@@ -1,0 +1,40 @@
+Info: [15:53:09] //////////////////////////////////////////////////////////////////////
+Info: [15:53:09] //          ___  ____   __    ___  ____    __    __                 //
+Info: [15:53:09] //         / __)(  _ \ /__\  / __)(_  _)  /__\  (  )                //
+Info: [15:53:09] //         \__ \ )___//(__)\( (__  _)(_  /(__)\  )(__               //
+Info: [15:53:09] //         (___/(__) (__)(__)\___)(____)(__)(__)(____)              //
+Info: [15:53:09] //                                                                  //
+Info: [15:53:09] //                   Coded by:      Borf                            //
+Info: [15:53:09] //                     Libraries used:                              //
+Info: [15:53:09] //            - OpenGL                                              //
+Info: [15:53:09] //            - pthread-win32                                       //
+Info: [15:53:09] //            - Cal3d 0.10                                          //
+Info: [15:53:09] //            - zlib                                                //
+Info: [15:53:09] //            - (win)sockets                                        //
+Info: [15:53:09] //            - mysql                                               //
+Info: [15:53:09] //                                                                  //
+Info: [15:53:09] //////////////////////////////////////////////////////////////////////
+Info: [15:53:09] 
+Info: [15:53:09] 
+Error: [15:53:09] FileSystem: Error opening datafile
+Info: [15:53:09] Font: Loading font data/fonts/font1.tga
+Info: [15:53:09] Texture: Loaded Uncompressed TGA 'data/fonts/font1.tga'
+Info: [15:53:09] Font: Loaded font data/fonts/font1.tga ok
+Info: [15:53:09] Loading c:\program files\gravity\ro\data\customtown
+Info: [15:53:10] Done loading gnd
+Info: [15:53:10] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_초원01.bmp...
+Info: [15:53:10] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_초원01.bmp successfully
+Info: [15:53:10] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_도시02.bmp...
+Info: [15:53:10] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_도시02.bmp successfully
+Info: [15:53:10] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_도시01.bmp...
+Info: [15:53:10] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_도시01.bmp successfully
+Info: [15:53:10] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_도시03.bmp...
+Info: [15:53:10] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_도시03.bmp successfully
+Info: [15:53:10] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-ctwr4.bmp...
+Info: [15:53:10] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-ctwr4.bmp successfully
+Info: [15:53:10] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_도시05.bmp...
+Info: [15:53:10] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_도시05.bmp successfully
+Info: [15:53:11] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_도시08.bmp...
+Info: [15:53:11] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_도시08.bmp successfully
+Info: [15:53:11] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_도시04.bmp...
+Info: [15:53:11] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_도시04.bmp successfully
