@@ -111,6 +111,7 @@ void cWorld::load()
 
 	pFile->close();
 	loaded = true;
+	clean();
 
 	Log(3,0,"Done loading gnd");
 	return;
@@ -291,7 +292,6 @@ void cWorld::draw()
 				0,camrad,0,
 				0,1,0);
 
-	Graphics.frustum.CalculateFrustum();
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 	glLoadIdentity();									// Reset The Modelview Matrix
 	glDisable(GL_LIGHTING);
@@ -299,6 +299,7 @@ void cWorld::draw()
 	glDisable(GL_BLEND);
 
 	glTranslatef(Graphics.camerapointer.x, 0, Graphics.camerapointer.y);
+	Graphics.frustum.CalculateFrustum();
 
 
 /*	float selsizex = (fabs(Graphics.selectionstart.x - Graphics.selectionend.x) / 32);
@@ -314,7 +315,8 @@ void cWorld::draw()
 		for(y = 0; y < height; y++)
 		{
 			cCube* c = &cubes[y][x];
-
+			if(!Graphics.frustum.CubeInFrustum(x*10+5,0,y*10+5, 10))
+				continue;
 			if (c->tileup != -1)
 			{
 				cTile* t = &tiles[c->tileup];
@@ -440,6 +442,8 @@ void cWorld::draw()
 			{
 				for(y = posy; y > posy-selsizey; y--)
 				{
+					if(!Graphics.frustum.CubeInFrustum(x*10+5,0,y*10+5, 10))
+						continue;
 					int xx = posx - x;
 					int yy = posy - y;
 					if (y < 0)
@@ -558,6 +562,8 @@ void cWorld::draw()
 				for(y = 1; y < height-1; y++)
 				{
 					cCube* c = &cubes[y][x];
+					if(!Graphics.frustum.CubeInFrustum(x*10+5,0,y*10+5, 10))
+						continue;
 
 					if (c->tileup != -1)
 					{
@@ -613,6 +619,8 @@ void cWorld::draw()
 			{
 				for(y = posy-floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
 				{
+					if(!Graphics.frustum.CubeInFrustum(x*10+5,0,y*10+5, 10))
+						continue;
 					cCube* c = &cubes[y][x];
 					glBegin(GL_LINE_LOOP);
 						glVertex3f(x*10,-c->cell1+0.2,y*10);
@@ -669,3 +677,61 @@ void cWorld::draw()
 
 
 
+
+void cWorld::clean()
+{
+	int count = 0 ;
+
+	int i;
+	map<int, bool, less<int> > tilesused;
+
+	for(int yy = 0; yy < height; yy++)
+	{
+		for(int xx = 0; xx < width; xx++)
+		{
+			tilesused[cubes[yy][xx].tileup] = true;
+			tilesused[cubes[yy][xx].tileside] = true;
+			tilesused[cubes[yy][xx].tileaside] = true;
+		}
+	}
+
+	Log(3,0,"%i tiles are used", tilesused.size());
+
+	for(i = tiles.size(); i > -1; i--)
+	{
+		if(tilesused.find(i) == tilesused.end())
+		{
+			tiles[i].used = false;
+			for(int yy = 0; yy < height; yy++)
+			{
+				for(int xx = 0; xx < width; xx++)
+				{
+					if (cubes[yy][xx].tileup > i)
+						cubes[yy][xx].tileup--;
+					if (cubes[yy][xx].tileside > i)
+						cubes[yy][xx].tileside--;
+					if (cubes[yy][xx].tileaside > i)
+						cubes[yy][xx].tileside--;
+
+				}
+			}
+
+			count++;
+			if(count % 100 == 0)
+				Log(3,0,"%i tiles left", tiles.size() - count);
+		}
+		else
+			tiles[i].used = true;
+	}
+
+	for(i = 0; i < tiles.size(); i++)
+	{
+		if (!tiles[i].used)
+		{
+			tiles.erase(tiles.begin() + i);
+			i--;
+		}
+	}
+
+
+}

@@ -25,6 +25,9 @@ float	u1,
 int texture;
 int lightmap;
 char color[4];
+
+
+	bool used;
 };
 
 
@@ -82,6 +85,9 @@ public:
 	void exportheight();
 
 	void newworld();
+
+
+	void clean();
 
 
 	long size;

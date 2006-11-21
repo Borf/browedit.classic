@@ -469,7 +469,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 										t.v3 = 1-t.v3;
 										t.v4 = 1-t.v4;
 									}
-									cTile* tt = &Graphics.world.tiles[Graphics.world.cubes[y][x].tileup];
+//									cTile* tt = &Graphics.world.tiles[Graphics.world.cubes[y][x].tileup];
 									Graphics.world.tiles.push_back(t);
 									Graphics.world.cubes[y][x].tileup = Graphics.world.tiles.size()-1;
 								}
@@ -1126,7 +1126,7 @@ MENUCOMMAND(speed)
 
 MENUCOMMAND(fill)
 {
-	int x,y,i;
+	int x,y;
 
 	int startid = Graphics.world.tiles.size();
 
