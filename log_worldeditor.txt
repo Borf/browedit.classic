@@ -1,41 +1,235 @@
-Info: [22:09:44] //////////////////////////////////////////////////////////////////////
-Info: [22:09:44] //          ___  ____   __    ___  ____    __    __                 //
-Info: [22:09:44] //         / __)(  _ \ /__\  / __)(_  _)  /__\  (  )                //
-Info: [22:09:44] //         \__ \ )___//(__)\( (__  _)(_  /(__)\  )(__               //
-Info: [22:09:44] //         (___/(__) (__)(__)\___)(____)(__)(__)(____)              //
-Info: [22:09:44] //                                                                  //
-Info: [22:09:44] //                   Coded by:      Borf                            //
-Info: [22:09:44] //                     Libraries used:                              //
-Info: [22:09:44] //            - OpenGL                                              //
-Info: [22:09:44] //            - pthread-win32                                       //
-Info: [22:09:44] //            - Cal3d 0.10                                          //
-Info: [22:09:44] //            - zlib                                                //
-Info: [22:09:44] //            - (win)sockets                                        //
-Info: [22:09:44] //            - mysql                                               //
-Info: [22:09:44] //                                                                  //
-Info: [22:09:44] //////////////////////////////////////////////////////////////////////
-Info: [22:09:44] 
-Info: [22:09:44] 
-Error: [22:09:44] FileSystem: Error opening datafile
-Info: [22:09:44] Font: Loading font data/fonts/font1.tga
-Info: [22:09:44] Texture: Loaded Uncompressed TGA 'data/fonts/font1.tga'
-Info: [22:09:44] Font: Loaded font data/fonts/font1.tga ok
-Info: [22:09:44] Loading c:\games\ro\data\customtown
-Info: [22:09:45] 17193 tiles are used
-Info: [22:09:45] Done loading gnd
-Info: [22:09:45] Loading c:\games\ro\data\texture\필드바닥\prt_도시01.bmp...
-Info: [22:09:45] Loaded c:\games\ro\data\texture\필드바닥\prt_도시01.bmp successfully
-Info: [22:09:45] Loading c:\games\ro\data\texture\필드바닥\prt_도시02.bmp...
-Info: [22:09:45] Loaded c:\games\ro\data\texture\필드바닥\prt_도시02.bmp successfully
-Info: [22:09:45] Loading c:\games\ro\data\texture\필드바닥\prt_초원01.bmp...
-Info: [22:09:45] Loaded c:\games\ro\data\texture\필드바닥\prt_초원01.bmp successfully
-Info: [22:09:45] Loading c:\games\ro\data\texture\필드바닥\prt_도시08.bmp...
-Info: [22:09:45] Loaded c:\games\ro\data\texture\필드바닥\prt_도시08.bmp successfully
-Info: [22:09:45] Loading c:\games\ro\data\texture\필드바닥\prt_도시04.bmp...
-Info: [22:09:45] Loaded c:\games\ro\data\texture\필드바닥\prt_도시04.bmp successfully
-Info: [22:09:46] Loading c:\games\ro\data\texture\필드바닥\prt_도시05.bmp...
-Info: [22:09:46] Loaded c:\games\ro\data\texture\필드바닥\prt_도시05.bmp successfully
-Info: [22:09:46] Loading c:\games\ro\data\texture\필드바닥\prt_도시03.bmp...
-Info: [22:09:46] Loaded c:\games\ro\data\texture\필드바닥\prt_도시03.bmp successfully
-Info: [22:09:47] Loading c:\games\ro\data\texture\프론테라\pron-ctwr4.bmp...
-Info: [22:09:47] Loaded c:\games\ro\data\texture\프론테라\pron-ctwr4.bmp successfully
+Info: [01:18:36] //////////////////////////////////////////////////////////////////////
+Info: [01:18:36] //          ___  ____   __    ___  ____    __    __                 //
+Info: [01:18:36] //         / __)(  _ \ /__\  / __)(_  _)  /__\  (  )                //
+Info: [01:18:36] //         \__ \ )___//(__)\( (__  _)(_  /(__)\  )(__               //
+Info: [01:18:36] //         (___/(__) (__)(__)\___)(____)(__)(__)(____)              //
+Info: [01:18:36] //                                                                  //
+Info: [01:18:36] //                   Coded by:      Borf                            //
+Info: [01:18:36] //                     Libraries used:                              //
+Info: [01:18:36] //            - OpenGL                                              //
+Info: [01:18:36] //            - pthread-win32                                       //
+Info: [01:18:36] //            - Cal3d 0.10                                          //
+Info: [01:18:36] //            - zlib                                                //
+Info: [01:18:36] //            - (win)sockets                                        //
+Info: [01:18:36] //            - mysql                                               //
+Info: [01:18:36] //                                                                  //
+Info: [01:18:36] //////////////////////////////////////////////////////////////////////
+Info: [01:18:36] 
+Info: [01:18:36] 
+Error: [01:18:36] FileSystem: Error opening datafile
+Info: [01:18:37] Font: Loading font data/fonts/font1.tga
+Info: [01:18:37] Texture: Loaded Uncompressed TGA 'data/fonts/font1.tga'
+Info: [01:18:37] Font: Loaded font data/fonts/font1.tga ok
+Info: [01:18:37] Loading c:\program files\gravity\ro\data\customtown
+Info: [01:18:41] 17186 tiles are used
+Info: [01:18:41] Done loading gnd
+Info: [01:18:42] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_도시01.bmp...
+Info: [01:18:42] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_도시01.bmp successfully
+Info: [01:18:42] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_도시02.bmp...
+Info: [01:18:42] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_도시02.bmp successfully
+Info: [01:18:42] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_초원01.bmp...
+Info: [01:18:42] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_초원01.bmp successfully
+Info: [01:18:42] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_도시08.bmp...
+Info: [01:18:42] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_도시08.bmp successfully
+Info: [01:18:42] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_도시04.bmp...
+Info: [01:18:42] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_도시04.bmp successfully
+Info: [01:20:05] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-ctwr4.bmp...
+Info: [01:20:05] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-ctwr4.bmp successfully
+Info: [01:20:18] Doubleclick
+Info: [01:20:18] Doubleclick
+Info: [01:20:18] Doubleclick
+Info: [01:20:19] Doubleclick
+Info: [01:20:19] Doubleclick
+Info: [01:20:19] Doubleclick
+Info: [01:20:19] Doubleclick
+Info: [01:20:20] Doubleclick
+Info: [01:20:24] Doubleclick
+Info: [01:20:25] Doubleclick
+Info: [01:20:25] Doubleclick
+Info: [01:20:25] Doubleclick
+Info: [01:20:25] Doubleclick
+Info: [01:20:26] Doubleclick
+Info: [01:20:26] Doubleclick
+Info: [01:20:26] Doubleclick
+Info: [01:20:26] Doubleclick
+Info: [01:20:26] Doubleclick
+Info: [01:20:27] Doubleclick
+Info: [01:20:27] Doubleclick
+Info: [01:20:27] Doubleclick
+Info: [01:20:27] Doubleclick
+Info: [01:20:27] Doubleclick
+Info: [01:20:28] Doubleclick
+Info: [01:20:28] Doubleclick
+Info: [01:20:28] Doubleclick
+Info: [01:20:28] Doubleclick
+Info: [01:20:28] Doubleclick
+Info: [01:20:28] Doubleclick
+Info: [01:20:29] Doubleclick
+Info: [01:20:29] Doubleclick
+Info: [01:20:29] Doubleclick
+Info: [01:20:29] Doubleclick
+Info: [01:20:29] Doubleclick
+Info: [01:20:30] Doubleclick
+Info: [01:20:30] Doubleclick
+Info: [01:20:30] Doubleclick
+Info: [01:20:30] Doubleclick
+Info: [01:20:30] Doubleclick
+Info: [01:20:31] Doubleclick
+Info: [01:20:31] Doubleclick
+Info: [01:20:31] Doubleclick
+Info: [01:20:37] Doubleclick
+Info: [01:20:38] Doubleclick
+Info: [01:20:38] Doubleclick
+Info: [01:20:38] Doubleclick
+Info: [01:20:38] Doubleclick
+Info: [01:20:38] Doubleclick
+Info: [01:20:39] Doubleclick
+Info: [01:20:39] Doubleclick
+Info: [01:20:39] Doubleclick
+Info: [01:20:40] Doubleclick
+Info: [01:20:40] Doubleclick
+Info: [01:20:40] Doubleclick
+Info: [01:20:40] Doubleclick
+Info: [01:20:40] Doubleclick
+Info: [01:20:41] Doubleclick
+Info: [01:20:41] Doubleclick
+Info: [01:20:41] Doubleclick
+Info: [01:20:41] Doubleclick
+Info: [01:20:41] Doubleclick
+Info: [01:20:42] Doubleclick
+Info: [01:20:42] Doubleclick
+Info: [01:20:42] Doubleclick
+Info: [01:20:42] Doubleclick
+Info: [01:20:42] Doubleclick
+Info: [01:20:43] Doubleclick
+Info: [01:20:43] Doubleclick
+Info: [01:20:43] Doubleclick
+Info: [01:20:43] Doubleclick
+Info: [01:20:44] Doubleclick
+Info: [01:20:44] Doubleclick
+Info: [01:20:45] Doubleclick
+Info: [01:20:45] Doubleclick
+Info: [01:20:45] Doubleclick
+Info: [01:20:45] Doubleclick
+Info: [01:20:45] Doubleclick
+Info: [01:20:45] Doubleclick
+Info: [01:20:46] Doubleclick
+Info: [01:20:46] Doubleclick
+Info: [01:20:46] Doubleclick
+Info: [01:20:46] Doubleclick
+Info: [01:20:46] Doubleclick
+Info: [01:20:46] Doubleclick
+Info: [01:20:46] Doubleclick
+Info: [01:20:46] Doubleclick
+Info: [01:20:47] Doubleclick
+Info: [01:20:47] Doubleclick
+Info: [01:20:47] Doubleclick
+Info: [01:20:47] Doubleclick
+Info: [01:20:47] Doubleclick
+Info: [01:20:47] Doubleclick
+Info: [01:20:47] Doubleclick
+Info: [01:20:47] Doubleclick
+Info: [01:20:48] Doubleclick
+Info: [01:20:48] Doubleclick
+Info: [01:20:48] Doubleclick
+Info: [01:20:48] Doubleclick
+Info: [01:20:48] Doubleclick
+Info: [01:20:48] Doubleclick
+Info: [01:20:49] Doubleclick
+Info: [01:20:49] Doubleclick
+Info: [01:20:49] Doubleclick
+Info: [01:20:49] Doubleclick
+Info: [01:20:49] Doubleclick
+Info: [01:20:49] Doubleclick
+Info: [01:20:49] Doubleclick
+Info: [01:20:50] Doubleclick
+Info: [01:20:50] Doubleclick
+Info: [01:20:50] Doubleclick
+Info: [01:20:50] Doubleclick
+Info: [01:20:50] Doubleclick
+Info: [01:20:51] Doubleclick
+Info: [01:20:51] Doubleclick
+Info: [01:20:51] Doubleclick
+Info: [01:20:52] Doubleclick
+Info: [01:20:52] Doubleclick
+Info: [01:20:52] Doubleclick
+Info: [01:20:52] Doubleclick
+Info: [01:20:52] Doubleclick
+Info: [01:20:52] Doubleclick
+Info: [01:20:53] Doubleclick
+Info: [01:20:53] Doubleclick
+Info: [01:20:53] Doubleclick
+Info: [01:20:53] Doubleclick
+Info: [01:20:53] Doubleclick
+Info: [01:20:53] Doubleclick
+Info: [01:20:53] Doubleclick
+Info: [01:20:53] Doubleclick
+Info: [01:20:53] Doubleclick
+Info: [01:20:53] Doubleclick
+Info: [01:20:53] Doubleclick
+Info: [01:20:54] Doubleclick
+Info: [01:20:54] Doubleclick
+Info: [01:20:54] Doubleclick
+Info: [01:20:54] Doubleclick
+Info: [01:20:54] Doubleclick
+Info: [01:20:55] Doubleclick
+Info: [01:20:55] Doubleclick
+Info: [01:20:55] Doubleclick
+Info: [01:20:55] Doubleclick
+Info: [01:20:55] Doubleclick
+Info: [01:20:55] Doubleclick
+Info: [01:20:56] Doubleclick
+Info: [01:20:57] Doubleclick
+Info: [01:20:57] Doubleclick
+Info: [01:20:57] Doubleclick
+Info: [01:20:57] Doubleclick
+Info: [01:20:57] Doubleclick
+Info: [01:20:57] Doubleclick
+Info: [01:20:58] Doubleclick
+Info: [01:20:58] Doubleclick
+Info: [01:20:58] Doubleclick
+Info: [01:20:58] Doubleclick
+Info: [01:20:58] Doubleclick
+Info: [01:20:58] Doubleclick
+Info: [01:20:59] Doubleclick
+Info: [01:20:59] Doubleclick
+Info: [01:20:59] Doubleclick
+Info: [01:20:59] Doubleclick
+Info: [01:20:59] Doubleclick
+Info: [01:21:00] Doubleclick
+Info: [01:21:00] Doubleclick
+Info: [01:21:00] Doubleclick
+Info: [01:21:00] Doubleclick
+Info: [01:21:01] Doubleclick
+Info: [01:21:01] Doubleclick
+Info: [01:21:01] Doubleclick
+Info: [01:21:01] Doubleclick
+Info: [01:21:01] Doubleclick
+Info: [01:21:01] Doubleclick
+Info: [01:21:01] Doubleclick
+Info: [01:21:02] Doubleclick
+Info: [01:21:02] Doubleclick
+Info: [01:21:02] Doubleclick
+Info: [01:21:02] Doubleclick
+Info: [01:21:02] Doubleclick
+Info: [01:21:02] Doubleclick
+Info: [01:21:03] Doubleclick
+Info: [01:21:03] Doubleclick
+Info: [01:21:03] Doubleclick
+Info: [01:21:03] Doubleclick
+Info: [01:21:03] Doubleclick
+Info: [01:21:03] Doubleclick
+Info: [01:21:04] Doubleclick
+Info: [01:21:04] Doubleclick
+Info: [01:21:04] Doubleclick
+Info: [01:21:05] Doubleclick
+Info: [01:21:05] Doubleclick
+Info: [01:21:05] Doubleclick
+Info: [01:21:05] Doubleclick
+Info: [01:21:05] Doubleclick
+Info: [01:21:06] Doubleclick
+Info: [01:21:06] Doubleclick
+Info: [01:21:06] Doubleclick
+Info: [01:21:07] Doubleclick
+Info: [01:21:09] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_흙03.bmp...
+Info: [01:21:09] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_흙03.bmp successfully

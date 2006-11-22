@@ -622,10 +622,48 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				Graphics.texturerot = (Graphics.texturerot + 1) % 4;
 				break;
 			case SDLK_h:
-				Graphics.fliph = !Graphics.fliph;
+				if (editmode == MODE_TEXTURE)
+					Graphics.fliph = !Graphics.fliph;
+				if(editmode == MODE_WALLS)
+				{
+					int x = mouse3dx / 10;
+					int y = mouse3dz / 10;
+					if (y < 0)
+						break;
+					if (x < 0)
+						break;
+					if(Graphics.world.cubes[y][x].tileside == -1)
+						break;
+					float f;
+					f = Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u1;
+					Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u1 = Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u2;
+					Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u2 = f;
+					f = Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u3;
+					Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u3 = Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u4;
+					Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u4 = f;
+				}
 				break;
 			case SDLK_v:
-				Graphics.flipv = !Graphics.flipv;
+				if (editmode == MODE_TEXTURE)
+					Graphics.flipv = !Graphics.flipv;
+				if(editmode == MODE_WALLS)
+				{
+					int x = mouse3dx / 10;
+					int y = mouse3dz / 10;
+					if (y < 0)
+						break;
+					if (x < 0)
+						break;
+					if(Graphics.world.cubes[y][x].tileside == -1)
+						break;
+					float f;
+					f = Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].v1;
+					Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].v1 = Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].v3;
+					Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].v3 = f;
+					f = Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].v2;
+					Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].v2 = Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].v4;
+					Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].v4 = f;
+				}
 				break;
 			case SDLK_g:
 				MenuCommand_grid((cMenuItem*)grid);
@@ -717,13 +755,39 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					int y = mouse3dz / 10;
 					if(SDL_GetModState() & KMOD_SHIFT)
 					{
-						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].v3+=0.03125;
-						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].v4+=0.03125;
+						int xx = x;
+						int xmax;
+						if (SDL_GetModState() & KMOD_CTRL)
+						{
+							while(Graphics.world.cubes[y][xx].tileside != -1)
+								xx++;
+							xmax = xx;
+						}
+						else
+							xmax = xx+1;
+						xx = x;
+						int xmin;
+						if (SDL_GetModState() & KMOD_CTRL)
+						{
+							while(Graphics.world.cubes[y][xx].tileside != -1)
+								xx--;
+							xmin = xx+1;
+						}
+						else
+							xmin = xx;
+						 
+						int xdiff = 4;
+
+						for(xx = xmin; xx < xmax; xx++)
+						{
+							Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside].v3+=0.03125;
+							Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside].v4+=0.03125;
+						}
 					}
 					else
 					{
-						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u1+=0.03125;
-						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u3+=0.03125;
+							Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u1+=0.03125;
+							Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u3+=0.03125;
 					}
 					break;
 				}
@@ -733,8 +797,34 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					int y = mouse3dz / 10;
 					if(SDL_GetModState() & KMOD_SHIFT)
 					{
-						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].v3-=0.03125;
-						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].v4-=0.03125;
+						int xx = x;
+						int xmax;
+						if (SDL_GetModState() & KMOD_CTRL)
+						{
+							while(Graphics.world.cubes[y][xx].tileside != -1)
+								xx++;
+							xmax = xx;
+						}
+						else
+							xmax = xx+1;
+						xx = x;
+						int xmin;
+						if (SDL_GetModState() & KMOD_CTRL)
+						{
+							while(Graphics.world.cubes[y][xx].tileside != -1)
+								xx--;
+							xmin = xx+1;
+						}
+						else
+							xmin = xx;
+						 
+						int xdiff = 4;
+
+						for(xx = xmin; xx < xmax; xx++)
+						{
+							Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside].v3-=0.03125;
+							Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside].v4-=0.03125;
+						}
 					}
 					else
 					{
@@ -749,8 +839,34 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					int y = mouse3dz / 10;
 					if(SDL_GetModState() & KMOD_SHIFT)
 					{
-						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].v1+=0.03125;
-						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].v2+=0.03125;
+						int xx = x;
+						int xmax;
+						if (SDL_GetModState() & KMOD_CTRL)
+						{
+							while(Graphics.world.cubes[y][xx].tileside != -1)
+								xx++;
+							xmax = xx;
+						}
+						else
+							xmax = xx+1;
+						xx = x;
+						int xmin;
+						if (SDL_GetModState() & KMOD_CTRL)
+						{
+							while(Graphics.world.cubes[y][xx].tileside != -1)
+								xx--;
+							xmin = xx+1;
+						}
+						else
+							xmin = xx;
+						 
+						int xdiff = 4;
+
+						for(xx = xmin; xx < xmax; xx++)
+						{
+							Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside].v1+=0.03125;
+							Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside].v2+=0.03125;
+						}
 					}
 					else
 					{
@@ -765,14 +881,84 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					int y = mouse3dz / 10;
 					if(SDL_GetModState() & KMOD_SHIFT)
 					{
-						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].v1-=0.03125;
-						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].v2-=0.03125;
+						int xx = x;
+						int xmax;
+						if (SDL_GetModState() & KMOD_CTRL)
+						{
+							while(Graphics.world.cubes[y][xx].tileside != -1)
+								xx++;
+							xmax = xx;
+						}
+						else
+							xmax = xx+1;
+						xx = x;
+						int xmin;
+						if (SDL_GetModState() & KMOD_CTRL)
+						{
+							while(Graphics.world.cubes[y][xx].tileside != -1)
+								xx--;
+							xmin = xx+1;
+						}
+						else
+							xmin = xx;
+						 
+						int xdiff = 4;
+
+						for(xx = xmin; xx < xmax; xx++)
+						{
+							Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside].v1-=0.03125;
+							Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside].v2-=0.03125;
+						}
 					}
 					else
 					{
 						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u2-=0.03125;
 						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u4-=0.03125;
 					}
+					break;
+				}
+			case SDLK_w:
+				{
+					int x = mouse3dx / 10;
+					int y = mouse3dz / 10;
+					if (y < 0)
+						break;
+					if (x < 0)
+						break;
+
+					if(Graphics.world.cubes[y][x].tileside == -1)
+						break;
+
+					int xx = x;
+					while(Graphics.world.cubes[y][xx].tileside != -1)
+						xx++;
+					int xmax = xx;
+					xx = x;
+					while(Graphics.world.cubes[y][xx].tileside != -1)
+						xx--;
+					int xmin = xx+1;
+					int xdiff = 4;
+
+					for(xx = xmin; xx < xmax; xx++)
+					{
+						cTile t;
+						t.texture = Graphics.texturestart;
+						t.lightmap = 0;
+						t.u1 = (xx-xmin) *  (1.0/(float)xdiff);
+						t.v1 = 0;
+
+						t.u2 = (xx-xmin+1) *  (1.0/(float)xdiff);
+						t.v2 = 0;
+						
+						t.u3 = (xx-xmin) *  (1.0/(float)xdiff);
+						t.v3 = 1;
+						
+						t.u4 = (xx-xmin+1) *  (1.0/(float)xdiff);
+						t.v4 = 1;
+						Graphics.world.tiles.push_back(t);
+						Graphics.world.cubes[y][xx].tileside = Graphics.world.tiles.size()-1;
+					}
+
 					break;
 				}
 			default:

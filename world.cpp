@@ -330,7 +330,7 @@ void cWorld::draw()
 					glTexCoord2f(t->u3, 1-t->v3); glVertex3f(x*10,-c->cell3,y*10+10);
 				glEnd();
 			}
-			if (c->tileaside != -1)
+			if (c->tileaside != -1 && c->tileaside < tiles.size())
 			{
 				cTile* t = &tiles[c->tileaside];
 				int texture = textures[t->texture]->texid();
@@ -343,10 +343,10 @@ void cWorld::draw()
 					glTexCoord2f(t->u3, 1-t->v3); glVertex3f(x*10+10,-(c+1)->cell3,y*10+10);
 				glEnd();
 			}
-			if (c->tileside != -1 && y < height-1)
+			if (c->tileside != -1 && y < height-1 && c->tileside < tiles.size())
 			{
 				cTile* t = &tiles[c->tileside];
-				int texture = textures[t->texture]->texid();
+ 				int texture = textures[t->texture]->texid();
 				glBindTexture(GL_TEXTURE_2D, texture);
 				glColor3f(1,1,1);
 				glBegin(GL_QUADS);
@@ -711,7 +711,7 @@ void cWorld::clean()
 					if (cubes[yy][xx].tileside > i)
 						cubes[yy][xx].tileside--;
 					if (cubes[yy][xx].tileaside > i)
-						cubes[yy][xx].tileside--;
+						cubes[yy][xx].tileaside--;
 
 				}
 			}
