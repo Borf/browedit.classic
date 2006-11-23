@@ -6,13 +6,13 @@
 --------------------Configuration: roworldedit - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\DOCUME~1\Borf\LOCALS~1\Temp\RSPC42.tmp" with contents
+Creating temporary file "C:\DOCUME~1\Borf\LOCALS~1\Temp\RSPEAF.tmp" with contents
 [
 /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /Fp"Debug/roworldedit.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
-"C:\Documents and Settings\Borf\Desktop\roworldedit\main.cpp"
+"C:\Documents and Settings\Borf\Desktop\roworldedit\RSMModel.cpp"
 ]
-Creating command line "cl.exe @C:\DOCUME~1\Borf\LOCALS~1\Temp\RSPC42.tmp" 
-Creating temporary file "C:\DOCUME~1\Borf\LOCALS~1\Temp\RSPC43.tmp" with contents
+Creating command line "cl.exe @C:\DOCUME~1\Borf\LOCALS~1\Temp\RSPEAF.tmp" 
+Creating temporary file "C:\DOCUME~1\Borf\LOCALS~1\Temp\RSPEB0.tmp" with contents
 [
 bgd.lib sdl.lib sdlmain.lib zlib.lib opengl32.lib glaux.lib glu32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/roworldedit.pdb" /debug /machine:I386 /nodefaultlib:"MSVCRT" /out:"Debug/roworldedit.exe" /pdbtype:sept 
 ".\Debug\common.obj"
@@ -25,10 +25,10 @@ bgd.lib sdl.lib sdlmain.lib zlib.lib opengl32.lib glaux.lib glu32.lib kernel32.l
 ".\Debug\texture.obj"
 ".\Debug\world.obj"
 ]
-Creating command line "link.exe @C:\DOCUME~1\Borf\LOCALS~1\Temp\RSPC43.tmp"
+Creating command line "link.exe @C:\DOCUME~1\Borf\LOCALS~1\Temp\RSPEB0.tmp"
 <h3>Output Window</h3>
 Compiling...
-main.cpp
+RSMModel.cpp
 Linking...
 
 

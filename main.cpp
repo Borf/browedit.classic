@@ -68,6 +68,8 @@ int cursorsize = 1;
 cMenu* mode;
 cMenu* editdetail;
 cMenu* speed;
+vector<vector<vector<float> > > clipboard;
+
 int main(int argc, char *argv[])
 {
 
@@ -169,7 +171,7 @@ int main(int argc, char *argv[])
 		return 1;
 
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "customtown").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "prontera").c_str());
 	Graphics.world.load();
 	long lasttimer = SDL_GetTicks();
 	while( running ) {
@@ -685,9 +687,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					int x = mouse3dx / 10;
 					int y = mouse3dz / 10;
-					if (y < 0)
+					if (y < 0 || y > Graphics.world.cubes.size()-1)
 						break;
-					if (x < 0)
+					if (x < 0 || x > Graphics.world.cubes[0].size()-1)
 						break;
 
 					if(Graphics.world.cubes[y][x].tileside != -1)
@@ -719,9 +721,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					int x = mouse3dx / 10;
 					int y = mouse3dz / 10;
-					if (y < 0)
+					if (y < 0 || y > Graphics.world.cubes.size()-1)
 						break;
-					if (x < 0)
+					if (x < 0 || x > Graphics.world.cubes[0].size()-1)
 						break;
 
 					if(Graphics.world.cubes[y][x].tileaside != -1)
@@ -944,21 +946,70 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						cTile t;
 						t.texture = Graphics.texturestart;
 						t.lightmap = 0;
-						t.u1 = (xx-xmin) *  (1.0/(float)xdiff);
+						t.u1 = ((xx-xmin)%4) *  (1.0/(float)xdiff);
 						t.v1 = 0;
 
-						t.u2 = (xx-xmin+1) *  (1.0/(float)xdiff);
+						t.u2 = ((xx-xmin+1)%4) *  (1.0/(float)xdiff);
 						t.v2 = 0;
 						
-						t.u3 = (xx-xmin) *  (1.0/(float)xdiff);
+						t.u3 = ((xx-xmin)%4) *  (1.0/(float)xdiff);
 						t.v3 = 1;
 						
-						t.u4 = (xx-xmin+1) *  (1.0/(float)xdiff);
+						t.u4 = ((xx-xmin+1)%4) *  (1.0/(float)xdiff);
 						t.v4 = 1;
 						Graphics.world.tiles.push_back(t);
 						Graphics.world.cubes[y][xx].tileside = Graphics.world.tiles.size()-1;
 					}
+					break;
+				}
+			case SDLK_c:
+				{
+					int posx = mouse3dx / 10;
+					int posy = mouse3dz / 10;
 
+					if (posx >= brushsize && posx < Graphics.world.width-brushsize && posy >= brushsize && posy< Graphics.world.height-brushsize)
+					{
+						clipboard.clear();
+						for(int y = posy-floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
+						{
+							vector<vector<float> > row;
+							for(int x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f); x++)
+							{
+								vector<float> c;
+								c.push_back(Graphics.world.cubes[y][x].cell1);
+								c.push_back(Graphics.world.cubes[y][x].cell2);
+								c.push_back(Graphics.world.cubes[y][x].cell3);
+								c.push_back(Graphics.world.cubes[y][x].cell4);
+								row.push_back(c);
+							}
+							clipboard.push_back(row);
+						}
+					}
+					break;
+				}
+			case SDLK_p:
+				{
+					int posx = mouse3dx / 10;
+					int posy = mouse3dz / 10;
+
+					if (posx >= brushsize && posx < Graphics.world.width-brushsize && posy >= brushsize && posy< Graphics.world.height-brushsize)
+					{
+						int yy = 0;
+						for(int y = posy-floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
+						{
+							vector<vector<float> > row;
+							int xx = 0;
+							for(int x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f); x++)
+							{
+								Graphics.world.cubes[y][x].cell1 = clipboard[yy][xx][0];
+								Graphics.world.cubes[y][x].cell2 = clipboard[yy][xx][1];
+								Graphics.world.cubes[y][x].cell3 = clipboard[yy][xx][2];
+								Graphics.world.cubes[y][x].cell4 = clipboard[yy][xx][3];
+								xx++;
+							}
+							yy++;
+						}
+					}
 					break;
 				}
 			default:

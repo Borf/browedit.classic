@@ -114,7 +114,8 @@ void cWorld::load()
 	clean();
 
 	Log(3,0,"Done loading gnd");
-	return;
+
+	
 	pFile = fs.open(string(filename) + ".rsw");
 
 	pFile->read(buf, 242);
@@ -133,14 +134,17 @@ void cWorld::load()
 			{
 			pFile->read(buf, 248);
 			string filename = buf+52;
-/*			cRSMModel* m = new cRSMModel();
-			m->load("c:\\program files\\gravity\\ro\\data\\model\\" + filename);
+			cRSMModel* m = new cRSMModel();
+			m->load(rodir+ "model\\" + filename);
 
 
 			m->pos.x = *((float*)(buf+212));
 			m->pos.y = *((float*)(buf+216));
 			m->pos.z = *((float*)(buf+220));
 
+
+			m->pos.x = (m->pos.x / 5) + width;
+			m->pos.z = (m->pos.z / 5) + height;
 
 			m->rot.x = *((float*)(buf+224));
 			m->rot.y = *((float*)(buf+228));
@@ -149,7 +153,7 @@ void cWorld::load()
 			m->scale.x = *((float*)(buf+236));
 			m->scale.y = *((float*)(buf+240));
 			m->scale.z = *((float*)(buf+244));
-			models.push_back(m);*/
+			models.push_back(m);
 			}
 			break;
 		case 2:
@@ -322,7 +326,10 @@ void cWorld::draw()
 				cTile* t = &tiles[c->tileup];
 				int texture = textures[t->texture]->texid();
 				glBindTexture(GL_TEXTURE_2D, texture);
-				glColor3f(1,1,1);
+				if (editmode == MODE_WALLS && Graphics.showgrid && (c->tileaside != -1 || c->tileside != -1))
+					glColor3f(1,0,1);
+				else
+					glColor3f(1,1,1);
 				glBegin(GL_QUADS);
 					glTexCoord2f(t->u1, 1-t->v1); glVertex3f(x*10,-c->cell1,y*10);
 					glTexCoord2f(t->u2, 1-t->v2); glVertex3f(x*10+10,-c->cell2,y*10);
@@ -651,20 +658,22 @@ void cWorld::draw()
 			glEnd();
 		}
 	}
+
 	
-	glTranslatef(-Graphics.camerapointer.x, 0, -Graphics.camerapointer.y);
-
-
 	glColor4f(1,1,1,1);
 
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_BLEND);
-
-
 	for(int i = 0; i < models.size(); i++)
 	{
 		models[i]->draw();
 	}
+
+	glTranslatef(-Graphics.camerapointer.x, 0, -Graphics.camerapointer.y);
+
+
+
+
 
 //	float	x = tilescale*Graphics.camerapointer.x,
 //			y = heightMap(Graphics.camerapointer.x,Graphics.camerapointer.y),
