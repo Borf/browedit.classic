@@ -111,7 +111,7 @@ void cRSMModelMesh::load(cFile* pFile, cRSMModel* model, bool firstmesh)
 
 }
 
-void MatrixMultVect(const float *M, cVector3 *Vin, float *Vout) 
+void MatrixMultVect(const float *M, cVector3 Vin, float *Vout) 
 {
 	Vout[0] = Vin[0]*M[0] + Vin[1]*M[4] + Vin[2]*M[8] + 1.0*M[12];
 	Vout[1] = Vin[0]*M[1] + Vin[1]*M[5] + Vin[2]*M[9] + 1.0*M[13];
@@ -124,11 +124,8 @@ void cRSMModelMesh::boundingbox(float* ptransf)
 {
 	bool firstmesh = (ptransf == NULL);
 	GLfloat Rot[16];
-	GLfloat *Transf;
 	int i;
 	int j;
-	int k;
-	GLfloat pmax[3], pmin[3];
 
 	Rot[0] = trans[0];
 	Rot[1] = trans[1];
@@ -155,23 +152,25 @@ void cRSMModelMesh::boundingbox(float* ptransf)
 
 	for (i = 0; i < nVertices; i++)
 	{
-		float vtemp[3], vout[3];
+		float vout[3];
 
 		MatrixMultVect(Rot, vertices[i], vout);
 		for (j = 0; j < 3; j++) {
 			GLfloat f;
 			if (!firstmesh)
-				f = vout[j]+transf.todo[12+j]+transf.todo[9+j];
+				f = vout[j]+trans[12+j]+trans[9+j];
 			else
 				f = vout[j];
 
-			bbmin[j] = min(f, bbmin[j]);
-			bbmax[j] = max(f, bbmax[j]);
+			if (f < bbmin[j])
+				bbmin[j] = f;
+			if (f > bbmax[j])
+				bbmax[j] = f;
 		}
 	}
 
 	for (j=0; j < 3; j++)
-		range[j] = (max[j]+min[j])/2.0;
+		range[j] = (bbmax[j]+bbmin[j])/2.0;
 }
 
 

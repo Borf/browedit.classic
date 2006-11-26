@@ -48,6 +48,7 @@ public:
 
 	float bbmin[3];
 	float bbmax[3];
+	float range[3];
 
 	void boundingbox(float* = NULL);
 
