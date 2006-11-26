@@ -52,7 +52,7 @@ void cRSMModel::load(string filename)
 
 		if(!found)
 		{
-			fathers.push_back(-1); //dunno if this is right
+			fathers.push_back(0); //dunno if this is right
 		}
 	}
 	boundingbox();

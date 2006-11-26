@@ -409,8 +409,6 @@ void cWorld::draw()
 
 		int posx = mouse3dx / 10;
 		int posy = mouse3dz / 10;
-		if(SDL_GetModState() & KMOD_SHIFT)
-			Log(3,0,"Pos: %i,%i", posx, posy);
 
 
 		glEnable(GL_TEXTURE_2D);
@@ -653,22 +651,23 @@ void cWorld::draw()
 		}
 	}
 
-	
-	glColor4f(1,1,1,1);
-
-	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_BLEND);
-	glTranslatef(0,0,height*10);
-	glScalef(1,1,-1);
-	for(int i = 0; i < models.size(); i++)
+	if (Graphics.showobjects)
 	{
-		models[i]->draw();
+		glColor4f(1,1,1,1);
+
+		glEnable(GL_TEXTURE_2D);
+		glEnable(GL_BLEND);
+		glTranslatef(0,0,height*10);
+		glScalef(1,1,-1);
+		for(int i = 0; i < models.size(); i++)
+		{
+			models[i]->draw();
+		}
+		glScalef(1,1,-1);
+		glTranslatef(0,0,-height*10);
+
+		glTranslatef(-Graphics.camerapointer.x, 0, -Graphics.camerapointer.y);
 	}
-	glScalef(1,1,-1);
-	glTranslatef(0,0,-height*10);
-
-	glTranslatef(-Graphics.camerapointer.x, 0, -Graphics.camerapointer.y);
-
 
 
 

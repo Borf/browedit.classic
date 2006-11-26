@@ -26,7 +26,7 @@ public:
 		texturerot = 0;
 		fliph = false;
 		flipv = false;
-
+		showobjects = false;
 	}
 
 	int						init();				// initializes graphics
@@ -85,6 +85,9 @@ public:
 	cTexture*				mask;
 	cTexture*				bulb;
 	int						selectedobjectprop;
+
+
+	bool					showobjects;
 
 
 private:

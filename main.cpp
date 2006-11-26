@@ -60,9 +60,11 @@ MENUCOMMAND(grid);
 MENUCOMMAND(mode_detail);
 MENUCOMMAND(speed);
 MENUCOMMAND(fill);
+MENUCOMMAND(showobjects);
 
 cMenu*	menu;
 cMenu* grid;
+cMenu* showobjects;
 
 int cursorsize = 1;
 
@@ -117,11 +119,12 @@ int main(int argc, char *argv[])
 	
 	ADDMENUITEM(mm,rnd, "Random 1", &MenuCommand_random1);
 
-	ADDMENUITEM(mm,view,"Textures",&MenuCommand_textures);
 	ADDMENUITEM(mm,view,"Grid",&MenuCommand_grid);
 	mm->ticked = true;
 	grid = mm;
-	
+	ADDMENUITEM(mm,view,"Objects",&MenuCommand_showobjects);
+	showobjects = mm;
+
 	ADDMENUITEM(mm,mode,"Texture Edit",			&MenuCommand_mode);
 	mm->ticked = true;
 	ADDMENUITEM(mm,mode,"Global Heightmap Edit",	&MenuCommand_mode);
@@ -137,6 +140,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm, editdetail, "64", &MenuCommand_mode_detail);
 
 	ADDMENUITEM(mm,mode,"Wall Edit",	&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,"Object Edit",	&MenuCommand_mode);
 
 
 	ADDMENUITEM(mm,edit,"Flatten map",			&MenuCommand_flatten);
@@ -1023,6 +1027,11 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 					break;
 				}
+			case SDLK_o:
+			{
+				MenuCommand_showobjects((cMenuItem*)showobjects);
+				break;
+			}
 			default:
 				break;
 		}
@@ -1313,6 +1322,10 @@ MENUCOMMAND(mode)
 	{
 		editmode = MODE_WALLS;
 	}
+	else if (title == "Object Edit")
+	{
+		editmode = MODE_OBJECTS;
+	}
 	return true;
 }
 MENUCOMMAND(textures)
@@ -1405,5 +1418,12 @@ MENUCOMMAND(fill)
 			Graphics.world.cubes[y][x].tileup = startid + (x%4) + 4*(y % 4);
 		}
 	}
+	return true;
+}
+
+MENUCOMMAND(showobjects)
+{
+	src->ticked = !src->ticked;
+	Graphics.showobjects = src->ticked;
 	return true;
 }
