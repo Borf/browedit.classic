@@ -34,7 +34,7 @@ GLuint cTexture::texid()
 			{
 				glGenTextures(1, &tid);
 				glBindTexture(GL_TEXTURE_2D, tid);
-				glTexImage2D(GL_TEXTURE_2D,0,3,bmp.width,bmp.height,0,GL_RGB,GL_UNSIGNED_BYTE,bmp.bytes);
+				glTexImage2D(GL_TEXTURE_2D,0,4,bmp.width,bmp.height,0,GL_RGBA,GL_UNSIGNED_BYTE,bmp.bytes);
 				glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
 				glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 				Log(3,0,"Loaded %s successfully", filename.c_str());
@@ -410,8 +410,8 @@ int cTexture::LoadFromJpeg(string filename)
 
 cTexture::BMPClass::BMPClass(){bytes=0;}
 cTexture::BMPClass::~BMPClass(){delete[] bytes;}
-BYTE& cTexture::BMPClass::pixel(int x,int y,int c){return bytes[(y*width+x)*3+c];}
-void cTexture::BMPClass::allocateMem(){delete[] bytes;bytes=new BYTE[width*height*3];}
+BYTE& cTexture::BMPClass::pixel(int x,int y,int c){return bytes[(y*width+x)*4+c];}
+void cTexture::BMPClass::allocateMem(){delete[] bytes;bytes=new BYTE[width*height*4];}
 
 
 BMPError cTexture::BMPLoad(std::string fname,BMPClass& bmp)
@@ -445,12 +445,13 @@ BMPError cTexture::BMPLoad(std::string fname,BMPClass& bmp)
 	{
 	case(24):
 		fseek(f,offset,SEEK_SET);
-		fread(bmp.bytes,bmp.width*bmp.height*3,1,f);	//24bit is easy
-		for(x=0;x<bmp.width*bmp.height*3;x+=3)			//except the format is BGR, grr
+		for(x=0;x<bmp.width*bmp.height*4;x+=4)			//except the format is BGR, grr
 		{
+			fread(bmp.bytes+x,4,1,f);	//24bit is easy
 			BYTE temp=bmp.bytes[x];
 			bmp.bytes[x]=bmp.bytes[x+2];
 			bmp.bytes[x+2]=temp;
+			bmp.bytes[x+3] = 255;
 		}
 		break;
 
@@ -464,6 +465,10 @@ BMPError cTexture::BMPLoad(std::string fname,BMPClass& bmp)
 				fread(&byte,1,1,f);						//just read byte					
 				for(int c=0;c<3;++c)
 					bmp.pixel(x,y,c)=cols[byte*4+2-c];	//and look up in the table
+				if(bmp.pixel(x,y,0) == 255 && bmp.pixel(x,y,2) == 255)
+					bmp.pixel(x,y,3) = 0;
+				else
+					bmp.pixel(x,y,3) = 255;
 			}
 		break;
 
@@ -479,6 +484,7 @@ BMPError cTexture::BMPLoad(std::string fname,BMPClass& bmp)
 					bmp.pixel(x,y,c)=cols[byte/16*4+2-c];
 				for(c=0;c<3;++c)
 					bmp.pixel(x+1,y,c)=cols[byte%16*4+2-c];
+				bmp.pixel(x+1,y,3) = 255;
 			}
 		break;
 
@@ -494,8 +500,11 @@ BMPError cTexture::BMPLoad(std::string fname,BMPClass& bmp)
 				//so I'm shifting the byte to the relevant position, then masking out
 				//all but the lowest bit in order to get the index into the colourtable.
 				for(int x2=0;x2<8;++x2)
+				{
 					for(int c=0;c<3;++c)
 						bmp.pixel(x+x2,y,c)=cols[((byte>>(7-x2))&1)*4+2-c];
+					bmp.pixel(x+x2,y,3)=255;
+				}
 			}
 		break;
 

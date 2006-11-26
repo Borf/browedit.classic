@@ -28,8 +28,9 @@ public:
 class cRSMModelMesh
 {
 public:
-	void load(cFile*, cRSMModel*);
-
+	void load(cFile*, cRSMModel*, bool);
+	int todo;
+	float ftodo[10];
 	string name;
 	string parent;
 	vector<cTexture*> textures;
@@ -43,6 +44,12 @@ public:
 	vector<cRSMModelFace> faces;
 	int nFrameAnimations;
 	vector<cRSMModelFrame> frames;
+
+
+	float bbmin[3];
+	float bbmax[3];
+
+	void boundingbox(float* = NULL);
 
 
 	void draw();

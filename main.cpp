@@ -8,6 +8,7 @@
 #include <list>
 #include <gd/gd.h>
 
+#include "texturecache.h"
 #ifdef WIN32
 #include <windows.h>
 #include <SDL/SDL_syswm.h>
@@ -38,6 +39,8 @@ string rodir;
 #define MENUCOMMAND(x) bool MenuCommand_ ## x (cMenuItem* src)
 
 int brushsize;
+
+cTextureCache TextureCache;
 
 //file
 MENUCOMMAND(new);

@@ -43,11 +43,13 @@ public:
 		tileaside;
 };
 
-class cTextureContainer : public cTexture
+class cTextureContainer
 {
 public:
+	cTexture* texture;
 	string RoFilename;
 	string RoFilename2;
+	GLuint texid() { return texture->texid(); }
 };
 
 class cWorld

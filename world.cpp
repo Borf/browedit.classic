@@ -4,7 +4,7 @@
 #include "filesystem.h"
 #include <math.h>
 #include <list>
-
+#include "texturecache.h"
 
 #define floatheight 0.1f
 
@@ -45,8 +45,7 @@ void cWorld::load()
 		cTextureContainer* t = new cTextureContainer();
 		t->RoFilename = s;
 		t->RoFilename2 = string(buf+40);
-
-		t->Load(rodir + "texture\\" + s);
+		t->texture = TextureCache.load(rodir + "texture\\" + s);
 		textures.push_back(t);
 	}
 

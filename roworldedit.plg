@@ -6,13 +6,13 @@
 --------------------Configuration: roworldedit - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\DOCUME~1\Borf\LOCALS~1\Temp\RSPEAF.tmp" with contents
+Creating temporary file "C:\DOCUME~1\Borf\LOCALS~1\Temp\RSPF72.tmp" with contents
 [
 /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /Fp"Debug/roworldedit.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
 "C:\Documents and Settings\Borf\Desktop\roworldedit\RSMModel.cpp"
 ]
-Creating command line "cl.exe @C:\DOCUME~1\Borf\LOCALS~1\Temp\RSPEAF.tmp" 
-Creating temporary file "C:\DOCUME~1\Borf\LOCALS~1\Temp\RSPEB0.tmp" with contents
+Creating command line "cl.exe @C:\DOCUME~1\Borf\LOCALS~1\Temp\RSPF72.tmp" 
+Creating temporary file "C:\DOCUME~1\Borf\LOCALS~1\Temp\RSPF73.tmp" with contents
 [
 bgd.lib sdl.lib sdlmain.lib zlib.lib opengl32.lib glaux.lib glu32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/roworldedit.pdb" /debug /machine:I386 /nodefaultlib:"MSVCRT" /out:"Debug/roworldedit.exe" /pdbtype:sept 
 ".\Debug\common.obj"
@@ -24,17 +24,33 @@ bgd.lib sdl.lib sdlmain.lib zlib.lib opengl32.lib glaux.lib glu32.lib kernel32.l
 ".\Debug\RSMModel.obj"
 ".\Debug\texture.obj"
 ".\Debug\world.obj"
+".\Debug\texturecache.obj"
 ]
-Creating command line "link.exe @C:\DOCUME~1\Borf\LOCALS~1\Temp\RSPEB0.tmp"
+Creating command line "link.exe @C:\DOCUME~1\Borf\LOCALS~1\Temp\RSPF73.tmp"
 <h3>Output Window</h3>
 Compiling...
 RSMModel.cpp
-Linking...
+C:\Documents and Settings\Borf\Desktop\roworldedit\RSMModel.cpp(116) : error C2679: binary '+' : no operator defined which takes a right-hand operand of type 'double' (or there is no acceptable conversion)
+C:\Documents and Settings\Borf\Desktop\roworldedit\RSMModel.cpp(117) : error C2679: binary '+' : no operator defined which takes a right-hand operand of type 'double' (or there is no acceptable conversion)
+C:\Documents and Settings\Borf\Desktop\roworldedit\RSMModel.cpp(118) : error C2679: binary '+' : no operator defined which takes a right-hand operand of type 'double' (or there is no acceptable conversion)
+C:\Documents and Settings\Borf\Desktop\roworldedit\RSMModel.cpp(160) : error C2664: 'MatrixMultVect' : cannot convert parameter 2 from 'struct cVector3' to 'struct cVector3 *'
+        No user-defined-conversion operator available that can perform this conversion, or the operator cannot be called
+C:\Documents and Settings\Borf\Desktop\roworldedit\RSMModel.cpp(164) : error C2065: 'transf' : undeclared identifier
+C:\Documents and Settings\Borf\Desktop\roworldedit\RSMModel.cpp(164) : error C2228: left of '.todo' must have class/struct/union type
+C:\Documents and Settings\Borf\Desktop\roworldedit\RSMModel.cpp(164) : error C2228: left of '.todo' must have class/struct/union type
+C:\Documents and Settings\Borf\Desktop\roworldedit\RSMModel.cpp(174) : error C2065: 'range' : undeclared identifier
+C:\Documents and Settings\Borf\Desktop\roworldedit\RSMModel.cpp(174) : error C2109: subscript requires array or pointer type
+C:\Documents and Settings\Borf\Desktop\roworldedit\RSMModel.cpp(174) : error C2065: 'max' : undeclared identifier
+C:\Documents and Settings\Borf\Desktop\roworldedit\RSMModel.cpp(174) : error C2109: subscript requires array or pointer type
+C:\Documents and Settings\Borf\Desktop\roworldedit\RSMModel.cpp(174) : error C2065: 'min' : undeclared identifier
+C:\Documents and Settings\Borf\Desktop\roworldedit\RSMModel.cpp(174) : error C2109: subscript requires array or pointer type
+C:\Documents and Settings\Borf\Desktop\roworldedit\RSMModel.cpp(174) : error C2106: '=' : left operand must be l-value
+Error executing cl.exe.
 
 
 
 <h3>Results</h3>
-roworldedit.exe - 0 error(s), 0 warning(s)
+roworldedit.exe - 14 error(s), 0 warning(s)
 </pre>
 </body>
 </html>
