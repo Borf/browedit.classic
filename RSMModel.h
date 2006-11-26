@@ -25,6 +25,14 @@ public:
 	float quat[4];
 };
 
+class cBoundingbox
+{
+public:
+	float bbmin[3];
+	float bbmax[3];
+	float bbrange[3];
+};
+
 class cRSMModelMesh
 {
 public:
@@ -44,16 +52,12 @@ public:
 	vector<cRSMModelFace> faces;
 	int nFrameAnimations;
 	vector<cRSMModelFrame> frames;
-
-
-	float bbmin[3];
-	float bbmax[3];
-	float range[3];
+	cBoundingbox bb;
 
 	void boundingbox(float* = NULL);
 
 
-	void draw();
+	void draw(cBoundingbox*, float*, bool);
 
 };
 
@@ -65,9 +69,17 @@ public:
 	cVector3 rot;
 
 	void load(string filename);
-	vector<cRSMModelMesh*> meshes;
+	vector<cRSMModelMesh*>	meshes;
+	vector<int>				fathers;
 	vector<cTexture*> textures;
 	void draw();
+	void draw2(cBoundingbox*, int, float*, bool);
+
+	void boundingbox();
+
+	cBoundingbox bb;
+
+
 };
 
 #endif

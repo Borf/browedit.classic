@@ -365,8 +365,10 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						{
 							float selsizex = (fabs(Graphics.selectionstart.x - Graphics.selectionend.x) / 32);
 							float selsizey = (fabs(Graphics.selectionstart.y - Graphics.selectionend.y) / 32);
+
 							selsizex = floor(selsizex*Graphics.brushsize);
 							selsizey = floor(selsizey*Graphics.brushsize);
+
 							int posx = mouse3dx / 10;
 							int posy = mouse3dz / 10;
 
@@ -374,6 +376,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							float selstarty = ((int)(Graphics.selectionstart.y - 32) % 288) / 32;
 							float selendx = ((Graphics.selectionend.x - (Graphics.w()-256)) / 32.0f);
 							float selendy = ((int)(Graphics.selectionend.y - 32) % 288) / 32;
+							glColor4f(1,1,1,0.7f);
+							glEnable(GL_BLEND);
 
 							if (Graphics.texturerot % 2 == 1)
 							{
@@ -395,6 +399,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							{
 								for(int y = posy; y > posy-selsizey; y--)
 								{
+									if(!Graphics.frustum.CubeInFrustum(x*10+5,0,(Graphics.world.height-y)*10+5, 10))
+										continue;
 									int xx = posx - x;
 									int yy = posy - y;
 									if (y < 0)
@@ -403,7 +409,6 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 										continue;
 									cTile t;
 									t.texture = Graphics.texturestart + (Graphics.selectionstart.y - 32) / 288;
-									t.lightmap = 0;
 									if (Graphics.texturerot == 0)
 									{
 										t.u1 = (selendx*Graphics.brushsize-xx-1) * (1/(8.0f*Graphics.brushsize));
@@ -460,20 +465,23 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 										t.v4 = (selstartx*Graphics.brushsize+xx) * (1/(8.0f*Graphics.brushsize));
 										t.u4 = ((selendy*Graphics.brushsize-yy) * (1/(8.0f*Graphics.brushsize)));
 									}
+									
+
 									if(Graphics.fliph)
 									{
-										t.u1 = 1-t.u1;
-										t.u2 = 1-t.u2;
-										t.u3 = 1-t.u3;
-										t.u4 = 1-t.u4;
+										t.u1 = ((selendx+selstartx)/8.0)-t.u1;
+										t.u2 = ((selendx+selstartx)/8.0)-t.u2;
+										t.u3 = ((selendx+selstartx)/8.0)-t.u3;
+										t.u4 = ((selendx+selstartx)/8.0)-t.u4;
 									}
 									if(Graphics.flipv)
 									{
-										t.v1 = 1-t.v1;
-										t.v2 = 1-t.v2;
-										t.v3 = 1-t.v3;
-										t.v4 = 1-t.v4;
+										t.v1 = ((selendy+selstarty)/8.0)-t.v1;
+										t.v2 = ((selendy+selstarty)/8.0)-t.v2;
+										t.v3 = ((selendy+selstarty)/8.0)-t.v3;
+										t.v4 = ((selendy+selstarty)/8.0)-t.v4;
 									}
+
 //									cTile* tt = &Graphics.world.tiles[Graphics.world.cubes[y][x].tileup];
 									Graphics.world.tiles.push_back(t);
 									Graphics.world.cubes[y][x].tileup = Graphics.world.tiles.size()-1;

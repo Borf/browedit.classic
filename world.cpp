@@ -318,7 +318,7 @@ void cWorld::draw()
 		for(y = 0; y < height; y++)
 		{
 			cCube* c = &cubes[y][x];
-			if(!Graphics.frustum.CubeInFrustum(x*10+5,0,y*10+5, 10))
+			if(!Graphics.frustum.CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 10))
 				continue;
 			if (c->tileup != -1)
 			{
@@ -330,10 +330,10 @@ void cWorld::draw()
 				else
 					glColor3f(1,1,1);
 				glBegin(GL_QUADS);
-					glTexCoord2f(t->u1, 1-t->v1); glVertex3f(x*10,-c->cell1,y*10);
-					glTexCoord2f(t->u2, 1-t->v2); glVertex3f(x*10+10,-c->cell2,y*10);
-					glTexCoord2f(t->u4, 1-t->v4); glVertex3f(x*10+10,-c->cell4,y*10+10);
-					glTexCoord2f(t->u3, 1-t->v3); glVertex3f(x*10,-c->cell3,y*10+10);
+					glTexCoord2f(t->u1, 1-t->v1); glVertex3f(x*10,-c->cell1,(height-y)*10);
+					glTexCoord2f(t->u2, 1-t->v2); glVertex3f(x*10+10,-c->cell2,(height-y)*10);
+					glTexCoord2f(t->u4, 1-t->v4); glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
+					glTexCoord2f(t->u3, 1-t->v3); glVertex3f(x*10,-c->cell3,(height-y)*10-10);
 				glEnd();
 			}
 			if (c->tileaside != -1 && c->tileaside < tiles.size())
@@ -343,10 +343,10 @@ void cWorld::draw()
 				glBindTexture(GL_TEXTURE_2D, texture);
 				glColor3f(1,1,1);
 				glBegin(GL_QUADS);
-					glTexCoord2f(t->u1, 1-t->v1); glVertex3f(x*10+10,-c->cell4,y*10+10);
-					glTexCoord2f(t->u2, 1-t->v2); glVertex3f(x*10+10,-c->cell2,y*10);
-					glTexCoord2f(t->u4, 1-t->v4); glVertex3f(x*10+10,-(c+1)->cell1,y*10);
-					glTexCoord2f(t->u3, 1-t->v3); glVertex3f(x*10+10,-(c+1)->cell3,y*10+10);
+					glTexCoord2f(t->u1, 1-t->v1); glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
+					glTexCoord2f(t->u2, 1-t->v2); glVertex3f(x*10+10,-c->cell2,(height-y)*10);
+					glTexCoord2f(t->u4, 1-t->v4); glVertex3f(x*10+10,-(c+1)->cell1,(height-y)*10);
+					glTexCoord2f(t->u3, 1-t->v3); glVertex3f(x*10+10,-(c+1)->cell3,(height-y)*10-10);
 				glEnd();
 			}
 			if (c->tileside != -1 && y < height-1 && c->tileside < tiles.size())
@@ -356,10 +356,10 @@ void cWorld::draw()
 				glBindTexture(GL_TEXTURE_2D, texture);
 				glColor3f(1,1,1);
 				glBegin(GL_QUADS);
-					glTexCoord2f(t->u1, 1-t->v1); glVertex3f(x*10,-c->cell3,y*10+10);
-					glTexCoord2f(t->u2, 1-t->v2); glVertex3f(x*10+10,-c->cell4,y*10+10);
-					glTexCoord2f(t->u4, 1-t->v4); glVertex3f(x*10+10,-cubes[y+1][x].cell2,y*10+10);
-					glTexCoord2f(t->u3, 1-t->v3); glVertex3f(x*10,-cubes[y+1][x].cell1,y*10+10);
+					glTexCoord2f(t->u1, 1-t->v1); glVertex3f(x*10,-c->cell3,(height-y)*10-10);
+					glTexCoord2f(t->u2, 1-t->v2); glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
+					glTexCoord2f(t->u4, 1-t->v4); glVertex3f(x*10+10,-cubes[y+1][x].cell2,(height-y)*10-10);
+					glTexCoord2f(t->u3, 1-t->v3); glVertex3f(x*10,-cubes[y+1][x].cell1,(height-y)*10-10);
 				glEnd();
 			}
 		}
@@ -393,7 +393,7 @@ void cWorld::draw()
 	);
 	mouse3dx = xxx;
 	mouse3dy = yyy;
-	mouse3dz = zzz;
+	mouse3dz = (height*10)-zzz;
 
 
 
@@ -409,6 +409,8 @@ void cWorld::draw()
 
 		int posx = mouse3dx / 10;
 		int posy = mouse3dz / 10;
+		if(SDL_GetModState() & KMOD_SHIFT)
+			Log(3,0,"Pos: %i,%i", posx, posy);
 
 
 		glEnable(GL_TEXTURE_2D);
@@ -437,18 +439,11 @@ void cWorld::draw()
 
 			}
 
-			if(Graphics.fliph)
-			{
-				//int a = selstartx;
-				//selstartx += selendx;
-				//selendx -= 8-a;
-			}
-
 			for(x = posx; x > posx-selsizex; x--)
 			{
 				for(y = posy; y > posy-selsizey; y--)
 				{
-					if(!Graphics.frustum.CubeInFrustum(x*10+5,0,y*10+5, 10))
+					if(!Graphics.frustum.CubeInFrustum(x*10+5,0,(height-y)*10+5, 10))
 						continue;
 					int xx = posx - x;
 					int yy = posy - y;
@@ -534,18 +529,18 @@ void cWorld::draw()
 					glBindTexture(GL_TEXTURE_2D, textures[t.texture]->texid());
 					cCube* c = &cubes[y][x];
 					glBegin(GL_QUADS);
-						glTexCoord2f(t.u1, 1-t.v1); glVertex3f(x*10,-c->cell1+0.1,y*10);
-						glTexCoord2f(t.u2, 1-t.v2); glVertex3f(x*10+10,-c->cell2+0.1,y*10);
-						glTexCoord2f(t.u4, 1-t.v4); glVertex3f(x*10+10,-c->cell4+0.1,y*10+10);
-						glTexCoord2f(t.u3, 1-t.v3); glVertex3f(x*10,-c->cell3+0.1,y*10+10);
+						glTexCoord2f(t.u1, 1-t.v1); glVertex3f(x*10,-c->cell1+0.1,(height-y)*10);
+						glTexCoord2f(t.u2, 1-t.v2); glVertex3f(x*10+10,-c->cell2+0.1,(height-y)*10);
+						glTexCoord2f(t.u4, 1-t.v4); glVertex3f(x*10+10,-c->cell4+0.1,(height-y)*10-10);
+						glTexCoord2f(t.u3, 1-t.v3); glVertex3f(x*10,-c->cell3+0.1,(height-y)*10-10);
 					glEnd();
 					glDisable(GL_BLEND);
 					glColor4f(1,0,0,1);
 					glBegin(GL_LINE_LOOP);
-						glTexCoord2f(t.u1, 1-t.v1); glVertex3f(x*10,-c->cell1+0.2,y*10);
-						glTexCoord2f(t.u2, 1-t.v2); glVertex3f(x*10+10,-c->cell2+0.2,y*10);
-						glTexCoord2f(t.u4, 1-t.v4); glVertex3f(x*10+10,-c->cell4+0.2,y*10+10);
-						glTexCoord2f(t.u3, 1-t.v3); glVertex3f(x*10,-c->cell3+0.2,y*10+10);
+						glTexCoord2f(t.u1, 1-t.v1); glVertex3f(x*10,-c->cell1+0.2,(height-y)*10);
+						glTexCoord2f(t.u2, 1-t.v2); glVertex3f(x*10+10,-c->cell2+0.2,(height-y)*10);
+						glTexCoord2f(t.u4, 1-t.v4); glVertex3f(x*10+10,-c->cell4+0.2,(height-y)*10-10);
+						glTexCoord2f(t.u3, 1-t.v3); glVertex3f(x*10,-c->cell3+0.2,(height-y)*10-10);
 					glEnd();
 					glEnable(GL_BLEND);
 					glColor4f(1,1,1,0.7f);
@@ -568,7 +563,7 @@ void cWorld::draw()
 				for(y = 1; y < height-1; y++)
 				{
 					cCube* c = &cubes[y][x];
-					if(!Graphics.frustum.CubeInFrustum(x*10+5,0,y*10+5, 10))
+					if(!Graphics.frustum.CubeInFrustum(x*10+5,-c->cell1,y*10-5, 10))
 						continue;
 
 					if (c->tileup != -1)
@@ -625,14 +620,14 @@ void cWorld::draw()
 			{
 				for(y = posy-floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
 				{
-					if(!Graphics.frustum.CubeInFrustum(x*10+5,0,y*10+5, 10))
-						continue;
 					cCube* c = &cubes[y][x];
+					if(!Graphics.frustum.CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 10))
+						continue;
 					glBegin(GL_LINE_LOOP);
-						glVertex3f(x*10,-c->cell1+0.2,y*10);
-						glVertex3f(x*10+10,-c->cell2+0.2,y*10);
-						glVertex3f(x*10+10,-c->cell4+0.2,y*10+10);
-						glVertex3f(x*10,-c->cell3+0.2,y*10+10);
+						glVertex3f(x*10,-c->cell1+0.2,(height-y)*10);
+						glVertex3f(x*10+10,-c->cell2+0.2,(height-y)*10);
+						glVertex3f(x*10+10,-c->cell4+0.2,(height-y)*10-10);
+						glVertex3f(x*10,-c->cell3+0.2,(height-y)*10-10);
 					glEnd();
 					
 
@@ -650,10 +645,10 @@ void cWorld::draw()
 		{
 			cCube* c = &cubes[y][x];
 			glBegin(GL_LINE_LOOP);
-				glVertex3f(x*10,-c->cell1+0.2,y*10);
-				glVertex3f(x*10+10,-c->cell2+0.2,y*10);
-				glVertex3f(x*10+10,-c->cell4+0.2,y*10+10);
-				glVertex3f(x*10,-c->cell3+0.2,y*10+10);
+				glVertex3f(x*10,-c->cell1+0.2,(height-y)*10);
+				glVertex3f(x*10+10,-c->cell2+0.2,(height-y)*10);
+				glVertex3f(x*10+10,-c->cell4+0.2,(height-y)*10-10);
+				glVertex3f(x*10,-c->cell3+0.2,(height-y)*10-10);
 			glEnd();
 		}
 	}
@@ -663,10 +658,14 @@ void cWorld::draw()
 
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_BLEND);
+	glTranslatef(0,0,height*10);
+	glScalef(1,1,-1);
 	for(int i = 0; i < models.size(); i++)
 	{
 		models[i]->draw();
 	}
+	glScalef(1,1,-1);
+	glTranslatef(0,0,-height*10);
 
 	glTranslatef(-Graphics.camerapointer.x, 0, -Graphics.camerapointer.y);
 

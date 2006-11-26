@@ -28,13 +28,34 @@ void cRSMModel::load(string filename)
 
 	while(pFile->data[pFile->index] != 0 && pFile->data[pFile->index+1] != 0 && pFile->data[pFile->index+2] != 0 && pFile->data[pFile->index+3] != 0 && pFile->index < pFile->size-32)
 	{
-		Log(4,0,"Pos: %i, %i", pFile->index, pFile->size);
 		cRSMModelMesh* mesh = new cRSMModelMesh();
 		mesh->load(pFile, this, meshes.size() == 0);
 		meshes.push_back(mesh);
 	}
 
 	pFile->close();
+
+	fathers.push_back(0);
+
+	for(i = 1; i < meshes.size(); i++)
+	{
+		bool found = false;
+		for(int j = 0; j < meshes.size(); j++)
+		{
+			if (i != j && meshes[i]->name == meshes[j]->name)
+			{
+				fathers.push_back(j);
+				found = true;
+				break;
+			}
+		}
+
+		if(!found)
+		{
+			fathers.push_back(-1); //dunno if this is right
+		}
+	}
+	boundingbox();
 	Log(3,0,"Done loading %s", filename.c_str());
 }
 
@@ -105,10 +126,6 @@ void cRSMModelMesh::load(cFile* pFile, cRSMModel* model, bool firstmesh)
 		pFile->read((char*)&f.quat, sizeof(f.quat));
 		frames.push_back(f);
 	}
-
-
-
-
 }
 
 void MatrixMultVect(const float *M, cVector3 Vin, float *Vout) 
@@ -147,8 +164,8 @@ void cRSMModelMesh::boundingbox(float* ptransf)
 	Rot[14] = 0.0;
 	Rot[15] = 1.0;
 
-	bbmin[0] = bbmin[1] = bbmin[2] = 99999999.0f;
-	bbmax[0] = bbmax[1] = bbmax[2] =-99999999.0f;
+	bb.bbmin[0] = bb.bbmin[1] = bb.bbmin[2] = 99999999.0f;
+	bb.bbmax[0] = bb.bbmax[1] = bb.bbmax[2] =-99999999.0f;
 
 	for (i = 0; i < nVertices; i++)
 	{
@@ -162,21 +179,21 @@ void cRSMModelMesh::boundingbox(float* ptransf)
 			else
 				f = vout[j];
 
-			if (f < bbmin[j])
-				bbmin[j] = f;
-			if (f > bbmax[j])
-				bbmax[j] = f;
+			if (f < bb.bbmin[j])
+				bb.bbmin[j] = f;
+			if (f > bb.bbmax[j])
+				bb.bbmax[j] = f;
 		}
 	}
 
 	for (j=0; j < 3; j++)
-		range[j] = (bbmax[j]+bbmin[j])/2.0;
+		bb.bbrange[j] = (bb.bbmax[j]+bb.bbmin[j])/2.0;
 }
 
 
 void cRSMModel::draw()
 {
-	if(!Graphics.frustum.PointInFrustum(5*pos.x, 5*pos.y, 5*pos.z))
+	if(!Graphics.frustum.PointInFrustum(5*pos.x, -5*pos.y, 5*(Graphics.world.height*2-pos.z)))
 		return;
 	glPushMatrix();
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set the correct blending mode
@@ -186,32 +203,131 @@ void cRSMModel::draw()
 	glRotatef(rot.y, 0.0, 1.0, 0.0);
 	glRotatef(rot.z, 0.0, 0.0, 1.0);
 
-	glScalef(scale.x/5.0, scale.y/5.0, scale.z/5.0);
+	glScalef(scale.x, -scale.y, scale.z);
 //	glScalef(0.5, 0.5, 0.5);
-	for(int i = 0; i < meshes.size(); i++)
-	{
-		meshes[i]->draw();
-	}
-
+	draw2(&bb,0, NULL, meshes.size() == 1);
 
 	glPopMatrix();
 }
 
-
-void cRSMModelMesh::draw()
+void cRSMModel::draw2(cBoundingbox* box, int mesh, float* transf, bool only)
 {
-	for(int i = 0; i < nFaces; i++)
+	glPushMatrix();
+	meshes[mesh]->draw(&bb,NULL, meshes.size() == 1);
+
+	for(int i = 0; i < meshes.size(); i++)
+	{
+		if(i != mesh && fathers[i] == mesh)
+			draw2((mesh == 0) ? box : NULL, i, meshes[mesh]->trans, only);
+	}
+	glPopMatrix();
+}
+
+
+void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only)
+{
+	bool firstmesh = (ptransf == NULL);
+	GLfloat Rot[16];
+	int i;
+	int j;
+
+	Rot[0] = trans[0];
+	Rot[1] = trans[1];
+	Rot[2] = trans[2];
+	Rot[3] = 0.0;
+
+	Rot[4] = trans[3];
+	Rot[5] = trans[4];
+	Rot[6] = trans[5];
+	Rot[7] = 0.0;
+
+	Rot[8] = trans[6];
+	Rot[9] = trans[7];
+	Rot[10] = trans[8];
+	Rot[11] = 0.0;
+
+	Rot[12] = 0.0;
+	Rot[13] = 0.0;
+	Rot[14] = 0.0;
+	Rot[15] = 1.0;
+	
+	glScalef(trans[19], trans[20], trans[21]);
+	if(firstmesh)
+	{
+		if(!only)
+		{
+			glTranslatef(-box->bbrange[0], -box->bbmax[1], -box->bbrange[2]);
+		}
+		else
+		{
+			glTranslatef(0, -box->bbmax[1]+box->bbrange[1], 0);
+		}
+	}
+
+	if(!firstmesh)
+		glTranslatef(trans[12], -trans[13], trans[14]);
+
+	if(frames.size() == 0)
+	{
+		glRotatef(trans[15]*180.0/3.14159, trans[16], trans[17], trans[18]);
+	}
+	else
+	{
+	}
+
+	glPushMatrix();
+
+	if(firstmesh && only)
+		glTranslatef(-box->bbrange[0], -box->bbrange[1], -box->bbrange[2]);
+
+	if (!firstmesh || !only)
+		glTranslatef(trans[9], trans[10], trans[11]);
+
+	glMultMatrixf(Rot);
+
+	for(i = 0; i < nFaces; i++)
 	{
 		cRSMModelFace* f = &faces[i];
 		glBindTexture(GL_TEXTURE_2D, textures[f->texid]->texid());
 		glBegin(GL_TRIANGLES);
-			glTexCoord2f(texcoords[f->t[0]].y, 1-texcoords[f->t[0]].z); glVertex3f(vertices[f->v[0]].x, vertices[f->v[0]].z, vertices[f->v[0]].y);
-			glTexCoord2f(texcoords[f->t[1]].y, 1-texcoords[f->t[1]].z); glVertex3f(vertices[f->v[1]].x, vertices[f->v[1]].z, vertices[f->v[1]].y);
-			glTexCoord2f(texcoords[f->t[2]].y, 1-texcoords[f->t[2]].z); glVertex3f(vertices[f->v[2]].x, vertices[f->v[2]].z, vertices[f->v[2]].y);
+			glTexCoord2f(texcoords[f->t[0]].y, 1-texcoords[f->t[0]].z); glVertex3f(vertices[f->v[0]].x, vertices[f->v[0]].y, vertices[f->v[0]].z);
+			glTexCoord2f(texcoords[f->t[1]].y, 1-texcoords[f->t[1]].z); glVertex3f(vertices[f->v[1]].x, vertices[f->v[1]].y, vertices[f->v[1]].z);
+			glTexCoord2f(texcoords[f->t[2]].y, 1-texcoords[f->t[2]].z); glVertex3f(vertices[f->v[2]].x, vertices[f->v[2]].y, vertices[f->v[2]].z);
 		glEnd();
 
 
 	}
+	glPopMatrix();
+
+}
 
 
+void cRSMModel::boundingbox()
+{
+	int i;
+	meshes[0]->boundingbox(NULL);
+	
+
+	for(i = 1; i < meshes.size(); i++)
+	{
+		if(fathers[i] == 0)
+				meshes[i]->boundingbox(meshes[0]->trans);
+	}
+
+	for(i = 0; i < 3; i++)
+	{
+		bb.bbmax[i] = meshes[0]->bb.bbmax[i];
+		bb.bbmin[i] = meshes[0]->bb.bbmin[i];
+		for(int j = 1; j < meshes.size(); j++)
+		{
+			if (fathers[j] == 0)
+			{
+				if (bb.bbmax[i] < meshes[j]->bb.bbmax[i])
+					bb.bbmax[i] = meshes[j]->bb.bbmax[i];
+				if (bb.bbmin[i] > meshes[j]->bb.bbmin[i])
+					bb.bbmin[i] = meshes[j]->bb.bbmin[i];
+			}
+		}
+		bb.bbrange[i] = (bb.bbmax[i]+bb.bbmin[i]) /2.0f;
+	}
 }

@@ -6,13 +6,13 @@
 --------------------Configuration: roworldedit - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\DOCUME~1\Borf\LOCALS~1\Temp\RSPF97.tmp" with contents
+Creating temporary file "C:\DOCUME~1\BORF~1.YAM\LOCALS~1\Temp\RSP683.tmp" with contents
 [
-/nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /Fp"Debug/roworldedit.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
-"C:\Documents and Settings\Borf\Desktop\roworldedit\RSMModel.cpp"
+/nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FR"Debug/" /Fp"Debug/roworldedit.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"C:\Documents and Settings\Borf.YAMI\Desktop\roworldedit\RSMModel.cpp"
 ]
-Creating command line "cl.exe @C:\DOCUME~1\Borf\LOCALS~1\Temp\RSPF97.tmp" 
-Creating temporary file "C:\DOCUME~1\Borf\LOCALS~1\Temp\RSPF98.tmp" with contents
+Creating command line "cl.exe @C:\DOCUME~1\BORF~1.YAM\LOCALS~1\Temp\RSP683.tmp" 
+Creating temporary file "C:\DOCUME~1\BORF~1.YAM\LOCALS~1\Temp\RSP684.tmp" with contents
 [
 bgd.lib sdl.lib sdlmain.lib zlib.lib opengl32.lib glaux.lib glu32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/roworldedit.pdb" /debug /machine:I386 /nodefaultlib:"MSVCRT" /out:"Debug/roworldedit.exe" /pdbtype:sept 
 ".\Debug\common.obj"
@@ -26,16 +26,33 @@ bgd.lib sdl.lib sdlmain.lib zlib.lib opengl32.lib glaux.lib glu32.lib kernel32.l
 ".\Debug\world.obj"
 ".\Debug\texturecache.obj"
 ]
-Creating command line "link.exe @C:\DOCUME~1\Borf\LOCALS~1\Temp\RSPF98.tmp"
+Creating command line "link.exe @C:\DOCUME~1\BORF~1.YAM\LOCALS~1\Temp\RSP684.tmp"
 <h3>Output Window</h3>
 Compiling...
 RSMModel.cpp
+c:\documents and settings\borf.yami\desktop\roworldedit\rsmmodel.cpp(232) : warning C4101: 'j' : unreferenced local variable
 Linking...
+Creating temporary file "C:\DOCUME~1\BORF~1.YAM\LOCALS~1\Temp\RSP685.tmp" with contents
+[
+/nologo /o"Debug/roworldedit.bsc" 
+".\Debug\common.sbr"
+".\Debug\filesystem.sbr"
+".\Debug\font.sbr"
+".\Debug\frustum.sbr"
+".\Debug\graphics.sbr"
+".\Debug\main.sbr"
+".\Debug\RSMModel.sbr"
+".\Debug\texture.sbr"
+".\Debug\world.sbr"
+".\Debug\texturecache.sbr"]
+Creating command line "bscmake.exe @C:\DOCUME~1\BORF~1.YAM\LOCALS~1\Temp\RSP685.tmp"
+Creating browse info file...
+<h3>Output Window</h3>
 
 
 
 <h3>Results</h3>
-roworldedit.exe - 0 error(s), 0 warning(s)
+roworldedit.exe - 0 error(s), 1 warning(s)
 </pre>
 </body>
 </html>

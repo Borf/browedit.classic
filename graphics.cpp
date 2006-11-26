@@ -111,7 +111,7 @@ int cGraphics::init()
 	cameraheight = 123;
 	camerarot = 0.0f;
 	//camerapointer = cVector2(980,980);
-	camerapointer = cVector2(-985,-1000.5);
+	camerapointer = cVector2(-774,-963.5);
 	cameraangle = 0;
 
 
