@@ -65,6 +65,7 @@ class cRSMModel
 {
 public:
 	~cRSMModel();
+	string filename;
 
 	cVector3 pos;
 	cVector3 scale;

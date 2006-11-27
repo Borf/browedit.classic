@@ -194,7 +194,7 @@ int main(int argc, char *argv[])
 		string cat = pre.substr(0, pre.rfind("/"));
 		string menuname = pre.substr(pre.rfind("/")+1);
 
-		if (items.find(cat) == items.end())
+		if (cat != "" && items.find(cat) == items.end())
 		{
 			cMenu* root = models;
 			string catname = cat;
@@ -225,7 +225,7 @@ int main(int argc, char *argv[])
 		return 1;
 
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "prontera").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "customtown").c_str());
 	Graphics.world.load();
 	long lasttimer = SDL_GetTicks();
 	while( running ) {
@@ -677,24 +677,37 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if(editmode == MODE_OBJECTS && !dragged)
 					{
-						int minobj = 0;
-						float mindist = 999999;
-						for(int i = 0; i < Graphics.world.models.size(); i++)
+						if (doubleclick)
 						{
-							cVector3 d = Graphics.world.models[i]->pos;
-							d.x = d.x;
-							
-							d.x -= mouse3dx/5;
-							d.z -= mouse3dz/5;
-							d.y = 0;
-
-							if(mindist > d.Magnitude())
-							{
-								mindist = d.Magnitude();
-								minobj = i;
-							}
+							cRSMModel* model = new cRSMModel();
+							model->load(Graphics.previewmodel->filename);
+							model->pos = cVector3(mouse3dx/5, mouse3dy, mouse3dz/5);
+							model->scale = cVector3(1,1,1);
+							model->rot = cVector3(0,0,0);
+							Graphics.world.models.push_back(model);
+							Graphics.selectedobject = Graphics.world.models.size()-1;
 						}
-						Graphics.selectedobject = minobj;
+						else
+						{
+							int minobj = 0;
+							float mindist = 999999;
+							for(int i = 0; i < Graphics.world.models.size(); i++)
+							{
+								cVector3 d = Graphics.world.models[i]->pos;
+								d.x = d.x;
+								
+								d.x -= mouse3dx/5;
+								d.z -= mouse3dz/5;
+								d.y = 0;
+
+								if(mindist > d.Magnitude())
+								{
+									mindist = d.Magnitude();
+									minobj = i;
+								}
+							}
+							Graphics.selectedobject = minobj;
+						}
 					}
 				}
 				break;
@@ -794,10 +807,23 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				break;
 			case SDLK_MINUS:
-				Graphics.brushsize/=2;
+				if (editmode == MODE_OBJECTS)
+				{
+					if (Graphics.previewmodel != NULL)
+						Graphics.previewmodel->scale = Graphics.previewmodel->scale * 0.9f;
+				}
+				else
+					Graphics.brushsize/=2;
+					
 				break;
 			case SDLK_EQUALS:
-				Graphics.brushsize*=2;
+				if (editmode == MODE_OBJECTS)
+				{
+					if (Graphics.previewmodel != NULL)
+						Graphics.previewmodel->scale = Graphics.previewmodel->scale * 1.1f;
+				}
+				else
+					Graphics.brushsize*=2;
 				break;
 			case SDLK_LEFTBRACKET:
 				Graphics.texturestart--;
@@ -810,6 +836,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					Graphics.texturestart--;
 				break;
 			case SDLK_SPACE:
+				Graphics.previewcolor = 20;
 				Graphics.texturerot = (Graphics.texturerot + 1) % 4;
 				break;
 			case SDLK_h:
@@ -1153,37 +1180,75 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					if (x < 0)
 						break;
 
-					if(Graphics.world.cubes[y][x].tileside == -1)
-						break;
-
-					int xx = x;
-					while(Graphics.world.cubes[y][xx].tileside != -1)
-						xx++;
-					int xmax = xx;
-					xx = x;
-					while(Graphics.world.cubes[y][xx].tileside != -1)
-						xx--;
-					int xmin = xx+1;
-					int xdiff = 4;
-
-					for(xx = xmin; xx < xmax; xx++)
+					if(SDL_GetModState() & KMOD_ALT)
 					{
-						cTile t;
-						t.texture = Graphics.texturestart;
-						t.lightmap = 0;
-						t.u1 = ((xx-xmin)%4) *  (1.0/(float)xdiff);
-						t.v1 = 0;
+						if(Graphics.world.cubes[y][x].tileaside == -1)
+							break;
 
-						t.u2 = ((xx-xmin+1)%4) *  (1.0/(float)xdiff);
-						t.v2 = 0;
-						
-						t.u3 = ((xx-xmin)%4) *  (1.0/(float)xdiff);
-						t.v3 = 1;
-						
-						t.u4 = ((xx-xmin+1)%4) *  (1.0/(float)xdiff);
-						t.v4 = 1;
-						Graphics.world.tiles.push_back(t);
-						Graphics.world.cubes[y][xx].tileside = Graphics.world.tiles.size()-1;
+						int yy = y;
+						while(Graphics.world.cubes[yy][x].tileaside != -1)
+							yy++;
+						int ymax = yy;
+						yy = y;
+						while(Graphics.world.cubes[yy][x].tileaside != -1)
+							yy--;
+						int ymin = yy+1;
+						int ydiff = 4;
+
+						for(yy = ymin; yy < ymax; yy++)
+						{
+							cTile t;
+							t.texture = Graphics.texturestart;
+							t.lightmap = 0;
+							t.u1 = ((yy-ymin)%4) *  (1.0/(float)ydiff);
+							t.v1 = 0;
+
+							t.u2 = ((yy-ymin+1)%4) *  (1.0/(float)ydiff);
+							t.v2 = 0;
+							
+							t.u3 = ((yy-ymin)%4) *  (1.0/(float)ydiff);
+							t.v3 = 1;
+							
+							t.u4 = ((yy-ymin+1)%4) *  (1.0/(float)ydiff);
+							t.v4 = 1;
+							Graphics.world.tiles.push_back(t);
+							Graphics.world.cubes[yy][x].tileaside = Graphics.world.tiles.size()-1;
+						}
+					}
+					else
+					{
+						if(Graphics.world.cubes[y][x].tileside == -1)
+							break;
+
+						int xx = x;
+						while(Graphics.world.cubes[y][xx].tileside != -1)
+							xx++;
+						int xmax = xx;
+						xx = x;
+						while(Graphics.world.cubes[y][xx].tileside != -1)
+							xx--;
+						int xmin = xx+1;
+						int xdiff = 4;
+
+						for(xx = xmin; xx < xmax; xx++)
+						{
+							cTile t;
+							t.texture = Graphics.texturestart;
+							t.lightmap = 0;
+							t.u1 = ((xx-xmin)%4) *  (1.0/(float)xdiff);
+							t.v1 = 0;
+
+							t.u2 = ((xx-xmin+1)%4) *  (1.0/(float)xdiff);
+							t.v2 = 0;
+							
+							t.u3 = ((xx-xmin)%4) *  (1.0/(float)xdiff);
+							t.v3 = 1;
+							
+							t.u4 = ((xx-xmin+1)%4) *  (1.0/(float)xdiff);
+							t.v4 = 1;
+							Graphics.world.tiles.push_back(t);
+							Graphics.world.cubes[y][xx].tileside = Graphics.world.tiles.size()-1;
+						}
 					}
 					break;
 				}
@@ -1661,5 +1726,6 @@ MENUCOMMAND(model)
 	Graphics.previewmodel->rot = cVector3(0,0,0);
 	Graphics.previewmodel->scale = cVector3(4,4,4);
 
+	Graphics.previewcolor = 200;
 	return true;
 }

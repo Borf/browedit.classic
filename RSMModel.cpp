@@ -5,8 +5,9 @@ extern cFileSystem fs;
 extern string rodir;
 extern cGraphics Graphics;
 
-void cRSMModel::load(string filename)
+void cRSMModel::load(string fname)
 {
+	filename = fname;
 	cFile* pFile = fs.open(filename);
 
 	char buffer[100];
@@ -194,7 +195,7 @@ void cRSMModel::draw(bool checkfrust)
 {
 	if (checkfrust)
 	{
-		if(!Graphics.frustum.PointInFrustum(5*pos.x, -5*pos.y, 5*(Graphics.world.height*2-pos.z)))
+		if(!Graphics.frustum.PointInFrustum(5*pos.x, -pos.y, 5*(Graphics.world.height*2-pos.z)))
 			return;
 	}
 	glPushMatrix();

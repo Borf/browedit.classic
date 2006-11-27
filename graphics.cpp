@@ -55,23 +55,47 @@ int cGraphics::draw()
 		font->print(0,0,0,(width / 2) - (font->textlen(message)/2),height/2,"%s", message.c_str());
 	}
 
-	glDisable(GL_TEXTURE_2D);
-	glColor4f(1,1,1,1);
-	glBegin(GL_QUADS);
-		glVertex3f( 0,0,-1000);
-		glVertex3f( 400,0,-1000);
-		glVertex3f( 400,400,-1000);
-		glVertex3f( 0,400,-1000);
-	glEnd();
+	if (previewmodel != NULL)
+	{
+		if (previewcolor != 0)
+		{
+			glDisable(GL_TEXTURE_2D);
+			glEnable(GL_BLEND);
+			glColor4f(1,1,1,previewcolor > 20 ? 1 : previewcolor / 20.0f);
+			glBegin(GL_QUADS);
+				glVertex3f( 0,0,-1000);
+				glVertex3f( 400,0,-1000);
+				glVertex3f( 400,400,-1000);
+				glVertex3f( 0,400,-1000);
+			glEnd();
 
-	
-	glEnable(GL_TEXTURE_2D);
-	glColor3f(1,1,1);
-	previewmodel->draw(false);
-	previewmodel->rot.y+=3;
+			glEnable(GL_TEXTURE_2D);
+			glColor4f(1,1,1,previewcolor > 10 ? 1 : previewcolor / 20.0f);
+			previewmodel->pos = cVector3(40,-100,0);
+			previewmodel->draw(false);
+			if (previewcolor > -1)
+				previewcolor--;
+		}
+		glColor4f(1,1,1,1);
+		if (editmode == MODE_OBJECTS)
+		{
+			glDisable(GL_TEXTURE_2D);
+			glEnable(GL_BLEND);
+			glBegin(GL_QUADS);
+				glVertex2f( w()-0,	h()-0-32);
+				glVertex2f( w()-256,h()-0-32);
+				glVertex2f( w()-256,h()-256-32);
+				glVertex2f( w()-0,	h()-256-32);
+			glEnd();
 
+			glEnable(GL_TEXTURE_2D);
+			previewmodel->pos = cVector3((w()/5)-25,-h()+32+192,1000);
+			previewmodel->draw(false);
+			previewmodel->rot.y+=3;
+		}
+	}
 	menu->draw();
-	if(world.loaded )
+	if(world.loaded && editmode != MODE_OBJECTS)
 	{
 		glEnable(GL_TEXTURE_2D);
 		glColor4f(1,1,1,1);
@@ -187,11 +211,7 @@ int cGraphics::init()
 	bulb = new cTexture();
 	mask->Load("data/textures/interface/bulb.tga");
 
-	previewmodel = new cRSMModel();
-	previewmodel->load("c:\\games\\ro\\data\\model\\ÈÖ°Ö\\ÈÖ°Ö_µ¿»ó01.rsm");
-	previewmodel->pos = cVector3(10,10,0);
-	previewmodel->rot = cVector3(0,0,0);
-	previewmodel->scale = cVector3(4,4,4);
+	previewmodel = NULL;
 
 	return 1;
 }

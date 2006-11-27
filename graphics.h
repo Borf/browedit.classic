@@ -93,6 +93,7 @@ public:
 
 
 	cRSMModel*				previewmodel;
+	int						previewcolor;
 
 	bool					showobjects;
 

@@ -44,6 +44,16 @@ public:
 		return cVector3(x - vVector.x, y - vVector.y, z - vVector.z);
 	}
 	
+	cVector3 operator-(float f)
+	{
+		// Return the subtracted vectors result
+		return cVector3(x - f, y - f, z - f);
+	}
+	cVector3 operator+(float f)
+	{
+		// Return the subtracted vectors result
+		return cVector3(x + f, y + f, z + f);
+	}
 	// Here we overload the * operator so we can multiply by scalars
 	cVector3 operator*(float num)
 	{

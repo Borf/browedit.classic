@@ -779,36 +779,36 @@ void cWorld::draw()
 				else
 					glColor4f(1,0,0,0.5);
 
-				glVertex3f(5*pos.x+5, -5*pos.y+5, 5*(2*height-pos.z)+5);
-				glVertex3f(5*pos.x+5, -5*pos.y+5, 5*(2*height-pos.z)-5);
-				glVertex3f(5*pos.x-5, -5*pos.y+5, 5*(2*height-pos.z)-5);
-				glVertex3f(5*pos.x-5, -5*pos.y+5, 5*(2*height-pos.z)+5);
+				glVertex3f(5*pos.x+5, -pos.y+5, 5*(2*height-pos.z)+5);
+				glVertex3f(5*pos.x+5, -pos.y+5, 5*(2*height-pos.z)-5);
+				glVertex3f(5*pos.x-5, -pos.y+5, 5*(2*height-pos.z)-5);
+				glVertex3f(5*pos.x-5, -pos.y+5, 5*(2*height-pos.z)+5);
 
-				glVertex3f(5*pos.x+5, -5*pos.y-5, 5*(2*height-pos.z)+5);
-				glVertex3f(5*pos.x+5, -5*pos.y-5, 5*(2*height-pos.z)-5);
-				glVertex3f(5*pos.x-5, -5*pos.y-5, 5*(2*height-pos.z)-5);
-				glVertex3f(5*pos.x-5, -5*pos.y-5, 5*(2*height-pos.z)+5);
+				glVertex3f(5*pos.x+5, -pos.y-5, 5*(2*height-pos.z)+5);
+				glVertex3f(5*pos.x+5, -pos.y-5, 5*(2*height-pos.z)-5);
+				glVertex3f(5*pos.x-5, -pos.y-5, 5*(2*height-pos.z)-5);
+				glVertex3f(5*pos.x-5, -pos.y-5, 5*(2*height-pos.z)+5);
 
 
-				glVertex3f(5*pos.x+5, -5*pos.y+5, 5*(2*height-pos.z)+5);
-				glVertex3f(5*pos.x+5, -5*pos.y-5, 5*(2*height-pos.z)+5);
-				glVertex3f(5*pos.x-5, -5*pos.y-5, 5*(2*height-pos.z)+5);
-				glVertex3f(5*pos.x-5, -5*pos.y+5, 5*(2*height-pos.z)+5);
+				glVertex3f(5*pos.x+5, -pos.y+5, 5*(2*height-pos.z)+5);
+				glVertex3f(5*pos.x+5, -pos.y-5, 5*(2*height-pos.z)+5);
+				glVertex3f(5*pos.x-5, -pos.y-5, 5*(2*height-pos.z)+5);
+				glVertex3f(5*pos.x-5, -pos.y+5, 5*(2*height-pos.z)+5);
 				
-				glVertex3f(5*pos.x+5, -5*pos.y+5, 5*(2*height-pos.z)-5);
-				glVertex3f(5*pos.x+5, -5*pos.y-5, 5*(2*height-pos.z)-5);
-				glVertex3f(5*pos.x-5, -5*pos.y-5, 5*(2*height-pos.z)-5);
-				glVertex3f(5*pos.x-5, -5*pos.y+5, 5*(2*height-pos.z)-5);
+				glVertex3f(5*pos.x+5, -pos.y+5, 5*(2*height-pos.z)-5);
+				glVertex3f(5*pos.x+5, -pos.y-5, 5*(2*height-pos.z)-5);
+				glVertex3f(5*pos.x-5, -pos.y-5, 5*(2*height-pos.z)-5);
+				glVertex3f(5*pos.x-5, -pos.y+5, 5*(2*height-pos.z)-5);
 
-				glVertex3f(5*pos.x+5, -5*pos.y+5, 5*(2*height-pos.z)+5);
-				glVertex3f(5*pos.x+5, -5*pos.y-5, 5*(2*height-pos.z)+5);
-				glVertex3f(5*pos.x+5, -5*pos.y-5, 5*(2*height-pos.z)-5);
-				glVertex3f(5*pos.x+5, -5*pos.y+5, 5*(2*height-pos.z)-5);
+				glVertex3f(5*pos.x+5, -pos.y+5, 5*(2*height-pos.z)+5);
+				glVertex3f(5*pos.x+5, -pos.y-5, 5*(2*height-pos.z)+5);
+				glVertex3f(5*pos.x+5, -pos.y-5, 5*(2*height-pos.z)-5);
+				glVertex3f(5*pos.x+5, -pos.y+5, 5*(2*height-pos.z)-5);
 
-				glVertex3f(5*pos.x-5, -5*pos.y+5, 5*(2*height-pos.z)+5);
-				glVertex3f(5*pos.x-5, -5*pos.y-5, 5*(2*height-pos.z)+5);
-				glVertex3f(5*pos.x-5, -5*pos.y-5, 5*(2*height-pos.z)-5);
-				glVertex3f(5*pos.x-5, -5*pos.y+5, 5*(2*height-pos.z)-5);
+				glVertex3f(5*pos.x-5, -pos.y+5, 5*(2*height-pos.z)+5);
+				glVertex3f(5*pos.x-5, -pos.y-5, 5*(2*height-pos.z)+5);
+				glVertex3f(5*pos.x-5, -pos.y-5, 5*(2*height-pos.z)-5);
+				glVertex3f(5*pos.x-5, -pos.y+5, 5*(2*height-pos.z)-5);
 			}
 			glColor4f(1,1,1,1);
 			glEnd();

@@ -449,11 +449,16 @@ BMPError cTexture::BMPLoad(std::string fname,BMPClass& bmp)
 		fseek(f,offset,SEEK_SET);
 		for(x=0;x<bmp.width*bmp.height*4;x+=4)			//except the format is BGR, grr
 		{
-			fread(bmp.bytes+x,4,1,f);	//24bit is easy
+			fread(bmp.bytes+x,3,1,f);	//24bit is easy
 			BYTE temp=bmp.bytes[x];
 			bmp.bytes[x]=bmp.bytes[x+2];
 			bmp.bytes[x+2]=temp;
-			bmp.bytes[x+3] = 255;
+
+			if(bmp.bytes[x] == 255 && bmp.bytes[x+2] == 255)
+				bmp.bytes[x+3] = 0;
+			else
+				bmp.bytes[x+3] = 255;
+
 		}
 		break;
 
