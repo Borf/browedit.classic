@@ -61,6 +61,7 @@ MENUCOMMAND(mode_detail);
 MENUCOMMAND(speed);
 MENUCOMMAND(fill);
 MENUCOMMAND(showobjects);
+MENUCOMMAND(model);
 
 cMenu*	menu;
 cMenu* grid;
@@ -69,11 +70,13 @@ cMenu* showobjects;
 int cursorsize = 1;
 
 #define ADDMENUITEM(m, p, t, pr) m = new cMenuItem(); m->title = t; m->item = true; m->drawstyle = 1; ((cMenuItem*)m)->proc = pr; p->items.push_back(m);
+#define ADDMENUITEMDATA(m, p, t, pr,d) m = new cMenuItem(); m->title = t; m->item = true; m->drawstyle = 1; ((cMenuItem*)m)->proc = pr; ((cMenuItem*)m)->data = d; p->items.push_back(m);
 #define ADDMENU(m,p,t,xpos,width) m = new cMenu(); m->title = t; m->item = false; m->drawstyle = 1; m->y = 20; m->x = xpos; m->w = width; p->items.push_back(m);
 cMenu* mode;
 cMenu* editdetail;
 cMenu* speed;
 vector<vector<vector<float> > > clipboard;
+
 
 int main(int argc, char *argv[])
 {
@@ -84,6 +87,7 @@ int main(int argc, char *argv[])
 	cMenu* rnd;
 	cMenu* view;
 	cMenu* edit;
+	cMenu* models;
 
 	menu = new cMenu();
 	menu->title = "root";
@@ -100,6 +104,7 @@ int main(int argc, char *argv[])
 	ADDMENU(view,		menu, "View",				200,50);
 	ADDMENU(mode,		menu, "Edit Mode",			250,100);
 	ADDMENU(edit,		menu, "Edit",				350,100);
+	ADDMENU(models,		menu, "Models",				450,100);
 	
 	ADDMENU(steepness,	edit, "Steepness...",		480,100);
 
@@ -159,6 +164,8 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,speed,"40",&MenuCommand_speed);
 	ADDMENUITEM(mm,speed,"50",&MenuCommand_speed);
 	
+
+
 	changetoserverdir();				
 	log_open("log_worldeditor.txt","worldedit",2);
 	fs.LoadFile("data.dat");
@@ -170,6 +177,46 @@ int main(int argc, char *argv[])
 	}
 	else
 		rodir = "c:\\program files\\gravity\\ro\\data\\";
+	pFile->close();
+
+
+	map<string, cMenu*, less<string> > items;
+	map<cMenu*, int, less<cMenu*> > level;
+	level[models] = 0;
+
+	pFile = fs.open("models.txt");
+	while(!pFile->eof())
+	{
+		string line = pFile->readline();
+		string pre = line.substr(0, line.find("|"));
+		string filename = line.substr(line.find("|")+1);
+
+		string cat = pre.substr(0, pre.rfind("/"));
+		string menuname = pre.substr(pre.rfind("/")+1);
+
+		if (items.find(cat) == items.end())
+		{
+			cMenu* root = models;
+			string catname = cat;
+			if(cat.find("/") != string::npos)
+			{
+				root = items[cat.substr(0, cat.rfind("/"))];
+				catname = cat.substr(cat.rfind("/")+1);
+			}
+			
+			cMenu* submenu;
+			ADDMENU(submenu,		root, catname + "...",				450 + 100*(level[root]+1),100);
+			items[cat] = submenu;
+			level[submenu] = level[root] + 1;
+		}
+		char* f = (char*)filename.c_str();
+		if(filename != "")
+		{
+			ADDMENUITEMDATA(mm,items[cat],menuname, &MenuCommand_model, filename);
+		}
+		
+	}
+
 
 	lastlclick = 0;
 	lastrclick = 0;
@@ -189,8 +236,12 @@ int main(int argc, char *argv[])
 		Sleep(1);																// god save the CPU
 	}
 
+
 	// Shutdown
 	Graphics.KillGLWindow();						// Kill The Window
+	Graphics.world.unload();
+	TextureCache.status();
+
 	log_close();
 	return 0;							// Exit The Program
 }
@@ -348,8 +399,47 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						Graphics.selectionend.y = f;
 					}
 				}
+				if(editmode == MODE_OBJECTS)
+				{
+					int minobj = 0;
+					float mindist = 999999;
+					if(Graphics.objectstartdrag)
+					{
+						bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
+						bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
+						if (!ctrl && !alt)
+						{
+							Graphics.world.models[Graphics.selectedobject]->pos.x = mouse3dx / 5;
+							Graphics.world.models[Graphics.selectedobject]->pos.z = mouse3dz / 5;
+							if (SDL_GetModState() & KMOD_SHIFT)
+							{
+								Graphics.world.models[Graphics.selectedobject]->pos.x = floor(Graphics.world.models[Graphics.selectedobject]->pos.x / 2.5) * 2.5;
+								Graphics.world.models[Graphics.selectedobject]->pos.z = floor(Graphics.world.models[Graphics.selectedobject]->pos.z / 2.5) * 2.5;
+							}
+						}
+						if(ctrl && !alt)
+						{
+							Graphics.world.models[Graphics.selectedobject]->rot.x += mousey - oldmousey;
+							Graphics.world.models[Graphics.selectedobject]->rot.y += mousex - oldmousex;
+							if (SDL_GetModState() & KMOD_SHIFT)
+							{
+
+								Graphics.world.models[Graphics.selectedobject]->rot.x = floor((Graphics.world.models[Graphics.selectedobject]->rot.x+22.5) / 45) * 45;
+								Graphics.world.models[Graphics.selectedobject]->rot.y = floor((Graphics.world.models[Graphics.selectedobject]->rot.y+22.5) / 45) * 45;
+							}
+						}
+						if(!ctrl && alt)
+						{
+							Graphics.world.models[Graphics.selectedobject]->scale.x += (mousex - oldmousex)/10.0;
+							Graphics.world.models[Graphics.selectedobject]->scale.y += (mousex - oldmousex)/10.0;
+							Graphics.world.models[Graphics.selectedobject]->scale.z += (mousex - oldmousex)/10.0;
+						}
+					}
+				}
+
 
 			}
+			dragged = true;
 			oldmousex = mousex;
 			oldmousey = mousey;
 			break;
@@ -357,6 +447,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 		case SDL_MOUSEBUTTONDOWN:
 			startmousex = mousex = event.motion.x;
 			startmousey = mousey = event.motion.y;
+			dragged = false;
 			if(event.button.button == SDL_BUTTON_LEFT)
 			{
 				lbuttondown = true;
@@ -403,8 +494,6 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							{
 								for(int y = posy; y > posy-selsizey; y--)
 								{
-									if(!Graphics.frustum.CubeInFrustum(x*10+5,0,(Graphics.world.height-y)*10+5, 10))
-										continue;
 									int xx = posx - x;
 									int yy = posy - y;
 									if (y < 0)
@@ -527,7 +616,27 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 								}
 							}
 						}
+					}
+					if(editmode == MODE_OBJECTS)
+					{
+						int minobj = 0;
+						float mindist = 999999;
+						for(int i = 0; i < Graphics.world.models.size(); i++)
+						{
+							cVector3 d = Graphics.world.models[i]->pos;
+							d.x = d.x;
+							
+							d.x -= mouse3dx/5;
+							d.z -= mouse3dz/5;
+							d.y = 0;
 
+							if(mindist > d.Magnitude())
+							{
+								mindist = d.Magnitude();
+								minobj = i;
+							}
+						}
+						Graphics.objectstartdrag = Graphics.selectedobject == minobj;
 					}
 				}
 			}
@@ -566,9 +675,26 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				else // no menu
 				{
-					if (!(Graphics.selectionstart == Graphics.selectionend))
+					if(editmode == MODE_OBJECTS && !dragged)
 					{
-						
+						int minobj = 0;
+						float mindist = 999999;
+						for(int i = 0; i < Graphics.world.models.size(); i++)
+						{
+							cVector3 d = Graphics.world.models[i]->pos;
+							d.x = d.x;
+							
+							d.x -= mouse3dx/5;
+							d.z -= mouse3dz/5;
+							d.y = 0;
+
+							if(mindist > d.Magnitude())
+							{
+								mindist = d.Magnitude();
+								minobj = i;
+							}
+						}
+						Graphics.selectedobject = minobj;
 					}
 				}
 				break;
@@ -600,24 +726,72 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			switch (event.key.keysym.sym)
 			{
 			case SDLK_UP:
-				Graphics.camerapointer.y++;
-				if (Graphics.camerapointer.y > Graphics.world.size)
-					Graphics.camerapointer.y-= Graphics.world.size;
+				if (editmode == MODE_OBJECTS)
+				{
+					if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.models.size())
+					{
+						bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
+						bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
+						bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
+						if (!ctrl && !alt)
+							Graphics.world.models[Graphics.selectedobject]->pos.z+=0.5 + shift ? 0.5 : 0;
+						if (ctrl && !alt)
+							Graphics.world.models[Graphics.selectedobject]->rot.z+=1 + shift ? 44 : 0;
+						if (!ctrl && alt)
+							Graphics.world.models[Graphics.selectedobject]->scale.z+=0.1 + shift ? 0.1 : 0;
+					}						
+				}
 				break;
 			case SDLK_DOWN:
-				Graphics.camerapointer.y--;
-				if (Graphics.camerapointer.y < 0)
-					Graphics.camerapointer.y+= Graphics.world.size;
+				if (editmode == MODE_OBJECTS)
+				{
+					if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.models.size())
+					{
+						bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
+						bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
+						bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
+						if (!ctrl && !alt)
+							Graphics.world.models[Graphics.selectedobject]->pos.z-=0.5 + shift ? 0.5 : 0;
+						if (ctrl && !alt)
+							Graphics.world.models[Graphics.selectedobject]->rot.z-=1 + shift ? 44 : 0;
+						if (!ctrl && alt)
+							Graphics.world.models[Graphics.selectedobject]->scale.z-=0.1 + shift ? 0.1 : 0;
+					}						
+				}
 				break;
 			case SDLK_RIGHT:
-				Graphics.camerapointer.x++;
-				if (Graphics.camerapointer.x > Graphics.world.size)
-					Graphics.camerapointer.x-= Graphics.world.size;
+				if (editmode == MODE_OBJECTS)
+				{
+					if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.models.size())
+					{
+						bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
+						bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
+						bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
+						if (!ctrl && !alt)
+							Graphics.world.models[Graphics.selectedobject]->pos.x+=0.5 + shift ? 0.5 : 0;
+						if (ctrl && !alt)
+							Graphics.world.models[Graphics.selectedobject]->rot.x+=1 + shift ? 44 : 0;
+						if (!ctrl && alt)
+							Graphics.world.models[Graphics.selectedobject]->scale.x+=0.1 + shift ? 0.1 : 0;
+					}						
+				}
 				break;
 			case SDLK_LEFT:
-				Graphics.camerapointer.x--;
-				if (Graphics.camerapointer.x < 0)
-					Graphics.camerapointer.x+= Graphics.world.size;
+				if (editmode == MODE_OBJECTS)
+				{
+					if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.models.size())
+					{
+						bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
+						bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
+						bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
+						if (!ctrl && !alt)
+							Graphics.world.models[Graphics.selectedobject]->pos.x-=0.5 + shift ? 0.5 : 0;
+						if (ctrl && !alt)
+							Graphics.world.models[Graphics.selectedobject]->rot.x-=1 + shift ? 44 : 0;
+						if (!ctrl && alt)
+							Graphics.world.models[Graphics.selectedobject]->scale.x-=0.1 + shift ? 0.1 : 0;
+					}						
+				}
 				break;
 			case SDLK_MINUS:
 				Graphics.brushsize/=2;
@@ -768,85 +942,121 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 			case SDLK_PAGEDOWN:
 				{
-					int x = mouse3dx / 10;
-					int y = mouse3dz / 10;
-					if(SDL_GetModState() & KMOD_SHIFT)
+					if(editmode == MODE_WALLS)
 					{
-						int xx = x;
-						int xmax;
-						if (SDL_GetModState() & KMOD_CTRL)
+						int x = mouse3dx / 10;
+						int y = mouse3dz / 10;
+						if(SDL_GetModState() & KMOD_SHIFT)
 						{
-							while(Graphics.world.cubes[y][xx].tileside != -1)
-								xx++;
-							xmax = xx;
-						}
-						else
-							xmax = xx+1;
-						xx = x;
-						int xmin;
-						if (SDL_GetModState() & KMOD_CTRL)
-						{
-							while(Graphics.world.cubes[y][xx].tileside != -1)
-								xx--;
-							xmin = xx+1;
-						}
-						else
-							xmin = xx;
-						 
-						int xdiff = 4;
+							int xx = x;
+							int xmax;
+							if (SDL_GetModState() & KMOD_CTRL)
+							{
+								while(Graphics.world.cubes[y][xx].tileside != -1)
+									xx++;
+								xmax = xx;
+							}
+							else
+								xmax = xx+1;
+							xx = x;
+							int xmin;
+							if (SDL_GetModState() & KMOD_CTRL)
+							{
+								while(Graphics.world.cubes[y][xx].tileside != -1)
+									xx--;
+								xmin = xx+1;
+							}
+							else
+								xmin = xx;
+							 
+							int xdiff = 4;
 
-						for(xx = xmin; xx < xmax; xx++)
+							for(xx = xmin; xx < xmax; xx++)
+							{
+								Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside].v3+=0.03125;
+								Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside].v4+=0.03125;
+							}
+						}
+						else
 						{
-							Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside].v3+=0.03125;
-							Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside].v4+=0.03125;
+								Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u1+=0.03125;
+								Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u3+=0.03125;
 						}
 					}
-					else
+					if (editmode == MODE_OBJECTS)
 					{
-							Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u1+=0.03125;
-							Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u3+=0.03125;
+						if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.models.size())
+						{
+							bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
+							bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
+							bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
+							if (!ctrl && !alt)
+								Graphics.world.models[Graphics.selectedobject]->pos.y+=0.5 + shift ? 0.5 : 0;
+							if (ctrl && !alt)
+								Graphics.world.models[Graphics.selectedobject]->rot.y+=1 + shift ? 44 : 0;
+							if (!ctrl && alt)
+								Graphics.world.models[Graphics.selectedobject]->scale.y+=0.1 + shift ? 0.1 : 0;
+						}						
 					}
 					break;
 				}
 			case SDLK_PAGEUP:
 				{
-					int x = mouse3dx / 10;
-					int y = mouse3dz / 10;
-					if(SDL_GetModState() & KMOD_SHIFT)
+					if(editmode == MODE_WALLS)
 					{
-						int xx = x;
-						int xmax;
-						if (SDL_GetModState() & KMOD_CTRL)
+						int x = mouse3dx / 10;
+						int y = mouse3dz / 10;
+						if(SDL_GetModState() & KMOD_SHIFT)
 						{
-							while(Graphics.world.cubes[y][xx].tileside != -1)
-								xx++;
-							xmax = xx;
-						}
-						else
-							xmax = xx+1;
-						xx = x;
-						int xmin;
-						if (SDL_GetModState() & KMOD_CTRL)
-						{
-							while(Graphics.world.cubes[y][xx].tileside != -1)
-								xx--;
-							xmin = xx+1;
-						}
-						else
-							xmin = xx;
-						 
-						int xdiff = 4;
+							int xx = x;
+							int xmax;
+							if (SDL_GetModState() & KMOD_CTRL)
+							{
+								while(Graphics.world.cubes[y][xx].tileside != -1)
+									xx++;
+								xmax = xx;
+							}
+							else
+								xmax = xx+1;
+							xx = x;
+							int xmin;
+							if (SDL_GetModState() & KMOD_CTRL)
+							{
+								while(Graphics.world.cubes[y][xx].tileside != -1)
+									xx--;
+								xmin = xx+1;
+							}
+							else
+								xmin = xx;
+							 
+							int xdiff = 4;
 
-						for(xx = xmin; xx < xmax; xx++)
+							for(xx = xmin; xx < xmax; xx++)
+							{
+								Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside].v3-=0.03125;
+								Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside].v4-=0.03125;
+							}
+						}
+						else
 						{
-							Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside].v3-=0.03125;
-							Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside].v4-=0.03125;
+							Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u1-=0.03125;
+							Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u3-=0.03125;
 						}
 					}
-					else
+					if (editmode == MODE_OBJECTS)
 					{
-						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u1-=0.03125;
-						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u3-=0.03125;
+						if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.models.size())
+						{
+							bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
+							bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
+							bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
+							if (!ctrl && !alt)
+								Graphics.world.models[Graphics.selectedobject]->pos.y-=0.5 + shift ? 0.5 : 0;
+							if (ctrl && !alt)
+								Graphics.world.models[Graphics.selectedobject]->rot.y-=1 + shift ? 44 : 0;
+							if (!ctrl && alt)
+								Graphics.world.models[Graphics.selectedobject]->scale.y-=0.1 + shift ? 0.1 : 0;
+						}						
 					}
 					break;
 				}
@@ -1030,6 +1240,19 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			case SDLK_o:
 			{
 				MenuCommand_showobjects((cMenuItem*)showobjects);
+				break;
+			}
+			case SDLK_BACKSPACE:
+			{
+				if (editmode == MODE_OBJECTS)
+				{
+					if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.models.size())
+					{
+						delete Graphics.world.models[Graphics.selectedobject];
+						Graphics.world.models.erase(Graphics.world.models.begin() + Graphics.selectedobject);
+						Graphics.selectedobject = -1;
+					}
+				}
 				break;
 			}
 			default:
@@ -1425,5 +1648,18 @@ MENUCOMMAND(showobjects)
 {
 	src->ticked = !src->ticked;
 	Graphics.showobjects = src->ticked;
+	return true;
+}
+
+
+MENUCOMMAND(model)
+{
+	delete Graphics.previewmodel;
+	Graphics.previewmodel = new cRSMModel();
+	Graphics.previewmodel->load(rodir + src->data);
+	Graphics.previewmodel->pos = cVector3(40,-40,-40);
+	Graphics.previewmodel->rot = cVector3(0,0,0);
+	Graphics.previewmodel->scale = cVector3(4,4,4);
+
 	return true;
 }

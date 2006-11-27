@@ -1,5 +1,6 @@
 #ifndef __MENU_H__
 #define __MENU_H__
+class cMenuItem;
 
 class cMenu
 {
@@ -19,7 +20,11 @@ class cMenu
 		void draw();
 		bool mouseover;
 		int maxlen;
-	
+
+		
+		bool (*mouseoverproc) (cMenu* m);
+		bool (*mouseoutproc) (cMenu* m);
+
 		cMenu()
 		{
 			ticked = false;
@@ -27,11 +32,15 @@ class cMenu
 			w = 100;
 			mouseover = false;
 			maxlen = -1;
+			mouseoutproc = NULL;
+			mouseoverproc = NULL;
 		}
 		cMenu* inwindow(int, int);
 		void click(int, int);
 		void unmouseover()
 		{
+			if(mouseoutproc!= NULL)
+				mouseoutproc(this);
 			mouseover = false;
 			for(int i = 0; i < (int)items.size(); i++)
 				items[i]->unmouseover();
@@ -63,6 +72,7 @@ class cMenuItem : public cMenu
 {
 public:
 	bool (*proc) (cMenuItem* m);
+	string data;
 	cMenuItem()
 	{
 		item = true;

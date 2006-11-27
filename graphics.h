@@ -27,6 +27,8 @@ public:
 		fliph = false;
 		flipv = false;
 		showobjects = false;
+		selectedobject = -1;
+		objectstartdrag = false;
 	}
 
 	int						init();				// initializes graphics
@@ -86,6 +88,11 @@ public:
 	cTexture*				bulb;
 	int						selectedobjectprop;
 
+	int						selectedobject;
+	bool					objectstartdrag;
+
+
+	cRSMModel*				previewmodel;
 
 	bool					showobjects;
 

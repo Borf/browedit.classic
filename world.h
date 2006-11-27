@@ -4,6 +4,8 @@
 #include "texture.h"
 #include <gd/gd.h>
 #include "rsmmodel.h"
+#include "texturecache.h"
+#include "texturemodel.h"
 
 class cLightmap
 {
@@ -50,6 +52,52 @@ public:
 	string RoFilename;
 	string RoFilename2;
 	GLuint texid() { return texture->texid(); }
+
+};
+
+class cLight
+{
+public:
+	string name;
+	cVector3 pos;
+	string todo;
+	cVector3 color;
+	float todo2;
+};
+
+
+class cSound
+{
+public:
+	string name;
+	string todo1;
+	string filename;
+	string todo2;
+	cVector3 pos;
+	string id;
+};
+
+class cEffect
+{
+public:
+	string name;
+	float todo1;
+	float todo2;
+	float todo3;
+	float todo4;
+	float todo5;
+	float todo6;
+	float todo7;
+	float todo8;
+	float todo9;
+	string category;
+	cVector3 pos;
+	int	type;
+	float loop;
+	float todo10;
+	float todo11;
+	int todo12;
+	int todo13;
 };
 
 class cWorld
@@ -71,20 +119,29 @@ public:
 
 	vector<cRSMModel*>	models;
 
+	vector<cLight>		lights;
+	vector<cSound>		sounds;
+	vector<cEffect>		effects;
+
 
 	cWorld()
 	{
 		showtextures = false;
 		loaded = false;
+		light = NULL;
+		sound = NULL;
+		effect = NULL;
 	}
 	~cWorld()
 	{
-
+		unload();
 	}
 	void draw();
 	void load();
 	void save();
 	void exportheight();
+
+	void unload();
 
 	void newworld();
 
@@ -98,6 +155,10 @@ public:
 	int lightmapWidth;
 	int lightmapHeight;
 	int gridSizeCell;
+
+	cTextureModel* light;
+	cTextureModel* sound;
+	cTextureModel* effect;
 
 
 };

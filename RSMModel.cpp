@@ -7,7 +7,6 @@ extern cGraphics Graphics;
 
 void cRSMModel::load(string filename)
 {
-	Log(3,0,"Loading %s", filename.c_str());
 	cFile* pFile = fs.open(filename);
 
 	char buffer[100];
@@ -26,12 +25,13 @@ void cRSMModel::load(string filename)
 		textures.push_back(tex);
 	}
 
-	while(pFile->data[pFile->index] != 0 && pFile->data[pFile->index+1] != 0 && pFile->data[pFile->index+2] != 0 && pFile->data[pFile->index+3] != 0 && pFile->index < pFile->size-32)
+	do
 	{
 		cRSMModelMesh* mesh = new cRSMModelMesh();
 		mesh->load(pFile, this, meshes.size() == 0);
 		meshes.push_back(mesh);
 	}
+	while (pFile->data[pFile->index] != 0 && pFile->data[pFile->index+1] != 0 && pFile->data[pFile->index+2] != 0 && pFile->data[pFile->index+3] != 0 && pFile->index < pFile->size-32);
 
 	pFile->close();
 
@@ -56,7 +56,6 @@ void cRSMModel::load(string filename)
 		}
 	}
 	boundingbox();
-	Log(3,0,"Done loading %s", filename.c_str());
 }
 
 void cRSMModelMesh::load(cFile* pFile, cRSMModel* model, bool firstmesh)
@@ -191,14 +190,17 @@ void cRSMModelMesh::boundingbox(float* ptransf)
 }
 
 
-void cRSMModel::draw()
+void cRSMModel::draw(bool checkfrust)
 {
-	if(!Graphics.frustum.PointInFrustum(5*pos.x, -5*pos.y, 5*(Graphics.world.height*2-pos.z)))
-		return;
+	if (checkfrust)
+	{
+		if(!Graphics.frustum.PointInFrustum(5*pos.x, -5*pos.y, 5*(Graphics.world.height*2-pos.z)))
+			return;
+	}
 	glPushMatrix();
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set the correct blending mode
 	glEnable(GL_BLEND);
-	glTranslatef(5*pos.x, -5*pos.y, 5*pos.z);
+	glTranslatef(5*pos.x, -pos.y, 5*pos.z);
 	glRotatef(rot.x, 1.0, 0.0, 0.0);
 	glRotatef(rot.y, 0.0, 1.0, 0.0);
 	glRotatef(rot.z, 0.0, 0.0, 1.0);
@@ -229,7 +231,6 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only)
 	bool firstmesh = (ptransf == NULL);
 	GLfloat Rot[16];
 	int i;
-	int j;
 
 	Rot[0] = trans[0];
 	Rot[1] = trans[1];
@@ -329,5 +330,18 @@ void cRSMModel::boundingbox()
 			}
 		}
 		bb.bbrange[i] = (bb.bbmax[i]+bb.bbmin[i]) /2.0f;
+	}
+}
+
+cRSMModel::~cRSMModel()
+{
+	for(int i = 0; i < meshes.size(); i++)
+	{
+		delete meshes[i];
+		meshes[i] = NULL;
+	}
+	for(i = 0; i < textures.size(); i++)
+	{
+		TextureCache.unload(textures[i]);
 	}
 }

@@ -23,6 +23,21 @@ extern string rodir;
 
 void cWorld::load()
 {
+	if(light == NULL)
+	{
+		light = new cTextureModel();
+		light->open("data/bulb.tga");
+	}
+	if(effect == NULL)
+	{
+		effect = new cTextureModel();
+		effect->open("data/explosion.tga");
+	}
+	if(sound == NULL)
+	{
+		sound = new cTextureModel();
+		sound->open("data/Speaker.tga");
+	}
 	int i;
 	Log(3,0,"Loading %s", filename);
 	cFile* pFile = fs.open(string(filename) + ".gnd");
@@ -156,13 +171,70 @@ void cWorld::load()
 			}
 			break;
 		case 2:
+			{
 			pFile->read(buf, 108);
+			cLight l;
+			l.name = string(buf);
+			l.pos.x = *((float*)(buf+40));
+			l.pos.y = *((float*)(buf+44));
+			l.pos.z = *((float*)(buf+48));
+
+			l.pos.x = (l.pos.x / 5) + width;
+			l.pos.z = (l.pos.z / 5) + height;
+
+			l.todo = string(buf+52, 40);
+			l.color.x = *((float*)(buf+92));
+			l.color.y = *((float*)(buf+96));
+			l.color.z = *((float*)(buf+100));
+			l.todo2 = *((float*)(buf+104));
+			lights.push_back(l);
+			}
 			break;
 		case 3:
+			{
 			pFile->read(buf, 192);
+			cSound s;			
+			s.name = string(buf);
+			s.todo1 = string(buf+40, 40);
+			s.filename = string(buf+80);
+			s.todo2 = string(buf+120,20);
+			s.pos.x = *((float*)(buf+140));
+			s.pos.y = *((float*)(buf+144));
+			s.pos.z = *((float*)(buf+148));
+			s.id = string(buf+152, 40);
+			s.pos.x = (s.pos.x / 5) + width;
+			s.pos.z = (s.pos.z / 5) + height;
+			sounds.push_back(s);
+			}
 			break;
 		case 4:
+			{
 			pFile->read(buf, 116);
+			cEffect e;
+			e.name = string(buf);
+			e.todo1 = *((float*)(buf+40));
+			e.todo2 = *((float*)(buf+44));
+			e.todo3 = *((float*)(buf+48));
+			e.todo4 = *((float*)(buf+52));
+			e.todo5 = *((float*)(buf+56));
+			e.todo6 = *((float*)(buf+60));
+			e.todo7 = *((float*)(buf+64));
+			e.todo8 = *((float*)(buf+68));
+			e.todo9 = *((float*)(buf+72));
+			e.category = string(buf+76, 4);
+			e.pos.x = *((float*)(buf+80));
+			e.pos.y = *((float*)(buf+84));
+			e.pos.z = *((float*)(buf+88));
+			e.type = *((int*)(buf+92));
+			e.loop = *((float*)(buf+96));
+			e.todo10 = *((float*)(buf+100));
+			e.todo11 = *((float*)(buf+104));
+			e.todo12 = *((int*)(buf+108));
+			e.todo13 = *((int*)(buf+112));
+			e.pos.x = (e.pos.x / 5) + width;
+			e.pos.z = (e.pos.z / 5) + height;
+			effects.push_back(e);
+			}
 			break;
 		default:
 			Log(1,0,"Unknown type!");
@@ -651,7 +723,7 @@ void cWorld::draw()
 		}
 	}
 
-	if (Graphics.showobjects)
+	if (Graphics.showobjects || editmode == MODE_OBJECTS)
 	{
 		glColor4f(1,1,1,1);
 
@@ -661,13 +733,89 @@ void cWorld::draw()
 		glScalef(1,1,-1);
 		for(int i = 0; i < models.size(); i++)
 		{
+			if(i == Graphics.selectedobject)
+				glColor3f(1,0,0);
+			else
+				glColor3f(1,1,1);
 			models[i]->draw();
 		}
 		glScalef(1,1,-1);
 		glTranslatef(0,0,-height*10);
 
-		glTranslatef(-Graphics.camerapointer.x, 0, -Graphics.camerapointer.y);
+
+		glColor4f(1,1,1,1);
+
+		glEnable(GL_TEXTURE_2D);
+		glEnable(GL_BLEND);
+		for(i = 0; i < lights.size(); i++)
+		{
+			glTranslatef(5*lights[i].pos.x, -lights[i].pos.y+5, 5*(2*height-lights[i].pos.z));
+			light->draw();
+			glTranslatef(-5*lights[i].pos.x, lights[i].pos.y-5, -5*(2*height-lights[i].pos.z));
+		}
+		for(i = 0; i < effects.size(); i++)
+		{
+			cVector3 p = effects[i].pos;
+			glTranslatef(5*effects[i].pos.x,-effects[i].pos.y+5, 5*(2*height-effects[i].pos.z));
+			effect->draw();
+			glTranslatef(-5*effects[i].pos.x, effects[i].pos.y-5, -5*(2*height-effects[i].pos.z));
+		}
+		for(i = 0; i < sounds.size(); i++)
+		{
+			glTranslatef(5*sounds[i].pos.x, -sounds[i].pos.y+5, 5*(2*height-sounds[i].pos.z));
+			sound->draw();
+			glTranslatef(-5*sounds[i].pos.x, sounds[i].pos.y-5, -5*(2*height-sounds[i].pos.z));
+		}
+
+		if(editmode == MODE_OBJECTS)
+		{
+			glDisable(GL_TEXTURE_2D);
+			glBegin(GL_QUADS);
+			for(i = 0; i < models.size(); i++)
+			{
+				cVector3 pos = models[i]->pos;
+				if(Graphics.selectedobject == i)
+					glColor4f(1,1,0,0.5);
+				else
+					glColor4f(1,0,0,0.5);
+
+				glVertex3f(5*pos.x+5, -5*pos.y+5, 5*(2*height-pos.z)+5);
+				glVertex3f(5*pos.x+5, -5*pos.y+5, 5*(2*height-pos.z)-5);
+				glVertex3f(5*pos.x-5, -5*pos.y+5, 5*(2*height-pos.z)-5);
+				glVertex3f(5*pos.x-5, -5*pos.y+5, 5*(2*height-pos.z)+5);
+
+				glVertex3f(5*pos.x+5, -5*pos.y-5, 5*(2*height-pos.z)+5);
+				glVertex3f(5*pos.x+5, -5*pos.y-5, 5*(2*height-pos.z)-5);
+				glVertex3f(5*pos.x-5, -5*pos.y-5, 5*(2*height-pos.z)-5);
+				glVertex3f(5*pos.x-5, -5*pos.y-5, 5*(2*height-pos.z)+5);
+
+
+				glVertex3f(5*pos.x+5, -5*pos.y+5, 5*(2*height-pos.z)+5);
+				glVertex3f(5*pos.x+5, -5*pos.y-5, 5*(2*height-pos.z)+5);
+				glVertex3f(5*pos.x-5, -5*pos.y-5, 5*(2*height-pos.z)+5);
+				glVertex3f(5*pos.x-5, -5*pos.y+5, 5*(2*height-pos.z)+5);
+				
+				glVertex3f(5*pos.x+5, -5*pos.y+5, 5*(2*height-pos.z)-5);
+				glVertex3f(5*pos.x+5, -5*pos.y-5, 5*(2*height-pos.z)-5);
+				glVertex3f(5*pos.x-5, -5*pos.y-5, 5*(2*height-pos.z)-5);
+				glVertex3f(5*pos.x-5, -5*pos.y+5, 5*(2*height-pos.z)-5);
+
+				glVertex3f(5*pos.x+5, -5*pos.y+5, 5*(2*height-pos.z)+5);
+				glVertex3f(5*pos.x+5, -5*pos.y-5, 5*(2*height-pos.z)+5);
+				glVertex3f(5*pos.x+5, -5*pos.y-5, 5*(2*height-pos.z)-5);
+				glVertex3f(5*pos.x+5, -5*pos.y+5, 5*(2*height-pos.z)-5);
+
+				glVertex3f(5*pos.x-5, -5*pos.y+5, 5*(2*height-pos.z)+5);
+				glVertex3f(5*pos.x-5, -5*pos.y-5, 5*(2*height-pos.z)+5);
+				glVertex3f(5*pos.x-5, -5*pos.y-5, 5*(2*height-pos.z)-5);
+				glVertex3f(5*pos.x-5, -5*pos.y+5, 5*(2*height-pos.z)-5);
+			}
+			glColor4f(1,1,1,1);
+			glEnd();
+		}
+	
 	}
+	glTranslatef(-Graphics.camerapointer.x, 0, -Graphics.camerapointer.y);
 
 
 
@@ -740,4 +888,16 @@ void cWorld::clean()
 	}
 
 
+}
+
+
+
+void cWorld::unload()
+{
+	for(int i = 0; i < models.size(); i++)
+		delete models[i];
+	for(i = 0; i < textures.size(); i++)
+		delete textures[i];
+	models.clear();
+	textures.clear();
 }

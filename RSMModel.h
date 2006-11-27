@@ -64,6 +64,8 @@ public:
 class cRSMModel
 {
 public:
+	~cRSMModel();
+
 	cVector3 pos;
 	cVector3 scale;
 	cVector3 rot;
@@ -72,7 +74,7 @@ public:
 	vector<cRSMModelMesh*>	meshes;
 	vector<int>				fathers;
 	vector<cTexture*> textures;
-	void draw();
+	void draw(bool = true);
 	void draw2(cBoundingbox*, int, float*, bool);
 
 	void boundingbox();

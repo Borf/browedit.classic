@@ -55,6 +55,21 @@ int cGraphics::draw()
 		font->print(0,0,0,(width / 2) - (font->textlen(message)/2),height/2,"%s", message.c_str());
 	}
 
+	glDisable(GL_TEXTURE_2D);
+	glColor4f(1,1,1,1);
+	glBegin(GL_QUADS);
+		glVertex3f( 0,0,-1000);
+		glVertex3f( 400,0,-1000);
+		glVertex3f( 400,400,-1000);
+		glVertex3f( 0,400,-1000);
+	glEnd();
+
+	
+	glEnable(GL_TEXTURE_2D);
+	glColor3f(1,1,1);
+	previewmodel->draw(false);
+	previewmodel->rot.y+=3;
+
 	menu->draw();
 	if(world.loaded )
 	{
@@ -82,6 +97,7 @@ int cGraphics::draw()
 
 		glColor3f(1,1,1);
 	}
+
 
 	
 
@@ -170,6 +186,13 @@ int cGraphics::init()
 	mask->Load("data/textures/mask.tga");
 	bulb = new cTexture();
 	mask->Load("data/textures/interface/bulb.tga");
+
+	previewmodel = new cRSMModel();
+	previewmodel->load("c:\\games\\ro\\data\\model\\ÈÖ°Ö\\ÈÖ°Ö_µ¿»ó01.rsm");
+	previewmodel->pos = cVector3(10,10,0);
+	previewmodel->rot = cVector3(0,0,0);
+	previewmodel->scale = cVector3(4,4,4);
+
 	return 1;
 }
 
@@ -211,6 +234,10 @@ int cGraphics::InitGL(void)										// All Setup For OpenGL Goes Here
     glCullFace( GL_BACK );
     glFrontFace( GL_CCW );
     glEnable( GL_CULL_FACE );
+
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.01f);
+
 
 	return 1;										// Initialization Went OK
 }
