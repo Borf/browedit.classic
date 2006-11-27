@@ -226,7 +226,7 @@ int main(int argc, char *argv[])
 
 	Graphics.world.newworld();
 	strcpy(Graphics.world.filename, string(rodir + "customtown").c_str());
-	Graphics.world.load();
+	//Graphics.world.load();
 	long lasttimer = SDL_GetTicks();
 	while( running ) {
 		process_events( );														// process keypresses
