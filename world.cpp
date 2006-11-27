@@ -133,6 +133,7 @@ void cWorld::load()
 	pFile = fs.open(string(filename) + ".rsw");
 
 	pFile->read(buf, 242);
+	useless = string(buf+166, 76);
 
 	pFile->read(buf, 4);
 	long nObjects = *((long*)buf);
@@ -240,7 +241,9 @@ void cWorld::load()
 			Log(1,0,"Unknown type!");
 		};
 	}
-
+	extradata = "";
+	while(!pFile->eof())
+		extradata += pFile->get();
 
 	pFile->close();
 
@@ -262,80 +265,170 @@ void cWorld::exportheight()
 
 void cWorld::save()
 {
-	ofstream pFile((string(filename) + ".gnd").c_str(), ios_base::out | ios_base::binary);
-	pFile.write("GRGN\1\7", 6);
-	pFile.write((char*)&width, 4);
-	pFile.write((char*)&height, 4);
-	pFile.write((char*)&tilescale, 4);
-
-	int nTextures = textures.size();
-	pFile.write((char*)&nTextures, 4);
-	int i = 80;
-	pFile.write((char*)&i, 4);
-
-	for(i = 0; i < textures.size(); i++)
+	if (!loaded)
+		return;
 	{
-		pFile.write(textures[i]->RoFilename.c_str(), textures[i]->RoFilename.length());
-		for(int ii = 0; ii < 40-textures[i]->RoFilename.length(); ii++)
-			pFile.put('\0');
-		pFile.write(textures[i]->RoFilename2.c_str(), textures[i]->RoFilename2.length());
-		for(ii = 0; ii < 40-textures[i]->RoFilename2.length(); ii++)
-			pFile.put('\0');
-	}
+		ofstream pFile((string(filename) + ".gnd").c_str(), ios_base::out | ios_base::binary);
+		pFile.write("GRGN\1\7", 6);
+		pFile.write((char*)&width, 4);
+		pFile.write((char*)&height, 4);
+		pFile.write((char*)&tilescale, 4);
 
-	int nLightmaps = lightmaps.size();
-	pFile.write((char*)&nLightmaps, 4);
-	pFile.write((char*)&lightmapWidth, 4);
-	pFile.write((char*)&lightmapHeight, 4);
-	pFile.write((char*)&gridSizeCell, 4);
-	for(i = 0; i < lightmaps.size(); i++)
-	{
-		pFile.write(lightmaps[i].buf, 256);
-	}
+		int nTextures = textures.size();
+		pFile.write((char*)&nTextures, 4);
+		int i = 80;
+		pFile.write((char*)&i, 4);
 
-	int nTiles = tiles.size();
-	pFile.write((char*)&nTiles, 4);
-
-	for(i = 0; i < tiles.size(); i++)
-	{
-		cTile* t = &tiles[i];
-
-		pFile.write((char*)&t->u1, 4);
-		pFile.write((char*)&t->u2, 4);
-		pFile.write((char*)&t->u3, 4);
-		pFile.write((char*)&t->u4, 4);
-		pFile.write((char*)&t->v1, 4);
-		pFile.write((char*)&t->v2, 4);
-		pFile.write((char*)&t->v3, 4);
-		pFile.write((char*)&t->v4, 4);
-
-		pFile.put(t->texture & 255);
-		pFile.put((t->texture>>8) & 255);
-
-		pFile.put(t->lightmap & 255);
-		pFile.put((t->lightmap>>8) & 255);
-
-		pFile.write(t->color, 4);
-	}
-
-	for(int y = 0; y < height; y++)
-	{
-		for(int x = 0; x < width; x++)
+		for(i = 0; i < textures.size(); i++)
 		{
-			cCube* c = &cubes[y][x];
-			pFile.write((char*)&c->cell1, 4);
-			pFile.write((char*)&c->cell2, 4);
-			pFile.write((char*)&c->cell3, 4);
-			pFile.write((char*)&c->cell4, 4);
-			pFile.write((char*)&c->tileup, 4);
-			pFile.write((char*)&c->tileside, 4);
-			pFile.write((char*)&c->tileaside, 4);
+			pFile.write(textures[i]->RoFilename.c_str(), textures[i]->RoFilename.length());
+			for(int ii = 0; ii < 40-textures[i]->RoFilename.length(); ii++)
+				pFile.put('\0');
+			pFile.write(textures[i]->RoFilename2.c_str(), textures[i]->RoFilename2.length());
+			for(ii = 0; ii < 40-textures[i]->RoFilename2.length(); ii++)
+				pFile.put('\0');
 		}
+
+		int nLightmaps = lightmaps.size();
+		pFile.write((char*)&nLightmaps, 4);
+		pFile.write((char*)&lightmapWidth, 4);
+		pFile.write((char*)&lightmapHeight, 4);
+		pFile.write((char*)&gridSizeCell, 4);
+		for(i = 0; i < lightmaps.size(); i++)
+		{
+			pFile.write(lightmaps[i].buf, 256);
+		}
+
+		int nTiles = tiles.size();
+		pFile.write((char*)&nTiles, 4);
+
+		for(i = 0; i < tiles.size(); i++)
+		{
+			cTile* t = &tiles[i];
+
+			pFile.write((char*)&t->u1, 4);
+			pFile.write((char*)&t->u2, 4);
+			pFile.write((char*)&t->u3, 4);
+			pFile.write((char*)&t->u4, 4);
+			pFile.write((char*)&t->v1, 4);
+			pFile.write((char*)&t->v2, 4);
+			pFile.write((char*)&t->v3, 4);
+			pFile.write((char*)&t->v4, 4);
+
+			pFile.put(t->texture & 255);
+			pFile.put((t->texture>>8) & 255);
+
+			pFile.put(t->lightmap & 255);
+			pFile.put((t->lightmap>>8) & 255);
+
+			pFile.write(t->color, 4);
+		}
+
+		for(int y = 0; y < height; y++)
+		{
+			for(int x = 0; x < width; x++)
+			{
+				cCube* c = &cubes[y][x];
+				pFile.write((char*)&c->cell1, 4);
+				pFile.write((char*)&c->cell2, 4);
+				pFile.write((char*)&c->cell3, 4);
+				pFile.write((char*)&c->cell4, 4);
+				pFile.write((char*)&c->tileup, 4);
+				pFile.write((char*)&c->tileside, 4);
+				pFile.write((char*)&c->tileaside, 4);
+			}
+		}
+		pFile.close();
 	}
+	{
+		string fname2 = filename;
+		char fname[50];
+		ZeroMemory(fname, 50);
+		strcpy(fname, fname2.substr(fname2.rfind("\\")+1).c_str());
+
+		int i;
+		ofstream pFile((string(filename) + ".rsw").c_str(), ios_base::out | ios_base::binary);
+		pFile.write("GRSW\2\1", 6);
+		for(i = 0; i < 40; i++) // ini file
+			pFile.put('\0');
+
+		pFile.write(fname, strlen(fname));
+		pFile.write(".gnd", 4);
+		for(i = 0; i < 40-strlen(fname)-4; i++)
+			pFile.put('\0');
+
+		pFile.write(fname, strlen(fname));
+		pFile.write(".gat", 4);
+		for(i = 0; i < 40-strlen(fname)-4; i++)
+			pFile.put('\0');
+
+		pFile.put('\0');
+		pFile.write(fname+1, strlen(fname+1));
+		pFile.write(".gat", 4);
+		for(i = 0; i < 40-strlen(fname)-4; i++)
+			pFile.put('\0');
+
+		pFile.write(useless.c_str(), useless.length());
+
+		long count = models.size();// + lights.size() + effects.size() + sounds.size();
+		pFile.write((char*)&count, 4);
 
 
+		for(i = 0; i < models.size(); i++)
+		{
+			char buf[100];
+			long l;
+			cRSMModel* m = models[i];
 
-	pFile.close();
+			l = 1;
+			pFile.write((char*)&l, 4);
+
+			ZeroMemory(buf, 100);
+			sprintf(buf, "%i", rand());
+			pFile.write(buf, 40);
+
+			l = 2;
+			pFile.write((char*)&l, 4); // unknown >_<
+			float f = 1;
+			pFile.write((char*)&f, 4); // unknown >_<
+			f = 0;
+			pFile.write((char*)&f, 4); // unknown >_<
+
+			pFile.write(m->rofilename.c_str(), m->rofilename.length());
+			for(int ii = 0; ii < 40-m->rofilename.length(); ii++)
+				pFile.put('\0');	 // filename
+			
+			pFile.write(buf, 40); // reserved
+
+			ZeroMemory(buf, 100);
+			sprintf(buf, "%s", "Object01");
+			pFile.write(buf, 20); // type
+			ZeroMemory(buf, 100);
+			pFile.write(buf, 20); // sound			
+
+			ZeroMemory(buf, 100);
+			pFile.write(buf, 40); // unknown
+
+			f = (m->pos.x - width) * 5.0;
+			pFile.write((char*)&f, 4);
+			pFile.write((char*)&m->pos.y, 4);
+			f = (m->pos.z - height) * 5.0;
+			pFile.write((char*)&f, 4);
+
+			pFile.write((char*)&m->rot.x, 4);
+			pFile.write((char*)&m->rot.y, 4);
+			pFile.write((char*)&m->rot.z, 4);
+
+			pFile.write((char*)&m->scale.x, 4);
+			pFile.write((char*)&m->scale.y, 4);
+			pFile.write((char*)&m->scale.z, 4);
+
+		}
+
+		pFile.write(extradata.c_str(), extradata.length());
+
+		pFile.close();
+	}
 }
 
 
@@ -633,7 +726,7 @@ void cWorld::draw()
 				for(y = 1; y < height-1; y++)
 				{
 					cCube* c = &cubes[y][x];
-					if(!Graphics.frustum.CubeInFrustum(x*10+5,-c->cell1,y*10-5, 10))
+					if(!Graphics.frustum.CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 10))
 						continue;
 
 					if (c->tileup != -1)
@@ -648,8 +741,8 @@ void cWorld::draw()
 								fabs(ot->u4 - t->u2) > 0.1 ||
 								ot->texture != t->texture)
 							{
-								glVertex3f(x*10,-c->cell1+0.1,y*10);
-								glVertex3f(x*10+10,-c->cell2+0.1,y*10);
+								glVertex3f(x*10,-c->cell1+0.1,(height-y)*10);
+								glVertex3f(x*10+10,-c->cell2+0.1,(height-y)*10);
 							}
 						}
 						if (cubes[y][x+1].tileup != -1)
@@ -661,8 +754,8 @@ void cWorld::draw()
 								fabs(ot->v3 - t->v4) > 0.1 ||
 								ot->texture != t->texture)
 							{
-								glVertex3f(x*10+10,-c->cell1+0.1,y*10);
-								glVertex3f(x*10+10,-c->cell2+0.1,y*10+10);
+								glVertex3f(x*10+10,-c->cell1+0.1,(height-y)*10);
+								glVertex3f(x*10+10,-c->cell2+0.1,(height-y)*10-10);
 							}
 						}
 
@@ -774,10 +867,12 @@ void cWorld::draw()
 			for(i = 0; i < models.size(); i++)
 			{
 				cVector3 pos = models[i]->pos;
+
 				if(Graphics.selectedobject == i)
 					glColor4f(1,1,0,0.5);
 				else
 					glColor4f(1,0,0,0.5);
+
 
 				glVertex3f(5*pos.x+5, -pos.y+5, 5*(2*height-pos.z)+5);
 				glVertex3f(5*pos.x+5, -pos.y+5, 5*(2*height-pos.z)-5);

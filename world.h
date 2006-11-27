@@ -159,7 +159,10 @@ public:
 	cTextureModel* light;
 	cTextureModel* sound;
 	cTextureModel* effect;
+	
+	string extradata;
 
+	string useless;
 
 };
 

@@ -8,6 +8,7 @@ extern cGraphics Graphics;
 void cRSMModel::load(string fname)
 {
 	filename = fname;
+	rofilename = filename.substr(filename.find("model\\") + 6);
 	cFile* pFile = fs.open(filename);
 
 	char buffer[100];
@@ -59,19 +60,19 @@ void cRSMModel::load(string fname)
 	boundingbox();
 }
 
-void cRSMModelMesh::load(cFile* pFile, cRSMModel* model, bool firstmesh)
+void cRSMModelMesh::load(cFile* pFile, cRSMModel* model, bool main)
 {
 	char buffer[100];
 	pFile->read(buffer, 40);			//	naam
 	name = buffer;
 
-	if (firstmesh)
+	if (main)
 		pFile->read((char*)&todo, 4);	// todo
 
 	pFile->read(buffer, 40);			//parentname
 	parent = buffer;
 
-	if(firstmesh)
+	if(main)
 		pFile->read((char*)&ftodo, 40);			// ftodo
 
 	int nTextures;
@@ -137,9 +138,9 @@ void MatrixMultVect(const float *M, cVector3 Vin, float *Vout)
 
 
 
-void cRSMModelMesh::boundingbox(float* ptransf)
+void cRSMModelMesh::boundingbox(float* ptransf, bool only)
 {
-	bool firstmesh = (ptransf == NULL);
+	bool main = (ptransf == NULL);
 	GLfloat Rot[16];
 	int i;
 	int j;
@@ -172,9 +173,13 @@ void cRSMModelMesh::boundingbox(float* ptransf)
 		float vout[3];
 
 		MatrixMultVect(Rot, vertices[i], vout);
+//		vout[0] = vertices[i][0];
+//		vout[1] = vertices[i][1];
+//		vout[2] = vertices[i][2];
+
 		for (j = 0; j < 3; j++) {
 			GLfloat f;
-			if (!firstmesh)
+			if (!only)
 				f = vout[j]+trans[12+j]+trans[9+j];
 			else
 				f = vout[j];
@@ -216,7 +221,7 @@ void cRSMModel::draw(bool checkfrust)
 void cRSMModel::draw2(cBoundingbox* box, int mesh, float* transf, bool only)
 {
 	glPushMatrix();
-	meshes[mesh]->draw(&bb,NULL, meshes.size() == 1);
+	meshes[mesh]->draw(box,transf, meshes.size() == 1);
 
 	for(int i = 0; i < meshes.size(); i++)
 	{
@@ -229,8 +234,9 @@ void cRSMModel::draw2(cBoundingbox* box, int mesh, float* transf, bool only)
 
 void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only)
 {
-	bool firstmesh = (ptransf == NULL);
+	bool main = (ptransf == NULL);
 	GLfloat Rot[16];
+	GLfloat Ori[16];
 	int i;
 
 	Rot[0] = trans[0];
@@ -252,40 +258,97 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only)
 	Rot[13] = 0.0;
 	Rot[14] = 0.0;
 	Rot[15] = 1.0;
+
+	if(frames.size() > 0)
+	{	int i;
+		int current = 0;
+		int next;
+		GLfloat t;
+		GLfloat q[4], q1[4], q2[4];
+		char buffer[1024];
+
+		for (i = 0; i < frames.size(); i++) {
+			if (nstep < frames[i].time) {
+				current = i-1;
+				break;
+			}
+		}
+
+		next = current + 1;
+		if (next == frames.size())
+			next = 0;
+
+		t = ((GLfloat) (nstep-frames[current].time))
+			/((GLfloat) (frames[next].time-frames[current].time));
+
+		for (i = 0; i < 4; i++) {
+			q[i] = frames[current].quat[i]*(1-t) + t*frames[next].quat[i];
+		}
+
+		GLfloat norm;
+		norm = sqrtf(q[0]*q[0]+q[1]*q[1]+q[2]*q[2]+q[3]*q[3]);
+
+		for (i = 0; i < 4; i++)
+			q[i] /= norm;
+		
+		GLfloat two_x = q[0] * 2.0;
+		GLfloat two_y = q[1] * 2.0;
+		GLfloat two_z = q[2] * 2.0;
+
+		Ori[0] = 1.0 - two_y * q[1] - two_z * q[2];
+		Ori[1] = two_x * q[1];
+		Ori[2] = two_z * q[0];
+		Ori[3] = 0.0;
+
+		Ori[4] = two_x * q[1];
+		Ori[5] = 1.0 - two_x * q[0] - two_z * q[2];
+		Ori[6] = two_y * q[2];
+		Ori[7] = 0.0;
+		
+		Ori[8] = two_z * q[0];
+		Ori[9] = two_y * q[2];
+		Ori[10] = 1.0 - two_x * q[0] - two_y * q[1];
+		Ori[11] = 0.0;
+
+		Ori[12] = 0.0;
+		Ori[13] = 0.0;
+		Ori[14] = 0.0;
+		Ori[15] = 1.0;
+
+		nstep += 100;
+		if (nstep >= frames[frames.size()-1].time)
+			nstep = 0;
+	}
 	
 	glScalef(trans[19], trans[20], trans[21]);
-	if(firstmesh)
-	{
-		if(!only)
-		{
+
+	if(main)
+	{	if(!only)
 			glTranslatef(-box->bbrange[0], -box->bbmax[1], -box->bbrange[2]);
-		}
 		else
-		{
 			glTranslatef(0, -box->bbmax[1]+box->bbrange[1], 0);
-		}
 	}
 
-	if(!firstmesh)
-		glTranslatef(trans[12], -trans[13], trans[14]);
+	if(!main)
+		glTranslatef(trans[12], trans[13], trans[14]);
 
 	if(frames.size() == 0)
-	{
 		glRotatef(trans[15]*180.0/3.14159, trans[16], trans[17], trans[18]);
-	}
 	else
-	{
-	}
+		glMultMatrixf(Ori);
+
+
 
 	glPushMatrix();
 
-	if(firstmesh && only)
+	if(main && only)
 		glTranslatef(-box->bbrange[0], -box->bbrange[1], -box->bbrange[2]);
 
-	if (!firstmesh || !only)
+	if (!main || !only)
 		glTranslatef(trans[9], trans[10], trans[11]);
 
 	glMultMatrixf(Rot);
+
 
 	for(i = 0; i < nFaces; i++)
 	{
@@ -307,13 +370,13 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only)
 void cRSMModel::boundingbox()
 {
 	int i;
-	meshes[0]->boundingbox(NULL);
+	meshes[0]->boundingbox(NULL, meshes.size() == 1);
 	
 
 	for(i = 1; i < meshes.size(); i++)
 	{
 		if(fathers[i] == 0)
-				meshes[i]->boundingbox(meshes[0]->trans);
+				meshes[i]->boundingbox(meshes[0]->trans, meshes.size() == 1);
 	}
 
 	for(i = 0; i < 3; i++)

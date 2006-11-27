@@ -36,6 +36,7 @@ public:
 class cRSMModelMesh
 {
 public:
+	int nstep;
 	void load(cFile*, cRSMModel*, bool);
 	int todo;
 	float ftodo[10];
@@ -54,10 +55,14 @@ public:
 	vector<cRSMModelFrame> frames;
 	cBoundingbox bb;
 
-	void boundingbox(float* = NULL);
+	void boundingbox(float* = NULL, bool = true);
 
 
 	void draw(cBoundingbox*, float*, bool);
+	cRSMModelMesh()
+	{
+		nstep = 0;
+	}
 
 };
 
@@ -66,6 +71,7 @@ class cRSMModel
 public:
 	~cRSMModel();
 	string filename;
+	string rofilename;
 
 	cVector3 pos;
 	cVector3 scale;

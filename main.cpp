@@ -24,6 +24,7 @@ string inputboxresult;
 list<cGraphics> undos;
 void MakeUndo();
 void Undo();
+int movement;
 
 void ChangeGrid();
 void UpdateTriangleMenu();
@@ -225,8 +226,8 @@ int main(int argc, char *argv[])
 		return 1;
 
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "customtown").c_str());
-	//Graphics.world.load();
+	strcpy(Graphics.world.filename, string(rodir + "alberta").c_str());
+	Graphics.world.load();
 	long lasttimer = SDL_GetTicks();
 	while( running ) {
 		process_events( );														// process keypresses
@@ -325,6 +326,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			if(m != NULL)
 				break;
 
+			movement++;
+
 			if (rbuttondown && !lbuttondown)
 			{
 				if(SDL_GetModState() & KMOD_SHIFT)
@@ -410,6 +413,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						if (!ctrl && !alt)
 						{
 							Graphics.world.models[Graphics.selectedobject]->pos.x = mouse3dx / 5;
+							Graphics.world.models[Graphics.selectedobject]->pos.y = -mouse3dy;
 							Graphics.world.models[Graphics.selectedobject]->pos.z = mouse3dz / 5;
 							if (SDL_GetModState() & KMOD_SHIFT)
 							{
@@ -445,6 +449,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			break;
 		}
 		case SDL_MOUSEBUTTONDOWN:
+			movement = 0;
 			startmousex = mousex = event.motion.x;
 			startmousey = mousey = event.motion.y;
 			dragged = false;
@@ -675,13 +680,13 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				else // no menu
 				{
-					if(editmode == MODE_OBJECTS && !dragged)
+					if(editmode == MODE_OBJECTS && movement < 3)
 					{
-						if (doubleclick)
+						if (SDL_GetModState() & KMOD_CTRL && Graphics.previewmodel != NULL)
 						{
 							cRSMModel* model = new cRSMModel();
 							model->load(Graphics.previewmodel->filename);
-							model->pos = cVector3(mouse3dx/5, mouse3dy, mouse3dz/5);
+							model->pos = cVector3(mouse3dx/5, -mouse3dy, mouse3dz/5);
 							model->scale = cVector3(1,1,1);
 							model->rot = cVector3(0,0,0);
 							Graphics.world.models.push_back(model);
@@ -710,7 +715,6 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						}
 					}
 				}
-				break;
 				
 			}
 			else // right button
@@ -732,9 +736,13 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				mousex = event.motion.x;
 				mousey = event.motion.y;
 
+				if(movement < 3 && editmode == MODE_OBJECTS)
+				{
+					Graphics.selectedobject = -1;
+				}
 				
-				break;
 			}
+			break;
 		case SDL_KEYDOWN:
 			switch (event.key.keysym.sym)
 			{

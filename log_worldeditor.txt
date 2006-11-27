@@ -1,238 +1,92 @@
-Info: [18:04:36] //////////////////////////////////////////////////////////////////////
-Info: [18:04:36] //          ___  ____   __    ___  ____    __    __                 //
-Info: [18:04:36] //         / __)(  _ \ /__\  / __)(_  _)  /__\  (  )                //
-Info: [18:04:36] //         \__ \ )___//(__)\( (__  _)(_  /(__)\  )(__               //
-Info: [18:04:36] //         (___/(__) (__)(__)\___)(____)(__)(__)(____)              //
-Info: [18:04:36] //                                                                  //
-Info: [18:04:36] //                   Coded by:      Borf                            //
-Info: [18:04:36] //                     Libraries used:                              //
-Info: [18:04:36] //            - OpenGL                                              //
-Info: [18:04:36] //            - pthread-win32                                       //
-Info: [18:04:36] //            - Cal3d 0.10                                          //
-Info: [18:04:36] //            - zlib                                                //
-Info: [18:04:36] //            - (win)sockets                                        //
-Info: [18:04:36] //            - mysql                                               //
-Info: [18:04:36] //                                                                  //
-Info: [18:04:36] //////////////////////////////////////////////////////////////////////
-Info: [18:04:36] 
-Info: [18:04:36] 
-Error: [18:04:36] FileSystem: Error opening datafile
-Info: [18:04:36] Font: Loading font data/fonts/font1.tga
-Info: [18:04:36] Texture: Loaded Uncompressed TGA 'data/fonts/font1.tga'
-Info: [18:04:36] Font: Loaded font data/fonts/font1.tga ok
-Info: [18:04:48] Loading C:\Program Files\Gravity\RO\data\c_tower1
-Info: [18:04:49] 54886 tiles are used
-Info: [18:04:49] Done loading gnd
-Info: [18:04:52] Done Loading C:\Program Files\Gravity\RO\data\c_tower1
-Info: [18:04:52] Loading c:\program files\gravity\ro\data\texture\기타마을내부\시계탑내부바닥04.bmp...
-Info: [18:04:52] Loaded c:\program files\gravity\ro\data\texture\기타마을내부\시계탑내부바닥04.bmp successfully
-Info: [18:04:52] Loading c:\program files\gravity\ro\data\texture\기타마을내부\시계탑내부바닥01.bmp...
-Info: [18:04:52] Loaded c:\program files\gravity\ro\data\texture\기타마을내부\시계탑내부바닥01.bmp successfully
-Info: [18:04:52] Loading c:\program files\gravity\ro\data\texture\기타마을내부\시계탑내부벽.bmp...
-Info: [18:04:52] Loaded c:\program files\gravity\ro\data\texture\기타마을내부\시계탑내부벽.bmp successfully
-Info: [18:04:52] Loading c:\program files\gravity\ro\data\texture\필드바닥\gp-lostdun_g03.bmp...
-Info: [18:04:52] Loaded c:\program files\gravity\ro\data\texture\필드바닥\gp-lostdun_g03.bmp successfully
-Info: [18:04:52] Loading c:\program files\gravity\ro\data\texture\필드바닥\시계탑내부벽3.bmp...
-Info: [18:04:52] Loaded c:\program files\gravity\ro\data\texture\필드바닥\시계탑내부벽3.bmp successfully
-Info: [18:04:52] Loading c:\program files\gravity\ro\data\texture\기타마을내부\시계탑내부바닥02.bmp...
-Info: [18:04:52] Loaded c:\program files\gravity\ro\data\texture\기타마을내부\시계탑내부바닥02.bmp successfully
-Info: [18:04:52] Loading c:\program files\gravity\ro\data\texture\필드바닥\시계탑던전03.bmp...
-Info: [18:04:52] Loaded c:\program files\gravity\ro\data\texture\필드바닥\시계탑던전03.bmp successfully
-Info: [18:04:55] Loading c:\program files\gravity\ro\data\texture\기타마을내부\시계탑내부벽2.bmp...
-Info: [18:04:56] Loaded c:\program files\gravity\ro\data\texture\기타마을내부\시계탑내부벽2.bmp successfully
-Info: [18:05:02] Loading c:\program files\gravity\ro\data\texture\내부소품\pron-spai.bmp...
-Info: [18:05:02] Loaded c:\program files\gravity\ro\data\texture\내부소품\pron-spai.bmp successfully
-Info: [18:05:02] Loading c:\program files\gravity\ro\data\texture\내부소품\pron-hwang.bmp...
-Info: [18:05:02] Loaded c:\program files\gravity\ro\data\texture\내부소품\pron-hwang.bmp successfully
-Info: [18:05:02] Loading c:\program files\gravity\ro\data\texture\내부소품\pron-bri-1.bmp...
-Info: [18:05:02] Loaded c:\program files\gravity\ro\data\texture\내부소품\pron-bri-1.bmp successfully
-Info: [18:05:02] Loading c:\program files\gravity\ro\data\texture\내부소품\pron-hwang2.bmp...
-Info: [18:05:02] Loaded c:\program files\gravity\ro\data\texture\내부소품\pron-hwang2.bmp successfully
-Info: [18:05:02] Loading c:\program files\gravity\ro\data\texture\내부소품\pron-hwang1.bmp...
-Info: [18:05:02] Loaded c:\program files\gravity\ro\data\texture\내부소품\pron-hwang1.bmp successfully
-Info: [18:05:02] Loading c:\program files\gravity\ro\data\texture\내부소품\ind2-side1.bmp...
-Info: [18:05:02] Loaded c:\program files\gravity\ro\data\texture\내부소품\ind2-side1.bmp successfully
-Info: [18:05:02] Loading c:\program files\gravity\ro\data\texture\내부소품\ind-side2.bmp...
-Info: [18:05:02] Loaded c:\program files\gravity\ro\data\texture\내부소품\ind-side2.bmp successfully
-Info: [18:05:02] Loading c:\program files\gravity\ro\data\texture\내부소품\bird_pillar.bmp...
-Info: [18:05:02] Loaded c:\program files\gravity\ro\data\texture\내부소품\bird_pillar.bmp successfully
-Info: [18:05:02] Loading c:\program files\gravity\ro\data\texture\내부소품\alde-inclok01.bmp...
-Info: [18:05:02] Loaded c:\program files\gravity\ro\data\texture\내부소품\alde-inclok01.bmp successfully
-Info: [18:05:02] Texture: Loaded Uncompressed TGA 'data/bulb.tga'
-Info: [18:05:02] Texture: Loaded Compressed TGA data/explosion.tga
-Info: [18:05:02] Texture: Loaded Compressed TGA data/Speaker.tga
-Info: [18:05:03] Loading c:\program files\gravity\ro\data\texture\외부소품\lampjul256 copy.bmp...
-Info: [18:05:03] Loaded c:\program files\gravity\ro\data\texture\외부소품\lampjul256 copy.bmp successfully
-Info: [18:05:03] Loading c:\program files\gravity\ro\data\texture\외부소품\lamp2256 copy.bmp...
-Info: [18:05:03] Loaded c:\program files\gravity\ro\data\texture\외부소품\lamp2256 copy.bmp successfully
-Info: [18:05:03] Loading c:\program files\gravity\ro\data\texture\내부소품\w_inarms.bmp...
-Info: [18:05:03] Loaded c:\program files\gravity\ro\data\texture\내부소품\w_inarms.bmp successfully
-Info: [18:05:03] Loading c:\program files\gravity\ro\data\texture\내부소품\alde-inbell1.bmp...
-Info: [18:05:03] Loaded c:\program files\gravity\ro\data\texture\내부소품\alde-inbell1.bmp successfully
-Info: [18:05:03] Loading c:\program files\gravity\ro\data\texture\내부소품\box2.bmp...
-Info: [18:05:03] Loaded c:\program files\gravity\ro\data\texture\내부소품\box2.bmp successfully
-Info: [18:05:03] Loading c:\program files\gravity\ro\data\texture\내부소품\pron-line.bmp...
-Info: [18:05:03] Loaded c:\program files\gravity\ro\data\texture\내부소품\pron-line.bmp successfully
-Info: [18:05:03] Loading c:\program files\gravity\ro\data\texture\기타마을내부\시계탑내부바닥03.bmp...
-Info: [18:05:03] Loaded c:\program files\gravity\ro\data\texture\기타마을내부\시계탑내부바닥03.bmp successfully
-Info: [18:05:04] Loading c:\program files\gravity\ro\data\texture\내부소품\prt_carpet03.bmp...
-Info: [18:05:04] Loaded c:\program files\gravity\ro\data\texture\내부소품\prt_carpet03.bmp successfully
-Info: [18:05:04] Loading c:\program files\gravity\ro\data\texture\내부소품\clock_in01.bmp...
-Info: [18:05:04] Loaded c:\program files\gravity\ro\data\texture\내부소품\clock_in01.bmp successfully
-Info: [18:05:04] Loading c:\program files\gravity\ro\data\texture\black.bmp...
-Info: [18:05:04] Loaded c:\program files\gravity\ro\data\texture\black.bmp successfully
-Info: [18:05:04] Loading c:\program files\gravity\ro\data\texture\내부소품\al-cl-wheel.bmp...
-Info: [18:05:04] Loaded c:\program files\gravity\ro\data\texture\내부소품\al-cl-wheel.bmp successfully
-Info: [18:05:04] Loading c:\program files\gravity\ro\data\texture\필드바닥\시계탑내부벽4.bmp...
-Info: [18:05:04] Loaded c:\program files\gravity\ro\data\texture\필드바닥\시계탑내부벽4.bmp successfully
-Info: [18:05:05] Loading c:\program files\gravity\ro\data\texture\내부소품\alde-inarch.bmp...
-Info: [18:05:05] Loaded c:\program files\gravity\ro\data\texture\내부소품\alde-inarch.bmp successfully
-Info: [18:05:05] Loading c:\program files\gravity\ro\data\texture\내부소품\clock_in_door.bmp...
-Info: [18:05:05] Loaded c:\program files\gravity\ro\data\texture\내부소품\clock_in_door.bmp successfully
-Info: [18:05:05] Loading c:\program files\gravity\ro\data\texture\내부소품\delight1.bmp...
-Info: [18:05:05] Loaded c:\program files\gravity\ro\data\texture\내부소품\delight1.bmp successfully
-Info: [18:05:06] Loading c:\program files\gravity\ro\data\texture\내부소품\clockweight1.bmp...
-Info: [18:05:06] Loaded c:\program files\gravity\ro\data\texture\내부소품\clockweight1.bmp successfully
-Info: [18:05:06] Loading c:\program files\gravity\ro\data\texture\내부소품\clockweight0.bmp...
-Info: [18:05:06] Loaded c:\program files\gravity\ro\data\texture\내부소품\clockweight0.bmp successfully
-Info: [18:05:07] Loading c:\program files\gravity\ro\data\texture\내부소품\box2-side.bmp...
-Info: [18:05:07] Loaded c:\program files\gravity\ro\data\texture\내부소품\box2-side.bmp successfully
-Info: [18:05:07] Loading c:\program files\gravity\ro\data\texture\내부소품\trea-arch.bmp...
-Info: [18:05:07] Loaded c:\program files\gravity\ro\data\texture\내부소품\trea-arch.bmp successfully
-Info: [18:05:08] Loading c:\program files\gravity\ro\data\texture\trea-mchain1.bmp...
-Info: [18:05:08] Loaded c:\program files\gravity\ro\data\texture\trea-mchain1.bmp successfully
-Info: [18:05:08] Loading c:\program files\gravity\ro\data\texture\내부소품\watch_worf1 copy.bmp...
-Info: [18:05:08] Loaded c:\program files\gravity\ro\data\texture\내부소품\watch_worf1 copy.bmp successfully
-Info: [18:05:08] Loading c:\program files\gravity\ro\data\texture\내부소품\watch_worf2 copy.bmp...
-Info: [18:05:08] Loaded c:\program files\gravity\ro\data\texture\내부소품\watch_worf2 copy.bmp successfully
-Info: [18:05:08] Loading c:\program files\gravity\ro\data\texture\내부소품\trea-table.bmp...
-Info: [18:05:08] Loaded c:\program files\gravity\ro\data\texture\내부소품\trea-table.bmp successfully
-Info: [18:05:08] Loading c:\program files\gravity\ro\data\texture\내부소품\alde-inclokt01.bmp...
-Info: [18:05:08] Loaded c:\program files\gravity\ro\data\texture\내부소품\alde-inclokt01.bmp successfully
-Info: [18:05:09] Loading c:\program files\gravity\ro\data\texture\내부소품\al_cl_ruin clock.bmp...
-Info: [18:05:09] Loaded c:\program files\gravity\ro\data\texture\내부소품\al_cl_ruin clock.bmp successfully
-Info: [18:05:09] Loading c:\program files\gravity\ro\data\texture\필드바닥\시계탑던전01.bmp...
-Info: [18:05:09] Loaded c:\program files\gravity\ro\data\texture\필드바닥\시계탑던전01.bmp successfully
-Info: [18:05:09] Loading c:\program files\gravity\ro\data\texture\필드바닥\시계탑던전02.bmp...
-Info: [18:05:09] Loaded c:\program files\gravity\ro\data\texture\필드바닥\시계탑던전02.bmp successfully
-Info: [18:05:09] Loading c:\program files\gravity\ro\data\texture\내부소품\alde-inirn01.bmp...
-Info: [18:05:09] Loaded c:\program files\gravity\ro\data\texture\내부소품\alde-inirn01.bmp successfully
-Info: [18:05:09] Loading c:\program files\gravity\ro\data\texture\필드바닥\시계탑던전07.bmp...
-Info: [18:05:09] Loaded c:\program files\gravity\ro\data\texture\필드바닥\시계탑던전07.bmp successfully
-Info: [18:05:09] Loading c:\program files\gravity\ro\data\texture\필드바닥\시계탑던전바닥01.bmp...
-Info: [18:05:09] Loaded c:\program files\gravity\ro\data\texture\필드바닥\시계탑던전바닥01.bmp successfully
-Info: [18:05:09] Loading c:\program files\gravity\ro\data\texture\필드바닥\시계탑던전바닥02.bmp...
-Info: [18:05:09] Loaded c:\program files\gravity\ro\data\texture\필드바닥\시계탑던전바닥02.bmp successfully
-Info: [18:05:09] Loading c:\program files\gravity\ro\data\texture\내부소품\clockt_arc.bmp...
-Info: [18:05:09] Loaded c:\program files\gravity\ro\data\texture\내부소품\clockt_arc.bmp successfully
-Info: [18:05:09] Loading c:\program files\gravity\ro\data\texture\내부소품\clockt_back&pipe.bmp...
-Info: [18:05:09] Loaded c:\program files\gravity\ro\data\texture\내부소품\clockt_back&pipe.bmp successfully
-Info: [18:05:09] Loading c:\program files\gravity\ro\data\texture\내부소품\clockt_u&c&k.bmp...
-Info: [18:05:09] Loaded c:\program files\gravity\ro\data\texture\내부소품\clockt_u&c&k.bmp successfully
-Info: [18:05:09] Loading c:\program files\gravity\ro\data\texture\내부소품\clockt_saw.bmp...
-Info: [18:05:09] Loaded c:\program files\gravity\ro\data\texture\내부소품\clockt_saw.bmp successfully
-Info: [18:05:09] Loading c:\program files\gravity\ro\data\texture\내부소품\gauge board.bmp...
-Info: [18:05:09] Loaded c:\program files\gravity\ro\data\texture\내부소품\gauge board.bmp successfully
-Info: [18:05:09] Loading c:\program files\gravity\ro\data\texture\내부소품\gauge wire.bmp...
-Info: [18:05:09] Loaded c:\program files\gravity\ro\data\texture\내부소품\gauge wire.bmp successfully
-Info: [18:05:09] Loading c:\program files\gravity\ro\data\texture\내부소품\a_room_column02.bmp...
-Info: [18:05:09] Loaded c:\program files\gravity\ro\data\texture\내부소품\a_room_column02.bmp successfully
-Info: [18:05:09] Loading c:\program files\gravity\ro\data\texture\내부소품\a_room_column01.bmp...
-Info: [18:05:09] Loaded c:\program files\gravity\ro\data\texture\내부소품\a_room_column01.bmp successfully
-Info: [18:05:09] Loading c:\program files\gravity\ro\data\texture\내부소품\pron-chang.bmp...
-Info: [18:05:09] Loaded c:\program files\gravity\ro\data\texture\내부소품\pron-chang.bmp successfully
-Info: [18:05:11] Loading c:\program files\gravity\ro\data\texture\내부소품\alde-in-obj03.bmp...
-Info: [18:05:11] Loaded c:\program files\gravity\ro\data\texture\내부소품\alde-in-obj03.bmp successfully
-Info: [18:05:11] Loading c:\program files\gravity\ro\data\texture\내부소품\prmd_wall.bmp...
-Info: [18:05:11] Loaded c:\program files\gravity\ro\data\texture\내부소품\prmd_wall.bmp successfully
-Info: [18:05:11] Loading c:\program files\gravity\ro\data\texture\내부소품\alde-in-mach01.bmp...
-Info: [18:05:11] Loaded c:\program files\gravity\ro\data\texture\내부소품\alde-in-mach01.bmp successfully
-Info: [18:05:12] Loading c:\program files\gravity\ro\data\texture\내부소품\L-side3.bmp...
-Info: [18:05:12] Loaded c:\program files\gravity\ro\data\texture\내부소품\L-side3.bmp successfully
-Info: [18:05:12] Loading c:\program files\gravity\ro\data\texture\내부소품\L-side1.bmp...
-Info: [18:05:12] Loaded c:\program files\gravity\ro\data\texture\내부소품\L-side1.bmp successfully
-Info: [18:05:12] Loading c:\program files\gravity\ro\data\texture\내부소품\L-side2.bmp...
-Info: [18:05:12] Loaded c:\program files\gravity\ro\data\texture\내부소품\L-side2.bmp successfully
-Info: [18:05:12] Loading c:\program files\gravity\ro\data\texture\내부소품\L-side4.bmp...
-Info: [18:05:12] Loaded c:\program files\gravity\ro\data\texture\내부소품\L-side4.bmp successfully
-Info: [18:05:12] Loading c:\program files\gravity\ro\data\texture\내부소품\alde-incol.bmp...
-Info: [18:05:12] Loaded c:\program files\gravity\ro\data\texture\내부소품\alde-incol.bmp successfully
-Info: [18:05:12] Loading c:\program files\gravity\ro\data\texture\내부소품\alde-incol2.bmp...
-Info: [18:05:12] Loaded c:\program files\gravity\ro\data\texture\내부소품\alde-incol2.bmp successfully
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\trea-table.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\watch_worf1 copy.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\watch_worf2 copy.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\L-side1.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\L-side2.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\L-side3.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\L-side4.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\gauge board.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\gauge wire.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\pron-bri.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\clockt_arc.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\clockt_back&pipe.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\clockt_u&c&k.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\clockt_saw.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\alde-in-obj03.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\alde-in-mach01.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\delight1.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\clock_in_door.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\a_room_column01.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\a_room_column02.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\trea-mchain1.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\alde-incol.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\alde-incol2.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\alde-inclok01.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\clockweight0.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\clockweight1.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\al-cl-wheel.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\alde-inarch.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\외부소품\alde_para01.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\외부소품\alde_para02.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\si-side1.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\si-side2.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\si-side3.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\bird_pillar.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\외부소품\lampjul256 copy.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\외부소품\lamp2256 copy.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\trea-arch.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\pron-chang.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\clock_in01.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\box2-side.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\box2.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\w_inarms.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\pron-line.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\alde-inbell1.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\pron-spai.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\al_cl_ruin clock.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\alde-inclokt01.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\alde-inclokt02.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\ind2-side1.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\ind-side2.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\pron-hwang.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\pron-bri-1.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\pron-hwang1.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\pron-hwang2.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\black.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\alde-inirn01.bmp seems to be unused
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\기타마을내부\시계탑내부바닥01.bmp is still 1 times loaded
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\기타마을내부\시계탑내부바닥02.bmp is still 1 times loaded
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\기타마을내부\시계탑내부바닥03.bmp is still 1 times loaded
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\기타마을내부\시계탑내부바닥04.bmp is still 1 times loaded
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\기타마을내부\시계탑내부벽.bmp is still 1 times loaded
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\기타마을내부\시계탑내부벽2.bmp is still 1 times loaded
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\prmd_wall.bmp is still 1 times loaded
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\내부소품\prt_carpet03.bmp is still 1 times loaded
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\필드바닥\gp-lostdun_g03.bmp is still 1 times loaded
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\필드바닥\시계탑내부벽3.bmp is still 1 times loaded
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\필드바닥\시계탑내부벽4.bmp is still 1 times loaded
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\필드바닥\시계탑던전01.bmp is still 1 times loaded
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\필드바닥\시계탑던전02.bmp is still 1 times loaded
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\필드바닥\시계탑던전03.bmp is still 1 times loaded
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\필드바닥\시계탑던전06.bmp is still 1 times loaded
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\필드바닥\시계탑던전07.bmp is still 1 times loaded
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\필드바닥\시계탑던전바닥01.bmp is still 1 times loaded
-Info: [18:14:01] Texture c:\program files\gravity\ro\data\texture\필드바닥\시계탑던전바닥02.bmp is still 1 times loaded
-Info: [18:14:01] Texture data/Speaker.tga is still 1 times loaded
-Info: [18:14:01] Texture data/bulb.tga is still 1 times loaded
-Info: [18:14:01] Texture data/explosion.tga is still 1 times loaded
+Info: [23:39:41] //////////////////////////////////////////////////////////////////////
+Info: [23:39:41] //          ___  ____   __    ___  ____    __    __                 //
+Info: [23:39:41] //         / __)(  _ \ /__\  / __)(_  _)  /__\  (  )                //
+Info: [23:39:41] //         \__ \ )___//(__)\( (__  _)(_  /(__)\  )(__               //
+Info: [23:39:41] //         (___/(__) (__)(__)\___)(____)(__)(__)(____)              //
+Info: [23:39:41] //                                                                  //
+Info: [23:39:41] //                   Coded by:      Borf                            //
+Info: [23:39:41] //                     Libraries used:                              //
+Info: [23:39:41] //            - OpenGL                                              //
+Info: [23:39:41] //            - pthread-win32                                       //
+Info: [23:39:41] //            - Cal3d 0.10                                          //
+Info: [23:39:41] //            - zlib                                                //
+Info: [23:39:41] //            - (win)sockets                                        //
+Info: [23:39:41] //            - mysql                                               //
+Info: [23:39:41] //                                                                  //
+Info: [23:39:41] //////////////////////////////////////////////////////////////////////
+Info: [23:39:41] 
+Info: [23:39:41] 
+Error: [23:39:41] FileSystem: Error opening datafile
+Info: [23:39:42] Font: Loading font data/fonts/font1.tga
+Info: [23:39:42] Texture: Loaded Uncompressed TGA 'data/fonts/font1.tga'
+Info: [23:39:42] Font: Loaded font data/fonts/font1.tga ok
+Info: [23:39:42] Loading c:\program files\gravity\ro\data\alberta
+Info: [23:39:43] 21947 tiles are used
+Info: [23:39:43] Done loading gnd
+Info: [23:39:43] Done Loading c:\program files\gravity\ro\data\alberta
+Info: [23:39:43] Loading c:\program files\gravity\ro\data\texture\필드바닥\알베르타마을바닥-2.bmp...
+Info: [23:39:43] Loaded c:\program files\gravity\ro\data\texture\필드바닥\알베르타마을바닥-2.bmp successfully
+Info: [23:39:43] Loading c:\program files\gravity\ro\data\texture\필드바닥\알베르타마을바닥-1.bmp...
+Info: [23:39:43] Loaded c:\program files\gravity\ro\data\texture\필드바닥\알베르타마을바닥-1.bmp successfully
+Info: [23:39:43] Loading c:\program files\gravity\ro\data\texture\기타마을\al-00.bmp...
+Info: [23:39:43] Loaded c:\program files\gravity\ro\data\texture\기타마을\al-00.bmp successfully
+Info: [23:39:43] Loading c:\program files\gravity\ro\data\texture\기타마을\alb-a-w5.bmp...
+Info: [23:39:43] Loaded c:\program files\gravity\ro\data\texture\기타마을\alb-a-w5.bmp successfully
+Info: [23:39:43] Loading c:\program files\gravity\ro\data\texture\필드바닥\숲속바닥-02.bmp...
+Info: [23:39:43] Loaded c:\program files\gravity\ro\data\texture\필드바닥\숲속바닥-02.bmp successfully
+Info: [23:39:43] Loading c:\program files\gravity\ro\data\texture\기타마을\al-05.bmp...
+Info: [23:39:43] Loaded c:\program files\gravity\ro\data\texture\기타마을\al-05.bmp successfully
+Info: [23:39:43] Loading c:\program files\gravity\ro\data\texture\필드바닥\숲속바닥-04.bmp...
+Info: [23:39:43] Loaded c:\program files\gravity\ro\data\texture\필드바닥\숲속바닥-04.bmp successfully
+Info: [23:39:43] Loading c:\program files\gravity\ro\data\texture\필드바닥\숲속바닥-03.bmp...
+Info: [23:39:43] Loaded c:\program files\gravity\ro\data\texture\필드바닥\숲속바닥-03.bmp successfully
+Info: [23:39:43] Loading c:\program files\gravity\ro\data\texture\필드바닥\숲속바닥-01.bmp...
+Info: [23:39:43] Loaded c:\program files\gravity\ro\data\texture\필드바닥\숲속바닥-01.bmp successfully
+Info: [23:39:43] Loading c:\program files\gravity\ro\data\texture\기타마을\al-inn-w1.bmp...
+Info: [23:39:43] Loaded c:\program files\gravity\ro\data\texture\기타마을\al-inn-w1.bmp successfully
+Info: [23:39:43] Loading c:\program files\gravity\ro\data\texture\기타마을\al-a02.bmp...
+Info: [23:39:44] Loaded c:\program files\gravity\ro\data\texture\기타마을\al-a02.bmp successfully
+Info: [23:39:44] Loading c:\program files\gravity\ro\data\texture\필드바닥\알베르타마을바닥-00.bmp...
+Info: [23:39:44] Loaded c:\program files\gravity\ro\data\texture\필드바닥\알베르타마을바닥-00.bmp successfully
+Info: [23:39:44] Loading c:\program files\gravity\ro\data\texture\BLACK.BMP...
+Info: [23:39:44] Loaded c:\program files\gravity\ro\data\texture\BLACK.BMP successfully
+Info: [23:39:44] Loading c:\program files\gravity\ro\data\texture\기타마을\알_바닥.bmp...
+Info: [23:39:44] Loaded c:\program files\gravity\ro\data\texture\기타마을\알_바닥.bmp successfully
+Info: [23:39:45] Loading c:\program files\gravity\ro\data\texture\기타마을\alb-a-w3.bmp...
+Info: [23:39:45] Loaded c:\program files\gravity\ro\data\texture\기타마을\alb-a-w3.bmp successfully
+Info: [23:39:50] Loading c:\program files\gravity\ro\data\texture\기타마을\albdo-04.bmp...
+Info: [23:39:50] Loaded c:\program files\gravity\ro\data\texture\기타마을\albdo-04.bmp successfully
+Info: [23:39:50] Loading c:\program files\gravity\ro\data\texture\기타마을\albdo-06.bmp...
+Info: [23:39:50] Loaded c:\program files\gravity\ro\data\texture\기타마을\albdo-06.bmp successfully
+Info: [23:39:50] Loading c:\program files\gravity\ro\data\texture\기타마을\albdo-02.bmp...
+Info: [23:39:50] Loaded c:\program files\gravity\ro\data\texture\기타마을\albdo-02.bmp successfully
+Info: [23:39:50] Loading c:\program files\gravity\ro\data\texture\기타마을\albdo-03.bmp...
+Info: [23:39:50] Loaded c:\program files\gravity\ro\data\texture\기타마을\albdo-03.bmp successfully
+Info: [23:39:50] Loading c:\program files\gravity\ro\data\texture\기타마을\albdo-01.bmp...
+Info: [23:39:50] Loaded c:\program files\gravity\ro\data\texture\기타마을\albdo-01.bmp successfully
+Info: [23:39:50] Loading c:\program files\gravity\ro\data\texture\기타마을\albdo-05.bmp...
+Info: [23:39:50] Loaded c:\program files\gravity\ro\data\texture\기타마을\albdo-05.bmp successfully
+Info: [23:40:58] Texture c:\program files\gravity\ro\data\texture\기타마을\albdo-01.bmp seems to be unused
+Info: [23:40:58] Texture c:\program files\gravity\ro\data\texture\기타마을\albdo-03.bmp seems to be unused
+Info: [23:40:58] Texture c:\program files\gravity\ro\data\texture\기타마을\albdo-04.bmp seems to be unused
+Info: [23:40:58] Texture c:\program files\gravity\ro\data\texture\기타마을\albdo-05.bmp seems to be unused
+Info: [23:40:58] Texture c:\program files\gravity\ro\data\texture\기타마을\albdo-06.bmp seems to be unused
+Info: [23:40:58] Texture c:\program files\gravity\ro\data\texture\BLACK.BMP is still 1 times loaded
+Info: [23:40:58] Texture c:\program files\gravity\ro\data\texture\기타마을\al-00.bmp is still 1 times loaded
+Info: [23:40:58] Texture c:\program files\gravity\ro\data\texture\기타마을\al-05.bmp is still 1 times loaded
+Info: [23:40:58] Texture c:\program files\gravity\ro\data\texture\기타마을\al-a02.bmp is still 1 times loaded
+Info: [23:40:58] Texture c:\program files\gravity\ro\data\texture\기타마을\al-inn-w1.bmp is still 1 times loaded
+Info: [23:40:58] Texture c:\program files\gravity\ro\data\texture\기타마을\alb-a-w3.bmp is still 1 times loaded
+Info: [23:40:58] Texture c:\program files\gravity\ro\data\texture\기타마을\alb-a-w5.bmp is still 1 times loaded
+Info: [23:40:58] Texture c:\program files\gravity\ro\data\texture\기타마을\albdo-02.bmp is still 1 times loaded
+Info: [23:40:58] Texture c:\program files\gravity\ro\data\texture\기타마을\알_바닥.bmp is still 1 times loaded
+Info: [23:40:58] Texture c:\program files\gravity\ro\data\texture\필드바닥\숲속바닥-01.bmp is still 1 times loaded
+Info: [23:40:58] Texture c:\program files\gravity\ro\data\texture\필드바닥\숲속바닥-02.bmp is still 1 times loaded
+Info: [23:40:58] Texture c:\program files\gravity\ro\data\texture\필드바닥\숲속바닥-03.bmp is still 1 times loaded
+Info: [23:40:58] Texture c:\program files\gravity\ro\data\texture\필드바닥\숲속바닥-04.bmp is still 1 times loaded
+Info: [23:40:58] Texture c:\program files\gravity\ro\data\texture\필드바닥\알베르타마을바닥-00.bmp is still 1 times loaded
+Info: [23:40:58] Texture c:\program files\gravity\ro\data\texture\필드바닥\알베르타마을바닥-1.bmp is still 1 times loaded
+Info: [23:40:58] Texture c:\program files\gravity\ro\data\texture\필드바닥\알베르타마을바닥-2.bmp is still 1 times loaded
+Info: [23:40:58] Texture data/Speaker.tga is still 1 times loaded
+Info: [23:40:58] Texture data/bulb.tga is still 1 times loaded
+Info: [23:40:58] Texture data/explosion.tga is still 1 times loaded
