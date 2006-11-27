@@ -5,7 +5,7 @@ turtledun/nature/oozescreen1|model\芭合捞级\芭合_馋利捞1.rsm
 turtledun/nature/oozescreen2|model\芭合捞级\芭合_馋利捞2.rsm
 turtledun/nature/oozescreen3|model\芭合捞级\芭合_馋利捞3.rsm
 turtledun/nature/trunk1|model\芭合捞级\芭合_唱公.rsm
-turtledun/nature/leafs|model\芭合捞级\芭合_唱公蕾.rsm
+turtledun/nature/leaves|model\芭合捞级\芭合_唱公蕾.rsm
 turtledun/turtlemouth1|model\芭合捞级\芭合_带怜涝备.rsm
 turtledun/nature/trunk2|model\芭合捞级\芭合_耽酿1.rsm
 turtledun/nature/trunk3|model\芭合捞级\芭合_耽酿2.rsm
