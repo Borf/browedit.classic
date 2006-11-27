@@ -226,8 +226,10 @@ int main(int argc, char *argv[])
 		return 1;
 
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "alberta").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "prontera").c_str());
+#ifdef _DEBUG
 	Graphics.world.load();
+#endif
 	long lasttimer = SDL_GetTicks();
 	while( running ) {
 		process_events( );														// process keypresses
