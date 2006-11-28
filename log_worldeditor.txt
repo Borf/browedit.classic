@@ -1,560 +1,79 @@
-Info: [23:47:40] //////////////////////////////////////////////////////////////////////
-Info: [23:47:40] //          ___  ____   __    ___  ____    __    __                 //
-Info: [23:47:40] //         / __)(  _ \ /__\  / __)(_  _)  /__\  (  )                //
-Info: [23:47:40] //         \__ \ )___//(__)\( (__  _)(_  /(__)\  )(__               //
-Info: [23:47:40] //         (___/(__) (__)(__)\___)(____)(__)(__)(____)              //
-Info: [23:47:40] //                                                                  //
-Info: [23:47:40] //                   Coded by:      Borf                            //
-Info: [23:47:40] //                     Libraries used:                              //
-Info: [23:47:40] //            - OpenGL                                              //
-Info: [23:47:40] //            - pthread-win32                                       //
-Info: [23:47:40] //            - Cal3d 0.10                                          //
-Info: [23:47:40] //            - zlib                                                //
-Info: [23:47:40] //            - (win)sockets                                        //
-Info: [23:47:40] //            - mysql                                               //
-Info: [23:47:40] //                                                                  //
-Info: [23:47:40] //////////////////////////////////////////////////////////////////////
-Info: [23:47:40] 
-Info: [23:47:40] 
-Error: [23:47:40] FileSystem: Error opening datafile
-Info: [23:47:41] Font: Loading font data/fonts/font1.tga
-Info: [23:47:41] Texture: Loaded Uncompressed TGA 'data/fonts/font1.tga'
-Info: [23:47:41] Font: Loaded font data/fonts/font1.tga ok
-Info: [23:47:41] Loading c:\program files\gravity\ro\data\prontera
-Info: [23:47:42] 28512 tiles are used
-Info: [23:47:42] Done loading gnd
-Info: [23:47:43] Done Loading c:\program files\gravity\ro\data\prontera
-Info: [23:47:44] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_도시02.bmp...
-Info: [23:47:44] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_도시02.bmp successfully
-Info: [23:47:44] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_도시01.bmp...
-Info: [23:47:44] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_도시01.bmp successfully
-Info: [23:47:44] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_도시05.bmp...
-Info: [23:47:44] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_도시05.bmp successfully
-Info: [23:47:44] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_도시03.bmp...
-Info: [23:47:44] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_도시03.bmp successfully
-Info: [23:47:44] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_초원01.bmp...
-Info: [23:47:44] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_초원01.bmp successfully
-Info: [23:47:44] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_도시08.bmp...
-Info: [23:47:44] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_도시08.bmp successfully
-Info: [23:47:44] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_도시04.bmp...
-Info: [23:47:44] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_도시04.bmp successfully
-Info: [23:47:45] Loading c:\program files\gravity\ro\data\texture\프론테라\wepon-wall-2.bmp...
-Info: [23:47:45] Loaded c:\program files\gravity\ro\data\texture\프론테라\wepon-wall-2.bmp successfully
-Info: [23:47:45] Loading c:\program files\gravity\ro\data\texture\프론테라\wepon-wall-3.bmp...
-Info: [23:47:45] Loaded c:\program files\gravity\ro\data\texture\프론테라\wepon-wall-3.bmp successfully
-Info: [23:47:45] Loading c:\program files\gravity\ro\data\texture\프론테라\wepon-wall-1.bmp...
-Info: [23:47:45] Loaded c:\program files\gravity\ro\data\texture\프론테라\wepon-wall-1.bmp successfully
-Info: [23:47:45] Loading c:\program files\gravity\ro\data\texture\프론테라\wepon-wall.bmp...
-Info: [23:47:45] Loaded c:\program files\gravity\ro\data\texture\프론테라\wepon-wall.bmp successfully
-Info: [23:47:45] Loading c:\program files\gravity\ro\data\texture\프론테라\wepon-wall-4.bmp...
-Info: [23:47:45] Loaded c:\program files\gravity\ro\data\texture\프론테라\wepon-wall-4.bmp successfully
-Info: [23:47:45] Loading c:\program files\gravity\ro\data\texture\프론테라\jop-f.bmp...
-Info: [23:47:45] Loaded c:\program files\gravity\ro\data\texture\프론테라\jop-f.bmp successfully
-Info: [23:47:45] Loading c:\program files\gravity\ro\data\texture\프론테라\wepon-wall-5.bmp...
-Info: [23:47:45] Loaded c:\program files\gravity\ro\data\texture\프론테라\wepon-wall-5.bmp successfully
-Info: [23:47:45] Loading c:\program files\gravity\ro\data\texture\프론테라\ho-wall-4.bmp...
-Info: [23:47:45] Loaded c:\program files\gravity\ro\data\texture\프론테라\ho-wall-4.bmp successfully
-Info: [23:47:45] Loading c:\program files\gravity\ro\data\texture\프론테라\wepon-wall-7.bmp...
-Info: [23:47:45] Loaded c:\program files\gravity\ro\data\texture\프론테라\wepon-wall-7.bmp successfully
-Info: [23:47:45] Loading c:\program files\gravity\ro\data\texture\프론테라\wepon-roof.bmp...
-Info: [23:47:45] Loaded c:\program files\gravity\ro\data\texture\프론테라\wepon-roof.bmp successfully
-Info: [23:47:45] Loading c:\program files\gravity\ro\data\texture\프론테라\wepon-wall-6.bmp...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\프론테라\wepon-wall-6.bmp successfully
-Info: [23:47:46] Loading c:\program files\gravity\ro\data\texture\나무잡초꽃\mo-tree-block.bmp...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\나무잡초꽃\mo-tree-block.bmp successfully
-Info: [23:47:46] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-tl1.bmp...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-tl1.bmp successfully
-Info: [23:47:46] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-tl2.bmp...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-tl2.bmp successfully
-Info: [23:47:46] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-tl3.bmp...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-tl3.bmp successfully
-Info: [23:47:46] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-tl4.bmp...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-tl4.bmp successfully
-Info: [23:47:46] Loading c:\program files\gravity\ro\data\texture\프론테라\pron_min02_03.bmp...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron_min02_03.bmp successfully
-Info: [23:47:46] Loading c:\program files\gravity\ro\data\texture\나무잡초꽃\newtree_01.bmp...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\나무잡초꽃\newtree_01.bmp successfully
-Info: [23:47:46] Loading c:\program files\gravity\ro\data\texture\나무잡초꽃\newtree_02.bmp...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\나무잡초꽃\newtree_02.bmp successfully
-Info: [23:47:46] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-flo-bloc.bmp...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-flo-bloc.bmp successfully
-Info: [23:47:46] Loading c:\program files\gravity\ro\data\texture\프론테라\weed.bmp...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\프론테라\weed.bmp successfully
-Info: [23:47:46] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-flo-f.bmp...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-flo-f.bmp successfully
-Info: [23:47:46] Loading c:\program files\gravity\ro\data\texture\외부소품\pron-bench1.bmp...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\외부소품\pron-bench1.bmp successfully
-Info: [23:47:46] Loading c:\program files\gravity\ro\data\texture\외부소품\pron-bench2.bmp...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\외부소품\pron-bench2.bmp successfully
-Info: [23:47:46] Loading c:\program files\gravity\ro\data\texture\외부소품\pron-bench3.bmp...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\외부소품\pron-bench3.bmp successfully
-Info: [23:47:46] Loading c:\program files\gravity\ro\data\texture\프론테라\stone-down.bmp...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\프론테라\stone-down.bmp successfully
-Info: [23:47:46] Loading c:\program files\gravity\ro\data\texture\프론테라\STONE-UP.BMP...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\프론테라\STONE-UP.BMP successfully
-Info: [23:47:46] Loading c:\program files\gravity\ro\data\texture\프론테라\UP.BMP...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\프론테라\UP.BMP successfully
-Info: [23:47:46] Loading c:\program files\gravity\ro\data\texture\프론테라\d-side.bmp...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\프론테라\d-side.bmp successfully
-Info: [23:47:46] Loading c:\program files\gravity\ro\data\texture\프론테라\gid..down(side).bmp...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\프론테라\gid..down(side).bmp successfully
-Info: [23:47:46] Loading c:\program files\gravity\ro\data\texture\프론테라\gid..(side).bmp...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\프론테라\gid..(side).bmp successfully
-Info: [23:47:46] Loading c:\program files\gravity\ro\data\texture\프론테라\rponsramp_08.bmp...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\프론테라\rponsramp_08.bmp successfully
-Info: [23:47:46] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-lamp2.bmp...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-lamp2.bmp successfully
-Info: [23:47:46] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-lamp1.bmp...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-lamp1.bmp successfully
-Info: [23:47:46] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-lamp3.bmp...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-lamp3.bmp successfully
-Info: [23:47:46] Loading c:\program files\gravity\ro\data\texture\프론테라\body.bmp...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\프론테라\body.bmp successfully
-Info: [23:47:46] Loading c:\program files\gravity\ro\data\texture\프론테라\dong.bmp...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\프론테라\dong.bmp successfully
-Info: [23:47:46] Loading c:\program files\gravity\ro\data\texture\프론테라\dong-ho.bmp...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\프론테라\dong-ho.bmp successfully
-Info: [23:47:46] Loading c:\program files\gravity\ro\data\texture\프론테라\dong-land.bmp...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\프론테라\dong-land.bmp successfully
-Info: [23:47:46] Loading c:\program files\gravity\ro\data\texture\프론테라\dong-d-4.bmp...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\프론테라\dong-d-4.bmp successfully
-Info: [23:47:46] Loading c:\program files\gravity\ro\data\texture\프론테라\dong-d-2.bmp...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\프론테라\dong-d-2.bmp successfully
-Info: [23:47:46] Loading c:\program files\gravity\ro\data\texture\프론테라\dong-d-5.bmp...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\프론테라\dong-d-5.bmp successfully
-Info: [23:47:46] Loading c:\program files\gravity\ro\data\texture\프론테라\dong-d-1.bmp...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\프론테라\dong-d-1.bmp successfully
-Info: [23:47:46] Loading c:\program files\gravity\ro\data\texture\프론테라\dong-d-3.bmp...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\프론테라\dong-d-3.bmp successfully
-Info: [23:47:46] Loading c:\program files\gravity\ro\data\texture\외부소품\myo-brd1.bmp...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\외부소품\myo-brd1.bmp successfully
-Info: [23:47:46] Loading c:\program files\gravity\ro\data\texture\외부소품\myo-msign1.bmp...
-Info: [23:47:46] Loaded c:\program files\gravity\ro\data\texture\외부소품\myo-msign1.bmp successfully
-Info: [23:47:46] Texture: Loaded Compressed TGA data/explosion.tga
-Info: [23:47:46] Texture: Loaded Compressed TGA data/Speaker.tga
-Info: [23:47:48] Loading c:\program files\gravity\ro\data\texture\프론테라\go-3.bmp...
-Info: [23:47:48] Loaded c:\program files\gravity\ro\data\texture\프론테라\go-3.bmp successfully
-Info: [23:47:48] Loading c:\program files\gravity\ro\data\texture\프론테라\go-1.bmp...
-Info: [23:47:48] Loaded c:\program files\gravity\ro\data\texture\프론테라\go-1.bmp successfully
-Info: [23:47:48] Loading c:\program files\gravity\ro\data\texture\프론테라\go-2.bmp...
-Info: [23:47:48] Loaded c:\program files\gravity\ro\data\texture\프론테라\go-2.bmp successfully
-Info: [23:47:48] Loading c:\program files\gravity\ro\data\texture\프론테라\go-roof.bmp...
-Info: [23:47:48] Loaded c:\program files\gravity\ro\data\texture\프론테라\go-roof.bmp successfully
-Info: [23:47:48] Loading c:\program files\gravity\ro\data\texture\프론테라내부\h3-door.bmp...
-Info: [23:47:48] Loaded c:\program files\gravity\ro\data\texture\프론테라내부\h3-door.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\prontrade_04.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\prontrade_04.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\prontrade_01.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\prontrade_01.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\prontrade_03.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\prontrade_03.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\prontrade_02.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\prontrade_02.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\prontrade_05.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\prontrade_05.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\ho-wall-3.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\ho-wall-3.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\ho-wall.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\ho-wall.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\ho-wall-1.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\ho-wall-1.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\ho-wall-2.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\ho-wall-2.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\ho-wall-b-1.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\ho-wall-b-1.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\ho-roof-1.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\ho-roof-1.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\ho-roof.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\ho-roof.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\ho-wall-b.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\ho-wall-b.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\pron_min02_01.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron_min02_01.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\pron_min02_02.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron_min02_02.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\pron_min02_04.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron_min02_04.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\al-hou-w3.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\al-hou-w3.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\al-hou-w4.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\al-hou-w4.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\al-hou-w2.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\al-hou-w2.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\al-hou-w1.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\al-hou-w1.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\al-hou-r1.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\al-hou-r1.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\al-hou-sw1.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\al-hou-sw1.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-ctwr4.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-ctwr4.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_초원06.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_초원06.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-lib-w2.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-lib-w2.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-lib-w1.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-lib-w1.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-lib-r.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-lib-r.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-lib-w3.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-lib-w3.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-ctwr1.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-ctwr1.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-ctwr2.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-ctwr2.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-ctwr3.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-ctwr3.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-bgate1.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-bgate1.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-bgate2.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-bgate2.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\pron_min03_02.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron_min03_02.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\pron_min03_01.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron_min03_01.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\pron_min03_03.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron_min03_03.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\pron_min04_05.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron_min04_05.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\pron_min04_02.bmp...
-Info: [23:47:49] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron_min04_02.bmp successfully
-Info: [23:47:49] Loading c:\program files\gravity\ro\data\texture\프론테라\pron_min04_04.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron_min04_04.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\프론테라\pron_min04_01.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron_min04_01.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\프론테라\pron_min04_06.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron_min04_06.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\프론테라\pron_min04_03.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron_min04_03.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\프론테라\bri-1.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\프론테라\bri-1.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\프론테라\bri-2.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\프론테라\bri-2.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\프론테라\bri-3.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\프론테라\bri-3.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\프론테라내부\h2-door.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\프론테라내부\h2-door.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\프론테라내부\h1-door.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\프론테라내부\h1-door.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\내부소품\cha2-side1.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\내부소품\cha2-side1.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\내부소품\cha2-side2.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\내부소품\cha2-side2.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\내부소품\cha2-side3.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\내부소품\cha2-side3.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\내부소품\ch-side1.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\내부소품\ch-side1.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\내부소품\ch-side2.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\내부소품\ch-side2.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\내부소품\ch-side3.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\내부소품\ch-side3.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\기타마을\HAND_02.BMP...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\기타마을\HAND_02.BMP successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\기타마을\HAND_01.BMP...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\기타마을\HAND_01.BMP successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\기타마을\izld-br2.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\기타마을\izld-br2.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\기타마을\izld-br3.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\기타마을\izld-br3.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\기타마을\izld-br5.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\기타마을\izld-br5.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_흙03.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_흙03.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\프론테라\jop-roof.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\프론테라\jop-roof.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\프론테라\jop-wall-1.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\프론테라\jop-wall-1.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\프론테라\jop-wall.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\프론테라\jop-wall.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\프론테라\jop-wall-5.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\프론테라\jop-wall-5.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\프론테라\jop-wall-4.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\프론테라\jop-wall-4.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\프론테라\jop-roof-1.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\프론테라\jop-roof-1.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\프론테라\jop-open.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\프론테라\jop-open.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\프론테라\jop-wall-3.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\프론테라\jop-wall-3.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\프론테라\jop-wall-2.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\프론테라\jop-wall-2.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\외부소품\pron-wag2.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\외부소품\pron-wag2.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\외부소품\pron-wag1.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\외부소품\pron-wag1.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\외부소품\pron-wag3.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\외부소품\pron-wag3.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\내부소품\box2-side.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\내부소품\box2-side.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-ju-wall.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-ju-wall.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-ju-wall-2.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-ju-wall-2.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-ju-wall-4.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-ju-wall-4.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-ju-roof.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-ju-roof.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-ju-roof-1.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-ju-roof-1.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-ju-wall-1.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-ju-wall-1.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-ju-wall-7.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-ju-wall-7.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-ju-wall-8.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-ju-wall-8.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-ju-wall-5.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-ju-wall-5.bmp successfully
-Info: [23:47:50] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-ju-wall-6.bmp...
-Info: [23:47:50] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-ju-wall-6.bmp successfully
-Info: [23:48:01] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-meatm2.bmp...
-Info: [23:48:01] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-meatm2.bmp successfully
-Info: [23:48:01] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-meatm1.bmp...
-Info: [23:48:01] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-meatm1.bmp successfully
-Info: [23:48:01] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-floshp2.bmp...
-Info: [23:48:01] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-floshp2.bmp successfully
-Info: [23:48:01] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-floshp1.bmp...
-Info: [23:48:01] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-floshp1.bmp successfully
-Info: [23:48:01] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-floshp3.bmp...
-Info: [23:48:01] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-floshp3.bmp successfully
-Info: [23:48:01] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-floshp4.bmp...
-Info: [23:48:01] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-floshp4.bmp successfully
-Info: [23:48:01] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-fishm2.bmp...
-Info: [23:48:01] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-fishm2.bmp successfully
-Info: [23:48:01] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-fishm1.bmp...
-Info: [23:48:01] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-fishm1.bmp successfully
-Info: [23:48:01] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-frm2.bmp...
-Info: [23:48:01] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-frm2.bmp successfully
-Info: [23:48:01] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-frm1.bmp...
-Info: [23:48:01] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-frm1.bmp successfully
-Info: [23:48:01] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-bak2.bmp...
-Info: [23:48:01] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-bak2.bmp successfully
-Info: [23:48:01] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-bak1.bmp...
-Info: [23:48:01] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-bak1.bmp successfully
-Info: [23:48:48] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-newcastle.bmp...
-Info: [23:48:48] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-newcastle.bmp successfully
-Info: [23:48:48] Loading c:\program files\gravity\ro\data\texture\프론테라\pron-newcastle-2.bmp...
-Info: [23:48:48] Loaded c:\program files\gravity\ro\data\texture\프론테라\pron-newcastle-2.bmp successfully
-Info: [23:48:48] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_초원09.bmp...
-Info: [23:48:48] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_초원09.bmp successfully
-Info: [23:48:48] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_초원08.bmp...
-Info: [23:48:48] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_초원08.bmp successfully
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-newcastle-roof.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-newcastle-4.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-newcastle-5.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-newcastle-6.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-newcastle-7.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-newcastle-8.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-newcastle-9.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\pron-ch1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\pron-ch2.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\pron-ch3.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\pron-ch4.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\pron-ch5.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\pron-ch6.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\pron-ch7.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\pron-ch8.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\pron-ch9.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-tradew2.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-nai.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-nai-1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-nai-roof.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-nai-roof-1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-nai-wall.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-nai-wall-1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-nai-wall-2.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-nai-wall-3.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-nai-wall-4.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-nai-roof-2.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-nai-wall-5.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\prontrade_01.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\prontrade_02.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\prontrade_03.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\prontrade_04.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\prontrade_05.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\jop-roof.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\jop-roof-1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\jop-wall.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\jop-wall-1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\jop-wall-2.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\jop-wall-3.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\jop-wall-4.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\jop-wall-5.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\jop-open.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-house.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-house-1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-house-roof.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-house-2.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-house-3.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-house-roof-2.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-house-4.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-house-5.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\wepon-wall.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\wepon-wall-1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\wepon-wall-2.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\wepon-wall-3.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\wepon-wall-4.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\wepon-wall-5.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\wepon-roof.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\wepon-wall-6.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\wepon-wall-7.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-ctwr1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-ctwr2.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-ctwr3.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-lib-w1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-lib-w2.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-lib-w3.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-lib-r.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\ho-wall.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\ho-wall-1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\ho-wall-2.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\ho-roof.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\ho-wall-3.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\ho-wall-b.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\ho-wall-b-1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\ho-roof-1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\ho-wall-4.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-tl1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-tl2.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-tl3.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-tl4.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-bgate1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-bgate2.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-zang.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\weed.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-flo-f.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-bgate3.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pronmok_01.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\tomb(stone)up.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\tomb(side2).bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\tomb(side1).bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\prontomb01_01.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-lamp1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-lamp2.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-lamp3.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\외부소품\pron-bench1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\외부소품\pron-bench2.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\외부소품\pron-bench3.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-ju-wall.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-ju-roof.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-ju-wall-1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-ju-wall-2.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-ju-roof-1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-ju-wall-4.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-ju-wall-5.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-ju-wall-6.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-ju-wall-7.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-ju-wall-8.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\body.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\dong.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\dong-ho.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\dong-land.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\dong-d-4.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\dong-d-5.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\dong-d-2.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\dong-d-1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\dong-d-3.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-tradew1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-trader1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-tradew3.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\외부소품\pron-wag1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\외부소품\pron-wag2.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\외부소품\pron-wag3.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\UP.BMP seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\d-side.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\gid..down(side).bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\gid..(side).bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\stone-down.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\STONE-UP.BMP seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\rponsramp_08.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-bak1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-bak2.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\내부소품\drum-1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\내부소품\d-w.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\내부소품\durm-1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-frm1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-frm2.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-meatm1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-meatm2.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\내부소품\box2.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-floshp1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-floshp2.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-floshp3.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-floshp4.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-fishm1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-fishm2.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-castle1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-castle3.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-castle4.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-castle5.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-castle7.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\bri-1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\bri-2.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\bri-3.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-guaw1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-guar.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-newcastle-1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-castle-2.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-newcastle-2.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-newcastle.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-castle2.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-castle6.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-flo-bloc.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\go-1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\go-2.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\go-roof.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\jop-f.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\go-3.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\내부소품\box2-side.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\al-hou-w1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\al-hou-w2.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\al-hou-w4.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron_min03_01.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron_min03_02.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron_min03_03.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\나무잡초꽃\mo-tree-block.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\나무잡초꽃\newtree_01.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\나무잡초꽃\newtree_02.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron_min04_01.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron_min04_02.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron_min04_03.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron_min04_04.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron_min04_05.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron_min04_06.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron_min02_01.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron_min02_02.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron_min02_03.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron_min02_04.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\al-hou-sw1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\al-hou-r1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\al-hou-w3.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라내부\h2-door.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라내부\h1-door.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라내부\h3-door.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\내부소품\cha2-side1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\내부소품\cha2-side2.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\내부소품\cha2-side3.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\외부소품\myo-brd1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\외부소품\myo-msign1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\내부소품\ch-side1.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\내부소품\ch-side2.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\내부소품\ch-side3.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\기타마을\HAND_02.BMP seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\기타마을\HAND_01.BMP seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\기타마을\izld-br2.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\기타마을\izld-br5.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\기타마을\izld-br3.bmp seems to be unused
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-ctwr4.bmp is still 1 times loaded
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_도시01.bmp is still 1 times loaded
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_도시02.bmp is still 1 times loaded
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_도시03.bmp is still 1 times loaded
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_도시04.bmp is still 1 times loaded
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_도시05.bmp is still 1 times loaded
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_도시08.bmp is still 1 times loaded
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_초원01.bmp is still 1 times loaded
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_초원06.bmp is still 1 times loaded
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_초원08.bmp is still 1 times loaded
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_초원09.bmp is still 1 times loaded
-Info: [23:49:23] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_흙03.bmp is still 1 times loaded
-Info: [23:49:23] Texture data/Speaker.tga is still 1 times loaded
-Info: [23:49:23] Texture data/bulb.tga is still 1 times loaded
-Info: [23:49:23] Texture data/explosion.tga is still 1 times loaded
+Info: [01:40:57] //////////////////////////////////////////////////////////////////////
+Info: [01:40:57] //          ___  ____   __    ___  ____    __    __                 //
+Info: [01:40:57] //         / __)(  _ \ /__\  / __)(_  _)  /__\  (  )                //
+Info: [01:40:57] //         \__ \ )___//(__)\( (__  _)(_  /(__)\  )(__               //
+Info: [01:40:57] //         (___/(__) (__)(__)\___)(____)(__)(__)(____)              //
+Info: [01:40:57] //                                                                  //
+Info: [01:40:57] //                   Coded by:      Borf                            //
+Info: [01:40:57] //                     Libraries used:                              //
+Info: [01:40:57] //            - OpenGL                                              //
+Info: [01:40:57] //            - pthread-win32                                       //
+Info: [01:40:57] //            - Cal3d 0.10                                          //
+Info: [01:40:57] //            - zlib                                                //
+Info: [01:40:57] //            - (win)sockets                                        //
+Info: [01:40:57] //            - mysql                                               //
+Info: [01:40:57] //                                                                  //
+Info: [01:40:57] //////////////////////////////////////////////////////////////////////
+Info: [01:40:57] 
+Info: [01:40:57] 
+Error: [01:40:57] FileSystem: Error opening datafile
+Info: [01:40:58] Font: Loading font data/fonts/font1.tga
+Info: [01:40:58] Texture: Loaded Uncompressed TGA 'data/fonts/font1.tga'
+Info: [01:40:58] Font: Loaded font data/fonts/font1.tga ok
+Info: [01:40:58] Loading c:\program files\gravity\ro\data\customtown
+Info: [01:40:59] 20456 tiles are used
+Info: [01:40:59] Done loading gnd
+Info: [01:40:59] Done Loading c:\program files\gravity\ro\data\customtown
+Info: [01:40:59] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_도시03.bmp...
+Info: [01:40:59] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_도시03.bmp successfully
+Info: [01:40:59] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_도시01.bmp...
+Info: [01:40:59] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_도시01.bmp successfully
+Info: [01:40:59] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_도시02.bmp...
+Info: [01:40:59] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_도시02.bmp successfully
+Info: [01:40:59] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_도시05.bmp...
+Info: [01:40:59] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_도시05.bmp successfully
+Info: [01:40:59] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_초원01.bmp...
+Info: [01:40:59] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_초원01.bmp successfully
+Info: [01:40:59] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_도시08.bmp...
+Info: [01:41:00] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_도시08.bmp successfully
+Info: [01:41:00] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_도시04.bmp...
+Info: [01:41:00] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_도시04.bmp successfully
+Info: [01:41:04] Loading c:\program files\gravity\ro\data\texture\기타마을\xmas_bc01.BMP...
+Info: [01:41:04] Loaded c:\program files\gravity\ro\data\texture\기타마을\xmas_bc01.BMP successfully
+Info: [01:41:58] Doubleclick
+Info: [01:42:20] 20456 tiles are used
+Info: [01:42:26] Loading c:\program files\gravity\ro\data\texture\외부소품\xmas_form03.BMP...
+Info: [01:42:26] Loaded c:\program files\gravity\ro\data\texture\외부소품\xmas_form03.BMP successfully
+Info: [01:42:26] Loading c:\program files\gravity\ro\data\texture\외부소품\xmas_form02.BMP...
+Info: [01:42:26] Loaded c:\program files\gravity\ro\data\texture\외부소품\xmas_form02.BMP successfully
+Info: [01:42:26] Loading c:\program files\gravity\ro\data\texture\외부소품\xmas_form01.bmp...
+Info: [01:42:26] Loaded c:\program files\gravity\ro\data\texture\외부소품\xmas_form01.bmp successfully
+Info: [01:42:26] Loading c:\program files\gravity\ro\data\texture\외부소품\xmas_form04.BMP...
+Info: [01:42:26] Loaded c:\program files\gravity\ro\data\texture\외부소품\xmas_form04.BMP successfully
+Info: [01:42:38] Texture c:\program files\gravity\ro\data\texture\외부소품\xmas_form02.BMP seems to be unused
+Info: [01:42:38] Texture c:\program files\gravity\ro\data\texture\외부소품\xmas_form03.BMP seems to be unused
+Info: [01:42:38] Texture c:\program files\gravity\ro\data\texture\외부소품\xmas_form01.bmp seems to be unused
+Info: [01:42:38] Texture c:\program files\gravity\ro\data\texture\외부소품\xmas_form04.BMP seems to be unused
+Info: [01:42:38] Loading c:\program files\gravity\ro\data\texture\내부소품\stclown_01.bmp...
+Info: [01:42:38] Loaded c:\program files\gravity\ro\data\texture\내부소품\stclown_01.bmp successfully
+Info: [01:42:47] Texture c:\program files\gravity\ro\data\texture\내부소품\stclown_01.bmp seems to be unused
+Info: [01:42:47] Loading c:\program files\gravity\ro\data\texture\기타마을내부\ingla_wall00.bmp...
+Info: [01:42:47] Loaded c:\program files\gravity\ro\data\texture\기타마을내부\ingla_wall00.bmp successfully
+Info: [01:44:47] 20456 tiles are used
+Info: [01:44:49] Texture c:\program files\gravity\ro\data\texture\기타마을\xmas_bc01.BMP seems to be unused
+Info: [01:44:49] Texture c:\program files\gravity\ro\data\texture\기타마을내부\ingla_wall00.bmp is still 1 times loaded
+Info: [01:44:49] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-ctwr4.bmp is still 1 times loaded
+Info: [01:44:49] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_도시01.bmp is still 1 times loaded
+Info: [01:44:49] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_도시02.bmp is still 1 times loaded
+Info: [01:44:49] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_도시03.bmp is still 1 times loaded
+Info: [01:44:49] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_도시04.bmp is still 1 times loaded
+Info: [01:44:49] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_도시05.bmp is still 1 times loaded
+Info: [01:44:49] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_도시08.bmp is still 1 times loaded
+Info: [01:44:49] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_초원01.bmp is still 1 times loaded
+Info: [01:44:49] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_초원06.bmp is still 1 times loaded
+Info: [01:44:49] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_초원08.bmp is still 1 times loaded
+Info: [01:44:49] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_초원09.bmp is still 1 times loaded
+Info: [01:44:49] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_흙03.bmp is still 1 times loaded
+Info: [01:44:49] Texture data/Speaker.tga is still 1 times loaded
+Info: [01:44:49] Texture data/bulb.tga is still 1 times loaded
+Info: [01:44:49] Texture data/explosion.tga is still 1 times loaded

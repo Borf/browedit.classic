@@ -226,7 +226,7 @@ int main(int argc, char *argv[])
 		return 1;
 
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "prontera").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "customtown").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 #endif
@@ -860,15 +860,63 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						break;
 					if (x < 0)
 						break;
-					if(Graphics.world.cubes[y][x].tileside == -1)
-						break;
-					float f;
-					f = Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u1;
-					Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u1 = Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u2;
-					Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u2 = f;
-					f = Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u3;
-					Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u3 = Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u4;
-					Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u4 = f;
+
+					if(SDL_GetModState() & KMOD_ALT)
+					{
+						if(Graphics.world.cubes[y][x].tileaside == -1)
+							break;
+
+						int yy = y;
+						while(Graphics.world.cubes[yy][x].tileaside != -1)
+							yy++;
+						int ymax = yy;
+						yy = y;
+						while(Graphics.world.cubes[yy][x].tileaside != -1)
+							yy--;
+						int ymin = yy+1;
+						int ydiff = 4;
+
+						for(yy = ymin; yy < ymax; yy++)
+						{
+							cTile* t = &Graphics.world.tiles[Graphics.world.cubes[yy][x].tileaside];
+							float f;
+							f = t->u1;
+							t->u1 = t->u2;
+							t->u2 = f;
+
+							f = t->u3;
+							t->u3 = t->u4;
+							t->u4 = f;
+						}
+					}
+					else
+					{
+						if(Graphics.world.cubes[y][x].tileside == -1)
+							break;
+
+						int xx = x;
+						while(Graphics.world.cubes[y][xx].tileside != -1)
+							xx++;
+						int xmax = xx;
+						xx = x;
+						while(Graphics.world.cubes[y][xx].tileside != -1)
+							xx--;
+						int xmin = xx+1;
+						int xdiff = 4;
+
+						for(xx = xmin; xx < xmax; xx++)
+						{
+							cTile* t = &Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside];
+							float f;
+							f = t->u1;
+							t->u1 = t->u2;
+							t->u2 = f;
+
+							f = t->u3;
+							t->u3 = t->u4;
+							t->u4 = f;
+						}
+					}
 				}
 				break;
 			case SDLK_v:
@@ -882,15 +930,63 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						break;
 					if (x < 0)
 						break;
-					if(Graphics.world.cubes[y][x].tileside == -1)
-						break;
-					float f;
-					f = Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].v1;
-					Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].v1 = Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].v3;
-					Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].v3 = f;
-					f = Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].v2;
-					Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].v2 = Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].v4;
-					Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].v4 = f;
+
+					if(SDL_GetModState() & KMOD_ALT)
+					{
+						if(Graphics.world.cubes[y][x].tileaside == -1)
+							break;
+
+						int yy = y;
+						while(Graphics.world.cubes[yy][x].tileaside != -1)
+							yy++;
+						int ymax = yy;
+						yy = y;
+						while(Graphics.world.cubes[yy][x].tileaside != -1)
+							yy--;
+						int ymin = yy+1;
+						int ydiff = 4;
+
+						for(yy = ymin; yy < ymax; yy++)
+						{
+							cTile* t = &Graphics.world.tiles[Graphics.world.cubes[yy][x].tileaside];
+							float f;
+							f = t->v1;
+							t->v1 = t->v3;
+							t->v3 = f;
+
+							f = t->v2;
+							t->v2 = t->v4;
+							t->v4 = f;
+						}
+					}
+					else
+					{
+						if(Graphics.world.cubes[y][x].tileside == -1)
+							break;
+
+						int xx = x;
+						while(Graphics.world.cubes[y][xx].tileside != -1)
+							xx++;
+						int xmax = xx;
+						xx = x;
+						while(Graphics.world.cubes[y][xx].tileside != -1)
+							xx--;
+						int xmin = xx+1;
+						int xdiff = 4;
+
+						for(xx = xmin; xx < xmax; xx++)
+						{
+							cTile* t = &Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside];
+							float f;
+							f = t->v1;
+							t->v1 = t->v3;
+							t->v3 = f;
+
+							f = t->v2;
+							t->v2 = t->v4;
+							t->v4 = f;
+						}
+					}
 				}
 				break;
 			case SDLK_g:
@@ -1213,13 +1309,13 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							t.u1 = ((yy-ymin)%4) *  (1.0/(float)ydiff);
 							t.v1 = 0;
 
-							t.u2 = ((yy-ymin+1)%4) *  (1.0/(float)ydiff);
+							t.u2 = ((yy-ymin)%4+1) *  (1.0/(float)ydiff);
 							t.v2 = 0;
 							
 							t.u3 = ((yy-ymin)%4) *  (1.0/(float)ydiff);
 							t.v3 = 1;
 							
-							t.u4 = ((yy-ymin+1)%4) *  (1.0/(float)ydiff);
+							t.u4 = ((yy-ymin)%4+1) *  (1.0/(float)ydiff);
 							t.v4 = 1;
 							Graphics.world.tiles.push_back(t);
 							Graphics.world.cubes[yy][x].tileaside = Graphics.world.tiles.size()-1;
@@ -1248,13 +1344,13 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							t.u1 = ((xx-xmin)%4) *  (1.0/(float)xdiff);
 							t.v1 = 0;
 
-							t.u2 = ((xx-xmin+1)%4) *  (1.0/(float)xdiff);
+							t.u2 = ((xx-xmin)%4+1) *  (1.0/(float)xdiff);
 							t.v2 = 0;
 							
 							t.u3 = ((xx-xmin)%4) *  (1.0/(float)xdiff);
 							t.v3 = 1;
 							
-							t.u4 = ((xx-xmin+1)%4) *  (1.0/(float)xdiff);
+							t.u4 = ((xx-xmin)%4+1) *  (1.0/(float)xdiff);
 							t.v4 = 1;
 							Graphics.world.tiles.push_back(t);
 							Graphics.world.cubes[y][xx].tileside = Graphics.world.tiles.size()-1;
@@ -1264,51 +1360,76 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 			case SDLK_c:
 				{
-					int posx = mouse3dx / 10;
-					int posy = mouse3dz / 10;
-
-					if (posx >= brushsize && posx < Graphics.world.width-brushsize && posy >= brushsize && posy< Graphics.world.height-brushsize)
+					if (editmode == MODE_HEIGHTDETAIL)
 					{
-						clipboard.clear();
-						for(int y = posy-floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
+						int posx = mouse3dx / 10;
+						int posy = mouse3dz / 10;
+
+						if (posx >= floor(brushsize/2.0f) && posx < Graphics.world.width-ceil(brushsize/2.0f) && posy >= brushsize && posy< Graphics.world.height-brushsize)
 						{
-							vector<vector<float> > row;
-							for(int x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f); x++)
+							clipboard.clear();
+							for(int y = posy-floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
 							{
-								vector<float> c;
-								c.push_back(Graphics.world.cubes[y][x].cell1);
-								c.push_back(Graphics.world.cubes[y][x].cell2);
-								c.push_back(Graphics.world.cubes[y][x].cell3);
-								c.push_back(Graphics.world.cubes[y][x].cell4);
-								row.push_back(c);
+								vector<vector<float> > row;
+								for(int x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f); x++)
+								{
+									vector<float> c;
+									c.push_back(Graphics.world.cubes[y][x].cell1);
+									c.push_back(Graphics.world.cubes[y][x].cell2);
+									c.push_back(Graphics.world.cubes[y][x].cell3);
+									c.push_back(Graphics.world.cubes[y][x].cell4);
+									row.push_back(c);
+								}
+								clipboard.push_back(row);
 							}
-							clipboard.push_back(row);
+						}
+					}
+					else if (editmode == MODE_OBJECTS)
+					{
+						if (Graphics.selectedobject != -1)
+						{
+							Graphics.clipboardrot = Graphics.world.models[Graphics.selectedobject]->rot;
+							Graphics.clipboardscale = Graphics.world.models[Graphics.selectedobject]->scale;
+							Graphics.clipboardfile = Graphics.world.models[Graphics.selectedobject]->filename;
 						}
 					}
 					break;
 				}
 			case SDLK_p:
 				{
-					int posx = mouse3dx / 10;
-					int posy = mouse3dz / 10;
-
-					if (posx >= brushsize && posx < Graphics.world.width-brushsize && posy >= brushsize && posy< Graphics.world.height-brushsize)
+					if (editmode == MODE_HEIGHTDETAIL)
 					{
-						int yy = 0;
-						for(int y = posy-floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
+						int posx = mouse3dx / 10;
+						int posy = mouse3dz / 10;
+
+						if (posx >= floor(brushsize/2.0f) && posx < Graphics.world.width-ceil(brushsize/2.0f) && posy >= brushsize && posy< Graphics.world.height-brushsize)
 						{
-							vector<vector<float> > row;
-							int xx = 0;
-							for(int x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f); x++)
+							int yy = 0;
+							for(int y = posy-floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
 							{
-								Graphics.world.cubes[y][x].cell1 = clipboard[yy][xx][0];
-								Graphics.world.cubes[y][x].cell2 = clipboard[yy][xx][1];
-								Graphics.world.cubes[y][x].cell3 = clipboard[yy][xx][2];
-								Graphics.world.cubes[y][x].cell4 = clipboard[yy][xx][3];
-								xx++;
+								vector<vector<float> > row;
+								int xx = 0;
+								for(int x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f); x++)
+								{
+									Graphics.world.cubes[y][x].cell1 = clipboard[yy][xx][0];
+									Graphics.world.cubes[y][x].cell2 = clipboard[yy][xx][1];
+									Graphics.world.cubes[y][x].cell3 = clipboard[yy][xx][2];
+									Graphics.world.cubes[y][x].cell4 = clipboard[yy][xx][3];
+									xx++;
+								}
+								yy++;
 							}
-							yy++;
 						}
+					}
+					else if (editmode == MODE_OBJECTS)
+					{
+						cRSMModel* model = new cRSMModel();
+						model->load(Graphics.clipboardfile);
+						model->pos = cVector3(mouse3dx/5, -mouse3dy, mouse3dz/5);
+						model->scale = Graphics.clipboardscale;
+						model->rot = Graphics.clipboardrot;
+						Graphics.world.models.push_back(model);
+						Graphics.selectedobject = Graphics.world.models.size()-1;
 					}
 					break;
 				}

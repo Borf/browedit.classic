@@ -96,7 +96,7 @@ void cWorld::load()
 		t.texture = ((BYTE)buf[32]) | (((BYTE)buf[33])<<8);
 		t.lightmap = ((BYTE)buf[34]) | (((BYTE)buf[35])<<8);
 
-		if(t.lightmap == -1)
+		if(t.lightmap < 0 || t.lightmap > lightmaps.size())
 			t.lightmap = 0;
 
 		memcpy(t.color, buf+36, 4);
@@ -268,6 +268,7 @@ void cWorld::save()
 	if (!loaded)
 		return;
 	{
+		clean();
 		ofstream pFile((string(filename) + ".gnd").c_str(), ios_base::out | ios_base::binary);
 		pFile.write("GRGN\1\7", 6);
 		pFile.write((char*)&width, 4);
@@ -774,7 +775,7 @@ void cWorld::draw()
 		int posx = mouse3dx / 10;
 		int posy = mouse3dz / 10;
 
-		if (posx >= brushsize && posx < width-brushsize && posy >= brushsize && posy< height-brushsize)
+		if (posx >= floor(brushsize/2.0f) && posx < width-ceil(brushsize/2.0f) && posy >= brushsize && posy< height-brushsize)
 		{
 			glColor4f(1,0,0,1);
 			glDisable(GL_TEXTURE_2D);

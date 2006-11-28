@@ -95,6 +95,12 @@ public:
 	cRSMModel*				previewmodel;
 	int						previewcolor;
 
+
+	cVector3				clipboardrot;
+	cVector3				clipboardscale;
+	string					clipboardfile;
+
+
 	bool					showobjects;
 
 
