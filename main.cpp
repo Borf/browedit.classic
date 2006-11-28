@@ -847,7 +847,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					Graphics.texturestart--;
 				break;
 			case SDLK_SPACE:
-				Graphics.previewcolor = 20;
+				if (Graphics.previewcolor > 20)
+					Graphics.previewcolor = 20;
 				Graphics.texturerot = (Graphics.texturerot + 1) % 4;
 				break;
 			case SDLK_h:
@@ -1392,6 +1393,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							Graphics.clipboardrot = Graphics.world.models[Graphics.selectedobject]->rot;
 							Graphics.clipboardscale = Graphics.world.models[Graphics.selectedobject]->scale;
 							Graphics.clipboardfile = Graphics.world.models[Graphics.selectedobject]->filename;
+							Log(3,0,"Copied %s", Graphics.clipboardfile.c_str());
 						}
 					}
 					break;
