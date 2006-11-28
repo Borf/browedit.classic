@@ -30,6 +30,7 @@ public:
 		selectedobject = -1;
 		objectstartdrag = false;
 		slope = false;
+		quadtreeview = 1;
 	}
 
 	int						init();				// initializes graphics
@@ -105,6 +106,9 @@ public:
 
 
 	bool					showobjects;
+
+
+	int						quadtreeview;
 
 
 private:

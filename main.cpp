@@ -274,7 +274,7 @@ int main(int argc, char *argv[])
 		return 1;
 
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "customtown").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "monk_test").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 #endif
@@ -644,7 +644,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						int posx = mouse3dx / 10;
 						int posy = mouse3dz / 10;
 
-						if (posx >= brushsize && posx < Graphics.world.width-brushsize && posy >= brushsize && posy< Graphics.world.height-brushsize)
+						if (posx >= floor(brushsize/2.0f) && posx < Graphics.world.width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy< Graphics.world.height-ceil(brushsize/2.0f))
 						{
 							glColor4f(1,0,0,1);
 							glDisable(GL_TEXTURE_2D);
@@ -1557,9 +1557,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					y = y;
 
 
-					if (x >= floor(brushsize/2.0f) && x < Graphics.world.width-ceil(brushsize/2.0f) && y >= brushsize && y < Graphics.world.height-brushsize)
+					if (x >= 0 && x < Graphics.world.width-ceil(brushsize/2.0f) && y >= brushsize && y < Graphics.world.height-brushsize)
 					{
-						float to = Graphics.world.cubes[y][x].cell1;
+						float to = Graphics.world.cubes[y][x].cell2;
 						Graphics.world.cubes[y][x].cell2 = to;
 						Graphics.world.cubes[y][x+1].cell1 = to;
 						Graphics.world.cubes[y-1][x+1].cell3 = to;
@@ -1570,6 +1570,16 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				break;
 			}
+			case SDLK_INSERT:
+				{
+					Graphics.quadtreeview++;
+				}
+				break;
+			case SDLK_DELETE:
+				{
+					Graphics.quadtreeview--;
+				}
+				break;
 			default:
 				break;
 		}
@@ -1995,7 +2005,11 @@ MENUCOMMAND(picktexture)
 	string data = src->data;
 	cTextureContainer* t = new cTextureContainer();
 	t->RoFilename = src->data;
-	t->texture = TextureCache.load(rodir + src->data);
+	char buf[40];
+	ZeroMemory(buf, 40);
+	sprintf(buf, "%i%i", rand(), rand());
+	t->RoFilename2 = string(buf,40);
+	t->texture = TextureCache.load(rodir + "texture/" + src->data);
 	Graphics.world.textures.push_back(t);
 	Graphics.texturestart = Graphics.world.textures.size() - 2;
 	return true;

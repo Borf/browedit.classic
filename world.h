@@ -160,7 +160,7 @@ public:
 	cTextureModel* sound;
 	cTextureModel* effect;
 	
-	string extradata;
+	vector<float> unknown;
 
 	string useless;
 

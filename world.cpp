@@ -243,11 +243,26 @@ void cWorld::load()
 			Log(1,0,"Unknown type!");
 		};
 	}
-	extradata = "";
-	while(!pFile->eof())
-		extradata += pFile->get();
+	ofstream outfile("tmp.txt");
 
-	pFile->close();
+	unknown.clear();
+	while(!pFile->eof())
+	{
+		float f;
+		pFile->read((char*)&f, 4);
+		unknown.push_back(f);
+
+		char buf[40];
+		sprintf(buf, "%f\n", f);
+		outfile.write(buf, strlen(buf));
+
+	}
+
+	pFile->close(); 
+
+	outfile.close();
+
+
 
 
 
@@ -428,7 +443,8 @@ void cWorld::save()
 
 		}
 
-		pFile.write(extradata.c_str(), extradata.length());
+		for(i = 0; i < unknown.size(); i++)
+			pFile.write((char*)&unknown[i], 4);
 
 		pFile.close();
 	}
@@ -913,6 +929,71 @@ void cWorld::draw()
 		}
 	
 	}
+
+
+	int c = 1;
+	int d = 1;
+
+
+
+
+	cVector3 colors[] = {cVector3(1,1,1), cVector3(1,0,0), cVector3(1,1,0), cVector3(1,0,1), cVector3(0,1,0), cVector3(0,1,1), cVector3(0,0,1) };
+
+
+
+	for(int i = 0; i < unknown.size(); i+=12)
+	{
+		int color = (i / 12) % (sizeof(colors) / sizeof(cVector3));
+
+		glColor4f(colors[color].x,colors[color].y,colors[color].z,1);
+		cVector3 v = cVector3(unknown[i], unknown[i+1], unknown[i+2]);
+		cVector3 v2 = cVector3(unknown[i+3], unknown[i+4], unknown[i+5]);
+
+		v.x += width*5;
+		v.y = -v.y;
+		v.z = height*5 - v.z;
+
+		v2.x += width*5;
+		v2.y = -v2.y;
+		v2.z = height*5 - v2.z;
+
+
+		cVector3 d = v - v2;
+		d.y = 0;
+
+
+
+		glBegin(GL_LINE_LOOP);
+			glVertex3f(v.x, v.y, v.z);
+			glVertex3f(v2.x, v.y, v.z);
+			glVertex3f(v2.x, v.y, v2.z);
+			glVertex3f(v.x, v.y, v2.z);
+		glEnd();	
+
+		glBegin(GL_LINE_LOOP);
+			glVertex3f(v.x, v2.y, v.z);
+			glVertex3f(v2.x, v2.y, v.z);
+			glVertex3f(v2.x, v2.y, v2.z);
+			glVertex3f(v.x, v2.y, v2.z);
+		glEnd();
+
+		glBegin(GL_LINES);
+			glVertex3f(v.x, v.y, v.z);
+			glVertex3f(v.x, v2.y, v.z);
+			glVertex3f(v2.x, v.y, v.z);
+			glVertex3f(v2.x, v2.y, v.z);
+			glVertex3f(v2.x, v.y, v2.z);
+			glVertex3f(v2.x, v2.y, v2.z);
+			glVertex3f(v.x, v.y, v2.z);
+			glVertex3f(v.x, v2.y, v2.z);
+		glEnd();
+
+		if(i / 12 == Graphics.quadtreeview)
+			break;
+	}
+	glColor3f(1,1,1);
+
+
 	glTranslatef(-Graphics.camerapointer.x, 0, -Graphics.camerapointer.y);
 
 

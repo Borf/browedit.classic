@@ -448,9 +448,14 @@ int	cFont::textlen(string s)
 	for(int i = 0; i < (int)s.length(); i++)
 	{
 		if (((BYTE)s[i])-32 < 256)
+		{
 			l = l + width[((BYTE)s[i])-32]+1;
+			if(width[((BYTE)s[i])-32] == 0)
+				l+=10;
+		}
 		else
 			l = l + 10;
+
 	}
 	return l;
 }
