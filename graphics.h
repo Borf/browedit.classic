@@ -29,6 +29,7 @@ public:
 		showobjects = false;
 		selectedobject = -1;
 		objectstartdrag = false;
+		slope = false;
 	}
 
 	int						init();				// initializes graphics
@@ -90,6 +91,8 @@ public:
 
 	int						selectedobject;
 	bool					objectstartdrag;
+
+	bool					slope;
 
 
 	cRSMModel*				previewmodel;

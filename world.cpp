@@ -98,6 +98,8 @@ void cWorld::load()
 
 		if(t.lightmap < 0 || t.lightmap > lightmaps.size())
 			t.lightmap = 0;
+		if(t.texture < 0 || t.texture > textures.size())
+			t.texture = 0;
 
 		memcpy(t.color, buf+36, 4);
 		tiles.push_back(t);

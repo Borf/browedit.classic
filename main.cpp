@@ -63,16 +63,18 @@ MENUCOMMAND(speed);
 MENUCOMMAND(fill);
 MENUCOMMAND(showobjects);
 MENUCOMMAND(model);
+MENUCOMMAND(slope);
 
 cMenu*	menu;
 cMenu* grid;
 cMenu* showobjects;
+cMenu* currentobject;
 
 int cursorsize = 1;
 
-#define ADDMENUITEM(m, p, t, pr) m = new cMenuItem(); m->title = t; m->item = true; m->drawstyle = 1; ((cMenuItem*)m)->proc = pr; p->items.push_back(m);
-#define ADDMENUITEMDATA(m, p, t, pr,d) m = new cMenuItem(); m->title = t; m->item = true; m->drawstyle = 1; ((cMenuItem*)m)->proc = pr; ((cMenuItem*)m)->data = d; p->items.push_back(m);
-#define ADDMENU(m,p,t,xpos,width) m = new cMenu(); m->title = t; m->item = false; m->drawstyle = 1; m->y = 20; m->x = xpos; m->w = width; p->items.push_back(m);
+#define ADDMENUITEM(m, p, t, pr) m = new cMenuItem(); m->parent = p; m->title = t; m->item = true; m->drawstyle = 1; ((cMenuItem*)m)->proc = pr; p->items.push_back(m);
+#define ADDMENUITEMDATA(m, p, t, pr,d) m = new cMenuItem(); m->parent = p; m->title = t; m->item = true; m->drawstyle = 1; ((cMenuItem*)m)->proc = pr; ((cMenuItem*)m)->data = d; p->items.push_back(m);
+#define ADDMENU(m,p,t,xpos,width) m = new cMenu(); m->parent = p; m->title = t; m->item = false; m->drawstyle = 1; m->y = 20; m->x = xpos; m->w = width; p->items.push_back(m);
 cMenu* mode;
 cMenu* editdetail;
 cMenu* speed;
@@ -153,6 +155,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,edit,"Round Flatten",		&MenuCommand_flatten);
 	ADDMENUITEM(mm,edit,"Randomize a bit",		&MenuCommand_editrandom);
 	ADDMENUITEM(mm,edit,"Fill",					&MenuCommand_fill);
+	ADDMENUITEM(mm,edit,"Sloping",				&MenuCommand_slope);
 
 	ADDMENU(speed,edit, "Speed", 480, 100);
 	ADDMENUITEM(mm,speed,"5",&MenuCommand_speed);
@@ -609,17 +612,25 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 									cCube* c = &Graphics.world.cubes[y][x];
 									if(lbuttondown && !rbuttondown)
 									{
-										c->cell1-=1;
-										c->cell2-=1;
-										c->cell3-=1;
-										c->cell4-=1;
+										if (!Graphics.slope || (x > posx-floor(brushsize/2.0f)) && y > posy-floor(brushsize/2.0f))
+											c->cell1-=1;
+										if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y > posy-floor(brushsize/2.0f))
+											c->cell2-=1;
+										if (!Graphics.slope || (x > posx-floor(brushsize/2.0f)) && y < posy+ceil(brushsize/2.0f)-1)
+											c->cell3-=1;
+										if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y < posy+ceil(brushsize/2.0f)-1)
+											c->cell4-=1;
 									}
 									if(lbuttondown && rbuttondown)
 									{
-										c->cell1+=1;
-										c->cell2+=1;
-										c->cell3+=1;
-										c->cell4+=1;
+										if (!Graphics.slope || (x > posx-floor(brushsize/2.0f)) && y > posy-floor(brushsize/2.0f))
+											c->cell1+=1;
+										if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y > posy-floor(brushsize/2.0f))
+											c->cell2+=1;
+										if (!Graphics.slope || (x > posx-floor(brushsize/2.0f)) && y < posy+ceil(brushsize/2.0f)-1)
+											c->cell3+=1;
+										if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y < posy+ceil(brushsize/2.0f)-1)
+											c->cell4+=1;
 									}
 								}
 							}
@@ -837,14 +848,51 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					Graphics.brushsize*=2;
 				break;
 			case SDLK_LEFTBRACKET:
-				Graphics.texturestart--;
-				if (Graphics.texturestart < 0)
-					Graphics.texturestart = 0;
+				if (editmode == MODE_OBJECTS)
+				{
+					for(int i = 0; i < currentobject->parent->items.size(); i++)
+					{
+						if (currentobject->parent->items[i] == currentobject)
+						{
+							i--;
+							if (i < 0)
+								i = currentobject->parent->items.size()-1;
+							currentobject = currentobject->parent->items[i];
+							MenuCommand_model((cMenuItem*)currentobject);
+							
+							break;
+						}
+					}
+				}
+				else
+				{
+					Graphics.texturestart--;
+					if (Graphics.texturestart < 0)
+						Graphics.texturestart = 0;
+				}
 				break;
 			case SDLK_RIGHTBRACKET:
-				Graphics.texturestart++;
-				if (Graphics.texturestart >= Graphics.world.textures.size() - (Graphics.h() / 288))
-					Graphics.texturestart--;
+				if (editmode == MODE_OBJECTS)
+				{
+					for(int i = 0; i < currentobject->parent->items.size(); i++)
+					{
+						if (currentobject->parent->items[i] == currentobject)
+						{
+							i++;
+							if (i >= currentobject->parent->items.size())
+								i = 0;
+							currentobject = currentobject->parent->items[i];
+							MenuCommand_model((cMenuItem*)currentobject);
+							break;
+						}
+					}
+				}
+				else
+				{
+					Graphics.texturestart++;
+					if (Graphics.texturestart >= Graphics.world.textures.size() - (Graphics.h() / 288))
+						Graphics.texturestart--;
+				}
 				break;
 			case SDLK_SPACE:
 				if (Graphics.previewcolor > 20)
@@ -1454,6 +1502,30 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				break;
 			}
+			case SDLK_f:
+			{
+				if (editmode == MODE_HEIGHTDETAIL)
+				{
+					int x = mouse3dx / 10;
+					int y = mouse3dz / 10;
+
+					x = x - floor(brushsize/2.0f);
+					y = y;
+
+
+					if (x >= floor(brushsize/2.0f) && x < Graphics.world.width-ceil(brushsize/2.0f) && y >= brushsize && y < Graphics.world.height-brushsize)
+					{
+						float to = Graphics.world.cubes[y][x].cell1;
+						Graphics.world.cubes[y][x].cell2 = to;
+						Graphics.world.cubes[y][x+1].cell1 = to;
+						Graphics.world.cubes[y-1][x+1].cell3 = to;
+						Graphics.world.cubes[y-1][x].cell4 = to;
+					}
+					
+
+				}
+				break;
+			}
 			default:
 				break;
 		}
@@ -1861,5 +1933,14 @@ MENUCOMMAND(model)
 	Graphics.previewmodel->scale = cVector3(4,4,4);
 
 	Graphics.previewcolor = 200;
+	currentobject = src;
+	return true;
+}
+
+
+MENUCOMMAND(slope)
+{
+	src->ticked = !src->ticked;
+	Graphics.slope = src->ticked;
 	return true;
 }

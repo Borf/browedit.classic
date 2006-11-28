@@ -23,6 +23,8 @@ class cMenu
 		bool mouseover;
 		int maxlen;
 
+		cMenu* parent;
+
 		
 		bool (*mouseoverproc) (cMenu* m);
 		bool (*mouseoutproc) (cMenu* m);
@@ -36,6 +38,7 @@ class cMenu
 			maxlen = -1;
 			mouseoutproc = NULL;
 			mouseoverproc = NULL;
+			parent = NULL;
 		}
 		cMenu* inwindow(int, int);
 		void click(int, int);
