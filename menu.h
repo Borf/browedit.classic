@@ -1,6 +1,8 @@
 #ifndef __MENU_H__
 #define __MENU_H__
 class cMenuItem;
+class cMenu;
+bool cmp(cMenu* a, cMenu* b);
 
 class cMenu
 {
@@ -66,8 +68,14 @@ class cMenu
 			}
 			return NULL;
 		}
-};
 
+		void sort()
+		{
+			mergesort(items, cmp);
+			for(int i = 0; i < items.size(); i++)
+				items[i]->sort();
+		}
+};
 class cMenuItem : public cMenu
 {
 public:

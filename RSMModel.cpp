@@ -264,8 +264,7 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only)
 		int current = 0;
 		int next;
 		GLfloat t;
-		GLfloat q[4], q1[4], q2[4];
-		char buffer[1024];
+		GLfloat q[4];
 
 		for (i = 0; i < frames.size(); i++) {
 			if (nstep < frames[i].time) {
@@ -281,39 +280,48 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only)
 		t = ((GLfloat) (nstep-frames[current].time))
 			/((GLfloat) (frames[next].time-frames[current].time));
 
-		for (i = 0; i < 4; i++) {
-			q[i] = frames[current].quat[i]*(1-t) + t*frames[next].quat[i];
-		}
+		//for (i = 0; i < 4; i++) {
+		//	q[i] = frames[current].orientation[i] * (1-t) + t * frames[next].orientation[i];
+		//}
+
+		float x = frames[current].quat[0] * (1-t) + t * frames[next].quat[0];
+		float y = frames[current].quat[1] * (1-t) + t * frames[next].quat[1];
+		float z = frames[current].quat[2] * (1-t) + t * frames[next].quat[2];
+		float w = frames[current].quat[3] * (1-t) + t * frames[next].quat[3];
 
 		GLfloat norm;
-		norm = sqrtf(q[0]*q[0]+q[1]*q[1]+q[2]*q[2]+q[3]*q[3]);
+		norm = sqrtf(x*x+y*y+z*z+w*w);
 
-		for (i = 0; i < 4; i++)
-			q[i] /= norm;
-		
-		GLfloat two_x = q[0] * 2.0;
-		GLfloat two_y = q[1] * 2.0;
-		GLfloat two_z = q[2] * 2.0;
+		//for (i = 0; i < 4; i++)
+		//	q[i] /= norm;
+		x /= norm;
+		y /= norm;
+		z /= norm;
+		w /= norm;
 
-		Ori[0] = 1.0 - two_y * q[1] - two_z * q[2];
-		Ori[1] = two_x * q[1];
-		Ori[2] = two_z * q[0];
-		Ori[3] = 0.0;
+		// First row
+		Ori[ 0] = 1.0f - 2.0f * ( y * y + z * z ); 
+		Ori[ 1] = 2.0f * (x * y + z * w);
+		Ori[ 2] = 2.0f * (x * z - y * w);
+		Ori[ 3] = 0.0f;  
 
-		Ori[4] = two_x * q[1];
-		Ori[5] = 1.0 - two_x * q[0] - two_z * q[2];
-		Ori[6] = two_y * q[2];
-		Ori[7] = 0.0;
-		
-		Ori[8] = two_z * q[0];
-		Ori[9] = two_y * q[2];
-		Ori[10] = 1.0 - two_x * q[0] - two_y * q[1];
-		Ori[11] = 0.0;
+		// Second row
+		Ori[ 4] = 2.0f * ( x * y - z * w );  
+		Ori[ 5] = 1.0f - 2.0f * ( x * x + z * z ); 
+		Ori[ 6] = 2.0f * (z * y + x * w );  
+		Ori[ 7] = 0.0f;  
 
-		Ori[12] = 0.0;
-		Ori[13] = 0.0;
-		Ori[14] = 0.0;
-		Ori[15] = 1.0;
+		// Third row
+		Ori[ 8] = 2.0f * ( x * z + y * w );
+		Ori[ 9] = 2.0f * ( y * z - x * w );
+		Ori[10] = 1.0f - 2.0f * ( x * x + y * y );  
+		Ori[11] = 0.0f;  
+
+		// Fourth row
+		Ori[12] = 0;  
+		Ori[13] = 0;  
+		Ori[14] = 0;  
+		Ori[15] = 1.0f;
 
 		nstep += 100;
 		if (nstep >= frames[frames.size()-1].time)

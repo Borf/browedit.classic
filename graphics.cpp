@@ -466,3 +466,9 @@ bool cGraphics::is3dSelected(float x, float y, float z)
 
 	return true;
 }
+
+
+bool cmp(cMenu* a, cMenu* b)
+{
+	return a->title < b->title;
+}

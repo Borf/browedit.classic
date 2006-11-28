@@ -217,6 +217,7 @@ int main(int argc, char *argv[])
 		}
 		
 	}
+	models->sort();
 
 
 	lastlclick = 0;

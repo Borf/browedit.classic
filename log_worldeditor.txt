@@ -1,79 +1,88 @@
-Info: [01:40:57] //////////////////////////////////////////////////////////////////////
-Info: [01:40:57] //          ___  ____   __    ___  ____    __    __                 //
-Info: [01:40:57] //         / __)(  _ \ /__\  / __)(_  _)  /__\  (  )                //
-Info: [01:40:57] //         \__ \ )___//(__)\( (__  _)(_  /(__)\  )(__               //
-Info: [01:40:57] //         (___/(__) (__)(__)\___)(____)(__)(__)(____)              //
-Info: [01:40:57] //                                                                  //
-Info: [01:40:57] //                   Coded by:      Borf                            //
-Info: [01:40:57] //                     Libraries used:                              //
-Info: [01:40:57] //            - OpenGL                                              //
-Info: [01:40:57] //            - pthread-win32                                       //
-Info: [01:40:57] //            - Cal3d 0.10                                          //
-Info: [01:40:57] //            - zlib                                                //
-Info: [01:40:57] //            - (win)sockets                                        //
-Info: [01:40:57] //            - mysql                                               //
-Info: [01:40:57] //                                                                  //
-Info: [01:40:57] //////////////////////////////////////////////////////////////////////
-Info: [01:40:57] 
-Info: [01:40:57] 
-Error: [01:40:57] FileSystem: Error opening datafile
-Info: [01:40:58] Font: Loading font data/fonts/font1.tga
-Info: [01:40:58] Texture: Loaded Uncompressed TGA 'data/fonts/font1.tga'
-Info: [01:40:58] Font: Loaded font data/fonts/font1.tga ok
-Info: [01:40:58] Loading c:\program files\gravity\ro\data\customtown
-Info: [01:40:59] 20456 tiles are used
-Info: [01:40:59] Done loading gnd
-Info: [01:40:59] Done Loading c:\program files\gravity\ro\data\customtown
-Info: [01:40:59] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_도시03.bmp...
-Info: [01:40:59] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_도시03.bmp successfully
-Info: [01:40:59] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_도시01.bmp...
-Info: [01:40:59] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_도시01.bmp successfully
-Info: [01:40:59] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_도시02.bmp...
-Info: [01:40:59] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_도시02.bmp successfully
-Info: [01:40:59] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_도시05.bmp...
-Info: [01:40:59] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_도시05.bmp successfully
-Info: [01:40:59] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_초원01.bmp...
-Info: [01:40:59] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_초원01.bmp successfully
-Info: [01:40:59] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_도시08.bmp...
-Info: [01:41:00] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_도시08.bmp successfully
-Info: [01:41:00] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_도시04.bmp...
-Info: [01:41:00] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_도시04.bmp successfully
-Info: [01:41:04] Loading c:\program files\gravity\ro\data\texture\기타마을\xmas_bc01.BMP...
-Info: [01:41:04] Loaded c:\program files\gravity\ro\data\texture\기타마을\xmas_bc01.BMP successfully
-Info: [01:41:58] Doubleclick
-Info: [01:42:20] 20456 tiles are used
-Info: [01:42:26] Loading c:\program files\gravity\ro\data\texture\외부소품\xmas_form03.BMP...
-Info: [01:42:26] Loaded c:\program files\gravity\ro\data\texture\외부소품\xmas_form03.BMP successfully
-Info: [01:42:26] Loading c:\program files\gravity\ro\data\texture\외부소품\xmas_form02.BMP...
-Info: [01:42:26] Loaded c:\program files\gravity\ro\data\texture\외부소품\xmas_form02.BMP successfully
-Info: [01:42:26] Loading c:\program files\gravity\ro\data\texture\외부소품\xmas_form01.bmp...
-Info: [01:42:26] Loaded c:\program files\gravity\ro\data\texture\외부소품\xmas_form01.bmp successfully
-Info: [01:42:26] Loading c:\program files\gravity\ro\data\texture\외부소품\xmas_form04.BMP...
-Info: [01:42:26] Loaded c:\program files\gravity\ro\data\texture\외부소품\xmas_form04.BMP successfully
-Info: [01:42:38] Texture c:\program files\gravity\ro\data\texture\외부소품\xmas_form02.BMP seems to be unused
-Info: [01:42:38] Texture c:\program files\gravity\ro\data\texture\외부소품\xmas_form03.BMP seems to be unused
-Info: [01:42:38] Texture c:\program files\gravity\ro\data\texture\외부소품\xmas_form01.bmp seems to be unused
-Info: [01:42:38] Texture c:\program files\gravity\ro\data\texture\외부소품\xmas_form04.BMP seems to be unused
-Info: [01:42:38] Loading c:\program files\gravity\ro\data\texture\내부소품\stclown_01.bmp...
-Info: [01:42:38] Loaded c:\program files\gravity\ro\data\texture\내부소품\stclown_01.bmp successfully
-Info: [01:42:47] Texture c:\program files\gravity\ro\data\texture\내부소품\stclown_01.bmp seems to be unused
-Info: [01:42:47] Loading c:\program files\gravity\ro\data\texture\기타마을내부\ingla_wall00.bmp...
-Info: [01:42:47] Loaded c:\program files\gravity\ro\data\texture\기타마을내부\ingla_wall00.bmp successfully
-Info: [01:44:47] 20456 tiles are used
-Info: [01:44:49] Texture c:\program files\gravity\ro\data\texture\기타마을\xmas_bc01.BMP seems to be unused
-Info: [01:44:49] Texture c:\program files\gravity\ro\data\texture\기타마을내부\ingla_wall00.bmp is still 1 times loaded
-Info: [01:44:49] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-ctwr4.bmp is still 1 times loaded
-Info: [01:44:49] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_도시01.bmp is still 1 times loaded
-Info: [01:44:49] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_도시02.bmp is still 1 times loaded
-Info: [01:44:49] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_도시03.bmp is still 1 times loaded
-Info: [01:44:49] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_도시04.bmp is still 1 times loaded
-Info: [01:44:49] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_도시05.bmp is still 1 times loaded
-Info: [01:44:49] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_도시08.bmp is still 1 times loaded
-Info: [01:44:49] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_초원01.bmp is still 1 times loaded
-Info: [01:44:49] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_초원06.bmp is still 1 times loaded
-Info: [01:44:49] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_초원08.bmp is still 1 times loaded
-Info: [01:44:49] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_초원09.bmp is still 1 times loaded
-Info: [01:44:49] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_흙03.bmp is still 1 times loaded
-Info: [01:44:49] Texture data/Speaker.tga is still 1 times loaded
-Info: [01:44:49] Texture data/bulb.tga is still 1 times loaded
-Info: [01:44:49] Texture data/explosion.tga is still 1 times loaded
+Info: [03:11:01] //////////////////////////////////////////////////////////////////////
+Info: [03:11:01] //          ___  ____   __    ___  ____    __    __                 //
+Info: [03:11:01] //         / __)(  _ \ /__\  / __)(_  _)  /__\  (  )                //
+Info: [03:11:01] //         \__ \ )___//(__)\( (__  _)(_  /(__)\  )(__               //
+Info: [03:11:01] //         (___/(__) (__)(__)\___)(____)(__)(__)(____)              //
+Info: [03:11:01] //                                                                  //
+Info: [03:11:01] //                   Coded by:      Borf                            //
+Info: [03:11:01] //                     Libraries used:                              //
+Info: [03:11:01] //            - OpenGL                                              //
+Info: [03:11:01] //            - pthread-win32                                       //
+Info: [03:11:01] //            - Cal3d 0.10                                          //
+Info: [03:11:01] //            - zlib                                                //
+Info: [03:11:01] //            - (win)sockets                                        //
+Info: [03:11:01] //            - mysql                                               //
+Info: [03:11:01] //                                                                  //
+Info: [03:11:01] //////////////////////////////////////////////////////////////////////
+Info: [03:11:01] 
+Info: [03:11:01] 
+Error: [03:11:01] FileSystem: Error opening datafile
+Info: [03:11:02] Font: Loading font data/fonts/font1.tga
+Info: [03:11:02] Texture: Loaded Uncompressed TGA 'data/fonts/font1.tga'
+Info: [03:11:02] Font: Loaded font data/fonts/font1.tga ok
+Info: [03:11:02] Loading c:\program files\gravity\ro\data\customtown
+Info: [03:11:03] 20456 tiles are used
+Info: [03:11:03] Done loading gnd
+Info: [03:11:03] Done Loading c:\program files\gravity\ro\data\customtown
+Info: [03:11:03] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_도시03.bmp...
+Info: [03:11:03] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_도시03.bmp successfully
+Info: [03:11:03] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_도시01.bmp...
+Info: [03:11:03] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_도시01.bmp successfully
+Info: [03:11:03] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_도시02.bmp...
+Info: [03:11:04] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_도시02.bmp successfully
+Info: [03:11:04] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_도시05.bmp...
+Info: [03:11:04] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_도시05.bmp successfully
+Info: [03:11:04] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_초원01.bmp...
+Info: [03:11:04] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_초원01.bmp successfully
+Info: [03:11:04] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_도시08.bmp...
+Info: [03:11:04] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_도시08.bmp successfully
+Info: [03:11:04] Loading c:\program files\gravity\ro\data\texture\필드바닥\prt_도시04.bmp...
+Info: [03:11:04] Loaded c:\program files\gravity\ro\data\texture\필드바닥\prt_도시04.bmp successfully
+Info: [03:11:11] Loading c:\program files\gravity\ro\data\texture\기타마을\Dra_Head1.bmp...
+Info: [03:11:11] Loaded c:\program files\gravity\ro\data\texture\기타마을\Dra_Head1.bmp successfully
+Info: [03:11:11] Loading c:\program files\gravity\ro\data\texture\기타마을\Dra_Head5.bmp...
+Info: [03:11:11] Loaded c:\program files\gravity\ro\data\texture\기타마을\Dra_Head5.bmp successfully
+Info: [03:11:11] Loading c:\program files\gravity\ro\data\texture\기타마을\Dra_Head2.bmp...
+Info: [03:11:11] Loaded c:\program files\gravity\ro\data\texture\기타마을\Dra_Head2.bmp successfully
+Info: [03:11:11] Loading c:\program files\gravity\ro\data\texture\기타마을\Dra_Head4.bmp...
+Info: [03:11:11] Loaded c:\program files\gravity\ro\data\texture\기타마을\Dra_Head4.bmp successfully
+Info: [03:11:11] Loading c:\program files\gravity\ro\data\texture\기타마을\Dra_Head3.bmp...
+Info: [03:11:11] Loaded c:\program files\gravity\ro\data\texture\기타마을\Dra_Head3.bmp successfully
+Info: [03:11:39] Texture c:\program files\gravity\ro\data\texture\기타마을\Dra_Head1.bmp seems to be unused
+Info: [03:11:39] Texture c:\program files\gravity\ro\data\texture\기타마을\Dra_Head2.bmp seems to be unused
+Info: [03:11:39] Texture c:\program files\gravity\ro\data\texture\기타마을\Dra_Head3.bmp seems to be unused
+Info: [03:11:39] Texture c:\program files\gravity\ro\data\texture\기타마을\Dra_Head4.bmp seems to be unused
+Info: [03:11:39] Texture c:\program files\gravity\ro\data\texture\기타마을\Dra_Head5.bmp seems to be unused
+Info: [03:11:39] Loading c:\program files\gravity\ro\data\texture\기타마을\n_wd2 copy.bmp...
+Info: [03:11:39] Loaded c:\program files\gravity\ro\data\texture\기타마을\n_wd2 copy.bmp successfully
+Info: [03:11:39] Loading c:\program files\gravity\ro\data\texture\기타마을\n_wd1-2 copy.bmp...
+Info: [03:11:39] Loaded c:\program files\gravity\ro\data\texture\기타마을\n_wd1-2 copy.bmp successfully
+Info: [03:11:46] Texture c:\program files\gravity\ro\data\texture\기타마을\n_wd2 copy.bmp seems to be unused
+Info: [03:11:46] Texture c:\program files\gravity\ro\data\texture\기타마을\n_wd1-2 copy.bmp seems to be unused
+Info: [03:11:46] Loading c:\program files\gravity\ro\data\texture\기타마을\nx_1 copy.bmp...
+Info: [03:11:47] Loaded c:\program files\gravity\ro\data\texture\기타마을\nx_1 copy.bmp successfully
+Info: [03:11:47] Loading c:\program files\gravity\ro\data\texture\기타마을\nx_3 copy.bmp...
+Info: [03:11:47] Loaded c:\program files\gravity\ro\data\texture\기타마을\nx_3 copy.bmp successfully
+Info: [03:11:47] Loading c:\program files\gravity\ro\data\texture\기타마을\nx_2 copy.bmp...
+Info: [03:11:47] Loaded c:\program files\gravity\ro\data\texture\기타마을\nx_2 copy.bmp successfully
+Info: [03:11:47] Loading c:\program files\gravity\ro\data\texture\기타마을\nx_4 copy.bmp...
+Info: [03:11:47] Loaded c:\program files\gravity\ro\data\texture\기타마을\nx_4 copy.bmp successfully
+Info: [03:11:49] Texture c:\program files\gravity\ro\data\texture\기타마을\nx_1 copy.bmp is still 1 times loaded
+Info: [03:11:49] Texture c:\program files\gravity\ro\data\texture\기타마을\nx_2 copy.bmp is still 1 times loaded
+Info: [03:11:49] Texture c:\program files\gravity\ro\data\texture\기타마을\nx_3 copy.bmp is still 1 times loaded
+Info: [03:11:49] Texture c:\program files\gravity\ro\data\texture\기타마을\nx_4 copy.bmp is still 1 times loaded
+Info: [03:11:49] Texture c:\program files\gravity\ro\data\texture\프론테라\pron-ctwr4.bmp is still 1 times loaded
+Info: [03:11:49] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_도시01.bmp is still 1 times loaded
+Info: [03:11:49] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_도시02.bmp is still 1 times loaded
+Info: [03:11:49] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_도시03.bmp is still 1 times loaded
+Info: [03:11:49] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_도시04.bmp is still 1 times loaded
+Info: [03:11:49] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_도시05.bmp is still 1 times loaded
+Info: [03:11:49] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_도시08.bmp is still 1 times loaded
+Info: [03:11:49] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_초원01.bmp is still 1 times loaded
+Info: [03:11:49] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_초원06.bmp is still 1 times loaded
+Info: [03:11:49] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_초원08.bmp is still 1 times loaded
+Info: [03:11:49] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_초원09.bmp is still 1 times loaded
+Info: [03:11:49] Texture c:\program files\gravity\ro\data\texture\필드바닥\prt_흙03.bmp is still 1 times loaded
+Info: [03:11:49] Texture data/Speaker.tga is still 1 times loaded
+Info: [03:11:49] Texture data/bulb.tga is still 1 times loaded
+Info: [03:11:49] Texture data/explosion.tga is still 1 times loaded
