@@ -94,12 +94,11 @@ int cGraphics::draw()
 			previewmodel->rot.y+=3;
 		}
 	}
-	menu->draw();
 	if(world.loaded && editmode != MODE_OBJECTS)
 	{
 		glEnable(GL_TEXTURE_2D);
 		glColor4f(1,1,1,1);
-		for(int i = 0; 256*i < height; i++)
+		for(int i = 0; 288*i+256 < height; i++)
 		{
 			glBindTexture(GL_TEXTURE_2D, world.textures[i+texturestart]->texid());
 			glBegin(GL_QUADS);
@@ -121,6 +120,7 @@ int cGraphics::draw()
 
 		glColor3f(1,1,1);
 	}
+	menu->draw();
 
 
 	
@@ -470,5 +470,6 @@ bool cGraphics::is3dSelected(float x, float y, float z)
 
 bool cmp(cMenu* a, cMenu* b)
 {
-	return a->title < b->title;
+	if (a->item == b->item) return a->title < b->title;
+	else return (a->item > b->item);
 }

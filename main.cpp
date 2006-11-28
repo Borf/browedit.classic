@@ -64,6 +64,7 @@ MENUCOMMAND(fill);
 MENUCOMMAND(showobjects);
 MENUCOMMAND(model);
 MENUCOMMAND(slope);
+MENUCOMMAND(picktexture);
 
 cMenu*	menu;
 cMenu* grid;
@@ -91,6 +92,7 @@ int main(int argc, char *argv[])
 	cMenu* view;
 	cMenu* edit;
 	cMenu* models;
+	cMenu* textures;
 
 	menu = new cMenu();
 	menu->title = "root";
@@ -108,6 +110,7 @@ int main(int argc, char *argv[])
 	ADDMENU(mode,		menu, "Edit Mode",			250,100);
 	ADDMENU(edit,		menu, "Edit",				350,100);
 	ADDMENU(models,		menu, "Models",				450,100);
+	ADDMENU(textures,	menu, "Textures",			550,100);
 	
 	ADDMENU(steepness,	edit, "Steepness...",		480,100);
 
@@ -221,6 +224,47 @@ int main(int argc, char *argv[])
 		
 	}
 	models->sort();
+	pFile->close();
+
+
+	items.clear();
+	level.clear();
+	level[textures] = 0;
+
+	pFile = fs.open("textures.txt");
+	while(!pFile->eof())
+	{
+		string line = pFile->readline();
+		string pre = line.substr(0, line.find("|"));
+		string filename = line.substr(line.find("|")+1);
+
+		string cat = pre.substr(0, pre.rfind("/"));
+		string menuname = pre.substr(pre.rfind("/")+1);
+
+		if (cat != "" && items.find(cat) == items.end())
+		{
+			cMenu* root = textures;
+			string catname = cat;
+			if(cat.find("/") != string::npos)
+			{
+				root = items[cat.substr(0, cat.rfind("/"))];
+				catname = cat.substr(cat.rfind("/")+1);
+			}
+			
+			cMenu* submenu;
+			ADDMENU(submenu,		root, catname + "...",				550 + 100*(level[root]+1),100);
+			items[cat] = submenu;
+			level[submenu] = level[root] + 1;
+		}
+		char* f = (char*)filename.c_str();
+		if(filename != "")
+		{
+			ADDMENUITEMDATA(mm,items[cat],menuname, &MenuCommand_picktexture, filename);
+		}
+		
+	}
+	models->sort();
+	pFile->close();
 
 
 	lastlclick = 0;
@@ -890,7 +934,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				else
 				{
 					Graphics.texturestart++;
-					if (Graphics.texturestart >= Graphics.world.textures.size() - (Graphics.h() / 288))
+					if (Graphics.texturestart > Graphics.world.textures.size() - (Graphics.h() / 288))
 						Graphics.texturestart--;
 				}
 				break;
@@ -1942,5 +1986,17 @@ MENUCOMMAND(slope)
 {
 	src->ticked = !src->ticked;
 	Graphics.slope = src->ticked;
+	return true;
+}
+
+
+MENUCOMMAND(picktexture)
+{
+	string data = src->data;
+	cTextureContainer* t = new cTextureContainer();
+	t->RoFilename = src->data;
+	t->texture = TextureCache.load(rodir + src->data);
+	Graphics.world.textures.push_back(t);
+	Graphics.texturestart = Graphics.world.textures.size() - 2;
 	return true;
 }

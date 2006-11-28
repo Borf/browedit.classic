@@ -24,7 +24,6 @@ class cMenu
 		int maxlen;
 
 		cMenu* parent;
-
 		
 		bool (*mouseoverproc) (cMenu* m);
 		bool (*mouseoutproc) (cMenu* m);
