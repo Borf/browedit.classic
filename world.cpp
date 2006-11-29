@@ -1021,6 +1021,7 @@ void cWorld::draw()
 
 
 	glDisable(GL_TEXTURE_2D);
+	glColor3f(1,1,0);
 	root->draw(Graphics.quadtreeview);
 	/*
 	for(int i = 0; i < quadtreefloats.size(); i+=4)
