@@ -100,6 +100,26 @@ public:
 	int todo13;
 };
 
+
+class cQuadTreeNode
+{
+public:
+	int load(vector<cVector3>&, int index, int level);
+	void draw(int level);
+	cVector3 box1;
+	cVector3 box2;
+
+
+	cVector3 range1;
+	cVector3 range2;
+
+	cQuadTreeNode* child1;
+	cQuadTreeNode* child2;
+	cQuadTreeNode* child3;
+	cQuadTreeNode* child4;
+};
+
+
 class cWorld
 {
 
@@ -160,7 +180,9 @@ public:
 	cTextureModel* sound;
 	cTextureModel* effect;
 	
-	vector<float> unknown;
+	vector<cVector3> quadtreefloats;
+	cQuadTreeNode* root;
+
 
 	string useless;
 

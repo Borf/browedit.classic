@@ -243,33 +243,109 @@ void cWorld::load()
 			Log(1,0,"Unknown type!");
 		};
 	}
-	ofstream outfile("tmp.txt");
-
-	unknown.clear();
+	quadtreefloats.clear();
 	while(!pFile->eof())
 	{
-		float f;
-		pFile->read((char*)&f, 4);
-		unknown.push_back(f);
-
-		char buf[40];
-		sprintf(buf, "%f\n", f);
-		outfile.write(buf, strlen(buf));
-
+		cVector3 f;
+		pFile->read((char*)&f.x, 4);
+		pFile->read((char*)&f.y, 4);
+		pFile->read((char*)&f.z, 4);
+		quadtreefloats.push_back(f);
 	}
-
 	pFile->close(); 
 
-	outfile.close();
-
-
-
+	
+	root = new cQuadTreeNode();
+	root->load(quadtreefloats, 0, 0);
 
 
 
 
 	Log(3,0,"Done Loading %s", filename);
 
+}
+
+
+int cQuadTreeNode::load(vector<cVector3>& data, int index, int level)
+{
+	child1 = NULL;
+	child2 = NULL;
+	child3 = NULL;
+	child4 = NULL;
+
+	box1 = data[index];
+	box2 = data[index+1];
+	range1 = data[index+2];
+	range2 = data[index+3];
+	index+=4;
+
+	if (level < 5)
+	{
+		child1 = new cQuadTreeNode();
+		index = child1->load(data, index, level+1);
+		child2 = new cQuadTreeNode();
+		index = child2->load(data, index, level+1);
+		child3 = new cQuadTreeNode();
+		index = child3->load(data, index, level+1);
+		child4 = new cQuadTreeNode();
+		index = child4->load(data, index, level+1);
+	}
+	return index;
+}
+
+
+void cQuadTreeNode::draw(int level)
+{
+	if (level == 0)
+	{
+		cVector3 v = box1;
+		cVector3 v2 = box2;
+
+		v.x += Graphics.world.width*5;
+		v.y = -v.y;
+		v.z = Graphics.world.height*5 - v.z;
+
+		v2.x += Graphics.world.width*5;
+		v2.y = -v2.y;
+		v2.z = Graphics.world.height*5 - v2.z;
+
+		glBegin(GL_LINE_LOOP);
+			glVertex3f(v.x, v.y, v.z);
+			glVertex3f(v2.x, v.y, v.z);
+			glVertex3f(v2.x, v.y, v2.z);
+			glVertex3f(v.x, v.y, v2.z);
+		glEnd();	
+
+		glBegin(GL_LINE_LOOP);
+			glVertex3f(v.x, v2.y, v.z);
+			glVertex3f(v2.x, v2.y, v.z);
+			glVertex3f(v2.x, v2.y, v2.z);
+			glVertex3f(v.x, v2.y, v2.z);
+		glEnd();
+
+		glBegin(GL_LINES);
+			glVertex3f(v.x, v.y, v.z);
+			glVertex3f(v.x, v2.y, v.z);
+			glVertex3f(v2.x, v.y, v.z);
+			glVertex3f(v2.x, v2.y, v.z);
+			glVertex3f(v2.x, v.y, v2.z);
+			glVertex3f(v2.x, v2.y, v2.z);
+			glVertex3f(v.x, v.y, v2.z);
+			glVertex3f(v.x, v2.y, v2.z);
+		glEnd();
+		return;
+	}
+	if (level > 0)
+	{
+		if(child1 != NULL)
+			child1->draw(level-1);
+		if(child2 != NULL)
+			child2->draw(level-1);
+		if(child3 != NULL)
+			child3->draw(level-1);
+		if(child4 != NULL)
+			child4->draw(level-1);
+	}
 }
 
 void cWorld::exportheight()
@@ -443,8 +519,12 @@ void cWorld::save()
 
 		}
 
-		for(i = 0; i < unknown.size(); i++)
-			pFile.write((char*)&unknown[i], 4);
+		for(i = 0; i < quadtreefloats.size(); i++)
+		{
+			pFile.write((char*)&quadtreefloats[i].x, 4);
+			pFile.write((char*)&quadtreefloats[i].y, 4);
+			pFile.write((char*)&quadtreefloats[i].z, 4);
+		}
 
 		pFile.close();
 	}
@@ -940,15 +1020,18 @@ void cWorld::draw()
 	cVector3 colors[] = {cVector3(1,1,1), cVector3(1,0,0), cVector3(1,1,0), cVector3(1,0,1), cVector3(0,1,0), cVector3(0,1,1), cVector3(0,0,1) };
 
 
-
-	for(int i = 0; i < unknown.size(); i+=12)
+	glDisable(GL_TEXTURE_2D);
+	root->draw(Graphics.quadtreeview);
+	/*
+	for(int i = 0; i < quadtreefloats.size(); i+=4)
 	{
 		int color = (i / 12) % (sizeof(colors) / sizeof(cVector3));
 
 		glColor4f(colors[color].x,colors[color].y,colors[color].z,1);
-		cVector3 v = cVector3(unknown[i], unknown[i+1], unknown[i+2]);
-		cVector3 v2 = cVector3(unknown[i+3], unknown[i+4], unknown[i+5]);
+		cVector3 v = quadtreefloats[i];
+		cVector3 v2 = quadtreefloats[i+1];
 
+	
 		v.x += width*5;
 		v.y = -v.y;
 		v.z = height*5 - v.z;
@@ -956,10 +1039,7 @@ void cWorld::draw()
 		v2.x += width*5;
 		v2.y = -v2.y;
 		v2.z = height*5 - v2.z;
-
-
-		cVector3 d = v - v2;
-		d.y = 0;
+/////////
 
 
 
@@ -988,11 +1068,13 @@ void cWorld::draw()
 			glVertex3f(v.x, v2.y, v2.z);
 		glEnd();
 
+
+
 		if(i / 12 == Graphics.quadtreeview)
 			break;
 	}
 	glColor3f(1,1,1);
-
+*/
 
 	glTranslatef(-Graphics.camerapointer.x, 0, -Graphics.camerapointer.y);
 

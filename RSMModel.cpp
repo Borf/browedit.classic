@@ -264,7 +264,6 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only)
 		int current = 0;
 		int next;
 		GLfloat t;
-		GLfloat q[4];
 
 		for (i = 0; i < frames.size(); i++) {
 			if (nstep < frames[i].time) {
