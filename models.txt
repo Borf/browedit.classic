@@ -1572,7 +1572,7 @@ cities/prontera/decor/pillar-2|model\프론테라\몽크건물05.rsm
 cities/prontera/decor/pillar-3|model\프론테라\몽크건물06.rsm
 cities/prontera/decor/sidewalk-1|model\프론테라\바닥블럭.rsm
 cities/prontera/decor/statue-1|model\프론테라\분수대.rsm
-cities/prontera/decor/stand-1\프론테라\상점01.rsm
+cities/prontera/decor/stand-1|model\프론테라\상점01.rsm
 cities/prontera/decor/stand-2|model\프론테라\상점02.rsm
 cities/prontera/decor/stand-3|model\프론테라\상점03.rsm
 cities/prontera/decor/stand-4|model\프론테라\상점04.rsm

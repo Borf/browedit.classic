@@ -28,6 +28,8 @@ class cMenu
 		bool (*mouseoverproc) (cMenu* m);
 		bool (*mouseoutproc) (cMenu* m);
 
+		cMenu* getnext(cMenu* curitem);
+
 		cMenu()
 		{
 			ticked = false;

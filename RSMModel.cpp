@@ -7,6 +7,7 @@ extern cGraphics Graphics;
 
 void cRSMModel::load(string fname)
 {
+	recalcbb = true;
 	filename = fname;
 	rofilename = filename.substr(filename.find("model\\") + 6);
 	cFile* pFile = fs.open(filename);
@@ -213,7 +214,91 @@ void cRSMModel::draw(bool checkfrust)
 
 	glScalef(scale.x, -scale.y, scale.z);
 //	glScalef(0.5, 0.5, 0.5);
+
+
+	glPushMatrix();
+/*
+
+	float Rot[16];
+	float Ori[16];
+	int i;
+
+	Rot[0] = meshes[0]->trans[0];
+	Rot[1] = meshes[0]->trans[1];
+	Rot[2] = meshes[0]->trans[2];
+	Rot[3] = 0.0;
+
+	Rot[4] = meshes[0]->trans[3];
+	Rot[5] = meshes[0]->trans[4];
+	Rot[6] = meshes[0]->trans[5];
+	Rot[7] = 0.0;
+
+	Rot[8] = meshes[0]->trans[6];
+	Rot[9] = meshes[0]->trans[7];
+	Rot[10] = meshes[0]->trans[8];
+	Rot[11] = 0.0;
+
+	Rot[12] = 0.0;
+	Rot[13] = 0.0;
+	Rot[14] = 0.0;
+	Rot[15] = 1.0;
+	
+	glScalef(meshes[0]->trans[19], meshes[0]->trans[20], meshes[0]->trans[21]);
+
+	if(meshes.size() != 1)
+			glTranslatef(-bb.bbrange[0], -bb.bbmax[1], -bb.bbrange[2]);
+		else
+			glTranslatef(0, -bb.bbmax[1]+bb.bbrange[1], 0);
+
+	glRotatef(meshes[0]->trans[15]*180.0/3.14159, meshes[0]->trans[16], meshes[0]->trans[17], meshes[0]->trans[18]);
+
+	if(meshes.size() == 1)
+		glTranslatef(-bb.bbrange[0], -bb.bbrange[1], -bb.bbrange[2]);
+	else
+		glTranslatef(meshes[0]->trans[9], meshes[0]->trans[10], meshes[0]->trans[11]);
+
+	glMultMatrixf(Rot);
+*/
+
+	cVector3 v1 = cVector3(bb.bbmin[0], bb.bbmin[2], bb.bbmin[1]);
+	cVector3 v2 = cVector3(bb.bbmax[0], bb.bbmax[2], bb.bbmax[1]);
+
+//	bb.bbmax = bb.bbmax + 
+
+	glColor4f(1,1,1,1);
+	glDisable(GL_TEXTURE_2D);
+	glBegin(GL_LINE_LOOP);
+		glVertex3f(v1.x, v1.y, v1.z);
+		glVertex3f(v2.x, v1.y, v1.z);
+		glVertex3f(v2.x, v1.y, v2.z);
+		glVertex3f(v1.x, v1.y, v2.z);
+	glEnd();
+	glBegin(GL_LINE_LOOP);
+		glVertex3f(v1.x, v2.y, v1.z);
+		glVertex3f(v2.x, v2.y, v1.z);
+		glVertex3f(v2.x, v2.y, v2.z);
+		glVertex3f(v1.x, v2.y, v2.z);
+	glEnd();
+	glBegin(GL_LINES);
+		glVertex3f(v1.x, v1.y, v1.z);
+		glVertex3f(v1.x, v2.y, v1.z);
+		glVertex3f(v2.x, v1.y, v1.z);
+		glVertex3f(v2.x, v2.y, v1.z);
+		glVertex3f(v2.x, v1.y, v2.z);
+		glVertex3f(v2.x, v2.y, v2.z);
+		glVertex3f(v1.x, v1.y, v2.z);
+		glVertex3f(v1.x, v2.y, v2.z);
+	glEnd();
+	glEnable(GL_TEXTURE_2D);
+
+
+
+
+
+	glPopMatrix();
+
 	draw2(&bb,0, NULL, meshes.size() == 1);
+	recalcbb = false;
 
 	glPopMatrix();
 }
@@ -221,7 +306,7 @@ void cRSMModel::draw(bool checkfrust)
 void cRSMModel::draw2(cBoundingbox* box, int mesh, float* transf, bool only)
 {
 	glPushMatrix();
-	meshes[mesh]->draw(box,transf, meshes.size() == 1);
+	meshes[mesh]->draw(box,transf, meshes.size() == 1, this);
 
 	for(int i = 0; i < meshes.size(); i++)
 	{
@@ -232,7 +317,7 @@ void cRSMModel::draw2(cBoundingbox* box, int mesh, float* transf, bool only)
 }
 
 
-void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only)
+void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel* model)
 {
 	bool main = (ptransf == NULL);
 	GLfloat Rot[16];
@@ -357,6 +442,7 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only)
 	glMultMatrixf(Rot);
 
 
+
 	for(i = 0; i < nFaces; i++)
 	{
 		cRSMModelFace* f = &faces[i];
@@ -366,7 +452,6 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only)
 			glTexCoord2f(texcoords[f->t[1]].y, 1-texcoords[f->t[1]].z); glVertex3f(vertices[f->v[1]].x, vertices[f->v[1]].y, vertices[f->v[1]].z);
 			glTexCoord2f(texcoords[f->t[2]].y, 1-texcoords[f->t[2]].z); glVertex3f(vertices[f->v[2]].x, vertices[f->v[2]].y, vertices[f->v[2]].z);
 		glEnd();
-
 
 	}
 	glPopMatrix();

@@ -274,7 +274,7 @@ int main(int argc, char *argv[])
 		return 1;
 
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "morocc").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "izlude").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 #endif
@@ -918,7 +918,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			case SDLK_RIGHTBRACKET:
 				if (editmode == MODE_OBJECTS)
 				{
-					for(int i = 0; i < currentobject->parent->items.size(); i++)
+					/*for(int i = 0; i < currentobject->parent->items.size(); i++)
 					{
 						if (currentobject->parent->items[i] == currentobject)
 						{
@@ -929,7 +929,10 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							MenuCommand_model((cMenuItem*)currentobject);
 							break;
 						}
-					}
+					}*/
+					currentobject = currentobject->parent->getnext(currentobject);
+					MenuCommand_model((cMenuItem*)currentobject);
+
 				}
 				else
 				{

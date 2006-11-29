@@ -470,6 +470,29 @@ bool cGraphics::is3dSelected(float x, float y, float z)
 
 bool cmp(cMenu* a, cMenu* b)
 {
-	if (a->item == b->item) return a->title < b->title;
-	else return (a->item > b->item);
+	if (a->item == b->item) 
+		return a->title < b->title;
+	else 
+		return (a->item > b->item);
+}
+
+
+cMenu* cMenu::getnext(cMenu* curitem)
+{
+	for(int i = 0; i < items.size(); i++)
+	{
+		if(items[i] == curitem)
+		{
+			if (i < ((int)items.size()) - 2)
+			{
+				if (items[i+1]->item)
+					return items[i+1];
+				else
+					return items[i+1]->items[0];
+			}
+		}
+	}
+	
+	return parent->getnext(this);
+
 }

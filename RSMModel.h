@@ -58,7 +58,7 @@ public:
 	void boundingbox(float* = NULL, bool = true);
 
 
-	void draw(cBoundingbox*, float*, bool);
+	void draw(cBoundingbox*, float*, bool, cRSMModel*);
 	cRSMModelMesh()
 	{
 		nstep = 0;
@@ -85,6 +85,7 @@ public:
 	void draw2(cBoundingbox*, int, float*, bool);
 
 	void boundingbox();
+	bool recalcbb;
 
 	cBoundingbox bb;
 
