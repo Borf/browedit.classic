@@ -260,12 +260,12 @@ void cRSMModel::draw(bool checkfrust)
 	glMultMatrixf(Rot);
 */
 
-	cVector3 v1 = cVector3(bb.bbmin[0], bb.bbmin[2], bb.bbmin[1]);
-	cVector3 v2 = cVector3(bb.bbmax[0], bb.bbmax[2], bb.bbmax[1]);
+	cVector3 v1 = cVector3(bb.bbmin[0], bb.bbmin[1], bb.bbmin[2]);
+	cVector3 v2 = cVector3(bb.bbmax[0], bb.bbmax[1], bb.bbmax[2]);
 
 //	bb.bbmax = bb.bbmax + 
 
-	glColor4f(1,1,1,1);
+	glColor4f(1,0,1,1);
 	glDisable(GL_TEXTURE_2D);
 	glBegin(GL_LINE_LOOP);
 		glVertex3f(v1.x, v1.y, v1.z);
@@ -290,6 +290,7 @@ void cRSMModel::draw(bool checkfrust)
 		glVertex3f(v1.x, v2.y, v2.z);
 	glEnd();
 	glEnable(GL_TEXTURE_2D);
+	glColor4f(1,1,1,1);
 
 
 

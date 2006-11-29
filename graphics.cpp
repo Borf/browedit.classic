@@ -496,3 +496,23 @@ cMenu* cMenu::getnext(cMenu* curitem)
 	return parent->getnext(this);
 
 }
+
+cMenu* cMenu::getprev(cMenu* curitem)
+{
+	for(int i = 0; i < items.size(); i++)
+	{
+		if(items[i] == curitem)
+		{
+			if (i > 0)
+			{
+				if (items[i-1]->item)
+					return items[i-1];
+				else
+					return items[i-1]->items[items[i-1]->items.size()-1];
+			}
+		}
+	}
+	
+	return parent->getprev(this);
+
+}

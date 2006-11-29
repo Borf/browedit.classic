@@ -29,6 +29,7 @@ class cMenu
 		bool (*mouseoutproc) (cMenu* m);
 
 		cMenu* getnext(cMenu* curitem);
+		cMenu* getprev(cMenu* curitem);
 
 		cMenu()
 		{
@@ -80,6 +81,7 @@ class cMenu
 				items[i]->sort();
 		}
 };
+
 class cMenuItem : public cMenu
 {
 public:

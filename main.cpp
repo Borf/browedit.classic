@@ -274,7 +274,7 @@ int main(int argc, char *argv[])
 		return 1;
 
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "izlude").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "prontera").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 #endif
@@ -894,19 +894,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			case SDLK_LEFTBRACKET:
 				if (editmode == MODE_OBJECTS)
 				{
-					for(int i = 0; i < currentobject->parent->items.size(); i++)
-					{
-						if (currentobject->parent->items[i] == currentobject)
-						{
-							i--;
-							if (i < 0)
-								i = currentobject->parent->items.size()-1;
-							currentobject = currentobject->parent->items[i];
-							MenuCommand_model((cMenuItem*)currentobject);
-							
-							break;
-						}
-					}
+					currentobject = currentobject->parent->getprev(currentobject);
+					MenuCommand_model((cMenuItem*)currentobject);
 				}
 				else
 				{
@@ -918,18 +907,6 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			case SDLK_RIGHTBRACKET:
 				if (editmode == MODE_OBJECTS)
 				{
-					/*for(int i = 0; i < currentobject->parent->items.size(); i++)
-					{
-						if (currentobject->parent->items[i] == currentobject)
-						{
-							i++;
-							if (i >= currentobject->parent->items.size())
-								i = 0;
-							currentobject = currentobject->parent->items[i];
-							MenuCommand_model((cMenuItem*)currentobject);
-							break;
-						}
-					}*/
 					currentobject = currentobject->parent->getnext(currentobject);
 					MenuCommand_model((cMenuItem*)currentobject);
 
@@ -1321,12 +1298,21 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 						for(xx = xmin; xx < xmax; xx++)
 						{
+							if (y < 0 || y > Graphics.world.height)
+								continue;
+							if (xx < 0 || xx > Graphics.world.width)
+								continue;
+
 							Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside].v1+=0.03125;
 							Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside].v2+=0.03125;
 						}
 					}
 					else
 					{
+						if (y < 0 || y > Graphics.world.height)
+							break;
+						if (x < 0 || x > Graphics.world.width)
+							break;
 						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u2+=0.03125;
 						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u4+=0.03125;
 					}
@@ -1369,6 +1355,12 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 					else
 					{
+						if (y < 0 || y > Graphics.world.height)
+							break;
+						if (x < 0 || x > Graphics.world.width)
+							break;
+						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u2+=0.03125;
+						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u4+=0.03125;
 						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u2-=0.03125;
 						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u4-=0.03125;
 					}
@@ -1991,6 +1983,7 @@ MENUCOMMAND(model)
 
 	Graphics.previewcolor = 200;
 	currentobject = src;
+	Log(3,0,"Meshcount: %i", Graphics.previewmodel->meshes.size());
 	return true;
 }
 
