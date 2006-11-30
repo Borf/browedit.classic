@@ -20,6 +20,7 @@ extern map<long, string, less<long> >	idtomodel;
 extern eMode			editmode;
 float f = 0;
 extern bool				lbuttondown;
+extern cMenu*			currentobject;
 
 double mouse3dx, mouse3dy, mouse3dz;
 
@@ -89,7 +90,7 @@ int cGraphics::draw()
 			glEnd();
 
 			glEnable(GL_TEXTURE_2D);
-			previewmodel->pos = cVector3((w()/5)-25,-h()+32+192,1000);
+			previewmodel->pos = cVector3((w()/5)-25,-h()+32+250,1000);
 			previewmodel->draw(false);
 			previewmodel->rot.y+=3;
 		}
@@ -121,6 +122,13 @@ int cGraphics::draw()
 		glColor3f(1,1,1);
 	}
 	menu->draw();
+	if(currentobject != NULL)
+	{
+		char buf[100];
+		sprintf(buf, "File: %s", ((cMenuItem*)currentobject)->data2.c_str());
+		float l = font->textlen(buf);
+		font->print(0,0,0,width-l,height-14,buf);
+	}
 
 
 	

@@ -87,6 +87,7 @@ class cMenuItem : public cMenu
 public:
 	bool (*proc) (cMenuItem* m);
 	string data;
+	string data2;
 	cMenuItem()
 	{
 		item = true;

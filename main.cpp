@@ -77,6 +77,7 @@ int cursorsize = 1;
 
 #define ADDMENUITEM(m, p, t, pr) m = new cMenuItem(); m->parent = p; m->title = t; m->item = true; m->drawstyle = 1; ((cMenuItem*)m)->proc = pr; p->items.push_back(m);
 #define ADDMENUITEMDATA(m, p, t, pr,d) m = new cMenuItem(); m->parent = p; m->title = t; m->item = true; m->drawstyle = 1; ((cMenuItem*)m)->proc = pr; ((cMenuItem*)m)->data = d; p->items.push_back(m);
+#define ADDMENUITEMDATA2(m, p, t, pr,d,d2) m = new cMenuItem(); m->parent = p; m->title = t; m->item = true; m->drawstyle = 1; ((cMenuItem*)m)->proc = pr; ((cMenuItem*)m)->data = d; ((cMenuItem*)m)->data2 = d2; p->items.push_back(m);
 #define ADDMENU(m,p,t,xpos,width) m = new cMenu(); m->parent = p; m->title = t; m->item = false; m->drawstyle = 1; m->y = 20; m->x = xpos; m->w = width; p->items.push_back(m);
 cMenu* mode;
 cMenu* editdetail;
@@ -223,7 +224,7 @@ int main(int argc, char *argv[])
 		char* f = (char*)filename.c_str();
 		if(filename != "")
 		{
-			ADDMENUITEMDATA(mm,items[cat],menuname, &MenuCommand_model, filename);
+			ADDMENUITEMDATA2(mm,items[cat],menuname, &MenuCommand_model, filename, pre);
 		}
 		
 	}
