@@ -54,11 +54,12 @@ public:
 	int nFrameAnimations;
 	vector<cRSMModelFrame> frames;
 	cBoundingbox bb;
+	cBoundingbox realbb;
 
 	void boundingbox(float* = NULL, bool = true);
 
 
-	void draw(cBoundingbox*, float*, bool, cRSMModel*);
+	void draw(cBoundingbox*, float*, bool, cRSMModel*, bool);
 	cRSMModelMesh()
 	{
 		nstep = 0;
@@ -81,13 +82,16 @@ public:
 	vector<cRSMModelMesh*>	meshes;
 	vector<int>				fathers;
 	vector<cTexture*> textures;
-	void draw(bool = true);
-	void draw2(cBoundingbox*, int, float*, bool);
+	void draw(bool = true, bool = true);
+	void draw2(cBoundingbox*, int, float*, bool,bool);
 
 	void boundingbox();
 	bool recalcbb;
 
+
+
 	cBoundingbox bb;
+	cBoundingbox bb2;
 
 
 };

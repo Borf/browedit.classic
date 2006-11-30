@@ -59,6 +59,10 @@ void cRSMModel::load(string fname)
 		}
 	}
 	boundingbox();
+	pos = cVector3(0,0,0);
+	rot = cVector3(0,0,0);
+	scale = cVector3(1,1,1);
+	draw(false,false);
 }
 
 void cRSMModelMesh::load(cFile* pFile, cRSMModel* model, bool main)
@@ -197,7 +201,7 @@ void cRSMModelMesh::boundingbox(float* ptransf, bool only)
 }
 
 
-void cRSMModel::draw(bool checkfrust)
+void cRSMModel::draw(bool checkfrust, bool dodraw)
 {
 	if (checkfrust)
 	{
@@ -216,66 +220,74 @@ void cRSMModel::draw(bool checkfrust)
 //	glScalef(0.5, 0.5, 0.5);
 
 
-	glPushMatrix();
-
-	cVector3 v1 = cVector3(bb.bbmin[0], bb.bbmin[1], bb.bbmin[2]);
-	cVector3 v2 = cVector3(bb.bbmax[0], bb.bbmax[1], bb.bbmax[2]);
-
-
-
-	if(meshes.size() != 1)
+	if(dodraw)
 	{
-		v1 += cVector3(-bb.bbrange[0], -bb.bbmax[1], -bb.bbrange[2]);
-		v2 += cVector3(-bb.bbrange[0], -bb.bbmax[1], -bb.bbrange[2]);
+		cVector3 v1 = cVector3(bb2.bbmin[0], bb2.bbmin[1], bb2.bbmin[2]);
+		cVector3 v2 = cVector3(bb2.bbmax[0], bb2.bbmax[1], bb2.bbmax[2]);
+		glColor4f(1,0,1,1);
+		glDisable(GL_TEXTURE_2D);
+		glBegin(GL_LINE_LOOP);
+			glVertex3f(v1.x, -v1.y, v1.z);
+			glVertex3f(v2.x, -v1.y, v1.z);
+			glVertex3f(v2.x, -v1.y, v2.z);
+			glVertex3f(v1.x, -v1.y, v2.z);
+		glEnd();
+		glBegin(GL_LINE_LOOP);
+			glVertex3f(v1.x, -v2.y, v1.z);
+			glVertex3f(v2.x, -v2.y, v1.z);
+			glVertex3f(v2.x, -v2.y, v2.z);
+			glVertex3f(v1.x, -v2.y, v2.z);
+		glEnd();
+		glBegin(GL_LINES);
+			glVertex3f(v1.x, -v1.y, v1.z);
+			glVertex3f(v1.x, -v2.y, v1.z);
+			glVertex3f(v2.x, -v1.y, v1.z);
+			glVertex3f(v2.x, -v2.y, v1.z);
+			glVertex3f(v2.x, -v1.y, v2.z);
+			glVertex3f(v2.x, -v2.y, v2.z);
+			glVertex3f(v1.x, -v1.y, v2.z);
+			glVertex3f(v1.x, -v2.y, v2.z);
+		glEnd();
+		glEnable(GL_TEXTURE_2D);
+		glColor4f(1,1,1,1);
 	}
-	else
-	{
-		v1 += cVector3(0, -bb.bbmax[1]+bb.bbrange[1], 0);
-		v2 += cVector3(0, -bb.bbmax[1]+bb.bbrange[1], 0);
-	}
 
-	if(meshes.size() == 1)
-	{
-		v1 += cVector3(-bb.bbrange[0], -bb.bbrange[1], -bb.bbrange[2]);
-		v2 += cVector3(-bb.bbrange[0], -bb.bbrange[1], -bb.bbrange[2]);
-	}
-	else
-	{
-		v1 += cVector3(meshes[0]->trans[9], meshes[0]->trans[10], meshes[0]->trans[11]);
-		v2 += cVector3(meshes[0]->trans[9], meshes[0]->trans[10], meshes[0]->trans[11]);
-	}
-
-
-//	bb.bbmax = bb.bbmax + 
-
-
-
-
-
-
-	glPopMatrix();
-
-	draw2(&bb,0, NULL, meshes.size() == 1);
+	draw2(&bb,0, NULL, meshes.size() == 1, dodraw);
 	recalcbb = false;
+
+
+	if(!dodraw)
+	{
+		bb2.bbmin[0] = bb2.bbmin[1] = bb2.bbmin[2] = 999999;
+		bb2.bbmax[0] = bb2.bbmax[1] = bb2.bbmax[2] = -999999;
+		for(int i = 0; i < meshes.size(); i++)
+		{
+			for(int ii = 0; ii < 3; ii++)
+			{
+				bb2.bbmin[ii] = min(bb2.bbmin[ii], meshes[i]->realbb.bbmin[ii]);
+				bb2.bbmax[ii] = max(bb2.bbmax[ii], meshes[i]->realbb.bbmax[ii]);
+			}
+		}
+	}
 
 	glPopMatrix();
 }
 
-void cRSMModel::draw2(cBoundingbox* box, int mesh, float* transf, bool only)
+void cRSMModel::draw2(cBoundingbox* box, int mesh, float* transf, bool only, bool dodraw)
 {
 	glPushMatrix();
-	meshes[mesh]->draw(box,transf, meshes.size() == 1, this);
+	meshes[mesh]->draw(box,transf, meshes.size() == 1, this, dodraw);
 
 	for(int i = 0; i < meshes.size(); i++)
 	{
 		if(i != mesh && fathers[i] == mesh)
-			draw2((mesh == 0) ? box : NULL, i, meshes[mesh]->trans, only);
+			draw2((mesh == 0) ? box : NULL, i, meshes[mesh]->trans, only, dodraw);
 	}
 	glPopMatrix();
 }
 
 
-void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel* model)
+void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel* model, bool dodraw)
 {
 	bool main = (ptransf == NULL);
 	GLfloat Rot[16];
@@ -402,16 +414,15 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 	cVector3 v1 = cVector3(999999,999999,999999);
 	cVector3 v2 = cVector3(-999999,-999999,-999999);
 
-
-	for(i = 0; i < nFaces; i++)
+	if(model->recalcbb)
 	{
-		cRSMModelFace* f = &faces[i];
-		glBindTexture(GL_TEXTURE_2D, textures[f->texid]->texid());
-		glBegin(GL_TRIANGLES);
-			glTexCoord2f(texcoords[f->t[0]].y, 1-texcoords[f->t[0]].z); glVertex3f(vertices[f->v[0]].x, vertices[f->v[0]].y, vertices[f->v[0]].z);
-			glTexCoord2f(texcoords[f->t[1]].y, 1-texcoords[f->t[1]].z); glVertex3f(vertices[f->v[1]].x, vertices[f->v[1]].y, vertices[f->v[1]].z);
-			glTexCoord2f(texcoords[f->t[2]].y, 1-texcoords[f->t[2]].z); glVertex3f(vertices[f->v[2]].x, vertices[f->v[2]].y, vertices[f->v[2]].z);
-
+		float ModelMatrix[16]; 
+		glGetFloatv(GL_MODELVIEW_MATRIX, ModelMatrix);
+		float ProjMatrix[16];
+		glGetFloatv(GL_PROJECTION_MATRIX, ProjMatrix);
+		for(i = 0; i < nFaces; i++)
+		{
+			cRSMModelFace* f = &faces[i];
 			v1.x = min(v1.x, vertices[f->v[0]].x);
 			v1.y = min(v1.y, vertices[f->v[0]].y);
 			v1.z = min(v1.z, vertices[f->v[0]].z);
@@ -431,39 +442,25 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 			v2.x = max(v2.x, vertices[f->v[2]].x);
 			v2.y = max(v2.y, vertices[f->v[2]].y);
 			v2.z = max(v2.z, vertices[f->v[2]].z);
-
-		glEnd();
-
+		}
+		MatrixMultVect(ModelMatrix, v1, realbb.bbmin);
+		MatrixMultVect(ModelMatrix, v2, realbb.bbmax);
 	}
 
-	glColor4f(1,0,1,1);
-	glDisable(GL_TEXTURE_2D);
-	glBegin(GL_LINE_LOOP);
-		glVertex3f(v1.x, v1.y, v1.z);
-		glVertex3f(v2.x, v1.y, v1.z);
-		glVertex3f(v2.x, v1.y, v2.z);
-		glVertex3f(v1.x, v1.y, v2.z);
-	glEnd();
-	glBegin(GL_LINE_LOOP);
-		glVertex3f(v1.x, v2.y, v1.z);
-		glVertex3f(v2.x, v2.y, v1.z);
-		glVertex3f(v2.x, v2.y, v2.z);
-		glVertex3f(v1.x, v2.y, v2.z);
-	glEnd();
-	glBegin(GL_LINES);
-		glVertex3f(v1.x, v1.y, v1.z);
-		glVertex3f(v1.x, v2.y, v1.z);
-		glVertex3f(v2.x, v1.y, v1.z);
-		glVertex3f(v2.x, v2.y, v1.z);
-		glVertex3f(v2.x, v1.y, v2.z);
-		glVertex3f(v2.x, v2.y, v2.z);
-		glVertex3f(v1.x, v1.y, v2.z);
-		glVertex3f(v1.x, v2.y, v2.z);
-	glEnd();
-	glEnable(GL_TEXTURE_2D);
-	glColor4f(1,1,1,1);
+	if(dodraw)
+	{
+		for(i = 0; i < nFaces; i++)
+		{
+			cRSMModelFace* f = &faces[i];
+			glBindTexture(GL_TEXTURE_2D, textures[f->texid]->texid());
+			glBegin(GL_TRIANGLES);
+				glTexCoord2f(texcoords[f->t[0]].y, 1-texcoords[f->t[0]].z); glVertex3f(vertices[f->v[0]].x, vertices[f->v[0]].y, vertices[f->v[0]].z);
+				glTexCoord2f(texcoords[f->t[1]].y, 1-texcoords[f->t[1]].z); glVertex3f(vertices[f->v[1]].x, vertices[f->v[1]].y, vertices[f->v[1]].z);
+				glTexCoord2f(texcoords[f->t[2]].y, 1-texcoords[f->t[2]].z); glVertex3f(vertices[f->v[2]].x, vertices[f->v[2]].y, vertices[f->v[2]].z);
+			glEnd();
 
-	
+		}
+	}	
 	glPopMatrix();
 
 }
