@@ -105,6 +105,7 @@ class cQuadTreeNode
 {
 public:
 	int load(vector<cVector3>&, int index, int level);
+	void save(vector<cVector3>&);
 	void draw(int level);
 
 	void recalculate();

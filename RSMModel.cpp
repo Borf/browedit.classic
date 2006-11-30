@@ -220,7 +220,7 @@ void cRSMModel::draw(bool checkfrust, bool dodraw)
 //	glScalef(0.5, 0.5, 0.5);
 
 
-	if(dodraw)
+	if(dodraw && Graphics.showboundingboxes)
 	{
 		cVector3 v1 = cVector3(bb2.bbmin[0], bb2.bbmin[1], bb2.bbmin[2]);
 		cVector3 v2 = cVector3(bb2.bbmax[0], bb2.bbmax[1], bb2.bbmax[2]);

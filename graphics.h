@@ -30,7 +30,8 @@ public:
 		selectedobject = -1;
 		objectstartdrag = false;
 		slope = false;
-		quadtreeview = 1;
+		quadtreeview = -1;
+		showboundingboxes = false;
 	}
 
 	int						init();				// initializes graphics
@@ -109,6 +110,7 @@ public:
 
 
 	int						quadtreeview;
+	bool					showboundingboxes;
 
 
 private:

@@ -362,6 +362,13 @@ void cWorld::save()
 		return;
 	{
 		clean();
+		root->recalculate();
+		quadtreefloats.clear();
+		root->save(quadtreefloats);
+
+//		for(int ii = 0; ii < quadtreefloats.size(); ii++)
+//			quadtreefloats[ii] = cVector3(0,0,0);
+
 		ofstream pFile((string(filename) + ".gnd").c_str(), ios_base::out | ios_base::binary);
 		pFile.write("GRGN\1\7", 6);
 		pFile.write((char*)&width, 4);
@@ -1186,7 +1193,7 @@ void cQuadTreeNode::recalculate()
 		box1.y = max(box1.y, child3->box1.y);
 		box1.y = max(box1.y, child4->box1.y);
 
-		box2.y = child1->box1.y;
+		box2.y = child1->box2.y;
 		box2.y = min(box2.y, child2->box2.y);
 		box2.y = min(box2.y, child3->box2.y);
 		box2.y = min(box2.y, child4->box2.y);
@@ -1228,4 +1235,31 @@ void cQuadTreeNode::recalculate()
 		}
 	}
 
+	range2.x = (box1.x+box2.x)/2.0f;
+	range1.x = box1.x-range2.x;
+
+	range2.y = (box1.y+box2.y)/2.0f;
+	range1.y = -range2.y;
+
+	range2.z = (box1.z+box2.z)/2.0f;
+	range1.z = box1.z-range2.z;
+
+
+
+}
+
+void cQuadTreeNode::save(vector<cVector3>& v)
+{
+	v.push_back(box1);
+	v.push_back(box2);
+	v.push_back(range1);
+	v.push_back(range2);
+	if(child1 != NULL)
+		child1->save(v);
+	if(child2 != NULL)
+		child2->save(v);
+	if(child3 != NULL)
+		child3->save(v);
+	if(child4 != NULL)
+		child4->save(v);
 }

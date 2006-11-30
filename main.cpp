@@ -66,6 +66,7 @@ MENUCOMMAND(model);
 MENUCOMMAND(slope);
 MENUCOMMAND(picktexture);
 MENUCOMMAND(quadtree);
+MENUCOMMAND(boundingboxes);
 
 cMenu*	menu;
 cMenu* grid;
@@ -136,6 +137,7 @@ int main(int argc, char *argv[])
 	grid = mm;
 	ADDMENUITEM(mm,view,"Objects",&MenuCommand_showobjects);
 	showobjects = mm;
+	ADDMENUITEM(mm,view,"Boundingboxes",&MenuCommand_boundingboxes);
 
 	ADDMENUITEM(mm,mode,"Texture Edit",			&MenuCommand_mode);
 	mm->ticked = true;
@@ -276,7 +278,7 @@ int main(int argc, char *argv[])
 		return 1;
 
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "izlude").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "customtown").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 #endif
@@ -1097,7 +1099,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 
 					cTile t;
-					t.texture = Graphics.texturestart;
+					t.texture = Graphics.texturestart + (Graphics.selectionstart.y - 32) / 288;
 					t.lightmap = 0;
 					t.u1 = 0;
 					t.v1 = 0;
@@ -1131,7 +1133,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 
 					cTile t;
-					t.texture = Graphics.texturestart;
+					t.texture = Graphics.texturestart + (Graphics.selectionstart.y - 32) / 288;
 					t.lightmap = 0;
 					t.u1 = 0;
 					t.v1 = 0;
@@ -1395,7 +1397,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						for(yy = ymin; yy < ymax; yy++)
 						{
 							cTile t;
-							t.texture = Graphics.texturestart;
+							t.texture = Graphics.texturestart + (Graphics.selectionstart.y - 32) / 288;
 							t.lightmap = 0;
 							t.u1 = ((yy-ymin)%4) *  (1.0/(float)ydiff);
 							t.v1 = 0;
@@ -1430,7 +1432,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						for(xx = xmin; xx < xmax; xx++)
 						{
 							cTile t;
-							t.texture = Graphics.texturestart;
+							t.texture = Graphics.texturestart + (Graphics.selectionstart.y - 32) / 288;
 							t.lightmap = 0;
 							t.u1 = ((xx-xmin)%4) *  (1.0/(float)xdiff);
 							t.v1 = 0;
@@ -1570,11 +1572,15 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			case SDLK_INSERT:
 				{
 					Graphics.quadtreeview++;
+					if (Graphics.quadtreeview > 5)
+						Graphics.quadtreeview = 5;
 				}
 				break;
 			case SDLK_DELETE:
 				{
 					Graphics.quadtreeview--;
+					if (Graphics.quadtreeview < -1)
+						Graphics.quadtreeview = -1;
 				}
 				break;
 			default:
@@ -2016,5 +2022,12 @@ MENUCOMMAND(picktexture)
 MENUCOMMAND(quadtree)
 {
 	Graphics.world.root->recalculate();
+	return true;
+}
+
+MENUCOMMAND(boundingboxes)
+{
+	src->ticked = !src->ticked;
+	Graphics.showboundingboxes = src->ticked;
 	return true;
 }
