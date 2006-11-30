@@ -65,6 +65,7 @@ MENUCOMMAND(showobjects);
 MENUCOMMAND(model);
 MENUCOMMAND(slope);
 MENUCOMMAND(picktexture);
+MENUCOMMAND(quadtree);
 
 cMenu*	menu;
 cMenu* grid;
@@ -159,6 +160,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,edit,"Randomize a bit",		&MenuCommand_editrandom);
 	ADDMENUITEM(mm,edit,"Fill",					&MenuCommand_fill);
 	ADDMENUITEM(mm,edit,"Sloping",				&MenuCommand_slope);
+	ADDMENUITEM(mm,edit,"Quadtree",				&MenuCommand_quadtree);
 
 	ADDMENU(speed,edit, "Speed", 480, 100);
 	ADDMENUITEM(mm,speed,"5",&MenuCommand_speed);
@@ -274,7 +276,7 @@ int main(int argc, char *argv[])
 		return 1;
 
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "prontera").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "izlude").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 #endif
@@ -2008,5 +2010,11 @@ MENUCOMMAND(picktexture)
 	t->texture = TextureCache.load(rodir + "texture/" + src->data);
 	Graphics.world.textures.push_back(t);
 	Graphics.texturestart = Graphics.world.textures.size() - 2;
+	return true;
+}
+
+MENUCOMMAND(quadtree)
+{
+	Graphics.world.root->recalculate();
 	return true;
 }

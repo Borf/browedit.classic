@@ -414,7 +414,7 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 	cVector3 v1 = cVector3(999999,999999,999999);
 	cVector3 v2 = cVector3(-999999,-999999,-999999);
 
-	if(model->recalcbb)
+	if(!dodraw)
 	{
 		float ModelMatrix[16]; 
 		glGetFloatv(GL_MODELVIEW_MATRIX, ModelMatrix);

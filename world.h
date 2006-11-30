@@ -107,7 +107,7 @@ public:
 	int load(vector<cVector3>&, int index, int level);
 	void draw(int level);
 
-	void calculate();
+	void recalculate();
 	cVector3 box1;
 	cVector3 box2;
 

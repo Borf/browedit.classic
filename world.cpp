@@ -1163,3 +1163,69 @@ void cWorld::unload()
 	models.clear();
 	textures.clear();
 }
+
+
+
+
+void cQuadTreeNode::recalculate()
+{
+	if(child1 != NULL)
+		child1->recalculate();
+	if(child2 != NULL)
+		child2->recalculate();
+	if(child3 != NULL)
+		child3->recalculate();
+	if(child4 != NULL)
+		child4->recalculate();
+
+
+	if(child1 != NULL)
+	{
+		box1.y = child1->box1.y;
+		box1.y = max(box1.y, child2->box1.y);
+		box1.y = max(box1.y, child3->box1.y);
+		box1.y = max(box1.y, child4->box1.y);
+
+		box2.y = child1->box1.y;
+		box2.y = min(box2.y, child2->box2.y);
+		box2.y = min(box2.y, child3->box2.y);
+		box2.y = min(box2.y, child4->box2.y);
+	}
+	else
+	{
+		box1.y = -999999;
+		box2.y = 999999;
+		for(float x = box2.x; x < box1.x; x+= (box1.x - box2.x)/10.0)
+		{
+			for(float y = box2.z; y < box1.z; y+= (box1.z - box2.z)/10.0)
+			{
+				int xx = x + Graphics.world.width*5;
+				int yy = Graphics.world.height*5 - y;
+
+				int tilex = xx / 10;
+				int tiley = yy / 10;
+
+				if(tiley > -1 && tiley < Graphics.world.height && tilex > -1 && tilex < Graphics.world.height)
+				{
+					box1.y = max(box1.y, Graphics.world.cubes[Graphics.world.height - tiley-1][tilex].cell1);
+					box2.y = min(box2.y, Graphics.world.cubes[Graphics.world.height - tiley-1][tilex].cell1);
+
+					box1.y = max(box1.y, Graphics.world.cubes[Graphics.world.height - tiley-1][tilex].cell2);
+					box2.y = min(box2.y, Graphics.world.cubes[Graphics.world.height - tiley-1][tilex].cell2);
+
+					box1.y = max(box1.y, Graphics.world.cubes[Graphics.world.height - tiley-1][tilex].cell3);
+					box2.y = min(box2.y, Graphics.world.cubes[Graphics.world.height - tiley-1][tilex].cell3);
+
+					box1.y = max(box1.y, Graphics.world.cubes[Graphics.world.height - tiley-1][tilex].cell4);
+					box2.y = min(box2.y, Graphics.world.cubes[Graphics.world.height - tiley-1][tilex].cell4);
+				}
+				else
+				{
+				}
+				
+			}
+
+		}
+	}
+
+}
