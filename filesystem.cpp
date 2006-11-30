@@ -235,7 +235,7 @@ char cFile::get()
 
 int cFile::read(char* buffer, int length)
 {
- 	int i = min((long)length, size+1-index);
+  	int i = min((long)length, size+1-index);
 	memcpy(buffer, data+index, i);
 	if (length > size-index) 
 		buffer[size-index] = 0;

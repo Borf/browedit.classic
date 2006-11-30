@@ -31,6 +31,9 @@ class cMenu
 		cMenu* getnext(cMenu* curitem);
 		cMenu* getprev(cMenu* curitem);
 
+		cMenu* getfirstitem();
+		cMenu* getlastitem();
+
 		cMenu()
 		{
 			ticked = false;
@@ -80,6 +83,8 @@ class cMenu
 			for(int i = 0; i < items.size(); i++)
 				items[i]->sort();
 		}
+		cMenu* finddata(string d);
+
 };
 
 class cMenuItem : public cMenu
@@ -92,6 +97,7 @@ public:
 	{
 		item = true;
 	}
+
 };
  
 

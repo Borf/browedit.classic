@@ -219,6 +219,10 @@ void cRSMModel::draw(bool checkfrust, bool dodraw)
 	glScalef(scale.x, -scale.y, scale.z);
 //	glScalef(0.5, 0.5, 0.5);
 
+	if(dodraw)
+	{
+		glTranslatef(-bb2.bbrange[0], bb2.bbmin[1], -bb2.bbrange[2]);
+	}
 
 	if(dodraw && Graphics.showboundingboxes)
 	{
@@ -252,6 +256,7 @@ void cRSMModel::draw(bool checkfrust, bool dodraw)
 		glColor4f(1,1,1,1);
 	}
 
+
 	draw2(&bb,0, NULL, meshes.size() == 1, dodraw);
 	recalcbb = false;
 
@@ -268,6 +273,8 @@ void cRSMModel::draw(bool checkfrust, bool dodraw)
 				bb2.bbmax[ii] = max(bb2.bbmax[ii], meshes[i]->realbb.bbmax[ii]);
 			}
 		}
+		for (int j=0; j < 3; j++)
+			bb2.bbrange[j] = (bb2.bbmax[j]+bb2.bbmin[j])/2.0;
 	}
 
 	glPopMatrix();

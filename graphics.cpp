@@ -496,7 +496,7 @@ cMenu* cMenu::getnext(cMenu* curitem)
 				if (items[i+1]->item)
 					return items[i+1];
 				else
-					return items[i+1]->items[0];
+					return items[i+1]->getfirstitem();
 			}
 		}
 	}
@@ -516,11 +516,50 @@ cMenu* cMenu::getprev(cMenu* curitem)
 				if (items[i-1]->item)
 					return items[i-1];
 				else
-					return items[i-1]->items[items[i-1]->items.size()-1];
+					return items[i-1]->getlastitem();
 			}
 		}
 	}
 	
 	return parent->getprev(this);
+}
 
+
+cMenu* cMenu::getfirstitem()
+{
+	if(items.size() == 0 || item)
+		return this;
+	if(items[0]->item)
+		return items[0];
+	else
+		return items[0]->getfirstitem();
+}
+
+cMenu* cMenu::getlastitem()
+{
+	if(items.size() == 0 || item)
+		return this;
+	if(items[items.size()-1]->item)
+		return items[items.size()-1];
+	else
+		return items[items.size()-1]->getlastitem();
+
+}
+
+
+
+cMenu* cMenu::finddata(string d)
+{
+	if(item)
+	{
+		if(((cMenuItem*)this)->data == d)
+			return this;
+	}
+	for(int i = 0; i < items.size(); i++)
+	{
+		cMenu* m = items[i]->finddata(d);
+		if (m != NULL)
+			return m;
+	}
+	return NULL;
 }

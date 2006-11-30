@@ -82,6 +82,8 @@ int cursorsize = 1;
 cMenu* mode;
 cMenu* editdetail;
 cMenu* speed;
+cMenu* models;
+
 vector<vector<vector<float> > > clipboard;
 
 
@@ -94,7 +96,6 @@ int main(int argc, char *argv[])
 	cMenu* rnd;
 	cMenu* view;
 	cMenu* edit;
-	cMenu* models;
 	cMenu* textures;
 
 	menu = new cMenu();
@@ -279,7 +280,7 @@ int main(int argc, char *argv[])
 		return 1;
 
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "customtown").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "prontera").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 #endif
@@ -1486,6 +1487,10 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							Graphics.clipboardscale = Graphics.world.models[Graphics.selectedobject]->scale;
 							Graphics.clipboardfile = Graphics.world.models[Graphics.selectedobject]->filename;
 							Log(3,0,"Copied %s", Graphics.clipboardfile.c_str());
+
+							currentobject = models->finddata("model\\" + Graphics.world.models[Graphics.selectedobject]->rofilename);
+							if(currentobject != NULL)
+								MenuCommand_model((cMenuItem*)currentobject);
 						}
 					}
 					break;
@@ -1516,7 +1521,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							}
 						}
 					}
-					else if (editmode == MODE_OBJECTS)
+					else if (editmode == MODE_OBJECTS && Graphics.clipboardfile != "")
 					{
 						cRSMModel* model = new cRSMModel();
 						model->load(Graphics.clipboardfile);
