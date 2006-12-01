@@ -38,6 +38,7 @@ void cWorld::load()
 		sound = new cTextureModel();
 		sound->open("data/Speaker.tga");
 	}
+	root = NULL;
 	int i;
 	Log(3,0,"Loading %s", filename);
 	cFile* pFile = fs.open(string(filename) + ".gnd");
@@ -113,6 +114,8 @@ void cWorld::load()
 		{
 			pFile->read(buf, 28);
 			cCube c;
+			c.maxh = -99999;
+			c.minh = 99999;
 			memcpy((char*)&c.cell1, buf, 4);
 			memcpy((char*)&c.cell2, buf+4, 4);
 			memcpy((char*)&c.cell3, buf+8, 4);
@@ -256,8 +259,11 @@ void cWorld::load()
 	pFile->close(); 
 
 	
-	root = new cQuadTreeNode();
-	root->load(quadtreefloats, 0, 0);
+	if(quadtreefloats.size() > 0)
+	{
+		root = new cQuadTreeNode();
+		root->load(quadtreefloats, 0, 0);
+	}
 
 
 
@@ -363,9 +369,12 @@ void cWorld::save()
 		return;
 	{
 		clean();
-		root->recalculate();
 		quadtreefloats.clear();
-		root->save(quadtreefloats);
+		if(root != NULL)
+		{
+			root->recalculate();
+			root->save(quadtreefloats);
+		}
 
 //		for(int ii = 0; ii < quadtreefloats.size(); ii++)
 //			quadtreefloats[ii] = cVector3(0,0,0);
