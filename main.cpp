@@ -280,7 +280,7 @@ int main(int argc, char *argv[])
 		return 1;
 
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "prontera").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "customtown").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 #endif
@@ -753,6 +753,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							model->pos = cVector3(mouse3dx/5, -mouse3dy, mouse3dz/5);
 							model->scale = cVector3(1,1,1);
 							model->rot = cVector3(0,0,0);
+							model->id = Graphics.world.models.size();
 							Graphics.world.models.push_back(model);
 							Graphics.selectedobject = Graphics.world.models.size()-1;
 						}
@@ -1528,6 +1529,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						model->pos = cVector3(mouse3dx/5, -mouse3dy, mouse3dz/5);
 						model->scale = Graphics.clipboardscale;
 						model->rot = Graphics.clipboardrot;
+						model->id = Graphics.world.models.size();
 						Graphics.world.models.push_back(model);
 						Graphics.selectedobject = Graphics.world.models.size()-1;
 					}
@@ -2027,6 +2029,20 @@ MENUCOMMAND(picktexture)
 
 MENUCOMMAND(quadtree)
 {
+	int x,y;
+	for(x = 0; x < Graphics.world.width; x++)
+		for(y = 0; y < Graphics.world.height; y++)
+		{
+			Graphics.world.cubes[y][x].maxh = -99999;
+			Graphics.world.cubes[y][x].minh = 99999;
+		}
+
+	for(int i = 0; i < Graphics.world.models.size(); i++)
+	{
+		Graphics.world.models[i]->draw(false,false,true);
+	}
+
+
 	Graphics.world.root->recalculate();
 	return true;
 }

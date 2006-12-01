@@ -59,7 +59,7 @@ public:
 	void boundingbox(float* = NULL, bool = true);
 
 
-	void draw(cBoundingbox*, float*, bool, cRSMModel*, bool);
+	void draw(cBoundingbox*, float*, bool, cRSMModel*, bool,bool);
 	cRSMModelMesh()
 	{
 		nstep = 0;
@@ -73,6 +73,7 @@ public:
 	~cRSMModel();
 	string filename;
 	string rofilename;
+	int id;
 
 	cVector3 pos;
 	cVector3 scale;
@@ -82,8 +83,8 @@ public:
 	vector<cRSMModelMesh*>	meshes;
 	vector<int>				fathers;
 	vector<cTexture*> textures;
-	void draw(bool = true, bool = true);
-	void draw2(cBoundingbox*, int, float*, bool,bool);
+	void draw(bool = true, bool = true,bool=false);
+	void draw2(cBoundingbox*, int, float*, bool,bool,bool);
 
 	void boundingbox();
 	bool recalcbb;

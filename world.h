@@ -43,6 +43,9 @@ public:
 	int tileup,
 		tileside,
 		tileaside;
+
+	float maxh;
+	float minh;
 };
 
 class cTextureContainer

@@ -201,7 +201,7 @@ void cRSMModelMesh::boundingbox(float* ptransf, bool only)
 }
 
 
-void cRSMModel::draw(bool checkfrust, bool dodraw)
+void cRSMModel::draw(bool checkfrust, bool dodraw, bool setheight)
 {
 	if (checkfrust)
 	{
@@ -257,7 +257,7 @@ void cRSMModel::draw(bool checkfrust, bool dodraw)
 	}
 
 
-	draw2(&bb,0, NULL, meshes.size() == 1, dodraw);
+	draw2(&bb,0, NULL, meshes.size() == 1, dodraw, setheight);
 	recalcbb = false;
 
 
@@ -280,21 +280,21 @@ void cRSMModel::draw(bool checkfrust, bool dodraw)
 	glPopMatrix();
 }
 
-void cRSMModel::draw2(cBoundingbox* box, int mesh, float* transf, bool only, bool dodraw)
+void cRSMModel::draw2(cBoundingbox* box, int mesh, float* transf, bool only, bool dodraw, bool setheight)
 {
 	glPushMatrix();
-	meshes[mesh]->draw(box,transf, meshes.size() == 1, this, dodraw);
+	meshes[mesh]->draw(box,transf, meshes.size() == 1, this, dodraw, setheight);
 
 	for(int i = 0; i < meshes.size(); i++)
 	{
 		if(i != mesh && fathers[i] == mesh)
-			draw2((mesh == 0) ? box : NULL, i, meshes[mesh]->trans, only, dodraw);
+			draw2((mesh == 0) ? box : NULL, i, meshes[mesh]->trans, only, dodraw, setheight);
 	}
 	glPopMatrix();
 }
 
 
-void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel* model, bool dodraw)
+void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel* model, bool dodraw, bool setheight)
 {
 	bool main = (ptransf == NULL);
 	GLfloat Rot[16];
@@ -430,30 +430,54 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 		for(i = 0; i < nFaces; i++)
 		{
 			cRSMModelFace* f = &faces[i];
-			v1.x = min(v1.x, vertices[f->v[0]].x);
-			v1.y = min(v1.y, vertices[f->v[0]].y);
-			v1.z = min(v1.z, vertices[f->v[0]].z);
-			v1.x = min(v1.x, vertices[f->v[1]].x);
-			v1.y = min(v1.y, vertices[f->v[1]].y);
-			v1.z = min(v1.z, vertices[f->v[1]].z);
-			v1.x = min(v1.x, vertices[f->v[2]].x);
-			v1.y = min(v1.y, vertices[f->v[2]].y);
-			v1.z = min(v1.z, vertices[f->v[2]].z);
+			if(!setheight)
+			{
+				v1.x = min(v1.x, vertices[f->v[0]].x);
+				v1.y = min(v1.y, vertices[f->v[0]].y);
+				v1.z = min(v1.z, vertices[f->v[0]].z);
+				v1.x = min(v1.x, vertices[f->v[1]].x);
+				v1.y = min(v1.y, vertices[f->v[1]].y);
+				v1.z = min(v1.z, vertices[f->v[1]].z);
+				v1.x = min(v1.x, vertices[f->v[2]].x);
+				v1.y = min(v1.y, vertices[f->v[2]].y);
+				v1.z = min(v1.z, vertices[f->v[2]].z);
 
-			v2.x = max(v2.x, vertices[f->v[0]].x);
-			v2.y = max(v2.y, vertices[f->v[0]].y);
-			v2.z = max(v2.z, vertices[f->v[0]].z);
-			v2.x = max(v2.x, vertices[f->v[1]].x);
-			v2.y = max(v2.y, vertices[f->v[1]].y);
-			v2.z = max(v2.z, vertices[f->v[1]].z);
-			v2.x = max(v2.x, vertices[f->v[2]].x);
-			v2.y = max(v2.y, vertices[f->v[2]].y);
-			v2.z = max(v2.z, vertices[f->v[2]].z);
+				v2.x = max(v2.x, vertices[f->v[0]].x);
+				v2.y = max(v2.y, vertices[f->v[0]].y);
+				v2.z = max(v2.z, vertices[f->v[0]].z);
+				v2.x = max(v2.x, vertices[f->v[1]].x);
+				v2.y = max(v2.y, vertices[f->v[1]].y);
+				v2.z = max(v2.z, vertices[f->v[1]].z);
+				v2.x = max(v2.x, vertices[f->v[2]].x);
+				v2.y = max(v2.y, vertices[f->v[2]].y);
+				v2.z = max(v2.z, vertices[f->v[2]].z);
+			}
+			if(setheight)
+			{
+				for(int ii = 0; ii < 3; ii++)
+				{
+					float vmin[3];
+					MatrixMultVect(ModelMatrix, vertices[f->v[0]], vmin);
+					Graphics.world.cubes[ceil(vmin[2]/10.0)][ceil(vmin[0]/10.0)].minh = min(Graphics.world.cubes[ceil(vmin[2]/10.0)][ceil(vmin[0]/10.0)].minh, -vmin[1]);
+					Graphics.world.cubes[ceil(vmin[2]/10.0)][ceil(vmin[0]/10.0)].maxh = max(Graphics.world.cubes[ceil(vmin[2]/10.0)][ceil(vmin[0]/10.0)].maxh, -vmin[1]);
+					Graphics.world.cubes[ceil(vmin[2]/10.0)][floor(vmin[0]/10.0)].minh = min(Graphics.world.cubes[ceil(vmin[2]/10.0)][floor(vmin[0]/10.0)].minh, -vmin[1]);
+					Graphics.world.cubes[ceil(vmin[2]/10.0)][floor(vmin[0]/10.0)].maxh = max(Graphics.world.cubes[ceil(vmin[2]/10.0)][floor(vmin[0]/10.0)].maxh, -vmin[1]);
+					Graphics.world.cubes[floor(vmin[2]/10.0)][floor(vmin[0]/10.0)].minh = min(Graphics.world.cubes[floor(vmin[2]/10.0)][floor(vmin[0]/10.0)].minh, -vmin[1]);
+					Graphics.world.cubes[floor(vmin[2]/10.0)][floor(vmin[0]/10.0)].maxh = max(Graphics.world.cubes[floor(vmin[2]/10.0)][floor(vmin[0]/10.0)].maxh, -vmin[1]);
+					Graphics.world.cubes[floor(vmin[2]/10.0)][ceil(vmin[0]/10.0)].minh = min(Graphics.world.cubes[floor(vmin[2]/10.0)][ceil(vmin[0]/10.0)].minh, -vmin[1]);
+					Graphics.world.cubes[floor(vmin[2]/10.0)][ceil(vmin[0]/10.0)].maxh = max(Graphics.world.cubes[floor(vmin[2]/10.0)][ceil(vmin[0]/10.0)].maxh, -vmin[1]);
+				}
+			}
+
 		}
-		MatrixMultVect(ModelMatrix, v1, realbb.bbmin);
-		MatrixMultVect(ModelMatrix, v2, realbb.bbmax);
-	}
+		if(!setheight)
+		{
+			MatrixMultVect(ModelMatrix, v1, realbb.bbmin);
+			MatrixMultVect(ModelMatrix, v2, realbb.bbmax);
+		}
 
+
+	}
 	if(dodraw)
 	{
 		for(i = 0; i < nFaces; i++)

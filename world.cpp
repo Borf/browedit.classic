@@ -153,6 +153,7 @@ void cWorld::load()
 			string filename = buf+52;
 			cRSMModel* m = new cRSMModel();
 			m->load(rodir+ "model\\" + filename);
+			m->id = models.size();
 
 
 			m->pos.x = *((float*)(buf+212));
@@ -596,7 +597,7 @@ void cWorld::draw()
 				cTile* t = &tiles[c->tileup];
 				int texture = textures[t->texture]->texid();
 				glBindTexture(GL_TEXTURE_2D, texture);
-				if (editmode == MODE_WALLS && Graphics.showgrid && (c->tileaside != -1 || c->tileside != -1))
+				if (editmode == MODE_WALLS && Graphics.showgrid && (c->tileaside != -1 || c->tileside != -1) || c->minh != 99999)
 					glColor3f(1,0,1);
 				else
 					glColor3f(1,1,1);
@@ -1200,8 +1201,8 @@ void cQuadTreeNode::recalculate()
 	}
 	else
 	{
-		box1.y = -999999;
-		box2.y = 999999;
+		box1.y = -0;
+		box2.y = 0;
 		for(float x = box2.x; x < box1.x; x+= (box1.x - box2.x)/10.0)
 		{
 			for(float y = box2.z; y < box1.z; y+= (box1.z - box2.z)/10.0)
@@ -1214,25 +1215,32 @@ void cQuadTreeNode::recalculate()
 
 				if(tiley > -1 && tiley < Graphics.world.height && tilex > -1 && tilex < Graphics.world.height)
 				{
-					box1.y = max(box1.y, Graphics.world.cubes[Graphics.world.height - tiley-1][tilex].cell1);
-					box2.y = min(box2.y, Graphics.world.cubes[Graphics.world.height - tiley-1][tilex].cell1);
+					cCube* c = &Graphics.world.cubes[Graphics.world.height - tiley-1][tilex];
+					box1.y = max(box1.y, c->cell1);
+					box2.y = min(box2.y, c->cell1);
 
-					box1.y = max(box1.y, Graphics.world.cubes[Graphics.world.height - tiley-1][tilex].cell2);
-					box2.y = min(box2.y, Graphics.world.cubes[Graphics.world.height - tiley-1][tilex].cell2);
+					box1.y = max(box1.y, c->cell2);
+					box2.y = min(box2.y, c->cell2);
 
-					box1.y = max(box1.y, Graphics.world.cubes[Graphics.world.height - tiley-1][tilex].cell3);
-					box2.y = min(box2.y, Graphics.world.cubes[Graphics.world.height - tiley-1][tilex].cell3);
+					box1.y = max(box1.y, c->cell3);
+					box2.y = min(box2.y, c->cell3);
 
-					box1.y = max(box1.y, Graphics.world.cubes[Graphics.world.height - tiley-1][tilex].cell4);
-					box2.y = min(box2.y, Graphics.world.cubes[Graphics.world.height - tiley-1][tilex].cell4);
+					box1.y = max(box1.y, c->cell4);
+					box2.y = min(box2.y, c->cell4);
+
+					
+					box1.y = max(box1.y, c->maxh);
+					box2.y = min(box2.y, c->minh);
+
 				}
 				else
 				{
 				}
-				
 			}
-
 		}
+
+
+
 	}
 
 	range2.x = (box1.x+box2.x)/2.0f;
