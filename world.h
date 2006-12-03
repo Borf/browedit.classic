@@ -126,6 +126,16 @@ public:
 };
 
 
+class cGatTile
+{
+public:
+	float	cell1,
+			cell2,
+			cell3,
+			cell4;
+	int type;
+};
+
 class cWorld
 {
 
@@ -142,6 +152,7 @@ public:
 	vector<cLightmap> lightmaps;
 	vector<cTile> tiles;
 	vector<vector<cCube> > cubes;
+	vector<vector<cGatTile> > gattiles;
 
 	vector<cRSMModel*>	models;
 

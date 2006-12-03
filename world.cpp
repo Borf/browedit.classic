@@ -266,6 +266,30 @@ void cWorld::load()
 	}
 
 
+	pFile = fs.open(string(filename) + ".gat");
+
+	pFile->read(buf, 14);
+	
+	for(y = 0; y < height*2; y++)
+	{
+		vector<cGatTile> row;
+		for(int x = 0; x < width*2; x++)
+		{
+			cGatTile g;
+			pFile->read((char*)&g.cell1, 4);
+			pFile->read((char*)&g.cell2, 4);
+			pFile->read((char*)&g.cell3, 4);
+			pFile->read((char*)&g.cell4, 4);
+			g.type = pFile->get();
+
+			pFile->get();pFile->get();pFile->get();
+			row.push_back(g);
+		}
+		gattiles.push_back(row);
+	}
+
+	pFile->close();
+
 
 
 	Log(3,0,"Done Loading %s", filename);
@@ -545,6 +569,33 @@ void cWorld::save()
 
 		pFile.close();
 	}
+	{
+		ofstream pFile((string(filename) + ".gat").c_str(), ios_base::out | ios_base::binary);
+		pFile.write("GRAT\1\2", 6);
+		
+		long l = width*2;
+		pFile.write((char*)&l, 4);
+		l = height*2;
+		pFile.write((char*)&l, 4);
+
+		for(int y = 0; y < height*2; y++)
+		{
+			for(int x = 0; x < width*2; x++)
+			{
+				cGatTile* c = &gattiles[y][x];
+				pFile.write((char*)&c->cell1, 4);
+				pFile.write((char*)&c->cell2, 4);
+				pFile.write((char*)&c->cell3, 4);
+				pFile.write((char*)&c->cell4, 4);
+				pFile.put(c->type);
+				pFile.put(0);
+				pFile.put(0);
+				pFile.put(0);
+			}
+		}
+
+		pFile.close();
+	}
 }
 
 
@@ -610,11 +661,11 @@ void cWorld::draw()
 					glColor3f(1,0,1);
 				else
 					glColor3f(1,1,1);
-				glBegin(GL_QUADS);
+				glBegin(GL_TRIANGLE_STRIP);
 					glTexCoord2f(t->u1, 1-t->v1); glVertex3f(x*10,-c->cell1,(height-y)*10);
+					glTexCoord2f(t->u3, 1-t->v3); glVertex3f(x*10,-c->cell3,(height-y)*10-10);
 					glTexCoord2f(t->u2, 1-t->v2); glVertex3f(x*10+10,-c->cell2,(height-y)*10);
 					glTexCoord2f(t->u4, 1-t->v4); glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
-					glTexCoord2f(t->u3, 1-t->v3); glVertex3f(x*10,-c->cell3,(height-y)*10-10);
 				glEnd();
 			}
 			if (c->tileaside != -1 && c->tileaside < tiles.size())
@@ -870,8 +921,8 @@ void cWorld::draw()
 								fabs(ot->v3 - t->v4) > 0.1 ||
 								ot->texture != t->texture)
 							{
-								glVertex3f(x*10+10,-c->cell1+0.1,(height-y)*10);
-								glVertex3f(x*10+10,-c->cell2+0.1,(height-y)*10-10);
+								glVertex3f(x*10+10,-c->cell2+0.1,(height-y)*10);
+								glVertex3f(x*10+10,-c->cell4+0.1,(height-y)*10-10);
 							}
 						}
 
@@ -930,6 +981,74 @@ void cWorld::draw()
 				glVertex3f(x*10,-c->cell3+0.2,(height-y)*10-10);
 			glEnd();
 		}
+	}
+	else if (editmode == MODE_GAT)
+	{
+		glEnable(GL_BLEND);
+		for(y = 0; y < gattiles.size(); y++)
+		{
+			for(x = 0; x < gattiles[y].size(); x++)
+			{
+				cGatTile* c = &gattiles[y][x];
+				if(!Graphics.frustum.CubeInFrustum(x*5+2.5,-c->cell1,(2*height-y)*5-2.5, 5))
+					continue;
+				glColor4f(1,1,1, 0.5);
+
+				glEnable(GL_TEXTURE_2D);
+				glBindTexture(GL_TEXTURE_2D, Graphics.gattextures[c->type]->texid());
+
+				glBegin(GL_TRIANGLE_STRIP);
+					glTexCoord2f(0,0); glVertex3f(x*5,-c->cell1+0.1,(2*height-y)*5);
+					glTexCoord2f(1,0); glVertex3f(x*5+5,-c->cell2+0.1,(2*height-y)*5);
+					glTexCoord2f(0,1); glVertex3f(x*5,-c->cell3+0.1,(2*height-y)*5-5);
+					glTexCoord2f(1,1); glVertex3f(x*5+5,-c->cell4+0.1,(2*height-y)*5-5);
+				glEnd();
+
+				if(Graphics.showgrid)
+				{
+					glDisable(GL_TEXTURE_2D);
+					glColor4f(0,0,0,1);
+					glBegin(GL_LINE_LOOP);
+						glVertex3f(x*5,-c->cell1+0.1,(2*height-y)*5);
+						glVertex3f(x*5+5,-c->cell2+0.1,(2*height-y)*5);
+						glVertex3f(x*5+5,-c->cell4+0.1,(2*height-y)*5-5);
+						glVertex3f(x*5,-c->cell3+0.1,(2*height-y)*5-5);
+					glEnd();
+				}			
+			}
+		}
+
+
+		int posx = mouse3dx / 5;
+		int posy = mouse3dz / 5;
+
+		int s = ceil(Graphics.brushsize);
+
+		if (posx >= floor(brushsize/2.0f) && posx < 2*width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy< 2*height-ceil(brushsize/2.0f))
+		{
+			glColor4f(1,0,0,1);
+			glDisable(GL_TEXTURE_2D);
+			glDisable(GL_BLEND);
+			for(x = posx-floor(s/2.0f); x < posx+ceil(s/2.0f); x++)
+			{
+				for(y = posy-floor(s/2.0f); y < posy+ceil(s/2.0f); y++)
+				{
+					if (y < 0 || y >= height*2 || x < 0 || x >= width*2)
+						continue;
+					cGatTile* c = &gattiles[y][x];
+					glBegin(GL_LINE_LOOP);
+						glVertex3f(x*5,-c->cell1+0.3,(2*height-y)*5);
+						glVertex3f(x*5+5,-c->cell2+0.3,(2*height-y)*5);
+						glVertex3f(x*5+5,-c->cell4+0.3,(2*height-y)*5-5);
+						glVertex3f(x*5,-c->cell3+0.3,(2*height-y)*5-5);
+					glEnd();
+					
+
+				}
+			}
+		}
+
+		
 	}
 
 	if (Graphics.showobjects || editmode == MODE_OBJECTS)

@@ -39,7 +39,7 @@ string rodir;
 
 #define MENUCOMMAND(x) bool MenuCommand_ ## x (cMenuItem* src)
 
-int brushsize;
+int brushsize = 1;
 
 cTextureCache TextureCache;
 
@@ -67,6 +67,7 @@ MENUCOMMAND(slope);
 MENUCOMMAND(picktexture);
 MENUCOMMAND(quadtree);
 MENUCOMMAND(boundingboxes);
+MENUCOMMAND(gatheight);
 
 cMenu*	menu;
 cMenu* grid;
@@ -157,6 +158,7 @@ int main(int argc, char *argv[])
 
 	ADDMENUITEM(mm,mode,"Wall Edit",	&MenuCommand_mode);
 	ADDMENUITEM(mm,mode,"Object Edit",	&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,"GAT Edit",	&MenuCommand_mode);
 
 
 	ADDMENUITEM(mm,edit,"Flatten map",			&MenuCommand_flatten);
@@ -165,6 +167,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,edit,"Fill",					&MenuCommand_fill);
 	ADDMENUITEM(mm,edit,"Sloping",				&MenuCommand_slope);
 	ADDMENUITEM(mm,edit,"Quadtree",				&MenuCommand_quadtree);
+	ADDMENUITEM(mm,edit,"Set GAT height",		&MenuCommand_gatheight);
 
 	ADDMENU(speed,edit, "Speed", 480, 100);
 	ADDMENUITEM(mm,speed,"5",&MenuCommand_speed);
@@ -280,7 +283,7 @@ int main(int argc, char *argv[])
 		return 1;
 
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "izlude_in").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "customtown").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 #endif
@@ -686,6 +689,30 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							}
 						}
 					}
+					else if (editmode == MODE_GAT)
+					{
+						int posx = mouse3dx / 5;
+						int posy = mouse3dz / 5;
+
+						int f = ceil(Graphics.brushsize);
+
+					//	if (posx >= floor(f/2.0f) && posx < 2*Graphics.world.width-ceil(f/2.0f) && posy >= floor(f/2.0f) && posy< 2*Graphics.world.height-ceil(f/2.0f))
+						{
+							glColor4f(1,0,0,1);
+							glDisable(GL_TEXTURE_2D);
+							glDisable(GL_BLEND);
+							for(int x = posx-floor(f/2.0f); x < posx+ceil(f/2.0f); x++)
+							{
+								for(int y = posy-floor(f/2.0f); y < posy+ceil(f/2.0f); y++)
+								{
+									if (y < 0 || y >= Graphics.world.height*2 || x < 0 || x >= Graphics.world.width*2)
+										continue;
+									cGatTile* c = &Graphics.world.gattiles[y][x];
+									c->type = Graphics.texturestart;
+								}
+							}
+						}
+					}
 					if(editmode == MODE_OBJECTS)
 					{
 						int minobj = 0;
@@ -921,7 +948,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				else
 				{
 					Graphics.texturestart++;
-					if (Graphics.texturestart > Graphics.world.textures.size() - (Graphics.h() / 288))
+					if (Graphics.texturestart > (editmode == MODE_GAT ? 8 : Graphics.world.textures.size()) - (Graphics.h() / 288))
 						Graphics.texturestart--;
 				}
 				break;
@@ -1591,6 +1618,21 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						Graphics.quadtreeview = -1;
 				}
 				break;
+			case SDLK_0:
+			case SDLK_1:
+			case SDLK_2:
+			case SDLK_3:
+			case SDLK_4:
+			case SDLK_5:
+			case SDLK_6:
+			case SDLK_7:
+			case SDLK_8:
+			case SDLK_9:
+				if (editmode == MODE_GAT)
+				{
+					Graphics.gattype = event.key.keysym.sym - SDLK_0;
+				}
+				break;
 			default:
 				break;
 		}
@@ -1885,6 +1927,11 @@ MENUCOMMAND(mode)
 	{
 		editmode = MODE_OBJECTS;
 	}
+	else if (title == "GAT Edit")
+	{
+		editmode = MODE_GAT;
+		Graphics.texturestart = 0;
+	}
 	return true;
 }
 MENUCOMMAND(textures)
@@ -2051,5 +2098,39 @@ MENUCOMMAND(boundingboxes)
 {
 	src->ticked = !src->ticked;
 	Graphics.showboundingboxes = src->ticked;
+	return true;
+}
+
+MENUCOMMAND(gatheight)
+{
+	int x,y;
+	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+			cCube* c = &Graphics.world.cubes[y][x];
+			Graphics.world.gattiles[2*y][2*x].cell1 = (c->cell1+c->cell1) / 2.0f;
+			Graphics.world.gattiles[2*y][2*x].cell2 = (c->cell1+c->cell2) / 2.0f;
+			Graphics.world.gattiles[2*y][2*x].cell3 = (c->cell1+c->cell3) / 2.0f;
+			Graphics.world.gattiles[2*y][2*x].cell4 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
+
+			Graphics.world.gattiles[2*y][2*x+1].cell1 = (c->cell1+c->cell2) / 2.0f;
+			Graphics.world.gattiles[2*y][2*x+1].cell2 = (c->cell2+c->cell2) / 2.0f;
+			Graphics.world.gattiles[2*y][2*x+1].cell3 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
+			Graphics.world.gattiles[2*y][2*x+1].cell4 = (c->cell4+c->cell2) / 2.0f;
+
+			Graphics.world.gattiles[2*y+1][2*x+1].cell1 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
+			Graphics.world.gattiles[2*y+1][2*x+1].cell2 = (c->cell4 + c->cell2) / 2.0f;
+			Graphics.world.gattiles[2*y+1][2*x+1].cell3 = (c->cell4 + c->cell3) / 2.0f;
+			Graphics.world.gattiles[2*y+1][2*x+1].cell4 = (c->cell4 + c->cell4) / 2.0f;
+
+			Graphics.world.gattiles[2*y+1][2*x].cell1 = (c->cell3 + c->cell1) / 2.0f;
+			Graphics.world.gattiles[2*y+1][2*x].cell2 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
+			Graphics.world.gattiles[2*y+1][2*x].cell3 = (c->cell3 + c->cell3) / 2.0f;
+			Graphics.world.gattiles[2*y+1][2*x].cell4 = (c->cell3 + c->cell4) / 2.0f;
+		}
+
+	}
+	
 	return true;
 }

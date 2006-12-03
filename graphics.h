@@ -32,6 +32,7 @@ public:
 		slope = false;
 		quadtreeview = -1;
 		showboundingboxes = false;
+		gattype = 0;
 	}
 
 	int						init();				// initializes graphics
@@ -111,6 +112,8 @@ public:
 
 	int						quadtreeview;
 	bool					showboundingboxes;
+	int						gattype;
+	cTexture*				gattextures[7];
 
 
 private:

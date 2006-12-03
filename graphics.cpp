@@ -101,7 +101,14 @@ int cGraphics::draw()
 		glColor4f(1,1,1,1);
 		for(int i = 0; 288*i+256 < height; i++)
 		{
-			glBindTexture(GL_TEXTURE_2D, world.textures[i+texturestart]->texid());
+			if (editmode == MODE_GAT)
+			{
+				if (i+texturestart > 6)
+					continue;
+				glBindTexture(GL_TEXTURE_2D, gattextures[i+texturestart]->texid());
+			}
+			else
+				glBindTexture(GL_TEXTURE_2D, world.textures[i+texturestart]->texid());
 			glBegin(GL_QUADS);
 				glTexCoord2f(1,1);		glVertex2f( width, height-(32+288*i));
 				glTexCoord2f(1,0);		glVertex2f( width, height-(32+288*i+256));
@@ -218,6 +225,14 @@ int cGraphics::init()
 	mask->Load("data/textures/mask.tga");
 	bulb = new cTexture();
 	mask->Load("data/textures/interface/bulb.tga");
+
+	
+	for(int i = 0; i < 7; i++)
+	{
+		char buf[64];
+		sprintf(buf, "data/gat%i.tga", i);
+		gattextures[i] = TextureCache.load(buf);
+	}
 
 	previewmodel = NULL;
 
