@@ -1239,6 +1239,35 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 								Graphics.world.models[Graphics.selectedobject]->scale.y+=0.1 + shift ? 0.1 : 0;
 						}						
 					}
+					if(editmode == MODE_GAT)
+					{
+						int posx = mouse3dx / 5;
+						int posy = mouse3dz / 5;
+
+						float f = ceil(Graphics.brushsize);
+
+						if (posx >= floor(f/2.0f) && posx < 2*Graphics.world.width-ceil(f/2.0f) && posy >= floor(f/2.0f) && posy< 2*Graphics.world.height-ceil(f/2.0f))
+						{
+							glColor4f(1,0,0,1);
+							glDisable(GL_TEXTURE_2D);
+							glDisable(GL_BLEND);
+							for(int x = posx-floor(f/2.0f); x < posx+ceil(f/2.0f); x++)
+							{
+								for(int y = posy-floor(f/2.0f); y < posy+ceil(f/2.0f); y++)
+								{
+									cGatTile* c = &Graphics.world.gattiles[y][x];
+									if (!Graphics.slope || (x > posx-floor(f/2.0f)) && y > posy-floor(f/2.0f))
+										c->cell1+=1;
+									if (!Graphics.slope || (x < posx+ceil(f/2.0f)-1) && y > posy-floor(f/2.0f))
+										c->cell2+=1;
+									if (!Graphics.slope || (x > posx-floor(f/2.0f)) && y < posy+ceil(f/2.0f)-1)
+										c->cell3+=1;
+									if (!Graphics.slope || (x < posx+ceil(f/2.0f)-1) && y < posy+ceil(f/2.0f)-1)
+										c->cell4+=1;
+								}
+							}
+						}
+					}
 					break;
 				}
 			case SDLK_PAGEUP:
@@ -1298,6 +1327,35 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							if (!ctrl && alt)
 								Graphics.world.models[Graphics.selectedobject]->scale.y-=0.1 + shift ? 0.1 : 0;
 						}						
+					}
+					if(editmode == MODE_GAT)
+					{
+						int posx = mouse3dx / 5;
+						int posy = mouse3dz / 5;
+
+						float f = ceil(Graphics.brushsize);
+
+						if (posx >= floor(f/2.0f) && posx < 2*Graphics.world.width-ceil(f/2.0f) && posy >= floor(f/2.0f) && posy< 2*Graphics.world.height-ceil(f/2.0f))
+						{
+							glColor4f(1,0,0,1);
+							glDisable(GL_TEXTURE_2D);
+							glDisable(GL_BLEND);
+							for(int x = posx-floor(f/2.0f); x < posx+ceil(f/2.0f); x++)
+							{
+								for(int y = posy-floor(f/2.0f); y < posy+ceil(f/2.0f); y++)
+								{
+									cGatTile* c = &Graphics.world.gattiles[y][x];
+									if (!Graphics.slope || (x > posx-floor(f/2.0f)) && y > posy-floor(f/2.0f))
+										c->cell1-=1;
+									if (!Graphics.slope || (x < posx+ceil(f/2.0f)-1) && y > posy-floor(f/2.0f))
+										c->cell2-=1;
+									if (!Graphics.slope || (x > posx-floor(f/2.0f)) && y < posy+ceil(f/2.0f)-1)
+										c->cell3-=1;
+									if (!Graphics.slope || (x < posx+ceil(f/2.0f)-1) && y < posy+ceil(f/2.0f)-1)
+										c->cell4-=1;
+								}
+							}
+						}
 					}
 					break;
 				}
@@ -1521,6 +1579,32 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 								MenuCommand_model((cMenuItem*)currentobject);
 						}
 					}
+					if (editmode == MODE_GAT)
+					{
+						int posx = mouse3dx / 5;
+						int posy = mouse3dz / 5;
+
+						int f = ceil(Graphics.brushsize);
+
+						if (posx >= floor(f/2.0f) && posx < 2*Graphics.world.width-ceil(f/2.0f) && posy >= f && posy< 2*Graphics.world.height-f)
+						{
+							clipboard.clear();
+							for(int y = posy-floor(f/2.0f); y < posy+ceil(f/2.0f); y++)
+							{
+								vector<vector<float> > row;
+								for(int x = posx-floor(f/2.0f); x < posx+ceil(f/2.0f); x++)
+								{
+									vector<float> c;
+									c.push_back(Graphics.world.gattiles[y][x].cell1);
+									c.push_back(Graphics.world.gattiles[y][x].cell2);
+									c.push_back(Graphics.world.gattiles[y][x].cell3);
+									c.push_back(Graphics.world.gattiles[y][x].cell4);
+									row.push_back(c);
+								}
+								clipboard.push_back(row);
+							}
+						}
+					}
 					break;
 				}
 			case SDLK_p:
@@ -1530,7 +1614,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						int posx = mouse3dx / 10;
 						int posy = mouse3dz / 10;
 
-						if (posx >= floor(brushsize/2.0f) && posx < Graphics.world.width-ceil(brushsize/2.0f) && posy >= brushsize && posy< Graphics.world.height-brushsize)
+						if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy <= Graphics.world.height-ceil(brushsize/2.0f))
 						{
 							int yy = 0;
 							for(int y = posy-floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
@@ -1539,6 +1623,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 								int xx = 0;
 								for(int x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f); x++)
 								{
+									if (x >= Graphics.world.width || x < 0 || y < 0 || y >= Graphics.world.height)
+										continue;
 									Graphics.world.cubes[y][x].cell1 = clipboard[yy][xx][0];
 									Graphics.world.cubes[y][x].cell2 = clipboard[yy][xx][1];
 									Graphics.world.cubes[y][x].cell3 = clipboard[yy][xx][2];
@@ -1559,6 +1645,31 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						model->id = Graphics.world.models.size();
 						Graphics.world.models.push_back(model);
 						Graphics.selectedobject = Graphics.world.models.size()-1;
+					}
+					if (editmode == MODE_GAT)
+					{
+						int posx = mouse3dx / 5;
+						int posy = mouse3dz / 5;
+
+						int f = ceil(Graphics.brushsize);
+
+						if (posx >= floor(f/2.0f) && posx < 2*Graphics.world.width-ceil(f/2.0f) && posy >= f && posy< 2*Graphics.world.height-f)
+						{
+							int yy = 0;
+							for(int y = posy-floor(f/2.0f); y < posy+ceil(f/2.0f); y++)
+							{
+								int xx = 0;
+								for(int x = posx-floor(f/2.0f); x < posx+ceil(f/2.0f); x++)
+								{
+									Graphics.world.gattiles[y][x].cell1 = clipboard[yy][xx][0];
+									Graphics.world.gattiles[y][x].cell2 = clipboard[yy][xx][1];
+									Graphics.world.gattiles[y][x].cell3 = clipboard[yy][xx][2];
+									Graphics.world.gattiles[y][x].cell4 = clipboard[yy][xx][3];
+									xx++;
+								}
+								yy++;
+							}
+						}
 					}
 					break;
 				}

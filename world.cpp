@@ -396,8 +396,28 @@ void cWorld::save()
 		quadtreefloats.clear();
 		if(root != NULL)
 		{
-			root->recalculate();
+			int x,y;
+			for(x = 0; x < width; x++)
+				for(y = 0; y < height; y++)
+				{
+					cubes[y][x].maxh = -99999;
+					cubes[y][x].minh = 99999;
+				}
+
+			for(int i = 0; i < models.size(); i++)
+			{
+				models[i]->draw(false,false,true);
+			}
+
+
+			Graphics.world.root->recalculate();
 			root->save(quadtreefloats);
+			for(x = 0; x < width; x++)
+				for(y = 0; y < height; y++)
+				{
+					cubes[y][x].maxh = -99999;
+					cubes[y][x].minh = 99999;
+				}
 		}
 
 //		for(int ii = 0; ii < quadtreefloats.size(); ii++)
@@ -941,7 +961,7 @@ void cWorld::draw()
 		int posx = mouse3dx / 10;
 		int posy = mouse3dz / 10;
 
-		if (posx >= floor(brushsize/2.0f) && posx < width-ceil(brushsize/2.0f) && posy >= brushsize && posy< height-brushsize)
+		if (posx >= floor(brushsize/2.0f) && posx <= width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= height-ceil(brushsize/2.0f))
 		{
 			glColor4f(1,0,0,1);
 			glDisable(GL_TEXTURE_2D);
