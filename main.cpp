@@ -476,8 +476,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							Graphics.world.models[Graphics.selectedobject]->pos.z = mouse3dz / 5;
 							if (SDL_GetModState() & KMOD_SHIFT)
 							{
-								Graphics.world.models[Graphics.selectedobject]->pos.x = floor(Graphics.world.models[Graphics.selectedobject]->pos.x / 2.5) * 2.5;
-								Graphics.world.models[Graphics.selectedobject]->pos.z = floor(Graphics.world.models[Graphics.selectedobject]->pos.z / 2.5) * 2.5;
+								Graphics.world.models[Graphics.selectedobject]->pos.x = floor(Graphics.world.models[Graphics.selectedobject]->pos.x+0.5f / 1) * 1;
+								Graphics.world.models[Graphics.selectedobject]->pos.z = floor(Graphics.world.models[Graphics.selectedobject]->pos.z+0.5f / 1) * 1;
 							}
 						}
 						if(ctrl && !alt)
@@ -1652,6 +1652,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						int posy = mouse3dz / 5;
 
 						int f = ceil(Graphics.brushsize);
+
+						if (clipboard.size() != f)
+							break;
 
 						if (posx >= floor(f/2.0f) && posx < 2*Graphics.world.width-ceil(f/2.0f) && posy >= f && posy< 2*Graphics.world.height-f)
 						{
