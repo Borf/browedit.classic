@@ -1,7 +1,6 @@
 cities/|
 dungeons/|
 
-
 Others/|
 Others/furniture/|
 Others/furniture/Wall-cupboard1|model\내부소품\찬장1.rsm
@@ -1467,6 +1466,7 @@ cities/prontera/houses/house-11|model\프론테라\상인협회01.rsm
 cities/prontera/houses/house-12|model\프론테라\여관.rsm
 cities/prontera/houses/house-13-w-ramp|model\프론테라\직업소개소.rsm
 cities/prontera/houses/house-14|model\프론테라\창고.rsm
+cities/prontera/houses/house-15|model\프론테라\도서관.rsm
 cities/prontera/houses/shop-1|model\프론테라\대성당.rsm
 cities/prontera/houses/shop-2|model\프론테라\무기점.rsm
 cities/prontera/houses/guard-booth|model\프론테라\입구초소.rsm
@@ -1474,9 +1474,8 @@ cities/prontera/houses/pub|model\프론테라\주점.rsm
 cities/prontera/castles/castle-1|model\프론테라\기사단.rsm
 cities/prontera/castles/castle-2|model\프론테라\프론테라성입구.rsm
 cities/prontera/castles/castle-3|model\프론테라\프론테라아레나.rsm
-cities/prontera/castles/gcastle-1|model\프론테라\목각인형.rsm
-cities/prontera/castles/gcastle-2|model\프론테라\몽크건물01.rsm
-cities/prontera/castles/gcastle-3|model\프론테라\몽크건물07.rsm
+cities/prontera/castles/gcastle-1|model\프론테라\몽크건물01.rsm
+cities/prontera/castles/gcastle-2|model\프론테라\몽크건물07.rsm
 cities/prontera/castles/Church-1|model\프론테라\대성당.rsm
 cities/prontera/castles/Church-2|model\프론테라\몽크건물04.rsm
 cities/prontera/castle-parts/tower-1|model\프론테라\몽크건물08.rsm
@@ -1494,7 +1493,7 @@ cities/prontera/fences-n-walls/wall-2|model\프론테라\시계탑벽.rsm
 cities/prontera/fences-n-walls/wall-tower-1|model\프론테라\후문기둥.rsm
 cities/prontera/decor/pedestal-1|model\프론테라\난간기둥.rsm
 cities/prontera/decor/pedestal-2|model\프론테라\몽크건물03.rsm
-cities/prontera/decor/grave-1|model\프론테라\도서관.rsm
+cities/prontera/decor/grave1|model\프론테라\목각인형.rsm
 cities/prontera/decor/pillar-1|model\프론테라\몽크건물02.rsm
 cities/prontera/decor/pillar-2|model\프론테라\몽크건물05.rsm
 cities/prontera/decor/pillar-3|model\프론테라\몽크건물06.rsm
