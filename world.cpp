@@ -579,6 +579,7 @@ void cWorld::save()
 			pFile.write((char*)&m->scale.z, 4);
 
 		}
+		Log(3,0,"%i objects written", models.size());
 
 		for(i = 0; i < quadtreefloats.size(); i++)
 		{
