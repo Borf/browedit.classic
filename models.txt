@@ -56,6 +56,32 @@ Others/aldebaran/door1|model\길드전\알데_악세서리2.rsm
 Others/aldebaran/emperium1|model\길드전\엠펠리움.rsm
 Others/aldebaran/emperium2|model\길드전\엠펠리움1.rsm
 
+Others/Nature/|
+Others/Nature/Flowers-n-plants/Flower1|model\움발라\이그-꽃.rsm
+Others/Nature/Flowers-n-plants/Grass1|model\라헬\풀01.rsm
+Others/Nature/Flowers-n-plants/Grass2|model\라헬\풀02.rsm
+Others/Nature/Flowers-n-plants/Grass3|model\라헬\풀03.rsm
+Others/Nature/Flowers-n-plants/Grass4|model\라헬\풀04.rsm
+Others/Nature/Flowers-n-plants/Grass5|model\라헬\풀05.rsm
+Others/Nature/Flowers-n-plants/Grass6|model\라헬\풀06.rsm
+Others/Decor/Town-n-garden/Fountain1|model\휘겔\휘겔_분수01.rsm
+Others/Decor/Town-n-garden/statue-1|model\프론테라\분수대.rsm
+Others/Decor/Town-n-garden/statue-2|model\거북이섬\거북_동상.rsm
+Others/Decor/Town-n-garden/statue-3|model\아인브로크\동상.rsm
+Others/Decor/Town-n-garden/flag-1|model\프론테라\휘장.rsm
+Others/Decor/Town-n-garden/flag-2|model\프론테라\휘장가로등.rsm
+Others/Decor/Town-n-garden/stand-1|model\프론테라\상점01.rsm
+Others/Decor/Town-n-garden/stand-2|model\프론테라\상점02.rsm
+Others/Decor/Town-n-garden/stand-3|model\프론테라\상점03.rsm
+Others/Decor/Town-n-garden/stand-4|model\프론테라\상점04.rsm
+Others/Decor/Town-n-garden/stand-5|model\프론테라\상점05.rsm
+Others/Decor/Town-n-garden/grave1|model\프론테라\목각인형.rsm
+Others/Decor/Town-n-garden/pedestal-1|model\프론테라\난간기둥.rsm
+Others/Decor/Town-n-garden/pedestal-2|model\프론테라\몽크건물03.rsm
+Others/Decor/Town-n-garden/Bird-feeder|model\라헬\이정표01.rsm
+Others/Decor/Town-n-garden/Bird-1|model\라헬\이정표02.rsm
+Others/Decor/Town-n-garden/garden-stand|model\라헬\정자.rsm
+
 subdir1/|
 subdir1/guild/model4|model\길드전\게펜_건물1.rsm
 subdir1/guild/model5|model\길드전\게펜_건물2.rsm
@@ -1512,13 +1538,6 @@ cities/prontera/doors-n-gates/door-3|model\프론테라\문03.rsm
 cities/prontera/doors-n-gates/gate-1|model\프론테라\성_앞문.rsm
 cities/prontera/doors-n-gates/gate-2|model\프론테라\시계탑.rsm
 cities/prontera/bridges/bridge-1|model\프론테라\성_다리.rsm
-
-
-
-
-
-
-
 
 
 cities/payon/model1587|model\페이욘\가구1.rsm
