@@ -3,7 +3,7 @@ dungeons/|
 
 
 Others/|
-Others/Furniture/|
+Others/furniture/|
 Others/furniture/Wall-cupboard1|model\내부소품\찬장1.rsm
 Others/furniture/Wall-cupboard2|model\내부소품\찬장2.rsm
 Others/furniture/books1|model\내부소품\책꽃이1.rsm
@@ -11,10 +11,6 @@ Others/furniture/books2|model\내부소품\책무덤01.rsm
 Others/furniture/Wall-cupboard3|model\내부소품\책장01.rsm
 Others/furniture/Wall-cupboard4|model\내부소품\책장02.rsm
 Others/furniture/Bench|model\내부소품\천정버팀.rsm
-Others/Walls-n-fences/fence1|model\내부소품\철조망.rsm
-Others/Walls-n-fences/under-fence1|model\아인브로크\레일00.rsm
-Others/structure/block|model\내부소품\천정틀.rsm
-Others/structure/bridge|model\내부소품\철다리.rsm
 Others/furniture/Bed1|model\내부소품\침대1.rsm
 Others/furniture/Bed2|model\내부소품\침대3.rsm
 Others/furniture/Bed3|model\내부소품\침대4.rsm
@@ -24,6 +20,10 @@ Others/furniture/reception-desk3|model\내부소품\탁상3.rsm
 Others/furniture/Table-1|model\내부소품\테이블1.rsm
 Others/furniture/Table-2|model\내부소품\테이블2.rsm
 Others/furniture/Table-3|model\내부소품\테이블3.rsm
+Others/Walls-n-fences/fence1|model\내부소품\철조망.rsm
+Others/Walls-n-fences/under-fence1|model\아인브로크\레일00.rsm
+Others/structure/block|model\내부소품\천정틀.rsm
+Others/structure/bridge|model\내부소품\철다리.rsm
 Others/Castle/Gate1|model\내부소품\프론아레나1-1.rsm
 Others/Castle/Wall1|model\내부소품\프론아레나1-2.rsm
 Others/Castle/Wall2|model\내부소품\프론아레나1-3.rsm
