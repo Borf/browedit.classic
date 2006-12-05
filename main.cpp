@@ -201,6 +201,7 @@ int main(int argc, char *argv[])
 	level[models] = 0;
 
 	pFile = fs.open("models.txt");
+	Log(3,0,"Loading models.txt");
 	while(!pFile->eof())
 	{
 		string line = pFile->readline();
@@ -233,6 +234,8 @@ int main(int argc, char *argv[])
 		
 	}
 	models->sort();
+	Log(3,0,"done loading models.txt");
+	Log(3,0,"Loading textures.txt");
 	pFile->close();
 
 
@@ -272,8 +275,9 @@ int main(int argc, char *argv[])
 		}
 		
 	}
-	models->sort();
+	textures->sort();
 	pFile->close();
+	Log(3,0,"done loading textures.txt");
 
 
 	lastlclick = 0;
@@ -653,7 +657,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						int posx = mouse3dx / 10;
 						int posy = mouse3dz / 10;
 
-						if (posx >= floor(brushsize/2.0f) && posx < Graphics.world.width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy< Graphics.world.height-ceil(brushsize/2.0f))
+						if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= Graphics.world.height-ceil(brushsize/2.0f))
 						{
 							glColor4f(1,0,0,1);
 							glDisable(GL_TEXTURE_2D);
@@ -1546,7 +1550,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						int posx = mouse3dx / 10;
 						int posy = mouse3dz / 10;
 
-						if (posx >= floor(brushsize/2.0f) && posx < Graphics.world.width-ceil(brushsize/2.0f) && posy >= brushsize && posy< Graphics.world.height-brushsize)
+						if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= Graphics.world.height-ceil(brushsize/2.0f))
 						{
 							clipboard.clear();
 							for(int y = posy-floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
@@ -1614,7 +1618,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						int posx = mouse3dx / 10;
 						int posy = mouse3dz / 10;
 
-						if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy <= Graphics.world.height-ceil(brushsize/2.0f))
+//						if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy <= Graphics.world.height-ceil(brushsize/2.0f))
 						{
 							int yy = 0;
 							for(int y = posy-floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
@@ -1705,7 +1709,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					y = y;
 
 
-					if (x >= 0 && x < Graphics.world.width-ceil(brushsize/2.0f) && y >= brushsize && y < Graphics.world.height-brushsize)
+					if (x >= 0 && x <= Graphics.world.width-ceil(brushsize/2.0f) && y >= 0 && y <= Graphics.world.height-ceil(brushsize/2.0f))
 					{
 						float to = Graphics.world.cubes[y][x].cell2;
 						Graphics.world.cubes[y][x].cell2 = to;
@@ -2154,11 +2158,13 @@ MENUCOMMAND(model)
 	delete Graphics.previewmodel;
 	Graphics.previewmodel = new cRSMModel();
 	Graphics.previewmodel->load(rodir + src->data);
-	Graphics.previewmodel->pos = cVector3(40,-40,-40);
 	Graphics.previewmodel->rot = cVector3(0,0,0);
 	Graphics.previewmodel->scale = cVector3(4,4,4);
 
-	Graphics.previewcolor = 200;
+	Graphics.previewmodel->pos = cVector3(40,-40,-40);
+
+	if (editmode != MODE_OBJECTS)
+		Graphics.previewcolor = 200;
 	currentobject = src;
 	Log(3,0,"Meshcount: %i", Graphics.previewmodel->meshes.size());
 	return true;

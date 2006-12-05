@@ -1115,7 +1115,7 @@ void cWorld::draw()
 			glTranslatef(-5*sounds[i].pos.x, sounds[i].pos.y-5, -5*(2*height-sounds[i].pos.z));
 		}
 
-		if(editmode == MODE_OBJECTS)
+		if(editmode == MODE_OBJECTS && Graphics.showgrid)
 		{
 			glDisable(GL_TEXTURE_2D);
 			glBegin(GL_QUADS);
