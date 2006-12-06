@@ -23,6 +23,7 @@ leftclick				raise brush
 rightclick+leftclick			lower brush
 c					copy
 p					paste
+f					merge cellheights (used for sloping)
 
 
 Wall edit
@@ -45,9 +46,40 @@ pagedown				move right part of walltexture to the left
 home
 end
 
-
+c					copy
+p					paste
+g					mark cells with a wall purple (to detect 0-height walls)
 
 
 
 Object edit
 -----------
+ctrl+leftclick				add object
+c					copy model, size & rotation
+p					paste model, size & rotatation
+leftclick				select object
+rightclick				deselect object
+left-drag				move selected object
+shift+left-drag				move selected object (on grid)
+ctrl-left-drag				rotate selected object
+shift+ctrl-left-drag			rotate selected object (on grid)
+alt-left-drag				scale selected object
+pageup/pagedown				move on y-axis
+left/right				move on x-axis
+up/down					move on z-axis
+ctrl+pageup/pagedown			rotate on y-axis
+ctrl+left/right				rotate on x-axis
+ctrl+up/down				rotate on z-axis
+alt+pageup/pagedown			scale on y-axis
+alt+left/right				scale on x-axis
+alt+up/down				scale on z-axis
+g					show object handles (red blocks)
+
+gat edit
+--------
+left-click				change brush to selected tile
+[,]					change selected tile
+pageup/pagedown				move gat tile up/down
+c					copy height
+p					paste height
++/-					change brushsize
