@@ -64,6 +64,7 @@ Others/Nature/Flowers-n-plants/Grass3|model\¶óÇï\Ç®03.rsm
 Others/Nature/Flowers-n-plants/Grass4|model\¶óÇï\Ç®04.rsm
 Others/Nature/Flowers-n-plants/Grass5|model\¶óÇï\Ç®05.rsm
 Others/Nature/Flowers-n-plants/Grass6|model\¶óÇï\Ç®06.rsm
+Others/Decor/|
 Others/Decor/Town-n-garden/Fountain1|model\ÈÖ°Ö\ÈÖ°Ö_ºĞ¼ö01.rsm
 Others/Decor/Town-n-garden/statue-1|model\ÇÁ·ĞÅ×¶ó\ºĞ¼ö´ë.rsm
 Others/Decor/Town-n-garden/statue-2|model\°ÅºÏÀÌ¼¶\°ÅºÏ_µ¿»ó.rsm
