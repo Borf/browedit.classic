@@ -136,10 +136,22 @@ public:
 	int type;
 };
 
+class cWater
+{
+public:
+	float	height;
+	int		type;
+	float	amplitude;
+	float	phase;
+	float	surfacecurve;
+	int		texcycle;
+};
+
 class cWorld
 {
 
 public:
+	cWater water;
 	bool loaded;
 
 	char filename[128];

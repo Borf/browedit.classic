@@ -136,6 +136,7 @@ enum eMode
 	MODE_WALLS,
 	MODE_OBJECTS,
 	MODE_GAT,
+	MODE_WATER,
 };
 
 

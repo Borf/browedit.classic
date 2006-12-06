@@ -21,6 +21,7 @@ extern eMode			editmode;
 float f = 0;
 extern bool				lbuttondown;
 extern cMenu*			currentobject;
+extern string			rodir;
 
 double mouse3dx, mouse3dy, mouse3dz;
 
@@ -106,6 +107,16 @@ int cGraphics::draw()
 				if (i+texturestart > 6)
 					continue;
 				glBindTexture(GL_TEXTURE_2D, gattextures[i+texturestart]->texid());
+			}
+			else if (editmode == MODE_WATER)
+			{
+				if (i+world.water.type > 5)
+					continue;
+				static float frame = 0;
+				glBindTexture(GL_TEXTURE_2D, watertextures[i+world.water.type][floor(frame)]->texid());
+				frame+=0.25;
+				if (frame > 31)
+					frame = 0;
 			}
 			else
 				glBindTexture(GL_TEXTURE_2D, world.textures[i+texturestart]->texid());
@@ -232,6 +243,17 @@ int cGraphics::init()
 		char buf[64];
 		sprintf(buf, "data/gat%i.tga", i);
 		gattextures[i] = TextureCache.load(buf);
+	}
+
+	watertextures.resize(6);
+	for(i = 0; i < 6; i++)
+	{
+		for(int ii = 0; ii < 32; ii++)
+		{
+			char buf[100];
+			sprintf(buf, "%stexture\\ฟ๖ลอ\\water%i%02i.jpg", rodir.c_str(), i, ii);
+			watertextures[i].push_back(TextureCache.load(buf));
+		}
 	}
 
 	previewmodel = NULL;

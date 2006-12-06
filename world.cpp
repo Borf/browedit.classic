@@ -140,6 +140,16 @@ void cWorld::load()
 	pFile->read(buf, 242);
 	useless = string(buf+166, 76);
 
+	char* w = (char*)useless.c_str();
+	water.height = *((float*)(w));
+	water.type = *((int*)(w+4));
+	water.amplitude = *((float*)(w+8));
+	water.phase = *((float*)(w+12));
+	water.surfacecurve = *((float*)(w+16));
+	water.texcycle = *((int*)(w+20));
+	
+	
+
 	pFile->read(buf, 4);
 	long nObjects = *((long*)buf);
 
@@ -523,7 +533,10 @@ void cWorld::save()
 		for(i = 0; i < 40-strlen(fname)-4; i++)
 			pFile.put('\0');
 
-		pFile.write(useless.c_str(), useless.length());
+
+		pFile.write((char*)&water.height, 4);
+		pFile.write((char*)&water.type, 4);
+		pFile.write(useless.c_str()+8, useless.length()-8);
 
 		long count = models.size();// + lights.size() + effects.size() + sounds.size();
 		pFile.write((char*)&count, 4);
@@ -1233,6 +1246,28 @@ void cWorld::draw()
 	}
 	glColor3f(1,1,1);
 */
+
+	glEnable(GL_BLEND);
+	glEnable(GL_TEXTURE_2D);
+
+	glColor4f(1,1,1,0.5);
+
+
+	static float waterindex = 0;
+
+	glBindTexture(GL_TEXTURE_2D, Graphics.watertextures[water.type][ceil(waterindex)]->texid());
+
+	waterindex+=0.5f;
+	if (waterindex > 31)
+		waterindex = 0;
+	glBegin(GL_QUADS);
+		glTexCoord2f(0,0); glVertex3f(0,-water.height,0);
+		glTexCoord2f(water.texcycle,0); glVertex3f(10*width,-water.height,0);
+		glTexCoord2f(water.texcycle,water.texcycle); glVertex3f(10*width,-water.height,10*height);
+		glTexCoord2f(0,water.texcycle); glVertex3f(0,-water.height,10*height);
+	glEnd();
+	glDisable(GL_BLEND);
+
 
 	glTranslatef(-Graphics.camerapointer.x, 0, -Graphics.camerapointer.y);
 

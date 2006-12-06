@@ -114,6 +114,7 @@ public:
 	bool					showboundingboxes;
 	int						gattype;
 	cTexture*				gattextures[7];
+	vector<vector<cTexture*> >		watertextures;
 
 
 private:

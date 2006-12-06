@@ -159,6 +159,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,mode,"Wall Edit",	&MenuCommand_mode);
 	ADDMENUITEM(mm,mode,"Object Edit",	&MenuCommand_mode);
 	ADDMENUITEM(mm,mode,"GAT Edit",	&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,"Water Edit",	&MenuCommand_mode);
 
 
 	ADDMENUITEM(mm,edit,"Flatten map",			&MenuCommand_flatten);
@@ -935,6 +936,10 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					currentobject = currentobject->parent->getprev(currentobject);
 					MenuCommand_model((cMenuItem*)currentobject);
 				}
+				else if (editmode == MODE_WATER)
+				{
+					Graphics.world.water.type = max(0, Graphics.world.water.type - 1);
+				}
 				else
 				{
 					Graphics.texturestart--;
@@ -947,7 +952,10 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					currentobject = currentobject->parent->getnext(currentobject);
 					MenuCommand_model((cMenuItem*)currentobject);
-
+				}
+				else if (editmode == MODE_WATER)
+				{
+					Graphics.world.water.type = min(5, Graphics.world.water.type + 1);
 				}
 				else
 				{
@@ -1272,6 +1280,10 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							}
 						}
 					}
+					if (editmode == MODE_WATER)
+					{
+						Graphics.world.water.height++;
+					}
 					break;
 				}
 			case SDLK_PAGEUP:
@@ -1360,6 +1372,10 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 								}
 							}
 						}
+					}
+					if (editmode == MODE_WATER)
+					{
+						Graphics.world.water.height--;
 					}
 					break;
 				}
@@ -2028,14 +2044,20 @@ MENUCOMMAND(mode)
 	if(title == "Global Terrain Edit")
 	{
 		editmode = MODE_HEIGHTGLOBAL;
+		if (Graphics.texturestart >= Graphics.world.textures.size())
+			Graphics.texturestart = 0;
 	}
 	else if (title == "Detail Terrain Edit...")
 	{
 		editmode = MODE_HEIGHTDETAIL;
+		if (Graphics.texturestart >= Graphics.world.textures.size())
+			Graphics.texturestart = 0;
 	}
 	else if (title == "Texture Edit")
 	{
 		editmode = MODE_TEXTURE;
+		if (Graphics.texturestart >= Graphics.world.textures.size())
+			Graphics.texturestart = 0;
 	}
 	else if (title == "Wall Edit")
 	{
@@ -2044,11 +2066,19 @@ MENUCOMMAND(mode)
 	else if (title == "Object Edit")
 	{
 		editmode = MODE_OBJECTS;
+		if (Graphics.texturestart >= Graphics.world.textures.size())
+			Graphics.texturestart = 0;
 	}
 	else if (title == "GAT Edit")
 	{
 		editmode = MODE_GAT;
-		Graphics.texturestart = 0;
+		if (Graphics.texturestart >= 6)
+			Graphics.texturestart = 0;
+	}
+	else if (title == "Water Edit")
+	{
+		editmode = MODE_WATER;
+		Graphics.texturestart = Graphics.world.water.type;
 	}
 	return true;
 }
