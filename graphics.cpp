@@ -257,22 +257,6 @@ int cGraphics::init()
 	}
 
 
-	glMultiTexCoord1fARB	= (PFNGLMULTITEXCOORD1FARBPROC)		wglGetProcAddress("glMultiTexCoord1fARB");
-	glMultiTexCoord2fARB	= (PFNGLMULTITEXCOORD2FARBPROC)		wglGetProcAddress("glMultiTexCoord2fARB");
-	glMultiTexCoord3fARB	= (PFNGLMULTITEXCOORD3FARBPROC)		wglGetProcAddress("glMultiTexCoord3fARB");
-	glMultiTexCoord4fARB	= (PFNGLMULTITEXCOORD4FARBPROC)		wglGetProcAddress("glMultiTexCoord4fARB");
-	glActiveTextureARB		= (PFNGLACTIVETEXTUREARBPROC)		wglGetProcAddress("glActiveTextureARB");
-	glClientActiveTextureARB= (PFNGLCLIENTACTIVETEXTUREARBPROC)	wglGetProcAddress("glClientActiveTextureARB");		
-
-	
-	// Here we make sure that the functions were loaded properly
-	if(!glActiveTextureARB || !glClientActiveTextureARB)
-	{
-		// Display an error message and quit
-		Log(1,0, "Warning: Your video card doesn't support multitexturing, you will not see any lighting");
-	}
-
-
 	previewmodel = NULL;
 
 	return 1;

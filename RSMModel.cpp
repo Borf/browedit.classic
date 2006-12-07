@@ -458,14 +458,23 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 				{
 					float vmin[3];
 					MatrixMultVect(ModelMatrix, vertices[f->v[0]], vmin);
-					Graphics.world.cubes[ceil(vmin[2]/10.0)][ceil(vmin[0]/10.0)].minh = min(Graphics.world.cubes[ceil(vmin[2]/10.0)][ceil(vmin[0]/10.0)].minh, -vmin[1]);
-					Graphics.world.cubes[ceil(vmin[2]/10.0)][ceil(vmin[0]/10.0)].maxh = max(Graphics.world.cubes[ceil(vmin[2]/10.0)][ceil(vmin[0]/10.0)].maxh, -vmin[1]);
-					Graphics.world.cubes[ceil(vmin[2]/10.0)][floor(vmin[0]/10.0)].minh = min(Graphics.world.cubes[ceil(vmin[2]/10.0)][floor(vmin[0]/10.0)].minh, -vmin[1]);
-					Graphics.world.cubes[ceil(vmin[2]/10.0)][floor(vmin[0]/10.0)].maxh = max(Graphics.world.cubes[ceil(vmin[2]/10.0)][floor(vmin[0]/10.0)].maxh, -vmin[1]);
-					Graphics.world.cubes[floor(vmin[2]/10.0)][floor(vmin[0]/10.0)].minh = min(Graphics.world.cubes[floor(vmin[2]/10.0)][floor(vmin[0]/10.0)].minh, -vmin[1]);
-					Graphics.world.cubes[floor(vmin[2]/10.0)][floor(vmin[0]/10.0)].maxh = max(Graphics.world.cubes[floor(vmin[2]/10.0)][floor(vmin[0]/10.0)].maxh, -vmin[1]);
-					Graphics.world.cubes[floor(vmin[2]/10.0)][ceil(vmin[0]/10.0)].minh = min(Graphics.world.cubes[floor(vmin[2]/10.0)][ceil(vmin[0]/10.0)].minh, -vmin[1]);
-					Graphics.world.cubes[floor(vmin[2]/10.0)][ceil(vmin[0]/10.0)].maxh = max(Graphics.world.cubes[floor(vmin[2]/10.0)][ceil(vmin[0]/10.0)].maxh, -vmin[1]);
+					int y1 = ceil(vmin[2]/10.0);
+					int y2 = floor(vmin[2]/10.0);
+					int x1 = ceil(vmin[0]/10.0);
+					int x2 = floor(vmin[0]/10.0);
+
+					if (y1 < 0 || y2 < 0 || x1 < 0 || x2 < 0 ||
+						y1 >= Graphics.world.height || y2 >= Graphics.world.height || x1 >= Graphics.world.width || y2 >= Graphics.world.width)
+						continue;
+
+					Graphics.world.cubes[y1][x1].minh = min(Graphics.world.cubes[y1][x1].minh, -vmin[1]);
+					Graphics.world.cubes[y1][x1].maxh = max(Graphics.world.cubes[y1][x1].maxh, -vmin[1]);
+					Graphics.world.cubes[y1][x2].minh = min(Graphics.world.cubes[y1][x2].minh, -vmin[1]);
+					Graphics.world.cubes[y1][x2].maxh = max(Graphics.world.cubes[y1][x2].maxh, -vmin[1]);
+					Graphics.world.cubes[y2][x2].minh = min(Graphics.world.cubes[y2][x2].minh, -vmin[1]);
+					Graphics.world.cubes[y2][x2].maxh = max(Graphics.world.cubes[y2][x2].maxh, -vmin[1]);
+					Graphics.world.cubes[y2][x1].minh = min(Graphics.world.cubes[y2][x1].minh, -vmin[1]);
+					Graphics.world.cubes[y2][x1].maxh = max(Graphics.world.cubes[y2][x1].maxh, -vmin[1]);
 				}
 			}
 

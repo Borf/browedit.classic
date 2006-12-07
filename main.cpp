@@ -68,6 +68,7 @@ MENUCOMMAND(picktexture);
 MENUCOMMAND(quadtree);
 MENUCOMMAND(boundingboxes);
 MENUCOMMAND(gatheight);
+MENUCOMMAND(lightmaps);
 
 cMenu*	menu;
 cMenu* grid;
@@ -141,6 +142,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,view,"Objects",&MenuCommand_showobjects);
 	showobjects = mm;
 	ADDMENUITEM(mm,view,"Boundingboxes",&MenuCommand_boundingboxes);
+	ADDMENUITEM(mm,view,"Lightmaps",&MenuCommand_lightmaps);
 
 	ADDMENUITEM(mm,mode,"Texture Edit",			&MenuCommand_mode);
 	mm->ticked = true;
@@ -1979,12 +1981,6 @@ int ClassifyPoint(cVector3 point, cVector3 pO, cVector3 pN)
 
 
 
-MENUCOMMAND(lightmaps)
-{
-	return true;
-}
-
-
 
 MENUCOMMAND(lightmapsreset)
 {
@@ -2307,5 +2303,13 @@ MENUCOMMAND(gatheight)
 
 	}
 	
+	return true;
+}
+
+
+MENUCOMMAND(lightmaps)
+{
+	src->ticked = !src->ticked;
+	Graphics.showlightmaps = src->ticked;
 	return true;
 }

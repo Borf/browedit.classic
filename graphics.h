@@ -3,7 +3,6 @@
 
 #include "common.h"
 #include <gl/gl.h>
-#include "glext.h"
 #include <map>
 using namespace std;
 #include "world.h"
@@ -35,12 +34,7 @@ public:
 		quadtreeview = -1;
 		showboundingboxes = false;
 		gattype = 0;
-		glMultiTexCoord1fARB	= NULL;
-		glMultiTexCoord2fARB	= NULL;
-		glMultiTexCoord3fARB	= NULL;
-		glMultiTexCoord4fARB	= NULL;
-		glActiveTextureARB		= NULL;
-		glClientActiveTextureARB= NULL;	
+		showlightmaps = false;
 	}
 
 	int						init();				// initializes graphics
@@ -116,6 +110,7 @@ public:
 
 
 	bool					showobjects;
+	bool					showlightmaps;
 
 
 	int						quadtreeview;
@@ -123,14 +118,6 @@ public:
 	int						gattype;
 	cTexture*				gattextures[7];
 	vector<vector<cTexture*> >		watertextures;
-
-
-	PFNGLMULTITEXCOORD1FARBPROC		glMultiTexCoord1fARB;
-	PFNGLMULTITEXCOORD2FARBPROC		glMultiTexCoord2fARB;
-	PFNGLMULTITEXCOORD3FARBPROC		glMultiTexCoord3fARB;
-	PFNGLMULTITEXCOORD4FARBPROC		glMultiTexCoord4fARB;
-	PFNGLACTIVETEXTUREARBPROC		glActiveTextureARB;
-	PFNGLCLIENTACTIVETEXTUREARBPROC	glClientActiveTextureARB;	
 
 
 private:
