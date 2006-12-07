@@ -74,8 +74,8 @@ void cWorld::load()
 	int nLightmaps = *((int*)buf);
 	for(i = 0; i < nLightmaps; i++)
 	{
-		cLightmap l;
-		pFile->read(l.buf, 256);
+		cLightmap* l = new cLightmap();
+		pFile->read(l->buf, 256);
 		lightmaps.push_back(l);
 	}
 
@@ -461,7 +461,7 @@ void cWorld::save()
 		pFile.write((char*)&gridSizeCell, 4);
 		for(i = 0; i < lightmaps.size(); i++)
 		{
-			pFile.write(lightmaps[i].buf, 256);
+			pFile.write(lightmaps[i]->buf, 256);
 		}
 
 		int nTiles = tiles.size();
@@ -677,8 +677,10 @@ void cWorld::draw()
 	selsizex = floor(selsizex*Graphics.brushsize);
 	selsizey = floor(selsizey*Graphics.brushsize);*/
 
-
 	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_BLEND);
+	glColor4f(1,1,1,1);
+	glEnable(GL_BLEND);
 	for(x = 0; x < width; x++)
 	{
 		for(y = 0; y < height; y++)
@@ -690,17 +692,45 @@ void cWorld::draw()
 			{
 				cTile* t = &tiles[c->tileup];
 				int texture = textures[t->texture]->texid();
-				glBindTexture(GL_TEXTURE_2D, texture);
-				if (editmode == MODE_WALLS && Graphics.showgrid && (c->tileaside != -1 || c->tileside != -1) || c->minh != 99999)
+				int lightmap = lightmaps[t->lightmap]->texid();
+				int lightmap2 = lightmaps[t->lightmap]->texid2();
+
+
+		/*		if (editmode == MODE_WALLS && Graphics.showgrid && (c->tileaside != -1 || c->tileside != -1) || c->minh != 99999)
 					glColor3f(1,0,1);
 				else
 					glColor3f((BYTE)t->color[0] / 256.0f,(BYTE)t->color[1] / 256.0f,(BYTE)t->color[2] / 256.0f);
+*/
+
+				glDisable(GL_BLEND);
+				glBindTexture(GL_TEXTURE_2D, texture);
 				glBegin(GL_TRIANGLE_STRIP);
-					glTexCoord2f(t->u1, 1-t->v1); glVertex3f(x*10,-c->cell1,(height-y)*10);
-					glTexCoord2f(t->u3, 1-t->v3); glVertex3f(x*10,-c->cell3,(height-y)*10-10);
-					glTexCoord2f(t->u2, 1-t->v2); glVertex3f(x*10+10,-c->cell2,(height-y)*10);
-					glTexCoord2f(t->u4, 1-t->v4); glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
+					glTexCoord2f(t->u1, 1-t->v1);				glVertex3f(x*10,-c->cell1,(height-y)*10);
+					glTexCoord2f(t->u3, 1-t->v3);				glVertex3f(x*10,-c->cell3,(height-y)*10-10);
+					glTexCoord2f(t->u2, 1-t->v2);				glVertex3f(x*10+10,-c->cell2,(height-y)*10);
+					glTexCoord2f(t->u4, 1-t->v4);				glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
 				glEnd();
+				glEnable(GL_BLEND);
+
+				glBlendFunc(GL_ONE ,GL_DST_COLOR);				
+				glBindTexture(GL_TEXTURE_2D, lightmap);
+				glBegin(GL_TRIANGLE_STRIP);
+					glTexCoord2f(0,0);					glVertex3f(x*10,-c->cell1,(height-y)*10);
+					glTexCoord2f(0,1);					glVertex3f(x*10,-c->cell3,(height-y)*10-10);
+					glTexCoord2f(1,0);					glVertex3f(x*10+10,-c->cell2,(height-y)*10);
+					glTexCoord2f(1,1);					glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
+				glEnd();
+
+				glBlendFunc(GL_DST_COLOR, GL_ZERO);
+				glBindTexture(GL_TEXTURE_2D, lightmap2);
+				glBegin(GL_TRIANGLE_STRIP);
+					glTexCoord2f(0,0);					glVertex3f(x*10,-c->cell1,(height-y)*10);
+					glTexCoord2f(0,1);					glVertex3f(x*10,-c->cell3,(height-y)*10-10);
+					glTexCoord2f(1,0);					glVertex3f(x*10+10,-c->cell2,(height-y)*10);
+					glTexCoord2f(1,1);					glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
+				glEnd();
+				glDisable(GL_BLEND);
+				
 			}
 			if (c->tileaside != -1 && c->tileaside < tiles.size())
 			{
@@ -730,6 +760,7 @@ void cWorld::draw()
 			}
 		}
 	}
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set the correct blending mode
 
 
 	float winZ;
@@ -1454,4 +1485,70 @@ void cQuadTreeNode::save(vector<cVector3>& v)
 		child3->save(v);
 	if(child4 != NULL)
 		child4->save(v);
+}
+
+
+
+int cLightmap::texid()
+{
+	if(generated)
+		return tid;
+
+	// Generate a texture with the associative texture ID stored in the array
+	glGenTextures(1, &tid);
+
+	// This sets the alignment requirements for the start of each pixel row in memory.
+	glPixelStorei (GL_UNPACK_ALIGNMENT, 1);
+
+	// Bind the texture to the texture arrays index and init the texture
+	glBindTexture(GL_TEXTURE_2D, tid);
+
+	// Build Mipmaps (builds different versions of the picture for distances - looks better)
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, 8, 8, 1, GL_RGB, GL_UNSIGNED_BYTE, buf+64);
+//	gluBuild2DMipmaps(GL_TEXTURE_2D, 3, size, size, GL_RGB, GL_UNSIGNED_BYTE, data);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+
+
+	//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
+	//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	generated = true;
+	return tid;
+}
+
+int cLightmap::texid2()
+{
+	if(generated2)
+		return tid2;
+
+
+
+	// Generate a texture with the associative texture ID stored in the array
+	glGenTextures(1, &tid2);
+
+	// This sets the alignment requirements for the start of each pixel row in memory.
+	glPixelStorei (GL_UNPACK_ALIGNMENT, 1);
+
+	// Bind the texture to the texture arrays index and init the texture
+	glBindTexture(GL_TEXTURE_2D, tid2);
+
+	// Build Mipmaps (builds different versions of the picture for distances - looks better)
+	glTexImage2D(GL_TEXTURE_2D, 0, 1, 8, 8, 1, GL_RED, GL_UNSIGNED_BYTE, buf);
+//	gluBuild2DMipmaps(GL_TEXTURE_2D, 3, size, size, GL_RGB, GL_UNSIGNED_BYTE, data);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+
+
+	//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
+	//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	generated2 = true;
+	return tid2;
 }

@@ -10,7 +10,20 @@
 class cLightmap
 {
 public:
+	cLightmap()
+	{
+		generated = false;
+		generated2 = false;
+	}
 	char buf[256];
+	int texid();
+	int texid2();
+
+
+	bool generated;
+	bool generated2;
+	GLuint tid;
+	GLuint tid2;
 };
 
 class cTile
@@ -161,7 +174,7 @@ public:
 	int width;
 	int texsize;
 	vector<cTextureContainer*> textures;
-	vector<cLightmap> lightmaps;
+	vector<cLightmap*> lightmaps;
 	vector<cTile> tiles;
 	vector<vector<cCube> > cubes;
 	vector<vector<cGatTile> > gattiles;
