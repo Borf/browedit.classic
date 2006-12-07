@@ -288,7 +288,7 @@ int main(int argc, char *argv[])
 		return 1;
 
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "customtown").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "n00bz00").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 #endif
@@ -570,6 +570,10 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 									if (x < 0)
 										continue;
 									cTile t;
+									t.color[0] = (char)255;
+									t.color[1] = (char)255;
+									t.color[2] = (char)255;
+									t.color[3] = (char)255;
 									t.texture = Graphics.texturestart + (Graphics.selectionstart.y - 32) / 288;
 									if (Graphics.texturerot == 0)
 									{
@@ -1141,6 +1145,10 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 
 					cTile t;
+					t.color[0] = (char)255;
+					t.color[1] = (char)255;
+					t.color[2] = (char)255;
+					t.color[3] = (char)255;
 					t.texture = Graphics.texturestart + (Graphics.selectionstart.y - 32) / 288;
 					t.lightmap = 0;
 					t.u1 = 0;
@@ -1175,6 +1183,10 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 
 					cTile t;
+					t.color[0] = (char)255;
+					t.color[1] = (char)255;
+					t.color[2] = (char)255;
+					t.color[3] = (char)255;
 					t.texture = Graphics.texturestart + (Graphics.selectionstart.y - 32) / 288;
 					t.lightmap = 0;
 					t.u1 = 0;
@@ -1505,6 +1517,10 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						for(yy = ymin; yy < ymax; yy++)
 						{
 							cTile t;
+							t.color[0] = (char)255;
+							t.color[1] = (char)255;
+							t.color[2] = (char)255;
+							t.color[3] = (char)255;
 							t.texture = Graphics.texturestart + (Graphics.selectionstart.y - 32) / 288;
 							t.lightmap = 0;
 							t.u1 = ((yy-ymin)%4) *  (1.0/(float)ydiff);
@@ -1540,6 +1556,10 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						for(xx = xmin; xx < xmax; xx++)
 						{
 							cTile t;
+							t.color[0] = (char)255;
+							t.color[1] = (char)255;
+							t.color[2] = (char)255;
+							t.color[3] = (char)255;
 							t.texture = Graphics.texturestart + (Graphics.selectionstart.y - 32) / 288;
 							t.lightmap = 0;
 							t.u1 = ((xx-xmin)%4) *  (1.0/(float)xdiff);
@@ -2160,6 +2180,11 @@ MENUCOMMAND(fill)
 			t.v3 = (y+1)/4.0;
 			t.u4 = (x+1)/4.0;
 			t.v4 = (y+1)/4.0;
+			t.color[0] = (char)255;
+			t.color[1] = (char)255;
+			t.color[2] = (char)255;
+			t.color[3] = (char)255;
+
 			Graphics.world.tiles.push_back(t);
 		}
 	}

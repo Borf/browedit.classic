@@ -694,7 +694,7 @@ void cWorld::draw()
 				if (editmode == MODE_WALLS && Graphics.showgrid && (c->tileaside != -1 || c->tileside != -1) || c->minh != 99999)
 					glColor3f(1,0,1);
 				else
-					glColor3f(1,1,1);
+					glColor3f((BYTE)t->color[0] / 256.0f,(BYTE)t->color[1] / 256.0f,(BYTE)t->color[2] / 256.0f);
 				glBegin(GL_TRIANGLE_STRIP);
 					glTexCoord2f(t->u1, 1-t->v1); glVertex3f(x*10,-c->cell1,(height-y)*10);
 					glTexCoord2f(t->u3, 1-t->v3); glVertex3f(x*10,-c->cell3,(height-y)*10-10);
@@ -1262,9 +1262,9 @@ void cWorld::draw()
 		waterindex = 0;
 	glBegin(GL_QUADS);
 		glTexCoord2f(0,0); glVertex3f(0,-water.height,0);
-		glTexCoord2f(water.texcycle,0); glVertex3f(10*width,-water.height,0);
-		glTexCoord2f(water.texcycle,water.texcycle); glVertex3f(10*width,-water.height,10*height);
-		glTexCoord2f(0,water.texcycle); glVertex3f(0,-water.height,10*height);
+		glTexCoord2f(width/water.texcycle,0); glVertex3f(10*width,-water.height,0);
+		glTexCoord2f(width/water.texcycle,height/water.texcycle); glVertex3f(10*width,-water.height,10*height);
+		glTexCoord2f(0,height/water.texcycle); glVertex3f(0,-water.height,10*height);
 	glEnd();
 	glDisable(GL_BLEND);
 
