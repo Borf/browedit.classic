@@ -69,11 +69,16 @@ MENUCOMMAND(quadtree);
 MENUCOMMAND(boundingboxes);
 MENUCOMMAND(gatheight);
 MENUCOMMAND(lightmaps);
+MENUCOMMAND(tilecolors);
+MENUCOMMAND(water);
+MENUCOMMAND(dolightmaps);
 
 cMenu*	menu;
 cMenu* grid;
 cMenu* showobjects;
+cMenu* showwater;
 cMenu* currentobject;
+cMenu* lightmaps;
 
 int cursorsize = 1;
 
@@ -136,13 +141,15 @@ int main(int argc, char *argv[])
 	
 	ADDMENUITEM(mm,rnd, "Random 1", &MenuCommand_random1);
 
-	ADDMENUITEM(mm,view,"Grid",&MenuCommand_grid);
-	mm->ticked = true;
-	grid = mm;
-	ADDMENUITEM(mm,view,"Objects",&MenuCommand_showobjects);
-	showobjects = mm;
+	ADDMENUITEM(grid,view,"Grid",&MenuCommand_grid);
+	grid->ticked = true;
+	ADDMENUITEM(showobjects,view,"Objects",&MenuCommand_showobjects);
 	ADDMENUITEM(mm,view,"Boundingboxes",&MenuCommand_boundingboxes);
-	ADDMENUITEM(mm,view,"Lightmaps",&MenuCommand_lightmaps);
+	ADDMENUITEM(lightmaps,view,"Lightmaps",&MenuCommand_lightmaps);
+	ADDMENUITEM(mm,view,"Tilecolors",&MenuCommand_tilecolors);
+	mm->ticked = true;
+	ADDMENUITEM(showwater,view,"Water",&MenuCommand_water);
+	showwater->ticked = true;
 
 	ADDMENUITEM(mm,mode,"Texture Edit",			&MenuCommand_mode);
 	mm->ticked = true;
@@ -171,7 +178,6 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,edit,"Sloping",				&MenuCommand_slope);
 	ADDMENUITEM(mm,edit,"Quadtree",				&MenuCommand_quadtree);
 	ADDMENUITEM(mm,edit,"Set GAT height",		&MenuCommand_gatheight);
-
 	ADDMENU(speed,edit, "Speed", 480, 100);
 	ADDMENUITEM(mm,speed,"5",&MenuCommand_speed);
 	mm->ticked = true;
@@ -182,6 +188,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,speed,"30",&MenuCommand_speed);
 	ADDMENUITEM(mm,speed,"40",&MenuCommand_speed);
 	ADDMENUITEM(mm,speed,"50",&MenuCommand_speed);
+	ADDMENUITEM(mm,edit,"Calculate Lightmaps",		&MenuCommand_dolightmaps);
 	
 
 
@@ -290,7 +297,7 @@ int main(int argc, char *argv[])
 		return 1;
 
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "jawaii_in").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "comodo").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 #endif
@@ -1118,6 +1125,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			case SDLK_g:
 				MenuCommand_grid((cMenuItem*)grid);
 				break;
+			case SDLK_l:
+				MenuCommand_lightmaps((cMenuItem*)lightmaps);
+				break;
 			case SDLK_d:
 				{
 					int posx = mouse3dx / 10;
@@ -1494,6 +1504,11 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 			case SDLK_w:
 				{
+					if(SDL_GetModState() & KMOD_META)
+					{
+						MenuCommand_water((cMenuItem*)showwater);
+						break;
+					}
 					int x = mouse3dx / 10;
 					int y = mouse3dz / 10;
 					if (y < 0)
@@ -1772,21 +1787,6 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					Graphics.quadtreeview--;
 					if (Graphics.quadtreeview < -1)
 						Graphics.quadtreeview = -1;
-				}
-				break;
-			case SDLK_0:
-			case SDLK_1:
-			case SDLK_2:
-			case SDLK_3:
-			case SDLK_4:
-			case SDLK_5:
-			case SDLK_6:
-			case SDLK_7:
-			case SDLK_8:
-			case SDLK_9:
-				if (editmode == MODE_GAT)
-				{
-					Graphics.gattype = event.key.keysym.sym - SDLK_0;
 				}
 				break;
 			default:
@@ -2311,5 +2311,46 @@ MENUCOMMAND(lightmaps)
 {
 	src->ticked = !src->ticked;
 	Graphics.showlightmaps = src->ticked;
+	return true;
+}
+
+MENUCOMMAND(tilecolors)
+{
+	src->ticked = !src->ticked;
+	Graphics.showtilecolors = src->ticked;
+	return true;
+}
+
+MENUCOMMAND(water)
+{
+	src->ticked = !src->ticked;
+	Graphics.showwater = src->ticked;
+	return true;
+}
+
+
+
+MENUCOMMAND(dolightmaps)
+{
+	int x,y;
+	for(x = 0; x < Graphics.world.width; x++)
+		for(y = 0; y < Graphics.world.height; y++)
+		{
+			int tile = Graphics.world.cubes[y][x].tileup;
+			if(tile != -1)
+			{
+				cLightmap* map = new cLightmap();
+				for(int i = 0; i < 256; i++)
+					map->buf[i] = i < 64 ? 255 : 0;
+				Graphics.world.tiles[tile].lightmap = Graphics.world.lightmaps.size();
+				Graphics.world.lightmaps.push_back(map);
+			}			
+		}
+
+	for(int i = 0; i < Graphics.world.models.size(); i++)
+	{
+		Graphics.world.models[i]->draw(false,false,false, true);
+	}
+
 	return true;
 }

@@ -35,6 +35,8 @@ public:
 		showboundingboxes = false;
 		gattype = 0;
 		showlightmaps = false;
+		showtilecolors = true;
+		showwater = true;
 	}
 
 	int						init();				// initializes graphics
@@ -111,6 +113,8 @@ public:
 
 	bool					showobjects;
 	bool					showlightmaps;
+	bool					showtilecolors;
+	bool					showwater;
 
 
 	int						quadtreeview;

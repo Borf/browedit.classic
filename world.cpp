@@ -694,11 +694,13 @@ void cWorld::draw()
 				int texture = textures[t->texture]->texid();
 
 
-		/*		if (editmode == MODE_WALLS && Graphics.showgrid && (c->tileaside != -1 || c->tileside != -1) || c->minh != 99999)
+				if (editmode == MODE_WALLS && Graphics.showgrid && (c->tileaside != -1 || c->tileside != -1) || c->minh != 99999)
 					glColor3f(1,0,1);
-				else
+				else if (Graphics.showtilecolors)
 					glColor3f((BYTE)t->color[0] / 256.0f,(BYTE)t->color[1] / 256.0f,(BYTE)t->color[2] / 256.0f);
-*/
+				else
+					glColor4f(1,1,1,1);
+
 
 				glDisable(GL_BLEND);
 				glBindTexture(GL_TEXTURE_2D, texture);
@@ -1284,22 +1286,23 @@ void cWorld::draw()
 
 	glColor4f(1,1,1,0.5);
 
+	if(Graphics.showwater || editmode == MODE_WATER)
+	{
+		static float waterindex = 0;
 
-	static float waterindex = 0;
+		glBindTexture(GL_TEXTURE_2D, Graphics.watertextures[water.type][ceil(waterindex)]->texid());
 
-	glBindTexture(GL_TEXTURE_2D, Graphics.watertextures[water.type][ceil(waterindex)]->texid());
-
-	waterindex+=0.5f;
-	if (waterindex > 31)
-		waterindex = 0;
-	glBegin(GL_QUADS);
-		glTexCoord2f(0,0); glVertex3f(0,-water.height,0);
-		glTexCoord2f(width/water.texcycle,0); glVertex3f(10*width,-water.height,0);
-		glTexCoord2f(width/water.texcycle,height/water.texcycle); glVertex3f(10*width,-water.height,10*height);
-		glTexCoord2f(0,height/water.texcycle); glVertex3f(0,-water.height,10*height);
-	glEnd();
-	glDisable(GL_BLEND);
-
+		waterindex+=0.5f;
+		if (waterindex > 31)
+			waterindex = 0;
+		glBegin(GL_QUADS);
+			glTexCoord2f(0,0); glVertex3f(0,-water.height,0);
+			glTexCoord2f(width/water.texcycle,0); glVertex3f(10*width,-water.height,0);
+			glTexCoord2f(width/water.texcycle,height/water.texcycle); glVertex3f(10*width,-water.height,10*height);
+			glTexCoord2f(0,height/water.texcycle); glVertex3f(0,-water.height,10*height);
+		glEnd();
+		glDisable(GL_BLEND);
+	}
 
 	glTranslatef(-Graphics.camerapointer.x, 0, -Graphics.camerapointer.y);
 
@@ -1525,9 +1528,6 @@ int cLightmap::texid2()
 {
 	if(generated2)
 		return tid2;
-
-
-
 	// Generate a texture with the associative texture ID stored in the array
 	glGenTextures(1, &tid2);
 
@@ -1552,4 +1552,24 @@ int cLightmap::texid2()
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	generated2 = true;
 	return tid2;
+}
+
+void cLightmap::del()
+{
+	if (generated)
+		glDeleteTextures(1, &tid);
+	generated = false;
+}
+
+cLightmap::~cLightmap()
+{
+	del();
+	del2();
+}
+
+void cLightmap::del2()
+{
+	if (generated2)
+		glDeleteTextures(1, &tid2);
+	generated2 = false;
 }

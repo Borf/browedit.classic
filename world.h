@@ -15,10 +15,12 @@ public:
 		generated = false;
 		generated2 = false;
 	}
+	~cLightmap();
 	char buf[256];
 	int texid();
 	int texid2();
-
+	void del();
+	void del2();
 
 	bool generated;
 	bool generated2;

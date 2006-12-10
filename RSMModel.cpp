@@ -201,7 +201,7 @@ void cRSMModelMesh::boundingbox(float* ptransf, bool only)
 }
 
 
-void cRSMModel::draw(bool checkfrust, bool dodraw, bool setheight)
+void cRSMModel::draw(bool checkfrust, bool dodraw, bool setheight, bool dolightmaps)
 {
 	if (checkfrust)
 	{
@@ -257,7 +257,7 @@ void cRSMModel::draw(bool checkfrust, bool dodraw, bool setheight)
 	}
 
 
-	draw2(&bb,0, NULL, meshes.size() == 1, dodraw, setheight);
+	draw2(&bb,0, NULL, meshes.size() == 1, dodraw, setheight, dolightmaps);
 	recalcbb = false;
 
 
@@ -280,21 +280,21 @@ void cRSMModel::draw(bool checkfrust, bool dodraw, bool setheight)
 	glPopMatrix();
 }
 
-void cRSMModel::draw2(cBoundingbox* box, int mesh, float* transf, bool only, bool dodraw, bool setheight)
+void cRSMModel::draw2(cBoundingbox* box, int mesh, float* transf, bool only, bool dodraw, bool setheight, bool dolightmaps)
 {
 	glPushMatrix();
-	meshes[mesh]->draw(box,transf, meshes.size() == 1, this, dodraw, setheight);
+	meshes[mesh]->draw(box,transf, meshes.size() == 1, this, dodraw, setheight, dolightmaps);
 
 	for(int i = 0; i < meshes.size(); i++)
 	{
 		if(i != mesh && fathers[i] == mesh)
-			draw2((mesh == 0) ? box : NULL, i, meshes[mesh]->trans, only, dodraw, setheight);
+			draw2((mesh == 0) ? box : NULL, i, meshes[mesh]->trans, only, dodraw, setheight, dolightmaps);
 	}
 	glPopMatrix();
 }
 
 
-void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel* model, bool dodraw, bool setheight)
+void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel* model, bool dodraw, bool setheight, bool dolightmaps)
 {
 	bool main = (ptransf == NULL);
 	GLfloat Rot[16];
@@ -430,7 +430,7 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 		for(i = 0; i < nFaces; i++)
 		{
 			cRSMModelFace* f = &faces[i];
-			if(!setheight)
+			if(!setheight && !dolightmaps)
 			{
 				v1.x = min(v1.x, vertices[f->v[0]].x);
 				v1.y = min(v1.y, vertices[f->v[0]].y);
@@ -477,9 +477,34 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 					Graphics.world.cubes[y2][x1].maxh = max(Graphics.world.cubes[y2][x1].maxh, -vmin[1]);
 				}
 			}
+			if(dolightmaps)
+			{
+				for(int ii = 0; ii < 3; ii++)
+				{
+					float vmin[3];
+					MatrixMultVect(ModelMatrix, vertices[f->v[0]], vmin);
+					int x1 = floor(vmin[0]/10.0);
+					int y1 = floor(vmin[2]/10.0);
+
+					float x2 = vmin[0]/10.0 - x1;
+					float y2 = vmin[2]/10.0 - y1;
+
+
+					if (y1 < 0 || x1 < 0 ||
+						y1 >= Graphics.world.height || x1 >= Graphics.world.width)
+						continue;
+
+					int tile = Graphics.world.cubes[y1][x1].tileup;
+					cLightmap* l = Graphics.world.lightmaps[Graphics.world.tiles[tile].lightmap];
+					
+					l->buf[(int)(floor(x2*8)+8*floor(y2*8))] = 0;
+
+				}
+
+			}
 
 		}
-		if(!setheight)
+		if(!setheight && !dolightmaps)
 		{
 			MatrixMultVect(ModelMatrix, v1, realbb.bbmin);
 			MatrixMultVect(ModelMatrix, v2, realbb.bbmax);

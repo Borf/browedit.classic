@@ -4,7 +4,10 @@ Right mouse button is to move around
 
 rightmousebutton + drag			move
 rightmousebutton + drag + shift		rotate camera
-
+O					show/hide objects
+winkey+w				show/hide water
+l					show/hide lightmaps
+insert/delete				change the level of the quadtree
 
 Texture Edit
 ------------
@@ -15,7 +18,6 @@ spacebar				rotate the current brush
 h					flip the brush horizontally
 v					flip the brush vertically
 g					show / hide grid
-
 
 Detail heightmap edit
 ---------------------
@@ -59,6 +61,7 @@ c					copy model, size & rotation
 p					paste model, size & rotatation
 leftclick				select object
 rightclick				deselect object
+backspace				delete model
 left-drag				move selected object
 shift+left-drag				move selected object (on grid)
 ctrl-left-drag				rotate selected object
