@@ -72,6 +72,7 @@ MENUCOMMAND(lightmaps);
 MENUCOMMAND(tilecolors);
 MENUCOMMAND(water);
 MENUCOMMAND(dolightmaps);
+MENUCOMMAND(fixcolors);
 
 cMenu*	menu;
 cMenu* grid;
@@ -189,7 +190,8 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,speed,"40",&MenuCommand_speed);
 	ADDMENUITEM(mm,speed,"50",&MenuCommand_speed);
 	ADDMENUITEM(mm,edit,"Calculate Lightmaps",		&MenuCommand_dolightmaps);
-	
+	ADDMENUITEM(mm,edit,"Reset Colors",		&MenuCommand_fixcolors);
+
 
 
 	changetoserverdir();				
@@ -297,7 +299,7 @@ int main(int argc, char *argv[])
 		return 1;
 
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "comodo").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "prontera").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 #endif
@@ -507,7 +509,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						}
 						if(!ctrl && alt)
 						{
-							Graphics.world.models[Graphics.selectedobject]->scale.x += (mousex - oldmousex)/10.0;
+ 							Graphics.world.models[Graphics.selectedobject]->scale.x += (mousex - oldmousex)/10.0;
 							Graphics.world.models[Graphics.selectedobject]->scale.y += (mousex - oldmousex)/10.0;
 							Graphics.world.models[Graphics.selectedobject]->scale.z += (mousex - oldmousex)/10.0;
 						}
@@ -520,7 +522,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			oldmousex = mousex;
 			oldmousey = mousey;
 			break;
-		}
+		} 
 		case SDL_MOUSEBUTTONDOWN:
 			movement = 0;
 			startmousex = mousex = event.motion.x;
@@ -2351,6 +2353,25 @@ MENUCOMMAND(dolightmaps)
 	{
 		Graphics.world.models[i]->draw(false,false,false, true);
 	}
+
+	return true;
+}
+
+MENUCOMMAND(fixcolors)
+{
+	int x,y;
+	for(x = 0; x < Graphics.world.width; x++)
+		for(y = 0; y < Graphics.world.height; y++)
+		{
+			int tile = Graphics.world.cubes[y][x].tileup;
+			if(tile != -1)
+			{
+				Graphics.world.tiles[tile].color[0] = '\255';
+				Graphics.world.tiles[tile].color[1] = '\255';
+				Graphics.world.tiles[tile].color[2] = '\255';
+				Graphics.world.tiles[tile].color[3] = '\255';
+			}			
+		}
 
 	return true;
 }
