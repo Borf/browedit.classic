@@ -294,6 +294,86 @@ void cRSMModel::draw2(cBoundingbox* box, int mesh, float* transf, bool only, boo
 }
 
 
+
+
+
+const float EPSILON = 0.01f;
+struct tPlane
+{
+	cVector3 Normal;
+	float D;
+};
+
+bool LinePlaneIntersection(tPlane &Plane, 
+			   cVector3 &StartLine,
+			   cVector3 &EndLine,
+			   float &t)
+{
+	cVector3 LineDir = EndLine - StartLine;			
+	float Denominator = LineDir.Dot(Plane.Normal);
+	if (fabs(Denominator) <= EPSILON) // Parallel to the plane
+	{		
+		return false;
+	}		
+	float Numerator = StartLine.Dot(Plane.Normal) + Plane.D;
+	t = - Numerator / Denominator;			  
+	if (t < 0.0f || t > 1.0f) // The intersection point is not on the line
+	{
+		return false;
+	}
+	return true;
+}
+
+cVector3 Normal(cVector3* vertices)
+{
+	cVector3 b1, b2, normal;
+	b1 = vertices[0] - vertices[1];
+	b2 = vertices[2] - vertices[1];
+
+	normal.x = b1.y * b2.z - b1.z * b2.y;
+	normal.y = b1.z * b2.x - b1.x * b2.z;
+	normal.z = b1.x * b2.y - b1.y * b2.x;
+
+	normal.Normalize();
+	return normal;
+	
+}
+
+bool LineIntersectPolygon( cVector3 *Vertices, 
+			   int NumVertices,
+			   cVector3 &StartLine,
+			   cVector3 &EndLine,
+			  float &t)
+{
+	tPlane Plane;
+	Plane.Normal = Normal(Vertices);
+	Plane.D = - Plane.Normal.Dot(Vertices[0]);
+	float tt;
+	
+	if (!LinePlaneIntersection(Plane, StartLine, EndLine, tt))
+		return false;	
+	
+	cVector3 Intersection = StartLine + (EndLine - StartLine) * tt;			
+	
+	int Vertex;
+	for (Vertex = 0; Vertex < NumVertices; Vertex ++)
+	{
+		tPlane EdgePlane;		
+		int NextVertex = (Vertex + 1) % NumVertices;
+		cVector3 EdgeVector = Vertices[NextVertex] - Vertices[Vertex];			
+		EdgePlane.Normal = EdgeVector.Cross(Plane.Normal);
+		EdgePlane.Normal.Normalize();
+		EdgePlane.D = - EdgePlane.Normal.Dot(Vertices[Vertex]);
+											
+		if (EdgePlane.Normal.Dot(Intersection) + EdgePlane.D < 0.0f)
+			return false;
+	}
+	t = tt;	
+	return true;
+}
+
+
+
 void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel* model, bool dodraw, bool setheight, bool dolightmaps)
 {
 	bool main = (ptransf == NULL);
@@ -479,27 +559,40 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 			}
 			if(dolightmaps)
 			{
-				for(int ii = 0; ii < 3; ii++)
+				float v[3];
+				cVector3 triangle[3];
+				MatrixMultVect(ModelMatrix, vertices[f->v[0]], v);
+				triangle[0] = cVector3(v[0], v[1], v[2]);
+				MatrixMultVect(ModelMatrix, vertices[f->v[1]], v);
+				triangle[1] = cVector3(v[0], v[1], v[2]);
+				MatrixMultVect(ModelMatrix, vertices[f->v[2]], v);
+				triangle[2] = cVector3(v[0], v[1], v[2]);
+				
+				printf(".");
+				for(int x = max(0, model->pos.x/2 - 10); x < min(Graphics.world.width, model->pos.x/2+10); x++)
 				{
-					float vmin[3];
-					MatrixMultVect(ModelMatrix, vertices[f->v[0]], vmin);
-					int x1 = floor(vmin[0]/10.0);
-					int y1 = floor(vmin[2]/10.0);
+					for(int y = max(0, model->pos.z/2 - 10); y < min(Graphics.world.height, model->pos.z/2 + 10); y++)
+					{
+						for(int xx = 0; xx < 6; xx++)
+						{
+							for(int yy = 0; yy < 6; yy++)
+							{
+								float px = 10*x+10*(xx/6.0);
+								float pu = 10*y+10*(yy/6.0);
 
-					float x2 = vmin[0]/10.0 - x1;
-					float y2 = vmin[2]/10.0 - y1;
-
-
-					if (y1 < 0 || x1 < 0 ||
-						y1 >= Graphics.world.height || x1 >= Graphics.world.width)
-						continue;
-
-					int tile = Graphics.world.cubes[y1][x1].tileup;
-					cLightmap* l = Graphics.world.lightmaps[Graphics.world.tiles[tile].lightmap];
-					
-					l->buf[(int)(floor(x2*8)+8*floor(y2*8))] = 0;
-
+								float t;
+								if (LineIntersectPolygon(triangle, 3, cVector3(0,500,0), cVector3(px,0, pu), t))
+								{
+									int tile = Graphics.world.cubes[y][x].tileup;
+									cLightmap* l = Graphics.world.lightmaps[Graphics.world.tiles[tile].lightmap];
+									
+									l->buf[1+xx + (8*(yy+1))] = 0;
+								}
+							}
+						}
+					}
 				}
+
 
 			}
 

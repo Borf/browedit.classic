@@ -299,7 +299,7 @@ int main(int argc, char *argv[])
 		return 1;
 
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "prontera").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "lighttest").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 #endif
@@ -2335,10 +2335,22 @@ MENUCOMMAND(water)
 MENUCOMMAND(dolightmaps)
 {
 	int x,y;
+
+	map<int, bool, less<int> > used;
+
 	for(x = 0; x < Graphics.world.width; x++)
+	{
 		for(y = 0; y < Graphics.world.height; y++)
 		{
 			int tile = Graphics.world.cubes[y][x].tileup;
+			if(used.find(tile) != used.end())
+			{
+				cTile t = Graphics.world.tiles[tile];
+				tile = Graphics.world.tiles.size();
+				Graphics.world.tiles.push_back(t);
+				Graphics.world.cubes[y][x].tileup = tile;
+			}
+			used[tile] = 1;
 			if(tile != -1)
 			{
 				cLightmap* map = new cLightmap();
@@ -2346,13 +2358,19 @@ MENUCOMMAND(dolightmaps)
 					map->buf[i] = i < 64 ? 255 : 0;
 				Graphics.world.tiles[tile].lightmap = Graphics.world.lightmaps.size();
 				Graphics.world.lightmaps.push_back(map);
-			}			
+			}
 		}
+	}
 
 	for(int i = 0; i < Graphics.world.models.size(); i++)
 	{
+		Log(3,0,"Doing model %i out of %i (%.2f%%)", i, Graphics.world.models.size(), (i/(float)Graphics.world.models.size())*100);
 		Graphics.world.models[i]->draw(false,false,false, true);
 	}
+
+		
+	
+
 
 	return true;
 }

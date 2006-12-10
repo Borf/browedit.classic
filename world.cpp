@@ -254,7 +254,9 @@ void cWorld::load()
 			}
 			break;
 		default:
-			Log(1,0,"Unknown type!");
+			Log(2,0,"Unknown type: %i", type);
+			pFile->close();
+			return;
 		};
 	}
 	quadtreefloats.clear();
