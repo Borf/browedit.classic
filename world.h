@@ -212,6 +212,9 @@ public:
 
 	void clean();
 
+	void savelightmap();
+	void loadlightmap();
+
 
 	long size;
 	float tilescale;

@@ -73,6 +73,8 @@ MENUCOMMAND(tilecolors);
 MENUCOMMAND(water);
 MENUCOMMAND(dolightmaps);
 MENUCOMMAND(fixcolors);
+MENUCOMMAND(savelightmaps);
+MENUCOMMAND(loadlightmaps);
 
 cMenu*	menu;
 cMenu* grid;
@@ -130,7 +132,8 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,file,"Open",					&MenuCommand_open);
 	ADDMENUITEM(mm,file,"Save",					&MenuCommand_save);
 	ADDMENUITEM(mm,file,"Save As",				&MenuCommand_saveAs);
-	ADDMENUITEM(mm,file,"Export Heightmaps",	&MenuCommand_exportheight);
+	ADDMENUITEM(mm,file,"Export Lightmaps",	&MenuCommand_savelightmaps);
+	ADDMENUITEM(mm,file,"Import Lightmaps",	&MenuCommand_loadlightmaps);
 	ADDMENUITEM(mm,file,"Exit",					&MenuCommand_exit);
 
 	ADDMENUITEM(mm,steepness, "0.5", &MenuCommand_steepness);
@@ -2362,13 +2365,49 @@ MENUCOMMAND(dolightmaps)
 		}
 	}
 
+
+
 	for(int i = 0; i < Graphics.world.models.size(); i++)
 	{
 		Log(3,0,"Doing model %i out of %i (%.2f%%)", i, Graphics.world.models.size(), (i/(float)Graphics.world.models.size())*100);
 		Graphics.world.models[i]->draw(false,false,false, true);
 	}
 
+	for(x = 1; x < Graphics.world.width; x++)
+	{
+		for(y = 1; y < Graphics.world.height; y++)
+		{
+			int tile = Graphics.world.cubes[y][x].tileup;
+			int tileleft = Graphics.world.cubes[y][x-1].tileup;
+			int tiletop = Graphics.world.cubes[y-1][x].tileup;
+			if (tile != -1 && tileleft != -1 && tiletop != -1)
+			{
+				int lightmap = Graphics.world.tiles[tile].lightmap;
+				int lightmapleft = Graphics.world.tiles[tileleft].lightmap;
+				int lightmaptop = Graphics.world.tiles[tiletop].lightmap;
+
+				if (lightmap < Graphics.world.lightmaps.size() && lightmapleft < Graphics.world.lightmaps.size() && lightmaptop < Graphics.world.lightmaps.size() &&
+					lightmap > -1 && lightmapleft > -1 && lightmaptop > -1)
+				{
+					cLightmap* map = Graphics.world.lightmaps[lightmap];
+					cLightmap* mapleft = Graphics.world.lightmaps[lightmapleft];
+					cLightmap* maptop = Graphics.world.lightmaps[lightmaptop];
+
+					for(i = 0; i < 8; i++)
+					{
+						mapleft->buf[8*i+7] = map->buf[8*i];
+						maptop->buf[7*8+i] = map->buf[i];
+					}
+				}
+				else
+				{
+				}
+			}
+				
+		}
+	}
 		
+
 	
 
 
@@ -2391,5 +2430,18 @@ MENUCOMMAND(fixcolors)
 			}			
 		}
 
+	return true;
+}
+
+
+MENUCOMMAND(savelightmaps)
+{
+	Graphics.world.savelightmap();
+	return true;
+}
+
+MENUCOMMAND(loadlightmaps)
+{
+	Graphics.world.loadlightmap();
 	return true;
 }

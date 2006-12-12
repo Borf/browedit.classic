@@ -507,6 +507,9 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 		glGetFloatv(GL_MODELVIEW_MATRIX, ModelMatrix);
 		float ProjMatrix[16];
 		glGetFloatv(GL_PROJECTION_MATRIX, ProjMatrix);
+		float mmin = min(min(model->bb2.bbmin[0], model->bb.bbmin[1]), model->bb2.bbmin[2]) / 5;
+		float mmax = max(max(model->bb2.bbmax[0], model->bb.bbmax[1]), model->bb2.bbmax[2]) / 5;
+
 		for(i = 0; i < nFaces; i++)
 		{
 			cRSMModelFace* f = &faces[i];
@@ -576,24 +579,21 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 //					continue;
 
 				printf(".");
-				for(int x = max(0, model->pos.x/2 +model->bb2.bbmin[0]/4); x < min(Graphics.world.width, model->pos.x/2+model->bb2.bbmax[0]/4); x++)
+				float t;
+				for(int x = max(0, model->pos.x/2 + mmin); x < min(Graphics.world.width, model->pos.x/2+mmax); x++)
 				{
-					for(int y = max(0, model->pos.z/2 + model->bb2.bbmin[2]/4); y < min(Graphics.world.height, model->pos.z/2+ model->bb2.bbmax[2]/4); y++)
+					for(int y = max(0, model->pos.z/2 + mmin); y < min(Graphics.world.height, model->pos.z/2+ mmax); y++)
 					{
-						for(int xx = 0; xx < 6; xx++)
+						for(int xx = 0; xx < 7; xx++)
 						{
-							for(int yy = 0; yy < 6; yy++)
+							for(int yy = 0; yy < 7; yy++)
 							{
-								float px = 10*x+10*(xx/6.0);
-								float pu = 10*y+10*(yy/6.0);
-
-								float t;
-								if (LineIntersectPolygon(triangle, 3, cVector3(0,1000,0), cVector3(px,0, pu), t))
+								if (LineIntersectPolygon(triangle, 3, cVector3(0,1000,0), cVector3(10*x+10*(xx/7.0),0, 10*y+10*(yy/7.0)), t))
 								{
 									int tile = Graphics.world.cubes[y][x].tileup;
 									cLightmap* l = Graphics.world.lightmaps[Graphics.world.tiles[tile].lightmap];
 									
-									l->buf[1+xx + (8*(yy+1))] = ((BYTE)l->buf[1+xx + (8*(yy+1))]) / 2;
+									l->buf[xx + (8*yy)] = ((BYTE)l->buf[xx + (8*yy)]) / 1.3;
 								}
 							}
 						}

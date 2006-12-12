@@ -5,6 +5,11 @@
 #include <math.h>
 #include <list>
 #include "texturecache.h"
+#ifdef _WIN32
+#include <gd/gd.h>
+#else
+#include <gd.h>
+#endif
 
 #define floatheight 0.1f
 
@@ -1645,4 +1650,114 @@ void cLightmap::del2()
 	if (generated2)
 		glDeleteTextures(1, &tid2);
 	generated2 = false;
+}
+
+
+// saves an array of pixels as a TGA image
+int tgaSave(    char            *filename,
+			short int       width,
+			short int       height,
+			unsigned char   pixelDepth,
+			unsigned char   *imageData) {
+	
+	unsigned char cGarbage = 0, type,mode,aux;
+	short int iGarbage = 0;
+	int i;
+	FILE *file;
+	
+	// open file and check for errors
+	file = fopen(filename, "wb");
+	if (file == NULL) {
+		return(-1);
+	}
+	
+	// compute image type: 2 for RGB(A), 3 for greyscale
+	mode = (unsigned char)(pixelDepth / 8);
+	if ((pixelDepth == 24) || (pixelDepth == 32))
+		type = 2;
+	else
+		type = 3;
+	
+	// write the header
+	fwrite(&cGarbage, sizeof(unsigned char), 1, file);
+	fwrite(&cGarbage, sizeof(unsigned char), 1, file);
+	
+	fwrite(&type, sizeof(unsigned char), 1, file);
+	
+	fwrite(&iGarbage, sizeof(short int), 1, file);
+	fwrite(&iGarbage, sizeof(short int), 1, file);
+	fwrite(&cGarbage, sizeof(unsigned char), 1, file);
+	fwrite(&iGarbage, sizeof(short int), 1, file);
+	fwrite(&iGarbage, sizeof(short int), 1, file);
+	
+	fwrite(&width, sizeof(short int), 1, file);
+	fwrite(&height, sizeof(short int), 1, file);
+	fwrite(&pixelDepth, sizeof(unsigned char), 1, file);
+	
+	fwrite(&cGarbage, sizeof(unsigned char), 1, file);
+	
+	// convert the image data from RGB(a) to BGR(A)
+	if (mode >= 3)
+		for (i=0; i < width * height * mode ; i+= mode) {
+			aux = imageData[i];
+			imageData[i] = imageData[i+2];
+			imageData[i+2] = aux;
+		}
+		
+		// save the image data
+		fwrite(imageData, sizeof(unsigned char),
+			width * height * mode, file);
+		fclose(file);
+		// release the memory
+		// free(imageData);
+		
+		return(0);
+}
+
+void cWorld::savelightmap()
+{
+	char* imgdata = new char[width*height*8*8*3];
+	for(int x = 0; x < width; x++)
+	{
+		for(int y = 0; y < height; y++)
+		{
+			for(int xx = 0; xx < 8; xx++)
+			{
+				for(int yy = 0; yy < 8; yy++)
+				{
+					imgdata[3*8*x + 8*8*3*width * y + 3*xx + 8*3*width*yy] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8];
+					imgdata[3*8*x + 8*8*3*width * y + 3*xx + 8*3*width*yy+1] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8];
+					imgdata[3*8*x + 8*8*3*width * y + 3*xx + 8*3*width*yy+2] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8];
+				}
+			}
+		}
+	}
+	tgaSave((char*)(string(filename) + ".lightmap.tga").c_str(), width*8, height*8, 24, (BYTE*)imgdata);
+	delete imgdata;
+}
+
+void cWorld::loadlightmap()
+{
+
+	cFile* pFile = fs.open(string(filename) + ".lightmap.tga");
+
+	int color;
+	for(int x = 0; x < width; x++)
+	{
+		for(int y = 0; y < height; y++)
+		{
+			for(int xx = 0; xx < 8; xx++)
+			{
+				for(int yy = 0; yy < 8; yy++)
+				{
+					color = pFile->data[12 + 3*8*x + 8*8*3*width*y + 3*xx + 8*3*width*yy];
+					lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8] = color;
+					lightmaps[tiles[cubes[y][x].tileup].lightmap]->del();
+					lightmaps[tiles[cubes[y][x].tileup].lightmap]->del2();
+				}
+			}
+		}
+	}
+	pFile->close();
+	
 }
