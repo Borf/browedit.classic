@@ -568,10 +568,17 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 				MatrixMultVect(ModelMatrix, vertices[f->v[2]], v);
 				triangle[2] = cVector3(v[0], v[1], v[2]);
 				
+
+//				cVector3 normal = Normal(triangle);
+//				cVector3 camera = cVector3(0,1000,0);
+
+//				if (camera.Dot(normal) < 0)
+//					continue;
+
 				printf(".");
-				for(int x = max(0, model->pos.x/2 - 10); x < min(Graphics.world.width, model->pos.x/2+10); x++)
+				for(int x = max(0, model->pos.x/2 +model->bb2.bbmin[0]/4); x < min(Graphics.world.width, model->pos.x/2+model->bb2.bbmax[0]/4); x++)
 				{
-					for(int y = max(0, model->pos.z/2 - 10); y < min(Graphics.world.height, model->pos.z/2 + 10); y++)
+					for(int y = max(0, model->pos.z/2 + model->bb2.bbmin[2]/4); y < min(Graphics.world.height, model->pos.z/2+ model->bb2.bbmax[2]/4); y++)
 					{
 						for(int xx = 0; xx < 6; xx++)
 						{
@@ -581,12 +588,12 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 								float pu = 10*y+10*(yy/6.0);
 
 								float t;
-								if (LineIntersectPolygon(triangle, 3, cVector3(0,500,0), cVector3(px,0, pu), t))
+								if (LineIntersectPolygon(triangle, 3, cVector3(0,1000,0), cVector3(px,0, pu), t))
 								{
 									int tile = Graphics.world.cubes[y][x].tileup;
 									cLightmap* l = Graphics.world.lightmaps[Graphics.world.tiles[tile].lightmap];
 									
-									l->buf[1+xx + (8*(yy+1))] = 0;
+									l->buf[1+xx + (8*(yy+1))] = ((BYTE)l->buf[1+xx + (8*(yy+1))]) / 2;
 								}
 							}
 						}

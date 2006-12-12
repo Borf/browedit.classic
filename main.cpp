@@ -299,7 +299,7 @@ int main(int argc, char *argv[])
 		return 1;
 
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "lighttest").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "customtown").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 #endif

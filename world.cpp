@@ -461,6 +461,9 @@ void cWorld::save()
 		pFile.write((char*)&lightmapWidth, 4);
 		pFile.write((char*)&lightmapHeight, 4);
 		pFile.write((char*)&gridSizeCell, 4);
+
+		if(nLightmaps > 65025)
+			Log(1,0,"TOO MANY LIGHTMAPS!");
 		for(i = 0; i < lightmaps.size(); i++)
 		{
 			pFile.write(lightmaps[i]->buf, 256);
@@ -485,8 +488,8 @@ void cWorld::save()
 			pFile.put(t->texture & 255);
 			pFile.put((t->texture>>8) & 255);
 
-			pFile.put(t->lightmap & 255);
-			pFile.put((t->lightmap>>8) & 255);
+			pFile.put((t->lightmap) & 255);
+			pFile.put(((t->lightmap)>>8) & 255);
 
 			pFile.write(t->color, 4);
 		}
@@ -692,6 +695,11 @@ void cWorld::draw()
 			if (c->tileup != -1)
 			{
 				cTile* t = &tiles[c->tileup];
+				if(t->texture >= textures.size())
+					t->texture = 0;
+				if(t->texture < 0)
+					t->texture = 0;
+
 				int texture = textures[t->texture]->texid();
 
 
@@ -1390,6 +1398,54 @@ void cWorld::clean()
 		{
 			tiles.erase(tiles.begin() + i);
 			i--;
+		}
+	}
+
+
+	tilesused.clear();
+
+	map<int, bool, less<int> >	lightmapsused;
+	
+
+
+	for(yy = 0; yy < height; yy++)
+	{
+		for(int xx = 0; xx < width; xx++)
+		{
+			if(cubes[yy][xx].tileup != -1)
+				lightmapsused[tiles[cubes[yy][xx].tileup].lightmap] = true;
+			if(cubes[yy][xx].tileside != -1)
+				lightmapsused[tiles[cubes[yy][xx].tileside].lightmap] = true;
+			if(cubes[yy][xx].tileaside != -1)
+				lightmapsused[tiles[cubes[yy][xx].tileaside].lightmap] = true;
+		}
+	}
+
+	count = 0;
+	for(i = lightmaps.size()-1; i > -1; i--)
+	{
+		if (lightmapsused.find(i) == lightmapsused.end())
+		{
+			lightmaps[i]->del();
+			lightmaps[i]->del2();
+			delete lightmaps[i];
+			for(int ii = i; ii < lightmaps.size()-1; ii++)
+			{
+				lightmaps[ii] = lightmaps[ii+1];
+			}
+			for(ii = 0; ii < tiles.size(); ii++)
+			{
+				if(tiles[ii].lightmap > i)
+					tiles[ii].lightmap--;
+			}
+
+
+			lightmaps.resize(lightmaps.size()-1);
+			count++;
+			if(count % 50 == 0)
+				printf(".");
+			if(count % 500 == 0)
+				printf("%i ", i);
 		}
 	}
 
