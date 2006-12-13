@@ -220,7 +220,7 @@ void cRSMModel::draw(bool checkfrust, bool dodraw, bool setheight, bool dolightm
 	glScalef(scale.x, -scale.y, scale.z);
 //	glScalef(0.5, 0.5, 0.5);
 
-	if(dodraw)
+	if(dodraw || dolightmaps)
 	{
 		glTranslatef(-bb2.bbrange[0], bb2.bbmin[1], -bb2.bbrange[2]);
 	}
@@ -591,7 +591,7 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 						{
 							for(int yy = 0; yy < 6; yy++)
 							{
-								if (LineIntersectPolygon(triangle, 3, cVector3(-1000,2000,-1000), cVector3(10*x+10*(xx/6.0),-Graphics.world.cubes[y][x].cell1, 10*y+10*(yy/6.0)), t))
+								if (LineIntersectPolygon(triangle, 3, cVector3(-10000,20000,-10000), cVector3(10*x+10*(xx/6.0),-Graphics.world.cubes[y][x].cell1, 10*y+10*(yy/6.0)), t))
 								{
 									int tile = Graphics.world.cubes[y][x].tileup;
 									cLightmap* l = Graphics.world.lightmaps[Graphics.world.tiles[tile].lightmap];

@@ -323,7 +323,7 @@ int main(int argc, char *argv[])
 		return 1;
 
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "customtown").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "glast_01").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 #endif
@@ -2373,6 +2373,41 @@ MENUCOMMAND(dolightmaps)
 				tile = Graphics.world.tiles.size();
 				Graphics.world.tiles.push_back(t);
 				Graphics.world.cubes[y][x].tileup = tile;
+			}
+			used[tile] = 1;
+			if(tile != -1)
+			{
+				cLightmap* map = new cLightmap();
+				for(int i = 0; i < 256; i++)
+					map->buf[i] = i < 64 ? 255 : 0;
+				Graphics.world.tiles[tile].lightmap = Graphics.world.lightmaps.size();
+				Graphics.world.lightmaps.push_back(map);
+			}
+
+			tile = Graphics.world.cubes[y][x].tileside;
+			if(used.find(tile) != used.end())
+			{
+				cTile t = Graphics.world.tiles[tile];
+				tile = Graphics.world.tiles.size();
+				Graphics.world.tiles.push_back(t);
+				Graphics.world.cubes[y][x].tileside = tile;
+			}
+			used[tile] = 1;
+			if(tile != -1)
+			{
+				cLightmap* map = new cLightmap();
+				for(int i = 0; i < 256; i++)
+					map->buf[i] = i < 64 ? 255 : 0;
+				Graphics.world.tiles[tile].lightmap = Graphics.world.lightmaps.size();
+				Graphics.world.lightmaps.push_back(map);
+			}
+			tile = Graphics.world.cubes[y][x].tileaside;
+			if(used.find(tile) != used.end())
+			{
+				cTile t = Graphics.world.tiles[tile];
+				tile = Graphics.world.tiles.size();
+				Graphics.world.tiles.push_back(t);
+				Graphics.world.cubes[y][x].tileaside = tile;
 			}
 			used[tile] = 1;
 			if(tile != -1)
