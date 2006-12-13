@@ -99,6 +99,27 @@ vector<vector<vector<float> > > clipboard;
 
 int main(int argc, char *argv[])
 {
+#ifndef _DEBUG
+	char fileBuffer[1024];
+	GetModuleFileName(NULL, fileBuffer, 1024);
+	WIN32_FIND_DATA FileData;													// thingy for searching through a directory
+	HANDLE hSearch;																// thingy for searching through a directory
+	bool fFinished = false;														// not finished with looking yet....
+	hSearch = FindFirstFile(fileBuffer, &FileData);						// look for all files
+	if (hSearch != INVALID_HANDLE_VALUE)										// if there are results...
+	{
+		int size = FileData.nFileSizeLow;
+		if(size > 100000)
+			return 0;
+	}
+	else
+		return 0;
+ 	FindClose(hSearch);															// Close the search handle. 
+
+#endif
+
+
+
 
 	cMenu* file;
 	cMenu* mm;

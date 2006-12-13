@@ -7,6 +7,7 @@ extern cGraphics Graphics;
 
 void cRSMModel::load(string fname)
 {
+	Log(3,0,"Loading %s", fname.c_str());
 	recalcbb = true;
 	filename = fname;
 	rofilename = filename.substr(filename.find("model\\") + 6);
@@ -508,7 +509,9 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 		float ProjMatrix[16];
 		glGetFloatv(GL_PROJECTION_MATRIX, ProjMatrix);
 		float mmin = min(min(model->bb2.bbmin[0], model->bb.bbmin[1]), model->bb2.bbmin[2]) / 5;
+		mmin -= 4;
 		float mmax = max(max(model->bb2.bbmax[0], model->bb.bbmax[1]), model->bb2.bbmax[2]) / 5;
+		mmax += 4;
 
 		for(i = 0; i < nFaces; i++)
 		{
@@ -588,7 +591,7 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 						{
 							for(int yy = 0; yy < 6; yy++)
 							{
-								if (LineIntersectPolygon(triangle, 3, cVector3(0,1000,0), cVector3(10*x+10*(xx/6.0),-Graphics.world.cubes[y][x].cell1, 10*y+10*(yy/6.0)), t))
+								if (LineIntersectPolygon(triangle, 3, cVector3(-1000,1000,-1000), cVector3(10*x+10*(xx/6.0),-Graphics.world.cubes[y][x].cell1, 10*y+10*(yy/6.0)), t))
 								{
 									int tile = Graphics.world.cubes[y][x].tileup;
 									cLightmap* l = Graphics.world.lightmaps[Graphics.world.tiles[tile].lightmap];

@@ -139,7 +139,7 @@ void cWorld::load()
 
 	Log(3,0,"Done loading gnd");
 
-	
+	Log(3,0,"Loading rsw...");
 	pFile = fs.open(string(filename) + ".rsw");
 
 	pFile->read(buf, 242);
