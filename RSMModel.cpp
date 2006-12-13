@@ -584,16 +584,16 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 				{
 					for(int y = max(0, model->pos.z/2 + mmin); y < min(Graphics.world.height, model->pos.z/2+ mmax); y++)
 					{
-						for(int xx = 0; xx < 7; xx++)
+						for(int xx = 0; xx < 6; xx++)
 						{
-							for(int yy = 0; yy < 7; yy++)
+							for(int yy = 0; yy < 6; yy++)
 							{
-								if (LineIntersectPolygon(triangle, 3, cVector3(0,1000,0), cVector3(10*x+10*(xx/7.0),0, 10*y+10*(yy/7.0)), t))
+								if (LineIntersectPolygon(triangle, 3, cVector3(0,1000,0), cVector3(10*x+10*(xx/6.0),-Graphics.world.cubes[y][x].cell1, 10*y+10*(yy/6.0)), t))
 								{
 									int tile = Graphics.world.cubes[y][x].tileup;
 									cLightmap* l = Graphics.world.lightmaps[Graphics.world.tiles[tile].lightmap];
 									
-									l->buf[xx + (8*yy)] = ((BYTE)l->buf[xx + (8*yy)]) / 1.3;
+									l->buf[xx + (8*yy)+1+8] = ((BYTE)l->buf[xx + (8*yy)+1+8]) / 1.3;
 								}
 							}
 						}

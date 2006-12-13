@@ -2373,18 +2373,22 @@ MENUCOMMAND(dolightmaps)
 		Graphics.world.models[i]->draw(false,false,false, true);
 	}
 
-	for(x = 1; x < Graphics.world.width; x++)
+	for(x = 1; x < Graphics.world.width-1; x++)
 	{
-		for(y = 1; y < Graphics.world.height; y++)
+		for(y = 1; y < Graphics.world.height-1; y++)
 		{
 			int tile = Graphics.world.cubes[y][x].tileup;
 			int tileleft = Graphics.world.cubes[y][x-1].tileup;
 			int tiletop = Graphics.world.cubes[y-1][x].tileup;
+			int tileright = Graphics.world.cubes[y][x+1].tileup;
+			int tilebottom = Graphics.world.cubes[y+1][x].tileup;
 			if (tile != -1 && tileleft != -1 && tiletop != -1)
 			{
 				int lightmap = Graphics.world.tiles[tile].lightmap;
 				int lightmapleft = Graphics.world.tiles[tileleft].lightmap;
 				int lightmaptop = Graphics.world.tiles[tiletop].lightmap;
+				int lightmapright = Graphics.world.tiles[tileright].lightmap;
+				int lightmapbottom = Graphics.world.tiles[tilebottom].lightmap;
 
 				if (lightmap < Graphics.world.lightmaps.size() && lightmapleft < Graphics.world.lightmaps.size() && lightmaptop < Graphics.world.lightmaps.size() &&
 					lightmap > -1 && lightmapleft > -1 && lightmaptop > -1)
@@ -2392,11 +2396,15 @@ MENUCOMMAND(dolightmaps)
 					cLightmap* map = Graphics.world.lightmaps[lightmap];
 					cLightmap* mapleft = Graphics.world.lightmaps[lightmapleft];
 					cLightmap* maptop = Graphics.world.lightmaps[lightmaptop];
+					cLightmap* mapright = Graphics.world.lightmaps[lightmapright];
+					cLightmap* mapbottom = Graphics.world.lightmaps[lightmapbottom];
 
 					for(i = 0; i < 8; i++)
 					{
-						mapleft->buf[8*i+7] = map->buf[8*i];
-						maptop->buf[7*8+i] = map->buf[i];
+						mapleft->buf[8*i+7] = map->buf[8*i+1];
+						maptop->buf[7*8+i] = map->buf[i+8];
+						mapright->buf[8*i] = map->buf[8*i+6];
+						mapbottom->buf[i] = map->buf[6*8+i];
 					}
 				}
 				else
@@ -2443,5 +2451,46 @@ MENUCOMMAND(savelightmaps)
 MENUCOMMAND(loadlightmaps)
 {
 	Graphics.world.loadlightmap();
+	for(int x = 1; x < Graphics.world.width-1; x++)
+	{
+		for(int y = 1; y < Graphics.world.height-1; y++)
+		{
+			int tile = Graphics.world.cubes[y][x].tileup;
+			int tileleft = Graphics.world.cubes[y][x-1].tileup;
+			int tiletop = Graphics.world.cubes[y-1][x].tileup;
+			int tileright = Graphics.world.cubes[y][x+1].tileup;
+			int tilebottom = Graphics.world.cubes[y+1][x].tileup;
+			if (tile != -1 && tileleft != -1 && tiletop != -1)
+			{
+				int lightmap = Graphics.world.tiles[tile].lightmap;
+				int lightmapleft = Graphics.world.tiles[tileleft].lightmap;
+				int lightmaptop = Graphics.world.tiles[tiletop].lightmap;
+				int lightmapright = Graphics.world.tiles[tileright].lightmap;
+				int lightmapbottom = Graphics.world.tiles[tilebottom].lightmap;
+
+				if (lightmap < Graphics.world.lightmaps.size() && lightmapleft < Graphics.world.lightmaps.size() && lightmaptop < Graphics.world.lightmaps.size() &&
+					lightmap > -1 && lightmapleft > -1 && lightmaptop > -1)
+				{
+					cLightmap* map = Graphics.world.lightmaps[lightmap];
+					cLightmap* mapleft = Graphics.world.lightmaps[lightmapleft];
+					cLightmap* maptop = Graphics.world.lightmaps[lightmaptop];
+					cLightmap* mapright = Graphics.world.lightmaps[lightmapright];
+					cLightmap* mapbottom = Graphics.world.lightmaps[lightmapbottom];
+
+					for(int i = 0; i < 8; i++)
+					{
+						mapleft->buf[8*i+7] = map->buf[8*i+1];
+						maptop->buf[7*8+i] = map->buf[i+8];
+						mapright->buf[8*i] = map->buf[8*i+6];
+						mapbottom->buf[i] = map->buf[6*8+i];
+					}
+				}
+				else
+				{
+				}
+			}
+				
+		}
+	}
 	return true;
 }

@@ -1716,23 +1716,23 @@ int tgaSave(    char            *filename,
 
 void cWorld::savelightmap()
 {
-	char* imgdata = new char[width*height*8*8*3];
+	char* imgdata = new char[width*height*6*6*3];
 	for(int x = 0; x < width; x++)
 	{
 		for(int y = 0; y < height; y++)
 		{
-			for(int xx = 0; xx < 8; xx++)
+			for(int xx = 0; xx < 6; xx++)
 			{
-				for(int yy = 0; yy < 8; yy++)
+				for(int yy = 0; yy < 6; yy++)
 				{
-					imgdata[3*8*x + 8*8*3*width * y + 3*xx + 8*3*width*yy] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8];
-					imgdata[3*8*x + 8*8*3*width * y + 3*xx + 8*3*width*yy+1] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8];
-					imgdata[3*8*x + 8*8*3*width * y + 3*xx + 8*3*width*yy+2] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8];
+					imgdata[3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8+8+1];
+					imgdata[3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy+1] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8+8+1];
+					imgdata[3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy+2] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8+8+1];
 				}
 			}
 		}
 	}
-	tgaSave((char*)(string(filename) + ".lightmap.tga").c_str(), width*8, height*8, 24, (BYTE*)imgdata);
+	tgaSave((char*)(string(filename) + ".lightmap.tga").c_str(), width*6, height*6, 24, (BYTE*)imgdata);
 	delete imgdata;
 }
 
@@ -1746,12 +1746,12 @@ void cWorld::loadlightmap()
 	{
 		for(int y = 0; y < height; y++)
 		{
-			for(int xx = 0; xx < 8; xx++)
+			for(int xx = 0; xx < 6; xx++)
 			{
-				for(int yy = 0; yy < 8; yy++)
+				for(int yy = 0; yy < 6; yy++)
 				{
-					color = pFile->data[12 + 3*8*x + 8*8*3*width*y + 3*xx + 8*3*width*yy];
-					lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8] = color;
+					color = pFile->data[20 + 3*6*x + 6*6*3*width*y + 3*xx + 6*3*width*yy];
+					lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8+8+1] = color;
 					lightmaps[tiles[cubes[y][x].tileup].lightmap]->del();
 					lightmaps[tiles[cubes[y][x].tileup].lightmap]->del2();
 				}
