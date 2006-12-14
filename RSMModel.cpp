@@ -540,27 +540,45 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 			}
 			if(setheight)
 			{
-				for(int ii = 0; ii < 3; ii++)
+				float v1_[3];
+				float v2_[3];
+				float v3_[3];
+				MatrixMultVect(ModelMatrix, vertices[f->v[0]], v1_);
+				MatrixMultVect(ModelMatrix, vertices[f->v[1]], v2_);
+				MatrixMultVect(ModelMatrix, vertices[f->v[2]], v3_);
+
+				
+				cVector3 v1 = cVector3(v1_[0], v1_[1], v1_[2]);
+				cVector3 v2 = cVector3(v2_[0], v2_[1], v2_[2]);
+				cVector3 v3 = cVector3(v3_[0], v3_[1], v3_[2]);
+
+				cVector3 xinc = v2 - v1;
+				cVector3 yinc = v3 - v1;
+
+				for(float xi = 0; xi < 1; xi+=0.1f)
 				{
-					float vmin[3];
-					MatrixMultVect(ModelMatrix, vertices[f->v[0]], vmin);
-					int y1 = ceil(vmin[2]/10.0);
-					int y2 = floor(vmin[2]/10.0);
-					int x1 = ceil(vmin[0]/10.0);
-					int x2 = floor(vmin[0]/10.0);
+					for(float yi = 0; yi < xi; yi+=0.1f)
+					{
+						
+						int y1 = ceil((v1.z+xinc.z*xi+yinc.z*yi)/10.0);
+						int y2 = floor((v1.z+xinc.z*xi+yinc.z*yi)/10.0);
+						int x1 = ceil((v1.x+xinc.x*xi+yinc.x*yi)/10.0);
+						int x2 = floor((v1.x+xinc.x*xi+yinc.x*yi)/10.0);
 
-					if (y1 < 0 || y2 < 0 || x1 < 0 || x2 < 0 ||
-						y1 >= Graphics.world.height || y2 >= Graphics.world.height || x1 >= Graphics.world.width || y2 >= Graphics.world.width)
-						continue;
+					//	if (y1 < 0 || y2 < 0 || x1 < 0 || x2 < 0 ||
+					//		y1 >= Graphics.world.height || y2 >= Graphics.world.height || x1 >= Graphics.world.width || y2 >= Graphics.world.width)
+					//		continue;
 
-					Graphics.world.cubes[y1][x1].minh = min(Graphics.world.cubes[y1][x1].minh, -vmin[1]);
-					Graphics.world.cubes[y1][x1].maxh = max(Graphics.world.cubes[y1][x1].maxh, -vmin[1]);
-					Graphics.world.cubes[y1][x2].minh = min(Graphics.world.cubes[y1][x2].minh, -vmin[1]);
-					Graphics.world.cubes[y1][x2].maxh = max(Graphics.world.cubes[y1][x2].maxh, -vmin[1]);
-					Graphics.world.cubes[y2][x2].minh = min(Graphics.world.cubes[y2][x2].minh, -vmin[1]);
-					Graphics.world.cubes[y2][x2].maxh = max(Graphics.world.cubes[y2][x2].maxh, -vmin[1]);
-					Graphics.world.cubes[y2][x1].minh = min(Graphics.world.cubes[y2][x1].minh, -vmin[1]);
-					Graphics.world.cubes[y2][x1].maxh = max(Graphics.world.cubes[y2][x1].maxh, -vmin[1]);
+						float h = (v1.y+xinc.y*xi+yinc.y*yi);
+						/*Graphics.world.cubes[y1][x1].minh = min(Graphics.world.cubes[y1][x1].minh, -h);
+						Graphics.world.cubes[y1][x1].maxh = max(Graphics.world.cubes[y1][x1].maxh, -h);
+						Graphics.world.cubes[y1][x2].minh = min(Graphics.world.cubes[y1][x2].minh, -h);
+						Graphics.world.cubes[y1][x2].maxh = max(Graphics.world.cubes[y1][x2].maxh, -h);*/
+						Graphics.world.cubes[y2][x2].minh = min(Graphics.world.cubes[y2][x2].minh, -h);
+						Graphics.world.cubes[y2][x2].maxh = max(Graphics.world.cubes[y2][x2].maxh, -h);
+						/*Graphics.world.cubes[y2][x1].minh = min(Graphics.world.cubes[y2][x1].minh, -h);
+						Graphics.world.cubes[y2][x1].maxh = max(Graphics.world.cubes[y2][x1].maxh, -h);*/
+					}
 				}
 			}
 			if(dolightmaps)

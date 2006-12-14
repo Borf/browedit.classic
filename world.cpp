@@ -423,6 +423,8 @@ void cWorld::save()
 
 			for(int i = 0; i < models.size(); i++)
 			{
+				if(i % 10 == 0)
+					Log(3,0,"Quadtree: looking at model %i out of %i (%.2f%%)", i, Graphics.world.models.size(), (i/(float)Graphics.world.models.size())*100);
 				models[i]->draw(false,false,true);
 			}
 
@@ -1563,21 +1565,21 @@ void cQuadTreeNode::recalculate()
 				if(tiley > -1 && tiley < Graphics.world.height && tilex > -1 && tilex < Graphics.world.height)
 				{
 					cCube* c = &Graphics.world.cubes[Graphics.world.height - tiley-1][tilex];
-					box1.y = max(box1.y, c->cell1);
-					box2.y = min(box2.y, c->cell1);
+					box1.y = max(box1.y, c->cell1+10);
+					box2.y = min(box2.y, c->cell1-10);
 
-					box1.y = max(box1.y, c->cell2);
-					box2.y = min(box2.y, c->cell2);
+					box1.y = max(box1.y, c->cell2+10);
+					box2.y = min(box2.y, c->cell2-10);
 
-					box1.y = max(box1.y, c->cell3);
-					box2.y = min(box2.y, c->cell3);
+					box1.y = max(box1.y, c->cell3+10);
+					box2.y = min(box2.y, c->cell3-10);
 
-					box1.y = max(box1.y, c->cell4);
-					box2.y = min(box2.y, c->cell4);
+					box1.y = max(box1.y, c->cell4+10);
+					box2.y = min(box2.y, c->cell4-10);
 
 					
-					box1.y = max(box1.y, c->maxh);
-					box2.y = min(box2.y, c->minh);
+					box1.y = max(box1.y, c->maxh+10);
+					box2.y = min(box2.y, c->minh-10);
 
 				}
 				else
