@@ -569,6 +569,9 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 					//		y1 >= Graphics.world.height || y2 >= Graphics.world.height || x1 >= Graphics.world.width || y2 >= Graphics.world.width)
 					//		continue;
 
+						if (y2 < 0 || y2 >= Graphics.world.height || x2 < 0 || x2 >= Graphics.world.width)
+							continue;
+
 						float h = (v1.y+xinc.y*xi+yinc.y*yi);
 						/*Graphics.world.cubes[y1][x1].minh = min(Graphics.world.cubes[y1][x1].minh, -h);
 						Graphics.world.cubes[y1][x1].maxh = max(Graphics.world.cubes[y1][x1].maxh, -h);
