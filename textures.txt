@@ -115,7 +115,14 @@ basics/hugel/streets/street-grass2|ÇÊµå¹Ù´Ú\ÈÖ°ÖÇÊµå38.bmp
 basics/hugel/streets/street-corner|ÇÊµå¹Ù´Ú\ÈÖ°ÖÇÊµå39.bmp
 basics/hugel/streets/street-dirt|ÇÊµå¹Ù´Ú\ÈÖ°ÖÇÊµå40.bmp
 
-
+basics/Jawaii/|
+basics/Jawaii/Sand1|ÇÊµå¹Ù´Ú\ÇØº¯¸ð·¡¹Ù´Ú01.bmp
+basics/Jawaii/Sand2|ÇÊµå¹Ù´Ú\ÇØº¯¸ð·¡¹Ù´Ú02.bmp
+basics/Jawaii/Sand3|ÇÊµå¹Ù´Ú\ÇØº¯¸ð·¡¹Ù´Ú03.bmp
+basics/Jawaii/Sand-rock1|ÇÊµå¹Ù´Ú\ÇØº¯¸ð·¡¹Ù´Ú04.bmp
+basics/Jawaii/Sand-rock2|ÇÊµå¹Ù´Ú\ÇØº¯¸ð·¡¹Ù´Ú05.bmp
+basics/Jawaii/Sand-rock2|ÇÊµå¹Ù´Ú\ÇØº¯¸ð·¡¹Ù´Ú06.bmp
+basics/Jawaii/rock|ÇÊµå¹Ù´Ú\ÇØº¯¸ð·¡¹Ù´Ú07.bmp
 
 root/backside.bmp|backside.bmp
 root/backtrans.bmp|backtrans.bmp
