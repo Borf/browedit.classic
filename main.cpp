@@ -73,6 +73,7 @@ MENUCOMMAND(tilecolors);
 MENUCOMMAND(water);
 MENUCOMMAND(dolightmaps);
 MENUCOMMAND(fixcolors);
+MENUCOMMAND(clearobjects);
 MENUCOMMAND(savelightmaps);
 MENUCOMMAND(loadlightmaps);
 
@@ -215,6 +216,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,speed,"50",&MenuCommand_speed);
 	ADDMENUITEM(mm,edit,"Calculate Lightmaps",		&MenuCommand_dolightmaps);
 	ADDMENUITEM(mm,edit,"Reset Colors",		&MenuCommand_fixcolors);
+	ADDMENUITEM(mm,edit,"Clear Objects",		&MenuCommand_clearobjects);
 
 
 
@@ -2549,5 +2551,15 @@ MENUCOMMAND(loadlightmaps)
 				
 		}
 	}
+	return true;
+}
+
+
+
+MENUCOMMAND(clearobjects)
+{
+	for(int i = 0; i < Graphics.world.models.size(); i++)
+		delete Graphics.world.models[i];
+	Graphics.world.models.clear();
 	return true;
 }
