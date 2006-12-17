@@ -76,6 +76,9 @@ MENUCOMMAND(fixcolors);
 MENUCOMMAND(clearobjects);
 MENUCOMMAND(savelightmaps);
 MENUCOMMAND(loadlightmaps);
+MENUCOMMAND(addwalls);
+MENUCOMMAND(gatcollision);
+MENUCOMMAND(clearlightmaps);
 
 cMenu*	menu;
 cMenu* grid;
@@ -217,6 +220,9 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,edit,"Calculate Lightmaps",		&MenuCommand_dolightmaps);
 	ADDMENUITEM(mm,edit,"Reset Colors",		&MenuCommand_fixcolors);
 	ADDMENUITEM(mm,edit,"Clear Objects",		&MenuCommand_clearobjects);
+	ADDMENUITEM(mm,edit,"Add Walls",		&MenuCommand_addwalls);
+	ADDMENUITEM(mm,edit,"Set gat collision",		&MenuCommand_gatcollision);
+	ADDMENUITEM(mm,edit,"Clear Lightmaps",		&MenuCommand_clearlightmaps);
 
 
 
@@ -325,7 +331,7 @@ int main(int argc, char *argv[])
 		return 1;
 
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "customtown").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "maze").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 #endif
@@ -612,6 +618,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 									t.color[2] = (char)255;
 									t.color[3] = (char)255;
 									t.texture = Graphics.texturestart + (Graphics.selectionstart.y - 32) / 288;
+									t.lightmap = 0;
 									if (Graphics.texturerot == 0)
 									{
 										t.u1 = (selendx*Graphics.brushsize-xx-1) * (1/(8.0f*Graphics.brushsize));
@@ -1657,6 +1664,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							Graphics.clipboardrot = Graphics.world.models[Graphics.selectedobject]->rot;
 							Graphics.clipboardscale = Graphics.world.models[Graphics.selectedobject]->scale;
 							Graphics.clipboardfile = Graphics.world.models[Graphics.selectedobject]->filename;
+							Graphics.clipboardy = Graphics.world.models[Graphics.selectedobject]->pos.y;
+
 							Log(3,0,"Copied %s", Graphics.clipboardfile.c_str());
 
 							currentobject = models->finddata("model\\" + Graphics.world.models[Graphics.selectedobject]->rofilename);
@@ -1725,6 +1734,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						cRSMModel* model = new cRSMModel();
 						model->load(Graphics.clipboardfile);
 						model->pos = cVector3(mouse3dx/5, -mouse3dy, mouse3dz/5);
+						if (SDL_GetModState() & KMOD_SHIFT)
+							model->pos.y = Graphics.clipboardy;
 						model->scale = Graphics.clipboardscale;
 						model->rot = Graphics.clipboardrot;
 						model->id = Graphics.world.models.size();
@@ -2195,7 +2206,7 @@ MENUCOMMAND(fill)
 		{
 			cTile t;
 			t.lightmap = 0;
-			t.texture = Graphics.texturestart;
+			t.texture = Graphics.texturestart + (Graphics.selectionstart.y - 32) / 288;
 			t.u1 = x/4.0;
 			t.v1 = y/4.0;
 			t.u2 = (x+1)/4.0;
@@ -2509,10 +2520,74 @@ MENUCOMMAND(savelightmaps)
 
 MENUCOMMAND(loadlightmaps)
 {
-	Graphics.world.loadlightmap();
-	for(int x = 1; x < Graphics.world.width-1; x++)
+	int x,y;
+
+	map<int, bool, less<int> > used;
+	for(x = 0; x < Graphics.world.width; x++)
 	{
-		for(int y = 1; y < Graphics.world.height-1; y++)
+		for(y = 0; y < Graphics.world.height; y++)
+		{
+			int tile = Graphics.world.cubes[y][x].tileup;
+			if(used.find(tile) != used.end())
+			{
+				cTile t = Graphics.world.tiles[tile];
+				tile = Graphics.world.tiles.size();
+				Graphics.world.tiles.push_back(t);
+				Graphics.world.cubes[y][x].tileup = tile;
+			}
+			used[tile] = 1;
+			if(tile != -1)
+			{
+				cLightmap* map = new cLightmap();
+				for(int i = 0; i < 256; i++)
+					map->buf[i] = i < 64 ? 255 : 0;
+				Graphics.world.tiles[tile].lightmap = Graphics.world.lightmaps.size();
+				Graphics.world.lightmaps.push_back(map);
+			}
+//////////////////////////////////
+			tile = Graphics.world.cubes[y][x].tileside;
+			if(used.find(tile) != used.end() && tile != -1)
+			{
+				cTile t = Graphics.world.tiles[tile];
+				tile = Graphics.world.tiles.size();
+				Graphics.world.tiles.push_back(t);
+				Graphics.world.cubes[y][x].tileside = tile;
+			}
+			used[tile] = 1;
+			if(tile != -1)
+			{
+				cLightmap* map = new cLightmap();
+				for(int i = 0; i < 256; i++)
+					map->buf[i] = i < 64 ? 255 : 0;
+				Graphics.world.tiles[tile].lightmap = Graphics.world.lightmaps.size();
+				Graphics.world.lightmaps.push_back(map);
+			}
+////////////////////////////////
+			tile = Graphics.world.cubes[y][x].tileaside;
+			if(used.find(tile) != used.end() && tile != -1)
+			{
+				cTile t = Graphics.world.tiles[tile];
+				tile = Graphics.world.tiles.size();
+				Graphics.world.tiles.push_back(t);
+				Graphics.world.cubes[y][x].tileaside = tile;
+			}
+			used[tile] = 1;
+			if(tile != -1)
+			{
+				cLightmap* map = new cLightmap();
+				for(int i = 0; i < 256; i++)
+					map->buf[i] = i < 64 ? 255 : 0;
+				Graphics.world.tiles[tile].lightmap = Graphics.world.lightmaps.size();
+				Graphics.world.lightmaps.push_back(map);
+			}
+		}
+	}
+
+
+	Graphics.world.loadlightmap();
+	for(x = 1; x < Graphics.world.width-1; x++)
+	{
+		for(y = 1; y < Graphics.world.height-1; y++)
 		{
 			int tile = Graphics.world.cubes[y][x].tileup;
 			int tileleft = Graphics.world.cubes[y][x-1].tileup;
@@ -2561,5 +2636,104 @@ MENUCOMMAND(clearobjects)
 	for(int i = 0; i < Graphics.world.models.size(); i++)
 		delete Graphics.world.models[i];
 	Graphics.world.models.clear();
+	return true;
+}
+
+MENUCOMMAND(addwalls)
+{
+	int x,y;
+	for(x = 0; x < Graphics.world.width-1; x++)
+	{
+		for(y = 0; y < Graphics.world.height-1; y++)
+		{
+			cCube* c = &Graphics.world.cubes[y][x];
+			if (c->tileaside == -1)
+			{
+				if (c->cell4 != (c+1)->cell1 && c->cell2 != (c+1)->cell3)
+				{
+					cTile t;
+					t.color[0] = (char)255;
+					t.color[1] = (char)255;
+					t.color[2] = (char)255;
+					t.color[3] = (char)255;
+					t.texture = Graphics.texturestart + (Graphics.selectionstart.y - 32) / 288;
+					t.lightmap = 0;
+					t.u1 = 0;
+					t.v1 = 0;
+
+					t.u2 = 1;
+					t.v2 = 0;
+					
+					t.u3 = 0;
+					t.v3 = 1;
+					
+					t.u4 = 1;
+					t.v4 = 1;
+					Graphics.world.tiles.push_back(t);
+					Graphics.world.cubes[y][x].tileaside = Graphics.world.tiles.size()-1;
+				}
+			}
+			if (c->tileside == -1)
+			{
+				if (c->cell4 != Graphics.world.cubes[y+1][x].cell1 && c->cell3 != Graphics.world.cubes[y+1][x].cell2)
+				{
+					cTile t;
+					t.color[0] = (char)255;
+					t.color[1] = (char)255;
+					t.color[2] = (char)255;
+					t.color[3] = (char)255;
+					t.texture = Graphics.texturestart + (Graphics.selectionstart.y - 32) / 288;
+					t.lightmap = 0;
+					t.u1 = 0;
+					t.v1 = 0;
+
+					t.u2 = 1;
+					t.v2 = 0;
+					
+					t.u3 = 0;
+					t.v3 = 1;
+					
+					t.u4 = 1;
+					t.v4 = 1;
+					Graphics.world.tiles.push_back(t);
+					Graphics.world.cubes[y][x].tileside = Graphics.world.tiles.size()-1;
+				}
+			}
+		}
+	}
+	return true;
+}
+
+MENUCOMMAND(gatcollision)
+{
+	int x,y;
+	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+			cCube* c = &Graphics.world.cubes[y][x];
+			Graphics.world.gattiles[2*y][2*x].type = (c->cell1+c->cell2+c->cell3+c->cell4) != 0 ? '\1' : '\0';
+			Graphics.world.gattiles[2*y][2*x+1].type = (c->cell1+c->cell2+c->cell3+c->cell4) != 0 ? '\1' : '\0';
+			Graphics.world.gattiles[2*y+1][2*x].type = (c->cell1+c->cell2+c->cell3+c->cell4) != 0 ? '\1' : '\0';
+			Graphics.world.gattiles[2*y+1][2*x+1].type = (c->cell1+c->cell2+c->cell3+c->cell4) != 0 ? '\1' : '\0';
+		}
+
+	}
+	return true;
+}
+
+MENUCOMMAND(clearlightmaps)
+{
+	for(int i = 0; i < Graphics.world.lightmaps.size(); i++)
+		delete 	Graphics.world.lightmaps[i];
+	Graphics.world.lightmaps.clear();
+	cLightmap* m = new cLightmap();
+	for(i = 0; i < 256; i++)
+		m->buf[i] = i < 64 ? 255 : 0;
+	Graphics.world.lightmaps.push_back(m);
+
+	for(i = 0; i < Graphics.world.tiles.size(); i++)
+		Graphics.world.tiles[i].lightmap = 0;
+
 	return true;
 }

@@ -109,6 +109,10 @@ public:
 	cVector3				clipboardrot;
 	cVector3				clipboardscale;
 	string					clipboardfile;
+	float					clipboardy;
+	GLfloat LightAmbient[4];			// lights
+	GLfloat LightDiffuse[4];
+	GLfloat LightPosition[4];
 
 
 	bool					showobjects;

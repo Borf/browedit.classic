@@ -33,9 +33,22 @@ int cGraphics::draw()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set the correct blending mode
 
+//	gluLookAt(  ,
+//				,
+//				,
+
+	LightPosition[0] = cameraheight*sin(camerarot);
+	LightPosition[1] = 10+cameraheight+cameraangle;
+	LightPosition[2] = cameraheight*cos(camerarot);
+	LightPosition[3] = 1.0f;
+	glLightfv(GL_LIGHT1, GL_POSITION, LightPosition);			// Position The Light
+
+	glEnable(GL_LIGHTING);
+
 	if(state != OBJECTSELECT && state != OBJECTPROPS)
 		world.draw();
 
+	glDisable(GL_LIGHTING);
 
 
 
@@ -258,6 +271,29 @@ int cGraphics::init()
 
 
 	previewmodel = NULL;
+
+	LightAmbient[0] = 0.1f;
+	LightAmbient[1] = 0.1f;
+	LightAmbient[2] = 0.1f;
+	LightAmbient[3] = 2.0f;
+
+	LightDiffuse[0] = 0.9f;
+	LightDiffuse[1] = 0.9f;
+	LightDiffuse[2] = 0.9f;
+	LightDiffuse[3] = 2.0f;
+
+	LightPosition[0] = 0.0f;
+	LightPosition[1] = 0.0f;
+	LightPosition[2] = 0.0f;
+	LightPosition[3] = 0.0f;
+
+
+	glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);				// Setup The Ambient Light
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);				// Setup The Diffuse Light
+	glLightfv(GL_LIGHT1, GL_POSITION,LightPosition);			// Position The Light
+	glEnable(GL_LIGHT1);										// Enable Light One
+	glEnable(GL_LIGHTING);
+	glEnable(GL_COLOR_MATERIAL);
 
 	return 1;
 }

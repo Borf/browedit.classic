@@ -675,7 +675,6 @@ void cWorld::draw()
 
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 	glLoadIdentity();									// Reset The Modelview Matrix
-	glDisable(GL_LIGHTING);
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_BLEND);
 
@@ -691,6 +690,10 @@ void cWorld::draw()
 
 	glEnable(GL_TEXTURE_2D);
 	glDisable(GL_BLEND);
+	if (Graphics.showlightmaps)
+		glDisable(GL_LIGHTING);
+	else
+		glEnable(GL_LIGHTING);
 	glColor4f(1,1,1,1);
 	for(x = 0; x < width; x++)
 	{
@@ -720,6 +723,7 @@ void cWorld::draw()
 
 				glDisable(GL_BLEND);
 				glBindTexture(GL_TEXTURE_2D, texture);
+				glNormal3f(0,1,0);
 				glBegin(GL_TRIANGLE_STRIP);
 					glTexCoord2f(t->u1, 1-t->v1);				glVertex3f(x*10,-c->cell1,(height-y)*10);
 					glTexCoord2f(t->u3, 1-t->v3);				glVertex3f(x*10,-c->cell3,(height-y)*10-10);
@@ -733,6 +737,7 @@ void cWorld::draw()
 				int texture = textures[t->texture]->texid();
 				glBindTexture(GL_TEXTURE_2D, texture);
 				glColor3f(1,1,1);
+				glNormal3f(c->cell4 > (c+1)->cell3 ? -1 : 1,0,0);
 				glBegin(GL_TRIANGLE_STRIP);
 					glTexCoord2f(t->u1, 1-t->v1); glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
 					glTexCoord2f(t->u2, 1-t->v2); glVertex3f(x*10+10,-c->cell2,(height-y)*10);
@@ -746,6 +751,7 @@ void cWorld::draw()
  				int texture = textures[t->texture]->texid();
 				glBindTexture(GL_TEXTURE_2D, texture);
 				glColor3f(1,1,1);
+				glNormal3f(0,0, cubes[y+1][x].cell1 > c->cell4 ? -1 : 1);
 				glBegin(GL_TRIANGLE_STRIP);
 					glTexCoord2f(t->u1, 1-t->v1); glVertex3f(x*10,-c->cell3,(height-y)*10-10);
 					glTexCoord2f(t->u2, 1-t->v2); glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
@@ -774,6 +780,7 @@ void cWorld::draw()
 					int lightmap2 = lightmaps[t->lightmap]->texid2();
 					glBlendFunc(GL_ONE ,GL_DST_COLOR);				
 					glBindTexture(GL_TEXTURE_2D, lightmap);
+					glNormal3f(1,0,0);
 					glBegin(GL_TRIANGLE_STRIP);
 						glTexCoord2f(0.125,0.125);					glVertex3f(x*10,-c->cell1,(height-y)*10);
 						glTexCoord2f(0.125,0.875);					glVertex3f(x*10,-c->cell3,(height-y)*10-10);
@@ -798,6 +805,7 @@ void cWorld::draw()
 					int lightmap2 = lightmaps[t->lightmap]->texid2();
 					glBlendFunc(GL_ONE ,GL_DST_COLOR);				
 					glBindTexture(GL_TEXTURE_2D, lightmap);
+					glNormal3f(0,0,1);
 					glBegin(GL_TRIANGLE_STRIP);
 						glTexCoord2f(0.125,0.125);					glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
 						glTexCoord2f(0.875,0.125);					glVertex3f(x*10+10,-c->cell2,(height-y)*10);
@@ -845,6 +853,7 @@ void cWorld::draw()
 	}
 
 	glDisable(GL_BLEND);
+	glDisable(GL_LIGHTING);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set the correct blending mode
 
 
@@ -1471,7 +1480,7 @@ void cWorld::clean()
 		{
 			if(cubes[yy][xx].tileup != -1)
 				lightmapsused[tiles[cubes[yy][xx].tileup].lightmap] = true;
-			if(cubes[yy][xx].tileside != -1)
+			if(cubes[yy][xx].tileside != -1)	
 				lightmapsused[tiles[cubes[yy][xx].tileside].lightmap] = true;
 			if(cubes[yy][xx].tileaside != -1)
 				lightmapsused[tiles[cubes[yy][xx].tileaside].lightmap] = true;
@@ -1565,21 +1574,21 @@ void cQuadTreeNode::recalculate()
 				if(tiley > -1 && tiley < Graphics.world.height && tilex > -1 && tilex < Graphics.world.height)
 				{
 					cCube* c = &Graphics.world.cubes[Graphics.world.height - tiley-1][tilex];
-					box1.y = max(box1.y, c->cell1+10);
-					box2.y = min(box2.y, c->cell1-10);
+					box1.y = max(box1.y, c->cell1);
+					box2.y = min(box2.y, c->cell1);
 
-					box1.y = max(box1.y, c->cell2+10);
-					box2.y = min(box2.y, c->cell2-10);
+					box1.y = max(box1.y, c->cell2);
+					box2.y = min(box2.y, c->cell2);
 
-					box1.y = max(box1.y, c->cell3+10);
-					box2.y = min(box2.y, c->cell3-10);
+					box1.y = max(box1.y, c->cell3);
+					box2.y = min(box2.y, c->cell3);
 
-					box1.y = max(box1.y, c->cell4+10);
-					box2.y = min(box2.y, c->cell4-10);
+					box1.y = max(box1.y, c->cell4);
+					box2.y = min(box2.y, c->cell4);
 
 					
-					box1.y = max(box1.y, c->maxh+10);
-					box2.y = min(box2.y, c->minh-10);
+					box1.y = max(box1.y, c->maxh);
+					box2.y = min(box2.y, c->minh);
 
 				}
 				else
@@ -1777,6 +1786,7 @@ void cWorld::savelightmap()
 			{
 				for(int yy = 0; yy < 6; yy++)
 				{
+					int lightmap = tiles[cubes[y][x].tileup].lightmap;
 					imgdata[3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8+8+1];
 					imgdata[3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy+1] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8+8+1];
 					imgdata[3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy+2] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8+8+1];
