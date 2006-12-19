@@ -7,6 +7,8 @@
 #include <fstream>
 #include <list>
 #include <gd/gd.h>
+#include "md5.h"
+#include <time.h>
 
 #include "texturecache.h"
 #ifdef WIN32
@@ -21,6 +23,7 @@ cFileSystem fs;
 string inputboxresult;
 
 
+long userid;
 list<cGraphics> undos;
 void MakeUndo();
 void Undo();
@@ -101,28 +104,301 @@ cMenu* models;
 vector<vector<vector<float> > > clipboard;
 
 
+char* downloadfile(string url, long &filesize)
+{
+//#define DOWNLOADBUFFERSIZE 1
+#define DOWNLOADBUFFERSIZE 2024
+	string server = url;
+	string file = "/";
+	if (url.find("/") != string::npos)
+	{
+		server = url.substr(0, url.find("/"));
+		file = url.substr(url.find("/"));
+	}
+
+	SOCKET s;
+    struct sockaddr_in addr;
+    struct hostent* host;    
+	bool connecttomap = false;
+	host = gethostbyname(server.c_str());
+	if(host==NULL)
+	{
+		Log(1,0,"Could not look up host '%s', are you connected to the internet?", server.c_str());
+		return 0;
+	}
+	addr.sin_family = host->h_addrtype;
+	memcpy((char*) &addr.sin_addr.s_addr, host->h_addr_list[0], host->h_length);
+	addr.sin_port = htons(80);
+	memset(addr.sin_zero, 0, 8);
+
+	if ((s = socket(AF_INET,SOCK_STREAM,0)) == -1)
+	{
+		Log(1,0,"Cannot create socket, try a reboot");
+		return 0;
+	}
+
+	int rc;
+	int siz = sizeof(addr);
+	rc = connect(s, (struct sockaddr*) &addr, siz);
+	if (rc < 0)
+	{
+		Log(3,0,"Could not connect to the server: %s", server.c_str());
+		return 0;
+	}
+
+	string header;
+
+
+	header+= "GET "+file+" HTTP/1.0\r\nhost: "+server+"\r\n\r\n";
+
+	send(s, header.c_str(), header.size(), 0);
+
+	char buffer[DOWNLOADBUFFERSIZE+1];
+	buffer[DOWNLOADBUFFERSIZE] = 0;
+	string buf;
+	long bytes = 0;
+	header = "";
+	filesize = 0;
+	char* downloadbuffer = NULL;
+	while(rc = recv(s, buffer, DOWNLOADBUFFERSIZE, 0))
+	{
+		if (rc <= 0)
+			break;
+
+		if (header == "")
+			buf += string(buffer, rc);
+
+		int bla = buf.find("\r\n\r\n");
+		if (header == "" && buf.find("\r\n\r\n") != string::npos)
+		{
+			header = buf.substr(0, buf.find("\r\n\r\n"));
+			if (header.find("HTTP/1.1 301 Moved Permanently") != string::npos)
+			{
+				string newurl = header.substr(header.find("Location: http://")+17);
+				newurl = newurl.substr(0, newurl.find("\r\n"));
+				return downloadfile(newurl, filesize);
+			}
+			else if (header.find("\r\nContent-Length") != string::npos)
+			{
+				if (header.substr(0, 22) == "HTTP/1.1 404 Not Found")
+				{
+					Log(3,0,"404 not found");
+					return NULL;
+				}
+				string bla = header.substr(header.find("\r\nContent-Length:")+18);
+				bla = bla.substr(0, bla.find("\r\n"));
+				filesize = atol(bla.c_str());
+				if (filesize == 0)
+					return NULL;
+				downloadbuffer = new char[filesize+100];
+				ZeroMemory(downloadbuffer, filesize+100);
+				int startpage = buf.find("\r\n\r\n")+4;
+				memcpy(downloadbuffer, buf.c_str()+startpage, buf.length()-startpage);
+				bytes+=buf.length()-startpage;
+			}
+			else
+			{
+				Log(3,0,"Url: %s -> Header: %s, buf -> %s", url.c_str(), header.c_str(), buf.c_str());
+				filesize = 0;
+				Log(3,0,"Unknown filesize!, cancelling download");
+				return NULL;
+			}
+		}
+		else
+		{
+			if (header != "")
+			{
+				memcpy(downloadbuffer+bytes, buffer, rc);
+				bytes+=rc;
+			}
+		}
+
+	}
+	
+	return downloadbuffer;
+}
+
+
 int main(int argc, char *argv[])
 {
-#ifndef _DEBUG
+	changetoserverdir();				
+	log_open("log_worldeditor.txt","worldedit",2);
 	char fileBuffer[1024];
 	GetModuleFileName(NULL, fileBuffer, 1024);
 	WIN32_FIND_DATA FileData;													// thingy for searching through a directory
 	HANDLE hSearch;																// thingy for searching through a directory
 	bool fFinished = false;														// not finished with looking yet....
+	long filesize;
 	hSearch = FindFirstFile(fileBuffer, &FileData);						// look for all files
 	if (hSearch != INVALID_HANDLE_VALUE)										// if there are results...
 	{
-		int size = FileData.nFileSizeLow;
-		if(size > 100000)
+		filesize = FileData.nFileSizeLow;
+#ifndef _DEBUG
+		if(filesize > 100000)
 			return 0;
+#endif
 	}
 	else
 		return 0;
  	FindClose(hSearch);															// Close the search handle. 
 
+	md5_state_t state;
+	md5_byte_t exedigest[16];
+	ifstream File(fileBuffer, ios_base::in | ios_base::binary);
+	if (File.eof() || File.bad() || !File.good())
+		Log(1,0,"Bad file");
+	char* filedata = new char[filesize];
+	File.read(filedata, filesize);
+	md5_init(&state);
+	md5_append(&state, (const md5_byte_t *)filedata, filesize-4);
+	md5_finish(&state, exedigest);	
+	delete[] filedata;
+	
+	File.seekg(-4, ios_base::end);
+	File.read((char*)&userid, 4);
+	File.close();
+
+	srand(0);
+	char buffer[100];
+	for(int i = 0; i < 64; i++)
+		buffer[i] = rand()%256;
+	sprintf(buffer, "%i", userid);
+
+	char serial[4];
+	unsigned long driveSerial = 1234;
+	GetVolumeInformation("C:\\", NULL, 0, (unsigned long*)&driveSerial, NULL, NULL, NULL, 0 );
+	memcpy(serial, (char*)&driveSerial, 4);
+
+	for(i = 0; i < 64; i+=4)
+	{
+		buffer[i] ^= serial[0];
+		buffer[i+1] ^= serial[1];
+		buffer[i+2] ^= serial[2];
+		buffer[i+3] ^= serial[3];
+	}
+
+
+	md5_byte_t digest[16];
+	md5_init(&state);
+	md5_append(&state, (const md5_byte_t *)buffer, 100);
+	md5_finish(&state, digest);
+	
+	char md5buf[33];
+	sprintf(md5buf,"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x", digest[0], digest[1], digest[2], digest[3], digest[4], digest[5], digest[6], digest[7], digest[8], digest[9], digest[10], digest[11], digest[12], digest[13],digest[14],digest[15]);
+
+	HKEY hKey;
+	int lRet = RegOpenKeyEx( HKEY_CLASSES_ROOT,
+            TEXT(md5buf),
+            0, KEY_QUERY_VALUE| KEY_SET_VALUE, &hKey );
+     if( lRet != ERROR_SUCCESS )
+	 {
+		RegCreateKeyEx(HKEY_CLASSES_ROOT, TEXT(md5buf), NULL, NULL, 0, KEY_ALL_ACCESS, NULL, &hKey, NULL);
+		unsigned long len = 16;
+		char data[16];
+		for(int i = 0; i < 16; i++)
+			data[i] = rand()%256;
+		sprintf(data, "%i", (long)time(NULL));
+		data[15] = '\0';
+		for(i = 0; i < len; i+=4)
+		{
+			data[i] ^= serial[0];
+			data[i+1] ^= serial[1];
+			data[i+2] ^= serial[2];
+			data[i+3] ^= serial[3];
+		}
+		RegSetValueEx(hKey, "",NULL,NULL,(BYTE*)data,len);
+	 }
+
+	DWORD len = 16;
+	char data[16];
+
+	lRet = RegQueryValueEx( hKey, "", NULL, NULL,	(LPBYTE) data, &len);
+
+	for(i = 0; i < len; i+=4)
+	{
+		data[i] ^= serial[0];
+		data[i+1] ^= serial[1];
+		data[i+2] ^= serial[2];
+		data[i+3] ^= serial[3];
+	}
+	bool ok = true;
+	long l = atol(data);
+	if (data[15] == 0)
+		ok = false;
+	long t = time(NULL);
+
+	if (l-t < 0 || l-t > 3600*24 || !ok)
+	{
+		WSADATA WinsockData;
+		if (WSAStartup(MAKEWORD(2, 2), &WinsockData) != 0)
+		{
+
+			msgbox("Winsock Startup failed!", "Fatal Error");
+			return 0;
+		}
+		long filesize;
+		char buf[100];
+		sprintf(buf, "browedit.excalibur-nw.com/check.php?hash=%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x", 
+			exedigest[0], 
+			(userid>>24)&255,
+			exedigest[1], 
+			(userid>>16)&255,
+			exedigest[2], 
+			(userid>>8)&255,
+			exedigest[3], 
+			userid&255,
+			exedigest[4], 
+			exedigest[5], 
+			exedigest[6], 
+			exedigest[7], 
+			exedigest[8], 
+			exedigest[9], 
+			exedigest[10], 
+			exedigest[11], 
+			exedigest[12], 
+			exedigest[13],
+			exedigest[14],
+			exedigest[15]
+			
+			);
+		char* res = downloadfile(buf, filesize);
+		if (res == NULL)
+			ok = true;
+		else if (strcmp(res, "1") == 0)
+		{
+			ok = true;
+		}
+		else
+			ok = false;
+		if (res != NULL && strcmp(res, "2") == 0)
+		{
+			Log(3,0,"You do not have the latest version of browedit");
+			sleep(10);
+			exit(0);
+		}
+		// ET phone home
+		for(int i = 0; i < 16; i++)
+			data[i] = rand()%256;
+		data[15] = ok ? '\1' : '\0';
+		sprintf(data, "%i", ((long)time(NULL))+3600*24);
+		for(i = 0; i < len; i+=4)
+		{
+			data[i] ^= serial[0];
+			data[i+1] ^= serial[1];
+			data[i+2] ^= serial[2];
+			data[i+3] ^= serial[3];
+		}
+		lRet = RegSetValueEx(hKey, "",NULL,NULL,(BYTE*)data,len);
+	}
+#ifndef _DEBUG
+	if(!ok)
+		exit(0);
+#else
+	if(!ok)
+		Log(1,0,"Error: non-valid licence stuff");
 #endif
 
-
+	RegCloseKey( hKey );
 
 
 	cMenu* file;
@@ -226,8 +502,6 @@ int main(int argc, char *argv[])
 
 
 
-	changetoserverdir();				
-	log_open("log_worldeditor.txt","worldedit",2);
 	fs.LoadFile("data.dat");
 	
 	cFile* pFile = fs.open("config.txt");
@@ -331,7 +605,7 @@ int main(int argc, char *argv[])
 		return 1;
 
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "maze").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "prontera").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 #endif

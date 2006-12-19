@@ -348,7 +348,19 @@ int cGraphics::InitGL(void)										// All Setup For OpenGL Goes Here
 void cGraphics::KillGLWindow(void)								// Properly Kill The Window
 {
 	SDL_ShowCursor(0);
+	TextureCache.unload(mask);
+	TextureCache.unload(bulb);
+	
+	for(int i = 0; i < 7; i++)
+		TextureCache.unload(gattextures[i]);
 
+	for(i = 0; i < 6; i++)
+	{
+		for(int ii = 0; ii < 32; ii++)
+		{
+			TextureCache.unload(watertextures[i][ii]);
+		}
+	}
 	return;
 }
 

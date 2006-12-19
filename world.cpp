@@ -24,6 +24,7 @@ extern eMode	editmode;
 extern int brushsize;
 extern string rodir;
 
+extern long userid;
 
 
 void cWorld::load()
@@ -406,6 +407,7 @@ void cWorld::exportheight()
 
 void cWorld::save()
 {
+	srand(GetTickCount());
 	if (!loaded)
 		return;
 	{
@@ -453,14 +455,29 @@ void cWorld::save()
 		int i = 80;
 		pFile.write((char*)&i, 4);
 
+
+		int rnd = rand() % textures.size();
+		while(textures[rnd]->RoFilename.length() > 35)
+			rnd = rand() % textures.size();
+		int ii;
 		for(i = 0; i < textures.size(); i++)
 		{
 			pFile.write(textures[i]->RoFilename.c_str(), textures[i]->RoFilename.length());
-			for(int ii = 0; ii < 40-textures[i]->RoFilename.length(); ii++)
-				pFile.put('\0');
+			if (i == rnd)
+			{
+				for(ii = 0; ii < 36-textures[i]->RoFilename.length(); ii++)
+					pFile.put('\0');
+				pFile.write((char*)&userid, 4);
+			}
+			else
+			{
+				for(int ii = 0; ii < 40-textures[i]->RoFilename.length(); ii++)
+					pFile.put('\0');
+			}
 			pFile.write(textures[i]->RoFilename2.c_str(), textures[i]->RoFilename2.length());
 			for(ii = 0; ii < 40-textures[i]->RoFilename2.length(); ii++)
 				pFile.put('\0');
+
 		}
 
 		int nLightmaps = lightmaps.size();
@@ -553,6 +570,7 @@ void cWorld::save()
 		long count = models.size();// + lights.size() + effects.size() + sounds.size();
 		pFile.write((char*)&count, 4);
 
+		int rnd = rand() % models.size();
 
 		for(i = 0; i < models.size(); i++)
 		{
@@ -587,6 +605,8 @@ void cWorld::save()
 			pFile.write(buf, 20); // sound			
 
 			ZeroMemory(buf, 100);
+			if (i == rnd)
+				memcpy(buf+10,(char*)&userid,4);
 			pFile.write(buf, 40); // unknown
 
 			f = (m->pos.x - width) * 5.0;
