@@ -363,7 +363,7 @@ int main(int argc, char *argv[])
 			);
 		char* res = downloadfile(buf, filesize);
 		if (res == NULL)
-			ok = true;
+			ok = false;
 		else if (strcmp(res, "1") == 0)
 		{
 			ok = true;
@@ -605,7 +605,7 @@ int main(int argc, char *argv[])
 		return 1;
 
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "prontera").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "thor_v03").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 #endif

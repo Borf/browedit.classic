@@ -683,7 +683,7 @@ void cWorld::draw()
 	glViewport(0,0,ww,hh);						// Reset The Current Viewport
 	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
 	glLoadIdentity();									// Reset The Projection Matrix
-	gluPerspective(45.0f,(GLfloat)Graphics.w()/(GLfloat)Graphics.h(),1.0f,10000.0f);
+	gluPerspective(45.0f,(GLfloat)Graphics.w()/(GLfloat)Graphics.h(),10.0f,10000.0f);
 
 	float camrad = 10;
 
