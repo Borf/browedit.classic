@@ -37,7 +37,7 @@ public:
 		showlightmaps = false;
 		showtilecolors = true;
 		showwater = true;
-		lasttick = GetTickCount();
+		lasttick = SDL_GetTicks();
 	}
 
 	int						init();				// initializes graphics

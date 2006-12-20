@@ -1429,9 +1429,10 @@ void cWorld::draw()
 	{
 		static float waterindex = 0;
 
+		Log(3,0,"%f", waterindex);
 		glBindTexture(GL_TEXTURE_2D, Graphics.watertextures[water.type][ceil(waterindex)]->texid());
 
-		waterindex+=(Graphics.frameticks) / 50.0f;
+		waterindex+=max(0,(Graphics.frameticks) / 50.0f);
 		if (waterindex > 31)
 			waterindex = 0;
 		glBegin(GL_QUADS);

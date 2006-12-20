@@ -2480,6 +2480,8 @@ MENUCOMMAND(fill)
 
 	int startid = Graphics.world.tiles.size();
 
+	MENUCOMMAND(flatten);
+	Graphics.world.tiles.clear();
 	for(y = 0; y < 4; y++)
 	{
 		for(x = 0; x < 4; x++)

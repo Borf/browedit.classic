@@ -27,7 +27,7 @@ double mouse3dx, mouse3dy, mouse3dz;
 
 int cGraphics::draw()
 {
-	frameticks = GetTickCount() - lasttick;
+	frameticks = SDL_GetTicks() - lasttick;
 	lasttick += frameticks;
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);				// Black Background
