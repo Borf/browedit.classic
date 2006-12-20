@@ -594,7 +594,7 @@ int main(int argc, char *argv[])
 		{
 			ADDMENUITEMDATA(mm,items[cat],menuname, &MenuCommand_picktexture, filename);
 		}
-		
+			
 	}
 	textures->sort();
 	pFile->close();
@@ -608,7 +608,7 @@ int main(int argc, char *argv[])
 		return 1;
 
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "prt_sewb1").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "alb2trea").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 #endif
