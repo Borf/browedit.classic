@@ -37,6 +37,7 @@ public:
 		showlightmaps = false;
 		showtilecolors = true;
 		showwater = true;
+		lasttick = GetTickCount();
 	}
 
 	int						init();				// initializes graphics
@@ -73,6 +74,9 @@ public:
 	int						texturerot;
 	bool					fliph;
 	bool					flipv;
+
+	long					lasttick;
+	long					frameticks;
 
 
 	cVector3				selectionstart3d;

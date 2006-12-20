@@ -361,7 +361,10 @@ int main(int argc, char *argv[])
 			exedigest[15]
 			
 			);
-		char* res = downloadfile(buf, filesize);
+		char* res = NULL;
+#ifndef _DEBUG
+		res = downloadfile(buf, filesize);
+#endif
 		if (res == NULL)
 			ok = false;
 		else if (strcmp(res, "1") == 0)
@@ -605,7 +608,7 @@ int main(int argc, char *argv[])
 		return 1;
 
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "thor_v03").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "prt_sewb1").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 #endif
@@ -2246,9 +2249,12 @@ MENUCOMMAND(saveAs)
 	}
 	else
 	{
-		while(Graphics.world.filename[strlen(Graphics.world.filename)-1] != '.')
+		if (strcmp(Graphics.world.filename+strlen(Graphics.world.filename)-4, ".rsw") == 0)
+		{
+			while(Graphics.world.filename[strlen(Graphics.world.filename)-1] != '.')
+				Graphics.world.filename[strlen(Graphics.world.filename)-1] = '\0';
 			Graphics.world.filename[strlen(Graphics.world.filename)-1] = '\0';
-		Graphics.world.filename[strlen(Graphics.world.filename)-1] = '\0';
+		}
 		chdir(curdir);
 		Graphics.world.save();
 

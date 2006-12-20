@@ -29,6 +29,7 @@ extern long userid;
 
 void cWorld::load()
 {
+	int i;
 	if(light == NULL)
 	{
 		light = new cTextureModel();
@@ -44,8 +45,33 @@ void cWorld::load()
 		sound = new cTextureModel();
 		sound->open("data/Speaker.tga");
 	}
+
+	for(i = 0; i < textures.size(); i++)
+		TextureCache.unload(textures[i]->texture);
+	textures.clear();
+
+	tiles.clear();
+	for(i = 0; i < cubes.size(); i++)
+		cubes[i].clear();
+	cubes.clear();
+
+	for(i = 0; i < lightmaps.size(); i++)
+	{
+		lightmaps[i]->del();
+		lightmaps[i]->del2();
+		delete lightmaps[i];
+	}
+	lightmaps.clear();
+
+	for(i = 0; i < models.size(); i++)
+		delete models[i];
+	models.clear();
+	delete root;
 	root = NULL;
-	int i;
+	quadtreefloats.clear();
+	sounds.clear();
+	effects.clear();
+
 	Log(3,0,"Loading %s", filename);
 	cFile* pFile = fs.open(string(filename) + ".gnd");
 	if(pFile == NULL)
@@ -570,7 +596,9 @@ void cWorld::save()
 		long count = models.size();// + lights.size() + effects.size() + sounds.size();
 		pFile.write((char*)&count, 4);
 
-		int rnd = rand() % models.size();
+		int rnd = 0;
+		if (models.size() != 0)
+			rnd = rand() % models.size();
 
 		for(i = 0; i < models.size(); i++)
 		{
@@ -1403,7 +1431,7 @@ void cWorld::draw()
 
 		glBindTexture(GL_TEXTURE_2D, Graphics.watertextures[water.type][ceil(waterindex)]->texid());
 
-		waterindex+=0.5f;
+		waterindex+=(Graphics.frameticks) / 50.0f;
 		if (waterindex > 31)
 			waterindex = 0;
 		glBegin(GL_QUADS);
