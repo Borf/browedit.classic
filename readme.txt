@@ -26,6 +26,7 @@ rightclick+leftclick			lower brush
 c					copy
 p					paste
 f					merge cellheights (used for sloping)
+s					smoooooooooothen the tiles under the current brush (could crash at edges of the map)
 
 
 Wall edit

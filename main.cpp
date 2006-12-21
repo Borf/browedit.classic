@@ -338,7 +338,6 @@ int main(int argc, char *argv[])
 			msgbox("Winsock Startup failed!", "Fatal Error");
 			return 0;
 		}
-		long filesize;
 		char buf[100];
 		sprintf(buf, "browedit.excalibur-nw.com/check.php?hash=%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x", 
 			exedigest[0], 
@@ -628,9 +627,6 @@ int main(int argc, char *argv[])
 
 									if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= Graphics.world.height-ceil(brushsize/2.0f))
 									{
-										glColor4f(1,0,0,1);
-										glDisable(GL_TEXTURE_2D);
-										glDisable(GL_BLEND);
 										for(int x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f); x++)
 										{
 											for(int y = posy-floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
@@ -2126,25 +2122,27 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			{
 				if (editmode == MODE_HEIGHTDETAIL)
 				{
-					int x = mouse3dx / 10;
-					int y = mouse3dz / 10;
+					int posx = mouse3dx / 10;
+					int posy = mouse3dz / 10;
 
-					x = x - floor(brushsize/2.0f);
-					y = y;
-
-
-					if (x >= 0 && x < Graphics.world.width-ceil(brushsize/2.0f) && y > 0 && y <= Graphics.world.height-ceil(brushsize/2.0f))
+					for(int x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f)-1; x++)
 					{
-						float to = Graphics.world.cubes[y][x].cell2;
-						Graphics.world.cubes[y][x].cell2 = to;
-						Graphics.world.cubes[y][x+1].cell1 = to;
-						Graphics.world.cubes[y-1][x+1].cell3 = to;
-						Graphics.world.cubes[y-1][x].cell4 = to;
+						for(int y = posy-floor(brushsize/2.0f)+1; y < posy+ceil(brushsize/2.0f); y++)
+						{
+							if (x >= 0 && x < Graphics.world.width-ceil(brushsize/2.0f) && y > 0 && y <= Graphics.world.height-ceil(brushsize/2.0f))
+							{
+								float to = Graphics.world.cubes[y][x].cell2;
+								Graphics.world.cubes[y][x].cell2 = to;
+								Graphics.world.cubes[y][x+1].cell1 = to;
+								Graphics.world.cubes[y-1][x+1].cell3 = to;
+								Graphics.world.cubes[y-1][x].cell4 = to;
 
-						Graphics.world.cubes[y][x].calcnormal();
-						Graphics.world.cubes[y][x+1].calcnormal();
-						Graphics.world.cubes[y-1][x+1].calcnormal();
-						Graphics.world.cubes[y-1][x].calcnormal();
+								Graphics.world.cubes[y][x].calcnormal();
+								Graphics.world.cubes[y][x+1].calcnormal();
+								Graphics.world.cubes[y-1][x+1].calcnormal();
+								Graphics.world.cubes[y-1][x].calcnormal();
+							}
+						}
 					}
 					
 
@@ -2163,6 +2161,53 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					Graphics.quadtreeview--;
 					if (Graphics.quadtreeview < -1)
 						Graphics.quadtreeview = -1;
+				}
+				break;
+			case SDLK_s:
+				{
+					if (editmode == MODE_HEIGHTDETAIL)
+					{
+						int x,y;
+						int posx = mouse3dx / 10;
+						int posy = mouse3dz / 10;
+						for(x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f)-1; x++)
+						{
+							for(y = posy-floor(brushsize/2.0f)+1; y < posy+ceil(brushsize/2.0f); y++)
+							{
+								if (x >= 0 && x < Graphics.world.width-ceil(brushsize/2.0f) && y > 0 && y <= Graphics.world.height-ceil(brushsize/2.0f))
+								{
+									float to = Graphics.world.cubes[y][x].cell2;
+									Graphics.world.cubes[y][x].cell2 = to;
+									Graphics.world.cubes[y][x+1].cell1 = to;
+									Graphics.world.cubes[y-1][x+1].cell3 = to;
+									Graphics.world.cubes[y-1][x].cell4 = to;
+								}
+							}
+						}
+						
+						for(x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f)-1; x++)
+						{
+							for(y = posy-floor(brushsize/2.0f)+1; y < posy+ceil(brushsize/2.0f); y++)
+							{
+								if (x >= 0 && x < Graphics.world.width-ceil(brushsize/2.0f) && y > 0 && y <= Graphics.world.height-ceil(brushsize/2.0f))
+								{
+									float to = (Graphics.world.cubes[y+1][x-1].cell2 + Graphics.world.cubes[y+1][x].cell2 + Graphics.world.cubes[y+1][x+1].cell2 + Graphics.world.cubes[y][x-1].cell2 + Graphics.world.cubes[y][x].cell2 + Graphics.world.cubes[y][x+1].cell2 + Graphics.world.cubes[y-1][x-1].cell2 + Graphics.world.cubes[y-1][x].cell2 + Graphics.world.cubes[y-1][x+1].cell2) / 9.0f;
+									Graphics.world.cubes[y][x].cell2 = to;
+									Graphics.world.cubes[y][x+1].cell1 = to;
+									Graphics.world.cubes[y-1][x+1].cell3 = to;
+									Graphics.world.cubes[y-1][x].cell4 = to;
+									Graphics.world.cubes[y][x].calcnormal();
+									Graphics.world.cubes[y][x+1].calcnormal();
+									Graphics.world.cubes[y-1][x+1].calcnormal();
+									Graphics.world.cubes[y-1][x].calcnormal();
+								}
+							}
+						}
+						
+
+					}
+					break;
+
 				}
 				break;
 			default:

@@ -1149,27 +1149,26 @@ void cWorld::draw()
 		int posx = mouse3dx / 10;
 		int posy = mouse3dz / 10;
 
-		if (posx >= floor(brushsize/2.0f) && posx <= width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= height-ceil(brushsize/2.0f))
+		glColor4f(1,0,0,1);
+		glDisable(GL_TEXTURE_2D);
+		glDisable(GL_BLEND);
+		for(x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f); x++)
 		{
-			glColor4f(1,0,0,1);
-			glDisable(GL_TEXTURE_2D);
-			glDisable(GL_BLEND);
-			for(x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f); x++)
+			for(y = posy-floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
 			{
-				for(y = posy-floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
-				{
-					cCube* c = &cubes[y][x];
-					if(!Graphics.frustum.CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 10))
-						continue;
-					glBegin(GL_LINE_LOOP);
-						glVertex3f(x*10,-c->cell1+0.2,(height-y)*10);
-						glVertex3f(x*10+10,-c->cell2+0.2,(height-y)*10);
-						glVertex3f(x*10+10,-c->cell4+0.2,(height-y)*10-10);
-						glVertex3f(x*10,-c->cell3+0.2,(height-y)*10-10);
-					glEnd();
-					
+				if (y >= height || y < 0 || x < 0 || x >= height)
+					continue;
+				cCube* c = &cubes[y][x];
+				if(!Graphics.frustum.CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 10))
+					continue;
+				glBegin(GL_LINE_LOOP);
+					glVertex3f(x*10,-c->cell1+0.2,(height-y)*10);
+					glVertex3f(x*10+10,-c->cell2+0.2,(height-y)*10);
+					glVertex3f(x*10+10,-c->cell4+0.2,(height-y)*10-10);
+					glVertex3f(x*10,-c->cell3+0.2,(height-y)*10-10);
+				glEnd();
+				
 
-				}
 			}
 		}
 	}
