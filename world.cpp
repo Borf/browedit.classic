@@ -155,6 +155,7 @@ void cWorld::load()
 			c.tileup = *((int*)(buf+16));
 			c.tileside = *((int*)(buf+20));
 			c.tileaside = *((int*)(buf+24));
+			c.calcnormal();
 			row.push_back(c);
 		}
 		cubes.push_back(row);
@@ -738,7 +739,7 @@ void cWorld::draw()
 
 	glEnable(GL_TEXTURE_2D);
 	glDisable(GL_BLEND);
-	if (Graphics.showlightmaps)
+	if (Graphics.showlightmaps || !Graphics.showoglighting)
 		glDisable(GL_LIGHTING);
 	else
 		glEnable(GL_LIGHTING);
@@ -771,7 +772,7 @@ void cWorld::draw()
 
 				glDisable(GL_BLEND);
 				glBindTexture(GL_TEXTURE_2D, texture);
-				glNormal3f(0,1,0);
+				glNormal3f(c->normal.x, c->normal.y, c->normal.z);
 				glBegin(GL_TRIANGLE_STRIP);
 					glTexCoord2f(t->u1, 1-t->v1);				glVertex3f(x*10,-c->cell1,(height-y)*10);
 					glTexCoord2f(t->u3, 1-t->v3);				glVertex3f(x*10,-c->cell3,(height-y)*10-10);
@@ -1897,4 +1898,23 @@ void cWorld::loadlightmap()
 	}
 	pFile->close();
 	
+}
+
+
+void cCube::calcnormal()
+{
+	cVector3 b1, b2;
+//					glTexCoord2f(t->u1, 1-t->v1);				glVertex3f(x*10,-c->cell1,(height-y)*10);
+//					glTexCoord2f(t->u3, 1-t->v3);				glVertex3f(x*10,-c->cell3,(height-y)*10-10);
+//					glTexCoord2f(t->u2, 1-t->v2);				glVertex3f(x*10+10,-c->cell2,(height-y)*10);
+//					glTexCoord2f(t->u4, 1-t->v4);				glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
+
+	b1 = cVector3(0,-cell1,0) - cVector3(10,-cell4,-10);
+	b2 = cVector3(10,-cell3,0) - cVector3(10,-cell4,-10);
+
+	normal.x = b1.y * b2.z - b1.z * b2.y;
+	normal.y = b1.z * b2.x - b1.x * b2.z;
+	normal.z = b1.x * b2.y - b1.y * b2.x;
+
+	normal = normal.Normalize();
 }

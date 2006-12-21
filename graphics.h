@@ -37,6 +37,7 @@ public:
 		showlightmaps = false;
 		showtilecolors = true;
 		showwater = true;
+		showoglighting = true;
 		lasttick = SDL_GetTicks();
 	}
 
@@ -102,6 +103,7 @@ public:
 
 	int						selectedobject;
 	bool					objectstartdrag;
+	bool					showoglighting;
 
 	bool					slope;
 

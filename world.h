@@ -61,6 +61,9 @@ public:
 
 	float maxh;
 	float minh;
+
+	void calcnormal();
+	cVector3 normal;
 };
 
 class cTextureContainer

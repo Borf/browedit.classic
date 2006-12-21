@@ -35,7 +35,7 @@ void CleanSurfaces();
 int process_events();
 bool running = true;
 eMode editmode = MODE_TEXTURE;
-float paintspeed = 0.1f;
+float paintspeed = 100;
 extern double mouse3dx, mouse3dy, mouse3dz;
 
 string rodir;
@@ -65,6 +65,7 @@ MENUCOMMAND(mode_detail);
 MENUCOMMAND(speed);
 MENUCOMMAND(fill);
 MENUCOMMAND(showobjects);
+MENUCOMMAND(showoglighting);
 MENUCOMMAND(model);
 MENUCOMMAND(slope);
 MENUCOMMAND(picktexture);
@@ -89,6 +90,7 @@ cMenu* showobjects;
 cMenu* showwater;
 cMenu* currentobject;
 cMenu* lightmaps;
+cMenu* showoglighting;
 
 int cursorsize = 1;
 
@@ -102,7 +104,7 @@ cMenu* speed;
 cMenu* models;
 
 vector<vector<vector<float> > > clipboard;
-
+long lasttimer;
 
 char* downloadfile(string url, long &filesize)
 {
@@ -454,8 +456,10 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(showobjects,view,"Objects",&MenuCommand_showobjects);
 	ADDMENUITEM(mm,view,"Boundingboxes",&MenuCommand_boundingboxes);
 	ADDMENUITEM(lightmaps,view,"Lightmaps",&MenuCommand_lightmaps);
+	ADDMENUITEM(showoglighting,view,"Show OGL Lighting", &MenuCommand_showoglighting);
 	ADDMENUITEM(mm,view,"Tilecolors",&MenuCommand_tilecolors);
 	mm->ticked = true;
+	showoglighting->ticked = true;
 	ADDMENUITEM(showwater,view,"Water",&MenuCommand_water);
 	showwater->ticked = true;
 
@@ -488,14 +492,13 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,edit,"Set GAT height",		&MenuCommand_gatheight);
 	ADDMENU(speed,edit, "Speed", 480, 100);
 	ADDMENUITEM(mm,speed,"5",&MenuCommand_speed);
-	mm->ticked = true;
 	ADDMENUITEM(mm,speed,"10",&MenuCommand_speed);
-	ADDMENUITEM(mm,speed,"15",&MenuCommand_speed);
-	ADDMENUITEM(mm,speed,"20",&MenuCommand_speed);
 	ADDMENUITEM(mm,speed,"25",&MenuCommand_speed);
-	ADDMENUITEM(mm,speed,"30",&MenuCommand_speed);
-	ADDMENUITEM(mm,speed,"40",&MenuCommand_speed);
 	ADDMENUITEM(mm,speed,"50",&MenuCommand_speed);
+	ADDMENUITEM(mm,speed,"100",&MenuCommand_speed);
+	mm->ticked = true;
+	ADDMENUITEM(mm,speed,"250",&MenuCommand_speed);
+	ADDMENUITEM(mm,speed,"500",&MenuCommand_speed);
 	ADDMENUITEM(mm,edit,"Calculate Lightmaps",		&MenuCommand_dolightmaps);
 	ADDMENUITEM(mm,edit,"Reset Colors",		&MenuCommand_fixcolors);
 	ADDMENUITEM(mm,edit,"Clear Objects",		&MenuCommand_clearobjects);
@@ -608,12 +611,62 @@ int main(int argc, char *argv[])
 		return 1;
 
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "moc_pryd04").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "moc_woe").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 #endif
-	long lasttimer = SDL_GetTicks();
+	lasttimer = SDL_GetTicks();
 	while( running ) {
+		if(lasttimer + paintspeed < SDL_GetTicks())
+		{
+			if(editmode == MODE_HEIGHTDETAIL && menu->inwindow(mousex, Graphics.h()-mousey) == NULL)
+			{
+				if (lbuttondown || rbuttondown)
+				{
+									int posx = mouse3dx / 10;
+									int posy = mouse3dz / 10;
+
+									if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= Graphics.world.height-ceil(brushsize/2.0f))
+									{
+										glColor4f(1,0,0,1);
+										glDisable(GL_TEXTURE_2D);
+										glDisable(GL_BLEND);
+										for(int x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f); x++)
+										{
+											for(int y = posy-floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
+											{
+												cCube* c = &Graphics.world.cubes[y][x];
+												if(lbuttondown && !rbuttondown)
+												{
+													if (!Graphics.slope || (x > posx-floor(brushsize/2.0f)) && y > posy-floor(brushsize/2.0f))
+														c->cell1-=1;
+													if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y > posy-floor(brushsize/2.0f))
+														c->cell2-=1;
+													if (!Graphics.slope || (x > posx-floor(brushsize/2.0f)) && y < posy+ceil(brushsize/2.0f)-1)
+														c->cell3-=1;
+													if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y < posy+ceil(brushsize/2.0f)-1)
+														c->cell4-=1;
+												}
+												if(lbuttondown && rbuttondown)
+												{
+													if (!Graphics.slope || (x > posx-floor(brushsize/2.0f)) && y > posy-floor(brushsize/2.0f))
+														c->cell1+=1;
+													if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y > posy-floor(brushsize/2.0f))
+														c->cell2+=1;
+													if (!Graphics.slope || (x > posx-floor(brushsize/2.0f)) && y < posy+ceil(brushsize/2.0f)-1)
+														c->cell3+=1;
+													if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y < posy+ceil(brushsize/2.0f)-1)
+														c->cell4+=1;
+												}
+												c->calcnormal();
+											}
+										}
+									}
+					lasttimer = SDL_GetTicks();
+				}
+			}
+		}
+			
 		process_events( );														// process keypresses
 		if (!Graphics.draw())												// Active?  Was There A Quit Received?
 			break;
@@ -1017,6 +1070,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 									}
 								}
 							}
+							lasttimer = SDL_GetTicks()+500;
 						}
 					}
 					else if (editmode == MODE_GAT)
@@ -2000,6 +2054,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 									Graphics.world.cubes[y][x].cell2 = clipboard[yy][xx][1];
 									Graphics.world.cubes[y][x].cell3 = clipboard[yy][xx][2];
 									Graphics.world.cubes[y][x].cell4 = clipboard[yy][xx][3];
+									Graphics.world.cubes[y][x].calcnormal();
 									xx++;
 								}
 								yy++;
@@ -2078,13 +2133,18 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					y = y;
 
 
-					if (x >= 0 && x <= Graphics.world.width-ceil(brushsize/2.0f) && y >= 0 && y <= Graphics.world.height-ceil(brushsize/2.0f))
+					if (x >= 0 && x < Graphics.world.width-ceil(brushsize/2.0f) && y > 0 && y <= Graphics.world.height-ceil(brushsize/2.0f))
 					{
 						float to = Graphics.world.cubes[y][x].cell2;
 						Graphics.world.cubes[y][x].cell2 = to;
 						Graphics.world.cubes[y][x+1].cell1 = to;
 						Graphics.world.cubes[y-1][x+1].cell3 = to;
 						Graphics.world.cubes[y-1][x].cell4 = to;
+
+						Graphics.world.cubes[y][x].calcnormal();
+						Graphics.world.cubes[y][x+1].calcnormal();
+						Graphics.world.cubes[y-1][x+1].calcnormal();
+						Graphics.world.cubes[y-1][x].calcnormal();
 					}
 					
 
@@ -2470,7 +2530,7 @@ MENUCOMMAND(speed)
 	for(int i =0 ; i < speed->items.size(); i++)
 		speed->items[i]->ticked = false;
 	src->ticked = true;
-	paintspeed = atof(src->title.c_str()) / 50.0f;
+	paintspeed = atof(src->title.c_str());
 	return true;
 }
 
@@ -3023,5 +3083,12 @@ MENUCOMMAND(clearlightmaps)
 	for(i = 0; i < Graphics.world.tiles.size(); i++)
 		Graphics.world.tiles[i].lightmap = 0;
 
+	return true;
+}
+
+MENUCOMMAND(showoglighting)
+{
+	src->ticked = !src->ticked;
+	Graphics.showoglighting = src->ticked;
 	return true;
 }
