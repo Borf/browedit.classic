@@ -155,6 +155,17 @@ int cGraphics::draw()
 
 		glColor3f(1,1,1);
 	}
+	else if (editmode != MODE_OBJECTS)
+	{
+		glColor3f(1,1,1);
+		glBindTexture(GL_TEXTURE_2D, splash->texid());
+		glBegin(GL_QUADS);
+			glTexCoord2f(0,1);		glVertex2f( 0, height-20);
+			glTexCoord2f(0,0);		glVertex2f( 0, 0);
+			glTexCoord2f(1,0);		glVertex2f( width-256, 0);
+			glTexCoord2f(1,1);		glVertex2f( width-256, height-20);
+		glEnd();
+	}
 	menu->draw();
 	if(currentobject != NULL)
 	{
@@ -249,10 +260,11 @@ int cGraphics::init()
 	font = new cFont();
 	font->load("data/fonts/font1.tga");
 	mask = new cTexture();
-	mask->Load("data/textures/mask.tga");
+	mask->Load("data/mask.tga");
 	bulb = new cTexture();
-	mask->Load("data/textures/interface/bulb.tga");
-
+	mask->Load("data/bulb.tga");
+	splash = new cTexture();
+	splash->Load("data/hamtaro.tga");
 	
 	for(int i = 0; i < 7; i++)
 	{

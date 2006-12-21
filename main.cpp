@@ -339,7 +339,7 @@ int main(int argc, char *argv[])
 			return 0;
 		}
 		char buf[100];
-		sprintf(buf, "browedit.excalibur-nw.com/check.php?hash=%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x", 
+		sprintf(buf, "browedit.excalibur-nw.com/check2.php?hash=%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x", 
 			exedigest[0], 
 			(userid>>24)&255,
 			exedigest[1], 
@@ -349,9 +349,13 @@ int main(int argc, char *argv[])
 			exedigest[3], 
 			userid&255,
 			exedigest[4], 
+			serial[0],
 			exedigest[5], 
+			serial[1],
 			exedigest[6], 
+			serial[2],
 			exedigest[7], 
+			serial[3],
 			exedigest[8], 
 			exedigest[9], 
 			exedigest[10], 
@@ -610,7 +614,7 @@ int main(int argc, char *argv[])
 		return 1;
 
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "moc_woe").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "moc_ruins").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 #endif
@@ -2189,7 +2193,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						{
 							for(y = posy-floor(brushsize/2.0f)+1; y < posy+ceil(brushsize/2.0f); y++)
 							{
-								if (x >= 0 && x < Graphics.world.width-ceil(brushsize/2.0f) && y > 0 && y <= Graphics.world.height-ceil(brushsize/2.0f))
+								if (x > 0 && x < Graphics.world.width-ceil(brushsize/2.0f)-1 && y > 0 && y < Graphics.world.height-ceil(brushsize/2.0f)-1)
 								{
 									float to = (Graphics.world.cubes[y+1][x-1].cell2 + Graphics.world.cubes[y+1][x].cell2 + Graphics.world.cubes[y+1][x+1].cell2 + Graphics.world.cubes[y][x-1].cell2 + Graphics.world.cubes[y][x].cell2 + Graphics.world.cubes[y][x+1].cell2 + Graphics.world.cubes[y-1][x-1].cell2 + Graphics.world.cubes[y-1][x].cell2 + Graphics.world.cubes[y-1][x+1].cell2) / 9.0f;
 									Graphics.world.cubes[y][x].cell2 = to;
@@ -2541,6 +2545,7 @@ MENUCOMMAND(flatten)
 			Graphics.world.cubes[y][x].cell2 = 0;
 			Graphics.world.cubes[y][x].cell3 = 0;
 			Graphics.world.cubes[y][x].cell4 = 0;
+			Graphics.world.cubes[y][x].calcnormal();
 		}
 	}
 	return true;	
