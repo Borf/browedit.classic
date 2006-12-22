@@ -106,7 +106,7 @@ cMenu* models;
 vector<vector<vector<float> > > clipboard;
 long lasttimer;
 
-char* downloadfile(string url, long &filesize)
+string downloadfile(string url, long &filesize)
 {
 //#define DOWNLOADBUFFERSIZE 1
 #define DOWNLOADBUFFERSIZE 2024
@@ -158,6 +158,7 @@ char* downloadfile(string url, long &filesize)
 	char buffer[DOWNLOADBUFFERSIZE+1];
 	buffer[DOWNLOADBUFFERSIZE] = 0;
 	string buf;
+	string data;
 	long bytes = 0;
 	header = "";
 	filesize = 0;
@@ -169,6 +170,8 @@ char* downloadfile(string url, long &filesize)
 
 		if (header == "")
 			buf += string(buffer, rc);
+		else
+			data += string(buffer, rc);
 
 		int bla = buf.find("\r\n\r\n");
 		if (header == "" && buf.find("\r\n\r\n") != string::npos)
@@ -180,44 +183,14 @@ char* downloadfile(string url, long &filesize)
 				newurl = newurl.substr(0, newurl.find("\r\n"));
 				return downloadfile(newurl, filesize);
 			}
-			else if (header.find("\r\nContent-Length") != string::npos)
-			{
-				if (header.substr(0, 22) == "HTTP/1.1 404 Not Found")
-				{
-					Log(3,0,"404 not found");
-					return NULL;
-				}
-				string bla = header.substr(header.find("\r\nContent-Length:")+18);
-				bla = bla.substr(0, bla.find("\r\n"));
-				filesize = atol(bla.c_str());
-				if (filesize == 0)
-					return NULL;
-				downloadbuffer = new char[filesize+100];
-				ZeroMemory(downloadbuffer, filesize+100);
-				int startpage = buf.find("\r\n\r\n")+4;
-				memcpy(downloadbuffer, buf.c_str()+startpage, buf.length()-startpage);
-				bytes+=buf.length()-startpage;
-			}
-			else
-			{
-				Log(3,0,"Url: %s -> Header: %s, buf -> %s", url.c_str(), header.c_str(), buf.c_str());
-				filesize = 0;
-				Log(3,0,"Unknown filesize!, cancelling download");
-				return NULL;
-			}
-		}
-		else
-		{
-			if (header != "")
-			{
-				memcpy(downloadbuffer+bytes, buffer, rc);
-				bytes+=rc;
-			}
+			int startpage = buf.find("\r\n\r\n")+4;
+			data = buf.substr(startpage);
 		}
 
 	}
+
+	return data;
 	
-	return downloadbuffer;
 }
 
 
@@ -340,45 +313,43 @@ int main(int argc, char *argv[])
 		}
 		char buf[100];
 		sprintf(buf, "browedit.excalibur-nw.com/check2.php?hash=%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x", 
-			exedigest[0], 
-			(userid>>24)&255,
-			exedigest[1], 
-			(userid>>16)&255,
-			exedigest[2], 
-			(userid>>8)&255,
-			exedigest[3], 
-			userid&255,
-			exedigest[4], 
-			serial[0],
-			exedigest[5], 
-			serial[1],
-			exedigest[6], 
-			serial[2],
-			exedigest[7], 
-			serial[3],
-			exedigest[8], 
-			exedigest[9], 
-			exedigest[10], 
-			exedigest[11], 
-			exedigest[12], 
-			exedigest[13],
-			exedigest[14],
-			exedigest[15]
+			(BYTE)exedigest[0], 
+			(BYTE)((userid>>24)&255),
+			(BYTE)exedigest[1], 
+			(BYTE)((userid>>16)&255),
+			(BYTE)exedigest[2], 
+			(BYTE)((userid>>8)&255),
+			(BYTE)exedigest[3], 
+			(BYTE)(userid&255),
+			(BYTE)exedigest[4], 
+			(BYTE)serial[0],
+			(BYTE)exedigest[5], 
+			(BYTE)serial[1],
+			(BYTE)exedigest[6], 
+			(BYTE)serial[2],
+			(BYTE)exedigest[7], 
+			(BYTE)serial[3],
+			(BYTE)exedigest[8], 
+			(BYTE)exedigest[9], 
+			(BYTE)exedigest[10], 
+			(BYTE)exedigest[11], 
+			(BYTE)exedigest[12], 
+			(BYTE)exedigest[13],
+			(BYTE)exedigest[14],
+			(BYTE)exedigest[15]
 			
 			);
-		char* res = NULL;
+		string res;
 #ifndef _DEBUG
 		res = downloadfile(buf, filesize);
 #endif
-		if (res == NULL)
-			ok = false;
-		else if (strcmp(res, "1") == 0)
+		if (res == "1")
 		{
 			ok = true;
 		}
 		else
 			ok = false;
-		if (res != NULL && strcmp(res, "2") == 0)
+		if (res == "2")
 		{
 			Log(3,0,"You do not have the latest version of browedit");
 			sleep(10);
