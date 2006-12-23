@@ -71,6 +71,9 @@ void cWorld::load()
 	quadtreefloats.clear();
 	sounds.clear();
 	effects.clear();
+	for(i = 0; i < gattiles.size(); i++)
+		gattiles[i].clear();
+	gattiles.clear();
 
 	Log(3,0,"Loading %s", filename);
 	cFile* pFile = fs.open(string(filename) + ".gnd");
@@ -1467,19 +1470,21 @@ void cWorld::clean()
 	int i;
 	map<int, bool, less<int> > tilesused;
 
+	cCube* c;
 	for(int yy = 0; yy < height; yy++)
 	{
 		for(int xx = 0; xx < width; xx++)
 		{
-			tilesused[cubes[yy][xx].tileup] = true;
-			tilesused[cubes[yy][xx].tileside] = true;
-			tilesused[cubes[yy][xx].tileaside] = true;
+			c = &cubes[yy][xx];
+			tilesused[c->tileup] = true;
+			tilesused[c->tileside] = true;
+			tilesused[c->tileaside] = true;
 		}
 	}
 
 	Log(3,0,"%i tiles are used", tilesused.size());
 
-	for(i = tiles.size(); i > -1; i--)
+	for(i = tiles.size()-1; i > -1; i--)
 	{
 		if(tilesused.find(i) == tilesused.end())
 		{
@@ -1488,12 +1493,13 @@ void cWorld::clean()
 			{
 				for(int xx = 0; xx < width; xx++)
 				{
-					if (cubes[yy][xx].tileup > i)
-						cubes[yy][xx].tileup--;
-					if (cubes[yy][xx].tileside > i)
-						cubes[yy][xx].tileside--;
-					if (cubes[yy][xx].tileaside > i)
-						cubes[yy][xx].tileaside--;
+					c = &cubes[yy][xx];
+					if (c->tileup > i)
+						c->tileup--;
+					if (c->tileside > i)
+						c->tileside--;
+					if (c->tileaside > i)
+						c->tileaside--;
 
 				}
 			}
@@ -1834,15 +1840,40 @@ void cWorld::savelightmap()
 			{
 				for(int yy = 0; yy < 6; yy++)
 				{
-					int lightmap = tiles[cubes[y][x].tileup].lightmap;
-					imgdata[3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8+8+1];
-					imgdata[3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy+1] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8+8+1];
-					imgdata[3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy+2] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8+8+1];
+					if (cubes[y][x].tileup != -1)
+					{
+						int lightmap = tiles[cubes[y][x].tileup].lightmap;
+						imgdata[3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8+8+1];
+						imgdata[3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy+1] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8+8+1];
+						imgdata[3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy+2] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8+8+1];
+					}
 				}
 			}
 		}
 	}
 	tgaSave((char*)(string(filename) + ".lightmap.tga").c_str(), width*6, height*6, 24, (BYTE*)imgdata);
+	delete[] imgdata;
+	imgdata = new char[width*height*6*6*3];
+	for(x = 0; x < width; x++)
+	{
+		for(int y = 0; y < height; y++)
+		{
+			for(int xx = 0; xx < 6; xx++)
+			{
+				for(int yy = 0; yy < 6; yy++)
+				{
+					if (cubes[y][x].tileup != -1)
+					{
+						int lightmap = tiles[cubes[y][x].tileup].lightmap;
+						imgdata[3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[64+3*(xx+yy*8+8+1)];
+						imgdata[3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy+1] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[64+3*(xx+yy*8+8+1)+1];
+						imgdata[3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy+2] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[64+3*(xx+yy*8+8+1)+2];
+					}
+				}
+			}
+		}
+	}
+	tgaSave((char*)(string(filename) + ".lightmap2.tga").c_str(), width*6, height*6, 24, (BYTE*)imgdata);
 	delete[] imgdata;
 
 	imgdata = new char[width*height*12*12*3];
@@ -1861,9 +1892,15 @@ void cWorld::savelightmap()
 
 					if (cubes[y][x].tileside != -1)
 					{
-						imgdata[3*12*x+6 + 12*12*3*width * y + 3*xx + 12*3*width*yy] = lightmaps[tiles[cubes[y][x].tileside].lightmap]->buf[xx+yy*8+8+1];
-						imgdata[3*12*x+6 + 12*12*3*width * y + 3*xx + 12*3*width*yy+1] = lightmaps[tiles[cubes[y][x].tileside].lightmap]->buf[xx+yy*8+8+1];
-						imgdata[3*12*x+6 + 12*12*3*width * y + 3*xx + 12*3*width*yy+2] = lightmaps[tiles[cubes[y][x].tileside].lightmap]->buf[xx+yy*8+8+1];
+						imgdata[3*12*x+6*3 + 12*12*3*width * y + 3*xx + 12*3*width*yy] = lightmaps[tiles[cubes[y][x].tileside].lightmap]->buf[xx+yy*8+8+1];
+						imgdata[3*12*x+6*3 + 12*12*3*width * y + 3*xx + 12*3*width*yy+1] = lightmaps[tiles[cubes[y][x].tileside].lightmap]->buf[xx+yy*8+8+1];
+						imgdata[3*12*x+6*3 + 12*12*3*width * y + 3*xx + 12*3*width*yy+2] = lightmaps[tiles[cubes[y][x].tileside].lightmap]->buf[xx+yy*8+8+1];
+					}
+					if (cubes[y][x].tileaside != -1)
+					{
+						imgdata[3*12*x + (int)(12*12*3*width * (y-0.5)) + 3*xx + 12*3*width*yy] = lightmaps[tiles[cubes[y][x].tileside].lightmap]->buf[xx+yy*8+8+1];
+						imgdata[3*12*x + (int)(12*12*3*width * (y-0.5)) + 3*xx + 12*3*width*yy+1] = lightmaps[tiles[cubes[y][x].tileside].lightmap]->buf[xx+yy*8+8+1];
+						imgdata[3*12*x + (int)(12*12*3*width * (y-0.5)) + 3*xx + 12*3*width*yy+2] = lightmaps[tiles[cubes[y][x].tileside].lightmap]->buf[xx+yy*8+8+1];
 					}
 				}
 			}

@@ -7,7 +7,7 @@ extern cGraphics Graphics;
 
 void cRSMModel::load(string fname)
 {
-	Log(3,0,"Loading %s", fname.c_str());
+//	Log(3,0,"Loading %s", fname.c_str());
 	recalcbb = true;
 	filename = fname;
 	rofilename = filename.substr(filename.find("model\\") + 6);
@@ -297,81 +297,6 @@ void cRSMModel::draw2(cBoundingbox* box, int mesh, float* transf, bool only, boo
 
 
 
-
-const float EPSILON = 0.01f;
-struct tPlane
-{
-	cVector3 Normal;
-	float D;
-};
-
-bool LinePlaneIntersection(tPlane &Plane, 
-			   cVector3 &StartLine,
-			   cVector3 &EndLine,
-			   float &t)
-{
-	cVector3 LineDir = EndLine - StartLine;			
-	float Denominator = LineDir.Dot(Plane.Normal);
-	if (fabs(Denominator) <= EPSILON) // Parallel to the plane
-	{		
-		return false;
-	}		
-	float Numerator = StartLine.Dot(Plane.Normal) + Plane.D;
-	t = - Numerator / Denominator;			  
-	if (t < 0.0f || t > 1.0f) // The intersection point is not on the line
-	{
-		return false;
-	}
-	return true;
-}
-
-cVector3 Normal(cVector3* vertices)
-{
-	cVector3 b1, b2, normal;
-	b1 = vertices[0] - vertices[1];
-	b2 = vertices[2] - vertices[1];
-
-	normal.x = b1.y * b2.z - b1.z * b2.y;
-	normal.y = b1.z * b2.x - b1.x * b2.z;
-	normal.z = b1.x * b2.y - b1.y * b2.x;
-
-	normal.Normalize();
-	return normal;
-	
-}
-
-bool LineIntersectPolygon( cVector3 *Vertices, 
-			   int NumVertices,
-			   cVector3 &StartLine,
-			   cVector3 &EndLine,
-			  float &t)
-{
-	tPlane Plane;
-	Plane.Normal = Normal(Vertices);
-	Plane.D = - Plane.Normal.Dot(Vertices[0]);
-	float tt;
-	
-	if (!LinePlaneIntersection(Plane, StartLine, EndLine, tt))
-		return false;	
-	
-	cVector3 Intersection = StartLine + (EndLine - StartLine) * tt;			
-	
-	int Vertex;
-	for (Vertex = 0; Vertex < NumVertices; Vertex ++)
-	{
-		tPlane EdgePlane;		
-		int NextVertex = (Vertex + 1) % NumVertices;
-		cVector3 EdgeVector = Vertices[NextVertex] - Vertices[Vertex];			
-		EdgePlane.Normal = EdgeVector.Cross(Plane.Normal);
-		EdgePlane.Normal.Normalize();
-		EdgePlane.D = - EdgePlane.Normal.Dot(Vertices[Vertex]);
-											
-		if (EdgePlane.Normal.Dot(Intersection) + EdgePlane.D < 0.0f)
-			return false;
-	}
-	t = tt;	
-	return true;
-}
 
 
 

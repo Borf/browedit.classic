@@ -140,6 +140,17 @@ enum eMode
 };
 
 
+
+
+const float EPSILON = 0.01f;
+struct tPlane
+{
+	cVector3 Normal;
+	float D;
+};
+
+bool LineIntersectPolygon( cVector3 *,int,cVector3 &,cVector3 &, float &);
+
 /*#ifdef WIN32
 #ifndef _CONSOLE
 #endif

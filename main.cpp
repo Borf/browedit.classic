@@ -83,6 +83,8 @@ MENUCOMMAND(loadlightmaps);
 MENUCOMMAND(addwalls);
 MENUCOMMAND(gatcollision);
 MENUCOMMAND(clearlightmaps);
+MENUCOMMAND(cleanuplightmaps);
+MENUCOMMAND(tempfunc);
 
 cMenu*	menu;
 cMenu* grid;
@@ -424,6 +426,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,steepness, "8.0", &MenuCommand_steepness);
 	
 	ADDMENUITEM(mm,rnd, "Random 1", &MenuCommand_random1);
+	ADDMENUITEM(mm,rnd, "Maze stuff", &MenuCommand_tempfunc);
 
 	ADDMENUITEM(grid,view,"Grid",&MenuCommand_grid);
 	grid->ticked = true;
@@ -479,6 +482,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,edit,"Add Walls",		&MenuCommand_addwalls);
 	ADDMENUITEM(mm,edit,"Set gat collision",		&MenuCommand_gatcollision);
 	ADDMENUITEM(mm,edit,"Clear Lightmaps",		&MenuCommand_clearlightmaps);
+	ADDMENUITEM(mm,edit,"Clean up Lightmaps",		&MenuCommand_cleanuplightmaps);
 
 
 
@@ -585,7 +589,7 @@ int main(int argc, char *argv[])
 		return 1;
 
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "moc_ruins").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "lighttest").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 #endif
@@ -2592,6 +2596,8 @@ MENUCOMMAND(fill)
 		for(x = 0; x < Graphics.world.width; x++)
 		{
 			Graphics.world.cubes[y][x].tileup = startid + (x%4) + 4*(y % 4);
+			Graphics.world.cubes[y][x].tileside = 0;
+			Graphics.world.cubes[y][x].tileaside = 0;
 		}
 	}
 	return true;
@@ -2811,6 +2817,74 @@ MENUCOMMAND(dolightmaps)
 		Log(3,0,"Doing model %i out of %i (%.2f%%)", i, Graphics.world.models.size(), (i/(float)Graphics.world.models.size())*100);
 		Graphics.world.models[i]->draw(false,false,false, true);
 	}
+
+	float t;
+	for(x = 50; x < Graphics.world.width-50; x++)
+	{
+		Log(3,0,"%f%%", (x/(float)Graphics.world.width)*100.0f);
+		for(y = 50; y < Graphics.world.height-50; y++)
+		{
+			int tile = Graphics.world.cubes[y][x].tileup;
+			if (tile != -1)
+			{
+				float cellheight = -Graphics.world.cubes[y][x].cell1;
+				cLightmap* l = Graphics.world.lightmaps[Graphics.world.tiles[tile].lightmap];
+				for(int xx = 0; xx < 6; xx++)
+				{
+					for(int yy = 0; yy < 6; yy++)
+					{
+						for(int xxx = max(0,x - 5); xxx <= min(Graphics.world.width-1,x+5); xxx++)
+						{
+							for(int yyy = max(0,y - 5); yyy <= min(Graphics.world.height-1,y+5); yyy++)
+							{
+								cCube* c = &Graphics.world.cubes[yyy][xxx];
+								cVector3 triangle[4];
+								triangle[0] = cVector3(xxx*10, -c->cell1, yyy*10);
+								triangle[1] = cVector3(xxx*10+10, -c->cell2, yyy*10);
+								triangle[2] = cVector3(xxx*10, -c->cell3, yyy*10-10);
+								triangle[3] = cVector3(xxx*10+10, -c->cell4, yyy*10-10);
+
+								if (LineIntersectPolygon(triangle, 4, cVector3(-10000,20000,-10000), cVector3(10*x+10*(xx/6.0),cellheight, 10*y+10*(yy/6.0)), t))
+								{
+									l->buf[xx + (8*yy)+1+8] = ((BYTE)l->buf[xx + (8*yy)+1+8]) / 1.6;
+								}
+
+								if (c->tileaside)
+								{
+									triangle[0] = cVector3(xxx*10+10,-c->cell4,(Graphics.world.height-yyy)*10-10);
+									triangle[1] = cVector3(xxx*10+10,-c->cell2,(Graphics.world.height-yyy)*10);
+									triangle[2] = cVector3(xxx*10+10,-(c+1)->cell3,(Graphics.world.height-yyy)*10-10);
+									triangle[3] = cVector3(xxx*10+10,-(c+1)->cell1,(Graphics.world.height-yyy)*10);
+
+									if (LineIntersectPolygon(triangle, 4, cVector3(-10000,20000,-10000), cVector3(10*x+10*(xx/6.0),cellheight, 10*y+10*(yy/6.0)), t))
+									{
+										l->buf[xx + (8*yy)+1+8] = ((BYTE)l->buf[xx + (8*yy)+1+8]) / 1.6;
+									}
+								}
+								if (c->tileside)
+								{
+
+									triangle[0] = cVector3(xxx*10,-c->cell3,(Graphics.world.height-yyy)*10-10);
+									triangle[1] = cVector3(xxx*10+10,-c->cell4,(Graphics.world.height-yyy)*10-10);
+									triangle[2] = cVector3(xxx*10,-Graphics.world.cubes[y+1][x].cell1,(Graphics.world.height-yyy)*10-10);
+									triangle[3] = cVector3(xxx*10+10,-Graphics.world.cubes[y+1][x].cell2,(Graphics.world.height-yyy)*10-10);
+
+									if (LineIntersectPolygon(triangle, 4, cVector3(-10000,20000,-10000), cVector3(10*x+10*(xx/6.0),cellheight, 10*y+10*(yy/6.0)), t))
+									{
+										l->buf[xx + (8*yy)+1+8] = ((BYTE)l->buf[xx + (8*yy)+1+8]) / 1.6;
+									}
+								}
+							
+							}
+						}
+					}
+				}
+
+			}
+				
+		}
+	}
+
 
 	for(x = 1; x < Graphics.world.width-1; x++)
 	{
@@ -3112,4 +3186,77 @@ MENUCOMMAND(showoglighting)
 	src->ticked = !src->ticked;
 	Graphics.showoglighting = src->ticked;
 	return true;
+}
+
+
+MENUCOMMAND(cleanuplightmaps)
+{
+	vector<int> newvalue;
+	map<int, bool, less<int> > used;
+	for(int i = 0; i < Graphics.world.lightmaps.size(); i++)
+	{
+		for(int ii = 0; ii < i; ii++)
+		{
+			if(memcmp(Graphics.world.lightmaps[i]->buf, Graphics.world.lightmaps[ii]->buf, 64) == 0)
+			{
+				newvalue.push_back(ii);
+				break;
+			}
+		}
+		if (newvalue.size() <= i)
+			newvalue.push_back(i);
+	}
+
+	for(i = 0; i < Graphics.world.tiles.size(); i++)
+	{
+		Graphics.world.tiles[i].lightmap = newvalue[Graphics.world.tiles[i].lightmap];
+	}
+	return true;
+}
+
+
+MENUCOMMAND(tempfunc)
+{
+	glColor4f(1,1,1,0.7f);
+	glEnable(GL_BLEND);
+
+	cTile t;
+	t.color[0] = (char)255;
+	t.color[1] = (char)255;
+	t.color[2] = (char)255;
+	t.color[3] = (char)255;
+	t.texture = Graphics.texturestart + (Graphics.selectionstart.y - 32) / 288;
+	t.lightmap = 0;
+	t.u1 = 0;
+	t.v1 = 0;
+
+	t.u2 = 1;
+	t.v2 = 0;
+	
+	t.u3 = 0;
+	t.v3 = 1;
+	
+	t.u4 = 1;
+	t.v4 = 1;
+	Graphics.world.tiles.push_back(t);
+	int x,y;
+	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+			cCube* c = &Graphics.world.cubes[y][x];
+			if(Graphics.world.lightmaps[Graphics.world.tiles[c->tileup].lightmap]->buf[10] == 0)
+			{
+				c->cell1 = -20;
+				c->cell2 = -20;
+				c->cell3 = -20;
+				c->cell4 = -20;
+
+				c->tileup = Graphics.world.tiles.size()-1;
+			}
+		}
+
+	}
+	return true;
+
 }
