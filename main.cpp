@@ -108,7 +108,7 @@ cMenu* models;
 vector<vector<vector<float> > > clipboard;
 long lasttimer;
 
-string downloadfile(string url, long &filesize)
+char* downloadfile(string url, long &filesize)
 {
 //#define DOWNLOADBUFFERSIZE 1
 #define DOWNLOADBUFFERSIZE 2024
@@ -160,7 +160,6 @@ string downloadfile(string url, long &filesize)
 	char buffer[DOWNLOADBUFFERSIZE+1];
 	buffer[DOWNLOADBUFFERSIZE] = 0;
 	string buf;
-	string data;
 	long bytes = 0;
 	header = "";
 	filesize = 0;
@@ -172,8 +171,6 @@ string downloadfile(string url, long &filesize)
 
 		if (header == "")
 			buf += string(buffer, rc);
-		else
-			data += string(buffer, rc);
 
 		int bla = buf.find("\r\n\r\n");
 		if (header == "" && buf.find("\r\n\r\n") != string::npos)
@@ -185,14 +182,44 @@ string downloadfile(string url, long &filesize)
 				newurl = newurl.substr(0, newurl.find("\r\n"));
 				return downloadfile(newurl, filesize);
 			}
-			int startpage = buf.find("\r\n\r\n")+4;
-			data = buf.substr(startpage);
+			else if (header.find("\r\nContent-Length") != string::npos)
+			{
+				if (header.substr(0, 22) == "HTTP/1.1 404 Not Found")
+				{
+					Log(3,0,"404 not found");
+					return NULL;
+				}
+				string bla = header.substr(header.find("\r\nContent-Length:")+18);
+				bla = bla.substr(0, bla.find("\r\n"));
+				filesize = atol(bla.c_str());
+				if (filesize == 0)
+					return NULL;
+				downloadbuffer = new char[filesize+100];
+				ZeroMemory(downloadbuffer, filesize+100);
+				int startpage = buf.find("\r\n\r\n")+4;
+				memcpy(downloadbuffer, buf.c_str()+startpage, buf.length()-startpage);
+				bytes+=buf.length()-startpage;
+			}
+			else
+			{
+				Log(3,0,"Url: %s -> Header: %s, buf -> %s", url.c_str(), header.c_str(), buf.c_str());
+				filesize = 0;
+				Log(3,0,"Unknown filesize!, cancelling download");
+				return NULL;
+			}
+		}
+		else
+		{
+			if (header != "")
+			{
+				memcpy(downloadbuffer+bytes, buffer, rc);
+				bytes+=rc;
+			}
 		}
 
 	}
-
-	return data;
 	
+	return downloadbuffer;
 }
 
 
@@ -315,43 +342,45 @@ int main(int argc, char *argv[])
 		}
 		char buf[100];
 		sprintf(buf, "browedit.excalibur-nw.com/check2.php?hash=%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x", 
-			(BYTE)exedigest[0], 
-			(BYTE)((userid>>24)&255),
-			(BYTE)exedigest[1], 
-			(BYTE)((userid>>16)&255),
-			(BYTE)exedigest[2], 
-			(BYTE)((userid>>8)&255),
-			(BYTE)exedigest[3], 
-			(BYTE)(userid&255),
-			(BYTE)exedigest[4], 
-			(BYTE)serial[0],
-			(BYTE)exedigest[5], 
-			(BYTE)serial[1],
-			(BYTE)exedigest[6], 
-			(BYTE)serial[2],
-			(BYTE)exedigest[7], 
-			(BYTE)serial[3],
-			(BYTE)exedigest[8], 
-			(BYTE)exedigest[9], 
-			(BYTE)exedigest[10], 
-			(BYTE)exedigest[11], 
-			(BYTE)exedigest[12], 
-			(BYTE)exedigest[13],
-			(BYTE)exedigest[14],
-			(BYTE)exedigest[15]
+			exedigest[0], 
+			(userid>>24)&255,
+			exedigest[1], 
+			(userid>>16)&255,
+			exedigest[2], 
+			(userid>>8)&255,
+			exedigest[3], 
+			userid&255,
+			exedigest[4], 
+			serial[0],
+			exedigest[5], 
+			serial[1],
+			exedigest[6], 
+			serial[2],
+			exedigest[7], 
+			serial[3],
+			exedigest[8], 
+			exedigest[9], 
+			exedigest[10], 
+			exedigest[11], 
+			exedigest[12], 
+			exedigest[13],
+			exedigest[14],
+			exedigest[15]
 			
 			);
-		string res;
+		char* res = NULL;
 #ifndef _DEBUG
 		res = downloadfile(buf, filesize);
 #endif
-		if (res == "1")
+		if (res == NULL)
+			ok = false;
+		else if (strcmp(res, "1") == 0)
 		{
 			ok = true;
 		}
 		else
 			ok = false;
-		if (res == "2")
+		if (res != NULL && strcmp(res, "2") == 0)
 		{
 			Log(3,0,"You do not have the latest version of browedit");
 			sleep(10);
@@ -589,7 +618,7 @@ int main(int argc, char *argv[])
 		return 1;
 
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "lighttest").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "xmasmaze").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 #endif
@@ -2738,6 +2767,8 @@ MENUCOMMAND(water)
 
 
 
+cVector3 lightpos = cVector3(0,5000,0);
+
 MENUCOMMAND(dolightmaps)
 {
 	int x,y;
@@ -2819,10 +2850,10 @@ MENUCOMMAND(dolightmaps)
 	}
 
 	float t;
-	for(x = 50; x < Graphics.world.width-50; x++)
+	for(x = 0; x < Graphics.world.width; x++)
 	{
 		Log(3,0,"%f%%", (x/(float)Graphics.world.width)*100.0f);
-		for(y = 50; y < Graphics.world.height-50; y++)
+		for(y = 0; y < Graphics.world.height; y++)
 		{
 			int tile = Graphics.world.cubes[y][x].tileup;
 			if (tile != -1)
@@ -2833,45 +2864,80 @@ MENUCOMMAND(dolightmaps)
 				{
 					for(int yy = 0; yy < 6; yy++)
 					{
-						for(int xxx = max(0,x - 5); xxx <= min(Graphics.world.width-1,x+5); xxx++)
-						{
-							for(int yyy = max(0,y - 5); yyy <= min(Graphics.world.height-1,y+5); yyy++)
-							{
-								cCube* c = &Graphics.world.cubes[yyy][xxx];
-								cVector3 triangle[4];
-								triangle[0] = cVector3(xxx*10, -c->cell1, yyy*10);
-								triangle[1] = cVector3(xxx*10+10, -c->cell2, yyy*10);
-								triangle[2] = cVector3(xxx*10, -c->cell3, yyy*10-10);
-								triangle[3] = cVector3(xxx*10+10, -c->cell4, yyy*10-10);
+						cVector3 pos = cVector3(10*x+10*(xx/6.0),cellheight, 10*y+10*(yy/6.0));
+						char* lightmappos = &l->buf[xx + (8*yy)+1+8];
 
-								if (LineIntersectPolygon(triangle, 4, cVector3(-10000,20000,-10000), cVector3(10*x+10*(xx/6.0),cellheight, 10*y+10*(yy/6.0)), t))
+						for(int xxx = max(0,x - 1); xxx <= min(Graphics.world.width-1,x+1); xxx++)
+						{
+							for(int yyy = max(0,y - 1); yyy <= min(Graphics.world.height-1,y+1); yyy++)
+							{
+								if(*lightmappos == 128)
+									break;
+			//					if (xxx == x && yyy == y)
+			//						continue;
+								cCube* c = &Graphics.world.cubes[yyy][xxx];
+								cVector3 triangle[6];
+								triangle[2] = cVector3(xxx*10+10, -c->cell2, yyy*10);
+								triangle[1] = cVector3(xxx*10, -c->cell3, yyy*10+10);
+								triangle[0] = cVector3(xxx*10+10, -c->cell4, yyy*10+10);
+
+								triangle[5] = cVector3(xxx*10, -c->cell4, yyy*10+10);
+								triangle[4] = cVector3(xxx*10+10, -c->cell2, yyy*10);
+								triangle[3] = cVector3(xxx*10, -c->cell1, yyy*10);
+
+								if (LineIntersectPolygon(triangle, 3, lightpos, pos, t))
 								{
-									l->buf[xx + (8*yy)+1+8] = ((BYTE)l->buf[xx + (8*yy)+1+8]) / 1.6;
+									if (t < 1)
+										*lightmappos = 127;//((BYTE)l->buf[xx + (8*yy)+1+8]) / 1.6;
+								}
+								else if (LineIntersectPolygon(triangle+3, 3, lightpos, pos, t))
+								{
+									if (t < 1)
+										*lightmappos = 127;//((BYTE)l->buf[xx + (8*yy)+1+8]) / 1.6;
 								}
 
-								if (c->tileaside)
+								if (c->tileaside != -1)
 								{
-									triangle[0] = cVector3(xxx*10+10,-c->cell4,(Graphics.world.height-yyy)*10-10);
-									triangle[1] = cVector3(xxx*10+10,-c->cell2,(Graphics.world.height-yyy)*10);
-									triangle[2] = cVector3(xxx*10+10,-(c+1)->cell3,(Graphics.world.height-yyy)*10-10);
-									triangle[3] = cVector3(xxx*10+10,-(c+1)->cell1,(Graphics.world.height-yyy)*10);
+									triangle[2] = cVector3(xxx*10+10,-c->cell4,yyy*10);
+									triangle[1] = cVector3(xxx*10+10,-(c+1)->cell1,yyy*10);
+									triangle[0] = cVector3(xxx*10+10,-(c+1)->cell3,yyy*10+10);
 
-									if (LineIntersectPolygon(triangle, 4, cVector3(-10000,20000,-10000), cVector3(10*x+10*(xx/6.0),cellheight, 10*y+10*(yy/6.0)), t))
+									triangle[3] = cVector3(xxx*10+10,-(c+1)->cell1,yyy*10+10);
+									triangle[4] = cVector3(xxx*10+10,-c->cell4,yyy*10+10);
+									triangle[5] = cVector3(xxx*10+10,-c->cell2,yyy*10);
+
+									if (LineIntersectPolygon(triangle, 3, lightpos, pos, t))
 									{
-										l->buf[xx + (8*yy)+1+8] = ((BYTE)l->buf[xx + (8*yy)+1+8]) / 1.6;
+										if (t < 1)
+											*lightmappos = 127;//((BYTE)l->buf[xx + (8*yy)+1+8]) / 1.6;
+									}
+									else if (LineIntersectPolygon(triangle+3, 3, lightpos, pos, t))
+									{
+										if (t < 1)
+											*lightmappos = 127;//((BYTE)l->buf[xx + (8*yy)+1+8]) / 1.6;
 									}
 								}
-								if (c->tileside)
+								if (c->tileside != -1 && y < Graphics.world.width - 1)
 								{
 
-									triangle[0] = cVector3(xxx*10,-c->cell3,(Graphics.world.height-yyy)*10-10);
-									triangle[1] = cVector3(xxx*10+10,-c->cell4,(Graphics.world.height-yyy)*10-10);
-									triangle[2] = cVector3(xxx*10,-Graphics.world.cubes[y+1][x].cell1,(Graphics.world.height-yyy)*10-10);
-									triangle[3] = cVector3(xxx*10+10,-Graphics.world.cubes[y+1][x].cell2,(Graphics.world.height-yyy)*10-10);
+									triangle[0] = cVector3(xxx*10,-c->cell3,yyy*10+10);
+									triangle[1] = cVector3(xxx*10+10,-c->cell4,yyy*10+10);
+									triangle[2] = cVector3(xxx*10,-Graphics.world.cubes[y+1][x].cell1,yyy*10+10);
+									
+									
+									triangle[3] = cVector3(xxx*10+10,-Graphics.world.cubes[y+1][x].cell2,yyy*10+10);
+									triangle[4] = cVector3(xxx*10,-Graphics.world.cubes[y+1][x].cell1,yyy*10+10);
+									triangle[5] = cVector3(xxx*10+10,-c->cell4,yyy*10+10);
 
-									if (LineIntersectPolygon(triangle, 4, cVector3(-10000,20000,-10000), cVector3(10*x+10*(xx/6.0),cellheight, 10*y+10*(yy/6.0)), t))
+									if (LineIntersectPolygon(triangle, 3, lightpos, pos, t))
 									{
-										l->buf[xx + (8*yy)+1+8] = ((BYTE)l->buf[xx + (8*yy)+1+8]) / 1.6;
+										if(t < 1)
+											*lightmappos = 127;//((BYTE)l->buf[xx + (8*yy)+1+8]) / 1.6;
+									}
+									else if (LineIntersectPolygon(triangle+3, 3, lightpos, pos, t))
+									{
+										if(t < 1)
+											*lightmappos = 127;//((BYTE)l->buf[xx + (8*yy)+1+8]) / 1.6;
 									}
 								}
 							
@@ -3060,6 +3126,20 @@ MENUCOMMAND(loadlightmaps)
 						maptop->buf[7*8+i] = map->buf[i+8];
 						mapright->buf[8*i] = map->buf[8*i+6];
 						mapbottom->buf[i] = map->buf[6*8+i];
+
+						mapleft->buf[64+3*(8*i+7)] = map->buf[64+3*(8*i+1)];
+						mapleft->buf[64+3*(8*i+7)+1] = map->buf[64+3*(8*i+1)+1];
+						mapleft->buf[64+3*(8*i+7)+2] = map->buf[64+3*(8*i+1)+2];
+						maptop->buf[64+3*(7*8+i)] = map->buf[64+3*(i+8)];
+						maptop->buf[64+3*(7*8+i)+1] = map->buf[64+3*(i+8)+1];
+						maptop->buf[64+3*(7*8+i)+2] = map->buf[64+3*(i+8)+2];
+						mapright->buf[64+3*(8*i)] = map->buf[64+3*(8*i+6)];
+						mapright->buf[64+3*(8*i)+1] = map->buf[64+3*(8*i+6)+1];
+						mapright->buf[64+3*(8*i)+2] = map->buf[64+3*(8*i+6)+2];
+						mapbottom->buf[64+3*(i)] = map->buf[64+3*(6*8+i)];
+						mapbottom->buf[64+3*(i)+1] = map->buf[64+3*(6*8+i)+1];
+						mapbottom->buf[64+3*(i)+2] = map->buf[64+3*(6*8+i)+2];
+					
 					}
 				}
 				else
@@ -3197,7 +3277,7 @@ MENUCOMMAND(cleanuplightmaps)
 	{
 		for(int ii = 0; ii < i; ii++)
 		{
-			if(memcmp(Graphics.world.lightmaps[i]->buf, Graphics.world.lightmaps[ii]->buf, 64) == 0)
+			if(memcmp(Graphics.world.lightmaps[i]->buf, Graphics.world.lightmaps[ii]->buf, 256) == 0)
 			{
 				newvalue.push_back(ii);
 				break;
@@ -3253,7 +3333,15 @@ MENUCOMMAND(tempfunc)
 				c->cell4 = -20;
 
 				c->tileup = Graphics.world.tiles.size()-1;
+				c->tileside = -1;
+				c->tileaside = -1;
 			}
+			else
+			{
+				c->tileside = -1;
+				c->tileaside = -1;
+			}
+
 		}
 
 	}

@@ -375,6 +375,8 @@ bool LineIntersectPolygon( cVector3 *Vertices,
 	
 	cVector3 Intersection = StartLine + (EndLine - StartLine) * tt;			
 	
+/*	if (Intersection == EndLine)
+		return false;*/
 	int Vertex;
 	for (Vertex = 0; Vertex < NumVertices; Vertex ++)
 	{

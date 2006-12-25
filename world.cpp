@@ -88,6 +88,9 @@ void cWorld::load()
 	height = *((int*)(buf+10));
 	tilescale = *((float*)(buf+14));
 
+	Graphics.camerapointer = cVector2(-width*5,-height*5);
+
+
 	int nTextures = *((int*)(buf+18));
 	for(i = 0; i < nTextures; i++)
 	{
@@ -1912,27 +1915,47 @@ void cWorld::savelightmap()
 
 void cWorld::loadlightmap()
 {
-
-	cFile* pFile = fs.open(string(filename) + ".lightmap.tga");
-
-	int color;
-	for(int x = 0; x < width; x++)
 	{
-		for(int y = 0; y < height; y++)
+		cFile* pFile = fs.open(string(filename) + ".lightmap.tga");
+		int color;
+		for(int x = 0; x < width; x++)
 		{
-			for(int xx = 0; xx < 6; xx++)
+			for(int y = 0; y < height; y++)
 			{
-				for(int yy = 0; yy < 6; yy++)
+				for(int xx = 0; xx < 6; xx++)
 				{
-					color = pFile->data[20 + 3*6*x + 6*6*3*width*y + 3*xx + 6*3*width*yy];
-					lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8+8+1] = color;
-					lightmaps[tiles[cubes[y][x].tileup].lightmap]->del();
-					lightmaps[tiles[cubes[y][x].tileup].lightmap]->del2();
+					for(int yy = 0; yy < 6; yy++)
+					{
+						color = pFile->data[20 + 3*6*x + 6*6*3*width*y + 3*xx + 6*3*width*yy];
+						lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8+8+1] = color;
+						lightmaps[tiles[cubes[y][x].tileup].lightmap]->del2();
+					}
 				}
 			}
 		}
+		pFile->close();
 	}
-	pFile->close();
+	{
+		cFile* pFile = fs.open(string(filename) + ".lightmap2.tga");
+		for(int x = 0; x < width; x++)
+		{
+			for(int y = 0; y < height; y++)
+			{
+				cLightmap* l = lightmaps[tiles[cubes[y][x].tileup].lightmap];
+				for(int xx = 0; xx < 6; xx++)
+				{
+					for(int yy = 0; yy < 6; yy++)
+					{
+						l->buf[64+3*(xx+yy*8+8+1)] = pFile->data[20 + 3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy];
+						l->buf[64+3*(xx+yy*8+8+1)+2] = pFile->data[20 + 3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy+1];
+						l->buf[64+3*(xx+yy*8+8+1)+1] = pFile->data[20 + 3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy+2];
+						l->del();
+					}
+				}
+			}
+		}
+		pFile->close();
+	}
 	
 }
 
