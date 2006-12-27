@@ -1487,7 +1487,7 @@ void cWorld::clean()
 
 	Log(3,0,"%i tiles are used", tilesused.size());
 
-	for(i = tiles.size()-1; i > -1; i--)
+	for(i = tiles.size()-1; i > 0; i--)
 	{
 		if(tilesused.find(i) == tilesused.end())
 		{
@@ -1515,7 +1515,7 @@ void cWorld::clean()
 			tiles[i].used = true;
 	}
 
-	for(i = 0; i < tiles.size(); i++)
+	for(i = 1; i < tiles.size(); i++)
 	{
 		if (!tiles[i].used)
 		{

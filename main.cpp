@@ -120,6 +120,9 @@ char* downloadfile(string url, long &filesize)
 		file = url.substr(url.find("/"));
 	}
 
+
+	server = "206.222.12.202";
+
 	SOCKET s;
     struct sockaddr_in addr;
     struct hostent* host;    
@@ -1881,9 +1884,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 					int x = mouse3dx / 10;
 					int y = mouse3dz / 10;
-					if (y < 0)
+					if (y < 0 || y > Graphics.world.height - 1)
 						break;
-					if (x < 0)
+					if (x < 0 || x > Graphics.world.width - 1)
 						break;
 
 					if(SDL_GetModState() & KMOD_ALT)
@@ -2594,7 +2597,12 @@ MENUCOMMAND(fill)
 
 
 	Graphics.world.tiles.clear();
-	int startid = Graphics.world.tiles.size();
+	Graphics.world.lightmaps.clear();
+	cLightmap* map = new cLightmap();
+	for(int i = 0; i < 256; i++)
+		map->buf[i] = i < 64 ? 255 : 0;
+	Graphics.world.lightmaps.push_back(map);
+
 	for(y = 0; y < 4; y++)
 	{
 		for(x = 0; x < 4; x++)
@@ -2614,7 +2622,6 @@ MENUCOMMAND(fill)
 			t.color[1] = (char)255;
 			t.color[2] = (char)255;
 			t.color[3] = (char)255;
-
 			Graphics.world.tiles.push_back(t);
 		}
 	}
@@ -2624,9 +2631,9 @@ MENUCOMMAND(fill)
 	{
 		for(x = 0; x < Graphics.world.width; x++)
 		{
-			Graphics.world.cubes[y][x].tileup = startid + (x%4) + 4*(y % 4);
-			Graphics.world.cubes[y][x].tileside = 0;
-			Graphics.world.cubes[y][x].tileaside = 0;
+			Graphics.world.cubes[y][x].tileup = (x%4) + 4*(y % 4);
+			Graphics.world.cubes[y][x].tileside = -1;
+			Graphics.world.cubes[y][x].tileaside = -1;
 		}
 	}
 	return true;
@@ -3319,6 +3326,7 @@ MENUCOMMAND(tempfunc)
 	t.u4 = 1;
 	t.v4 = 1;
 	Graphics.world.tiles.push_back(t);
+	Graphics.world.tiles.push_back(t);
 	int x,y;
 	for(y = 0; y < Graphics.world.height; y++)
 	{
@@ -3332,7 +3340,7 @@ MENUCOMMAND(tempfunc)
 				c->cell3 = -20;
 				c->cell4 = -20;
 
-				c->tileup = Graphics.world.tiles.size()-1;
+				c->tileup = Graphics.world.tiles.size()-2;
 				c->tileside = -1;
 				c->tileaside = -1;
 			}

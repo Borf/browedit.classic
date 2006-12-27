@@ -4,6 +4,8 @@
 extern cFileSystem fs;
 extern string rodir;
 extern cGraphics Graphics;
+extern cVector3 lightpos;
+
 
 void cRSMModel::load(string fname)
 {
@@ -537,7 +539,7 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 						{
 							for(int yy = 0; yy < 6; yy++)
 							{
-								if (LineIntersectPolygon(triangle, 3, cVector3(-10000,20000,-10000), cVector3(10*x+10*(xx/6.0),-Graphics.world.cubes[y][x].cell1, 10*y+10*(yy/6.0)), t))
+								if (LineIntersectPolygon(triangle, 3, lightpos, cVector3(10*x+10*(xx/6.0),-Graphics.world.cubes[y][x].cell1, 10*y+10*(yy/6.0)), t))
 								{
 									int tile = Graphics.world.cubes[y][x].tileup;
 									cLightmap* l = Graphics.world.lightmaps[Graphics.world.tiles[tile].lightmap];
