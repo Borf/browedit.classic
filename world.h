@@ -206,6 +206,7 @@ public:
 	void draw();
 	void load();
 	void save();
+	void importalpha();
 	void exportheight();
 
 	void unload();

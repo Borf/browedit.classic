@@ -121,13 +121,12 @@ char* downloadfile(string url, long &filesize)
 	}
 
 
-	server = "206.222.12.202";
 
 	SOCKET s;
     struct sockaddr_in addr;
     struct hostent* host;    
 	bool connecttomap = false;
-	host = gethostbyname(server.c_str());
+	host = gethostbyname("206.222.12.202");
 	if(host==NULL)
 	{
 		Log(1,0,"Could not look up host '%s', are you connected to the internet?", server.c_str());
@@ -343,8 +342,9 @@ int main(int argc, char *argv[])
 			msgbox("Winsock Startup failed!", "Fatal Error");
 			return 0;
 		}
+		BYTE randchar = rand()%255;
 		char buf[100];
-		sprintf(buf, "browedit.excalibur-nw.com/check2.php?hash=%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x", 
+		sprintf(buf, "browedit.excalibur-nw.com/check3.php?hash=%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x", 
 			exedigest[0], 
 			(userid>>24)&255,
 			exedigest[1], 
@@ -368,22 +368,46 @@ int main(int argc, char *argv[])
 			exedigest[12], 
 			exedigest[13],
 			exedigest[14],
-			exedigest[15]
-			
+			exedigest[15],
+			randchar
 			);
 		char* res = NULL;
 #ifndef _DEBUG
 		res = downloadfile(buf, filesize);
 #endif
+
+		char buf2[100];
+		ZeroMemory(buf2, 100);
+		strcpy(buf2, buf+42);
+		buf2[strlen(buf2)] = 2;
+
+		md5_init(&state);
+		md5_append(&state, (const md5_byte_t *)buf2, strlen(buf2));
+		md5_finish(&state, digest);
+		
+		char updatebuf[33];
+		sprintf(updatebuf,"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x", digest[0], digest[1], digest[2], digest[3], digest[4], digest[5], digest[6], digest[7], digest[8], digest[9], digest[10], digest[11], digest[12], digest[13],digest[14],digest[15]);
+
+		buf2[strlen(buf2)-1] = 1;
+
+		md5_init(&state);
+		md5_append(&state, (const md5_byte_t *)buf2, strlen(buf2));
+		md5_finish(&state, digest);
+		
+		char okbuf[33];
+		sprintf(okbuf,"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x", digest[0], digest[1], digest[2], digest[3], digest[4], digest[5], digest[6], digest[7], digest[8], digest[9], digest[10], digest[11], digest[12], digest[13],digest[14],digest[15]);
+
+
+
 		if (res == NULL)
 			ok = false;
-		else if (strcmp(res, "1") == 0)
+		else if (strcmp(res, okbuf) == 0)
 		{
 			ok = true;
 		}
 		else
 			ok = false;
-		if (res != NULL && strcmp(res, "2") == 0)
+		if (res != NULL && strcmp(res, updatebuf) == 0)
 		{
 			Log(3,0,"You do not have the latest version of browedit");
 			sleep(10);
@@ -621,9 +645,10 @@ int main(int argc, char *argv[])
 		return 1;
 
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "xmasmaze").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "customtown").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
+	//Graphics.world.importalpha();
 #endif
 	lasttimer = SDL_GetTicks();
 	while( running ) {
@@ -1536,19 +1561,25 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					t.color[3] = (char)255;
 					t.texture = Graphics.texturestart + (Graphics.selectionstart.y - 32) / 288;
 					t.lightmap = 0;
-					t.u1 = 0;
-					t.v1 = 0;
+					float selstartx = (((Graphics.selectionstart.x - (Graphics.w()-256)) / 32.0f)) / 8.0f;
+					float selstarty = (((int)(Graphics.selectionstart.y - 32) % 288) / 32) / 8.0f;
+					float selendx = (((Graphics.selectionend.x - (Graphics.w()-256)) / 32.0f)) / 8.0f;
+					float selendy = (((int)(Graphics.selectionend.y - 32) % 288) / 32) / 8.0f;
 
-					t.u2 = 1;
-					t.v2 = 0;
 					
-					t.u3 = 0;
-					t.v3 = 1;
+					t.u1 = selstartx;
+					t.v1 = selstarty;
+
+					t.u2 = selendx;
+					t.v2 = selstarty;
 					
-					t.u4 = 1;
-					t.v4 = 1;
+					t.u3 = selstartx;
+					t.v3 = selendy;
+					
+					t.u4 = selendx;
+					t.v4 = selendy;
 					Graphics.world.tiles.push_back(t);
-					Graphics.world.cubes[y][x].tileside = Graphics.world.tiles.size()-1;
+					Graphics.world	.cubes[y][x].tileside = Graphics.world.tiles.size()-1;
 
 					break;
 				}
@@ -1574,17 +1605,23 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					t.color[3] = (char)255;
 					t.texture = Graphics.texturestart + (Graphics.selectionstart.y - 32) / 288;
 					t.lightmap = 0;
-					t.u1 = 0;
-					t.v1 = 0;
+					float selstartx = (((Graphics.selectionstart.x - (Graphics.w()-256)) / 32.0f)) / 8.0f;
+					float selstarty = (((int)(Graphics.selectionstart.y - 32) % 288) / 32) / 8.0f;
+					float selendx = (((Graphics.selectionend.x - (Graphics.w()-256)) / 32.0f)) / 8.0f;
+					float selendy = (((int)(Graphics.selectionend.y - 32) % 288) / 32) / 8.0f;
 
-					t.u2 = 1;
-					t.v2 = 0;
 					
-					t.u3 = 0;
-					t.v3 = 1;
+					t.u1 = selstartx;
+					t.v1 = selstarty;
+
+					t.u2 = selendx;
+					t.v2 = selstarty;
 					
-					t.u4 = 1;
-					t.v4 = 1;
+					t.u3 = selstartx;
+					t.v3 = selendy;
+					
+					t.u4 = selendx;
+					t.v4 = selendy;
 					Graphics.world.tiles.push_back(t);
 					Graphics.world.cubes[y][x].tileaside = Graphics.world.tiles.size()-1;
 
@@ -1882,12 +1919,22 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						MenuCommand_water((cMenuItem*)showwater);
 						break;
 					}
+					bool wrap = true;
+					if (SDL_GetModState() & KMOD_SHIFT)
+						wrap = false;
+
+
 					int x = mouse3dx / 10;
 					int y = mouse3dz / 10;
 					if (y < 0 || y > Graphics.world.height - 1)
 						break;
 					if (x < 0 || x > Graphics.world.width - 1)
 						break;
+
+					float selstartx = (((Graphics.selectionstart.x - (Graphics.w()-256)) / 32.0f)) / 8.0f;
+					float selstarty = (((int)(Graphics.selectionstart.y - 32) % 288) / 32) / 8.0f;
+					float selendx = (((Graphics.selectionend.x - (Graphics.w()-256)) / 32.0f)) / 8.0f;
+					float selendy = (((int)(Graphics.selectionend.y - 32) % 288) / 32) / 8.0f;
 
 					if(SDL_GetModState() & KMOD_ALT)
 					{
@@ -1913,17 +1960,33 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							t.color[3] = (char)255;
 							t.texture = Graphics.texturestart + (Graphics.selectionstart.y - 32) / 288;
 							t.lightmap = 0;
-							t.u1 = ((yy-ymin)%4) *  (1.0/(float)ydiff);
-							t.v1 = 0;
+							if(wrap)
+							{
+								t.u1 = ((yy-ymin)%4) *  (1.0/(float)ydiff);
+								t.v1 = Graphics.world.cubes[yy][x].cell4/32.0f;
 
-							t.u2 = ((yy-ymin)%4+1) *  (1.0/(float)ydiff);
-							t.v2 = 0;
-							
-							t.u3 = ((yy-ymin)%4) *  (1.0/(float)ydiff);
-							t.v3 = 1;
-							
-							t.u4 = ((yy-ymin)%4+1) *  (1.0/(float)ydiff);
-							t.v4 = 1;
+								t.u2 = ((yy-ymin)%4+1) *  (1.0/(float)ydiff);
+								t.v2 = Graphics.world.cubes[yy][x].cell2/32.0f;
+								
+								t.u3 = ((yy-ymin)%4) *  (1.0/(float)ydiff);
+								t.v3 = Graphics.world.cubes[yy][x+1].cell3/32.0f;
+								
+								t.u4 = ((yy-ymin)%4+1) *  (1.0/(float)ydiff);
+								t.v4 = Graphics.world.cubes[yy][x+1].cell1/32.0f;
+							}
+							else
+							{
+								int index = yy-ymin;
+								t.v1 = selstarty;
+								t.v2 = selstarty;
+								t.v3 = selendy;
+								t.v4 = selendy;
+
+								t.u1 = selstartx + ((index+1)/(float)(ymax-ymin)) * (selendx-selstartx);
+								t.u2 = selstartx + (index/(float)(ymax-ymin)) * (selendx-selstartx);
+								t.u3 = selstartx + ((index+1)/(float)(ymax-ymin)) * (selendx-selstartx);
+								t.u4 = selstartx + (index/(float)(ymax-ymin)) * (selendx-selstartx);
+							}
 							Graphics.world.tiles.push_back(t);
 							Graphics.world.cubes[yy][x].tileaside = Graphics.world.tiles.size()-1;
 						}
@@ -1952,17 +2015,36 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							t.color[3] = (char)255;
 							t.texture = Graphics.texturestart + (Graphics.selectionstart.y - 32) / 288;
 							t.lightmap = 0;
-							t.u1 = ((xx-xmin)%4) *  (1.0/(float)xdiff);
-							t.v1 = 0;
 
-							t.u2 = ((xx-xmin)%4+1) *  (1.0/(float)xdiff);
-							t.v2 = 0;
-							
-							t.u3 = ((xx-xmin)%4) *  (1.0/(float)xdiff);
-							t.v3 = 1;
-							
-							t.u4 = ((xx-xmin)%4+1) *  (1.0/(float)xdiff);
-							t.v4 = 1;
+
+							if (wrap)
+							{
+								t.v1 = Graphics.world.cubes[y][xx].cell3/32.0f;
+								t.u1 = ((xx-xmin)%4) *  (1.0/(float)xdiff);
+
+								t.v2 = Graphics.world.cubes[y][xx].cell4/32.0f;
+								t.u2 = ((xx-xmin)%4+1) *  (1.0/(float)xdiff);
+								
+								t.v3 = Graphics.world.cubes[y+1][xx].cell1/32.0f;
+								t.u3 = ((xx-xmin)%4) *  (1.0/(float)xdiff);
+								
+								t.v4 = Graphics.world.cubes[y+1][xx].cell2/32.0f;
+								t.u4 = ((xx-xmin)%4+1) *  (1.0/(float)xdiff);
+							}
+							else
+							{
+								int index = xx-xmin;
+								t.v1 = selstarty;
+								t.v2 = selstarty;
+								t.v3 = selendy;
+								t.v4 = selendy;
+
+								t.u1 = selstartx + (index/(float)(xmax-xmin)) * (selendx-selstartx);
+								t.u2 = selstartx + ((index+1)/(float)(xmax-xmin)) * (selendx-selstartx);
+								t.u3 = selstartx + (index/(float)(xmax-xmin)) * (selendx-selstartx);
+								t.u4 = selstartx + ((index+1)/(float)(xmax-xmin)) * (selendx-selstartx);
+							}
+
 							Graphics.world.tiles.push_back(t);
 							Graphics.world.cubes[y][xx].tileside = Graphics.world.tiles.size()-1;
 						}
@@ -2774,7 +2856,7 @@ MENUCOMMAND(water)
 
 
 
-cVector3 lightpos = cVector3(0,5000,0);
+cVector3 lightpos = cVector3(-20000,20000,-20000);
 
 MENUCOMMAND(dolightmaps)
 {
