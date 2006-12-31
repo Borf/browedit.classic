@@ -109,7 +109,7 @@ int cGraphics::draw()
 			glEnable(GL_TEXTURE_2D);
 			previewmodel->pos = cVector3((w()/5)-25,-h()+32+250,1000);
 			previewmodel->draw(false);
-			previewmodel->rot.y+=3;
+			previewmodel->rot.y+=15*(frameticks / 1000.0f);
 		}
 	}
 	if(world.loaded && editmode != MODE_OBJECTS)

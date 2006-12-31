@@ -345,31 +345,31 @@ int main(int argc, char *argv[])
 		BYTE randchar = rand()%255;
 		char buf[100];
 		sprintf(buf, "browedit.excalibur-nw.com/check3.php?hash=%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x", 
-			exedigest[0], 
-			(userid>>24)&255,
-			exedigest[1], 
-			(userid>>16)&255,
-			exedigest[2], 
-			(userid>>8)&255,
-			exedigest[3], 
-			userid&255,
-			exedigest[4], 
-			serial[0],
-			exedigest[5], 
-			serial[1],
-			exedigest[6], 
-			serial[2],
-			exedigest[7], 
-			serial[3],
-			exedigest[8], 
-			exedigest[9], 
-			exedigest[10], 
-			exedigest[11], 
-			exedigest[12], 
-			exedigest[13],
-			exedigest[14],
-			exedigest[15],
-			randchar
+			(BYTE)exedigest[0], 
+			(BYTE)(userid>>24)&255,
+			(BYTE)exedigest[1], 
+			(BYTE)(userid>>16)&255,
+			(BYTE)exedigest[2], 
+			(BYTE)(userid>>8)&255,
+			(BYTE)exedigest[3], 
+			(BYTE)userid&255,
+			(BYTE)exedigest[4], 
+			(BYTE)serial[0],
+			(BYTE)exedigest[5], 
+			(BYTE)serial[1],
+			(BYTE)exedigest[6], 
+			(BYTE)serial[2],
+			(BYTE)exedigest[7], 
+			(BYTE)serial[3],
+			(BYTE)exedigest[8], 
+			(BYTE)exedigest[9], 
+			(BYTE)exedigest[10], 
+			(BYTE)exedigest[11], 
+			(BYTE)exedigest[12], 
+			(BYTE)exedigest[13],
+			(BYTE)exedigest[14],
+			(BYTE)exedigest[15],
+			(BYTE)randchar
 			);
 		char* res = NULL;
 #ifndef _DEBUG
@@ -645,7 +645,7 @@ int main(int argc, char *argv[])
 		return 1;
 
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "customtown").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "prontera").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 	//Graphics.world.importalpha();
@@ -1263,9 +1263,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 						bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
 						if (!ctrl && !alt)
-							Graphics.world.models[Graphics.selectedobject]->pos.z+=0.5 + shift ? 0.5 : 0;
+							Graphics.world.models[Graphics.selectedobject]->pos.z+=0.1 + (shift ? 0.4 : 0);
 						if (ctrl && !alt)
-							Graphics.world.models[Graphics.selectedobject]->rot.z+=1 + shift ? 44 : 0;
+							Graphics.world.models[Graphics.selectedobject]->rot.z+=1 + (shift ? 44 : 0);
 						if (!ctrl && alt)
 							Graphics.world.models[Graphics.selectedobject]->scale.z+=0.1 + shift ? 0.1 : 0;
 					}						
@@ -1280,9 +1280,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 						bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
 						if (!ctrl && !alt)
-							Graphics.world.models[Graphics.selectedobject]->pos.z-=0.5 + shift ? 0.5 : 0;
+							Graphics.world.models[Graphics.selectedobject]->pos.z-=0.1 + (shift ? 0.4 : 0);
 						if (ctrl && !alt)
-							Graphics.world.models[Graphics.selectedobject]->rot.z-=1 + shift ? 44 : 0;
+							Graphics.world.models[Graphics.selectedobject]->rot.z-=1 + (shift ? 44 : 0);
 						if (!ctrl && alt)
 							Graphics.world.models[Graphics.selectedobject]->scale.z-=0.1 + shift ? 0.1 : 0;
 					}						
@@ -1297,9 +1297,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 						bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
 						if (!ctrl && !alt)
-							Graphics.world.models[Graphics.selectedobject]->pos.x+=0.5 + shift ? 0.5 : 0;
+							Graphics.world.models[Graphics.selectedobject]->pos.x+=0.1 + (shift ? 0.4 : 0);
 						if (ctrl && !alt)
-							Graphics.world.models[Graphics.selectedobject]->rot.x+=1 + shift ? 44 : 0;
+							Graphics.world.models[Graphics.selectedobject]->rot.x+=1 + (shift ? 44 : 0);
 						if (!ctrl && alt)
 							Graphics.world.models[Graphics.selectedobject]->scale.x+=0.1 + shift ? 0.1 : 0;
 					}						
@@ -1314,9 +1314,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 						bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
 						if (!ctrl && !alt)
-							Graphics.world.models[Graphics.selectedobject]->pos.x-=0.5 + shift ? 0.5 : 0;
+							Graphics.world.models[Graphics.selectedobject]->pos.x-=0.1 + (shift ? 0.4 : 0);
 						if (ctrl && !alt)
-							Graphics.world.models[Graphics.selectedobject]->rot.x-=1 + shift ? 44 : 0;
+							Graphics.world.models[Graphics.selectedobject]->rot.x-=1 + (shift ? 44 : 0);
 						if (!ctrl && alt)
 							Graphics.world.models[Graphics.selectedobject]->scale.x-=0.1 + shift ? 0.1 : 0;
 					}						
@@ -1678,9 +1678,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 							bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
 							if (!ctrl && !alt)
-								Graphics.world.models[Graphics.selectedobject]->pos.y+=0.5 + shift ? 0.5 : 0;
+								Graphics.world.models[Graphics.selectedobject]->pos.y+=0.1 + (shift ? 0.4 : 0);
 							if (ctrl && !alt)
-								Graphics.world.models[Graphics.selectedobject]->rot.y+=1 + shift ? 44 : 0;
+								Graphics.world.models[Graphics.selectedobject]->rot.y+=1 + (shift ? 44 : 0);
 							if (!ctrl && alt)
 								Graphics.world.models[Graphics.selectedobject]->scale.y+=0.1 + shift ? 0.1 : 0;
 						}						
@@ -1771,9 +1771,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 							bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
 							if (!ctrl && !alt)
-								Graphics.world.models[Graphics.selectedobject]->pos.y-=0.5 + shift ? 0.5 : 0;
+								Graphics.world.models[Graphics.selectedobject]->pos.y-=0.1 + (shift ? 0.4 : 0);
 							if (ctrl && !alt)
-								Graphics.world.models[Graphics.selectedobject]->rot.y-=1 + shift ? 44 : 0;
+								Graphics.world.models[Graphics.selectedobject]->rot.y-=1 + (shift ? 44 : 0);
 							if (!ctrl && alt)
 								Graphics.world.models[Graphics.selectedobject]->scale.y-=0.1 + shift ? 0.1 : 0;
 						}						
@@ -1814,6 +1814,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					break;
 				}
 			case SDLK_HOME:
+				if(editmode == MODE_WALLS)
 				{
 					int x = mouse3dx / 10;
 					int y = mouse3dz / 10;
@@ -1855,9 +1856,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 					else
 					{
-						if (y < 0 || y > Graphics.world.height)
+						if (y < 0 || y > Graphics.world.height-1)
 							break;
-						if (x < 0 || x > Graphics.world.width)
+						if (x < 0 || x > Graphics.world.width-1)
 							break;
 						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u2+=0.03125;
 						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u4+=0.03125;
@@ -1865,6 +1866,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					break;
 				}
 			case SDLK_END:
+				if(editmode == MODE_WALLS)
 				{
 					int x = mouse3dx / 10;
 					int y = mouse3dz / 10;

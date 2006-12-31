@@ -1845,7 +1845,11 @@ void cWorld::savelightmap()
 				{
 					if (cubes[y][x].tileup != -1)
 					{
+						if (cubes[y][x].tileup < 0 || cubes[y][x].tileup >= tiles.size())
+							Log(1,0,"Error2 in lightmaps");
 						int lightmap = tiles[cubes[y][x].tileup].lightmap;
+						if(lightmap < 0 || lightmap >= lightmaps.size())
+							Log(1,0,"Error in lightmaps");
 						imgdata[3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8+8+1];
 						imgdata[3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy+1] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8+8+1];
 						imgdata[3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy+2] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8+8+1];
@@ -1889,10 +1893,12 @@ void cWorld::savelightmap()
 			{
 				for(int yy = 0; yy < 6; yy++)
 				{
-					imgdata[3*12*x + 12*12*3*width * y + 3*xx + 12*3*width*yy] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8+8+1];
-					imgdata[3*12*x + 12*12*3*width * y + 3*xx + 12*3*width*yy+1] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8+8+1];
-					imgdata[3*12*x + 12*12*3*width * y + 3*xx + 12*3*width*yy+2] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8+8+1];
-
+					if (cubes[y][x].tileup != -1)
+					{
+						imgdata[3*12*x + 12*12*3*width * y + 3*xx + 12*3*width*yy] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8+8+1];
+						imgdata[3*12*x + 12*12*3*width * y + 3*xx + 12*3*width*yy+1] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8+8+1];
+						imgdata[3*12*x + 12*12*3*width * y + 3*xx + 12*3*width*yy+2] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8+8+1];
+					}
 					if (cubes[y][x].tileside != -1)
 					{
 						imgdata[3*12*x+6*3 + 12*12*3*width * y + 3*xx + 12*3*width*yy] = lightmaps[tiles[cubes[y][x].tileside].lightmap]->buf[xx+yy*8+8+1];
@@ -1926,9 +1932,12 @@ void cWorld::loadlightmap()
 				{
 					for(int yy = 0; yy < 6; yy++)
 					{
-						color = pFile->data[20 + 3*6*x + 6*6*3*width*y + 3*xx + 6*3*width*yy];
-						lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8+8+1] = color;
-						lightmaps[tiles[cubes[y][x].tileup].lightmap]->del2();
+						if (cubes[y][x].tileup != -1)
+						{
+							color = pFile->data[20 + 3*6*x + 6*6*3*width*y + 3*xx + 6*3*width*yy];
+							lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8+8+1] = color;
+							lightmaps[tiles[cubes[y][x].tileup].lightmap]->del2();
+						}
 					}
 				}
 			}
@@ -1946,10 +1955,13 @@ void cWorld::loadlightmap()
 				{
 					for(int yy = 0; yy < 6; yy++)
 					{
-						l->buf[64+3*(xx+yy*8+8+1)] = pFile->data[20 + 3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy];
-						l->buf[64+3*(xx+yy*8+8+1)+2] = pFile->data[20 + 3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy+1];
-						l->buf[64+3*(xx+yy*8+8+1)+1] = pFile->data[20 + 3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy+2];
-						l->del();
+						if (cubes[y][x].tileup != -1)
+						{
+							l->buf[64+3*(xx+yy*8+8+1)] = pFile->data[20 + 3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy];
+							l->buf[64+3*(xx+yy*8+8+1)+2] = pFile->data[20 + 3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy+1];
+							l->buf[64+3*(xx+yy*8+8+1)+1] = pFile->data[20 + 3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy+2];
+							l->del();
+						}
 					}
 				}
 			}
