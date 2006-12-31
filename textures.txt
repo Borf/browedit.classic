@@ -58,6 +58,49 @@ basics/prontera/field/desert-deadgrass|필드바닥\prt_흙02-3.bmp
 basics/prontera/field/desert1|필드바닥\prt_흙02.bmp
 basics/prontera/field/desert2|필드바닥\prt_흙03.bmp
 
+basics/einbroch/|
+basics/einbroch/ground/|
+basics/einbroch/ground/i_vill01.bmp|필드바닥\i_vill01.bmp
+basics/einbroch/ground/i_vill02.bmp|필드바닥\i_vill02.bmp
+basics/einbroch/ground/i_vill03.bmp|필드바닥\i_vill03.bmp
+basics/einbroch/ground/i_vill04.bmp|필드바닥\i_vill04.bmp
+basics/einbroch/ground/i_vill05.bmp|필드바닥\i_vill05.bmp
+basics/einbroch/ground/i_vill06.bmp|필드바닥\i_vill06.bmp
+basics/einbroch/ground/i_vill07.bmp|필드바닥\i_vill07.bmp
+basics/einbroch/ground/i_vill08.bmp|필드바닥\i_vill08.bmp
+basics/einbroch/ground/i_vill09.bmp|필드바닥\i_vill09.bmp
+basics/einbroch/ground/i_vill10.bmp|필드바닥\i_vill10.bmp
+basics/einbroch/ground/i_vill11.bmp|필드바닥\i_vill11.bmp
+basics/einbroch/ground/i_vill12.bmp|필드바닥\i_vill12.bmp
+basics/einbroch/ground/i_vill13.bmp|필드바닥\i_vill13.bmp
+basics/einbroch/ground/i_vill14.bmp|필드바닥\i_vill14.bmp
+basics/einbroch/ground/i_vill15.bmp|필드바닥\i_vill15.bmp
+basics/einbroch/ground/i_vill16.bmp|필드바닥\i_vill16.bmp
+basics/einbroch/ground/i_vill17.bmp|필드바닥\i_vill17.bmp
+basics/einbroch/ground/i_vill18.bmp|필드바닥\i_vill18.bmp
+basics/einbroch/ground/i_vill19.bmp|필드바닥\i_vill19.bmp
+basics/einbroch/ground/i_vill20.bmp|필드바닥\i_vill20.bmp
+
+basics/geffen/|
+basics/geffen/ge-in000.bmp|게펜내부\ge-in000.bmp
+basics/geffen/ge-in001.bmp|게펜내부\ge-in001.bmp
+basics/geffen/ge-incarpet1.bmp|게펜내부\ge-incarpet1.bmp
+basics/geffen/ge-incarpet2.bmp|게펜내부\ge-incarpet2.bmp
+basics/geffen/ge-inflat.bmp|게펜내부\ge-inflat.bmp
+basics/geffen/ge-land-1.bmp|게펜내부\ge-land-1.bmp
+basics/geffen/ge-land.bmp|게펜내부\ge-land.bmp
+basics/geffen/ge-wall-00.bmp|게펜내부\ge-wall-00.bmp
+basics/geffen/ge-wall-000.bmp|게펜내부\ge-wall-000.bmp
+basics/geffen/ge_hin01_01.bmp|게펜내부\ge_hin01_01.bmp
+basics/geffen/ge_hin01_02.bmp|게펜내부\ge_hin01_02.bmp
+basics/geffen/ge_hin01_03.bmp|게펜내부\ge_hin01_03.bmp
+basics/geffen/ge_hin01_04.bmp|게펜내부\ge_hin01_04.bmp
+basics/geffen/ge_hin01_06.bmp|게펜내부\ge_hin01_06.bmp
+basics/geffen/ge_shop_tile-1.bmp|게펜내부\ge_shop_tile-1.bmp
+basics/geffen/ge_top_tile01.bmp|게펜내부\ge_top_tile01.bmp
+basics/geffen/ge_top_tile02.bmp|게펜내부\ge_top_tile02.bmp
+basics/geffen/ge_top_tile03.bmp|게펜내부\ge_top_tile03.bmp
+
 basics/hugel/|
 basics/hugel/rocks/|
 basics/hugel/rocks/rockwall-1|필드바닥\휘겔필드01.bmp
@@ -123,6 +166,215 @@ basics/Jawaii/Sand-rock1|필드바닥\해변모래바닥04.bmp
 basics/Jawaii/Sand-rock2|필드바닥\해변모래바닥05.bmp
 basics/Jawaii/Sand-rock2|필드바닥\해변모래바닥06.bmp
 basics/Jawaii/rock|필드바닥\해변모래바닥07.bmp
+
+basics/louyang/|
+basics/louyang/ch_roof.bmp|기타마을\ch_roof.bmp
+basics/louyang/ch_roofbo.bmp|기타마을\ch_roofbo.bmp
+basics/louyang/ch_roofli.bmp|기타마을\ch_roofli.bmp
+basics/louyang/ch_rooflibo.bmp|기타마을\ch_rooflibo.bmp
+basics/louyang/ch_sd01.bmp|기타마을\ch_sd01.bmp
+basics/louyang/ch_sidest.bmp|기타마을\ch_sidest.bmp
+basics/louyang/ch_sidestpl.bmp|기타마을\ch_sidestpl.bmp
+basics/louyang/ch_st01.bmp|기타마을\ch_st01.bmp
+basics/louyang/ch_st02.bmp|기타마을\ch_st02.bmp
+basics/louyang/ch_st03.bmp|기타마을\ch_st03.bmp
+basics/louyang/ch_st04.bmp|기타마을\ch_st04.bmp
+basics/louyang/ch_t01.bmp|기타마을\ch_t01.bmp
+basics/louyang/ch_t02.bmp|기타마을\ch_t02.bmp
+basics/louyang/ch_t03.bmp|기타마을\ch_t03.bmp
+basics/louyang/ch_t05.bmp|기타마을\ch_t05.bmp
+basics/louyang/ch_t06.bmp|기타마을\ch_t06.bmp
+basics/louyang/ch_t07.bmp|기타마을\ch_t07.bmp
+basics/louyang/ch_t08.bmp|기타마을\ch_t08.bmp
+basics/louyang/ch_t09.bmp|기타마을\ch_t09.bmp
+basics/louyang/ch_w01.bmp|기타마을\ch_w01.bmp
+basics/louyang/ch_w02.bmp|기타마을\ch_w02.bmp
+basics/louyang/ch_w03.bmp|기타마을\ch_w03.bmp
+basics/louyang/ch_w04.bmp|기타마을\ch_w04.bmp
+basics/louyang/ch_w05.bmp|기타마을\ch_w05.bmp
+basics/louyang/ch_wall.bmp|기타마을\ch_wall.bmp
+basics/louyang/ch_wallhi.bmp|기타마을\ch_wallhi.bmp
+basics/louyang/ch_wallhist.bmp|기타마을\ch_wallhist.bmp
+basics/louyang/ch_wallpl.bmp|기타마을\ch_wallpl.bmp
+basics/louyang/ch_wallpl02.bmp|기타마을\ch_wallpl02.bmp
+basics/louyang/ch_wallst.bmp|기타마을\ch_wallst.bmp
+basics/louyang/ch_walltop.bmp|기타마을\ch_walltop.bmp
+basics/louyang/ch_wall_02.bmp|기타마을\ch_wall_02.bmp
+basics/louyang/chi_mu1 copy.bmp|기타마을\chi_mu1 copy.bmp
+basics/louyang/chi_mu2 copy.bmp|기타마을\chi_mu2 copy.bmp
+basics/louyang/chi_mu3 copy.bmp|기타마을\chi_mu3 copy.bmp
+basics/louyang/chi_mu4 copy.bmp|기타마을\chi_mu4 copy.bmp
+basics/louyang/chi_mu5 copy.bmp|기타마을\chi_mu5 copy.bmp
+basics/louyang/chi_mu6 copy.bmp|기타마을\chi_mu6 copy.bmp
+basics/louyang/chn_door3.bmp|기타마을\chn_door3.bmp
+
+basics/lutie/|
+basics/lutie/ground/|
+basics/lutie/ground/xmas_눈바닥01.bmp|필드바닥\xmas_눈바닥01.bmp
+basics/lutie/ground/xmas_눈바닥02.bmp|필드바닥\xmas_눈바닥02.bmp
+basics/lutie/ground/xmas_눈바닥03.bmp|필드바닥\xmas_눈바닥03.bmp
+basics/lutie/ground/xmas_눈바닥04.bmp|필드바닥\xmas_눈바닥04.bmp
+basics/lutie/ground/xmas_눈바닥05.bmp|필드바닥\xmas_눈바닥05.bmp
+basics/lutie/ground/xmas_눈바닥06.bmp|필드바닥\xmas_눈바닥06.bmp
+basics/lutie/ground/xmas_블럭01.bmp|필드바닥\xmas_블럭01.bmp
+basics/lutie/ground/xmas_블럭02.bmp|필드바닥\xmas_블럭02.bmp
+basics/lutie/ground/xmas_블럭03.bmp|필드바닥\xmas_블럭03.bmp
+basics/lutie/ground/xmas_블럭04.bmp|필드바닥\xmas_블럭04.bmp
+basics/lutie/ground/xmas_블럭05.bmp|필드바닥\xmas_블럭05.bmp
+basics/lutie/ground/xmas_블럭06.bmp|필드바닥\xmas_블럭06.bmp
+basics/lutie/ground/xmas_블럭07.bmp|필드바닥\xmas_블럭07.bmp
+basics/lutie/ground/xmas_블럭08.bmp|필드바닥\xmas_블럭08.bmp
+basics/lutie/ground/xmas_블럭09.bmp|필드바닥\xmas_블럭09.bmp
+basics/lutie/ground/xmas_블럭10.bmp|필드바닥\xmas_블럭10.bmp
+basics/lutie/ground/xmas_블럭11.bmp|필드바닥\xmas_블럭11.bmp
+basics/lutie/ground/xmas_블럭12.bmp|필드바닥\xmas_블럭12.bmp
+
+basics/morocc/|
+basics/morocc/in_sphinx_01.bmp|모로코내부\in_sphinx_01.bmp
+basics/morocc/in_sphinx_02.bmp|모로코내부\in_sphinx_02.bmp
+basics/morocc/in_sphinx_03.bmp|모로코내부\in_sphinx_03.bmp
+basics/morocc/in_sphinx_04.bmp|모로코내부\in_sphinx_04.bmp
+basics/morocc/mo-castle-wall1.bmp|모로코내부\mo-castle-wall1.bmp
+basics/morocc/mo-castle-wall2.bmp|모로코내부\mo-castle-wall2.bmp
+basics/morocc/mo-cstlw1-1.bmp|모로코내부\mo-cstlw1-1.bmp
+basics/morocc/mo-cstlw1-2.bmp|모로코내부\mo-cstlw1-2.bmp
+basics/morocc/mo-cstlw2-1.bmp|모로코내부\mo-cstlw2-1.bmp
+basics/morocc/mo-cstlw2-2.bmp|모로코내부\mo-cstlw2-2.bmp
+basics/morocc/mo-pyra-c1.bmp|모로코내부\mo-pyra-c1.bmp
+basics/morocc/mo-pyra-c2.bmp|모로코내부\mo-pyra-c2.bmp
+basics/morocc/mo-pyra-f1.bmp|모로코내부\mo-pyra-f1.bmp
+basics/morocc/mo-pyra-f2.bmp|모로코내부\mo-pyra-f2.bmp
+basics/morocc/mo-pyra-tas1.bmp|모로코내부\mo-pyra-tas1.bmp
+basics/morocc/mo-pyra-tas2.bmp|모로코내부\mo-pyra-tas2.bmp
+basics/morocc/mo-tile-000.bmp|모로코내부\mo-tile-000.bmp
+basics/morocc/moc_tile-00.bmp|모로코내부\moc_tile-00.bmp
+basics/morocc/moc_tile-02.bmp|모로코내부\moc_tile-02.bmp
+basics/morocc/moc_tile02.bmp|모로코내부\moc_tile02.bmp
+basics/morocc/moc_wall00.bmp|모로코내부\moc_wall00.bmp
+basics/morocc/moc_wall01.bmp|모로코내부\moc_wall01.bmp
+basics/morocc/moc_wall02.bmp|모로코내부\moc_wall02.bmp
+basics/morocc/moc_wall03.bmp|모로코내부\moc_wall03.bmp
+basics/morocc/moc_wall04.bmp|모로코내부\moc_wall04.bmp
+basics/morocc/moc_wall05.bmp|모로코내부\moc_wall05.bmp
+basics/morocc/moc_wall06.bmp|모로코내부\moc_wall06.bmp
+basics/morocc/moc_wall07-.bmp|모로코내부\moc_wall07-.bmp
+basics/morocc/moc_wall07.bmp|모로코내부\moc_wall07.bmp
+basics/morocc/moc_wall08-.bmp|모로코내부\moc_wall08-.bmp
+basics/morocc/moc_wall08.bmp|모로코내부\moc_wall08.bmp
+basics/morocc/moc_wall10.bmp|모로코내부\moc_wall10.bmp
+basics/morocc/moc_wall11.bmp|모로코내부\moc_wall11.bmp
+basics/morocc/moc_wall12.bmp|모로코내부\moc_wall12.bmp
+basics/morocc/moc_wall13.bmp|모로코내부\moc_wall13.bmp
+basics/morocc/모로코성-바닥2.bmp|모로코내부\모로코성-바닥2.bmp
+basics/morocc/모로코성-바닥3.bmp|모로코내부\모로코성-바닥3.bmp
+
+dungeons/|
+dungeons/abyss/|
+dungeons/abyss/others/|
+dungeons/abyss/others/abi_bbul copy.bmp|외부소품\abi_bbul copy.bmp
+dungeons/abyss/others/abi_duninp1 copy.bmp|외부소품\abi_duninp1 copy.bmp
+dungeons/abyss/others/abi_duninp2 copy.bmp|외부소품\abi_duninp2 copy.bmp
+dungeons/abyss/others/abi_duninp3 copy.bmp|외부소품\abi_duninp3 copy.bmp
+dungeons/abyss/others/abi_duninp4 copy.bmp|외부소품\abi_duninp4 copy.bmp
+dungeons/abyss/others/abi_duninp5 copy.bmp|외부소품\abi_duninp5 copy.bmp
+dungeons/abyss/others/abi_nung copy.bmp|외부소품\abi_nung copy.bmp
+dungeons/abyss/others/abi_dosul copy.bmp|내부소품\abi_dosul copy.bmp
+dungeons/abyss/others/abi_dosul2 copy.bmp|내부소품\abi_dosul2 copy.bmp
+dungeons/abyss/others/abi_dun40.bmp|내부소품\abi_dun40.bmp
+dungeons/abyss/others/abi_dun41.bmp|내부소품\abi_dun41.bmp
+dungeons/abyss/others/abi_dun42.bmp|내부소품\abi_dun42.bmp
+
+dungeons/abyss/ground/|
+dungeons/abyss/ground/어비스동굴01.bmp|필드바닥\어비스동굴01.bmp
+dungeons/abyss/ground/어비스동굴02.bmp|필드바닥\어비스동굴02.bmp
+dungeons/abyss/ground/어비스동굴03.bmp|필드바닥\어비스동굴03.bmp
+dungeons/abyss/ground/어비스동굴04.bmp|필드바닥\어비스동굴04.bmp
+dungeons/abyss/ground/어비스바닥1.bmp|필드바닥\어비스바닥1.bmp
+dungeons/abyss/ground/어비스바닥10.bmp|필드바닥\어비스바닥10.bmp
+dungeons/abyss/ground/어비스바닥2.bmp|필드바닥\어비스바닥2.bmp
+dungeons/abyss/ground/어비스바닥3.bmp|필드바닥\어비스바닥3.bmp
+dungeons/abyss/ground/어비스바닥4.bmp|필드바닥\어비스바닥4.bmp
+dungeons/abyss/ground/어비스바닥5.bmp|필드바닥\어비스바닥5.bmp
+dungeons/abyss/ground/어비스바닥6.bmp|필드바닥\어비스바닥6.bmp
+dungeons/abyss/ground/어비스바닥7.bmp|필드바닥\어비스바닥7.bmp
+dungeons/abyss/ground/어비스바닥8.bmp|필드바닥\어비스바닥8.bmp
+dungeons/abyss/ground/어비스바닥9.bmp|필드바닥\어비스바닥9.bmp
+
+dungeons/ant hell/|
+dungeons/ant hell/others/|
+dungeons/ant hell/others/animalbone.bmp|모로코\animalbone.bmp
+dungeons/ant hell/others/antegg-1.bmp|모로코\antegg-1.bmp
+dungeons/ant hell/others/antegg-2.bmp|모로코\antegg-2.bmp
+dungeons/ant hell/others/anthell.bmp|모로코\anthell.bmp
+dungeons/ant hell/others/anttree-1.bmp|모로코\anttree-1.bmp
+dungeons/ant hell/others/anttree-2.bmp|모로코\anttree-2.bmp
+dungeons/ant hell/others/anttree-3.bmp|모로코\anttree-3.bmp
+dungeons/ant hell/others/anttree-4.bmp|모로코\anttree-4.bmp
+dungeons/ant hell/others/anttree-5.bmp|모로코\anttree-5.bmp
+
+dungeons/ant hell/ground/|
+dungeons/ant hell/ground/antflat-1.bmp|필드바닥\antflat-1.bmp
+dungeons/ant hell/ground/antflat-2.bmp|필드바닥\antflat-2.bmp
+dungeons/ant hell/ground/antflat-3.bmp|필드바닥\antflat-3.bmp
+dungeons/ant hell/ground/antflat-4.bmp|필드바닥\antflat-4.bmp
+
+dungeons/louyang/chdn_d1 copy.bmp|기타마을\chdn_d1 copy.bmp
+dungeons/louyang/chdn_d2 copy.bmp|기타마을\chdn_d2 copy.bmp
+dungeons/louyang/chdn_d3 copy.bmp|기타마을\chdn_d3 copy.bmp
+dungeons/louyang/chdn_d4 copy.bmp|기타마을\chdn_d4 copy.bmp
+
+dungeons/sunkenship/inaltreasureship_01.bmp|알베르타내부\inaltreasureship_01.bmp
+dungeons/sunkenship/inaltreasureship_02.bmp|알베르타내부\inaltreasureship_02.bmp
+dungeons/sunkenship/inaltreasureship_03.bmp|알베르타내부\inaltreasureship_03.bmp
+dungeons/sunkenship/inaltreasureship_04.bmp|알베르타내부\inaltreasureship_04.bmp
+dungeons/sunkenship/inaltreasureship_05.bmp|알베르타내부\inaltreasureship_05.bmp
+dungeons/sunkenship/inaltreasureship_06.bmp|알베르타내부\inaltreasureship_06.bmp
+dungeons/sunkenship/inaltreasureship_07.bmp|알베르타내부\inaltreasureship_07.bmp
+dungeons/sunkenship/inaltreasureship_08.bmp|알베르타내부\inaltreasureship_08.bmp
+dungeons/sunkenship/inaltreasureship_09.bmp|알베르타내부\inaltreasureship_09.bmp
+dungeons/sunkenship/inaltreasureship_10.bmp|알베르타내부\inaltreasureship_10.bmp
+
+dungeons/toy factory/|
+dungeons/toy factory/ground/|
+dungeons/toy factory/ground/장난감던전바닥01.bmp|필드바닥\장난감던전바닥01.bmp
+dungeons/toy factory/ground/장난감던전바닥02.bmp|필드바닥\장난감던전바닥02.bmp
+dungeons/toy factory/ground/장난감던전벽01.bmp|필드바닥\장난감던전벽01.bmp
+dungeons/toy factory/ground/장난감던전벽02.bmp|필드바닥\장난감던전벽02.bmp
+dungeons/toy factory/ground/장난감던전벽03.bmp|필드바닥\장난감던전벽03.bmp
+dungeons/toy factory/ground/장난감던전블럭.bmp|필드바닥\장난감던전블럭.bmp
+
+fields/|
+fields/abyss/|
+fields/abyss/ground/|
+fields/abyss/ground/abi_1dan.bmp|필드바닥\abi_1dan.bmp
+fields/abyss/ground/abi_2dan.bmp|필드바닥\abi_2dan.bmp
+fields/abyss/ground/abi_3dan.bmp|필드바닥\abi_3dan.bmp
+fields/abyss/ground/abi_4dan.bmp|필드바닥\abi_4dan.bmp
+fields/abyss/ground/abi_tex01.bmp|필드바닥\abi_tex01.bmp
+fields/abyss/ground/abi_tex02.bmp|필드바닥\abi_tex02.bmp
+fields/abyss/ground/abi_tex03.bmp|필드바닥\abi_tex03.bmp
+fields/abyss/ground/abi_tex04.bmp|필드바닥\abi_tex04.bmp
+fields/abyss/ground/abi_tex05.bmp|필드바닥\abi_tex05.bmp
+fields/abyss/ground/abi_tex06.bmp|필드바닥\abi_tex06.bmp
+fields/abyss/ground/abi_tex07.bmp|필드바닥\abi_tex07.bmp
+fields/abyss/ground/abi_tex08.bmp|필드바닥\abi_tex08.bmp
+fields/abyss/ground/abi_tex09.bmp|필드바닥\abi_tex09.bmp
+fields/abyss/ground/abi_tex10.bmp|필드바닥\abi_tex10.bmp
+fields/abyss/ground/abi_tex11.bmp|필드바닥\abi_tex11.bmp
+fields/abyss/ground/abi_tex12.bmp|필드바닥\abi_tex12.bmp
+fields/abyss/ground/abi_tex13.bmp|필드바닥\abi_tex13.bmp
+fields/abyss/ground/abi_tex14.bmp|필드바닥\abi_tex14.bmp
+
+fields/thanatos/|
+fields/thanatos/ground/|
+fields/thanatos/ground/tan_field01.bmp|필드바닥\tan_field01.bmp
+fields/thanatos/ground/tan_field02.bmp|필드바닥\tan_field02.bmp
+fields/thanatos/ground/tan_field03.bmp|필드바닥\tan_field03.bmp
+fields/thanatos/ground/tan_field04.bmp|필드바닥\tan_field04.bmp
+fields/thanatos/ground/tan_field05.bmp|필드바닥\tan_field05.bmp
+fields/thanatos/ground/tan_field06.bmp|필드바닥\tan_field06.bmp
+fields/thanatos/ground/tan_field07.bmp|필드바닥\tan_field07.bmp
+fields/thanatos/ground/tan_field08.bmp|필드바닥\tan_field08.bmp
 
 root/backside.bmp|backside.bmp
 root/backtrans.bmp|backtrans.bmp
@@ -301,24 +553,6 @@ cat1/ma_hou_11.bmp|게페니아\ma_hou_11.bmp
 cat1/ma_hou_12.bmp|게페니아\ma_hou_12.bmp
 cat1/ma_hou_13.bmp|게페니아\ma_hou_13.bmp
 cat1/ma_hou_14.bmp|게페니아\ma_hou_14.bmp
-geffen/ge-in000.bmp|게펜내부\ge-in000.bmp
-geffen/ge-in001.bmp|게펜내부\ge-in001.bmp
-geffen/ge-incarpet1.bmp|게펜내부\ge-incarpet1.bmp
-geffen/ge-incarpet2.bmp|게펜내부\ge-incarpet2.bmp
-geffen/ge-inflat.bmp|게펜내부\ge-inflat.bmp
-geffen/ge-land-1.bmp|게펜내부\ge-land-1.bmp
-geffen/ge-land.bmp|게펜내부\ge-land.bmp
-geffen/ge-wall-00.bmp|게펜내부\ge-wall-00.bmp
-geffen/ge-wall-000.bmp|게펜내부\ge-wall-000.bmp
-geffen/ge_hin01_01.bmp|게펜내부\ge_hin01_01.bmp
-geffen/ge_hin01_02.bmp|게펜내부\ge_hin01_02.bmp
-geffen/ge_hin01_03.bmp|게펜내부\ge_hin01_03.bmp
-geffen/ge_hin01_04.bmp|게펜내부\ge_hin01_04.bmp
-geffen/ge_hin01_06.bmp|게펜내부\ge_hin01_06.bmp
-geffen/ge_shop_tile-1.bmp|게펜내부\ge_shop_tile-1.bmp
-geffen/ge_top_tile01.bmp|게펜내부\ge_top_tile01.bmp
-geffen/ge_top_tile02.bmp|게펜내부\ge_top_tile02.bmp
-geffen/ge_top_tile03.bmp|게펜내부\ge_top_tile03.bmp
 cat2/00_a.bmp|기타마을\00_a.bmp
 cat2/1 copy.bmp|기타마을\1 copy.bmp
 cat2/2 copy.bmp|기타마을\2 copy.bmp
@@ -718,17 +952,6 @@ cat2/cc_weapon17.bmp|기타마을\cc_weapon17.bmp
 cat2/cc_weapon18.bmp|기타마을\cc_weapon18.bmp
 cat2/cc_weapon19.bmp|기타마을\cc_weapon19.bmp
 cat2/center copy.bmp|기타마을\center copy.bmp
-cat2/chdn_d1 copy.bmp|기타마을\chdn_d1 copy.bmp
-cat2/chdn_d2 copy.bmp|기타마을\chdn_d2 copy.bmp
-cat2/chdn_d3 copy.bmp|기타마을\chdn_d3 copy.bmp
-cat2/chdn_d4 copy.bmp|기타마을\chdn_d4 copy.bmp
-cat2/chi_mu1 copy.bmp|기타마을\chi_mu1 copy.bmp
-cat2/chi_mu2 copy.bmp|기타마을\chi_mu2 copy.bmp
-cat2/chi_mu3 copy.bmp|기타마을\chi_mu3 copy.bmp
-cat2/chi_mu4 copy.bmp|기타마을\chi_mu4 copy.bmp
-cat2/chi_mu5 copy.bmp|기타마을\chi_mu5 copy.bmp
-cat2/chi_mu6 copy.bmp|기타마을\chi_mu6 copy.bmp
-cat2/chn_door3.bmp|기타마을\chn_door3.bmp
 cat2/chool-01.bmp|기타마을\chool-01.bmp
 cat2/chool-02.bmp|기타마을\chool-02.bmp
 cat2/chool-03.bmp|기타마을\chool-03.bmp
@@ -797,38 +1020,6 @@ cat2/ch_mt14.bmp|기타마을\ch_mt14.bmp
 cat2/ch_mt15.bmp|기타마을\ch_mt15.bmp
 cat2/ch_mt16.bmp|기타마을\ch_mt16.bmp
 cat2/ch_mt17.bmp|기타마을\ch_mt17.bmp
-cat2/ch_roof.bmp|기타마을\ch_roof.bmp
-cat2/ch_roofbo.bmp|기타마을\ch_roofbo.bmp
-cat2/ch_roofli.bmp|기타마을\ch_roofli.bmp
-cat2/ch_rooflibo.bmp|기타마을\ch_rooflibo.bmp
-cat2/ch_sd01.bmp|기타마을\ch_sd01.bmp
-cat2/ch_sidest.bmp|기타마을\ch_sidest.bmp
-cat2/ch_sidestpl.bmp|기타마을\ch_sidestpl.bmp
-cat2/ch_st01.bmp|기타마을\ch_st01.bmp
-cat2/ch_st02.bmp|기타마을\ch_st02.bmp
-cat2/ch_st03.bmp|기타마을\ch_st03.bmp
-cat2/ch_st04.bmp|기타마을\ch_st04.bmp
-cat2/ch_t01.bmp|기타마을\ch_t01.bmp
-cat2/ch_t02.bmp|기타마을\ch_t02.bmp
-cat2/ch_t03.bmp|기타마을\ch_t03.bmp
-cat2/ch_t05.bmp|기타마을\ch_t05.bmp
-cat2/ch_t06.bmp|기타마을\ch_t06.bmp
-cat2/ch_t07.bmp|기타마을\ch_t07.bmp
-cat2/ch_t08.bmp|기타마을\ch_t08.bmp
-cat2/ch_t09.bmp|기타마을\ch_t09.bmp
-cat2/ch_w01.bmp|기타마을\ch_w01.bmp
-cat2/ch_w02.bmp|기타마을\ch_w02.bmp
-cat2/ch_w03.bmp|기타마을\ch_w03.bmp
-cat2/ch_w04.bmp|기타마을\ch_w04.bmp
-cat2/ch_w05.bmp|기타마을\ch_w05.bmp
-cat2/ch_wall.bmp|기타마을\ch_wall.bmp
-cat2/ch_wallhi.bmp|기타마을\ch_wallhi.bmp
-cat2/ch_wallhist.bmp|기타마을\ch_wallhist.bmp
-cat2/ch_wallpl.bmp|기타마을\ch_wallpl.bmp
-cat2/ch_wallpl02.bmp|기타마을\ch_wallpl02.bmp
-cat2/ch_wallst.bmp|기타마을\ch_wallst.bmp
-cat2/ch_walltop.bmp|기타마을\ch_walltop.bmp
-cat2/ch_wall_02.bmp|기타마을\ch_wall_02.bmp
 cat2/col_box.bmp|기타마을\col_box.bmp
 cat2/col_centop.bmp|기타마을\col_centop.bmp
 cat2/col_centop02.bmp|기타마을\col_centop02.bmp
@@ -3128,11 +3319,6 @@ cat14/xmas_tree03.bmp|나무잡초꽃\xmas_tree03.bmp
 cat14/xmas_tree04.bmp|나무잡초꽃\xmas_tree04.bmp
 cat14/xmas_undbr01.bmp|나무잡초꽃\xmas_undbr01.bmp
 cat5/1gid copy.bmp|내부소품\1gid copy.bmp
-cat5/abi_dosul copy.bmp|내부소품\abi_dosul copy.bmp
-cat5/abi_dosul2 copy.bmp|내부소품\abi_dosul2 copy.bmp
-cat5/abi_dun40.bmp|내부소품\abi_dun40.bmp
-cat5/abi_dun41.bmp|내부소품\abi_dun41.bmp
-cat5/abi_dun42.bmp|내부소품\abi_dun42.bmp
 cat5/al-cl-wheel.bmp|내부소품\al-cl-wheel.bmp
 cat5/al-ship1.bmp|내부소품\al-ship1.bmp
 cat5/al-ship2.bmp|내부소품\al-ship2.bmp
@@ -3778,15 +3964,6 @@ cat5/xmas_switch.bmp|내부소품\xmas_switch.bmp
 cat5/xmas_switch1.bmp|내부소품\xmas_switch1.bmp
 cat5/xmas_switch2.bmp|내부소품\xmas_switch2.bmp
 cat5/xmax_crane.bmp|내부소품\xmax_crane.bmp
-cat6/animalbone.bmp|모로코\animalbone.bmp
-cat6/antegg-1.bmp|모로코\antegg-1.bmp
-cat6/antegg-2.bmp|모로코\antegg-2.bmp
-cat6/anthell.bmp|모로코\anthell.bmp
-cat6/anttree-1.bmp|모로코\anttree-1.bmp
-cat6/anttree-2.bmp|모로코\anttree-2.bmp
-cat6/anttree-3.bmp|모로코\anttree-3.bmp
-cat6/anttree-4.bmp|모로코\anttree-4.bmp
-cat6/anttree-5.bmp|모로코\anttree-5.bmp
 cat6/ba-1.bmp|모로코\ba-1.bmp
 cat6/ba-2.bmp|모로코\ba-2.bmp
 cat6/ba-back.bmp|모로코\ba-back.bmp
@@ -3939,53 +4116,6 @@ cat6/statue-map03.bmp|모로코\statue-map03.bmp
 cat6/top01.bmp|모로코\top01.bmp
 cat6/top02.bmp|모로코\top02.bmp
 cat6/trunk.bmp|모로코\trunk.bmp
-morocc/in_sphinx_01.bmp|모로코내부\in_sphinx_01.bmp
-morocc/in_sphinx_02.bmp|모로코내부\in_sphinx_02.bmp
-morocc/in_sphinx_03.bmp|모로코내부\in_sphinx_03.bmp
-morocc/in_sphinx_04.bmp|모로코내부\in_sphinx_04.bmp
-morocc/mo-castle-wall1.bmp|모로코내부\mo-castle-wall1.bmp
-morocc/mo-castle-wall2.bmp|모로코내부\mo-castle-wall2.bmp
-morocc/mo-cstlw1-1.bmp|모로코내부\mo-cstlw1-1.bmp
-morocc/mo-cstlw1-2.bmp|모로코내부\mo-cstlw1-2.bmp
-morocc/mo-cstlw2-1.bmp|모로코내부\mo-cstlw2-1.bmp
-morocc/mo-cstlw2-2.bmp|모로코내부\mo-cstlw2-2.bmp
-morocc/mo-pyra-c1.bmp|모로코내부\mo-pyra-c1.bmp
-morocc/mo-pyra-c2.bmp|모로코내부\mo-pyra-c2.bmp
-morocc/mo-pyra-f1.bmp|모로코내부\mo-pyra-f1.bmp
-morocc/mo-pyra-f2.bmp|모로코내부\mo-pyra-f2.bmp
-morocc/mo-pyra-tas1.bmp|모로코내부\mo-pyra-tas1.bmp
-morocc/mo-pyra-tas2.bmp|모로코내부\mo-pyra-tas2.bmp
-morocc/mo-tile-000.bmp|모로코내부\mo-tile-000.bmp
-morocc/moc_tile-00.bmp|모로코내부\moc_tile-00.bmp
-morocc/moc_tile-02.bmp|모로코내부\moc_tile-02.bmp
-morocc/moc_tile02.bmp|모로코내부\moc_tile02.bmp
-morocc/moc_wall00.bmp|모로코내부\moc_wall00.bmp
-morocc/moc_wall01.bmp|모로코내부\moc_wall01.bmp
-morocc/moc_wall02.bmp|모로코내부\moc_wall02.bmp
-morocc/moc_wall03.bmp|모로코내부\moc_wall03.bmp
-morocc/moc_wall04.bmp|모로코내부\moc_wall04.bmp
-morocc/moc_wall05.bmp|모로코내부\moc_wall05.bmp
-morocc/moc_wall06.bmp|모로코내부\moc_wall06.bmp
-morocc/moc_wall07-.bmp|모로코내부\moc_wall07-.bmp
-morocc/moc_wall07.bmp|모로코내부\moc_wall07.bmp
-morocc/moc_wall08-.bmp|모로코내부\moc_wall08-.bmp
-morocc/moc_wall08.bmp|모로코내부\moc_wall08.bmp
-morocc/moc_wall10.bmp|모로코내부\moc_wall10.bmp
-morocc/moc_wall11.bmp|모로코내부\moc_wall11.bmp
-morocc/moc_wall12.bmp|모로코내부\moc_wall12.bmp
-morocc/moc_wall13.bmp|모로코내부\moc_wall13.bmp
-morocc/모로코성-바닥2.bmp|모로코내부\모로코성-바닥2.bmp
-morocc/모로코성-바닥3.bmp|모로코내부\모로코성-바닥3.bmp
-sunkenship/inaltreasureship_01.bmp|알베르타내부\inaltreasureship_01.bmp
-sunkenship/inaltreasureship_02.bmp|알베르타내부\inaltreasureship_02.bmp
-sunkenship/inaltreasureship_03.bmp|알베르타내부\inaltreasureship_03.bmp
-sunkenship/inaltreasureship_04.bmp|알베르타내부\inaltreasureship_04.bmp
-sunkenship/inaltreasureship_05.bmp|알베르타내부\inaltreasureship_05.bmp
-sunkenship/inaltreasureship_06.bmp|알베르타내부\inaltreasureship_06.bmp
-sunkenship/inaltreasureship_07.bmp|알베르타내부\inaltreasureship_07.bmp
-sunkenship/inaltreasureship_08.bmp|알베르타내부\inaltreasureship_08.bmp
-sunkenship/inaltreasureship_09.bmp|알베르타내부\inaltreasureship_09.bmp
-sunkenship/inaltreasureship_10.bmp|알베르타내부\inaltreasureship_10.bmp
 cat7/water600.bmp|워터\water600.bmp
 cat8/moc_a_inside04.bmp|워프대기실내부\moc_a_inside04.bmp
 cat8/w_inside01.bmp|워프대기실내부\w_inside01.bmp
@@ -3995,13 +4125,6 @@ cat8/w_inside04.bmp|워프대기실내부\w_inside04.bmp
 cat8/w_inside05.bmp|워프대기실내부\w_inside05.bmp
 cat8/w_inside06.bmp|워프대기실내부\w_inside06.bmp
 cat9/12-sang copy.bmp|외부소품\12-sang copy.bmp
-cat9/abi_bbul copy.bmp|외부소품\abi_bbul copy.bmp
-cat9/abi_duninp1 copy.bmp|외부소품\abi_duninp1 copy.bmp
-cat9/abi_duninp2 copy.bmp|외부소품\abi_duninp2 copy.bmp
-cat9/abi_duninp3 copy.bmp|외부소품\abi_duninp3 copy.bmp
-cat9/abi_duninp4 copy.bmp|외부소품\abi_duninp4 copy.bmp
-cat9/abi_duninp5 copy.bmp|외부소품\abi_duninp5 copy.bmp
-cat9/abi_nung copy.bmp|외부소품\abi_nung copy.bmp
 cat9/alde_para01.bmp|외부소품\alde_para01.bmp
 cat9/alde_para02.bmp|외부소품\alde_para02.bmp
 cat9/arena2_1.bmp|외부소품\arena2_1.bmp
@@ -4780,28 +4903,6 @@ ground/a/a-2.bmp|필드바닥\a-2.bmp
 ground/a/a-3.bmp|필드바닥\a-3.bmp
 ground/a/a-4.bmp|필드바닥\a-4.bmp
 ground/a/a-5.bmp|필드바닥\a-5.bmp
-ground/abi/abi_1dan.bmp|필드바닥\abi_1dan.bmp
-ground/abi/abi_2dan.bmp|필드바닥\abi_2dan.bmp
-ground/abi/abi_3dan.bmp|필드바닥\abi_3dan.bmp
-ground/abi/abi_4dan.bmp|필드바닥\abi_4dan.bmp
-ground/abi/abi_tex01.bmp|필드바닥\abi_tex01.bmp
-ground/abi/abi_tex02.bmp|필드바닥\abi_tex02.bmp
-ground/abi/abi_tex03.bmp|필드바닥\abi_tex03.bmp
-ground/abi/abi_tex04.bmp|필드바닥\abi_tex04.bmp
-ground/abi/abi_tex05.bmp|필드바닥\abi_tex05.bmp
-ground/abi/abi_tex06.bmp|필드바닥\abi_tex06.bmp
-ground/abi/abi_tex07.bmp|필드바닥\abi_tex07.bmp
-ground/abi/abi_tex08.bmp|필드바닥\abi_tex08.bmp
-ground/abi/abi_tex09.bmp|필드바닥\abi_tex09.bmp
-ground/abi/abi_tex10.bmp|필드바닥\abi_tex10.bmp
-ground/abi/abi_tex11.bmp|필드바닥\abi_tex11.bmp
-ground/abi/abi_tex12.bmp|필드바닥\abi_tex12.bmp
-ground/abi/abi_tex13.bmp|필드바닥\abi_tex13.bmp
-ground/abi/abi_tex14.bmp|필드바닥\abi_tex14.bmp
-ground/antflat/antflat-1.bmp|필드바닥\antflat-1.bmp
-ground/antflat/antflat-2.bmp|필드바닥\antflat-2.bmp
-ground/antflat/antflat-3.bmp|필드바닥\antflat-3.bmp
-ground/antflat/antflat-4.bmp|필드바닥\antflat-4.bmp
 ground/dong/dong-ki.bmp|필드바닥\dong-ki.bmp
 ground/dun-lin/dun-lin001.bmp|필드바닥\dun-lin001.bmp
 ground/dun-lin/dun-lin002.bmp|필드바닥\dun-lin002.bmp
@@ -4887,26 +4988,7 @@ ground/i_fild/i_fild13.bmp|필드바닥\i_fild13.bmp
 ground/i_fild/i_fild14.bmp|필드바닥\i_fild14.bmp
 ground/i_fild/i_fild15.bmp|필드바닥\i_fild15.bmp
 ground/i_fild/i_fild16.bmp|필드바닥\i_fild16.bmp
-ground/city/i_vill/i_vill01.bmp|필드바닥\i_vill01.bmp
-ground/city/i_vill/i_vill02.bmp|필드바닥\i_vill02.bmp
-ground/city/i_vill/i_vill03.bmp|필드바닥\i_vill03.bmp
-ground/city/i_vill/i_vill04.bmp|필드바닥\i_vill04.bmp
-ground/city/i_vill/i_vill05.bmp|필드바닥\i_vill05.bmp
-ground/city/i_vill/i_vill06.bmp|필드바닥\i_vill06.bmp
-ground/city/i_vill/i_vill07.bmp|필드바닥\i_vill07.bmp
-ground/city/i_vill/i_vill08.bmp|필드바닥\i_vill08.bmp
-ground/city/i_vill/i_vill09.bmp|필드바닥\i_vill09.bmp
-ground/city/i_vill/i_vill10.bmp|필드바닥\i_vill10.bmp
-ground/city/i_vill/i_vill11.bmp|필드바닥\i_vill11.bmp
-ground/city/i_vill/i_vill12.bmp|필드바닥\i_vill12.bmp
-ground/city/i_vill/i_vill13.bmp|필드바닥\i_vill13.bmp
-ground/city/i_vill/i_vill14.bmp|필드바닥\i_vill14.bmp
-ground/city/i_vill/i_vill15.bmp|필드바닥\i_vill15.bmp
-ground/city/i_vill/i_vill16.bmp|필드바닥\i_vill16.bmp
-ground/city/i_vill/i_vill17.bmp|필드바닥\i_vill17.bmp
-ground/city/i_vill/i_vill18.bmp|필드바닥\i_vill18.bmp
-ground/city/i_vill/i_vill19.bmp|필드바닥\i_vill19.bmp
-ground/city/i_vill/i_vill20.bmp|필드바닥\i_vill20.bmp
+
 ground/mo-wall/mo-wall-01.bmp|필드바닥\mo-wall-01.bmp
 ground/mo-wall/mo-wall-02.bmp|필드바닥\mo-wall-02.bmp
 ground/mo-wall/mo-wall-03.bmp|필드바닥\mo-wall-03.bmp
@@ -4962,33 +5044,7 @@ ground/pe-wall/pe-wall-008.bmp|필드바닥\pe-wall-008.bmp
 ground/sage_gr.bmp|필드바닥\sage_gr.bmp
 ground/sage_gr01.bmp|필드바닥\sage_gr01.bmp
 ground/snow.bmp|필드바닥\snow.bmp
-ground/tan_field/tan_field01.bmp|필드바닥\tan_field01.bmp
-ground/tan_field/tan_field02.bmp|필드바닥\tan_field02.bmp
-ground/tan_field/tan_field03.bmp|필드바닥\tan_field03.bmp
-ground/tan_field/tan_field04.bmp|필드바닥\tan_field04.bmp
-ground/tan_field/tan_field05.bmp|필드바닥\tan_field05.bmp
-ground/tan_field/tan_field06.bmp|필드바닥\tan_field06.bmp
-ground/tan_field/tan_field07.bmp|필드바닥\tan_field07.bmp
-ground/tan_field/tan_field08.bmp|필드바닥\tan_field08.bmp
 ground/whi_dunbadak1 copy.bmp|필드바닥\whi_dunbadak1 copy.bmp
-ground/city/xmas/xmas_눈바닥01.bmp|필드바닥\xmas_눈바닥01.bmp
-ground/city/xmas/xmas_눈바닥02.bmp|필드바닥\xmas_눈바닥02.bmp
-ground/city/xmas/xmas_눈바닥03.bmp|필드바닥\xmas_눈바닥03.bmp
-ground/city/xmas/xmas_눈바닥04.bmp|필드바닥\xmas_눈바닥04.bmp
-ground/city/xmas/xmas_눈바닥05.bmp|필드바닥\xmas_눈바닥05.bmp
-ground/city/xmas/xmas_눈바닥06.bmp|필드바닥\xmas_눈바닥06.bmp
-ground/city/xmas/xmas_블럭01.bmp|필드바닥\xmas_블럭01.bmp
-ground/city/xmas/xmas_블럭02.bmp|필드바닥\xmas_블럭02.bmp
-ground/city/xmas/xmas_블럭03.bmp|필드바닥\xmas_블럭03.bmp
-ground/city/xmas/xmas_블럭04.bmp|필드바닥\xmas_블럭04.bmp
-ground/city/xmas/xmas_블럭05.bmp|필드바닥\xmas_블럭05.bmp
-ground/city/xmas/xmas_블럭06.bmp|필드바닥\xmas_블럭06.bmp
-ground/city/xmas/xmas_블럭07.bmp|필드바닥\xmas_블럭07.bmp
-ground/city/xmas/xmas_블럭08.bmp|필드바닥\xmas_블럭08.bmp
-ground/city/xmas/xmas_블럭09.bmp|필드바닥\xmas_블럭09.bmp
-ground/city/xmas/xmas_블럭10.bmp|필드바닥\xmas_블럭10.bmp
-ground/city/xmas/xmas_블럭11.bmp|필드바닥\xmas_블럭11.bmp
-ground/city/xmas/xmas_블럭12.bmp|필드바닥\xmas_블럭12.bmp
 
 ground/crap/|
 ground/crap/crap1/|
@@ -5267,20 +5323,6 @@ ground/crap/crap1/알데바란벽.bmp|필드바닥\알데바란벽.bmp
 ground/crap/crap1/알베르타마을바닥-00.bmp|필드바닥\알베르타마을바닥-00.bmp
 ground/crap/crap1/알베르타마을바닥-1.bmp|필드바닥\알베르타마을바닥-1.bmp
 ground/crap/crap1/알베르타마을바닥-2.bmp|필드바닥\알베르타마을바닥-2.bmp
-ground/crap/crap1/어비스동굴01.bmp|필드바닥\어비스동굴01.bmp
-ground/crap/crap1/어비스동굴02.bmp|필드바닥\어비스동굴02.bmp
-ground/crap/crap1/어비스동굴03.bmp|필드바닥\어비스동굴03.bmp
-ground/crap/crap1/어비스동굴04.bmp|필드바닥\어비스동굴04.bmp
-ground/crap/crap1/어비스바닥1.bmp|필드바닥\어비스바닥1.bmp
-ground/crap/crap1/어비스바닥10.bmp|필드바닥\어비스바닥10.bmp
-ground/crap/crap1/어비스바닥2.bmp|필드바닥\어비스바닥2.bmp
-ground/crap/crap1/어비스바닥3.bmp|필드바닥\어비스바닥3.bmp
-ground/crap/crap1/어비스바닥4.bmp|필드바닥\어비스바닥4.bmp
-ground/crap/crap1/어비스바닥5.bmp|필드바닥\어비스바닥5.bmp
-ground/crap/crap1/어비스바닥6.bmp|필드바닥\어비스바닥6.bmp
-ground/crap/crap1/어비스바닥7.bmp|필드바닥\어비스바닥7.bmp
-ground/crap/crap1/어비스바닥8.bmp|필드바닥\어비스바닥8.bmp
-ground/crap/crap1/어비스바닥9.bmp|필드바닥\어비스바닥9.bmp
 ground/crap/crap1/어비유노연결01.bmp|필드바닥\어비유노연결01.bmp
 ground/crap/crap1/어비유노연결02.bmp|필드바닥\어비유노연결02.bmp
 ground/crap/crap1/어비유노연결03.bmp|필드바닥\어비유노연결03.bmp
@@ -5335,12 +5377,6 @@ ground/crap/crap1/유노추가06.bmp|필드바닥\유노추가06.bmp
 ground/crap/crap1/유노추가07.bmp|필드바닥\유노추가07.bmp
 ground/crap/crap1/유노추가08.bmp|필드바닥\유노추가08.bmp
 ground/crap/crap1/유노추가09.bmp|필드바닥\유노추가09.bmp
-ground/crap/crap1/장난감던전바닥01.bmp|필드바닥\장난감던전바닥01.bmp
-ground/crap/crap1/장난감던전바닥02.bmp|필드바닥\장난감던전바닥02.bmp
-ground/crap/crap1/장난감던전벽01.bmp|필드바닥\장난감던전벽01.bmp
-ground/crap/crap1/장난감던전벽02.bmp|필드바닥\장난감던전벽02.bmp
-ground/crap/crap1/장난감던전벽03.bmp|필드바닥\장난감던전벽03.bmp
-ground/crap/crap1/장난감던전블럭.bmp|필드바닥\장난감던전블럭.bmp
 ground/crap/crap1/이그드라시바닥01.bmp|필드바닥\이그드라시바닥01.bmp
 ground/crap/crap1/이그드라시바닥02.bmp|필드바닥\이그드라시바닥02.bmp
 ground/crap/crap1/이그드라시바닥03.bmp|필드바닥\이그드라시바닥03.bmp
