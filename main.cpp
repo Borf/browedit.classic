@@ -51,6 +51,7 @@ MENUCOMMAND(new);
 MENUCOMMAND(open);
 MENUCOMMAND(save);
 MENUCOMMAND(saveAs);
+MENUCOMMAND(importalpha);
 MENUCOMMAND(exit);
 MENUCOMMAND(steepness);
 MENUCOMMAND(random1);
@@ -108,7 +109,7 @@ cMenu* models;
 vector<vector<vector<float> > > clipboard;
 long lasttimer;
 
-char* downloadfile(string url, long &filesize)
+string downloadfile(string url, long &filesize)
 {
 //#define DOWNLOADBUFFERSIZE 1
 #define DOWNLOADBUFFERSIZE 2024
@@ -165,14 +166,13 @@ char* downloadfile(string url, long &filesize)
 	long bytes = 0;
 	header = "";
 	filesize = 0;
-	char* downloadbuffer = NULL;
+	string downloadbuffer = "";
 	while(rc = recv(s, buffer, DOWNLOADBUFFERSIZE, 0))
 	{
 		if (rc <= 0)
 			break;
 
-		if (header == "")
-			buf += string(buffer, rc);
+		buf += string(buffer, rc);
 
 		int bla = buf.find("\r\n\r\n");
 		if (header == "" && buf.find("\r\n\r\n") != string::npos)
@@ -184,44 +184,15 @@ char* downloadfile(string url, long &filesize)
 				newurl = newurl.substr(0, newurl.find("\r\n"));
 				return downloadfile(newurl, filesize);
 			}
-			else if (header.find("\r\nContent-Length") != string::npos)
-			{
-				if (header.substr(0, 22) == "HTTP/1.1 404 Not Found")
-				{
-					Log(3,0,"404 not found");
-					return NULL;
-				}
-				string bla = header.substr(header.find("\r\nContent-Length:")+18);
-				bla = bla.substr(0, bla.find("\r\n"));
-				filesize = atol(bla.c_str());
-				if (filesize == 0)
-					return NULL;
-				downloadbuffer = new char[filesize+100];
-				ZeroMemory(downloadbuffer, filesize+100);
-				int startpage = buf.find("\r\n\r\n")+4;
-				memcpy(downloadbuffer, buf.c_str()+startpage, buf.length()-startpage);
-				bytes+=buf.length()-startpage;
-			}
 			else
 			{
-				Log(3,0,"Url: %s -> Header: %s, buf -> %s", url.c_str(), header.c_str(), buf.c_str());
-				filesize = 0;
-				Log(3,0,"Unknown filesize!, cancelling download");
-				return NULL;
+				int startpage = buf.find("\r\n\r\n")+4;
+				buf = buf.substr(startpage);
 			}
 		}
-		else
-		{
-			if (header != "")
-			{
-				memcpy(downloadbuffer+bytes, buffer, rc);
-				bytes+=rc;
-			}
-		}
-
 	}
 	
-	return downloadbuffer;
+	return buf;
 }
 
 
@@ -371,7 +342,7 @@ int main(int argc, char *argv[])
 			(BYTE)exedigest[15],
 			(BYTE)randchar
 			);
-		char* res = NULL;
+		string res;
 #ifndef _DEBUG
 		res = downloadfile(buf, filesize);
 #endif
@@ -399,15 +370,15 @@ int main(int argc, char *argv[])
 
 
 
-		if (res == NULL)
+		if (res == "")
 			ok = false;
-		else if (strcmp(res, okbuf) == 0)
+		else if (res == okbuf)
 		{
 			ok = true;
 		}
 		else
 			ok = false;
-		if (res != NULL && strcmp(res, updatebuf) == 0)
+		if (res == updatebuf)
 		{
 			Log(3,0,"You do not have the latest version of browedit");
 			sleep(10);
@@ -470,6 +441,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,file,"Open",					&MenuCommand_open);
 	ADDMENUITEM(mm,file,"Save",					&MenuCommand_save);
 	ADDMENUITEM(mm,file,"Save As",				&MenuCommand_saveAs);
+	ADDMENUITEM(mm,file,"Import RO Alpha maps",	&MenuCommand_importalpha);
 	ADDMENUITEM(mm,file,"Export Lightmaps",	&MenuCommand_savelightmaps);
 	ADDMENUITEM(mm,file,"Import Lightmaps",	&MenuCommand_loadlightmaps);
 	ADDMENUITEM(mm,file,"Exit",					&MenuCommand_exit);
@@ -645,7 +617,7 @@ int main(int argc, char *argv[])
 		return 1;
 
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "prontera").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "eden_city01").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 	//Graphics.world.importalpha();
@@ -1328,6 +1300,10 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					if (Graphics.previewmodel != NULL)
 						Graphics.previewmodel->scale = Graphics.previewmodel->scale * 0.9f;
 				}
+				else if (editmode == MODE_HEIGHTDETAIL)
+				{
+					brushsize/=2;
+				}
 				else
 					Graphics.brushsize/=2;
 					
@@ -1337,6 +1313,10 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if (Graphics.previewmodel != NULL)
 						Graphics.previewmodel->scale = Graphics.previewmodel->scale * 1.1f;
+				}
+				else if (editmode == MODE_HEIGHTDETAIL)
+				{
+					brushsize*=2;
 				}
 				else
 					Graphics.brushsize*=2;
@@ -1718,6 +1698,31 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					{
 						Graphics.world.water.height++;
 					}
+					if (editmode == MODE_HEIGHTGLOBAL)
+					{
+						for(int x = 0; x < Graphics.world.width; x++)
+						{
+							for(int y = 0; y < Graphics.world.height; y++)
+							{
+								Graphics.world.cubes[y][x].cell1 += 10;
+								Graphics.world.cubes[y][x].cell2 += 10;
+								Graphics.world.cubes[y][x].cell3 += 10;
+								Graphics.world.cubes[y][x].cell4 += 10;
+							}
+						}
+						for(int y = 0; y < Graphics.world.gattiles.size(); y++)
+						{
+							for(int x = 0; x < Graphics.world.gattiles[y].size(); x++)
+							{
+								Graphics.world.gattiles[y][x].cell1 += 10;
+								Graphics.world.gattiles[y][x].cell2 += 10;
+								Graphics.world.gattiles[y][x].cell3 += 10;
+								Graphics.world.gattiles[y][x].cell4 += 10;
+							}
+						}
+						for(int i = 0; i < Graphics.world.models.size(); i++)
+							Graphics.world.models[i]->pos.y+=10;
+					}
 					break;
 				}
 			case SDLK_PAGEUP:
@@ -1810,6 +1815,31 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					if (editmode == MODE_WATER)
 					{
 						Graphics.world.water.height--;
+					}
+					if (editmode == MODE_HEIGHTGLOBAL)
+					{
+						for(int x = 0; x < Graphics.world.width; x++)
+						{
+							for(int y = 0; y < Graphics.world.height; y++)
+							{
+								Graphics.world.cubes[y][x].cell1 -= 10;
+								Graphics.world.cubes[y][x].cell2 -= 10;
+								Graphics.world.cubes[y][x].cell3 -= 10;
+								Graphics.world.cubes[y][x].cell4 -= 10;
+							}
+						}
+						for(int y = 0; y < Graphics.world.gattiles.size(); y++)
+						{
+							for(int x = 0; x < Graphics.world.gattiles[y].size(); x++)
+							{
+								Graphics.world.gattiles[y][x].cell1 -= 10;
+								Graphics.world.gattiles[y][x].cell2 -= 10;
+								Graphics.world.gattiles[y][x].cell3 -= 10;
+								Graphics.world.gattiles[y][x].cell4 -= 10;
+							}
+						}
+						for(int i = 0; i < Graphics.world.models.size(); i++)
+							Graphics.world.models[i]->pos.y-=10;
 					}
 					break;
 				}
@@ -2154,16 +2184,23 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 					else if (editmode == MODE_OBJECTS && Graphics.clipboardfile != "")
 					{
-						cRSMModel* model = new cRSMModel();
-						model->load(Graphics.clipboardfile);
-						model->pos = cVector3(mouse3dx/5, -mouse3dy, mouse3dz/5);
-						if (SDL_GetModState() & KMOD_SHIFT)
-							model->pos.y = Graphics.clipboardy;
-						model->scale = Graphics.clipboardscale;
-						model->rot = Graphics.clipboardrot;
-						model->id = Graphics.world.models.size();
-						Graphics.world.models.push_back(model);
-						Graphics.selectedobject = Graphics.world.models.size()-1;
+						if (SDL_GetModState() & KMOD_CTRL)
+						{
+							Graphics.world.models[Graphics.selectedobject]->pos.y = Graphics.clipboardy;
+						}
+						else
+						{
+							cRSMModel* model = new cRSMModel();
+							model->load(Graphics.clipboardfile);
+							model->pos = cVector3(mouse3dx/5, -mouse3dy, mouse3dz/5);
+							if (SDL_GetModState() & KMOD_SHIFT)
+								model->pos.y = Graphics.clipboardy;
+							model->scale = Graphics.clipboardscale;
+							model->rot = Graphics.clipboardrot;
+							model->id = Graphics.world.models.size();
+							Graphics.world.models.push_back(model);
+							Graphics.selectedobject = Graphics.world.models.size()-1;
+						}
 					}
 					if (editmode == MODE_GAT)
 					{
@@ -2379,6 +2416,46 @@ MENUCOMMAND(open)
 }
 
 
+MENUCOMMAND(importalpha)
+{
+#ifdef WIN32
+	char curdir[100];
+	getcwd(curdir, 100);
+	SDL_SysWMinfo wmInfo;
+	SDL_VERSION(&wmInfo.version)	;
+	SDL_GetWMInfo(&wmInfo);
+	HWND hWnd = wmInfo.window;
+	OPENFILENAME ofn;
+	ZeroMemory(&ofn, sizeof(ofn));
+	ofn.lStructSize = sizeof(ofn);
+	ofn.hwndOwner = hWnd;
+
+	strcpy(Graphics.world.filename, replace(Graphics.world.filename, "/", "\\").c_str());
+	ofn.lpstrFile = Graphics.world.filename;
+	ofn.nMaxFile = 256;
+	ofn.lpstrFilter = "All\0*.*\0RO ALPHA Maps\0*.rsw\0";
+	ofn.nFilterIndex = 2;
+	ofn.lpstrFileTitle = NULL;
+	ofn.nMaxFileTitle = 0;
+	ofn.lpstrInitialDir = NULL;
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_ENABLESIZING;
+	if (GetOpenFileName(&ofn))
+	{
+		while(Graphics.world.filename[strlen(Graphics.world.filename)-1] != '.')
+			Graphics.world.filename[strlen(Graphics.world.filename)-1] = '\0';
+		Graphics.world.filename[strlen(Graphics.world.filename)-1] = '\0';
+
+		chdir(curdir);
+		Graphics.world.importalpha();
+	}
+#else
+
+
+#endif
+	return true;
+}
+
+
 MENUCOMMAND(save)
 {
 #ifdef WIN32
@@ -2576,7 +2653,7 @@ MENUCOMMAND(mode)
 		mode->items[i]->ticked = false;
 	src->ticked = true;
 
-	if(title == "Global Terrain Edit")
+	if(title == "Global Heightmap Edit")
 	{
 		editmode = MODE_HEIGHTGLOBAL;
 		if (Graphics.texturestart >= Graphics.world.textures.size())

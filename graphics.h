@@ -133,6 +133,9 @@ public:
 	cTexture*				gattextures[7];
 	cTexture*				splash;
 	vector<vector<cTexture*> >		watertextures;
+	string					waterdir;
+	string					waterext;
+	int						watercount;
 
 
 private:

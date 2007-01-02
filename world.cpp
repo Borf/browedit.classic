@@ -2052,7 +2052,7 @@ void cWorld::importalpha()
 
 	width = *((int*)(buf+4));
 	height = *((int*)(buf+8));
-	//tilescale = *((float*)(buf+14));
+	tilescale = 10;
 
 	Graphics.camerapointer = cVector2(-width*5,-height*5);
 
@@ -2160,97 +2160,40 @@ void cWorld::importalpha()
 	}
 	loaded = true;
 
+	lightmapWidth = 8;
+	lightmapHeight = 8;
+	gridSizeCell = 1;
+
+
 	water.height = 50;
 	water.texcycle = 10;
-	return;
-
-
-
-
-//	lightmapWidth = *((int*)(buf+4));
-//	lightmapHeight = *((int*)(buf+8));
-//	pFile->read(buf, 4);
-	gridSizeCell = *((int*)(buf));
-
-	int nLightmaps = *((int*)buf);
-	for(i = 0; i < nLightmaps; i++)
-	{
-		cLightmap* l = new cLightmap();
-		pFile->read(l->buf, 256);
-		lightmaps.push_back(l);
-	}
-
-	long nTiles;
-	pFile->read((char*)&nTiles, 4);
-	for(i = 0; i < nTiles; i++)
-	{
-		pFile->read(buf, 40);
-		cTile t;
-		memcpy((char*)&t.u1, buf, 4);
-		memcpy((char*)&t.u2, buf+4, 4);
-		memcpy((char*)&t.u3, buf+8, 4);
-		memcpy((char*)&t.u4, buf+12, 4);
-		memcpy((char*)&t.v1, buf+16, 4);
-		memcpy((char*)&t.v2, buf+20, 4);
-		memcpy((char*)&t.v3, buf+24, 4);
-		memcpy((char*)&t.v4, buf+28, 4);
-
-		t.texture = ((BYTE)buf[32]) | (((BYTE)buf[33])<<8);
-		t.lightmap = ((BYTE)buf[34]) | (((BYTE)buf[35])<<8);
-
-		if(t.lightmap < 0 || t.lightmap > lightmaps.size())
-			t.lightmap = 0;
-		if(t.texture < 0 || t.texture > textures.size())
-			t.texture = 0;
-
-		memcpy(t.color, buf+36, 4);
-		tiles.push_back(t);
-	}
-
-	for(y = 0; y < height; y++)
-	{
-		vector<cCube> row;
-		row.clear();
-		for(int x = 0; x < width; x++)
-		{
-			pFile->read(buf, 28);
-			cCube c;
-			c.maxh = -99999;
-			c.minh = 99999;
-			memcpy((char*)&c.cell1, buf, 4);
-			memcpy((char*)&c.cell2, buf+4, 4);
-			memcpy((char*)&c.cell3, buf+8, 4);
-			memcpy((char*)&c.cell4, buf+12, 4);
-			c.tileup = *((int*)(buf+16));
-			c.tileside = *((int*)(buf+20));
-			c.tileaside = *((int*)(buf+24));
-			c.calcnormal();
-			row.push_back(c);
-		}
-		cubes.push_back(row);
-	}
 
 	pFile->close();
-	loaded = true;
-
-	return;
-	clean();
 
 	Log(3,0,"Done loading gnd");
 
 	Log(3,0,"Loading rsw...");
 	pFile = fs.open(string(filename) + ".rsw");
 
-	pFile->read(buf, 242);
-	useless = string(buf+166, 76);
+	pFile->read(buf, 218);
+unsigned char rawData[76] =
+{
+    0,0,0,0,0,0,0,0,0x00, 0x00, 0x80, 0x3F, 0x00, 0x00, 0x00, 0x40, 0x00, 0x00, 0x48, 0x42, 0x03, 0x00, 0x00, 0x00, 
+    0x2D, 0x00, 0x00, 0x00, 0x2D, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x3F, 0x00, 0x00, 0x80, 0x3F, 
+    0x00, 0x00, 0x80, 0x3F, 0xCD, 0xCC, 0x0C, 0x3F, 0x00, 0x00, 0x00, 0x3F, 0x00, 0x00, 0x00, 0x3F, 
+    0x00, 0x00, 0x00, 0x3F, 0x09, 0x00, 0x00, 0x00, 0xD4, 0x84, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 
+    0x00, 0x00, 0x00, 0x00, 
+} ;
+	useless = string((char*)rawData, 76);
+//	useless = string(buf+166, 76);
 
-	char* w = (char*)useless.c_str();
+/*	char* w = (char*)useless.c_str();
 	water.height = *((float*)(w));
 	water.type = *((int*)(w+4));
 	water.amplitude = *((float*)(w+8));
 	water.phase = *((float*)(w+12));
 	water.surfacecurve = *((float*)(w+16));
-	water.texcycle = *((int*)(w+20));
+	water.texcycle = *((int*)(w+20));*/
 	
 	
 
@@ -2293,68 +2236,21 @@ void cWorld::importalpha()
 			break;
 		case 2:
 			{
-			pFile->read(buf, 108);
-			cLight l;
-			l.name = string(buf);
-			l.pos.x = *((float*)(buf+40));
-			l.pos.y = *((float*)(buf+44));
-			l.pos.z = *((float*)(buf+48));
-
-			l.pos.x = (l.pos.x / 5) + width;
-			l.pos.z = (l.pos.z / 5) + height;
-
-			l.todo = string(buf+52, 40);
-			l.color.x = *((float*)(buf+92));
-			l.color.y = *((float*)(buf+96));
-			l.color.z = *((float*)(buf+100));
-			l.todo2 = *((float*)(buf+104));
-			lights.push_back(l);
+			pFile->read(buf, 208);
+			Log(3,0,"Read objecttype 2");
 			}
 			break;
 		case 3:
 			{
-			pFile->read(buf, 192);
-			cSound s;			
-			s.name = string(buf);
-			s.todo1 = string(buf+40, 40);
-			s.filename = string(buf+80);
-			s.todo2 = string(buf+120,20);
-			s.pos.x = *((float*)(buf+140));
-			s.pos.y = *((float*)(buf+144));
-			s.pos.z = *((float*)(buf+148));
-			s.id = string(buf+152, 40);
-			s.pos.x = (s.pos.x / 5) + width;
-			s.pos.z = (s.pos.z / 5) + height;
-			sounds.push_back(s);
+			pFile->read(buf, 196);
+			Log(3,0,"Read objecttype 3");
 			}
 			break;
 		case 4:
 			{
-			pFile->read(buf, 116);
-			cEffect e;
-			e.name = string(buf);
-			e.todo1 = *((float*)(buf+40));
-			e.todo2 = *((float*)(buf+44));
-			e.todo3 = *((float*)(buf+48));
-			e.todo4 = *((float*)(buf+52));
-			e.todo5 = *((float*)(buf+56));
-			e.todo6 = *((float*)(buf+60));
-			e.todo7 = *((float*)(buf+64));
-			e.todo8 = *((float*)(buf+68));
-			e.todo9 = *((float*)(buf+72));
-			e.category = string(buf+76, 4);
-			e.pos.x = *((float*)(buf+80));
-			e.pos.y = *((float*)(buf+84));
-			e.pos.z = *((float*)(buf+88));
-			e.type = *((int*)(buf+92));
-			e.loop = *((float*)(buf+96));
-			e.todo10 = *((float*)(buf+100));
-			e.todo11 = *((float*)(buf+104));
-			e.todo12 = *((int*)(buf+108));
-			e.todo13 = *((int*)(buf+112));
-			e.pos.x = (e.pos.x / 5) + width;
-			e.pos.z = (e.pos.z / 5) + height;
-			effects.push_back(e);
+			pFile->read(buf, 196);
+			Log(3,0,"Read objecttype 4");
+			i = nObjects;
 			}
 			break;
 		default:
@@ -2363,6 +2259,7 @@ void cWorld::importalpha()
 			return;
 		};
 	}
+/*
 	quadtreefloats.clear();
 	while(!pFile->eof())
 	{
@@ -2371,15 +2268,15 @@ void cWorld::importalpha()
 		pFile->read((char*)&f.y, 4);
 		pFile->read((char*)&f.z, 4);
 		quadtreefloats.push_back(f);
-	}
+	}*/
 	pFile->close(); 
 
 	
-	if(quadtreefloats.size() > 0)
+/*	if(quadtreefloats.size() > 0)
 	{
 		root = new cQuadTreeNode();
 		root->load(quadtreefloats, 0, 0);
-	}
+	}*/
 
 
 	pFile = fs.open(string(filename) + ".gat");

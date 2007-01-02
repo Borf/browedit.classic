@@ -273,13 +273,19 @@ int cGraphics::init()
 		gattextures[i] = TextureCache.load(buf);
 	}
 
-	watertextures.resize(6);
+	
+	cFile* pFile = fs.open("water.txt");
+	waterdir = pFile->readline();
+	waterext = pFile->readline();
+	watercount = atoi(pFile->readline().c_str());
+
+	watertextures.resize(watercount);
 	for(i = 0; i < 6; i++)
 	{
 		for(int ii = 0; ii < 32; ii++)
 		{
 			char buf[100];
-			sprintf(buf, "%stexture\\ฟ๖ลอ\\water%i%02i.jpg", rodir.c_str(), i, ii);
+			sprintf(buf, "%s%swater%i%02i%s", rodir.c_str(), waterdir.c_str(), i, ii, waterext.c_str());
 			watertextures[i].push_back(TextureCache.load(buf));
 		}
 	}

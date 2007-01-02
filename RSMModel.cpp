@@ -17,11 +17,18 @@ void cRSMModel::load(string fname)
 
 	char buffer[100];
 	pFile->read(buffer, 6); // header
-	pFile->read(buffer, 25); // unknown
+	if (buffer[5] == 4)
+		pFile->read(buffer, 25); // unknown
+	else
+		pFile->read(buffer, 24); // unknown
 
 	pFile->read(buffer, 4); // ntextures;
 
 	long ntextures = *((long*)buffer);
+
+
+	if(ntextures < 0 || ntextures > 1000)
+		return;
 
 	for(int i = 0; i < ntextures; i++)
 	{
@@ -85,12 +92,16 @@ void cRSMModelMesh::load(cFile* pFile, cRSMModel* model, bool main)
 
 	int nTextures;
 	pFile->read((char*)&nTextures, 4);
-
+	if (nTextures > 1000 || nTextures < 0)
+		return;
 	for(int i = 0; i < nTextures; i++)
 	{
 		int id;
 		pFile->read((char*)&id, 4);
-		textures.push_back(model->textures[id]);
+		if (id < 0 || id > model->textures.size())
+			textures.push_back(0);
+		else
+			textures.push_back(model->textures[id]);
 	}
 
 	pFile->read((char*)trans, 22*4);	// trans
