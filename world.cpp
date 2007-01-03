@@ -80,6 +80,7 @@ void cWorld::load()
 	if(pFile == NULL)
 	{
 		Log(1,0,"Could not open %s!", (string(filename) + ".gnd").c_str());
+		return;
 	}
 	char buf[512];
 	pFile->read(buf, 26);
@@ -314,6 +315,7 @@ void cWorld::load()
 	{
 		root = new cQuadTreeNode();
 		root->load(quadtreefloats, 0, 0);
+//		root->generate(width*10-1, height*10-1,-0.5,-0.5,5);
 	}
 
 
@@ -419,12 +421,16 @@ void cQuadTreeNode::draw(int level)
 	}
 	if (level > 0)
 	{
+		glColor3f(1,0,0);
 		if(child1 != NULL)
 			child1->draw(level-1);
+		glColor3f(1,1,0);
 		if(child2 != NULL)
 			child2->draw(level-1);
+		glColor3f(1,0,1);
 		if(child3 != NULL)
 			child3->draw(level-1);
+		glColor3f(0,1,1);
 		if(child4 != NULL)
 			child4->draw(level-1);
 	}
@@ -1616,8 +1622,8 @@ void cQuadTreeNode::recalculate()
 	}
 	else
 	{
-		box1.y = -0;
-		box2.y = 0;
+		box1.y = -9999;
+		box2.y = 9999;
 		for(float x = box2.x; x < box1.x; x+= (box1.x - box2.x)/10.0)
 		{
 			for(float y = box2.z; y < box1.z; y+= (box1.z - box2.z)/10.0)
@@ -1883,7 +1889,7 @@ void cWorld::savelightmap()
 	tgaSave((char*)(string(filename) + ".lightmap2.tga").c_str(), width*6, height*6, 24, (BYTE*)imgdata);
 	delete[] imgdata;
 
-	imgdata = new char[width*height*12*12*3];
+/*	imgdata = new char[width*height*12*12*3];
 
 	for(x = 0; x < width; x++)
 	{
@@ -1916,7 +1922,7 @@ void cWorld::savelightmap()
 		}
 	}
 	tgaSave((char*)(string(filename) + ".lightmap.walls.tga").c_str(), width*12, height*12, 24, (BYTE*)imgdata);
-	delete[] imgdata;
+	delete[] imgdata;*/
 }
 
 void cWorld::loadlightmap()
@@ -2046,6 +2052,7 @@ void cWorld::importalpha()
 	if(pFile == NULL)
 	{
 		Log(1,0,"Could not open %s!", (string(filename) + ".gnd").c_str());
+		return;
 	}
 	char buf[512];
 	pFile->read(buf, 12);
@@ -2253,12 +2260,30 @@ unsigned char rawData[76] =
 			i = nObjects;
 			}
 			break;
+		case 5:
+			{
+			pFile->read(buf, 178);
+			Log(3,0,"Read objecttype 5");
+			i = nObjects;
+			}
+			break;
+		case 7:
+			{
+			pFile->read(buf, 204);
+			Log(3,0,"Read objecttype 7");
+			}
+			break;
 		default:
 			Log(2,0,"Unknown type: %i", type);
 			pFile->close();
 			return;
 		};
 	}
+
+	root = new cQuadTreeNode();
+	root->generate(width*10-1, height*10-1,-0.5,-0.5,5);
+
+
 /*
 	quadtreefloats.clear();
 	while(!pFile->eof())
@@ -2306,4 +2331,38 @@ unsigned char rawData[76] =
 
 
 	Log(3,0,"Done Loading %s", filename);
+}
+
+
+void cQuadTreeNode::generate(float w, float h, float centerx, float centery, int level)
+{
+	box1.x = centerx+w/2;
+	box1.z = centery+h/2;
+	box1.y = -100;
+
+	box2.x = centerx-w/2;
+	box2.z = centery-h/2;
+	box2.y = 100;
+
+	if (level == 0)
+	{
+		child1 = NULL;
+		child2 = NULL;
+		child3 = NULL;
+		child4 = NULL;
+	}
+	else
+	{
+		child1 = new cQuadTreeNode();
+		child2 = new cQuadTreeNode();
+		child3 = new cQuadTreeNode();
+		child4 = new cQuadTreeNode();
+
+
+		child1->generate(w/2.0f,h/2.0f,centerx-w/4.0f,centery-w/4.0f, level-1);
+		child2->generate(w/2.0f,h/2.0f,centerx+w/4.0f,centery-w/4.0f, level-1);
+		child3->generate(w/2.0f,h/2.0f,centerx-w/4.0f,centery+w/4.0f, level-1);
+		child4->generate(w/2.0f,h/2.0f,centerx+w/4.0f,centery+w/4.0f, level-1);
+	}
+
 }

@@ -25,6 +25,8 @@ extern string			rodir;
 
 double mouse3dx, mouse3dy, mouse3dz;
 
+extern string			config;
+
 int cGraphics::draw()
 {
 	frameticks = SDL_GetTicks() - lasttick;
@@ -109,7 +111,7 @@ int cGraphics::draw()
 			glEnable(GL_TEXTURE_2D);
 			previewmodel->pos = cVector3((w()/5)-25,-h()+32+250,1000);
 			previewmodel->draw(false);
-			previewmodel->rot.y+=15*(frameticks / 1000.0f);
+			previewmodel->rot.y+=40*(frameticks / 1000.0f);
 		}
 	}
 	if(world.loaded && editmode != MODE_OBJECTS)
@@ -275,10 +277,13 @@ int cGraphics::init()
 
 	
 	cFile* pFile = fs.open("water.txt");
+	while(pFile->readline() != "[" + config + "]" && !pFile->eof());
+
 	waterdir = pFile->readline();
 	waterext = pFile->readline();
 	watercount = atoi(pFile->readline().c_str());
 
+	pFile->close();
 	watertextures.resize(watercount);
 	for(i = 0; i < 6; i++)
 	{

@@ -14,6 +14,9 @@ void cRSMModel::load(string fname)
 	filename = fname;
 	rofilename = filename.substr(filename.find("model\\") + 6);
 	cFile* pFile = fs.open(filename);
+	if (pFile == NULL)
+		return;
+
 
 	char buffer[100];
 	pFile->read(buffer, 6); // header
@@ -222,6 +225,8 @@ void cRSMModel::draw(bool checkfrust, bool dodraw, bool setheight, bool dolightm
 		if(!Graphics.frustum.PointInFrustum(5*pos.x, -pos.y, 5*(Graphics.world.height*2-pos.z)))
 			return;
 	}
+	if (meshes.size() == 0)
+		return;
 	glPushMatrix();
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set the correct blending mode
 	glEnable(GL_BLEND);

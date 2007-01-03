@@ -1,1 +1,13 @@
-c:\games\ro\data\
+setting=RO
+
+[RO]
+datadir=c:\games\ro\data\
+model=romodels.txt
+model=arcturusmodels.txt
+texture=rotextures.txt
+texture=arctextures.txt
+
+[Arcturus]
+datadir=c:\Program Files\Arcturus\data\
+model=arcturusmodels.txt
+texture=arctextures.txt

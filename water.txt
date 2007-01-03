@@ -1,4 +1,8 @@
+[RO]
 texture\워터\
 .jpg
 7
-texture\\워터\\
+[Arcturus]
+texture\wate\
+.bmp
+7

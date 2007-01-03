@@ -36,6 +36,7 @@ int process_events();
 bool running = true;
 eMode editmode = MODE_TEXTURE;
 float paintspeed = 100;
+string config;
 extern double mouse3dx, mouse3dy, mouse3dz;
 
 string rodir;
@@ -517,97 +518,137 @@ int main(int argc, char *argv[])
 	fs.LoadFile("data.dat");
 	
 	cFile* pFile = fs.open("config.txt");
-	if (pFile != NULL)
+	if (pFile == NULL)
 	{
-		rodir = pFile->readline();
+		Log(1,0,"Error opening configfile");
 	}
-	else
-		rodir = "c:\\program files\\gravity\\ro\\data\\";
-	pFile->close();
+	config = pFile->readline();
+	config = config.substr(config.find("=")+1);
 
-
+	
 	map<string, cMenu*, less<string> > items;
 	map<cMenu*, int, less<cMenu*> > level;
 	level[models] = 0;
+	level[textures] = 0;
 
-	pFile = fs.open("models.txt");
-	Log(3,0,"Loading models.txt");
 	while(!pFile->eof())
 	{
 		string line = pFile->readline();
-		string pre = line.substr(0, line.find("|"));
-		string filename = line.substr(line.find("|")+1);
-
-		string cat = pre.substr(0, pre.rfind("/"));
-		string menuname = pre.substr(pre.rfind("/")+1);
-
-		if (cat != "" && items.find(cat) == items.end())
+		if (line == "[" + config + "]")
 		{
-			cMenu* root = models;
-			string catname = cat;
-			if(cat.find("/") != string::npos)
+			line = "";
+			while(!pFile->eof() && line[0] != '[')
 			{
-				root = items[cat.substr(0, cat.rfind("/"))];
-				catname = cat.substr(cat.rfind("/")+1);
-			}
-			
-			cMenu* submenu;
-			ADDMENU(submenu,		root, catname + "...",				450 + 100*(level[root]+1),100);
-			items[cat] = submenu;
-			level[submenu] = level[root] + 1;
-		}
-		char* f = (char*)filename.c_str();
-		if(filename != "")
-		{
-			ADDMENUITEMDATA2(mm,items[cat],menuname, &MenuCommand_model, filename, pre);
-		}
-		
-	}
-	models->sort();
-	Log(3,0,"done loading models.txt");
-	Log(3,0,"Loading textures.txt");
-	pFile->close();
+				line = pFile->readline();
+				if(line.find("=") != string::npos)
+				{
+					string option = line.substr(0, line.find("="));
+					string value = line.substr(line.find("=")+1);
 
+					if(option == "datadir")
+						rodir = value;
+					else if (option == "model")
+					{
+						cFile* pFile2 = fs.open(value);
+						if (pFile2 != NULL)
+						{
+							Log(3,0,"Loading %s", value.c_str());
+							while(!pFile2->eof())
+							{
+								string line = pFile2->readline();
+								string pre = line.substr(0, line.find("|"));
+								string filename = line.substr(line.find("|")+1);
+
+								string cat = pre.substr(0, pre.rfind("/"));
+								string menuname = pre.substr(pre.rfind("/")+1);
+
+								if (cat != "" && items.find(cat) == items.end())
+								{
+									cMenu* root = models;
+									string catname = cat;
+									if(cat.find("/") != string::npos)
+									{
+										root = items[cat.substr(0, cat.rfind("/"))];
+										catname = cat.substr(cat.rfind("/")+1);
+									}
+									
+									cMenu* submenu;
+									ADDMENU(submenu,		root, catname + "...",				450 + 100*(level[root]+1),100);
+									items[cat] = submenu;
+									level[submenu] = level[root] + 1;
+								}
+								char* f = (char*)filename.c_str();
+								if(filename != "")
+								{
+									ADDMENUITEMDATA2(mm,items[cat],menuname, &MenuCommand_model, filename, pre);
+								}
+								
+							}
+							Log(3,0,"done loading %s", value.c_str());
+							pFile2->close();
+						}
+						else
+							Log(1,0,"Couldn't open %s", value.c_str());
+					}
+					else if (option == "texture")
+					{
+						Log(3,0,"Loading %s", value.c_str());
+						cFile* pFile2 = fs.open(value);
+						if (pFile2 != NULL)
+						{
+							while(!pFile2->eof())
+							{
+								string line = pFile2->readline();
+								string pre = line.substr(0, line.find("|"));
+								string filename = line.substr(line.find("|")+1);
+
+								string cat = pre.substr(0, pre.rfind("/"));
+								string menuname = pre.substr(pre.rfind("/")+1);
+
+								if (cat != "" && items.find(cat) == items.end())
+								{
+									cMenu* root = textures;
+									string catname = cat;
+									if(cat.find("/") != string::npos)
+									{
+										root = items[cat.substr(0, cat.rfind("/"))];
+										catname = cat.substr(cat.rfind("/")+1);
+									}
+									
+									cMenu* submenu;
+									ADDMENU(submenu,		root, catname + "...",				550 + 100*(level[root]+1),100);
+									items[cat] = submenu;
+									level[submenu] = level[root] + 1;
+								}
+								char* f = (char*)filename.c_str();
+								if(filename != "")
+								{
+									ADDMENUITEMDATA(mm,items[cat],menuname, &MenuCommand_picktexture, filename);
+								}
+									
+							}
+							pFile2->close();
+							Log(3,0,"done loading %s", value.c_str());
+						}
+						else
+							Log(1,0,"Couldn't open %s", value.c_str());
+					}
+					else
+						Log(2,0,"Unknown option: %s=%s", option.c_str(), value.c_str());
+
+				}			
+
+			}
+		}
+	}
+
+	pFile->close();
 
 	items.clear();
 	level.clear();
-	level[textures] = 0;
 
-	pFile = fs.open("textures.txt");
-	while(!pFile->eof())
-	{
-		string line = pFile->readline();
-		string pre = line.substr(0, line.find("|"));
-		string filename = line.substr(line.find("|")+1);
-
-		string cat = pre.substr(0, pre.rfind("/"));
-		string menuname = pre.substr(pre.rfind("/")+1);
-
-		if (cat != "" && items.find(cat) == items.end())
-		{
-			cMenu* root = textures;
-			string catname = cat;
-			if(cat.find("/") != string::npos)
-			{
-				root = items[cat.substr(0, cat.rfind("/"))];
-				catname = cat.substr(cat.rfind("/")+1);
-			}
-			
-			cMenu* submenu;
-			ADDMENU(submenu,		root, catname + "...",				550 + 100*(level[root]+1),100);
-			items[cat] = submenu;
-			level[submenu] = level[root] + 1;
-		}
-		char* f = (char*)filename.c_str();
-		if(filename != "")
-		{
-			ADDMENUITEMDATA(mm,items[cat],menuname, &MenuCommand_picktexture, filename);
-		}
-			
-	}
+	models->sort();
 	textures->sort();
-	pFile->close();
-	Log(3,0,"done loading textures.txt");
 
 
 	lastlclick = 0;
@@ -617,10 +658,10 @@ int main(int argc, char *argv[])
 		return 1;
 
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "eden_city01").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "customtown").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
-	//Graphics.world.importalpha();
+//	Graphics.world.importalpha();
 #endif
 	lasttimer = SDL_GetTicks();
 	while( running ) {
@@ -1818,6 +1859,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 					if (editmode == MODE_HEIGHTGLOBAL)
 					{
+						float avg = 0;
+						float mmin = 999999;
+						float mmax = -999999;
 						for(int x = 0; x < Graphics.world.width; x++)
 						{
 							for(int y = 0; y < Graphics.world.height; y++)
@@ -1826,6 +1870,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 								Graphics.world.cubes[y][x].cell2 -= 10;
 								Graphics.world.cubes[y][x].cell3 -= 10;
 								Graphics.world.cubes[y][x].cell4 -= 10;
+								avg = (avg+Graphics.world.cubes[y][x].cell1+Graphics.world.cubes[y][x].cell2+Graphics.world.cubes[y][x].cell3+Graphics.world.cubes[y][x].cell4)/5.0f;
+								mmin = min(min(min(min(mmin,Graphics.world.cubes[y][x].cell1),Graphics.world.cubes[y][x].cell2),Graphics.world.cubes[y][x].cell3),Graphics.world.cubes[y][x].cell4);
+								mmax = max(max(max(max(mmax,Graphics.world.cubes[y][x].cell1),Graphics.world.cubes[y][x].cell2),Graphics.world.cubes[y][x].cell3),Graphics.world.cubes[y][x].cell4);
 							}
 						}
 						for(int y = 0; y < Graphics.world.gattiles.size(); y++)
@@ -1840,6 +1887,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						}
 						for(int i = 0; i < Graphics.world.models.size(); i++)
 							Graphics.world.models[i]->pos.y-=10;
+						Log(3,0,"Avg: %f, Min: %f, Max: %f", avg, mmin, mmax);
 					}
 					break;
 				}
@@ -2283,6 +2331,16 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				break;
 			}
+			case SDLK_i:
+				{
+					int posx = mouse3dx / 10;
+					int posy = mouse3dz / 10;
+					if(posx > -1 && posy > -1 && posx < Graphics.world.width && posy < Graphics.world.height)
+					{
+						Log(3,0,"Cube (%i,%i): %f,%f,%f,%f", posx, posy, Graphics.world.cubes[posy][posx].cell1, Graphics.world.cubes[posy][posx].cell2, Graphics.world.cubes[posy][posx].cell3, Graphics.world.cubes[posy][posx].cell4);
+					}
+					break;
+				}
 			case SDLK_INSERT:
 				{
 					Graphics.quadtreeview++;
