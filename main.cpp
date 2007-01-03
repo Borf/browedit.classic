@@ -822,7 +822,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 				}
 			}
-			else if (lbuttondown)
+			else if (lbuttondown && !rbuttondown)
 			{
 				if(startmousex > Graphics.w()-256)
 				{
@@ -2159,6 +2159,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					{
 						int posx = mouse3dx / 10;
 						int posy = mouse3dz / 10;
+						if (clipboard.size() != brushsize)
+							break;
 
 //						if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy <= Graphics.world.height-ceil(brushsize/2.0f))
 						{
