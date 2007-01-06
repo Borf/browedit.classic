@@ -526,10 +526,12 @@ int main(int argc, char *argv[])
 	config = config.substr(config.find("=")+1);
 
 	
-	map<string, cMenu*, less<string> > items;
-	map<cMenu*, int, less<cMenu*> > level;
-	level[models] = 0;
-	level[textures] = 0;
+	map<string, cMenu*, less<string> > itemsm;
+	map<cMenu*, int, less<cMenu*> > levelm;
+	map<string, cMenu*, less<string> > itemst;
+	map<cMenu*, int, less<cMenu*> > levelt;
+	levelm[models] = 0;
+	levelt[textures] = 0;
 
 	while(!pFile->eof())
 	{
@@ -562,25 +564,25 @@ int main(int argc, char *argv[])
 								string cat = pre.substr(0, pre.rfind("/"));
 								string menuname = pre.substr(pre.rfind("/")+1);
 
-								if (cat != "" && items.find(cat) == items.end())
+								if (cat != "" && itemsm.find(cat) == itemsm.end())
 								{
 									cMenu* root = models;
 									string catname = cat;
 									if(cat.find("/") != string::npos)
 									{
-										root = items[cat.substr(0, cat.rfind("/"))];
+										root = itemsm[cat.substr(0, cat.rfind("/"))];
 										catname = cat.substr(cat.rfind("/")+1);
 									}
 									
 									cMenu* submenu;
-									ADDMENU(submenu,		root, catname + "...",				450 + 100*(level[root]+1),100);
-									items[cat] = submenu;
-									level[submenu] = level[root] + 1;
+									ADDMENU(submenu,		root, catname + "...",				450 + 100*(levelm[root]+1),100);
+									itemsm[cat] = submenu;
+									levelm[submenu] = levelm[root] + 1;
 								}
 								char* f = (char*)filename.c_str();
 								if(filename != "")
 								{
-									ADDMENUITEMDATA2(mm,items[cat],menuname, &MenuCommand_model, filename, pre);
+									ADDMENUITEMDATA2(mm,itemsm[cat],menuname, &MenuCommand_model, filename, pre);
 								}
 								
 							}
@@ -605,25 +607,25 @@ int main(int argc, char *argv[])
 								string cat = pre.substr(0, pre.rfind("/"));
 								string menuname = pre.substr(pre.rfind("/")+1);
 
-								if (cat != "" && items.find(cat) == items.end())
+								if (cat != "" && itemst.find(cat) == itemst.end())
 								{
 									cMenu* root = textures;
 									string catname = cat;
 									if(cat.find("/") != string::npos)
 									{
-										root = items[cat.substr(0, cat.rfind("/"))];
+										root = itemst[cat.substr(0, cat.rfind("/"))];
 										catname = cat.substr(cat.rfind("/")+1);
 									}
 									
 									cMenu* submenu;
-									ADDMENU(submenu,		root, catname + "...",				550 + 100*(level[root]+1),100);
-									items[cat] = submenu;
-									level[submenu] = level[root] + 1;
+									ADDMENU(submenu,		root, catname + "...",				550 + 100*(levelt[root]+1),100);
+									itemst[cat] = submenu;
+									levelt[submenu] = levelt[root] + 1;
 								}
 								char* f = (char*)filename.c_str();
 								if(filename != "")
 								{
-									ADDMENUITEMDATA(mm,items[cat],menuname, &MenuCommand_picktexture, filename);
+									ADDMENUITEMDATA(mm,itemst[cat],menuname, &MenuCommand_picktexture, filename);
 								}
 									
 							}
@@ -644,8 +646,10 @@ int main(int argc, char *argv[])
 
 	pFile->close();
 
-	items.clear();
-	level.clear();
+	itemsm.clear();
+	levelm.clear();
+	itemst.clear();
+	levelt.clear();
 
 	models->sort();
 	textures->sort();
