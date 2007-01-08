@@ -87,6 +87,7 @@ MENUCOMMAND(gatcollision);
 MENUCOMMAND(clearlightmaps);
 MENUCOMMAND(cleanuplightmaps);
 MENUCOMMAND(tempfunc);
+MENUCOMMAND(snaptofloor);
 
 cMenu*	menu;
 cMenu* grid;
@@ -95,6 +96,7 @@ cMenu* showwater;
 cMenu* currentobject;
 cMenu* lightmaps;
 cMenu* showoglighting;
+cMenu* snaptofloor;
 
 int cursorsize = 1;
 
@@ -456,6 +458,8 @@ int main(int argc, char *argv[])
 	
 	ADDMENUITEM(mm,rnd, "Random 1", &MenuCommand_random1);
 	ADDMENUITEM(mm,rnd, "Maze stuff", &MenuCommand_tempfunc);
+	ADDMENUITEM(mm,rnd,"Quadtree",				&MenuCommand_quadtree);
+	ADDMENUITEM(mm,rnd,"Calculate Lightmaps",		&MenuCommand_dolightmaps);
 
 	ADDMENUITEM(grid,view,"Grid",&MenuCommand_grid);
 	grid->ticked = true;
@@ -494,7 +498,6 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,edit,"Randomize a bit",		&MenuCommand_editrandom);
 	ADDMENUITEM(mm,edit,"Fill",					&MenuCommand_fill);
 	ADDMENUITEM(mm,edit,"Sloping",				&MenuCommand_slope);
-	ADDMENUITEM(mm,edit,"Quadtree",				&MenuCommand_quadtree);
 	ADDMENUITEM(mm,edit,"Set GAT height",		&MenuCommand_gatheight);
 	ADDMENU(speed,edit, "Speed", 480, 100);
 	ADDMENUITEM(mm,speed,"5",&MenuCommand_speed);
@@ -505,14 +508,14 @@ int main(int argc, char *argv[])
 	mm->ticked = true;
 	ADDMENUITEM(mm,speed,"250",&MenuCommand_speed);
 	ADDMENUITEM(mm,speed,"500",&MenuCommand_speed);
-	ADDMENUITEM(mm,edit,"Calculate Lightmaps",		&MenuCommand_dolightmaps);
 	ADDMENUITEM(mm,edit,"Reset Colors",		&MenuCommand_fixcolors);
 	ADDMENUITEM(mm,edit,"Clear Objects",		&MenuCommand_clearobjects);
 	ADDMENUITEM(mm,edit,"Add Walls",		&MenuCommand_addwalls);
 	ADDMENUITEM(mm,edit,"Set gat collision",		&MenuCommand_gatcollision);
 	ADDMENUITEM(mm,edit,"Clear Lightmaps",		&MenuCommand_clearlightmaps);
 	ADDMENUITEM(mm,edit,"Clean up Lightmaps",		&MenuCommand_cleanuplightmaps);
-
+	ADDMENUITEM(snaptofloor,edit,"Snap objects to floor",		&MenuCommand_snaptofloor);
+	snaptofloor->ticked = true;
 
 
 	fs.LoadFile("data.dat");
@@ -899,7 +902,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						if (!ctrl && !alt)
 						{
 							Graphics.world.models[Graphics.selectedobject]->pos.x = mouse3dx / 5;
-							Graphics.world.models[Graphics.selectedobject]->pos.y = -mouse3dy;
+							if(snaptofloor->ticked)
+								Graphics.world.models[Graphics.selectedobject]->pos.y = -mouse3dy;
 							Graphics.world.models[Graphics.selectedobject]->pos.z = mouse3dz / 5;
 							if (SDL_GetModState() & KMOD_SHIFT)
 							{
@@ -2359,6 +2363,13 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						Graphics.quadtreeview = -1;
 				}
 				break;
+			case SDLK_r:
+				{
+					if (Graphics.selectedobject != -1)
+					{
+						Graphics.world.models[Graphics.selectedobject]->rot = cVector3(0,0,0);
+					}
+				}
 			case SDLK_s:
 				{
 					if (editmode == MODE_HEIGHTDETAIL)
@@ -3580,4 +3591,10 @@ MENUCOMMAND(tempfunc)
 	}
 	return true;
 
+}
+
+MENUCOMMAND(snaptofloor)
+{
+	src->ticked = !src->ticked;
+	return true;
 }
