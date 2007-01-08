@@ -2039,6 +2039,21 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						int ymin = yy+1;
 						int ydiff = 4;
 
+					
+						float vmin = 99999, vmax = -99999;
+						for(yy = ymin; yy < ymax; yy++)
+						{
+							vmin = min(vmin, Graphics.world.cubes[yy][x].cell4/32.0f);
+							vmax = max(vmax, Graphics.world.cubes[yy][x].cell4/32.0f);
+							vmin = min(vmin, Graphics.world.cubes[yy][x].cell2/32.0f);
+							vmax = max(vmax, Graphics.world.cubes[yy][x].cell2/32.0f);
+							vmin = min(vmin, Graphics.world.cubes[yy][x+1].cell3/32.0f);
+							vmax = max(vmax, Graphics.world.cubes[yy][x+1].cell3/32.0f);
+							vmin = min(vmin, Graphics.world.cubes[yy][x+1].cell1/32.0f);
+							vmax = max(vmax, Graphics.world.cubes[yy][x+1].cell1/32.0f);
+						}
+
+
 						for(yy = ymin; yy < ymax; yy++)
 						{
 							cTile t;
@@ -2050,17 +2065,26 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							t.lightmap = 0;
 							if(wrap)
 							{
-								t.u1 = ((yy-ymin)%4) *  (1.0/(float)ydiff);
-								t.v1 = Graphics.world.cubes[yy][x].cell4/32.0f;
+								t.u1 = (yy%4+1) *  (1.0/(float)ydiff);
+								t.u2 = (yy%4) *  (1.0/(float)ydiff);
+								t.u3 = (yy%4+1) *  (1.0/(float)ydiff);
+								t.u4 = (yy%4) *  (1.0/(float)ydiff);
 
-								t.u2 = ((yy-ymin)%4+1) *  (1.0/(float)ydiff);
-								t.v2 = Graphics.world.cubes[yy][x].cell2/32.0f;
-								
-								t.u3 = ((yy-ymin)%4) *  (1.0/(float)ydiff);
-								t.v3 = Graphics.world.cubes[yy][x+1].cell3/32.0f;
-								
-								t.u4 = ((yy-ymin)%4+1) *  (1.0/(float)ydiff);
-								t.v4 = Graphics.world.cubes[yy][x+1].cell1/32.0f;
+
+								if (Graphics.world.cubes[yy][x].cell4 > Graphics.world.cubes[yy][x+1].cell3)
+								{
+									t.v1 = selstarty + (Graphics.world.cubes[yy][x].cell4/32.0f)/(vmax-vmin);
+									t.v2 = selstarty + (Graphics.world.cubes[yy][x].cell2/32.0f)/(vmax-vmin);
+									t.v3 = selendy - (1-(Graphics.world.cubes[yy][x+1].cell3/32.0f)/(vmax-vmin));
+									t.v4 = selendy - (1-(Graphics.world.cubes[yy][x+1].cell1/32.0f)/(vmax-vmin));
+								}
+								else
+								{
+									t.v1 = selstarty + (Graphics.world.cubes[yy][x].cell4/32.0f-vmin)/(vmax-vmin);
+									t.v2 = selstarty + (Graphics.world.cubes[yy][x].cell2/32.0f-vmin)/(vmax-vmin);
+									t.v3 = selendy - (vmax - Graphics.world.cubes[yy][x+1].cell3/32.0f)/(vmax-vmin);
+									t.v4 = selendy - (vmax - Graphics.world.cubes[yy][x+1].cell1/32.0f)/(vmax-vmin);
+								}
 							}
 							else
 							{
@@ -2094,6 +2118,20 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						int xmin = xx+1;
 						int xdiff = 4;
 
+						float vmin = 99999, vmax = -99999;
+						for(xx = xmin; xx < xmax; xx++)
+						{
+							vmin = min(vmin, Graphics.world.cubes[y][xx].cell3/32.0f);
+							vmax = max(vmax, Graphics.world.cubes[y][xx].cell3/32.0f);
+							vmin = min(vmin, Graphics.world.cubes[y][xx].cell4/32.0f);
+							vmax = max(vmax, Graphics.world.cubes[y][xx].cell4/32.0f);
+							vmin = min(vmin, Graphics.world.cubes[y+1][xx].cell1/32.0f);
+							vmax = max(vmax, Graphics.world.cubes[y+1][xx].cell1/32.0f);
+							vmin = min(vmin, Graphics.world.cubes[y+1][xx].cell2/32.0f);
+							vmax = max(vmax, Graphics.world.cubes[y+1][xx].cell2/32.0f);
+						}
+
+
 						for(xx = xmin; xx < xmax; xx++)
 						{
 							cTile t;
@@ -2107,17 +2145,49 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 							if (wrap)
 							{
-								t.v1 = Graphics.world.cubes[y][xx].cell3/32.0f;
-								t.u1 = ((xx-xmin)%4) *  (1.0/(float)xdiff);
+								t.u2 = (xx%4+1) *  (1.0/(float)xdiff);
+								t.u1 = (xx%4) *  (1.0/(float)xdiff);
+								t.u3 = (xx%4) *  (1.0/(float)xdiff);
+								t.u4 = (xx%4+1) *  (1.0/(float)xdiff);
 
+
+								if (Graphics.world.cubes[y][xx].cell3 > Graphics.world.cubes[y+1][xx].cell1)
+								{
+									t.v1 = selstarty - (Graphics.world.cubes[y][xx].cell3/32.0f-vmax)/(vmax-vmin);
+							 		t.v2 = selstarty - (Graphics.world.cubes[y][xx].cell4/32.0f-vmax)/(vmax-vmin);
+									t.v3 = selendy - (Graphics.world.cubes[y+1][xx].cell1/32.0f-vmin)/(vmax-vmin);
+									t.v4 = selendy - (Graphics.world.cubes[y+1][xx].cell2/32.0f-vmin)/(vmax-vmin);
+								}
+								else
+								{
+									t.v1 = selstarty - (Graphics.world.cubes[y][xx].cell3/32.0f-vmin)/(vmax-vmin);
+							 		t.v2 = selstarty - (Graphics.world.cubes[y][xx].cell4/32.0f-vmin)/(vmax-vmin);
+									t.v3 = selendy - (Graphics.world.cubes[y+1][xx].cell1/32.0f-vmax)/(vmax-vmin);
+									t.v4 = selendy - (Graphics.world.cubes[y+1][xx].cell2/32.0f-vmax)/(vmax-vmin);
+								}
+
+
+/*								t.v1 = Graphics.world.cubes[y][xx].cell3/32.0f;
 								t.v2 = Graphics.world.cubes[y][xx].cell4/32.0f;
-								t.u2 = ((xx-xmin)%4+1) *  (1.0/(float)xdiff);
-								
 								t.v3 = Graphics.world.cubes[y+1][xx].cell1/32.0f;
-								t.u3 = ((xx-xmin)%4) *  (1.0/(float)xdiff);
-								
 								t.v4 = Graphics.world.cubes[y+1][xx].cell2/32.0f;
-								t.u4 = ((xx-xmin)%4+1) *  (1.0/(float)xdiff);
+
+*/
+								while(t.v1 < 0 || t.v2 < 0 || t.v3 < 0 || t.v4 < 0)
+								{
+									t.v1++;
+									t.v2++;
+									t.v3++;
+									t.v4++;
+								}
+								while(t.v1 > 1 || t.v2 > 1 || t.v3 > 1 || t.v4 > 1)
+								{
+									t.v1--;
+									t.v2--;
+									t.v3--;
+									t.v4--;
+								}
+
 							}
 							else
 							{
