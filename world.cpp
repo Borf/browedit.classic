@@ -1200,6 +1200,29 @@ void cWorld::draw()
 				glVertex3f(x*10,-c->cell3+0.2,(height-y)*10-10);
 			glEnd();
 		}
+		if (!(Graphics.wallheightmax == cVector2(-1,-1)))
+		{
+			cCube* c = &cubes[Graphics.wallheightmax.y][Graphics.wallheightmax.x];
+			glColor4f(1,0,0,0.5);
+			glBegin(GL_QUADS);
+				glVertex3f(Graphics.wallheightmax.x*10,-c->cell1+0.2,(height-Graphics.wallheightmax.y)*10);
+				glVertex3f(Graphics.wallheightmax.x*10+10,-c->cell2+0.2,(height-Graphics.wallheightmax.y)*10);
+				glVertex3f(Graphics.wallheightmax.x*10+10,-c->cell4+0.2,(height-Graphics.wallheightmax.y)*10-10);
+				glVertex3f(Graphics.wallheightmax.x*10,-c->cell3+0.2,(height-Graphics.wallheightmax.y)*10-10);
+			glEnd();
+		}
+		if (!(Graphics.wallheightmin == cVector2(-1,-1)))
+		{
+			cCube* c = &cubes[Graphics.wallheightmin.y][Graphics.wallheightmin.x];
+			glColor4f(0,1,0,0.5);
+			glBegin(GL_QUADS);
+				glVertex3f(Graphics.wallheightmin.x*10,-c->cell1+0.2,(height-Graphics.wallheightmin.y)*10);
+				glVertex3f(Graphics.wallheightmin.x*10+10,-c->cell2+0.2,(height-Graphics.wallheightmin.y)*10);
+				glVertex3f(Graphics.wallheightmin.x*10+10,-c->cell4+0.2,(height-Graphics.wallheightmin.y)*10-10);
+				glVertex3f(Graphics.wallheightmin.x*10,-c->cell3+0.2,(height-Graphics.wallheightmin.y)*10-10);
+			glEnd();
+		}
+		glColor4f(1,1,1,1);
 	}
 	else if (editmode == MODE_GAT)
 	{

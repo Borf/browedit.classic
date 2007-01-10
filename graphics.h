@@ -39,6 +39,9 @@ public:
 		showwater = true;
 		showoglighting = true;
 		lasttick = SDL_GetTicks();
+		wallheightmin = cVector2(-1,-1);
+		wallheightmax = cVector2(-1,-1);
+
 	}
 
 	int						init();				// initializes graphics
@@ -136,6 +139,9 @@ public:
 	string					waterdir;
 	string					waterext;
 	int						watercount;
+
+	cVector2				wallheightmin;
+	cVector2				wallheightmax;
 
 
 private:

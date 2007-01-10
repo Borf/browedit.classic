@@ -1243,6 +1243,20 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							Graphics.selectedobject = minobj;
 						}
 					}
+					else if(editmode == MODE_WALLS && movement < 3)
+					{
+						int x = mouse3dx / 10;
+						int y = mouse3dz / 10;
+						if (y < 0 || y > Graphics.world.height-1)
+							break;
+						if (x < 0 || x > Graphics.world.width-1)
+							break;
+						if (Graphics.wallheightmin == cVector2(x,y))
+							Graphics.wallheightmin = cVector2(-1,-1);
+						else
+							Graphics.wallheightmin = cVector2(x,y);
+					}
+
 				}
 				
 			}
@@ -1268,6 +1282,20 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				if(movement < 3 && editmode == MODE_OBJECTS)
 				{
 					Graphics.selectedobject = -1;
+				}
+				else if(editmode == MODE_WALLS && movement < 3)
+				{
+					int x = mouse3dx / 10;
+					int y = mouse3dz / 10;
+					if (y < 0 || y > Graphics.world.height-1)
+						break;
+					if (x < 0 || x > Graphics.world.width-1)
+						break;
+					if (Graphics.wallheightmax == cVector2(x,y))
+						Graphics.wallheightmax = cVector2(-1,-1);
+					else
+						Graphics.wallheightmax = cVector2(x,y);
+
 				}
 				
 			}
@@ -2023,6 +2051,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					float selstarty = (((int)(Graphics.selectionstart.y - 32) % 288) / 32) / 8.0f;
 					float selendx = (((Graphics.selectionend.x - (Graphics.w()-256)) / 32.0f)) / 8.0f;
 					float selendy = (((int)(Graphics.selectionend.y - 32) % 288) / 32) / 8.0f;
+					float selheight = selendy - selstarty;
 
 					if(SDL_GetModState() & KMOD_ALT)
 					{
@@ -2052,6 +2081,21 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							vmin = min(vmin, Graphics.world.cubes[yy][x+1].cell1/32.0f);
 							vmax = max(vmax, Graphics.world.cubes[yy][x+1].cell1/32.0f);
 						}
+						if (!(Graphics.wallheightmin == cVector2(-1,-1)))
+						{
+							vmin = min(vmin, Graphics.world.cubes[Graphics.wallheightmin.y][Graphics.wallheightmin.x].cell4/32.0f);
+							vmin = min(vmin, Graphics.world.cubes[Graphics.wallheightmin.y][Graphics.wallheightmin.x].cell2/32.0f);
+							vmin = min(vmin, Graphics.world.cubes[Graphics.wallheightmin.y][Graphics.wallheightmin.x].cell3/32.0f);
+							vmin = min(vmin, Graphics.world.cubes[Graphics.wallheightmin.y][Graphics.wallheightmin.x].cell1/32.0f);
+						}
+						if (!(Graphics.wallheightmax == cVector2(-1,-1)))
+						{
+							vmax = max(vmax, Graphics.world.cubes[Graphics.wallheightmax.y][Graphics.wallheightmax.x].cell4/32.0f);
+							vmax = max(vmax, Graphics.world.cubes[Graphics.wallheightmax.y][Graphics.wallheightmax.x].cell2/32.0f);
+							vmax = max(vmax, Graphics.world.cubes[Graphics.wallheightmax.y][Graphics.wallheightmax.x].cell3/32.0f);
+							vmax = max(vmax, Graphics.world.cubes[Graphics.wallheightmax.y][Graphics.wallheightmax.x].cell1/32.0f);
+						}
+
 
 
 						for(yy = ymin; yy < ymax; yy++)
@@ -2073,17 +2117,17 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 								if (Graphics.world.cubes[yy][x].cell4 > Graphics.world.cubes[yy][x+1].cell3)
 								{
-									t.v1 = selstarty + (Graphics.world.cubes[yy][x].cell4/32.0f)/(vmax-vmin);
-									t.v2 = selstarty + (Graphics.world.cubes[yy][x].cell2/32.0f)/(vmax-vmin);
-									t.v3 = selendy - (1-(Graphics.world.cubes[yy][x+1].cell3/32.0f)/(vmax-vmin));
-									t.v4 = selendy - (1-(Graphics.world.cubes[yy][x+1].cell1/32.0f)/(vmax-vmin));
+									t.v3 = selstarty+(Graphics.world.cubes[yy][x+1].cell3/32.0f-vmin)/(vmax-vmin)*selheight;
+									t.v4 = selstarty+(Graphics.world.cubes[yy][x+1].cell1/32.0f-vmin)/(vmax-vmin)*selheight;
+									t.v1 = selendy+(Graphics.world.cubes[yy][x].cell4/32.0f-vmax)/(vmax-vmin)*selheight;
+									t.v2 = selendy+(Graphics.world.cubes[yy][x].cell2/32.0f-vmax)/(vmax-vmin)*selheight;
 								}
 								else
 								{
-									t.v1 = selstarty + (Graphics.world.cubes[yy][x].cell4/32.0f-vmin)/(vmax-vmin);
-									t.v2 = selstarty + (Graphics.world.cubes[yy][x].cell2/32.0f-vmin)/(vmax-vmin);
-									t.v3 = selendy - (vmax - Graphics.world.cubes[yy][x+1].cell3/32.0f)/(vmax-vmin);
-									t.v4 = selendy - (vmax - Graphics.world.cubes[yy][x+1].cell1/32.0f)/(vmax-vmin);
+									t.v1 = selstarty + (Graphics.world.cubes[yy][x].cell4/32.0f-vmin)/(vmax-vmin)*selheight;
+									t.v2 = selstarty + (Graphics.world.cubes[yy][x].cell2/32.0f-vmin)/(vmax-vmin)*selheight;
+									t.v3 = selendy + (Graphics.world.cubes[yy][x+1].cell3/32.0f-vmax)/(vmax-vmin)*selheight;
+									t.v4 = selendy + (Graphics.world.cubes[yy][x+1].cell1/32.0f-vmax)/(vmax-vmin)*selheight;
 								}
 							}
 							else
@@ -2130,6 +2174,20 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							vmin = min(vmin, Graphics.world.cubes[y+1][xx].cell2/32.0f);
 							vmax = max(vmax, Graphics.world.cubes[y+1][xx].cell2/32.0f);
 						}
+						if (!(Graphics.wallheightmin == cVector2(-1,-1)))
+						{
+							vmin = min(vmin, Graphics.world.cubes[Graphics.wallheightmin.y][Graphics.wallheightmin.x].cell4/32.0f);
+							vmin = min(vmin, Graphics.world.cubes[Graphics.wallheightmin.y][Graphics.wallheightmin.x].cell2/32.0f);
+							vmin = min(vmin, Graphics.world.cubes[Graphics.wallheightmin.y][Graphics.wallheightmin.x].cell3/32.0f);
+							vmin = min(vmin, Graphics.world.cubes[Graphics.wallheightmin.y][Graphics.wallheightmin.x].cell1/32.0f);
+						}
+						if (!(Graphics.wallheightmax == cVector2(-1,-1)))
+						{
+							vmax = max(vmax, Graphics.world.cubes[Graphics.wallheightmax.y][Graphics.wallheightmax.x].cell4/32.0f);
+							vmax = max(vmax, Graphics.world.cubes[Graphics.wallheightmax.y][Graphics.wallheightmax.x].cell2/32.0f);
+							vmax = max(vmax, Graphics.world.cubes[Graphics.wallheightmax.y][Graphics.wallheightmax.x].cell3/32.0f);
+							vmax = max(vmax, Graphics.world.cubes[Graphics.wallheightmax.y][Graphics.wallheightmax.x].cell1/32.0f);
+						}
 
 
 						for(xx = xmin; xx < xmax; xx++)
@@ -2153,40 +2211,19 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 								if (Graphics.world.cubes[y][xx].cell3 > Graphics.world.cubes[y+1][xx].cell1)
 								{
-									t.v1 = selstarty - (Graphics.world.cubes[y][xx].cell3/32.0f-vmax)/(vmax-vmin);
-							 		t.v2 = selstarty - (Graphics.world.cubes[y][xx].cell4/32.0f-vmax)/(vmax-vmin);
-									t.v3 = selendy - (Graphics.world.cubes[y+1][xx].cell1/32.0f-vmin)/(vmax-vmin);
-									t.v4 = selendy - (Graphics.world.cubes[y+1][xx].cell2/32.0f-vmin)/(vmax-vmin);
+									t.v1 = selendy + (Graphics.world.cubes[y][xx].cell3/32.0f-vmax)/(vmax-vmin)*selheight;
+							 		t.v2 = selendy + (Graphics.world.cubes[y][xx].cell4/32.0f-vmax)/(vmax-vmin)*selheight;
+									t.v3 = selstarty + (Graphics.world.cubes[y+1][xx].cell1/32.0f-vmin)/(vmax-vmin)*selheight;
+									t.v4 = selstarty + (Graphics.world.cubes[y+1][xx].cell2/32.0f-vmin)/(vmax-vmin)*selheight;
 								}
 								else
 								{
-									t.v1 = selstarty - (Graphics.world.cubes[y][xx].cell3/32.0f-vmin)/(vmax-vmin);
-							 		t.v2 = selstarty - (Graphics.world.cubes[y][xx].cell4/32.0f-vmin)/(vmax-vmin);
-									t.v3 = selendy - (Graphics.world.cubes[y+1][xx].cell1/32.0f-vmax)/(vmax-vmin);
-									t.v4 = selendy - (Graphics.world.cubes[y+1][xx].cell2/32.0f-vmax)/(vmax-vmin);
+									t.v1 = selstarty + (Graphics.world.cubes[y][xx].cell3/32.0f-vmin)/(vmax-vmin)*selheight;
+							 		t.v2 = selstarty + (Graphics.world.cubes[y][xx].cell4/32.0f-vmin)/(vmax-vmin)*selheight;
+									t.v3 = selendy + (Graphics.world.cubes[y+1][xx].cell1/32.0f-vmax)/(vmax-vmin)*selheight;
+									t.v4 = selendy + (Graphics.world.cubes[y+1][xx].cell2/32.0f-vmax)/(vmax-vmin)*selheight;
 								}
 
-
-/*								t.v1 = Graphics.world.cubes[y][xx].cell3/32.0f;
-								t.v2 = Graphics.world.cubes[y][xx].cell4/32.0f;
-								t.v3 = Graphics.world.cubes[y+1][xx].cell1/32.0f;
-								t.v4 = Graphics.world.cubes[y+1][xx].cell2/32.0f;
-
-*/
-								while(t.v1 < 0 || t.v2 < 0 || t.v3 < 0 || t.v4 < 0)
-								{
-									t.v1++;
-									t.v2++;
-									t.v3++;
-									t.v4++;
-								}
-								while(t.v1 > 1 || t.v2 > 1 || t.v3 > 1 || t.v4 > 1)
-								{
-									t.v1--;
-									t.v2--;
-									t.v3--;
-									t.v4--;
-								}
 
 							}
 							else

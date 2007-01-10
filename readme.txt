@@ -33,8 +33,6 @@ Wall edit
 ---------
 ,									insert wall on the horizontal axes
 .									insert wall on the vertical axes
-w									align textures on the horizontal axes
-alt+w								align textures on the vertical axes
 h									flip walltexture horizontally (on the horizontal axes)
 ctrl+h								flip walltexture on entire wall horizontally (on the horizontal axes)
 v									flip walltexture vertically (on the horizontal axes)
@@ -52,6 +50,15 @@ end
 c									copy
 p									paste
 g									mark cells with a wall purple (to detect 0-height walls)
+
+leftclick							mark a cell as "bottom"
+rightclick							mark a cell as "top"
+w									align textures on the horizontal axes
+alt+w								align textures on the vertical axes
+									note on aligning: if no markers are placed, the texture is vertically scaled from the highest border 'till 
+									the lowest border because RO doesn't support vertical texture repeating. If the markers are placed, then
+									it's scaled from bottom to top
+
 
 
 
