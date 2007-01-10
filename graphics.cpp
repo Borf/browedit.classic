@@ -467,9 +467,8 @@ void cMenu::draw()
 		{
 			if (Graphics.font->textlen(items[i]->title.c_str()) > maxlen-50)
 				maxlen = Graphics.font->textlen(items[i]->title.c_str())+50;
-			
 			float color = 0;
-			if (mousex > x && mousex < x+maxlen && (mousey) > y+i*20 && (mousey) < y+i*20+20)
+			if ((mousex > x && mousex < x+maxlen && (mousey) > y+i*20 && (mousey) < y+i*20+20))
 			{
 				glDisable(GL_TEXTURE_2D);
 				glColor4f(0.2f,0.2f,0.9f,1);
@@ -488,6 +487,20 @@ void cMenu::draw()
 			Graphics.font->print(color,color,color,x+23,Graphics.h()-y-20*i-18,"%s",items[i]->title.c_str());
 			if(items[i]->opened)
 				items[i]->draw();
+		}
+		if(w != maxlen && !updatedchildrenpos)
+		{
+			if(parent->drawstyle != 0)
+				w = maxlen;
+			else
+				updatedchildrenpos = true;
+			for(int ii = 0; ii < items.size(); ii++)
+			{
+				items[ii]->x = x+maxlen;
+				items[ii]->y = y+ii*20;
+				if (items[ii]->y + items[ii]->items.size()*20 > Graphics.h())
+					items[ii]->y = Graphics.h() - items[ii]->items.size()*20;
+			}
 		}
 	}
 }
@@ -527,7 +540,7 @@ void cMenu::click(int xx, int yy)
 			}
 		}
 	}
-	else if (opened)
+	else //if (opened)
 	{
 		for(i = 0; i < (int)items.size(); i++)
 		{
@@ -541,7 +554,14 @@ void cMenu::click(int xx, int yy)
 					return;
 				}
 				else
+				{
+					for(int ii = 0; ii < items.size(); ii++)
+					{
+						if(i != ii)
+							items[ii]->opened = false;
+					}
 					items[i]->opened = !items[i]->opened;
+				}
 			}
 		}
 	}
