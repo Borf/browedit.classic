@@ -41,6 +41,7 @@ public:
 		lasttick = SDL_GetTicks();
 		wallheightmin = cVector2(-1,-1);
 		wallheightmax = cVector2(-1,-1);
+		texturepreview = NULL;
 
 	}
 
@@ -142,6 +143,8 @@ public:
 
 	cVector2				wallheightmin;
 	cVector2				wallheightmax;
+
+	cTexture*				texturepreview;
 
 
 private:

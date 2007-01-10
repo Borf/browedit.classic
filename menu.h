@@ -51,8 +51,6 @@ class cMenu
 		void click(int, int);
 		void unmouseover()
 		{
-			if(mouseoutproc!= NULL)
-				mouseoutproc(this);
 			mouseover = false;
 			for(int i = 0; i < (int)items.size(); i++)
 				items[i]->unmouseover();
@@ -60,6 +58,8 @@ class cMenu
 		void closemenu()
 		{
 			opened = false;
+			if(mouseoutproc!= NULL)
+				mouseoutproc(this);
 			for(int i = 0; i < (int)items.size(); i++)
 				items[i]->closemenu();
 		}

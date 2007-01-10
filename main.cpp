@@ -39,6 +39,9 @@ float paintspeed = 100;
 string config;
 extern double mouse3dx, mouse3dy, mouse3dz;
 
+bool mouseouttexture(cMenu*);
+bool mouseovertexture(cMenu*);
+
 string rodir;
 
 #define MENUCOMMAND(x) bool MenuCommand_ ## x (cMenuItem* src)
@@ -629,6 +632,8 @@ int main(int argc, char *argv[])
 								if(filename != "")
 								{
 									ADDMENUITEMDATA(mm,itemst[cat],menuname, &MenuCommand_picktexture, filename);
+									mm->mouseoverproc = mouseovertexture;
+									mm->mouseoutproc = mouseouttexture;
 								}
 									
 							}
@@ -3703,5 +3708,33 @@ MENUCOMMAND(tempfunc)
 MENUCOMMAND(snaptofloor)
 {
 	src->ticked = !src->ticked;
+	return true;
+}
+
+
+bool mouseovertexture(cMenu* src)
+{
+	if (Graphics.texturepreview == NULL || Graphics.texturepreview->getfilename() != rodir + "texture/" + ((cMenuItem*)src)->data)
+	{
+		Graphics.texturepreview = new cTexture();
+		Graphics.texturepreview->Load(rodir + "texture/" + ((cMenuItem*)src)->data);
+		return false;
+	}
+	else
+	{
+		Graphics.texturepreview->unLoad();
+		delete Graphics.texturepreview;
+		Graphics.texturepreview = NULL;
+		return true;
+	}
+}
+bool mouseouttexture(cMenu* src)
+{
+	if (Graphics.texturepreview != NULL)
+	{
+		Graphics.texturepreview->unLoad();
+		delete Graphics.texturepreview;
+		Graphics.texturepreview = NULL;
+	}
 	return true;
 }

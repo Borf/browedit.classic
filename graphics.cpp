@@ -75,6 +75,21 @@ int cGraphics::draw()
 		font->print(0,0,0,(width / 2) - (font->textlen(message)/2),height/2,"%s", message.c_str());
 	}
 
+	if(texturepreview != NULL)
+	{
+		glEnable(GL_TEXTURE_2D);
+		glColor4f(1,1,1,1);
+		glBindTexture(GL_TEXTURE_2D, texturepreview->texid());
+		glBegin(GL_QUADS);
+			glTexCoord2f(1,1);		glVertex2f( 256, height-32);
+			glTexCoord2f(1,0);		glVertex2f( 256, height-(32+256));
+			glTexCoord2f(0,0);		glVertex2f( 0, height-(32+256));
+			glTexCoord2f(0,1);		glVertex2f( 0, height-32);
+		glEnd();
+
+
+	}
+
 	if (previewmodel != NULL)
 	{
 		if (previewcolor != 0)
@@ -548,6 +563,11 @@ void cMenu::click(int xx, int yy)
 			{
 				if(items[i]->item)
 				{
+					if (items[i]->mouseoverproc)
+					{
+						if(!items[i]->mouseoverproc(items[i]))
+							return;
+					}
 					((cMenuItem*)items[i])->proc((cMenuItem*)items[i]);
 					menu->closemenu();
 					menu->opened = true;
@@ -558,9 +578,11 @@ void cMenu::click(int xx, int yy)
 					for(int ii = 0; ii < items.size(); ii++)
 					{
 						if(i != ii)
-							items[ii]->opened = false;
+							items[ii]->closemenu();
 					}
 					items[i]->opened = !items[i]->opened;
+					if (!items[i]->opened)
+						items[i]->closemenu();
 				}
 			}
 		}
