@@ -1229,6 +1229,8 @@ void cWorld::draw()
 		glEnable(GL_BLEND);
 		for(y = 0; y < gattiles.size(); y++)
 		{
+			if(!Graphics.frustum.BoxInFrustum(0,-1000,(2*height-y)*5, gattiles[y].size()*5,1000,(2*height-y)*5-5))
+				continue;
 			for(x = 0; x < gattiles[y].size(); x++)
 			{
 				cGatTile* c = &gattiles[y][x];
@@ -1337,7 +1339,7 @@ void cWorld::draw()
 			glTranslatef(-5*sounds[i].pos.x, sounds[i].pos.y-5, -5*(2*height-sounds[i].pos.z));
 		}
 
-		if(editmode == MODE_OBJECTS && Graphics.showgrid)
+		if(editmode == MODE_OBJECTS && Graphics.showobjects)
 		{
 			glDisable(GL_TEXTURE_2D);
 			glBegin(GL_QUADS);
@@ -1387,7 +1389,32 @@ void cWorld::draw()
 		}
 	
 	}
+	if(editmode == MODE_OBJECTS && Graphics.showgrid)
+	{
+		glDisable(GL_TEXTURE_2D);
+		glColor3f(1,0,0);
+		float s = 10 / Graphics.gridsize;
+		glTranslatef(s*Graphics.gridoffsetx,0,s*Graphics.gridoffsety);
+		for(int x = 0; x < width*Graphics.gridsize; x++)
+		{
+			if(!Graphics.frustum.BoxInFrustum(x*s,-1000,0, x*s+s,1000,height*Graphics.gridsize*s))
+				continue;
+			for(int y = 0; y < height*Graphics.gridsize; y++)
+			{
+				cCube* c = &cubes[y/Graphics.gridsize][x/Graphics.gridsize];
+				if(!Graphics.frustum.PointInFrustum(x*s,-c->cell1,(height*Graphics.gridsize-y)*s))
+					continue;
 
+				glBegin(GL_LINE_LOOP);
+					glVertex3f(x*s,-c->cell1,(height*Graphics.gridsize-y)*s);
+					glVertex3f(x*s,-c->cell3,(height*Graphics.gridsize-y)*s-s);
+					glVertex3f(x*s+s,-c->cell4,(height*Graphics.gridsize-y)*s-s);
+					glVertex3f(x*s+s,-c->cell2,(height*Graphics.gridsize-y)*s);
+				glEnd();
+			}
+		}
+		glTranslatef(-s*Graphics.gridoffsetx,0,-s*Graphics.gridoffsety);
+	}
 
 	int c = 1;
 	int d = 1;

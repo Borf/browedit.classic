@@ -20,7 +20,7 @@ int cFileSystem::LoadFile(string filename)
 	if (!pFile.good() || pFile.eof() || pFile.bad())
 	{
 		pFile.close();
-		Log(2,0,"FileSystem: Error opening datafile");
+		//Log(2,0,"FileSystem: Error opening datafile");
 		return -1;
 	}
 	Log(3,0,"FileSystem: datafile opened");

@@ -670,7 +670,7 @@ int main(int argc, char *argv[])
 		return 1;
 
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "customtown").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "rachel").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 //	Graphics.world.importalpha();
@@ -912,8 +912,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							Graphics.world.models[Graphics.selectedobject]->pos.z = mouse3dz / 5;
 							if (SDL_GetModState() & KMOD_SHIFT)
 							{
-								Graphics.world.models[Graphics.selectedobject]->pos.x = floor(Graphics.world.models[Graphics.selectedobject]->pos.x+0.5f / 1) * 1;
-								Graphics.world.models[Graphics.selectedobject]->pos.z = floor(Graphics.world.models[Graphics.selectedobject]->pos.z+0.5f / 1) * 1;
+								Graphics.world.models[Graphics.selectedobject]->pos.x = floor(Graphics.world.models[Graphics.selectedobject]->pos.x * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsetx) / (Graphics.gridsize/2.0f) + Graphics.gridoffsetx/(Graphics.gridsize/2.0f);
+								Graphics.world.models[Graphics.selectedobject]->pos.z = floor(Graphics.world.models[Graphics.selectedobject]->pos.z * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsety) / (Graphics.gridsize/2.0f) + Graphics.gridoffsety/(Graphics.gridsize/2.0f);
 							}
 						}
 						if(ctrl && !alt)
@@ -2482,6 +2482,60 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						Graphics.world.models[Graphics.selectedobject]->rot = cVector3(0,0,0);
 					}
 				}
+			case SDLK_F1:
+				editmode = MODE_TEXTURE;
+				if (Graphics.texturestart >= Graphics.world.textures.size())
+					Graphics.texturestart = 0;
+				break;
+			case SDLK_F2:
+				editmode = MODE_HEIGHTGLOBAL;
+				if (Graphics.texturestart >= Graphics.world.textures.size())
+					Graphics.texturestart = 0;
+			case SDLK_F3:
+				editmode = MODE_HEIGHTDETAIL;
+				if (Graphics.texturestart >= Graphics.world.textures.size())
+					Graphics.texturestart = 0;
+				break;
+			case SDLK_F4:
+				editmode = MODE_WALLS;
+				break;
+			case SDLK_F5:
+				editmode = MODE_OBJECTS;
+				if (Graphics.texturestart >= Graphics.world.textures.size())
+					Graphics.texturestart = 0;
+				break;
+			case SDLK_F6:
+				editmode = MODE_GAT;
+				if (Graphics.texturestart >= 6)
+					Graphics.texturestart = 0;
+				break;
+			case SDLK_F7:
+				editmode = MODE_WATER;
+				Graphics.texturestart = Graphics.world.water.type;
+				break;
+			case SDLK_1:
+			case SDLK_2:
+			case SDLK_3:
+			case SDLK_4:
+			case SDLK_5:
+			case SDLK_6:
+			case SDLK_7:
+			case SDLK_8:
+			case SDLK_9:
+				if(SDL_GetModState() & KMOD_SHIFT)
+					Graphics.gridoffsetx = (event.key.keysym.sym - SDLK_0) / 10.0f;
+				else if(SDL_GetModState() & KMOD_CTRL)
+					Graphics.gridoffsety = (event.key.keysym.sym - SDLK_0) / 10.0f;
+				else
+					Graphics.gridsize = (event.key.keysym.sym - SDLK_0) / 4.0f;
+				break;
+			case SDLK_0:
+				if(SDL_GetModState() & KMOD_SHIFT)
+					Graphics.gridoffsetx = 0;
+				else if(SDL_GetModState() & KMOD_CTRL)
+					Graphics.gridoffsety = 0;
+				else
+					Graphics.gridsize = 16 / 4.0f;
 			case SDLK_s:
 				{
 					if (editmode == MODE_HEIGHTDETAIL)

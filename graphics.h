@@ -42,6 +42,9 @@ public:
 		wallheightmin = cVector2(-1,-1);
 		wallheightmax = cVector2(-1,-1);
 		texturepreview = NULL;
+		gridsize = 1;
+		gridoffsetx = 0;
+		gridoffsety = 0;
 
 	}
 
@@ -69,6 +72,9 @@ public:
 	cVector2				camerapointer;
 
 	bool					showgrid;
+	float					gridsize;
+	float					gridoffsetx;
+	float					gridoffsety;
 
 	cVector2				selectedTile;
 

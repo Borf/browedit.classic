@@ -6,13 +6,7 @@
 --------------------Configuration: roworldedit - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\DOCUME~1\BORF~1.YAM\LOCALS~1\Temp\RSP4791.tmp" with contents
-[
-/nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FR"Debug/" /Fp"Debug/roworldedit.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
-"C:\Documents and Settings\Borf.YAMI\Desktop\roworldedit\main.cpp"
-]
-Creating command line "cl.exe @C:\DOCUME~1\BORF~1.YAM\LOCALS~1\Temp\RSP4791.tmp" 
-Creating temporary file "C:\DOCUME~1\BORF~1.YAM\LOCALS~1\Temp\RSP4792.tmp" with contents
+Creating temporary file "C:\DOCUME~1\BORF~1.YAM\LOCALS~1\Temp\RSP12F.tmp" with contents
 [
 ws2_32.lib bgd.lib sdl.lib sdlmain.lib zlib.lib opengl32.lib glaux.lib glu32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/roworldedit.pdb" /debug /machine:I386 /nodefaultlib:"MSVCRT" /out:"Debug/roworldedit.exe" /pdbtype:sept 
 ".\Debug\common.obj"
@@ -29,12 +23,10 @@ ws2_32.lib bgd.lib sdl.lib sdlmain.lib zlib.lib opengl32.lib glaux.lib glu32.lib
 ".\Debug\world.obj"
 ".\Debug\Script1.res"
 ]
-Creating command line "link.exe @C:\DOCUME~1\BORF~1.YAM\LOCALS~1\Temp\RSP4792.tmp"
+Creating command line "link.exe @C:\DOCUME~1\BORF~1.YAM\LOCALS~1\Temp\RSP12F.tmp"
 <h3>Output Window</h3>
-Compiling...
-main.cpp
 Linking...
-Creating temporary file "C:\DOCUME~1\BORF~1.YAM\LOCALS~1\Temp\RSP4793.tmp" with contents
+Creating temporary file "C:\DOCUME~1\BORF~1.YAM\LOCALS~1\Temp\RSP130.tmp" with contents
 [
 /nologo /o"Debug/roworldedit.bsc" 
 ".\Debug\common.sbr"
@@ -49,7 +41,7 @@ Creating temporary file "C:\DOCUME~1\BORF~1.YAM\LOCALS~1\Temp\RSP4793.tmp" with 
 ".\Debug\texturecache.sbr"
 ".\Debug\texturemodel.sbr"
 ".\Debug\world.sbr"]
-Creating command line "bscmake.exe @C:\DOCUME~1\BORF~1.YAM\LOCALS~1\Temp\RSP4793.tmp"
+Creating command line "bscmake.exe @C:\DOCUME~1\BORF~1.YAM\LOCALS~1\Temp\RSP130.tmp"
 Creating browse info file...
 <h3>Output Window</h3>
 

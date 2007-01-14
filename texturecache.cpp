@@ -29,6 +29,9 @@ void cTextureCache::unload(cTexture* tex)
 	if (used[tex] == 0)
 	{
 		Log(3,0,"Texture %s seems to be unused", tex->getfilename().c_str());
+		textures[tex->getfilename()]->unLoad();
+		textures.erase(textures.find(tex->getfilename()));
+		used.erase(used.find(tex));
 	}
 	if (used[tex] < 0)
 	{

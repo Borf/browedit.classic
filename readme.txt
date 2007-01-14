@@ -84,10 +84,14 @@ ctrl+up/down						rotate on z-axis
 alt+pageup/pagedown					scale on y-axis
 alt+left/right						scale on x-axis
 alt+up/down							scale on z-axis
-g									show object handles (red blocks)
+o									show object handles (red blocks)
 ctrl+p								paste height
 shift+p								paste new object with the same height as the copied object
 r									reset rotation
+1,2,3,4,5,6,7,8,9,0					Change grid-size
+shift+1,2,3,4,5,6,7,8,9,0			Change grid-x-offset
+ctrl+1,2,3,4,5,6,7,8,9,0			Change grid-y-offset
+
 
 gat edit
 --------
