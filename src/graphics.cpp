@@ -262,7 +262,7 @@ int cGraphics::init()
 
 
 //	SDL_WM_SetIcon(SDL_LoadBMP("data/domovsneko.bmp"), NULL);
-	SDL_WM_SetCaption("Ragnarok Online Worldeditor 0.1", "RO Worldeditor");
+	SDL_WM_SetCaption("Borf's Ragnarok Online World Editor 0.1", "BROWorld Editor");
 
 	//SDL_ShowCursor(0);
 	if (InitGL() == 0)							// Initialize Our Newly Created GL Window

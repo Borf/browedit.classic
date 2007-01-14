@@ -668,6 +668,7 @@ int main(int argc, char *argv[])
 	if (!Graphics.init())
 		return 1;
 
+	Log(3,0,"Done initializing..");
 	Graphics.world.newworld();
 	strcpy(Graphics.world.filename, string(rodir + "rachel").c_str());
 #ifdef _DEBUG
@@ -2784,7 +2785,7 @@ MENUCOMMAND(saveAs)
 }
 MENUCOMMAND(exit)
 {
-	exit(0);
+	running = false;
 	return true;
 }	
 MENUCOMMAND(undo)

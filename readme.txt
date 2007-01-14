@@ -4,6 +4,7 @@ Right mouse button is to move around
 
 rightmousebutton + drag				move
 rightmousebutton + drag + shift		rotate camera
+RMB + drag + shift	+ctrl			rotate camera (other axes)
 O									show/hide objects
 winkey+w							show/hide water
 l									show/hide lightmaps
