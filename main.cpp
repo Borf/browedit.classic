@@ -204,7 +204,6 @@ string downloadfile(string url, long &filesize)
 
 int main(int argc, char *argv[])
 {
-	changetoserverdir();				
 	log_open("log_worldeditor.txt","worldedit",2);
 	char fileBuffer[1024];
 	GetModuleFileName(NULL, fileBuffer, 1024);
@@ -409,7 +408,7 @@ int main(int argc, char *argv[])
 		exit(0);
 #else
 	if(!ok)
-		Log(1,0,"Error: non-valid licence stuff");
+		Log(2,0,"Error: non-valid licence stuff");
 #endif
 
 	RegCloseKey( hKey );
@@ -839,7 +838,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					else
 					{
 						Graphics.cameraheight += (oldmousey - mousey) / 2.0f;
-						//Graphics.cameraheight = max(min(Graphics.cameraheight, 150), 10);
+						Graphics.cameraheight = max(min(Graphics.cameraheight, 15000), 5);
 						Graphics.camerarot += (oldmousex - mousex) / 100.0f;
 						while(Graphics.camerarot < 0)
 							Graphics.camerarot+=2*(float)PI;

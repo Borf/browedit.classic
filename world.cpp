@@ -729,9 +729,9 @@ void cWorld::draw()
 	float camrad = 10;
 
 	gluLookAt(  Graphics.cameraheight*sin(Graphics.camerarot),
-				camrad+Graphics.cameraheight+Graphics.cameraangle,
+				camrad+Graphics.cameraheight,
 				Graphics.cameraheight*cos(Graphics.camerarot),
-				0,camrad,0,
+				0,camrad + Graphics.cameraheight * (Graphics.cameraangle/10.0f),0,
 				0,1,0);
 
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
