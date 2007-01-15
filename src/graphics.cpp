@@ -67,12 +67,12 @@ int cGraphics::draw()
 		{
 		glDisable(GL_TEXTURE_2D);
 		glBegin(GL_QUADS);
-			glVertex2f( (width / 2) - (font->textlen(message)/2) - 50, height/2 - 50);
-			glVertex2f( (width / 2) + (font->textlen(message)/2) + 50, height/2 - 50);
-			glVertex2f( (width / 2) + (font->textlen(message)/2) + 50, height/2 + 50);
-			glVertex2f( (width / 2) - (font->textlen(message)/2) - 50, height/2 + 50);
+			glVertex2f( (width / 2) - (font->textlen(message)/2.0f) - 50, height/2.0f - 50);
+			glVertex2f( (width / 2) + (font->textlen(message)/2.0f) + 50, height/2.0f - 50);
+			glVertex2f( (width / 2) + (font->textlen(message)/2.0f) + 50, height/2.0f + 50);
+			glVertex2f( (width / 2) - (font->textlen(message)/2.0f) - 50, height/2.0f + 50);
 		glEnd();
-		font->print(0,0,0,(width / 2) - (font->textlen(message)/2),height/2,"%s", message.c_str());
+		font->print(0,0,0,(width / 2) - (font->textlen(message)/2.0f),height/2.0f,"%s", message.c_str());
 	}
 
 	if(texturepreview != NULL)
@@ -81,10 +81,10 @@ int cGraphics::draw()
 		glColor4f(1,1,1,1);
 		glBindTexture(GL_TEXTURE_2D, texturepreview->texid());
 		glBegin(GL_QUADS);
-			glTexCoord2f(1,1);		glVertex2f( 256, height-32);
-			glTexCoord2f(1,0);		glVertex2f( 256, height-(32+256));
-			glTexCoord2f(0,0);		glVertex2f( 0, height-(32+256));
-			glTexCoord2f(0,1);		glVertex2f( 0, height-32);
+			glTexCoord2f(1,1);		glVertex2f( 256.0f, height-32.0f);
+			glTexCoord2f(1,0);		glVertex2f( 256.0f, height-(32+256.0f));
+			glTexCoord2f(0,0);		glVertex2f( 0.0f, height-(32+256.0f));
+			glTexCoord2f(0,1);		glVertex2f( 0.0f, height-32.0f);
 		glEnd();
 
 
@@ -282,8 +282,8 @@ int cGraphics::init()
 	mask->Load("data/bulb.tga");
 	splash = new cTexture();
 	splash->Load("data/hamtaro.tga");
-	
-	for(int i = 0; i < 7; i++)
+	int i;
+	for(i = 0; i < 7; i++)
 	{
 		char buf[64];
 		sprintf(buf, "data/gat%i.tga", i);
@@ -391,8 +391,8 @@ void cGraphics::KillGLWindow(void)								// Properly Kill The Window
 	SDL_ShowCursor(0);
 	TextureCache.unload(mask);
 	TextureCache.unload(bulb);
-	
-	for(int i = 0; i < 7; i++)
+	int i;
+	for(i = 0; i < 7; i++)
 		TextureCache.unload(gattextures[i]);
 
 	for(i = 0; i < 6; i++)

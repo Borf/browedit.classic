@@ -29,7 +29,7 @@ extern long userid;
 
 void cWorld::load()
 {
-	int i;
+	int i,x,y;
 	if(light == NULL)
 	{
 		light = new cTextureModel();
@@ -145,11 +145,11 @@ void cWorld::load()
 		tiles.push_back(t);
 	}
 
-	for(int y = 0; y < height; y++)
+	for(y = 0; y < height; y++)
 	{
 		vector<cCube> row;
 		row.clear();
-		for(int x = 0; x < width; x++)
+		for(x = 0; x < width; x++)
 		{
 			pFile->read(buf, 28);
 			cCube c;
@@ -326,7 +326,7 @@ void cWorld::load()
 	for(y = 0; y < height*2; y++)
 	{
 		vector<cGatTile> row;
-		for(int x = 0; x < width*2; x++)
+		for(x = 0; x < width*2; x++)
 		{
 			cGatTile g;
 			pFile->read((char*)&g.cell1, 4);
@@ -606,7 +606,8 @@ void cWorld::save()
 		pFile.write((char*)&water.type, 4);
 		pFile.write(useless.c_str()+8, useless.length()-8);
 
-		long count = models.size();// + lights.size() + effects.size() + sounds.size();
+		long count = models.size() + lights.size()+effects.size();// + sounds.size(); //+ effects.size();
+
 		pFile.write((char*)&count, 4);
 
 		int rnd = 0;
@@ -666,6 +667,80 @@ void cWorld::save()
 
 		}
 		Log(3,0,"%i objects written", models.size());
+		for(i = 0; i < lights.size(); i++)
+		{
+			long l = 2;
+			pFile.write((char*)&l, 4);
+			char buf[41];
+			ZeroMemory(buf,41);
+			strcpy(buf, lights[i].name.c_str());
+			pFile.write(buf, 40);
+			pFile.write((char*)&lights[i].pos.x,4);
+			pFile.write((char*)&lights[i].pos.y,4);
+			pFile.write((char*)&lights[i].pos.z,4);
+			ZeroMemory(buf,41);
+			strcpy(buf, lights[i].todo.c_str());
+			pFile.write(buf, 40);
+			pFile.write((char*)&lights[i].color.x,4);
+			pFile.write((char*)&lights[i].color.y,4);
+			pFile.write((char*)&lights[i].color.z,4);
+			pFile.write((char*)&lights[i].todo2,4);
+		}
+
+
+/*		for(i = 0; i < sounds.size(); i++)
+		{
+			long l = 3;
+			pFile.write((char*)&l, 4);
+			char buf[41];
+			ZeroMemory(buf,41);
+			strcpy(buf, sounds[i].name.c_str());
+			pFile.write(buf, 40);
+			ZeroMemory(buf,41);
+			strcpy(buf, sounds[i].todo1.c_str());
+			pFile.write(buf, 40);
+			ZeroMemory(buf,41);
+			strcpy(buf, sounds[i].todo2.c_str());
+			pFile.write(buf, 20);
+			pFile.write((char*)&sounds[i].pos.x,4);
+			pFile.write((char*)&sounds[i].pos.y,4);
+			pFile.write((char*)&sounds[i].pos.z,4);
+			ZeroMemory(buf,41);
+			strcpy(buf, sounds[i].id.c_str());
+			pFile.write(buf, 40);
+
+		}*/
+
+		for(i = 0; i < effects.size(); i++)
+		{
+			long l = 4;
+			pFile.write((char*)&l, 4);
+			char buf[41];
+			ZeroMemory(buf,41);
+			strcpy(buf, effects[i].name.c_str());
+			pFile.write(buf, 40);
+			pFile.write((char*)&effects[i].todo1,4);
+			pFile.write((char*)&effects[i].todo2,4);
+			pFile.write((char*)&effects[i].todo3,4);
+			pFile.write((char*)&effects[i].todo4,4);
+			pFile.write((char*)&effects[i].todo5,4);
+			pFile.write((char*)&effects[i].todo6,4);
+			pFile.write((char*)&effects[i].todo7,4);
+			pFile.write((char*)&effects[i].todo8,4);
+			pFile.write((char*)&effects[i].todo9,4);
+			ZeroMemory(buf,41);
+			strcpy(buf, effects[i].category.c_str());
+			pFile.write(buf, 4);
+			pFile.write((char*)&effects[i].pos.x,4);
+			pFile.write((char*)&effects[i].pos.y,4);
+			pFile.write((char*)&effects[i].pos.z,4);
+			pFile.write((char*)&effects[i].type,4);
+			pFile.write((char*)&effects[i].loop,4);
+			pFile.write((char*)&effects[i].todo10,4);
+			pFile.write((char*)&effects[i].todo11,4);
+			pFile.write((char*)&effects[i].todo12,4);
+			pFile.write((char*)&effects[i].todo13,4);
+		}
 
 		for(i = 0; i < quadtreefloats.size(); i++)
 		{
@@ -715,7 +790,7 @@ void cWorld::draw()
 {
 	if(!loaded)
 		return;
-	int x,y;
+	int x,y,i;
 	int ww = Graphics.w();
 	ww -= 256;
 	int hh = Graphics.h()-25;
@@ -1303,7 +1378,7 @@ void cWorld::draw()
 		glEnable(GL_BLEND);
 		glTranslatef(0,0,height*10);
 		glScalef(1,1,-1);
-		for(int i = 0; i < models.size(); i++)
+		for(i = 0; i < models.size(); i++)
 		{
 			if(i == Graphics.selectedobject)
 				glColor3f(1,0,0);
@@ -1526,13 +1601,13 @@ void cWorld::clean()
 {
 	int count = 0 ;
 
-	int i;
+	int i,ii,xx,yy;
 	map<int, bool, less<int> > tilesused;
 
 	cCube* c;
-	for(int yy = 0; yy < height; yy++)
+	for(yy = 0; yy < height; yy++)
 	{
-		for(int xx = 0; xx < width; xx++)
+		for(xx = 0; xx < width; xx++)
 		{
 			c = &cubes[yy][xx];
 			tilesused[c->tileup] = true;
@@ -1589,7 +1664,7 @@ void cWorld::clean()
 
 	for(yy = 0; yy < height; yy++)
 	{
-		for(int xx = 0; xx < width; xx++)
+		for(xx = 0; xx < width; xx++)
 		{
 			if(cubes[yy][xx].tileup != -1)
 				lightmapsused[tiles[cubes[yy][xx].tileup].lightmap] = true;
@@ -1608,7 +1683,7 @@ void cWorld::clean()
 			lightmaps[i]->del();
 			lightmaps[i]->del2();
 			delete lightmaps[i];
-			for(int ii = i; ii < lightmaps.size()-1; ii++)
+			for(ii = i; ii < lightmaps.size()-1; ii++)
 			{
 				lightmaps[ii] = lightmaps[ii+1];
 			}
@@ -1635,7 +1710,8 @@ void cWorld::clean()
 
 void cWorld::unload()
 {
-	for(int i = 0; i < models.size(); i++)
+	int i;
+	for(i = 0; i < models.size(); i++)
 		delete models[i];
 	for(i = 0; i < textures.size(); i++)
 		delete textures[i];
@@ -1890,14 +1966,15 @@ int tgaSave(    char            *filename,
 
 void cWorld::savelightmap()
 {
+	int x,y,xx,yy;
 	char* imgdata = new char[width*height*6*6*3];
-	for(int x = 0; x < width; x++)
+	for(x = 0; x < width; x++)
 	{
-		for(int y = 0; y < height; y++)
+		for(y = 0; y < height; y++)
 		{
-			for(int xx = 0; xx < 6; xx++)
+			for(xx = 0; xx < 6; xx++)
 			{
-				for(int yy = 0; yy < 6; yy++)
+				for(yy = 0; yy < 6; yy++)
 				{
 					if (cubes[y][x].tileup != -1)
 					{
@@ -1919,11 +1996,11 @@ void cWorld::savelightmap()
 	imgdata = new char[width*height*6*6*3];
 	for(x = 0; x < width; x++)
 	{
-		for(int y = 0; y < height; y++)
+		for(y = 0; y < height; y++)
 		{
-			for(int xx = 0; xx < 6; xx++)
+			for(xx = 0; xx < 6; xx++)
 			{
-				for(int yy = 0; yy < 6; yy++)
+				for(yy = 0; yy < 6; yy++)
 				{
 					if (cubes[y][x].tileup != -1)
 					{

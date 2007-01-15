@@ -142,7 +142,7 @@ int cFile::open()
 		{
 			Log(1,0,"Error, could not open file %s", filename.c_str());
 			#ifdef WIN32
-			MessageBox(NULL, ("Error: could not open file: " + filename).c_str(), "File not found", MB_OK);
+//			MessageBox(NULL, ("Error: could not open file: " + filename).c_str(), "File not found", MB_OK);
 			#endif
 		}
 	}

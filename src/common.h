@@ -1,5 +1,6 @@
 #ifndef __COMMON_H__
 #define __COMMON_H__
+
 #define GL_GLEXT_PROTOTYPES	
 #include <SDL/SDL.h>
 

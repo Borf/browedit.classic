@@ -13,9 +13,9 @@ class cMenu
 		int drawstyle;
 		int x, y, w;
 		bool ticked;
-		int h()
+		unsigned int h()
 		{
-			return (drawstyle==0) ? 20 : 20*items.size();
+			return (unsigned int) ((drawstyle==0) ? 20 : 20*items.size());
 		}
 		bool opened;
 		
@@ -82,7 +82,7 @@ class cMenu
 		void sort()
 		{
 			mergesort(items, cmp);
-			for(int i = 0; i < items.size(); i++)
+			for(unsigned int i = 0; i < items.size(); i++)
 				items[i]->sort();
 		}
 		cMenu* finddata(string d);

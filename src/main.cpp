@@ -204,6 +204,7 @@ string downloadfile(string url, long &filesize)
 
 int main(int argc, char *argv[])
 {
+	int i;
 	log_open("log_worldeditor.txt","worldedit",2);
 	char fileBuffer[1024];
 	GetModuleFileName(NULL, fileBuffer, 1024);
@@ -242,7 +243,7 @@ int main(int argc, char *argv[])
 
 	srand(0);
 	char buffer[100];
-	for(int i = 0; i < 64; i++)
+	for(i = 0; i < 64; i++)
 		buffer[i] = rand()%256;
 	sprintf(buffer, "%i", userid);
 
@@ -2974,7 +2975,8 @@ MENUCOMMAND(grid)
 
 MENUCOMMAND(mode_detail)
 {
-	for(int i = 0; i < mode->items.size(); i++)
+	int i;
+	for(i = 0; i < mode->items.size(); i++)
 		mode->items[i]->ticked = (mode->items[i]->title == "Detail Terrain Edit" ? true : false);
 	for(i = 0; i < editdetail->items.size(); i++)
 		editdetail->items[i]->ticked = false;
@@ -3180,7 +3182,7 @@ cVector3 lightpos = cVector3(-20000,20000,-20000);
 
 MENUCOMMAND(dolightmaps)
 {
-	int x,y;
+	int x,y,i;
 
 	map<int, bool, less<int> > used;
 
@@ -3252,7 +3254,7 @@ MENUCOMMAND(dolightmaps)
 
 
 
-	for(int i = 0; i < Graphics.world.models.size(); i++)
+	for(i = 0; i < Graphics.world.models.size(); i++)
 	{
 		Log(3,0,"Doing model %i out of %i (%.2f%%)", i, Graphics.world.models.size(), (i/(float)Graphics.world.models.size())*100);
 		Graphics.world.models[i]->draw(false,false,false, true);
@@ -3656,7 +3658,8 @@ MENUCOMMAND(gatcollision)
 
 MENUCOMMAND(clearlightmaps)
 {
-	for(int i = 0; i < Graphics.world.lightmaps.size(); i++)
+	unsigned int i;
+	for(i = 0; i < Graphics.world.lightmaps.size(); i++)
 		delete 	Graphics.world.lightmaps[i];
 	Graphics.world.lightmaps.clear();
 	cLightmap* m = new cLightmap();
@@ -3680,9 +3683,10 @@ MENUCOMMAND(showoglighting)
 
 MENUCOMMAND(cleanuplightmaps)
 {
+	unsigned int i;
 	vector<int> newvalue;
 	map<int, bool, less<int> > used;
-	for(int i = 0; i < Graphics.world.lightmaps.size(); i++)
+	for(i = 0; i < Graphics.world.lightmaps.size(); i++)
 	{
 		for(int ii = 0; ii < i; ii++)
 		{

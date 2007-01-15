@@ -9,6 +9,7 @@ extern cVector3 lightpos;
 
 void cRSMModel::load(string fname)
 {
+	int i;
 //	Log(3,0,"Loading %s", fname.c_str());
 	recalcbb = true;
 	filename = fname;
@@ -33,7 +34,7 @@ void cRSMModel::load(string fname)
 	if(ntextures < 0 || ntextures > 1000)
 		return;
 
-	for(int i = 0; i < ntextures; i++)
+	for(i = 0; i < ntextures; i++)
 	{
 		pFile->read(buffer, 40);
 		string filename = buffer;
@@ -80,6 +81,7 @@ void cRSMModel::load(string fname)
 
 void cRSMModelMesh::load(cFile* pFile, cRSMModel* model, bool main)
 {
+	int i;
 	char buffer[100];
 	pFile->read(buffer, 40);			//	naam
 	name = buffer;
@@ -97,7 +99,7 @@ void cRSMModelMesh::load(cFile* pFile, cRSMModel* model, bool main)
 	pFile->read((char*)&nTextures, 4);
 	if (nTextures > 1000 || nTextures < 0)
 		return;
-	for(int i = 0; i < nTextures; i++)
+	for(i = 0; i < nTextures; i++)
 	{
 		int id;
 		pFile->read((char*)&id, 4);
@@ -634,7 +636,8 @@ void cRSMModel::boundingbox()
 
 cRSMModel::~cRSMModel()
 {
-	for(int i = 0; i < meshes.size(); i++)
+	int i;
+	for(i = 0; i < meshes.size(); i++)
 	{
 		delete meshes[i];
 		meshes[i] = NULL;
