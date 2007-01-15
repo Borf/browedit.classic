@@ -87,51 +87,51 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=.\common.cpp
+SOURCE=.\src\common.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\filesystem.cpp
+SOURCE=.\src\filesystem.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\font.cpp
+SOURCE=.\src\font.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\frustum.cpp
+SOURCE=.\src\frustum.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\graphics.cpp
+SOURCE=.\src\graphics.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\main.cpp
+SOURCE=.\src\main.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\md5.c
+SOURCE=.\src\md5.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\RSMModel.cpp
+SOURCE=.\src\RSMModel.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\texture.cpp
+SOURCE=.\src\texture.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\texturecache.cpp
+SOURCE=.\src\texturecache.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\texturemodel.cpp
+SOURCE=.\src\texturemodel.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\world.cpp
+SOURCE=.\src\world.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -139,59 +139,63 @@ SOURCE=.\world.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=.\common.h
+SOURCE=.\src\common.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\filesystem.h
+SOURCE=.\src\filesystem.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\font.h
+SOURCE=.\src\font.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\frustum.h
+SOURCE=.\src\frustum.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\graphics.h
+SOURCE=.\src\graphics.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\main.h
+SOURCE=.\src\main.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\md5.h
+SOURCE=.\src\md5.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\menu.h
+SOURCE=.\src\menu.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\mymath.h
+SOURCE=.\src\mymath.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\RSMModel.h
+SOURCE=.\src\resource.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\texture.h
+SOURCE=.\src\RSMModel.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\texturecache.h
+SOURCE=.\src\texture.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\texturemodel.h
+SOURCE=.\src\texturecache.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\world.h
+SOURCE=.\src\texturemodel.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\world.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
@@ -207,7 +211,7 @@ SOURCE=.\resource.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\Script1.rc
+SOURCE=.\src\Script1.rc
 # End Source File
 # End Group
 # End Target
