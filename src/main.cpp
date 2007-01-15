@@ -6,7 +6,6 @@
 #include "menu.h"
 #include <fstream>
 #include <list>
-#include <gd/gd.h>
 #include "md5.h"
 #include <time.h>
 
@@ -206,6 +205,7 @@ int main(int argc, char *argv[])
 {
 	int i;
 	log_open("log_worldeditor.txt","worldedit",2);
+#ifdef WIN32
 	char fileBuffer[1024];
 	GetModuleFileName(NULL, fileBuffer, 1024);
 	WIN32_FIND_DATA FileData;													// thingy for searching through a directory
@@ -413,7 +413,7 @@ int main(int argc, char *argv[])
 #endif
 
 	RegCloseKey( hKey );
-
+#endif //win32
 
 	cMenu* file;
 	cMenu* mm;

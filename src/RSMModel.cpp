@@ -1,5 +1,5 @@
 #include "RSMModel.h"
-#include "Graphics.h"
+#include "graphics.h"
 #include "texturecache.h"
 extern cFileSystem fs;
 extern string rodir;
@@ -548,7 +548,7 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 //					continue;
 
 				printf(".");
-				float t;
+				float t = 0;
 
 				int x2 = min(Graphics.world.width, model->pos.x/2+mmax);
 				int y2 = min(Graphics.world.height, model->pos.z/2+ mmax);
@@ -561,7 +561,8 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 						{
 							for(int yy = 0; yy < 6; yy++)
 							{
-								if (LineIntersectPolygon(triangle, 3, lightpos, cVector3(10*x+10*(xx/6.0),-Graphics.world.cubes[y][x].cell1, 10*y+10*(yy/6.0)), t))
+								cVector3 v = cVector3(10*x+10*(xx/6.0),-Graphics.world.cubes[y][x].cell1, 10*y+10*(yy/6.0));
+								if (LineIntersectPolygon(triangle, 3, lightpos, v, t))
 								{
 									int tile = Graphics.world.cubes[y][x].tileup;
 									cLightmap* l = Graphics.world.lightmaps[Graphics.world.tiles[tile].lightmap];

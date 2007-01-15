@@ -2,8 +2,12 @@
 #define __WORLD_H__
 
 #include "texture.h"
+#ifdef WIN32
 #include <gd/gd.h>
-#include "rsmmodel.h"
+#else
+#include <gd.h>
+#endif
+#include "RSMModel.h"
 #include "texturecache.h"
 #include "texturemodel.h"
 

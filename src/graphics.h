@@ -2,7 +2,7 @@
 #define __GRAPHICS_H__
 
 #include "common.h"
-#include <gl/gl.h>
+#include <GL/gl.h>
 #include <map>
 using namespace std;
 #include "world.h"

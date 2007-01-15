@@ -5,6 +5,7 @@
 #include <math.h>
 #include <list>
 #include "texturecache.h"
+#include <fstream>
 #ifdef _WIN32
 #include <gd/gd.h>
 #else
@@ -446,7 +447,7 @@ void cWorld::exportheight()
 
 void cWorld::save()
 {
-	srand(GetTickCount());
+	srand(tickcount());
 	if (!loaded)
 		return;
 	{

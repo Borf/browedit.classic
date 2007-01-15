@@ -1,0 +1,97 @@
+#!/usr/bin/php
+<?
+chdir("src");
+$files = array(	
+			"RSMModel",
+			"common",
+			"filesystem",
+			"font",
+			"frustum",
+			"graphics",
+			"main",
+			"texture",
+			"texturecache",
+			"texturemodel",
+			"world",
+			);
+
+$fp = fopen("Makefile","w");
+fputs($fp,
+"#!make
+LIBS = -lGL -lz -lSDL -lGLU -lgd
+
+%.o: %.cpp
+	@echo -e \"    \033[1mCC\\033[1m\\t\\033[22;34m$<\\033[39m\"
+	@$(CC) $(CFLAGS) -D__USESDL__ -c -o $@ $<
+
+
+../browedit:  ");
+
+for($i = 0; $i < count($files); $i++)
+	fputs($fp, $files[$i] . ".o ");
+fputs($fp,"
+
+	@echo -e \"    \\033[1mLD\\033[1m\\t\\033[22;35m$@\\033[39m\"
+	@$(CC) $(LDFLAGS) -o $@  ");
+	
+for($i = 0; $i < count($files); $i++)
+	fputs($fp, $files[$i] . ".o ");
+fputs($fp, "\$(LIBS)\n");
+for($i = 0; $i < count($files); $i++)
+{
+	echo $files[$i] . "\n";
+	fputs($fp,$files[$i].".o:");
+	$filesdone = array();
+	parsefile($files[$i].".cpp");
+	for($ii = 0; $ii < count($filesdone); $ii++)
+		fputs($fp, " " . $filesdone[$ii]);
+	fputs($fp,"\n");
+	
+}
+fputs($fp,"
+
+
+clean:
+	rm -f *.o
+");
+fclose($fp);
+chdir("..");
+
+
+function parsefile($filename, $includedir = "")
+{
+	global $filesdone;
+	if (in_array($includedir . $filename, $filesdone))
+		return;
+	else
+		$filesdone[] = $includedir . $filename;
+	$dir = getcwd();
+	while(stristr($filename, "/"))
+	{
+		chdir(substr($filename, 0, strpos($filename,"/")));
+		$includedir .= substr($filename, 0, strpos($filename,"/")+1);
+		$filename = substr($filename,strpos($filename,"/")+1);
+	}
+	if (is_file($filename))
+	{
+		$f = file($filename);
+		for($i = 0; $i < count($f); $i++)
+		{
+			$l = trim($f[$i]);
+			if (substr($l, 0, 10) == "#include \"")
+			{
+				$include = substr($l, 10);
+				$include = substr($include, 0, -1);
+				parsefile($include, $includedir);
+			}
+		}
+	}
+	else
+	{
+		echo "Could not open " . $filename . " in directory " . getcwd() . "\n";
+	}
+	chdir($dir);
+}
+
+
+?>
