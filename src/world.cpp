@@ -607,7 +607,7 @@ void cWorld::save()
 		pFile.write((char*)&water.type, 4);
 		pFile.write(useless.c_str()+8, useless.length()-8);
 
-		long count = models.size() + lights.size()+effects.size();// + sounds.size(); //+ effects.size();
+		long count = models.size() + lights.size()+effects.size() + sounds.size();
 
 		pFile.write((char*)&count, 4);
 
@@ -676,9 +676,13 @@ void cWorld::save()
 			ZeroMemory(buf,41);
 			strcpy(buf, lights[i].name.c_str());
 			pFile.write(buf, 40);
-			pFile.write((char*)&lights[i].pos.x,4);
-			pFile.write((char*)&lights[i].pos.y,4);
-			pFile.write((char*)&lights[i].pos.z,4);
+
+			float f = (lights[i].pos.x - width) * 5.0;
+			pFile.write((char*)&f, 4);
+			pFile.write((char*)&lights[i].pos.y, 4);
+			f = (lights[i].pos.z - height) * 5.0;
+			pFile.write((char*)&f, 4);
+			
 			ZeroMemory(buf,41);
 			strcpy(buf, lights[i].todo.c_str());
 			pFile.write(buf, 40);
@@ -689,7 +693,7 @@ void cWorld::save()
 		}
 
 
-/*		for(i = 0; i < sounds.size(); i++)
+		for(i = 0; i < sounds.size(); i++)
 		{
 			long l = 3;
 			pFile.write((char*)&l, 4);
@@ -701,16 +705,22 @@ void cWorld::save()
 			strcpy(buf, sounds[i].todo1.c_str());
 			pFile.write(buf, 40);
 			ZeroMemory(buf,41);
+			strcpy(buf, sounds[i].filename.c_str());
+			pFile.write(buf, 40);
+			ZeroMemory(buf,41);
 			strcpy(buf, sounds[i].todo2.c_str());
 			pFile.write(buf, 20);
-			pFile.write((char*)&sounds[i].pos.x,4);
-			pFile.write((char*)&sounds[i].pos.y,4);
-			pFile.write((char*)&sounds[i].pos.z,4);
+
+			float f = (sounds[i].pos.x - width) * 5.0;
+			pFile.write((char*)&f, 4);
+			pFile.write((char*)&sounds[i].pos.y, 4);
+			f = (sounds[i].pos.z - height) * 5.0;
+			pFile.write((char*)&f, 4);
+
 			ZeroMemory(buf,41);
 			strcpy(buf, sounds[i].id.c_str());
 			pFile.write(buf, 40);
-
-		}*/
+		}
 
 		for(i = 0; i < effects.size(); i++)
 		{
@@ -732,9 +742,13 @@ void cWorld::save()
 			ZeroMemory(buf,41);
 			strcpy(buf, effects[i].category.c_str());
 			pFile.write(buf, 4);
-			pFile.write((char*)&effects[i].pos.x,4);
-			pFile.write((char*)&effects[i].pos.y,4);
-			pFile.write((char*)&effects[i].pos.z,4);
+
+			float f = (effects[i].pos.x - width) * 5.0;
+			pFile.write((char*)&f, 4);
+			pFile.write((char*)&effects[i].pos.y, 4);
+			f = (effects[i].pos.z - height) * 5.0;
+			pFile.write((char*)&f, 4);
+			
 			pFile.write((char*)&effects[i].type,4);
 			pFile.write((char*)&effects[i].loop,4);
 			pFile.write((char*)&effects[i].todo10,4);
