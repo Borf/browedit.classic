@@ -1446,6 +1446,13 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			case SDLK_h:
 				if (editmode == MODE_TEXTURE)
 					Graphics.fliph = !Graphics.fliph;
+				if (editmode == MODE_OBJECTS && Graphics.selectedobject != -1)
+				{
+					if(SDL_GetModState() & KMOD_ALT)
+						Graphics.world.models[Graphics.selectedobject]->scale.y = -	Graphics.world.models[Graphics.selectedobject]->scale.y;
+					else
+						Graphics.world.models[Graphics.selectedobject]->scale.x = -	Graphics.world.models[Graphics.selectedobject]->scale.x;
+				}
 				if(editmode == MODE_WALLS)
 				{
 					int x = mouse3dx / 10;
@@ -1516,6 +1523,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			case SDLK_v:
 				if (editmode == MODE_TEXTURE)
 					Graphics.flipv = !Graphics.flipv;
+				if (editmode == MODE_OBJECTS && Graphics.selectedobject != -1)
+					Graphics.world.models[Graphics.selectedobject]->scale.z = -	Graphics.world.models[Graphics.selectedobject]->scale.z;
 				if(editmode == MODE_WALLS)
 				{
 					int x = mouse3dx / 10;
@@ -2482,6 +2491,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					{
 						Graphics.world.models[Graphics.selectedobject]->rot = cVector3(0,0,0);
 					}
+					break;
 				}
 			case SDLK_F1:
 				editmode = MODE_TEXTURE;
