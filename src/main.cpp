@@ -2044,6 +2044,13 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					break;
 				}
 			case SDLK_w:
+				if(editmode == MODE_WATER)
+				{
+					char buf[100];
+					scanf("%s", buf);
+					Graphics.world.water.height = atof(buf);
+				}
+				else
 				{
 					if(SDL_GetModState() & KMOD_META)
 					{
