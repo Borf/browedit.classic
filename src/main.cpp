@@ -90,6 +90,7 @@ MENUCOMMAND(clearlightmaps);
 MENUCOMMAND(cleanuplightmaps);
 MENUCOMMAND(tempfunc);
 MENUCOMMAND(snaptofloor);
+MENUCOMMAND(clearstuff);
 
 cMenu*	menu;
 cMenu* grid;
@@ -463,6 +464,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,rnd, "Maze stuff", &MenuCommand_tempfunc);
 	ADDMENUITEM(mm,rnd,"Quadtree",				&MenuCommand_quadtree);
 	ADDMENUITEM(mm,rnd,"Calculate Lightmaps",		&MenuCommand_dolightmaps);
+	ADDMENUITEM(mm,rnd,"Clear Map",		&MenuCommand_clearstuff);
 
 	ADDMENUITEM(grid,view,"Grid",&MenuCommand_grid);
 	grid->ticked = true;
@@ -494,6 +496,9 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,mode,"Object Edit",	&MenuCommand_mode);
 	ADDMENUITEM(mm,mode,"GAT Edit",	&MenuCommand_mode);
 	ADDMENUITEM(mm,mode,"Water Edit",	&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,"Effects Edit",	&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,"Sounds Edit",	&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,"Lights Edit",	&MenuCommand_mode);
 
 
 	ADDMENUITEM(mm,edit,"Flatten map",			&MenuCommand_flatten);
@@ -936,6 +941,37 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						}
 					}
 				}
+				if(editmode == MODE_EFFECTS)
+				{
+					int minobj = 0;
+					float mindist = 999999;
+					if(Graphics.objectstartdrag)
+					{
+						bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
+						bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
+						if (!ctrl && !alt)
+						{
+							Graphics.world.effects[Graphics.selectedobject].pos.x = mouse3dx / 5;
+							Graphics.world.effects[Graphics.selectedobject].pos.z = mouse3dz / 5;
+							if (SDL_GetModState() & KMOD_SHIFT)
+							{
+								Graphics.world.effects[Graphics.selectedobject].pos.x = floor(Graphics.world.effects[Graphics.selectedobject].pos.x * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsetx) / (Graphics.gridsize/2.0f) + Graphics.gridoffsetx/(Graphics.gridsize/2.0f);
+								Graphics.world.effects[Graphics.selectedobject].pos.z = floor(Graphics.world.effects[Graphics.selectedobject].pos.z * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsety) / (Graphics.gridsize/2.0f) + Graphics.gridoffsety/(Graphics.gridsize/2.0f);
+							}
+						}
+						if(ctrl && !alt)
+						{
+							Graphics.world.effects[Graphics.selectedobject].pos.y += (mousey-oldmousey);
+							if (SDL_GetModState() & KMOD_SHIFT)
+							{
+								Graphics.world.effects[Graphics.selectedobject].pos.y = floor(Graphics.world.effects[Graphics.selectedobject].pos.y * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsetx) / (Graphics.gridsize/2.0f) + Graphics.gridoffsetx/(Graphics.gridsize/2.0f);
+							}
+						}
+						if(!ctrl && alt)
+						{
+						}
+					}
+				}
 
 
 			}
@@ -1177,6 +1213,27 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						}
 						Graphics.objectstartdrag = Graphics.selectedobject == minobj;
 					}
+					if(editmode == MODE_EFFECTS)
+					{
+						int minobj = 0;
+						float mindist = 999999;
+						for(int i = 0; i < Graphics.world.effects.size(); i++)
+						{
+							cVector3 d = Graphics.world.effects[i].pos;
+							d.x = d.x;
+							
+							d.x -= mouse3dx/5;
+							d.z -= mouse3dz/5;
+							d.y = 0;
+
+							if(mindist > d.Magnitude())
+							{
+								mindist = d.Magnitude();
+								minobj = i;
+							}
+						}
+						Graphics.objectstartdrag = Graphics.selectedobject == minobj;
+					}
 				}
 			}
 			else // rbutton
@@ -1248,6 +1305,27 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							}
 							Graphics.selectedobject = minobj;
 						}
+					}
+					if(editmode == MODE_EFFECTS && movement < 3)
+					{
+						int minobj = 0;
+						float mindist = 999999;
+						for(int i = 0; i < Graphics.world.effects.size(); i++)
+						{
+							cVector3 d = Graphics.world.effects[i].pos;
+							d.x = d.x;
+							
+							d.x -= mouse3dx/5;
+							d.z -= mouse3dz/5;
+							d.y = 0;
+
+							if(mindist > d.Magnitude())
+							{
+								mindist = d.Magnitude();
+								minobj = i;
+							}
+						}
+						Graphics.selectedobject = minobj;
 					}
 					else if(editmode == MODE_WALLS && movement < 3)
 					{
@@ -2531,6 +2609,15 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				editmode = MODE_WATER;
 				Graphics.texturestart = Graphics.world.water.type;
 				break;
+			case SDLK_F8:
+				editmode = MODE_EFFECTS;
+				break;
+			case SDLK_F9:
+				editmode = MODE_SOUNDS;
+				break;
+			case SDLK_F10:
+				editmode = MODE_LIGHTS;
+				break;
 			case SDLK_1:
 			case SDLK_2:
 			case SDLK_3:
@@ -2950,6 +3037,18 @@ MENUCOMMAND(mode)
 	{
 		editmode = MODE_WATER;
 		Graphics.texturestart = Graphics.world.water.type;
+	}
+	else if (title == "Effects Edit")
+	{
+		editmode = MODE_EFFECTS;
+	}
+	else if (title == "Sounds Edit")
+	{
+		editmode = MODE_SOUNDS;
+	}
+	else if (title == "Lights Edit")
+	{
+		editmode = MODE_LIGHTS;
 	}
 	return true;
 }
@@ -3811,5 +3910,18 @@ bool mouseouttexture(cMenu* src)
 		delete Graphics.texturepreview;
 		Graphics.texturepreview = NULL;
 	}
+	return true;
+}
+
+MENUCOMMAND(clearstuff)
+{
+	MenuCommand_flatten(src);
+	MenuCommand_clearobjects(src);
+	MenuCommand_clearlightmaps(src);
+	MenuCommand_fill(src);
+	MenuCommand_fixcolors(src);
+	Graphics.world.effects.clear();
+	Graphics.world.lights.clear();
+	Graphics.world.sounds.clear();
 	return true;
 }

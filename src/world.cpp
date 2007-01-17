@@ -1395,7 +1395,7 @@ void cWorld::draw()
 		glScalef(1,1,-1);
 		for(i = 0; i < models.size(); i++)
 		{
-			if(i == Graphics.selectedobject)
+			if(i == Graphics.selectedobject && editmode == MODE_OBJECTS)
 				glColor3f(1,0,0);
 			else
 				glColor3f(1,1,1);
@@ -1405,29 +1405,32 @@ void cWorld::draw()
 		glTranslatef(0,0,-height*10);
 
 
-		glColor4f(1,1,1,1);
+		if (editmode != MODE_EFFECTS && editmode != MODE_LIGHTS && editmode != MODE_SOUNDS)
+		{
+			glColor4f(1,1,1,1);
+			glEnable(GL_TEXTURE_2D);
+			glEnable(GL_BLEND);
+			for(i = 0; i < lights.size(); i++)
+			{
+				glTranslatef(5*lights[i].pos.x, -lights[i].pos.y+5, 5*(2*height-lights[i].pos.z));
+				light->draw();
+				glTranslatef(-5*lights[i].pos.x, lights[i].pos.y-5, -5*(2*height-lights[i].pos.z));
+			}
+			for(i = 0; i < effects.size(); i++)
+			{
+				cVector3 p = effects[i].pos;
+				glTranslatef(5*effects[i].pos.x,-effects[i].pos.y+5, 5*(2*height-effects[i].pos.z));
+				effect->draw();
+				glTranslatef(-5*effects[i].pos.x, effects[i].pos.y-5, -5*(2*height-effects[i].pos.z));
+			}
+			for(i = 0; i < sounds.size(); i++)
+			{
+				glTranslatef(5*sounds[i].pos.x, -sounds[i].pos.y+5, 5*(2*height-sounds[i].pos.z));
+				sound->draw();
+				glTranslatef(-5*sounds[i].pos.x, sounds[i].pos.y-5, -5*(2*height-sounds[i].pos.z));
+			}
+		}
 
-		glEnable(GL_TEXTURE_2D);
-		glEnable(GL_BLEND);
-		for(i = 0; i < lights.size(); i++)
-		{
-			glTranslatef(5*lights[i].pos.x, -lights[i].pos.y+5, 5*(2*height-lights[i].pos.z));
-			light->draw();
-			glTranslatef(-5*lights[i].pos.x, lights[i].pos.y-5, -5*(2*height-lights[i].pos.z));
-		}
-		for(i = 0; i < effects.size(); i++)
-		{
-			cVector3 p = effects[i].pos;
-			glTranslatef(5*effects[i].pos.x,-effects[i].pos.y+5, 5*(2*height-effects[i].pos.z));
-			effect->draw();
-			glTranslatef(-5*effects[i].pos.x, effects[i].pos.y-5, -5*(2*height-effects[i].pos.z));
-		}
-		for(i = 0; i < sounds.size(); i++)
-		{
-			glTranslatef(5*sounds[i].pos.x, -sounds[i].pos.y+5, 5*(2*height-sounds[i].pos.z));
-			sound->draw();
-			glTranslatef(-5*sounds[i].pos.x, sounds[i].pos.y-5, -5*(2*height-sounds[i].pos.z));
-		}
 
 		if(editmode == MODE_OBJECTS && Graphics.showobjects)
 		{
@@ -1505,6 +1508,26 @@ void cWorld::draw()
 		}
 		glTranslatef(-s*Graphics.gridoffsetx,0,-s*Graphics.gridoffsety);
 	}
+
+	if(editmode == MODE_EFFECTS)
+	{
+		glEnable(GL_TEXTURE_2D);
+		glEnable(GL_BLEND);
+		for(i = 0; i < effects.size(); i++)
+		{
+			if (i == Graphics.selectedobject)
+				glColor4f(1,0,0,1);
+			else
+				glColor4f(1,1,1,1);
+
+			cVector3 p = effects[i].pos;
+			glTranslatef(5*effects[i].pos.x,-effects[i].pos.y+5, 5*(2*height-effects[i].pos.z));
+			effect->draw();
+			glTranslatef(-5*effects[i].pos.x, effects[i].pos.y-5, -5*(2*height-effects[i].pos.z));
+		}
+	}
+
+
 
 	int c = 1;
 	int d = 1;
