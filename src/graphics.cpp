@@ -214,8 +214,6 @@ glDisable(GL_DEPTH_TEST);
 
 int cGraphics::init()
 {
-	width = 1024;
-	height = 600;
 
 	
 	cameraheight = 123;
@@ -250,7 +248,7 @@ int cGraphics::init()
 	SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
 
 	flags = SDL_OPENGL;// | SDL_FULLSCREEN;
-	if(fullscreen != 0)
+	if(fullscreen)
 	{
 		flags = SDL_OPENGL | SDL_FULLSCREEN;
 	}

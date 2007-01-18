@@ -151,6 +151,10 @@ public:
 	cVector2				wallheightmax;
 
 	cTexture*				texturepreview;
+	int						height;						// windowheight
+	int						width;						// windowwidth
+	int						bits;						// bpp (8,16,24,32)
+	bool					fullscreen;					// fullscreen ?
 
 
 private:
@@ -158,10 +162,6 @@ private:
 	int						InitGL(void);
 
 ////////////////////
-	int						height;						// windowheight
-	int						width;						// windowwidth
-	int						bits;						// bpp (8,16,24,32)
-	bool					fullscreen;					// fullscreen ?
 	void					drawvertexview();
 	void					drawfloorview();
 	void					drawwallview();

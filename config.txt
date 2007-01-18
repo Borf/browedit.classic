@@ -6,8 +6,16 @@ model=romodels.txt
 model=arcturusmodels.txt
 texture=rotextures.txt
 texture=arctextures.txt
+resx=1024
+resy=768
+fullscreen=0
+bpp=32
 
 [Arcturus]
 datadir=c:\Program Files\Arcturus\data\
 model=arcturusmodels.txt
 texture=arctextures.txt
+resx=1024
+resy=768
+fullscreen=0
+bpp=32

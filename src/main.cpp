@@ -560,6 +560,14 @@ int main(int argc, char *argv[])
 
 					if(option == "datadir")
 						rodir = value;
+					else if(option == "resx")
+						Graphics.width = atoi(value.c_str());
+					else if(option == "resy")
+						Graphics.height = atoi(value.c_str());
+					else if(option == "bpp")
+						Graphics.bits = atoi(value.c_str());
+					else if(option == "fullscreen")
+						Graphics.fullscreen = value == "1";
 					else if (option == "model")
 					{
 						cFile* pFile2 = fs.open(value);
