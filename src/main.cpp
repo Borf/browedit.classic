@@ -678,7 +678,7 @@ int main(int argc, char *argv[])
 	Graphics.world.newworld();
 	strcpy(Graphics.world.filename, string(rodir + "prontera").c_str());
 #ifdef _DEBUG
-	Graphics.world.load();
+//	Graphics.world.load();
 //	Graphics.world.importalpha();
 #endif
 	lasttimer = SDL_GetTicks();
@@ -3195,16 +3195,24 @@ MENUCOMMAND(slope)
 
 MENUCOMMAND(picktexture)
 {
-	string data = src->data;
-	cTextureContainer* t = new cTextureContainer();
-	t->RoFilename = src->data;
-	char buf[40];
-	ZeroMemory(buf, 40);
-	sprintf(buf, "%i%i", rand(), rand());
-	t->RoFilename2 = string(buf,40);
-	t->texture = TextureCache.load(rodir + "texture/" + src->data);
-	Graphics.world.textures.push_back(t);
-	Graphics.texturestart = Graphics.world.textures.size() - 2;
+	if(SDL_GetModState() & KMOD_SHIFT)
+	{
+		int id = Graphics.texturestart + (Graphics.selectionstart.y - 32) / 288;
+		//Graphics.world.textures[id]
+	}
+	else
+	{
+		string data = src->data;
+		cTextureContainer* t = new cTextureContainer();
+		t->RoFilename = src->data;
+		char buf[40];
+		ZeroMemory(buf, 40);
+		sprintf(buf, "%i%i", rand(), rand());
+		t->RoFilename2 = string(buf,40);
+		t->texture = TextureCache.load(rodir + "texture/" + src->data);
+		Graphics.world.textures.push_back(t);
+		Graphics.texturestart = Graphics.world.textures.size() - 2;
+	}
 	return true;
 }
 
