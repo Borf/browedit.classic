@@ -363,7 +363,7 @@ int cGraphics::ReSizeGLScene(GLsizei w, GLsizei h)	// Resize And Initialize The 
 
 
 
-int cGraphics::InitGL(void)										// All Setup For OpenGL Goes Here
+int cGraphics::InitGL(void)
 {
 
 	glEnable(GL_TEXTURE_2D);							// Enable Texture Mapping
