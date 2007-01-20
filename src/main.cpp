@@ -91,6 +91,7 @@ MENUCOMMAND(cleanuplightmaps);
 MENUCOMMAND(tempfunc);
 MENUCOMMAND(snaptofloor);
 MENUCOMMAND(clearstuff);
+MENUCOMMAND(effect);
 
 cMenu*	menu;
 cMenu* grid;
@@ -111,6 +112,9 @@ cMenu* mode;
 cMenu* editdetail;
 cMenu* speed;
 cMenu* models;
+
+map<int, cMenu*, less<int> >	effects;
+cMenu* effectsmenu;
 
 vector<vector<vector<float> > > clipboard;
 long lasttimer;
@@ -441,6 +445,7 @@ int main(int argc, char *argv[])
 	ADDMENU(edit,		menu, "Edit",				350,100);
 	ADDMENU(models,		menu, "Models",				450,100);
 	ADDMENU(textures,	menu, "Textures",			550,100);
+	ADDMENU(effectsmenu,menu, "Effects",			650,100);
 	
 	ADDMENU(steepness,	edit, "Steepness...",		480,100);
 
@@ -664,7 +669,6 @@ int main(int argc, char *argv[])
 			}
 		}
 	}
-
 	pFile->close();
 
 	itemsm.clear();
@@ -678,6 +682,41 @@ int main(int argc, char *argv[])
 
 	lastlclick = 0;
 	lastrclick = 0;
+
+	vector<cMenu*> effectssubmenu;
+
+	pFile = fs.open("effects.txt");
+	i = 0;
+	while(pFile && !pFile->eof())
+	{
+		string line = pFile->readline();
+		if(line.find("|") != string::npos)
+		{
+			if (effectssubmenu.size() <= floor(i/30))
+			{
+				effectssubmenu.resize(effectssubmenu.size()+1);
+				char buf[100];
+				sprintf(buf, "%i - %i", (int) (floor(i/30)*30), (int)((floor(i/30)+1)*30));
+				ADDMENU(effectssubmenu.back(),		effectsmenu, buf,				0,100);
+			}
+
+			int id = atoi(line.substr(0,line.find("|")).c_str());
+			string val = line.substr(line.find("|")+1);
+
+			char buf[255];
+			sprintf(buf, "%i. %s", id, val.c_str());
+
+			ADDMENUITEMDATA(mm,effectssubmenu[floor(i/30)],buf, &MenuCommand_effect, line.substr(0,line.find("|")));
+
+			i++;
+		
+		}
+	}
+
+	pFile->close();
+
+
+
 	
 	if (!Graphics.init())
 		return 1;
@@ -1334,6 +1373,12 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							}
 						}
 						Graphics.selectedobject = minobj;
+						char buf[100];
+						sprintf(buf, "%i", Graphics.world.effects[Graphics.selectedobject].type);
+						cMenu* m = effectsmenu->finddata(buf);
+						if (m!=NULL)
+							Log(3,0,"Selected effect %s", m->title.c_str());
+						Log(3,0,"Looping: %i, ", Graphics.world.effects[Graphics.selectedobject].loop);
 					}
 					else if(editmode == MODE_WALLS && movement < 3)
 					{
@@ -3951,5 +3996,10 @@ MENUCOMMAND(clearstuff)
 	Graphics.world.effects.clear();
 	Graphics.world.lights.clear();
 	Graphics.world.sounds.clear();
+	return true;
+}
+
+MENUCOMMAND(effect)
+{
 	return true;
 }

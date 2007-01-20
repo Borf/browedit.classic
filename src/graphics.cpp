@@ -42,9 +42,9 @@ int cGraphics::draw()
 //				,
 //				,
 
-	LightPosition[0] = cameraheight*sin(camerarot);
+	LightPosition[0] = -camerapointer.x + cameraheight*sin(camerarot);
 	LightPosition[1] = 10+cameraheight+cameraangle;
-	LightPosition[2] = cameraheight*cos(camerarot);
+	LightPosition[2] = -camerapointer.y + cameraheight*cos(camerarot);
 	LightPosition[3] = 1.0f;
 	glLightfv(GL_LIGHT1, GL_POSITION, LightPosition);			// Position The Light
 

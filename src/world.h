@@ -105,6 +105,9 @@ public:
 class cEffect
 {
 public:
+	string readablename;
+
+
 	string name;
 	float todo1;
 	float todo2;

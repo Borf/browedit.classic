@@ -6,6 +6,7 @@
 #include <list>
 #include "texturecache.h"
 #include <fstream>
+#include "menu.h"
 #ifdef _WIN32
 #include <gd/gd.h>
 #else
@@ -13,7 +14,7 @@
 #endif
 
 #define floatheight 0.1f
-
+extern cMenu* effectsmenu;
 
 
 extern cGraphics Graphics;
@@ -291,6 +292,12 @@ void cWorld::load()
 			e.todo13 = *((int*)(buf+112));
 			e.pos.x = (e.pos.x / 5) + width;
 			e.pos.z = (e.pos.z / 5) + height;
+
+			char buf[100];
+			sprintf(buf, "%i", e.type);
+			cMenu* m = effectsmenu->finddata(buf);
+			if (m != NULL)
+				e.readablename = m->title;
 			effects.push_back(e);
 			}
 			break;
@@ -818,10 +825,10 @@ void cWorld::draw()
 
 	float camrad = 10;
 
-	gluLookAt(  Graphics.cameraheight*sin(Graphics.camerarot),
+	gluLookAt(  -Graphics.camerapointer.x + Graphics.cameraheight*sin(Graphics.camerarot),
 				camrad+Graphics.cameraheight,
-				Graphics.cameraheight*cos(Graphics.camerarot),
-				0,camrad + Graphics.cameraheight * (Graphics.cameraangle/10.0f),0,
+				-Graphics.camerapointer.y + Graphics.cameraheight*cos(Graphics.camerarot),
+				-Graphics.camerapointer.x,camrad + Graphics.cameraheight * (Graphics.cameraangle/10.0f),-Graphics.camerapointer.y,
 				0,1,0);
 
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
@@ -829,7 +836,7 @@ void cWorld::draw()
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_BLEND);
 
-	glTranslatef(Graphics.camerapointer.x, 0, Graphics.camerapointer.y);
+	//glTranslatef(Graphics.camerapointer.x, 0, Graphics.camerapointer.y);
 	Graphics.frustum.CalculateFrustum();
 
 
@@ -1523,7 +1530,9 @@ void cWorld::draw()
 			cVector3 p = effects[i].pos;
 			glTranslatef(5*effects[i].pos.x,-effects[i].pos.y+5, 5*(2*height-effects[i].pos.z));
 			effect->draw();
+			Graphics.font->print3d(0,0,1,1,0,0,0,0.4f,"%s", effects[i].readablename.c_str());
 			glTranslatef(-5*effects[i].pos.x, effects[i].pos.y-5, -5*(2*height-effects[i].pos.z));
+
 		}
 	}
 
@@ -1618,7 +1627,7 @@ void cWorld::draw()
 		glDisable(GL_BLEND);
 	}
 
-	glTranslatef(-Graphics.camerapointer.x, 0, -Graphics.camerapointer.y);
+	//glTranslatef(-Graphics.camerapointer.x, 0, -Graphics.camerapointer.y);
 
 
 
@@ -2151,8 +2160,8 @@ void cCube::calcnormal()
 //					glTexCoord2f(t->u2, 1-t->v2);				glVertex3f(x*10+10,-c->cell2,(height-y)*10);
 //					glTexCoord2f(t->u4, 1-t->v4);				glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
 
-	b1 = cVector3(0,-cell1,0) - cVector3(10,-cell4,-10);
-	b2 = cVector3(10,-cell3,0) - cVector3(10,-cell4,-10);
+	b1 = cVector3(10,-cell1,-10) - cVector3(0,-cell4,0);
+	b2 = cVector3(0,-cell3,-10) - cVector3(0,-cell4,0);
 
 	normal.x = b1.y * b2.z - b1.z * b2.y;
 	normal.y = b1.z * b2.x - b1.x * b2.z;
