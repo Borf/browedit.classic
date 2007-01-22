@@ -38,10 +38,6 @@ int cGraphics::draw()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set the correct blending mode
 
-//	gluLookAt(  ,
-//				,
-//				,
-
 	LightPosition[0] = -camerapointer.x + cameraheight*sin(camerarot);
 	LightPosition[1] = 10+cameraheight+cameraangle;
 	LightPosition[2] = -camerapointer.y + cameraheight*cos(camerarot);

@@ -723,7 +723,7 @@ int main(int argc, char *argv[])
 
 	Log(3,0,"Done initializing..");
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "prontera").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "niflheim").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 //	Graphics.world.importalpha();
@@ -1378,7 +1378,20 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						cMenu* m = effectsmenu->finddata(buf);
 						if (m!=NULL)
 							Log(3,0,"Selected effect %s", m->title.c_str());
-						Log(3,0,"Looping: %i, ", Graphics.world.effects[Graphics.selectedobject].loop);
+						Log(3,0,"Looping: %i, Category: %i", Graphics.world.effects[Graphics.selectedobject].loop, Graphics.world.effects[Graphics.selectedobject].category);
+						Log(3,0,"todo1: %f", Graphics.world.effects[Graphics.selectedobject].todo1);
+						Log(3,0,"todo2: %f", Graphics.world.effects[Graphics.selectedobject].todo2);
+						Log(3,0,"todo3: %f", Graphics.world.effects[Graphics.selectedobject].todo3);
+						Log(3,0,"todo4: %f", Graphics.world.effects[Graphics.selectedobject].todo4);
+						Log(3,0,"todo5: %f", Graphics.world.effects[Graphics.selectedobject].todo5);
+						Log(3,0,"todo6: %f", Graphics.world.effects[Graphics.selectedobject].todo6);
+						Log(3,0,"todo7: %f", Graphics.world.effects[Graphics.selectedobject].todo7);
+						Log(3,0,"todo8: %f", Graphics.world.effects[Graphics.selectedobject].todo8);
+						Log(3,0,"todo9: %f", Graphics.world.effects[Graphics.selectedobject].todo9);
+						Log(3,0,"todo10: %f", Graphics.world.effects[Graphics.selectedobject].todo10);
+						Log(3,0,"todo11: %f", Graphics.world.effects[Graphics.selectedobject].todo11);
+						Log(3,0,"todo12: %f", Graphics.world.effects[Graphics.selectedobject].todo12);
+						Log(3,0,"todo13: %f", Graphics.world.effects[Graphics.selectedobject].todo13);
 					}
 					else if(editmode == MODE_WALLS && movement < 3)
 					{

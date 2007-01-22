@@ -247,7 +247,6 @@ int cFont::print(float r, float g, float b, float x, float y, const char *fmt, .
 
 int cFont::print3d(float r, float g, float b, float a, float x, float y, float z, float scale, const char *fmt, ...)
 {
-	glDisable(GL_LIGHTING);
 	char type = 0;
 	char    text[1024];                            // Holds Our String
 	int screenStats[4],blendSrc,blendDst;
@@ -373,7 +372,6 @@ int cFont::print3d(float r, float g, float b, float a, float x, float y, float z
 	
 	glPopMatrix();
 	glTranslatef(-x,-y,-z);
-	glEnable(GL_LIGHTING);
 	return 1;
 }
 

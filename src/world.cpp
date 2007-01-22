@@ -269,6 +269,15 @@ void cWorld::load()
 		case 4:
 			{
 			pFile->read(buf, 116);
+			
+			static int index = 0;
+			char bufje[100];
+			sprintf(bufje, "tmq%i.txt", index++);
+			ofstream pFile2;
+			pFile2.open(bufje);
+			pFile2.write(buf, 116);
+			pFile2.close();
+
 			cEffect e;
 			e.name = string(buf);
 			e.todo1 = *((float*)(buf+40));
@@ -1010,6 +1019,7 @@ void cWorld::draw()
 		}
 	}
 
+	glNormal3f(0,1,0);
 	glDisable(GL_BLEND);
 	glDisable(GL_LIGHTING);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set the correct blending mode
@@ -1419,22 +1429,22 @@ void cWorld::draw()
 			glEnable(GL_BLEND);
 			for(i = 0; i < lights.size(); i++)
 			{
-				glTranslatef(5*lights[i].pos.x, -lights[i].pos.y+5, 5*(2*height-lights[i].pos.z));
+				glTranslatef(5*lights[i].pos.x, -lights[i].pos.y, 5*(2*height-lights[i].pos.z));
 				light->draw();
-				glTranslatef(-5*lights[i].pos.x, lights[i].pos.y-5, -5*(2*height-lights[i].pos.z));
+				glTranslatef(-5*lights[i].pos.x, lights[i].pos.y, -5*(2*height-lights[i].pos.z));
 			}
 			for(i = 0; i < effects.size(); i++)
 			{
 				cVector3 p = effects[i].pos;
-				glTranslatef(5*effects[i].pos.x,-effects[i].pos.y+5, 5*(2*height-effects[i].pos.z));
+				glTranslatef(5*effects[i].pos.x,-effects[i].pos.y, 5*(2*height-effects[i].pos.z));
 				effect->draw();
-				glTranslatef(-5*effects[i].pos.x, effects[i].pos.y-5, -5*(2*height-effects[i].pos.z));
+				glTranslatef(-5*effects[i].pos.x, effects[i].pos.y, -5*(2*height-effects[i].pos.z));
 			}
 			for(i = 0; i < sounds.size(); i++)
 			{
-				glTranslatef(5*sounds[i].pos.x, -sounds[i].pos.y+5, 5*(2*height-sounds[i].pos.z));
+				glTranslatef(5*sounds[i].pos.x, -sounds[i].pos.y, 5*(2*height-sounds[i].pos.z));
 				sound->draw();
-				glTranslatef(-5*sounds[i].pos.x, sounds[i].pos.y-5, -5*(2*height-sounds[i].pos.z));
+				glTranslatef(-5*sounds[i].pos.x, sounds[i].pos.y, -5*(2*height-sounds[i].pos.z));
 			}
 		}
 
@@ -1528,10 +1538,10 @@ void cWorld::draw()
 				glColor4f(1,1,1,1);
 
 			cVector3 p = effects[i].pos;
-			glTranslatef(5*effects[i].pos.x,-effects[i].pos.y+5, 5*(2*height-effects[i].pos.z));
+			glTranslatef(5*effects[i].pos.x,-effects[i].pos.y, 5*(2*height-effects[i].pos.z));
 			effect->draw();
 			Graphics.font->print3d(0,0,1,1,0,0,0,0.4f,"%s", effects[i].readablename.c_str());
-			glTranslatef(-5*effects[i].pos.x, effects[i].pos.y-5, -5*(2*height-effects[i].pos.z));
+			glTranslatef(-5*effects[i].pos.x, effects[i].pos.y, -5*(2*height-effects[i].pos.z));
 
 		}
 	}
