@@ -45,6 +45,7 @@ public:
 		gridsize = 1;
 		gridoffsetx = 0;
 		gridoffsety = 0;
+		topcamera = false;
 
 	}
 
@@ -114,6 +115,7 @@ public:
 	int						selectedobject;
 	bool					objectstartdrag;
 	bool					showoglighting;
+	bool					topcamera;
 
 	bool					slope;
 

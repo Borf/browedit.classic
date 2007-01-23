@@ -823,15 +823,29 @@ void cWorld::draw()
 	glViewport(0,0,ww,hh);						// Reset The Current Viewport
 	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
 	glLoadIdentity();									// Reset The Projection Matrix
-	gluPerspective(45.0f,(GLfloat)Graphics.w()/(GLfloat)Graphics.h(),10.0f,10000.0f);
 
 	float camrad = 10;
 
-	gluLookAt(  -Graphics.camerapointer.x + Graphics.cameraheight*sin(Graphics.camerarot),
-				camrad+Graphics.cameraheight,
-				-Graphics.camerapointer.y + Graphics.cameraheight*cos(Graphics.camerarot),
-				-Graphics.camerapointer.x,camrad + Graphics.cameraheight * (Graphics.cameraangle/10.0f),-Graphics.camerapointer.y,
-				0,1,0);
+	if (Graphics.topcamera)
+	{
+		glOrtho(0,width+Graphics.cameraheight,0,height+Graphics.cameraheight,-10000,10000);
+		gluLookAt(  -Graphics.camerapointer.y,
+					100,
+					-Graphics.camerapointer.x,
+					-Graphics.camerapointer.y,
+					0,
+					-Graphics.camerapointer.x-0.001,
+					0,1,0);
+	}
+	else
+	{
+		gluPerspective(45.0f,(GLfloat)Graphics.w()/(GLfloat)Graphics.h(),10.0f,10000.0f);
+		gluLookAt(  -Graphics.camerapointer.x + Graphics.cameraheight*sin(Graphics.camerarot),
+					camrad+Graphics.cameraheight,
+					-Graphics.camerapointer.y + Graphics.cameraheight*cos(Graphics.camerarot),
+					-Graphics.camerapointer.x,camrad + Graphics.cameraheight * (Graphics.cameraangle/10.0f),-Graphics.camerapointer.y,
+					0,1,0);
+	}
 
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 	glLoadIdentity();									// Reset The Modelview Matrix

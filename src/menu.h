@@ -95,6 +95,7 @@ public:
 	bool (*proc) (cMenuItem* m);
 	string data;
 	string data2;
+	void* pdata;
 	cMenuItem()
 	{
 		item = true;

@@ -69,16 +69,11 @@ MENUCOMMAND(mode_detail);
 MENUCOMMAND(speed);
 MENUCOMMAND(fill);
 MENUCOMMAND(showobjects);
-MENUCOMMAND(showoglighting);
 MENUCOMMAND(model);
 MENUCOMMAND(slope);
 MENUCOMMAND(picktexture);
 MENUCOMMAND(quadtree);
-MENUCOMMAND(boundingboxes);
 MENUCOMMAND(gatheight);
-MENUCOMMAND(lightmaps);
-MENUCOMMAND(tilecolors);
-MENUCOMMAND(water);
 MENUCOMMAND(dolightmaps);
 MENUCOMMAND(fixcolors);
 MENUCOMMAND(clearobjects);
@@ -92,14 +87,12 @@ MENUCOMMAND(tempfunc);
 MENUCOMMAND(snaptofloor);
 MENUCOMMAND(clearstuff);
 MENUCOMMAND(effect);
+MENUCOMMAND(toggle);
 
 cMenu*	menu;
 cMenu* grid;
 cMenu* showobjects;
-cMenu* showwater;
 cMenu* currentobject;
-cMenu* lightmaps;
-cMenu* showoglighting;
 cMenu* snaptofloor;
 cMenuItem* selectedeffect = NULL;
 
@@ -108,6 +101,7 @@ int cursorsize = 1;
 #define ADDMENUITEM(m, p, t, pr) m = new cMenuItem(); m->parent = p; m->title = t; m->item = true; m->drawstyle = 1; ((cMenuItem*)m)->proc = pr; p->items.push_back(m);
 #define ADDMENUITEMDATA(m, p, t, pr,d) m = new cMenuItem(); m->parent = p; m->title = t; m->item = true; m->drawstyle = 1; ((cMenuItem*)m)->proc = pr; ((cMenuItem*)m)->data = d; p->items.push_back(m);
 #define ADDMENUITEMDATA2(m, p, t, pr,d,d2) m = new cMenuItem(); m->parent = p; m->title = t; m->item = true; m->drawstyle = 1; ((cMenuItem*)m)->proc = pr; ((cMenuItem*)m)->data = d; ((cMenuItem*)m)->data2 = d2; p->items.push_back(m);
+#define ADDMENUITEMDATAP(m, p, t, pr,d) m = new cMenuItem(); m->parent = p; m->title = t; m->item = true; m->drawstyle = 1; ((cMenuItem*)m)->proc = pr; ((cMenuItem*)m)->pdata = d; p->items.push_back(m);
 #define ADDMENU(m,p,t,xpos,width) m = new cMenu(); m->parent = p; m->title = t; m->item = false; m->drawstyle = 1; m->y = 20; m->x = xpos; m->w = width; p->items.push_back(m);
 cMenu* mode;
 cMenu* editdetail;
@@ -475,14 +469,17 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(grid,view,"Grid",&MenuCommand_grid);
 	grid->ticked = true;
 	ADDMENUITEM(showobjects,view,"Objects",&MenuCommand_showobjects);
-	ADDMENUITEM(mm,view,"Boundingboxes",&MenuCommand_boundingboxes);
-	ADDMENUITEM(lightmaps,view,"Lightmaps",&MenuCommand_lightmaps);
-	ADDMENUITEM(showoglighting,view,"Show OGL Lighting", &MenuCommand_showoglighting);
-	ADDMENUITEM(mm,view,"Tilecolors",&MenuCommand_tilecolors);
+	ADDMENUITEMDATAP(mm,view,"Boundingboxes",&MenuCommand_toggle, (void*)&Graphics.showboundingboxes);
+	ADDMENUITEMDATAP(mm,view,"Lightmaps",&MenuCommand_toggle, (void*)&Graphics.showlightmaps);
+	ADDMENUITEMDATAP(mm,view,"Show OGL Lighting", &MenuCommand_toggle, (void*)&Graphics.showoglighting);
 	mm->ticked = true;
-	showoglighting->ticked = true;
-	ADDMENUITEM(showwater,view,"Water",&MenuCommand_water);
-	showwater->ticked = true;
+	ADDMENUITEMDATAP(mm,view,"Tilecolors",&MenuCommand_toggle, (void*)&Graphics.showtilecolors);
+	mm->ticked = true;
+	ADDMENUITEMDATAP(mm,view,"Water",&MenuCommand_toggle, (void*)&Graphics.showwater);
+	mm->ticked = true;
+	ADDMENUITEMDATAP(mm,view,"Topcamera",&MenuCommand_toggle, (void*)&Graphics.topcamera);
+
+
 
 	ADDMENUITEM(mm,mode,"Texture Edit",			&MenuCommand_mode);
 	mm->ticked = true;
@@ -724,7 +721,7 @@ int main(int argc, char *argv[])
 
 	Log(3,0,"Done initializing..");
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "rachel").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "louyang").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 //	Graphics.world.importalpha();
@@ -1772,7 +1769,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				MenuCommand_grid((cMenuItem*)grid);
 				break;
 			case SDLK_l:
-				MenuCommand_lightmaps((cMenuItem*)lightmaps);
+				MenuCommand_toggle((cMenuItem*)menu->find("Lightmaps"));
 				break;
 			case SDLK_d:
 				{
@@ -2246,7 +2243,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if(SDL_GetModState() & KMOD_META)
 					{
-						MenuCommand_water((cMenuItem*)showwater);
+						MenuCommand_toggle((cMenuItem*)menu->find("Water"));
 						break;
 					}
 					bool wrap = true;
@@ -3388,13 +3385,6 @@ MENUCOMMAND(quadtree)
 	return true;
 }
 
-MENUCOMMAND(boundingboxes)
-{
-	src->ticked = !src->ticked;
-	Graphics.showboundingboxes = src->ticked;
-	return true;
-}
-
 MENUCOMMAND(gatheight)
 {
 	int x,y;
@@ -3429,27 +3419,6 @@ MENUCOMMAND(gatheight)
 	return true;
 }
 
-
-MENUCOMMAND(lightmaps)
-{
-	src->ticked = !src->ticked;
-	Graphics.showlightmaps = src->ticked;
-	return true;
-}
-
-MENUCOMMAND(tilecolors)
-{
-	src->ticked = !src->ticked;
-	Graphics.showtilecolors = src->ticked;
-	return true;
-}
-
-MENUCOMMAND(water)
-{
-	src->ticked = !src->ticked;
-	Graphics.showwater = src->ticked;
-	return true;
-}
 
 
 
@@ -3948,13 +3917,6 @@ MENUCOMMAND(clearlightmaps)
 	return true;
 }
 
-MENUCOMMAND(showoglighting)
-{
-	src->ticked = !src->ticked;
-	Graphics.showoglighting = src->ticked;
-	return true;
-}
-
 
 MENUCOMMAND(cleanuplightmaps)
 {
@@ -4096,5 +4058,13 @@ MENUCOMMAND(effect)
 		Graphics.world.effects[Graphics.selectedobject].readablename = src->title;
 	}
 	selectedeffect = src;
+	return true;
+}
+
+MENUCOMMAND(toggle)
+{
+	src->ticked = !src->ticked;
+	*((bool*)src->pdata) = src->ticked;
+
 	return true;
 }
