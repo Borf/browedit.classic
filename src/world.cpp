@@ -269,26 +269,17 @@ void cWorld::load()
 		case 4:
 			{
 			pFile->read(buf, 116);
-			
-			static int index = 0;
-			char bufje[100];
-			sprintf(bufje, "tmq%i.txt", index++);
-			ofstream pFile2;
-			pFile2.open(bufje);
-			pFile2.write(buf, 116);
-			pFile2.close();
-
 			cEffect e;
 			e.name = string(buf);
 			e.todo1 = *((float*)(buf+40));
 			e.todo2 = *((float*)(buf+44));
 			e.todo3 = *((float*)(buf+48));
-			e.todo4 = *((float*)(buf+52));
-			e.todo5 = *((float*)(buf+56));
-			e.todo6 = *((float*)(buf+60));
-			e.todo7 = *((float*)(buf+64));
-			e.todo8 = *((float*)(buf+68));
-			e.todo9 = *((float*)(buf+72));
+			e.rotation.x = *((float*)(buf+52));
+			e.rotation.y = *((float*)(buf+56));
+			e.rotation.z = *((float*)(buf+60));
+			e.scale.x = *((float*)(buf+64));
+			e.scale.y = *((float*)(buf+68));
+			e.scale.z = *((float*)(buf+72));
 			e.category = string(buf+76, 4);
 			e.pos.x = *((float*)(buf+80));
 			e.pos.y = *((float*)(buf+84));
@@ -749,12 +740,14 @@ void cWorld::save()
 			pFile.write((char*)&effects[i].todo1,4);
 			pFile.write((char*)&effects[i].todo2,4);
 			pFile.write((char*)&effects[i].todo3,4);
-			pFile.write((char*)&effects[i].todo4,4);
-			pFile.write((char*)&effects[i].todo5,4);
-			pFile.write((char*)&effects[i].todo6,4);
-			pFile.write((char*)&effects[i].todo7,4);
-			pFile.write((char*)&effects[i].todo8,4);
-			pFile.write((char*)&effects[i].todo9,4);
+
+			pFile.write((char*)&effects[i].rotation.x,4);
+			pFile.write((char*)&effects[i].rotation.y,4);
+			pFile.write((char*)&effects[i].rotation.z,4);
+
+			pFile.write((char*)&effects[i].scale.x,4);
+			pFile.write((char*)&effects[i].scale.y,4);
+			pFile.write((char*)&effects[i].scale.z,4);
 			ZeroMemory(buf,41);
 			strcpy(buf, effects[i].category.c_str());
 			pFile.write(buf, 4);

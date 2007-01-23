@@ -112,12 +112,8 @@ public:
 	float todo1;
 	float todo2;
 	float todo3;
-	float todo4;
-	float todo5;
-	float todo6;
-	float todo7;
-	float todo8;
-	float todo9;
+	cVector3 rotation;
+	cVector3 scale;
 	string category;
 	cVector3 pos;
 	int	type;

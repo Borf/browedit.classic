@@ -52,7 +52,12 @@
 51|Icebolt Hit
 52|Something LIKE Jupitel Thunder Hit
 53|Puff of Purpulish Smoke?
-54-59|Various Cast Animations
+54|Various Cast Animations
+55|Various Cast Animations
+56|Various Cast Animations
+57|Various Cast Animations
+58|Various Cast Animations
+59|Various Cast Animations
 60|Cast target circle
 61|Warp portal (for maps)
 62|Sight Trasher
@@ -133,6 +138,20 @@
 137|Really Really Small Basilica
 138|Fire pillar
 139|Sandman Trap
+140|unknown
+141|unknown
+142|unknown
+143|unknown
+144|unknown
+145|unknown
+146|unknown
+147|unknown
+148|unknown
+149|unknown
+150|unknown
+151|unknown
+152|unknown
+153|unknown
 154|Refine Success
 155|Refine Fail
 156|Nothing
@@ -276,7 +295,9 @@
 294|Need More Skill Test
 295|Frost Joke
 296|Scream
+297|UNKNOWN
 298|Fire Bottle Throwing
+299|UNKNOWN
 300|Chemical Protection
 301|FireWorks Sound (3 Sec Before Happen, this effect have a sorta of LOOP... it continue until player warp)
 302|Bomb
@@ -334,6 +355,7 @@
 354|Dark Waterfall (Vertical)
 355|Dark Small Waterfall (Horizonatal)
 356|Dark Small Waterfall (Vertical)
+357|UNKNOWN
 358|Niflheim Ghost
 359|Niflheim Bat Slow
 360|Niflheim Bat Fast

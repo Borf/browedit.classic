@@ -101,6 +101,7 @@ cMenu* currentobject;
 cMenu* lightmaps;
 cMenu* showoglighting;
 cMenu* snaptofloor;
+cMenuItem* selectedeffect = NULL;
 
 int cursorsize = 1;
 
@@ -696,7 +697,7 @@ int main(int argc, char *argv[])
 			{
 				effectssubmenu.resize(effectssubmenu.size()+1);
 				char buf[100];
-				sprintf(buf, "%i - %i", (int) (floor(i/30)*30), (int)((floor(i/30)+1)*30));
+				sprintf(buf, "%i - %i", (int) (floor(i/30)*30), (int)((floor(i/30)+1)*30)-1);
 				ADDMENU(effectssubmenu.back(),		effectsmenu, buf,				0,100);
 			}
 
@@ -723,7 +724,7 @@ int main(int argc, char *argv[])
 
 	Log(3,0,"Done initializing..");
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "niflheim").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "customtown").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 //	Graphics.world.importalpha();
@@ -1262,6 +1263,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 					if(editmode == MODE_EFFECTS)
 					{
+						if(Graphics.world.effects.size() == 0)
+							break;
 						int minobj = 0;
 						float mindist = 999999;
 						for(int i = 0; i < Graphics.world.effects.size(); i++)
@@ -1355,43 +1358,68 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 					if(editmode == MODE_EFFECTS && movement < 3)
 					{
-						int minobj = 0;
-						float mindist = 999999;
-						for(int i = 0; i < Graphics.world.effects.size(); i++)
-						{
-							cVector3 d = Graphics.world.effects[i].pos;
-							d.x = d.x;
-							
-							d.x -= mouse3dx/5;
-							d.z -= mouse3dz/5;
-							d.y = 0;
 
-							if(mindist > d.Magnitude())
-							{
-								mindist = d.Magnitude();
-								minobj = i;
-							}
+						if (SDL_GetModState() & KMOD_CTRL)
+						{
+							if (selectedeffect == NULL)
+								break;
+							cEffect e;
+							char buf[100];
+							sprintf(buf, "obj%i", rand());
+							e.category = "\0\0\0\0";
+							e.loop = 40;
+							e.pos = cVector3(mouse3dx/5, mouse3dy/5, mouse3dz/5);
+							e.name = buf;
+							e.readablename = selectedeffect->title;
+							e.type = atoi(selectedeffect->data.c_str());
+							e.todo1 = 1;
+							e.todo2 = 1;
+							e.todo3 = 1;
+							e.rotation = cVector3(0,0,0);
+							e.scale = cVector3(1,1,1);
+							e.todo10 = 1; // seems to be linked to 11
+							e.todo11 = 1; // seems to be linked to 10
+							e.todo12 = 0; // seems to be always 0
+							e.todo13 = 0; // seems to be always 0
+
+							Graphics.world.effects.push_back(e);
 						}
-						Graphics.selectedobject = minobj;
-						char buf[100];
-						sprintf(buf, "%i", Graphics.world.effects[Graphics.selectedobject].type);
-						cMenu* m = effectsmenu->finddata(buf);
-						if (m!=NULL)
-							Log(3,0,"Selected effect %s", m->title.c_str());
-						Log(3,0,"Looping: %i, Category: %i", Graphics.world.effects[Graphics.selectedobject].loop, Graphics.world.effects[Graphics.selectedobject].category);
-						Log(3,0,"todo1: %f", Graphics.world.effects[Graphics.selectedobject].todo1);
-						Log(3,0,"todo2: %f", Graphics.world.effects[Graphics.selectedobject].todo2);
-						Log(3,0,"todo3: %f", Graphics.world.effects[Graphics.selectedobject].todo3);
-						Log(3,0,"todo4: %f", Graphics.world.effects[Graphics.selectedobject].todo4);
-						Log(3,0,"todo5: %f", Graphics.world.effects[Graphics.selectedobject].todo5);
-						Log(3,0,"todo6: %f", Graphics.world.effects[Graphics.selectedobject].todo6);
-						Log(3,0,"todo7: %f", Graphics.world.effects[Graphics.selectedobject].todo7);
-						Log(3,0,"todo8: %f", Graphics.world.effects[Graphics.selectedobject].todo8);
-						Log(3,0,"todo9: %f", Graphics.world.effects[Graphics.selectedobject].todo9);
-						Log(3,0,"todo10: %f", Graphics.world.effects[Graphics.selectedobject].todo10);
-						Log(3,0,"todo11: %f", Graphics.world.effects[Graphics.selectedobject].todo11);
-						Log(3,0,"todo12: %f", Graphics.world.effects[Graphics.selectedobject].todo12);
-						Log(3,0,"todo13: %f", Graphics.world.effects[Graphics.selectedobject].todo13);
+						else
+						{
+							int minobj = 0;
+							float mindist = 999999;
+							for(int i = 0; i < Graphics.world.effects.size(); i++)
+							{
+								cVector3 d = Graphics.world.effects[i].pos;
+								d.x = d.x;
+								
+								d.x -= mouse3dx/5;
+								d.z -= mouse3dz/5;
+								d.y = 0;
+
+								if(mindist > d.Magnitude())
+								{
+									mindist = d.Magnitude();
+									minobj = i;
+								}
+							}
+							Graphics.selectedobject = minobj;
+							char buf[100];
+							sprintf(buf, "%i", Graphics.world.effects[Graphics.selectedobject].type);
+							cMenu* m = effectsmenu->finddata(buf);
+							if (m!=NULL)
+								Log(3,0,"Selected effect %s", m->title.c_str());
+							Log(3,0,"Looping: %i, Category: %i", Graphics.world.effects[Graphics.selectedobject].loop, Graphics.world.effects[Graphics.selectedobject].category);
+							Log(3,0,"todo1: %f", Graphics.world.effects[Graphics.selectedobject].todo1);
+							Log(3,0,"todo2: %f", Graphics.world.effects[Graphics.selectedobject].todo2);
+							Log(3,0,"todo3: %f", Graphics.world.effects[Graphics.selectedobject].todo3);
+							Log(3,0,"rotation: %f %f %f", Graphics.world.effects[Graphics.selectedobject].rotation.x, Graphics.world.effects[Graphics.selectedobject].rotation.y, Graphics.world.effects[Graphics.selectedobject].rotation.z);
+							Log(3,0,"scale: %f %f %f", Graphics.world.effects[Graphics.selectedobject].scale.x, Graphics.world.effects[Graphics.selectedobject].scale.y, Graphics.world.effects[Graphics.selectedobject].scale.z);
+							Log(3,0,"todo10: %f", Graphics.world.effects[Graphics.selectedobject].todo10);
+							Log(3,0,"todo11: %f", Graphics.world.effects[Graphics.selectedobject].todo11);
+							Log(3,0,"todo12: %f", Graphics.world.effects[Graphics.selectedobject].todo12);
+							Log(3,0,"todo13: %f", Graphics.world.effects[Graphics.selectedobject].todo13);
+						}
 					}
 					else if(editmode == MODE_WALLS && movement < 3)
 					{
@@ -1429,7 +1457,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				mousex = event.motion.x;
 				mousey = event.motion.y;
 
-				if(movement < 3 && editmode == MODE_OBJECTS)
+				if(movement < 3 && (editmode == MODE_OBJECTS || editmode == MODE_EFFECTS))
 				{
 					Graphics.selectedobject = -1;
 				}
@@ -1959,6 +1987,14 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						for(int i = 0; i < Graphics.world.models.size(); i++)
 							Graphics.world.models[i]->pos.y+=10;
 					}
+					if (editmode == MODE_EFFECTS)
+					{
+						if (Graphics.selectedobject != -1)
+						{
+							Graphics.world.effects[Graphics.selectedobject].loop--;
+							Log(3,0,"Effect-loop time: %f", Graphics.world.effects[Graphics.selectedobject].loop);
+						}
+					}
 					break;
 				}
 			case SDLK_PAGEUP:
@@ -2083,6 +2119,14 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						for(int i = 0; i < Graphics.world.models.size(); i++)
 							Graphics.world.models[i]->pos.y-=10;
 						Log(3,0,"Avg: %f, Min: %f, Max: %f", avg, mmin, mmax);
+					}
+					if (editmode == MODE_EFFECTS)
+					{
+						if (Graphics.selectedobject != -1)
+						{
+							Graphics.world.effects[Graphics.selectedobject].loop++;
+							Log(3,0,"Effect-loop time: %f", Graphics.world.effects[Graphics.selectedobject].loop);
+						}
 					}
 					break;
 				}
@@ -2579,6 +2623,14 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						Graphics.selectedobject = -1;
 					}
 				}
+				if (editmode == MODE_EFFECTS)
+				{
+					if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.effects.size())
+					{
+						Graphics.world.effects.erase(Graphics.world.effects.begin() + Graphics.selectedobject);
+						Graphics.selectedobject = -1;
+					}
+				}
 				break;
 			}
 			case SDLK_f:
@@ -2677,6 +2729,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				break;
 			case SDLK_F8:
 				editmode = MODE_EFFECTS;
+				Graphics.selectedobject = -1;
 				break;
 			case SDLK_F9:
 				editmode = MODE_SOUNDS;
@@ -3107,6 +3160,7 @@ MENUCOMMAND(mode)
 	else if (title == "Effects Edit")
 	{
 		editmode = MODE_EFFECTS;
+		Graphics.selectedobject = -1;
 	}
 	else if (title == "Sounds Edit")
 	{
@@ -4014,5 +4068,14 @@ MENUCOMMAND(clearstuff)
 
 MENUCOMMAND(effect)
 {
+	if (selectedeffect != NULL)
+		selectedeffect->ticked = false;
+	src->ticked = true;
+	if (Graphics.selectedobject != -1)
+	{
+		Graphics.world.effects[Graphics.selectedobject].type = atoi(src->data.c_str());
+		Graphics.world.effects[Graphics.selectedobject].readablename = src->title;
+	}
+	selectedeffect = src;
 	return true;
 }

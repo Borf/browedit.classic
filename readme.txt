@@ -102,3 +102,13 @@ pageup/pagedown						move gat tile up/down
 c									copy height
 p									paste height
 +/-									change brushsize
+
+
+effects edit
+------------
+left-click							select an effect
+ctrl+click							make a new effect
+backspace							delete an effect
+pageup / pagedown					change the effect looping-time (check console for the time)
+drag								move an effect
+ctrl+drag							move an effect up / down
