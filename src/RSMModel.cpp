@@ -415,7 +415,6 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 			nstep = 0;
 	}
 	
-	glScalef(trans[19], trans[20], trans[21]);
 
 	if(main)
 	{	if(!only)
@@ -432,6 +431,7 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 	else
 		glMultMatrixf(Ori);
 
+	glScalef(trans[19], trans[20], trans[21]);
 
 
 	glPushMatrix();

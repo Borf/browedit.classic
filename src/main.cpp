@@ -223,7 +223,7 @@ int main(int argc, char *argv[])
 	{
 		filesize = FileData.nFileSizeLow;
 #ifndef _DEBUG
-		if(filesize > 100000)
+		if(filesize > 110000)
 			return 0;
 #endif
 	}
@@ -724,7 +724,7 @@ int main(int argc, char *argv[])
 
 	Log(3,0,"Done initializing..");
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "customtown").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "rachel").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 //	Graphics.world.importalpha();
@@ -991,6 +991,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				if(editmode == MODE_EFFECTS)
 				{
+					if (Graphics.world.effects.size() == 0)
+						break;
 					int minobj = 0;
 					float mindist = 999999;
 					if(Graphics.objectstartdrag)
@@ -1386,6 +1388,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						}
 						else
 						{
+							if (Graphics.world.effects.size() == 0)
+								break;
 							int minobj = 0;
 							float mindist = 999999;
 							for(int i = 0; i < Graphics.world.effects.size(); i++)
@@ -1409,7 +1413,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							cMenu* m = effectsmenu->finddata(buf);
 							if (m!=NULL)
 								Log(3,0,"Selected effect %s", m->title.c_str());
-							Log(3,0,"Looping: %i, Category: %i", Graphics.world.effects[Graphics.selectedobject].loop, Graphics.world.effects[Graphics.selectedobject].category);
+							Log(3,0,"Looping: %f, Category: %i", Graphics.world.effects[Graphics.selectedobject].loop, Graphics.world.effects[Graphics.selectedobject].category);
 							Log(3,0,"todo1: %f", Graphics.world.effects[Graphics.selectedobject].todo1);
 							Log(3,0,"todo2: %f", Graphics.world.effects[Graphics.selectedobject].todo2);
 							Log(3,0,"todo3: %f", Graphics.world.effects[Graphics.selectedobject].todo3);
@@ -2666,11 +2670,26 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			}
 			case SDLK_i:
 				{
-					int posx = mouse3dx / 10;
-					int posy = mouse3dz / 10;
-					if(posx > -1 && posy > -1 && posx < Graphics.world.width && posy < Graphics.world.height)
+					if (editmode == MODE_TEXTURE)
 					{
-						Log(3,0,"Cube (%i,%i): %f,%f,%f,%f", posx, posy, Graphics.world.cubes[posy][posx].cell1, Graphics.world.cubes[posy][posx].cell2, Graphics.world.cubes[posy][posx].cell3, Graphics.world.cubes[posy][posx].cell4);
+						int posx = mouse3dx / 10;
+						int posy = mouse3dz / 10;
+						if(posx > -1 && posy > -1 && posx < Graphics.world.width && posy < Graphics.world.height)
+						{
+							Log(3,0,"Cube (%i,%i): %f,%f,%f,%f", posx, posy, Graphics.world.cubes[posy][posx].cell1, Graphics.world.cubes[posy][posx].cell2, Graphics.world.cubes[posy][posx].cell3, Graphics.world.cubes[posy][posx].cell4);
+						}
+					}
+					else if (editmode == MODE_OBJECTS)
+					{
+						if (Graphics.selectedobject != -1)
+						{
+							cRSMModel* m = Graphics.world.models[Graphics.selectedobject];
+							Log(3,0,"Objects: %i", Graphics.selectedobject);
+							Log(3,0,"Pos: %f,%f,%f", m->pos.x, m->pos.y, m->pos.z);
+							Log(3,0,"scale: %f,%f,%f", m->scale.x, m->scale.y, m->scale.z);
+							Log(3,0,"rot: %f,%f,%f", m->rot.x, m->rot.y, m->rot.z);
+							Log(3,0,"nr of submeshes: %i", m->meshes.size());
+						}
 					}
 					break;
 				}
