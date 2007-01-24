@@ -6,6 +6,7 @@
 #include "confirmwindow.h"
 extern cGraphics Graphics;
 extern cWindow* draggingwindow;
+extern string fontname;
 
 int cWM::draw()
 {
@@ -32,7 +33,7 @@ int cWM::draw()
 				w->draw();
 		}
 		if (windows[i] != w)
-			break;
+			break;	
 	}
 	return 1;
 }
@@ -41,7 +42,7 @@ int cWM::draw()
 int cWM::init()
 {
 	texture.Load("data\\window.tga");
-	font.load("data\\fonts\\font1.tga");
+	font.load("data\\fonts\\"+fontname+".tga");
 
 	focus = 0;
 	Log(3,0,"Window Manager initialized");

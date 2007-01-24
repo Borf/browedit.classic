@@ -90,7 +90,7 @@ public:
 		o->parent = this;
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,40);
-		o->resizeto(120,20);
+		o->resizeto(210,20);
 		o->SetText(0,"Treehouse");
 		objects["objectname"] = o;
 		
@@ -98,23 +98,23 @@ public:
 		o->parent = this;
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,60);
-		o->resizeto(40,20);
+		o->resizeto(70,20);
 		o->SetText(0,"10");
 		objects["posx"] = o;
 
 		o = new cWindowInputBox();
 		o->parent = this;
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(140,60);
-		o->resizeto(40,20);
+		o->moveto(170,60);
+		o->resizeto(70,20);
 		o->SetText(0,"10");
 		objects["posy"] = o;
 		
 		o = new cWindowInputBox();
 		o->parent = this;
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(180,60);
-		o->resizeto(40,20);
+		o->moveto(240,60);
+		o->resizeto(70,20);
 		o->SetText(0,"10");
 		objects["posz"] = o;
 		
@@ -122,23 +122,23 @@ public:
 		o->parent = this;
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,80);
-		o->resizeto(40,20);
+		o->resizeto(70,20);
 		o->SetText(0,"1.000000");
 		objects["scalex"] = o;
 
 		o = new cWindowInputBox();
 		o->parent = this;
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(140,80);
-		o->resizeto(40,20);
+		o->moveto(170,80);
+		o->resizeto(70,20);
 		o->SetText(0,"1.000000");
 		objects["scaley"] = o;
 		
 		o = new cWindowInputBox();
 		o->parent = this;
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(180,80);
-		o->resizeto(40,20);
+		o->moveto(240,80);
+		o->resizeto(70,20);
 		o->SetText(0,"1.000000");
 		objects["scalez"] = o;
 		
@@ -146,23 +146,23 @@ public:
 		o->parent = this;
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,100);
-		o->resizeto(40,20);
+		o->resizeto(70,20);
 		o->SetText(0,"10");
 		objects["rotx"] = o;
 
 		o = new cWindowInputBox();
 		o->parent = this;
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(140,100);
-		o->resizeto(40,20);
+		o->moveto(170,100);
+		o->resizeto(70,20);
 		o->SetText(0,"10");
 		objects["roty"] = o;
 		
 		o = new cWindowInputBox();
 		o->parent = this;
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(180,100);
-		o->resizeto(40,20);
+		o->moveto(240,100);
+		o->resizeto(70,20);
 		o->SetText(0,"10");
 		objects["rotz"] = o;
 

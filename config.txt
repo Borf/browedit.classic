@@ -10,6 +10,7 @@ resx=1024
 resy=768
 fullscreen=0
 bpp=32
+font=tahoma
 
 [Arcturus]
 datadir=c:\Program Files\Arcturus\data\
@@ -19,3 +20,4 @@ resx=1024
 resy=768
 fullscreen=0
 bpp=32
+font=tahoma

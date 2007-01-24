@@ -23,6 +23,7 @@ extern bool				lbuttondown;
 extern cMenu*			currentobject;
 extern string			rodir;
 extern long				lastmotion;
+extern string			fontname;
 
 double mouse3dx, mouse3dy, mouse3dz;
 
@@ -323,7 +324,7 @@ int cGraphics::init()
 
 	glDisable(GL_LIGHTING);
 	font = new cFont();
-	font->load("data/fonts/font1.tga");
+	font->load("data/fonts/"+fontname+".tga");
 	mask = new cTexture();
 	mask->Load("data/mask.tga");
 	bulb = new cTexture();

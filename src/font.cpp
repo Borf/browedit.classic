@@ -210,7 +210,7 @@ int cFont::print(float r, float g, float b, float x, float y, const char *fmt, .
 
 		if (type == 0)
 		{
-			glListBase(list_base-32+(128*typ));
+			glListBase(list_base);
 			if (tmp == -1)
 				glCallLists(strlen(pointer),GL_UNSIGNED_BYTE, pointer); // Write The Text To The Screen
 			else
@@ -219,7 +219,7 @@ int cFont::print(float r, float g, float b, float x, float y, const char *fmt, .
 		}
 		if(type>0)
 		{
-			glListBase((signed int)list_base-32+(128*((signed int)type-2)));
+			glListBase((signed int)list_base);
 			if (tmp == -1)
 				glCallLists(strlen(pointer),GL_UNSIGNED_BYTE, pointer); // Write The Text To The Screen
 			else
@@ -342,7 +342,7 @@ int cFont::print3d(float r, float g, float b, float a, float x, float y, float z
 
 		if (type == 0)
 		{
-			glListBase(list_base-32+(128*typ));
+			glListBase(list_base);
 			if (tmp == -1)
 				glCallLists(strlen(pointer),GL_UNSIGNED_BYTE, pointer); // Write The Text To The Screen
 			else
@@ -351,7 +351,7 @@ int cFont::print3d(float r, float g, float b, float a, float x, float y, float z
 		}
 		if(type>0)
 		{
-			glListBase((signed int)list_base-32+(128*((signed int)type-2)));
+			glListBase((signed int)list_base);
 			if (tmp == -1)
 				glCallLists(strlen(pointer),GL_UNSIGNED_BYTE, pointer); // Write The Text To The Screen
 			else
@@ -445,10 +445,10 @@ int	cFont::textlen(string s)
 	int l = 0;
 	for(int i = 0; i < (int)s.length(); i++)
 	{
-		if (((BYTE)s[i])-32 < 256)
+		if (((BYTE)s[i]) < 256)
 		{
-			l = l + width[((BYTE)s[i])-32]+1;
-			if(width[((BYTE)s[i])-32] == 0)
+			l = l + width[((BYTE)s[i])]+1;
+			if(width[((BYTE)s[i])] == 0)
 				l+=10;
 		}
 		else

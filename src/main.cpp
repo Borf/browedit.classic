@@ -43,6 +43,8 @@ long lastmotion;
 bool doubleclick = false;
 cWindow*				draggingwindow = NULL;
 cWindowObject*			draggingobject = NULL;
+string fontname = "tahoma";
+
 
 bool mouseouttexture(cMenu*);
 bool mouseovertexture(cMenu*);
@@ -577,6 +579,8 @@ int main(int argc, char *argv[])
 						Graphics.bits = atoi(value.c_str());
 					else if(option == "fullscreen")
 						Graphics.fullscreen = value == "1";
+					else if(option == "font")
+						fontname = value;
 					else if (option == "model")
 					{
 						cFile* pFile2 = fs.open(value);
@@ -728,7 +732,7 @@ int main(int argc, char *argv[])
 
 	Log(3,0,"Done initializing..");
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "louyang").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "prontera").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 //	Graphics.world.importalpha();
@@ -2918,6 +2922,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							sprintf(buf, "%f", o->scale.x); w->objects["scalex"]->SetText(0,buf);
 							sprintf(buf, "%f", o->scale.y); w->objects["scaley"]->SetText(0,buf);
 							sprintf(buf, "%f", o->scale.z); w->objects["scalez"]->SetText(0,buf);
+							w->objects["objectname"]->SetText(0, o->filename);
 							Graphics.WM.addwindow(w);
 						}
 					}
