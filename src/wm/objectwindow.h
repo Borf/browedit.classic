@@ -42,6 +42,10 @@ public:
 		{
 			char buf[100];
 			sprintf(buf, "%f", *floatje);
+			while(buf[strlen(buf)-1] == '0')
+				buf[strlen(buf)-1] = '\0';
+			if(buf[strlen(buf)-1] == '.')
+				buf[strlen(buf)-1] = '\0';
 			text = buf;
 			lastvalue = *floatje;
 		}
@@ -52,9 +56,7 @@ public:
 	{
 		cWindowInputBox::SetInt(id,val);
 		if (id == 3)
-		{
 			floatje = (float*)val;
-		}
 	}
 	bool onkeydown(int keyid)
 	{

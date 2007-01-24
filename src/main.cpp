@@ -1393,6 +1393,10 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 		case SDL_MOUSEBUTTONUP:
 			if(event.button.button == SDL_BUTTON_LEFT)
 			{
+				lbuttondown = false;
+				mousex = event.motion.x;
+				mousey = event.motion.y;
+				cWindow* w = Graphics.WM.inwindow();
 				if (draggingwindow != NULL)
 				{
 					draggingwindow->stopresizing();
@@ -1407,8 +1411,6 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					draggingobject->parent->stopdrag();
 					draggingobject = NULL;
 				}
-				if(Graphics.WM.inwindow() != NULL)
-					return 0;
 
 				lbuttondown = false;
 				if (SDL_GetTicks() - lastlclick < 250)
@@ -1420,9 +1422,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				else
 					lastlclick = SDL_GetTicks();
-				lbuttondown = false;
-				mousex = event.motion.x;
-				mousey = event.motion.y;
+				if(w != NULL)
+					return 0;
 				menu->unmouseover();
 				cMenu* m = menu->inwindow((int)mousex, Graphics.h()-(int)mousey);
 				if (m == NULL)
