@@ -9,6 +9,7 @@
 #include "md5.h"
 #include <time.h>
 #include "wm/objectwindow.h"
+#include "wm/effectwindow.h"
 
 #include "texturecache.h"
 #ifdef WIN32
@@ -1111,6 +1112,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							draggingwindow->startresisingx();
 						if((Graphics.h()-startmousey) < draggingwindow->py()+draggingwindow->ph() && (Graphics.h()-startmousey) > draggingwindow->py()+draggingwindow->ph() - DRAGBORDER)
 							draggingwindow->startresizingy();
+						return 0;
 					}
 					else
 					{ // drag this component
@@ -2911,19 +2913,42 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 							cWindow* w = new cObjectWindow();
 							w->init(&Graphics.WM.texture, &Graphics.WM.font);
-							char buf[100];
 							if (menuitem != NULL)
 								w->objects["objectmenu"]->SetText(0,menuitem->data2);
-							sprintf(buf, "%f", o->pos.x); w->objects["posx"]->SetInt(3,(int)&o->pos.x);
-							sprintf(buf, "%f", o->pos.y); w->objects["posy"]->SetInt(3,(int)&o->pos.y);
-							sprintf(buf, "%f", o->pos.z); w->objects["posz"]->SetInt(3,(int)&o->pos.z);
-							sprintf(buf, "%f", o->rot.x); w->objects["rotx"]->SetInt(3,(int)&o->rot.x);
-							sprintf(buf, "%f", o->rot.y); w->objects["roty"]->SetInt(3,(int)&o->rot.y);
-							sprintf(buf, "%f", o->rot.z); w->objects["rotz"]->SetInt(3,(int)&o->rot.z);
-							sprintf(buf, "%f", o->scale.x); w->objects["scalex"]->SetInt(3,(int)&o->scale.x);
-							sprintf(buf, "%f", o->scale.y); w->objects["scaley"]->SetInt(3,(int)&o->scale.y);
-							sprintf(buf, "%f", o->scale.z); w->objects["scalez"]->SetInt(3,(int)&o->scale.z);
+							w->objects["posx"]->SetInt(3,(int)&o->pos.x);
+							w->objects["posy"]->SetInt(3,(int)&o->pos.y);
+							w->objects["posz"]->SetInt(3,(int)&o->pos.z);
+							w->objects["rotx"]->SetInt(3,(int)&o->rot.x);
+							w->objects["roty"]->SetInt(3,(int)&o->rot.y);
+							w->objects["rotz"]->SetInt(3,(int)&o->rot.z);
+							w->objects["scalex"]->SetInt(3,(int)&o->scale.x);
+							w->objects["scaley"]->SetInt(3,(int)&o->scale.y);
+							w->objects["scalez"]->SetInt(3,(int)&o->scale.z);
 							w->objects["objectname"]->SetText(0, o->rofilename);
+							Graphics.WM.addwindow(w);
+						}
+					}
+					else if (editmode == MODE_EFFECTS)
+					{
+						if (Graphics.selectedobject != -1)
+						{
+							cEffect* o = &Graphics.world.effects[Graphics.selectedobject];
+
+							cWindow* w = new cEffectWindow();
+							w->init(&Graphics.WM.texture, &Graphics.WM.font);
+//							if (menuitem != NULL)
+//								w->objects["objectmenu"]->SetText(0,menuitem->data2);
+							w->objects["posx"]->SetInt(3,(int)&o->pos.x);
+							w->objects["posy"]->SetInt(3,(int)&o->pos.y);
+							w->objects["posz"]->SetInt(3,(int)&o->pos.z);
+							w->objects["rotx"]->SetInt(3,(int)&o->rotation.x);
+							w->objects["roty"]->SetInt(3,(int)&o->rotation.y);
+							w->objects["rotz"]->SetInt(3,(int)&o->rotation.z);
+							w->objects["scalex"]->SetInt(3,(int)&o->scale.x);
+							w->objects["scaley"]->SetInt(3,(int)&o->scale.y);
+							w->objects["scalez"]->SetInt(3,(int)&o->scale.z);
+							w->objects["looptime"]->SetInt(3,(int)&o->loop);
+							w->objects["objectname"]->SetText(0, o->readablename);
 							Graphics.WM.addwindow(w);
 						}
 					}

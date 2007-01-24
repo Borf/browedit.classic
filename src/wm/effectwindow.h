@@ -1,5 +1,5 @@
-#ifndef __OBJECTWINDOW_H__
-#define __OBJECTWINDOW_H__
+#ifndef __EFFECTWINDOW_H__
+#define __EFFECTWINDOW_H__
 
 #include "window.h"
 
@@ -9,80 +9,19 @@
 #include "windowlabel.h"
 #include "windowinputbox.h"
 
-class cWindowOkButton : public cWindowButton
+
+class cEffectWindow : public cWindow
 {
 public:
-	cWindowOkButton()
+	cEffectWindow()
 	{
-		alignment = ALIGN_BOTTOM;
-		moveto(0, 20);
-		resizeto(100, 20);
-		text = "            Ok";
-	}
-	virtual ~cWindowOkButton() {}
-	void click()
-	{
-		parent->close();
-	}
-};
-
-class cWindowFloatInputBox : public cWindowInputBox
-{
-	float* floatje;
-	float lastvalue;
-public:
-	cWindowFloatInputBox()
-	{
-		alignment = ALIGN_TOPLEFT;
-		resizeto(70,20);
-	}
-	void draw()
-	{
-		if(*floatje != lastvalue)
-		{
-			char buf[100];
-			sprintf(buf, "%f", *floatje);
-			while(buf[strlen(buf)-1] == '0')
-				buf[strlen(buf)-1] = '\0';
-			if(buf[strlen(buf)-1] == '.')
-				buf[strlen(buf)-1] = '\0';
-			text = buf;
-			lastvalue = *floatje;
-		}
-		cWindowInputBox::draw();
-	}
-
-	void SetInt(int id, int val)
-	{
-		cWindowInputBox::SetInt(id,val);
-		if (id == 3)
-			floatje = (float*)val;
-	}
-	bool onkeydown(int keyid)
-	{
-		bool ret = cWindowInputBox::onkeydown(keyid);
-		if (keyid == SDLK_RETURN)
-		{
-			*floatje = atof(text.c_str());
-			ret = true;
-		}
-		return ret;
-	}
-};
-
-
-class cObjectWindow : public cWindow
-{
-public:
-	cObjectWindow()
-	{
-		wtype = WT_OBJECT;
+		wtype = WT_EFFECT;
 		resizable = false;
 		visible = true;
 
 		h = 200;
 		w = 350;
-		title = "Object";
+		title = "Effect";
 		center();
 
 		defaultobject = "OkButton";
@@ -218,6 +157,12 @@ public:
 		o->resizeto(70,20);
 		objects["rotz"] = o;
 
+		o = new cWindowFloatInputBox();
+		o->parent = this;
+		o->alignment = ALIGN_TOPLEFT;
+		o->moveto(100,120);
+		o->resizeto(210,20);
+		objects["looptime"] = o;
 
 		o = new cWindowOkButton();
 		o->parent = this;
