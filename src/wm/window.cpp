@@ -240,8 +240,9 @@ bool cWindow::onchar(char c)
 bool cWindow::onkeydown(int c)
 {
 	if (selectedobject != NULL)
-		return selectedobject->onkeydown(c);
-	else if (c == SDLK_RETURN)
+		if(selectedobject->onkeydown(c))
+			return true;
+	if (c == SDLK_RETURN)
 	{
 		if (objects.find(defaultobject) != objects.end())
 			return objects[defaultobject]->onkeyup(c);
@@ -249,13 +250,7 @@ bool cWindow::onkeydown(int c)
 			return selectedobject->onkeyup(c);
 
 	}
-	else if (objects.find(defaultobject) != objects.end())
-		return objects[defaultobject]->onkeydown(c);
-	return false;
-}
-bool cWindow::onkeyup(int c)
-{
-	if (c == SDLK_TAB)
+	else if (c == SDLK_TAB)
 	{
 		int selcount = 0;
 		objectlist::iterator i;
@@ -308,7 +303,13 @@ bool cWindow::onkeyup(int c)
 		}
 		return true;
 	}
-	else if (selectedobject != NULL)
+	else if (objects.find(defaultobject) != objects.end())
+		return objects[defaultobject]->onkeydown(c);
+	return false;
+}
+bool cWindow::onkeyup(int c)
+{
+	if (selectedobject != NULL)
 	{
 		return selectedobject->onkeyup(c);
 	}

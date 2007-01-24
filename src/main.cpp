@@ -2912,7 +2912,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							w->init(&Graphics.WM.texture, &Graphics.WM.font);
 							char buf[100];
 							if (menuitem != NULL)
-								w->objects["objectname"]->SetText(0,menuitem->data2);
+								w->objects["objectmenu"]->SetText(0,menuitem->data2);
 							sprintf(buf, "%f", o->pos.x); w->objects["posx"]->SetText(0,buf);
 							sprintf(buf, "%f", o->pos.y); w->objects["posy"]->SetText(0,buf);
 							sprintf(buf, "%f", o->pos.z); w->objects["posz"]->SetText(0,buf);
@@ -2922,7 +2922,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							sprintf(buf, "%f", o->scale.x); w->objects["scalex"]->SetText(0,buf);
 							sprintf(buf, "%f", o->scale.y); w->objects["scaley"]->SetText(0,buf);
 							sprintf(buf, "%f", o->scale.z); w->objects["scalez"]->SetText(0,buf);
-							w->objects["objectname"]->SetText(0, o->filename);
+							w->objects["objectname"]->SetText(0, o->rofilename);
 							Graphics.WM.addwindow(w);
 						}
 					}

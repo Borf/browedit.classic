@@ -52,6 +52,15 @@ public:
 		o->parent = this;
 		objects["close"] = o;
 
+
+		o = new cWindowLabel();
+		o->parent = this;
+		o->alignment = ALIGN_TOPLEFT;
+		o->moveto(15, 20);
+		o->resizeto(320, 100);
+		o->SetText(0, "Object:");
+		objects["text"] = o;
+
 		o = new cWindowLabel();
 		o->parent = this;
 		o->alignment = ALIGN_TOPLEFT;
@@ -85,13 +94,22 @@ public:
 		o->SetText(0, "Rotation:");
 		objects["lblRot"] = o;
 
+		o = new cWindowInputBox();
+		o->parent = this;
+		o->alignment = ALIGN_TOPLEFT;
+		o->moveto(100,20);
+		o->resizeto(210,20);
+		o->SetText(0,"");
+		o->SetInt(0,0);
+		objects["objectmenu"] = o;
 
 		o = new cWindowInputBox();
 		o->parent = this;
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,40);
 		o->resizeto(210,20);
-		o->SetText(0,"Treehouse");
+		o->SetText(0,"");
+		o->SetInt(0,0);
 		objects["objectname"] = o;
 		
 		o = new cWindowInputBox();
