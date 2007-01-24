@@ -29,6 +29,7 @@ public:
 class cWindowFloatInputBox : public cWindowInputBox
 {
 	float* floatje;
+	float lastvalue;
 public:
 	cWindowFloatInputBox()
 	{
@@ -37,9 +38,13 @@ public:
 	}
 	void draw()
 	{
-		char buf[100];
-		sprintf(buf, "%f", *floatje);
-		text = buf;
+		if(*floatje != lastvalue)
+		{
+			char buf[100];
+			sprintf(buf, "%f", *floatje);
+			text = buf;
+			lastvalue = *floatje;
+		}
 		cWindowInputBox::draw();
 	}
 
@@ -54,19 +59,11 @@ public:
 	bool onkeydown(int keyid)
 	{
 		bool ret = cWindowInputBox::onkeydown(keyid);
-		*floatje = atof(text.c_str());
-		return ret;
-	}
-	bool onchar(int keyid)
-	{
-		bool ret = cWindowInputBox::onchar(keyid);
-		*floatje = atof(text.c_str());
-		return ret;
-	}
-	bool onkeyup(int keyid)
-	{
-		bool ret = cWindowInputBox::onkeyup(keyid);
-		*floatje = atof(text.c_str());
+		if (keyid == SDLK_RETURN)
+		{
+			*floatje = atof(text.c_str());
+			ret = true;
+		}
 		return ret;
 	}
 };

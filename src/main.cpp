@@ -1005,7 +1005,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					int minobj = 0;
 					float mindist = 999999;
-					if(Graphics.objectstartdrag)
+					if(Graphics.objectstartdrag && Graphics.selectedobject != -1)
 					{
 						bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 						bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
