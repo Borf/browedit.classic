@@ -2913,15 +2913,15 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							char buf[100];
 							if (menuitem != NULL)
 								w->objects["objectmenu"]->SetText(0,menuitem->data2);
-							sprintf(buf, "%f", o->pos.x); w->objects["posx"]->SetText(0,buf);
-							sprintf(buf, "%f", o->pos.y); w->objects["posy"]->SetText(0,buf);
-							sprintf(buf, "%f", o->pos.z); w->objects["posz"]->SetText(0,buf);
-							sprintf(buf, "%f", o->rot.x); w->objects["rotx"]->SetText(0,buf);
-							sprintf(buf, "%f", o->rot.y); w->objects["roty"]->SetText(0,buf);
-							sprintf(buf, "%f", o->rot.z); w->objects["rotz"]->SetText(0,buf);
-							sprintf(buf, "%f", o->scale.x); w->objects["scalex"]->SetText(0,buf);
-							sprintf(buf, "%f", o->scale.y); w->objects["scaley"]->SetText(0,buf);
-							sprintf(buf, "%f", o->scale.z); w->objects["scalez"]->SetText(0,buf);
+							sprintf(buf, "%f", o->pos.x); w->objects["posx"]->SetText(0,buf); w->objects["posx"]->SetInt(3,(int)&o->pos.x);
+							sprintf(buf, "%f", o->pos.y); w->objects["posy"]->SetText(0,buf); w->objects["posy"]->SetInt(3,(int)&o->pos.y);
+							sprintf(buf, "%f", o->pos.z); w->objects["posz"]->SetText(0,buf); w->objects["posz"]->SetInt(3,(int)&o->pos.z);
+							sprintf(buf, "%f", o->rot.x); w->objects["rotx"]->SetText(0,buf); w->objects["rotx"]->SetInt(3,(int)&o->rot.x);
+							sprintf(buf, "%f", o->rot.y); w->objects["roty"]->SetText(0,buf); w->objects["roty"]->SetInt(3,(int)&o->rot.y);
+							sprintf(buf, "%f", o->rot.z); w->objects["rotz"]->SetText(0,buf); w->objects["rotz"]->SetInt(3,(int)&o->rot.z);
+							sprintf(buf, "%f", o->scale.x); w->objects["scalex"]->SetText(0,buf); w->objects["scalex"]->SetInt(3,(int)&o->scale.x);
+							sprintf(buf, "%f", o->scale.y); w->objects["scaley"]->SetText(0,buf); w->objects["scaley"]->SetInt(3,(int)&o->scale.y);
+							sprintf(buf, "%f", o->scale.z); w->objects["scalez"]->SetText(0,buf); w->objects["scalez"]->SetInt(3,(int)&o->scale.z);
 							w->objects["objectname"]->SetText(0, o->rofilename);
 							Graphics.WM.addwindow(w);
 						}

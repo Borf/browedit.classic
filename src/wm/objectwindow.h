@@ -26,6 +26,51 @@ public:
 	}
 };
 
+class cWindowFloatInputBox : public cWindowInputBox
+{
+	float* floatje;
+public:
+	cWindowFloatInputBox()
+	{
+		alignment = ALIGN_TOPLEFT;
+		resizeto(70,20);
+	}
+	void draw()
+	{
+		char buf[100];
+		sprintf(buf, "%f", *floatje);
+		text = buf;
+		cWindowInputBox::draw();
+	}
+
+	void SetInt(int id, int val)
+	{
+		cWindowInputBox::SetInt(id,val);
+		if (id == 3)
+		{
+			floatje = (float*)val;
+		}
+	}
+	bool onkeydown(int keyid)
+	{
+		bool ret = cWindowInputBox::onkeydown(keyid);
+		*floatje = atof(text.c_str());
+		return ret;
+	}
+	bool onchar(int keyid)
+	{
+		bool ret = cWindowInputBox::onchar(keyid);
+		*floatje = atof(text.c_str());
+		return ret;
+	}
+	bool onkeyup(int keyid)
+	{
+		bool ret = cWindowInputBox::onkeyup(keyid);
+		*floatje = atof(text.c_str());
+		return ret;
+	}
+};
+
 
 class cObjectWindow : public cWindow
 {
@@ -112,76 +157,67 @@ public:
 		o->SetInt(0,0);
 		objects["objectname"] = o;
 		
-		o = new cWindowInputBox();
+		o = new cWindowFloatInputBox();
 		o->parent = this;
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,60);
 		o->resizeto(70,20);
-		o->SetText(0,"10");
 		objects["posx"] = o;
 
-		o = new cWindowInputBox();
+		o = new cWindowFloatInputBox();
 		o->parent = this;
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(170,60);
 		o->resizeto(70,20);
-		o->SetText(0,"10");
 		objects["posy"] = o;
 		
-		o = new cWindowInputBox();
+		o = new cWindowFloatInputBox();
 		o->parent = this;
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(240,60);
 		o->resizeto(70,20);
-		o->SetText(0,"10");
 		objects["posz"] = o;
 		
-		o = new cWindowInputBox();
+		o = new cWindowFloatInputBox();
 		o->parent = this;
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,80);
 		o->resizeto(70,20);
-		o->SetText(0,"1.000000");
 		objects["scalex"] = o;
 
-		o = new cWindowInputBox();
+		o = new cWindowFloatInputBox();
 		o->parent = this;
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(170,80);
 		o->resizeto(70,20);
-		o->SetText(0,"1.000000");
 		objects["scaley"] = o;
 		
-		o = new cWindowInputBox();
+		o = new cWindowFloatInputBox();
 		o->parent = this;
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(240,80);
 		o->resizeto(70,20);
-		o->SetText(0,"1.000000");
 		objects["scalez"] = o;
 		
-		o = new cWindowInputBox();
+		o = new cWindowFloatInputBox();
 		o->parent = this;
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,100);
 		o->resizeto(70,20);
-		o->SetText(0,"10");
 		objects["rotx"] = o;
 
-		o = new cWindowInputBox();
+		o = new cWindowFloatInputBox();
 		o->parent = this;
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(170,100);
 		o->resizeto(70,20);
-		o->SetText(0,"10");
 		objects["roty"] = o;
 		
-		o = new cWindowInputBox();
+		o = new cWindowFloatInputBox();
 		o->parent = this;
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(240,100);
 		o->resizeto(70,20);
-		o->SetText(0,"10");
 		objects["rotz"] = o;
 
 
