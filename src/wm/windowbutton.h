@@ -25,7 +25,7 @@ public:
 	virtual ~cWindowButton() {}
 	virtual void draw();
 	virtual void click() = 0;
-	virtual bool onkeyup(int);
+	virtual bool onkeydown(int);
 
 
 };

@@ -241,6 +241,14 @@ bool cWindow::onkeydown(int c)
 {
 	if (selectedobject != NULL)
 		return selectedobject->onkeydown(c);
+	else if (c == SDLK_RETURN)
+	{
+		if (objects.find(defaultobject) != objects.end())
+			return objects[defaultobject]->onkeyup(c);
+		else if (selectedobject != NULL)
+			return selectedobject->onkeyup(c);
+
+	}
 	else if (objects.find(defaultobject) != objects.end())
 		return objects[defaultobject]->onkeydown(c);
 	return false;
@@ -299,14 +307,6 @@ bool cWindow::onkeyup(int c)
 			}
 		}
 		return true;
-	}
-	else if (c == SDLK_RETURN)
-	{
-		if (objects.find(defaultobject) != objects.end())
-			return objects[defaultobject]->onkeyup(c);
-		else if (selectedobject != NULL)
-			return selectedobject->onkeyup(c);
-
 	}
 	else if (selectedobject != NULL)
 	{

@@ -117,8 +117,16 @@ void cWindowInputBox::click()
 {
 	if (parent->selectedobject != this)
 	{
-		selectionstart = 0;
-		cursor = text.length();
+		selectionstart = text.length();
+		cursor = 0;
+		while(cursor < startindex)
+			startindex = max(0, cursor-4);
+		while(parent->font->textlen(text.substr(startindex, cursor-startindex)) > w-10)
+			startindex = min(startindex + 4, (int)text.length());
+		if (selectionstart > (int)text.length())
+			selectionstart = cursor;
+
+		
 		return;
 	}
 	int xx = mousex;

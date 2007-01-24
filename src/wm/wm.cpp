@@ -219,6 +219,7 @@ bool cWM::onchar(char c)
 	if (windows.size() > 0)
 		if (windows[0]->isenabled() && windows[0]->isvisible())
 			return windows[0]->onchar(c);
+	return false;
 }
 
 bool cWM::onkeydown(int key)
@@ -226,6 +227,7 @@ bool cWM::onkeydown(int key)
 	if(windows.size() > 0)
 		if (windows[0]->isenabled() && windows[0]->isvisible())
 			return windows[0]->onkeydown(key);
+	return false;
 }
 bool cWM::onkeyup(int key)
 {
@@ -236,6 +238,7 @@ bool cWM::onkeyup(int key)
 		if (parsekey && windows[0]->isvisible() && windows[0]->isenabled())
 			return windows[0]->onkeyup(key);
 	}
+	return false;
 }
 
 void cWM::doubleclick()

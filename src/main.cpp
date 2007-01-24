@@ -726,11 +726,6 @@ int main(int argc, char *argv[])
 		return 1;
 
 
-	//Graphics.WM.MessageBox("This is a test message to see if my WM is working");
-	cWindow* w = new cObjectWindow();
-	w->init(&Graphics.WM.texture, &Graphics.WM.font);
-	Graphics.WM.addwindow(w);
-
 	Log(3,0,"Done initializing..");
 	Graphics.world.newworld();
 	strcpy(Graphics.world.filename, string(rodir + "louyang").c_str());
@@ -831,7 +826,7 @@ int process_events()
 			running = false;
 			break;
 		case SDL_KEYUP:
-			if (Graphics.WM.onkeydown(event.key.keysym.sym))
+			if (Graphics.WM.onkeyup(event.key.keysym.sym))
 				return 0;
 			switch (event.key.keysym.sym)
 			{
@@ -845,8 +840,9 @@ int process_events()
 			default:
 				break;
 			}
+			break;
 		case SDL_KEYDOWN:
-			if(Graphics.WM.onkeyup(event.key.keysym.sym))
+			if(Graphics.WM.onkeydown(event.key.keysym.sym))
 				return 0;
 			if (strlen(SDL_GetKeyName(event.key.keysym.sym)) == 1 || event.key.keysym.sym == SDLK_SPACE)
 			{
@@ -854,6 +850,7 @@ int process_events()
 					if (Graphics.WM.onchar((char)event.key.keysym.unicode))
 						return 0;
 			}
+			break;
 
 		default:
 			break;
@@ -1406,6 +1403,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					draggingobject->parent->stopdrag();
 					draggingobject = NULL;
 				}
+				if(Graphics.WM.inwindow() != NULL)
+					return 0;
 
 				lbuttondown = false;
 				if (SDL_GetTicks() - lastlclick < 250)
@@ -2894,6 +2893,36 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					Graphics.gridoffsety = 0;
 				else
 					Graphics.gridsize = 16 / 4.0f;
+				break;
+
+			case SDLK_RETURN:
+				{
+					if (editmode == MODE_OBJECTS)
+					{
+						if (Graphics.selectedobject != -1)
+						{
+							cRSMModel* o = Graphics.world.models[Graphics.selectedobject];
+							cMenuItem* menuitem = (cMenuItem*)models->finddata("model\\" + o->rofilename);
+
+							cWindow* w = new cObjectWindow();
+							w->init(&Graphics.WM.texture, &Graphics.WM.font);
+							char buf[100];
+							if (menuitem != NULL)
+								w->objects["objectname"]->SetText(0,menuitem->data2);
+							sprintf(buf, "%f", o->pos.x); w->objects["posx"]->SetText(0,buf);
+							sprintf(buf, "%f", o->pos.y); w->objects["posy"]->SetText(0,buf);
+							sprintf(buf, "%f", o->pos.z); w->objects["posz"]->SetText(0,buf);
+							sprintf(buf, "%f", o->rot.x); w->objects["rotx"]->SetText(0,buf);
+							sprintf(buf, "%f", o->rot.y); w->objects["roty"]->SetText(0,buf);
+							sprintf(buf, "%f", o->rot.z); w->objects["rotz"]->SetText(0,buf);
+							sprintf(buf, "%f", o->scale.x); w->objects["scalex"]->SetText(0,buf);
+							sprintf(buf, "%f", o->scale.y); w->objects["scaley"]->SetText(0,buf);
+							sprintf(buf, "%f", o->scale.z); w->objects["scalez"]->SetText(0,buf);
+							Graphics.WM.addwindow(w);
+						}
+					}
+					break;
+				}
 			case SDLK_s:
 				{
 					if (editmode == MODE_HEIGHTDETAIL)
