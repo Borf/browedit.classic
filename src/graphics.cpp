@@ -158,9 +158,10 @@ int cGraphics::draw()
 	}
 	if(world.loaded && editmode != MODE_OBJECTS)
 	{
+		int i;
 		glEnable(GL_TEXTURE_2D);
 		glColor4f(1,1,1,1);
-		for(int i = 0; 288*i+256 < height; i++)
+		for(i = 0; 288*i+256 < height; i++)
 		{
 			if (editmode == MODE_GAT)
 			{
@@ -188,6 +189,28 @@ int cGraphics::draw()
 			glEnd();
 		}
 		glDisable(GL_TEXTURE_2D);
+		glColor3f(0.5f,0.5f,1);
+		for(i = 0; 288*i+256 < height; i++)
+		{
+			if (editmode == MODE_GAT)
+			{
+				if (i+texturestart > 6)
+					continue;
+			}
+			else if (editmode == MODE_WATER)
+			{
+				if (i+world.water.type > 5)
+					continue;
+			}
+			glBegin(GL_LINE_LOOP);
+				glTexCoord2f(1,1);		glVertex2f( width, height-(32+288*i));
+				glTexCoord2f(1,0);		glVertex2f( width, height-(32+288*i+256));
+				glTexCoord2f(0,0);		glVertex2f( width-256, height-(32+288*i+256));
+				glTexCoord2f(0,1);		glVertex2f( width-256, height-(32+288*i));
+			glEnd();
+		}
+		glEnd();
+
 
 		glColor3f(1,0,0);
 		glBegin(GL_LINE_LOOP);
