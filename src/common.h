@@ -40,6 +40,10 @@
 
 #include "mymath.h"
 
+#define SNAPPINGDIST 10
+#define DRAGBORDER   4
+
+
 #define BOLD 1				// options for logging
 #define DEBUG_LEVEL 5
 

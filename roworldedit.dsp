@@ -214,5 +214,137 @@ SOURCE=.\resource.h
 SOURCE=.\src\Script1.rc
 # End Source File
 # End Group
+# Begin Group "wm"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\src\wm\confirmwindow.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\messagewindow.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\objectwindow.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\window.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\window.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\windowbutton.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\windowbutton.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\windowcheckbox.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\windowcheckbox.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\windowinputbox.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\windowinputbox.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\windowlabel.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\windowlabel.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\windowline.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\windowlistbox.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\windowlistbox.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\windowmainbutton.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\windowmainbutton.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\windowobject.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\windowobject.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\windowpicturebox.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\windowpicturebox.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\windowprogressbar.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\windowprogressbar.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\windowroundbutton.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\windowroundbutton.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\windowscrollpanel.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\windowscrollpanel.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\windowtabpanel.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\windowtabpanel.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\wm.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\wm.h
+# End Source File
+# End Group
 # End Target
 # End Project

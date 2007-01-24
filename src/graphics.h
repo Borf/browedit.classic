@@ -9,6 +9,7 @@ using namespace std;
 #include "font.h"
 #include "texture.h"
 #include "frustum.h"
+#include "wm/wm.h"
 
 class cGraphics
 {
@@ -157,6 +158,8 @@ public:
 	int						width;						// windowwidth
 	int						bits;						// bpp (8,16,24,32)
 	bool					fullscreen;					// fullscreen ?
+
+	cWM						WM;
 
 
 private:

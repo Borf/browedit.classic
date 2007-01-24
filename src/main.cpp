@@ -8,6 +8,7 @@
 #include <list>
 #include "md5.h"
 #include <time.h>
+#include "wm/objectwindow.h"
 
 #include "texturecache.h"
 #ifdef WIN32
@@ -27,6 +28,7 @@ list<cGraphics> undos;
 void MakeUndo();
 void Undo();
 int movement;
+float dragoffsety, dragoffsetx;
 
 void ChangeGrid();
 void UpdateTriangleMenu();
@@ -37,6 +39,10 @@ eMode editmode = MODE_TEXTURE;
 float paintspeed = 100;
 string config;
 extern double mouse3dx, mouse3dy, mouse3dz;
+long lastmotion;
+bool doubleclick = false;
+cWindow*				draggingwindow = NULL;
+cWindowObject*			draggingobject = NULL;
 
 bool mouseouttexture(cMenu*);
 bool mouseovertexture(cMenu*);
@@ -719,6 +725,12 @@ int main(int argc, char *argv[])
 	if (!Graphics.init())
 		return 1;
 
+
+	//Graphics.WM.MessageBox("This is a test message to see if my WM is working");
+	cWindow* w = new cObjectWindow();
+	w->init(&Graphics.WM.texture, &Graphics.WM.font);
+	Graphics.WM.addwindow(w);
+
 	Log(3,0,"Done initializing..");
 	Graphics.world.newworld();
 	strcpy(Graphics.world.filename, string(rodir + "louyang").c_str());
@@ -818,7 +830,9 @@ int process_events()
 		case SDL_QUIT:
 			running = false;
 			break;
-		case SDL_KEYDOWN:
+		case SDL_KEYUP:
+			if (Graphics.WM.onkeydown(event.key.keysym.sym))
+				return 0;
 			switch (event.key.keysym.sym)
 			{
 			case SDLK_F4:
@@ -831,8 +845,18 @@ int process_events()
 			default:
 				break;
 			}
-			default:
-				break;
+		case SDL_KEYDOWN:
+			if(Graphics.WM.onkeyup(event.key.keysym.sym))
+				return 0;
+			if (strlen(SDL_GetKeyName(event.key.keysym.sym)) == 1 || event.key.keysym.sym == SDLK_SPACE)
+			{
+				if (event.key.keysym.unicode > 0 && event.key.keysym.unicode < 128)
+					if (Graphics.WM.onchar((char)event.key.keysym.unicode))
+						return 0;
+			}
+
+		default:
+			break;
 		}
 		
 		
@@ -855,6 +879,11 @@ void checkheight(int x, int y)
 {
 }
 
+
+
+cWindow* lastdragoverwindow = NULL;
+
+
 /**
  * Main mode process handler
  */
@@ -867,11 +896,35 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			dragged = true;
 			mousex = event.motion.x;
 			mousey = event.motion.y;
+			lastmotion = SDL_GetTicks();
 			cMenu* m = menu->inwindow((int)mousex, Graphics.h()-(int)mousey);
 			if(m != NULL)
 				break;
 
 			movement++;
+
+			if (movement > 0)
+			{
+				if (draggingwindow != NULL)
+				{
+					draggingwindow->drag();
+					Graphics.WM.drag(draggingwindow);
+				}
+				else
+				{
+					if (draggingobject != NULL)
+					{
+						draggingobject->drag();
+
+						cWindow* w = Graphics.WM.inwindow();
+						if (w != NULL)
+							w->holddragover();
+						else if (w == NULL && lastdragoverwindow != NULL)
+							lastdragoverwindow->holddragover();
+						lastdragoverwindow = w;
+					}
+				}
+			}
 
 			if (rbuttondown && !lbuttondown)
 			{
@@ -1032,6 +1085,52 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			startmousex = mousex = event.motion.x;
 			startmousey = mousey = event.motion.y;
 			dragged = false;
+			doubleclick = false;
+			if (SDL_GetTicks() - lastlclick < 250)
+				doubleclick = true;
+			
+			if (!dragged && !doubleclick)
+			{
+				draggingobject = NULL;
+				draggingwindow = NULL;
+				if (Graphics.WM.inwindow() != NULL)
+				{
+					cWindow* w = Graphics.WM.inwindow();
+					if (!w->inobject())
+					{ // drag this window
+						dragoffsetx = mousex - w->px();
+						dragoffsety = (Graphics.h()-mousey) - w->py2();
+						Graphics.WM.click(false);
+						draggingwindow = Graphics.WM.inwindow();
+						if(startmousex < draggingwindow->px()+draggingwindow->pw() && startmousex > draggingwindow->px()+draggingwindow->pw() - DRAGBORDER)
+							draggingwindow->startresisingxy();
+						if((Graphics.h()-startmousey) > draggingwindow->py() && (Graphics.h()-startmousey) < draggingwindow->py() + DRAGBORDER)
+							draggingwindow->startresizingyx();
+						if(startmousex > draggingwindow->px() && startmousex < draggingwindow->px() + DRAGBORDER)
+							draggingwindow->startresisingx();
+						if((Graphics.h()-startmousey) < draggingwindow->py()+draggingwindow->ph() && (Graphics.h()-startmousey) > draggingwindow->py()+draggingwindow->ph() - DRAGBORDER)
+							draggingwindow->startresizingy();
+					}
+					else
+					{ // drag this component
+						Graphics.WM.click(false);
+						draggingobject = w->inobject();
+						dragoffsetx = mousex - w->px() - w->inobject()->realx();
+						dragoffsety = (Graphics.h()-mousey) - w->py() - w->inobject()->realy();
+					}
+					return 0;
+				}
+				else
+				{
+					Graphics.WM.defocus();
+				}
+			}			
+			
+			
+			
+			
+			
+			
 			if(event.button.button == SDL_BUTTON_LEFT)
 			{
 				lbuttondown = true;
@@ -1293,14 +1392,28 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 		case SDL_MOUSEBUTTONUP:
 			if(event.button.button == SDL_BUTTON_LEFT)
 			{
+				if (draggingwindow != NULL)
+				{
+					draggingwindow->stopresizing();
+				}
+				draggingwindow = NULL;
+				if (movement <= 1)
+					Graphics.WM.click(true);
+				if (movement > 1 && draggingobject != NULL)
+				{
+					if(Graphics.WM.inwindow() != NULL)
+						Graphics.WM.inwindow()->dragover();
+					draggingobject->parent->stopdrag();
+					draggingobject = NULL;
+				}
+
 				lbuttondown = false;
-				bool doubleclick = false;
-				long l = SDL_GetTicks();
-				if (l - lastlclick < 250)
+				if (SDL_GetTicks() - lastlclick < 250)
 				{
 					Log(3,0,"Doubleclick");
 					doubleclick = true;
 					lastlclick = SDL_GetTicks();
+					Graphics.WM.doubleclick();
 				}
 				else
 					lastlclick = SDL_GetTicks();
@@ -1441,8 +1554,13 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			}
 			else // right button
 			{
+				if (movement < 2)
+				{
+					if(Graphics.WM.inwindow() != NULL)
+						Graphics.WM.rightclick();
+				}
 				rbuttondown = false;
-				bool doubleclick = false;
+				doubleclick = false;
 				long l = SDL_GetTicks();
 				if (l - lastrclick < 250)
 				{

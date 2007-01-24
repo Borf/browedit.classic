@@ -22,6 +22,7 @@ float f = 0;
 extern bool				lbuttondown;
 extern cMenu*			currentobject;
 extern string			rodir;
+extern long				lastmotion;
 
 double mouse3dx, mouse3dy, mouse3dz;
 
@@ -59,6 +60,36 @@ int cGraphics::draw()
 	glOrtho(0,width,0,height,-10000,10000);
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 	glLoadIdentity();									// Reset The Modelview Matrix
+
+	WM.draw();
+	if (SDL_GetTicks() - lastmotion > 500)
+	{
+		cWindow* w = WM.inwindow();
+		if (w != NULL)
+		{
+			cWindowObject* o = w->inobject();
+			if (o != NULL)
+			{
+				if (o->ppopup() != "")
+				{
+					glDisable(GL_TEXTURE_2D);
+					glColor3f(0.5,0.5,1);
+					int len = font->textlen(o->ppopup());
+					glBegin(GL_QUADS);
+						glVertex2f(mousex-2, mousey-2);
+						glVertex2f(mousex+len+2, mousey-2);
+						glVertex2f(mousex+len+2, mousey+16);
+						glVertex2f(mousex-2, mousey+16);
+
+
+					glEnd();
+					font->print(1,1,1,mousex, mousey, "%s", o->ppopup().c_str());
+				}
+			}
+		}
+	}
+
+	
 	if (showmessage)
 		{
 		glDisable(GL_TEXTURE_2D);
@@ -276,6 +307,7 @@ int cGraphics::init()
 	mask->Load("data/bulb.tga");
 	splash = new cTexture();
 	splash->Load("data/hamtaro.tga");
+	WM.init();
 	int i;
 	for(i = 0; i < 7; i++)
 	{
