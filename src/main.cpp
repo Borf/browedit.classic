@@ -99,6 +99,7 @@ MENUCOMMAND(clearstuff);
 MENUCOMMAND(effect);
 MENUCOMMAND(toggle);
 MENUCOMMAND(water);
+MENUCOMMAND(cleantextures);
 
 cMenu*	menu;
 cMenu* grid;
@@ -540,6 +541,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(snaptofloor,edit,"Snap objects to floor",		&MenuCommand_snaptofloor);
 	snaptofloor->ticked = true;
 	ADDMENUITEM(mm,edit,"Edit Water",		&MenuCommand_water);
+	ADDMENUITEM(mm,edit,"Clean Textures",		&MenuCommand_cleantextures);
 
 
 	fs.LoadFile("data.dat");
@@ -737,7 +739,7 @@ int main(int argc, char *argv[])
 
 	Log(3,0,"Done initializing..");
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "prt_church").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "house").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 //	Graphics.world.importalpha();
@@ -750,42 +752,42 @@ int main(int argc, char *argv[])
 			{
 				if (lbuttondown || rbuttondown)
 				{
-									int posx = mouse3dx / 10;
-									int posy = mouse3dz / 10;
+					int posx = mouse3dx / 10;
+					int posy = mouse3dz / 10;
 
-									if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= Graphics.world.height-ceil(brushsize/2.0f))
-									{
-										for(int x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f); x++)
-										{
-											for(int y = posy-floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
-											{
-												cCube* c = &Graphics.world.cubes[y][x];
-												if(lbuttondown && !rbuttondown)
-												{
-													if (!Graphics.slope || (x > posx-floor(brushsize/2.0f)) && y > posy-floor(brushsize/2.0f))
-														c->cell1-=1;
-													if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y > posy-floor(brushsize/2.0f))
-														c->cell2-=1;
-													if (!Graphics.slope || (x > posx-floor(brushsize/2.0f)) && y < posy+ceil(brushsize/2.0f)-1)
-														c->cell3-=1;
-													if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y < posy+ceil(brushsize/2.0f)-1)
-														c->cell4-=1;
-												}
-												if(lbuttondown && rbuttondown)
-												{
-													if (!Graphics.slope || (x > posx-floor(brushsize/2.0f)) && y > posy-floor(brushsize/2.0f))
-														c->cell1+=1;
-													if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y > posy-floor(brushsize/2.0f))
-														c->cell2+=1;
-													if (!Graphics.slope || (x > posx-floor(brushsize/2.0f)) && y < posy+ceil(brushsize/2.0f)-1)
-														c->cell3+=1;
-													if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y < posy+ceil(brushsize/2.0f)-1)
-														c->cell4+=1;
-												}
-												c->calcnormal();
-											}
-										}
-									}
+					if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= Graphics.world.height-ceil(brushsize/2.0f))
+					{
+						for(int x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f); x++)
+						{
+							for(int y = posy-floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
+							{
+								cCube* c = &Graphics.world.cubes[y][x];
+								if(lbuttondown && !rbuttondown)
+								{
+									if (!Graphics.slope || (x > posx-floor(brushsize/2.0f)) && y > posy-floor(brushsize/2.0f))
+										c->cell1-=1;
+									if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y > posy-floor(brushsize/2.0f))
+										c->cell2-=1;
+									if (!Graphics.slope || (x > posx-floor(brushsize/2.0f)) && y < posy+ceil(brushsize/2.0f)-1)
+										c->cell3-=1;
+									if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y < posy+ceil(brushsize/2.0f)-1)
+										c->cell4-=1;
+								}
+								if(lbuttondown && rbuttondown)
+								{
+									if (!Graphics.slope || (x > posx-floor(brushsize/2.0f)) && y > posy-floor(brushsize/2.0f))
+										c->cell1+=1;
+									if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y > posy-floor(brushsize/2.0f))
+										c->cell2+=1;
+									if (!Graphics.slope || (x > posx-floor(brushsize/2.0f)) && y < posy+ceil(brushsize/2.0f)-1)
+										c->cell3+=1;
+									if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y < posy+ceil(brushsize/2.0f)-1)
+										c->cell4+=1;
+								}
+								c->calcnormal();
+							}
+						}
+					}
 					lasttimer = SDL_GetTicks();
 				}
 			}
@@ -1706,7 +1708,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					Graphics.brushsize*=2;
 				break;
 			case SDLK_LEFTBRACKET:
-				if (editmode == MODE_OBJECTS)
+				if (editmode == MODE_OBJECTS && currentobject != NULL)
 				{
 					currentobject = currentobject->parent->getprev(currentobject);
 					MenuCommand_model((cMenuItem*)currentobject);
@@ -1723,7 +1725,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				break;
 			case SDLK_RIGHTBRACKET:
-				if (editmode == MODE_OBJECTS)
+				if (editmode == MODE_OBJECTS && currentobject != NULL)
 				{
 					currentobject = currentobject->parent->getnext(currentobject);
 					MenuCommand_model((cMenuItem*)currentobject);
@@ -1735,7 +1737,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				else
 				{
 					Graphics.texturestart++;
-					if (Graphics.texturestart > (editmode == MODE_GAT ? 8 : Graphics.world.textures.size()) - (Graphics.h() / 288))
+					if (Graphics.texturestart > (editmode == MODE_GAT ? 8 : (int)Graphics.world.textures.size()) - (Graphics.h() / 288))
 						Graphics.texturestart--;
 				}
 				break;
@@ -1841,14 +1843,22 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							break;
 
 						int yy = y;
-						while(Graphics.world.cubes[yy][x].tileaside != -1)
-							yy++;
-						int ymax = yy;
-						yy = y;
-						while(Graphics.world.cubes[yy][x].tileaside != -1)
-							yy--;
-						int ymin = yy+1;
-						int ydiff = 4;
+						int ymax = yy+1;
+						int ymin = yy;
+						int ydiff = 2;
+
+						if (SDL_GetModState() & KMOD_SHIFT)
+						{
+							yy = y;
+							while(Graphics.world.cubes[yy][x].tileaside != -1)
+								yy++;
+							ymax = yy;
+							yy = y;
+							while(Graphics.world.cubes[yy][x].tileaside != -1)
+								yy--;
+							ymin = yy+1;
+							ydiff = 4;
+						}
 
 						for(yy = ymin; yy < ymax; yy++)
 						{
@@ -1869,14 +1879,21 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							break;
 
 						int xx = x;
-						while(Graphics.world.cubes[y][xx].tileside != -1)
-							xx++;
-						int xmax = xx;
-						xx = x;
-						while(Graphics.world.cubes[y][xx].tileside != -1)
-							xx--;
-						int xmin = xx+1;
+						int xmax = xx+1;
+						int xmin = xx;
 						int xdiff = 4;
+						if (SDL_GetModState() & KMOD_SHIFT)
+						{
+							xx = x;
+							while(Graphics.world.cubes[y][xx].tileside != -1)
+								xx++;
+							xmax = xx;
+							xx = x;
+							while(Graphics.world.cubes[y][xx].tileside != -1)
+								xx--;
+							xmin = xx+1;
+							xdiff = 4;
+						}
 
 						for(xx = xmin; xx < xmax; xx++)
 						{
@@ -2391,6 +2408,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					float selendx = (((Graphics.selectionend.x - (Graphics.w()-256)) / 32.0f)) / 8.0f;
 					float selendy = (((int)(Graphics.selectionend.y - 32) % 288) / 32) / 8.0f;
 					float selheight = selendy - selstarty;
+					float selwidth = selendx - selstartx;
 
 					if(SDL_GetModState() & KMOD_ALT)
 					{
@@ -2405,7 +2423,6 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						while(Graphics.world.cubes[yy][x].tileaside != -1)
 							yy--;
 						int ymin = yy+1;
-						int ydiff = 4;
 
 					
 						float vmin = 99999, vmax = -99999;
@@ -2448,10 +2465,10 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							t.lightmap = 0;
 							if(wrap)
 							{
-								t.u1 = (yy%4+1) *  (1.0/(float)ydiff);
-								t.u2 = (yy%4) *  (1.0/(float)ydiff);
-								t.u3 = (yy%4+1) *  (1.0/(float)ydiff);
-								t.u4 = (yy%4) *  (1.0/(float)ydiff);
+								t.u1 = selstartx + (yy%4+1) *  ((float)selwidth/4);
+								t.u2 = selstartx + (yy%4) *  ((float)selwidth/4);
+								t.u3 = selstartx + (yy%4+1) *  ((float)selwidth/4);
+								t.u4 = selstartx + (yy%4) *  ((float)selwidth/4);
 
 
 								if (Graphics.world.cubes[yy][x].cell4 > Graphics.world.cubes[yy][x+1].cell3)
@@ -2542,10 +2559,10 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 							if (wrap)
 							{
-								t.u2 = (xx%4+1) *  (1.0/(float)xdiff);
-								t.u1 = (xx%4) *  (1.0/(float)xdiff);
-								t.u3 = (xx%4) *  (1.0/(float)xdiff);
-								t.u4 = (xx%4+1) *  (1.0/(float)xdiff);
+								t.u1 = selstartx + (xx%2) *  ((float)selwidth/2);
+								t.u2 = selstartx + (xx%2+1) *  ((float)selwidth/2);
+								t.u3 = selstartx + (xx%2) *  ((float)selwidth/2);
+								t.u4 = selstartx + (xx%2+1) *  ((float)selwidth/2);
 
 
 								if (Graphics.world.cubes[y][xx].cell3 > Graphics.world.cubes[y+1][xx].cell1)
@@ -3708,7 +3725,7 @@ MENUCOMMAND(dolightmaps)
 		Graphics.world.models[i]->draw(false,false,false, true);
 	}
 
-	float t;
+/*	float t;
 	for(x = 0; x < Graphics.world.width; x++)
 	{
 		Log(3,0,"%f%%", (x/(float)Graphics.world.width)*100.0f);
@@ -3730,17 +3747,17 @@ MENUCOMMAND(dolightmaps)
 						{
 							for(int yyy = max(0,y - 1); yyy <= min(Graphics.world.height-1,y+1); yyy++)
 							{
-								if(*lightmappos == 128)
+								if(*lightmappos == 127)
 									break;
-			//					if (xxx == x && yyy == y)
-			//						continue;
+								if (xxx == x && yyy == y)
+									continue;
 								cCube* c = &Graphics.world.cubes[yyy][xxx];
 								cVector3 triangle[6];
 								triangle[2] = cVector3(xxx*10+10, -c->cell2, yyy*10);
-								triangle[1] = cVector3(xxx*10, -c->cell3, yyy*10+10);
-								triangle[0] = cVector3(xxx*10+10, -c->cell4, yyy*10+10);
+								triangle[1] = cVector3(xxx*10, -c->cell3, yyy*10-10);
+								triangle[0] = cVector3(xxx*10+10, -c->cell4, yyy*10-10);
 
-								triangle[5] = cVector3(xxx*10, -c->cell4, yyy*10+10);
+								triangle[5] = cVector3(xxx*10, -c->cell4, yyy*10-10);
 								triangle[4] = cVector3(xxx*10+10, -c->cell2, yyy*10);
 								triangle[3] = cVector3(xxx*10, -c->cell1, yyy*10);
 
@@ -3807,6 +3824,15 @@ MENUCOMMAND(dolightmaps)
 
 			}
 				
+		}
+	}
+*/
+
+	for(x = 1; x < (Graphics.world.width*6)-1; x++)
+	{
+		for(y = 1; y < (Graphics.world.height*6)-1; y++)
+		{
+
 		}
 	}
 
@@ -4285,5 +4311,35 @@ MENUCOMMAND(water)
 	sprintf(buf, "%i", Graphics.world.water.texcycle);		w->objects["texcycle"]->SetText(0,buf);
 	sprintf(buf, "%i", Graphics.world.water.type);			w->objects["type"]->SetText(0,buf);
 	Graphics.WM.addwindow(w);
+	return true;
+}
+
+MENUCOMMAND(cleantextures)
+{
+	Graphics.world.clean();
+	vector<bool> used;
+	int i;
+	used.resize(Graphics.world.textures.size(), false);
+	for(i = 0; i < Graphics.world.tiles.size(); i++)
+	{
+		used[Graphics.world.tiles[i].texture] = true;
+	}
+	
+	for(i = used.size()-1; i > -1; i--)
+	{
+		if (!used[i])
+		{
+			for(int ii = 0; ii < Graphics.world.tiles.size(); ii++)
+			{
+				if(Graphics.world.tiles[i].texture > i)
+					Graphics.world.tiles[i].texture--;
+			}
+			TextureCache.unload(Graphics.world.textures[i]->texture);
+			delete Graphics.world.textures[i]->texture;
+			delete Graphics.world.textures[i];
+			Graphics.world.textures.erase(Graphics.world.textures.begin() + i);
+		}
+	}
+
 	return true;
 }

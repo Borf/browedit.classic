@@ -181,7 +181,11 @@ int cGraphics::draw()
 					frame = 0;
 			}
 			else
+			{
+				if (i+texturestart >= world.textures.size())
+					continue;
 				glBindTexture(GL_TEXTURE_2D, world.textures[i+texturestart]->texid());
+			}
 			glBegin(GL_QUADS);
 				glTexCoord2f(1,1);		glVertex2f( width, height-(32+288*i));
 				glTexCoord2f(1,0);		glVertex2f( width, height-(32+288*i+256));
@@ -695,7 +699,7 @@ cMenu* cMenu::getnext(cMenu* curitem)
 	{
 		if(items[i] == curitem)
 		{
-			if (i < ((int)items.size()) - 2)
+			if (i < ((int)items.size()) - 1)
 			{
 				if (items[i+1]->item)
 					return items[i+1];

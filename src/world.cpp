@@ -898,7 +898,6 @@ void cWorld::draw()
 				else
 					glColor4f(1,1,1,1);
 
-
 				glDisable(GL_BLEND);
 				glBindTexture(GL_TEXTURE_2D, texture);
 				glNormal3f(c->normal.x, c->normal.y, c->normal.z);
@@ -912,6 +911,7 @@ void cWorld::draw()
 			else if (Graphics.shownotiles)
 			{
 
+				glColor3f(1,1,1);
 				glDisable(GL_TEXTURE_2D);
 				glNormal3f(c->normal.x, c->normal.y, c->normal.z);
 				glBegin(GL_TRIANGLE_STRIP);
