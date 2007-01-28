@@ -48,6 +48,7 @@ public:
 		gridoffsety = 0;
 		topcamera = false;
 
+		shownotiles = true;
 	}
 
 	int						init();				// initializes graphics
@@ -119,6 +120,7 @@ public:
 	bool					topcamera;
 
 	bool					slope;
+	bool					shownotiles;
 
 
 	cRSMModel*				previewmodel;

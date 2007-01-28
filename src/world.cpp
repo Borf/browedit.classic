@@ -47,6 +47,10 @@ void cWorld::load()
 		sound = new cTextureModel();
 		sound->open("data/Speaker.tga");
 	}
+	if(notile == NULL)
+	{
+		notile = TextureCache.load("data/notile.tga");
+	}
 
 	for(i = 0; i < textures.size(); i++)
 		TextureCache.unload(textures[i]->texture);
@@ -905,6 +909,19 @@ void cWorld::draw()
 					glTexCoord2f(t->u4, 1-t->v4);				glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
 				glEnd();
 			}
+			else if (Graphics.shownotiles)
+			{
+
+				glDisable(GL_TEXTURE_2D);
+				glNormal3f(c->normal.x, c->normal.y, c->normal.z);
+				glBegin(GL_TRIANGLE_STRIP);
+					glVertex3f(x*10,-c->cell1,(height-y)*10);
+					glVertex3f(x*10,-c->cell3,(height-y)*10-10);
+					glVertex3f(x*10+10,-c->cell2,(height-y)*10);
+					glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
+				glEnd();
+				glEnable(GL_TEXTURE_2D);
+			}
 			if (c->tileaside != -1 && c->tileaside < tiles.size())
 			{
 				cTile* t = &tiles[c->tileaside];
@@ -1259,9 +1276,14 @@ void cWorld::draw()
 								glVertex3f(x*10+10,-c->cell4+0.1,(height-y)*10-10);
 							}
 						}
+					}
+					else
+					{
+						glVertex3f(x*10,-c->cell1+0.1,(height-y)*10);
+						glVertex3f(x*10+10,-c->cell2+0.1,(height-y)*10);
 
-
-
+						glVertex3f(x*10+10,-c->cell2+0.1,(height-y)*10);
+						glVertex3f(x*10+10,-c->cell4+0.1,(height-y)*10-10);
 					}
 				}
 			}
@@ -1781,6 +1803,7 @@ void cWorld::unload()
 		delete textures[i];
 	models.clear();
 	textures.clear();
+
 }
 
 

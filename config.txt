@@ -1,7 +1,7 @@
 setting=RO
 
 [RO]
-datadir=c:\games\ro\data\
+datadir=c:\program files\gravity\ro\data\
 model=romodels.txt
 model=arcturusmodels.txt
 texture=rotextures.txt

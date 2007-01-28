@@ -231,6 +231,10 @@ SOURCE=.\src\wm\objectwindow.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\wm\waterwindow.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\wm\window.cpp
 # End Source File
 # Begin Source File

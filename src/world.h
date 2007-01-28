@@ -194,6 +194,7 @@ public:
 	vector<cSound>		sounds;
 	vector<cEffect>		effects;
 
+	cTexture*			notile;
 
 	cWorld()
 	{
@@ -202,6 +203,7 @@ public:
 		light = NULL;
 		sound = NULL;
 		effect = NULL;
+		notile = NULL;
 	}
 	~cWorld()
 	{
@@ -240,6 +242,7 @@ public:
 
 
 	string useless;
+
 
 };
 

@@ -10,6 +10,7 @@
 #include <time.h>
 #include "wm/objectwindow.h"
 #include "wm/effectwindow.h"
+#include "wm/waterwindow.h"
 
 #include "texturecache.h"
 #ifdef WIN32
@@ -97,6 +98,7 @@ MENUCOMMAND(snaptofloor);
 MENUCOMMAND(clearstuff);
 MENUCOMMAND(effect);
 MENUCOMMAND(toggle);
+MENUCOMMAND(water);
 
 cMenu*	menu;
 cMenu* grid;
@@ -487,6 +489,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEMDATAP(mm,view,"Water",&MenuCommand_toggle, (void*)&Graphics.showwater);
 	mm->ticked = true;
 	ADDMENUITEMDATAP(mm,view,"Topcamera",&MenuCommand_toggle, (void*)&Graphics.topcamera);
+	ADDMENUITEMDATAP(mm,view,"Show invisible tiles",&MenuCommand_toggle, (void*)&Graphics.shownotiles);
 
 
 
@@ -536,6 +539,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,edit,"Clean up Lightmaps",		&MenuCommand_cleanuplightmaps);
 	ADDMENUITEM(snaptofloor,edit,"Snap objects to floor",		&MenuCommand_snaptofloor);
 	snaptofloor->ticked = true;
+	ADDMENUITEM(mm,edit,"Edit Water",		&MenuCommand_water);
 
 
 	fs.LoadFile("data.dat");
@@ -733,7 +737,7 @@ int main(int argc, char *argv[])
 
 	Log(3,0,"Done initializing..");
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "prontera").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "prt_church").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 //	Graphics.world.importalpha();
@@ -2739,6 +2743,30 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			}
 			case SDLK_BACKSPACE:
 			{
+				if (editmode == MODE_TEXTURE)
+				{
+					int posx = mouse3dx / 10;
+					int posy = mouse3dz / 10;
+					float selsizex = (fabs(Graphics.selectionstart.x - Graphics.selectionend.x) / 32);
+					float selsizey = (fabs(Graphics.selectionstart.y - Graphics.selectionend.y) / 32);
+					selsizex = floor(selsizex*Graphics.brushsize);
+					selsizey = floor(selsizey*Graphics.brushsize);
+
+					for(int x = posx; x > posx-selsizex; x--)
+					{
+						for(int y = posy; y > posy-selsizey; y--)
+						{
+							int xx = posx - x;
+							int yy = posy - y;
+							if (y < 0)
+								continue;
+							if (x < 0)
+								continue;
+							
+							Graphics.world.cubes[y][x].tileup = -1;
+						}
+					}
+				}
 				if (editmode == MODE_OBJECTS)
 				{
 					if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.models.size())
@@ -2936,8 +2964,6 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 							cWindow* w = new cEffectWindow();
 							w->init(&Graphics.WM.texture, &Graphics.WM.font);
-//							if (menuitem != NULL)
-//								w->objects["objectmenu"]->SetText(0,menuitem->data2);
 							w->objects["posx"]->SetInt(3,(int)&o->pos.x);
 							w->objects["posy"]->SetInt(3,(int)&o->pos.y);
 							w->objects["posz"]->SetInt(3,(int)&o->pos.z);
@@ -4244,5 +4270,20 @@ MENUCOMMAND(toggle)
 	src->ticked = !src->ticked;
 	*((bool*)src->pdata) = src->ticked;
 
+	return true;
+}
+
+MENUCOMMAND(water)
+{
+	char buf[100];
+	cWindow* w = new cWaterWindow();
+	w->init(&Graphics.WM.texture, &Graphics.WM.font);
+	sprintf(buf, "%f", Graphics.world.water.amplitude);		w->objects["amplitude"]->SetText(0,buf);
+	sprintf(buf, "%f", Graphics.world.water.height);		w->objects["height"]->SetText(0,buf);
+	sprintf(buf, "%f", Graphics.world.water.phase);			w->objects["phase"]->SetText(0,buf);
+	sprintf(buf, "%f", Graphics.world.water.surfacecurve);	w->objects["surfacecurve"]->SetText(0,buf);
+	sprintf(buf, "%i", Graphics.world.water.texcycle);		w->objects["texcycle"]->SetText(0,buf);
+	sprintf(buf, "%i", Graphics.world.water.type);			w->objects["type"]->SetText(0,buf);
+	Graphics.WM.addwindow(w);
 	return true;
 }

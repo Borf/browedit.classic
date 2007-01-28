@@ -19,6 +19,7 @@ spacebar							rotate the current brush
 h									flip the brush horizontally
 v									flip the brush vertically
 g									show / hide grid
+backspace							clears a part of the floor (for indoors)
 
 Detail heightmap edit
 ---------------------
