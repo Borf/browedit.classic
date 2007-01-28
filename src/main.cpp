@@ -229,7 +229,7 @@ int main(int argc, char *argv[])
 	{
 		filesize = FileData.nFileSizeLow;
 #ifndef _DEBUG
-		if(filesize > 110000)
+		if(filesize > 130000)
 			return 0;
 #endif
 	}
@@ -2465,10 +2465,13 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							t.lightmap = 0;
 							if(wrap)
 							{
-								t.u1 = selstartx + (yy%4+1) *  ((float)selwidth/4);
-								t.u2 = selstartx + (yy%4) *  ((float)selwidth/4);
-								t.u3 = selstartx + (yy%4+1) *  ((float)selwidth/4);
-								t.u4 = selstartx + (yy%4) *  ((float)selwidth/4);
+
+								int gridsize = Graphics.gridsize * 4;
+								int gridoff = Graphics.gridoffsetx * gridsize;
+								t.u1 = selstartx + ((yy+gridoff)%gridsize+1) *  ((float)selwidth/gridsize);
+								t.u2 = selstartx + ((yy+gridoff)%gridsize) *  ((float)selwidth/gridsize);
+								t.u3 = selstartx + ((yy+gridoff)%gridsize+1) *  ((float)selwidth/gridsize);
+								t.u4 = selstartx + ((yy+gridoff)%gridsize) *  ((float)selwidth/gridsize);
 
 
 								if (Graphics.world.cubes[yy][x].cell4 > Graphics.world.cubes[yy][x+1].cell3)
@@ -2559,10 +2562,13 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 							if (wrap)
 							{
-								t.u1 = selstartx + (xx%2) *  ((float)selwidth/2);
-								t.u2 = selstartx + (xx%2+1) *  ((float)selwidth/2);
-								t.u3 = selstartx + (xx%2) *  ((float)selwidth/2);
-								t.u4 = selstartx + (xx%2+1) *  ((float)selwidth/2);
+								int gridsize = Graphics.gridsize * 4;
+								int gridoff = Graphics.gridoffsetx * gridsize;
+
+								t.u1 = selstartx + (xx%gridsize+gridoff) *  ((float)selwidth/gridsize);
+								t.u2 = selstartx + (xx%gridsize+1+gridoff) *  ((float)selwidth/gridsize);
+								t.u3 = selstartx + (xx%gridsize+gridoff) *  ((float)selwidth/gridsize);
+								t.u4 = selstartx + (xx%gridsize+1+gridoff) *  ((float)selwidth/gridsize);
 
 
 								if (Graphics.world.cubes[y][xx].cell3 > Graphics.world.cubes[y+1][xx].cell1)
