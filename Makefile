@@ -1,7 +1,7 @@
 #!make
-# Makefile for Spacial
+# Makefile for browedit
 CC = /usr/bin/g++
-CFLAGS = -pipe -Wall -O2
+CFLAGS = -pipe -Wall -Wextra -ansi -pedantic -O2
 LIBS = 
 AR = /usr/bin/ar
 
@@ -16,7 +16,7 @@ title:
 
 browedit:
 	@echo -e " - \033[1mDIR\033[1m\t\033[22;32msrc\033[39m"
-	@$(MAKE) --no-print-directory -C src/ ../browedit
+	$(MAKE) --no-print-directory -C src/ ../browedit
 
 clean:
 	@$(MAKE) -C src/ clean

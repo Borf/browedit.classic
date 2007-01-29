@@ -2,17 +2,32 @@
 <?
 chdir("src");
 $files = array(	
-			"RSMModel",
-			"common",
-			"filesystem",
-			"font",
-			"frustum",
-			"graphics",
-			"main",
-			"texture",
-			"texturecache",
-			"texturemodel",
-			"world",
+"RSMModel",
+"common",
+"filesystem",
+"font",
+"frustum",
+"graphics",
+"main",
+"texture",
+"texturecache",
+"texturemodel",
+"wm/windowinputbox",
+"wm/windowobject",
+"wm/windowbutton",
+"wm/window",
+"wm/windowlabel",
+"wm/windowroundbutton",
+"wm/windowpicturebox",
+"wm/windowlistbox",
+"wm/windowtabpanel",
+"wm/windowcheckbox",
+"wm/windowmainbutton",
+"wm/wm",
+"wm/windowscrollpanel",
+"wm/windowprogressbar",
+"world",
+
 			);
 
 $fp = fopen("Makefile","w");
