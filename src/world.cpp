@@ -212,6 +212,11 @@ void cWorld::load()
 			string filename = buf+52;
 			cRSMModel* m = new cRSMModel();
 			m->load(rodir+ "model\\" + filename);
+
+			if (m->meshes.size() == 0)
+			{
+				Log(2,0,"Error loading %s", filename.c_str());
+			}
 			m->id = models.size();
 
 

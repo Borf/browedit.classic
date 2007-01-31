@@ -16,6 +16,11 @@
 	#define usleep(x) Sleep((x) / 1000);
 	#define msgbox(x, y) MessageBox(NULL, x, y, MB_OK);
 	#include <direct.h>
+
+typedef unsigned int uint32_t;
+typedef unsigned char uint8_t;
+
+
 #else
 	#include <netdb.h>
 	#include <netinet/in.h>

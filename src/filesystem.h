@@ -6,6 +6,9 @@
 
 #include <string>
 #include <vector>
+#include <map>
+#include "grflib/grf.h"
+
 using namespace std;
 
 enum STARTPOS
@@ -48,48 +51,21 @@ public:
 
 };
 
-class cFSFile
+class cGRFFile
 {
 public:
-	cFSFile()
-	{
-		majorversion = -1;
-		minorversion = -1;
-	}
-	void set(string s)
-	{
-		file = s;
-	}
-	bool operator==(string s)
-	{
-		return (file == s);
-	}
-	const char* c_str()
-	{
-		return file.c_str();
-	}
-	string file;
-	int majorversion;
-	int minorversion;
+	Grf* grf;
+	map<string, cFile*, less<string> > files;
+	long	nroffiles;
 };
 
 class cFileSystem
 {
 private:
-	cFile*	files;
-	long	nroffiles;
 public:
 	int LoadFile(string);
 	cFile*	open(string);
-	vector<cFSFile>	locations;
-	long	filecount()
-	{
-		return nroffiles;
-	}
-	cFile&	getfile(int i)
-	{
-		return files[i];
-	}
+	vector<cGRFFile*>	locations;
 };
 
 #endif

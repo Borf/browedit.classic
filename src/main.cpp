@@ -491,6 +491,7 @@ int main(int argc, char *argv[])
 	mm->ticked = true;
 	ADDMENUITEMDATAP(mm,view,"Topcamera",&MenuCommand_toggle, (void*)&Graphics.topcamera);
 	ADDMENUITEMDATAP(mm,view,"Show invisible tiles",&MenuCommand_toggle, (void*)&Graphics.shownotiles);
+	mm->ticked = true;
 
 
 
@@ -544,7 +545,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,edit,"Clean Textures",		&MenuCommand_cleantextures);
 
 
-	fs.LoadFile("data.dat");
+	fs.LoadFile("sdata.grf");
 	
 	cFile* pFile = fs.open("config.txt");
 	if (pFile == NULL)
@@ -739,7 +740,7 @@ int main(int argc, char *argv[])
 
 	Log(3,0,"Done initializing..");
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "house").c_str());
+	strcpy(Graphics.world.filename, string("c:\\games\\ro\\data\\prontera").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 //	Graphics.world.importalpha();
@@ -2565,10 +2566,10 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 								int gridsize = Graphics.gridsize * 4;
 								int gridoff = Graphics.gridoffsetx * gridsize;
 
-								t.u1 = selstartx + (xx%gridsize+gridoff) *  ((float)selwidth/gridsize);
-								t.u2 = selstartx + (xx%gridsize+1+gridoff) *  ((float)selwidth/gridsize);
-								t.u3 = selstartx + (xx%gridsize+gridoff) *  ((float)selwidth/gridsize);
-								t.u4 = selstartx + (xx%gridsize+1+gridoff) *  ((float)selwidth/gridsize);
+								t.u1 = selstartx + ((xx+gridoff)%gridsize) *  ((float)selwidth/gridsize);
+								t.u2 = selstartx + ((xx+gridoff)%gridsize+1) *  ((float)selwidth/gridsize);
+								t.u3 = selstartx + ((xx+gridoff)%gridsize) *  ((float)selwidth/gridsize);
+								t.u4 = selstartx + ((xx+gridoff)%gridsize+1) *  ((float)selwidth/gridsize);
 
 
 								if (Graphics.world.cubes[y][xx].cell3 > Graphics.world.cubes[y+1][xx].cell1)

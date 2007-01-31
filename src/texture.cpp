@@ -19,7 +19,7 @@ int cTexture::Load(string Filename, bool freedat)
 
 GLuint cTexture::texid()
 {
-	if (!loaded && filename != "")
+ 	if (!loaded && filename != "")
 	{
 		if (filename.find(".tga") != string::npos || filename.find(".TGA") != string::npos)
 			LoadFromTGA(filename);
@@ -27,19 +27,72 @@ GLuint cTexture::texid()
 			LoadFromJpeg(filename);
 		else if (lcase(filename).find(".bmp") != string::npos)
 		{
+			if(filename == "data\\texture\\프론테라\\STONE-UP.BMP")
+				Sleep(0);
 			Log(3,0,"Loading %s...", filename.c_str());
 			BMPClass bmp;
 			int ret = BMPLoad(filename,bmp);
 			if (ret == 0)
 			{
-				glGenTextures(1, &tid);
-				glBindTexture(GL_TEXTURE_2D, tid);
-				glTexImage2D(GL_TEXTURE_2D,0,4,bmp.width,bmp.height,0,GL_RGBA,GL_UNSIGNED_BYTE,bmp.bytes);
-				glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-				//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-				//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-				Log(3,0,"Loaded %s successfully", filename.c_str());
+				if(bmp.width != 128 && bmp.width != 256 && bmp.width != 64 && bmp.width != 32 && bmp.width != 16)
+					Log(3,0,"wrong width!");
+				if(bmp.height != 128 && bmp.height != 256 && bmp.height != 64 && bmp.height != 32 && bmp.height != 16)
+					Log(3,0,"wrong height!");
+				// Resize Image To Closest Power Of Two
+				GLint glMaxTexDim;
+				
+				int lHeightPixels = bmp.height;
+				int lWidthPixels = bmp.width;
+
+				glGetIntegerv(GL_MAX_TEXTURE_SIZE, &glMaxTexDim);
+				if (lWidthPixels <= glMaxTexDim) // Is Image Width Less Than Or Equal To Cards Limit
+					lWidthPixels = 1 << (int)floor((log((double)lWidthPixels)/log(2.0f)) + 0.5f); 
+				else  // Otherwise  Set Width To "Max Power Of Two" That The Card Can Handle
+					lWidthPixels = glMaxTexDim;
+				
+				if (lHeightPixels <= glMaxTexDim) // Is Image Height Greater Than Cards Limit
+					lHeightPixels = 1 << (int)floor((log((double)lHeightPixels)/log(2.0f)) + 0.5f);
+				else  // Otherwise  Set Height To "Max Power Of Two" That The Card Can Handle
+					lHeightPixels = glMaxTexDim;
+
+				if(bmp.width == lWidthPixels && bmp.height == lHeightPixels)
+				{
+					glGenTextures(1, &tid);
+					glBindTexture(GL_TEXTURE_2D, tid);
+					glTexImage2D(GL_TEXTURE_2D,0,4,bmp.width,bmp.height,0,GL_RGBA,GL_UNSIGNED_BYTE,bmp.bytes);
+					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+					//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+					//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+					Log(3,0,"Loaded %s successfully", filename.c_str());
+				}
+				else
+				{
+					float factorx = (float)bmp.width / (float)lWidthPixels;
+					float factory = (float)bmp.height / (float)lHeightPixels;
+
+					char* data = new char[lWidthPixels * lHeightPixels*4];
+					for(int x = 0; x < lWidthPixels; x++)
+					{
+						for(int y = 0; y < lHeightPixels; y++)
+						{
+							data[4*x+4*lWidthPixels*y] = bmp.bytes[4*(int)(x*factorx) + (int)(4*bmp.width*(int)(y*factory))];
+							data[4*x+4*lWidthPixels*y+1] = bmp.bytes[4*(int)(x*factorx) + (int)(4*bmp.width*(int)(y*factory))+1];
+							data[4*x+4*lWidthPixels*y+2] = bmp.bytes[4*(int)(x*factorx) + (int)(4*bmp.width*(int)(y*factory))+2];
+							data[4*x+4*lWidthPixels*y+3] = bmp.bytes[4*(int)(x*factorx) + (int)(4*bmp.width*(int)(y*factory))+3];
+						}
+					}
+					glGenTextures(1, &tid);
+					glBindTexture(GL_TEXTURE_2D, tid);
+					glTexImage2D(GL_TEXTURE_2D,0,4,lWidthPixels,lHeightPixels,0,GL_RGBA,GL_UNSIGNED_BYTE,data);
+					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+					//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+					//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+					
+					delete[] data;
+					Log(3,0,"Loaded and resized %s successfully", filename.c_str());
+				}
 			}
 			else
 				Log(3,0,"Couldn't load %s", filename.c_str());
@@ -420,14 +473,14 @@ BMPError cTexture::BMPLoad(std::string fname,BMPClass& bmp)
 {
 	if(sizeof(int)!=4) return BMPBADINT;
 		
-	FILE* f=fopen(fname.c_str(),"rb");		//open for reading in binary mode
+	cFile* f=fs.open(fname);		//open for reading in binary mode
 	if(!f) return BMPNOOPEN;
 	char header[54];
-	fread(header,54,1,f);			//read the 54bit main header
+	f->read(header,54);			//read the 54bit main header
 
 	if(header[0]!='B' || header[1]!='M') 
 	{
-		fclose(f);
+		f->close();
 		return BMPNOTABITMAP;		//all bitmaps should start "BM"
 	}
 
@@ -446,10 +499,10 @@ BMPError cTexture::BMPLoad(std::string fname,BMPClass& bmp)
 	switch(bits)
 	{
 	case(24):
-		fseek(f,offset,SEEK_SET);
+		f->seek(offset,beg);
 		for(x=0;x<bmp.width*bmp.height*4;x+=4)			//except the format is BGR, grr
 		{
-			fread(bmp.bytes+x,3,1,f);	//24bit is easy
+			f->read((char*)bmp.bytes+x,3);	//24bit is easy
 			BYTE temp=bmp.bytes[x];
 			bmp.bytes[x]=bmp.bytes[x+2];
 			bmp.bytes[x+2]=temp;
@@ -463,13 +516,12 @@ BMPError cTexture::BMPLoad(std::string fname,BMPClass& bmp)
 		break;
 
 	case(8):
-		fread(cols,256*4,1,f);							//read colortable
-		fseek(f,offset,SEEK_SET);
+		f->read((char*)cols,256*4);							//read colortable
+		f->seek(offset,beg);
 		for(y=0;y<bmp.height;++y)						//(Notice 4bytes/col for some reason)
 			for(x=0;x<bmp.width;++x)
 			{
-				BYTE byte;			
-				fread(&byte,1,1,f);						//just read byte					
+				BYTE byte = f->get();
 				for(int c=0;c<3;++c)
 					bmp.pixel(x,y,c)=cols[byte*4+2-c];	//and look up in the table
 				if(bmp.pixel(x,y,0) == 255 && bmp.pixel(x,y,2) == 255)
@@ -480,13 +532,12 @@ BMPError cTexture::BMPLoad(std::string fname,BMPClass& bmp)
 		break;
 
 	case(4):
-		fread(cols,16*4,1,f);
-		fseek(f,offset,SEEK_SET);
+		f->read((char*)cols,16*4);
+		f->seek(offset,beg);
 		for(y=0;y<256;++y)
 			for(x=0;x<256;x+=2)
 			{
-				BYTE byte;
-				fread(&byte,1,1,f);						//as above, but need to exract two
+				BYTE byte = f->get();
 				for(c=0;c<3;++c)						//pixels from each byte
 					bmp.pixel(x,y,c)=cols[byte/16*4+2-c];
 				for(c=0;c<3;++c)
@@ -496,13 +547,12 @@ BMPError cTexture::BMPLoad(std::string fname,BMPClass& bmp)
 		break;
 
 	case(1):
-		fread(cols,8,1,f);
-		fseek(f,offset,SEEK_SET);
+		f->read((char*)cols,8);
+		f->seek(offset,beg);
 		for(y=0;y<bmp.height;++y)
 			for(x=0;x<bmp.width;x+=8)
 			{
-				BYTE byte;
-				fread(&byte,1,1,f);
+				BYTE byte = f->get();
 				//Every byte is eight pixels
 				//so I'm shifting the byte to the relevant position, then masking out
 				//all but the lowest bit in order to get the index into the colourtable.
@@ -516,17 +566,12 @@ BMPError cTexture::BMPLoad(std::string fname,BMPClass& bmp)
 		break;
 
 	default:
-		fclose(f);
+		f->close();
 		return BMPUNKNOWNFORMAT;
 	}
 
-	if(ferror(f))
-	{
-		fclose(f);
-		return BMPFILEERROR;
-	}
 	
-	fclose(f);
+	f->close();
 
 	return BMPNOERROR;
 }

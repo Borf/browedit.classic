@@ -31,7 +31,7 @@ void cRSMModel::load(string fname)
 	long ntextures = *((long*)buffer);
 
 
-	if(ntextures < 0 || ntextures > 1000)
+	if(ntextures < 1 || ntextures > 1000)
 		return;
 
 	for(i = 0; i < ntextures; i++)
@@ -550,12 +550,12 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 				printf(".");
 				float t = 0;
 
-				int x2 = min(Graphics.world.width, model->pos.x/2+mmax);
-				int y2 = min(Graphics.world.height, model->pos.z/2+ mmax);
+				int x2 = min(Graphics.world.width, model->pos.x/2+mmax*2);
+				int y2 = min(Graphics.world.height, model->pos.z/2+ mmax*2);
 
-				for(int x = max(0, model->pos.x/2 + mmin); x < x2; x++)
+				for(int x = max(0, model->pos.x/2 + mmin*2); x < x2; x++)
 				{
-					for(int y = max(0, model->pos.z/2 + mmin); y < y2; y++)
+					for(int y = max(0, model->pos.z/2 + mmin*2); y < y2; y++)
 					{
 						for(int xx = 0; xx < 6; xx++)
 						{
