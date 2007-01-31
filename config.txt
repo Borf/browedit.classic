@@ -1,7 +1,7 @@
 setting=RO
 
 [RO]
-datadir=c:\games\ro\data\
+datadir=c:\games\ro\
 model=romodels.txt
 model=arcturusmodels.txt
 texture=rotextures.txt
@@ -11,6 +11,10 @@ resy=768
 fullscreen=0
 bpp=32
 font=tahoma
+grf=c:\games\ro\adata.grf
+grf=c:\games\ro\bdata.grf
+grf=c:\games\ro\sdata.grf
+grf=c:\games\ro\data.grf
 
 [Arcturus]
 datadir=c:\Program Files\Arcturus\data\

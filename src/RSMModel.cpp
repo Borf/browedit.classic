@@ -38,7 +38,7 @@ void cRSMModel::load(string fname)
 	{
 		pFile->read(buffer, 40);
 		string filename = buffer;
-		cTexture* tex = TextureCache.load(rodir + "texture\\" + filename);
+		cTexture* tex = TextureCache.load(rodir + "data\\texture\\" + filename);
 		textures.push_back(tex);
 	}
 

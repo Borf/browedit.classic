@@ -8,30 +8,32 @@
 
 extern cFileSystem fs;
 
-int cFileSystem::LoadFile(string filename)
+extern string rodir;
+
+int cFileSystem::LoadFile(string grffilename)
 {
 	cGRFFile* grffile = new cGRFFile();
 	locations.push_back(grffile);
 	char thislocation = locations.size()-1;
 	GrfError error;
 
-	grffile->grf = grf_open("c:\\games\\ro\\data.grf", "rb", &error);
+	grffile->grf = grf_open(grffilename.c_str(), "rb", &error);
 	if (grffile->grf == NULL)
 	{
-		Log(1,0,"Filesystem: Error opening grf: %s", filename.c_str());
+		Log(1,0,"Filesystem: Error opening grf: %s", grffilename.c_str());
 		return -1;
 	}
 	
 	for(int i =0 ; i < grffile->grf->nfiles; i++)
 	{
-		string filename = lcase(grffile->grf->files[i].name);
+		string filename = lcase(rodir + grffile->grf->files[i].name);
 		grffile->files[filename] = new cFile();
 		grffile->files[filename]->filename = grffile->grf->files[i].name;
 		grffile->files[filename]->location = thislocation;
 	}
 
 
-	Log(3,0,"Done reading %s", filename.c_str());
+	Log(3,0,"Done reading %s", grffilename.c_str());
 
 	return 0;
 }

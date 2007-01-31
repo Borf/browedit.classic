@@ -106,7 +106,7 @@ void cWorld::load()
 		cTextureContainer* t = new cTextureContainer();
 		t->RoFilename = s;
 		t->RoFilename2 = string(buf+40);
-		t->texture = TextureCache.load(rodir + "texture\\" + s);
+		t->texture = TextureCache.load(rodir + "data\\texture\\" + s);
 		textures.push_back(t);
 	}
 
@@ -211,7 +211,7 @@ void cWorld::load()
 			pFile->read(buf, 248);
 			string filename = buf+52;
 			cRSMModel* m = new cRSMModel();
-			m->load(rodir+ "model\\" + filename);
+			m->load(rodir+ "data\\model\\" + filename);
 
 			if (m->meshes.size() == 0)
 			{

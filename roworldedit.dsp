@@ -50,7 +50,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 ws2_32.lib sdl.lib sdlmain.lib zlib.lib bgd.lib opengl32.lib glu32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
+# ADD LINK32 libgrf.lib ws2_32.lib bgd.lib sdl.lib sdlmain.lib zlib.lib opengl32.lib glu32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
 
 !ELSEIF  "$(CFG)" == "roworldedit - Win32 Debug"
 
@@ -66,7 +66,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FR /YX /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /D "GRF_STATIC" /FR /YX /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -74,7 +74,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 ws2_32.lib bgd.lib sdl.lib sdlmain.lib zlib.lib opengl32.lib glaux.lib glu32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /nodefaultlib:"MSVCRT" /pdbtype:sept
+# ADD LINK32 glaux.lib ws2_32.lib bgd.lib sdl.lib sdlmain.lib zlib.lib opengl32.lib glu32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /nodefaultlib:"MSVCRT" /pdbtype:sept
 
 !ENDIF 
 
@@ -348,6 +348,126 @@ SOURCE=.\src\wm\wm.cpp
 # Begin Source File
 
 SOURCE=.\src\wm\wm.h
+# End Source File
+# End Group
+# Begin Group "grflib"
+
+# PROP Default_Filter ""
+# Begin Group "zlib"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\src\grflib\zlib\adler32.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\grflib\zlib\compress.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\grflib\zlib\crc32.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\grflib\zlib\crc32.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\grflib\zlib\deflate.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\grflib\zlib\deflate.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\grflib\zlib\inffast.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\grflib\zlib\inffast.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\grflib\zlib\inffixed.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\grflib\zlib\inflate.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\grflib\zlib\inflate.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\grflib\zlib\inftrees.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\grflib\zlib\inftrees.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\grflib\zlib\trees.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\grflib\zlib\trees.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\grflib\zlib\zconf.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\grflib\zlib\zlib.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\grflib\zlib\zutil.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\grflib\zlib\zutil.h
+# End Source File
+# End Group
+# Begin Source File
+
+SOURCE=.\src\grflib\grf.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\grflib\grf.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\grflib\grfcrypt.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\grflib\grfcrypt.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\grflib\grfsupport.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\grflib\grfsupport.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\grflib\grftypes.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\grflib\rgz.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\grflib\rgz.h
 # End Source File
 # End Group
 # End Target

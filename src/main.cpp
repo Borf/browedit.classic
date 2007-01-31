@@ -544,9 +544,6 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,edit,"Edit Water",		&MenuCommand_water);
 	ADDMENUITEM(mm,edit,"Clean Textures",		&MenuCommand_cleantextures);
 
-
-	fs.LoadFile("sdata.grf");
-	
 	cFile* pFile = fs.open("config.txt");
 	if (pFile == NULL)
 	{
@@ -579,6 +576,8 @@ int main(int argc, char *argv[])
 
 					if(option == "datadir")
 						rodir = value;
+					else if(option == "grf")
+						fs.LoadFile(value);
 					else if(option == "resx")
 						Graphics.width = atoi(value.c_str());
 					else if(option == "resy")
@@ -731,16 +730,13 @@ int main(int argc, char *argv[])
 
 	pFile->close();
 
-
-
-	
 	if (!Graphics.init())
 		return 1;
 
 
 	Log(3,0,"Done initializing..");
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string("c:\\games\\ro\\data\\prontera").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "data\\prontera").c_str());
 #ifdef _DEBUG
 	Graphics.world.load();
 //	Graphics.world.importalpha();
@@ -3572,7 +3568,7 @@ MENUCOMMAND(picktexture)
 		ZeroMemory(buf, 40);
 		sprintf(buf, "%i%i", rand(), rand());
 		t->RoFilename2 = string(buf,40);
-		t->texture = TextureCache.load(rodir + "texture/" + src->data);
+		t->texture = TextureCache.load(rodir + src->data);
 		Graphics.world.textures[id] = t;
 
 	}
@@ -3585,7 +3581,7 @@ MENUCOMMAND(picktexture)
 		ZeroMemory(buf, 40);
 		sprintf(buf, "%i%i", rand(), rand());
 		t->RoFilename2 = string(buf,40);
-		t->texture = TextureCache.load(rodir + "texture/" + src->data);
+		t->texture = TextureCache.load(rodir + src->data);
 		Graphics.world.textures.push_back(t);
 		Graphics.texturestart = Graphics.world.textures.size() - 2;
 	}
@@ -4246,10 +4242,10 @@ MENUCOMMAND(snaptofloor)
 
 bool mouseovertexture(cMenu* src)
 {
-	if (Graphics.texturepreview == NULL || Graphics.texturepreview->getfilename() != rodir + "texture/" + ((cMenuItem*)src)->data)
+	if (Graphics.texturepreview == NULL || Graphics.texturepreview->getfilename() != rodir + ((cMenuItem*)src)->data)
 	{
 		Graphics.texturepreview = new cTexture();
-		Graphics.texturepreview->Load(rodir + "texture/" + ((cMenuItem*)src)->data);
+		Graphics.texturepreview->Load(rodir + ((cMenuItem*)src)->data);
 		return false;
 	}
 	else
