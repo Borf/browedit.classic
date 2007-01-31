@@ -21,9 +21,9 @@
  * See grfcrypt.h for information about encryption related GRF_FLAG_*s
  */
 
-#include "grftypes.h"		/* for uint[8,16,32]_t */
-#include "grfcrypt.h"		/* Prototypes */
-#include <string.h>		/* memset, memcpy */
+#include "grftypes.h"
+#include "grfcrypt.h"
+#include <string.h>
 
 GRFEXTERN_BEGIN
 

@@ -737,6 +737,10 @@ int main(int argc, char *argv[])
 	Log(3,0,"Done initializing..");
 	Graphics.world.newworld();
 	strcpy(Graphics.world.filename, string(rodir + "data\\prontera").c_str());
+#ifndef WIN32
+	Graphics.world.load();
+#endif
+
 #ifdef _DEBUG
 	Graphics.world.load();
 //	Graphics.world.importalpha();

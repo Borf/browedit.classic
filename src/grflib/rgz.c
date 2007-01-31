@@ -22,8 +22,8 @@
  */
 
 /* Include headers needed for RGZ handling */
-#include "rgz.h"	/* RGZ basics */
-#include <zlib.h>	/* For GZip support */
+#include "rgz.h"
+#include <zlib.h>
 #include <stdlib.h>
 #include <string.h>
 

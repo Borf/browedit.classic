@@ -26,7 +26,7 @@ int cFileSystem::LoadFile(string grffilename)
 	
 	for(int i =0 ; i < grffile->grf->nfiles; i++)
 	{
-		string filename = lcase(rodir + grffile->grf->files[i].name);
+		string filename = replace(lcase(rodir + grffile->grf->files[i].name),"/","\\");
 		grffile->files[filename] = new cFile();
 		grffile->files[filename]->filename = grffile->grf->files[i].name;
 		grffile->files[filename]->location = thislocation;
@@ -61,6 +61,7 @@ cFile* cFileSystem::open(string filename)
 		return fil;
 	}
 
+	filename = replace(filename,"/","\\");
 	for(int i = 0; i < locations.size(); i++)
 	{
 		if(locations[i]->files.find(lcase(filename)) != locations[i]->files.end())

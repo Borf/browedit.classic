@@ -16,7 +16,7 @@ title:
 
 browedit:
 	@echo -e " - \033[1mDIR\033[1m\t\033[22;32msrc\033[39m"
-	$(MAKE) --no-print-directory -C src/ ../browedit
+	$(MAKE) --no-print-directory -C src ../browedit
 
 clean:
 	@$(MAKE) -C src/ clean

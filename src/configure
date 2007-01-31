@@ -2,31 +2,45 @@
 <?
 chdir("src");
 $files = array(	
-"RSMModel",
-"common",
-"filesystem",
-"font",
-"frustum",
-"graphics",
-"main",
-"texture",
-"texturecache",
-"texturemodel",
-"wm/windowinputbox",
-"wm/windowobject",
-"wm/windowbutton",
-"wm/window",
-"wm/windowlabel",
-"wm/windowroundbutton",
-"wm/windowpicturebox",
-"wm/windowlistbox",
-"wm/windowtabpanel",
-"wm/windowcheckbox",
-"wm/windowmainbutton",
-"wm/wm",
-"wm/windowscrollpanel",
-"wm/windowprogressbar",
-"world",
+"RSMModel.cpp",
+"common.cpp",
+"filesystem.cpp",
+"font.cpp",
+"frustum.cpp",
+"graphics.cpp",
+"grflib/zlib/deflate.c",
+"grflib/zlib/zutil.c",
+"grflib/zlib/crc32.c",
+"grflib/zlib/inftrees.c",
+"grflib/zlib/inflate.c",
+"grflib/zlib/trees.c",
+"grflib/zlib/inffast.c",
+"grflib/zlib/compress.c",
+"grflib/zlib/adler32.c",
+"grflib/grfcrypt.c",
+"grflib/grf.c",
+"grflib/rgz.c",
+"grflib/grfsupport.c",
+"main.cpp",
+"md5.c",
+"texture.cpp",
+"texturecache.cpp",
+"texturemodel.cpp",
+"wm/windowinputbox.cpp",
+"wm/windowobject.cpp",
+"wm/windowbutton.cpp",
+"wm/window.cpp",
+"wm/windowlabel.cpp",
+"wm/windowroundbutton.cpp",
+"wm/windowpicturebox.cpp",
+"wm/windowlistbox.cpp",
+"wm/windowtabpanel.cpp",
+"wm/windowcheckbox.cpp",
+"wm/windowmainbutton.cpp",
+"wm/wm.cpp",
+"wm/windowscrollpanel.cpp",
+"wm/windowprogressbar.cpp",
+"world.cpp",
 
 			);
 
@@ -43,21 +57,21 @@ LIBS = -lGL -lz -lSDL -lGLU -lgd
 ../browedit:  ");
 
 for($i = 0; $i < count($files); $i++)
-	fputs($fp, $files[$i] . ".o ");
+	fputs($fp, substr($files[$i],0,strrpos($files[$i],".")) . ".o ");
 fputs($fp,"
 
 	@echo -e \"    \\033[1mLD\\033[1m\\t\\033[22;35m$@\\033[39m\"
 	@$(CC) $(LDFLAGS) -o $@  ");
 	
 for($i = 0; $i < count($files); $i++)
-	fputs($fp, $files[$i] . ".o ");
+	fputs($fp, substr($files[$i],0,strrpos($files[$i],".")) . ".o ");
 fputs($fp, "\$(LIBS)\n");
 for($i = 0; $i < count($files); $i++)
 {
-	echo $files[$i] . "\n";
-	fputs($fp,$files[$i].".o:");
+	echo substr($files[$i],0,strrpos($files[$i],".")) . "\n";
+	fputs($fp,substr($files[$i],0,strrpos($files[$i],".")).".o:");
 	$filesdone = array();
-	parsefile($files[$i].".cpp");
+	parsefile($files[$i]);
 	for($ii = 0; $ii < count($filesdone); $ii++)
 		fputs($fp, " " . $filesdone[$ii]);
 	fputs($fp,"\n");
@@ -83,7 +97,7 @@ function parsefile($filename, $includedir = "")
 	$dir = getcwd();
 	while(stristr($filename, "/"))
 	{
-		chdir(substr($filename, 0, strpos($filename,"/")));
+		chdir(substr($filename, 0, strpos($filename,"/"))) or die("Couldn't chmod to " . substr($filename, 0, strpos($filename,"/")) . " from " . getcwd() . "|" . $filename . "|");
 		$includedir .= substr($filename, 0, strpos($filename,"/")+1);
 		$filename = substr($filename,strpos($filename,"/")+1);
 	}
