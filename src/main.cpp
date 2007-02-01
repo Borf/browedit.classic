@@ -736,7 +736,7 @@ int main(int argc, char *argv[])
 
 	Log(3,0,"Done initializing..");
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "data\\prontera").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "data\\payon").c_str());
 #ifndef WIN32
 	Graphics.world.load();
 #endif

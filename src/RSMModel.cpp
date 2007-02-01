@@ -233,9 +233,9 @@ void cRSMModel::draw(bool checkfrust, bool dodraw, bool setheight, bool dolightm
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set the correct blending mode
 	glEnable(GL_BLEND);
 	glTranslatef(5*pos.x, -pos.y, 5*pos.z);
+	glRotatef(-rot.x, 1.0, 0.0, 0.0);
 	glRotatef(-rot.z, 0.0, 0.0, 1.0);
 	glRotatef(rot.y, 0.0, 1.0, 0.0);
-	glRotatef(rot.x, 1.0, 0.0, 0.0);
 
 	glScalef(scale.x, -scale.y, scale.z);
 //	glScalef(0.5, 0.5, 0.5);
@@ -427,7 +427,7 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 		glTranslatef(trans[12], trans[13], trans[14]);
 
 	if(frames.size() == 0)
-		glRotatef(trans[15]*180.0/3.14159, trans[16], trans[17], trans[18]);
+		glRotatef(trans[15]*180.0/3.14159, -trans[16], trans[17], trans[18]);
 	else
 		glMultMatrixf(Ori);
 
