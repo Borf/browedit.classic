@@ -169,10 +169,20 @@ public:
 	int		texcycle;
 };
 
+class cAmbientLight
+{
+public:
+	cVector3	ambient;
+	cVector3	diffuse;
+	cVector3	shadow;
+	float		alpha;
+};
+
 class cWorld
 {
 
 public:
+	cAmbientLight ambientlight;
 	cWater water;
 	bool loaded;
 

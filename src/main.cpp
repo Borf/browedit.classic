@@ -11,6 +11,7 @@
 #include "wm/objectwindow.h"
 #include "wm/effectwindow.h"
 #include "wm/waterwindow.h"
+#include "wm/ambientlightwindow.h"
 
 #include "texturecache.h"
 #ifdef WIN32
@@ -99,6 +100,7 @@ MENUCOMMAND(clearstuff);
 MENUCOMMAND(effect);
 MENUCOMMAND(toggle);
 MENUCOMMAND(water);
+MENUCOMMAND(ambientlight);
 MENUCOMMAND(cleantextures);
 
 cMenu*	menu;
@@ -543,6 +545,7 @@ int main(int argc, char *argv[])
 	snaptofloor->ticked = true;
 	ADDMENUITEM(mm,edit,"Edit Water",		&MenuCommand_water);
 	ADDMENUITEM(mm,edit,"Clean Textures",		&MenuCommand_cleantextures);
+	ADDMENUITEM(mm,edit,"Edit Ambient Lighting",		&MenuCommand_ambientlight);
 
 	cFile* pFile = fs.open("config.txt");
 	if (pFile == NULL)
@@ -736,7 +739,7 @@ int main(int argc, char *argv[])
 
 	Log(3,0,"Done initializing..");
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "data\\payon").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "data\\morc_cas01").c_str());
 #ifndef WIN32
 	Graphics.world.load();
 #endif
@@ -2646,7 +2649,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 							Log(3,0,"Copied %s", Graphics.clipboardfile.c_str());
 
-							currentobject = models->finddata("model\\" + Graphics.world.models[Graphics.selectedobject]->rofilename);
+							currentobject = models->finddata("data\\model\\" + Graphics.world.models[Graphics.selectedobject]->rofilename);
 							if(currentobject != NULL)
 								MenuCommand_model((cMenuItem*)currentobject);
 						}
@@ -3015,13 +3018,16 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						{
 							for(y = posy-floor(brushsize/2.0f)+1; y < posy+ceil(brushsize/2.0f); y++)
 							{
-								if (x >= 0 && x < Graphics.world.width-ceil(brushsize/2.0f) && y > 0 && y <= Graphics.world.height-ceil(brushsize/2.0f))
+								if (x >= 0 && x < Graphics.world.width && y >= 0 && y < Graphics.world.height)
 								{
 									float to = Graphics.world.cubes[y][x].cell2;
 									Graphics.world.cubes[y][x].cell2 = to;
 									Graphics.world.cubes[y][x+1].cell1 = to;
-									Graphics.world.cubes[y-1][x+1].cell3 = to;
-									Graphics.world.cubes[y-1][x].cell4 = to;
+									if (y > 0)
+									{
+										Graphics.world.cubes[y-1][x+1].cell3 = to;
+										Graphics.world.cubes[y-1][x].cell4 = to;
+									}
 								}
 							}
 						}
@@ -3030,7 +3036,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						{
 							for(y = posy-floor(brushsize/2.0f)+1; y < posy+ceil(brushsize/2.0f); y++)
 							{
-								if (x > 0 && x < Graphics.world.width-ceil(brushsize/2.0f)-1 && y > 0 && y < Graphics.world.height-ceil(brushsize/2.0f)-1)
+								if (x >= 0 && x < Graphics.world.width && y > 0 && y < Graphics.world.height-1)
 								{
 									float to = (Graphics.world.cubes[y+1][x-1].cell2 + Graphics.world.cubes[y+1][x].cell2 + Graphics.world.cubes[y+1][x+1].cell2 + Graphics.world.cubes[y][x-1].cell2 + Graphics.world.cubes[y][x].cell2 + Graphics.world.cubes[y][x+1].cell2 + Graphics.world.cubes[y-1][x-1].cell2 + Graphics.world.cubes[y-1][x].cell2 + Graphics.world.cubes[y-1][x+1].cell2) / 9.0f;
 									Graphics.world.cubes[y][x].cell2 = to;
@@ -4348,5 +4354,28 @@ MENUCOMMAND(cleantextures)
 		}
 	}
 
+	return true;
+}
+
+MENUCOMMAND(ambientlight)
+{
+	char buf[100];
+	cWindow* w = new cAmbientLightWindow();
+	w->init(&Graphics.WM.texture, &Graphics.WM.font);
+	sprintf(buf, "%f", Graphics.world.ambientlight.ambient.x);		w->objects["ambientr"]->SetText(0,buf);
+	sprintf(buf, "%f", Graphics.world.ambientlight.ambient.y);		w->objects["ambientg"]->SetText(0,buf);
+	sprintf(buf, "%f", Graphics.world.ambientlight.ambient.z);		w->objects["ambientb"]->SetText(0,buf);
+
+	sprintf(buf, "%f", Graphics.world.ambientlight.diffuse.x);		w->objects["diffuser"]->SetText(0,buf);
+	sprintf(buf, "%f", Graphics.world.ambientlight.diffuse.y);		w->objects["diffuseg"]->SetText(0,buf);
+	sprintf(buf, "%f", Graphics.world.ambientlight.diffuse.z);		w->objects["diffuseb"]->SetText(0,buf);
+
+	sprintf(buf, "%f", Graphics.world.ambientlight.shadow.x);		w->objects["shadowr"]->SetText(0,buf);
+	sprintf(buf, "%f", Graphics.world.ambientlight.shadow.y);		w->objects["shadowg"]->SetText(0,buf);
+	sprintf(buf, "%f", Graphics.world.ambientlight.shadow.z);		w->objects["shadowb"]->SetText(0,buf);
+	
+	sprintf(buf, "%f", Graphics.world.ambientlight.alpha);			w->objects["alpha"]->SetText(0,buf);
+
+	Graphics.WM.addwindow(w);
 	return true;
 }

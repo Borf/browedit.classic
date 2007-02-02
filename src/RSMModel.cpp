@@ -427,7 +427,7 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 		glTranslatef(trans[12], trans[13], trans[14]);
 
 	if(frames.size() == 0)
-		glRotatef(trans[15]*180.0/3.14159, -trans[16], trans[17], trans[18]);
+		glRotatef(trans[15]*180.0/3.14159, trans[16], trans[17], trans[18]);
 	else
 		glMultMatrixf(Ori);
 

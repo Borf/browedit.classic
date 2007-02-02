@@ -194,6 +194,19 @@ void cWorld::load()
 	water.surfacecurve = *((float*)(w+16));
 	water.texcycle = *((int*)(w+20));
 	
+	ambientlight.ambient.x = *((float*)(w+24));
+	ambientlight.ambient.y = *((float*)(w+28));
+	ambientlight.ambient.z = *((float*)(w+32));
+
+	ambientlight.diffuse.x = *((float*)(w+32));
+	ambientlight.diffuse.y = *((float*)(w+36));
+	ambientlight.diffuse.z = *((float*)(w+40));
+
+	ambientlight.shadow.x = *((float*)(w+44));
+	ambientlight.shadow.y = *((float*)(w+48));
+	ambientlight.shadow.z = *((float*)(w+52));
+
+	ambientlight.alpha = *((float*)(w+56));
 	
 
 	pFile->read(buf, 4);
@@ -930,6 +943,8 @@ void cWorld::draw()
 			if (c->tileaside != -1 && c->tileaside < tiles.size())
 			{
 				cTile* t = &tiles[c->tileaside];
+				if(t->texture >= textures.size())
+					break;
 				int texture = textures[t->texture]->texid();
 				glBindTexture(GL_TEXTURE_2D, texture);
 				glColor3f(1,1,1);
@@ -944,6 +959,8 @@ void cWorld::draw()
 			if (c->tileside != -1 && y < height-1 && c->tileside < tiles.size())
 			{
 				cTile* t = &tiles[c->tileside];
+				if(t->texture >= textures.size())
+					break;
  				int texture = textures[t->texture]->texid();
 				glBindTexture(GL_TEXTURE_2D, texture);
 				glColor3f(1,1,1);
@@ -1139,6 +1156,8 @@ void cWorld::draw()
 						continue;
 					cTile t;
 					t.texture = Graphics.texturestart + (Graphics.selectionstart.y - 32) / 288;
+					if(t.texture >= Graphics.world.textures.size())
+						break;
 					if (Graphics.texturerot == 0)
 					{
 						t.u1 = (selendx*Graphics.brushsize-xx-1) * (1/(8.0f*Graphics.brushsize));
