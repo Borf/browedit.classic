@@ -577,15 +577,25 @@ void cMenu::draw()
 
 cMenu* cMenu::inwindow(int xx, int yy)
 {
+	int i,m = w;
+	if (parent != NULL && parent->drawstyle == 0)
+	{
+		for(i = 0; i < (int)items.size(); i++)
+		{
+			if (Graphics.font->textlen(items[i]->title.c_str()) > m-50)
+				m = Graphics.font->textlen(items[i]->title.c_str())+50;
+
+		}
+	}
+		
 	mouseover = false;
-	if (xx > x && xx < x+w && Graphics.h()-yy > y && Graphics.h()-yy < y+h() && opened)
+	if (xx > x && xx < x+m && Graphics.h()-yy > y && Graphics.h()-yy < y+h() && opened)
 	{
 		mouseover = true;
 		return this;
 	}
 	if (opened)
 	{
-		int i;
 		for(i = 0; i < (int)items.size(); i++)
 		{
 			cMenu* m = items[i]->inwindow(xx, yy);
@@ -598,12 +608,20 @@ cMenu* cMenu::inwindow(int xx, int yy)
 
 void cMenu::click(int xx, int yy)
 {
-	int i;
+	int i,ii,m;
 	if (drawstyle == 0)
 	{
 		for(i = 0; i < (int)items.size(); i++)
 		{
-			if (mousex > x+items[i]->x && mousex < x+items[i]->x+items[i]->w)
+			m = items[i]->w;
+			for(ii = 0; ii < (int)items[i]->items.size(); ii++)
+			{
+				if (Graphics.font->textlen(items[i]->items[ii]->title.c_str()) > m-50)
+					m = Graphics.font->textlen(items[i]->items[ii]->title.c_str())+50;
+			}
+
+			
+			if (mousex > x+items[i]->x && mousex < x+items[i]->x+m)
 			{
 				items[i]->opened = !items[i]->opened;
 			}
@@ -611,9 +629,20 @@ void cMenu::click(int xx, int yy)
 	}
 	else //if (opened)
 	{
+		m = w;
+		if (parent->drawstyle == 0)
+		{
+			for(i = 0; i < (int)items.size(); i++)
+			{
+				if (Graphics.font->textlen(items[i]->title.c_str()) > m-50)
+					m = Graphics.font->textlen(items[i]->title.c_str())+50;
+
+			}
+		}
 		for(i = 0; i < (int)items.size(); i++)
 		{
-			if (mousex > x && mousex < x+w && (mousey) > y+20*i && (mousey) < y+20*i+20)
+
+			if (mousex > x && mousex < x+m && (mousey) > y+20*i && (mousey) < y+20*i+20)
 			{
 				if(items[i]->item)
 				{

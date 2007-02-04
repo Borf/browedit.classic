@@ -447,14 +447,14 @@ int main(int argc, char *argv[])
 	menu->w = Graphics.w();
 	
 	
-	ADDMENU(file,		menu, "File",				0,100);
-	ADDMENU(rnd,		menu, "Generate",			100,100);
-	ADDMENU(view,		menu, "View",				200,50);
-	ADDMENU(mode,		menu, "Edit Mode",			250,100);
-	ADDMENU(edit,		menu, "Edit",				350,100);
-	ADDMENU(models,		menu, "Models",				450,100);
-	ADDMENU(textures,	menu, "Textures",			550,100);
-	ADDMENU(effectsmenu,menu, "Effects",			650,100);
+	ADDMENU(file,		menu, "File",				0,50);
+	ADDMENU(rnd,		menu, "Generate",			50,75);
+	ADDMENU(view,		menu, "View",				125,50);
+	ADDMENU(mode,		menu, "Edit Mode",			175,75);
+	ADDMENU(edit,		menu, "Edit",				250,50);
+	ADDMENU(models,		menu, "Models",				300,50);
+	ADDMENU(textures,	menu, "Textures",			350,60);
+	ADDMENU(effectsmenu,menu, "Effects",			410,50);
 	
 	ADDMENU(steepness,	edit, "Steepness...",		480,100);
 
