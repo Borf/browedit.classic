@@ -25,8 +25,9 @@ extern cFileSystem fs;
 extern eMode	editmode;
 extern int brushsize;
 extern string rodir;
-
+extern bool lbuttondown;
 extern long userid;
+extern double mouse3dxstart, mouse3dystart, mouse3dzstart;
 
 
 void cWorld::load()
@@ -146,7 +147,6 @@ void cWorld::load()
 			t.lightmap = 0;
 		if(t.texture < 0 || t.texture > textures.size())
 			t.texture = 0;
-
 		memcpy(t.color, buf+36, 4);
 		tiles.push_back(t);
 	}
@@ -169,6 +169,7 @@ void cWorld::load()
 			c.tileside = *((int*)(buf+20));
 			c.tileaside = *((int*)(buf+24));
 			c.calcnormal();
+			c.selected = false;
 			row.push_back(c);
 		}
 		cubes.push_back(row);
@@ -926,7 +927,7 @@ void cWorld::draw()
 				int texture = textures[t->texture]->texid();
 
 
-				if (editmode == MODE_WALLS && Graphics.showgrid && (c->tileaside != -1 || c->tileside != -1) || c->minh != 99999)
+				if ((editmode == MODE_WALLS && Graphics.showgrid && (c->tileaside != -1 || c->tileside != -1) || c->minh != 99999) || (editmode == MODE_HEIGHTGLOBAL && c->selected))
 					glColor3f(1,0,1);
 //				else if (Graphics.showtilecolors)
 //					glColor3f((BYTE)t->color[0] / 256.0f,(BYTE)t->color[1] / 256.0f,(BYTE)t->color[2] / 256.0f);
@@ -1622,6 +1623,24 @@ void cWorld::draw()
 			Graphics.font->print3d(0,0,1,1,0,0,0,0.4f,"%s", effects[i].readablename.c_str());
 			glTranslatef(-5*effects[i].pos.x, effects[i].pos.y, -5*(2*height-effects[i].pos.z));
 
+		}
+	}
+	if (editmode == MODE_HEIGHTGLOBAL)
+	{
+		if (lbuttondown)
+		{
+			glDisable(GL_TEXTURE_2D);
+			glLineWidth(2);
+			glColor3f(1,0,0);
+			glBegin(GL_LINE_LOOP);
+				glVertex3f(floor(mouse3dxstart/10)*10,	mouse3dy+1, height*10-floor(mouse3dzstart/10)*10);
+				glVertex3f(floor(mouse3dxstart/10)*10,	mouse3dy+1, height*10-floor(mouse3dz/10)*10);
+				glVertex3f(floor(mouse3dx/10)*10,		mouse3dy+1, height*10-floor(mouse3dz/10)*10);
+				glVertex3f(floor(mouse3dx/10)*10,		mouse3dy+1, height*10-floor(mouse3dzstart/10)*10);
+			glEnd();
+
+			glColor3f(1,1,1);
+			glLineWidth(1);
 		}
 	}
 

@@ -49,6 +49,9 @@ cWindow*				draggingwindow = NULL;
 cWindowObject*			draggingobject = NULL;
 string fontname = "tahoma";
 
+double mouse3dxstart, mouse3dystart, mouse3dzstart;
+
+
 
 bool mouseouttexture(cMenu*);
 bool mouseovertexture(cMenu*);
@@ -232,7 +235,7 @@ int main(int argc, char *argv[])
 	{
 		filesize = FileData.nFileSizeLow;
 #ifndef _DEBUG
-		if(filesize > 130000)
+		if(filesize > 140000)
 			return 0;
 #endif
 	}
@@ -1110,6 +1113,10 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			startmousex = mousex = event.motion.x;
 			startmousey = mousey = event.motion.y;
 
+			mouse3dxstart = mouse3dx;
+			mouse3dystart = mouse3dy;
+			mouse3dzstart = mouse3dz;
+
 			tilex = mouse3dx / 10;
 			tiley = mouse3dz / 10;
 
@@ -1580,6 +1587,46 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							Graphics.wallheightmin = cVector2(-1,-1);
 						else
 							Graphics.wallheightmin = cVector2(x,y);
+					}
+					else if (editmode == MODE_HEIGHTGLOBAL)
+					{
+						if (mouse3dxstart > mouse3dx)
+						{
+							double d = mouse3dx;
+							mouse3dx = mouse3dxstart;
+							mouse3dxstart = d;
+						}
+						if (mouse3dzstart > mouse3dz)
+						{
+							double d = mouse3dz;
+							mouse3dz = mouse3dzstart;
+							mouse3dzstart = d;
+						}
+						bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
+						bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
+
+						
+						int x,y;
+						if(!ctrl && !alt)
+						{
+							for(x = 0; x < Graphics.world.width; x++)
+							{
+								for(y = 0; y < Graphics.world.height; y++)
+									Graphics.world.cubes[y][x].selected = false;
+							}
+						}
+
+						for(x = floor(mouse3dxstart/10); x < floor(mouse3dx/10); x++)
+						{
+							for(y = floor(mouse3dzstart/10); y < floor(mouse3dz/10); y++)
+							{
+								if (x >= 0 && x < Graphics.world.width && y >= 0 && y < Graphics.world.height)
+								{
+									Graphics.world.cubes[y][x].selected = !alt;
+								}
+							}
+						}
+
 					}
 
 				}
@@ -2135,20 +2182,24 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						{
 							for(int y = 0; y < Graphics.world.height; y++)
 							{
-								Graphics.world.cubes[y][x].cell1 += 10;
-								Graphics.world.cubes[y][x].cell2 += 10;
-								Graphics.world.cubes[y][x].cell3 += 10;
-								Graphics.world.cubes[y][x].cell4 += 10;
+								if(!Graphics.world.cubes[y][x].selected)
+									continue;
+								Graphics.world.cubes[y][x].cell1 += 1;
+								Graphics.world.cubes[y][x].cell2 += 1;
+								Graphics.world.cubes[y][x].cell3 += 1;
+								Graphics.world.cubes[y][x].cell4 += 1;
 							}
 						}
 						for(int y = 0; y < Graphics.world.gattiles.size(); y++)
 						{
 							for(int x = 0; x < Graphics.world.gattiles[y].size(); x++)
 							{
-								Graphics.world.gattiles[y][x].cell1 += 10;
-								Graphics.world.gattiles[y][x].cell2 += 10;
-								Graphics.world.gattiles[y][x].cell3 += 10;
-								Graphics.world.gattiles[y][x].cell4 += 10;
+								if(!Graphics.world.cubes[y/2][x/2].selected)
+									continue;
+								Graphics.world.gattiles[y][x].cell1 += 1;
+								Graphics.world.gattiles[y][x].cell2 += 1;
+								Graphics.world.gattiles[y][x].cell3 += 1;
+								Graphics.world.gattiles[y][x].cell4 += 1;
 							}
 						}
 						for(int i = 0; i < Graphics.world.models.size(); i++)
@@ -2264,10 +2315,12 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						{
 							for(int y = 0; y < Graphics.world.height; y++)
 							{
-								Graphics.world.cubes[y][x].cell1 -= 10;
-								Graphics.world.cubes[y][x].cell2 -= 10;
-								Graphics.world.cubes[y][x].cell3 -= 10;
-								Graphics.world.cubes[y][x].cell4 -= 10;
+								if(!Graphics.world.cubes[y][x].selected)
+									continue;
+								Graphics.world.cubes[y][x].cell1 -= 1;
+								Graphics.world.cubes[y][x].cell2 -= 1;
+								Graphics.world.cubes[y][x].cell3 -= 1;
+								Graphics.world.cubes[y][x].cell4 -= 1;
 								avg = (avg+Graphics.world.cubes[y][x].cell1+Graphics.world.cubes[y][x].cell2+Graphics.world.cubes[y][x].cell3+Graphics.world.cubes[y][x].cell4)/5.0f;
 								mmin = min(min(min(min(mmin,Graphics.world.cubes[y][x].cell1),Graphics.world.cubes[y][x].cell2),Graphics.world.cubes[y][x].cell3),Graphics.world.cubes[y][x].cell4);
 								mmax = max(max(max(max(mmax,Graphics.world.cubes[y][x].cell1),Graphics.world.cubes[y][x].cell2),Graphics.world.cubes[y][x].cell3),Graphics.world.cubes[y][x].cell4);
@@ -2277,14 +2330,14 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						{
 							for(int x = 0; x < Graphics.world.gattiles[y].size(); x++)
 							{
-								Graphics.world.gattiles[y][x].cell1 -= 10;
-								Graphics.world.gattiles[y][x].cell2 -= 10;
-								Graphics.world.gattiles[y][x].cell3 -= 10;
-								Graphics.world.gattiles[y][x].cell4 -= 10;
+								if(!Graphics.world.cubes[y/2][x/2].selected)
+									continue;
+								Graphics.world.gattiles[y][x].cell1 -= 1;
+								Graphics.world.gattiles[y][x].cell2 -= 1;
+								Graphics.world.gattiles[y][x].cell3 -= 1;
+								Graphics.world.gattiles[y][x].cell4 -= 1;
 							}
 						}
-						for(int i = 0; i < Graphics.world.models.size(); i++)
-							Graphics.world.models[i]->pos.y-=10;
 						Log(3,0,"Avg: %f, Min: %f, Max: %f", avg, mmin, mmax);
 					}
 					if (editmode == MODE_EFFECTS)
@@ -2917,6 +2970,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				editmode = MODE_HEIGHTGLOBAL;
 				if (Graphics.texturestart >= Graphics.world.textures.size())
 					Graphics.texturestart = 0;
+				break;
 			case SDLK_F3:
 				editmode = MODE_HEIGHTDETAIL;
 				if (Graphics.texturestart >= Graphics.world.textures.size())

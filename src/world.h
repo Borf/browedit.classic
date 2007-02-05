@@ -65,6 +65,7 @@ public:
 
 	float maxh;
 	float minh;
+	bool selected;
 
 	void calcnormal();
 	cVector3 normal;
