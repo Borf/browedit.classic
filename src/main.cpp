@@ -580,7 +580,7 @@ int main(int argc, char *argv[])
 					string option = line.substr(0, line.find("="));
 					string value = line.substr(line.find("=")+1);
 
-					if(option == "datadir")
+					if(option == "rodir")
 						rodir = value;
 					else if(option == "grf")
 						fs.LoadFile(value);

@@ -1,7 +1,7 @@
 setting=RO
 
 [RO]
-datadir=c:\program files\gravity\ro\
+rodir=c:\program files\gravity\ro\
 model=romodels.txt
 model=arcturusmodels.txt
 texture=rotextures.txt
@@ -17,7 +17,7 @@ grf=c:\program files\gravity\ro\sdata.grf
 grf=c:\program files\gravity\ro\data.grf
 
 [Arcturus]
-datadir=c:\Program Files\Arcturus\
+rodir=c:\Program Files\Arcturus\
 model=arcturusmodels.txt
 texture=arctextures.txt
 resx=1024
