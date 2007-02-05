@@ -33,6 +33,8 @@ Detail heightmap edit
 ---------------------
 leftclick							raise brush
 rightclick+leftclick				lower brush
+ctrl+leftclick						raise brush with maximum
+ctrl+rightclick+leftclick			lower brush with minimum
 c									copy
 p									paste
 f									merge cellheights (used for sloping)

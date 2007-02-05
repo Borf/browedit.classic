@@ -767,6 +767,25 @@ int main(int argc, char *argv[])
 
 					int posx = tilex;
 					int posy = tiley;
+					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
+					int mmin = 99999999;
+					int mmax = -9999999;
+					if (ctrl)
+					{
+						if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= Graphics.world.height-ceil(brushsize/2.0f))
+						{
+							for(int x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f); x++)
+							{
+								for(int y = posy-floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
+								{
+									cCube* c = &Graphics.world.cubes[y][x];
+									mmin = min(min(min(min(mmin, c->cell1),c->cell2),c->cell3),c->cell4);
+									mmax = max(max(max(max(mmax, c->cell1),c->cell2),c->cell3),c->cell4);
+								}
+							}
+						}
+						
+					}
 
 					if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= Graphics.world.height-ceil(brushsize/2.0f))
 					{
@@ -785,6 +804,13 @@ int main(int argc, char *argv[])
 										c->cell3-=1;
 									if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y < posy+ceil(brushsize/2.0f)-1)
 										c->cell4-=1;
+									if(ctrl)
+									{
+										c->cell1 = max(mmin,c->cell1);
+										c->cell2 = max(mmin,c->cell2);
+										c->cell3 = max(mmin,c->cell3);
+										c->cell4 = max(mmin,c->cell4);
+									}
 								}
 								if(lbuttondown && rbuttondown)
 								{
@@ -796,6 +822,13 @@ int main(int argc, char *argv[])
 										c->cell3+=1;
 									if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y < posy+ceil(brushsize/2.0f)-1)
 										c->cell4+=1;
+									if(ctrl)
+									{
+										c->cell1 = min(mmax,c->cell1);
+										c->cell2 = min(mmax,c->cell2);
+										c->cell3 = min(mmax,c->cell3);
+										c->cell4 = min(mmax,c->cell4);
+									}
 								}
 								c->calcnormal();
 							}
