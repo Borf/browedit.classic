@@ -21,6 +21,14 @@ v									flip the brush vertically
 g									show / hide grid
 backspace							clears a part of the floor (for indoors)
 
+Global heightmap edit
+---------------------
+left-drag							select an area
+ctrl+left-drag						add an area to the selection
+alt+left-drag						remove an area from the selection
+pageup								raise selection
+pagedown							lower selection
+
 Detail heightmap edit
 ---------------------
 leftclick							raise brush
