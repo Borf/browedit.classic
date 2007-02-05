@@ -233,7 +233,7 @@ int main(int argc, char *argv[])
 	{
 		filesize = FileData.nFileSizeLow;
 #ifndef _DEBUG
-		if(filesize > 140000)
+		if(filesize > 150000)
 			return 0;
 #endif
 	}
@@ -732,7 +732,7 @@ int main(int argc, char *argv[])
 
 	Log(3,0,"Done initializing..");
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "data\\prontera").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "data\\pvp_y_8-4").c_str());
 #ifndef WIN32
 	Graphics.world.load();
 #endif
@@ -1002,7 +1002,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				else
 				{
-					cVector2 v = cVector2((oldmousex - mousex),  (oldmousey - mousey)) / 1.0f;
+					cVector2 v = cVector2((oldmousex - mousex),  (oldmousey - mousey));
 		
 					v.rotate(-Graphics.camerarot / PI * 180.0f);
 
@@ -3682,7 +3682,7 @@ MENUCOMMAND(picktexture)
 		ZeroMemory(buf, 40);
 		sprintf(buf, "%i%i", rand(), rand());
 		t->RoFilename2 = string(buf,40);
-		t->texture = TextureCache.load(rodir + src->data);
+		t->texture = TextureCache.load(rodir + "data\\texture\\" + src->data);
 		Graphics.world.textures[id] = t;
 
 	}
@@ -3695,7 +3695,7 @@ MENUCOMMAND(picktexture)
 		ZeroMemory(buf, 40);
 		sprintf(buf, "%i%i", rand(), rand());
 		t->RoFilename2 = string(buf,40);
-		t->texture = TextureCache.load(rodir + src->data);
+		t->texture = TextureCache.load(rodir + "data\\texture\\" + src->data);
 		Graphics.world.textures.push_back(t);
 		Graphics.texturestart = Graphics.world.textures.size() - 2;
 	}
@@ -4356,10 +4356,10 @@ MENUCOMMAND(snaptofloor)
 
 bool mouseovertexture(cMenu* src)
 {
-	if (Graphics.texturepreview == NULL || Graphics.texturepreview->getfilename() != rodir + ((cMenuItem*)src)->data)
+	if (Graphics.texturepreview == NULL || Graphics.texturepreview->getfilename() != rodir + "data\\texture\\" + ((cMenuItem*)src)->data)
 	{
 		Graphics.texturepreview = new cTexture();
-		Graphics.texturepreview->Load(rodir + ((cMenuItem*)src)->data);
+		Graphics.texturepreview->Load(rodir + "data\\texture\\" + ((cMenuItem*)src)->data);
 		return false;
 	}
 	else
