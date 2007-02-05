@@ -166,13 +166,15 @@ public:
 	float	amplitude;
 	float	phase;
 	float	surfacecurve;
-	int		texcycle;
+//	int		texcycle; // unknown
 };
 
 class cAmbientLight
 {
 public:
-	cVector3	ambient;
+	int	ambientr;
+	int	ambientg;
+	int	ambientb;
 	cVector3	diffuse;
 	cVector3	shadow;
 	float		alpha;

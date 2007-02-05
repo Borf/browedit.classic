@@ -192,11 +192,10 @@ void cWorld::load()
 	water.amplitude = *((float*)(w+8));
 	water.phase = *((float*)(w+12));
 	water.surfacecurve = *((float*)(w+16));
-	water.texcycle = *((int*)(w+20));
 	
-	ambientlight.ambient.x = *((float*)(w+24));
-	ambientlight.ambient.y = *((float*)(w+28));
-	ambientlight.ambient.z = *((float*)(w+32));
+	ambientlight.ambientr = *((int*)(w+20));
+	ambientlight.ambientg = *((int*)(w+24));
+	ambientlight.ambientb = *((int*)(w+28));
 
 	ambientlight.diffuse.x = *((float*)(w+32));
 	ambientlight.diffuse.y = *((float*)(w+36));
@@ -634,7 +633,22 @@ void cWorld::save()
 
 		pFile.write((char*)&water.height, 4);
 		pFile.write((char*)&water.type, 4);
-		pFile.write(useless.c_str()+8, useless.length()-8);
+		pFile.write((char*)&water.amplitude, 4);
+		pFile.write((char*)&water.phase, 4);
+		pFile.write((char*)&water.surfacecurve, 4);
+
+		pFile.write((char*)&ambientlight.ambientr, 4);
+		pFile.write((char*)&ambientlight.ambientg, 4);
+		pFile.write((char*)&ambientlight.ambientb, 4);
+		pFile.write((char*)&ambientlight.diffuse.x, 4);
+		pFile.write((char*)&ambientlight.diffuse.y, 4);
+		pFile.write((char*)&ambientlight.diffuse.z, 4);
+		pFile.write((char*)&ambientlight.shadow.x, 4);
+		pFile.write((char*)&ambientlight.shadow.y, 4);
+		pFile.write((char*)&ambientlight.shadow.z, 4);
+		pFile.write((char*)&ambientlight.alpha, 4);
+
+		pFile.write(useless.c_str()+60, useless.length()-60);
 
 		long count = models.size() + lights.size()+effects.size() + sounds.size();
 
@@ -890,7 +904,10 @@ void cWorld::draw()
 		glDisable(GL_LIGHTING);
 	else
 		glEnable(GL_LIGHTING);
-	glColor4f(1,1,1,1);
+	if(Graphics.showambientlighting)
+		glColor4f(ambientlight.diffuse.x,ambientlight.diffuse.y,ambientlight.diffuse.z,1);
+	else
+		glColor4f(1,1,1,1);
 	for(x = 0; x < width; x++)
 	{
 		for(y = 0; y < height; y++)
@@ -913,6 +930,8 @@ void cWorld::draw()
 					glColor3f(1,0,1);
 //				else if (Graphics.showtilecolors)
 //					glColor3f((BYTE)t->color[0] / 256.0f,(BYTE)t->color[1] / 256.0f,(BYTE)t->color[2] / 256.0f);
+				else if (Graphics.showambientlighting)
+					glColor4f(ambientlight.diffuse.x,ambientlight.diffuse.y,ambientlight.diffuse.z,1);
 				else
 					glColor4f(1,1,1,1);
 
@@ -947,7 +966,10 @@ void cWorld::draw()
 					break;
 				int texture = textures[t->texture]->texid();
 				glBindTexture(GL_TEXTURE_2D, texture);
-				glColor3f(1,1,1);
+				if(Graphics.showambientlighting)
+					glColor4f(ambientlight.diffuse.x,ambientlight.diffuse.y,ambientlight.diffuse.z,1);
+				else
+					glColor4f(1,1,1,1);
 				glNormal3f(c->cell4 > (c+1)->cell3 ? -1 : 1,0,0);
 				glBegin(GL_TRIANGLE_STRIP);
 					glTexCoord2f(t->u1, 1-t->v1); glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
@@ -963,7 +985,10 @@ void cWorld::draw()
 					break;
  				int texture = textures[t->texture]->texid();
 				glBindTexture(GL_TEXTURE_2D, texture);
-				glColor3f(1,1,1);
+				if(Graphics.showambientlighting)
+					glColor4f(ambientlight.diffuse.x,ambientlight.diffuse.y,ambientlight.diffuse.z,1);
+				else
+					glColor4f(1,1,1,1);
 				glNormal3f(0,0, cubes[y+1][x].cell1 > c->cell4 ? -1 : 1);
 				glBegin(GL_TRIANGLE_STRIP);
 					glTexCoord2f(t->u1, 1-t->v1); glVertex3f(x*10,-c->cell3,(height-y)*10-10);
@@ -976,6 +1001,7 @@ void cWorld::draw()
 	}
 
 
+	glColor4f(1,1,1,1);
 	glEnable(GL_BLEND);
 	if(Graphics.showlightmaps)
 	{
@@ -1683,9 +1709,9 @@ void cWorld::draw()
 			waterindex = 0;
 		glBegin(GL_QUADS);
 			glTexCoord2f(0,0); glVertex3f(0,-water.height,0);
-			glTexCoord2f(width/water.texcycle,0); glVertex3f(10*width,-water.height,0);
-			glTexCoord2f(width/water.texcycle,height/water.texcycle); glVertex3f(10*width,-water.height,10*height);
-			glTexCoord2f(0,height/water.texcycle); glVertex3f(0,-water.height,10*height);
+			glTexCoord2f(width/8,0); glVertex3f(10*width,-water.height,0);
+			glTexCoord2f(width/8,height/8); glVertex3f(10*width,-water.height,10*height);
+			glTexCoord2f(0,height/8); glVertex3f(0,-water.height,10*height);
 		glEnd();
 		glDisable(GL_BLEND);
 	}
@@ -2310,7 +2336,7 @@ void cWorld::importalpha()
 		cTextureContainer* t = new cTextureContainer();
 		t->RoFilename = s;
 		t->RoFilename2 = string(buf+40);
-		t->texture = TextureCache.load(rodir + "texture\\" + s);
+		t->texture = TextureCache.load(rodir + "data\\texture\\" + s);
 		textures.push_back(t);
 	}
 
@@ -2411,7 +2437,6 @@ void cWorld::importalpha()
 
 
 	water.height = 50;
-	water.texcycle = 10;
 
 	pFile->close();
 
@@ -2457,7 +2482,7 @@ unsigned char rawData[76] =
 			pFile->read(buf, 248);
 			string filename = buf+52;
 			cRSMModel* m = new cRSMModel();
-			m->load(rodir+ "model\\" + filename);
+			m->load(rodir+ "data\\model\\" + filename);
 			m->id = models.size();
 
 

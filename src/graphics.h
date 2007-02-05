@@ -47,6 +47,7 @@ public:
 		gridoffsetx = 0;
 		gridoffsety = 0;
 		topcamera = false;
+		showambientlighting = true;
 
 		shownotiles = true;
 	}
@@ -91,6 +92,7 @@ public:
 
 	long					lasttick;
 	long					frameticks;
+	bool					showambientlighting;
 
 
 	cVector3				selectionstart3d;

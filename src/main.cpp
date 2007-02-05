@@ -496,6 +496,8 @@ int main(int argc, char *argv[])
 	ADDMENUITEMDATAP(mm,view,"Show invisible tiles",&MenuCommand_toggle, (void*)&Graphics.shownotiles);
 	mm->ticked = true;
 
+	ADDMENUITEMDATAP(mm,view,"Show Ambient Lighting",&MenuCommand_toggle, (void*)&Graphics.showambientlighting);
+	mm->ticked = true;
 
 
 	ADDMENUITEM(mm,mode,"Texture Edit",			&MenuCommand_mode);
@@ -4336,7 +4338,6 @@ MENUCOMMAND(water)
 	sprintf(buf, "%f", Graphics.world.water.height);		w->objects["height"]->SetText(0,buf);
 	sprintf(buf, "%f", Graphics.world.water.phase);			w->objects["phase"]->SetText(0,buf);
 	sprintf(buf, "%f", Graphics.world.water.surfacecurve);	w->objects["surfacecurve"]->SetText(0,buf);
-	sprintf(buf, "%i", Graphics.world.water.texcycle);		w->objects["texcycle"]->SetText(0,buf);
 	sprintf(buf, "%i", Graphics.world.water.type);			w->objects["type"]->SetText(0,buf);
 	Graphics.WM.addwindow(w);
 	return true;
@@ -4377,9 +4378,9 @@ MENUCOMMAND(ambientlight)
 	char buf[100];
 	cWindow* w = new cAmbientLightWindow();
 	w->init(&Graphics.WM.texture, &Graphics.WM.font);
-	sprintf(buf, "%f", Graphics.world.ambientlight.ambient.x);		w->objects["ambientr"]->SetText(0,buf);
-	sprintf(buf, "%f", Graphics.world.ambientlight.ambient.y);		w->objects["ambientg"]->SetText(0,buf);
-	sprintf(buf, "%f", Graphics.world.ambientlight.ambient.z);		w->objects["ambientb"]->SetText(0,buf);
+	sprintf(buf, "%i", Graphics.world.ambientlight.ambientr);		w->objects["ambientr"]->SetText(0,buf);
+	sprintf(buf, "%i", Graphics.world.ambientlight.ambientg);		w->objects["ambientg"]->SetText(0,buf);
+	sprintf(buf, "%i", Graphics.world.ambientlight.ambientb);		w->objects["ambientb"]->SetText(0,buf);
 
 	sprintf(buf, "%f", Graphics.world.ambientlight.diffuse.x);		w->objects["diffuser"]->SetText(0,buf);
 	sprintf(buf, "%f", Graphics.world.ambientlight.diffuse.y);		w->objects["diffuseg"]->SetText(0,buf);

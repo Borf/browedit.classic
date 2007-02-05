@@ -23,9 +23,9 @@ public:
 	virtual ~cAmbientLightWindowOkButton() {}
 	void click()
 	{
-		Graphics.world.ambientlight.ambient.x = atof(parent->objects["ambientr"]->GetText(0).c_str());
-		Graphics.world.ambientlight.ambient.y = atof(parent->objects["ambientg"]->GetText(0).c_str());
-		Graphics.world.ambientlight.ambient.z = atof(parent->objects["ambientb"]->GetText(0).c_str());
+		Graphics.world.ambientlight.ambientr = atoi(parent->objects["ambientr"]->GetText(0).c_str());
+		Graphics.world.ambientlight.ambientg = atoi(parent->objects["ambientg"]->GetText(0).c_str());
+		Graphics.world.ambientlight.ambientb = atoi(parent->objects["ambientb"]->GetText(0).c_str());
 
 		Graphics.world.ambientlight.diffuse.x = atof(parent->objects["diffuser"]->GetText(0).c_str());
 		Graphics.world.ambientlight.diffuse.y = atof(parent->objects["diffuseg"]->GetText(0).c_str());
