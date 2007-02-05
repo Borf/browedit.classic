@@ -219,6 +219,10 @@ SOURCE=.\src\Script1.rc
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\src\wm\ambientlightwindow.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\wm\confirmwindow.h
 # End Source File
 # Begin Source File
