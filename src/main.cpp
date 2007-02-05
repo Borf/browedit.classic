@@ -42,6 +42,7 @@ eMode editmode = MODE_TEXTURE;
 float paintspeed = 100;
 string config;
 extern double mouse3dx, mouse3dy, mouse3dz;
+long tilex,tiley;
 long lastmotion;
 bool doubleclick = false;
 cWindow*				draggingwindow = NULL;
@@ -739,7 +740,7 @@ int main(int argc, char *argv[])
 
 	Log(3,0,"Done initializing..");
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "data\\morc_cas01").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "data\\prontera").c_str());
 #ifndef WIN32
 	Graphics.world.load();
 #endif
@@ -756,8 +757,11 @@ int main(int argc, char *argv[])
 			{
 				if (lbuttondown || rbuttondown)
 				{
-					int posx = mouse3dx / 10;
-					int posy = mouse3dz / 10;
+					/*int posx = mouse3dx / 10;
+					int posy = mouse3dz / 10;*/
+
+					int posx = tilex;
+					int posy = tiley;
 
 					if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= Graphics.world.height-ceil(brushsize/2.0f))
 					{
@@ -910,6 +914,13 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			mousey = event.motion.y;
 			lastmotion = SDL_GetTicks();
 			cMenu* m = menu->inwindow((int)mousex, Graphics.h()-(int)mousey);
+
+
+			if(movement > 4)
+			{
+				tilex = mouse3dx / 10;
+				tiley = mouse3dz / 10;
+			}
 			if(m != NULL)
 				break;
 
@@ -1096,6 +1107,10 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			movement = 0;
 			startmousex = mousex = event.motion.x;
 			startmousey = mousey = event.motion.y;
+
+			tilex = mouse3dx / 10;
+			tiley = mouse3dz / 10;
+
 			dragged = false;
 			doubleclick = false;
 			if (SDL_GetTicks() - lastlclick < 250)
