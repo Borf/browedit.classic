@@ -71,14 +71,12 @@ MENUCOMMAND(save);
 MENUCOMMAND(saveAs);
 MENUCOMMAND(importalpha);
 MENUCOMMAND(exit);
-MENUCOMMAND(steepness);
 MENUCOMMAND(random1);
 MENUCOMMAND(shading);
 MENUCOMMAND(exportheight);
 MENUCOMMAND(textures);
 MENUCOMMAND(mode);
 MENUCOMMAND(flatten);
-MENUCOMMAND(editrandom);
 MENUCOMMAND(grid);
 MENUCOMMAND(mode_detail);
 MENUCOMMAND(speed);
@@ -435,7 +433,6 @@ int main(int argc, char *argv[])
 
 	cMenu* file;
 	cMenu* mm;
-	cMenu* steepness;
 	cMenu* rnd;
 	cMenu* view;
 	cMenu* edit;
@@ -460,7 +457,6 @@ int main(int argc, char *argv[])
 	ADDMENU(textures,	menu, "Textures",			350,60);
 	ADDMENU(effectsmenu,menu, "Effects",			410,50);
 	
-	ADDMENU(steepness,	edit, "Steepness...",		480,100);
 
 	ADDMENUITEM(mm,file,"New"	,				&MenuCommand_new);
 	ADDMENUITEM(mm,file,"Open",					&MenuCommand_open);
@@ -470,13 +466,6 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,file,"Export Lightmaps",	&MenuCommand_savelightmaps);
 	ADDMENUITEM(mm,file,"Import Lightmaps",	&MenuCommand_loadlightmaps);
 	ADDMENUITEM(mm,file,"Exit",					&MenuCommand_exit);
-
-	ADDMENUITEM(mm,steepness, "0.5", &MenuCommand_steepness);
-	ADDMENUITEM(mm,steepness, "1.0", &MenuCommand_steepness);
-	ADDMENUITEM(mm,steepness, "1.5", &MenuCommand_steepness);
-	ADDMENUITEM(mm,steepness, "2.0", &MenuCommand_steepness);
-	ADDMENUITEM(mm,steepness, "4.0", &MenuCommand_steepness);
-	ADDMENUITEM(mm,steepness, "8.0", &MenuCommand_steepness);
 	
 	ADDMENUITEM(mm,rnd, "Random 1", &MenuCommand_random1);
 	ADDMENUITEM(mm,rnd, "Maze stuff", &MenuCommand_tempfunc);
@@ -508,7 +497,6 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,mode,"Global Heightmap Edit",	&MenuCommand_mode);
 	ADDMENU(editdetail,mode,"Detail Terrain Edit...",400,100);
 
-
 	ADDMENUITEM(mm, editdetail, "1", &MenuCommand_mode_detail);
 	ADDMENUITEM(mm, editdetail, "2", &MenuCommand_mode_detail);
 	ADDMENUITEM(mm, editdetail, "4", &MenuCommand_mode_detail);
@@ -526,31 +514,30 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,mode,"Lights Edit",	&MenuCommand_mode);
 
 
-	ADDMENUITEM(mm,edit,"Flatten map",			&MenuCommand_flatten);
-	ADDMENUITEM(mm,edit,"Round Flatten",		&MenuCommand_flatten);
-	ADDMENUITEM(mm,edit,"Randomize a bit",		&MenuCommand_editrandom);
-	ADDMENUITEM(mm,edit,"Fill",					&MenuCommand_fill);
-	ADDMENUITEM(mm,edit,"Sloping",				&MenuCommand_slope);
-	ADDMENUITEM(mm,edit,"Set GAT height",		&MenuCommand_gatheight);
 	ADDMENU(speed,edit, "Speed", 480, 100);
 	ADDMENUITEM(mm,speed,"5",&MenuCommand_speed);
 	ADDMENUITEM(mm,speed,"10",&MenuCommand_speed);
 	ADDMENUITEM(mm,speed,"25",&MenuCommand_speed);
 	ADDMENUITEM(mm,speed,"50",&MenuCommand_speed);
 	ADDMENUITEM(mm,speed,"100",&MenuCommand_speed);
-	mm->ticked = true;
 	ADDMENUITEM(mm,speed,"250",&MenuCommand_speed);
 	ADDMENUITEM(mm,speed,"500",&MenuCommand_speed);
+	ADDMENUITEM(mm,edit,"Sloping",				&MenuCommand_slope);
+	ADDMENUITEM(snaptofloor,edit,"Snap objects to floor",		&MenuCommand_snaptofloor);
+	snaptofloor->ticked = true;
+
+	ADDMENUITEM(mm,edit,"Flatten map",			&MenuCommand_flatten);
+	ADDMENUITEM(mm,edit,"Fill with selected texture",			&MenuCommand_fill);
+	ADDMENUITEM(mm,edit,"Set GAT height",		&MenuCommand_gatheight);
+	mm->ticked = true;
 	ADDMENUITEM(mm,edit,"Reset Colors",		&MenuCommand_fixcolors);
 	ADDMENUITEM(mm,edit,"Clear Objects",		&MenuCommand_clearobjects);
 	ADDMENUITEM(mm,edit,"Add Walls",		&MenuCommand_addwalls);
 	ADDMENUITEM(mm,edit,"Set gat collision",		&MenuCommand_gatcollision);
 	ADDMENUITEM(mm,edit,"Clear Lightmaps",		&MenuCommand_clearlightmaps);
 	ADDMENUITEM(mm,edit,"Clean up Lightmaps",		&MenuCommand_cleanuplightmaps);
-	ADDMENUITEM(snaptofloor,edit,"Snap objects to floor",		&MenuCommand_snaptofloor);
-	snaptofloor->ticked = true;
-	ADDMENUITEM(mm,edit,"Edit Water",		&MenuCommand_water);
 	ADDMENUITEM(mm,edit,"Clean Textures",		&MenuCommand_cleantextures);
+	ADDMENUITEM(mm,edit,"Edit Water",		&MenuCommand_water);
 	ADDMENUITEM(mm,edit,"Edit Ambient Lighting",		&MenuCommand_ambientlight);
 
 	cFile* pFile = fs.open("config.txt");
@@ -926,13 +913,6 @@ int process_events()
 	}
 	return 0;
 }
-
-
-float steepness = 3;
-void checkheight(int x, int y)
-{
-}
-
 
 
 cWindow* lastdragoverwindow = NULL;
@@ -1344,14 +1324,30 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 					else if (editmode == MODE_HEIGHTDETAIL)
 					{
-						int posx = mouse3dx / 10;
-						int posy = mouse3dz / 10;
+						int posx = tilex;
+						int posy = tiley;
+						bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
+						int mmin = 99999999;
+						int mmax = -9999999;
+						if (ctrl)
+						{
+							if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= Graphics.world.height-ceil(brushsize/2.0f))
+							{
+								for(int x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f); x++)
+								{
+									for(int y = posy-floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
+									{
+										cCube* c = &Graphics.world.cubes[y][x];
+										mmin = min(min(min(min(mmin, c->cell1),c->cell2),c->cell3),c->cell4);
+										mmax = max(max(max(max(mmax, c->cell1),c->cell2),c->cell3),c->cell4);
+									}
+								}
+							}
+							
+						}
 
 						if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= Graphics.world.height-ceil(brushsize/2.0f))
 						{
-							glColor4f(1,0,0,1);
-							glDisable(GL_TEXTURE_2D);
-							glDisable(GL_BLEND);
 							for(int x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f); x++)
 							{
 								for(int y = posy-floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
@@ -1367,6 +1363,13 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 											c->cell3-=1;
 										if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y < posy+ceil(brushsize/2.0f)-1)
 											c->cell4-=1;
+										if(ctrl)
+										{
+											c->cell1 = max(mmin,c->cell1);
+											c->cell2 = max(mmin,c->cell2);
+											c->cell3 = max(mmin,c->cell3);
+											c->cell4 = max(mmin,c->cell4);
+										}
 									}
 									if(lbuttondown && rbuttondown)
 									{
@@ -1378,7 +1381,15 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 											c->cell3+=1;
 										if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y < posy+ceil(brushsize/2.0f)-1)
 											c->cell4+=1;
+										if(ctrl)
+										{
+											c->cell1 = min(mmax,c->cell1);
+											c->cell2 = min(mmax,c->cell2);
+											c->cell3 = min(mmax,c->cell3);
+											c->cell4 = min(mmax,c->cell4);
+										}
 									}
+									c->calcnormal();
 								}
 							}
 							lasttimer = SDL_GetTicks()+500;
@@ -3140,7 +3151,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						{
 							for(y = posy-floor(brushsize/2.0f)+1; y < posy+ceil(brushsize/2.0f); y++)
 							{
-								if (x >= 0 && x < Graphics.world.width && y > 0 && y < Graphics.world.height-1)
+								if (x > 1 && x < Graphics.world.width-1 && y > 1 && y < Graphics.world.height-1)
 								{
 									float to = (Graphics.world.cubes[y+1][x-1].cell2 + Graphics.world.cubes[y+1][x].cell2 + Graphics.world.cubes[y+1][x+1].cell2 + Graphics.world.cubes[y][x-1].cell2 + Graphics.world.cubes[y][x].cell2 + Graphics.world.cubes[y][x+1].cell2 + Graphics.world.cubes[y-1][x-1].cell2 + Graphics.world.cubes[y-1][x].cell2 + Graphics.world.cubes[y-1][x+1].cell2) / 9.0f;
 									Graphics.world.cubes[y][x].cell2 = to;
@@ -3404,12 +3415,6 @@ MENUCOMMAND(lightmapsreset)
 }
 
 
-MENUCOMMAND(steepness)
-{
-	steepness = atof(src->title.c_str());
-	return true;
-}
-
 
 MENUCOMMAND(random1)
 {
@@ -3549,11 +3554,6 @@ MENUCOMMAND(flatten)
 		}
 	}
 	return true;	
-}
-
-MENUCOMMAND(editrandom)
-{
-	return true;
 }
 
 MENUCOMMAND(grid)
