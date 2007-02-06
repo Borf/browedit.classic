@@ -131,6 +131,10 @@ SOURCE=.\src\texturemodel.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\undo.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\world.cpp
 # End Source File
 # End Group
@@ -192,6 +196,10 @@ SOURCE=.\src\texturecache.h
 # Begin Source File
 
 SOURCE=.\src\texturemodel.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\undo.h
 # End Source File
 # Begin Source File
 

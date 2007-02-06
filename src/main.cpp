@@ -12,6 +12,7 @@
 #include "wm/effectwindow.h"
 #include "wm/waterwindow.h"
 #include "wm/ambientlightwindow.h"
+#include "undo.h"
 
 #include "texturecache.h"
 #ifdef WIN32
@@ -48,6 +49,7 @@ bool doubleclick = false;
 cWindow*				draggingwindow = NULL;
 cWindowObject*			draggingobject = NULL;
 string fontname = "tahoma";
+bool	doneaction = true;
 
 double mouse3dxstart, mouse3dystart, mouse3dzstart;
 
@@ -55,6 +57,8 @@ double mouse3dxstart, mouse3dystart, mouse3dzstart;
 
 bool mouseouttexture(cMenu*);
 bool mouseovertexture(cMenu*);
+
+cUndoStack undostack;
 
 string rodir;
 
@@ -1050,6 +1054,11 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					float mindist = 999999;
 					if(Graphics.objectstartdrag && Graphics.selectedobject != -1)
 					{
+						if (doneaction)
+						{
+							undostack.items.push(new cUndoChangeObject(Graphics.selectedobject, Graphics.world.models[Graphics.selectedobject]->pos, Graphics.world.models[Graphics.selectedobject]->rot, Graphics.world.models[Graphics.selectedobject]->scale));
+							doneaction = false;
+						}
 						bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 						bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 						if (!ctrl && !alt)
@@ -1275,6 +1284,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 							}
 
+							undostack.items.push(new cUndoTexture(posx-selsizex+1, posy-selsizey+1, posx+1, posy+1));
+
+
 							for(int x = posx; x > posx-selsizex; x--)
 							{
 								for(int y = posy; y > posy-selsizey; y--)
@@ -1398,6 +1410,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							
 						}
 
+						undostack.items.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
+
 						if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= Graphics.world.height-ceil(brushsize/2.0f))
 						{
 							for(int x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f); x++)
@@ -1456,6 +1470,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 					//	if (posx >= floor(f/2.0f) && posx < 2*Graphics.world.width-ceil(f/2.0f) && posy >= floor(f/2.0f) && posy< 2*Graphics.world.height-ceil(f/2.0f))
 						{
+							undostack.items.push(new cUndoGatTileEdit(posx-floor(f/2.0f), posy-floor(f/2.0f), posx+ceil(f/2.0f), posy+ceil(f/2.0f)));
+
 							glColor4f(1,0,0,1);
 							glDisable(GL_TEXTURE_2D);
 							glDisable(GL_BLEND);
@@ -1525,6 +1541,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 		case SDL_MOUSEBUTTONUP:
 			if(event.button.button == SDL_BUTTON_LEFT)
 			{
+				doneaction = true;
 				lbuttondown = false;
 				mousex = event.motion.x;
 				mousey = event.motion.y;
@@ -1817,6 +1834,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.models.size())
 					{
+						undostack.items.push(new cUndoChangeObject(Graphics.selectedobject, Graphics.world.models[Graphics.selectedobject]->pos, Graphics.world.models[Graphics.selectedobject]->rot, Graphics.world.models[Graphics.selectedobject]->scale));
 						bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 						bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 						bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
@@ -1834,6 +1852,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.models.size())
 					{
+						undostack.items.push(new cUndoChangeObject(Graphics.selectedobject, Graphics.world.models[Graphics.selectedobject]->pos, Graphics.world.models[Graphics.selectedobject]->rot, Graphics.world.models[Graphics.selectedobject]->scale));
 						bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 						bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 						bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
@@ -1851,6 +1870,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.models.size())
 					{
+						undostack.items.push(new cUndoChangeObject(Graphics.selectedobject, Graphics.world.models[Graphics.selectedobject]->pos, Graphics.world.models[Graphics.selectedobject]->rot, Graphics.world.models[Graphics.selectedobject]->scale));
 						bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 						bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 						bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
@@ -1868,6 +1888,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.models.size())
 					{
+						undostack.items.push(new cUndoChangeObject(Graphics.selectedobject, Graphics.world.models[Graphics.selectedobject]->pos, Graphics.world.models[Graphics.selectedobject]->rot, Graphics.world.models[Graphics.selectedobject]->scale));
 						bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 						bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 						bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
@@ -1981,6 +2002,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					Graphics.fliph = !Graphics.fliph;
 				if (editmode == MODE_OBJECTS && Graphics.selectedobject != -1)
 				{
+					undostack.items.push(new cUndoChangeObject(Graphics.selectedobject, Graphics.world.models[Graphics.selectedobject]->pos, Graphics.world.models[Graphics.selectedobject]->rot, Graphics.world.models[Graphics.selectedobject]->scale));
 					if(SDL_GetModState() & KMOD_ALT)
 						Graphics.world.models[Graphics.selectedobject]->scale.y = -	Graphics.world.models[Graphics.selectedobject]->scale.y;
 					else
@@ -1988,6 +2010,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				if(editmode == MODE_WALLS)
 				{
+					vector<pair<int, cTile> > tilesedited;
+
 					int x = mouse3dx / 10;
 					int y = mouse3dz / 10;
 					if (y < 0)
@@ -2013,6 +2037,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						for(yy = ymin; yy < ymax; yy++)
 						{
 							cTile* t = &Graphics.world.tiles[Graphics.world.cubes[yy][x].tileaside];
+							tilesedited.push_back(pair<int, cTile>(Graphics.world.cubes[yy][x].tileaside, *t));
 							float f;
 							f = t->u1;
 							t->u1 = t->u2;
@@ -2041,6 +2066,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						for(xx = xmin; xx < xmax; xx++)
 						{
 							cTile* t = &Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside];
+							tilesedited.push_back(pair<int, cTile>(Graphics.world.cubes[y][xx].tileside, *t));
 							float f;
 							f = t->u1;
 							t->u1 = t->u2;
@@ -2051,15 +2077,21 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							t->u4 = f;
 						}
 					}
+					if (tilesedited.size() > 0)
+						undostack.items.push(new cUndoTileEdit(tilesedited));
 				}
 				break;
 			case SDLK_v:
 				if (editmode == MODE_TEXTURE)
 					Graphics.flipv = !Graphics.flipv;
 				if (editmode == MODE_OBJECTS && Graphics.selectedobject != -1)
+				{
+					undostack.items.push(new cUndoChangeObject(Graphics.selectedobject, Graphics.world.models[Graphics.selectedobject]->pos, Graphics.world.models[Graphics.selectedobject]->rot, Graphics.world.models[Graphics.selectedobject]->scale));
 					Graphics.world.models[Graphics.selectedobject]->scale.z = -	Graphics.world.models[Graphics.selectedobject]->scale.z;
+				}
 				if(editmode == MODE_WALLS)
 				{
+					vector<pair<int, cTile> > tilesedited;
 					int x = mouse3dx / 10;
 					int y = mouse3dz / 10;
 					if (y < 0)
@@ -2093,6 +2125,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						for(yy = ymin; yy < ymax; yy++)
 						{
 							cTile* t = &Graphics.world.tiles[Graphics.world.cubes[yy][x].tileaside];
+							tilesedited.push_back(pair<int, cTile>(Graphics.world.cubes[yy][x].tileaside, *t));
 							float f;
 							f = t->v1;
 							t->v1 = t->v3;
@@ -2128,6 +2161,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						for(xx = xmin; xx < xmax; xx++)
 						{
 							cTile* t = &Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside];
+							tilesedited.push_back(pair<int, cTile>(Graphics.world.cubes[y][xx].tileside, *t));
 							float f;
 							f = t->v1;
 							t->v1 = t->v3;
@@ -2138,6 +2172,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							t->v4 = f;
 						}
 					}
+					if (tilesedited.size() > 0)
+						undostack.items.push(new cUndoTileEdit(tilesedited));
+
 				}
 				break;
 			case SDLK_g:
@@ -3216,7 +3253,11 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				else
 					Graphics.gridsize = 16 / 4.0f;
 				break;
-
+			case SDLK_u:
+				{
+					undostack.undo();
+					break;
+				}
 			case SDLK_RETURN:
 				{
 					if (editmode == MODE_OBJECTS)
@@ -3240,6 +3281,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							w->objects["scaley"]->SetInt(3,(int)&o->scale.y);
 							w->objects["scalez"]->SetInt(3,(int)&o->scale.z);
 							w->objects["objectname"]->SetText(0, o->rofilename);
+							((cObjectWindow*)w)->undo = new cUndoChangeObject(Graphics.selectedobject, Graphics.world.models[Graphics.selectedobject]->pos, Graphics.world.models[Graphics.selectedobject]->rot, Graphics.world.models[Graphics.selectedobject]->scale);
+
 							Graphics.WM.addwindow(w);
 						}
 					}
@@ -3578,10 +3621,10 @@ MENUCOMMAND(random1)
 		{
 		//	Graphics.world.cubes[2*y][2*x].tileup = 1;
 
-			Graphics.world.cubes[2*y][2*x].cell1 = -rand()%10;
-			Graphics.world.cubes[2*y][2*x].cell2 = -rand()%10;
-			Graphics.world.cubes[2*y][2*x].cell3 = -rand()%10;
-			Graphics.world.cubes[2*y][2*x].cell4 = -rand()%10;
+			Graphics.world.cubes[2*y][2*x].cell1 = -rand()%1000;
+			Graphics.world.cubes[2*y][2*x].cell2 = -rand()%1000;
+			Graphics.world.cubes[2*y][2*x].cell3 = -rand()%1000;
+			Graphics.world.cubes[2*y][2*x].cell4 = -rand()%1000;
 
 			Graphics.world.cubes[2*y][2*x-1].cell2 =	Graphics.world.cubes[2*y][2*x].cell1;
 			Graphics.world.cubes[2*y-1][2*x-1].cell4 =	Graphics.world.cubes[2*y][2*x].cell1;

@@ -8,6 +8,8 @@
 #include "windowbutton.h"
 #include "windowlabel.h"
 #include "windowinputbox.h"
+#include "../undo.h"
+extern cUndoStack undostack;
 
 class cWindowOkButton : public cWindowButton
 {
@@ -15,13 +17,39 @@ public:
 	cWindowOkButton()
 	{
 		alignment = ALIGN_BOTTOM;
-		moveto(0, 20);
+		moveto(100, 20);
 		resizeto(100, 20);
 		text = "            Ok";
 	}
 	virtual ~cWindowOkButton() {}
 	void click()
 	{
+		if (parent->windowtype() == WT_OBJECT)
+		{
+			parent->userfunc((void*)1);
+		}
+		parent->close();
+	}
+};
+
+
+class cWindowCancelButton : public cWindowButton
+{
+public:
+	cWindowCancelButton()
+	{
+		alignment = ALIGN_BOTTOM;
+		moveto(-100, 20);
+		resizeto(100, 20);
+		text = "            Cancel";
+	}
+	virtual ~cWindowCancelButton() {}
+	void click()
+	{
+		if (parent->windowtype() == WT_OBJECT)
+		{
+			parent->userfunc((void*)0);
+		}
 		parent->close();
 	}
 };
@@ -74,6 +102,8 @@ public:
 class cObjectWindow : public cWindow
 {
 public:
+	cUndoItem* undo;
+
 	cObjectWindow()
 	{
 		wtype = WT_OBJECT;
@@ -222,7 +252,26 @@ public:
 		o = new cWindowOkButton();
 		o->parent = this;
 		objects["OkButton"] = o;
+		o = new cWindowCancelButton();
+		o->parent = this;
+		objects["CancelButton"] = o;
 	}	
+
+	void* userfunc(void* param)
+	{
+		int p = (int)param;
+		if(p == 0) // cancel
+		{
+			undo->undo();
+			delete undo;
+		}
+		else
+		{
+			undostack.items.push(undo);
+		}
+
+		return NULL;
+	}
 };
 
 #endif
