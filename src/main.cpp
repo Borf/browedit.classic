@@ -1799,7 +1799,10 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				else
 					lastrclick = SDL_GetTicks();
-				
+				if(doubleclick && movement < 3)
+				{
+					Graphics.camerarot = 0;
+				}
 				lastrclick = SDL_GetTicks();
 				rbuttondown = false;
 				mousex = event.motion.x;
