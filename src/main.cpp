@@ -512,6 +512,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,mode,"Effects Edit",	&MenuCommand_mode);
 	ADDMENUITEM(mm,mode,"Sounds Edit",	&MenuCommand_mode);
 	ADDMENUITEM(mm,mode,"Lights Edit",	&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,"Object Group Edit",	&MenuCommand_mode);
 
 
 	ADDMENU(speed,edit, "Speed", 480, 100);
@@ -565,6 +566,8 @@ int main(int argc, char *argv[])
 			while(!pFile->eof() && line[0] != '[')
 			{
 				line = pFile->readline();
+				if(ltrim(line).substr(0,2) == "//")
+					continue;
 				if(line.find("=") != string::npos)
 				{
 					string option = line.substr(0, line.find("="));
@@ -732,7 +735,7 @@ int main(int argc, char *argv[])
 
 	Log(3,0,"Done initializing..");
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "data\\pvp_y_8-4").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "data\\prontera").c_str());
 #ifndef WIN32
 	Graphics.world.load();
 #endif
@@ -1111,6 +1114,18 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						if(!ctrl && alt)
 						{
 						}
+					}
+				}
+				if (editmode == MODE_OBJECTGROUP && Graphics.groupeditmode)
+				{
+					int i;
+					for(i = 0; i < Graphics.world.models.size(); i++)
+					{
+						if (!Graphics.world.models[i]->selected)
+							continue;
+						Graphics.world.models[i]->pos.x += (mousex - oldmousex)/10.0f;
+						Graphics.world.models[i]->pos.z -= (mousey - oldmousey)/10.0f;
+
 					}
 				}
 
@@ -1672,6 +1687,42 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						}
 
 					}
+					else if (editmode == MODE_OBJECTGROUP && !Graphics.groupeditmode)
+					{
+						if (mouse3dxstart > mouse3dx)
+						{
+							double d = mouse3dx;
+							mouse3dx = mouse3dxstart;
+							mouse3dxstart = d;
+						}
+						if (mouse3dzstart > mouse3dz)
+						{
+							double d = mouse3dz;
+							mouse3dz = mouse3dzstart;
+							mouse3dzstart = d;
+						}
+						bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
+						bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
+
+						
+						int i;
+						if(!ctrl && !alt)
+						{
+							for(i = 0; i < Graphics.world.models.size(); i++)
+								Graphics.world.models[i]->selected = false;
+						}
+
+
+						for(i = 0; i < Graphics.world.models.size(); i++)
+						{
+							cVector3* pos = &Graphics.world.models[i]->pos;
+							if (pos->x*5 > mouse3dxstart && pos->x*5 < mouse3dx && pos->z*5 > mouse3dzstart && pos->z*5 < mouse3dz)
+							{
+								Graphics.world.models[i]->selected = !alt;
+							}
+						}
+
+					}
 
 				}
 				
@@ -1829,6 +1880,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					Graphics.world.water.type = max(0, Graphics.world.water.type - 1);
 				}
+				else if (editmode == MODE_OBJECTGROUP)
+					Graphics.groupeditmode = !Graphics.groupeditmode;
 				else
 				{
 					Graphics.texturestart--;
@@ -1846,6 +1899,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					Graphics.world.water.type = min(5, Graphics.world.water.type + 1);
 				}
+				else if (editmode == MODE_OBJECTGROUP)
+					Graphics.groupeditmode = !Graphics.groupeditmode;
 				else
 				{
 					Graphics.texturestart++;
@@ -2030,14 +2085,38 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				break;
 			case SDLK_d:
 				{
-					int posx = mouse3dx / 10;
-					int posy = mouse3dz / 10;
-
-					if (posx >= brushsize && posx < Graphics.world.width-brushsize && posy >= brushsize && posy< Graphics.world.height-brushsize)
+					if (editmode == MODE_OBJECTGROUP)
 					{
-						Log(3,0,"Pos: %i,%i", posx, posy);
-						Log(3,0,"Cube: tileup: %i, tileside: %i, tileaside: %i, v1: %f, v2: %f, v3: %f, v4: %f", Graphics.world.cubes[posy][posx].tileup, Graphics.world.cubes[posy][posx].tileside, Graphics.world.cubes[posy][posx].tileaside, Graphics.world.cubes[posy][posx].cell1, Graphics.world.cubes[posy][posx].cell2, Graphics.world.cubes[posy][posx].cell3, Graphics.world.cubes[posy][posx].cell4);
-						Log(3,0,"Tileup: texture: %i, v1: (%f,%f), v2: (%f,%f), v3: (%f,%f), v4: (%f,%f)", Graphics.world.tiles[Graphics.world.cubes[posy][posx].tileup].texture, Graphics.world.tiles[Graphics.world.cubes[posy][posx].tileup].u1, Graphics.world.tiles[Graphics.world.cubes[posy][posx].tileup].v1, Graphics.world.tiles[Graphics.world.cubes[posy][posx].tileup].u2, Graphics.world.tiles[Graphics.world.cubes[posy][posx].tileup].v2, Graphics.world.tiles[Graphics.world.cubes[posy][posx].tileup].u3, Graphics.world.tiles[Graphics.world.cubes[posy][posx].tileup].v3, Graphics.world.tiles[Graphics.world.cubes[posy][posx].tileup].u4, Graphics.world.tiles[Graphics.world.cubes[posy][posx].tileup].v4);
+						int start = Graphics.world.models.size();
+						int i;
+						for(i = 0; i < start; i++)
+						{
+							if (Graphics.world.models[i]->selected)
+							{
+								Graphics.world.models[i]->selected = false;
+								cRSMModel* model = new cRSMModel();
+								model->load(Graphics.world.models[i]->filename);
+								model->pos = Graphics.world.models[i]->pos;
+								model->scale = Graphics.world.models[i]->scale;
+								model->rot = Graphics.world.models[i]->rot;
+								model->id = Graphics.world.models.size();
+								model->selected = true;
+								Graphics.world.models.push_back(model);
+							}
+						}
+
+					}
+					else
+					{
+						int posx = mouse3dx / 10;
+						int posy = mouse3dz / 10;
+
+						if (posx >= brushsize && posx < Graphics.world.width-brushsize && posy >= brushsize && posy< Graphics.world.height-brushsize)
+						{
+							Log(3,0,"Pos: %i,%i", posx, posy);
+							Log(3,0,"Cube: tileup: %i, tileside: %i, tileaside: %i, v1: %f, v2: %f, v3: %f, v4: %f", Graphics.world.cubes[posy][posx].tileup, Graphics.world.cubes[posy][posx].tileside, Graphics.world.cubes[posy][posx].tileaside, Graphics.world.cubes[posy][posx].cell1, Graphics.world.cubes[posy][posx].cell2, Graphics.world.cubes[posy][posx].cell3, Graphics.world.cubes[posy][posx].cell4);
+							Log(3,0,"Tileup: texture: %i, v1: (%f,%f), v2: (%f,%f), v3: (%f,%f), v4: (%f,%f)", Graphics.world.tiles[Graphics.world.cubes[posy][posx].tileup].texture, Graphics.world.tiles[Graphics.world.cubes[posy][posx].tileup].u1, Graphics.world.tiles[Graphics.world.cubes[posy][posx].tileup].v1, Graphics.world.tiles[Graphics.world.cubes[posy][posx].tileup].u2, Graphics.world.tiles[Graphics.world.cubes[posy][posx].tileup].v2, Graphics.world.tiles[Graphics.world.cubes[posy][posx].tileup].u3, Graphics.world.tiles[Graphics.world.cubes[posy][posx].tileup].v3, Graphics.world.tiles[Graphics.world.cubes[posy][posx].tileup].u4, Graphics.world.tiles[Graphics.world.cubes[posy][posx].tileup].v4);
+						}
 					}
 				}
 				break;
@@ -3047,6 +3126,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			case SDLK_F10:
 				editmode = MODE_LIGHTS;
 				break;
+			case SDLK_F11:
+				editmode = MODE_OBJECTGROUP;
+				break;
 			case SDLK_1:
 			case SDLK_2:
 			case SDLK_3:
@@ -3528,6 +3610,10 @@ MENUCOMMAND(mode)
 	else if (title == "Lights Edit")
 	{
 		editmode = MODE_LIGHTS;
+	}
+	else if (title == "Object Group Edit")
+	{
+		editmode = MODE_OBJECTGROUP;
 	}
 	return true;
 }

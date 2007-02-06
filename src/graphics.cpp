@@ -157,7 +157,7 @@ int cGraphics::draw()
 			previewmodel->rot.y+=40*(frameticks / 1000.0f);
 		}
 	}
-	if(world.loaded && editmode != MODE_OBJECTS)
+	if(world.loaded && editmode != MODE_OBJECTS && editmode != MODE_OBJECTGROUP)
 	{
 		int i;
 		glEnable(GL_TEXTURE_2D);
@@ -226,6 +226,15 @@ int cGraphics::draw()
 		glEnd();
 
 		glColor3f(1,1,1);
+	}
+	else if (editmode == MODE_OBJECTGROUP)
+	{
+		char buf[100];
+		if (!groupeditmode)
+			sprintf(buf, "Selecting");
+		else
+			sprintf(buf, "Editing");
+		font->print(1,1,1,width-font->textlen(buf), height-40, buf);
 	}
 	else if (editmode != MODE_OBJECTS)
 	{

@@ -71,6 +71,10 @@ class cRSMModel
 {
 public:
 	~cRSMModel();
+	cRSMModel()
+	{
+		selected = false;
+	}
 	string filename;
 	string rofilename;
 	int id;
@@ -88,6 +92,7 @@ public:
 
 	void boundingbox();
 	bool recalcbb;
+	bool selected;
 
 
 

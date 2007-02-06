@@ -1482,7 +1482,7 @@ void cWorld::draw()
 		
 	}
 
-	if (Graphics.showobjects || editmode == MODE_OBJECTS)
+	if ((Graphics.showobjects || editmode == MODE_OBJECTS) && editmode != MODE_OBJECTGROUP)
 	{
 		glColor4f(1,1,1,1);
 
@@ -1581,6 +1581,23 @@ void cWorld::draw()
 	}
 	if(editmode == MODE_OBJECTS && Graphics.showgrid)
 	{
+		glColor4f(1,1,1,1);
+
+		glEnable(GL_TEXTURE_2D);
+		glEnable(GL_BLEND);
+		glTranslatef(0,0,height*10);
+		glScalef(1,1,-1);
+		for(i = 0; i < models.size(); i++)
+		{
+			if(i == Graphics.selectedobject && editmode == MODE_OBJECTS)
+				glColor3f(1,0,0);
+			else
+				glColor3f(1,1,1);
+			models[i]->draw();
+		}
+		glScalef(1,1,-1);
+		glTranslatef(0,0,-height*10);
+
 		glDisable(GL_TEXTURE_2D);
 		glColor3f(1,0,0);
 		float s = 10 / Graphics.gridsize;
@@ -1604,6 +1621,74 @@ void cWorld::draw()
 			}
 		}
 		glTranslatef(-s*Graphics.gridoffsetx,0,-s*Graphics.gridoffsety);
+	}
+
+	if(editmode == MODE_OBJECTGROUP)
+	{
+		glColor4f(1,1,1,1);
+
+		glEnable(GL_TEXTURE_2D);
+		glEnable(GL_BLEND);
+		glTranslatef(0,0,height*10);
+		glScalef(1,1,-1);
+		for(i = 0; i < models.size(); i++)
+		{
+			if(i == Graphics.selectedobject && editmode == MODE_OBJECTS)
+				glColor3f(1,0,0);
+			else
+				glColor3f(1,1,1);
+			models[i]->draw();
+		}
+		glScalef(1,1,-1);
+		glTranslatef(0,0,-height*10);
+
+
+		
+		glDisable(GL_TEXTURE_2D);
+		glBegin(GL_QUADS);
+		for(i = 0; i < models.size(); i++)
+		{
+			cVector3 pos = models[i]->pos;
+
+			if(5*models[i]->selected)
+				glColor4f(1,1,0,0.5);
+			else
+				glColor4f(1,0,0,0.5);
+
+
+			glVertex3f(5*pos.x+5, -pos.y+5, 5*(2*height-pos.z)+5);
+			glVertex3f(5*pos.x+5, -pos.y+5, 5*(2*height-pos.z)-5);
+			glVertex3f(5*pos.x-5, -pos.y+5, 5*(2*height-pos.z)-5);
+			glVertex3f(5*pos.x-5, -pos.y+5, 5*(2*height-pos.z)+5);
+
+			glVertex3f(5*pos.x+5, -pos.y-5, 5*(2*height-pos.z)+5);
+			glVertex3f(5*pos.x+5, -pos.y-5, 5*(2*height-pos.z)-5);
+			glVertex3f(5*pos.x-5, -pos.y-5, 5*(2*height-pos.z)-5);
+			glVertex3f(5*pos.x-5, -pos.y-5, 5*(2*height-pos.z)+5);
+
+
+			glVertex3f(5*pos.x+5, -pos.y+5, 5*(2*height-pos.z)+5);
+			glVertex3f(5*pos.x+5, -pos.y-5, 5*(2*height-pos.z)+5);
+			glVertex3f(5*pos.x-5, -pos.y-5, 5*(2*height-pos.z)+5);
+			glVertex3f(5*pos.x-5, -pos.y+5, 5*(2*height-pos.z)+5);
+			
+			glVertex3f(5*pos.x+5, -pos.y+5, 5*(2*height-pos.z)-5);
+			glVertex3f(5*pos.x+5, -pos.y-5, 5*(2*height-pos.z)-5);
+			glVertex3f(5*pos.x-5, -pos.y-5, 5*(2*height-pos.z)-5);
+			glVertex3f(5*pos.x-5, -pos.y+5, 5*(2*height-pos.z)-5);
+
+			glVertex3f(5*pos.x+5, -pos.y+5, 5*(2*height-pos.z)+5);
+			glVertex3f(5*pos.x+5, -pos.y-5, 5*(2*height-pos.z)+5);
+			glVertex3f(5*pos.x+5, -pos.y-5, 5*(2*height-pos.z)-5);
+			glVertex3f(5*pos.x+5, -pos.y+5, 5*(2*height-pos.z)-5);
+
+			glVertex3f(5*pos.x-5, -pos.y+5, 5*(2*height-pos.z)+5);
+			glVertex3f(5*pos.x-5, -pos.y-5, 5*(2*height-pos.z)+5);
+			glVertex3f(5*pos.x-5, -pos.y-5, 5*(2*height-pos.z)-5);
+			glVertex3f(5*pos.x-5, -pos.y+5, 5*(2*height-pos.z)-5);
+		}
+		glColor4f(1,1,1,1);
+		glEnd();
 	}
 
 	if(editmode == MODE_EFFECTS)
@@ -1637,6 +1722,24 @@ void cWorld::draw()
 				glVertex3f(floor(mouse3dxstart/10)*10,	mouse3dy+1, height*10-floor(mouse3dz/10)*10);
 				glVertex3f(floor(mouse3dx/10)*10,		mouse3dy+1, height*10-floor(mouse3dz/10)*10);
 				glVertex3f(floor(mouse3dx/10)*10,		mouse3dy+1, height*10-floor(mouse3dzstart/10)*10);
+			glEnd();
+
+			glColor3f(1,1,1);
+			glLineWidth(1);
+		}
+	}
+	if (editmode == MODE_OBJECTGROUP)
+	{
+		if (lbuttondown && !Graphics.groupeditmode)
+		{
+			glDisable(GL_TEXTURE_2D);
+			glLineWidth(2);
+			glColor3f(1,0,0);
+			glBegin(GL_LINE_LOOP);
+				glVertex3f(mouse3dxstart,	mouse3dy+1, height*10-mouse3dzstart);
+				glVertex3f(mouse3dxstart,	mouse3dy+1, height*10-mouse3dz);
+				glVertex3f(mouse3dx,		mouse3dy+1, height*10-mouse3dz);
+				glVertex3f(mouse3dx,		mouse3dy+1, height*10-mouse3dzstart);
 			glEnd();
 
 			glColor3f(1,1,1);
