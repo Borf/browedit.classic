@@ -51,6 +51,7 @@ public:
 		groupeditmode = false;
 
 		shownotiles = true;
+		selectioncenter = cVector3(-1,-1,-1);
 	}
 
 	int						init();				// initializes graphics
@@ -165,6 +166,8 @@ public:
 	int						width;						// windowwidth
 	int						bits;						// bpp (8,16,24,32)
 	bool					fullscreen;					// fullscreen ?
+
+	cVector3				selectioncenter;
 
 	cWM						WM;
 

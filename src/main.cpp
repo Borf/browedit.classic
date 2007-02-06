@@ -1118,14 +1118,51 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				if (editmode == MODE_OBJECTGROUP && Graphics.groupeditmode)
 				{
+					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
+					bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 					int i;
 					for(i = 0; i < Graphics.world.models.size(); i++)
 					{
 						if (!Graphics.world.models[i]->selected)
 							continue;
-						Graphics.world.models[i]->pos.x += (mousex - oldmousex)/10.0f;
-						Graphics.world.models[i]->pos.z -= (mousey - oldmousey)/10.0f;
 
+						if (!ctrl && !alt)
+						{
+							Graphics.world.models[i]->pos.x += (mousex - oldmousex)/10.0f;
+							Graphics.world.models[i]->pos.z -= (mousey - oldmousey)/10.0f;						
+						}
+						if(ctrl && !alt)
+						{
+							cVector2 diff = cVector2(Graphics.world.models[i]->pos.x - Graphics.selectioncenter.x, Graphics.world.models[i]->pos.z - Graphics.selectioncenter.z);
+							diff.rotate((mousex-oldmousex)/10.0f);
+							Graphics.world.models[i]->pos.x = Graphics.selectioncenter.x + diff.x;
+							Graphics.world.models[i]->pos.z = Graphics.selectioncenter.z + diff.y;
+
+							Graphics.world.models[i]->rot.y -= (mousex - oldmousex)/10.0f;
+						}
+						if(alt && !ctrl)
+						{
+							cVector2 diff = cVector2(Graphics.world.models[i]->pos.x - Graphics.selectioncenter.x, Graphics.world.models[i]->pos.z - Graphics.selectioncenter.z);
+							diff = diff * (1 + ((mousex - oldmousex) / 10.0f));
+							Graphics.world.models[i]->pos.x = Graphics.selectioncenter.x + diff.x;
+							Graphics.world.models[i]->pos.z = Graphics.selectioncenter.z + diff.y;
+
+							Graphics.world.models[i]->scale = Graphics.world.models[i]->scale * (1+((mousex - oldmousex) / 10.0f));
+						}
+					}
+					if(!ctrl && !alt)
+					{
+						int count = 0;
+						Graphics.selectioncenter = cVector3(0,0,0);
+						for(int i = 0; i < Graphics.world.models.size(); i++)
+						{
+							if (Graphics.world.models[i]->selected)
+							{
+								count++;
+								Graphics.selectioncenter+=Graphics.world.models[i]->pos;
+							}
+						}
+						Graphics.selectioncenter = Graphics.selectioncenter / count;
 					}
 				}
 
@@ -1881,7 +1918,20 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					Graphics.world.water.type = max(0, Graphics.world.water.type - 1);
 				}
 				else if (editmode == MODE_OBJECTGROUP)
+				{
 					Graphics.groupeditmode = !Graphics.groupeditmode;
+					int count = 0;
+					Graphics.selectioncenter = cVector3(0,0,0);
+					for(int i = 0; i < Graphics.world.models.size(); i++)
+					{
+						if (Graphics.world.models[i]->selected)
+						{
+							count++;
+							Graphics.selectioncenter+=Graphics.world.models[i]->pos;
+						}
+					}
+					Graphics.selectioncenter = Graphics.selectioncenter / count;
+				}
 				else
 				{
 					Graphics.texturestart--;
@@ -1900,7 +1950,20 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					Graphics.world.water.type = min(5, Graphics.world.water.type + 1);
 				}
 				else if (editmode == MODE_OBJECTGROUP)
+				{
 					Graphics.groupeditmode = !Graphics.groupeditmode;
+					int count = 0;
+					Graphics.selectioncenter = cVector3(0,0,0);
+					for(int i = 0; i < Graphics.world.models.size(); i++)
+					{
+						if (Graphics.world.models[i]->selected)
+						{
+							count++;
+							Graphics.selectioncenter+=Graphics.world.models[i]->pos;
+						}
+					}
+					Graphics.selectioncenter = Graphics.selectioncenter / count;
+				}
 				else
 				{
 					Graphics.texturestart++;
@@ -2096,7 +2159,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 								Graphics.world.models[i]->selected = false;
 								cRSMModel* model = new cRSMModel();
 								model->load(Graphics.world.models[i]->filename);
-								model->pos = Graphics.world.models[i]->pos;
+								model->pos = Graphics.world.models[i]->pos + cVector3(4,0,4);
 								model->scale = Graphics.world.models[i]->scale;
 								model->rot = Graphics.world.models[i]->rot;
 								model->id = Graphics.world.models.size();
