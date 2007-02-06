@@ -1137,8 +1137,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 						if (!ctrl && !alt)
 						{
-							Graphics.world.models[i]->pos.x += (mousex - oldmousex)/10.0f;
-							Graphics.world.models[i]->pos.z -= (mousey - oldmousey)/10.0f;						
+							Graphics.world.models[i]->pos.x += (mousex - oldmousex)/10.0f * cos(Graphics.camerarot) + (mousey - oldmousey)/10.0f * sin(Graphics.camerarot);
+							Graphics.world.models[i]->pos.z += (mousex - oldmousex)/10.0f * sin(Graphics.camerarot) - (mousey - oldmousey)/10.0f * cos(Graphics.camerarot);						
 						}
 						if(ctrl && !alt)
 						{
@@ -3107,6 +3107,20 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						Graphics.selectedobject = -1;
 					}
 				}
+				if (editmode == MODE_OBJECTGROUP)
+				{
+					for(int i = 0; i < Graphics.world.models.size(); i++)
+					{
+						if (Graphics.world.models[i]->selected)
+						{
+							delete Graphics.world.models[i];
+							Graphics.world.models.erase(Graphics.world.models.begin() + i);
+							i--;
+						}
+					}
+					Graphics.selectedobject = -1;
+				}
+
 				break;
 			}
 			case SDLK_f:
