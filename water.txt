@@ -6,3 +6,7 @@ data\texture\워터\
 data\texture\wate\
 .bmp
 7
+[ROdesktop]
+data\texture\워터\
+.jpg
+7
