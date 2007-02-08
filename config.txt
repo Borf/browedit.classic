@@ -1,4 +1,4 @@
-setting=ROdesktop
+setting=RO
 
 [RO]
 rodir=c:\program files\gravity\ro\
