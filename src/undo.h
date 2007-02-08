@@ -130,7 +130,10 @@ public:
 			vector<int> row;
 			for(int xx = xfrom; xx < xto; xx++)
 			{
-				row.push_back(Graphics.world.cubes[yy][xx].tileup);
+				if (yy < 0 || yy >= Graphics.world.height || xx < 0 || xx > Graphics.world.width)
+					row.push_back(0);
+				else
+					row.push_back(Graphics.world.cubes[yy][xx].tileup);
 			}
 			data.push_back(row);
 		}
@@ -141,7 +144,8 @@ public:
 		{
 			for(int xx = 0; xx < data[yy].size(); xx++)
 			{
-				Graphics.world.cubes[y+yy][x+xx].tileup = data[yy][xx];
+				if (!(yy+y < 0 || yy+y >= Graphics.world.height || xx+x < 0 || xx+x > Graphics.world.width))
+					Graphics.world.cubes[y+yy][x+xx].tileup = data[yy][xx];
 			}
 		}
 	}
@@ -166,10 +170,13 @@ public:
 			for(int xx = xfrom; xx < xto; xx++)
 			{
 				cCubeHeight c;
-				c.cell1 = Graphics.world.cubes[yy][xx].cell1;
-				c.cell2 = Graphics.world.cubes[yy][xx].cell2;
-				c.cell3 = Graphics.world.cubes[yy][xx].cell3;
-				c.cell4 = Graphics.world.cubes[yy][xx].cell4;
+				if (!(yy < 0 || yy >= Graphics.world.height || xx < 0 || xx > Graphics.world.width))
+				{
+					c.cell1 = Graphics.world.cubes[yy][xx].cell1;
+					c.cell2 = Graphics.world.cubes[yy][xx].cell2;
+					c.cell3 = Graphics.world.cubes[yy][xx].cell3;
+					c.cell4 = Graphics.world.cubes[yy][xx].cell4;
+				}
 				row.push_back(c);
 			}
 			data.push_back(row);
@@ -181,10 +188,14 @@ public:
 		{
 			for(int xx = 0; xx < data[yy].size(); xx++)
 			{
-				Graphics.world.cubes[y+yy][x+xx].cell1 = data[yy][xx].cell1;
-				Graphics.world.cubes[y+yy][x+xx].cell2 = data[yy][xx].cell2;
-				Graphics.world.cubes[y+yy][x+xx].cell3 = data[yy][xx].cell3;
-				Graphics.world.cubes[y+yy][x+xx].cell4 = data[yy][xx].cell4;
+				if (!(yy+y < 0 || yy+y >= Graphics.world.height || xx+x < 0 || xx+x > Graphics.world.width))
+				{
+					Graphics.world.cubes[y+yy][x+xx].cell1 = data[yy][xx].cell1;
+					Graphics.world.cubes[y+yy][x+xx].cell2 = data[yy][xx].cell2;
+					Graphics.world.cubes[y+yy][x+xx].cell3 = data[yy][xx].cell3;
+					Graphics.world.cubes[y+yy][x+xx].cell4 = data[yy][xx].cell4;
+					Graphics.world.cubes[y+yy][x+xx].calcnormal();
+				}
 			}
 		}
 	}
