@@ -77,7 +77,6 @@ public:
 	}
 	string filename;
 	string rofilename;
-	int id;
 
 	cVector3 pos;
 	cVector3 scale;

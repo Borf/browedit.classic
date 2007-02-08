@@ -215,6 +215,10 @@ SOURCE=.\icon1.ico
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\icon1.ico
+# End Source File
+# Begin Source File
+
 SOURCE=.\resource.h
 # End Source File
 # Begin Source File
@@ -232,6 +236,10 @@ SOURCE=.\src\wm\ambientlightwindow.h
 # Begin Source File
 
 SOURCE=.\src\wm\confirmwindow.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\effectwindow.h
 # End Source File
 # Begin Source File
 

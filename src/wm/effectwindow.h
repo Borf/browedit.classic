@@ -167,7 +167,27 @@ public:
 		o = new cWindowOkButton();
 		o->parent = this;
 		objects["OkButton"] = o;
-	}	
+
+		o = new cWindowCancelButton();
+		o->parent = this;
+		objects["CancelButton"] = o;
+	}
+	cUndoItem* undo;
+	void* userfunc(void* param)
+	{
+		int p = (int)param;
+		if(p == 0) // cancel
+		{
+			undo->undo();
+			delete undo;
+		}
+		else
+		{
+			undostack.items.push(undo);
+		}
+
+		return NULL;
+	}
 };
 
 #endif

@@ -230,7 +230,6 @@ void cWorld::load()
 			{
 				Log(2,0,"Error loading %s", filename.c_str());
 			}
-			m->id = models.size();
 
 
 			m->pos.x = *((float*)(buf+212));
@@ -2605,8 +2604,6 @@ unsigned char rawData[76] =
 			string filename = buf+52;
 			cRSMModel* m = new cRSMModel();
 			m->load(rodir+ "data\\model\\" + filename);
-			m->id = models.size();
-
 
 			m->pos.x = *((float*)(buf+212));
 			m->pos.y = *((float*)(buf+216));

@@ -24,7 +24,7 @@ public:
 	virtual ~cWindowOkButton() {}
 	void click()
 	{
-		if (parent->windowtype() == WT_OBJECT)
+		if (parent->windowtype() == WT_OBJECT || parent->windowtype() == WT_EFFECT)
 		{
 			parent->userfunc((void*)1);
 		}
@@ -46,7 +46,7 @@ public:
 	virtual ~cWindowCancelButton() {}
 	void click()
 	{
-		if (parent->windowtype() == WT_OBJECT)
+		if (parent->windowtype() == WT_OBJECT || parent->windowtype() == WT_EFFECT)
 		{
 			parent->userfunc((void*)0);
 		}

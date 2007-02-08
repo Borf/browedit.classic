@@ -50,6 +50,14 @@ public:
 		scale = oldscale;
 		objectid = id;
 	}
+	cUndoChangeObject(int id)
+	{
+		type = UNDO_OTHER;
+		objectid = id;
+		pos = Graphics.world.models[id]->pos;
+		rot = Graphics.world.models[id]->rot;
+		scale = Graphics.world.models[id]->scale;
+	}
 	void undo()
 	{
 		Graphics.world.models[objectid]->pos = pos;
@@ -132,6 +140,48 @@ public:
 	}
 };
 
+class cUndoGatHeightEdit : public cUndoItem
+{
+	class cCubeHeight
+	{public:
+		float cell1,cell2,cell3,cell4;
+	};
+	vector<vector<cCubeHeight> > data;
+	int x, y;
+public:
+	cUndoGatHeightEdit(int xfrom, int yfrom, int xto, int yto)
+	{
+		x = xfrom;
+		y = yfrom;
+		for(int yy = yfrom; yy < yto; yy++)
+		{
+			vector<cCubeHeight> row;
+			for(int xx = xfrom; xx < xto; xx++)
+			{
+				cCubeHeight c;
+				c.cell1 = Graphics.world.gattiles[yy][xx].cell1;
+				c.cell2 = Graphics.world.gattiles[yy][xx].cell2;
+				c.cell3 = Graphics.world.gattiles[yy][xx].cell3;
+				c.cell4 = Graphics.world.gattiles[yy][xx].cell4;
+				row.push_back(c);
+			}
+			data.push_back(row);
+		}
+	}
+	void undo()
+	{
+		for(int yy = 0; yy < data.size(); yy++)
+		{
+			for(int xx = 0; xx < data[yy].size(); xx++)
+			{
+				Graphics.world.gattiles[y+yy][x+xx].cell1 = data[yy][xx].cell1;
+				Graphics.world.gattiles[y+yy][x+xx].cell2 = data[yy][xx].cell2;
+				Graphics.world.gattiles[y+yy][x+xx].cell3 = data[yy][xx].cell3;
+				Graphics.world.gattiles[y+yy][x+xx].cell4 = data[yy][xx].cell4;
+			}
+		}
+	}
+};
 
 class cUndoGatTileEdit : public cUndoItem
 {
@@ -185,6 +235,204 @@ public:
 		}
 	}
 };
+
+
+class cUndoNewObject : public cUndoItem
+{
+public:
+	cUndoNewObject()
+	{
+
+	}
+	void undo()
+	{
+		delete Graphics.world.models.back();
+		Graphics.world.models.erase(Graphics.world.models.begin() + (Graphics.world.models.size()-1));
+	}
+};
+
+class cUndoNewObjects : public cUndoItem
+{
+	vector<int> prevselection;
+	int size;
+public:
+	cUndoNewObjects(int previoussize)
+	{
+		size = previoussize;
+		for(int i = 0; i < Graphics.world.models.size(); i++)
+		{
+			if (Graphics.world.models[i]->selected)
+				prevselection.push_back(i);
+		}
+	}
+	void undo()
+	{
+		while(Graphics.world.models.size() > size)
+		{
+			delete Graphics.world.models.back();
+			Graphics.world.models.erase(Graphics.world.models.begin() + (Graphics.world.models.size()-1));
+		}
+		for(int i = 0; i < prevselection.size(); i++)
+			Graphics.world.models[prevselection[i]]->selected = true;
+	}
+};
+
+
+class cUndoChangeWall : public cUndoItem
+{
+	int x,y,type,val;
+public:
+	cUndoChangeWall(int t, int xx, int yy,int v)
+	{
+		type = t;
+		x = xx;
+		y = yy;
+		val = v;
+	}
+	void undo()
+	{
+		if (type == 0)
+			Graphics.world.cubes[y][x].tileside = val;
+		else
+			Graphics.world.cubes[y][x].tileaside = val;
+	}
+};
+
+class cUndoChangeWalls : public cUndoItem
+{
+	int type;
+	vector<pair<pair<int,int>, int> > vals;
+public:
+	cUndoChangeWalls(int t, vector<pair<pair<int,int>, int> > v)
+	{
+		type = t;
+		vals = v;
+	}
+	void undo()
+	{
+		if (type == 0)
+		{
+			for(int i = 0; i < vals.size(); i++)
+				Graphics.world.cubes[vals[i].first.second][vals[i].first.first].tileside = vals[i].second;
+		}
+		else
+		{
+			for(int i = 0; i < vals.size(); i++)
+				Graphics.world.cubes[vals[i].first.second][vals[i].first.first].tileaside = vals[i].second;
+		}
+	}
+};
+
+class cUndoChangeWater : public cUndoItem
+{
+	cWater water;
+public:
+	cUndoChangeWater(cWater w)
+	{
+		water = w;
+	}
+	void undo()
+	{
+		Graphics.world.water = water;
+	}
+};
+
+class cUndoObjectDelete : public cUndoItem
+{
+	string filename;
+	cVector3 pos;
+	int id;
+	cVector3 scale;
+	cVector3 rot;
+public:
+	cUndoObjectDelete(int i)
+	{
+		id = i;
+		pos = Graphics.world.models[i]->pos;
+		scale = Graphics.world.models[i]->scale;
+		rot = Graphics.world.models[i]->rot;
+		filename = Graphics.world.models[i]->filename;
+	}
+	void undo()
+	{
+		cRSMModel* model = new cRSMModel();
+		model->load(filename);
+		model->pos = pos;
+		model->rot = rot;
+		model->scale = scale;
+		Graphics.world.models.insert(Graphics.world.models.begin() + id, model);
+		Graphics.selectedobject = id;
+//		Graphics.world.models.push_back(model);
+	}
+};
+
+class cUndoEffectDelete : public cUndoItem
+{
+	int id;
+	cEffect effect;
+public:
+	cUndoEffectDelete(int i)
+	{
+		id = i;
+		effect = Graphics.world.effects[i];
+	}
+	void undo()
+	{
+		Graphics.world.effects.insert(Graphics.world.effects.begin() + id, effect);
+		Graphics.selectedobject = id;
+	}
+};
+
+
+class cUndoChangeEffect : public cUndoItem
+{
+	cEffect effect;
+	int id;
+public:
+	cUndoChangeEffect(int i)
+	{
+		id = i;
+		effect = Graphics.world.effects[i];
+	}
+	void undo()
+	{
+		Graphics.world.effects[id] = effect;
+	}
+};
+
+class cUndoObjectsDelete : public cUndoItem
+{
+public:
+	class cObject
+	{public:
+		string filename;
+		cVector3 pos;
+		cVector3 rot;
+		cVector3 scale;
+		int id;
+	};
+	vector<cObject> objects;
+
+	cUndoObjectsDelete(vector<cObject> myobjects)
+	{
+		objects = myobjects;
+	}
+	void undo()
+	{
+		for(int i = 0; i < objects.size(); i++)
+		{
+			cRSMModel* model = new cRSMModel();
+			model->load(objects[i].filename);
+			model->pos = objects[i].pos;
+			model->rot = objects[i].rot;
+			model->scale = objects[i].scale;
+			model->selected = true;
+			Graphics.world.models.insert(Graphics.world.models.begin() + objects[i].id, model);
+		}
+	}
+};
+
+
 
 class cUndoStack
 {

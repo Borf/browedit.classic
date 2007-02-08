@@ -1056,7 +1056,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					{
 						if (doneaction)
 						{
-							undostack.items.push(new cUndoChangeObject(Graphics.selectedobject, Graphics.world.models[Graphics.selectedobject]->pos, Graphics.world.models[Graphics.selectedobject]->rot, Graphics.world.models[Graphics.selectedobject]->scale));
+							undostack.items.push(new cUndoChangeObject(Graphics.selectedobject));
 							doneaction = false;
 						}
 						bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
@@ -1595,9 +1595,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							model->pos = cVector3(mouse3dx/5, -mouse3dy, mouse3dz/5);
 							model->scale = cVector3(1,1,1);
 							model->rot = cVector3(0,0,0);
-							model->id = Graphics.world.models.size();
 							Graphics.world.models.push_back(model);
 							Graphics.selectedobject = Graphics.world.models.size()-1;
+							undostack.items.push(new cUndoNewObject());
 						}
 						else
 						{
@@ -1837,7 +1837,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.models.size())
 					{
-						undostack.items.push(new cUndoChangeObject(Graphics.selectedobject, Graphics.world.models[Graphics.selectedobject]->pos, Graphics.world.models[Graphics.selectedobject]->rot, Graphics.world.models[Graphics.selectedobject]->scale));
+						undostack.items.push(new cUndoChangeObject(Graphics.selectedobject));
 						bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 						bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 						bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
@@ -1855,7 +1855,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.models.size())
 					{
-						undostack.items.push(new cUndoChangeObject(Graphics.selectedobject, Graphics.world.models[Graphics.selectedobject]->pos, Graphics.world.models[Graphics.selectedobject]->rot, Graphics.world.models[Graphics.selectedobject]->scale));
+						undostack.items.push(new cUndoChangeObject(Graphics.selectedobject));
 						bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 						bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 						bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
@@ -1873,7 +1873,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.models.size())
 					{
-						undostack.items.push(new cUndoChangeObject(Graphics.selectedobject, Graphics.world.models[Graphics.selectedobject]->pos, Graphics.world.models[Graphics.selectedobject]->rot, Graphics.world.models[Graphics.selectedobject]->scale));
+						undostack.items.push(new cUndoChangeObject(Graphics.selectedobject));
 						bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 						bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 						bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
@@ -1891,7 +1891,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.models.size())
 					{
-						undostack.items.push(new cUndoChangeObject(Graphics.selectedobject, Graphics.world.models[Graphics.selectedobject]->pos, Graphics.world.models[Graphics.selectedobject]->rot, Graphics.world.models[Graphics.selectedobject]->scale));
+						undostack.items.push(new cUndoChangeObject(Graphics.selectedobject));
 						bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 						bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 						bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
@@ -1910,11 +1910,11 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					if (Graphics.previewmodel != NULL)
 						Graphics.previewmodel->scale = Graphics.previewmodel->scale * 0.9f;
 				}
-				else if (editmode == MODE_HEIGHTDETAIL)
+				else if (editmode == MODE_HEIGHTDETAIL && brushsize > 1)
 				{
 					brushsize/=2;
 				}
-				else
+				else if (editmode != MODE_GAT || Graphics.brushsize > 1)
 					Graphics.brushsize/=2;
 					
 				break;
@@ -2005,7 +2005,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					Graphics.fliph = !Graphics.fliph;
 				if (editmode == MODE_OBJECTS && Graphics.selectedobject != -1)
 				{
-					undostack.items.push(new cUndoChangeObject(Graphics.selectedobject, Graphics.world.models[Graphics.selectedobject]->pos, Graphics.world.models[Graphics.selectedobject]->rot, Graphics.world.models[Graphics.selectedobject]->scale));
+					undostack.items.push(new cUndoChangeObject(Graphics.selectedobject));
 					if(SDL_GetModState() & KMOD_ALT)
 						Graphics.world.models[Graphics.selectedobject]->scale.y = -	Graphics.world.models[Graphics.selectedobject]->scale.y;
 					else
@@ -2089,7 +2089,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					Graphics.flipv = !Graphics.flipv;
 				if (editmode == MODE_OBJECTS && Graphics.selectedobject != -1)
 				{
-					undostack.items.push(new cUndoChangeObject(Graphics.selectedobject, Graphics.world.models[Graphics.selectedobject]->pos, Graphics.world.models[Graphics.selectedobject]->rot, Graphics.world.models[Graphics.selectedobject]->scale));
+					undostack.items.push(new cUndoChangeObject(Graphics.selectedobject));
 					Graphics.world.models[Graphics.selectedobject]->scale.z = -	Graphics.world.models[Graphics.selectedobject]->scale.z;
 				}
 				if(editmode == MODE_WALLS)
@@ -2190,6 +2190,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if (editmode == MODE_OBJECTGROUP)
 					{
+						undostack.items.push(new cUndoNewObjects(Graphics.world.models.size()));
 						int start = Graphics.world.models.size();
 						int i;
 						for(i = 0; i < start; i++)
@@ -2202,7 +2203,6 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 								model->pos = Graphics.world.models[i]->pos + cVector3(4,0,4);
 								model->scale = Graphics.world.models[i]->scale;
 								model->rot = Graphics.world.models[i]->rot;
-								model->id = Graphics.world.models.size();
 								model->selected = true;
 								Graphics.world.models.push_back(model);
 							}
@@ -2232,6 +2232,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					if (x < 0 || x > Graphics.world.cubes[0].size()-1)
 						break;
 
+					undostack.items.push(new cUndoChangeWall(0,x,y, Graphics.world.cubes[y][x].tileside));
 					if(Graphics.world.cubes[y][x].tileside != -1)
 					{
 						Graphics.world.cubes[y][x].tileside = -1;
@@ -2263,7 +2264,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					t.u4 = selendx;
 					t.v4 = selendy;
 					Graphics.world.tiles.push_back(t);
-					Graphics.world	.cubes[y][x].tileside = Graphics.world.tiles.size()-1;
+					Graphics.world.cubes[y][x].tileside = Graphics.world.tiles.size()-1;
 
 					break;
 				}
@@ -2276,6 +2277,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					if (x < 0 || x > Graphics.world.cubes[0].size()-1)
 						break;
 
+					undostack.items.push(new cUndoChangeWall(1,x,y, Graphics.world.cubes[y][x].tileaside));
 					if(Graphics.world.cubes[y][x].tileaside != -1)
 					{
 						Graphics.world.cubes[y][x].tileaside = -1;
@@ -2315,6 +2317,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if(editmode == MODE_WALLS)
 					{
+						vector<pair<int, cTile> > tileschanged;
 						int x = mouse3dx / 10;
 						int y = mouse3dz / 10;
 						if(SDL_GetModState() & KMOD_SHIFT)
@@ -2344,20 +2347,25 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 							for(xx = xmin; xx < xmax; xx++)
 							{
+								tileschanged.push_back(pair<int, cTile>(Graphics.world.cubes[y][xx].tileside, Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside]));
 								Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside].v3+=0.03125;
 								Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside].v4+=0.03125;
 							}
 						}
 						else
 						{
+								tileschanged.push_back(pair<int, cTile>(Graphics.world.cubes[y][x].tileside, Graphics.world.tiles[Graphics.world.cubes[y][x].tileside]));
 								Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u1+=0.03125;
 								Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u3+=0.03125;
 						}
+						if(tileschanged.size() > 0)
+							undostack.items.push(new cUndoTileEdit(tileschanged));
 					}
 					if (editmode == MODE_OBJECTS)
 					{
 						if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.models.size())
 						{
+							undostack.items.push(new cUndoChangeObject(Graphics.selectedobject));
 							bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 							bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 							bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
@@ -2376,8 +2384,10 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 						float f = ceil(Graphics.brushsize);
 
+
 						if (posx >= floor(f/2.0f) && posx < 2*Graphics.world.width-ceil(f/2.0f) && posy >= floor(f/2.0f) && posy< 2*Graphics.world.height-ceil(f/2.0f))
 						{
+							undostack.items.push(new cUndoGatHeightEdit(posx-floor(f/2.0f), posy-floor(f/2.0f), posx+ceil(f/2.0f), posy+ceil(f/2.0f)));
 							glColor4f(1,0,0,1);
 							glDisable(GL_TEXTURE_2D);
 							glDisable(GL_BLEND);
@@ -2400,10 +2410,12 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 					if (editmode == MODE_WATER)
 					{
+						undostack.items.push(new cUndoChangeWater(Graphics.world.water));
 						Graphics.world.water.height++;
 					}
 					if (editmode == MODE_HEIGHTGLOBAL)
 					{
+						undostack.items.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
 						for(int x = 0; x < Graphics.world.width; x++)
 						{
 							for(int y = 0; y < Graphics.world.height; y++)
@@ -2435,6 +2447,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					{
 						if (Graphics.selectedobject != -1)
 						{
+							undostack.items.push(new cUndoChangeEffect(Graphics.selectedobject));
 							Graphics.world.effects[Graphics.selectedobject].loop--;
 							Log(3,0,"Effect-loop time: %f", Graphics.world.effects[Graphics.selectedobject].loop);
 						}
@@ -2445,6 +2458,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if(editmode == MODE_WALLS)
 					{
+						vector<pair<int, cTile> > tileschanged;
 						int x = mouse3dx / 10;
 						int y = mouse3dz / 10;
 						if(SDL_GetModState() & KMOD_SHIFT)
@@ -2474,20 +2488,25 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 							for(xx = xmin; xx < xmax; xx++)
 							{
+								tileschanged.push_back(pair<int, cTile>(Graphics.world.cubes[y][xx].tileside, Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside]));
 								Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside].v3-=0.03125;
 								Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside].v4-=0.03125;
 							}
 						}
 						else
 						{
+							tileschanged.push_back(pair<int, cTile>(Graphics.world.cubes[y][x].tileside, Graphics.world.tiles[Graphics.world.cubes[y][x].tileside]));
 							Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u1-=0.03125;
 							Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u3-=0.03125;
 						}
+						if(tileschanged.size() > 0)
+							undostack.items.push(new cUndoTileEdit(tileschanged));
 					}
 					if (editmode == MODE_OBJECTS)
 					{
 						if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.models.size())
 						{
+							undostack.items.push(new cUndoChangeObject(Graphics.selectedobject));
 							bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 							bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 							bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
@@ -2508,6 +2527,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 						if (posx >= floor(f/2.0f) && posx < 2*Graphics.world.width-ceil(f/2.0f) && posy >= floor(f/2.0f) && posy< 2*Graphics.world.height-ceil(f/2.0f))
 						{
+							undostack.items.push(new cUndoGatHeightEdit(posx-floor(f/2.0f), posy-floor(f/2.0f), posx+ceil(f/2.0f), posy+ceil(f/2.0f)));
 							glColor4f(1,0,0,1);
 							glDisable(GL_TEXTURE_2D);
 							glDisable(GL_BLEND);
@@ -2530,6 +2550,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 					if (editmode == MODE_WATER)
 					{
+						undostack.items.push(new cUndoChangeWater(Graphics.world.water));
 						Graphics.world.water.height--;
 					}
 					if (editmode == MODE_HEIGHTGLOBAL)
@@ -2537,6 +2558,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						float avg = 0;
 						float mmin = 999999;
 						float mmax = -999999;
+						undostack.items.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
 						for(int x = 0; x < Graphics.world.width; x++)
 						{
 							for(int y = 0; y < Graphics.world.height; y++)
@@ -2570,6 +2592,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					{
 						if (Graphics.selectedobject != -1)
 						{
+							undostack.items.push(new cUndoChangeEffect(Graphics.selectedobject));
 							Graphics.world.effects[Graphics.selectedobject].loop++;
 							Log(3,0,"Effect-loop time: %f", Graphics.world.effects[Graphics.selectedobject].loop);
 						}
@@ -2579,6 +2602,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			case SDLK_HOME:
 				if(editmode == MODE_WALLS)
 				{
+					vector<pair<int, cTile> > tileschanged;
 					int x = mouse3dx / 10;
 					int y = mouse3dz / 10;
 					if(SDL_GetModState() & KMOD_SHIFT)
@@ -2613,6 +2637,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							if (xx < 0 || xx > Graphics.world.width)
 								continue;
 
+							tileschanged.push_back(pair<int, cTile>(Graphics.world.cubes[y][xx].tileside, Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside]));
 							Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside].v1+=0.03125;
 							Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside].v2+=0.03125;
 						}
@@ -2623,14 +2648,18 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							break;
 						if (x < 0 || x > Graphics.world.width-1)
 							break;
+						tileschanged.push_back(pair<int, cTile>(Graphics.world.cubes[y][x].tileside, Graphics.world.tiles[Graphics.world.cubes[y][x].tileside]));
 						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u2+=0.03125;
 						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u4+=0.03125;
 					}
+					if(tileschanged.size() > 0)
+						undostack.items.push(new cUndoTileEdit(tileschanged));
 					break;
 				}
 			case SDLK_END:
 				if(editmode == MODE_WALLS)
 				{
+					vector<pair<int, cTile> > tileschanged;
 					int x = mouse3dx / 10;
 					int y = mouse3dz / 10;
 					if(SDL_GetModState() & KMOD_SHIFT)
@@ -2660,6 +2689,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 						for(xx = xmin; xx < xmax; xx++)
 						{
+							tileschanged.push_back(pair<int, cTile>(Graphics.world.cubes[y][xx].tileside, Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside]));
 							Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside].v1-=0.03125;
 							Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside].v2-=0.03125;
 						}
@@ -2670,27 +2700,24 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							break;
 						if (x < 0 || x > Graphics.world.width)
 							break;
+						tileschanged.push_back(pair<int, cTile>(Graphics.world.cubes[y][x].tileside, Graphics.world.tiles[Graphics.world.cubes[y][x].tileside]));
 						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u2+=0.03125;
 						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u4+=0.03125;
 						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u2-=0.03125;
 						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u4-=0.03125;
 					}
+					if(tileschanged.size() > 0)
+						undostack.items.push(new cUndoTileEdit(tileschanged));
 					break;
 				}
 			case SDLK_w:
-				if(editmode == MODE_WATER)
+				if(SDL_GetModState() & KMOD_META)
 				{
-					char buf[100];
-					scanf("%s", buf);
-					Graphics.world.water.height = atof(buf);
+					MenuCommand_toggle((cMenuItem*)menu->find("Water"));
+					break;
 				}
-				else
+				else if (editmode == MODE_WALLS)
 				{
-					if(SDL_GetModState() & KMOD_META)
-					{
-						MenuCommand_toggle((cMenuItem*)menu->find("Water"));
-						break;
-					}
 					bool wrap = true;
 					if (SDL_GetModState() & KMOD_SHIFT)
 						wrap = false;
@@ -2710,6 +2737,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					float selheight = selendy - selstarty;
 					float selwidth = selendx - selstartx;
 
+					vector<pair<pair<int,int>, int> > wallschanged;
 					if(SDL_GetModState() & KMOD_ALT)
 					{
 						if(Graphics.world.cubes[y][x].tileaside == -1)
@@ -2803,8 +2831,11 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 								t.u4 = selstartx + (index/(float)(ymax-ymin)) * (selendx-selstartx);
 							}
 							Graphics.world.tiles.push_back(t);
+							wallschanged.push_back(pair<pair<int,int>,int>(pair<int,int>(x,yy),Graphics.world.cubes[yy][x].tileaside));
 							Graphics.world.cubes[yy][x].tileaside = Graphics.world.tiles.size()-1;
 						}
+						if(wallschanged.size() > 0)
+							undostack.items.push(new cUndoChangeWalls(1, wallschanged));
 					}
 					else
 					{
@@ -2903,8 +2934,11 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							}
 
 							Graphics.world.tiles.push_back(t);
+							wallschanged.push_back(pair<pair<int,int>,int>(pair<int,int>(xx,y),Graphics.world.cubes[y][xx].tileside));
 							Graphics.world.cubes[y][xx].tileside = Graphics.world.tiles.size()-1;
 						}
+						if(wallschanged.size() > 0)
+							undostack.items.push(new cUndoChangeWalls(0, wallschanged));
 					}
 					break;
 				}
@@ -2987,6 +3021,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						if (clipboard.size() != brushsize)
 							break;
 
+						undostack.items.push(new cUndoHeightEdit(posx-floor(brushsize/2.0f), posy-floor(brushsize/2.0f), posx+ceil(brushsize/2.0f), posy+ceil(brushsize/2.0f)));
 //						if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy <= Graphics.world.height-ceil(brushsize/2.0f))
 						{
 							int yy = 0;
@@ -3024,9 +3059,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 								model->pos.y = Graphics.clipboardy;
 							model->scale = Graphics.clipboardscale;
 							model->rot = Graphics.clipboardrot;
-							model->id = Graphics.world.models.size();
 							Graphics.world.models.push_back(model);
 							Graphics.selectedobject = Graphics.world.models.size()-1;
+							undostack.items.push(new cUndoNewObject());
 						}
 					}
 					if (editmode == MODE_GAT)
@@ -3038,6 +3073,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 						if (clipboard.size() != f)
 							break;
+
+						undostack.items.push(new cUndoGatHeightEdit(posx-floor(f/2.0f), posy-floor(f/2.0f), posx+ceil(f/2.0f), posy+ceil(f/2.0f)));
 
 						if (posx >= floor(f/2.0f) && posx < 2*Graphics.world.width-ceil(f/2.0f) && posy >= f && posy< 2*Graphics.world.height-f)
 						{
@@ -3075,6 +3112,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					selsizex = floor(selsizex*Graphics.brushsize);
 					selsizey = floor(selsizey*Graphics.brushsize);
 
+					undostack.items.push(new cUndoTexture(posx-selsizex+1, posy-selsizey+1, posx+1, posy+1));
 					for(int x = posx; x > posx-selsizex; x--)
 					{
 						for(int y = posy; y > posy-selsizey; y--)
@@ -3085,7 +3123,6 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 								continue;
 							if (x < 0)
 								continue;
-							
 							Graphics.world.cubes[y][x].tileup = -1;
 						}
 					}
@@ -3094,6 +3131,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.models.size())
 					{
+						undostack.items.push(new cUndoObjectDelete(Graphics.selectedobject));
 						delete Graphics.world.models[Graphics.selectedobject];
 						Graphics.world.models.erase(Graphics.world.models.begin() + Graphics.selectedobject);
 						Graphics.selectedobject = -1;
@@ -3103,22 +3141,33 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.effects.size())
 					{
+						undostack.items.push(new cUndoEffectDelete(Graphics.selectedobject));
 						Graphics.world.effects.erase(Graphics.world.effects.begin() + Graphics.selectedobject);
 						Graphics.selectedobject = -1;
 					}
 				}
 				if (editmode == MODE_OBJECTGROUP)
 				{
+					vector<cUndoObjectsDelete::cObject> objectsdeleted;
 					for(int i = 0; i < Graphics.world.models.size(); i++)
 					{
 						if (Graphics.world.models[i]->selected)
 						{
+							cUndoObjectsDelete::cObject object;
+							object.filename = Graphics.world.models[i]->filename;
+							object.pos = Graphics.world.models[i]->pos;
+							object.rot = Graphics.world.models[i]->rot;
+							object.scale = Graphics.world.models[i]->scale;
+							object.id = i;
+							objectsdeleted.push_back(object);
 							delete Graphics.world.models[i];
 							Graphics.world.models.erase(Graphics.world.models.begin() + i);
 							i--;
 						}
 					}
 					Graphics.selectedobject = -1;
+					if (objectsdeleted.size() > 0)
+						undostack.items.push(new cUndoObjectsDelete(objectsdeleted));
 				}
 
 				break;
@@ -3130,6 +3179,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					int posx = mouse3dx / 10;
 					int posy = mouse3dz / 10;
 
+					undostack.items.push(new cUndoHeightEdit(posx-floor(brushsize/2.0f), posy-floor(brushsize/2.0f), posx+ceil(brushsize/2.0f), posy+ceil(brushsize/2.0f)));
 					for(int x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f)-1; x++)
 					{
 						for(int y = posy-floor(brushsize/2.0f)+1; y < posy+ceil(brushsize/2.0f); y++)
@@ -3197,6 +3247,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if (Graphics.selectedobject != -1)
 					{
+						undostack.items.push(new cUndoChangeObject(Graphics.selectedobject));
 						Graphics.world.models[Graphics.selectedobject]->rot = cVector3(0,0,0);
 					}
 					break;
@@ -3298,7 +3349,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							w->objects["scaley"]->SetInt(3,(int)&o->scale.y);
 							w->objects["scalez"]->SetInt(3,(int)&o->scale.z);
 							w->objects["objectname"]->SetText(0, o->rofilename);
-							((cObjectWindow*)w)->undo = new cUndoChangeObject(Graphics.selectedobject, Graphics.world.models[Graphics.selectedobject]->pos, Graphics.world.models[Graphics.selectedobject]->rot, Graphics.world.models[Graphics.selectedobject]->scale);
+							((cObjectWindow*)w)->undo = new cUndoChangeObject(Graphics.selectedobject);
 
 							Graphics.WM.addwindow(w);
 						}
@@ -3322,6 +3373,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							w->objects["scalez"]->SetInt(3,(int)&o->scale.z);
 							w->objects["looptime"]->SetInt(3,(int)&o->loop);
 							w->objects["objectname"]->SetText(0, o->readablename);
+							((cEffectWindow*)w)->undo = new cUndoChangeEffect(Graphics.selectedobject);
 							Graphics.WM.addwindow(w);
 						}
 					}
@@ -3334,6 +3386,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						int x,y;
 						int posx = mouse3dx / 10;
 						int posy = mouse3dz / 10;
+						undostack.items.push(new cUndoHeightEdit(posx-floor(brushsize/2.0f), posy-floor(brushsize/2.0f), posx+ceil(brushsize/2.0f), posy+ceil(brushsize/2.0f)));
 						for(x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f)-1; x++)
 						{
 							for(y = posy-floor(brushsize/2.0f)+1; y < posy+ceil(brushsize/2.0f); y++)
@@ -3638,10 +3691,10 @@ MENUCOMMAND(random1)
 		{
 		//	Graphics.world.cubes[2*y][2*x].tileup = 1;
 
-			Graphics.world.cubes[2*y][2*x].cell1 = -rand()%1000;
-			Graphics.world.cubes[2*y][2*x].cell2 = -rand()%1000;
-			Graphics.world.cubes[2*y][2*x].cell3 = -rand()%1000;
-			Graphics.world.cubes[2*y][2*x].cell4 = -rand()%1000;
+			Graphics.world.cubes[2*y][2*x].cell1 = 500-rand()%1000;
+			Graphics.world.cubes[2*y][2*x].cell2 = 500-rand()%1000;
+			Graphics.world.cubes[2*y][2*x].cell3 = 500-rand()%1000;
+			Graphics.world.cubes[2*y][2*x].cell4 = 500-rand()%1000;
 
 			Graphics.world.cubes[2*y][2*x-1].cell2 =	Graphics.world.cubes[2*y][2*x].cell1;
 			Graphics.world.cubes[2*y-1][2*x-1].cell4 =	Graphics.world.cubes[2*y][2*x].cell1;
