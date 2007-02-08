@@ -66,6 +66,56 @@ public:
 	}
 };
 
+
+class cUndoChangeObjects : public cUndoItem
+{
+	class cObject
+	{public:
+		cVector3 pos;
+		cVector3 rot;
+		cVector3 scale;
+		int objectid;
+	};
+	vector<cObject>	objects;
+public:
+
+	cUndoChangeObjects(vector<int> ob)
+	{
+		type = UNDO_OTHER;
+		for(int i = 0; i < ob.size(); i++)
+		{
+			cObject o;
+			o.pos = Graphics.world.models[ob[i]]->pos;
+			o.rot = Graphics.world.models[ob[i]]->rot;
+			o.scale = Graphics.world.models[ob[i]]->scale;
+			o.objectid = ob[i];
+			objects.push_back(o);
+		}
+	}
+	void undo()
+	{
+		int i;
+		for(i = 0; i < objects.size(); i++)
+		{
+			Graphics.world.models[objects[i].objectid]->pos = objects[i].pos;
+			Graphics.world.models[objects[i].objectid]->rot = objects[i].rot;
+			Graphics.world.models[objects[i].objectid]->scale = objects[i].scale;
+		}
+		int count = 0;
+		Graphics.selectioncenter = cVector3(0,0,0);
+		for(i = 0; i < Graphics.world.models.size(); i++)
+		{
+			if (Graphics.world.models[i]->selected)
+			{
+				count++;
+				Graphics.selectioncenter+=Graphics.world.models[i]->pos;
+			}
+		}
+		Graphics.selectioncenter = Graphics.selectioncenter / count;
+	}
+};
+
+
 class cUndoTexture : public cUndoItem
 {
 	vector<vector<int> > data;

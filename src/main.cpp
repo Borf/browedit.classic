@@ -1127,9 +1127,19 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				if (editmode == MODE_OBJECTGROUP && Graphics.groupeditmode)
 				{
+					int i;
+					if(doneaction)
+					{
+						vector<int> objectsselected;
+						for(i = 0; i < Graphics.world.models.size(); i++)
+							if(Graphics.world.models[i]->selected)
+								objectsselected.push_back(i);
+						if (objectsselected.size() > 0)
+							undostack.items.push(new cUndoChangeObjects(objectsselected));
+						doneaction = false;
+					}
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 					bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
-					int i;
 					for(i = 0; i < Graphics.world.models.size(); i++)
 					{
 						if (!Graphics.world.models[i]->selected)
@@ -3663,19 +3673,9 @@ int ClassifyPoint(cVector3 point, cVector3 pO, cVector3 pN)
 }
 
 
-
-
-
-MENUCOMMAND(lightmapsreset)
-{
-
-	return true;
-}
-
-
-
 MENUCOMMAND(random1)
 {
+	undostack.items.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
 	int x,y;
 	for(y = 0; y < Graphics.world.height; y++)
 	{
@@ -3724,10 +3724,6 @@ MENUCOMMAND(random1)
 }
 
 
-MENUCOMMAND(exportheight)
-{
-	return true;
-}
 MENUCOMMAND(mode)
 {
 	string title = src->title;
@@ -3802,6 +3798,7 @@ MENUCOMMAND(textures)
 
 MENUCOMMAND(flatten)
 {
+	undostack.items.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
 	for(int y = 0; y < Graphics.world.height; y++)
 	{
 		for(int x = 0; x < Graphics.world.width; x++)
@@ -3858,13 +3855,16 @@ MENUCOMMAND(fill)
 	for(int i = 0; i < 256; i++)
 		map->buf[i] = i < 64 ? 255 : 0;
 	Graphics.world.lightmaps.push_back(map);
-
+	map = new cLightmap();
+	for(i = 0; i < 256; i++)
+		map->buf[i] = i < 64 ? 255 : 0;
+	Graphics.world.lightmaps.push_back(map);
 	for(y = 0; y < 4; y++)
 	{
 		for(x = 0; x < 4; x++)
 		{
 			cTile t;
-			t.lightmap = 0;
+			t.lightmap = 1;
 			t.texture = Graphics.texturestart + (Graphics.selectionstart.y - 32) / 288;
 			t.u1 = x/4.0;
 			t.v1 = y/4.0;
@@ -3987,6 +3987,7 @@ MENUCOMMAND(quadtree)
 
 MENUCOMMAND(gatheight)
 {
+	undostack.items.push(new cUndoGatHeightEdit(0,0,Graphics.world.gattiles[0].size(), Graphics.world.gattiles.size()));
 	int x,y;
 	for(y = 0; y < Graphics.world.height; y++)
 	{
@@ -4420,7 +4421,20 @@ MENUCOMMAND(loadlightmaps)
 
 MENUCOMMAND(clearobjects)
 {
-	for(int i = 0; i < Graphics.world.models.size(); i++)
+	int i;
+	vector<cUndoObjectsDelete::cObject> objectsdeleted;
+	for(i = 0; i < Graphics.world.models.size(); i++)
+	{
+		cUndoObjectsDelete::cObject object;
+		object.filename = Graphics.world.models[i]->filename;
+		object.pos = Graphics.world.models[i]->pos;
+		object.rot = Graphics.world.models[i]->rot;
+		object.scale = Graphics.world.models[i]->scale;
+		object.id = i;
+		objectsdeleted.push_back(object);
+	}
+	undostack.items.push(new cUndoObjectsDelete(objectsdeleted));
+	for(i = 0; i < Graphics.world.models.size(); i++)
 		delete Graphics.world.models[i];
 	Graphics.world.models.clear();
 	return true;
