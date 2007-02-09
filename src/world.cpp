@@ -1354,7 +1354,7 @@ void cWorld::draw()
 		{
 			for(y = posy-floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
 			{
-				if (y >= height || y < 0 || x < 0 || x >= height)
+				if (y >= height || y < 0 || x < 0 || x >= width)
 					continue;
 				cCube* c = &cubes[y][x];
 				if(!Graphics.frustum.CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 10))
