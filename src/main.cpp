@@ -133,6 +133,7 @@ map<int, cMenu*, less<int> >	effects;
 cMenu* effectsmenu;
 
 vector<vector<vector<float> > > clipboard;
+vector<vector<int > > clipboardgat;
 long lasttimer;
 
 string downloadfile(string url, long &filesize)
@@ -3007,6 +3008,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							for(int y = posy-floor(f/2.0f); y < posy+ceil(f/2.0f); y++)
 							{
 								vector<vector<float> > row;
+								vector<int > row2;
 								for(int x = posx-floor(f/2.0f); x < posx+ceil(f/2.0f); x++)
 								{
 									vector<float> c;
@@ -3015,8 +3017,10 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 									c.push_back(Graphics.world.gattiles[y][x].cell3);
 									c.push_back(Graphics.world.gattiles[y][x].cell4);
 									row.push_back(c);
+									row2.push_back(Graphics.world.gattiles[y][x].type);
 								}
 								clipboard.push_back(row);
+								clipboardgat.push_back(row2);
 							}
 						}
 					}
@@ -3085,6 +3089,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							break;
 
 						undostack.items.push(new cUndoGatHeightEdit(posx-floor(f/2.0f), posy-floor(f/2.0f), posx+ceil(f/2.0f), posy+ceil(f/2.0f)));
+						undostack.items.push(new cUndoGatTileEdit(posx-floor(f/2.0f), posy-floor(f/2.0f), posx+ceil(f/2.0f), posy+ceil(f/2.0f)));
 
 						if (posx >= floor(f/2.0f) && posx < 2*Graphics.world.width-ceil(f/2.0f) && posy >= f && posy< 2*Graphics.world.height-f)
 						{
@@ -3098,6 +3103,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 									Graphics.world.gattiles[y][x].cell2 = clipboard[yy][xx][1];
 									Graphics.world.gattiles[y][x].cell3 = clipboard[yy][xx][2];
 									Graphics.world.gattiles[y][x].cell4 = clipboard[yy][xx][3];
+									Graphics.world.gattiles[y][x].type = clipboardgat[yy][xx];
 									xx++;
 								}
 								yy++;
