@@ -853,7 +853,7 @@ void cWorld::draw()
 	int x,y,i;
 	int ww = Graphics.w();
 	ww -= 256;
-	int hh = Graphics.h()-25;
+	int hh = Graphics.h()-20;
 
 	glEnable(GL_DEPTH_TEST);
 	glViewport(0,0,ww,hh);						// Reset The Current Viewport

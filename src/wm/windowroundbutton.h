@@ -23,8 +23,8 @@ class cWindowCloseButton : public cWindowRoundButton
 public:
 	cWindowCloseButton()
 	{
-		resizeto(13, 13);
-		moveto(2, 2);
+		resizeto(11, 11);
+		moveto(4, 4);
 		alignment = ALIGN_TOPRIGHT;
 	}
 	void click()
@@ -38,8 +38,8 @@ class cWindowRollupButton : public cWindowRoundButton
 public:
 	cWindowRollupButton()
 	{
-		resizeto(13, 13);
-		moveto(16, 2);
+		resizeto(11, 11);
+		moveto(16, 4);
 		alignment = ALIGN_TOPRIGHT;
 	}
 	void click()

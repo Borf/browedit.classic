@@ -24,6 +24,7 @@ extern cMenu*			currentobject;
 extern string			rodir;
 extern long				lastmotion;
 extern string			fontname;
+extern cMenu*			lastmenu;
 
 double mouse3dx, mouse3dy, mouse3dz;
 
@@ -247,6 +248,7 @@ int cGraphics::draw()
 			glTexCoord2f(1,1);		glVertex2f( width-256, height-20);
 		glEnd();
 	}
+	glEnable(GL_BLEND);
 	menu->draw();
 	if(currentobject != NULL)
 	{
@@ -483,23 +485,37 @@ void cMenu::draw()
 				oneopened = true;
 		
 		glDisable(GL_TEXTURE_2D);
-		glColor4f(0.7f,0.7f,0.7f,1);
+		glColor4f(1,1,1,1);
 		glBegin(GL_QUADS);
 			glVertex2f(0, Graphics.h()-20);
 			glVertex2f(Graphics.w(), Graphics.h()-20);
 			glVertex2f(Graphics.w(), Graphics.h());
 			glVertex2f(0, Graphics.h());
 		glEnd();
+		glBegin(GL_LINES);
+		for(i = 0; i < 10; i++)
+		{
+			glColor4f(i/3.0f,i/3.0f,i/3.0f,1);
+			glVertex2f(0, Graphics.h()-20+i);
+			glVertex2f(Graphics.w(), Graphics.h()-20+i);
+		}
+		glEnd();
 		glColor4f(0,0,0,1);
+		glBegin(GL_QUADS);
+			glVertex2f(0, Graphics.h()-20);
+			glVertex2f(Graphics.w(), Graphics.h()-20);
+			glVertex2f(Graphics.w(), Graphics.h()-19);
+			glVertex2f(0, Graphics.h()-19);
+		glEnd();
 		for(i = 0; i < (int)items.size(); i++)
 		{
 			if (mousex >= x + items[i]->x && mousex < x + items[i]->x + items[i]->w && mousey < 20)
 			{
 				glDisable(GL_TEXTURE_2D);
-				glColor4f(0.2f,0.2f,0.9f,1);
+				glColor4f(0.2f,0.2f,0.9f,0.5);
 				glBegin(GL_QUADS);
-					glVertex2f(x+items[i]->x, 		Graphics.h()-y-20);
-					glVertex2f(x+items[i]->x+items[i]->w, 	Graphics.h()-y-20);
+					glVertex2f(x+items[i]->x, 		Graphics.h()-y-15);
+					glVertex2f(x+items[i]->x+items[i]->w, 	Graphics.h()-y-15);
 					glVertex2f(x+items[i]->x+items[i]->w, 	Graphics.h()-y);
 					glVertex2f(x+items[i]->x, 		Graphics.h()-y);
 					if (oneopened && !items[i]->opened)
@@ -514,11 +530,12 @@ void cMenu::draw()
 			if(items[i]->opened)
 				items[i]->draw();
 		}
+		glColor4f(0,0,0,1);
 	}
 	else if (drawstyle == 1)
 	{
 		glDisable(GL_TEXTURE_2D);
-		glColor4f(0.7f,0.7f,0.7f,1);
+		glColor4f(1,1,1,0.75);
 		glBegin(GL_QUADS);
 			glVertex2f(x, Graphics.h()-y-20*items.size());
 			glVertex2f(x+maxlen, Graphics.h()-y-20*items.size());
@@ -540,7 +557,7 @@ void cMenu::draw()
 			glVertex2f(x+1, Graphics.h()-y-1);
 		glEnd();
 		
-		glColor4f(0,0,0,1);
+		glColor4f(0,0,0,0.5);
 		for(i = 0; i < (int)items.size(); i++)
 		{
 			if (Graphics.font->textlen(items[i]->title.c_str()) > maxlen-50)
@@ -660,6 +677,7 @@ void cMenu::click(int xx, int yy)
 						if(!items[i]->mouseoverproc(items[i]))
 							return;
 					}
+					lastmenu = this;
 					((cMenuItem*)items[i])->proc((cMenuItem*)items[i]);
 					menu->closemenu();
 					menu->opened = true;

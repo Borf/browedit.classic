@@ -115,6 +115,7 @@ cMenu* showobjects;
 cMenu* currentobject;
 cMenu* snaptofloor;
 cMenuItem* selectedeffect = NULL;
+cMenu* lastmenu = NULL;
 
 int cursorsize = 1;
 
@@ -460,7 +461,6 @@ int main(int argc, char *argv[])
 	ADDMENU(models,		menu, "Models",				300,50);
 	ADDMENU(textures,	menu, "Textures",			350,60);
 	ADDMENU(effectsmenu,menu, "Effects",			410,50);
-	
 
 	ADDMENUITEM(mm,file,"New"	,				&MenuCommand_new);
 	ADDMENUITEM(mm,file,"Open",					&MenuCommand_open);
@@ -3406,7 +3406,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 									float to = Graphics.world.cubes[y][x].cell2;
 									Graphics.world.cubes[y][x].cell2 = to;
 									Graphics.world.cubes[y][x+1].cell1 = to;
-									if (y > 0)
+									if (y > 0)	
 									{
 										Graphics.world.cubes[y-1][x+1].cell3 = to;
 										Graphics.world.cubes[y-1][x].cell4 = to;
@@ -3440,6 +3440,18 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 				}
 				break;
+			case SDLK_m:
+				if(lastmenu != NULL)
+				{
+					cMenu* m = lastmenu;
+					while(m->parent != NULL)
+					{
+						m->opened = true;
+						m = m->parent;
+					}
+					break;
+				}
+
 			default:
 				break;
 		}
