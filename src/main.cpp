@@ -3263,7 +3263,31 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							}
 						}
 					}
-					
+
+				}
+				else if (editmode == MODE_GAT)
+				{
+					int posx = mouse3dx / 5;
+					int posy = mouse3dz / 5;
+
+					float f = ceil(Graphics.brushsize);
+
+
+					undostack.items.push(new cUndoGatHeightEdit(posx-floor(f/2.0f), posy-floor(f/2.0f), posx+ceil(f/2.0f), posy+ceil(f/2.0f)));
+					for(int x = posx-floor(f/2.0f); x < posx+ceil(f/2.0f); x++)
+					{
+						for(int y = posy-floor(f/2.0f); y < posy+ceil(f/2.0f); y++)
+						{
+							if (x >= 0 && x < Graphics.world.width*2 && y > 0 && y <= Graphics.world.height*2)
+							{
+								float to = Graphics.world.gattiles[y][x].cell2;
+								Graphics.world.gattiles[y][x].cell2 = to;
+								Graphics.world.gattiles[y][x+1].cell1 = to;
+								Graphics.world.gattiles[y-1][x+1].cell3 = to;
+								Graphics.world.gattiles[y-1][x].cell4 = to;
+							}
+						}
+					}
 
 				}
 				break;
