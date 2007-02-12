@@ -7,7 +7,6 @@
 #include "../graphics.h"
 extern cGraphics Graphics;
 
-extern float mousex, mousey;
 
 void cWindowRoundButton::draw()
 {

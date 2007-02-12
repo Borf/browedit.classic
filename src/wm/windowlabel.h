@@ -1,7 +1,6 @@
 #ifndef __WINDOWLABEL_H__
 #define __WINDOWLABEL_H__
 
-#include "../common.h"
 #include "windowobject.h"
 #include <string>
 #include <vector>

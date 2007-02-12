@@ -27,6 +27,11 @@ public:
 	virtual void click() = 0;
 	virtual bool onkeydown(int);
 
+	void SetText(int id, string txt)
+	{
+		text = txt;
+	}
+
 
 };
 

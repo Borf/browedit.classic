@@ -3643,7 +3643,7 @@ MENUCOMMAND(saveAs)
 	else
 	{
 		if (strcmp(Graphics.world.filename+strlen(Graphics.world.filename)-4, ".rsw") == 0)
-		{
+		{ 
 			while(Graphics.world.filename[strlen(Graphics.world.filename)-1] != '.')
 				Graphics.world.filename[strlen(Graphics.world.filename)-1] = '\0';
 			Graphics.world.filename[strlen(Graphics.world.filename)-1] = '\0';

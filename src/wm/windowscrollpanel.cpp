@@ -4,7 +4,6 @@
 #include "window.h"
 #include "../graphics.h"
 extern cGraphics Graphics;
-extern float mousex, mousey;
 extern cWindowObject* draggingobject;
 
 cWindowScrollPanel::~cWindowScrollPanel()

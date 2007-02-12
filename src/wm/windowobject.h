@@ -108,5 +108,6 @@ public:
 	cWindow* parent;
 };
 
+extern float mousex, mousey;
 
 #endif

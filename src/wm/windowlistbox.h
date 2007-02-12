@@ -13,6 +13,8 @@ protected:
 	int				liststart;
 	int				selected;
 	vector<int>		properties;
+	bool			showselection;
+	bool			showscroll;
 public:
 	cWindowListBox()
 	{
@@ -23,6 +25,8 @@ public:
 		alignment = ALIGN_TOPLEFT;
 		liststart = 0;
 		selected = 0;
+		showselection = true;
+		showscroll = true;
 		type = OBJECT_LISTBOX;
 	}
 	virtual ~cWindowListBox() {}

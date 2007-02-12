@@ -21,7 +21,7 @@ class cConfirmWindow : public cWindow
 			alignment = ALIGN_BOTTOMLEFT;
 			moveto(20, 20);
 			resizeto(100, 20);
-			text = "            Ok";
+			text = "Ok";
 		}
 		virtual ~cWindowOkButton() {}
 		void click()
@@ -38,7 +38,7 @@ class cConfirmWindow : public cWindow
 			alignment = ALIGN_BOTTOMRIGHT;
 			moveto(20, 20);
 			resizeto(100, 20);
-			text = "            Cancel";
+			text = "Cancel";
 		}
 		virtual ~cWindowCancelButton() {}
 		void click()

@@ -25,10 +25,10 @@ void cWindowButton::draw()
 		glTexCoord2f((387.0f-4.0f)/512.0f,	(469.0f-4.0f)/512.0f);		glVertex2d(xx+w-4, yy+h-4);
 		glTexCoord2f((258.0f+4.0f)/512.0f,	(469.0f-4.0f)/512.0f);		glVertex2d(xx+4, yy+h-4);
 
-		glTexCoord2f((258.0f+4.0f)/512.0f,	(340.0f+4.0f)/512.0f);		glVertex2d(xx+4, yy+4);
-		glTexCoord2f((258.0f)/512.0f,		(340.0f+4.0f)/512.0f);		glVertex2d(xx, yy+4);
-		glTexCoord2f((258.0f)/512.0f,		(469.0f-4.0f)/512.0f);		glVertex2d(xx, yy+h-4);
-		glTexCoord2f((258.0f+4.0f)/512.0f,	(469.0f-4.0f)/512.0f);		glVertex2d(xx+4, yy+h-4);
+		glTexCoord2f((258.0f)/512.0f,	(340.0f+4.0f)/512.0f);		glVertex2d(xx, yy+4);
+		glTexCoord2f((258.0f+4.0f)/512.0f,		(340.0f+4.0f)/512.0f);		glVertex2d(xx+4, yy+4);
+		glTexCoord2f((258.0f+4.0f)/512.0f,		(469.0f-4.0f)/512.0f);		glVertex2d(xx+4, yy+h-4);
+		glTexCoord2f((258.0f)/512.0f,	(469.0f-4.0f)/512.0f);		glVertex2d(xx, yy+h-4);
 
 		glTexCoord2f((387.0f-4.0f)/512.0f,	(340.0f+4.0f)/512.0f);		glVertex2d(xx+w-4, yy+4);
 		glTexCoord2f((387.0f)/512.0f,		(340.0f+4.0f)/512.0f);		glVertex2d(xx+w, yy+4);
@@ -57,7 +57,7 @@ void cWindowButton::draw()
 
 
 	glEnd();
-	parent->font->print(0,0,0, parent->px() + xx+5, parent->py() + yy+3, text.c_str());
+ 	parent->font->print(0,0,0, parent->px() + xx + (w/2)- (parent->font->textlen(text)/2), parent->py() + yy+3, text.c_str());
 	glColor4fv(colors);
 }
 

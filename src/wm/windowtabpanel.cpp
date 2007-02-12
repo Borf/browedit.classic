@@ -4,7 +4,6 @@
 #include <GL/glu.h>												// Header File For The GLu32 Library
 #include "window.h"
 #include "../graphics.h"
-extern float mousey, mousex;
 extern cGraphics Graphics;
 
 void cWindowTabPanel::draw()

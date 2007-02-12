@@ -16,7 +16,7 @@ public:
 		alignment = ALIGN_BOTTOM;
 		moveto(0, 20);
 		resizeto(100, 20);
-		text = "            Ok";
+		text = "Ok";
 	}
 	virtual ~cWindowOkButton() {}
 	void click()

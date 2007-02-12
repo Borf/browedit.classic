@@ -3,7 +3,6 @@
 
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
-extern float mousex;
 void cWindowInputBox::draw()
 {
 	GLfloat colors[4];
@@ -14,17 +13,15 @@ void cWindowInputBox::draw()
 
 	glBindTexture(GL_TEXTURE_2D, parent->texture->texid());
 	glBegin(GL_QUADS);
-
-
 		glTexCoord2f((371.0f)/512.0f,	(337.0f)/512.0f);				glVertex2d(xx+2, yy+2);
 		glTexCoord2f((371.0f)/512.0f,	(337.0f)/512.0f);				glVertex2d(xx+w-2, yy+2);
 		glTexCoord2f((371.0f)/512.0f,	(337.0f)/512.0f);				glVertex2d(xx+w-2, yy+h-2);
 		glTexCoord2f((371.0f)/512.0f,	(337.0f)/512.0f);				glVertex2d(xx+2, yy+h-2);
 
-		glTexCoord2f((258.0f+2.0f)/512.0f,	(340.0f+2.0f)/512.0f);		glVertex2d(xx+2, yy+2);
-		glTexCoord2f((258.0f)/512.0f,		(340.0f+2.0f)/512.0f);		glVertex2d(xx, yy+2);
-		glTexCoord2f((258.0f)/512.0f,		(469.0f-2.0f)/512.0f);		glVertex2d(xx, yy+h-2);
-		glTexCoord2f((258.0f+2.0f)/512.0f,	(469.0f-2.0f)/512.0f);		glVertex2d(xx+2, yy+h-2);
+		glTexCoord2f((258.0f)/512.0f,	(340.0f+2.0f)/512.0f)	;		glVertex2d(xx, yy+2);
+		glTexCoord2f((258.0f+2.0f)/512.0f,		(340.0f+2.0f)/512.0f);	glVertex2d(xx+2, yy+2);
+		glTexCoord2f((258.0f+2.0f)/512.0f,		(469.0f-2.0f)/512.0f);	glVertex2d(xx+2, yy+h-2);
+		glTexCoord2f((258.0f)/512.0f,	(469.0f-2.0f)/512.0f);			glVertex2d(xx, yy+h-2);
 
 		glTexCoord2f((387.0f-2.0f)/512.0f,	(340.0f+2.0f)/512.0f);		glVertex2d(xx+w-2, yy+2);
 		glTexCoord2f((387.0f)/512.0f,		(340.0f+2.0f)/512.0f);		glVertex2d(xx+w, yy+2);
@@ -64,7 +61,9 @@ void cWindowInputBox::draw()
 	}
 
 	string t = text;
-	t = t.substr(startindex, 1000000);
+	if (startindex > t.length())
+		startindex = 0;
+	t = t.substr(startindex);
 	int l = t.size();
 	while(l > 0 && parent->font->textlen(t.substr(0, l)) > w-5)
 		l--;
