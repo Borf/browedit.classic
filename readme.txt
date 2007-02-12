@@ -115,6 +115,7 @@ pageup/pagedown                     move gat tile up/down
 c                                   copy height
 p                                   paste height
 +/-                                 change brushsize
+space								map the gattiles to the floor on the brush
 
 
 effects edit

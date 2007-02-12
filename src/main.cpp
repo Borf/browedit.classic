@@ -2009,7 +2009,58 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			case SDLK_SPACE:
 				if (Graphics.previewcolor > 20)
 					Graphics.previewcolor = 20;
-				Graphics.texturerot = (Graphics.texturerot + 1) % 4;
+				if(editmode == MODE_TEXTURE)
+					Graphics.texturerot = (Graphics.texturerot + 1) % 4;
+				else if (editmode == MODE_GAT)
+				{
+					int posx = mouse3dx / 5;
+					int posy = mouse3dz / 5;
+
+					float f = ceil(Graphics.brushsize);
+
+
+					if (posx >= floor(f/2.0f) && posx < 2*Graphics.world.width-ceil(f/2.0f) && posy >= floor(f/2.0f) && posy< 2*Graphics.world.height-ceil(f/2.0f))
+					{
+						undostack.items.push(new cUndoGatHeightEdit(posx-floor(f/2.0f), posy-floor(f/2.0f), posx+ceil(f/2.0f), posy+ceil(f/2.0f)));
+						for(int x = posx-floor(f/2.0f); x < posx+ceil(f/2.0f); x++)
+						{
+							for(int y = posy-floor(f/2.0f); y < posy+ceil(f/2.0f); y++)
+							{
+								cCube* c = &Graphics.world.cubes[y/2][x/2];
+
+								if (y%2 == 0 && x%2 == 0)
+								{
+									Graphics.world.gattiles[y][x].cell1 = (c->cell1+c->cell1) / 2.0f;
+									Graphics.world.gattiles[y][x].cell2 = (c->cell1+c->cell2) / 2.0f;
+									Graphics.world.gattiles[y][x].cell3 = (c->cell1+c->cell3) / 2.0f;
+									Graphics.world.gattiles[y][x].cell4 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
+								}
+								if (y%2 == 0 && x%2 == 1)
+								{
+									Graphics.world.gattiles[y][x].cell1 = (c->cell1+c->cell2) / 2.0f;
+									Graphics.world.gattiles[y][x].cell2 = (c->cell2+c->cell2) / 2.0f;
+									Graphics.world.gattiles[y][x].cell3 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
+									Graphics.world.gattiles[y][x].cell4 = (c->cell4+c->cell2) / 2.0f;
+								}
+								if (y%2 == 1 && x%2 == 0)
+								{
+									Graphics.world.gattiles[y][x].cell1 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
+									Graphics.world.gattiles[y][x].cell2 = (c->cell4 + c->cell2) / 2.0f;
+									Graphics.world.gattiles[y][x].cell3 = (c->cell4 + c->cell3) / 2.0f;
+									Graphics.world.gattiles[y][x].cell4 = (c->cell4 + c->cell4) / 2.0f;
+								}
+								if (y%2 == 1 && x%2 == 1)
+								{
+									Graphics.world.gattiles[y][x].cell1 = (c->cell3 + c->cell1) / 2.0f;
+									Graphics.world.gattiles[y][x].cell2 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
+									Graphics.world.gattiles[y][x].cell3 = (c->cell3 + c->cell3) / 2.0f;
+									Graphics.world.gattiles[y][x].cell4 = (c->cell3 + c->cell4) / 2.0f;
+								}
+							
+							}
+						}
+					}
+				}
 				break;
 			case SDLK_h:
 				if (editmode == MODE_TEXTURE)
@@ -2399,9 +2450,6 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						if (posx >= floor(f/2.0f) && posx < 2*Graphics.world.width-ceil(f/2.0f) && posy >= floor(f/2.0f) && posy< 2*Graphics.world.height-ceil(f/2.0f))
 						{
 							undostack.items.push(new cUndoGatHeightEdit(posx-floor(f/2.0f), posy-floor(f/2.0f), posx+ceil(f/2.0f), posy+ceil(f/2.0f)));
-							glColor4f(1,0,0,1);
-							glDisable(GL_TEXTURE_2D);
-							glDisable(GL_BLEND);
 							for(int x = posx-floor(f/2.0f); x < posx+ceil(f/2.0f); x++)
 							{
 								for(int y = posy-floor(f/2.0f); y < posy+ceil(f/2.0f); y++)
