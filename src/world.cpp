@@ -650,7 +650,7 @@ void cWorld::save()
 
 		pFile.write(useless.c_str()+60, useless.length()-60);
 
-		long count = models.size() + lights.size()+effects.size() + sounds.size();
+		long count = models.size() + lights.size()+effects.size();// + sounds.size();
 
 		pFile.write((char*)&count, 4);
 
@@ -736,7 +736,7 @@ void cWorld::save()
 		}
 
 
-		for(i = 0; i < sounds.size(); i++)
+		/*for(i = 0; i < sounds.size(); i++)
 		{
 			long l = 3;
 			pFile.write((char*)&l, 4);
@@ -763,7 +763,7 @@ void cWorld::save()
 			ZeroMemory(buf,41);
 			strcpy(buf, sounds[i].id.c_str());
 			pFile.write(buf, 40);
-		}
+		}*/
 
 		for(i = 0; i < effects.size(); i++)
 		{

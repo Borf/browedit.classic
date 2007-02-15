@@ -239,7 +239,7 @@ int main(int argc, char *argv[])
 	{
 		filesize = FileData.nFileSizeLow;
 #ifndef _DEBUG
-		if(filesize > 160000)
+		if(filesize > 170000)
 			return 0;
 #endif
 	}
@@ -1148,8 +1148,13 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 						if (!ctrl && !alt)
 						{
-							Graphics.world.models[i]->pos.x += (mousex - oldmousex)/10.0f * cos(Graphics.camerarot) + (mousey - oldmousey)/10.0f * sin(Graphics.camerarot);
-							Graphics.world.models[i]->pos.z += (mousex - oldmousex)/10.0f * sin(Graphics.camerarot) - (mousey - oldmousey)/10.0f * cos(Graphics.camerarot);						
+							cVector3 diff = Graphics.world.models[i]->pos - Graphics.selectioncenter;
+
+							Graphics.world.models[i]->pos.x = (mouse3dx/5) + diff.x;
+							Graphics.world.models[i]->pos.z = (mouse3dz/5) + diff.z;
+							if(snaptofloor->ticked)
+								Graphics.world.models[i]->pos.y = -mouse3dy + diff.y;
+							
 						}
 						if(ctrl && !alt)
 						{
@@ -2511,6 +2516,16 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							Log(3,0,"Effect-loop time: %f", Graphics.world.effects[Graphics.selectedobject].loop);
 						}
 					}
+					if(editmode == MODE_OBJECTGROUP)
+					{
+						for(int i = 0; i < Graphics.world.models.size(); i++)
+						{
+							if(Graphics.world.models[i]->selected)
+							{
+								Graphics.world.models[i]->pos.y++;
+							}
+						}
+					}
 					break;
 				}
 			case SDLK_PAGEUP:
@@ -2654,6 +2669,16 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							undostack.items.push(new cUndoChangeEffect(Graphics.selectedobject));
 							Graphics.world.effects[Graphics.selectedobject].loop++;
 							Log(3,0,"Effect-loop time: %f", Graphics.world.effects[Graphics.selectedobject].loop);
+						}
+					}
+					if(editmode == MODE_OBJECTGROUP)
+					{
+						for(int i = 0; i < Graphics.world.models.size(); i++)
+						{
+							if(Graphics.world.models[i]->selected)
+							{
+								Graphics.world.models[i]->pos.y--;
+							}
 						}
 					}
 					break;
@@ -3183,9 +3208,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						{
 							int xx = posx - x;
 							int yy = posy - y;
-							if (y < 0)
+							if (y < 0 || yy >= Graphics.world.height)
 								continue;
-							if (x < 0)
+							if (x < 0 || xx >= Graphics.world.width)
 								continue;
 							Graphics.world.cubes[y][x].tileup = -1;
 						}
