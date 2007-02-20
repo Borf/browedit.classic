@@ -450,6 +450,27 @@ public:
 	}
 };
 
+class cUndoEffectsDelete : public cUndoItem
+{
+	vector<pair<int, cEffect> > effects;
+public:
+	cUndoEffectsDelete(vector<int> e)
+	{
+		for(int i = 0; i < e.size(); i++)
+		{
+			effects.push_back(pair<int, cEffect>(e[i], Graphics.world.effects[e[i]]));
+		}
+	}
+	void undo()
+	{
+		for(int i = 0; i < effects.size(); i++)
+		{
+			Graphics.world.effects.insert(Graphics.world.effects.begin() + effects[i].first, effects[i].second);
+		}
+	}
+};
+
+
 
 class cUndoChangeEffect : public cUndoItem
 {

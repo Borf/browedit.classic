@@ -6,13 +6,14 @@
 --------------------Configuration: roworldedit - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\DOCUME~1\Borf\LOCALS~1\Temp\RSP96E.tmp" with contents
+Creating temporary file "C:\DOCUME~1\BORF~1.YAM\LOCALS~1\Temp\RSP1D1.tmp" with contents
 [
 /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /D "GRF_STATIC" /FR"Debug/" /Fp"Debug/roworldedit.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
-"C:\Documents and Settings\Borf\Desktop\roworldedit\src\main.cpp"
+"C:\Documents and Settings\Borf.YAMI\Desktop\roworldedit\src\main.cpp"
+"C:\Documents and Settings\Borf.YAMI\Desktop\roworldedit\src\undo.cpp"
 ]
-Creating command line "cl.exe @C:\DOCUME~1\Borf\LOCALS~1\Temp\RSP96E.tmp" 
-Creating temporary file "C:\DOCUME~1\Borf\LOCALS~1\Temp\RSP96F.tmp" with contents
+Creating command line "cl.exe @C:\DOCUME~1\BORF~1.YAM\LOCALS~1\Temp\RSP1D1.tmp" 
+Creating temporary file "C:\DOCUME~1\BORF~1.YAM\LOCALS~1\Temp\RSP1D2.tmp" with contents
 [
 glaux.lib ws2_32.lib bgd.lib sdl.lib sdlmain.lib zlib.lib opengl32.lib glu32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/roworldedit.pdb" /debug /machine:I386 /nodefaultlib:"MSVCRT" /out:"Debug/roworldedit.exe" /pdbtype:sept 
 ".\Debug\common.obj"
@@ -57,12 +58,14 @@ glaux.lib ws2_32.lib bgd.lib sdl.lib sdlmain.lib zlib.lib opengl32.lib glu32.lib
 ".\Debug\rgz.obj"
 ".\Debug\Script1.res"
 ]
-Creating command line "link.exe @C:\DOCUME~1\Borf\LOCALS~1\Temp\RSP96F.tmp"
+Creating command line "link.exe @C:\DOCUME~1\BORF~1.YAM\LOCALS~1\Temp\RSP1D2.tmp"
 <h3>Output Window</h3>
 Compiling...
 main.cpp
+Skipping... (no relevant changes detected)
+undo.cpp
 Linking...
-Creating temporary file "C:\DOCUME~1\Borf\LOCALS~1\Temp\RSP970.tmp" with contents
+Creating temporary file "C:\DOCUME~1\BORF~1.YAM\LOCALS~1\Temp\RSP1D3.tmp" with contents
 [
 /nologo /o"Debug/roworldedit.bsc" 
 ".\Debug\common.sbr"
@@ -105,7 +108,7 @@ Creating temporary file "C:\DOCUME~1\Borf\LOCALS~1\Temp\RSP970.tmp" with content
 ".\Debug\grfcrypt.sbr"
 ".\Debug\grfsupport.sbr"
 ".\Debug\rgz.sbr"]
-Creating command line "bscmake.exe @C:\DOCUME~1\Borf\LOCALS~1\Temp\RSP970.tmp"
+Creating command line "bscmake.exe @C:\DOCUME~1\BORF~1.YAM\LOCALS~1\Temp\RSP1D3.tmp"
 Creating browse info file...
 <h3>Output Window</h3>
 

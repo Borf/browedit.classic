@@ -94,6 +94,7 @@ MENUCOMMAND(gatheight);
 MENUCOMMAND(dolightmaps);
 MENUCOMMAND(fixcolors);
 MENUCOMMAND(clearobjects);
+MENUCOMMAND(cleareffects);
 MENUCOMMAND(savelightmaps);
 MENUCOMMAND(loadlightmaps);
 MENUCOMMAND(addwalls);
@@ -538,6 +539,7 @@ int main(int argc, char *argv[])
 	mm->ticked = true;
 	ADDMENUITEM(mm,edit,"Reset Colors",		&MenuCommand_fixcolors);
 	ADDMENUITEM(mm,edit,"Clear Objects",		&MenuCommand_clearobjects);
+	ADDMENUITEM(mm,edit,"Clear Effects",		&MenuCommand_cleareffects);
 	ADDMENUITEM(mm,edit,"Add Walls",		&MenuCommand_addwalls);
 	ADDMENUITEM(mm,edit,"Set gat collision",		&MenuCommand_gatcollision);
 	ADDMENUITEM(mm,edit,"Clear Lightmaps",		&MenuCommand_clearlightmaps);
@@ -4871,5 +4873,18 @@ MENUCOMMAND(ambientlight)
 	sprintf(buf, "%f", Graphics.world.ambientlight.alpha);			w->objects["alpha"]->SetText(0,buf);
 
 	Graphics.WM.addwindow(w);
+	return true;
+}
+
+
+MENUCOMMAND(cleareffects)
+{
+	int i;
+	vector<int> objectsdeleted;
+	for(i = 0; i < Graphics.world.effects.size(); i++)
+		objectsdeleted.push_back(i);
+	undostack.items.push(new cUndoEffectsDelete(objectsdeleted));
+
+	Graphics.world.effects.clear();
 	return true;
 }
