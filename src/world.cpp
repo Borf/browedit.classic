@@ -57,6 +57,14 @@ void cWorld::load()
 		TextureCache.unload(textures[i]->texture);
 	textures.clear();
 
+	for(y = 0; y < reallightmaps.size(); y+=21)
+	{
+		for(x = 0; x < reallightmaps.size(); x+=21)
+		{
+			delete reallightmaps[y][x];
+		}
+	}
+
 	tiles.clear();
 	for(i = 0; i < cubes.size(); i++)
 		cubes[i].clear();
@@ -174,6 +182,33 @@ void cWorld::load()
 		}
 		cubes.push_back(row);
 	}
+
+	reallightmaps.resize(height, vector<cRealLightMap*>(NULL));
+	for(i = 0; i < height; i++)
+		reallightmaps[i].resize(width, NULL);
+
+	for(y = 0; y < height; y+=21)
+	{
+		for(x = 0; x < width; x+=21)
+		{
+			cRealLightMap* l = new cRealLightMap();
+			l->x = x;
+			l->y = y;
+			reallightmaps[y][x] = l;
+		}
+	}
+	for(y = 0; y < height; y++)
+	{
+		for(x = 0; x < width; x++)
+		{
+			cRealLightMap* l = reallightmaps[y - (y%21)][x - (x%21)];
+			if(l != NULL)
+				reallightmaps[y][x] = l;
+
+		}
+	}
+
+
 
 	pFile->close();
 	loaded = true;
@@ -859,12 +894,15 @@ void cWorld::draw()
 	glViewport(0,0,ww,hh);						// Reset The Current Viewport
 	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
 	glLoadIdentity();									// Reset The Projection Matrix
-
+	if (Graphics.topcamera)
+		glOrtho(0,width+Graphics.cameraheight,0,height+Graphics.cameraheight,-10000,10000);
+	else
+		gluPerspective(45.0f,(GLfloat)Graphics.w()/(GLfloat)Graphics.h(),10.0f,10000.0f);
 	float camrad = 10;
+	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
+	glLoadIdentity();									// Reset The Modelview Matrix
 
 	if (Graphics.topcamera)
-	{
-		glOrtho(0,width+Graphics.cameraheight,0,height+Graphics.cameraheight,-10000,10000);
 		gluLookAt(  -Graphics.camerapointer.y,
 					100,
 					-Graphics.camerapointer.x,
@@ -872,19 +910,13 @@ void cWorld::draw()
 					0,
 					-Graphics.camerapointer.x-0.001,
 					0,1,0);
-	}
 	else
-	{
-		gluPerspective(45.0f,(GLfloat)Graphics.w()/(GLfloat)Graphics.h(),10.0f,10000.0f);
 		gluLookAt(  -Graphics.camerapointer.x + Graphics.cameraheight*sin(Graphics.camerarot),
 					camrad+Graphics.cameraheight,
 					-Graphics.camerapointer.y + Graphics.cameraheight*cos(Graphics.camerarot),
 					-Graphics.camerapointer.x,camrad + Graphics.cameraheight * (Graphics.cameraangle/10.0f),-Graphics.camerapointer.y,
 					0,1,0);
-	}
 
-	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
-	glLoadIdentity();									// Reset The Modelview Matrix
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_BLEND);
 
@@ -1015,25 +1047,31 @@ void cWorld::draw()
 				if (c->tileup != -1)
 				{
 					cTile* t = &tiles[c->tileup];
-					int lightmap = lightmaps[t->lightmap]->texid();
-					int lightmap2 = lightmaps[t->lightmap]->texid2();
+//					int lightmap = lightmaps[t->lightmap]->texid();
+//					int lightmap2 = lightmaps[t->lightmap]->texid2();
+					if(reallightmaps[y][x] == NULL)
+						continue;
+					int lightmap = reallightmaps[y][x]->texid();
+					int lightmap2 = reallightmaps[y][x]->texid2();
 					glBlendFunc(GL_ONE ,GL_DST_COLOR);				
 					glBindTexture(GL_TEXTURE_2D, lightmap);
 					glNormal3f(1,0,0);
+					double d = 1/128.0;
+					double d6 = 6/128.0;
 					glBegin(GL_TRIANGLE_STRIP);
-						glTexCoord2f(0.125,0.125);					glVertex3f(x*10,-c->cell1,(height-y)*10);
-						glTexCoord2f(0.125,0.875);					glVertex3f(x*10,-c->cell3,(height-y)*10-10);
-						glTexCoord2f(0.875,0.125);					glVertex3f(x*10+10,-c->cell2,(height-y)*10);
-						glTexCoord2f(0.875,0.875);					glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
+						glTexCoord2f(d + d6*(x%21),d + d6*(y%21));					glVertex3f(x*10,-c->cell1,(height-y)*10);
+						glTexCoord2f(d + d6*(x%21),d + d6*(y%21)+d6);					glVertex3f(x*10,-c->cell3,(height-y)*10-10);
+						glTexCoord2f(d + d6*(x%21)+d6,d + d6*(y%21));					glVertex3f(x*10+10,-c->cell2,(height-y)*10);
+						glTexCoord2f(d + d6*(x%21)+d6,d + d6*(y%21)+d6);					glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
 					glEnd();
 
 					glBlendFunc(GL_DST_COLOR, GL_ZERO);
 					glBindTexture(GL_TEXTURE_2D, lightmap2);
 					glBegin(GL_TRIANGLE_STRIP);
-						glTexCoord2f(0.125,0.125);					glVertex3f(x*10,-c->cell1,(height-y)*10);
-						glTexCoord2f(0.125,0.875);					glVertex3f(x*10,-c->cell3,(height-y)*10-10);
-						glTexCoord2f(0.875,0.125);					glVertex3f(x*10+10,-c->cell2,(height-y)*10);
-						glTexCoord2f(0.875,0.875);					glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
+						glTexCoord2f(d + d6*(x%21),d + d6*(y%21));					glVertex3f(x*10,-c->cell1,(height-y)*10);
+						glTexCoord2f(d + d6*(x%21),d + d6*(y%21)+d6);					glVertex3f(x*10,-c->cell3,(height-y)*10-10);
+						glTexCoord2f(d + d6*(x%21)+d6,d + d6*(y%21));					glVertex3f(x*10+10,-c->cell2,(height-y)*10);
+						glTexCoord2f(d + d6*(x%21)+d6,d + d6*(y%21)+d6);					glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
 					glEnd();
 				}
 				
@@ -1508,9 +1546,10 @@ void cWorld::draw()
 			glEnable(GL_BLEND);
 			for(i = 0; i < lights.size(); i++)
 			{
-				glTranslatef(5*lights[i].pos.x, -lights[i].pos.y, 5*(2*height-lights[i].pos.z));
+				cVector3 p = effects[i].pos;
+				glTranslatef(5*effects[i].pos.x,-effects[i].pos.y-5, 5*(2*height-effects[i].pos.z));
 				light->draw();
-				glTranslatef(-5*lights[i].pos.x, lights[i].pos.y, -5*(2*height-lights[i].pos.z));
+				glTranslatef(-5*effects[i].pos.x, effects[i].pos.y+5, -5*(2*height-effects[i].pos.z));
 			}
 			for(i = 0; i < effects.size(); i++)
 			{
@@ -1706,6 +1745,24 @@ void cWorld::draw()
 			effect->draw();
 			Graphics.font->print3d(0,0,1,1,0,0,0,0.4f,"%s", effects[i].readablename.c_str());
 			glTranslatef(-5*effects[i].pos.x, effects[i].pos.y, -5*(2*height-effects[i].pos.z));
+
+		}
+	}
+	if(editmode == MODE_LIGHTS)
+	{
+		glEnable(GL_TEXTURE_2D);
+		glEnable(GL_BLEND);
+		for(i = 0; i < lights.size(); i++)
+		{
+			if (i == Graphics.selectedobject)
+				glColor4f(1,0,0,1);
+			else
+				glColor4f(1,1,1,1);
+
+			cVector3 p = lights[i].pos;
+			glTranslatef(5*lights[i].pos.x,lights[i].pos.y+5, 5*(2*height-lights[i].pos.z));
+			light->draw();
+			glTranslatef(-5*lights[i].pos.x,-lights[i].pos.y-5, -5*(2*height-lights[i].pos.z));
 
 		}
 	}
@@ -2747,4 +2804,119 @@ void cQuadTreeNode::generate(float w, float h, float centerx, float centery, int
 		child4->generate(w/2.0f,h/2.0f,centerx+w/4.0f,centery+w/4.0f, level-1);
 	}
 
+}
+
+
+int cRealLightMap::texid()
+{
+	if(generated)
+		return tid;
+
+
+	char* buf = new char[128*128*3];
+	for(int xx = 0; xx < min(21, Graphics.world.width-x); xx++)
+	{
+		for(int yy = 0; yy < min(21, Graphics.world.height-y); yy++)
+		{
+			char* b = Graphics.world.lightmaps[Graphics.world.tiles[Graphics.world.cubes[y+yy][x+xx].tileup].lightmap]->buf;
+			for(int xxx = 0; xxx < 6; xxx++)
+			{
+				for(int yyy = 0; yyy < 6; yyy++)
+				{
+					buf[3*(128 + 128*yy*6 + 1+xx*6 + 128*yyy + xxx)] = b[64 + 3*(xxx+yyy*8+1+8)];
+					buf[3*(128 + 128*yy*6 + 1+xx*6 + 128*yyy + xxx)+1] = b[64 + 3*(xxx+yyy*8+1+8)+1];
+					buf[3*(128 + 128*yy*6 + 1+xx*6 + 128*yyy + xxx)+2] = b[64 + 3*(xxx+yyy*8+1+8)+2];
+				}
+			}
+		}
+	}
+
+	// Generate a texture with the associative texture ID stored in the array
+	glGenTextures(1, &tid);
+
+	// This sets the alignment requirements for the start of each pixel row in memory.
+	glPixelStorei (GL_UNPACK_ALIGNMENT, 1);
+
+	// Bind the texture to the texture arrays index and init the texture
+	glBindTexture(GL_TEXTURE_2D, tid);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, 3, 128, 128, 0, GL_RGB, GL_UNSIGNED_BYTE, buf);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	generated = true;
+	delete[] buf;
+	return tid;
+}
+
+int cRealLightMap::texid2()
+{
+	if(generated2)
+		return tid2;
+
+	int xx, yy;
+
+	char* buf = new char[128*128];
+	ZeroMemory(buf, 128*128);
+	for(xx = 0; xx < min(21, Graphics.world.width-x); xx++)
+	{
+		for(yy = 0; yy < min(21, Graphics.world.height-y); yy++)
+		{
+			char* b = Graphics.world.lightmaps[Graphics.world.tiles[Graphics.world.cubes[y+yy][x+xx].tileup].lightmap]->buf;
+			for(int xxx = 0; xxx < 6; xxx++)
+			{
+				for(int yyy = 0; yyy < 6; yyy++)
+				{
+					buf[(128 + 128*yy*6 + 1+xx*6 + 128*yyy + xxx)] = b[(xxx+yyy*8+1+8)];
+				}
+			}
+		}
+	}
+
+		for(xx = 0; xx < min(21, Graphics.world.width-x); xx++)
+		{
+			char* b = Graphics.world.lightmaps[Graphics.world.tiles[Graphics.world.cubes[y-1][x+xx].tileup].lightmap]->buf;
+			char* b2 = Graphics.world.lightmaps[Graphics.world.tiles[Graphics.world.cubes[y+1][x+xx].tileup].lightmap]->buf;
+			for(int xxx = 0; xxx < 6; xxx++)
+			{
+				buf[1+xx*6+xxx] = b[xxx+1+6*8];
+				buf[1+xx*6+xxx + 127*128] = b2[xxx+1+8];
+			}
+		}
+
+		for(yy = 0; yy < min(21, Graphics.world.height-y); yy++)
+		{
+			char* b = Graphics.world.lightmaps[Graphics.world.tiles[Graphics.world.cubes[y+yy][x-1].tileup].lightmap]->buf;
+			char* b2 = Graphics.world.lightmaps[Graphics.world.tiles[Graphics.world.cubes[y+yy][x+1].tileup].lightmap]->buf;
+			for(int yyy = 0; yyy < 6; yyy++)
+			{
+				buf[yy*128*6 + yyy*128] = b[yyy*8+8+6];
+				buf[yy*128*6 + yyy*128+127] = b2[yyy*8+1+8];
+			}
+		}
+
+	// Generate a texture with the associative texture ID stored in the array
+	glGenTextures(1, &tid2);
+
+	// This sets the alignment requirements for the start of each pixel row in memory.
+	glPixelStorei (GL_UNPACK_ALIGNMENT, 1);
+
+	// Bind the texture to the texture arrays index and init the texture
+	glBindTexture(GL_TEXTURE_2D, tid2);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, 1, 128, 128, 0, GL_RED, GL_UNSIGNED_BYTE, buf);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+	generated2 = true;
+	delete[] buf;
+	return tid2;
 }

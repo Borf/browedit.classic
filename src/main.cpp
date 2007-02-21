@@ -1128,6 +1128,39 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						}
 					}
 				}
+				if(editmode == MODE_LIGHTS)
+				{
+					if (Graphics.world.lights.size() == 0)
+						break;
+					int minobj = 0;
+					float mindist = 999999;
+					if(Graphics.objectstartdrag)
+					{
+						bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
+						bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
+						if (!ctrl && !alt)
+						{
+							Graphics.world.lights[Graphics.selectedobject].pos.x = mouse3dx / 5;
+							Graphics.world.lights[Graphics.selectedobject].pos.z = mouse3dz / 5;
+							if (SDL_GetModState() & KMOD_SHIFT)
+							{
+								Graphics.world.lights[Graphics.selectedobject].pos.x = floor(Graphics.world.lights[Graphics.selectedobject].pos.x * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsetx) / (Graphics.gridsize/2.0f) + Graphics.gridoffsetx/(Graphics.gridsize/2.0f);
+								Graphics.world.lights[Graphics.selectedobject].pos.z = floor(Graphics.world.lights[Graphics.selectedobject].pos.z * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsety) / (Graphics.gridsize/2.0f) + Graphics.gridoffsety/(Graphics.gridsize/2.0f);
+							}
+						}
+						if(ctrl && !alt)
+						{
+							Graphics.world.lights[Graphics.selectedobject].pos.y += (mousey-oldmousey);
+							if (SDL_GetModState() & KMOD_SHIFT)
+							{
+								Graphics.world.lights[Graphics.selectedobject].pos.y = floor(Graphics.world.lights[Graphics.selectedobject].pos.y * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsetx) / (Graphics.gridsize/2.0f) + Graphics.gridoffsetx/(Graphics.gridsize/2.0f);
+							}
+						}
+						if(!ctrl && alt)
+						{
+						}
+					}
+				}
 				if (editmode == MODE_OBJECTGROUP && Graphics.groupeditmode)
 				{
 					int i;
@@ -1549,6 +1582,29 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						}
 						Graphics.objectstartdrag = Graphics.selectedobject == minobj;
 					}
+					if(editmode == MODE_LIGHTS)
+					{
+						if(Graphics.world.lights.size() == 0)
+							break;
+						int minobj = 0;
+						float mindist = 999999;
+						for(int i = 0; i < Graphics.world.lights.size(); i++)
+						{
+							cVector3 d = Graphics.world.lights[i].pos;
+							d.x = d.x;
+							
+							d.x -= mouse3dx/5;
+							d.z -= mouse3dz/5;
+							d.y = 0;
+
+							if(mindist > d.Magnitude())
+							{
+								mindist = d.Magnitude();
+								minobj = i;
+							}
+						}
+						Graphics.objectstartdrag = Graphics.selectedobject == minobj;
+					}
 				}
 			}
 			else // rbutton
@@ -1704,6 +1760,48 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							Log(3,0,"todo11: %f", Graphics.world.effects[Graphics.selectedobject].todo11);
 							Log(3,0,"todo12: %f", Graphics.world.effects[Graphics.selectedobject].todo12);
 							Log(3,0,"todo13: %f", Graphics.world.effects[Graphics.selectedobject].todo13);
+						}
+					}
+					if(editmode == MODE_LIGHTS && movement < 3)
+					{
+
+						if (SDL_GetModState() & KMOD_CTRL)
+						{
+							cLight l;
+							char buf[100];
+							sprintf(buf, "obj%i", rand());
+							l.name = buf;
+							l.color.x = 1;
+							l.color.y = 0;
+							l.color.z = 1;
+							l.pos = cVector3(mouse3dx/5, mouse3dy/5, mouse3dz/5);
+							l.todo = string(buf, 40);
+							l.todo2 = 1;
+
+							Graphics.world.lights.push_back(l);
+						}
+						else
+						{
+							if (Graphics.world.lights.size() == 0)
+								break;
+							int minobj = 0;
+							float mindist = 999999;
+							for(int i = 0; i < Graphics.world.lights.size(); i++)
+							{
+								cVector3 d = Graphics.world.lights[i].pos;
+								d.x = d.x;
+								
+								d.x -= mouse3dx/5;
+								d.z -= mouse3dz/5;
+								d.y = 0;
+
+								if(mindist > d.Magnitude())
+								{
+									mindist = d.Magnitude();
+									minobj = i;
+								}
+							}
+							Graphics.selectedobject = minobj;
 						}
 					}
 					else if(editmode == MODE_WALLS && movement < 3)
@@ -3240,6 +3338,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				if (editmode == MODE_OBJECTGROUP)
 				{
 					vector<cUndoObjectsDelete::cObject> objectsdeleted;
+					int idoff = 0;
 					for(int i = 0; i < Graphics.world.models.size(); i++)
 					{
 						if (Graphics.world.models[i]->selected)
@@ -3249,11 +3348,12 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							object.pos = Graphics.world.models[i]->pos;
 							object.rot = Graphics.world.models[i]->rot;
 							object.scale = Graphics.world.models[i]->scale;
-							object.id = i;
+							object.id = i-idoff;
 							objectsdeleted.push_back(object);
 							delete Graphics.world.models[i];
 							Graphics.world.models.erase(Graphics.world.models.begin() + i);
 							i--;
+							idoff--;
 						}
 					}
 					Graphics.selectedobject = -1;

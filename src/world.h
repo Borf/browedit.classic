@@ -32,6 +32,25 @@ public:
 	GLuint tid2;
 };
 
+class cRealLightMap
+{
+public:
+	cRealLightMap()
+	{
+		generated = false;
+		generated2 = false;
+	}
+	int texid();
+	int texid2();
+
+	bool generated;
+	bool generated2;
+	GLuint tid;
+	GLuint tid2;
+	int x;
+	int y;
+};
+
 class cTile
 {
 public:
@@ -200,6 +219,7 @@ public:
 	vector<cTile> tiles;
 	vector<vector<cCube> > cubes;
 	vector<vector<cGatTile> > gattiles;
+	vector<vector<cRealLightMap*> > reallightmaps;
 
 	vector<cRSMModel*>	models;
 
