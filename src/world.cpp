@@ -1058,12 +1058,12 @@ void cWorld::draw()
 					glNormal3f(1,0,0);
 					double d = 1/128.0;
 					double d6 = 6/128.0;
-					glBegin(GL_TRIANGLE_STRIP);
+/*					glBegin(GL_TRIANGLE_STRIP);
 						glTexCoord2f(d + d6*(x%21),d + d6*(y%21));					glVertex3f(x*10,-c->cell1,(height-y)*10);
 						glTexCoord2f(d + d6*(x%21),d + d6*(y%21)+d6);					glVertex3f(x*10,-c->cell3,(height-y)*10-10);
 						glTexCoord2f(d + d6*(x%21)+d6,d + d6*(y%21));					glVertex3f(x*10+10,-c->cell2,(height-y)*10);
 						glTexCoord2f(d + d6*(x%21)+d6,d + d6*(y%21)+d6);					glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
-					glEnd();
+					glEnd();*/
 
 					glBlendFunc(GL_DST_COLOR, GL_ZERO);
 					glBindTexture(GL_TEXTURE_2D, lightmap2);
@@ -2812,11 +2812,12 @@ int cRealLightMap::texid()
 	if(generated)
 		return tid;
 
+	int xx, yy;
 
 	char* buf = new char[128*128*3];
-	for(int xx = 0; xx < min(21, Graphics.world.width-x); xx++)
+	for(xx = 0; xx < min(21, Graphics.world.width-x); xx++)
 	{
-		for(int yy = 0; yy < min(21, Graphics.world.height-y); yy++)
+		for(yy = 0; yy < min(21, Graphics.world.height-y); yy++)
 		{
 			char* b = Graphics.world.lightmaps[Graphics.world.tiles[Graphics.world.cubes[y+yy][x+xx].tileup].lightmap]->buf;
 			for(int xxx = 0; xxx < 6; xxx++)
@@ -2831,6 +2832,30 @@ int cRealLightMap::texid()
 		}
 	}
 
+
+	for(xx = 0; xx < min(21, Graphics.world.width-x); xx++)
+	{
+		for(int xxx = 0; xxx < 6; xxx++)
+		{
+			for(int i = 0; i < 3; i++)
+			{
+				buf[3*(1+xx*6+xxx)+i] = buf[3*(1+xx*6+xxx+128)+i];
+				buf[3*(1+xx*6+xxx + 127*128)+i] = buf[3*(1+xx*6+xxx + 126*128)+i];
+			}
+		}
+	}
+
+	for(yy = 0; yy < min(21, Graphics.world.height-y); yy++)
+	{
+		for(int yyy = 0; yyy < 6; yyy++)
+		{
+			for(int i = 0; i < 3; i++)
+			{
+				buf[3*(yy*128*6 + yyy*128)+i]		= buf[3*(yy*128*6 + yyy*128+1)+i];
+				buf[3*(yy*128*6 + yyy*128+127)+i] = buf[3*(yy*128*6 + yyy*128+127-1)+i];
+			}
+		}
+	}
 	// Generate a texture with the associative texture ID stored in the array
 	glGenTextures(1, &tid);
 
@@ -2877,27 +2902,23 @@ int cRealLightMap::texid2()
 		}
 	}
 
-		for(xx = 0; xx < min(21, Graphics.world.width-x); xx++)
+	for(xx = 0; xx < min(21, Graphics.world.width-x); xx++)
+	{
+		for(int xxx = 0; xxx < 6; xxx++)
 		{
-			char* b = Graphics.world.lightmaps[Graphics.world.tiles[Graphics.world.cubes[y-1][x+xx].tileup].lightmap]->buf;
-			char* b2 = Graphics.world.lightmaps[Graphics.world.tiles[Graphics.world.cubes[y+1][x+xx].tileup].lightmap]->buf;
-			for(int xxx = 0; xxx < 6; xxx++)
-			{
-				buf[1+xx*6+xxx] = b[xxx+1+6*8];
-				buf[1+xx*6+xxx + 127*128] = b2[xxx+1+8];
-			}
+			buf[1+xx*6+xxx] = buf[1+xx*6+xxx+128];
+			buf[1+xx*6+xxx + 127*128] = buf[1+xx*6+xxx + 126*128];
 		}
+	}
 
-		for(yy = 0; yy < min(21, Graphics.world.height-y); yy++)
+	for(yy = 0; yy < min(21, Graphics.world.height-y); yy++)
+	{
+		for(int yyy = 0; yyy < 6; yyy++)
 		{
-			char* b = Graphics.world.lightmaps[Graphics.world.tiles[Graphics.world.cubes[y+yy][x-1].tileup].lightmap]->buf;
-			char* b2 = Graphics.world.lightmaps[Graphics.world.tiles[Graphics.world.cubes[y+yy][x+1].tileup].lightmap]->buf;
-			for(int yyy = 0; yyy < 6; yyy++)
-			{
-				buf[yy*128*6 + yyy*128] = b[yyy*8+8+6];
-				buf[yy*128*6 + yyy*128+127] = b2[yyy*8+1+8];
-			}
+			buf[yy*128*6 + yyy*128]		= buf[yy*128*6 + yyy*128+1];
+			buf[yy*128*6 + yyy*128+127] = buf[yy*128*6 + yyy*128+127-1];
 		}
+	}
 
 	// Generate a texture with the associative texture ID stored in the array
 	glGenTextures(1, &tid2);
