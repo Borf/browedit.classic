@@ -38,6 +38,13 @@ void cWorld::load()
 		light = new cTextureModel();
 		light->open("data/bulb.tga");
 	}
+	if(light2 == NULL)
+	{
+		light2 = new cTextureModel();
+		light2->open("data/bulb.tga");
+		light2->boundingbox1 = light2->boundingbox1 * 1.1f;
+		light2->boundingbox2 = light2->boundingbox2 * 1.1f;
+	}
 	if(effect == NULL)
 	{
 		effect = new cTextureModel();
@@ -899,8 +906,6 @@ void cWorld::draw()
 	else
 		gluPerspective(45.0f,(GLfloat)Graphics.w()/(GLfloat)Graphics.h(),10.0f,10000.0f);
 	float camrad = 10;
-	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
-	glLoadIdentity();									// Reset The Modelview Matrix
 
 	if (Graphics.topcamera)
 		gluLookAt(  -Graphics.camerapointer.y,
@@ -916,6 +921,8 @@ void cWorld::draw()
 					-Graphics.camerapointer.y + Graphics.cameraheight*cos(Graphics.camerarot),
 					-Graphics.camerapointer.x,camrad + Graphics.cameraheight * (Graphics.cameraangle/10.0f),-Graphics.camerapointer.y,
 					0,1,0);
+	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
+	glLoadIdentity();									// Reset The Modelview Matrix
 
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_BLEND);
@@ -1058,12 +1065,12 @@ void cWorld::draw()
 					glNormal3f(1,0,0);
 					double d = 1/128.0;
 					double d6 = 6/128.0;
-/*					glBegin(GL_TRIANGLE_STRIP);
+					glBegin(GL_TRIANGLE_STRIP);
 						glTexCoord2f(d + d6*(x%21),d + d6*(y%21));					glVertex3f(x*10,-c->cell1,(height-y)*10);
 						glTexCoord2f(d + d6*(x%21),d + d6*(y%21)+d6);					glVertex3f(x*10,-c->cell3,(height-y)*10-10);
 						glTexCoord2f(d + d6*(x%21)+d6,d + d6*(y%21));					glVertex3f(x*10+10,-c->cell2,(height-y)*10);
 						glTexCoord2f(d + d6*(x%21)+d6,d + d6*(y%21)+d6);					glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
-					glEnd();*/
+					glEnd();
 
 					glBlendFunc(GL_DST_COLOR, GL_ZERO);
 					glBindTexture(GL_TEXTURE_2D, lightmap2);
@@ -1533,6 +1540,7 @@ void cWorld::draw()
 				glColor3f(1,0,0);
 			else
 				glColor3f(1,1,1);
+			models[i]->collides(cVector3(0,0,0), cVector3(0,0,0));
 			models[i]->draw();
 		}
 		glScalef(1,1,-1);
@@ -1546,11 +1554,15 @@ void cWorld::draw()
 			glEnable(GL_BLEND);
 			for(i = 0; i < lights.size(); i++)
 			{
-				cVector3 p = effects[i].pos;
-				glTranslatef(5*effects[i].pos.x,-effects[i].pos.y-5, 5*(2*height-effects[i].pos.z));
+				cVector3 p = lights[i].pos;
+				glTranslatef(5*lights[i].pos.x,-lights[i].pos.y-5, 5*(2*height-lights[i].pos.z));
+				glColor3f(1,1,1);
+				light2->draw();
+				glColor3f(lights[i].color.x, lights[i].color.y, lights[i].color.z);
 				light->draw();
-				glTranslatef(-5*effects[i].pos.x, effects[i].pos.y+5, -5*(2*height-effects[i].pos.z));
+				glTranslatef(-5*lights[i].pos.x, lights[i].pos.y+5, -5*(2*height-lights[i].pos.z));
 			}
+			glColor3f(1,1,1);
 			for(i = 0; i < effects.size(); i++)
 			{
 				cVector3 p = effects[i].pos;
@@ -1621,22 +1633,6 @@ void cWorld::draw()
 	{
 		glColor4f(1,1,1,1);
 
-		glEnable(GL_TEXTURE_2D);
-		glEnable(GL_BLEND);
-		glTranslatef(0,0,height*10);
-		glScalef(1,1,-1);
-		for(i = 0; i < models.size(); i++)
-		{
-			if(i == Graphics.selectedobject && editmode == MODE_OBJECTS)
-				glColor3f(1,0,0);
-			else
-				glColor3f(1,1,1);
-			models[i]->draw();
-		}
-		glScalef(1,1,-1);
-		glTranslatef(0,0,-height*10);
-
-		glDisable(GL_TEXTURE_2D);
 		glColor3f(1,0,0);
 		float s = 10 / Graphics.gridsize;
 		glTranslatef(s*Graphics.gridoffsetx,0,s*Graphics.gridoffsety);
@@ -1754,17 +1750,19 @@ void cWorld::draw()
 		glEnable(GL_BLEND);
 		for(i = 0; i < lights.size(); i++)
 		{
+			cVector3 p = lights[i].pos;
+			glTranslatef(5*lights[i].pos.x,lights[i].pos.y+5, 5*(2*height-lights[i].pos.z));
+			glColor3f(1,1,1);
+			light2->draw();
+
 			if (i == Graphics.selectedobject)
 				glColor4f(1,0,0,1);
 			else
-				glColor4f(1,1,1,1);
-
-			cVector3 p = lights[i].pos;
-			glTranslatef(5*lights[i].pos.x,lights[i].pos.y+5, 5*(2*height-lights[i].pos.z));
+				glColor3f(lights[i].color.x, lights[i].color.y, lights[i].color.z);
 			light->draw();
 			glTranslatef(-5*lights[i].pos.x,-lights[i].pos.y-5, -5*(2*height-lights[i].pos.z));
-
 		}
+		glColor3f(1,1,1);
 	}
 	if (editmode == MODE_HEIGHTGLOBAL)
 	{
@@ -1882,7 +1880,8 @@ void cWorld::draw()
 
 		glBindTexture(GL_TEXTURE_2D, Graphics.watertextures[water.type][ceil(waterindex)]->texid());
 
-		waterindex+=max(0,(Graphics.frameticks) / 50.0f);
+		if(Graphics.animatewater)
+			waterindex+=max(0,(Graphics.frameticks) / 50.0f);
 		if (waterindex > 31)
 			waterindex = 0;
 		glBegin(GL_QUADS);
@@ -2940,4 +2939,18 @@ int cRealLightMap::texid2()
 	generated2 = true;
 	delete[] buf;
 	return tid2;
+}
+
+void cRealLightMap::reset()
+{
+	if(generated)
+	{
+		glDeleteTextures(1,&tid);
+		generated = false;
+	}
+	if(generated2)
+	{
+		glDeleteTextures(1,&tid2);
+		generated2 = false;
+	}
 }

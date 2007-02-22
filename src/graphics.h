@@ -49,6 +49,7 @@ public:
 		topcamera = false;
 		showambientlighting = true;
 		groupeditmode = false;
+		animatewater = true;
 
 		shownotiles = true;
 		selectioncenter = cVector3(-1,-1,-1);
@@ -146,6 +147,7 @@ public:
 	bool					showlightmaps;
 	bool					showtilecolors;
 	bool					showwater;
+	bool					animatewater;
 
 
 	int						quadtreeview;

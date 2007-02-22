@@ -49,6 +49,8 @@ public:
 	GLuint tid2;
 	int x;
 	int y;
+
+	void reset();
 };
 
 class cTile
@@ -234,6 +236,7 @@ public:
 		showtextures = false;
 		loaded = false;
 		light = NULL;
+		light2 = NULL;
 		sound = NULL;
 		effect = NULL;
 		notile = NULL;
@@ -267,6 +270,7 @@ public:
 	int gridSizeCell;
 
 	cTextureModel* light;
+	cTextureModel* light2;
 	cTextureModel* sound;
 	cTextureModel* effect;
 	

@@ -12,6 +12,7 @@
 #include "wm/effectwindow.h"
 #include "wm/waterwindow.h"
 #include "wm/ambientlightwindow.h"
+#include "wm/lightwindow.h"
 #include "undo.h"
 
 #include "texturecache.h"
@@ -496,6 +497,8 @@ int main(int argc, char *argv[])
 
 	ADDMENUITEMDATAP(mm,view,"Show Ambient Lighting",&MenuCommand_toggle, (void*)&Graphics.showambientlighting);
 	mm->ticked = true;
+	ADDMENUITEMDATAP(mm,view,"Water Animation",&MenuCommand_toggle, (void*)&Graphics.animatewater);
+	mm->ticked = true;
 
 
 	ADDMENUITEM(mm,mode,"Texture Edit",			&MenuCommand_mode);
@@ -742,7 +745,7 @@ int main(int argc, char *argv[])
 
 	Log(3,0,"Done initializing..");
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "data\\prontera").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "data\\lighttest").c_str());
 #ifndef WIN32
 	Graphics.world.load();
 #endif
@@ -1771,12 +1774,12 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							char buf[100];
 							sprintf(buf, "obj%i", rand());
 							l.name = buf;
-							l.color.x = 1;
+							l.color.x = 0;
 							l.color.y = 0;
-							l.color.z = 1;
+							l.color.z = 0;
 							l.pos = cVector3(mouse3dx/5, mouse3dy/5, mouse3dz/5);
 							l.todo = string(buf, 40);
-							l.todo2 = 1;
+							l.todo2 = 300;
 
 							Graphics.world.lights.push_back(l);
 						}
@@ -1924,7 +1927,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				mousex = event.motion.x;
 				mousey = event.motion.y;
 
-				if(movement < 3 && (editmode == MODE_OBJECTS || editmode == MODE_EFFECTS))
+				if(movement < 3 && (editmode == MODE_OBJECTS || editmode == MODE_EFFECTS || editmode == MODE_LIGHTS))
 				{
 					Graphics.selectedobject = -1;
 				}
@@ -3335,6 +3338,15 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						Graphics.selectedobject = -1;
 					}
 				}
+				if (editmode == MODE_LIGHTS)
+				{
+					if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.lights.size())
+					{
+						//undostack.items.push(new cUndoEffectDelete(Graphics.selectedobject));
+						Graphics.world.lights.erase(Graphics.world.lights.begin() + Graphics.selectedobject);
+						Graphics.selectedobject = -1;
+					}
+				}
 				if (editmode == MODE_OBJECTGROUP)
 				{
 					vector<cUndoObjectsDelete::cObject> objectsdeleted;
@@ -3589,6 +3601,25 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							w->objects["looptime"]->SetInt(3,(int)&o->loop);
 							w->objects["objectname"]->SetText(0, o->readablename);
 							((cEffectWindow*)w)->undo = new cUndoChangeEffect(Graphics.selectedobject);
+							Graphics.WM.addwindow(w);
+						}
+					}
+					else if (editmode == MODE_LIGHTS)
+					{
+						if (Graphics.selectedobject != -1)
+						{
+							cLight* l = &Graphics.world.lights[Graphics.selectedobject];
+
+							cWindow* w = new cLightWindow();
+							w->init(&Graphics.WM.texture, &Graphics.WM.font);
+							w->objects["posx"]->SetInt(3,(int)&l->pos.x);
+							w->objects["posy"]->SetInt(3,(int)&l->pos.y);
+							w->objects["posz"]->SetInt(3,(int)&l->pos.z);
+							w->objects["colorr"]->SetInt(3,(int)&l->color.x);
+							w->objects["colorg"]->SetInt(3,(int)&l->color.y);
+							w->objects["colorb"]->SetInt(3,(int)&l->color.z);
+							w->objects["intensity"]->SetInt(3,(int)&l->todo2);
+							//((cEffectWindow*)w)->undo = new cUndoChangeEffect(Graphics.selectedobject);
 							Graphics.WM.addwindow(w);
 						}
 					}
@@ -4265,7 +4296,7 @@ MENUCOMMAND(dolightmaps)
 			{
 				cLightmap* map = new cLightmap();
 				for(int i = 0; i < 256; i++)
-					map->buf[i] = i < 64 ? 255 : 0;
+					map->buf[i] = i < 64 ? 0 : 0;
 				Graphics.world.tiles[tile].lightmap = Graphics.world.lightmaps.size();
 				Graphics.world.lightmaps.push_back(map);
 			}
@@ -4314,13 +4345,92 @@ MENUCOMMAND(dolightmaps)
 		}
 	}
 
+	int ww = Graphics.w();
+	ww -= 256;
+	int hh = Graphics.h()-20;
+
+	glEnable(GL_DEPTH_TEST);
+	glViewport(0,0,ww,hh);						// Reset The Current Viewport
+
+	float camrad = 10;
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);				// Black Background
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
+	glLoadIdentity();									// Reset The Projection Matrix
+	gluPerspective(45.0f,(GLfloat)Graphics.w()/(GLfloat)Graphics.h(),10.0f,10000.0f);
+	gluLookAt(  -Graphics.camerapointer.x + Graphics.cameraheight*sin(Graphics.camerarot),
+				camrad+Graphics.cameraheight,
+				-Graphics.camerapointer.y + Graphics.cameraheight*cos(Graphics.camerarot),
+				-Graphics.camerapointer.x,camrad + Graphics.cameraheight * (Graphics.cameraangle/10.0f),-Graphics.camerapointer.y,
+				0,1,0);
+	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
+	glLoadIdentity();									// Reset The Modelview Matrix
+	glTranslatef(0,0,Graphics.world.height*10);
+	glScalef(1,1,-1);
+
+	for(y = 0; y < Graphics.world.height; y++)
+//	for(y = 40; y < 60; y++)
+	{
+		Log(3,0,"%i %%", y);
+		for(x = 0; x < Graphics.world.width; x++)
+//		for(x = 40; x < 60; x++)
+		{
+			if(Graphics.world.cubes[y][x].tileup == -1)
+				continue;
+			Graphics.world.reallightmaps[y][x]->reset();
+			BYTE* buf = (BYTE*)Graphics.world.lightmaps[Graphics.world.tiles[Graphics.world.cubes[y][x].tileup].lightmap]->buf;
+
+			for(int yy = 0; yy < 6; yy++)
+			{
+				for(int xx = 0; xx < 6; xx++)
+				{
+					cVector3 worldpos = cVector3(	10*x+(10/6.0)*xx, 
+													Graphics.world.cubes[y][x].cell1+Graphics.world.cubes[y][x].cell2+Graphics.world.cubes[y][x].cell3+Graphics.world.cubes[y][x].cell4,
+													10*y+(10/6.0)*yy);
+					for(i = 0; i < Graphics.world.lights.size(); i++)
+					{
+						cLight* l = &Graphics.world.lights[i];
+						glTranslatef(l->pos.x*5, l->pos.y, l->pos.z*5);
+						glEnable(GL_TEXTURE_2D);
+						Graphics.world.light->draw();
+						glDisable(GL_TEXTURE_2D);
+						glTranslatef(-l->pos.x*5, -l->pos.y, -l->pos.z*5);
+
+						cVector3 diff = worldpos - cVector3(l->pos.x*5, l->pos.y, l->pos.z*5);
+						float bla = diff.Magnitude();
+						bool obstructed = false;
+
+						for(int ii = 0; ii < Graphics.world.models.size() && !obstructed; ii++)
+						{
+							if(Graphics.world.models[i]->collides(worldpos, l->pos))
+								obstructed = true;
+						}
+
+						if(!obstructed)
+						{
+							buf[yy*8 + xx + 9] = min(255, buf[yy*8 + xx + 9] + max(0, l->todo2 - bla));
+
+							buf[64 + 3*(yy*8 + xx + 9)+0] = min(255, buf[64 + 3*(yy*8 + xx + 9)+0] + max(0, ceil((l->todo2 - bla)*l->color.x)));
+							buf[64 + 3*(yy*8 + xx + 9)+1] = min(255, buf[64 + 3*(yy*8 + xx + 9)+1] + max(0, ceil((l->todo2 - bla)*l->color.y)));
+							buf[64 + 3*(yy*8 + xx + 9)+2] = min(255, buf[64 + 3*(yy*8 + xx + 9)+2] + max(0, ceil((l->todo2 - bla)*l->color.z)));
+						}
+						else
+						{
+							//buf[yy*8 + xx + 9] = 0;//min(255, buf[yy*8 + xx + 9] + max(0, l->todo2 - bla));
+						}
+					}
+				}
+			}
+		}
+	}
 
 
+/*
 	for(i = 0; i < Graphics.world.models.size(); i++)
 	{
 		Log(3,0,"Doing model %i out of %i (%.2f%%)", i, Graphics.world.models.size(), (i/(float)Graphics.world.models.size())*100);
 		Graphics.world.models[i]->draw(false,false,false, true);
-	}
+	}*/
 
 /*	float t;
 	for(x = 0; x < Graphics.world.width; x++)

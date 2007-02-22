@@ -86,6 +86,8 @@ public:
 	vector<cRSMModelMesh*>	meshes;
 	vector<int>				fathers;
 	vector<cTexture*> textures;
+	bool collides(cVector3, cVector3);
+
 	void draw(bool = true, bool = true,bool=false,bool=false);
 	void draw2(cBoundingbox*, int, float*, bool,bool,bool,bool);
 

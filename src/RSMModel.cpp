@@ -451,8 +451,6 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 	{
 		float ModelMatrix[16]; 
 		glGetFloatv(GL_MODELVIEW_MATRIX, ModelMatrix);
-		float ProjMatrix[16];
-		glGetFloatv(GL_PROJECTION_MATRIX, ProjMatrix);
 		float mmin = min(min(model->bb2.bbmin[0], model->bb.bbmin[1]), model->bb2.bbmin[2]) / 5;
 		mmin -= 4;
 		float mmax = max(max(model->bb2.bbmax[0], model->bb.bbmax[1]), model->bb2.bbmax[2]) / 5;
@@ -647,4 +645,206 @@ cRSMModel::~cRSMModel()
 	{
 		TextureCache.unload(textures[i]);
 	}
+}
+
+
+bool cRSMModel::collides(cVector3 start, cVector3 end)
+{
+	if (meshes.size() == 0)
+		return false;
+	glPushMatrix();
+	glLoadIdentity();
+	glTranslatef(0,0,Graphics.world.height*10);
+	glScalef(1,1,-1);
+	glTranslatef(5*pos.x, -pos.y, 5*pos.z);
+	glRotatef(-rot.x, 1.0, 0.0, 0.0);
+	glRotatef(-rot.z, 0.0, 0.0, 1.0);
+	glRotatef(rot.y, 0.0, 1.0, 0.0);
+
+	glScalef(scale.x, -scale.y, scale.z);
+
+	glTranslatef(-bb2.bbrange[0], -bb2.bbmin[1], -bb2.bbrange[2]);
+
+	float ModelMatrix[16]; 
+	glGetFloatv(GL_MODELVIEW_MATRIX, ModelMatrix);
+	float ProjMatrix[16]; 
+	glGetFloatv(GL_PROJECTION_MATRIX, ProjMatrix);
+
+	cVector3 v1 = cVector3(bb2.bbmin[0], bb2.bbmin[1], bb2.bbmin[2]);
+	cVector3 v2 = cVector3(bb2.bbmax[0], bb2.bbmax[1], bb2.bbmax[2]);
+	float v1_[3];
+	float v2_[3];
+	float v3_[3];
+	float v4_[3];
+	float v5_[3];
+	float v6_[3];
+	float v7_[3];
+	float v8_[3];
+
+	MatrixMultVect(ModelMatrix, cVector3(v1.x, v1.y, v1.z), v1_);
+	MatrixMultVect(ModelMatrix, cVector3(v2.x, v1.y, v1.z), v2_);
+	MatrixMultVect(ModelMatrix, cVector3(v2.x, v1.y, v2.z), v3_);
+	MatrixMultVect(ModelMatrix, cVector3(v1.x, v1.y, v2.z), v4_);
+	MatrixMultVect(ModelMatrix, cVector3(v1.x, v2.y, v1.z), v5_);
+	MatrixMultVect(ModelMatrix, cVector3(v2.x, v2.y, v1.z), v6_);
+	MatrixMultVect(ModelMatrix, cVector3(v2.x, v2.y, v2.z), v7_);
+	MatrixMultVect(ModelMatrix, cVector3(v1.x, v2.y, v2.z), v8_);
+
+/*	glColor4f(1,1,1,1);
+	glDisable(GL_TEXTURE_2D);
+
+	glBegin(GL_LINE_LOOP);
+		glVertex3f(v1.x, -v1.y, v1.z);
+		glVertex3f(v2.x, -v1.y, v1.z);
+		glVertex3f(v2.x, -v1.y, v2.z);
+		glVertex3f(v1.x, -v1.y, v2.z);
+	glEnd();
+	glBegin(GL_LINE_LOOP);
+		glVertex3f(v1.x, -v2.y, v1.z);
+		glVertex3f(v2.x, -v2.y, v1.z);
+		glVertex3f(v2.x, -v2.y, v2.z);
+		glVertex3f(v1.x, -v2.y, v2.z);
+	glEnd();
+	glBegin(GL_LINES);
+		glVertex3f(v1.x, -v1.y, v1.z);
+		glVertex3f(v1.x, -v2.y, v1.z);
+		glVertex3f(v2.x, -v1.y, v1.z);
+		glVertex3f(v2.x, -v2.y, v1.z);
+		glVertex3f(v2.x, -v1.y, v2.z);
+		glVertex3f(v2.x, -v2.y, v2.z);
+		glVertex3f(v1.x, -v1.y, v2.z);
+		glVertex3f(v1.x, -v2.y, v2.z);
+	glEnd();*/
+	glPopMatrix();	
+
+
+/*	glBegin(GL_LINE_LOOP);
+		glVertex3f(v1_[0], v1_[1], v1_[2]);
+		glVertex3f(v2_[0], v2_[1], v2_[2]);
+		glVertex3f(v3_[0], v3_[1], v3_[2]);
+	glEnd();
+
+	glBegin(GL_LINE_LOOP);
+		glVertex3f(v1_[0], v1_[1], v1_[2]);
+		glVertex3f(v4_[0], v4_[1], v4_[2]);
+		glVertex3f(v3_[0], v3_[1], v3_[2]);
+	glEnd();
+
+	glBegin(GL_LINE_LOOP);
+		glVertex3f(v5_[0], -v5_[1], v5_[2]);
+		glVertex3f(v6_[0], -v6_[1], v6_[2]);
+		glVertex3f(v7_[0], -v7_[1], v7_[2]);
+	glEnd();
+
+	glBegin(GL_LINE_LOOP);
+		glVertex3f(v5_[0], -v5_[1], v5_[2]);
+		glVertex3f(v8_[0], -v8_[1], v8_[2]);
+		glVertex3f(v7_[0], -v7_[1], v7_[2]);
+	glEnd();
+
+	glEnable(GL_TEXTURE_2D);*/
+
+	cVector3 triangle[3];
+	float t = 0;
+
+//	end = cVector3(500,50,500);
+
+	//bottom
+	triangle[0] = cVector3(v1_[0], -v1_[1], v1_[2]);
+	triangle[1] = cVector3(v2_[0], -v2_[1], v2_[2]);
+	triangle[2] = cVector3(v3_[0], -v3_[1], v3_[2]);
+	if(LineIntersectPolygon(triangle, 3, start, end, t))
+	{
+		return true;
+	}
+	triangle[0] = cVector3(v1_[0], -v1_[1], v1_[2]);
+	triangle[1] = cVector3(v3_[0], -v3_[1], v3_[2]);
+	triangle[2] = cVector3(v4_[0], -v4_[1], v4_[2]);
+	if(LineIntersectPolygon(triangle, 3, start, end, t))
+	{
+		return true;
+	}
+	//top
+	triangle[0] = cVector3(v5_[0], -v5_[1], v5_[2]);
+	triangle[1] = cVector3(v6_[0], -v6_[1], v6_[2]);
+	triangle[2] = cVector3(v7_[0], -v7_[1], v7_[2]);
+	if(LineIntersectPolygon(triangle, 3, start, end, t))
+	{
+		return true;
+	}
+	triangle[0] = cVector3(v5_[0], -v5_[1], v5_[2]);
+	triangle[1] = cVector3(v7_[0], -v7_[1], v7_[2]);
+	triangle[2] = cVector3(v8_[0], -v8_[1], v8_[2]);
+	if(LineIntersectPolygon(triangle, 3, start, end, t))
+	{
+		return true;
+	}
+
+
+	//front
+	triangle[0] = cVector3(v1_[0], -v1_[1], v1_[2]);
+	triangle[1] = cVector3(v2_[0], -v2_[1], v2_[2]);
+	triangle[2] = cVector3(v6_[0], -v6_[1], v6_[2]);
+	if(LineIntersectPolygon(triangle, 3, start, end, t))
+	{
+		return true;
+	}
+	triangle[0] = cVector3(v1_[0], -v1_[1], v1_[2]);
+	triangle[1] = cVector3(v5_[0], -v5_[1], v5_[2]);
+	triangle[2] = cVector3(v6_[0], -v6_[1], v6_[2]);
+	if(LineIntersectPolygon(triangle, 3, start, end, t))
+	{
+		return true;
+	}
+
+	//back
+	triangle[0] = cVector3(v4_[0], -v4_[1], v4_[2]);
+	triangle[1] = cVector3(v3_[0], -v3_[1], v3_[2]);
+	triangle[2] = cVector3(v7_[0], -v7_[1], v7_[2]);
+	if(LineIntersectPolygon(triangle, 3, start, end, t))
+	{
+		return true;
+	}
+	triangle[0] = cVector3(v4_[0], -v5_[1], v4_[2]);
+	triangle[1] = cVector3(v7_[0], -v7_[1], v7_[2]);
+	triangle[2] = cVector3(v8_[0], -v8_[1], v8_[2]);
+	if(LineIntersectPolygon(triangle, 3, start, end, t))
+	{
+		return true;
+	}
+
+	//left
+	triangle[0] = cVector3(v1_[0], -v1_[1], v1_[2]);
+	triangle[1] = cVector3(v5_[0], -v5_[1], v5_[2]);
+	triangle[2] = cVector3(v8_[0], -v8_[1], v8_[2]);
+	if(LineIntersectPolygon(triangle, 3, start, end, t))
+	{
+		return true;
+	}
+	triangle[0] = cVector3(v1_[0], -v1_[1], v1_[2]);
+	triangle[1] = cVector3(v4_[0], -v4_[1], v4_[2]);
+	triangle[2] = cVector3(v8_[0], -v8_[1], v8_[2]);
+	if(LineIntersectPolygon(triangle, 3, start, end, t))
+	{
+		return true;
+	}
+
+	//right
+	triangle[0] = cVector3(v2_[0], -v2_[1], v2_[2]);
+	triangle[1] = cVector3(v3_[0], -v3_[1], v3_[2]);
+	triangle[2] = cVector3(v7_[0], -v7_[1], v7_[2]);
+	if(LineIntersectPolygon(triangle, 3, start, end, t))
+	{
+		return true;
+	}
+	triangle[0] = cVector3(v2_[0], -v2_[1], v2_[2]);
+	triangle[1] = cVector3(v6_[0], -v6_[1], v6_[2]);
+	triangle[2] = cVector3(v7_[0], -v7_[1], v7_[2]);
+	if(LineIntersectPolygon(triangle, 3, start, end, t))
+	{
+		return true;
+	}
+
+//	glPopMatrix();
+	return false;
 }

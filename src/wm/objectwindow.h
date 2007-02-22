@@ -19,7 +19,7 @@ public:
 		alignment = ALIGN_BOTTOM;
 		moveto(100, 20);
 		resizeto(100, 20);
-		text = "            Ok";
+		text = "Ok";
 	}
 	virtual ~cWindowOkButton() {}
 	void click()
@@ -41,7 +41,7 @@ public:
 		alignment = ALIGN_BOTTOM;
 		moveto(-100, 20);
 		resizeto(100, 20);
-		text = "            Cancel";
+		text = "Cancel";
 	}
 	virtual ~cWindowCancelButton() {}
 	void click()
