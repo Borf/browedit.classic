@@ -243,6 +243,10 @@ SOURCE=.\src\wm\effectwindow.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\wm\lightwindow.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\wm\messagewindow.h
 # End Source File
 # Begin Source File

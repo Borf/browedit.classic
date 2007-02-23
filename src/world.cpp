@@ -907,6 +907,8 @@ void cWorld::draw()
 		gluPerspective(45.0f,(GLfloat)Graphics.w()/(GLfloat)Graphics.h(),10.0f,10000.0f);
 	float camrad = 10;
 
+	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
+	glLoadIdentity();									// Reset The Modelview Matrix
 	if (Graphics.topcamera)
 		gluLookAt(  -Graphics.camerapointer.y,
 					100,
@@ -921,8 +923,6 @@ void cWorld::draw()
 					-Graphics.camerapointer.y + Graphics.cameraheight*cos(Graphics.camerarot),
 					-Graphics.camerapointer.x,camrad + Graphics.cameraheight * (Graphics.cameraangle/10.0f),-Graphics.camerapointer.y,
 					0,1,0);
-	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
-	glLoadIdentity();									// Reset The Modelview Matrix
 
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_BLEND);

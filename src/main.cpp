@@ -1015,22 +1015,18 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				else
 				{
-					cVector2 v = cVector2((oldmousex - mousex),  (oldmousey - mousey));
-		
-					v.rotate(-Graphics.camerarot / PI * 180.0f);
+					if(!Graphics.topcamera)
+					{
+						cVector2 v = cVector2((oldmousex - mousex),  (oldmousey - mousey));
+						v.rotate(-Graphics.camerarot / PI * 180.0f);
+						Graphics.camerapointer = Graphics.camerapointer - v;
+					}
+					else
+					{
+						Graphics.camerapointer.x -= (oldmousey - mousey);
+						Graphics.camerapointer.y -= (oldmousex - mousex);
 
-					Graphics.camerapointer = Graphics.camerapointer - v;
-					long size = Graphics.world.size;
-/*					while (Graphics.camerapointer.x+(size/2) > size)
-						Graphics.camerapointer.x -= size;
-					while (Graphics.camerapointer.y+(size/2) > size)
-						Graphics.camerapointer.y -= size;
-
-					while (Graphics.camerapointer.x+(size/2) < 0)
-						Graphics.camerapointer.x += size;
-					while (Graphics.camerapointer.y+(size/2) < 0)
-						Graphics.camerapointer.y += size;*/
-
+					}
 				}
 			}
 			else if (lbuttondown && !rbuttondown)
@@ -4402,7 +4398,7 @@ MENUCOMMAND(dolightmaps)
 
 						for(int ii = 0; ii < Graphics.world.models.size() && !obstructed; ii++)
 						{
-							if(Graphics.world.models[i]->collides(worldpos, l->pos))
+							if(Graphics.world.models[ii]->collides(worldpos, cVector3(l->pos.x*5, l->pos.y, l->pos.z*5)))
 								obstructed = true;
 						}
 
