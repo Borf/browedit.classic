@@ -55,6 +55,11 @@ GLuint cTexture::texid()
 				else  // Otherwise  Set Height To "Max Power Of Two" That The Card Can Handle
 					lHeightPixels = glMaxTexDim;
 
+				while(lHeightPixels < bmp.height)
+					lHeightPixels*=2;
+				while(lWidthPixels < bmp.width)
+					lWidthPixels*=2;
+
 				if(bmp.width == lWidthPixels && bmp.height == lHeightPixels)
 				{
 					glGenTextures(1, &tid);
@@ -72,14 +77,18 @@ GLuint cTexture::texid()
 					float factory = (float)bmp.height / (float)lHeightPixels;
 
 					char* data = new char[lWidthPixels * lHeightPixels*4];
+					ZeroMemory(data, lWidthPixels * lHeightPixels*4);
 					for(int x = 0; x < lWidthPixels; x++)
 					{
 						for(int y = 0; y < lHeightPixels; y++)
 						{
-							data[4*x+4*lWidthPixels*y] = bmp.bytes[4*(int)(x*factorx) + (int)(4*bmp.width*(int)(y*factory))];
-							data[4*x+4*lWidthPixels*y+1] = bmp.bytes[4*(int)(x*factorx) + (int)(4*bmp.width*(int)(y*factory))+1];
-							data[4*x+4*lWidthPixels*y+2] = bmp.bytes[4*(int)(x*factorx) + (int)(4*bmp.width*(int)(y*factory))+2];
-							data[4*x+4*lWidthPixels*y+3] = bmp.bytes[4*(int)(x*factorx) + (int)(4*bmp.width*(int)(y*factory))+3];
+							int tx = floor(x*factorx);
+							int ty = floor(y*factory);
+							int target = 4*(tx+(bmp.width+2-(bmp.width%2))*ty);
+							data[4*(x+lWidthPixels*y)] = bmp.bytes[target];
+							data[4*(x+lWidthPixels*y)+1] = bmp.bytes[target+1];
+							data[4*(x+lWidthPixels*y)+2] = bmp.bytes[target+2];
+							data[4*(x+lWidthPixels*y)+3] = bmp.bytes[target+3];
 						}
 					}
 					glGenTextures(1, &tid);
@@ -91,7 +100,7 @@ GLuint cTexture::texid()
 					//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
 					
 					delete[] data;
-					Log(3,0,"Loaded and resized %s successfully", filename.c_str());
+					Log(3,0,"Loaded and resized %s from %ix%i to %ix%i successfully", filename.c_str(), bmp.width, bmp.height, lWidthPixels, lHeightPixels);
 				}
 			}
 			else
@@ -507,7 +516,7 @@ BMPError cTexture::BMPLoad(std::string fname,BMPClass& bmp)
 			bmp.bytes[x]=bmp.bytes[x+2];
 			bmp.bytes[x+2]=temp;
 
-			if(bmp.bytes[x] == 255 && bmp.bytes[x+2] == 255)
+			if(bmp.bytes[x] == 255 && bmp.bytes[x+1] == 0 && bmp.bytes[x+2] == 255)
 				bmp.bytes[x+3] = 0;
 			else
 				bmp.bytes[x+3] = 255;
