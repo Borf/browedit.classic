@@ -4361,12 +4361,17 @@ MENUCOMMAND(dolightmaps)
 				0,1,0);
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 	glLoadIdentity();									// Reset The Modelview Matrix
-	glTranslatef(0,0,Graphics.world.height*10);
-	glScalef(1,1,-1);
+//	glTranslatef(0,0,Graphics.world.height*10);
+//	glScalef(1,1,-1);
+
+	for(i = 0; i < Graphics.world.models.size(); i++)
+		Graphics.world.models[i]->precollides();
 
 	for(y = 0; y < Graphics.world.height; y++)
 //	for(y = 40; y < 60; y++)
 	{
+		if(y == 99)
+			Sleep(0);
 		Log(3,0,"%i %%", y);
 		for(x = 0; x < Graphics.world.width; x++)
 //		for(x = 40; x < 60; x++)
@@ -4386,12 +4391,6 @@ MENUCOMMAND(dolightmaps)
 					for(i = 0; i < Graphics.world.lights.size(); i++)
 					{
 						cLight* l = &Graphics.world.lights[i];
-						glTranslatef(l->pos.x*5, l->pos.y, l->pos.z*5);
-						glEnable(GL_TEXTURE_2D);
-						Graphics.world.light->draw();
-						glDisable(GL_TEXTURE_2D);
-						glTranslatef(-l->pos.x*5, -l->pos.y, -l->pos.z*5);
-
 						cVector3 diff = worldpos - cVector3(l->pos.x*5, l->pos.y, l->pos.z*5);
 						float bla = diff.Magnitude();
 						bool obstructed = false;
@@ -4412,13 +4411,13 @@ MENUCOMMAND(dolightmaps)
 						}
 						else
 						{
-							//buf[yy*8 + xx + 9] = 0;//min(255, buf[yy*8 + xx + 9] + max(0, l->todo2 - bla));
 						}
 					}
 				}
 			}
 		}
 	}
+
 
 
 /*

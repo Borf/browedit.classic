@@ -650,12 +650,355 @@ cRSMModel::~cRSMModel()
 
 bool cRSMModel::collides(cVector3 start, cVector3 end)
 {
-	if (meshes.size() == 0)
+	cVector3 triangle[3];
+	float t = 0;
+
+	bool collide = false;
+	do
+	{
+		//bottom
+		triangle[0] = cVector3(absolutebbv1_[0], -absolutebbv1_[1], absolutebbv1_[2]);
+		triangle[1] = cVector3(absolutebbv2_[0], -absolutebbv2_[1], absolutebbv2_[2]);
+		triangle[2] = cVector3(absolutebbv3_[0], -absolutebbv3_[1], absolutebbv3_[2]);
+		if(LineIntersectPolygon(triangle, 3, start, end, t))
+		{
+			collide = true;
+			break;
+		}
+		triangle[0] = cVector3(absolutebbv1_[0], -absolutebbv1_[1], absolutebbv1_[2]);
+		triangle[1] = cVector3(absolutebbv3_[0], -absolutebbv3_[1], absolutebbv3_[2]);
+		triangle[2] = cVector3(absolutebbv4_[0], -absolutebbv4_[1], absolutebbv4_[2]);
+		if(LineIntersectPolygon(triangle, 3, start, end, t))
+		{
+			collide = true;
+			break;
+		}
+		//top
+		triangle[0] = cVector3(absolutebbv5_[0], -absolutebbv5_[1], absolutebbv5_[2]);
+		triangle[1] = cVector3(absolutebbv6_[0], -absolutebbv6_[1], absolutebbv6_[2]);
+		triangle[2] = cVector3(absolutebbv7_[0], -absolutebbv7_[1], absolutebbv7_[2]);
+		if(LineIntersectPolygon(triangle, 3, start, end, t))
+		{
+			collide = true;
+			break;
+		}
+		triangle[0] = cVector3(absolutebbv5_[0], -absolutebbv5_[1], absolutebbv5_[2]);
+		triangle[1] = cVector3(absolutebbv7_[0], -absolutebbv7_[1], absolutebbv7_[2]);
+		triangle[2] = cVector3(absolutebbv8_[0], -absolutebbv8_[1], absolutebbv8_[2]);
+		if(LineIntersectPolygon(triangle, 3, start, end, t))
+		{
+			collide = true;
+			break;
+		}
+
+
+		//front
+		triangle[0] = cVector3(absolutebbv1_[0], -absolutebbv1_[1], absolutebbv1_[2]);
+		triangle[1] = cVector3(absolutebbv2_[0], -absolutebbv2_[1], absolutebbv2_[2]);
+		triangle[2] = cVector3(absolutebbv6_[0], -absolutebbv6_[1], absolutebbv6_[2]);
+		if(LineIntersectPolygon(triangle, 3, start, end, t))
+		{
+			collide = true;
+			break;
+		}
+		triangle[0] = cVector3(absolutebbv1_[0], -absolutebbv1_[1], absolutebbv1_[2]);
+		triangle[1] = cVector3(absolutebbv5_[0], -absolutebbv5_[1], absolutebbv5_[2]);
+		triangle[2] = cVector3(absolutebbv6_[0], -absolutebbv6_[1], absolutebbv6_[2]);
+		if(LineIntersectPolygon(triangle, 3, start, end, t))
+		{
+			collide = true;
+			break;
+		}
+
+		//back
+		triangle[0] = cVector3(absolutebbv4_[0], -absolutebbv4_[1], absolutebbv4_[2]);
+		triangle[1] = cVector3(absolutebbv3_[0], -absolutebbv3_[1], absolutebbv3_[2]);
+		triangle[2] = cVector3(absolutebbv7_[0], -absolutebbv7_[1], absolutebbv7_[2]);
+		if(LineIntersectPolygon(triangle, 3, start, end, t))
+		{
+			collide = true;
+			break;
+		}
+		triangle[0] = cVector3(absolutebbv4_[0], -absolutebbv5_[1], absolutebbv4_[2]);
+		triangle[1] = cVector3(absolutebbv7_[0], -absolutebbv7_[1], absolutebbv7_[2]);
+		triangle[2] = cVector3(absolutebbv8_[0], -absolutebbv8_[1], absolutebbv8_[2]);
+		if(LineIntersectPolygon(triangle, 3, start, end, t))
+		{
+			collide = true;
+			break;
+		}
+
+		//left
+		triangle[0] = cVector3(absolutebbv1_[0], -absolutebbv1_[1], absolutebbv1_[2]);
+		triangle[1] = cVector3(absolutebbv5_[0], -absolutebbv5_[1], absolutebbv5_[2]);
+		triangle[2] = cVector3(absolutebbv8_[0], -absolutebbv8_[1], absolutebbv8_[2]);
+		if(LineIntersectPolygon(triangle, 3, start, end, t))
+		{
+			collide = true;
+			break;
+		}
+		triangle[0] = cVector3(absolutebbv1_[0], -absolutebbv1_[1], absolutebbv1_[2]);
+		triangle[1] = cVector3(absolutebbv4_[0], -absolutebbv4_[1], absolutebbv4_[2]);
+		triangle[2] = cVector3(absolutebbv8_[0], -absolutebbv8_[1], absolutebbv8_[2]);
+		if(LineIntersectPolygon(triangle, 3, start, end, t))
+		{
+			collide = true;
+			break;
+		}
+
+		//right
+		triangle[0] = cVector3(absolutebbv2_[0], -absolutebbv2_[1], absolutebbv2_[2]);
+		triangle[1] = cVector3(absolutebbv3_[0], -absolutebbv3_[1], absolutebbv3_[2]);
+		triangle[2] = cVector3(absolutebbv7_[0], -absolutebbv7_[1], absolutebbv7_[2]);
+		if(LineIntersectPolygon(triangle, 3, start, end, t))
+		{
+			collide = true;
+			break;
+		}
+		triangle[0] = cVector3(absolutebbv2_[0], -absolutebbv2_[1], absolutebbv2_[2]);
+		triangle[1] = cVector3(absolutebbv6_[0], -absolutebbv6_[1], absolutebbv6_[2]);
+		triangle[2] = cVector3(absolutebbv7_[0], -absolutebbv7_[1], absolutebbv7_[2]);
+		if(LineIntersectPolygon(triangle, 3, start, end, t))
+		{
+			collide = true;
+			break;
+		}
+	} while(1 == 0);
+
+	if(!collide)
 		return false;
+
+	//return true;
+
+	glPushMatrix();
+	glTranslatef(5*pos.x, -pos.y, 5*pos.z);
+	glRotatef(-rot.x, 1.0, 0.0, 0.0);
+	glRotatef(-rot.z, 0.0, 0.0, 1.0);
+	glRotatef(rot.y, 0.0, 1.0, 0.0);
+
+	glScalef(scale.x, -scale.y, scale.z);
+
+	glTranslatef(-bb2.bbrange[0], bb2.bbmin[1], -bb2.bbrange[2]);
+	bool b = collides2(&bb,0, NULL, meshes.size() == 1, start, end);
+	recalcbb = false;
+
+	glPopMatrix();
+	
+	return b;
+}
+
+
+bool cRSMModel::collides2(cBoundingbox* box, int mesh, float* transf, bool only, cVector3 start, cVector3 end)
+{
+	glPushMatrix();
+	bool b = meshes[mesh]->collides(box,transf, meshes.size() == 1, this, start, end);
+	if(b)
+		return true;
+
+	for(int i = 0; i < meshes.size(); i++)
+	{
+		if(i != mesh && fathers[i] == mesh)
+		{
+			b = collides2((mesh == 0) ? box : NULL, i, meshes[mesh]->trans, only, start, end);
+			if (b)
+				return true;
+		}
+	}
+	glPopMatrix();
+	return false;
+}
+
+
+
+
+
+bool cRSMModelMesh::collides(cBoundingbox* box, float* ptransf, bool only, cRSMModel* model, cVector3 start, cVector3 end)
+{
+	bool main = (ptransf == NULL);
+	GLfloat Rot[16];
+	GLfloat Ori[16];
+	int i;
+
+	Rot[0] = trans[0];
+	Rot[1] = trans[1];
+	Rot[2] = trans[2];
+	Rot[3] = 0.0;
+
+	Rot[4] = trans[3];
+	Rot[5] = trans[4];
+	Rot[6] = trans[5];
+	Rot[7] = 0.0;
+
+	Rot[8] = trans[6];
+	Rot[9] = trans[7];
+	Rot[10] = trans[8];
+	Rot[11] = 0.0;
+
+	Rot[12] = 0.0;
+	Rot[13] = 0.0;
+	Rot[14] = 0.0;
+	Rot[15] = 1.0;
+
+	if(frames.size() > 0)
+	{	int i;
+		int current = 0;
+		int next;
+		GLfloat t;
+
+		for (i = 0; i < frames.size(); i++) {
+			if (nstep < frames[i].time) {
+				current = i-1;
+				break;
+			}
+		}
+
+		next = current + 1;
+		if (next == frames.size())
+			next = 0;
+
+		t = ((GLfloat) (nstep-frames[current].time))
+			/((GLfloat) (frames[next].time-frames[current].time));
+
+		//for (i = 0; i < 4; i++) {
+		//	q[i] = frames[current].orientation[i] * (1-t) + t * frames[next].orientation[i];
+		//}
+
+		float x = frames[current].quat[0] * (1-t) + t * frames[next].quat[0];
+		float y = frames[current].quat[1] * (1-t) + t * frames[next].quat[1];
+		float z = frames[current].quat[2] * (1-t) + t * frames[next].quat[2];
+		float w = frames[current].quat[3] * (1-t) + t * frames[next].quat[3];
+
+		GLfloat norm;
+		norm = sqrtf(x*x+y*y+z*z+w*w);
+
+		//for (i = 0; i < 4; i++)
+		//	q[i] /= norm;
+		x /= norm;
+		y /= norm;
+		z /= norm;
+		w /= norm;
+
+		// First row
+		Ori[ 0] = 1.0f - 2.0f * ( y * y + z * z ); 
+		Ori[ 1] = 2.0f * (x * y + z * w);
+		Ori[ 2] = 2.0f * (x * z - y * w);
+		Ori[ 3] = 0.0f;  
+
+		// Second row
+		Ori[ 4] = 2.0f * ( x * y - z * w );  
+		Ori[ 5] = 1.0f - 2.0f * ( x * x + z * z ); 
+		Ori[ 6] = 2.0f * (z * y + x * w );  
+		Ori[ 7] = 0.0f;  
+
+		// Third row
+		Ori[ 8] = 2.0f * ( x * z + y * w );
+		Ori[ 9] = 2.0f * ( y * z - x * w );
+		Ori[10] = 1.0f - 2.0f * ( x * x + y * y );  
+		Ori[11] = 0.0f;  
+
+		// Fourth row
+		Ori[12] = 0;  
+		Ori[13] = 0;  
+		Ori[14] = 0;  
+		Ori[15] = 1.0f;
+
+		nstep += 100;
+		if (nstep >= frames[frames.size()-1].time)
+			nstep = 0;
+	}
+	
+
+	if(main)
+	{	if(!only)
+			glTranslatef(-box->bbrange[0], -box->bbmax[1], -box->bbrange[2]);
+		else
+			glTranslatef(0, -box->bbmax[1]+box->bbrange[1], 0);
+	}
+
+	if(!main)
+		glTranslatef(trans[12], trans[13], trans[14]);
+
+	if(frames.size() == 0)
+		glRotatef(trans[15]*180.0/3.14159, trans[16], trans[17], trans[18]);
+	else
+		glMultMatrixf(Ori);
+
+	glScalef(trans[19], trans[20], trans[21]);
+
+
+	glPushMatrix();
+
+	if(main && only)
+		glTranslatef(-box->bbrange[0], -box->bbrange[1], -box->bbrange[2]);
+
+	if (!main || !only)
+		glTranslatef(trans[9], trans[10], trans[11]);
+
+	glMultMatrixf(Rot);
+
+	cVector3 v1 = cVector3(999999,999999,999999);
+	cVector3 v2 = cVector3(-999999,-999999,-999999);
+
+	float ModelMatrix[16]; 
+	glGetFloatv(GL_MODELVIEW_MATRIX, ModelMatrix);
+	float mmin = min(min(model->bb2.bbmin[0], model->bb.bbmin[1]), model->bb2.bbmin[2]) / 5;
+	mmin -= 4;
+	float mmax = max(max(model->bb2.bbmax[0], model->bb.bbmax[1]), model->bb2.bbmax[2]) / 5;
+	mmax += 4;
+
+	for(i = 0; i < nFaces; i++)
+	{
+		cRSMModelFace* f = &faces[i];
+		float v[3];
+		cVector3 triangle[3];
+		MatrixMultVect(ModelMatrix, vertices[f->v[0]], v);
+		triangle[0] = cVector3(v[0], v[1], v[2]);
+		MatrixMultVect(ModelMatrix, vertices[f->v[1]], v);
+		triangle[1] = cVector3(v[0], v[1], v[2]);
+		MatrixMultVect(ModelMatrix, vertices[f->v[2]], v);
+		triangle[2] = cVector3(v[0], v[1], v[2]);
+		glPopMatrix();
+
+/*		glBegin(GL_LINE_LOOP);
+			glVertex3f(triangle[0].x, triangle[0].y, triangle[0].z);
+			glVertex3f(triangle[1].x, triangle[1].y, triangle[1].z);
+			glVertex3f(triangle[2].x, triangle[2].y, triangle[2].z);
+		glEnd();*/
+
+//		cVector3 normal = Normal(triangle);
+//		cVector3 camera = cVector3(0,1000,0);
+
+//		if (camera.Dot(normal) < 0)
+//			continue;
+
+		float t = 0;
+
+		if (LineIntersectPolygon(triangle, 3, end, start, t))
+		{
+			return true;
+		}
+	}
+
+
+	return false; 
+}
+
+
+
+
+
+
+
+
+
+void cRSMModel::precollides()
+{
+	if (meshes.size() == 0)
+		return;
 	glPushMatrix();
 	glLoadIdentity();
-	glTranslatef(0,0,Graphics.world.height*10);
-	glScalef(1,1,-1);
+	//glTranslatef(0,0,Graphics.world.height*10);
+	//glScalef(1,1,-1);
 	glTranslatef(5*pos.x, -pos.y, 5*pos.z);
 	glRotatef(-rot.x, 1.0, 0.0, 0.0);
 	glRotatef(-rot.z, 0.0, 0.0, 1.0);
@@ -672,179 +1015,15 @@ bool cRSMModel::collides(cVector3 start, cVector3 end)
 
 	cVector3 v1 = cVector3(bb2.bbmin[0], bb2.bbmin[1], bb2.bbmin[2]);
 	cVector3 v2 = cVector3(bb2.bbmax[0], bb2.bbmax[1], bb2.bbmax[2]);
-	float v1_[3];
-	float v2_[3];
-	float v3_[3];
-	float v4_[3];
-	float v5_[3];
-	float v6_[3];
-	float v7_[3];
-	float v8_[3];
 
-	MatrixMultVect(ModelMatrix, cVector3(v1.x, v1.y, v1.z), v1_);
-	MatrixMultVect(ModelMatrix, cVector3(v2.x, v1.y, v1.z), v2_);
-	MatrixMultVect(ModelMatrix, cVector3(v2.x, v1.y, v2.z), v3_);
-	MatrixMultVect(ModelMatrix, cVector3(v1.x, v1.y, v2.z), v4_);
-	MatrixMultVect(ModelMatrix, cVector3(v1.x, v2.y, v1.z), v5_);
-	MatrixMultVect(ModelMatrix, cVector3(v2.x, v2.y, v1.z), v6_);
-	MatrixMultVect(ModelMatrix, cVector3(v2.x, v2.y, v2.z), v7_);
-	MatrixMultVect(ModelMatrix, cVector3(v1.x, v2.y, v2.z), v8_);
-
-/*	glColor4f(1,1,1,1);
-	glDisable(GL_TEXTURE_2D);
-
-	glBegin(GL_LINE_LOOP);
-		glVertex3f(v1.x, -v1.y, v1.z);
-		glVertex3f(v2.x, -v1.y, v1.z);
-		glVertex3f(v2.x, -v1.y, v2.z);
-		glVertex3f(v1.x, -v1.y, v2.z);
-	glEnd();
-	glBegin(GL_LINE_LOOP);
-		glVertex3f(v1.x, -v2.y, v1.z);
-		glVertex3f(v2.x, -v2.y, v1.z);
-		glVertex3f(v2.x, -v2.y, v2.z);
-		glVertex3f(v1.x, -v2.y, v2.z);
-	glEnd();
-	glBegin(GL_LINES);
-		glVertex3f(v1.x, -v1.y, v1.z);
-		glVertex3f(v1.x, -v2.y, v1.z);
-		glVertex3f(v2.x, -v1.y, v1.z);
-		glVertex3f(v2.x, -v2.y, v1.z);
-		glVertex3f(v2.x, -v1.y, v2.z);
-		glVertex3f(v2.x, -v2.y, v2.z);
-		glVertex3f(v1.x, -v1.y, v2.z);
-		glVertex3f(v1.x, -v2.y, v2.z);
-	glEnd();*/
+	MatrixMultVect(ModelMatrix, cVector3(v1.x, v1.y, v1.z), absolutebbv1_);
+	MatrixMultVect(ModelMatrix, cVector3(v2.x, v1.y, v1.z), absolutebbv2_);
+	MatrixMultVect(ModelMatrix, cVector3(v2.x, v1.y, v2.z), absolutebbv3_);
+	MatrixMultVect(ModelMatrix, cVector3(v1.x, v1.y, v2.z), absolutebbv4_);
+	MatrixMultVect(ModelMatrix, cVector3(v1.x, v2.y, v1.z), absolutebbv5_);
+	MatrixMultVect(ModelMatrix, cVector3(v2.x, v2.y, v1.z), absolutebbv6_);
+	MatrixMultVect(ModelMatrix, cVector3(v2.x, v2.y, v2.z), absolutebbv7_);
+	MatrixMultVect(ModelMatrix, cVector3(v1.x, v2.y, v2.z), absolutebbv8_);
 	glPopMatrix();	
-
-
-/*	glBegin(GL_LINE_LOOP);
-		glVertex3f(v1_[0], v1_[1], v1_[2]);
-		glVertex3f(v2_[0], v2_[1], v2_[2]);
-		glVertex3f(v3_[0], v3_[1], v3_[2]);
-	glEnd();
-
-	glBegin(GL_LINE_LOOP);
-		glVertex3f(v1_[0], v1_[1], v1_[2]);
-		glVertex3f(v4_[0], v4_[1], v4_[2]);
-		glVertex3f(v3_[0], v3_[1], v3_[2]);
-	glEnd();
-
-	glBegin(GL_LINE_LOOP);
-		glVertex3f(v5_[0], -v5_[1], v5_[2]);
-		glVertex3f(v6_[0], -v6_[1], v6_[2]);
-		glVertex3f(v7_[0], -v7_[1], v7_[2]);
-	glEnd();
-
-	glBegin(GL_LINE_LOOP);
-		glVertex3f(v5_[0], -v5_[1], v5_[2]);
-		glVertex3f(v8_[0], -v8_[1], v8_[2]);
-		glVertex3f(v7_[0], -v7_[1], v7_[2]);
-	glEnd();
-
-	glEnable(GL_TEXTURE_2D);*/
-
-	cVector3 triangle[3];
-	float t = 0;
-
-//	end = cVector3(500,50,500);
-
-	//bottom
-	triangle[0] = cVector3(v1_[0], -v1_[1], v1_[2]);
-	triangle[1] = cVector3(v2_[0], -v2_[1], v2_[2]);
-	triangle[2] = cVector3(v3_[0], -v3_[1], v3_[2]);
-	if(LineIntersectPolygon(triangle, 3, start, end, t))
-	{
-		return true;
-	}
-	triangle[0] = cVector3(v1_[0], -v1_[1], v1_[2]);
-	triangle[1] = cVector3(v3_[0], -v3_[1], v3_[2]);
-	triangle[2] = cVector3(v4_[0], -v4_[1], v4_[2]);
-	if(LineIntersectPolygon(triangle, 3, start, end, t))
-	{
-		return true;
-	}
-	//top
-	triangle[0] = cVector3(v5_[0], -v5_[1], v5_[2]);
-	triangle[1] = cVector3(v6_[0], -v6_[1], v6_[2]);
-	triangle[2] = cVector3(v7_[0], -v7_[1], v7_[2]);
-	if(LineIntersectPolygon(triangle, 3, start, end, t))
-	{
-		return true;
-	}
-	triangle[0] = cVector3(v5_[0], -v5_[1], v5_[2]);
-	triangle[1] = cVector3(v7_[0], -v7_[1], v7_[2]);
-	triangle[2] = cVector3(v8_[0], -v8_[1], v8_[2]);
-	if(LineIntersectPolygon(triangle, 3, start, end, t))
-	{
-		return true;
-	}
-
-
-	//front
-	triangle[0] = cVector3(v1_[0], -v1_[1], v1_[2]);
-	triangle[1] = cVector3(v2_[0], -v2_[1], v2_[2]);
-	triangle[2] = cVector3(v6_[0], -v6_[1], v6_[2]);
-	if(LineIntersectPolygon(triangle, 3, start, end, t))
-	{
-		return true;
-	}
-	triangle[0] = cVector3(v1_[0], -v1_[1], v1_[2]);
-	triangle[1] = cVector3(v5_[0], -v5_[1], v5_[2]);
-	triangle[2] = cVector3(v6_[0], -v6_[1], v6_[2]);
-	if(LineIntersectPolygon(triangle, 3, start, end, t))
-	{
-		return true;
-	}
-
-	//back
-	triangle[0] = cVector3(v4_[0], -v4_[1], v4_[2]);
-	triangle[1] = cVector3(v3_[0], -v3_[1], v3_[2]);
-	triangle[2] = cVector3(v7_[0], -v7_[1], v7_[2]);
-	if(LineIntersectPolygon(triangle, 3, start, end, t))
-	{
-		return true;
-	}
-	triangle[0] = cVector3(v4_[0], -v5_[1], v4_[2]);
-	triangle[1] = cVector3(v7_[0], -v7_[1], v7_[2]);
-	triangle[2] = cVector3(v8_[0], -v8_[1], v8_[2]);
-	if(LineIntersectPolygon(triangle, 3, start, end, t))
-	{
-		return true;
-	}
-
-	//left
-	triangle[0] = cVector3(v1_[0], -v1_[1], v1_[2]);
-	triangle[1] = cVector3(v5_[0], -v5_[1], v5_[2]);
-	triangle[2] = cVector3(v8_[0], -v8_[1], v8_[2]);
-	if(LineIntersectPolygon(triangle, 3, start, end, t))
-	{
-		return true;
-	}
-	triangle[0] = cVector3(v1_[0], -v1_[1], v1_[2]);
-	triangle[1] = cVector3(v4_[0], -v4_[1], v4_[2]);
-	triangle[2] = cVector3(v8_[0], -v8_[1], v8_[2]);
-	if(LineIntersectPolygon(triangle, 3, start, end, t))
-	{
-		return true;
-	}
-
-	//right
-	triangle[0] = cVector3(v2_[0], -v2_[1], v2_[2]);
-	triangle[1] = cVector3(v3_[0], -v3_[1], v3_[2]);
-	triangle[2] = cVector3(v7_[0], -v7_[1], v7_[2]);
-	if(LineIntersectPolygon(triangle, 3, start, end, t))
-	{
-		return true;
-	}
-	triangle[0] = cVector3(v2_[0], -v2_[1], v2_[2]);
-	triangle[1] = cVector3(v6_[0], -v6_[1], v6_[2]);
-	triangle[2] = cVector3(v7_[0], -v7_[1], v7_[2]);
-	if(LineIntersectPolygon(triangle, 3, start, end, t))
-	{
-		return true;
-	}
-
-//	glPopMatrix();
-	return false;
+	return;
 }

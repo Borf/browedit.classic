@@ -60,6 +60,7 @@ public:
 
 
 	void draw(cBoundingbox*, float*, bool, cRSMModel*, bool,bool,bool);
+	bool collides(cBoundingbox*, float*, bool, cRSMModel*, cVector3, cVector3);
 	cRSMModelMesh()
 	{
 		nstep = 0;
@@ -87,6 +88,8 @@ public:
 	vector<int>				fathers;
 	vector<cTexture*> textures;
 	bool collides(cVector3, cVector3);
+	bool collides2(cBoundingbox*, int, float*, bool, cVector3, cVector3);
+	void precollides();
 
 	void draw(bool = true, bool = true,bool=false,bool=false);
 	void draw2(cBoundingbox*, int, float*, bool,bool,bool,bool);
@@ -101,6 +104,14 @@ public:
 	cBoundingbox bb2;
 
 
+	float absolutebbv1_[3];
+	float absolutebbv2_[3];
+	float absolutebbv3_[3];
+	float absolutebbv4_[3];
+	float absolutebbv5_[3];
+	float absolutebbv6_[3];
+	float absolutebbv7_[3];
+	float absolutebbv8_[3];
 };
 
 #endif
