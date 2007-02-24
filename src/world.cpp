@@ -7,6 +7,7 @@
 #include "texturecache.h"
 #include <fstream>
 #include "menu.h"
+#include "wm/hotkeywindow.h"
 #ifdef _WIN32
 #include <gd/gd.h>
 #else
@@ -71,6 +72,24 @@ void cWorld::load()
 			delete reallightmaps[y][x];
 		}
 	}
+
+	cWindow* wnd = Graphics.WM.getwindow(WT_HOTKEY);
+	if (wnd != NULL)
+	{
+		for(i = 0; i < 8; i++)
+		{
+			char buf[10];
+			sprintf(buf, "obj%i", i);
+			delete wnd->objects[buf];
+			cWindowObject* o = new cHotkeyWindow::cHotkeyButton(wnd);
+			o->moveto(20+32*i, 4);
+			o->resizeto(32,32);
+			wnd->objects[buf] = o;
+		}
+	}
+
+
+
 
 	tiles.clear();
 	for(i = 0; i < cubes.size(); i++)
@@ -414,6 +433,36 @@ void cWorld::load()
 
 	pFile->close();
 
+	wnd = Graphics.WM.getwindow(WT_HOTKEY);
+	if (wnd != NULL)
+	{
+		pFile = fs.open(string(filename) + ".locations");
+		if(pFile != NULL)
+		{
+			while(!pFile->eof())
+			{
+				int i;
+				i = pFile->get();
+				char buf[10];
+				sprintf(buf, "obj%i", i);
+
+				cHotkeyWindow::cHotkeyButton* o = (cHotkeyWindow::cHotkeyButton*)wnd->objects[buf];
+
+
+				pFile->read((char*)&o->cameraangle, 4);
+				pFile->read((char*)&o->cameraheight, 4);
+				pFile->read((char*)&o->camerarot, 4);
+				pFile->read((char*)&o->camerapointer.x, 4);
+				pFile->read((char*)&o->camerapointer.y, 4);
+				o->topcamera = pFile->get() != 0;
+				o->im = new char[256*256*3];
+				pFile->read(o->im, 256*256*3);
+				o->userfunc(NULL);
+				o->loaded = true;
+			}
+			pFile->close();
+		}
+	}
 
 
 	Log(3,0,"Done Loading %s", filename);
@@ -876,6 +925,30 @@ void cWorld::save()
 				pFile.put(0);
 				pFile.put(0);
 			}
+		}
+
+		pFile.close();
+	}
+	{
+		ofstream pFile((string(filename) + ".locations").c_str(), ios_base::out | ios_base::binary);
+		cWindow* w = Graphics.WM.getwindow(WT_HOTKEY);
+		for(int i = 0; i < 8; i++)
+		{
+			char buf[10];
+			sprintf(buf, "obj%i", i);
+			cHotkeyWindow::cHotkeyButton* o = (cHotkeyWindow::cHotkeyButton*)w->objects[buf];
+			if (o->loaded)
+			{
+				pFile.put(i);
+				pFile.write((char*)&o->cameraangle, 4);
+				pFile.write((char*)&o->cameraheight, 4);
+				pFile.write((char*)&o->camerarot, 4);
+				pFile.write((char*)&o->camerapointer.x, 4);
+				pFile.write((char*)&o->camerapointer.y, 4);
+				pFile.put(o->topcamera ? 1 : 0);
+				pFile.write(o->im, 256*256*3);
+			}
+			
 		}
 
 		pFile.close();

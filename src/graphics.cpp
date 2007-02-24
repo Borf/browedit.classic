@@ -5,6 +5,7 @@
 #include <GL/glu.h>												// Header File For The GLu32 Library
 #include <math.h>
 #include <map>
+#include "wm/hotkeywindow.h"
 
 #include "graphics.h"
 #include "menu.h"
@@ -357,6 +358,10 @@ int cGraphics::init()
 	splash = new cTexture();
 	splash->Load("data/hamtaro.tga");
 	WM.init();
+	cWindow* w = new cHotkeyWindow();
+	w->init(&WM.texture, &WM.font);
+	WM.addwindow(w);
+
 	int i;
 	for(i = 0; i < 7; i++)
 	{

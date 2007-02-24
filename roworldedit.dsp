@@ -229,6 +229,9 @@ SOURCE=.\src\Script1.rc
 # Begin Group "wm"
 
 # PROP Default_Filter ""
+# Begin Group "windows"
+
+# PROP Default_Filter ""
 # Begin Source File
 
 SOURCE=.\src\wm\ambientlightwindow.h
@@ -240,6 +243,10 @@ SOURCE=.\src\wm\confirmwindow.h
 # Begin Source File
 
 SOURCE=.\src\wm\effectwindow.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\hotkeywindow.h
 # End Source File
 # Begin Source File
 
@@ -257,14 +264,10 @@ SOURCE=.\src\wm\objectwindow.h
 
 SOURCE=.\src\wm\waterwindow.h
 # End Source File
-# Begin Source File
+# End Group
+# Begin Group "objects"
 
-SOURCE=.\src\wm\window.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\wm\window.h
-# End Source File
+# PROP Default_Filter ""
 # Begin Source File
 
 SOURCE=.\src\wm\windowbutton.cpp
@@ -280,6 +283,14 @@ SOURCE=.\src\wm\windowcheckbox.cpp
 # Begin Source File
 
 SOURCE=.\src\wm\windowcheckbox.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\windowframe.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\windowframe.h
 # End Source File
 # Begin Source File
 
@@ -364,6 +375,15 @@ SOURCE=.\src\wm\windowtabpanel.cpp
 # Begin Source File
 
 SOURCE=.\src\wm\windowtabpanel.h
+# End Source File
+# End Group
+# Begin Source File
+
+SOURCE=.\src\wm\window.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\window.h
 # End Source File
 # Begin Source File
 
