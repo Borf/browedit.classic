@@ -2603,8 +2603,6 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 								Graphics.world.gattiles[y][x].cell4 += 1;
 							}
 						}
-						for(int i = 0; i < Graphics.world.models.size(); i++)
-							Graphics.world.models[i]->pos.y+=10;
 					}
 					if (editmode == MODE_EFFECTS)
 					{
