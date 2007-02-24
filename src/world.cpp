@@ -1528,7 +1528,7 @@ void cWorld::draw()
 		}
 		glColor4f(1,1,1,1);
 	}
-	else if (editmode == MODE_GAT)
+	if (editmode == MODE_GAT || Graphics.showgat)
 	{
 		glEnable(GL_BLEND);
 		for(y = 0; y < gattiles.size(); y++)

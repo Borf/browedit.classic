@@ -53,6 +53,7 @@ public:
 
 		shownotiles = true;
 		selectioncenter = cVector3(-1,-1,-1);
+		showgat = false;
 	}
 
 	int						init();				// initializes graphics
@@ -77,6 +78,8 @@ public:
 	float					cameraangle;
 	float					camerarot;
 	cVector2				camerapointer;
+
+	bool					showgat;
 
 	bool					showgrid;
 	float					gridsize;

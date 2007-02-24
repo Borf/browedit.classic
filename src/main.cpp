@@ -499,6 +499,7 @@ int main(int argc, char *argv[])
 	mm->ticked = true;
 	ADDMENUITEMDATAP(mm,view,"Water Animation",&MenuCommand_toggle, (void*)&Graphics.animatewater);
 	mm->ticked = true;
+	ADDMENUITEMDATAP(mm,view,"Show gat tiles",&MenuCommand_toggle, (void*)&Graphics.showgat);
 
 
 	ADDMENUITEM(mm,mode,"Texture Edit",			&MenuCommand_mode);
@@ -539,7 +540,6 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,edit,"Flatten map",			&MenuCommand_flatten);
 	ADDMENUITEM(mm,edit,"Fill with selected texture",			&MenuCommand_fill);
 	ADDMENUITEM(mm,edit,"Set GAT height",		&MenuCommand_gatheight);
-	mm->ticked = true;
 	ADDMENUITEM(mm,edit,"Reset Colors",		&MenuCommand_fixcolors);
 	ADDMENUITEM(mm,edit,"Clear Objects",		&MenuCommand_clearobjects);
 	ADDMENUITEM(mm,edit,"Clear Effects",		&MenuCommand_cleareffects);
