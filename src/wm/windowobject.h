@@ -44,6 +44,7 @@ enum OBJECT_BASE
 	OBJECT_PROGRESSBAR,
 	OBJECT_SCROLLPANEL,
 	OBJECT_TABPANEL,
+	OBJECT_FRAME,
 };
 
 
@@ -68,6 +69,19 @@ public:
 		selectable = true;
 		type = OBJECT_UNDEFINED;
 	}	
+	cWindowObject(cWindow* p)
+	{
+		parent = p;
+		x = 10;
+		y = 10;
+		w = 100;
+		h = 100;
+		cursortype = 0;
+		alignment = ALIGN_CENTER;
+		selectable = true;
+		type = OBJECT_UNDEFINED;
+	}
+
 	virtual ~cWindowObject() {}
 	OBJECT_BASE type;
 

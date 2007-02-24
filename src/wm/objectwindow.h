@@ -14,7 +14,7 @@ extern cUndoStack undostack;
 class cWindowOkButton : public cWindowButton
 {
 public:
-	cWindowOkButton()
+	cWindowOkButton(cWindow* parent) : cWindowButton(parent)
 	{
 		alignment = ALIGN_BOTTOM;
 		moveto(100, 20);
@@ -36,7 +36,7 @@ public:
 class cWindowCancelButton : public cWindowButton
 {
 public:
-	cWindowCancelButton()
+	cWindowCancelButton(cWindow* parent) : cWindowButton(parent)
 	{
 		alignment = ALIGN_BOTTOM;
 		moveto(-100, 20);
@@ -59,7 +59,7 @@ class cWindowFloatInputBox : public cWindowInputBox
 	float* floatje;
 	float lastvalue;
 public:
-	cWindowFloatInputBox()
+	cWindowFloatInputBox(cWindow* parent) : cWindowInputBox(parent)
 	{
 		alignment = ALIGN_TOPLEFT;
 		resizeto(70,20);
@@ -106,6 +106,7 @@ public:
 
 	cObjectWindow()
 	{
+		cWindowObject* o;
 		wtype = WT_OBJECT;
 		resizable = false;
 		visible = true;
@@ -117,58 +118,16 @@ public:
 
 		defaultobject = "OkButton";
 
-		cWindowObject* o = new cWindowRollupButton();
-		o->parent = this;
-		objects["rollup"] = o;
-
-		o = new cWindowCloseButton();
-		o->parent = this;
-		objects["close"] = o;
+		objects["rollup"] = new cWindowRollupButton(this);
+		objects["close"] = new cWindowCloseButton(this);
 
 
-		o = new cWindowLabel();
-		o->parent = this;
-		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(15, 20);
-		o->resizeto(320, 100);
-		o->SetText(0, "Object:");
-		objects["text"] = o;
+		addlabel("text", 15,20,"Object:");
+		addlabel("lblPos", 15, 60, "Position:");
+		addlabel("lblScale", 15,80, "Scale:");
+		addlabel("lblRot", 15,100,"Rotation:");
 
-		o = new cWindowLabel();
-		o->parent = this;
-		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(15, 40);
-		o->resizeto(320, 100);
-		o->SetText(0, "Object:");
-		objects["text"] = o;
-
-
-		o = new cWindowLabel();
-		o->parent = this;
-		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(15, 60);
-		o->resizeto(320, 100);
-		o->SetText(0, "Position:");
-		objects["lblPos"] = o;
-
-		o = new cWindowLabel();
-		o->parent = this;
-		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(15, 80);
-		o->resizeto(320, 100);
-		o->SetText(0, "Scale:");
-		objects["lblScale"] = o;
-
-		o = new cWindowLabel();
-		o->parent = this;
-		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(15, 100);
-		o->resizeto(320, 100);
-		o->SetText(0, "Rotation:");
-		objects["lblRot"] = o;
-
-		o = new cWindowInputBox();
-		o->parent = this;
+		o = new cWindowInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,20);
 		o->resizeto(210,20);
@@ -176,8 +135,7 @@ public:
 		o->SetInt(0,0);
 		objects["objectmenu"] = o;
 
-		o = new cWindowInputBox();
-		o->parent = this;
+		o = new cWindowInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,40);
 		o->resizeto(210,20);
@@ -185,76 +143,62 @@ public:
 		o->SetInt(0,0);
 		objects["objectname"] = o;
 		
-		o = new cWindowFloatInputBox();
-		o->parent = this;
+		o = new cWindowFloatInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,60);
 		o->resizeto(70,20);
 		objects["posx"] = o;
 
-		o = new cWindowFloatInputBox();
-		o->parent = this;
+		o = new cWindowFloatInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(170,60);
 		o->resizeto(70,20);
 		objects["posy"] = o;
 		
-		o = new cWindowFloatInputBox();
-		o->parent = this;
+		o = new cWindowFloatInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(240,60);
 		o->resizeto(70,20);
 		objects["posz"] = o;
 		
-		o = new cWindowFloatInputBox();
-		o->parent = this;
+		o = new cWindowFloatInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,80);
 		o->resizeto(70,20);
 		objects["scalex"] = o;
 
-		o = new cWindowFloatInputBox();
-		o->parent = this;
+		o = new cWindowFloatInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(170,80);
 		o->resizeto(70,20);
 		objects["scaley"] = o;
 		
-		o = new cWindowFloatInputBox();
-		o->parent = this;
+		o = new cWindowFloatInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(240,80);
 		o->resizeto(70,20);
 		objects["scalez"] = o;
 		
-		o = new cWindowFloatInputBox();
-		o->parent = this;
+		o = new cWindowFloatInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,100);
 		o->resizeto(70,20);
 		objects["rotx"] = o;
 
-		o = new cWindowFloatInputBox();
-		o->parent = this;
+		o = new cWindowFloatInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(170,100);
 		o->resizeto(70,20);
 		objects["roty"] = o;
 		
-		o = new cWindowFloatInputBox();
-		o->parent = this;
+		o = new cWindowFloatInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(240,100);
 		o->resizeto(70,20);
 		objects["rotz"] = o;
 
-
-		o = new cWindowOkButton();
-		o->parent = this;
-		objects["OkButton"] = o;
-		o = new cWindowCancelButton();
-		o->parent = this;
-		objects["CancelButton"] = o;
+		objects["OkButton"] = new cWindowOkButton(this);
+		objects["CancelButton"] = new cWindowCancelButton(this);
 	}	
 
 	void* userfunc(void* param)

@@ -13,7 +13,7 @@ public:
 	vector<string>	tabs;
 	int selectedtab;
 
-	cWindowTabPanel()
+	cWindowTabPanel(cWindow* parent) : cWindowObject(parent)
 	{
 		w = 100;
 		h = 25;

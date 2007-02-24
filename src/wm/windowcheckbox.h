@@ -10,7 +10,7 @@ class cWindowCheckBox : public cWindowObject
 protected:
 	bool value;	
 public:
-	cWindowCheckBox()
+	cWindowCheckBox(cWindow* parent) : cWindowObject(parent)
 	{
 		w = 12;
 		h = 12;

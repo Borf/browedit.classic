@@ -13,7 +13,7 @@
 class cWaterWindowOkButton : public cWindowButton
 {
 public:
-	cWaterWindowOkButton()
+	cWaterWindowOkButton(cWindow* parent) : cWindowButton(parent)
 	{
 		alignment = ALIGN_BOTTOM;
 		moveto(0, 20);
@@ -49,25 +49,19 @@ public:
 
 		defaultobject = "OkButton";
 
-		cWindowObject* o = new cWindowRollupButton();
-		o->parent = this;
-		objects["rollup"] = o;
+		cWindowObject* o;
+		
+		objects["rollup"] = new cWindowRollupButton(this);
+		objects["close"] = new cWindowCloseButton(this);
 
-		o = new cWindowCloseButton();
-		o->parent = this;
-		objects["close"] = o;
-
-
-		o = new cWindowLabel();
-		o->parent = this;
+		o = new cWindowLabel(this);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(15, 20);
 		o->resizeto(320, 100);
 		o->SetText(0, "Amplitude:");
 		objects["lblAmplitude"] = o;
 
-		o = new cWindowLabel();
-		o->parent = this;
+		o = new cWindowLabel(this);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(15, 40);
 		o->resizeto(320, 100);
@@ -75,84 +69,72 @@ public:
 		objects["lblHeight"] = o;
 
 
-		o = new cWindowLabel();
-		o->parent = this;
+		o = new cWindowLabel(this);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(15, 60);
 		o->resizeto(320, 100);
 		o->SetText(0, "Phase:");
 		objects["lblPhase"] = o;
 
-		o = new cWindowLabel();
-		o->parent = this;
+		o = new cWindowLabel(this);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(15, 80);
 		o->resizeto(320, 100);
 		o->SetText(0, "SurfaceCycle:");
 		objects["lblSurfaceCycle"] = o;
 
-		o = new cWindowLabel();
-		o->parent = this;
+		o = new cWindowLabel(this);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(15, 100);
 		o->resizeto(320, 100);
 		o->SetText(0, "TextureCycle:");
 		objects["lblTexCycle"] = o;
 
-		o = new cWindowLabel();
-		o->parent = this;
+		o = new cWindowLabel(this);
+
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(15, 120);
 		o->resizeto(320, 100);
 		o->SetText(0, "Type:");
 		objects["lblType"] = o;
 
-		o = new cWindowInputBox();
-		o->parent = this;
+		o = new cWindowInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(120,20);
 		o->resizeto(70,20);
 		objects["amplitude"] = o;
 		
-		o = new cWindowInputBox();
-		o->parent = this;
+		o = new cWindowInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(120,40);
 		o->resizeto(70,20);
 		objects["height"] = o;
 
-		o = new cWindowInputBox();
-		o->parent = this;
+		o = new cWindowInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(120,60);
 		o->resizeto(70,20);
 		objects["phase"] = o;
 
-		o = new cWindowInputBox();
-		o->parent = this;
+		o = new cWindowInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(120,80);
 		o->resizeto(70,20);
 		objects["surfacecurve"] = o;
 
-		o = new cWindowInputBox();
-		o->parent = this;
+		o = new cWindowInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(120,100);
 		o->resizeto(70,20);
 		objects["texcycle"] = o;
 
-		o = new cWindowInputBox();
-		o->parent = this;
+		o = new cWindowInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(120,120);
 		o->resizeto(70,20);
 		objects["type"] = o;
 		
-		
-		o = new cWaterWindowOkButton();
-		o->parent = this;
-		objects["OkButton"] = o;
+		objects["OkButton"] = new cWaterWindowOkButton(this);
 	}	
 };
 

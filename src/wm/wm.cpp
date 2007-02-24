@@ -6,7 +6,6 @@
 #include "confirmwindow.h"
 extern cGraphics Graphics;
 extern cWindow* draggingwindow;
-extern string fontname;
 
 int cWM::draw()
 {
@@ -42,7 +41,7 @@ int cWM::draw()
 int cWM::init()
 {
 	texture.Load("data\\window.tga");
-	font.load("data\\fonts\\"+fontname+".tga");
+	font.load("data\\fonts\\tahoma.tga");
 
 	focus = 0;
 	Log(3,0,"Window Manager initialized");

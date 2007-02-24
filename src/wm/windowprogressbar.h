@@ -15,7 +15,7 @@ protected:
 	int value;
 	bool gradcolors;
 public:
-	cWindowProgressBar()
+	cWindowProgressBar(cWindow* parent) : cWindowObject(parent)
 	{
 		w = 100;
 		h = 10;

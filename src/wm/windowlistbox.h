@@ -9,14 +9,14 @@ using namespace std;
 class cWindowListBox : public cWindowObject
 {
 protected:
-	vector<string>	values;
 	int				liststart;
 	int				selected;
-	vector<int>		properties;
 	bool			showselection;
 	bool			showscroll;
 public:
-	cWindowListBox()
+	vector<string>	values;
+	vector<int>		properties;
+	cWindowListBox(cWindow* parent) : cWindowObject(parent)
 	{
 		w = 280;
 		h = 100;

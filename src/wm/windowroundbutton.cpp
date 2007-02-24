@@ -7,7 +7,6 @@
 #include "../graphics.h"
 extern cGraphics Graphics;
 
-
 void cWindowRoundButton::draw()
 {
 	GLfloat colors[4];

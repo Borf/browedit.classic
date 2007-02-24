@@ -9,7 +9,7 @@ class cWindowLine : public cWindowObject
 protected:
 	int r,g,b;
 public:
-	cWindowLine()
+	cWindowLine(cWindow* parent) : cWindowObject(parent)
 	{
 		w = 100;
 		h = 100;

@@ -135,6 +135,7 @@ public:
 	virtual bool onkeydown(int);
 	virtual bool onchar(char);
 
+	cWindowObject* addlabel(string, int,int,string);
 
 	void center();
 

@@ -15,7 +15,7 @@ protected:
 	bool editable;
 	int selectionstart;
 public:
-	cWindowInputBox()
+	cWindowInputBox(cWindow* parent) : cWindowObject(parent)
 	{
 		w = 100;
 		h = 25;

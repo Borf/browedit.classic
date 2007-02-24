@@ -18,7 +18,7 @@ public:
 	int scrollposx;
 	int scrollposy;
 
-	cWindowScrollPanel()
+	cWindowScrollPanel(cWindow* parent) : cWindowObject(parent)
 	{
 		w = 100;
 		h = 25;

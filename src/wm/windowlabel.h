@@ -13,7 +13,7 @@ protected:
 	string lasttext;
 	vector<string> lines;
 public:
-	cWindowLabel()
+	cWindowLabel(cWindow* parent) : cWindowObject(parent)
 	{
 		w = 30;
 		h = 100;

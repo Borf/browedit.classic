@@ -7,7 +7,7 @@
 class cWindowRoundButton : public cWindowObject
 {
 public:
-	cWindowRoundButton()
+	cWindowRoundButton(cWindow* parent) : cWindowObject(parent)
 	{
 		cursortype = 1;
 		type = OBJECT_ROUNDBUTTON;
@@ -21,7 +21,7 @@ public:
 class cWindowCloseButton : public cWindowRoundButton
 {
 public:
-	cWindowCloseButton()
+	cWindowCloseButton(cWindow* parent) : cWindowRoundButton(parent)
 	{
 		resizeto(11, 11);
 		moveto(4, 4);
@@ -36,7 +36,7 @@ public:
 class cWindowRollupButton : public cWindowRoundButton
 {
 public:
-	cWindowRollupButton()
+	cWindowRollupButton(cWindow* parent) : cWindowRoundButton(parent)
 	{
 		resizeto(11, 11);
 		moveto(16, 4);

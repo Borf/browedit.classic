@@ -52,7 +52,6 @@ public:
 
 	void				printdebug();
 	void				defocus();
-
 };
 
 #endif

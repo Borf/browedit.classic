@@ -1,11 +1,11 @@
 #include "window.h"
 #include "../graphics.h"
 
-extern float mousex, mousey;
 extern cGraphics Graphics;
 extern cWindowObject* draggingobject;
 
 #include "windowinputbox.h"
+#include "windowlabel.h"
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
 
@@ -290,9 +290,9 @@ bool cWindow::onkeydown(int c)
 	if (c == SDLK_RETURN)
 	{
 		if (objects.find(defaultobject) != objects.end())
-			return objects[defaultobject]->onkeyup(c);
+			return objects[defaultobject]->onkeydown(c);
 		else if (selectedobject != NULL)
-			return selectedobject->onkeyup(c);
+			return selectedobject->onkeydown(c);
 
 	}
 	else if (c == SDLK_TAB)
@@ -413,4 +413,16 @@ void cWindow::rightclick()
 		}
 	}
 
+}
+
+
+cWindowObject* cWindow::addlabel(string name, int x, int y, string text)
+{
+	cWindowObject* o = new cWindowLabel(this);
+	o->alignment = ALIGN_TOPLEFT;
+	o->moveto(x,y);
+	o->resizeto(Graphics.WM.font.textlen(text), 12);
+	o->SetText(0,text);
+	objects[name] = o;
+	return o;
 }

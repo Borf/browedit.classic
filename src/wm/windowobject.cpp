@@ -5,7 +5,6 @@
 #include <GL/glu.h>												// Header File For The GLu32 Library
 #include "../graphics.h"
 
-extern float mousex, mousey;
 extern cGraphics Graphics;
 void cWindowObject::draw()
 {

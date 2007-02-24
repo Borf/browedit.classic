@@ -16,7 +16,7 @@ class cConfirmWindow : public cWindow
 	class cWindowOkButton : public cWindowButton
 	{
 	public:
-		cWindowOkButton()
+		cWindowOkButton(cWindow* parent) : cWindowButton(parent)
 		{
 			alignment = ALIGN_BOTTOMLEFT;
 			moveto(20, 20);
@@ -33,7 +33,7 @@ class cConfirmWindow : public cWindow
 	class cWindowCancelButton : public cWindowButton
 	{
 	public:
-		cWindowCancelButton()
+		cWindowCancelButton(cWindow* parent) : cWindowButton(parent)
 		{
 			alignment = ALIGN_BOTTOMRIGHT;
 			moveto(20, 20);
@@ -74,29 +74,11 @@ public:
 
 		defaultobject = "OkButton";
 
-		cWindowObject* o = new cWindowRollupButton();
-		o->parent = this;
-		objects["rollup"] = o;
-
-		o = new cWindowCloseButton();
-		o->parent = this;
-		objects["close"] = o;
-
-		o = new cWindowLabel();
-		o->parent = this;
-		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(15, 40);
-		o->resizeto(320, 100);
-		o->SetText(0, "UserId");
-		objects["text"] = o;
-
-		o = new cWindowOkButton();
-		o->parent = this;
-		objects["OkButton"] = o;
-
-		o = new cWindowCancelButton();
-		o->parent = this;
-		objects["CancelButton"] = o;
+		objects["rollup"] = new cWindowRollupButton(this);
+		objects["close"] = new cWindowCloseButton(this);;
+		addlabel("text", 15,40,"UserId");
+		objects["OkButton"] = new cWindowOkButton(this);
+		objects["CancelButton"] = new cWindowCancelButton(this);
 	
 	}	
 

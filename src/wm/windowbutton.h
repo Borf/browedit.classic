@@ -10,7 +10,7 @@ class cWindowButton : public cWindowObject
 protected:
 	string text;
 public:
-	cWindowButton()
+	cWindowButton(cWindow* parent) : cWindowObject(parent)
 	{
 		w = 100;
 		h = 25;

@@ -14,7 +14,7 @@ protected:
 	cTexture* tex;
 	int highlightmode;
 public:
-	cWindowPictureBox()
+	cWindowPictureBox(cWindow* parent) : cWindowObject(parent)
 	{
 		highlightmode = 0;
 		w = 100;

@@ -10,7 +10,7 @@ class cWindowMainButton : public cWindowButton
 protected:
 	string text;
 public:
-	cWindowMainButton()
+	cWindowMainButton(cWindow* parent) : cWindowButton(parent)
 	{
 		cursortype = 1;
 		type = OBJECT_MAINBUTTON;

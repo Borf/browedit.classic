@@ -11,7 +11,7 @@
 class cWindowOkButton : public cWindowButton
 {
 public:
-	cWindowOkButton()
+	cWindowOkButton(cWindow* parent) : cWindowButton(parent)
 	{
 		alignment = ALIGN_BOTTOM;
 		moveto(0, 20);
@@ -43,25 +43,11 @@ public:
 
 		defaultobject = "OkButton";
 
-		cWindowObject* o = new cWindowRollupButton();
-		o->parent = this;
-		objects["rollup"] = o;
+		objects["rollup"] = new cWindowRollupButton(this);
+		objects["close"] = new cWindowCloseButton(this);
 
-		o = new cWindowCloseButton();
-		o->parent = this;
-		objects["close"] = o;
-
-		o = new cWindowLabel();
-		o->parent = this;
-		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(15, 40);
-		o->resizeto(320, 100);
-		o->SetText(0, "UserId");
-		objects["text"] = o;
-
-		o = new cWindowOkButton();
-		o->parent = this;
-		objects["OkButton"] = o;
+		addlabel("text", 15,40, "UserId")->resizeto(320, 100);;
+		objects["OkButton"] = new cWindowOkButton(this);
 	}	
 };
 

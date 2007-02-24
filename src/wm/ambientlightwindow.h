@@ -13,7 +13,7 @@
 class cAmbientLightWindowOkButton : public cWindowButton
 {
 public:
-	cAmbientLightWindowOkButton()
+	cAmbientLightWindowOkButton(cWindow* parent) : cWindowButton(parent)
 	{
 		alignment = ALIGN_BOTTOM;
 		moveto(0, 20);
@@ -58,124 +58,79 @@ public:
 
 		defaultobject = "OkButton";
 
-		cWindowObject* o = new cWindowRollupButton();
-		o->parent = this;
-		objects["rollup"] = o;
+		objects["rollup"] = new cWindowRollupButton(this);
+		objects["close"] = new cWindowCloseButton(this);
 
-		o = new cWindowCloseButton();
-		o->parent = this;
-		objects["close"] = o;
+		cWindowObject* o;
 
+		addlabel("lblAmbient", 15,20,"Ambient:");
+		addlabel("lblDiffuse", 15,40,"Diffuse:");
+		addlabel("lblShadow",15,60,"Shadow:");
+		addlabel("lblAlpha", 15,80,"Alpha:");
 
-		o = new cWindowLabel();
-		o->parent = this;
-		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(15, 20);
-		o->resizeto(320, 100);
-		o->SetText(0, "Ambient:");
-		objects["lblAmbient"] = o;
-
-		o = new cWindowLabel();
-		o->parent = this;
-		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(15, 40);
-		o->resizeto(320, 100);
-		o->SetText(0, "Diffuse:");
-		objects["lblDiffuse"] = o;
-
-
-		o = new cWindowLabel();
-		o->parent = this;
-		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(15, 60);
-		o->resizeto(320, 100);
-		o->SetText(0, "Shadow:");
-		objects["lblShadow"] = o;
-
-		o = new cWindowLabel();
-		o->parent = this;
-		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(15, 80);
-		o->resizeto(320, 100);
-		o->SetText(0, "Alpha:");
-		objects["lblAlpha"] = o;
-
-		o = new cWindowInputBox();
-		o->parent = this;
+		o = new cWindowInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(120,20);
 		o->resizeto(70,20);
 		objects["ambientr"] = o;
 
-		o = new cWindowInputBox();
-		o->parent = this;
+		o = new cWindowInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(190,20);
 		o->resizeto(70,20);
 		objects["ambientg"] = o;
 		
-		o = new cWindowInputBox();
-		o->parent = this;
+		o = new cWindowInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(260,20);
 		o->resizeto(70,20);
 		objects["ambientb"] = o;
 		///////////////////////////////////////////////
 
-		o = new cWindowInputBox();
-		o->parent = this;
+		o = new cWindowInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(120,40);
 		o->resizeto(70,20);
 		objects["diffuser"] = o;
 
-		o = new cWindowInputBox();
-		o->parent = this;
+		o = new cWindowInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(190,40);
 		o->resizeto(70,20);
 		objects["diffuseg"] = o;
 
-		o = new cWindowInputBox();
-		o->parent = this;
+		o = new cWindowInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(260,40);
 		o->resizeto(70,20);
 		objects["diffuseb"] = o;
 		///////////////////////////////////////////////
-		o = new cWindowInputBox();
-		o->parent = this;
+		o = new cWindowInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(120,60);
 		o->resizeto(70,20);
 		objects["shadowr"] = o;
 
-		o = new cWindowInputBox();
-		o->parent = this;
+		o = new cWindowInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(190,60);
 		o->resizeto(70,20);
 		objects["shadowg"] = o;
 
-		o = new cWindowInputBox();
-		o->parent = this;
+		o = new cWindowInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(260,60);
 		o->resizeto(70,20);
 		objects["shadowb"] = o;
 		/////////////////////////////////////////////////
 
-		o = new cWindowInputBox();
-		o->parent = this;
+		o = new cWindowInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(120,80);
 		o->resizeto(210,20);
 		objects["alpha"] = o;
 
-		
-		o = new cAmbientLightWindowOkButton();
-		o->parent = this;
-		objects["OkButton"] = o;
+		objects["OkButton"] = new cAmbientLightWindowOkButton(this);
 	}	
 };
 

@@ -57,7 +57,7 @@ void cWindowButton::draw()
 
 
 	glEnd();
- 	parent->font->print(0,0,0, parent->px() + xx + (w/2)- (parent->font->textlen(text)/2), parent->py() + yy+3, text.c_str());
+ 	parent->font->print(0,0,0, parent->px() + xx + (w/2)- (parent->font->textlen(text)/2), parent->py() + yy + (h/2)-6, text.c_str());
 	glColor4fv(colors);
 }
 
