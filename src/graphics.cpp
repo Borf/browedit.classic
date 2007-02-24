@@ -250,6 +250,7 @@ int cGraphics::draw()
 	}
 	else if (editmode != MODE_OBJECTS)
 	{
+		glEnable(GL_TEXTURE_2D);
 		glColor3f(1,1,1);
 		glBindTexture(GL_TEXTURE_2D, splash->texid());
 		glBegin(GL_QUADS);

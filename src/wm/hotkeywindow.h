@@ -132,14 +132,14 @@ public:
 					int yyy = yy+16;
 					if(xxx+parent->px()+256 > Graphics.w())
 						xxx = Graphics.w() - 256 - parent->px();
-					if(yyy+parent->py()+256 > Graphics.h())
+					if(yyy+parent->py()+256*(Graphics.h()/(float)Graphics.w()) > Graphics.h())
 						yyy = Graphics.h() - 256 - parent->py();
 
 					glBegin(GL_QUADS);
 						glTexCoord2f(0,0);		glVertex3d(xxx, yyy,100);
 						glTexCoord2f(1,0);		glVertex3d(xxx+256, yyy,100);
-						glTexCoord2f(1,1);		glVertex3d(xxx+256, yyy+256,100);
-						glTexCoord2f(0,1);		glVertex3d(xxx, yyy+256,100);
+						glTexCoord2f(1,1);		glVertex3d(xxx+256, yyy+256*(Graphics.h()/(float)Graphics.w()),100);
+						glTexCoord2f(0,1);		glVertex3d(xxx, yyy+256*(Graphics.h()/(float)Graphics.w()),100);
 					glEnd();
 				}
 
