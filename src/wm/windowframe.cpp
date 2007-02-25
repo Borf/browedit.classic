@@ -4,7 +4,7 @@
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
 
-void cWindowFrame::draw()
+void cWindowFrame::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {
 	GLfloat colors[4];
 	glGetFloatv(GL_CURRENT_COLOR, colors);

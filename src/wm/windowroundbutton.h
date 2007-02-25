@@ -12,7 +12,7 @@ public:
 		cursortype = 1;
 		type = OBJECT_ROUNDBUTTON;
 	}
-	void draw();
+	void draw(int,int,int,int);
 	void click();
 	bool inobject();
 };

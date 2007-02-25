@@ -31,7 +31,7 @@ public:
 		if (tex != NULL || loaded)
 			TextureCache.unload(tex);
 	}
-	virtual void draw();
+	virtual void draw(int,int,int,int);
 	virtual void click();
 
 	void SetText(int, string);

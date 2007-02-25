@@ -6,7 +6,7 @@
 #include "../graphics.h"
 extern cGraphics Graphics;
 
-void cWindowTabPanel::draw()
+void cWindowTabPanel::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {
 	int i;
 	GLfloat colors[4];

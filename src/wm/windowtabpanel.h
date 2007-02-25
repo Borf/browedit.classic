@@ -30,7 +30,7 @@ public:
 		tabs.push_back("tab4");
 		tabs.push_back("tab5");
 	}
-	void draw();
+	void draw(int,int,int,int);
 	void click();
 
 

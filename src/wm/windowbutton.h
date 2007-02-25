@@ -23,7 +23,7 @@ public:
 		type = OBJECT_BUTTON;
 	}
 	virtual ~cWindowButton() {}
-	virtual void draw();
+	virtual void draw(int,int,int,int);
 	virtual void click() = 0;
 	virtual bool onkeydown(int);
 

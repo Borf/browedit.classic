@@ -5,7 +5,7 @@
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
 
-void cWindowPictureBox::draw()
+void cWindowPictureBox::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {
 	if (loaded)
 	{
@@ -39,10 +39,10 @@ void cWindowPictureBox::draw()
 			glEnable(GL_TEXTURE_2D);
 			glBindTexture(GL_TEXTURE_2D, tex->texid());
 			glBegin(GL_QUADS);
-				glTexCoord2f(0,0);		glVertex2d(xx, yy);
-				glTexCoord2f(1,0);		glVertex2d(xx+h, yy);
-				glTexCoord2f(1,1);		glVertex2d(xx+h, yy+w);
-				glTexCoord2f(0,1);		glVertex2d(xx, yy+w);
+				glTexCoord2f(0,cutoffbottom / (float)h);		glVertex2d(xx+cutoffleft,		yy+cutoffbottom);
+				glTexCoord2f(1,cutoffbottom / (float)h);		glVertex2d(xx+w-cutoffright,	yy+cutoffbottom);
+				glTexCoord2f(1,1 - cutofftop / (float)h);			glVertex2d(xx+w-cutoffright,	yy+h-cutofftop);
+				glTexCoord2f(0,1 - cutofftop / (float)h);			glVertex2d(xx+cutoffleft,		yy+h-cutofftop);
 			glEnd();
 			glColor4fv(colors);
 		}

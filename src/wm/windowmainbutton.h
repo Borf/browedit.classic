@@ -15,7 +15,7 @@ public:
 		cursortype = 1;
 		type = OBJECT_MAINBUTTON;
 	}
-	void draw();
+	void draw(int,int,int,int);
 	void click();
 	void SetText(int, string);
 	string GetText(int);

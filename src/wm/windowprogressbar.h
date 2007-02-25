@@ -29,7 +29,7 @@ public:
 		gradcolors = true;
 	}
 	virtual ~cWindowProgressBar() {}
-	virtual void draw();
+	virtual void draw(int,int,int,int);
 	virtual void click();
 
 	void SetInt(int, int);

@@ -25,7 +25,7 @@ public:
 		type = OBJECT_LABEL;
 	}
 	virtual ~cWindowLabel() {}
-	virtual void draw();
+	virtual void draw(int,int,int,int);
 	void SetText(int, string);
 	string GetText(int);
 

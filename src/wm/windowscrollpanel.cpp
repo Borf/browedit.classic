@@ -13,7 +13,7 @@ cWindowScrollPanel::~cWindowScrollPanel()
 	objects.clear();
 }
 
-void cWindowScrollPanel::draw()
+void cWindowScrollPanel::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {
 /*	for(int i = 0; i < objects.size(); i++)
 	{
@@ -30,10 +30,10 @@ void cWindowScrollPanel::draw()
 
 
 	int ybarheight = (int)max(((float)h/(float)innerheight)*(h-16 - 13), 18.0f);
-	int ybarpos = (int)((float)scrollposy / (float)innerheight) * (h-16 - 13);
+	int ybarpos = (int)(((float)scrollposy / (float)innerheight) * (h-16 - 13));
 
 	int xbarwidth = (int)max(((float)w/(float)innerwidth)*(w-16 - 13),18.0f);
-	int xbarpos = (int)((float)scrollposx / (float)innerwidth) * (w-16 - 13);
+	int xbarpos = (int)(((float)scrollposx / (float)innerwidth) * (w-16 - 13));
 
 	//ybarpos -= barheigh;
 
@@ -129,14 +129,23 @@ void cWindowScrollPanel::draw()
 	{
 		cWindowObject* o = objects[i];
 		if (o->px() >= scrollposx && o->px() + o->pw() <= scrollposx + (w-18) &&
-			o->py() >= scrollposy && o->py() + o->ph() <= scrollposy + (h-18) && o->type != OBJECT_LINE)
+			o->py() >= scrollposy-o->ph() && o->py() <= scrollposy + (h-18) && o->type != OBJECT_LINE)
+//			o->py() >= scrollposy && o->py() + o->ph() <= scrollposy + (h-18) && o->type != OBJECT_LINE)
 		{
 			if(o->type == OBJECT_LABEL)
 				o->moveto(o->px() - scrollposx, o->py() - scrollposy);
-			o->draw();
+
+			o->draw(0,
+					0,
+					scrollposy-o->py() > 0 ? scrollposy-o->py() : 0,
+					o->py() <= scrollposy + (h-18) && !(o->py() + o->ph() <= scrollposy + (h-18)) ? o->ph()-(scrollposy+(h-18) - o->py()) : 0);
+
 			if(o->type == OBJECT_LABEL)
 				o->moveto(o->px() + scrollposx, o->py() + scrollposy);
 		}
+
+
+
 		if (o->px() >= scrollposx && o->px() + o->pw() <= scrollposx + (w-18) &&
 			o->py() >= scrollposy && o->ph() <= scrollposy + (h-18) && o->type == OBJECT_LINE)
 		{
@@ -144,6 +153,7 @@ void cWindowScrollPanel::draw()
 		}
 	}
 	glTranslatef(-x+scrollposx, y-scrollposy,0);
+	glEnable(GL_TEXTURE_2D);
 
 }
 
@@ -239,8 +249,8 @@ void cWindowScrollPanel::drag()
 
 	if (startmousex - realx() - parent->px() > w-14 && startmousex - realx() - parent->px() < w)
 	{
-			scrollposy = (int)((h-(((Graphics.h()-mousey)+(ybarheight/2)) -parent->py() - ybarheight)) / (float)(h-16)) * innerheight - h;
-			scrollposy = (int)min(max(scrollposy, 0), innerheight-h);
+		scrollposy = ((h-(((Graphics.h()-mousey)+(ybarheight/2)) -parent->py() - ybarheight)) / (float)(h-16)) * innerheight - h;
+		scrollposy = (int)min(max(scrollposy, 0), innerheight-h);
 	}
 	else if ((Graphics.h()-startmousey) - parent->py() - realy() < 14)
 	{

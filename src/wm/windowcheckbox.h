@@ -20,7 +20,7 @@ public:
 		value = true;
 		type = OBJECT_CHECKBOX;
 	}
-	virtual void draw();
+	virtual void draw(int,int,int,int);
 	virtual void click();
 	bool onchar(char);
 	void SetInt(int, int);

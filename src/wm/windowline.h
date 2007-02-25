@@ -19,7 +19,7 @@ public:
 		type = OBJECT_LINE;
 		r = (g = (b = 0));
 	}
-	void draw()
+	void draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 	{
 		GLfloat colors[4];
 		glGetFloatv(GL_CURRENT_COLOR, colors);

@@ -13,6 +13,7 @@
 #include "wm/waterwindow.h"
 #include "wm/ambientlightwindow.h"
 #include "wm/lightwindow.h"
+#include "wm/texturewindow.h"
 #include "undo.h"
 
 #include "texturecache.h"
@@ -51,6 +52,8 @@ cWindow*				draggingwindow = NULL;
 cWindowObject*			draggingobject = NULL;
 string fontname = "tahoma";
 bool	doneaction = true;
+
+vector<string> texturefiles;
 
 double mouse3dxstart, mouse3dystart, mouse3dzstart;
 
@@ -642,6 +645,7 @@ int main(int argc, char *argv[])
 					}
 					else if (option == "texture")
 					{
+						texturefiles.push_back(value);
 						Log(3,0,"Loading %s", value.c_str());
 						cFile* pFile2 = fs.open(value);
 						if (pFile2 != NULL)
@@ -1626,7 +1630,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				draggingwindow = NULL;
 				if (movement <= 1)
 					Graphics.WM.click(true);
-				if (movement > 1 && draggingobject != NULL)
+				if (draggingobject != NULL)
 				{
 					if(Graphics.WM.inwindow() != NULL)
 						Graphics.WM.inwindow()->dragover();
@@ -3545,6 +3549,17 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			case SDLK_u:
 				{
 					undostack.undo();
+					break;
+				}
+			case SDLK_t:
+				{
+					cWindow* w = Graphics.WM.getwindow(WT_TEXTURE);
+					if (w == NULL)
+					{
+						w = new cTextureWindow();
+						w->init(&Graphics.WM.texture, &Graphics.WM.font);
+						Graphics.WM.addwindow(w);
+					}
 					break;
 				}
 			case SDLK_RETURN:

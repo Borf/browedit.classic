@@ -17,7 +17,7 @@ public:
 		alignment = ALIGN_CENTER;
 		type = OBJECT_FRAME;
 	}
-	virtual void draw();
+	virtual void draw(int,int,int,int);
 };
 
 

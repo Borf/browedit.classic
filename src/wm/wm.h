@@ -37,6 +37,8 @@ public:
 	void				doubleclick();
 	void				rightclick();
 	cWindow*			getwindow(WINDOW_TYPE);
+	void				unload();
+
 //properties
 	vector<cWindow*>	windows; //vector of windows, 0 = topwindow
 	cTexture			texture;

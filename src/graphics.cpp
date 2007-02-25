@@ -74,33 +74,6 @@ int cGraphics::draw()
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 	glLoadIdentity();									// Reset The Modelview Matrix
 
-	WM.draw();
-	if (SDL_GetTicks() - lastmotion > 500)
-	{
-		cWindow* w = WM.inwindow();
-		if (w != NULL)
-		{
-			cWindowObject* o = w->inobject();
-			if (o != NULL)
-			{
-				if (o->ppopup() != "")
-				{
-					glDisable(GL_TEXTURE_2D);
-					glColor3f(0.5,0.5,1);
-					int len = font->textlen(o->ppopup());
-					glBegin(GL_QUADS);
-						glVertex2f(mousex-2, mousey-2);
-						glVertex2f(mousex+len+2, mousey-2);
-						glVertex2f(mousex+len+2, mousey+16);
-						glVertex2f(mousex-2, mousey+16);
-
-
-					glEnd();
-					font->print(1,1,1,mousex, mousey, "%s", o->ppopup().c_str());
-				}
-			}
-		}
-	}
 
 	
 	if (showmessage)
@@ -271,6 +244,33 @@ int cGraphics::draw()
 	}
 
 
+	WM.draw();
+	if (SDL_GetTicks() - lastmotion > 500)
+	{
+		cWindow* w = WM.inwindow();
+		if (w != NULL)
+		{
+			cWindowObject* o = w->inobject();
+			if (o != NULL)
+			{
+				if (o->ppopup() != "")
+				{
+					glDisable(GL_TEXTURE_2D);
+					glColor3f(0.5,0.5,1);
+					int len = font->textlen(o->ppopup());
+					glBegin(GL_QUADS);
+						glVertex2f(mousex-2, mousey-2);
+						glVertex2f(mousex+len+2, mousey-2);
+						glVertex2f(mousex+len+2, mousey+16);
+						glVertex2f(mousex-2, mousey+16);
+
+
+					glEnd();
+					font->print(1,1,1,mousex, mousey, "%s", o->ppopup().c_str());
+				}
+			}
+		}
+	}
 	
 
 	
@@ -483,6 +483,9 @@ void cGraphics::KillGLWindow(void)								// Properly Kill The Window
 			TextureCache.unload(watertextures[i][ii]);
 		}
 	}
+
+	WM.unload();
+
 	return;
 }
 

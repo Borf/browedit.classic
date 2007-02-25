@@ -7,7 +7,7 @@
 #include "../graphics.h"
 extern cGraphics Graphics;
 
-void cWindowRoundButton::draw()
+void cWindowRoundButton::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {
 	GLfloat colors[4];
 	glGetFloatv(GL_CURRENT_COLOR, colors);

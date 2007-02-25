@@ -4,7 +4,7 @@
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
 
-void cWindowCheckBox::draw()
+void cWindowCheckBox::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {
 	int xx, yy;
 	xx = realx();

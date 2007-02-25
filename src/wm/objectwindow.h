@@ -64,7 +64,7 @@ public:
 		alignment = ALIGN_TOPLEFT;
 		resizeto(70,20);
 	}
-	void draw()
+	void draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 	{
 		if(*floatje != lastvalue)
 		{
@@ -77,7 +77,7 @@ public:
 			text = buf;
 			lastvalue = *floatje;
 		}
-		cWindowInputBox::draw();
+		cWindowInputBox::draw(cutoffleft, cutoffright, cutofftop, cutoffbottom);
 	}
 
 	void SetInt(int id, int val)

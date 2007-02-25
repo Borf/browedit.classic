@@ -88,7 +88,7 @@ public:
 			}
 		}
 
-		void draw()
+		void draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 		{
 			GLfloat colors[4];
 			glGetFloatv(GL_CURRENT_COLOR, colors);

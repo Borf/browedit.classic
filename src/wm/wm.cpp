@@ -62,11 +62,16 @@ void cWM::save()
 //////////////////////////////////////////////////////////////////////////////////////////////
 }
 
-cWM::~cWM()
+void cWM::unload()
 {
 	for(int i = 0; i < (int)windows.size(); i++)
 		delete(windows[i]);
 	windows.clear();
+}
+
+cWM::~cWM()
+{
+	unload();
 }
 
 void cWM::click(bool b)

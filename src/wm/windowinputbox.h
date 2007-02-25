@@ -31,7 +31,7 @@ public:
 		type = OBJECT_INPUTBOX;
 	}
 	virtual ~cWindowInputBox() {}
-	virtual void draw();
+	virtual void draw(int,int,int,int);
 	virtual void click();
 	bool onkeydown(int);
 	bool onchar(char);

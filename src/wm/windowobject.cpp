@@ -6,9 +6,9 @@
 #include "../graphics.h"
 
 extern cGraphics Graphics;
-void cWindowObject::draw()
+/*void cWindowObject::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {
-}
+}*/
 
 
 

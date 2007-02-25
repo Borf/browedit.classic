@@ -36,7 +36,7 @@ public:
 		draggingobject = NULL;
 	}
 	~cWindowScrollPanel();
-	void draw();
+	void draw(int,int,int,int);
 	void drag();
 	void click();
 	bool onkeyup(int);

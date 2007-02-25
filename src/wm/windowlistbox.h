@@ -30,7 +30,7 @@ public:
 		type = OBJECT_LISTBOX;
 	}
 	virtual ~cWindowListBox() {}
-	virtual void draw();
+	virtual void draw(int,int,int,int);
 	virtual void click();
 	bool onkeydown(int);
 //	void onchar(char);

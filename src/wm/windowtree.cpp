@@ -1,4 +1,4 @@
-#include "windowlistbox.h"
+#include "windowtree.h"
 #include "window.h"
 #include "../graphics.h"
 extern cGraphics Graphics;
@@ -6,10 +6,17 @@ extern cGraphics Graphics;
 #include <GL/glu.h>												// Header File For The GLu32 Library
 
 
-void cWindowListBox::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
+void cWindowTree::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {
 	GLfloat colors[4];
 	glGetFloatv(GL_CURRENT_COLOR, colors);
+
+	int i;
+
+	vector<string> values;
+	for(i = 0; i < nodes.size(); i++)
+		nodes[i]->getdata(values);
+
 
 	int xx, yy;
 	xx = realx();
@@ -18,7 +25,7 @@ void cWindowListBox::draw(int cutoffleft, int cutoffright, int cutofftop, int cu
 	int ww = w - 14;
 
 
-	int i = 0;
+	i = 0;
 	yy = realy()+h-5-12;
 	while(yy+10 > realy() && i < (int)values.size())
 	{
@@ -144,11 +151,15 @@ void cWindowListBox::draw(int cutoffleft, int cutoffright, int cutofftop, int cu
 
 
 
-bool cWindowListBox::onkeydown(int key)
+bool cWindowTree::onkeydown(int key)
 {
+	int i;
+	vector<string> values;
+	for(i = 0; i < nodes.size(); i++)
+		nodes[i]->getdata(values);
 	if (key == SDLK_DOWN && selected < (int)values.size()-1)
 	{
-		int i = 0;
+		i = 0;
 		int yy = realy()+h-5-12;
 		while(yy+10 > realy() && i < (int)values.size())
 		{
@@ -175,30 +186,12 @@ bool cWindowListBox::onkeydown(int key)
 }
 
 
-void cWindowListBox::SetText(int index, string text)
+void cWindowTree::SetText(int index, string text)
 {
-	if (index == -1)
-		values.push_back(text);
-	else
-	{
-		if (index >= (int)values.size())
-			values.resize(index+1);
-		values[index] = text;
-	}
 }
-void cWindowListBox::SetInt(int index, int value)
+void cWindowTree::SetInt(int index, int value)
 {
-	if (index == -1)
-		properties.push_back(value);
-	else if (index == -2)
-	{
-		selected = (value == -1 ? values.size() - 1 : value);
-		if(selected < liststart)
-			liststart = selected;
-		if( selected > (liststart + ((h - 5 - 12 - 10)/12)))
-			liststart = max(0, selected - ((h - 5 - 12 - 10)/12)-1);
-	}
-	else if (index == -3)
+	if (index == -3)
 	{
 		showselection = value != 0;
 	}
@@ -206,26 +199,22 @@ void cWindowListBox::SetInt(int index, int value)
 	{
 		showscroll = value != 0;
 	}
-	else
-	{
-		if (index >= (int)properties.size())
-			properties.resize(index+1);
-		properties[index] = value;
-	}
 }
-int cWindowListBox::GetInt(int index)
+int cWindowTree::GetInt(int index)
 {
-	if (index == -1)
-		return selected;
-	if (index == -2)
-		return properties.size();
-	if (index < 0 || index > (int)properties.size())
-		return 0;
-	return properties[index];
+	if (index == 1)
+		return (int)&nodes;
+	return selected;
 }
 
-void cWindowListBox::click()
+void cWindowTree::click()
 {
+	int i;
+	vector<string> values;
+	for(i = 0; i < nodes.size(); i++)
+		nodes[i]->getdata(values);
+
+	
 	int xx = mousex;
 	xx -= realx();
 	xx -= parent->px();
@@ -276,10 +265,9 @@ void cWindowListBox::click()
 			}
 		}	
 	}
-
 }
 
-void cWindowListBox::drag()
+void cWindowTree::drag()
 {
 	int xx = mousex;
 	xx -= realx();
@@ -290,7 +278,12 @@ void cWindowListBox::drag()
 
 	if (startmousex - realx() - parent->px() > w-14 && startmousex - realx() - parent->px() < w)
 	{
-		int i = 0;
+		int i;
+		vector<string> values;
+		for(i = 0; i < nodes.size(); i++)
+			nodes[i]->getdata(values);
+
+		i = 0;
 		int yyy = realy()+h-5-12;
 		while(yyy+10 > realy() && i < (int)values.size())
 		{
@@ -319,8 +312,83 @@ void cWindowListBox::drag()
 	}
 }
 
-void cWindowListBox::doubleclick()
+void cWindowTree::doubleclick()
 {
-//	Log(1,0,"You doubleclicked me!");
+	int a = selected;
+	cTreeNode* node = NULL;
+	for(int i = 0; i < nodes.size(); i++)
+	{
+		 node = nodes[i]->getnode(a);
+		 if(node != NULL)
+			 break;
+	}
+	if(node != NULL)
+	{
+		node->open = !node->open;
+		Log(3,0,"Selected Node %s", node->text.c_str());
+	}
+	else
+		Log(3,0,"Wrong node selected O_o;");
 }
 
+
+
+
+void cWindowTree::cTreeNode::getdata(vector<string> &data, int level)
+{
+	string d;
+
+	int i;
+	for(i = 0; i < level; i++)
+	{
+		d += "    ";
+	}
+	if (children.size() == 0)
+		d += "    ";
+	else if (open)
+		d += "\7  \0";
+	else
+		d += "\32  ";
+
+	d += text;
+	data.push_back(d);
+	if (open)
+	{
+		for(i = 0; i < children.size(); i++)
+			children[i]->getdata(data, level+1);
+	}
+}
+
+cWindowTree::cTreeNode* cWindowTree::cTreeNode::getnode(int &nr)
+{
+	if (nr == 0)
+		return this;
+	nr--;
+
+	if (open)
+	{
+		for(int i = 0; i < children.size(); i++)
+		{
+			cTreeNode* n = children[i]->getnode(nr);
+			if (n != NULL)
+				return n;
+		}
+	}
+	return NULL;
+}
+
+bool cWindowTree::cTreeNode::haschild(string tofind)
+{
+	for(int i = 0; i < children.size(); i++)
+		if (children[i]->text == tofind)
+			return true;
+
+	return false;
+}
+
+
+void cWindowTree::cTreeNode::addchild(cWindowTree::cTreeNode* newnode)
+{
+	children.push_back(newnode);
+	newnode->parent = this;
+}

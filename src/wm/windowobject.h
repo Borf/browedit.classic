@@ -45,6 +45,7 @@ enum OBJECT_BASE
 	OBJECT_SCROLLPANEL,
 	OBJECT_TABPANEL,
 	OBJECT_FRAME,
+	OBJECT_TREE,
 };
 
 
@@ -96,7 +97,7 @@ public:
 
 	bool selectable;
 	
-	virtual void draw();
+	virtual void draw(int = 0, int = 0, int = 0, int = 0) = 0;
 	virtual void click();
 	virtual void drag() {}
 
