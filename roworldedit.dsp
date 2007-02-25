@@ -262,6 +262,10 @@ SOURCE=.\src\wm\objectwindow.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\wm\texturewindow.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\wm\waterwindow.h
 # End Source File
 # End Group
@@ -375,6 +379,14 @@ SOURCE=.\src\wm\windowtabpanel.cpp
 # Begin Source File
 
 SOURCE=.\src\wm\windowtabpanel.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\windowtree.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\windowtree.h
 # End Source File
 # End Group
 # Begin Source File
