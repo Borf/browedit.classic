@@ -34,7 +34,7 @@ public:
 	virtual void draw(int,int,int,int);
 	virtual void click();
 
-	void SetText(int, string);
+	virtual void SetText(int, string);
 	void SetInt(int, int);
 	int GetInt(int);
 	bool loaded;

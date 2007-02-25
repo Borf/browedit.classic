@@ -58,8 +58,11 @@ void cWindowPictureBox::click()
 
 void cWindowPictureBox::SetText(int i, string fil)
 {
-	loaded = true;
-	tex = TextureCache.load(fil);
+	if(i == 0)
+	{
+		loaded = true;
+		tex = TextureCache.load(fil);
+	}
 }
 
 void cWindowPictureBox::SetInt(int i, int v)

@@ -19,6 +19,57 @@ extern vector<string> texturefiles;
 
 class cTextureWindow : public cWindow
 {
+	class cWindowTexture : public cWindowPictureBox
+	{
+		string data;
+	public:
+		cWindowTexture(cWindow* parent) : cWindowPictureBox(parent)
+		{
+
+		}
+
+		void click()
+		{
+			if(SDL_GetModState() & KMOD_SHIFT)
+			{
+				int id = Graphics.texturestart + (Graphics.selectionstart.y - 32) / 288;
+				TextureCache.unload(Graphics.world.textures[id]->texture);
+				delete Graphics.world.textures[id];
+
+				cTextureContainer* t = new cTextureContainer();
+				t->RoFilename = data;
+				char buf[40];
+				ZeroMemory(buf, 40);
+				sprintf(buf, "%i%i", rand(), rand());
+				t->RoFilename2 = string(buf,40);
+				t->texture = TextureCache.load(rodir + "data\\texture\\" + data);
+				Graphics.world.textures[id] = t;
+
+			}
+			else
+			{
+				cTextureContainer* t = new cTextureContainer();
+				t->RoFilename = data;
+				char buf[40];
+				ZeroMemory(buf, 40);
+				sprintf(buf, "%i%i", rand(), rand());
+				t->RoFilename2 = string(buf,40);
+				t->texture = TextureCache.load(rodir + "data\\texture\\" + data);
+				Graphics.world.textures.push_back(t);
+				Graphics.texturestart = Graphics.world.textures.size() - 2;
+			}
+		}
+		void SetText(int i, string s)
+		{
+			cWindowPictureBox::SetText(i, s);
+			if(i == 1)
+			{
+				data = s;
+			}
+		}
+	};
+
+
 	class cWindowTextureCatSelect : public cWindowTree
 	{
 	public:
@@ -49,11 +100,13 @@ class cTextureWindow : public cWindow
 
 			for(i = 0; i < v.size(); i++)
 			{
-				cWindowObject* o = new cWindowPictureBox(parent);
+				pair<string, string> p = v[i];
+				cWindowObject* o = new cWindowTexture(parent);
 				o->alignment = ALIGN_TOPLEFT;
 				o->moveto(i*130, 32);
 				o->resizeto(128,128);
-				o->SetText(0,rodir + "data\\texture\\" + v[i].second);
+				o->SetText(0,rodir + "data\\texture\\" + p.second);
+				o->SetText(1,p.second);
 				box->objects.push_back(o);
 			}
 			parent->resizeto(parent->pw(), parent->ph());
@@ -70,12 +123,13 @@ public:
 	cTextureWindow()
 	{
 		wtype = WT_MESSAGE;
+		closetype = HIDE;
 		resizable = true;
 		visible = true;
 		modal = false;
 
-		h = 500;
-		w = 700;
+		h = Graphics.h()-50;
+		w = Graphics.w()-50;
 		title = "Texture Select";
 		center();
 
@@ -159,11 +213,11 @@ public:
 	void resizeto(int ww, int hh)
 	{
 		cWindow::resizeto(ww,hh);
-		objects["tree"]->resizeto(ww / 2, hh-30);
+		objects["tree"]->resizeto(200, hh-30);
 		cWindowScrollPanel* panel = (cWindowScrollPanel*)objects["textures"];
-		panel->moveto((ww / 2)+20, 20);
-		panel->resizeto((ww / 2)-20, hh-30);
-		panel->innerwidth = (ww / 2) - 20;
+		panel->moveto(220, 20);
+		panel->resizeto(ww-220, hh-30);
+		panel->innerwidth = ww-220;
 
 		int x = 0;
 		int y = 0;
@@ -180,10 +234,6 @@ public:
 		panel->scrollposx = 0;
 		panel->scrollposy = 0;
 		panel->innerheight = y+130;
-
-		panel->innerheight += (panel->innerheight % (panel->ph() - 16));
-
-		
 	}
 
 	void* userfunc(void* param)

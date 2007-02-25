@@ -192,20 +192,20 @@ void cWindowScrollPanel::click()
 		else
 		{
 // in the box
-			parent->moveto(parent->px()-scrollposx-x, parent->py()-scrollposy-y);
+			parent->moveto(parent->px()+scrollposx+x, parent->py()+scrollposy+y);
 			bool found = false;
 			for(unsigned int i = 0; i < objects.size(); i++)
 			{
 				if (objects[i]->inobject())
 				{
 					found = true;
-					parent->moveto(parent->px()+scrollposx+x, parent->py()+scrollposy+y);
+					parent->moveto(parent->px()-scrollposx-x, parent->py()-scrollposy-y);
 					objects[i]->click();
 					break;
 				}
 			}
 			if (!found)
-				parent->moveto(parent->px()+scrollposx+x, parent->py()+scrollposy+y);
+				parent->moveto(parent->px()-scrollposx-x, parent->py()-scrollposy-y);
 		}
 	}
 	else if (yy < h-8)

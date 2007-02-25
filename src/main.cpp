@@ -82,7 +82,6 @@ MENUCOMMAND(exit);
 MENUCOMMAND(random1);
 MENUCOMMAND(shading);
 MENUCOMMAND(exportheight);
-MENUCOMMAND(textures);
 MENUCOMMAND(mode);
 MENUCOMMAND(flatten);
 MENUCOMMAND(grid);
@@ -447,7 +446,6 @@ int main(int argc, char *argv[])
 	cMenu* rnd;
 	cMenu* view;
 	cMenu* edit;
-	cMenu* textures;
 
 	menu = new cMenu();
 	menu->title = "root";
@@ -465,7 +463,6 @@ int main(int argc, char *argv[])
 	ADDMENU(mode,		menu, "Edit Mode",			175,75);
 	ADDMENU(edit,		menu, "Edit",				250,50);
 	ADDMENU(models,		menu, "Models",				300,50);
-	ADDMENU(textures,	menu, "Textures",			350,60);
 	ADDMENU(effectsmenu,menu, "Effects",			410,50);
 
 	ADDMENUITEM(mm,file,"New"	,				&MenuCommand_new);
@@ -568,7 +565,6 @@ int main(int argc, char *argv[])
 	map<string, cMenu*, less<string> > itemst;
 	map<cMenu*, int, less<cMenu*> > levelt;
 	levelm[models] = 0;
-	levelt[textures] = 0;
 
 	while(!pFile->eof())
 	{
@@ -646,48 +642,6 @@ int main(int argc, char *argv[])
 					else if (option == "texture")
 					{
 						texturefiles.push_back(value);
-						Log(3,0,"Loading %s", value.c_str());
-						cFile* pFile2 = fs.open(value);
-						if (pFile2 != NULL)
-						{
-							while(!pFile2->eof())
-							{
-								string line = pFile2->readline();
-								string pre = line.substr(0, line.find("|"));
-								string filename = line.substr(line.find("|")+1);
-
-								string cat = pre.substr(0, pre.rfind("/"));
-								string menuname = pre.substr(pre.rfind("/")+1);
-
-								if (cat != "" && itemst.find(cat) == itemst.end())
-								{
-									cMenu* root = textures;
-									string catname = cat;
-									if(cat.find("/") != string::npos)
-									{
-										root = itemst[cat.substr(0, cat.rfind("/"))];
-										catname = cat.substr(cat.rfind("/")+1);
-									}
-									
-									cMenu* submenu;
-									ADDMENU(submenu,		root, catname + "...",				550 + 100*(levelt[root]+1),100);
-									itemst[cat] = submenu;
-									levelt[submenu] = levelt[root] + 1;
-								}
-								char* f = (char*)filename.c_str();
-								if(filename != "")
-								{
-									ADDMENUITEMDATA(mm,itemst[cat],menuname, &MenuCommand_picktexture, filename);
-									mm->mouseoverproc = mouseovertexture;
-									mm->mouseoutproc = mouseouttexture;
-								}
-									
-							}
-							pFile2->close();
-							Log(3,0,"done loading %s", value.c_str());
-						}
-						else
-							Log(1,0,"Couldn't open %s", value.c_str());
 					}
 					else
 						Log(2,0,"Unknown option: %s=%s", option.c_str(), value.c_str());
@@ -705,7 +659,6 @@ int main(int argc, char *argv[])
 	levelt.clear();
 
 	models->sort();
-	textures->sort();
 
 
 	lastlclick = 0;
@@ -3560,6 +3513,10 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						w->init(&Graphics.WM.texture, &Graphics.WM.font);
 						Graphics.WM.addwindow(w);
 					}
+					else
+					{
+						w->togglevis();
+					}
 					break;
 				}
 			case SDLK_RETURN:
@@ -4046,12 +4003,6 @@ MENUCOMMAND(mode)
 	}
 	return true;
 }
-MENUCOMMAND(textures)
-{
-	Graphics.world.showtextures = !Graphics.world.showtextures;
-	src->ticked = !src->ticked;
-	return true;
-}
 
 MENUCOMMAND(flatten)
 {
@@ -4182,42 +4133,6 @@ MENUCOMMAND(slope)
 {
 	src->ticked = !src->ticked;
 	Graphics.slope = src->ticked;
-	return true;
-}
-
-
-MENUCOMMAND(picktexture)
-{
-	if(SDL_GetModState() & KMOD_SHIFT)
-	{
-		int id = Graphics.texturestart + (Graphics.selectionstart.y - 32) / 288;
-		TextureCache.unload(Graphics.world.textures[id]->texture);
-		delete Graphics.world.textures[id];
-
-		string data = src->data;
-		cTextureContainer* t = new cTextureContainer();
-		t->RoFilename = src->data;
-		char buf[40];
-		ZeroMemory(buf, 40);
-		sprintf(buf, "%i%i", rand(), rand());
-		t->RoFilename2 = string(buf,40);
-		t->texture = TextureCache.load(rodir + "data\\texture\\" + src->data);
-		Graphics.world.textures[id] = t;
-
-	}
-	else
-	{
-		string data = src->data;
-		cTextureContainer* t = new cTextureContainer();
-		t->RoFilename = src->data;
-		char buf[40];
-		ZeroMemory(buf, 40);
-		sprintf(buf, "%i%i", rand(), rand());
-		t->RoFilename2 = string(buf,40);
-		t->texture = TextureCache.load(rodir + "data\\texture\\" + src->data);
-		Graphics.world.textures.push_back(t);
-		Graphics.texturestart = Graphics.world.textures.size() - 2;
-	}
 	return true;
 }
 
