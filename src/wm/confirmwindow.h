@@ -76,7 +76,7 @@ public:
 
 		objects["rollup"] = new cWindowRollupButton(this);
 		objects["close"] = new cWindowCloseButton(this);;
-		addlabel("text", 15,40,"UserId");
+		addlabel("text", 15,40,"UserId")->resizeto(w-30, h-100);
 		objects["OkButton"] = new cWindowOkButton(this);
 		objects["CancelButton"] = new cWindowCancelButton(this);
 	

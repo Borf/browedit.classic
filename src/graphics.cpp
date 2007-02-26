@@ -234,6 +234,8 @@ int cGraphics::draw()
 		glEnd();
 	}
 	glEnable(GL_BLEND);
+
+	WM.draw();
 	menu->draw();
 	if(currentobject != NULL)
 	{
@@ -244,7 +246,6 @@ int cGraphics::draw()
 	}
 
 
-	WM.draw();
 	if (SDL_GetTicks() - lastmotion > 500)
 	{
 		cWindow* w = WM.inwindow();
@@ -253,20 +254,21 @@ int cGraphics::draw()
 			cWindowObject* o = w->inobject();
 			if (o != NULL)
 			{
-				if (o->ppopup() != "")
+				string popup = o->ppopup();
+				if (popup != "")
 				{
 					glDisable(GL_TEXTURE_2D);
+					glDisable(GL_DEPTH_TEST);
 					glColor3f(0.5,0.5,1);
-					int len = font->textlen(o->ppopup());
+					int len = font->textlen(popup);
 					glBegin(GL_QUADS);
 						glVertex2f(mousex-2, Graphics.h()-mousey-2);
 						glVertex2f(mousex+len+2, Graphics.h()-mousey-2);
 						glVertex2f(mousex+len+2, Graphics.h()-mousey+16);
 						glVertex2f(mousex-2, Graphics.h()-mousey+16);
-
-
 					glEnd();
-					font->print(1,1,1,mousex, Graphics.h()-mousey, "%s", o->ppopup().c_str());
+					font->print(1,1,1,mousex, Graphics.h()-mousey, "%s", popup.c_str());
+					glEnable(GL_DEPTH_TEST);
 				}
 			}
 		}

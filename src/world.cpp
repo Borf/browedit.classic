@@ -29,6 +29,7 @@ extern string rodir;
 extern bool lbuttondown;
 extern long userid;
 extern double mouse3dxstart, mouse3dystart, mouse3dzstart;
+extern void mainloop();
 
 
 void cWorld::load()
@@ -564,6 +565,27 @@ void cWorld::exportheight()
 
 }
 
+
+class cAddQuadtreeConfirm : public cConfirmWindow::cConfirmWindowCaller
+{
+	private:
+		int* b;
+	public:
+		cAddQuadtreeConfirm(int* bb)
+		{
+			b = bb;
+		}
+		void Ok()
+		{
+			*b = 1;
+		}
+		void Cancel()
+		{
+			*b = -1;
+		}
+
+};
+
 void cWorld::save()
 {
 	srand(tickcount());
@@ -572,6 +594,23 @@ void cWorld::save()
 	{
 		clean();
 		quadtreefloats.clear();
+		if(root == NULL)
+		{
+			int b = 0;
+			Graphics.WM.ConfirmWindow("There is no quadtree information added, would you like to try adding it?", new cAddQuadtreeConfirm(&b));
+			while(b == 0)
+			{
+				mainloop();
+				Sleep(10);
+			}
+			if(b == 1)
+			{
+				root = new cQuadTreeNode();
+				root->generate(width*10-1, height*10-1,-0.5,-0.5,5);			
+			}
+
+		}
+
 		if(root != NULL)
 		{
 			int x,y;

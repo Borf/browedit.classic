@@ -47,7 +47,7 @@ typedef unsigned char uint8_t;
 #include "mymath.h"
 
 #define SNAPPINGDIST 10
-#define DRAGBORDER   4
+#define DRAGBORDER   6
 
 
 #define BOLD 1				// options for logging

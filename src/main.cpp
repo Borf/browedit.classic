@@ -24,8 +24,6 @@
 
 cFileSystem fs;
 
-#define VERTEXDIST 10
-
 string inputboxresult;
 
 
@@ -226,6 +224,99 @@ string downloadfile(string url, long &filesize)
 	
 	return buf;
 }
+
+void mainloop()
+{
+	if(lasttimer + paintspeed < SDL_GetTicks())
+	{
+		if(editmode == MODE_HEIGHTDETAIL && menu->inwindow(mousex, Graphics.h()-mousey) == NULL)
+		{
+			if (lbuttondown || rbuttondown)
+			{
+				/*int posx = mouse3dx / 10;
+				int posy = mouse3dz / 10;*/
+
+				int posx = tilex;
+				int posy = tiley;
+				bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
+				int mmin = 99999999;
+				int mmax = -9999999;
+				if (ctrl)
+				{
+					if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= Graphics.world.height-ceil(brushsize/2.0f))
+					{
+						for(int x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f); x++)
+						{
+							for(int y = posy-floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
+							{
+								cCube* c = &Graphics.world.cubes[y][x];
+								mmin = min(min(min(min(mmin, c->cell1),c->cell2),c->cell3),c->cell4);
+								mmax = max(max(max(max(mmax, c->cell1),c->cell2),c->cell3),c->cell4);
+							}
+						}
+					}
+					
+				}
+
+				if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= Graphics.world.height-ceil(brushsize/2.0f))
+				{
+					for(int x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f); x++)
+					{
+						for(int y = posy-floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
+						{
+							cCube* c = &Graphics.world.cubes[y][x];
+							if(lbuttondown && !rbuttondown)
+							{
+								if (!Graphics.slope || (x > posx-floor(brushsize/2.0f)) && y > posy-floor(brushsize/2.0f))
+									c->cell1-=1;
+								if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y > posy-floor(brushsize/2.0f))
+									c->cell2-=1;
+								if (!Graphics.slope || (x > posx-floor(brushsize/2.0f)) && y < posy+ceil(brushsize/2.0f)-1)
+									c->cell3-=1;
+								if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y < posy+ceil(brushsize/2.0f)-1)
+									c->cell4-=1;
+								if(ctrl)
+								{
+									c->cell1 = max(mmin,c->cell1);
+									c->cell2 = max(mmin,c->cell2);
+									c->cell3 = max(mmin,c->cell3);
+									c->cell4 = max(mmin,c->cell4);
+								}
+							}
+							if(lbuttondown && rbuttondown)
+							{
+								if (!Graphics.slope || (x > posx-floor(brushsize/2.0f)) && y > posy-floor(brushsize/2.0f))
+									c->cell1+=1;
+								if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y > posy-floor(brushsize/2.0f))
+									c->cell2+=1;
+								if (!Graphics.slope || (x > posx-floor(brushsize/2.0f)) && y < posy+ceil(brushsize/2.0f)-1)
+									c->cell3+=1;
+								if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y < posy+ceil(brushsize/2.0f)-1)
+									c->cell4+=1;
+								if(ctrl)
+								{
+									c->cell1 = min(mmax,c->cell1);
+									c->cell2 = min(mmax,c->cell2);
+									c->cell3 = min(mmax,c->cell3);
+									c->cell4 = min(mmax,c->cell4);
+								}
+							}
+							c->calcnormal();
+						}
+					}
+				}
+				lasttimer = SDL_GetTicks();
+			}
+		}
+	}
+		
+	process_events( );														// process keypresses
+	if (!Graphics.draw())												// Active?  Was There A Quit Received?
+		running = false;
+	SDL_GL_SwapBuffers();
+	Sleep(1);																// god save the CPU
+}
+
 
 
 int main(int argc, char *argv[])
@@ -464,7 +555,7 @@ int main(int argc, char *argv[])
 	ADDMENU(mode,		menu, "Edit Mode",			175,75);
 	ADDMENU(edit,		menu, "Edit",				250,50);
 	ADDMENU(models,		menu, "Models",				300,50);
-	ADDMENU(effectsmenu,menu, "Effects",			410,50);
+	ADDMENU(effectsmenu,menu, "Effects",			350,50);
 
 	ADDMENUITEM(mm,file,"New"	,				&MenuCommand_new);
 	ADDMENUITEM(mm,file,"Open",					&MenuCommand_open);
@@ -715,97 +806,8 @@ int main(int argc, char *argv[])
 //	Graphics.world.importalpha();
 #endif
 	lasttimer = SDL_GetTicks();
-	while( running ) {
-		if(lasttimer + paintspeed < SDL_GetTicks())
-		{
-			if(editmode == MODE_HEIGHTDETAIL && menu->inwindow(mousex, Graphics.h()-mousey) == NULL)
-			{
-				if (lbuttondown || rbuttondown)
-				{
-					/*int posx = mouse3dx / 10;
-					int posy = mouse3dz / 10;*/
-
-					int posx = tilex;
-					int posy = tiley;
-					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
-					int mmin = 99999999;
-					int mmax = -9999999;
-					if (ctrl)
-					{
-						if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= Graphics.world.height-ceil(brushsize/2.0f))
-						{
-							for(int x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f); x++)
-							{
-								for(int y = posy-floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
-								{
-									cCube* c = &Graphics.world.cubes[y][x];
-									mmin = min(min(min(min(mmin, c->cell1),c->cell2),c->cell3),c->cell4);
-									mmax = max(max(max(max(mmax, c->cell1),c->cell2),c->cell3),c->cell4);
-								}
-							}
-						}
-						
-					}
-
-					if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= Graphics.world.height-ceil(brushsize/2.0f))
-					{
-						for(int x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f); x++)
-						{
-							for(int y = posy-floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
-							{
-								cCube* c = &Graphics.world.cubes[y][x];
-								if(lbuttondown && !rbuttondown)
-								{
-									if (!Graphics.slope || (x > posx-floor(brushsize/2.0f)) && y > posy-floor(brushsize/2.0f))
-										c->cell1-=1;
-									if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y > posy-floor(brushsize/2.0f))
-										c->cell2-=1;
-									if (!Graphics.slope || (x > posx-floor(brushsize/2.0f)) && y < posy+ceil(brushsize/2.0f)-1)
-										c->cell3-=1;
-									if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y < posy+ceil(brushsize/2.0f)-1)
-										c->cell4-=1;
-									if(ctrl)
-									{
-										c->cell1 = max(mmin,c->cell1);
-										c->cell2 = max(mmin,c->cell2);
-										c->cell3 = max(mmin,c->cell3);
-										c->cell4 = max(mmin,c->cell4);
-									}
-								}
-								if(lbuttondown && rbuttondown)
-								{
-									if (!Graphics.slope || (x > posx-floor(brushsize/2.0f)) && y > posy-floor(brushsize/2.0f))
-										c->cell1+=1;
-									if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y > posy-floor(brushsize/2.0f))
-										c->cell2+=1;
-									if (!Graphics.slope || (x > posx-floor(brushsize/2.0f)) && y < posy+ceil(brushsize/2.0f)-1)
-										c->cell3+=1;
-									if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y < posy+ceil(brushsize/2.0f)-1)
-										c->cell4+=1;
-									if(ctrl)
-									{
-										c->cell1 = min(mmax,c->cell1);
-										c->cell2 = min(mmax,c->cell2);
-										c->cell3 = min(mmax,c->cell3);
-										c->cell4 = min(mmax,c->cell4);
-									}
-								}
-								c->calcnormal();
-							}
-						}
-					}
-					lasttimer = SDL_GetTicks();
-				}
-			}
-		}
-			
-		process_events( );														// process keypresses
-		if (!Graphics.draw())												// Active?  Was There A Quit Received?
-			break;
-		SDL_GL_SwapBuffers();
-		Sleep(1);																// god save the CPU
-	}
-
+	while( running )
+		mainloop();
 
 	// Shutdown
 	Graphics.KillGLWindow();						// Kill The Window
@@ -901,9 +903,12 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 	case SDL_MOUSEMOTION:
 		{
 			dragged = true;
+	
+			if(mousex != event.motion.x || mousey != event.motion.y)
+				lastmotion = SDL_GetTicks();
+
 			mousex = event.motion.x;
 			mousey = event.motion.y;
-			lastmotion = SDL_GetTicks();
 			cMenu* m = menu->inwindow((int)mousex, Graphics.h()-(int)mousey);
 
 
@@ -1198,6 +1203,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			break;
 		} 
 		case SDL_MOUSEBUTTONDOWN:
+			{
 			movement = 0;
 			startmousex = mousex = event.motion.x;
 			startmousey = mousey = event.motion.y;
@@ -1213,8 +1219,11 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			doubleclick = false;
 			if (SDL_GetTicks() - lastlclick < 250)
 				doubleclick = true;
-			
-			if (!dragged && !doubleclick)
+
+			cMenu* m = menu->inwindow((int)mousex, Graphics.h()-(int)mousey);
+		
+
+			if (!dragged && !doubleclick && m == NULL)
 			{
 				draggingobject = NULL;
 				draggingwindow = NULL;
@@ -1260,7 +1269,6 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			if(event.button.button == SDL_BUTTON_LEFT)
 			{
 				lbuttondown = true;
-				cMenu* m = menu->inwindow((int)mousex, Graphics.h()-(int)mousey);
 				if(m == NULL)
 				{
 					if (editmode == MODE_TEXTURE)
@@ -1576,22 +1584,24 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				rbuttondown = true;
 			}
 			break;
+			}
 		case SDL_MOUSEBUTTONUP:
 			if(event.button.button == SDL_BUTTON_LEFT)
 			{
+				cMenu* m = menu->inwindow((int)mousex, Graphics.h()-(int)mousey);
 				doneaction = true;
 				lbuttondown = false;
 				mousex = event.motion.x;
 				mousey = event.motion.y;
 				cWindow* w = Graphics.WM.inwindow();
-				if (draggingwindow != NULL)
+				if (draggingwindow != NULL && m == NULL)
 				{
 					draggingwindow->stopresizing();
 				}
 				draggingwindow = NULL;
-				if (movement <= 1)
+				if (movement <= 1 && m == NULL)
 					Graphics.WM.click(true);
-				if (draggingobject != NULL)
+				if (draggingobject != NULL && m == NULL)
 				{
 					if(Graphics.WM.inwindow() != NULL)
 						Graphics.WM.inwindow()->dragover();
@@ -1605,14 +1615,12 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					Log(3,0,"Doubleclick");
 					doubleclick = true;
 					lastlclick = SDL_GetTicks();
-					Graphics.WM.doubleclick();
+					if(m == NULL)
+						Graphics.WM.doubleclick();
 				}
 				else
 					lastlclick = SDL_GetTicks();
-				if(w != NULL)
-					return 0;
 				menu->unmouseover();
-				cMenu* m = menu->inwindow((int)mousex, Graphics.h()-(int)mousey);
 				if (m == NULL)
 				{
 					menu->closemenu();
@@ -1621,9 +1629,12 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				if (m != NULL && m->opened)
 				{
 					m->click((int)mousex, Graphics.h()-(int)mousey);
+					break;
 				}
 				else // no menu
 				{
+					if(w != NULL)
+						return 0;
 					if(editmode == MODE_OBJECTS && movement < 3)
 					{
 						if (SDL_GetModState() & KMOD_CTRL && Graphics.previewmodel != NULL)
