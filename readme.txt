@@ -10,6 +10,7 @@ winkey+w                            show/hide water
 l                                   show/hide lightmaps
 insert/delete                       change the viewinglevel of the quadtree
 U                                   undo
+T									open texture dialog
 
 Texture Edit
 ------------
@@ -127,3 +128,25 @@ pageup / pagedown                   change the effect looping-time (check consol
 drag                                move an effect
 ctrl+drag                           move an effect up / down
 Enter                               Open effects properties window
+
+group object edit
+-----------------
+in Select mode:
+
+left-drag							make a new selection
+ctrl+left-drag						add objects to the selection
+alt+left-drag						remove objects from the selection
+[ / ]								switch select/edit mode
+
+In Editing mode:
+left-drag							move the selection
+ctrl+left-drag						rotate the selection around it's center
+alt+left-drag						scale the selection around it's center
+D									duplicate the selection
+
+Light Edit
+----------
+left-click							select a light
+left-drag							move a light
+ctrl+left-drag						move a light up/down
+Enter								Open light dialog

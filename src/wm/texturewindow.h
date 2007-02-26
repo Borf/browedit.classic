@@ -14,6 +14,9 @@
 #include "../filesystem.h"
 extern cFileSystem fs;
 extern string rodir;
+extern cWindow* draggingwindow;
+extern cWindowObject* draggingobject;
+
 
 extern vector<string> texturefiles;
 
@@ -111,7 +114,8 @@ class cTextureWindow : public cWindow
 				box->objects.push_back(o);
 			}
 			parent->resizeto(parent->pw(), parent->ph());
-			
+			draggingwindow = NULL;
+			draggingobject = NULL;
 		}
 	};
 

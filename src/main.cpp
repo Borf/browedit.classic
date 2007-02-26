@@ -97,6 +97,7 @@ MENUCOMMAND(dolightmaps);
 MENUCOMMAND(fixcolors);
 MENUCOMMAND(clearobjects);
 MENUCOMMAND(cleareffects);
+MENUCOMMAND(clearlights);
 MENUCOMMAND(savelightmaps);
 MENUCOMMAND(loadlightmaps);
 MENUCOMMAND(addwalls);
@@ -335,7 +336,7 @@ int main(int argc, char *argv[])
 	{
 		filesize = FileData.nFileSizeLow;
 #ifndef _DEBUG
-		if(filesize > 170000)
+		if(filesize > 190000)
 			return 0;
 #endif
 	}
@@ -635,6 +636,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,edit,"Reset Colors",		&MenuCommand_fixcolors);
 	ADDMENUITEM(mm,edit,"Clear Objects",		&MenuCommand_clearobjects);
 	ADDMENUITEM(mm,edit,"Clear Effects",		&MenuCommand_cleareffects);
+	ADDMENUITEM(mm,edit,"Clear lights",		&MenuCommand_clearlights);
 	ADDMENUITEM(mm,edit,"Add Walls",		&MenuCommand_addwalls);
 	ADDMENUITEM(mm,edit,"Set gat collision",		&MenuCommand_gatcollision);
 	ADDMENUITEM(mm,edit,"Clear Lightmaps",		&MenuCommand_clearlightmaps);
@@ -5040,5 +5042,11 @@ MENUCOMMAND(cleareffects)
 	undostack.push(new cUndoEffectsDelete(objectsdeleted));
 
 	Graphics.world.effects.clear();
+	return true;
+}
+
+MENUCOMMAND(clearlights)
+{
+	Graphics.world.lights.clear();
 	return true;
 }

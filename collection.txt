@@ -1,4 +1,3 @@
-collection2/ketupat|유저인터페이스\collection\ketupat.bmp
 collection/ketupat|유저인터페이스\collection\ketupat.bmp
 collection/krathong|유저인터페이스\collection\krathong.bmp
 collection/ramadan|유저인터페이스\collection\ramadan.bmp

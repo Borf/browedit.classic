@@ -113,6 +113,7 @@ void cWorld::load()
 	quadtreefloats.clear();
 	sounds.clear();
 	effects.clear();
+	lights.clear();
 	for(i = 0; i < gattiles.size(); i++)
 		gattiles[i].clear();
 	gattiles.clear();
@@ -2186,7 +2187,7 @@ void cQuadTreeNode::recalculate()
 				int tilex = xx / 10;
 				int tiley = yy / 10;
 
-				if(tiley > -1 && tiley < Graphics.world.height && tilex > -1 && tilex < Graphics.world.height)
+				if(tiley > -1 && tiley < Graphics.world.height && tilex > -1 && tilex < Graphics.world.width)
 				{
 					cCube* c = &Graphics.world.cubes[Graphics.world.height - tiley-1][tilex];
 					box1.y = max(box1.y, c->cell1);
