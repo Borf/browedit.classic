@@ -124,7 +124,7 @@ public:
 		}
 		else
 		{
-			undostack.items.push(undo);
+			undostack.push(undo);
 		}
 
 		return NULL;

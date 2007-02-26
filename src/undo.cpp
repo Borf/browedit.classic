@@ -1,12 +1,24 @@
 #include "undo.h"
 
+extern int undosize;
 
 void cUndoStack::undo()
 {
-	cUndoItem* item = items.top();
-	if(item->type == UNDO_NOOP)
-		return;
-	items.pop();
-	item->undo();
-	delete item;
+	if (items.size() > 0)
+	{
+		cUndoItem* item = items.back();
+		items.pop_back();
+		item->undo();
+		delete item;
+	}
+}
+
+void cUndoStack::push(cUndoItem* u)
+{
+	items.push_back(u);
+	while(items.size() > undosize)
+	{
+		delete items.front();
+		items.pop_front();
+	}
 }

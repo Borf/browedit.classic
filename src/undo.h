@@ -2,7 +2,7 @@
 #define __UNDO_H__
 
 #include "common.h"
-#include <stack>
+#include <list>
 #include "graphics.h"
 
 extern cGraphics Graphics;
@@ -471,6 +471,35 @@ public:
 };
 
 
+class cUndoLightDelete : public cUndoItem
+{
+	int id;
+	cLight light;
+public:
+	cUndoLightDelete(int i)
+	{
+		id = i;
+		light = Graphics.world.lights[i];
+	}
+	void undo()
+	{
+		Graphics.world.lights.insert(Graphics.world.lights.begin() + id, light);
+		Graphics.selectedobject = id;
+	}
+};
+
+class cUndoNewLight : public cUndoItem
+{
+public:
+	cUndoNewLight()
+	{
+
+	}
+	void undo()
+	{
+		Graphics.world.lights.erase(Graphics.world.lights.begin() + (Graphics.world.lights.size()-1));
+	}
+};
 
 class cUndoChangeEffect : public cUndoItem
 {
@@ -487,6 +516,23 @@ public:
 		Graphics.world.effects[id] = effect;
 	}
 };
+
+class cUndoChangeLight : public cUndoItem
+{
+	cLight light;
+	int id;
+public:
+	cUndoChangeLight(int i)
+	{
+		id = i;
+		light = Graphics.world.lights[i];
+	}
+	void undo()
+	{
+		Graphics.world.lights[id] = light;
+	}
+};
+
 
 class cUndoObjectsDelete : public cUndoItem
 {
@@ -525,13 +571,13 @@ public:
 class cUndoStack
 {
 public:
-	stack<cUndoItem*> items;
+	list<cUndoItem*> items;
 
 	void undo();
+	void push(cUndoItem*);
 
 	cUndoStack()
 	{
-		items.push(new cUndoNOOP());
 	}
 };
 

@@ -53,6 +53,7 @@ cWindowObject*			draggingobject = NULL;
 string fontname = "tahoma";
 bool	doneaction = true;
 
+int undosize = 50;
 vector<string> texturefiles;
 
 double mouse3dxstart, mouse3dystart, mouse3dzstart;
@@ -643,6 +644,8 @@ int main(int argc, char *argv[])
 					{
 						texturefiles.push_back(value);
 					}
+					else if (option == "undostack")
+						undosize = atoi(value.c_str());
 					else
 						Log(2,0,"Unknown option: %s=%s", option.c_str(), value.c_str());
 
@@ -1015,7 +1018,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					{
 						if (doneaction)
 						{
-							undostack.items.push(new cUndoChangeObject(Graphics.selectedobject));
+							undostack.push(new cUndoChangeObject(Graphics.selectedobject));
 							doneaction = false;
 						}
 						bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
@@ -1092,6 +1095,11 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					float mindist = 999999;
 					if(Graphics.objectstartdrag)
 					{
+						if(doneaction)
+						{
+							undostack.push(new cUndoChangeLight(Graphics.selectedobject));
+							doneaction = false;
+						}
 						bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 						bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 						if (!ctrl && !alt)
@@ -1127,7 +1135,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							if(Graphics.world.models[i]->selected)
 								objectsselected.push_back(i);
 						if (objectsselected.size() > 0)
-							undostack.items.push(new cUndoChangeObjects(objectsselected));
+							undostack.push(new cUndoChangeObjects(objectsselected));
 						doneaction = false;
 					}
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
@@ -1291,7 +1299,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 							}
 
-							undostack.items.push(new cUndoTexture(posx-selsizex+1, posy-selsizey+1, posx+1, posy+1));
+							undostack.push(new cUndoTexture(posx-selsizex+1, posy-selsizey+1, posx+1, posy+1));
 
 
 							for(int x = posx; x > posx-selsizex; x--)
@@ -1417,7 +1425,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							
 						}
 
-						undostack.items.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
+						undostack.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
 
 						if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= Graphics.world.height-ceil(brushsize/2.0f))
 						{
@@ -1477,7 +1485,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 					//	if (posx >= floor(f/2.0f) && posx < 2*Graphics.world.width-ceil(f/2.0f) && posy >= floor(f/2.0f) && posy< 2*Graphics.world.height-ceil(f/2.0f))
 						{
-							undostack.items.push(new cUndoGatTileEdit(posx-floor(f/2.0f), posy-floor(f/2.0f), posx+ceil(f/2.0f), posy+ceil(f/2.0f)));
+							undostack.push(new cUndoGatTileEdit(posx-floor(f/2.0f), posy-floor(f/2.0f), posx+ceil(f/2.0f), posy+ceil(f/2.0f)));
 
 							glColor4f(1,0,0,1);
 							glDisable(GL_TEXTURE_2D);
@@ -1627,7 +1635,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							model->rot = cVector3(0,0,0);
 							Graphics.world.models.push_back(model);
 							Graphics.selectedobject = Graphics.world.models.size()-1;
-							undostack.items.push(new cUndoNewObject());
+							undostack.push(new cUndoNewObject());
 						}
 						else
 						{
@@ -1735,6 +1743,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							l.todo2 = 300;
 
 							Graphics.world.lights.push_back(l);
+							undostack.push(new cUndoNewLight());
 						}
 						else
 						{
@@ -1909,7 +1918,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.models.size())
 					{
-						undostack.items.push(new cUndoChangeObject(Graphics.selectedobject));
+						undostack.push(new cUndoChangeObject(Graphics.selectedobject));
 						bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 						bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 						bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
@@ -1927,7 +1936,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.models.size())
 					{
-						undostack.items.push(new cUndoChangeObject(Graphics.selectedobject));
+						undostack.push(new cUndoChangeObject(Graphics.selectedobject));
 						bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 						bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 						bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
@@ -1945,7 +1954,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.models.size())
 					{
-						undostack.items.push(new cUndoChangeObject(Graphics.selectedobject));
+						undostack.push(new cUndoChangeObject(Graphics.selectedobject));
 						bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 						bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 						bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
@@ -1963,7 +1972,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.models.size())
 					{
-						undostack.items.push(new cUndoChangeObject(Graphics.selectedobject));
+						undostack.push(new cUndoChangeObject(Graphics.selectedobject));
 						bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 						bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 						bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
@@ -2082,7 +2091,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 					if (posx >= floor(f/2.0f) && posx < 2*Graphics.world.width-ceil(f/2.0f) && posy >= floor(f/2.0f) && posy< 2*Graphics.world.height-ceil(f/2.0f))
 					{
-						undostack.items.push(new cUndoGatHeightEdit(posx-floor(f/2.0f), posy-floor(f/2.0f), posx+ceil(f/2.0f), posy+ceil(f/2.0f)));
+						undostack.push(new cUndoGatHeightEdit(posx-floor(f/2.0f), posy-floor(f/2.0f), posx+ceil(f/2.0f), posy+ceil(f/2.0f)));
 						for(int x = posx-floor(f/2.0f); x < posx+ceil(f/2.0f); x++)
 						{
 							for(int y = posy-floor(f/2.0f); y < posy+ceil(f/2.0f); y++)
@@ -2128,7 +2137,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					Graphics.fliph = !Graphics.fliph;
 				if (editmode == MODE_OBJECTS && Graphics.selectedobject != -1)
 				{
-					undostack.items.push(new cUndoChangeObject(Graphics.selectedobject));
+					undostack.push(new cUndoChangeObject(Graphics.selectedobject));
 					if(SDL_GetModState() & KMOD_ALT)
 						Graphics.world.models[Graphics.selectedobject]->scale.y = -	Graphics.world.models[Graphics.selectedobject]->scale.y;
 					else
@@ -2204,7 +2213,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						}
 					}
 					if (tilesedited.size() > 0)
-						undostack.items.push(new cUndoTileEdit(tilesedited));
+						undostack.push(new cUndoTileEdit(tilesedited));
 				}
 				break;
 			case SDLK_v:
@@ -2212,7 +2221,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					Graphics.flipv = !Graphics.flipv;
 				if (editmode == MODE_OBJECTS && Graphics.selectedobject != -1)
 				{
-					undostack.items.push(new cUndoChangeObject(Graphics.selectedobject));
+					undostack.push(new cUndoChangeObject(Graphics.selectedobject));
 					Graphics.world.models[Graphics.selectedobject]->scale.z = -	Graphics.world.models[Graphics.selectedobject]->scale.z;
 				}
 				if(editmode == MODE_WALLS)
@@ -2299,7 +2308,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						}
 					}
 					if (tilesedited.size() > 0)
-						undostack.items.push(new cUndoTileEdit(tilesedited));
+						undostack.push(new cUndoTileEdit(tilesedited));
 
 				}
 				break;
@@ -2314,7 +2323,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					Graphics.WM.printdebug();
 					if (editmode == MODE_OBJECTGROUP)
 					{
-						undostack.items.push(new cUndoNewObjects(Graphics.world.models.size()));
+						undostack.push(new cUndoNewObjects(Graphics.world.models.size()));
 						int start = Graphics.world.models.size();
 						int i;
 						for(i = 0; i < start; i++)
@@ -2356,7 +2365,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					if (x < 0 || x > Graphics.world.cubes[0].size()-1)
 						break;
 
-					undostack.items.push(new cUndoChangeWall(0,x,y, Graphics.world.cubes[y][x].tileside));
+					undostack.push(new cUndoChangeWall(0,x,y, Graphics.world.cubes[y][x].tileside));
 					if(Graphics.world.cubes[y][x].tileside != -1)
 					{
 						Graphics.world.cubes[y][x].tileside = -1;
@@ -2401,7 +2410,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					if (x < 0 || x > Graphics.world.cubes[0].size()-1)
 						break;
 
-					undostack.items.push(new cUndoChangeWall(1,x,y, Graphics.world.cubes[y][x].tileaside));
+					undostack.push(new cUndoChangeWall(1,x,y, Graphics.world.cubes[y][x].tileaside));
 					if(Graphics.world.cubes[y][x].tileaside != -1)
 					{
 						Graphics.world.cubes[y][x].tileaside = -1;
@@ -2483,13 +2492,13 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 								Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u3+=0.03125;
 						}
 						if(tileschanged.size() > 0)
-							undostack.items.push(new cUndoTileEdit(tileschanged));
+							undostack.push(new cUndoTileEdit(tileschanged));
 					}
 					if (editmode == MODE_OBJECTS)
 					{
 						if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.models.size())
 						{
-							undostack.items.push(new cUndoChangeObject(Graphics.selectedobject));
+							undostack.push(new cUndoChangeObject(Graphics.selectedobject));
 							bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 							bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 							bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
@@ -2511,7 +2520,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 						if (posx >= floor(f/2.0f) && posx < 2*Graphics.world.width-ceil(f/2.0f) && posy >= floor(f/2.0f) && posy< 2*Graphics.world.height-ceil(f/2.0f))
 						{
-							undostack.items.push(new cUndoGatHeightEdit(posx-floor(f/2.0f), posy-floor(f/2.0f), posx+ceil(f/2.0f), posy+ceil(f/2.0f)));
+							undostack.push(new cUndoGatHeightEdit(posx-floor(f/2.0f), posy-floor(f/2.0f), posx+ceil(f/2.0f), posy+ceil(f/2.0f)));
 							for(int x = posx-floor(f/2.0f); x < posx+ceil(f/2.0f); x++)
 							{
 								for(int y = posy-floor(f/2.0f); y < posy+ceil(f/2.0f); y++)
@@ -2531,12 +2540,12 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 					if (editmode == MODE_WATER)
 					{
-						undostack.items.push(new cUndoChangeWater(Graphics.world.water));
+						undostack.push(new cUndoChangeWater(Graphics.world.water));
 						Graphics.world.water.height++;
 					}
 					if (editmode == MODE_HEIGHTGLOBAL)
 					{
-						undostack.items.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
+						undostack.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
 						for(int x = 0; x < Graphics.world.width; x++)
 						{
 							for(int y = 0; y < Graphics.world.height; y++)
@@ -2566,7 +2575,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					{
 						if (Graphics.selectedobject != -1)
 						{
-							undostack.items.push(new cUndoChangeEffect(Graphics.selectedobject));
+							undostack.push(new cUndoChangeEffect(Graphics.selectedobject));
 							Graphics.world.effects[Graphics.selectedobject].loop--;
 							Log(3,0,"Effect-loop time: %f", Graphics.world.effects[Graphics.selectedobject].loop);
 						}
@@ -2629,13 +2638,13 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u3-=0.03125;
 						}
 						if(tileschanged.size() > 0)
-							undostack.items.push(new cUndoTileEdit(tileschanged));
+							undostack.push(new cUndoTileEdit(tileschanged));
 					}
 					if (editmode == MODE_OBJECTS)
 					{
 						if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.models.size())
 						{
-							undostack.items.push(new cUndoChangeObject(Graphics.selectedobject));
+							undostack.push(new cUndoChangeObject(Graphics.selectedobject));
 							bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 							bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 							bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
@@ -2656,7 +2665,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 						if (posx >= floor(f/2.0f) && posx < 2*Graphics.world.width-ceil(f/2.0f) && posy >= floor(f/2.0f) && posy< 2*Graphics.world.height-ceil(f/2.0f))
 						{
-							undostack.items.push(new cUndoGatHeightEdit(posx-floor(f/2.0f), posy-floor(f/2.0f), posx+ceil(f/2.0f), posy+ceil(f/2.0f)));
+							undostack.push(new cUndoGatHeightEdit(posx-floor(f/2.0f), posy-floor(f/2.0f), posx+ceil(f/2.0f), posy+ceil(f/2.0f)));
 							glColor4f(1,0,0,1);
 							glDisable(GL_TEXTURE_2D);
 							glDisable(GL_BLEND);
@@ -2679,7 +2688,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 					if (editmode == MODE_WATER)
 					{
-						undostack.items.push(new cUndoChangeWater(Graphics.world.water));
+						undostack.push(new cUndoChangeWater(Graphics.world.water));
 						Graphics.world.water.height--;
 					}
 					if (editmode == MODE_HEIGHTGLOBAL)
@@ -2687,7 +2696,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						float avg = 0;
 						float mmin = 999999;
 						float mmax = -999999;
-						undostack.items.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
+						undostack.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
 						for(int x = 0; x < Graphics.world.width; x++)
 						{
 							for(int y = 0; y < Graphics.world.height; y++)
@@ -2721,7 +2730,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					{
 						if (Graphics.selectedobject != -1)
 						{
-							undostack.items.push(new cUndoChangeEffect(Graphics.selectedobject));
+							undostack.push(new cUndoChangeEffect(Graphics.selectedobject));
 							Graphics.world.effects[Graphics.selectedobject].loop++;
 							Log(3,0,"Effect-loop time: %f", Graphics.world.effects[Graphics.selectedobject].loop);
 						}
@@ -2792,7 +2801,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u4+=0.03125;
 					}
 					if(tileschanged.size() > 0)
-						undostack.items.push(new cUndoTileEdit(tileschanged));
+						undostack.push(new cUndoTileEdit(tileschanged));
 					break;
 				}
 			case SDLK_END:
@@ -2846,7 +2855,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u4-=0.03125;
 					}
 					if(tileschanged.size() > 0)
-						undostack.items.push(new cUndoTileEdit(tileschanged));
+						undostack.push(new cUndoTileEdit(tileschanged));
 					break;
 				}
 			case SDLK_w:
@@ -2974,7 +2983,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							Graphics.world.cubes[yy][x].tileaside = Graphics.world.tiles.size()-1;
 						}
 						if(wallschanged.size() > 0)
-							undostack.items.push(new cUndoChangeWalls(1, wallschanged));
+							undostack.push(new cUndoChangeWalls(1, wallschanged));
 					}
 					else
 					{
@@ -3077,7 +3086,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							Graphics.world.cubes[y][xx].tileside = Graphics.world.tiles.size()-1;
 						}
 						if(wallschanged.size() > 0)
-							undostack.items.push(new cUndoChangeWalls(0, wallschanged));
+							undostack.push(new cUndoChangeWalls(0, wallschanged));
 					}
 					break;
 				}
@@ -3163,7 +3172,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						if (clipboard.size() != brushsize)
 							break;
 
-						undostack.items.push(new cUndoHeightEdit(posx-floor(brushsize/2.0f), posy-floor(brushsize/2.0f), posx+ceil(brushsize/2.0f), posy+ceil(brushsize/2.0f)));
+						undostack.push(new cUndoHeightEdit(posx-floor(brushsize/2.0f), posy-floor(brushsize/2.0f), posx+ceil(brushsize/2.0f), posy+ceil(brushsize/2.0f)));
 //						if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy <= Graphics.world.height-ceil(brushsize/2.0f))
 						{
 							int yy = 0;
@@ -3203,7 +3212,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							model->rot = Graphics.clipboardrot;
 							Graphics.world.models.push_back(model);
 							Graphics.selectedobject = Graphics.world.models.size()-1;
-							undostack.items.push(new cUndoNewObject());
+							undostack.push(new cUndoNewObject());
 						}
 					}
 					if (editmode == MODE_GAT)
@@ -3216,8 +3225,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						if (clipboard.size() != f)
 							break;
 
-						undostack.items.push(new cUndoGatHeightEdit(posx-floor(f/2.0f), posy-floor(f/2.0f), posx+ceil(f/2.0f), posy+ceil(f/2.0f)));
-						undostack.items.push(new cUndoGatTileEdit(posx-floor(f/2.0f), posy-floor(f/2.0f), posx+ceil(f/2.0f), posy+ceil(f/2.0f)));
+						undostack.push(new cUndoGatHeightEdit(posx-floor(f/2.0f), posy-floor(f/2.0f), posx+ceil(f/2.0f), posy+ceil(f/2.0f)));
+						undostack.push(new cUndoGatTileEdit(posx-floor(f/2.0f), posy-floor(f/2.0f), posx+ceil(f/2.0f), posy+ceil(f/2.0f)));
 
 						if (posx >= floor(f/2.0f) && posx < 2*Graphics.world.width-ceil(f/2.0f) && posy >= f && posy< 2*Graphics.world.height-f)
 						{
@@ -3256,7 +3265,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					selsizex = floor(selsizex*Graphics.brushsize);
 					selsizey = floor(selsizey*Graphics.brushsize);
 
-					undostack.items.push(new cUndoTexture(posx-selsizex+1, posy-selsizey+1, posx+1, posy+1));
+					undostack.push(new cUndoTexture(posx-selsizex+1, posy-selsizey+1, posx+1, posy+1));
 					for(int x = posx; x > posx-selsizex; x--)
 					{
 						for(int y = posy; y > posy-selsizey; y--)
@@ -3275,7 +3284,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.models.size())
 					{
-						undostack.items.push(new cUndoObjectDelete(Graphics.selectedobject));
+						undostack.push(new cUndoObjectDelete(Graphics.selectedobject));
 						delete Graphics.world.models[Graphics.selectedobject];
 						Graphics.world.models.erase(Graphics.world.models.begin() + Graphics.selectedobject);
 						Graphics.selectedobject = -1;
@@ -3285,7 +3294,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.effects.size())
 					{
-						undostack.items.push(new cUndoEffectDelete(Graphics.selectedobject));
+						undostack.push(new cUndoEffectDelete(Graphics.selectedobject));
 						Graphics.world.effects.erase(Graphics.world.effects.begin() + Graphics.selectedobject);
 						Graphics.selectedobject = -1;
 					}
@@ -3294,7 +3303,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.lights.size())
 					{
-						//undostack.items.push(new cUndoEffectDelete(Graphics.selectedobject));
+						undostack.push(new cUndoLightDelete(Graphics.selectedobject));
 						Graphics.world.lights.erase(Graphics.world.lights.begin() + Graphics.selectedobject);
 						Graphics.selectedobject = -1;
 					}
@@ -3322,7 +3331,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 					Graphics.selectedobject = -1;
 					if (objectsdeleted.size() > 0)
-						undostack.items.push(new cUndoObjectsDelete(objectsdeleted));
+						undostack.push(new cUndoObjectsDelete(objectsdeleted));
 				}
 
 				break;
@@ -3334,7 +3343,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					int posx = mouse3dx / 10;
 					int posy = mouse3dz / 10;
 
-					undostack.items.push(new cUndoHeightEdit(posx-floor(brushsize/2.0f), posy-floor(brushsize/2.0f), posx+ceil(brushsize/2.0f), posy+ceil(brushsize/2.0f)));
+					undostack.push(new cUndoHeightEdit(posx-floor(brushsize/2.0f), posy-floor(brushsize/2.0f), posx+ceil(brushsize/2.0f), posy+ceil(brushsize/2.0f)));
 					for(int x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f)-1; x++)
 					{
 						for(int y = posy-floor(brushsize/2.0f)+1; y < posy+ceil(brushsize/2.0f); y++)
@@ -3364,7 +3373,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					float f = ceil(Graphics.brushsize);
 
 
-					undostack.items.push(new cUndoGatHeightEdit(posx-floor(f/2.0f), posy-floor(f/2.0f), posx+ceil(f/2.0f), posy+ceil(f/2.0f)));
+					undostack.push(new cUndoGatHeightEdit(posx-floor(f/2.0f), posy-floor(f/2.0f), posx+ceil(f/2.0f), posy+ceil(f/2.0f)));
 					for(int x = posx-floor(f/2.0f); x < posx+ceil(f/2.0f); x++)
 					{
 						for(int y = posy-floor(f/2.0f); y < posy+ceil(f/2.0f); y++)
@@ -3426,7 +3435,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if (Graphics.selectedobject != -1)
 					{
-						undostack.items.push(new cUndoChangeObject(Graphics.selectedobject));
+						undostack.push(new cUndoChangeObject(Graphics.selectedobject));
 						Graphics.world.models[Graphics.selectedobject]->rot = cVector3(0,0,0);
 					}
 					break;
@@ -3599,7 +3608,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						int x,y;
 						int posx = mouse3dx / 10;
 						int posy = mouse3dz / 10;
-						undostack.items.push(new cUndoHeightEdit(posx-floor(brushsize/2.0f), posy-floor(brushsize/2.0f), posx+ceil(brushsize/2.0f), posy+ceil(brushsize/2.0f)));
+						undostack.push(new cUndoHeightEdit(posx-floor(brushsize/2.0f), posy-floor(brushsize/2.0f), posx+ceil(brushsize/2.0f), posy+ceil(brushsize/2.0f)));
 						for(x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f)-1; x++)
 						{
 							for(y = posy-floor(brushsize/2.0f)+1; y < posy+ceil(brushsize/2.0f); y++)
@@ -3890,7 +3899,7 @@ int ClassifyPoint(cVector3 point, cVector3 pO, cVector3 pN)
 
 MENUCOMMAND(random1)
 {
-	undostack.items.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
+	undostack.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
 	int x,y;
 	for(y = 0; y < Graphics.world.height; y++)
 	{
@@ -4007,7 +4016,7 @@ MENUCOMMAND(mode)
 
 MENUCOMMAND(flatten)
 {
-	undostack.items.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
+	undostack.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
 	for(int y = 0; y < Graphics.world.height; y++)
 	{
 		for(int x = 0; x < Graphics.world.width; x++)
@@ -4160,7 +4169,7 @@ MENUCOMMAND(quadtree)
 
 MENUCOMMAND(gatheight)
 {
-	undostack.items.push(new cUndoGatHeightEdit(0,0,Graphics.world.gattiles[0].size(), Graphics.world.gattiles.size()));
+	undostack.push(new cUndoGatHeightEdit(0,0,Graphics.world.gattiles[0].size(), Graphics.world.gattiles.size()));
 	int x,y;
 	for(y = 0; y < Graphics.world.height; y++)
 	{
@@ -4684,7 +4693,7 @@ MENUCOMMAND(clearobjects)
 		object.id = i;
 		objectsdeleted.push_back(object);
 	}
-	undostack.items.push(new cUndoObjectsDelete(objectsdeleted));
+	undostack.push(new cUndoObjectsDelete(objectsdeleted));
 	for(i = 0; i < Graphics.world.models.size(); i++)
 		delete Graphics.world.models[i];
 	Graphics.world.models.clear();
@@ -5017,7 +5026,7 @@ MENUCOMMAND(cleareffects)
 	vector<int> objectsdeleted;
 	for(i = 0; i < Graphics.world.effects.size(); i++)
 		objectsdeleted.push_back(i);
-	undostack.items.push(new cUndoEffectsDelete(objectsdeleted));
+	undostack.push(new cUndoEffectsDelete(objectsdeleted));
 
 	Graphics.world.effects.clear();
 	return true;
