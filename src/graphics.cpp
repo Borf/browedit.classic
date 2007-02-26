@@ -259,14 +259,14 @@ int cGraphics::draw()
 					glColor3f(0.5,0.5,1);
 					int len = font->textlen(o->ppopup());
 					glBegin(GL_QUADS);
-						glVertex2f(mousex-2, mousey-2);
-						glVertex2f(mousex+len+2, mousey-2);
-						glVertex2f(mousex+len+2, mousey+16);
-						glVertex2f(mousex-2, mousey+16);
+						glVertex2f(mousex-2, Graphics.h()-mousey-2);
+						glVertex2f(mousex+len+2, Graphics.h()-mousey-2);
+						glVertex2f(mousex+len+2, Graphics.h()-mousey+16);
+						glVertex2f(mousex-2, Graphics.h()-mousey+16);
 
 
 					glEnd();
-					font->print(1,1,1,mousex, mousey, "%s", o->ppopup().c_str());
+					font->print(1,1,1,mousex, Graphics.h()-mousey, "%s", o->ppopup().c_str());
 				}
 			}
 		}

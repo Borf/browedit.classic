@@ -335,16 +335,16 @@ void cWindowScrollPanel::rightclick()
 
 string cWindowScrollPanel::ppopup()
 {
-	parent->moveto(parent->px()-scrollposx-x, parent->py()-scrollposy-y);
+	parent->moveto(parent->px()+scrollposx+x, parent->py()+scrollposy+y);
 	for(unsigned int i = 0; i < objects.size(); i++)
 	{
 		if (objects[i]->inobject())
 		{
-			parent->moveto(parent->px()+scrollposx+x, parent->py()+scrollposy+y);
+			parent->moveto(parent->px()-scrollposx-x, parent->py()-scrollposy-y);
 			return objects[i]->ppopup();
 		}
 	}
-	parent->moveto(parent->px()+scrollposx+x, parent->py()+scrollposy+y);
+	parent->moveto(parent->px()-scrollposx-x, parent->py()-scrollposy-y);
 	return "";
 }
 

@@ -310,8 +310,12 @@ void cWM::MessageBox(string message)
 cWindow* cWM::getwindow(WINDOW_TYPE wt)
 {
 	for(int i = 0; i < (int)windows.size(); i++)
+	{
 		if (windows[i]->isenabled() && windows[i]->windowtype() == wt)
+		{
 			return windows[i];
+		}
+	}
 	return NULL;
 }
 

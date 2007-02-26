@@ -107,6 +107,7 @@ class cTextureWindow : public cWindow
 				o->resizeto(128,128);
 				o->SetText(0,rodir + "data\\texture\\" + p.second);
 				o->SetText(1,p.second);
+				o->setpopup(p.first);
 				box->objects.push_back(o);
 			}
 			parent->resizeto(parent->pw(), parent->ph());
@@ -122,7 +123,7 @@ public:
 
 	cTextureWindow()
 	{
-		wtype = WT_MESSAGE;
+		wtype = WT_TEXTURE;
 		closetype = HIDE;
 		resizable = true;
 		visible = true;

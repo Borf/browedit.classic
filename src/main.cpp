@@ -2311,6 +2311,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				break;
 			case SDLK_d:
 				{
+					Graphics.WM.printdebug();
 					if (editmode == MODE_OBJECTGROUP)
 					{
 						undostack.items.push(new cUndoNewObjects(Graphics.world.models.size()));
