@@ -39,7 +39,7 @@ public:
 		showtilecolors = true;
 		showwater = true;
 		showoglighting = true;
-		lasttick = SDL_GetTicks();
+		lasttick = 0;
 		wallheightmin = cVector2(-1,-1);
 		wallheightmax = cVector2(-1,-1);
 		texturepreview = NULL;

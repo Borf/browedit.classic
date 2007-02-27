@@ -294,8 +294,7 @@ glDisable(GL_DEPTH_TEST);
 
 int cGraphics::init()
 {
-
-	
+	Log(3,0,"Setting stuff");	
 	cameraheight = 123;
 	camerarot = 0.0f;
 	//camerapointer = cVector2(980,980);
@@ -303,16 +302,19 @@ int cGraphics::init()
 	cameraangle = 0;
 
 
+	Log(3,0,"Initializing video");
 	int flags = 0;
 	const SDL_VideoInfo* info = NULL;
 	if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) {
-		fprintf( stderr, "Video initialization failed: %s\n",
+		Log( 1,0, "Video initialization failed: %s\n",
 				 SDL_GetError( ) );
 		return 0;
 	}
+	Log(3,0,"Enabling unicode");
 	SDL_EnableUNICODE(1);
 	info = SDL_GetVideoInfo( );
 
+	Log(3,0,"Setting video info");
 	if( !info ) {
 		fprintf( stderr, "Video query failed: %s\n",
 				 SDL_GetError( ) );
@@ -327,21 +329,24 @@ int cGraphics::init()
 	SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
 	SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
 
+	Log(3,0,"Setting flags");
 	flags = SDL_OPENGL;// | SDL_FULLSCREEN;
 	if(fullscreen)
 	{
 		flags = SDL_OPENGL | SDL_FULLSCREEN;
 	}
 	if( SDL_SetVideoMode( width, height, bpp, flags ) == 0 ) {
-		fprintf( stderr, "Video mode set failed: %s\n",
+		Log( 1,0, "Video mode set failed: %s\n",
 				 SDL_GetError( ) );
 		return -1;
 	}
 
+	Log(3,0,"Setting caption");
 
 //	SDL_WM_SetIcon(SDL_LoadBMP("data/domovsneko.bmp"), NULL);
 	SDL_WM_SetCaption("Borf's Ragnarok Online World Editor 0.1", "BROWorld Editor");
 
+	Log(3,0,"Initializing OpenGL");
 	//SDL_ShowCursor(0);
 	if (InitGL() == 0)							// Initialize Our Newly Created GL Window
 	{

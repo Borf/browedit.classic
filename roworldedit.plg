@@ -3,120 +3,147 @@
 <pre>
 <h1>Build Log</h1>
 <h3>
---------------------Configuration: roworldedit - Win32 Debug--------------------
+--------------------Configuration: roworldedit - Win32 Release--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating temporary file "C:\DOCUME~1\BORF~1.YAM\LOCALS~1\Temp\RSP2E8.tmp" with contents
+Creating temporary file "C:\DOCUME~1\BORF~1.YAM\LOCALS~1\Temp\RSP3F2.tmp" with contents
 [
-/nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /D "GRF_STATIC" /FR"Debug/" /Fp"Debug/roworldedit.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+/nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /D "GRF_STATIC" /FR"Release/" /Fp"Release/roworldedit.pch" /YX /Fo"Release/" /Fd"Release/" /FD /c 
+"C:\Documents and Settings\Borf.YAMI\Desktop\roworldedit\src\graphics.cpp"
 "C:\Documents and Settings\Borf.YAMI\Desktop\roworldedit\src\main.cpp"
+"C:\Documents and Settings\Borf.YAMI\Desktop\roworldedit\src\RSMModel.cpp"
+"C:\Documents and Settings\Borf.YAMI\Desktop\roworldedit\src\texturemodel.cpp"
+"C:\Documents and Settings\Borf.YAMI\Desktop\roworldedit\src\undo.cpp"
+"C:\Documents and Settings\Borf.YAMI\Desktop\roworldedit\src\world.cpp"
+"C:\Documents and Settings\Borf.YAMI\Desktop\roworldedit\src\wm\windowlistbox.cpp"
+"C:\Documents and Settings\Borf.YAMI\Desktop\roworldedit\src\wm\windowobject.cpp"
+"C:\Documents and Settings\Borf.YAMI\Desktop\roworldedit\src\wm\windowroundbutton.cpp"
+"C:\Documents and Settings\Borf.YAMI\Desktop\roworldedit\src\wm\windowscrollpanel.cpp"
+"C:\Documents and Settings\Borf.YAMI\Desktop\roworldedit\src\wm\windowtabpanel.cpp"
+"C:\Documents and Settings\Borf.YAMI\Desktop\roworldedit\src\wm\windowtree.cpp"
+"C:\Documents and Settings\Borf.YAMI\Desktop\roworldedit\src\wm\window.cpp"
+"C:\Documents and Settings\Borf.YAMI\Desktop\roworldedit\src\wm\wm.cpp"
 ]
-Creating command line "cl.exe @C:\DOCUME~1\BORF~1.YAM\LOCALS~1\Temp\RSP2E8.tmp" 
-Creating temporary file "C:\DOCUME~1\BORF~1.YAM\LOCALS~1\Temp\RSP2E9.tmp" with contents
+Creating command line "cl.exe @C:\DOCUME~1\BORF~1.YAM\LOCALS~1\Temp\RSP3F2.tmp" 
+Creating temporary file "C:\DOCUME~1\BORF~1.YAM\LOCALS~1\Temp\RSP3F3.tmp" with contents
 [
-glaux.lib ws2_32.lib bgd.lib sdl.lib sdlmain.lib zlib.lib opengl32.lib glu32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/roworldedit.pdb" /debug /machine:I386 /nodefaultlib:"MSVCRT" /out:"Debug/roworldedit.exe" /pdbtype:sept 
-".\Debug\common.obj"
-".\Debug\filesystem.obj"
-".\Debug\font.obj"
-".\Debug\frustum.obj"
-".\Debug\graphics.obj"
-".\Debug\main.obj"
-".\Debug\md5.obj"
-".\Debug\RSMModel.obj"
-".\Debug\texture.obj"
-".\Debug\texturecache.obj"
-".\Debug\texturemodel.obj"
-".\Debug\undo.obj"
-".\Debug\world.obj"
-".\Debug\windowbutton.obj"
-".\Debug\windowcheckbox.obj"
-".\Debug\windowframe.obj"
-".\Debug\windowinputbox.obj"
-".\Debug\windowlabel.obj"
-".\Debug\windowlistbox.obj"
-".\Debug\windowmainbutton.obj"
-".\Debug\windowobject.obj"
-".\Debug\windowpicturebox.obj"
-".\Debug\windowprogressbar.obj"
-".\Debug\windowroundbutton.obj"
-".\Debug\windowscrollpanel.obj"
-".\Debug\windowtabpanel.obj"
-".\Debug\windowtree.obj"
-".\Debug\window.obj"
-".\Debug\wm.obj"
-".\Debug\adler32.obj"
-".\Debug\compress.obj"
-".\Debug\crc32.obj"
-".\Debug\deflate.obj"
-".\Debug\inffast.obj"
-".\Debug\inflate.obj"
-".\Debug\inftrees.obj"
-".\Debug\trees.obj"
-".\Debug\zutil.obj"
-".\Debug\grf.obj"
-".\Debug\grfcrypt.obj"
-".\Debug\grfsupport.obj"
-".\Debug\rgz.obj"
-".\Debug\Script1.res"
+ws2_32.lib bgd.lib sdl.lib sdlmain.lib zlib.lib opengl32.lib glu32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:no /pdb:"Release/roworldedit.pdb" /machine:I386 /out:"Release/roworldedit.exe" 
+".\Release\common.obj"
+".\Release\filesystem.obj"
+".\Release\font.obj"
+".\Release\frustum.obj"
+".\Release\graphics.obj"
+".\Release\main.obj"
+".\Release\md5.obj"
+".\Release\RSMModel.obj"
+".\Release\texture.obj"
+".\Release\texturecache.obj"
+".\Release\texturemodel.obj"
+".\Release\undo.obj"
+".\Release\world.obj"
+".\Release\windowbutton.obj"
+".\Release\windowcheckbox.obj"
+".\Release\windowframe.obj"
+".\Release\windowinputbox.obj"
+".\Release\windowlabel.obj"
+".\Release\windowlistbox.obj"
+".\Release\windowmainbutton.obj"
+".\Release\windowobject.obj"
+".\Release\windowpicturebox.obj"
+".\Release\windowprogressbar.obj"
+".\Release\windowroundbutton.obj"
+".\Release\windowscrollpanel.obj"
+".\Release\windowtabpanel.obj"
+".\Release\windowtree.obj"
+".\Release\window.obj"
+".\Release\wm.obj"
+".\Release\adler32.obj"
+".\Release\compress.obj"
+".\Release\crc32.obj"
+".\Release\deflate.obj"
+".\Release\inffast.obj"
+".\Release\inflate.obj"
+".\Release\inftrees.obj"
+".\Release\trees.obj"
+".\Release\zutil.obj"
+".\Release\grf.obj"
+".\Release\grfcrypt.obj"
+".\Release\grfsupport.obj"
+".\Release\rgz.obj"
+".\Release\Script1.res"
 ]
-Creating command line "link.exe @C:\DOCUME~1\BORF~1.YAM\LOCALS~1\Temp\RSP2E9.tmp"
+Creating command line "link.exe @C:\DOCUME~1\BORF~1.YAM\LOCALS~1\Temp\RSP3F3.tmp"
 <h3>Output Window</h3>
 Compiling...
+graphics.cpp
 main.cpp
+RSMModel.cpp
+texturemodel.cpp
+undo.cpp
+world.cpp
+windowlistbox.cpp
+windowobject.cpp
+windowroundbutton.cpp
+windowscrollpanel.cpp
+windowtabpanel.cpp
+windowtree.cpp
+window.cpp
+wm.cpp
 Linking...
-Creating temporary file "C:\DOCUME~1\BORF~1.YAM\LOCALS~1\Temp\RSP2EA.tmp" with contents
+LINK : warning LNK4098: defaultlib "LIBCMTD" conflicts with use of other libs; use /NODEFAULTLIB:library
+Creating temporary file "C:\DOCUME~1\BORF~1.YAM\LOCALS~1\Temp\RSP3F5.tmp" with contents
 [
-/nologo /o"Debug/roworldedit.bsc" 
-".\Debug\common.sbr"
-".\Debug\filesystem.sbr"
-".\Debug\font.sbr"
-".\Debug\frustum.sbr"
-".\Debug\graphics.sbr"
-".\Debug\main.sbr"
-".\Debug\md5.sbr"
-".\Debug\RSMModel.sbr"
-".\Debug\texture.sbr"
-".\Debug\texturecache.sbr"
-".\Debug\texturemodel.sbr"
-".\Debug\undo.sbr"
-".\Debug\world.sbr"
-".\Debug\windowbutton.sbr"
-".\Debug\windowcheckbox.sbr"
-".\Debug\windowframe.sbr"
-".\Debug\windowinputbox.sbr"
-".\Debug\windowlabel.sbr"
-".\Debug\windowlistbox.sbr"
-".\Debug\windowmainbutton.sbr"
-".\Debug\windowobject.sbr"
-".\Debug\windowpicturebox.sbr"
-".\Debug\windowprogressbar.sbr"
-".\Debug\windowroundbutton.sbr"
-".\Debug\windowscrollpanel.sbr"
-".\Debug\windowtabpanel.sbr"
-".\Debug\windowtree.sbr"
-".\Debug\window.sbr"
-".\Debug\wm.sbr"
-".\Debug\adler32.sbr"
-".\Debug\compress.sbr"
-".\Debug\crc32.sbr"
-".\Debug\deflate.sbr"
-".\Debug\inffast.sbr"
-".\Debug\inflate.sbr"
-".\Debug\inftrees.sbr"
-".\Debug\trees.sbr"
-".\Debug\zutil.sbr"
-".\Debug\grf.sbr"
-".\Debug\grfcrypt.sbr"
-".\Debug\grfsupport.sbr"
-".\Debug\rgz.sbr"]
-Creating command line "bscmake.exe @C:\DOCUME~1\BORF~1.YAM\LOCALS~1\Temp\RSP2EA.tmp"
+/nologo /o"Release/roworldedit.bsc" 
+".\Release\common.sbr"
+".\Release\filesystem.sbr"
+".\Release\font.sbr"
+".\Release\frustum.sbr"
+".\Release\graphics.sbr"
+".\Release\main.sbr"
+".\Release\md5.sbr"
+".\Release\RSMModel.sbr"
+".\Release\texture.sbr"
+".\Release\texturecache.sbr"
+".\Release\texturemodel.sbr"
+".\Release\undo.sbr"
+".\Release\world.sbr"
+".\Release\windowbutton.sbr"
+".\Release\windowcheckbox.sbr"
+".\Release\windowframe.sbr"
+".\Release\windowinputbox.sbr"
+".\Release\windowlabel.sbr"
+".\Release\windowlistbox.sbr"
+".\Release\windowmainbutton.sbr"
+".\Release\windowobject.sbr"
+".\Release\windowpicturebox.sbr"
+".\Release\windowprogressbar.sbr"
+".\Release\windowroundbutton.sbr"
+".\Release\windowscrollpanel.sbr"
+".\Release\windowtabpanel.sbr"
+".\Release\windowtree.sbr"
+".\Release\window.sbr"
+".\Release\wm.sbr"
+".\Release\adler32.sbr"
+".\Release\compress.sbr"
+".\Release\crc32.sbr"
+".\Release\deflate.sbr"
+".\Release\inffast.sbr"
+".\Release\inflate.sbr"
+".\Release\inftrees.sbr"
+".\Release\trees.sbr"
+".\Release\zutil.sbr"
+".\Release\grf.sbr"
+".\Release\grfcrypt.sbr"
+".\Release\grfsupport.sbr"
+".\Release\rgz.sbr"]
+Creating command line "bscmake.exe @C:\DOCUME~1\BORF~1.YAM\LOCALS~1\Temp\RSP3F5.tmp"
 Creating browse info file...
 <h3>Output Window</h3>
 
 
 
 <h3>Results</h3>
-roworldedit.exe - 0 error(s), 0 warning(s)
+roworldedit.exe - 0 error(s), 1 warning(s)
 </pre>
 </body>
 </html>
