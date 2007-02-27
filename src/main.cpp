@@ -656,8 +656,6 @@ int main(int argc, char *argv[])
 	
 	map<string, cMenu*, less<string> > itemsm;
 	map<cMenu*, int, less<cMenu*> > levelm;
-	map<string, cMenu*, less<string> > itemst;
-	map<cMenu*, int, less<cMenu*> > levelt;
 	levelm[models] = 0;
 
 	while(!pFile->eof())
@@ -751,8 +749,6 @@ int main(int argc, char *argv[])
 
 	itemsm.clear();
 	levelm.clear();
-	itemst.clear();
-	levelt.clear();
 
 	models->sort();
 
@@ -760,6 +756,7 @@ int main(int argc, char *argv[])
 	lastlclick = 0;
 	lastrclick = 0;
 
+	Log(3,0,"Loading effects...");
 	vector<cMenu*> effectssubmenu;
 
 	pFile = fs.open("effects.txt");
@@ -791,6 +788,7 @@ int main(int argc, char *argv[])
 	}
 
 	pFile->close();
+	Log(3,0,"Done loading effects, initializing graphics...");
 
 	if (!Graphics.init())
 		return 1;

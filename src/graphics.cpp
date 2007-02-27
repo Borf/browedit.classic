@@ -350,6 +350,7 @@ int cGraphics::init()
 		return 0;						// Return FALSE
 	}
 
+	Log(3,0,"Opening general textures");
 
 	glDisable(GL_LIGHTING);
 	font = new cFont();
@@ -360,7 +361,9 @@ int cGraphics::init()
 	mask->Load("data/bulb.tga");
 	splash = new cTexture();
 	splash->Load("data/hamtaro.tga");
+	Log(3,0,"Initializing WM");
 	WM.init();
+	Log(3,0,"Adding locations bar");
 	cWindow* w = new cHotkeyWindow();
 	w->init(&WM.texture, &WM.font);
 	WM.addwindow(w);
@@ -374,6 +377,7 @@ int cGraphics::init()
 	}
 
 	
+	Log(3,0,"Loading water.txt");
 	cFile* pFile = fs.open("water.txt");
 	while(pFile->readline() != "[" + config + "]" && !pFile->eof());
 
