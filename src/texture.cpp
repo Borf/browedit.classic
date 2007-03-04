@@ -82,8 +82,8 @@ GLuint cTexture::texid()
 					{
 						for(int y = 0; y < lHeightPixels; y++)
 						{
-							int tx = floor(x*factorx);
-							int ty = floor(y*factory);
+							int tx = (int)floor(x*factorx);
+							int ty = (int)floor(y*factory);
 							int target = 4*(tx+(bmp.width)*ty);
 							data[4*(x+lWidthPixels*y)] = bmp.bytes[target];
 							data[4*(x+lWidthPixels*y)+1] = bmp.bytes[target+1];

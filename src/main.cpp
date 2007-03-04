@@ -230,7 +230,7 @@ void mainloop()
 {
 	if(lasttimer + paintspeed < SDL_GetTicks())
 	{
-		if(editmode == MODE_HEIGHTDETAIL && menu->inwindow(mousex, Graphics.h()-mousey) == NULL)
+		if(editmode == MODE_HEIGHTDETAIL && menu->inwindow((int)mousex, Graphics.h()-(int)mousey) == NULL)
 		{
 			if (lbuttondown || rbuttondown)
 			{
@@ -240,15 +240,15 @@ void mainloop()
 				int posx = tilex;
 				int posy = tiley;
 				bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
-				int mmin = 99999999;
-				int mmax = -9999999;
+				float mmin = 99999999;
+				float mmax = -9999999;
 				if (ctrl)
 				{
-					if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= Graphics.world.height-ceil(brushsize/2.0f))
+					if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-(int)ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= Graphics.world.height-(int)ceil(brushsize/2.0f))
 					{
-						for(int x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f); x++)
+						for(int x = posx-(int)floor(brushsize/2.0f); x < posx+(int)ceil(brushsize/2.0f); x++)
 						{
-							for(int y = posy-floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
+							for(int y = posy-(int)floor(brushsize/2.0f); y < posy+(int)ceil(brushsize/2.0f); y++)
 							{
 								cCube* c = &Graphics.world.cubes[y][x];
 								mmin = min(min(min(min(mmin, c->cell1),c->cell2),c->cell3),c->cell4);
@@ -259,22 +259,22 @@ void mainloop()
 					
 				}
 
-				if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= Graphics.world.height-ceil(brushsize/2.0f))
+				if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-(int)ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= Graphics.world.height-(int)ceil(brushsize/2.0f))
 				{
-					for(int x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f); x++)
+					for(int x = posx-(int)floor(brushsize/2.0f); x < posx+(int)ceil(brushsize/2.0f); x++)
 					{
-						for(int y = posy-floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
+						for(int y = posy-(int)floor(brushsize/2.0f); y < posy+(int)ceil(brushsize/2.0f); y++)
 						{
 							cCube* c = &Graphics.world.cubes[y][x];
 							if(lbuttondown && !rbuttondown)
 							{
-								if (!Graphics.slope || (x > posx-floor(brushsize/2.0f)) && y > posy-floor(brushsize/2.0f))
+								if (!Graphics.slope || (x > posx-(int)floor(brushsize/2.0f)) && y > posy-(int)floor(brushsize/2.0f))
 									c->cell1-=1;
-								if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y > posy-floor(brushsize/2.0f))
+								if (!Graphics.slope || (x < posx+(int)ceil(brushsize/2.0f)-1) && y > posy-(int)floor(brushsize/2.0f))
 									c->cell2-=1;
-								if (!Graphics.slope || (x > posx-floor(brushsize/2.0f)) && y < posy+ceil(brushsize/2.0f)-1)
+								if (!Graphics.slope || (x > posx-(int)floor(brushsize/2.0f)) && y < posy+(int)ceil(brushsize/2.0f)-1)
 									c->cell3-=1;
-								if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y < posy+ceil(brushsize/2.0f)-1)
+								if (!Graphics.slope || (x < posx+(int)ceil(brushsize/2.0f)-1) && y < posy+(int)ceil(brushsize/2.0f)-1)
 									c->cell4-=1;
 								if(ctrl)
 								{
@@ -286,13 +286,13 @@ void mainloop()
 							}
 							if(lbuttondown && rbuttondown)
 							{
-								if (!Graphics.slope || (x > posx-floor(brushsize/2.0f)) && y > posy-floor(brushsize/2.0f))
+								if (!Graphics.slope || (x > posx-(int)floor(brushsize/2.0f)) && y > posy-(int)floor(brushsize/2.0f))
 									c->cell1+=1;
-								if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y > posy-floor(brushsize/2.0f))
+								if (!Graphics.slope || (x < posx+(int)ceil(brushsize/2.0f)-1) && y > posy-(int)floor(brushsize/2.0f))
 									c->cell2+=1;
-								if (!Graphics.slope || (x > posx-floor(brushsize/2.0f)) && y < posy+ceil(brushsize/2.0f)-1)
+								if (!Graphics.slope || (x > posx-(int)floor(brushsize/2.0f)) && y < posy+(int)ceil(brushsize/2.0f)-1)
 									c->cell3+=1;
-								if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y < posy+ceil(brushsize/2.0f)-1)
+								if (!Graphics.slope || (x < posx+(int)ceil(brushsize/2.0f)-1) && y < posy+(int)ceil(brushsize/2.0f)-1)
 									c->cell4+=1;
 								if(ctrl)
 								{
@@ -780,7 +780,7 @@ int main(int argc, char *argv[])
 			char buf[255];
 			sprintf(buf, "%i. %s", id, val.c_str());
 
-			ADDMENUITEMDATA(mm,effectssubmenu[floor(i/30)],buf, &MenuCommand_effect, line.substr(0,line.find("|")));
+			ADDMENUITEMDATA(mm,effectssubmenu[(int)floor(i/30)],buf, &MenuCommand_effect, line.substr(0,line.find("|")));
 
 			i++;
 		
@@ -914,8 +914,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 			if(movement > 4)
 			{
-				tilex = mouse3dx / 10;
-				tiley = mouse3dz / 10;
+				tilex = (int)mouse3dx / 10;
+				tiley = (int)mouse3dz / 10;
 			}
 			if(m != NULL)
 				break;
@@ -1000,8 +1000,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					Graphics.selectionstart.x = floor(startmousex / 32)*32;
 					Graphics.selectionstart.y = floor(startmousey / 32)*32;
-					Graphics.selectionend.x = ceil(mousex / 32)*32;
-					Graphics.selectionend.y = ceil(mousey / 32)*32;
+					Graphics.selectionend.x = (int)ceil(mousex / 32)*32;
+					Graphics.selectionend.y = (int)ceil(mousey / 32)*32;
 					if(Graphics.selectionstart.x > Graphics.selectionend.x)
 					{
 						float f = Graphics.selectionstart.x;
@@ -1212,8 +1212,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			mouse3dystart = mouse3dy;
 			mouse3dzstart = mouse3dz;
 
-			tilex = mouse3dx / 10;
-			tiley = mouse3dz / 10;
+			tilex = (int)mouse3dx / 10;
+			tiley = (int)mouse3dz / 10;
 
 			dragged = false;
 			doubleclick = false;
@@ -1281,8 +1281,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							selsizex = floor(selsizex*Graphics.brushsize);
 							selsizey = floor(selsizey*Graphics.brushsize);
 
-							int posx = mouse3dx / 10;
-							int posy = mouse3dz / 10;
+							int posx = (int)mouse3dx / 10;
+							int posy = (int)mouse3dz / 10;
 
 							float selstartx = ((Graphics.selectionstart.x - (Graphics.w()-256)) / 32.0f);
 							float selstarty = ((int)(Graphics.selectionstart.y - 32) % 288) / 32;
@@ -1307,7 +1307,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 							}
 
-							undostack.push(new cUndoTexture(posx-selsizex+1, posy-selsizey+1, posx+1, posy+1));
+							undostack.push(new cUndoTexture(posx-(int)selsizex+1, posy-(int)selsizey+1, posx+1, posy+1));
 
 
 							for(int x = posx; x > posx-selsizex; x--)
@@ -1325,7 +1325,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 									t.color[1] = (char)255;
 									t.color[2] = (char)255;
 									t.color[3] = (char)255;
-									t.texture = Graphics.texturestart + (Graphics.selectionstart.y - 32) / 288;
+									t.texture = Graphics.texturestart + (int)(Graphics.selectionstart.y - 32) / 288;
 									t.lightmap = 0;
 									if (Graphics.texturerot == 0)
 									{
@@ -1414,15 +1414,15 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						int posx = tilex;
 						int posy = tiley;
 						bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
-						int mmin = 99999999;
-						int mmax = -9999999;
+						float mmin = 99999999;
+						float mmax = -9999999;
 						if (ctrl)
 						{
-							if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= Graphics.world.height-ceil(brushsize/2.0f))
+							if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-(int)ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= Graphics.world.height-(int)ceil(brushsize/2.0f))
 							{
-								for(int x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f); x++)
+								for(int x = posx-(int)floor(brushsize/2.0f); x < posx+(int)ceil(brushsize/2.0f); x++)
 								{
-									for(int y = posy-floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
+									for(int y = posy-(int)floor(brushsize/2.0f); y < posy+(int)ceil(brushsize/2.0f); y++)
 									{
 										cCube* c = &Graphics.world.cubes[y][x];
 										mmin = min(min(min(min(mmin, c->cell1),c->cell2),c->cell3),c->cell4);
@@ -1435,22 +1435,22 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 						undostack.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
 
-						if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= Graphics.world.height-ceil(brushsize/2.0f))
+						if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-(int)ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= Graphics.world.height-(int)ceil(brushsize/2.0f))
 						{
-							for(int x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f); x++)
+							for(int x = posx-(int)floor(brushsize/2.0f); x < posx+(int)ceil(brushsize/2.0f); x++)
 							{
-								for(int y = posy-floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
+								for(int y = posy-(int)floor(brushsize/2.0f); y < posy+(int)ceil(brushsize/2.0f); y++)
 								{
 									cCube* c = &Graphics.world.cubes[y][x];
 									if(lbuttondown && !rbuttondown)
 									{
-										if (!Graphics.slope || (x > posx-floor(brushsize/2.0f)) && y > posy-floor(brushsize/2.0f))
+										if (!Graphics.slope || (x > posx-(int)floor(brushsize/2.0f)) && y > posy-(int)floor(brushsize/2.0f))
 											c->cell1-=1;
-										if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y > posy-floor(brushsize/2.0f))
+										if (!Graphics.slope || (x < posx+(int)ceil(brushsize/2.0f)-1) && y > posy-(int)floor(brushsize/2.0f))
 											c->cell2-=1;
-										if (!Graphics.slope || (x > posx-floor(brushsize/2.0f)) && y < posy+ceil(brushsize/2.0f)-1)
+										if (!Graphics.slope || (x > posx-(int)floor(brushsize/2.0f)) && y < posy+(int)ceil(brushsize/2.0f)-1)
 											c->cell3-=1;
-										if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y < posy+ceil(brushsize/2.0f)-1)
+										if (!Graphics.slope || (x < posx+(int)ceil(brushsize/2.0f)-1) && y < posy+(int)ceil(brushsize/2.0f)-1)
 											c->cell4-=1;
 										if(ctrl)
 										{
@@ -1462,13 +1462,13 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 									}
 									if(lbuttondown && rbuttondown)
 									{
-										if (!Graphics.slope || (x > posx-floor(brushsize/2.0f)) && y > posy-floor(brushsize/2.0f))
+										if (!Graphics.slope || (x > posx-(int)floor(brushsize/2.0f)) && y > posy-(int)floor(brushsize/2.0f))
 											c->cell1+=1;
-										if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y > posy-floor(brushsize/2.0f))
+										if (!Graphics.slope || (x < posx+(int)ceil(brushsize/2.0f)-1) && y > posy-(int)floor(brushsize/2.0f))
 											c->cell2+=1;
-										if (!Graphics.slope || (x > posx-floor(brushsize/2.0f)) && y < posy+ceil(brushsize/2.0f)-1)
+										if (!Graphics.slope || (x > posx-(int)floor(brushsize/2.0f)) && y < posy+(int)ceil(brushsize/2.0f)-1)
 											c->cell3+=1;
-										if (!Graphics.slope || (x < posx+ceil(brushsize/2.0f)-1) && y < posy+ceil(brushsize/2.0f)-1)
+										if (!Graphics.slope || (x < posx+(int)ceil(brushsize/2.0f)-1) && y < posy+(int)ceil(brushsize/2.0f)-1)
 											c->cell4+=1;
 										if(ctrl)
 										{
@@ -1486,21 +1486,21 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 					else if (editmode == MODE_GAT)
 					{
-						int posx = mouse3dx / 5;
-						int posy = mouse3dz / 5;
+						int posx = (int)mouse3dx / 5;
+						int posy = (int)mouse3dz / 5;
 
-						int f = ceil(Graphics.brushsize);
+						int f = (int)ceil(Graphics.brushsize);
 
-					//	if (posx >= floor(f/2.0f) && posx < 2*Graphics.world.width-ceil(f/2.0f) && posy >= floor(f/2.0f) && posy< 2*Graphics.world.height-ceil(f/2.0f))
+					//	if (posx >= floor(f/2.0f) && posx < 2*Graphics.world.width-(int)ceil(f/2.0f) && posy >= floor(f/2.0f) && posy< 2*Graphics.world.height-(int)ceil(f/2.0f))
 						{
-							undostack.push(new cUndoGatTileEdit(posx-floor(f/2.0f), posy-floor(f/2.0f), posx+ceil(f/2.0f), posy+ceil(f/2.0f)));
+							undostack.push(new cUndoGatTileEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
 
 							glColor4f(1,0,0,1);
 							glDisable(GL_TEXTURE_2D);
 							glDisable(GL_BLEND);
-							for(int x = posx-floor(f/2.0f); x < posx+ceil(f/2.0f); x++)
+							for(int x = posx-(int)floor(f/2.0f); x < posx+(int)ceil(f/2.0f); x++)
 							{
-								for(int y = posy-floor(f/2.0f); y < posy+ceil(f/2.0f); y++)
+								for(int y = posy-(int)floor(f/2.0f); y < posy+(int)ceil(f/2.0f); y++)
 								{
 									if (y < 0 || y >= Graphics.world.height*2 || x < 0 || x >= Graphics.world.width*2)
 										continue;
@@ -1725,7 +1725,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							cMenu* m = effectsmenu->finddata(buf);
 							if (m!=NULL)
 								Log(3,0,"Selected effect %s", m->title.c_str());
-							Log(3,0,"Looping: %f, Category: %i", Graphics.world.effects[Graphics.selectedobject].loop, Graphics.world.effects[Graphics.selectedobject].category);
+							Log(3,0,"Looping: %f, Category: %s", Graphics.world.effects[Graphics.selectedobject].loop, Graphics.world.effects[Graphics.selectedobject].category.c_str());
 							Log(3,0,"todo1: %f", Graphics.world.effects[Graphics.selectedobject].todo1);
 							Log(3,0,"todo2: %f", Graphics.world.effects[Graphics.selectedobject].todo2);
 							Log(3,0,"todo3: %f", Graphics.world.effects[Graphics.selectedobject].todo3);
@@ -1782,8 +1782,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 					else if(editmode == MODE_WALLS && movement < 3)
 					{
-						int x = mouse3dx / 10;
-						int y = mouse3dz / 10;
+						int x = (int)mouse3dx / 10;
+						int y = (int)mouse3dz / 10;
 						if (y < 0 || y > Graphics.world.height-1)
 							break;
 						if (x < 0 || x > Graphics.world.width-1)
@@ -1821,9 +1821,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							}
 						}
 
-						for(x = floor(mouse3dxstart/10); x < floor(mouse3dx/10); x++)
+						for(x = (int)floor(mouse3dxstart/10); x < floor(mouse3dx/10); x++)
 						{
-							for(y = floor(mouse3dzstart/10); y < floor(mouse3dz/10); y++)
+							for(y = (int)floor(mouse3dzstart/10); y < (int)floor(mouse3dz/10); y++)
 							{
 								if (x >= 0 && x < Graphics.world.width && y >= 0 && y < Graphics.world.height)
 								{
@@ -1906,8 +1906,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				else if(editmode == MODE_WALLS && movement < 3)
 				{
-					int x = mouse3dx / 10;
-					int y = mouse3dz / 10;
+					int x = (int)mouse3dx / 10;
+					int y = (int)mouse3dz / 10;
 					if (y < 0 || y > Graphics.world.height-1)
 						break;
 					if (x < 0 || x > Graphics.world.width-1)
@@ -2094,18 +2094,18 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					Graphics.texturerot = (Graphics.texturerot + 1) % 4;
 				else if (editmode == MODE_GAT)
 				{
-					int posx = mouse3dx / 5;
-					int posy = mouse3dz / 5;
+					int posx = (int)mouse3dx / 5;
+					int posy = (int)mouse3dz / 5;
 
-					float f = ceil(Graphics.brushsize);
+					float f = (int)ceil(Graphics.brushsize);
 
 
-					if (posx >= floor(f/2.0f) && posx < 2*Graphics.world.width-ceil(f/2.0f) && posy >= floor(f/2.0f) && posy< 2*Graphics.world.height-ceil(f/2.0f))
+					if (posx >= (int)floor(f/2.0f) && posx < 2*Graphics.world.width-(int)ceil(f/2.0f) && posy >= (int)floor(f/2.0f) && posy< 2*Graphics.world.height-(int)ceil(f/2.0f))
 					{
-						undostack.push(new cUndoGatHeightEdit(posx-floor(f/2.0f), posy-floor(f/2.0f), posx+ceil(f/2.0f), posy+ceil(f/2.0f)));
-						for(int x = posx-floor(f/2.0f); x < posx+ceil(f/2.0f); x++)
+						undostack.push(new cUndoGatHeightEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
+						for(int x = posx-(int)floor(f/2.0f); x < posx+(int)ceil(f/2.0f); x++)
 						{
-							for(int y = posy-floor(f/2.0f); y < posy+ceil(f/2.0f); y++)
+							for(int y = posy-(int)floor(f/2.0f); y < posy+(int)ceil(f/2.0f); y++)
 							{
 								cCube* c = &Graphics.world.cubes[y/2][x/2];
 
@@ -2158,8 +2158,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					vector<pair<int, cTile> > tilesedited;
 
-					int x = mouse3dx / 10;
-					int y = mouse3dz / 10;
+					int x = (int)mouse3dx / 10;
+					int y = (int)mouse3dz / 10;
 					if (y < 0)
 						break;
 					if (x < 0)
@@ -2238,8 +2238,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				if(editmode == MODE_WALLS)
 				{
 					vector<pair<int, cTile> > tilesedited;
-					int x = mouse3dx / 10;
-					int y = mouse3dz / 10;
+					int x = (int)mouse3dx / 10;
+					int y = (int)mouse3dz / 10;
 					if (y < 0)
 						break;
 					if (x < 0)
@@ -2355,8 +2355,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 					else
 					{
-						int posx = mouse3dx / 10;
-						int posy = mouse3dz / 10;
+						int posx = (int)mouse3dx / 10;
+						int posy = (int)mouse3dz / 10;
 
 						if (posx >= brushsize && posx < Graphics.world.width-brushsize && posy >= brushsize && posy< Graphics.world.height-brushsize)
 						{
@@ -2369,8 +2369,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				break;
 			case SDLK_COMMA:
 				{
-					int x = mouse3dx / 10;
-					int y = mouse3dz / 10;
+					int x = (int)mouse3dx / 10;
+					int y = (int)mouse3dz / 10;
 					if (y < 0 || y > Graphics.world.cubes.size()-1)
 						break;
 					if (x < 0 || x > Graphics.world.cubes[0].size()-1)
@@ -2388,7 +2388,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					t.color[1] = (char)255;
 					t.color[2] = (char)255;
 					t.color[3] = (char)255;
-					t.texture = Graphics.texturestart + (Graphics.selectionstart.y - 32) / 288;
+					t.texture = Graphics.texturestart + ((int)Graphics.selectionstart.y - 32) / 288;
 					t.lightmap = 0;
 					float selstartx = (((Graphics.selectionstart.x - (Graphics.w()-256)) / 32.0f)) / 8.0f;
 					float selstarty = (((int)(Graphics.selectionstart.y - 32) % 288) / 32) / 8.0f;
@@ -2414,8 +2414,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 			case SDLK_PERIOD:
 				{
-					int x = mouse3dx / 10;
-					int y = mouse3dz / 10;
+					int x = (int)mouse3dx / 10;
+					int y = (int)mouse3dz / 10;
 					if (y < 0 || y > Graphics.world.cubes.size()-1)
 						break;
 					if (x < 0 || x > Graphics.world.cubes[0].size()-1)
@@ -2433,7 +2433,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					t.color[1] = (char)255;
 					t.color[2] = (char)255;
 					t.color[3] = (char)255;
-					t.texture = Graphics.texturestart + (Graphics.selectionstart.y - 32) / 288;
+					t.texture = Graphics.texturestart + (int)(Graphics.selectionstart.y - 32) / 288;
 					t.lightmap = 0;
 					float selstartx = (((Graphics.selectionstart.x - (Graphics.w()-256)) / 32.0f)) / 8.0f;
 					float selstarty = (((int)(Graphics.selectionstart.y - 32) % 288) / 32) / 8.0f;
@@ -2462,8 +2462,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					if(editmode == MODE_WALLS)
 					{
 						vector<pair<int, cTile> > tileschanged;
-						int x = mouse3dx / 10;
-						int y = mouse3dz / 10;
+						int x = (int)mouse3dx / 10;
+						int y = (int)mouse3dz / 10;
 						if(SDL_GetModState() & KMOD_SHIFT)
 						{
 							int xx = x;
@@ -2523,27 +2523,27 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 					if(editmode == MODE_GAT)
 					{
-						int posx = mouse3dx / 5;
-						int posy = mouse3dz / 5;
+						int posx = (int)mouse3dx / 5;
+						int posy = (int)mouse3dz / 5;
 
-						float f = ceil(Graphics.brushsize);
+						float f = (int)ceil(Graphics.brushsize);
 
 
-						if (posx >= floor(f/2.0f) && posx < 2*Graphics.world.width-ceil(f/2.0f) && posy >= floor(f/2.0f) && posy< 2*Graphics.world.height-ceil(f/2.0f))
+						if (posx >= (int)floor(f/2.0f) && posx < 2*Graphics.world.width-(int)ceil(f/2.0f) && posy >= (int)floor(f/2.0f) && posy< 2*Graphics.world.height-(int)ceil(f/2.0f))
 						{
-							undostack.push(new cUndoGatHeightEdit(posx-floor(f/2.0f), posy-floor(f/2.0f), posx+ceil(f/2.0f), posy+ceil(f/2.0f)));
-							for(int x = posx-floor(f/2.0f); x < posx+ceil(f/2.0f); x++)
+							undostack.push(new cUndoGatHeightEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
+							for(int x = posx-(int)floor(f/2.0f); x < posx+(int)ceil(f/2.0f); x++)
 							{
-								for(int y = posy-floor(f/2.0f); y < posy+ceil(f/2.0f); y++)
+								for(int y = posy-(int)floor(f/2.0f); y < posy+(int)ceil(f/2.0f); y++)
 								{
 									cGatTile* c = &Graphics.world.gattiles[y][x];
-									if (!Graphics.slope || (x > posx-floor(f/2.0f)) && y > posy-floor(f/2.0f))
+									if (!Graphics.slope || (x > posx-(int)floor(f/2.0f)) && y > posy-(int)floor(f/2.0f))
 										c->cell1+=1;
-									if (!Graphics.slope || (x < posx+ceil(f/2.0f)-1) && y > posy-floor(f/2.0f))
+									if (!Graphics.slope || (x < posx+(int)ceil(f/2.0f)-1) && y > posy-(int)floor(f/2.0f))
 										c->cell2+=1;
-									if (!Graphics.slope || (x > posx-floor(f/2.0f)) && y < posy+ceil(f/2.0f)-1)
+									if (!Graphics.slope || (x > posx-(int)floor(f/2.0f)) && y < posy+(int)ceil(f/2.0f)-1)
 										c->cell3+=1;
-									if (!Graphics.slope || (x < posx+ceil(f/2.0f)-1) && y < posy+ceil(f/2.0f)-1)
+									if (!Graphics.slope || (x < posx+(int)ceil(f/2.0f)-1) && y < posy+(int)ceil(f/2.0f)-1)
 										c->cell4+=1;
 								}
 							}
@@ -2608,8 +2608,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					if(editmode == MODE_WALLS)
 					{
 						vector<pair<int, cTile> > tileschanged;
-						int x = mouse3dx / 10;
-						int y = mouse3dz / 10;
+						int x = (int)mouse3dx / 10;
+						int y = (int)mouse3dz / 10;
 						if(SDL_GetModState() & KMOD_SHIFT)
 						{
 							int xx = x;
@@ -2669,29 +2669,29 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 					if(editmode == MODE_GAT)
 					{
-						int posx = mouse3dx / 5;
-						int posy = mouse3dz / 5;
+						int posx = (int)mouse3dx / 5;
+						int posy = (int)mouse3dz / 5;
 
-						float f = ceil(Graphics.brushsize);
+						float f = (int)ceil(Graphics.brushsize);
 
-						if (posx >= floor(f/2.0f) && posx < 2*Graphics.world.width-ceil(f/2.0f) && posy >= floor(f/2.0f) && posy< 2*Graphics.world.height-ceil(f/2.0f))
+						if (posx >= (int)floor(f/2.0f) && posx < 2*Graphics.world.width-(int)ceil(f/2.0f) && posy >= (int)floor(f/2.0f) && posy< 2*Graphics.world.height-(int)ceil(f/2.0f))
 						{
-							undostack.push(new cUndoGatHeightEdit(posx-floor(f/2.0f), posy-floor(f/2.0f), posx+ceil(f/2.0f), posy+ceil(f/2.0f)));
+							undostack.push(new cUndoGatHeightEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
 							glColor4f(1,0,0,1);
 							glDisable(GL_TEXTURE_2D);
 							glDisable(GL_BLEND);
-							for(int x = posx-floor(f/2.0f); x < posx+ceil(f/2.0f); x++)
+							for(int x = posx-(int)floor(f/2.0f); x < posx+(int)ceil(f/2.0f); x++)
 							{
-								for(int y = posy-floor(f/2.0f); y < posy+ceil(f/2.0f); y++)
+								for(int y = posy-(int)floor(f/2.0f); y < posy+(int)ceil(f/2.0f); y++)
 								{
 									cGatTile* c = &Graphics.world.gattiles[y][x];
-									if (!Graphics.slope || (x > posx-floor(f/2.0f)) && y > posy-floor(f/2.0f))
+									if (!Graphics.slope || (x > posx-(int)floor(f/2.0f)) && y > posy-(int)floor(f/2.0f))
 										c->cell1-=1;
-									if (!Graphics.slope || (x < posx+ceil(f/2.0f)-1) && y > posy-floor(f/2.0f))
+									if (!Graphics.slope || (x < posx+(int)ceil(f/2.0f)-1) && y > posy-(int)floor(f/2.0f))
 										c->cell2-=1;
-									if (!Graphics.slope || (x > posx-floor(f/2.0f)) && y < posy+ceil(f/2.0f)-1)
+									if (!Graphics.slope || (x > posx-(int)floor(f/2.0f)) && y < posy+(int)ceil(f/2.0f)-1)
 										c->cell3-=1;
-									if (!Graphics.slope || (x < posx+ceil(f/2.0f)-1) && y < posy+ceil(f/2.0f)-1)
+									if (!Graphics.slope || (x < posx+(int)ceil(f/2.0f)-1) && y < posy+(int)ceil(f/2.0f)-1)
 										c->cell4-=1;
 								}
 							}
@@ -2762,8 +2762,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				if(editmode == MODE_WALLS)
 				{
 					vector<pair<int, cTile> > tileschanged;
-					int x = mouse3dx / 10;
-					int y = mouse3dz / 10;
+					int x = (int)mouse3dx / 10;
+					int y = (int)mouse3dz / 10;
 					if(SDL_GetModState() & KMOD_SHIFT)
 					{
 						int xx = x;
@@ -2819,8 +2819,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				if(editmode == MODE_WALLS)
 				{
 					vector<pair<int, cTile> > tileschanged;
-					int x = mouse3dx / 10;
-					int y = mouse3dz / 10;
+					int x = (int)mouse3dx / 10;
+					int y = (int)mouse3dz / 10;
 					if(SDL_GetModState() & KMOD_SHIFT)
 					{
 						int xx = x;
@@ -2882,8 +2882,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						wrap = false;
 
 
-					int x = mouse3dx / 10;
-					int y = mouse3dz / 10;
+					int x = (int)mouse3dx / 10;
+					int y = (int)mouse3dz / 10;
 					if (y < 0 || y > Graphics.world.height - 1)
 						break;
 					if (x < 0 || x > Graphics.world.width - 1)
@@ -2926,17 +2926,17 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						}
 						if (!(Graphics.wallheightmin == cVector2(-1,-1)))
 						{
-							vmin = min(vmin, Graphics.world.cubes[Graphics.wallheightmin.y][Graphics.wallheightmin.x].cell4/32.0f);
-							vmin = min(vmin, Graphics.world.cubes[Graphics.wallheightmin.y][Graphics.wallheightmin.x].cell2/32.0f);
-							vmin = min(vmin, Graphics.world.cubes[Graphics.wallheightmin.y][Graphics.wallheightmin.x].cell3/32.0f);
-							vmin = min(vmin, Graphics.world.cubes[Graphics.wallheightmin.y][Graphics.wallheightmin.x].cell1/32.0f);
+							vmin = min(vmin, Graphics.world.cubes[(int)Graphics.wallheightmin.y][(int)Graphics.wallheightmin.x].cell4/32.0f);
+							vmin = min(vmin, Graphics.world.cubes[(int)Graphics.wallheightmin.y][(int)Graphics.wallheightmin.x].cell2/32.0f);
+							vmin = min(vmin, Graphics.world.cubes[(int)Graphics.wallheightmin.y][(int)Graphics.wallheightmin.x].cell3/32.0f);
+							vmin = min(vmin, Graphics.world.cubes[(int)Graphics.wallheightmin.y][(int)Graphics.wallheightmin.x].cell1/32.0f);
 						}
 						if (!(Graphics.wallheightmax == cVector2(-1,-1)))
 						{
-							vmax = max(vmax, Graphics.world.cubes[Graphics.wallheightmax.y][Graphics.wallheightmax.x].cell4/32.0f);
-							vmax = max(vmax, Graphics.world.cubes[Graphics.wallheightmax.y][Graphics.wallheightmax.x].cell2/32.0f);
-							vmax = max(vmax, Graphics.world.cubes[Graphics.wallheightmax.y][Graphics.wallheightmax.x].cell3/32.0f);
-							vmax = max(vmax, Graphics.world.cubes[Graphics.wallheightmax.y][Graphics.wallheightmax.x].cell1/32.0f);
+							vmax = max(vmax, Graphics.world.cubes[(int)Graphics.wallheightmax.y][(int)Graphics.wallheightmax.x].cell4/32.0f);
+							vmax = max(vmax, Graphics.world.cubes[(int)Graphics.wallheightmax.y][(int)Graphics.wallheightmax.x].cell2/32.0f);
+							vmax = max(vmax, Graphics.world.cubes[(int)Graphics.wallheightmax.y][(int)Graphics.wallheightmax.x].cell3/32.0f);
+							vmax = max(vmax, Graphics.world.cubes[(int)Graphics.wallheightmax.y][(int)Graphics.wallheightmax.x].cell1/32.0f);
 						}
 
 
@@ -2948,13 +2948,13 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							t.color[1] = (char)255;
 							t.color[2] = (char)255;
 							t.color[3] = (char)255;
-							t.texture = Graphics.texturestart + (Graphics.selectionstart.y - 32) / 288;
+							t.texture = Graphics.texturestart + ((int)Graphics.selectionstart.y - 32) / 288;
 							t.lightmap = 0;
 							if(wrap)
 							{
 
-								int gridsize = Graphics.gridsize * 4;
-								int gridoff = Graphics.gridoffsetx * gridsize;
+								int gridsize = (int)(Graphics.gridsize * 4);
+								int gridoff = (int)(Graphics.gridoffsetx * gridsize);
 								t.u1 = selstartx + ((yy+gridoff)%gridsize+1) *  ((float)selwidth/gridsize);
 								t.u2 = selstartx + ((yy+gridoff)%gridsize) *  ((float)selwidth/gridsize);
 								t.u3 = selstartx + ((yy+gridoff)%gridsize+1) *  ((float)selwidth/gridsize);
@@ -3025,17 +3025,17 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						}
 						if (!(Graphics.wallheightmin == cVector2(-1,-1)))
 						{
-							vmin = min(vmin, Graphics.world.cubes[Graphics.wallheightmin.y][Graphics.wallheightmin.x].cell4/32.0f);
-							vmin = min(vmin, Graphics.world.cubes[Graphics.wallheightmin.y][Graphics.wallheightmin.x].cell2/32.0f);
-							vmin = min(vmin, Graphics.world.cubes[Graphics.wallheightmin.y][Graphics.wallheightmin.x].cell3/32.0f);
-							vmin = min(vmin, Graphics.world.cubes[Graphics.wallheightmin.y][Graphics.wallheightmin.x].cell1/32.0f);
+							vmin = min(vmin, Graphics.world.cubes[(int)Graphics.wallheightmin.y][(int)Graphics.wallheightmin.x].cell4/32.0f);
+							vmin = min(vmin, Graphics.world.cubes[(int)Graphics.wallheightmin.y][(int)Graphics.wallheightmin.x].cell2/32.0f);
+							vmin = min(vmin, Graphics.world.cubes[(int)Graphics.wallheightmin.y][(int)Graphics.wallheightmin.x].cell3/32.0f);
+							vmin = min(vmin, Graphics.world.cubes[(int)Graphics.wallheightmin.y][(int)Graphics.wallheightmin.x].cell1/32.0f);
 						}
 						if (!(Graphics.wallheightmax == cVector2(-1,-1)))
 						{
-							vmax = max(vmax, Graphics.world.cubes[Graphics.wallheightmax.y][Graphics.wallheightmax.x].cell4/32.0f);
-							vmax = max(vmax, Graphics.world.cubes[Graphics.wallheightmax.y][Graphics.wallheightmax.x].cell2/32.0f);
-							vmax = max(vmax, Graphics.world.cubes[Graphics.wallheightmax.y][Graphics.wallheightmax.x].cell3/32.0f);
-							vmax = max(vmax, Graphics.world.cubes[Graphics.wallheightmax.y][Graphics.wallheightmax.x].cell1/32.0f);
+							vmax = max(vmax, Graphics.world.cubes[(int)Graphics.wallheightmax.y][(int)Graphics.wallheightmax.x].cell4/32.0f);
+							vmax = max(vmax, Graphics.world.cubes[(int)Graphics.wallheightmax.y][(int)Graphics.wallheightmax.x].cell2/32.0f);
+							vmax = max(vmax, Graphics.world.cubes[(int)Graphics.wallheightmax.y][(int)Graphics.wallheightmax.x].cell3/32.0f);
+							vmax = max(vmax, Graphics.world.cubes[(int)Graphics.wallheightmax.y][(int)Graphics.wallheightmax.x].cell1/32.0f);
 						}
 
 
@@ -3046,14 +3046,14 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							t.color[1] = (char)255;
 							t.color[2] = (char)255;
 							t.color[3] = (char)255;
-							t.texture = Graphics.texturestart + (Graphics.selectionstart.y - 32) / 288;
+							t.texture = Graphics.texturestart + ((int)Graphics.selectionstart.y - 32) / 288;
 							t.lightmap = 0;
 
 
 							if (wrap)
 							{
-								int gridsize = Graphics.gridsize * 4;
-								int gridoff = Graphics.gridoffsetx * gridsize;
+								int gridsize = (int)(Graphics.gridsize * 4);
+								int gridoff = (int)(Graphics.gridoffsetx * gridsize);
 
 								t.u1 = selstartx + ((xx+gridoff)%gridsize) *  ((float)selwidth/gridsize);
 								t.u2 = selstartx + ((xx+gridoff)%gridsize+1) *  ((float)selwidth/gridsize);
@@ -3105,16 +3105,16 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if (editmode == MODE_HEIGHTDETAIL)
 					{
-						int posx = mouse3dx / 10;
-						int posy = mouse3dz / 10;
+						int posx = (int)mouse3dx / 10;
+						int posy = (int)mouse3dz / 10;
 
-						if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= Graphics.world.height-ceil(brushsize/2.0f))
+						if (posx >= (int)floor(brushsize/2.0f) && posx <= Graphics.world.width-(int)ceil(brushsize/2.0f) && posy >= (int)floor(brushsize/2.0f) && posy<= Graphics.world.height-(int)ceil(brushsize/2.0f))
 						{
 							clipboard.clear();
-							for(int y = posy-floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
+							for(int y = posy-(int)floor(brushsize/2.0f); y < posy+(int)ceil(brushsize/2.0f); y++)
 							{
 								vector<vector<float> > row;
-								for(int x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f); x++)
+								for(int x = posx-(int)floor(brushsize/2.0f); x < posx+(int)ceil(brushsize/2.0f); x++)
 								{
 									vector<float> c;
 									c.push_back(Graphics.world.cubes[y][x].cell1);
@@ -3145,19 +3145,19 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 					if (editmode == MODE_GAT)
 					{
-						int posx = mouse3dx / 5;
-						int posy = mouse3dz / 5;
+						int posx = (int)mouse3dx / 5;
+						int posy = (int)mouse3dz / 5;
 
-						int f = ceil(Graphics.brushsize);
+						int f = (int)ceil(Graphics.brushsize);
 
-						if (posx >= floor(f/2.0f) && posx < 2*Graphics.world.width-ceil(f/2.0f) && posy >= f && posy< 2*Graphics.world.height-f)
+						if (posx >= (int)floor(f/2.0f) && posx < 2*Graphics.world.width-(int)ceil(f/2.0f) && posy >= f && posy< 2*Graphics.world.height-f)
 						{
 							clipboard.clear();
-							for(int y = posy-floor(f/2.0f); y < posy+ceil(f/2.0f); y++)
+							for(int y = posy-(int)floor(f/2.0f); y < posy+(int)ceil(f/2.0f); y++)
 							{
 								vector<vector<float> > row;
 								vector<int > row2;
-								for(int x = posx-floor(f/2.0f); x < posx+ceil(f/2.0f); x++)
+								for(int x = posx-(int)floor(f/2.0f); x < posx+(int)ceil(f/2.0f); x++)
 								{
 									vector<float> c;
 									c.push_back(Graphics.world.gattiles[y][x].cell1);
@@ -3178,20 +3178,20 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if (editmode == MODE_HEIGHTDETAIL)
 					{
-						int posx = mouse3dx / 10;
-						int posy = mouse3dz / 10;
+						int posx = (int)mouse3dx / 10;
+						int posy = (int)mouse3dz / 10;
 						if (clipboard.size() != brushsize)
 							break;
 
-						undostack.push(new cUndoHeightEdit(posx-floor(brushsize/2.0f), posy-floor(brushsize/2.0f), posx+ceil(brushsize/2.0f), posy+ceil(brushsize/2.0f)));
-//						if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy <= Graphics.world.height-ceil(brushsize/2.0f))
+						undostack.push(new cUndoHeightEdit(posx-(int)floor(brushsize/2.0f), posy-(int)floor(brushsize/2.0f), posx+(int)ceil(brushsize/2.0f), posy+(int)ceil(brushsize/2.0f)));
+//						if (posx >= (int)floor(brushsize/2.0f) && posx <= Graphics.world.width-(int)ceil(brushsize/2.0f) && posy >= (int)floor(brushsize/2.0f) && posy <= Graphics.world.height-(int)ceil(brushsize/2.0f))
 						{
 							int yy = 0;
-							for(int y = posy-floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
+							for(int y = posy-(int)floor(brushsize/2.0f); y < posy+(int)ceil(brushsize/2.0f); y++)
 							{
 								vector<vector<float> > row;
 								int xx = 0;
-								for(int x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f); x++)
+								for(int x = posx-(int)floor(brushsize/2.0f); x < posx+(int)ceil(brushsize/2.0f); x++)
 								{
 									if (x >= Graphics.world.width || x < 0 || y < 0 || y >= Graphics.world.height)
 										continue;
@@ -3228,24 +3228,24 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 					if (editmode == MODE_GAT)
 					{
-						int posx = mouse3dx / 5;
-						int posy = mouse3dz / 5;
+						int posx = (int)mouse3dx / 5;
+						int posy = (int)mouse3dz / 5;
 
-						int f = ceil(Graphics.brushsize);
+						int f = (int)ceil(Graphics.brushsize);
 
 						if (clipboard.size() != f)
 							break;
 
-						undostack.push(new cUndoGatHeightEdit(posx-floor(f/2.0f), posy-floor(f/2.0f), posx+ceil(f/2.0f), posy+ceil(f/2.0f)));
-						undostack.push(new cUndoGatTileEdit(posx-floor(f/2.0f), posy-floor(f/2.0f), posx+ceil(f/2.0f), posy+ceil(f/2.0f)));
+						undostack.push(new cUndoGatHeightEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
+						undostack.push(new cUndoGatTileEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
 
-						if (posx >= floor(f/2.0f) && posx < 2*Graphics.world.width-ceil(f/2.0f) && posy >= f && posy< 2*Graphics.world.height-f)
+						if (posx >= (int)floor(f/2.0f) && posx < 2*Graphics.world.width-(int)ceil(f/2.0f) && posy >= f && posy< 2*Graphics.world.height-f)
 						{
 							int yy = 0;
-							for(int y = posy-floor(f/2.0f); y < posy+ceil(f/2.0f); y++)
+							for(int y = posy-(int)floor(f/2.0f); y < posy+(int)ceil(f/2.0f); y++)
 							{
 								int xx = 0;
-								for(int x = posx-floor(f/2.0f); x < posx+ceil(f/2.0f); x++)
+								for(int x = posx-(int)floor(f/2.0f); x < posx+(int)ceil(f/2.0f); x++)
 								{
 									Graphics.world.gattiles[y][x].cell1 = clipboard[yy][xx][0];
 									Graphics.world.gattiles[y][x].cell2 = clipboard[yy][xx][1];
@@ -3269,14 +3269,14 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			{
 				if (editmode == MODE_TEXTURE)
 				{
-					int posx = mouse3dx / 10;
-					int posy = mouse3dz / 10;
+					int posx = (int)mouse3dx / 10;
+					int posy = (int)mouse3dz / 10;
 					float selsizex = (fabs(Graphics.selectionstart.x - Graphics.selectionend.x) / 32);
-					float selsizey = (fabs(Graphics.selectionstart.y - Graphics.selectionend.y) / 32);
-					selsizex = floor(selsizex*Graphics.brushsize);
-					selsizey = floor(selsizey*Graphics.brushsize);
+					float selsizey = (fabs((int)Graphics.selectionstart.y - Graphics.selectionend.y) / 32);
+					selsizex = (int)floor(selsizex*Graphics.brushsize);
+					selsizey = (int)floor(selsizey*Graphics.brushsize);
 
-					undostack.push(new cUndoTexture(posx-selsizex+1, posy-selsizey+1, posx+1, posy+1));
+					undostack.push(new cUndoTexture(posx-(int)selsizex+1, posy-(int)selsizey+1, posx+1, posy+1));
 					for(int x = posx; x > posx-selsizex; x--)
 					{
 						for(int y = posy; y > posy-selsizey; y--)
@@ -3351,15 +3351,15 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			{
 				if (editmode == MODE_HEIGHTDETAIL)
 				{
-					int posx = mouse3dx / 10;
-					int posy = mouse3dz / 10;
+					int posx = (int)mouse3dx / 10;
+					int posy = (int)mouse3dz / 10;
 
-					undostack.push(new cUndoHeightEdit(posx-floor(brushsize/2.0f), posy-floor(brushsize/2.0f), posx+ceil(brushsize/2.0f), posy+ceil(brushsize/2.0f)));
-					for(int x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f)-1; x++)
+					undostack.push(new cUndoHeightEdit(posx-(int)floor(brushsize/2.0f), posy-(int)floor(brushsize/2.0f), posx+(int)ceil(brushsize/2.0f), posy+(int)ceil(brushsize/2.0f)));
+					for(int x = posx-(int)floor(brushsize/2.0f); x < posx+(int)ceil(brushsize/2.0f)-1; x++)
 					{
-						for(int y = posy-floor(brushsize/2.0f)+1; y < posy+ceil(brushsize/2.0f); y++)
+						for(int y = posy-(int)floor(brushsize/2.0f)+1; y < posy+(int)ceil(brushsize/2.0f); y++)
 						{
-							if (x >= 0 && x < Graphics.world.width-ceil(brushsize/2.0f) && y > 0 && y <= Graphics.world.height-ceil(brushsize/2.0f))
+							if (x >= 0 && x < Graphics.world.width-(int)ceil(brushsize/2.0f) && y > 0 && y <= Graphics.world.height-(int)ceil(brushsize/2.0f))
 							{
 								float to = Graphics.world.cubes[y][x].cell2;
 								Graphics.world.cubes[y][x].cell2 = to;
@@ -3378,16 +3378,16 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				else if (editmode == MODE_GAT)
 				{
-					int posx = mouse3dx / 5;
-					int posy = mouse3dz / 5;
+					int posx = (int)mouse3dx / 5;
+					int posy = (int)mouse3dz / 5;
 
-					float f = ceil(Graphics.brushsize);
+					float f = (int)ceil(Graphics.brushsize);
 
 
-					undostack.push(new cUndoGatHeightEdit(posx-floor(f/2.0f), posy-floor(f/2.0f), posx+ceil(f/2.0f), posy+ceil(f/2.0f)));
-					for(int x = posx-floor(f/2.0f); x < posx+ceil(f/2.0f); x++)
+					undostack.push(new cUndoGatHeightEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
+					for(int x = posx-(int)floor(f/2.0f); x < posx+(int)ceil(f/2.0f); x++)
 					{
-						for(int y = posy-floor(f/2.0f); y < posy+ceil(f/2.0f); y++)
+						for(int y = posy-(int)floor(f/2.0f); y < posy+(int)ceil(f/2.0f); y++)
 						{
 							if (x >= 0 && x < Graphics.world.width*2 && y > 0 && y <= Graphics.world.height*2)
 							{
@@ -3407,8 +3407,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if (editmode == MODE_TEXTURE)
 					{
-						int posx = mouse3dx / 10;
-						int posy = mouse3dz / 10;
+						int posx = (int)mouse3dx / 10;
+						int posy = (int)mouse3dz / 10;
 						if(posx > -1 && posy > -1 && posx < Graphics.world.width && posy < Graphics.world.height)
 						{
 							Log(3,0,"Cube (%i,%i): %f,%f,%f,%f", posx, posy, Graphics.world.cubes[posy][posx].cell1, Graphics.world.cubes[posy][posx].cell2, Graphics.world.cubes[posy][posx].cell3, Graphics.world.cubes[posy][posx].cell4);
@@ -3617,12 +3617,12 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					if (editmode == MODE_HEIGHTDETAIL)
 					{
 						int x,y;
-						int posx = mouse3dx / 10;
-						int posy = mouse3dz / 10;
-						undostack.push(new cUndoHeightEdit(posx-floor(brushsize/2.0f), posy-floor(brushsize/2.0f), posx+ceil(brushsize/2.0f), posy+ceil(brushsize/2.0f)));
-						for(x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f)-1; x++)
+						int posx = (int)mouse3dx / 10;
+						int posy = (int)mouse3dz / 10;
+						undostack.push(new cUndoHeightEdit(posx-(int)floor(brushsize/2.0f), posy-(int)floor(brushsize/2.0f), posx+(int)ceil(brushsize/2.0f), posy+(int)ceil(brushsize/2.0f)));
+						for(x = posx-(int)floor(brushsize/2.0f); x < posx+(int)ceil(brushsize/2.0f)-1; x++)
 						{
-							for(y = posy-floor(brushsize/2.0f)+1; y < posy+ceil(brushsize/2.0f); y++)
+							for(y = posy-(int)floor(brushsize/2.0f)+1; y < posy+(int)ceil(brushsize/2.0f); y++)
 							{
 								if (x >= 0 && x < Graphics.world.width && y >= 0 && y < Graphics.world.height)
 								{
@@ -3638,9 +3638,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							}
 						}
 						
-						for(x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f)-1; x++)
+						for(x = posx-(int)floor(brushsize/2.0f); x < posx+(int)ceil(brushsize/2.0f)-1; x++)
 						{
-							for(y = posy-floor(brushsize/2.0f)+1; y < posy+ceil(brushsize/2.0f); y++)
+							for(y = posy-(int)floor(brushsize/2.0f)+1; y < posy+(int)ceil(brushsize/2.0f); y++)
 							{
 								if (x > 1 && x < Graphics.world.width-1 && y > 1 && y < Graphics.world.height-1)
 								{
@@ -4075,13 +4075,13 @@ MENUCOMMAND(speed)
 
 MENUCOMMAND(fill)
 {
-	int x,y;
+	int x,y,i;
 
 
 	Graphics.world.tiles.clear();
 	Graphics.world.lightmaps.clear();
 	cLightmap* map = new cLightmap();
-	for(int i = 0; i < 256; i++)
+	for(i = 0; i < 256; i++)
 		map->buf[i] = i < 64 ? 255 : 0;
 	Graphics.world.lightmaps.push_back(map);
 	map = new cLightmap();
@@ -4094,7 +4094,7 @@ MENUCOMMAND(fill)
 		{
 			cTile t;
 			t.lightmap = 1;
-			t.texture = Graphics.texturestart + (Graphics.selectionstart.y - 32) / 288;
+			t.texture = Graphics.texturestart + ((int)Graphics.selectionstart.y - 32) / 288;
 			t.u1 = x/4.0;
 			t.v1 = y/4.0;
 			t.u2 = (x+1)/4.0;
@@ -4352,11 +4352,11 @@ MENUCOMMAND(dolightmaps)
 
 						if(!obstructed)
 						{
-							buf[yy*8 + xx + 9] = min(255, buf[yy*8 + xx + 9] + max(0, l->todo2 - bla));
+							buf[yy*8 + xx + 9] = min(255, buf[yy*8 + xx + 9] + max(0, (int)(l->todo2 - bla)));
 
-							buf[64 + 3*(yy*8 + xx + 9)+0] = min(255, buf[64 + 3*(yy*8 + xx + 9)+0] + max(0, ceil((l->todo2 - bla)*l->color.x)));
-							buf[64 + 3*(yy*8 + xx + 9)+1] = min(255, buf[64 + 3*(yy*8 + xx + 9)+1] + max(0, ceil((l->todo2 - bla)*l->color.y)));
-							buf[64 + 3*(yy*8 + xx + 9)+2] = min(255, buf[64 + 3*(yy*8 + xx + 9)+2] + max(0, ceil((l->todo2 - bla)*l->color.z)));
+							buf[64 + 3*(yy*8 + xx + 9)+0] = min(255, buf[64 + 3*(yy*8 + xx + 9)+0] + max(0, (int)ceil((l->todo2 - bla)*l->color.x)));
+							buf[64 + 3*(yy*8 + xx + 9)+1] = min(255, buf[64 + 3*(yy*8 + xx + 9)+1] + max(0, (int)ceil((l->todo2 - bla)*l->color.y)));
+							buf[64 + 3*(yy*8 + xx + 9)+2] = min(255, buf[64 + 3*(yy*8 + xx + 9)+2] + max(0, (int)ceil((l->todo2 - bla)*l->color.z)));
 						}
 						else
 						{
@@ -4728,7 +4728,7 @@ MENUCOMMAND(addwalls)
 					t.color[1] = (char)255;
 					t.color[2] = (char)255;
 					t.color[3] = (char)255;
-					t.texture = Graphics.texturestart + (Graphics.selectionstart.y - 32) / 288;
+					t.texture = Graphics.texturestart + ((int)Graphics.selectionstart.y - 32) / 288;
 					t.lightmap = 0;
 					t.u1 = 0;
 					t.v1 = 0;
@@ -4754,7 +4754,7 @@ MENUCOMMAND(addwalls)
 					t.color[1] = (char)255;
 					t.color[2] = (char)255;
 					t.color[3] = (char)255;
-					t.texture = Graphics.texturestart + (Graphics.selectionstart.y - 32) / 288;
+					t.texture = Graphics.texturestart + ((int)Graphics.selectionstart.y - 32) / 288;
 					t.lightmap = 0;
 					t.u1 = 0;
 					t.v1 = 0;
@@ -4849,7 +4849,7 @@ MENUCOMMAND(tempfunc)
 	t.color[1] = (char)255;
 	t.color[2] = (char)255;
 	t.color[3] = (char)255;
-	t.texture = Graphics.texturestart + (Graphics.selectionstart.y - 32) / 288;
+	t.texture = Graphics.texturestart + ((int)Graphics.selectionstart.y - 32) / 288;
 	t.lightmap = 0;
 	t.u1 = 0;
 	t.v1 = 0;

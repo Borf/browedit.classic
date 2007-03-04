@@ -35,7 +35,7 @@ class cTextureWindow : public cWindow
 		{
 			if(SDL_GetModState() & KMOD_SHIFT)
 			{
-				int id = Graphics.texturestart + (Graphics.selectionstart.y - 32) / 288;
+				int id = Graphics.texturestart + (int)(Graphics.selectionstart.y - 32) / 288;
 				TextureCache.unload(Graphics.world.textures[id]->texture);
 				delete Graphics.world.textures[id];
 

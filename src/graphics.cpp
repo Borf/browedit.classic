@@ -160,7 +160,7 @@ int cGraphics::draw()
 				if (i+world.water.type > 5)
 					continue;
 				static float frame = 0;
-				glBindTexture(GL_TEXTURE_2D, watertextures[i+world.water.type][floor(frame)]->texid());
+				glBindTexture(GL_TEXTURE_2D, watertextures[i+world.water.type][(int)floor(frame)]->texid());
 				frame+=0.25;
 				if (frame > 31)
 					frame = 0;

@@ -503,10 +503,10 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 					for(float yi = 0; yi < xi; yi+=0.1f)
 					{
 						
-						int y1 = ceil((v1.z+xinc.z*xi+yinc.z*yi)/10.0);
-						int y2 = floor((v1.z+xinc.z*xi+yinc.z*yi)/10.0);
-						int x1 = ceil((v1.x+xinc.x*xi+yinc.x*yi)/10.0);
-						int x2 = floor((v1.x+xinc.x*xi+yinc.x*yi)/10.0);
+						int y1 = (int)ceil((v1.z+xinc.z*xi+yinc.z*yi)/10.0);
+						int y2 = (int)floor((v1.z+xinc.z*xi+yinc.z*yi)/10.0);
+						int x1 = (int)ceil((v1.x+xinc.x*xi+yinc.x*yi)/10.0);
+						int x2 = (int)floor((v1.x+xinc.x*xi+yinc.x*yi)/10.0);
 
 					//	if (y1 < 0 || y2 < 0 || x1 < 0 || x2 < 0 ||
 					//		y1 >= Graphics.world.height || y2 >= Graphics.world.height || x1 >= Graphics.world.width || y2 >= Graphics.world.width)
@@ -548,12 +548,12 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 				printf(".");
 				float t = 0;
 
-				int x2 = min(Graphics.world.width, model->pos.x/2+mmax*2);
-				int y2 = min(Graphics.world.height, model->pos.z/2+ mmax*2);
+				int x2 = (int)min(Graphics.world.width, model->pos.x/2+mmax*2);
+				int y2 = (int)min(Graphics.world.height, model->pos.z/2+ mmax*2);
 
-				for(int x = max(0, model->pos.x/2 + mmin*2); x < x2; x++)
+				for(int x = (int)max(0, model->pos.x/2 + mmin*2); x < x2; x++)
 				{
-					for(int y = max(0, model->pos.z/2 + mmin*2); y < y2; y++)
+					for(int y = (int)max(0, model->pos.z/2 + mmin*2); y < y2; y++)
 					{
 						for(int xx = 0; xx < 6; xx++)
 						{
@@ -565,7 +565,7 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 									int tile = Graphics.world.cubes[y][x].tileup;
 									cLightmap* l = Graphics.world.lightmaps[Graphics.world.tiles[tile].lightmap];
 									
-									l->buf[xx + (8*yy)+1+8] = ((BYTE)l->buf[xx + (8*yy)+1+8]) / 1.3;
+									l->buf[xx + (8*yy)+1+8] =(char) (((BYTE)l->buf[xx + (8*yy)+1+8]) / 1.3);
 								}
 							}
 						}

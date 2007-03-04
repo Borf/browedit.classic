@@ -215,10 +215,10 @@ void cWindowTree::click()
 		nodes[i]->getdata(values);
 
 	
-	int xx = mousex;
+	int xx = (int)mousex;
 	xx -= realx();
 	xx -= parent->px();
-	int yy = Graphics.h()-mousey;
+	int yy = Graphics.h()-(int)mousey;
 	yy -= realy();
 	yy -= parent->py();
 
@@ -269,10 +269,10 @@ void cWindowTree::click()
 
 void cWindowTree::drag()
 {
-	int xx = mousex;
+	int xx = (int)mousex;
 	xx -= realx();
 	xx -= parent->px();
-	int yy = Graphics.h()-mousey;
+	int yy = Graphics.h()-(int)mousey;
 	yy -= realy();
 	yy -= parent->py();
 
@@ -296,7 +296,7 @@ void cWindowTree::drag()
 		if (barpos != 0)
 			barpos = (int)((float)(h-16.0f) * ((float)liststart / (float)values.size()));
 
-		int offset = yy-dragoffsety;
+		int offset = (int)(yy-dragoffsety);
 
 		barpos-=offset;
 		if (barpos < 0)

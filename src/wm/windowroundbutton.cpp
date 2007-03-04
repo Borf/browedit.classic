@@ -33,8 +33,8 @@ void cWindowRoundButton::click()
 
 bool cWindowRoundButton::inobject()
 {
-	int xx=mousex-parent->px();
-	int yy=(Graphics.h()-mousey)-parent->py();
+	int xx=(int)mousex-parent->px();
+	int yy=(Graphics.h()-(int)mousey)-parent->py();
 	int xxx = realx() + (w/2);
 	int yyy = realy() + (h/2);
 	if (((xx - xxx)*(xx - xxx))+((yy - yyy)*(yy - yyy)) < (w*w)/2)

@@ -1,48 +1,10 @@
 #!/usr/bin/php
 <?
 chdir("src");
-$files = array(	
-"RSMModel.cpp",
-"common.cpp",
-"filesystem.cpp",
-"font.cpp",
-"frustum.cpp",
-"graphics.cpp",
-"grflib/zlib/deflate.c",
-"grflib/zlib/zutil.c",
-"grflib/zlib/crc32.c",
-"grflib/zlib/inftrees.c",
-"grflib/zlib/inflate.c",
-"grflib/zlib/trees.c",
-"grflib/zlib/inffast.c",
-"grflib/zlib/compress.c",
-"grflib/zlib/adler32.c",
-"grflib/grfcrypt.c",
-"grflib/grf.c",
-"grflib/rgz.c",
-"grflib/grfsupport.c",
-"main.cpp",
-"md5.c",
-"texture.cpp",
-"texturecache.cpp",
-"texturemodel.cpp",
-"wm/windowinputbox.cpp",
-"wm/windowobject.cpp",
-"wm/windowbutton.cpp",
-"wm/window.cpp",
-"wm/windowlabel.cpp",
-"wm/windowroundbutton.cpp",
-"wm/windowpicturebox.cpp",
-"wm/windowlistbox.cpp",
-"wm/windowtabpanel.cpp",
-"wm/windowcheckbox.cpp",
-"wm/windowmainbutton.cpp",
-"wm/wm.cpp",
-"wm/windowscrollpanel.cpp",
-"wm/windowprogressbar.cpp",
-"world.cpp",
-
-			);
+`find * | grep "\.c" | grep -v svn > files.txt`;
+$files = file("files.txt");
+for($i = 0; $i < count($files); $i++)
+	$files[$i] = trim($files[$i]);
 
 $fp = fopen("Makefile","w");
 fputs($fp,
@@ -53,6 +15,9 @@ LIBS = -lGL -lz -lSDL -lGLU -lgd
 	@echo -e \"    \033[1mCC\\033[1m\\t\\033[22;34m$<\\033[39m\"
 	@$(CC) $(CFLAGS) -D__USESDL__ -c -o $@ $<
 
+%.o: %.c
+	@echo -e \"    \033[1mCC\\033[1m\\t\\033[22;34m$<\\033[39m\"
+	@$(CC) $(CFLAGS) -D__USESDL__ -c -o $@ $<
 
 ../browedit:  ");
 
@@ -82,6 +47,9 @@ fputs($fp,"
 
 clean:
 	rm -f *.o
+	rm -f grflib/*.o
+	rm -f grflib/gzip/*.o
+	rm -f wm/*.o
 ");
 fclose($fp);
 chdir("..");

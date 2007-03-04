@@ -138,7 +138,7 @@ void cWindowInputBox::click()
 		
 		return;
 	}
-	int xx = mousex;
+	int xx = (int)mousex;
 	xx -= realx();
 	xx -= parent->px();
 	int i = startindex;

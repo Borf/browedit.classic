@@ -130,14 +130,14 @@ bool cWindow::drag()
 	if (resizable)
 	{
 		if (resizingxy && (mousex-x) > minw)
-			resizeto(mousex - x, h);
+			resizeto((int)mousex - x, h);
 		else if (resizingxy)
 			resizeto(minw, h);
 
 		if (resizingyx && ((py()+h)-(Graphics.h()-mousey)) > minh)
 		{
-			resizeto(w, (py()+h)-(Graphics.h()-mousey));
-			y = (Graphics.h()-mousey);
+			resizeto(w, (py()+h)-(Graphics.h()-(int)mousey));
+			y = (Graphics.h()-(int)mousey);
 		}
 		else if (resizingyx)
 		{
@@ -145,10 +145,10 @@ bool cWindow::drag()
 			resizeto(w, minh);
 		}
 
-		if (resizingx && (w+x-mousex) > minh)
+		if (resizingx && (w+x-(int)mousex) > minh)
 		{
-			resizeto(w + x - mousex, h);
-			x = mousex;
+			resizeto(w + x - (int)mousex, h);
+			x = (int)mousex;
 		}
 		else if (resizingx)
 		{
@@ -158,7 +158,7 @@ bool cWindow::drag()
 
 		if (resizingy && ((Graphics.h()-mousey)-py2() > minh))
 		{
-			resizeto(w, (Graphics.h()-mousey) - py2());
+			resizeto(w, (Graphics.h()-(int)mousey) - py2());
 		}
 		else if (resizingy)
 		{
@@ -168,8 +168,8 @@ bool cWindow::drag()
 
 	if (movable && !resizing())
 	{
-		x=mousex-dragoffsetx;
-		y=(Graphics.h()-mousey)-dragoffsety;
+		x=(int)mousex-(int)dragoffsetx;
+		y=(Graphics.h()-(int)mousey)-(int)dragoffsety;
 		if (abs(x) < SNAPPINGDIST) 
 			x = 0;
 		if (abs(py()) < SNAPPINGDIST)

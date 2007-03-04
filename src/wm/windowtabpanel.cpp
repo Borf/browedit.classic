@@ -60,7 +60,7 @@ void cWindowTabPanel::click()
 	if (this->inobject() && parent->istopwindow() && ((Graphics.h()-mousey) - parent->py() - yy - h > -14))
 	{
 		int oldtab = selectedtab;
-		selectedtab = (mousex - parent->px() - xx) / (w/tabs.size());
+		selectedtab = ((int)mousex - parent->px() - xx) / (w/tabs.size());
 		if (selectedtab != oldtab)
 			tabchange(oldtab);
 	}

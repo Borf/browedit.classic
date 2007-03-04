@@ -161,10 +161,10 @@ void cWindowScrollPanel::draw(int cutoffleft, int cutoffright, int cutofftop, in
 
 void cWindowScrollPanel::click()
 {
-	int xx = mousex;
+	int xx = (int)mousex;
 	xx -= realx();
 	xx -= parent->px();
-	int yy = (Graphics.h()-mousey);
+	int yy = (Graphics.h()-(int)mousey);
 	yy -= realy();
 	yy -= parent->py();
 
@@ -229,10 +229,10 @@ void cWindowScrollPanel::click()
 
 void cWindowScrollPanel::drag()
 {
-	int xx = mousex;
+	int xx = (int)mousex;
 	xx -= realx();
 	xx -= parent->px();
-	int yy = (Graphics.h()-mousey);
+	int yy = (Graphics.h()-(int)mousey);
 	yy -= realy();
 	yy -= parent->py();
 	int ybarheight = (int)max(((float)h/(float)innerheight)*h, 16);
@@ -249,7 +249,7 @@ void cWindowScrollPanel::drag()
 
 	if (startmousex - realx() - parent->px() > w-14 && startmousex - realx() - parent->px() < w)
 	{
-		scrollposy = ((h-(((Graphics.h()-mousey)+(ybarheight/2)) -parent->py() - ybarheight)) / (float)(h-16)) * innerheight - h;
+		scrollposy = (int)(((h-(((Graphics.h()-mousey)+(ybarheight/2)) -parent->py() - ybarheight)) / (float)(h-16)) * innerheight - h);
 		scrollposy = (int)min(max(scrollposy, 0), innerheight-h);
 	}
 	else if ((Graphics.h()-startmousey) - parent->py() - realy() < 14)

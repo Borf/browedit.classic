@@ -29,7 +29,6 @@ typedef unsigned char uint8_t;
 	#include <sys/socket.h>
 	#include <netinet/in.h>
 	#include <arpa/inet.h>
-	#include <mysql/mysql.h>
 	#include <fcntl.h>
 	typedef int SOCKET;
 	#define closesocket(x) close(x)

@@ -7,7 +7,7 @@
 #include "windowroundbutton.h"
 #include "windowbutton.h"
 #include "windowpicturebox.h"
-#include "graphics.h"
+#include "../graphics.h"
 extern cGraphics Graphics;
 
 class cHotkeyWindow : public cWindow

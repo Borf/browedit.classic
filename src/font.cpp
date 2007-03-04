@@ -445,7 +445,7 @@ int	cFont::textlen(string s)
 	int l = 0;
 	for(int i = 0; i < (int)s.length(); i++)
 	{
-		if (((BYTE)s[i]) < 256)
+		if (((BYTE)s[i]) < 255)
 		{
 			l = l + width[((BYTE)s[i])]+1;
 			if(width[((BYTE)s[i])] == 0)

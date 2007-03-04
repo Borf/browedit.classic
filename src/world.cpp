@@ -1256,7 +1256,7 @@ void cWorld::draw()
 
 
 	float winZ;
-	glReadPixels( mousex, Graphics.h()-mousey, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ );
+	glReadPixels( (int)mousex, Graphics.h()-(int)mousey, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ );
 
 
 	double ModelMatrix[16]; 
@@ -1296,8 +1296,8 @@ void cWorld::draw()
 		selsizey = floor(selsizey*Graphics.brushsize);
 
 
-		int posx = mouse3dx / 10;
-		int posy = mouse3dz / 10;
+		int posx = (int)mouse3dx / 10;
+		int posy = (int)mouse3dz / 10;
 
 
 		glEnable(GL_TEXTURE_2D);
@@ -1339,7 +1339,7 @@ void cWorld::draw()
 					if (x < 0)
 						continue;
 					cTile t;
-					t.texture = Graphics.texturestart + (Graphics.selectionstart.y - 32) / 288;
+					t.texture = Graphics.texturestart + ((int)Graphics.selectionstart.y - 32) / 288;
 					if(t.texture >= Graphics.world.textures.size())
 						break;
 					if (Graphics.texturerot == 0)
@@ -1502,15 +1502,15 @@ void cWorld::draw()
 	else if(editmode == MODE_HEIGHTDETAIL)
 	{
 
-		int posx = mouse3dx / 10;
-		int posy = mouse3dz / 10;
+		int posx = (int)mouse3dx / 10;
+		int posy = (int)mouse3dz / 10;
 
 		glColor4f(1,0,0,1);
 		glDisable(GL_TEXTURE_2D);
 		glDisable(GL_BLEND);
-		for(x = posx-floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f); x++)
+		for(x = posx-(int)floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f); x++)
 		{
-			for(y = posy-floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
+			for(y = posy-(int)floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
 			{
 				if (y >= height || y < 0 || x < 0 || x >= width)
 					continue;
@@ -1532,8 +1532,8 @@ void cWorld::draw()
 	{
 		glDisable(GL_TEXTURE_2D);
 		glColor3f(1,0,0);
-		int x = mouse3dx / 10;
-		int y = mouse3dz / 10;
+		int x = (int)mouse3dx / 10;
+		int y = (int)mouse3dz / 10;
 		if (x >= 1 && x < width-1 && y >= 1 && y< height-1)
 		{
 			cCube* c = &cubes[y][x];
@@ -1546,7 +1546,7 @@ void cWorld::draw()
 		}
 		if (!(Graphics.wallheightmax == cVector2(-1,-1)))
 		{
-			cCube* c = &cubes[Graphics.wallheightmax.y][Graphics.wallheightmax.x];
+			cCube* c = &cubes[(int)Graphics.wallheightmax.y][(int)Graphics.wallheightmax.x];
 			glColor4f(1,0,0,0.5);
 			glBegin(GL_QUADS);
 				glVertex3f(Graphics.wallheightmax.x*10,-c->cell1+0.2,(height-Graphics.wallheightmax.y)*10);
@@ -1557,7 +1557,7 @@ void cWorld::draw()
 		}
 		if (!(Graphics.wallheightmin == cVector2(-1,-1)))
 		{
-			cCube* c = &cubes[Graphics.wallheightmin.y][Graphics.wallheightmin.x];
+			cCube* c = &cubes[(int)Graphics.wallheightmin.y][(int)Graphics.wallheightmin.x];
 			glColor4f(0,1,0,0.5);
 			glBegin(GL_QUADS);
 				glVertex3f(Graphics.wallheightmin.x*10,-c->cell1+0.2,(height-Graphics.wallheightmin.y)*10);
@@ -1607,19 +1607,19 @@ void cWorld::draw()
 		}
 
 
-		int posx = mouse3dx / 5;
-		int posy = mouse3dz / 5;
+		int posx = (int)mouse3dx / 5;
+		int posy = (int)mouse3dz / 5;
 
-		int s = ceil(Graphics.brushsize);
+		int s = (int)ceil(Graphics.brushsize);
 
 		if (posx >= floor(brushsize/2.0f) && posx < 2*width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy< 2*height-ceil(brushsize/2.0f))
 		{
 			glColor4f(1,0,0,1);
 			glDisable(GL_TEXTURE_2D);
 			glDisable(GL_BLEND);
-			for(x = posx-floor(s/2.0f); x < posx+ceil(s/2.0f); x++)
+			for(x = posx-(int)floor(s/2.0f); x < posx+ceil(s/2.0f); x++)
 			{
-				for(y = posy-floor(s/2.0f); y < posy+ceil(s/2.0f); y++)
+				for(y = posy-(int)floor(s/2.0f); y < posy+ceil(s/2.0f); y++)
 				{
 					if (y < 0 || y >= height*2 || x < 0 || x >= width*2)
 						continue;
@@ -1755,7 +1755,7 @@ void cWorld::draw()
 				continue;
 			for(int y = 0; y < height*Graphics.gridsize; y++)
 			{
-				cCube* c = &cubes[y/Graphics.gridsize][x/Graphics.gridsize];
+				cCube* c = &cubes[(int)(y/Graphics.gridsize)][(int)(x/Graphics.gridsize)];
 				if(!Graphics.frustum.PointInFrustum(x*s,-c->cell1,(height*Graphics.gridsize-y)*s))
 					continue;
 
@@ -1991,7 +1991,7 @@ void cWorld::draw()
 	{
 		static float waterindex = 0;
 
-		glBindTexture(GL_TEXTURE_2D, Graphics.watertextures[water.type][ceil(waterindex)]->texid());
+		glBindTexture(GL_TEXTURE_2D, Graphics.watertextures[water.type][(int)ceil(waterindex)]->texid());
 
 		if(Graphics.animatewater)
 			waterindex+=max(0,(Graphics.frameticks) / 50.0f);
@@ -2181,8 +2181,8 @@ void cQuadTreeNode::recalculate()
 		{
 			for(float y = box2.z; y < box1.z; y+= (box1.z - box2.z)/10.0)
 			{
-				int xx = x + Graphics.world.width*5;
-				int yy = Graphics.world.height*5 - y;
+				int xx = (int)x + Graphics.world.width*5;
+				int yy = Graphics.world.height*5 - (int)y;
 
 				int tilex = xx / 10;
 				int tiley = yy / 10;
