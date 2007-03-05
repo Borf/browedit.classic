@@ -240,8 +240,8 @@ void mainloop()
 				int posx = tilex;
 				int posy = tiley;
 				bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
-				float mmin = 99999999;
-				float mmax = -9999999;
+				float mmin = 99999999.0f;
+				float mmax = -9999999.0f;
 				if (ctrl)
 				{
 					if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-(int)ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= Graphics.world.height-(int)ceil(brushsize/2.0f))
@@ -1414,8 +1414,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						int posx = tilex;
 						int posy = tiley;
 						bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
-						float mmin = 99999999;
-						float mmax = -9999999;
+						float mmin = 99999999.0f;
+						float mmax = -9999999.0f;
 						if (ctrl)
 						{
 							if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-(int)ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= Graphics.world.height-(int)ceil(brushsize/2.0f))
@@ -4076,7 +4076,7 @@ MENUCOMMAND(speed)
 MENUCOMMAND(fill)
 {
 	int x,y,i;
-
+	map<int, bool, less<int> > used;
 
 	Graphics.world.tiles.clear();
 	Graphics.world.lightmaps.clear();
@@ -4121,6 +4121,53 @@ MENUCOMMAND(fill)
 			Graphics.world.cubes[y][x].tileaside = -1;
 		}
 	}
+
+
+	for(x = 0; x < Graphics.world.width; x++)
+	{
+		for(y = 0; y < Graphics.world.height; y++)
+		{
+			int tile = Graphics.world.cubes[y][x].tileup;
+			if(used.find(tile) != used.end())
+			{
+				cTile t = Graphics.world.tiles[tile];
+				tile = Graphics.world.tiles.size();
+				Graphics.world.tiles.push_back(t);
+				Graphics.world.cubes[y][x].tileup = tile;
+			}
+			used[tile] = 1;
+///////////////////////////////////////
+			tile = Graphics.world.cubes[y][x].tileside;
+			if (tile != -1)
+			{
+				if(used.find(tile) != used.end())
+				{
+					cTile t = Graphics.world.tiles[tile];
+					tile = Graphics.world.tiles.size();
+					Graphics.world.tiles.push_back(t);
+					Graphics.world.cubes[y][x].tileside = tile;
+				}
+				used[tile] = 1;
+			}
+/////////////////////////////////////
+			tile = Graphics.world.cubes[y][x].tileaside;
+			if (tile!= -1)
+			{
+				if(used.find(tile) != used.end())
+				{
+					cTile t = Graphics.world.tiles[tile];
+					tile = Graphics.world.tiles.size();
+					Graphics.world.tiles.push_back(t);
+					Graphics.world.cubes[y][x].tileaside = tile;
+				}
+				used[tile] = 1;
+			}
+		}
+	}
+
+
+	
+
 	return true;
 }
 
@@ -4325,6 +4372,8 @@ MENUCOMMAND(dolightmaps)
 		for(x = 0; x < Graphics.world.width; x++)
 //		for(x = 40; x < 60; x++)
 		{
+			cCube* c = &Graphics.world.cubes[y][x];
+			Log(3,0,"%f %%", (y*Graphics.world.width+x) / (float)(Graphics.world.height * Graphics.world.width)*100);
 			if(Graphics.world.cubes[y][x].tileup == -1)
 				continue;
 			Graphics.world.reallightmaps[y][x]->reset();
@@ -4343,6 +4392,10 @@ MENUCOMMAND(dolightmaps)
 						cVector3 diff = worldpos - cVector3(l->pos.x*5, l->pos.y, l->pos.z*5);
 						float bla = diff.Magnitude();
 						bool obstructed = false;
+						if(l->todo2-bla < 0)
+							continue;
+						if(buf[yy*8 + xx + 9] == 255)
+							continue;
 
 						for(int ii = 0; ii < Graphics.world.models.size() && !obstructed; ii++)
 						{
@@ -4572,6 +4625,7 @@ MENUCOMMAND(loadlightmaps)
 	{
 		for(y = 0; y < Graphics.world.height; y++)
 		{
+			Graphics.world.reallightmaps[y][x]->reset();
 			int tile = Graphics.world.cubes[y][x].tileup;
 			if(used.find(tile) != used.end())
 			{
