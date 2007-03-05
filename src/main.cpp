@@ -796,7 +796,7 @@ int main(int argc, char *argv[])
 
 	Log(3,0,"Done initializing..");
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "data\\lighttest").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "data\\cam_dun01").c_str());
 #ifndef WIN32
 	Graphics.world.load();
 #endif
@@ -1013,6 +1013,32 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						float f = Graphics.selectionstart.y;
 						Graphics.selectionstart.y = Graphics.selectionend.y;
 						Graphics.selectionend.y = f;
+					}
+				}
+				if(editmode == MODE_GAT)
+				{
+					int posx = (int)mouse3dx / 5;
+					int posy = (int)mouse3dz / 5;
+
+					int f = (int)ceil(Graphics.brushsize);
+
+				//	if (posx >= floor(f/2.0f) && posx < 2*Graphics.world.width-(int)ceil(f/2.0f) && posy >= floor(f/2.0f) && posy< 2*Graphics.world.height-(int)ceil(f/2.0f))
+					{
+						undostack.push(new cUndoGatTileEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
+
+						glColor4f(1,0,0,1);
+						glDisable(GL_TEXTURE_2D);
+						glDisable(GL_BLEND);
+						for(int x = posx-(int)floor(f/2.0f); x < posx+(int)ceil(f/2.0f); x++)
+						{
+							for(int y = posy-(int)floor(f/2.0f); y < posy+(int)ceil(f/2.0f); y++)
+							{
+								if (y < 0 || y >= Graphics.world.height*2 || x < 0 || x >= Graphics.world.width*2)
+									continue;
+								cGatTile* c = &Graphics.world.gattiles[y][x];
+								c->type = Graphics.texturestart;
+							}
+						}
 					}
 				}
 				if(editmode == MODE_OBJECTS)

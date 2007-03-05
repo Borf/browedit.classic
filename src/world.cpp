@@ -1284,6 +1284,77 @@ void cWorld::draw()
 	mouse3dy = yyy;
 	mouse3dz = (height*10)-zzz;
 
+	if (editmode == MODE_GAT || Graphics.showgat)
+	{
+		glEnable(GL_BLEND);
+		for(y = 0; y < gattiles.size(); y++)
+		{
+			if(!Graphics.frustum.BoxInFrustum(0,-1000,(2*height-y)*5, gattiles[y].size()*5,1000,(2*height-y)*5-5))
+				continue;
+			for(x = 0; x < gattiles[y].size(); x++)
+			{
+				cGatTile* c = &gattiles[y][x];
+				if(!Graphics.frustum.CubeInFrustum(x*5+2.5,-c->cell1,(2*height-y)*5-2.5, 5))
+					continue;
+				glColor4f(1,1,1, 0.3f);
+
+				glEnable(GL_TEXTURE_2D);
+				glBindTexture(GL_TEXTURE_2D, Graphics.gattextures[c->type]->texid());
+
+				glBegin(GL_TRIANGLE_STRIP);
+					glTexCoord2f(0,0); glVertex3f(x*5,-c->cell1+0.1,(2*height-y)*5);
+					glTexCoord2f(1,0); glVertex3f(x*5+5,-c->cell2+0.1,(2*height-y)*5);
+					glTexCoord2f(0,1); glVertex3f(x*5,-c->cell3+0.1,(2*height-y)*5-5);
+					glTexCoord2f(1,1); glVertex3f(x*5+5,-c->cell4+0.1,(2*height-y)*5-5);
+				glEnd();
+
+				if(Graphics.showgrid)
+				{
+					glDisable(GL_TEXTURE_2D);
+					glColor4f(0,0,0,1);
+					glBegin(GL_LINE_LOOP);
+						glVertex3f(x*5,-c->cell1+0.1,(2*height-y)*5);
+						glVertex3f(x*5+5,-c->cell2+0.1,(2*height-y)*5);
+						glVertex3f(x*5+5,-c->cell4+0.1,(2*height-y)*5-5);
+						glVertex3f(x*5,-c->cell3+0.1,(2*height-y)*5-5);
+					glEnd();
+				}			
+			}
+		}
+
+
+		int posx = (int)mouse3dx / 5;
+		int posy = (int)mouse3dz / 5;
+
+		int s = (int)ceil(Graphics.brushsize);
+
+		if (posx >= floor(brushsize/2.0f) && posx < 2*width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy< 2*height-ceil(brushsize/2.0f))
+		{
+			glColor4f(1,0,0,1);
+			glDisable(GL_TEXTURE_2D);
+			glDisable(GL_BLEND);
+			for(x = posx-(int)floor(s/2.0f); x < posx+ceil(s/2.0f); x++)
+			{
+				for(y = posy-(int)floor(s/2.0f); y < posy+ceil(s/2.0f); y++)
+				{
+					if (y < 0 || y >= height*2 || x < 0 || x >= width*2)
+						continue;
+					cGatTile* c = &gattiles[y][x];
+					glBegin(GL_LINE_LOOP);
+						glVertex3f(x*5,-c->cell1+0.3,(2*height-y)*5);
+						glVertex3f(x*5+5,-c->cell2+0.3,(2*height-y)*5);
+						glVertex3f(x*5+5,-c->cell4+0.3,(2*height-y)*5-5);
+						glVertex3f(x*5,-c->cell3+0.3,(2*height-y)*5-5);
+					glEnd();
+					
+
+				}
+			}
+		}
+		glDisable(GL_BLEND);
+
+		
+	}
 
 
 
@@ -1568,79 +1639,10 @@ void cWorld::draw()
 		}
 		glColor4f(1,1,1,1);
 	}
-	if (editmode == MODE_GAT || Graphics.showgat)
-	{
-		glEnable(GL_BLEND);
-		for(y = 0; y < gattiles.size(); y++)
-		{
-			if(!Graphics.frustum.BoxInFrustum(0,-1000,(2*height-y)*5, gattiles[y].size()*5,1000,(2*height-y)*5-5))
-				continue;
-			for(x = 0; x < gattiles[y].size(); x++)
-			{
-				cGatTile* c = &gattiles[y][x];
-				if(!Graphics.frustum.CubeInFrustum(x*5+2.5,-c->cell1,(2*height-y)*5-2.5, 5))
-					continue;
-				glColor4f(1,1,1, 0.5);
-
-				glEnable(GL_TEXTURE_2D);
-				glBindTexture(GL_TEXTURE_2D, Graphics.gattextures[c->type]->texid());
-
-				glBegin(GL_TRIANGLE_STRIP);
-					glTexCoord2f(0,0); glVertex3f(x*5,-c->cell1+0.1,(2*height-y)*5);
-					glTexCoord2f(1,0); glVertex3f(x*5+5,-c->cell2+0.1,(2*height-y)*5);
-					glTexCoord2f(0,1); glVertex3f(x*5,-c->cell3+0.1,(2*height-y)*5-5);
-					glTexCoord2f(1,1); glVertex3f(x*5+5,-c->cell4+0.1,(2*height-y)*5-5);
-				glEnd();
-
-				if(Graphics.showgrid)
-				{
-					glDisable(GL_TEXTURE_2D);
-					glColor4f(0,0,0,1);
-					glBegin(GL_LINE_LOOP);
-						glVertex3f(x*5,-c->cell1+0.1,(2*height-y)*5);
-						glVertex3f(x*5+5,-c->cell2+0.1,(2*height-y)*5);
-						glVertex3f(x*5+5,-c->cell4+0.1,(2*height-y)*5-5);
-						glVertex3f(x*5,-c->cell3+0.1,(2*height-y)*5-5);
-					glEnd();
-				}			
-			}
-		}
-
-
-		int posx = (int)mouse3dx / 5;
-		int posy = (int)mouse3dz / 5;
-
-		int s = (int)ceil(Graphics.brushsize);
-
-		if (posx >= floor(brushsize/2.0f) && posx < 2*width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy< 2*height-ceil(brushsize/2.0f))
-		{
-			glColor4f(1,0,0,1);
-			glDisable(GL_TEXTURE_2D);
-			glDisable(GL_BLEND);
-			for(x = posx-(int)floor(s/2.0f); x < posx+ceil(s/2.0f); x++)
-			{
-				for(y = posy-(int)floor(s/2.0f); y < posy+ceil(s/2.0f); y++)
-				{
-					if (y < 0 || y >= height*2 || x < 0 || x >= width*2)
-						continue;
-					cGatTile* c = &gattiles[y][x];
-					glBegin(GL_LINE_LOOP);
-						glVertex3f(x*5,-c->cell1+0.3,(2*height-y)*5);
-						glVertex3f(x*5+5,-c->cell2+0.3,(2*height-y)*5);
-						glVertex3f(x*5+5,-c->cell4+0.3,(2*height-y)*5-5);
-						glVertex3f(x*5,-c->cell3+0.3,(2*height-y)*5-5);
-					glEnd();
-					
-
-				}
-			}
-		}
-
-		
-	}
 
 	if ((Graphics.showobjects || editmode == MODE_OBJECTS) && editmode != MODE_OBJECTGROUP)
 	{
+		glDisable(GL_BLEND);
 		glColor4f(1,1,1,1);
 
 		glEnable(GL_TEXTURE_2D);
@@ -1744,6 +1746,7 @@ void cWorld::draw()
 	}
 	if(editmode == MODE_OBJECTS && Graphics.showgrid)
 	{
+		glDisable(GL_TEXTURE_2D);
 		glColor4f(1,1,1,1);
 
 		glColor3f(1,0,0);
