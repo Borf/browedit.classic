@@ -471,7 +471,7 @@ int cGraphics::InitGL(void)
     glEnable( GL_CULL_FACE );
 
 //	glEnable(GL_ALPHA_TEST);
-//	glAlphaFunc(GL_GREATER, 0.01f);
+//	glAlphaFunc(GL_GREATER, 0.1f);
 
 
 	return 1;										// Initialization Went OK

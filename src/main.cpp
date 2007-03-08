@@ -14,6 +14,7 @@
 #include "wm/ambientlightwindow.h"
 #include "wm/lightwindow.h"
 #include "wm/texturewindow.h"
+#include "wm/modelswindow.h"
 #include "undo.h"
 
 #include "texturecache.h"
@@ -53,6 +54,7 @@ bool	doneaction = true;
 
 int undosize = 50;
 vector<string> texturefiles;
+vector<string> objectfiles;
 
 double mouse3dxstart, mouse3dystart, mouse3dzstart;
 unsigned long keys[SDLK_LAST-SDLK_FIRST];
@@ -95,6 +97,8 @@ MENUCOMMAND(picktexture);
 MENUCOMMAND(quadtree);
 MENUCOMMAND(gatheight);
 MENUCOMMAND(dolightmaps);
+MENUCOMMAND(dolightmapsall);
+MENUCOMMAND(dolightmaps2);
 MENUCOMMAND(fixcolors);
 MENUCOMMAND(clearobjects);
 MENUCOMMAND(cleareffects);
@@ -308,6 +312,7 @@ void mainloop()
 			}
 		}
 	}
+	process_events( );
 
 	unsigned long currenttime = SDL_GetTicks();
 	for(int i = 0; i < SDLK_LAST-SDLK_FIRST; i++)
@@ -326,7 +331,6 @@ void mainloop()
 	}
 
 		
-	process_events( );
 	if (!Graphics.draw())
 		running = false;
 	SDL_GL_SwapBuffers();
@@ -584,7 +588,8 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,rnd, "Random 1", &MenuCommand_random1);
 	ADDMENUITEM(mm,rnd, "Maze stuff", &MenuCommand_tempfunc);
 	ADDMENUITEM(mm,rnd,"Quadtree",				&MenuCommand_quadtree);
-	ADDMENUITEM(mm,rnd,"Calculate Lightmaps",		&MenuCommand_dolightmaps);
+	ADDMENUITEM(mm,rnd,"Calculate Lightmaps",		&MenuCommand_dolightmapsall);
+	ADDMENUITEM(mm,rnd,"Calculate selected Lightmaps",		&MenuCommand_dolightmaps);
 	ADDMENUITEM(mm,rnd,"Clear Map",		&MenuCommand_clearstuff);
 
 	ADDMENUITEM(grid,view,"Grid",&MenuCommand_grid);
@@ -4311,8 +4316,21 @@ MENUCOMMAND(gatheight)
 
 
 cVector3 lightpos = cVector3(-20000,20000,-20000);
+bool selectonly;
 
 MENUCOMMAND(dolightmaps)
+{
+	selectonly = true;
+	return MenuCommand_dolightmaps2(src);
+}
+MENUCOMMAND(dolightmapsall)
+{
+	selectonly = false;
+	return MenuCommand_dolightmaps2(src);
+}
+
+
+MENUCOMMAND(dolightmaps2)
 {
 	int x,y,i;
 
@@ -4322,6 +4340,8 @@ MENUCOMMAND(dolightmaps)
 	{
 		for(y = 0; y < Graphics.world.height; y++)
 		{
+			if(selectonly && !Graphics.world.cubes[y][x].selected)
+				continue;
 			int tile = Graphics.world.cubes[y][x].tileup;
 			if(used.find(tile) != used.end())
 			{
@@ -4420,6 +4440,8 @@ MENUCOMMAND(dolightmaps)
 //		for(x = 40; x < 60; x++)
 		{
 			cCube* c = &Graphics.world.cubes[y][x];
+			if(selectonly && !c->selected)
+				continue;
 			Log(3,0,"%f %%", (y*Graphics.world.width+x) / (float)(Graphics.world.height * Graphics.world.width)*100);
 			if(Graphics.world.cubes[y][x].tileup == -1)
 				continue;

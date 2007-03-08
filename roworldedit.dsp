@@ -258,6 +258,10 @@ SOURCE=.\src\wm\messagewindow.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\wm\modelswindow.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\wm\objectwindow.h
 # End Source File
 # Begin Source File

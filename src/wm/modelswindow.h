@@ -1,5 +1,5 @@
-#ifndef __TEXTUREWINDOW_H__
-#define __TEXTUREWINDOW_H__
+#ifndef __MODELSWINDOW_H__
+#define __MODELSWINDOW_H__
 
 #include "window.h"
 
@@ -18,19 +18,24 @@ extern cWindow* draggingwindow;
 extern cWindowObject* draggingobject;
 
 
-extern vector<string> texturefiles;
+extern vector<string> objectfiles;
 
-class cTextureWindow : public cWindow
+class cModelsWindow : public cWindow
 {
-	class cWindowTexture : public cWindowPictureBox
+	class cWindowModel : public cWindowObject
 	{
 		string data;
 	public:
-		cWindowTexture(cWindow* parent) : cWindowPictureBox(parent)
+		cWindowModel(cWindow* parent) : cWindowObject(parent)
+		{
+
+		}
+		void draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 		{
 
 		}
 
+/*
 		void click()
 		{
 			if(SDL_GetModState() & KMOD_SHIFT)
@@ -69,14 +74,14 @@ class cTextureWindow : public cWindow
 			{
 				data = s;
 			}
-		}
+		}*/
 	};
 
 
-	class cWindowTextureCatSelect : public cWindowTree
+	class cWindowModelCatSelect : public cWindowTree
 	{
 	public:
-		cWindowTextureCatSelect(cWindow* parent, vector<cWindowTree::cTreeNode*> n) : cWindowTree(parent, n)
+		cWindowModelCatSelect(cWindow* parent, vector<cWindowTree::cTreeNode*> n) : cWindowTree(parent, n)
 		{
 			
 		}
@@ -85,7 +90,7 @@ class cTextureWindow : public cWindow
 		{
 			int i;
 			cWindowTree::click();
-			cWindowScrollPanel* box = (cWindowScrollPanel*)parent->objects["textures"];
+			cWindowScrollPanel* box = (cWindowScrollPanel*)parent->objects["models"];
 			for(i = 0; i < box->objects.size(); i++)
 				delete box->objects[i];
 			box->objects.clear();
@@ -104,11 +109,11 @@ class cTextureWindow : public cWindow
 			for(i = 0; i < v.size(); i++)
 			{
 				pair<string, string> p = v[i];
-				cWindowObject* o = new cWindowTexture(parent);
+				cWindowObject* o = new cWindowModel(parent);
 				o->alignment = ALIGN_TOPLEFT;
 				o->moveto(i*130, 32);
 				o->resizeto(128,128);
-				o->SetText(0,rodir + "data\\texture\\" + p.second);
+				o->SetText(0,rodir + "data\\model\\" + p.second);
 				o->SetText(1,p.second);
 				o->setpopup(p.first);
 				box->objects.push_back(o);
@@ -125,9 +130,9 @@ public:
 
 	map<cWindowTree::cTreeNode*, vector<pair<string, string> >, less<cWindowTree::cTreeNode*> > items;
 
-	cTextureWindow()
+	cModelsWindow()
 	{
-		wtype = WT_TEXTURE;
+		wtype = WT_MODELS;
 		closetype = HIDE;
 		resizable = true;
 		visible = true;
@@ -135,7 +140,7 @@ public:
 
 		h = Graphics.h()-50;
 		w = Graphics.w()-50;
-		title = "Texture Select";
+		title = "Model Select";
 		center();
 
 		cWindowObject* o;
@@ -143,9 +148,9 @@ public:
 		vector<cWindowTree::cTreeNode*> nodes;
 		map<string, cWindowTree::cTreeNode*, less<string> > lookup;
 
-		for(int i = 0; i < texturefiles.size(); i++)
+		for(int i = 0; i < objectfiles.size(); i++)
 		{
-			cFile* pFile = fs.open(texturefiles[i]);
+			cFile* pFile = fs.open(objectfiles[i]);
 			while(!pFile->eof())
 			{
 				string line = pFile->readline();
@@ -164,7 +169,7 @@ public:
 						string p = cat.substr(0, cat.rfind("/"));
 						if(lookup.find(p) == lookup.end())
 						{
-							Log(1,0,"Invalid nesting in texturefile...");
+							Log(1,0,"Invalid nesting in objectfile...");
 						}
 						else
 						{
@@ -191,7 +196,7 @@ public:
 			}
 		}
 
-		o = new cWindowTextureCatSelect(this, nodes);
+		o = new cWindowModelCatSelect(this, nodes);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(20,20);
 		o->resizeto(400,400);
@@ -207,7 +212,7 @@ public:
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(20, 20);
 		o->resizeto(100,100);
-		objects["textures"] = o;
+		objects["models"] = o;
 
 		objects["rollup"] = new cWindowRollupButton(this);
 		objects["close"] = new cWindowCloseButton(this);
@@ -219,7 +224,7 @@ public:
 	{
 		cWindow::resizeto(ww,hh);
 		objects["tree"]->resizeto(200, hh-30);
-		cWindowScrollPanel* panel = (cWindowScrollPanel*)objects["textures"];
+		cWindowScrollPanel* panel = (cWindowScrollPanel*)objects["models"];
 		panel->moveto(220, 20);
 		panel->resizeto(ww-220, hh-30);
 		panel->innerwidth = ww-220;
