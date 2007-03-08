@@ -56,9 +56,9 @@ public:
 		showgat = false;
 	}
 
-	int						init();				// initializes graphics
-	int						draw();				// draws graphics
-	int						ReSizeGLScene(int, int);		// Resize And Initialize The GL Window
+	int						init();
+	int						draw();
+	int						ReSizeGLScene(int, int);
 
 	void					KillGLWindow(void);
 
@@ -141,7 +141,7 @@ public:
 	cVector3				clipboardscale;
 	string					clipboardfile;
 	float					clipboardy;
-	GLfloat LightAmbient[4];			// lights
+	GLfloat LightAmbient[4];
 	GLfloat LightDiffuse[4];
 	GLfloat LightPosition[4];
 
@@ -167,10 +167,10 @@ public:
 	cVector2				wallheightmax;
 
 	cTexture*				texturepreview;
-	int						height;						// windowheight
-	int						width;						// windowwidth
-	int						bits;						// bpp (8,16,24,32)
-	bool					fullscreen;					// fullscreen ?
+	int						height;
+	int						width;
+	int						bits;
+	bool					fullscreen;
 
 	cVector3				selectioncenter;
 

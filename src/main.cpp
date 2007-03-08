@@ -55,6 +55,7 @@ int undosize = 50;
 vector<string> texturefiles;
 
 double mouse3dxstart, mouse3dystart, mouse3dzstart;
+unsigned long keys[SDLK_LAST-SDLK_FIRST];
 
 
 
@@ -234,9 +235,6 @@ void mainloop()
 		{
 			if (lbuttondown || rbuttondown)
 			{
-				/*int posx = mouse3dx / 10;
-				int posy = mouse3dz / 10;*/
-
 				int posx = tilex;
 				int posy = tiley;
 				bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
@@ -310,14 +308,30 @@ void mainloop()
 			}
 		}
 	}
+
+	unsigned long currenttime = SDL_GetTicks();
+	for(int i = 0; i < SDLK_LAST-SDLK_FIRST; i++)
+	{
+		if(keys[i] != 0)
+		{
+			if (keys[i] < currenttime)
+			{
+				keys[i] = currenttime + 50;
+				SDL_Event ev;
+				ev.type = SDL_KEYDOWN;
+				ev.key.keysym.sym = (SDLKey)(i + SDLK_FIRST);
+				SDL_PushEvent(&ev);
+			}
+		}
+	}
+
 		
-	process_events( );														// process keypresses
-	if (!Graphics.draw())												// Active?  Was There A Quit Received?
+	process_events( );
+	if (!Graphics.draw())
 		running = false;
 	SDL_GL_SwapBuffers();
-	Sleep(1);																// god save the CPU
+	Sleep(1);
 }
-
 
 
 int main(int argc, char *argv[])
@@ -327,12 +341,12 @@ int main(int argc, char *argv[])
 #ifdef WIN32
 	char fileBuffer[1024];
 	GetModuleFileName(NULL, fileBuffer, 1024);
-	WIN32_FIND_DATA FileData;													// thingy for searching through a directory
-	HANDLE hSearch;																// thingy for searching through a directory
-	bool fFinished = false;														// not finished with looking yet....
+	WIN32_FIND_DATA FileData;
+	HANDLE hSearch;
+	bool fFinished = false;
 	long filesize;
-	hSearch = FindFirstFile(fileBuffer, &FileData);						// look for all files
-	if (hSearch != INVALID_HANDLE_VALUE)										// if there are results...
+	hSearch = FindFirstFile(fileBuffer, &FileData);
+	if (hSearch != INVALID_HANDLE_VALUE)
 	{
 		filesize = FileData.nFileSizeLow;
 #ifndef _DEBUG
@@ -342,7 +356,7 @@ int main(int argc, char *argv[])
 	}
 	else
 		return 0;
- 	FindClose(hSearch);															// Close the search handle. 
+ 	FindClose(hSearch);
 
 	md5_state_t state;
 	md5_byte_t exedigest[16];
@@ -793,7 +807,6 @@ int main(int argc, char *argv[])
 	if (!Graphics.init())
 		return 1;
 
-
 	Log(3,0,"Done initializing..");
 	Graphics.world.newworld();
 	strcpy(Graphics.world.filename, string(rodir + "data\\cam_dun01").c_str());
@@ -805,6 +818,11 @@ int main(int argc, char *argv[])
 	Graphics.world.load();
 //	Graphics.world.importalpha();
 #endif
+
+	for(i = 0; i < SDLK_LAST-SDLK_FIRST; i++)
+		keys[i] = 0;
+
+	
 	lasttimer = SDL_GetTicks();
 	while( running )
 		mainloop();
@@ -845,6 +863,7 @@ int process_events()
 			running = false;
 			break;
 		case SDL_KEYUP:
+			keys[event.key.keysym.sym-SDLK_FIRST] = 0;
 			if (Graphics.WM.onkeyup(event.key.keysym.sym))
 				return 0;
 			switch (event.key.keysym.sym)
@@ -861,6 +880,8 @@ int process_events()
 			}
 			break;
 		case SDL_KEYDOWN:
+			if(keys[event.key.keysym.sym-SDLK_FIRST] == 0)
+				keys[event.key.keysym.sym-SDLK_FIRST] = SDL_GetTicks() + 400;
 			if(Graphics.WM.onkeydown(event.key.keysym.sym))
 				return 0;
 			if (strlen(SDL_GetKeyName(event.key.keysym.sym)) == 1 || event.key.keysym.sym == SDLK_SPACE)
