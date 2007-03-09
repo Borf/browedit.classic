@@ -38,6 +38,8 @@ class cModelsWindow : public cWindow
 
 			if(data != "" && model == NULL)
 			{
+				glPushMatrix();
+				glLoadIdentity();
 				model = new cRSMModel();
 				model->load(rodir + data);
 				model->pos = cVector3(0,0.7*w,1000);
@@ -54,6 +56,7 @@ class cModelsWindow : public cWindow
 				model->bb2.bbrange[0] = 0;
 				//model->bb2.bbmin[1] = 0;
 				model->bb2.bbrange[2] = 0;
+				glPopMatrix();
 			}
 
 
