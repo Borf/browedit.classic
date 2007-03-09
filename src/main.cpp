@@ -709,6 +709,7 @@ int main(int argc, char *argv[])
 						fontname = value;
 					else if (option == "model")
 					{
+						objectfiles.push_back(value);
 						cFile* pFile2 = fs.open(value);
 						if (pFile2 != NULL)
 						{
@@ -3716,15 +3717,18 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				break;
 			case SDLK_m:
-				if(lastmenu != NULL)
 				{
-					cMenu* m = lastmenu;
-					while(m->parent != NULL)
+					cWindow* w = Graphics.WM.getwindow(WT_MODELS);
+					if (w == NULL)
 					{
-						m->opened = true;
-						m = m->parent;
+						w = new cModelsWindow();
+						w->init(&Graphics.WM.texture, &Graphics.WM.font);
+						Graphics.WM.addwindow(w);
 					}
-					break;
+					else
+					{
+						w->togglevis();
+					}
 				}
 
 			default:
@@ -4810,7 +4814,6 @@ MENUCOMMAND(loadlightmaps)
 	}
 	return true;
 }
-
 
 
 MENUCOMMAND(clearobjects)

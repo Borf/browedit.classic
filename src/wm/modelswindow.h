@@ -11,12 +11,13 @@
 #include "windowscrollpanel.h"
 #include "windowpicturebox.h"
 
+#include "../RSMModel.h"
 #include "../filesystem.h"
 extern cFileSystem fs;
 extern string rodir;
 extern cWindow* draggingwindow;
 extern cWindowObject* draggingobject;
-
+extern eMode editmode;
 
 extern vector<string> objectfiles;
 
@@ -24,57 +25,118 @@ class cModelsWindow : public cWindow
 {
 	class cWindowModel : public cWindowObject
 	{
+		cRSMModel* model;
 		string data;
 	public:
 		cWindowModel(cWindow* parent) : cWindowObject(parent)
 		{
-
+			type = OBJECT_MODEL;
+			model = NULL;
 		}
 		void draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 		{
 
+			if(data != "" && model == NULL)
+			{
+				model = new cRSMModel();
+				model->load(rodir + data);
+				model->pos = cVector3(0,0.7*w,1000);
+				
+				float sc = 0;
+				sc = max(sc, model->bb2.bbmax[0] - model->bb2.bbmin[0]);
+				sc = max(sc, model->bb2.bbmax[1] - model->bb2.bbmin[1]);
+				sc = max(sc, model->bb2.bbmax[2] - model->bb2.bbmin[2]);
+				sc = 1.5f*min(h,w) / sc;
+
+				model->scale = cVector3(sc,sc,sc);
+
+				model->rot = cVector3(0,0,0);
+				model->bb2.bbrange[0] = 0;
+			//	model->bb2.bbmin[1] = 0;
+				model->bb2.bbrange[2] = 0;
+			}
+
+
+			GLint viewport[4];
+			glGetIntegerv(GL_VIEWPORT, viewport);			// (X, Y, Width, Height)
+			
+			glMatrixMode(GL_MODELVIEW);
+			glPushMatrix();
+			glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
+			glPushMatrix();
+
+			int xx, yy;
+			xx = parent->px() + realx();
+			yy = parent->py() + realy();
+			glViewport(xx, yy+(cutoffbottom), w, h-(cutofftop) - (cutoffbottom));
+			glLoadIdentity();
+			glOrtho(-w,w,-h+2*cutoffbottom,h-2*cutofftop,-10000,10000);
+			glMatrixMode(GL_MODELVIEW);
+			glLoadIdentity();
+
+			glColor4f(0,0,0,1);
+			glDisable(GL_TEXTURE_2D);
+			glLineWidth(2);
+			glBegin(GL_LINE_LOOP);
+				glVertex2f(-w,-h);
+				glVertex2f(w,-h);
+				glVertex2f(w,h);
+				glVertex2f(-w,h);
+			glEnd();
+			glLineWidth(1);
+			glEnable(GL_TEXTURE_2D);
+			glColor4f(1,1,1,1);
+
+			if (model != NULL)
+			{
+				model->draw(false);
+				model->rot.y+=40*(Graphics.frameticks / 1000.0f);
+			}
+
+			glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
+			glMatrixMode(GL_MODELVIEW);
+			glPopMatrix();
+			glMatrixMode(GL_PROJECTION);
+			glPopMatrix();
+			glMatrixMode(GL_MODELVIEW);
 		}
 
-/*
+
 		void click()
 		{
-			if(SDL_GetModState() & KMOD_SHIFT)
+			if(Graphics.previewmodel != NULL)
 			{
-				int id = Graphics.texturestart + (int)(Graphics.selectionstart.y - 32) / 288;
-				TextureCache.unload(Graphics.world.textures[id]->texture);
-				delete Graphics.world.textures[id];
-
-				cTextureContainer* t = new cTextureContainer();
-				t->RoFilename = data;
-				char buf[40];
-				ZeroMemory(buf, 40);
-				sprintf(buf, "%i%i", rand(), rand());
-				t->RoFilename2 = string(buf,40);
-				t->texture = TextureCache.load(rodir + "data\\texture\\" + data);
-				Graphics.world.textures[id] = t;
-
+				if(Graphics.previewmodel->filename == model->filename)
+				{
+					if (editmode == MODE_OBJECTS)
+						Graphics.previewcolor = 0;
+					parent->close();
+					return;
+				}
+				delete Graphics.previewmodel;
 			}
-			else
-			{
-				cTextureContainer* t = new cTextureContainer();
-				t->RoFilename = data;
-				char buf[40];
-				ZeroMemory(buf, 40);
-				sprintf(buf, "%i%i", rand(), rand());
-				t->RoFilename2 = string(buf,40);
-				t->texture = TextureCache.load(rodir + "data\\texture\\" + data);
-				Graphics.world.textures.push_back(t);
-				Graphics.texturestart = Graphics.world.textures.size() - 2;
-			}
+			Graphics.previewmodel = new cRSMModel();
+			Graphics.previewmodel->load(rodir + data);
+			Graphics.previewmodel->rot = cVector3(0,0,0);
+			Graphics.previewmodel->scale = cVector3(4,4,4);
+			Graphics.previewmodel->pos = cVector3(40,-40,-40);
+			Graphics.previewcolor = 200;
+
 		}
+
 		void SetText(int i, string s)
 		{
-			cWindowPictureBox::SetText(i, s);
 			if(i == 1)
 			{
 				data = s;
 			}
-		}*/
+		}
+		~cWindowModel()
+		{
+			if(model != NULL)
+				delete model;
+			model = NULL;
+		}
 	};
 
 
@@ -113,7 +175,7 @@ class cModelsWindow : public cWindow
 				o->alignment = ALIGN_TOPLEFT;
 				o->moveto(i*130, 32);
 				o->resizeto(128,128);
-				o->SetText(0,rodir + "data\\model\\" + p.second);
+				o->SetText(0,rodir + p.second);
 				o->SetText(1,p.second);
 				o->setpopup(p.first);
 				box->objects.push_back(o);

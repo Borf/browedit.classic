@@ -129,19 +129,26 @@ void cWindowScrollPanel::draw(int cutoffleft, int cutoffright, int cutofftop, in
 	{
 		cWindowObject* o = objects[i];
 		if (o->px() >= scrollposx && o->px() + o->pw() <= scrollposx + (w-18) &&
-			o->py() >= scrollposy-o->ph() && o->py() <= scrollposy + (h-18) && o->type != OBJECT_LINE)
+			o->py() > scrollposy-o->ph() && o->py() < scrollposy + (h-18) && o->type != OBJECT_LINE)
 //			o->py() >= scrollposy && o->py() + o->ph() <= scrollposy + (h-18) && o->type != OBJECT_LINE)
 		{
+			int oy = o->py();
+			int ox = o->px();
+
 			if(o->type == OBJECT_LABEL)
 				o->moveto(o->px() - scrollposx, o->py() - scrollposy);
+			if(o->type == OBJECT_MODEL)
+				o->moveto(o->px() + x - scrollposx, o->py() + y - scrollposy);
 
 			o->draw(0,
 					0,
-					scrollposy-o->py() > 0 ? scrollposy-o->py() : 0,
-					o->py() <= scrollposy + (h-18) && !(o->py() + o->ph() <= scrollposy + (h-18)) ? o->ph()-(scrollposy+(h-18) - o->py()) : 0);
+					scrollposy-oy > 0 ? scrollposy-oy : 0,
+					oy <= scrollposy + (h-18) && !(oy + o->ph() <= scrollposy + (h-18)) ? o->ph()-(scrollposy+(h-18) - oy) : 0);
 
 			if(o->type == OBJECT_LABEL)
 				o->moveto(o->px() + scrollposx, o->py() + scrollposy);
+			if(o->type == OBJECT_MODEL)
+				o->moveto(o->px() - x + scrollposx, o->py() - y + scrollposy);
 		}
 
 
