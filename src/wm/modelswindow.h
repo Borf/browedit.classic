@@ -52,7 +52,7 @@ class cModelsWindow : public cWindow
 
 				model->rot = cVector3(0,0,0);
 				model->bb2.bbrange[0] = 0;
-			//	model->bb2.bbmin[1] = 0;
+				//model->bb2.bbmin[1] = 0;
 				model->bb2.bbrange[2] = 0;
 			}
 
@@ -89,7 +89,9 @@ class cModelsWindow : public cWindow
 
 			if (model != NULL)
 			{
+				glTranslatef(0,0,1000);
 				model->draw(false);
+				glTranslatef(0,0,-1000);
 				model->rot.y+=40*(Graphics.frameticks / 1000.0f);
 			}
 
@@ -297,7 +299,7 @@ public:
 		{
 			panel->objects[i]->moveto(x,y);
 			x+=130;
-			if(x > panel->innerwidth-18)
+			if(x+130 > panel->innerwidth-18)
 			{
 				x = 0;
 				y += 130;

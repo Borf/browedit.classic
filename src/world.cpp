@@ -1057,7 +1057,7 @@ void cWorld::draw()
 	else
 		glEnable(GL_LIGHTING);
 	if(Graphics.showambientlighting)
-		glColor4f(ambientlight.diffuse.x,ambientlight.diffuse.y,ambientlight.diffuse.z,1);
+		glColor4f(ambientlight.diffuse.x+ambientlight.shadow.x,ambientlight.diffuse.y+ambientlight.shadow.y,ambientlight.diffuse.z+ambientlight.shadow.z,1);
 	else
 		glColor4f(1,1,1,1);
 	for(x = 0; x < width; x++)

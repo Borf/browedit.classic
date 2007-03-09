@@ -242,7 +242,12 @@ void cRSMModel::draw(bool checkfrust, bool dodraw, bool setheight, bool dolightm
 
 	if(dodraw || dolightmaps)
 	{
-		glTranslatef(-bb2.bbrange[0], bb2.bbmin[1], -bb2.bbrange[2]);
+		if (bb2.bbmin[1] != 0 && fabs(bb2.bbmax[1]) < 1)
+		{
+			bb2.bbmax[1] -=bb2.bbmin[1];
+			bb2.bbmin[1] = 0;
+		}
+			glTranslatef(-bb2.bbrange[0], bb2.bbmin[1], -bb2.bbrange[2]);
 	}
 
 	if(dodraw && Graphics.showboundingboxes)

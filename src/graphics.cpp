@@ -105,6 +105,7 @@ int cGraphics::draw()
 
 	if (previewmodel != NULL)
 	{
+		glDisable(GL_DEPTH_TEST);
 		if (previewcolor != 0)
 		{
 			glDisable(GL_TEXTURE_2D);
@@ -137,10 +138,11 @@ int cGraphics::draw()
 			glEnd();
 
 			glEnable(GL_TEXTURE_2D);
-			previewmodel->pos = cVector3((w()/5)-25,-h()+32+250,1000);
+			previewmodel->pos = cVector3((w()/5)-25,-h()+32+250,0);
 			previewmodel->draw(false);
 			previewmodel->rot.y+=40*(frameticks / 1000.0f);
 		}
+		glEnable(GL_DEPTH_TEST);
 	}
 	if(world.loaded && editmode != MODE_OBJECTS && editmode != MODE_OBJECTGROUP)
 	{
