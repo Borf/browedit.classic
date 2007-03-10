@@ -29,7 +29,7 @@ GLuint cTexture::texid()
 		{
 			if(filename == "data\\texture\\프론테라\\STONE-UP.BMP")
 				Sleep(0);
-			Log(3,0,"Loading %s...", filename.c_str());
+			//Log(3,0,"Loading %s...", filename.c_str());
 			BMPClass bmp;
 			int ret = BMPLoad(filename,bmp);
 			if (ret == 0)
@@ -69,7 +69,7 @@ GLuint cTexture::texid()
 					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 					//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 					//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-					Log(3,0,"Loaded %s successfully", filename.c_str());
+					//Log(3,0,"Loaded %s successfully", filename.c_str());
 				}
 				else
 				{
@@ -100,7 +100,7 @@ GLuint cTexture::texid()
 					//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
 					
 					delete[] data;
-					Log(3,0,"Loaded and resized %s from %ix%i to %ix%i successfully", filename.c_str(), bmp.width, bmp.height, lWidthPixels, lHeightPixels);
+					//Log(3,0,"Loaded and resized %s from %ix%i to %ix%i successfully", filename.c_str(), bmp.width, bmp.height, lWidthPixels, lHeightPixels);
 				}
 			}
 			else

@@ -14,7 +14,7 @@ public:
 	}
 	void draw(int,int,int,int);
 	void click();
-	bool inobject();
+	cWindowObject* inobject();
 };
 
 

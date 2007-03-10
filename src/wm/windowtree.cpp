@@ -11,6 +11,7 @@ void cWindowTree::draw(int cutoffleft, int cutoffright, int cutofftop, int cutof
 	GLfloat colors[4];
 	glGetFloatv(GL_CURRENT_COLOR, colors);
 
+	glEnable(GL_BLEND);
 	int i;
 
 	vector<string> values;

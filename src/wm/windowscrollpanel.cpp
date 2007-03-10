@@ -356,3 +356,17 @@ string cWindowScrollPanel::ppopup()
 }
 
 
+cWindowObject* cWindowScrollPanel::inobject()
+{
+	parent->moveto(parent->px()+scrollposx+x, parent->py()+scrollposy-y);
+	for(unsigned int i = 0; i < objects.size(); i++)
+	{
+		if (objects[i]->inobject())
+		{
+			parent->moveto(parent->px()-scrollposx-x, parent->py()-scrollposy+y);
+			return objects[i];
+		}
+	}
+	parent->moveto(parent->px()-scrollposx-x, parent->py()-scrollposy+y);
+	return NULL;
+}

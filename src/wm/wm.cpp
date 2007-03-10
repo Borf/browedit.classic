@@ -9,6 +9,7 @@ extern cWindow* draggingwindow;
 
 int cWM::draw()
 {
+	glDisable(GL_DEPTH_TEST);
 	//glTranslatef(0,0,9000);
 	CleanWindows();
 	glEnable(GL_TEXTURE_2D);
@@ -35,6 +36,7 @@ int cWM::draw()
 		if (windows[i] != w)
 			break;	
 	}
+	glEnable(GL_DEPTH_TEST);
 	//glTranslatef(0,0,-9000);
 	return 1;
 }

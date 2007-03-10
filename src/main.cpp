@@ -1285,7 +1285,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			cMenu* m = menu->inwindow((int)mousex, Graphics.h()-(int)mousey);
 		
 
-			if (!dragged && !doubleclick && m == NULL)
+			if (!dragged && !doubleclick && m == NULL && event.button.button == SDL_BUTTON_LEFT)
 			{
 				draggingobject = NULL;
 				draggingwindow = NULL;
@@ -1311,12 +1311,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					else
 					{ // drag this component
 						Graphics.WM.click(false);
-						if(movement > 0)
-						{
-							draggingobject = w->inobject();
-							dragoffsetx = mousex - w->px() - w->inobject()->realx();
-							dragoffsety = (Graphics.h()-mousey) - w->py() - w->inobject()->realy();
-						}
+						draggingobject = w->inobject();
+						dragoffsetx = mousex - w->px() - w->inobject()->realx();
+						dragoffsety = (Graphics.h()-mousey) - w->py() - w->inobject()->realy();
 					}
 					return 0;
 				}
@@ -1670,7 +1667,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if(Graphics.WM.inwindow() != NULL)
 						Graphics.WM.inwindow()->dragover();
-					draggingobject->parent->stopdrag();
+					if(draggingobject != NULL)
+						draggingobject->parent->stopdrag();
 					draggingobject = NULL;
 				}
 

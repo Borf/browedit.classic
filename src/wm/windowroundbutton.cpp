@@ -31,13 +31,13 @@ void cWindowRoundButton::click()
 	Log(1,0,"You clicked the button!");
 }
 
-bool cWindowRoundButton::inobject()
+cWindowObject* cWindowRoundButton::inobject()
 {
 	int xx=(int)mousex-parent->px();
 	int yy=(Graphics.h()-(int)mousey)-parent->py();
 	int xxx = realx() + (w/2);
 	int yyy = realy() + (h/2);
 	if (((xx - xxx)*(xx - xxx))+((yy - yyy)*(yy - yyy)) < (w*w)/2)
-		return true;
-	return false;
+		return this;
+	return NULL;
 }

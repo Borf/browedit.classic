@@ -13,14 +13,14 @@ extern cGraphics Graphics;
 
 
 
-bool cWindowObject::inobject()
+cWindowObject* cWindowObject::inobject()
 {
 	int xx=(int)mousex-parent->px();
 	int yy=(Graphics.h()-(int)mousey)-parent->py();
 	if (xx > realx() && xx < realx()+w &&
 		yy > realy() && yy < realy()+h)
-		return true;
-	return false;
+		return this;
+	return NULL;
 }
 
 

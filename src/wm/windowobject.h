@@ -103,7 +103,7 @@ public:
 	virtual void drag() {}
 
 	int cursortype;
-	virtual bool inobject();
+	virtual cWindowObject* inobject();
 	void moveto(int xx, int yy)		{ x = xx; y = yy; }
 	void resizeto(int ww, int hh)	{ w = ww; h = hh; }
 

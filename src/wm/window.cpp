@@ -261,10 +261,11 @@ cWindowObject* cWindow::inobject()
 	objectlist::iterator i;
 	for(i = objects.begin(); i != objects.end(); i++)
 	{
-		if (i->second->inobject() && i->second->selectable)
-			return i->second;
+		cWindowObject* o = i->second->inobject();
+		if (o != NULL && i->second->selectable)
+			return o;
 	}
-	return false;
+	return NULL;
 }
 
 
@@ -405,10 +406,11 @@ void cWindow::rightclick()
 
 	for(objectlist::iterator i = objects.begin(); i != objects.end(); i++)
 	{
-		if (i->second->inobject() && i->second->selectable)
+		cWindowObject* o = i->second->inobject();
+		if (o != NULL && i->second->selectable)
 		{
-			i->second->rightclick();
-			selectedobject = i->second;
+			o->rightclick();
+			selectedobject = o;
 			break;
 		}
 	}

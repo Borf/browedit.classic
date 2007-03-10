@@ -44,6 +44,7 @@ public:
 	bool onchar(char);
 	void doubleclick();
 	void rightclick();
+	cWindowObject* inobject();
 
 	string ppopup();
 
