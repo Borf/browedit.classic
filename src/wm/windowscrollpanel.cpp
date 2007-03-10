@@ -266,18 +266,18 @@ void cWindowScrollPanel::drag()
 	}
 	else
 	{
-		parent->moveto(parent->px()-scrollposx-x, parent->py()-scrollposy-y);
+		parent->moveto(parent->px()+scrollposx+x, parent->py()+scrollposy-y);
 		for(unsigned int i = 0; i < objects.size(); i++)
 		{
 			if (objects[i]->inobject())
 			{
 				objects[i]->drag();
 				draggingobject = objects[i];
-				parent->moveto(parent->px()+scrollposx+x, parent->py()+scrollposy+y);
+				parent->moveto(parent->px()-scrollposx-x, parent->py()-scrollposy+y);
 				return;
 			}
 		}
-		parent->moveto(parent->px()+scrollposx+x, parent->py()+scrollposy+y);
+		parent->moveto(parent->px()-scrollposx-x, parent->py()-scrollposy+y);
 		return;
 	}
 

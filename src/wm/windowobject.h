@@ -121,6 +121,9 @@ public:
 	virtual void SetInt(int, int) {}
 	virtual string GetText(int) { return "NULL"; }
 	virtual int GetInt(int) { return -1; }
+	virtual void holddragover() {}
+	virtual void dragover() {}
+
 	cWindow* parent;
 };
 

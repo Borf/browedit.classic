@@ -182,6 +182,11 @@ bool cWindowTree::onkeydown(int key)
 		}
 		return true;
 	}
+	else if(key == SDLK_RIGHT || key == SDLK_LEFT)
+	{
+		doubleclick();
+		return true;
+	}
 	return false;
 }
 

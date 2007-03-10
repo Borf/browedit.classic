@@ -117,6 +117,9 @@ MENUCOMMAND(toggle);
 MENUCOMMAND(water);
 MENUCOMMAND(ambientlight);
 MENUCOMMAND(cleantextures);
+MENUCOMMAND(modelwindow);
+MENUCOMMAND(texturewindow);
+MENUCOMMAND(properties);
 
 cMenu*	menu;
 cMenu* grid;
@@ -557,6 +560,7 @@ int main(int argc, char *argv[])
 	cMenu* rnd;
 	cMenu* view;
 	cMenu* edit;
+	cMenu* windows;
 
 	menu = new cMenu();
 	menu->title = "root";
@@ -575,94 +579,99 @@ int main(int argc, char *argv[])
 	ADDMENU(edit,		menu, "Edit",				250,50);
 	ADDMENU(models,		menu, "Models",				300,50);
 	ADDMENU(effectsmenu,menu, "Effects",			350,50);
+	ADDMENU(windows,	menu, "Windows",			400,50);
 
-	ADDMENUITEM(mm,file,"New"	,				&MenuCommand_new);
-	ADDMENUITEM(mm,file,"Open",					&MenuCommand_open);
-	ADDMENUITEM(mm,file,"Save",					&MenuCommand_save);
-	ADDMENUITEM(mm,file,"Save As",				&MenuCommand_saveAs);
-	ADDMENUITEM(mm,file,"Import RO Alpha maps",	&MenuCommand_importalpha);
-	ADDMENUITEM(mm,file,"Export Lightmaps",	&MenuCommand_savelightmaps);
-	ADDMENUITEM(mm,file,"Import Lightmaps",	&MenuCommand_loadlightmaps);
-	ADDMENUITEM(mm,file,"Exit",					&MenuCommand_exit);
+	ADDMENUITEM(mm,file,"New"	,						&MenuCommand_new);
+	ADDMENUITEM(mm,file,"Open",							&MenuCommand_open);
+	ADDMENUITEM(mm,file,"Save",							&MenuCommand_save);
+	ADDMENUITEM(mm,file,"Save As",						&MenuCommand_saveAs);
+	ADDMENUITEM(mm,file,"Import RO Alpha maps",			&MenuCommand_importalpha);
+	ADDMENUITEM(mm,file,"Export Lightmaps",				&MenuCommand_savelightmaps);
+	ADDMENUITEM(mm,file,"Import Lightmaps",				&MenuCommand_loadlightmaps);
+	ADDMENUITEM(mm,file,"Exit",							&MenuCommand_exit);
 	
-	ADDMENUITEM(mm,rnd, "Random 1", &MenuCommand_random1);
-	ADDMENUITEM(mm,rnd, "Maze stuff", &MenuCommand_tempfunc);
-	ADDMENUITEM(mm,rnd,"Quadtree",				&MenuCommand_quadtree);
-	ADDMENUITEM(mm,rnd,"Calculate Lightmaps",		&MenuCommand_dolightmapsall);
-	ADDMENUITEM(mm,rnd,"Calculate selected Lightmaps",		&MenuCommand_dolightmaps);
-	ADDMENUITEM(mm,rnd,"Clear Map",		&MenuCommand_clearstuff);
+	ADDMENUITEM(mm,rnd, "Random 1",						&MenuCommand_random1);
+	ADDMENUITEM(mm,rnd, "Maze stuff",					&MenuCommand_tempfunc);
+	ADDMENUITEM(mm,rnd,"Quadtree",						&MenuCommand_quadtree);
+	ADDMENUITEM(mm,rnd,"Calculate Lightmaps",			&MenuCommand_dolightmapsall);
+	ADDMENUITEM(mm,rnd,"Calculate selected Lightmaps",	&MenuCommand_dolightmaps);
+	ADDMENUITEM(mm,rnd,"Clear Map",						&MenuCommand_clearstuff);
 
-	ADDMENUITEM(grid,view,"Grid",&MenuCommand_grid);
+	ADDMENUITEM(grid,view,"Grid",						&MenuCommand_grid);
 	grid->ticked = true;
-	ADDMENUITEM(showobjects,view,"Objects",&MenuCommand_showobjects);
-	ADDMENUITEMDATAP(mm,view,"Boundingboxes",&MenuCommand_toggle, (void*)&Graphics.showboundingboxes);
-	ADDMENUITEMDATAP(mm,view,"Lightmaps",&MenuCommand_toggle, (void*)&Graphics.showlightmaps);
-	ADDMENUITEMDATAP(mm,view,"Show OGL Lighting", &MenuCommand_toggle, (void*)&Graphics.showoglighting);
+	ADDMENUITEM(showobjects,view,"Objects",				&MenuCommand_showobjects);
+	ADDMENUITEMDATAP(mm,view,"Boundingboxes",			&MenuCommand_toggle, (void*)&Graphics.showboundingboxes);
+	ADDMENUITEMDATAP(mm,view,"Lightmaps",				&MenuCommand_toggle, (void*)&Graphics.showlightmaps);
+	ADDMENUITEMDATAP(mm,view,"Show OGL Lighting",		&MenuCommand_toggle, (void*)&Graphics.showoglighting);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,"Tilecolors",&MenuCommand_toggle, (void*)&Graphics.showtilecolors);
+	ADDMENUITEMDATAP(mm,view,"Tilecolors",				&MenuCommand_toggle, (void*)&Graphics.showtilecolors);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,"Water",&MenuCommand_toggle, (void*)&Graphics.showwater);
+	ADDMENUITEMDATAP(mm,view,"Water",					&MenuCommand_toggle, (void*)&Graphics.showwater);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,"Topcamera",&MenuCommand_toggle, (void*)&Graphics.topcamera);
-	ADDMENUITEMDATAP(mm,view,"Show invisible tiles",&MenuCommand_toggle, (void*)&Graphics.shownotiles);
+	ADDMENUITEMDATAP(mm,view,"Topcamera",				&MenuCommand_toggle, (void*)&Graphics.topcamera);
+	ADDMENUITEMDATAP(mm,view,"Show invisible tiles",	&MenuCommand_toggle, (void*)&Graphics.shownotiles);
 	mm->ticked = true;
 
-	ADDMENUITEMDATAP(mm,view,"Show Ambient Lighting",&MenuCommand_toggle, (void*)&Graphics.showambientlighting);
+	ADDMENUITEMDATAP(mm,view,"Show Ambient Lighting",	&MenuCommand_toggle, (void*)&Graphics.showambientlighting);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,"Water Animation",&MenuCommand_toggle, (void*)&Graphics.animatewater);
+	ADDMENUITEMDATAP(mm,view,"Water Animation",			&MenuCommand_toggle, (void*)&Graphics.animatewater);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,"Show gat tiles",&MenuCommand_toggle, (void*)&Graphics.showgat);
+	ADDMENUITEMDATAP(mm,view,"Show gat tiles",			&MenuCommand_toggle, (void*)&Graphics.showgat);
 
 
-	ADDMENUITEM(mm,mode,"Texture Edit",			&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,"Texture Edit",					&MenuCommand_mode);
 	mm->ticked = true;
-	ADDMENUITEM(mm,mode,"Global Heightmap Edit",	&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,"Global Heightmap Edit",		&MenuCommand_mode);
 	ADDMENU(editdetail,mode,"Detail Terrain Edit...",400,100);
 
-	ADDMENUITEM(mm, editdetail, "1", &MenuCommand_mode_detail);
-	ADDMENUITEM(mm, editdetail, "2", &MenuCommand_mode_detail);
-	ADDMENUITEM(mm, editdetail, "4", &MenuCommand_mode_detail);
-	ADDMENUITEM(mm, editdetail, "8", &MenuCommand_mode_detail);
-	ADDMENUITEM(mm, editdetail, "16", &MenuCommand_mode_detail);
-	ADDMENUITEM(mm, editdetail, "32", &MenuCommand_mode_detail);
-	ADDMENUITEM(mm, editdetail, "64", &MenuCommand_mode_detail);
+	ADDMENUITEM(mm, editdetail, "1",					&MenuCommand_mode_detail);
+	ADDMENUITEM(mm, editdetail, "2",					&MenuCommand_mode_detail);
+	ADDMENUITEM(mm, editdetail, "4",					&MenuCommand_mode_detail);
+	ADDMENUITEM(mm, editdetail, "8",					&MenuCommand_mode_detail);
+	ADDMENUITEM(mm, editdetail, "16",					&MenuCommand_mode_detail);
+	ADDMENUITEM(mm, editdetail, "32",					&MenuCommand_mode_detail);
+	ADDMENUITEM(mm, editdetail, "64",					&MenuCommand_mode_detail);
 
-	ADDMENUITEM(mm,mode,"Wall Edit",	&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,"Object Edit",	&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,"GAT Edit",	&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,"Water Edit",	&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,"Effects Edit",	&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,"Sounds Edit",	&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,"Lights Edit",	&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,"Object Group Edit",	&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,"Wall Edit",					&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,"Object Edit",					&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,"GAT Edit",						&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,"Water Edit",					&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,"Effects Edit",					&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,"Sounds Edit",					&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,"Lights Edit",					&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,"Object Group Edit",			&MenuCommand_mode);
 
 
 	ADDMENU(speed,edit, "Speed", 480, 100);
-	ADDMENUITEM(mm,speed,"5",&MenuCommand_speed);
-	ADDMENUITEM(mm,speed,"10",&MenuCommand_speed);
-	ADDMENUITEM(mm,speed,"25",&MenuCommand_speed);
-	ADDMENUITEM(mm,speed,"50",&MenuCommand_speed);
-	ADDMENUITEM(mm,speed,"100",&MenuCommand_speed);
-	ADDMENUITEM(mm,speed,"250",&MenuCommand_speed);
-	ADDMENUITEM(mm,speed,"500",&MenuCommand_speed);
-	ADDMENUITEM(mm,edit,"Sloping",				&MenuCommand_slope);
-	ADDMENUITEM(snaptofloor,edit,"Snap objects to floor",		&MenuCommand_snaptofloor);
+	ADDMENUITEM(mm,speed,"5",							&MenuCommand_speed);
+	ADDMENUITEM(mm,speed,"10",							&MenuCommand_speed);
+	ADDMENUITEM(mm,speed,"25",							&MenuCommand_speed);
+	ADDMENUITEM(mm,speed,"50",							&MenuCommand_speed);
+	ADDMENUITEM(mm,speed,"100",							&MenuCommand_speed);
+	ADDMENUITEM(mm,speed,"250",							&MenuCommand_speed);
+	ADDMENUITEM(mm,speed,"500",							&MenuCommand_speed);
+	ADDMENUITEM(mm,edit,"Sloping",						&MenuCommand_slope);
+	ADDMENUITEM(snaptofloor,edit,"Snap objects to floor",	&MenuCommand_snaptofloor);
 	snaptofloor->ticked = true;
 
-	ADDMENUITEM(mm,edit,"Flatten map",			&MenuCommand_flatten);
-	ADDMENUITEM(mm,edit,"Fill with selected texture",			&MenuCommand_fill);
-	ADDMENUITEM(mm,edit,"Set GAT height",		&MenuCommand_gatheight);
-	ADDMENUITEM(mm,edit,"Reset Colors",		&MenuCommand_fixcolors);
-	ADDMENUITEM(mm,edit,"Clear Objects",		&MenuCommand_clearobjects);
-	ADDMENUITEM(mm,edit,"Clear Effects",		&MenuCommand_cleareffects);
-	ADDMENUITEM(mm,edit,"Clear lights",		&MenuCommand_clearlights);
-	ADDMENUITEM(mm,edit,"Add Walls",		&MenuCommand_addwalls);
-	ADDMENUITEM(mm,edit,"Set gat collision",		&MenuCommand_gatcollision);
-	ADDMENUITEM(mm,edit,"Clear Lightmaps",		&MenuCommand_clearlightmaps);
-	ADDMENUITEM(mm,edit,"Clean up Lightmaps",		&MenuCommand_cleanuplightmaps);
-	ADDMENUITEM(mm,edit,"Clean Textures",		&MenuCommand_cleantextures);
-	ADDMENUITEM(mm,edit,"Edit Water",		&MenuCommand_water);
-	ADDMENUITEM(mm,edit,"Edit Ambient Lighting",		&MenuCommand_ambientlight);
+	ADDMENUITEM(mm,edit,"Flatten map",					&MenuCommand_flatten);
+	ADDMENUITEM(mm,edit,"Fill with selected texture",	&MenuCommand_fill);
+	ADDMENUITEM(mm,edit,"Set GAT height"	,			&MenuCommand_gatheight);
+	ADDMENUITEM(mm,edit,"Reset Colors",					&MenuCommand_fixcolors);
+	ADDMENUITEM(mm,edit,"Clear Objects",				&MenuCommand_clearobjects);
+	ADDMENUITEM(mm,edit,"Clear Effects",				&MenuCommand_cleareffects);
+	ADDMENUITEM(mm,edit,"Clear lights",					&MenuCommand_clearlights);
+	ADDMENUITEM(mm,edit,"Add Walls",					&MenuCommand_addwalls);
+	ADDMENUITEM(mm,edit,"Set gat collision",			&MenuCommand_gatcollision);
+	ADDMENUITEM(mm,edit,"Clear Lightmaps",				&MenuCommand_clearlightmaps);
+	ADDMENUITEM(mm,edit,"Clean up Lightmaps",			&MenuCommand_cleanuplightmaps);
+	ADDMENUITEM(mm,edit,"Clean Textures",				&MenuCommand_cleantextures);
+
+	ADDMENUITEM(mm,windows,"Ambient Lighting",			&MenuCommand_ambientlight);
+	ADDMENUITEM(mm,windows,"Models",					&MenuCommand_modelwindow);
+	ADDMENUITEM(mm,windows,"Textures",					&MenuCommand_texturewindow);
+	ADDMENUITEM(mm,windows,"Properties",				&MenuCommand_properties);
+	ADDMENUITEM(mm,windows,"Water",						&MenuCommand_water);
 
 	cFile* pFile = fs.open("config.txt");
 	if (pFile == NULL)
@@ -1302,9 +1311,12 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					else
 					{ // drag this component
 						Graphics.WM.click(false);
-						draggingobject = w->inobject();
-						dragoffsetx = mousex - w->px() - w->inobject()->realx();
-						dragoffsety = (Graphics.h()-mousey) - w->py() - w->inobject()->realy();
+						if(movement > 0)
+						{
+							draggingobject = w->inobject();
+							dragoffsetx = mousex - w->px() - w->inobject()->realx();
+							dragoffsety = (Graphics.h()-mousey) - w->py() - w->inobject()->realy();
+						}
 					}
 					return 0;
 				}
@@ -3759,7 +3771,7 @@ void Undo()
 
 MENUCOMMAND(new)
 {
-
+	Graphics.WM.MessageBox("This feature isn't working yet...");
 	return true;
 }
 
@@ -5172,5 +5184,32 @@ MENUCOMMAND(cleareffects)
 MENUCOMMAND(clearlights)
 {
 	Graphics.world.lights.clear();
+	return true;
+}
+
+MENUCOMMAND(texturewindow)
+{
+	SDL_Event ev;
+	ev.type = SDL_KEYDOWN;
+	ev.key.keysym.sym = SDLK_t;
+	SDL_PushEvent(&ev);
+	return true;
+}
+
+MENUCOMMAND(modelwindow)
+{
+	SDL_Event ev;
+	ev.type = SDL_KEYDOWN;
+	ev.key.keysym.sym = SDLK_m;
+	SDL_PushEvent(&ev);
+	return true;
+}
+
+MENUCOMMAND(properties)
+{
+	SDL_Event ev;
+	ev.type = SDL_KEYDOWN;
+	ev.key.keysym.sym = SDLK_RETURN;
+	SDL_PushEvent(&ev);
 	return true;
 }

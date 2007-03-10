@@ -131,8 +131,8 @@ public:
 	virtual void doubleclick();
 	virtual void rightclick();
 	virtual void stopdrag() {}
-	virtual void dragover() {}
-	virtual void holddragover() {}
+	virtual void dragover();
+	virtual void holddragover();
 
 	virtual bool onkeyup(int);
 	virtual bool onkeydown(int);

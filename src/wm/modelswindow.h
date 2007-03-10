@@ -136,6 +136,29 @@ class cModelsWindow : public cWindow
 				data = s;
 			}
 		}
+
+		string GetText(int i)
+		{
+			return data;
+		}
+
+		void drag()
+		{
+			parent->objects["zdragger"]->moveto(mousex-parent->px()-256,mousey-(Graphics.h()-parent->ph()-parent->py()));
+			parent->objects["zdragger"]->SetText(1, data);
+		}
+
+		void SetInt(int i, int id)
+		{
+			data = "";
+			if (model != NULL)
+			{
+				delete model;
+				model = NULL;
+			}
+		}
+		
+
 		~cWindowModel()
 		{
 			if(model != NULL)
@@ -147,10 +170,11 @@ class cModelsWindow : public cWindow
 
 	class cWindowModelCatSelect : public cWindowTree
 	{
+		int originalselection;
 	public:
 		cWindowModelCatSelect(cWindow* parent, vector<cWindowTree::cTreeNode*> n) : cWindowTree(parent, n)
 		{
-			
+			originalselection = -1;
 		}
 
 		void click()
@@ -189,8 +213,82 @@ class cModelsWindow : public cWindow
 			draggingwindow = NULL;
 			draggingobject = NULL;
 		}
-	};
+		void holddragover()
+		{
+			if(originalselection == -1)
+				originalselection = selected;
+			int i;
+			vector<string> values;
+			for(i = 0; i < nodes.size(); i++)
+				nodes[i]->getdata(values);
 
+			
+			int xx = (int)mousex;
+			xx -= realx();
+			xx -= parent->px();
+			int yy = Graphics.h()-(int)mousey;
+			yy -= realy();
+			yy -= parent->py();
+
+			if (xx < w - 14)
+			{ // in the box
+				int s = selected;
+				selected = liststart + ((h-yy-3) / 12);
+				if (selected > (int)values.size() || selected < 0)
+					selected = s;
+			}
+		}
+		void dragover()
+		{
+			int i;
+			int a = selected;
+			cTreeNode* node = NULL;
+			for(i = 0; i < nodes.size(); i++)
+			{
+				 node = nodes[i]->getnode(a);
+				 if(node != NULL)
+					 break;
+			}
+			a = originalselection;
+			cTreeNode* nodeorig = NULL;
+			for(i = 0; i < nodes.size(); i++)
+			{
+				 nodeorig = nodes[i]->getnode(a);
+				 if(nodeorig != NULL)
+					 break;
+			}
+
+			if(node != NULL && nodeorig != NULL)
+			{
+				string orig = "";
+				string dest = "";
+				cTreeNode* n = node;
+				while(n != NULL)
+				{
+					dest = "/" + n->text + dest;
+					n = n->parent;
+				}
+				dest = dest.substr(1);
+				n = nodeorig;
+				while(n != NULL)
+				{
+					orig = "/" + n->text + orig;
+					n = n->parent;
+				}
+				orig = orig.substr(1);
+				
+				
+
+				Graphics.WM.MessageBox("Moving: " + draggingobject->GetText(0) + " from " + orig + " to " + dest);
+			}
+			
+
+			selected = originalselection;
+			originalselection = -1;
+		}
+
+	};
+	
 
 
 public:
@@ -281,6 +379,13 @@ public:
 		o->resizeto(100,100);
 		objects["models"] = o;
 
+		o = new cWindowModel(this);
+		o->alignment = ALIGN_TOPLEFT;
+		o->moveto(9999,9999);
+		o->resizeto(128,128);
+		//o->SetText(0,"data/dragger.tga");
+		objects["zdragger"] = o;
+
 		objects["rollup"] = new cWindowRollupButton(this);
 		objects["close"] = new cWindowCloseButton(this);
 
@@ -312,6 +417,13 @@ public:
 		panel->scrollposy = 0;
 		panel->innerheight = y+130;
 	}
+	void stopdrag()
+	{
+		objects["zdragger"]->moveto(-4000,-4000);
+		objects["zdragger"]->SetInt(0,0);
+		((cWindowScrollPanel*)objects["models"])->draggingobject = NULL;
+
+	}	
 
 	void* userfunc(void* param)
 	{

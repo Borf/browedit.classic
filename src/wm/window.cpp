@@ -426,3 +426,17 @@ cWindowObject* cWindow::addlabel(string name, int x, int y, string text)
 	objects[name] = o;
 	return o;
 }
+
+void cWindow::holddragover()
+{
+	cWindowObject* o = inobject();
+	if(o != NULL)
+		o->holddragover();	
+}
+
+void cWindow::dragover()
+{
+	cWindowObject* o = inobject();
+	if(o != NULL)
+		o->dragover();	
+}
