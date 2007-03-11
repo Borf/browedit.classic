@@ -3,7 +3,7 @@
 
 #define GL_GLEXT_PROTOTYPES	
 #include <SDL/SDL.h>
-
+#include "version.h"
 
 
 #ifdef WIN32
