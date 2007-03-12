@@ -75,6 +75,10 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
 # ADD LINK32 glaux.lib ws2_32.lib bgd.lib sdl.lib sdlmain.lib zlib.lib opengl32.lib glu32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /nodefaultlib:"MSVCRT" /pdbtype:sept
+# Begin Special Build Tool
+SOURCE="$(InputPath)"
+PreLink_Cmds=svnver src/version.h
+# End Special Build Tool
 
 !ENDIF 
 
@@ -116,6 +120,10 @@ SOURCE=.\src\md5.c
 # Begin Source File
 
 SOURCE=.\src\RSMModel.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\svnver.cpp
 # End Source File
 # Begin Source File
 
@@ -187,6 +195,10 @@ SOURCE=.\src\RSMModel.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\svnver.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\texture.h
 # End Source File
 # Begin Source File
@@ -216,14 +228,6 @@ InputPath=.\src\version.h
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "roworldedit - Win32 Debug"
-
-# Begin Custom Build
-InputPath=.\src\version.h
-
-"src/version.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	svnver > src/version.h
-
-# End Custom Build
 
 !ENDIF 
 

@@ -1,5 +1,4 @@
 #include "common.h"
-
 #include <cstdarg>
 #include <stdio.h>
 #include <stdlib.h>
@@ -274,7 +273,7 @@ void drawlogo()
 	Log(3,0,"");
 	Log(3,0,"");
 	Log(3,0,"       Private Alpha Release, DO NOT DISTRIBUTE OR BE BLOCKED!");
-	Log(3,0,"       Version %i", SVN_VERSION);
+	Log(3,0,"       Version %i", getversion());
 	Log(3,0,"");
 }
 

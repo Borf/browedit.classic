@@ -347,7 +347,7 @@ int cGraphics::init()
 
 //	SDL_WM_SetIcon(SDL_LoadBMP("data/domovsneko.bmp"), NULL);
 	char buf[100];
-	sprintf(buf, "Borf's Ragnarok Online World Editor, revision %i", SVN_VERSION);
+	sprintf(buf, "Borf's Ragnarok Online World Editor, revision %i", getversion());
 	SDL_WM_SetCaption(buf, "BROWorld Editor");
 
 	Log(3,0,"Initializing OpenGL");
