@@ -10,6 +10,7 @@
 using namespace std;
 
 #include "confirmwindow.h"
+#include "inputwindow.h"
 
 
 #include "window.h"
@@ -51,6 +52,8 @@ public:
 	int					focus;
 	void				MessageBox(string);
 	void				ConfirmWindow(string, cConfirmWindow::cConfirmWindowCaller* caller);
+	void				InputWindow(string, cInputWindow::cInputWindowCaller* caller);
+	string				InputWindow(string);
 
 	void				printdebug();
 	void				defocus();

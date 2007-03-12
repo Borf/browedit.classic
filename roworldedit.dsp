@@ -277,6 +277,10 @@ SOURCE=.\src\wm\hotkeywindow.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\wm\inputwindow.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\wm\lightwindow.h
 # End Source File
 # Begin Source File

@@ -27,7 +27,7 @@ void cModelsWindow::cWindowModel::draw(int cutoffleft, int cutoffright, int cuto
 		glLoadIdentity();
 		model = new cRSMModel();
 		model->load(rodir + data);
-		model->pos = cVector3(0,0.7*w,0);
+		model->pos = cVector3(0,0.7*w,1000);
 		
 		float sc = 0;
 		sc = max(sc, model->bb2.bbmax[0] - model->bb2.bbmin[0]);
@@ -246,7 +246,27 @@ void cModelsWindow::cWindowModel::rightclick()
 	Graphics.WM.ConfirmWindow("Are you sure you want to remove this model from the list?", new cConfirmDeleteModel(this));
 }
 
-
+void cModelsWindow::cWindowModelCatSelect::rightclick()
+{
+	int i;
+	click();
+	int a = selected;
+	cTreeNode* node = NULL;
+	for(i = 0; i < nodes.size(); i++)
+	{
+		 node = nodes[i]->getnode(a);
+		 if(node != NULL)
+			 break;
+	}
+	if(node != NULL)
+	{
+		string newnode = Graphics.WM.InputWindow("Please enter the name of the new node");
+		cTreeNode* n = new cTreeNode(newnode);
+		n->parent = node;
+		node->addchild(n);
+		((cModelsWindow*)parent)->items[n] = vector<pair<string,string> >();
+	}
+}
 
 cModelsWindow::cWindowModelCatSelect::cWindowModelCatSelect(cWindow* parent, vector<cWindowTree::cTreeNode*> n) : cWindowTree(parent, n)
 {

@@ -6,6 +6,7 @@
 #include "confirmwindow.h"
 extern cGraphics Graphics;
 extern cWindow* draggingwindow;
+extern void mainloop();
 
 int cWM::draw()
 {
@@ -403,3 +404,53 @@ void cWM::defocus()
 	for(int i = 0; i < windows.size(); i++)
 		windows[i]->selectedobject = NULL;
 }
+
+void cWM::InputWindow(string title, cInputWindow::cInputWindowCaller* caller)
+{
+	cWindow* w = new cInputWindow(caller);
+	w->init(&texture, &font);
+	w->objects["text"]->SetText(0, title);
+	w->show();
+	addwindow(w);
+}
+
+
+string cWM::InputWindow(string title)
+{
+	class cDefaultInputWindowCaller : public cInputWindow::cInputWindowCaller
+	{
+	public:
+		bool* b;
+		string* dat;
+
+		cDefaultInputWindowCaller(bool* bb, string* str)
+		{
+			b = bb;
+			dat = str;
+		}
+		void Ok()
+		{
+			*dat = data;
+			*b = true;
+		}
+		void Cancel()
+		{
+			*dat = "";
+			*b = true;
+		}
+	};
+
+	bool b = false;
+	string data = "";
+
+	InputWindow(title, new cDefaultInputWindowCaller(&b, &data));
+	while(!b)
+	{
+		mainloop();
+		Sleep(100);
+	}
+
+	return data;	
+}
+
+

@@ -341,6 +341,28 @@ void mainloop()
 }
 
 
+
+
+
+void additem(map<string, cMenu*, less<string> > &itemsm, map<cMenu*, int, less<cMenu*> > &levelm, string cat)
+{
+	cMenu* root = models;
+	string catname = cat;
+	if(cat.find("/") != string::npos)
+	{
+		root = itemsm[cat.substr(0, cat.rfind("/"))];
+		catname = cat.substr(cat.rfind("/")+1);
+	}
+	
+	cMenu* submenu;
+	ADDMENU(submenu,		root, catname + "...",				450 + 100*(levelm[root]+1),100);
+	itemsm[cat] = submenu;
+	levelm[submenu] = levelm[root] + 1;
+}
+
+
+
+
 int main(int argc, char *argv[])
 {
 	int i;
@@ -734,18 +756,7 @@ int main(int argc, char *argv[])
 
 								if (cat != "" && itemsm.find(cat) == itemsm.end())
 								{
-									cMenu* root = models;
-									string catname = cat;
-									if(cat.find("/") != string::npos)
-									{
-										root = itemsm[cat.substr(0, cat.rfind("/"))];
-										catname = cat.substr(cat.rfind("/")+1);
-									}
-									
-									cMenu* submenu;
-									ADDMENU(submenu,		root, catname + "...",				450 + 100*(levelm[root]+1),100);
-									itemsm[cat] = submenu;
-									levelm[submenu] = levelm[root] + 1;
+									additem(itemsm, levelm, cat);
 								}
 								char* f = (char*)filename.c_str();
 								if(filename != "")

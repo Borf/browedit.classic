@@ -23,6 +23,7 @@ public:
 		void holddragover();
 		void dragover();
 		void refreshmodels();
+		void rightclick();
 	};
 	class cWindowModel : public cWindowObject
 	{
