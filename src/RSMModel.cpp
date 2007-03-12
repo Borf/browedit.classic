@@ -230,6 +230,7 @@ void cRSMModel::draw(bool checkfrust, bool dodraw, bool setheight, bool dolightm
 	if (meshes.size() == 0)
 		return;
 	glPushMatrix();
+	glEnable(GL_DEPTH_TEST);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set the correct blending mode
 	glEnable(GL_BLEND);
 	glTranslatef(5*pos.x, -pos.y, 5*pos.z);

@@ -2507,7 +2507,7 @@ void cWorld::loadlightmap()
 		}
 		pFile->close();
 	}
-	{
+/*	{
 		cFile* pFile = fs.open(string(filename) + ".lightmap2.tga");
 		for(int x = 0; x < width; x++)
 		{
@@ -2530,7 +2530,7 @@ void cWorld::loadlightmap()
 			}
 		}
 		pFile->close();
-	}
+	}*/
 	
 }
 

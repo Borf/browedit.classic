@@ -455,6 +455,28 @@ void cModelsWindow::cWindowModelCatSelect::refreshmodels()
 	draggingobject = NULL;
 }
 
+void addnode(vector<cWindowTree::cTreeNode*> &nodes, map<string, cWindowTree::cTreeNode*, less<string> > &lookup, string cat)
+{
+	if(lookup.find(cat) == lookup.end())
+	{
+		if(cat.rfind("/") != string::npos)
+		{
+			string p = cat.substr(0, cat.rfind("/"));
+			if(lookup.find(p) == lookup.end())
+				addnode(nodes, lookup, p);
+			cWindowTree::cTreeNode* n = new cWindowTree::cTreeNode(cat.substr(cat.rfind("/")+1));
+			lookup[cat] = n;
+			lookup[p]->addchild(n);
+		}
+		else
+		{
+			cWindowTree::cTreeNode* n = new cWindowTree::cTreeNode(cat);
+			lookup[cat] = n;
+			nodes.push_back(n);
+		}
+	}
+
+}
 
 cModelsWindow::cModelsWindow()
 {
@@ -490,26 +512,7 @@ cModelsWindow::cModelsWindow()
 
 			if(lookup.find(cat) == lookup.end())
 			{
-				if(cat.find("/") != string::npos)
-				{
-					string p = cat.substr(0, cat.rfind("/"));
-					if(lookup.find(p) == lookup.end())
-					{
-						Log(1,0,"Invalid nesting in objectfile...");
-					}
-					else
-					{
-						cWindowTree::cTreeNode* n = new cWindowTree::cTreeNode(cat.substr(cat.rfind("/")+1));
-						lookup[cat] = n;
-						lookup[p]->addchild(n);
-					}
-				}
-				else
-				{
-					cWindowTree::cTreeNode* n = new cWindowTree::cTreeNode(cat);
-					lookup[cat] = n;
-					nodes.push_back(n);
-				}
+				addnode(nodes, lookup, cat);
 			}
 			if(filename != "")
 			{

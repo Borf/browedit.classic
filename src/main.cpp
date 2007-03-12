@@ -350,6 +350,8 @@ void additem(map<string, cMenu*, less<string> > &itemsm, map<cMenu*, int, less<c
 	string catname = cat;
 	if(cat.find("/") != string::npos)
 	{
+		if(itemsm.find(cat.substr(0, cat.rfind("/"))) == itemsm.end())
+			additem(itemsm, levelm, cat.substr(0, cat.rfind("/")));
 		root = itemsm[cat.substr(0, cat.rfind("/"))];
 		catname = cat.substr(cat.rfind("/")+1);
 	}
