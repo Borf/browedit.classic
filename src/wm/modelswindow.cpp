@@ -265,11 +265,125 @@ void cModelsWindow::cWindowModelCatSelect::rightclick()
 	if(node != NULL)
 	{
 		string newnode = Graphics.WM.InputWindow("Please enter the name of the new node");
+		if(newnode == "")
+			return;
 		cTreeNode* n = new cTreeNode(newnode);
 		n->parent = node;
 		node->addchild(n);
 		((cModelsWindow*)parent)->items[n] = vector<pair<string,string> >();
+
+		string cat = "";
+		n = node;
+		while(n != NULL)
+		{
+			cat = n->text + "/" + cat;
+			n = n->parent;
+		}
+
+		ofstream pFile("romodels.txt", ios_base::out | ios_base::app);
+		if(pFile.good() && !pFile.bad())
+		{
+			char buf[512];
+			sprintf(buf, "%s%s/|\n", cat.c_str(), newnode.c_str());
+			pFile.write(buf, strlen(buf));
+			pFile.close();
+		}
 	}
+	else if (node == NULL)
+	{
+		string newnode = Graphics.WM.InputWindow("Please enter the name of the new node");
+		if(newnode == "")
+			return;
+		cTreeNode* n = new cTreeNode(newnode);
+		n->parent = NULL;
+		((cModelsWindow*)parent)->items[n] = vector<pair<string,string> >();
+		nodes.push_back(n);
+	}
+}
+
+
+bool cModelsWindow::cWindowModelCatSelect::onkeydown(int key)
+{
+	bool b = cWindowTree::onkeydown(key);
+	if(b)
+		return true;
+	
+	if(key == SDLK_DELETE || key == SDLK_BACKSPACE)
+	{
+		int a = selected;
+		cTreeNode* node = NULL;
+		for(int i = 0; i < nodes.size(); i++)
+		{
+			 node = nodes[i]->getnode(a);
+			 if(node != NULL)
+				 break;
+		}
+		if (node != NULL)
+		{
+			if(node->parent != NULL)
+			{
+				for(int i = 0; i < node->parent->children.size(); i++)
+				{
+					if (node->parent->children[i] == node)
+					{
+						node->parent->children.erase(node->parent->children.begin() + i);
+						break;
+					}
+				}
+			}
+			else
+			{
+				for(int i = 0; i < nodes.size(); i++)
+				{
+					if (nodes[i] == node)
+					{
+						nodes.erase(nodes.begin() + i);
+						break;
+					}
+				}
+			}
+			((cModelsWindow*)parent)->items.erase(((cModelsWindow*)parent)->items.find(node));
+			string cat = "";
+			cTreeNode* n = node;
+			while(n != NULL)
+			{
+				cat = n->text + "/" + cat;
+				n = n->parent;
+			}
+
+			for(i = 0; i < objectfiles.size(); i++)
+			{
+				cFile* pFile = fs.open(objectfiles[i]);
+				ofstream pFile2((objectfiles[i] + ".tmp").c_str());
+				while(!pFile->eof())
+				{
+					string line = pFile->readline();
+					if(line.substr(0, cat.length()) != cat)
+					{
+						line += "\n";
+						pFile2.write(line.c_str(), line.length());
+					}
+				}
+				pFile->close();
+				pFile2.close();
+#ifdef WIN32
+				DeleteFile((objectfiles[i]+".bak").c_str());
+				MoveFile(objectfiles[i].c_str(), (objectfiles[i]+".bak").c_str());
+				MoveFile((objectfiles[i]+".tmp").c_str(), objectfiles[i].c_str());
+#else
+				unlink((objectfiles[i]+".bak").c_str());
+				rename(objectfiles[i].c_str(), (objectfiles[i]+".bak").c_str());
+				rename((objectfiles[i]+".tmp").c_str(), objectfiles[i].c_str());
+#endif
+			}
+
+			delete node;
+			refreshmodels();
+		}
+		
+		return true;
+	}
+	return false;
 }
 
 cModelsWindow::cWindowModelCatSelect::cWindowModelCatSelect(cWindow* parent, vector<cWindowTree::cTreeNode*> n) : cWindowTree(parent, n)
@@ -386,8 +500,6 @@ void cModelsWindow::cWindowModelCatSelect::dragover()
 			rename(objectfiles[i].c_str(), (objectfiles[i]+".bak").c_str());
 			rename((objectfiles[i]+".tmp").c_str(), objectfiles[i].c_str());
 #endif
-
-
 		}
 
 

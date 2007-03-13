@@ -1951,13 +1951,13 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			}
 			else // right button
 			{
+				rbuttondown = false;
+				doubleclick = false;
 				if (movement < 2)
 				{
 					if(Graphics.WM.inwindow() != NULL)
 						Graphics.WM.rightclick();
 				}
-				rbuttondown = false;
-				doubleclick = false;
 				long l = SDL_GetTicks();
 				if (l - lastrclick < 250)
 				{

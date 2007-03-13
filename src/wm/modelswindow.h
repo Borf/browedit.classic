@@ -24,6 +24,7 @@ public:
 		void dragover();
 		void refreshmodels();
 		void rightclick();
+		bool onkeydown(int);
 	};
 	class cWindowModel : public cWindowObject
 	{
