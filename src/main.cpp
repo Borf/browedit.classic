@@ -3965,6 +3965,9 @@ MENUCOMMAND(undo)
 	ev.type = SDL_KEYDOWN;
 	ev.key.keysym.sym = SDLK_u;
 	SDL_PushEvent(&ev);
+	ev.type = SDL_KEYUP;
+	ev.key.keysym.sym = SDLK_u;
+	SDL_PushEvent(&ev);
 	return true;
 }
 
@@ -5204,6 +5207,9 @@ MENUCOMMAND(texturewindow)
 	ev.type = SDL_KEYDOWN;
 	ev.key.keysym.sym = SDLK_t;
 	SDL_PushEvent(&ev);
+	ev.type = SDL_KEYUP;
+	ev.key.keysym.sym = SDLK_t;
+	SDL_PushEvent(&ev);
 	return true;
 }
 
@@ -5213,6 +5219,9 @@ MENUCOMMAND(modelwindow)
 	ev.type = SDL_KEYDOWN;
 	ev.key.keysym.sym = SDLK_m;
 	SDL_PushEvent(&ev);
+	ev.type = SDL_KEYUP;
+	ev.key.keysym.sym = SDLK_m;
+	SDL_PushEvent(&ev);
 	return true;
 }
 
@@ -5220,6 +5229,9 @@ MENUCOMMAND(properties)
 {
 	SDL_Event ev;
 	ev.type = SDL_KEYDOWN;
+	ev.key.keysym.sym = SDLK_RETURN;
+	SDL_PushEvent(&ev);
+	ev.type = SDL_KEYUP;
 	ev.key.keysym.sym = SDLK_RETURN;
 	SDL_PushEvent(&ev);
 	return true;
