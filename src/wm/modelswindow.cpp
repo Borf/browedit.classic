@@ -208,11 +208,15 @@ class cConfirmDeleteModel : public cConfirmWindow::cConfirmWindowCaller
 				}
 				pFile->close();
 				pFile2.close();
+#ifdef WIN32
 				DeleteFile((objectfiles[i]+".bak").c_str());
 				MoveFile(objectfiles[i].c_str(), (objectfiles[i]+".bak").c_str());
 				MoveFile((objectfiles[i]+".tmp").c_str(), objectfiles[i].c_str());
-
-
+#else
+				unlink((objectfiles[i]+".bak").c_str());
+				rename(objectfiles[i].c_str(), (objectfiles[i]+".bak").c_str());
+				rename((objectfiles[i]+".tmp").c_str(), objectfiles[i].c_str());
+#endif
 			}
 
 			model->parent->selectedobject = NULL;
@@ -373,9 +377,15 @@ void cModelsWindow::cWindowModelCatSelect::dragover()
 			}
 			pFile->close();
 			pFile2.close();
+#ifdef WIN32
 			DeleteFile((objectfiles[i]+".bak").c_str());
 			MoveFile(objectfiles[i].c_str(), (objectfiles[i]+".bak").c_str());
 			MoveFile((objectfiles[i]+".tmp").c_str(), objectfiles[i].c_str());
+#else
+			unlink((objectfiles[i]+".bak").c_str());
+			rename(objectfiles[i].c_str(), (objectfiles[i]+".bak").c_str());
+			rename((objectfiles[i]+".tmp").c_str(), objectfiles[i].c_str());
+#endif
 
 
 		}

@@ -368,5 +368,5 @@ cWindowObject* cWindowScrollPanel::inobject()
 		}
 	}
 	parent->moveto(parent->px()-scrollposx-x, parent->py()-scrollposy+y);
-	return NULL;
+	return cWindowObject::inobject();
 }

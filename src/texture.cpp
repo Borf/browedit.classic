@@ -34,10 +34,6 @@ GLuint cTexture::texid()
 			int ret = BMPLoad(filename,bmp);
 			if (ret == 0)
 			{
-				if(bmp.width != 128 && bmp.width != 256 && bmp.width != 64 && bmp.width != 32 && bmp.width != 16)
-					Log(3,0,"wrong width!");
-				if(bmp.height != 128 && bmp.height != 256 && bmp.height != 64 && bmp.height != 32 && bmp.height != 16)
-					Log(3,0,"wrong height!");
 				// Resize Image To Closest Power Of Two
 				GLint glMaxTexDim;
 				
@@ -85,7 +81,7 @@ GLuint cTexture::texid()
 							int tx = (int)floor(x*factorx);
 							int ty = (int)floor(y*factory);
 							int target = 4*(tx+(bmp.width)*ty);
-							data[4*(x+lWidthPixels*y)] = bmp.bytes[target];
+  							data[4*(x+lWidthPixels*y)] = bmp.bytes[target];
 							data[4*(x+lWidthPixels*y)+1] = bmp.bytes[target+1];
 							data[4*(x+lWidthPixels*y)+2] = bmp.bytes[target+2];
 							data[4*(x+lWidthPixels*y)+3] = bmp.bytes[target+3];
@@ -466,7 +462,7 @@ int cTexture::LoadFromJpeg(string filename)
 	gdImageDestroy(pImageData);
 	pFile->close();
 	delete[] data;
-	Log(3,0,"Loaded %s successfully", filename.c_str());
+	//Log(3,0,"Loaded %s successfully", filename.c_str());
 	return 0;
 }
 
@@ -498,10 +494,15 @@ BMPError cTexture::BMPLoad(std::string fname,BMPClass& bmp)
 	
 	bmp.width=*(int*)(header+18);
 	bmp.height=*(int*)(header+22);
+
+	int bits=int(header[28]);		//colourdepth
+
+	int internalwidth = bmp.width*(bits/8);
+	internalwidth += (4-(internalwidth%4))%4;
+
 	//now the bitmap knows how big it is it can allocate its memory
 	bmp.allocateMem();
 
-	int bits=int(header[28]);		//colourdepth
 
 	int x,y,c;
 	BYTE cols[256*4];				//colourtable
@@ -520,7 +521,11 @@ BMPError cTexture::BMPLoad(std::string fname,BMPClass& bmp)
 				bmp.bytes[x+3] = 0;
 			else
 				bmp.bytes[x+3] = 255;
-
+			if( (x%bmp.width) == 0 && x != 0)
+			{
+				for(int i = 0; i < internalwidth-3*bmp.width; i++)
+					f->get();
+			}
 		}
 		break;
 
@@ -528,6 +533,7 @@ BMPError cTexture::BMPLoad(std::string fname,BMPClass& bmp)
 		f->read((char*)cols,256*4);							//read colortable
 		f->seek(offset,beg);
 		for(y=0;y<bmp.height;++y)						//(Notice 4bytes/col for some reason)
+		{
 			for(x=0;x<bmp.width;++x)
 			{
 				BYTE byte = f->get();
@@ -538,6 +544,9 @@ BMPError cTexture::BMPLoad(std::string fname,BMPClass& bmp)
 				else
 					bmp.pixel(x,y,3) = 255;
 			}
+			for(int i = 0; i < internalwidth-bmp.width; i++)
+				f->get();
+		}
 		break;
 
 	case(4):

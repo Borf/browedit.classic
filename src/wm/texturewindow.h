@@ -230,7 +230,7 @@ public:
 		{
 			panel->objects[i]->moveto(x,y);
 			x+=130;
-			if(x > panel->innerwidth-18)
+			if(x+130 > panel->innerwidth-18)
 			{
 				x = 0;
 				y += 130;
