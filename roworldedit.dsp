@@ -229,6 +229,9 @@ SOURCE=.\src\Script1.rc
 # Begin Group "wm"
 
 # PROP Default_Filter ""
+# Begin Group "windows"
+
+# PROP Default_Filter ""
 # Begin Source File
 
 SOURCE=.\src\wm\ambientlightwindow.h
@@ -277,14 +280,10 @@ SOURCE=.\src\wm\texturewindow.h
 
 SOURCE=.\src\wm\waterwindow.h
 # End Source File
-# Begin Source File
+# End Group
+# Begin Group "components"
 
-SOURCE=.\src\wm\window.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\wm\window.h
-# End Source File
+# PROP Default_Filter ""
 # Begin Source File
 
 SOURCE=.\src\wm\windowbutton.cpp
@@ -400,6 +399,15 @@ SOURCE=.\src\wm\windowtree.cpp
 # Begin Source File
 
 SOURCE=.\src\wm\windowtree.h
+# End Source File
+# End Group
+# Begin Source File
+
+SOURCE=.\src\wm\window.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\window.h
 # End Source File
 # Begin Source File
 

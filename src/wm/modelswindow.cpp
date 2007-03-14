@@ -247,7 +247,7 @@ class cConfirmDeleteModel : public cConfirmWindow::cConfirmWindowCaller
 void cModelsWindow::cWindowModel::rightclick()
 {
 	((cModelsWindow*)parent)->stopdrag();
-	Graphics.WM.ConfirmWindow("Are you sure you want to remove this model from the list?", new cConfirmDeleteModel(this));
+	Graphics.WM.ConfirmWindow(msgtable[WINDOW_MODELS_DELETECONFIRM], new cConfirmDeleteModel(this));
 }
 
 void cModelsWindow::cWindowModelCatSelect::rightclick()
@@ -264,7 +264,7 @@ void cModelsWindow::cWindowModelCatSelect::rightclick()
 	}
 	if(node != NULL)
 	{
-		string newnode = Graphics.WM.InputWindow("Please enter the name of the new node");
+		string newnode = Graphics.WM.InputWindow(msgtable[WINDOW_MODELS_NODENAME]);
 		if(newnode == "")
 			return;
 		cTreeNode* n = new cTreeNode(newnode);
@@ -291,7 +291,7 @@ void cModelsWindow::cWindowModelCatSelect::rightclick()
 	}
 	else if (node == NULL)
 	{
-		string newnode = Graphics.WM.InputWindow("Please enter the name of the new node");
+		string newnode = Graphics.WM.InputWindow(msgtable[WINDOW_MODELS_NODENAME]);
 		if(newnode == "")
 			return;
 		cTreeNode* n = new cTreeNode(newnode);
@@ -611,7 +611,7 @@ cModelsWindow::cModelsWindow()
 
 	h = Graphics.h()-50;
 	w = Graphics.w()-50;
-	title = "Model Select";
+	title = WINDOW_MODELS_TITLE;
 	center();
 
 	cWindowObject* o;

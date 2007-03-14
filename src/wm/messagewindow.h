@@ -16,7 +16,7 @@ public:
 		alignment = ALIGN_BOTTOM;
 		moveto(0, 20);
 		resizeto(100, 20);
-		text = "Ok";
+		text = msgtable[WINDOW_OK];
 	}
 	virtual ~cWindowOkButton() {}
 	void click()
@@ -38,7 +38,7 @@ public:
 
 		h = 200;
 		w = 350;
-		title = "Message";
+		title = msgtable[WINDOW_MESSAGE_TITLE];
 		center();
 
 		defaultobject = "OkButton";

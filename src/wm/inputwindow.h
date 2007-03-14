@@ -22,7 +22,7 @@ class cInputWindow : public cWindow
 			alignment = ALIGN_BOTTOMLEFT;
 			moveto(20, 20);
 			resizeto(100, 20);
-			text = "Ok";
+			text = msgtable[WINDOW_OK];
 		}
 		virtual ~cWindowOkButton() {}
 		void click()
@@ -39,7 +39,7 @@ class cInputWindow : public cWindow
 			alignment = ALIGN_BOTTOMRIGHT;
 			moveto(20, 20);
 			resizeto(100, 20);
-			text = "Cancel";
+			text = msgtable[WINDOW_CANCEL];
 		}
 		virtual ~cWindowCancelButton() {}
 		void click()
@@ -72,7 +72,7 @@ public:
 
 		h = 200;
 		w = 350;
-		title = "Please Input...";
+		title = msgtable[WINDOW_INPUT_TITLE];
 		center();
 
 		defaultobject = "OkButton";

@@ -1,5 +1,6 @@
 #define _MAIN_CPP_
 #include "common.h"
+vector<char*> msgtable;
 #include "filesystem.h"
 #include <math.h>
 #include "main.h"
@@ -148,7 +149,6 @@ vector<vector<vector<float> > > clipboard;
 vector<vector<int > > clipboardgat;
 long lasttimer;
 
-vector<char*> msgtable;
 
 string downloadfile(string url, long &filesize)
 {

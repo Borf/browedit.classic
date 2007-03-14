@@ -18,7 +18,7 @@ public:
 		alignment = ALIGN_BOTTOM;
 		moveto(0, 20);
 		resizeto(100, 20);
-		text = "            Ok";
+		text = msgtable[WINDOW_OK];
 	}
 	virtual ~cWaterWindowOkButton() {}
 	void click()
@@ -44,7 +44,7 @@ public:
 
 		h = 200;
 		w = 350;
-		title = "Water";
+		title = msgtable[WINDOW_WATER_TITLE];
 		center();
 
 		defaultobject = "OkButton";
@@ -54,49 +54,13 @@ public:
 		objects["rollup"] = new cWindowRollupButton(this);
 		objects["close"] = new cWindowCloseButton(this);
 
-		o = new cWindowLabel(this);
-		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(15, 20);
-		o->resizeto(320, 100);
-		o->SetText(0, "Amplitude:");
-		objects["lblAmplitude"] = o;
+		addlabel("lblAmplitude", 15,20,msgtable[WINDOW_WATER_AMPLITUDE]);
+		addlabel("lblHeight", 15,40,msgtable[WINDOW_WATER_HEIGHT]);
+		addlabel("lblPhase", 15,60,msgtable[WINDOW_WATER_PHASE]);
+		addlabel("lblSurfaceCycle", 15,80,msgtable[WINDOW_WATER_SURFACECYCLE]);
+		addlabel("lblTexCycle", 15,100,msgtable[WINDOW_WATER_TEXTURECYCLE]);
+		addlabel("lblType", 15,120,msgtable[WINDOW_WATER_TYPE]);
 
-		o = new cWindowLabel(this);
-		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(15, 40);
-		o->resizeto(320, 100);
-		o->SetText(0, "Height:");
-		objects["lblHeight"] = o;
-
-
-		o = new cWindowLabel(this);
-		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(15, 60);
-		o->resizeto(320, 100);
-		o->SetText(0, "Phase:");
-		objects["lblPhase"] = o;
-
-		o = new cWindowLabel(this);
-		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(15, 80);
-		o->resizeto(320, 100);
-		o->SetText(0, "SurfaceCycle:");
-		objects["lblSurfaceCycle"] = o;
-
-		o = new cWindowLabel(this);
-		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(15, 100);
-		o->resizeto(320, 100);
-		o->SetText(0, "TextureCycle:");
-		objects["lblTexCycle"] = o;
-
-		o = new cWindowLabel(this);
-
-		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(15, 120);
-		o->resizeto(320, 100);
-		o->SetText(0, "Type:");
-		objects["lblType"] = o;
 
 		o = new cWindowInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;

@@ -9,7 +9,6 @@
 #include "windowlabel.h"
 #include "windowinputbox.h"
 
-
 class cAmbientLightWindowOkButton : public cWindowButton
 {
 public:
@@ -53,7 +52,7 @@ public:
 
 		h = 200;
 		w = 350;
-		title = "Ambient Light";
+		title = msgtable[WINDOW_AMBIENT_TITLE];
 		center();
 
 		defaultobject = "OkButton";
@@ -63,10 +62,10 @@ public:
 
 		cWindowObject* o;
 
-		addlabel("lblAmbient", 15,20,"Ambient:");
-		addlabel("lblDiffuse", 15,40,"Diffuse:");
-		addlabel("lblShadow",15,60,"Shadow:");
-		addlabel("lblAlpha", 15,80,"Alpha:");
+		addlabel("lblAmbient", 15,20,msgtable[WINDOW_AMBIENT_AMBIENT]);
+		addlabel("lblDiffuse", 15,40,msgtable[WINDOW_AMBIENT_DIFFUSE]);
+		addlabel("lblShadow",15,60,msgtable[WINDOW_AMBIENT_SHADOW]);
+		addlabel("lblAlpha", 15,80,msgtable[WINDOW_AMBIENT_ALPHA]);
 
 		o = new cWindowInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;

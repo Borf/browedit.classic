@@ -99,3 +99,37 @@ Too Many lightmaps!
 World: %i models written
 World: %i tiles are used
 World: %i tiles left
+Ok
+Cancel
+Ambient Light
+Ambient:
+Diffuse:
+Shadow:
+Alpha:
+Please Confirm...
+Effect
+Position:
+Scale:
+Rotation:
+Please Input...
+Light...
+Position:
+Color:
+Intensity:
+Message...
+Model Select...
+Are you sure you want to remove this model from the list?
+Please enter the name of the new node
+Object...
+Object:
+Position:
+Scale:
+Rotation:
+Texture Select...
+Water...
+Amplitude:
+Height:
+Phase:
+SurfaceCycle:
+TextureCycle:
+Type:

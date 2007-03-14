@@ -135,7 +135,7 @@ public:
 
 		h = Graphics.h()-50;
 		w = Graphics.w()-50;
-		title = "Texture Select";
+		title = msgtable[WINDOW_TEXTURE_TITLE];
 		center();
 
 		cWindowObject* o;
