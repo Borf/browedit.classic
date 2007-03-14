@@ -42,7 +42,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /D "GRF_STATIC" /FR /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -50,11 +50,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 ws2_32.lib bgd.lib sdl.lib sdlmain.lib zlib.lib opengl32.lib glu32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# Begin Special Build Tool
-SOURCE="$(InputPath)"
-PreLink_Cmds=svnver src/version.h
-# End Special Build Tool
+# ADD LINK32 sdl.lib sdlmain.lib zlib.lib bgd.lib opengl32.lib glu32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
 
 !ELSEIF  "$(CFG)" == "roworldedit - Win32 Debug"
 
@@ -70,7 +66,7 @@ PreLink_Cmds=svnver src/version.h
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /D "GRF_STATIC" /FR /YX /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /D "GRF_STATIC" /YX /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -78,11 +74,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 glaux.lib ws2_32.lib bgd.lib sdl.lib sdlmain.lib zlib.lib opengl32.lib glu32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /nodefaultlib:"MSVCRT" /pdbtype:sept
-# Begin Special Build Tool
-SOURCE="$(InputPath)"
-PreLink_Cmds=svnver src/version.h
-# End Special Build Tool
+# ADD LINK32 ws2_32.lib bgd.lib sdl.lib sdlmain.lib zlib.lib opengl32.lib glaux.lib glu32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /nodefaultlib:"MSVCRT" /pdbtype:sept
 
 !ENDIF 
 
@@ -124,6 +116,10 @@ SOURCE=.\src\md5.c
 # Begin Source File
 
 SOURCE=.\src\RSMModel.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\Script1.rc
 # End Source File
 # Begin Source File
 
@@ -220,21 +216,6 @@ SOURCE=.\src\undo.h
 # Begin Source File
 
 SOURCE=.\src\version.h
-
-!IF  "$(CFG)" == "roworldedit - Win32 Release"
-
-# Begin Custom Build
-InputPath=.\src\version.h
-
-"src/version.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	svnver > src/version.h
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "roworldedit - Win32 Debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
@@ -244,27 +225,8 @@ SOURCE=.\src\world.h
 # Begin Group "Resource Files"
 
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
-# Begin Source File
-
-SOURCE=.\icon1.ico
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\icon1.ico
-# End Source File
-# Begin Source File
-
-SOURCE=.\resource.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\Script1.rc
-# End Source File
 # End Group
 # Begin Group "wm"
-
-# PROP Default_Filter ""
-# Begin Group "windows"
 
 # PROP Default_Filter ""
 # Begin Source File
@@ -315,10 +277,14 @@ SOURCE=.\src\wm\texturewindow.h
 
 SOURCE=.\src\wm\waterwindow.h
 # End Source File
-# End Group
-# Begin Group "objects"
+# Begin Source File
 
-# PROP Default_Filter ""
+SOURCE=.\src\wm\window.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\window.h
+# End Source File
 # Begin Source File
 
 SOURCE=.\src\wm\windowbutton.cpp
@@ -434,15 +400,6 @@ SOURCE=.\src\wm\windowtree.cpp
 # Begin Source File
 
 SOURCE=.\src\wm\windowtree.h
-# End Source File
-# End Group
-# Begin Source File
-
-SOURCE=.\src\wm\window.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\src\wm\window.h
 # End Source File
 # Begin Source File
 
