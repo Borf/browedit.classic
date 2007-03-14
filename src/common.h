@@ -44,6 +44,7 @@ typedef unsigned char uint8_t;
 	#include <vector>
 	using namespace std;
 	extern vector<char*> msgtable;
+	extern unsigned long keymap[SDLK_LAST-SDLK_FIRST];
 #endif
 
 #include <vector>
@@ -262,6 +263,7 @@ enum eLanguage
 	MENU_TEXTURES,
 	MENU_PROPERTIES,
 	MENU_WATER,
+	MENU_PREFERENCES,
 
 	FS_GRFOPENERROR,
 	FS_GRFOPENDONE,
@@ -339,6 +341,7 @@ enum eLanguage
 	WINDOW_WATER_TEXTURECYCLE,
 	WINDOW_WATER_TYPE,
 
+	WINDOW_PREFERENCES_TITLE,
 
 };
 

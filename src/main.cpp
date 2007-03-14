@@ -1,6 +1,7 @@
 #define _MAIN_CPP_
 #include "common.h"
 vector<char*> msgtable;
+unsigned long keymap[SDLK_LAST-SDLK_FIRST];
 #include "filesystem.h"
 #include <math.h>
 #include "main.h"
@@ -16,6 +17,7 @@ vector<char*> msgtable;
 #include "wm/lightwindow.h"
 #include "wm/texturewindow.h"
 #include "wm/modelswindow.h"
+#include "wm/keybindwindow.h"
 #include "undo.h"
 
 #include "texturecache.h"
@@ -121,6 +123,7 @@ MENUCOMMAND(cleantextures);
 MENUCOMMAND(modelwindow);
 MENUCOMMAND(texturewindow);
 MENUCOMMAND(properties);
+MENUCOMMAND(preferences);
 
 cMenu*	menu;
 cMenu* grid;
@@ -722,6 +725,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,windows,msgtable[MENU_TEXTURES],					&MenuCommand_texturewindow);
 	ADDMENUITEM(mm,windows,msgtable[MENU_PROPERTIES],				&MenuCommand_properties);
 	ADDMENUITEM(mm,windows,msgtable[MENU_WATER],					&MenuCommand_water);
+	ADDMENUITEM(mm,windows,msgtable[MENU_PREFERENCES],				&MenuCommand_preferences);
 
 	config = pFile->readline();
 	config = config.substr(config.find("=")+1);
@@ -809,6 +813,7 @@ int main(int argc, char *argv[])
 	}
 	pFile->close();
 
+
 	itemsm.clear();
 	levelm.clear();
 
@@ -817,6 +822,17 @@ int main(int argc, char *argv[])
 
 	lastlclick = 0;
 	lastrclick = 0;
+
+	Log(3,0,msgtable[4], "keymap.txt");
+	pFile = fs.open("keymap.txt");
+	for(i = 0; i < SDLK_LAST-SDLK_FIRST; i++)
+	{
+		keymap[i] = atoi(pFile->readline().c_str());
+	}
+
+	pFile->close();
+	Log(3,0,msgtable[5], "keymap.txt");
+
 
 	Log(3,0,msgtable[4], "effects.txt");
 	vector<cMenu*> effectssubmenu;
@@ -2004,6 +2020,22 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			}
 			break;
 		case SDL_KEYDOWN:
+			{
+				bool found = false;
+				for(int i = 0; i < SDLK_LAST-SDLK_FIRST; i++)
+				{
+					if (keymap[i] == event.key.keysym.sym+SDLK_FIRST)
+					{
+						event.key.keysym.sym = (SDLKey)(i+SDLK_FIRST);
+						found = true;
+						break;
+					}
+				}
+				if(!found)
+					break;
+			}
+
+
 			switch (event.key.keysym.sym)
 			{
 			case SDLK_UP:
@@ -5228,3 +5260,13 @@ MENUCOMMAND(properties)
 	SDL_PushEvent(&ev);
 	return true;
 }
+
+
+MENUCOMMAND(preferences)
+{
+	cWindow* w = new cKeyBindWindow();
+	w->init(&Graphics.WM.texture, &Graphics.WM.font);
+	Graphics.WM.addwindow(w);
+	return true;
+}
+

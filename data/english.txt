@@ -73,6 +73,7 @@ Models
 Textures
 Properties
 Water
+Preferences
 FS: Error opening grf %s
 FS: Done reading grf  %s
 FS: Could not open file %s
@@ -133,3 +134,4 @@ Phase:
 SurfaceCycle:
 TextureCycle:
 Type:
+Preferences...
