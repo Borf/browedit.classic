@@ -20,7 +20,7 @@ int cFileSystem::LoadFile(string grffilename)
 	grffile->grf = grf_open(grffilename.c_str(), "rb", &error);
 	if (grffile->grf == NULL)
 	{
-		Log(1,0,"Filesystem: Error opening grf: %s", grffilename.c_str());
+		Log(1,0,msgtable[FS_GRFOPENERROR], grffilename.c_str());
 		return -1;
 	}
 	
@@ -33,7 +33,7 @@ int cFileSystem::LoadFile(string grffilename)
 	}
 
 
-	Log(3,0,"Done reading %s", grffilename.c_str());
+	Log(3,0,msgtable[FS_GRFOPENDONE], grffilename.c_str());
 
 	return 0;
 }
@@ -82,7 +82,7 @@ int cFile::open()
 		pFile.open(filename.c_str(), ios_base::in | ios_base::binary);
 		if(pFile.bad())
 		{
-			Log(1,0,"Error, could not open file %s", filename.c_str());
+			Log(1,0,msgtable[FS_FILEERROR], filename.c_str());
 			#ifdef WIN32
 //			MessageBox(NULL, ("Error: could not open file: " + filename).c_str(), "File not found", MB_OK);
 			#endif
@@ -104,8 +104,7 @@ int cFile::open()
 		char* dat = (char*)grf_get(grffile->grf, filename.c_str(), (unsigned int*)&size, &error);
 		if(!dat)
 		{
-			Log(2,0,"Cannot open data.grf: error code %d", error.type);
-			Log(2,0,"The error message is: %s", grf_strerror (error));
+			return 0;
 		}
 		data = new char[size+1];
 		memcpy(data, dat, size);

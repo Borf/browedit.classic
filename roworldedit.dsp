@@ -119,10 +119,6 @@ SOURCE=.\src\RSMModel.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\Script1.rc
-# End Source File
-# Begin Source File
-
 SOURCE=.\src\svnver.cpp
 # End Source File
 # Begin Source File
@@ -187,10 +183,6 @@ SOURCE=.\src\mymath.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\resource.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\src\RSMModel.h
 # End Source File
 # Begin Source File
@@ -225,6 +217,14 @@ SOURCE=.\src\world.h
 # Begin Group "Resource Files"
 
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
+# Begin Source File
+
+SOURCE=.\src\resource.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\Script1.rc
+# End Source File
 # End Group
 # Begin Group "wm"
 

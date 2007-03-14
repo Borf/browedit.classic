@@ -296,7 +296,7 @@ glDisable(GL_DEPTH_TEST);
 
 int cGraphics::init()
 {
-	Log(3,0,"Setting stuff");	
+	Log(3,0,msgtable[INIT_GRAPHICS]);	
 	cameraheight = 123;
 	camerarot = 0.0f;
 	//camerapointer = cVector2(980,980);
@@ -304,22 +304,17 @@ int cGraphics::init()
 	cameraangle = 0;
 
 
-	Log(3,0,"Initializing video");
 	int flags = 0;
 	const SDL_VideoInfo* info = NULL;
 	if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) {
-		Log( 1,0, "Video initialization failed: %s\n",
-				 SDL_GetError( ) );
+		Log( 1,0, msgtable[INIT_GRAPHICS_VIDEO_FAILED], SDL_GetError( ) );
 		return 0;
 	}
-	Log(3,0,"Enabling unicode");
 	SDL_EnableUNICODE(1);
 	info = SDL_GetVideoInfo( );
 
-	Log(3,0,"Setting video info");
 	if( !info ) {
-		fprintf( stderr, "Video query failed: %s\n",
-				 SDL_GetError( ) );
+		Log(1,0,msgtable[INIT_GRAPHICS_QUERY_FAILED], SDL_GetError( ) );
 		return -1;
 	}
 
@@ -331,35 +326,30 @@ int cGraphics::init()
 	SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
 	SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
 
-	Log(3,0,"Setting flags");
 	flags = SDL_OPENGL;// | SDL_FULLSCREEN;
 	if(fullscreen)
 	{
 		flags = SDL_OPENGL | SDL_FULLSCREEN;
 	}
 	if( SDL_SetVideoMode( width, height, bpp, flags ) == 0 ) {
-		Log( 1,0, "Video mode set failed: %s\n",
-				 SDL_GetError( ) );
+		Log( 1,0, msgtable[INIT_GRAPHICS_MODE_FAILED], SDL_GetError( ) );
 		return -1;
 	}
-
-	Log(3,0,"Setting caption");
 
 //	SDL_WM_SetIcon(SDL_LoadBMP("data/domovsneko.bmp"), NULL);
 	char buf[100];
 	sprintf(buf, "Borf's Ragnarok Online World Editor, revision %i", getversion());
-	SDL_WM_SetCaption(buf, "BROWorld Editor");
+	SDL_WM_SetCaption(buf, "BROWEdit");
 
-	Log(3,0,"Initializing OpenGL");
 	//SDL_ShowCursor(0);
 	if (InitGL() == 0)							// Initialize Our Newly Created GL Window
 	{
 		KillGLWindow();								// Reset The Display
-		Log(1,0,"Initialization Failed.");
+		Log(1,0,msgtable[INIT_GRAPHICS_OPENGL_FAILED]);
 		return 0;						// Return FALSE
 	}
 
-	Log(3,0,"Opening general textures");
+	Log(3,0,msgtable[INIT_GRAPHICS_TEXTURES]);
 
 	glDisable(GL_LIGHTING);
 	font = new cFont();
@@ -370,9 +360,8 @@ int cGraphics::init()
 	mask->Load("data/bulb.tga");
 	splash = new cTexture();
 	splash->Load("data/hamtaro.tga");
-	Log(3,0,"Initializing WM");
+	Log(3,0,msgtable[INIT_GRAPHICS_WM]);
 	WM.init();
-	Log(3,0,"Adding locations bar");
 	cWindow* w = new cHotkeyWindow();
 	w->init(&WM.texture, &WM.font);
 	WM.addwindow(w);
@@ -386,7 +375,7 @@ int cGraphics::init()
 	}
 
 	
-	Log(3,0,"Loading water.txt");
+	Log(3,0,msgtable[LOADINGFILE], "water.txt");
 	cFile* pFile = fs.open("water.txt");
 	while(pFile->readline() != "[" + config + "]" && !pFile->eof());
 
@@ -485,6 +474,7 @@ int cGraphics::InitGL(void)
 void cGraphics::KillGLWindow(void)								// Properly Kill The Window
 {
 	SDL_ShowCursor(0);
+	world.unload();
 	TextureCache.unload(mask);
 	TextureCache.unload(bulb);
 	int i;

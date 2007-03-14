@@ -73,3 +73,29 @@ Models
 Textures
 Properties
 Water
+FS: Error opening grf %s
+FS: Done reading grf  %s
+FS: Could not open file %s
+Font: Loading font %s
+Font: Done Loading %s
+Initializing Graphics
+Video Initialization failed: %s
+Video Query Failed: %s
+Video Mode Set Failed: %s
+OpenGL init failed
+Opening general textures
+Initializing WM
+Unable to load texture %s
+Texturecache: Trying to unload texture %s, but this texture hasn't been loaded through the texturecache!
+Texturecache: Texture %s is being unloaded too often!
+Texturecache: Texture %s is still %i times loaded
+World: Loading map %s
+World: Could not open map %s
+World: Done loading %s
+World: Could not open model %s
+World: Unknown object type %i
+Quadtree: looking at model %i out of %i (%.2f%%)
+Too Many lightmaps!
+World: %i models written
+World: %i tiles are used
+World: %i tiles left

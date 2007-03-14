@@ -118,11 +118,11 @@ void cWorld::load()
 		gattiles[i].clear();
 	gattiles.clear();
 
-	Log(3,0,"Loading %s", filename);
+	Log(3,0,msgtable[WORLD_LOAD], filename);
 	cFile* pFile = fs.open(string(filename) + ".gnd");
 	if(pFile == NULL)
 	{
-		Log(1,0,"Could not open %s!", (string(filename) + ".gnd").c_str());
+		Log(1,0,msgtable[WORLD_LOADFAIL], (string(filename) + ".gnd").c_str());
 		return;
 	}
 	char buf[512];
@@ -242,9 +242,9 @@ void cWorld::load()
 	loaded = true;
 	//clean();
 
-	Log(3,0,"Done loading gnd");
+	Log(3,0,msgtable[WORLD_LOADDONE], "gnd");
 
-	Log(3,0,"Loading rsw...");
+	Log(3,0,msgtable[WORLD_LOAD], (filename + string(".rsw")).c_str());
 	pFile = fs.open(string(filename) + ".rsw");
 
 	pFile->read(buf, 242);
@@ -291,7 +291,7 @@ void cWorld::load()
 
 			if (m->meshes.size() == 0)
 			{
-				Log(2,0,"Error loading %s", filename.c_str());
+				Log(2,0,msgtable[WORLD_MODELFAIL], filename.c_str());
 			}
 
 
@@ -386,7 +386,7 @@ void cWorld::load()
 			}
 			break;
 		default:
-			Log(2,0,"Unknown type: %i", type);
+			Log(2,0,msgtable[WORLD_UNKNOWNOBJECT], type);
 			pFile->close();
 			return;
 		};
@@ -467,7 +467,7 @@ void cWorld::load()
 	}
 
 
-	Log(3,0,"Done Loading %s", filename);
+	Log(3,0,msgtable[WORLD_LOADDONE], filename);
 
 }
 
@@ -625,7 +625,7 @@ void cWorld::save()
 			for(int i = 0; i < models.size(); i++)
 			{
 				if(i % 10 == 0)
-					Log(3,0,"Quadtree: looking at model %i out of %i (%.2f%%)", i, Graphics.world.models.size(), (i/(float)Graphics.world.models.size())*100);
+					Log(3,0,msgtable[WORLD_QUADTREECALC], i, Graphics.world.models.size(), (i/(float)Graphics.world.models.size())*100);
 				models[i]->draw(false,false,true);
 			}
 
@@ -686,7 +686,7 @@ void cWorld::save()
 		pFile.write((char*)&gridSizeCell, 4);
 
 		if(nLightmaps > 65025)
-			Log(1,0,"TOO MANY LIGHTMAPS!");
+			Log(1,0,msgtable[WORLD_TOOMANYLIGHTMAPS]);
 		for(i = 0; i < lightmaps.size(); i++)
 		{
 			pFile.write(lightmaps[i]->buf, 256);
@@ -841,7 +841,7 @@ void cWorld::save()
 			pFile.write((char*)&m->scale.z, 4);
 
 		}
-		Log(3,0,"%i objects written", models.size());
+		Log(3,0,msgtable[WORLD_MODELCOUNT], models.size());
 		for(i = 0; i < lights.size(); i++)
 		{
 			long l = 2;
@@ -2045,7 +2045,7 @@ void cWorld::clean()
 		}
 	}
 
-	Log(3,0,"%i tiles are used", tilesused.size());
+	Log(3,0,msgtable[WORLD_TILESUSED], tilesused.size());
 
 	for(i = tiles.size()-1; i > 0; i--)
 	{
@@ -2069,7 +2069,7 @@ void cWorld::clean()
 
 			count++;
 			if(count % 100 == 0)
-				Log(3,0,"%i tiles left", tiles.size() - count);
+				Log(3,0,msgtable[WORLD_TILESLEFT], tiles.size() - count);
 		}
 		else
 			tiles[i].used = true;
@@ -2143,7 +2143,10 @@ void cWorld::unload()
 	for(i = 0; i < models.size(); i++)
 		delete models[i];
 	for(i = 0; i < textures.size(); i++)
+	{
+		TextureCache.unload(textures[i]->texture);
 		delete textures[i];
+	}
 	models.clear();
 	textures.clear();
 
@@ -2408,11 +2411,7 @@ void cWorld::savelightmap()
 				{
 					if (cubes[y][x].tileup != -1)
 					{
-						if (cubes[y][x].tileup < 0 || cubes[y][x].tileup >= tiles.size())
-							Log(1,0,"Error2 in lightmaps");
 						int lightmap = tiles[cubes[y][x].tileup].lightmap;
-						if(lightmap < 0 || lightmap >= lightmaps.size())
-							Log(1,0,"Error in lightmaps");
 						imgdata[3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8+8+1];
 						imgdata[3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy+1] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8+8+1];
 						imgdata[3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy+2] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8+8+1];
@@ -2604,11 +2603,11 @@ void cWorld::importalpha()
 		gattiles[i].clear();
 	gattiles.clear();
 
-	Log(3,0,"Loading %s", filename);
+	Log(3,0,msgtable[WORLD_LOAD], (filename + string("gnd")).c_str());
 	cFile* pFile = fs.open(string(filename) + ".gnd");
 	if(pFile == NULL)
 	{
-		Log(1,0,"Could not open %s!", (string(filename) + ".gnd").c_str());
+		Log(1,0,msgtable[WORLD_LOADFAIL], (string(filename) + ".gnd").c_str());
 		return;
 	}
 	char buf[512];
@@ -2733,9 +2732,9 @@ void cWorld::importalpha()
 
 	pFile->close();
 
-	Log(3,0,"Done loading gnd");
+	Log(3,0,msgtable[WORLD_LOADDONE], "gnd");
 
-	Log(3,0,"Loading rsw...");
+	Log(3,0,msgtable[WORLD_LOAD], "rsw");
 	pFile = fs.open(string(filename) + ".rsw");
 
 	pFile->read(buf, 218);
@@ -2798,37 +2797,31 @@ unsigned char rawData[76] =
 		case 2:
 			{
 			pFile->read(buf, 208);
-			Log(3,0,"Read objecttype 2");
 			}
 			break;
 		case 3:
 			{
 			pFile->read(buf, 196);
-			Log(3,0,"Read objecttype 3");
 			}
 			break;
 		case 4:
 			{
 			pFile->read(buf, 196);
-			Log(3,0,"Read objecttype 4");
 			i = nObjects;
 			}
 			break;
 		case 5:
 			{
 			pFile->read(buf, 178);
-			Log(3,0,"Read objecttype 5");
 			i = nObjects;
 			}
 			break;
 		case 7:
 			{
 			pFile->read(buf, 204);
-			Log(3,0,"Read objecttype 7");
 			}
 			break;
 		default:
-			Log(2,0,"Unknown type: %i", type);
 			pFile->close();
 			return;
 		};
@@ -2884,7 +2877,7 @@ unsigned char rawData[76] =
 
 
 
-	Log(3,0,"Done Loading %s", filename);
+	Log(3,0,msgtable[WORLD_LOADDONE], filename);
 }
 
 
