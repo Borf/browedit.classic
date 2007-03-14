@@ -148,6 +148,8 @@ vector<vector<vector<float> > > clipboard;
 vector<vector<int > > clipboardgat;
 long lasttimer;
 
+vector<char*> msgtable;
+
 string downloadfile(string url, long &filesize)
 {
 //#define DOWNLOADBUFFERSIZE 1
@@ -169,7 +171,7 @@ string downloadfile(string url, long &filesize)
 	host = gethostbyname("206.222.12.202");
 	if(host==NULL)
 	{
-		Log(1,0,"Could not look up host '%s', are you connected to the internet?", server.c_str());
+		Log(1,0,msgtable[HOSTNOTFOUND], server.c_str());
 		return 0;
 	}
 	addr.sin_family = host->h_addrtype;
@@ -179,7 +181,7 @@ string downloadfile(string url, long &filesize)
 
 	if ((s = socket(AF_INET,SOCK_STREAM,0)) == -1)
 	{
-		Log(1,0,"Cannot create socket, try a reboot");
+		Log(1,0,msgtable[NOSOCKET]);
 		return 0;
 	}
 
@@ -369,6 +371,31 @@ int main(int argc, char *argv[])
 {
 	int i;
 	log_open("log_worldeditor.txt","worldedit",2);
+	cFile* pFile = fs.open("config.txt");
+	if (pFile == NULL)
+	{
+		Log(1,0,"Error opening configfile");
+	}
+
+	string language = pFile->readline();
+	language = language.substr(language.find("=")+1);
+	cFile* pLangFile = fs.open("data/" + language + ".txt");
+	msgtable.resize(1);
+	msgtable.back() = new char[64];
+	sprintf(msgtable.back(), "No Message");
+
+	while(!pLangFile->eof())
+	{
+		msgtable.resize(msgtable.size()+1);
+		msgtable.back() = new char[512];
+		pLangFile->readline(msgtable.back(), 512);
+	}
+	pLangFile->close();
+
+
+
+
+
 #ifdef WIN32
 	char fileBuffer[1024];
 	GetModuleFileName(NULL, fileBuffer, 1024);
@@ -550,7 +577,7 @@ int main(int argc, char *argv[])
 			ok = false;
 		if (res == updatebuf)
 		{
-			Log(3,0,"You do not have the latest version of browedit");
+			Log(3,0,msgtable[VERSIONERROR]); // you do not have the latest version
 			sleep(10);
 			exit(0);
 		}
@@ -596,116 +623,109 @@ int main(int argc, char *argv[])
 	menu->w = Graphics.w();
 	
 	
-	ADDMENU(file,		menu, "File",				0,50);
-	ADDMENU(rnd,		menu, "Generate",			50,75);
-	ADDMENU(view,		menu, "View",				125,50);
-	ADDMENU(mode,		menu, "Edit Mode",			175,75);
-	ADDMENU(edit,		menu, "Edit",				250,50);
-	ADDMENU(models,		menu, "Models",				300,50);
-	ADDMENU(effectsmenu,menu, "Effects",			350,50);
-	ADDMENU(windows,	menu, "Windows",			400,50);
+	ADDMENU(file,		menu, msgtable[MENU_FILE],		0,50); // File
+	ADDMENU(rnd,		menu, msgtable[MENU_GENERATE],	50,75); // Generate
+	ADDMENU(view,		menu, msgtable[MENU_VIEW],		125,50); // view
+	ADDMENU(mode,		menu, msgtable[MENU_EDITMODE],	175,75); // edit mode
+	ADDMENU(edit,		menu, msgtable[MENU_EDIT],		250,50); // edit
+	ADDMENU(models,		menu, msgtable[MENU_MODELS],	300,50); // models
+	ADDMENU(effectsmenu,menu, msgtable[MENU_EFFECTS],	350,50); // effects
+	ADDMENU(windows,	menu, msgtable[MENU_WINDOWS],	400,50); // windows
 
-	ADDMENUITEM(mm,file,"New"	,						&MenuCommand_new);
-	ADDMENUITEM(mm,file,"Open",							&MenuCommand_open);
-	ADDMENUITEM(mm,file,"Save",							&MenuCommand_save);
-	ADDMENUITEM(mm,file,"Save As",						&MenuCommand_saveAs);
-	ADDMENUITEM(mm,file,"Import RO Alpha maps",			&MenuCommand_importalpha);
-	ADDMENUITEM(mm,file,"Export Lightmaps",				&MenuCommand_savelightmaps);
-	ADDMENUITEM(mm,file,"Import Lightmaps",				&MenuCommand_loadlightmaps);
-	ADDMENUITEM(mm,file,"Exit",							&MenuCommand_exit);
+	ADDMENUITEM(mm,file,msgtable[MENU_NEW],							&MenuCommand_new); //new
+	ADDMENUITEM(mm,file,msgtable[MENU_OPEN],						&MenuCommand_open); //open
+	ADDMENUITEM(mm,file,msgtable[MENU_SAVE],						&MenuCommand_save); //save
+	ADDMENUITEM(mm,file,msgtable[MENU_SAVEAS],						&MenuCommand_saveAs); //save as
+	ADDMENUITEM(mm,file,msgtable[MENU_IMPORTARCTURUS],				&MenuCommand_importalpha); // Import arcturus maps
+	ADDMENUITEM(mm,file,msgtable[MENU_EXPORTLIGHTMAPS],				&MenuCommand_savelightmaps); // export lightmaps
+	ADDMENUITEM(mm,file,msgtable[MENU_IMPORTLIGHTMAPS],				&MenuCommand_loadlightmaps); // import lightmaps
+	ADDMENUITEM(mm,file,msgtable[MENU_EXIT],						&MenuCommand_exit); // exit
 	
-	ADDMENUITEM(mm,rnd, "Random 1",						&MenuCommand_random1);
-	ADDMENUITEM(mm,rnd, "Maze stuff",					&MenuCommand_tempfunc);
-	ADDMENUITEM(mm,rnd,"Quadtree",						&MenuCommand_quadtree);
-	ADDMENUITEM(mm,rnd,"Calculate Lightmaps",			&MenuCommand_dolightmapsall);
-	ADDMENUITEM(mm,rnd,"Calculate selected Lightmaps",	&MenuCommand_dolightmaps);
-	ADDMENUITEM(mm,rnd,"Clear Map",						&MenuCommand_clearstuff);
+	ADDMENUITEM(mm,rnd, msgtable[MENU_RANDOM1],						&MenuCommand_random1); // random1
+	ADDMENUITEM(mm,rnd, msgtable[MENU_MAZESTUFF],					&MenuCommand_tempfunc); // Maze stuff
+	ADDMENUITEM(mm,rnd, msgtable[MENU_QUADTREE],					&MenuCommand_quadtree); // Quadtree
+	ADDMENUITEM(mm,rnd, msgtable[MENU_CALCULATELIGHTMAPS],			&MenuCommand_dolightmapsall); // Lightmaps
+	ADDMENUITEM(mm,rnd, msgtable[MENU_CALCULATELIGHTMAPSLOCAL],		&MenuCommand_dolightmaps); // Selected lightmaps
+	ADDMENUITEM(mm,rnd,	msgtable[MENU_CLEARMAP],					&MenuCommand_clearstuff); // clear map
 
-	ADDMENUITEM(grid,view,"Grid",						&MenuCommand_grid);
+	ADDMENUITEM(grid,view,msgtable[MENU_GRID],						&MenuCommand_grid); //grid
 	grid->ticked = true;
-	ADDMENUITEM(showobjects,view,"Objects",				&MenuCommand_showobjects);
-	ADDMENUITEMDATAP(mm,view,"Boundingboxes",			&MenuCommand_toggle, (void*)&Graphics.showboundingboxes);
-	ADDMENUITEMDATAP(mm,view,"Lightmaps",				&MenuCommand_toggle, (void*)&Graphics.showlightmaps);
-	ADDMENUITEMDATAP(mm,view,"Show OGL Lighting",		&MenuCommand_toggle, (void*)&Graphics.showoglighting);
+	ADDMENUITEM(showobjects,view,msgtable[MENU_OBJECTS],			&MenuCommand_showobjects);
+	ADDMENUITEMDATAP(mm,view,msgtable[MENU_BOUNDINGBOXES],			&MenuCommand_toggle, (void*)&Graphics.showboundingboxes);
+	ADDMENUITEMDATAP(mm,view,msgtable[MENU_LIGHTMAPS],				&MenuCommand_toggle, (void*)&Graphics.showlightmaps);
+	ADDMENUITEMDATAP(mm,view,msgtable[MENU_OGLLIGHTING],			&MenuCommand_toggle, (void*)&Graphics.showoglighting);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,"Tilecolors",				&MenuCommand_toggle, (void*)&Graphics.showtilecolors);
+	ADDMENUITEMDATAP(mm,view,msgtable[MENU_TILECOLORS],				&MenuCommand_toggle, (void*)&Graphics.showtilecolors);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,"Water",					&MenuCommand_toggle, (void*)&Graphics.showwater);
+	ADDMENUITEMDATAP(mm,view,msgtable[MENU_SHOWWATER],				&MenuCommand_toggle, (void*)&Graphics.showwater);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,"Topcamera",				&MenuCommand_toggle, (void*)&Graphics.topcamera);
-	ADDMENUITEMDATAP(mm,view,"Show invisible tiles",	&MenuCommand_toggle, (void*)&Graphics.shownotiles);
+	ADDMENUITEMDATAP(mm,view,msgtable[MENU_TOPCAMERA],				&MenuCommand_toggle, (void*)&Graphics.topcamera);
+	ADDMENUITEMDATAP(mm,view,msgtable[MENU_INVISIBLETILES],			&MenuCommand_toggle, (void*)&Graphics.shownotiles);
 	mm->ticked = true;
-
-	ADDMENUITEMDATAP(mm,view,"Show Ambient Lighting",	&MenuCommand_toggle, (void*)&Graphics.showambientlighting);
+	ADDMENUITEMDATAP(mm,view,msgtable[MENU_SHOWAMBIENTLIGHTING],	&MenuCommand_toggle, (void*)&Graphics.showambientlighting);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,"Water Animation",			&MenuCommand_toggle, (void*)&Graphics.animatewater);
+	ADDMENUITEMDATAP(mm,view,msgtable[MENU_WATERANIMATION],			&MenuCommand_toggle, (void*)&Graphics.animatewater);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,"Show gat tiles",			&MenuCommand_toggle, (void*)&Graphics.showgat);
-
-
-	ADDMENUITEM(mm,mode,"Texture Edit",					&MenuCommand_mode);
-	mm->ticked = true;
-	ADDMENUITEM(mm,mode,"Global Heightmap Edit",		&MenuCommand_mode);
-	ADDMENU(editdetail,mode,"Detail Terrain Edit...",400,100);
-
-	ADDMENUITEM(mm, editdetail, "1",					&MenuCommand_mode_detail);
-	ADDMENUITEM(mm, editdetail, "2",					&MenuCommand_mode_detail);
-	ADDMENUITEM(mm, editdetail, "4",					&MenuCommand_mode_detail);
-	ADDMENUITEM(mm, editdetail, "8",					&MenuCommand_mode_detail);
-	ADDMENUITEM(mm, editdetail, "16",					&MenuCommand_mode_detail);
-	ADDMENUITEM(mm, editdetail, "32",					&MenuCommand_mode_detail);
-	ADDMENUITEM(mm, editdetail, "64",					&MenuCommand_mode_detail);
-
-	ADDMENUITEM(mm,mode,"Wall Edit",					&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,"Object Edit",					&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,"GAT Edit",						&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,"Water Edit",					&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,"Effects Edit",					&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,"Sounds Edit",					&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,"Lights Edit",					&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,"Object Group Edit",			&MenuCommand_mode);
+	ADDMENUITEMDATAP(mm,view,msgtable[MENU_GATTILES],				&MenuCommand_toggle, (void*)&Graphics.showgat);
 
 
-	ADDMENU(speed,edit, "Speed", 480, 100);
-	ADDMENUITEM(mm,speed,"5",							&MenuCommand_speed);
-	ADDMENUITEM(mm,speed,"10",							&MenuCommand_speed);
-	ADDMENUITEM(mm,speed,"25",							&MenuCommand_speed);
-	ADDMENUITEM(mm,speed,"50",							&MenuCommand_speed);
-	ADDMENUITEM(mm,speed,"100",							&MenuCommand_speed);
-	ADDMENUITEM(mm,speed,"250",							&MenuCommand_speed);
-	ADDMENUITEM(mm,speed,"500",							&MenuCommand_speed);
-	ADDMENUITEM(mm,edit,"Sloping",						&MenuCommand_slope);
-	ADDMENUITEM(snaptofloor,edit,"Snap objects to floor",	&MenuCommand_snaptofloor);
+	ADDMENUITEM(mm,mode,msgtable[MENU_TEXTUREEDIT],					&MenuCommand_mode);
+	mm->ticked = true;
+	ADDMENUITEM(mm,mode,msgtable[MENU_GLOBALHEIGHTEDIT],			&MenuCommand_mode);
+	ADDMENU(editdetail,mode,msgtable[MENU_DETAILTERRAINEDIT],		400,100);
+
+	ADDMENUITEM(mm, editdetail, "1",								&MenuCommand_mode_detail);
+	ADDMENUITEM(mm, editdetail, "2",								&MenuCommand_mode_detail);
+	ADDMENUITEM(mm, editdetail, "4",								&MenuCommand_mode_detail);
+	ADDMENUITEM(mm, editdetail, "8",								&MenuCommand_mode_detail);
+	ADDMENUITEM(mm, editdetail, "16",								&MenuCommand_mode_detail);
+	ADDMENUITEM(mm, editdetail, "32",								&MenuCommand_mode_detail);
+	ADDMENUITEM(mm, editdetail, "64",								&MenuCommand_mode_detail);
+
+	ADDMENUITEM(mm,mode,msgtable[MENU_WALLEDIT],					&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,msgtable[MENU_OBJECTEDIT],					&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,msgtable[MENU_GATEDIT],						&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,msgtable[MENU_WATEREDIT],					&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,msgtable[MENU_EFFECTSEDIT],					&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,msgtable[MENU_SOUNDSEDIT],					&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,msgtable[MENU_LIGHTSEDIT],					&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,msgtable[MENU_OBJECTGROUPEDIT],				&MenuCommand_mode);
+
+
+	ADDMENU(speed,edit, msgtable[MENU_SPEED],						480, 100);
+	ADDMENUITEM(mm,speed,"5",										&MenuCommand_speed);
+	ADDMENUITEM(mm,speed,"10",										&MenuCommand_speed);
+	ADDMENUITEM(mm,speed,"25",										&MenuCommand_speed);
+	ADDMENUITEM(mm,speed,"50",										&MenuCommand_speed);
+	ADDMENUITEM(mm,speed,"100",										&MenuCommand_speed);
+	ADDMENUITEM(mm,speed,"250",										&MenuCommand_speed);
+	ADDMENUITEM(mm,speed,"500",										&MenuCommand_speed);
+	ADDMENUITEM(mm,edit,msgtable[MENU_SLOPING],						&MenuCommand_slope);
+	ADDMENUITEM(snaptofloor,edit,msgtable[MENU_SNAPOBJECTS],		&MenuCommand_snaptofloor);
 	snaptofloor->ticked = true;
 
-	ADDMENUITEM(mm,edit,"Flatten map",					&MenuCommand_flatten);
-	ADDMENUITEM(mm,edit,"Fill with selected texture",	&MenuCommand_fill);
-	ADDMENUITEM(mm,edit,"Set GAT height"	,			&MenuCommand_gatheight);
-	ADDMENUITEM(mm,edit,"Reset Colors",					&MenuCommand_fixcolors);
-	ADDMENUITEM(mm,edit,"Clear Objects",				&MenuCommand_clearobjects);
-	ADDMENUITEM(mm,edit,"Clear Effects",				&MenuCommand_cleareffects);
-	ADDMENUITEM(mm,edit,"Clear lights",					&MenuCommand_clearlights);
-	ADDMENUITEM(mm,edit,"Add Walls",					&MenuCommand_addwalls);
-	ADDMENUITEM(mm,edit,"Set gat collision",			&MenuCommand_gatcollision);
-	ADDMENUITEM(mm,edit,"Clear Lightmaps",				&MenuCommand_clearlightmaps);
-	ADDMENUITEM(mm,edit,"Clean up Lightmaps",			&MenuCommand_cleanuplightmaps);
-	ADDMENUITEM(mm,edit,"Clean Textures",				&MenuCommand_cleantextures);
+	ADDMENUITEM(mm,edit,msgtable[MENU_FLATTEN],						&MenuCommand_flatten);
+	ADDMENUITEM(mm,edit,msgtable[MENU_FILL],						&MenuCommand_fill);
+	ADDMENUITEM(mm,edit,msgtable[MENU_GATHEIGHT],					&MenuCommand_gatheight);
+	ADDMENUITEM(mm,edit,msgtable[MENU_RESETCOLORS],					&MenuCommand_fixcolors);
+	ADDMENUITEM(mm,edit,msgtable[MENU_CLEAROBJECTS],				&MenuCommand_clearobjects);
+	ADDMENUITEM(mm,edit,msgtable[MENU_CLEAREFFECTS],				&MenuCommand_cleareffects);
+	ADDMENUITEM(mm,edit,msgtable[MENU_CLEARLIGHTS],					&MenuCommand_clearlights);
+	ADDMENUITEM(mm,edit,msgtable[MENU_ADDWALLS],					&MenuCommand_addwalls);
+	ADDMENUITEM(mm,edit,msgtable[MENU_GATCOLLISION],				&MenuCommand_gatcollision);
+	ADDMENUITEM(mm,edit,msgtable[MENU_CLEARLIGHTMAPS],				&MenuCommand_clearlightmaps);
+	ADDMENUITEM(mm,edit,msgtable[MENU_CLEANLIGHTMAPS],			&MenuCommand_cleanuplightmaps);
+	ADDMENUITEM(mm,edit,msgtable[MENU_REMOVETEXTURES],				&MenuCommand_cleantextures);
 
-	ADDMENUITEM(mm,windows,"Ambient Lighting",			&MenuCommand_ambientlight);
-	ADDMENUITEM(mm,windows,"Models",					&MenuCommand_modelwindow);
-	ADDMENUITEM(mm,windows,"Textures",					&MenuCommand_texturewindow);
-	ADDMENUITEM(mm,windows,"Properties",				&MenuCommand_properties);
-	ADDMENUITEM(mm,windows,"Water",						&MenuCommand_water);
+	ADDMENUITEM(mm,windows,msgtable[MENU_AMBIENTLIGHTING],			&MenuCommand_ambientlight);
+	ADDMENUITEM(mm,windows,msgtable[MENU_MODELWINDOW],				&MenuCommand_modelwindow);
+	ADDMENUITEM(mm,windows,msgtable[MENU_TEXTURES],					&MenuCommand_texturewindow);
+	ADDMENUITEM(mm,windows,msgtable[MENU_PROPERTIES],				&MenuCommand_properties);
+	ADDMENUITEM(mm,windows,msgtable[MENU_WATER],					&MenuCommand_water);
 
-	cFile* pFile = fs.open("config.txt");
-	if (pFile == NULL)
-	{
-		Log(1,0,"Error opening configfile");
-	}
 	config = pFile->readline();
 	config = config.substr(config.find("=")+1);
 
-	
 	map<string, cMenu*, less<string> > itemsm;
 	map<cMenu*, int, less<cMenu*> > levelm;
 	levelm[models] = 0;
@@ -746,7 +766,7 @@ int main(int argc, char *argv[])
 						cFile* pFile2 = fs.open(value);
 						if (pFile2 != NULL)
 						{
-							Log(3,0,"Loading %s", value.c_str());
+							Log(3,0,msgtable[4], value.c_str()); // Loading file
 							while(!pFile2->eof())
 							{
 								string line = pFile2->readline();
@@ -767,11 +787,11 @@ int main(int argc, char *argv[])
 								}
 								
 							}
-							Log(3,0,"done loading %s", value.c_str());
+							Log(3,0,msgtable[5], value.c_str()); // Done Loading file
 							pFile2->close();
 						}
 						else
-							Log(1,0,"Couldn't open %s", value.c_str());
+							Log(1,0,msgtable[6], value.c_str()); // could not open %s
 					}
 					else if (option == "texture")
 					{
@@ -780,7 +800,7 @@ int main(int argc, char *argv[])
 					else if (option == "undostack")
 						undosize = atoi(value.c_str());
 					else
-						Log(2,0,"Unknown option: %s=%s", option.c_str(), value.c_str());
+						Log(2,0,msgtable[7], option.c_str(), value.c_str()); // unknown config option
 
 				}			
 
@@ -798,7 +818,7 @@ int main(int argc, char *argv[])
 	lastlclick = 0;
 	lastrclick = 0;
 
-	Log(3,0,"Loading effects...");
+	Log(3,0,msgtable[4], "effects.txt");
 	vector<cMenu*> effectssubmenu;
 
 	pFile = fs.open("effects.txt");
@@ -830,12 +850,12 @@ int main(int argc, char *argv[])
 	}
 
 	pFile->close();
-	Log(3,0,"Done loading effects, initializing graphics...");
+	Log(3,0,msgtable[5], "effects.txt");
 
 	if (!Graphics.init())
 		return 1;
 
-	Log(3,0,"Done initializing..");
+	Log(3,0,msgtable[8]);
 	Graphics.world.newworld();
 	strcpy(Graphics.world.filename, string(rodir + "data\\cam_dun01").c_str());
 #ifndef WIN32
@@ -1688,7 +1708,6 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				lbuttondown = false;
 				if (SDL_GetTicks() - lastlclick < 250)
 				{
-					Log(3,0,"Doubleclick");
 					doubleclick = true;
 					lastlclick = SDL_GetTicks();
 					if(m == NULL)
@@ -1799,18 +1818,6 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							char buf[100];
 							sprintf(buf, "%i", Graphics.world.effects[Graphics.selectedobject].type);
 							cMenu* m = effectsmenu->finddata(buf);
-							if (m!=NULL)
-								Log(3,0,"Selected effect %s", m->title.c_str());
-							Log(3,0,"Looping: %f, Category: %s", Graphics.world.effects[Graphics.selectedobject].loop, Graphics.world.effects[Graphics.selectedobject].category.c_str());
-							Log(3,0,"todo1: %f", Graphics.world.effects[Graphics.selectedobject].todo1);
-							Log(3,0,"todo2: %f", Graphics.world.effects[Graphics.selectedobject].todo2);
-							Log(3,0,"todo3: %f", Graphics.world.effects[Graphics.selectedobject].todo3);
-							Log(3,0,"rotation: %f %f %f", Graphics.world.effects[Graphics.selectedobject].rotation.x, Graphics.world.effects[Graphics.selectedobject].rotation.y, Graphics.world.effects[Graphics.selectedobject].rotation.z);
-							Log(3,0,"scale: %f %f %f", Graphics.world.effects[Graphics.selectedobject].scale.x, Graphics.world.effects[Graphics.selectedobject].scale.y, Graphics.world.effects[Graphics.selectedobject].scale.z);
-							Log(3,0,"todo10: %f", Graphics.world.effects[Graphics.selectedobject].todo10);
-							Log(3,0,"todo11: %f", Graphics.world.effects[Graphics.selectedobject].todo11);
-							Log(3,0,"todo12: %f", Graphics.world.effects[Graphics.selectedobject].todo12);
-							Log(3,0,"todo13: %f", Graphics.world.effects[Graphics.selectedobject].todo13);
 						}
 					}
 					if(editmode == MODE_LIGHTS && movement < 3)
@@ -1961,7 +1968,6 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				long l = SDL_GetTicks();
 				if (l - lastrclick < 250)
 				{
-					Log(3,0,"Doubleclick");
 					doubleclick = true;
 					lastrclick = 0;
 				}
@@ -2664,7 +2670,6 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						{
 							undostack.push(new cUndoChangeEffect(Graphics.selectedobject));
 							Graphics.world.effects[Graphics.selectedobject].loop--;
-							Log(3,0,"Effect-loop time: %f", Graphics.world.effects[Graphics.selectedobject].loop);
 						}
 					}
 					if(editmode == MODE_OBJECTGROUP)
@@ -2780,9 +2785,6 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 					if (editmode == MODE_HEIGHTGLOBAL)
 					{
-						float avg = 0;
-						float mmin = 999999;
-						float mmax = -999999;
 						undostack.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
 						for(int x = 0; x < Graphics.world.width; x++)
 						{
@@ -2794,9 +2796,6 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 								Graphics.world.cubes[y][x].cell2 -= 1;
 								Graphics.world.cubes[y][x].cell3 -= 1;
 								Graphics.world.cubes[y][x].cell4 -= 1;
-								avg = (avg+Graphics.world.cubes[y][x].cell1+Graphics.world.cubes[y][x].cell2+Graphics.world.cubes[y][x].cell3+Graphics.world.cubes[y][x].cell4)/5.0f;
-								mmin = min(min(min(min(mmin,Graphics.world.cubes[y][x].cell1),Graphics.world.cubes[y][x].cell2),Graphics.world.cubes[y][x].cell3),Graphics.world.cubes[y][x].cell4);
-								mmax = max(max(max(max(mmax,Graphics.world.cubes[y][x].cell1),Graphics.world.cubes[y][x].cell2),Graphics.world.cubes[y][x].cell3),Graphics.world.cubes[y][x].cell4);
 							}
 						}
 						for(int y = 0; y < Graphics.world.gattiles.size(); y++)
@@ -2811,7 +2810,6 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 								Graphics.world.gattiles[y][x].cell4 -= 1;
 							}
 						}
-						Log(3,0,"Avg: %f, Min: %f, Max: %f", avg, mmin, mmax);
 					}
 					if (editmode == MODE_EFFECTS)
 					{
@@ -2819,7 +2817,6 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						{
 							undostack.push(new cUndoChangeEffect(Graphics.selectedobject));
 							Graphics.world.effects[Graphics.selectedobject].loop++;
-							Log(3,0,"Effect-loop time: %f", Graphics.world.effects[Graphics.selectedobject].loop);
 						}
 					}
 					if(editmode == MODE_OBJECTGROUP)
@@ -3211,9 +3208,6 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							Graphics.clipboardscale = Graphics.world.models[Graphics.selectedobject]->scale;
 							Graphics.clipboardfile = Graphics.world.models[Graphics.selectedobject]->filename;
 							Graphics.clipboardy = Graphics.world.models[Graphics.selectedobject]->pos.y;
-
-							Log(3,0,"Copied %s", Graphics.clipboardfile.c_str());
-
 							currentobject = models->finddata("data\\model\\" + Graphics.world.models[Graphics.selectedobject]->rofilename);
 							if(currentobject != NULL)
 								MenuCommand_model((cMenuItem*)currentobject);
@@ -4274,7 +4268,6 @@ MENUCOMMAND(model)
 	if (editmode != MODE_OBJECTS)
 		Graphics.previewcolor = 200;
 	currentobject = src;
-	Log(3,0,"Meshcount: %i", Graphics.previewmodel->meshes.size());
 	return true;
 }
 
@@ -4298,7 +4291,7 @@ MENUCOMMAND(quadtree)
 
 	for(int i = 0; i < Graphics.world.models.size(); i++)
 	{
-		Log(3,0,"Doing model %i out of %i (%.2f%%)", i, Graphics.world.models.size(), (i/(float)Graphics.world.models.size())*100);
+		Log(3,0,msgtable[9], i, Graphics.world.models.size(), (i/(float)Graphics.world.models.size())*100);
 		Graphics.world.models[i]->draw(false,false,true);
 	}
 
@@ -4465,14 +4458,13 @@ MENUCOMMAND(dolightmaps2)
 	{
 		if(y == 99)
 			Sleep(0);
-		Log(3,0,"%i %%", y);
 		for(x = 0; x < Graphics.world.width; x++)
 //		for(x = 40; x < 60; x++)
 		{
 			cCube* c = &Graphics.world.cubes[y][x];
 			if(selectonly && !c->selected)
 				continue;
-			Log(3,0,"%f %%", (y*Graphics.world.width+x) / (float)(Graphics.world.height * Graphics.world.width)*100);
+			Log(3,0,msgtable[10], (y*Graphics.world.width+x) / (float)(Graphics.world.height * Graphics.world.width)*100); // %f %%
 			if(Graphics.world.cubes[y][x].tileup == -1)
 				continue;
 			Graphics.world.reallightmaps[y][x]->reset();

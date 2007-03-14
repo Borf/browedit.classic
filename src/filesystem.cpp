@@ -165,7 +165,27 @@ void cFile::seek(int o, enum STARTPOS p)
 
 int cFile::readline(char* buf, int maxlen)
 {
-	return 0;
+	int i = 0;
+	while(data[index] != '\r' && data[index] != '\n' && !eof() && i < maxlen)
+	{
+		buf[i] = data[index];
+		index++;
+		i++;
+	}
+	buf[i] = 0;
+	if (data[index] == '\r')
+	{
+		index++;
+		if (data[index] == '\n')
+			index++;
+	}
+	else if (data[index] == '\n')
+	{
+		index++;
+		if (data[index] == '\r')
+			index++;
+	}
+	return i;
 }
 string cFile::readline()
 {

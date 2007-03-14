@@ -1,0 +1,75 @@
+Could not look up host '%s', are you connected to the internet?
+Cannot create socket, please reboot
+You do not have the latest version of Browedit
+Loading file %s
+Done Loading file %s
+Could not open %s
+Unknown config option: %s = %s
+Done Initializing
+Calculating model %i out of %i (%.2%%)
+%f %%
+File
+Generate
+View
+Edit Mode
+Edit
+Models
+Effects
+Windows
+New
+Open
+Save
+Save As
+Import Arcturus maps
+Export Lightmaps
+Import Lightmaps
+Exit
+Random1
+Maze Stuff
+Quadtree
+Calculate Lightmaps
+Calculate Selected lightmaps
+Clear Map
+Grid
+Objects
+Boundingboxes
+Lightmaps
+Show OGL Lighting
+Tilecolors
+Water
+Topcamera
+Invisible Tiles
+Ambient Lighting
+Water Animation
+Gat Tiles
+Texture Edit
+Global Height Edit
+Detail Terrain Edit...
+Wall Edit
+Object Edit
+GAT Edit"
+Water Edit
+Effects Edit
+Sounds Edit
+Lights Edit
+Object Group Edit
+Raise/Lowerspeed
+Sloping
+Snap Objects to floor
+Flatten map
+Fill with selected texture
+Set GAT height
+Reset colors
+Clear Objects
+Clear Effects
+Clear Lights
+Add Walls
+Set GAT Collision
+Clear Lightmaps
+Clean Lightmaps
+Remove unused textures
+Ambient Lighting
+Models
+Textures
+Properties
+Water

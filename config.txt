@@ -1,3 +1,4 @@
+language=english
 setting=ROdesktop
 
 [RO]
