@@ -828,11 +828,11 @@ int main(int argc, char *argv[])
 		string line = pFile->readline();
 		if(line.find("|") != string::npos)
 		{
-			if (effectssubmenu.size() <= floor(i/30))
+			if (effectssubmenu.size() <= floor(i/30.0))
 			{
 				effectssubmenu.resize(effectssubmenu.size()+1);
 				char buf[100];
-				sprintf(buf, "%i - %i", (int) (floor(i/30)*30), (int)((floor(i/30)+1)*30)-1);
+				sprintf(buf, "%i - %i", (int) (floor(i/30.0)*30), (int)((floor(i/30.0)+1)*30)-1);
 				ADDMENU(effectssubmenu.back(),		effectsmenu, buf,				0,100);
 			}
 
@@ -842,7 +842,7 @@ int main(int argc, char *argv[])
 			char buf[255];
 			sprintf(buf, "%i. %s", id, val.c_str());
 
-			ADDMENUITEMDATA(mm,effectssubmenu[(int)floor(i/30)],buf, &MenuCommand_effect, line.substr(0,line.find("|")));
+			ADDMENUITEMDATA(mm,effectssubmenu[(int)floor(i/30.0)],buf, &MenuCommand_effect, line.substr(0,line.find("|")));
 
 			i++;
 		

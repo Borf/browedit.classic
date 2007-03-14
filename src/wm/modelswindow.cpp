@@ -304,6 +304,7 @@ void cModelsWindow::cWindowModelCatSelect::rightclick()
 
 bool cModelsWindow::cWindowModelCatSelect::onkeydown(int key)
 {
+	int i;
 	bool b = cWindowTree::onkeydown(key);
 	if(b)
 		return true;
@@ -312,7 +313,7 @@ bool cModelsWindow::cWindowModelCatSelect::onkeydown(int key)
 	{
 		int a = selected;
 		cTreeNode* node = NULL;
-		for(int i = 0; i < nodes.size(); i++)
+		for(i = 0; i < nodes.size(); i++)
 		{
 			 node = nodes[i]->getnode(a);
 			 if(node != NULL)
@@ -322,7 +323,7 @@ bool cModelsWindow::cWindowModelCatSelect::onkeydown(int key)
 		{
 			if(node->parent != NULL)
 			{
-				for(int i = 0; i < node->parent->children.size(); i++)
+				for(i = 0; i < node->parent->children.size(); i++)
 				{
 					if (node->parent->children[i] == node)
 					{
@@ -333,7 +334,7 @@ bool cModelsWindow::cWindowModelCatSelect::onkeydown(int key)
 			}
 			else
 			{
-				for(int i = 0; i < nodes.size(); i++)
+				for(i = 0; i < nodes.size(); i++)
 				{
 					if (nodes[i] == node)
 					{

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8.00"
+	Version="8,00"
 	Name="roworldedit"
 	ProjectGUID="{3DF19951-7066-478B-A800-B9E4346B1184}"
 	RootNamespace="roworldedit"
@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;VC8;GRF_STATIC"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -209,6 +209,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\svnver.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\texture.cpp"
 				>
 			</File>
@@ -218,6 +222,10 @@
 			</File>
 			<File
 				RelativePath="..\src\texturemodel.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\undo.cpp"
 				>
 			</File>
 			<File
@@ -275,6 +283,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\svnver.h"
+				>
+			</File>
+			<File
 				RelativePath="..\src\texture.h"
 				>
 			</File>
@@ -284,6 +296,14 @@
 			</File>
 			<File
 				RelativePath="..\src\texturemodel.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\undo.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\version.h"
 				>
 			</File>
 			<File
@@ -306,6 +326,310 @@
 			</File>
 			<File
 				RelativePath="..\src\Script1.rc"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="grf"
+			>
+			<File
+				RelativePath="..\src\grflib\grf.c"
+				>
+			</File>
+			<File
+				RelativePath="..\src\grflib\grf.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\grflib\grfcrypt.c"
+				>
+			</File>
+			<File
+				RelativePath="..\src\grflib\grfcrypt.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\grflib\grfsupport.c"
+				>
+			</File>
+			<File
+				RelativePath="..\src\grflib\grfsupport.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\grflib\grftypes.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\grflib\rgz.c"
+				>
+			</File>
+			<File
+				RelativePath="..\src\grflib\rgz.h"
+				>
+			</File>
+			<Filter
+				Name="zlib"
+				>
+				<File
+					RelativePath="..\src\grflib\zlib\adler32.c"
+					>
+				</File>
+				<File
+					RelativePath="..\src\grflib\zlib\compress.c"
+					>
+				</File>
+				<File
+					RelativePath="..\src\grflib\zlib\crc32.c"
+					>
+				</File>
+				<File
+					RelativePath="..\src\grflib\zlib\crc32.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\grflib\zlib\deflate.c"
+					>
+				</File>
+				<File
+					RelativePath="..\src\grflib\zlib\deflate.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\grflib\zlib\inffast.c"
+					>
+				</File>
+				<File
+					RelativePath="..\src\grflib\zlib\inffast.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\grflib\zlib\inffixed.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\grflib\zlib\inflate.c"
+					>
+				</File>
+				<File
+					RelativePath="..\src\grflib\zlib\inflate.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\grflib\zlib\inftrees.c"
+					>
+				</File>
+				<File
+					RelativePath="..\src\grflib\zlib\inftrees.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\grflib\zlib\trees.c"
+					>
+				</File>
+				<File
+					RelativePath="..\src\grflib\zlib\trees.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\grflib\zlib\zconf.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\grflib\zlib\zlib.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\grflib\zlib\zutil.c"
+					>
+				</File>
+				<File
+					RelativePath="..\src\grflib\zlib\zutil.h"
+					>
+				</File>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="wm"
+			>
+			<File
+				RelativePath="..\src\wm\ambientlightwindow.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\confirmwindow.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\effectwindow.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\hotkeywindow.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\inputwindow.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\lightwindow.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\messagewindow.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\modelswindow.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\modelswindow.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\objectwindow.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\texturewindow.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\waterwindow.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\window.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\window.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\windowbutton.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\windowbutton.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\windowcheckbox.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\windowcheckbox.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\windowframe.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\windowframe.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\windowinputbox.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\windowinputbox.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\windowlabel.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\windowlabel.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\windowline.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\windowlistbox.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\windowlistbox.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\windowmainbutton.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\windowmainbutton.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\windowobject.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\windowobject.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\windowpicturebox.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\windowpicturebox.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\windowprogressbar.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\windowprogressbar.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\windowroundbutton.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\windowroundbutton.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\windowscrollpanel.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\windowscrollpanel.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\windowtabpanel.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\windowtabpanel.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\windowtree.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\windowtree.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\wm.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\wm\wm.h"
 				>
 			</File>
 		</Filter>
