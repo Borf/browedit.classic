@@ -419,7 +419,7 @@ int cTexture::LoadFromJpeg(string filename)
 	pFile = fs.open(filename);
 	if(pFile == NULL)
 	{
-		Log(1,0,"Error opening %s", filename.c_str());
+		Log(2,0,"Error opening %s", filename.c_str());
 		return 0;
 	}
 	gdImage* pImageData = gdImageCreateFromJpegPtr(pFile->size, pFile->data);

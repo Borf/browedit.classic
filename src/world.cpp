@@ -2927,6 +2927,8 @@ int cRealLightMap::texid()
 	{
 		for(yy = 0; yy < min(21, Graphics.world.height-y); yy++)
 		{
+			if(Graphics.world.cubes[y+yy][x+xx].tileup == -1)
+				continue;
 			char* b = Graphics.world.lightmaps[Graphics.world.tiles[Graphics.world.cubes[y+yy][x+xx].tileup].lightmap]->buf;
 			for(int xxx = 0; xxx < 6; xxx++)
 			{
@@ -2999,6 +3001,8 @@ int cRealLightMap::texid2()
 	{
 		for(yy = 0; yy < min(21, Graphics.world.height-y); yy++)
 		{
+			if(Graphics.world.cubes[y+yy][x+xx].tileup == -1)
+				continue;
 			char* b = Graphics.world.lightmaps[Graphics.world.tiles[Graphics.world.cubes[y+yy][x+xx].tileup].lightmap]->buf;
 			for(int xxx = 0; xxx < 6; xxx++)
 			{

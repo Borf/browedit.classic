@@ -20,7 +20,7 @@ int cFileSystem::LoadFile(string grffilename)
 	grffile->grf = grf_open(grffilename.c_str(), "rb", &error);
 	if (grffile->grf == NULL)
 	{
-		Log(1,0,msgtable[FS_GRFOPENERROR], grffilename.c_str());
+		Log(2,0,msgtable[FS_GRFOPENERROR], grffilename.c_str());
 		return -1;
 	}
 	

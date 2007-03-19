@@ -140,6 +140,7 @@ int cursorsize = 1;
 #define ADDMENUITEMDATA2(m, p, t, pr,d,d2) m = new cMenuItem(); m->parent = p; m->title = t; m->item = true; m->drawstyle = 1; ((cMenuItem*)m)->proc = pr; ((cMenuItem*)m)->data = d; ((cMenuItem*)m)->data2 = d2; p->items.push_back(m);
 #define ADDMENUITEMDATAP(m, p, t, pr,d) m = new cMenuItem(); m->parent = p; m->title = t; m->item = true; m->drawstyle = 1; ((cMenuItem*)m)->proc = pr; ((cMenuItem*)m)->pdata = d; p->items.push_back(m);
 #define ADDMENU(m,p,t,xpos,width) m = new cMenu(); m->parent = p; m->title = t; m->item = false; m->drawstyle = 1; m->y = 20; m->x = xpos; m->w = width; p->items.push_back(m);
+#define ADDMENU2(m,p,t,xpos) m = new cMenu(); m->parent = p; m->title = t; m->item = false; m->drawstyle = 1; m->y = 20; m->x = xpos; m->w = Graphics.font->textlen(t)+10; p->items.push_back(m); xpos += Graphics.font->textlen(t)+10;
 cMenu* mode;
 cMenu* editdetail;
 cMenu* speed;
@@ -383,6 +384,16 @@ int main(int argc, char *argv[])
 	string language = pFile->readline();
 	language = language.substr(language.find("=")+1);
 	cFile* pLangFile = fs.open("data/" + language + ".txt");
+	if(pLangFile == NULL)
+	{
+		Log(1,0,"Language file not found! Trying english");
+		pLangFile = fs.open("data/english.txt");
+		if(pLangFile == NULL)
+		{
+			Log(1,0,"English languagefile not found, quitting...");
+			exit(0);
+		}
+	}
 	msgtable.resize(1);
 	msgtable.back() = new char[64];
 	sprintf(msgtable.back(), "No Message");
@@ -395,6 +406,8 @@ int main(int argc, char *argv[])
 	}
 	pLangFile->close();
 
+	config = pFile->readline();
+	config = config.substr(config.find("=")+1);
 
 
 
@@ -608,9 +621,114 @@ int main(int argc, char *argv[])
 
 	RegCloseKey( hKey );
 #endif //win32
+	cMenu* mm;
+
+
+	models = new cMenu();
+	models->parent = NULL;
+	models->title = msgtable[MENU_MODELS]; 
+	models->item = false; 
+	models->drawstyle = 1; 
+	models->y = 20; 
+	models->x = 0; 
+	models->w = 50; 
+	
+
+	map<string, cMenu*, less<string> > itemsm;
+	map<cMenu*, int, less<cMenu*> > levelm;
+	levelm[models] = 0;
+	
+
+	while(!pFile->eof())
+	{
+		string line = pFile->readline();
+		if (line == "[" + config + "]")
+		{
+			line = "";
+			while(!pFile->eof() && line[0] != '[')
+			{
+				line = pFile->readline();
+				if(ltrim(line).substr(0,2) == "//")
+					continue;
+				if(line.find("=") != string::npos)
+				{
+					string option = line.substr(0, line.find("="));
+					string value = line.substr(line.find("=")+1);
+
+					if(option == "rodir")
+						rodir = value;
+					else if(option == "grf")
+						fs.LoadFile(value);
+					else if(option == "resx")
+						Graphics.width = atoi(value.c_str());
+					else if(option == "resy")
+						Graphics.height = atoi(value.c_str());
+					else if(option == "bpp")
+						Graphics.bits = atoi(value.c_str());
+					else if(option == "fullscreen")
+						Graphics.fullscreen = value == "1";
+					else if(option == "font")
+						fontname = value;
+					else if (option == "model")
+					{
+						objectfiles.push_back(value);
+						cFile* pFile2 = fs.open(value);
+						if (pFile2 != NULL)
+						{
+							Log(3,0,msgtable[4], value.c_str()); // Loading file
+							while(!pFile2->eof())
+							{
+								string line = pFile2->readline();
+								string pre = line.substr(0, line.find("|"));
+								string filename = line.substr(line.find("|")+1);
+
+								string cat = pre.substr(0, pre.rfind("/"));
+								string menuname = pre.substr(pre.rfind("/")+1);
+
+								if (cat != "" && itemsm.find(cat) == itemsm.end())
+								{
+									additem(itemsm, levelm, cat);
+								}
+								char* f = (char*)filename.c_str();
+								if(filename != "")
+								{
+									ADDMENUITEMDATA2(mm,itemsm[cat],menuname, &MenuCommand_model, filename, pre);
+								}
+								
+							}
+							Log(3,0,msgtable[5], value.c_str()); // Done Loading file
+							pFile2->close();
+						}
+						else
+							Log(1,0,msgtable[6], value.c_str()); // could not open %s
+					}
+					else if (option == "texture")
+					{
+						texturefiles.push_back(value);
+					}
+					else if (option == "undostack")
+						undosize = atoi(value.c_str());
+					else
+						Log(2,0,msgtable[7], option.c_str(), value.c_str()); // unknown config option
+
+				}			
+
+			}
+		}
+	}
+	pFile->close();
+
+
+	itemsm.clear();
+	levelm.clear();
+
+	models->sort();
+	
+	
+	if (!Graphics.init())
+		return 1;
 
 	cMenu* file;
-	cMenu* mm;
 	cMenu* rnd;
 	cMenu* view;
 	cMenu* edit;
@@ -625,15 +743,20 @@ int main(int argc, char *argv[])
 	menu->y = 0;
 	menu->w = Graphics.w();
 	
-	
-	ADDMENU(file,		menu, msgtable[MENU_FILE],		0,50); // File
-	ADDMENU(rnd,		menu, msgtable[MENU_GENERATE],	50,75); // Generate
-	ADDMENU(view,		menu, msgtable[MENU_VIEW],		125,50); // view
-	ADDMENU(mode,		menu, msgtable[MENU_EDITMODE],	175,75); // edit mode
-	ADDMENU(edit,		menu, msgtable[MENU_EDIT],		250,50); // edit
-	ADDMENU(models,		menu, msgtable[MENU_MODELS],	300,50); // models
-	ADDMENU(effectsmenu,menu, msgtable[MENU_EFFECTS],	350,50); // effects
-	ADDMENU(windows,	menu, msgtable[MENU_WINDOWS],	400,50); // windows
+	int posx = 0;
+	ADDMENU2(file,		menu, msgtable[MENU_FILE],		posx); // File
+	ADDMENU2(rnd,		menu, msgtable[MENU_GENERATE],	posx); // Generate
+	ADDMENU2(view,		menu, msgtable[MENU_VIEW],		posx); // view
+	ADDMENU2(mode,		menu, msgtable[MENU_EDITMODE],	posx); // edit mode
+	ADDMENU2(edit,		menu, msgtable[MENU_EDIT],		posx); // edit
+	//ADDMENU2(models,		menu, msgtable[MENU_MODELS],	posx); // models
+	models->parent = menu;
+	menu->items.push_back(models);
+	models->x = posx;
+	models->w = Graphics.font->textlen(models->title)+10;
+	posx+=models->w;
+	ADDMENU2(effectsmenu,menu, msgtable[MENU_EFFECTS],	posx); // effects
+	ADDMENU2(windows,	menu, msgtable[MENU_WINDOWS],	posx); // windows
 
 	ADDMENUITEM(mm,file,msgtable[MENU_NEW],							&MenuCommand_new); //new
 	ADDMENUITEM(mm,file,msgtable[MENU_OPEN],						&MenuCommand_open); //open
@@ -727,97 +850,6 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,windows,msgtable[MENU_WATER],					&MenuCommand_water);
 	ADDMENUITEM(mm,windows,msgtable[MENU_PREFERENCES],				&MenuCommand_preferences);
 
-	config = pFile->readline();
-	config = config.substr(config.find("=")+1);
-
-	map<string, cMenu*, less<string> > itemsm;
-	map<cMenu*, int, less<cMenu*> > levelm;
-	levelm[models] = 0;
-
-	while(!pFile->eof())
-	{
-		string line = pFile->readline();
-		if (line == "[" + config + "]")
-		{
-			line = "";
-			while(!pFile->eof() && line[0] != '[')
-			{
-				line = pFile->readline();
-				if(ltrim(line).substr(0,2) == "//")
-					continue;
-				if(line.find("=") != string::npos)
-				{
-					string option = line.substr(0, line.find("="));
-					string value = line.substr(line.find("=")+1);
-
-					if(option == "rodir")
-						rodir = value;
-					else if(option == "grf")
-						fs.LoadFile(value);
-					else if(option == "resx")
-						Graphics.width = atoi(value.c_str());
-					else if(option == "resy")
-						Graphics.height = atoi(value.c_str());
-					else if(option == "bpp")
-						Graphics.bits = atoi(value.c_str());
-					else if(option == "fullscreen")
-						Graphics.fullscreen = value == "1";
-					else if(option == "font")
-						fontname = value;
-					else if (option == "model")
-					{
-						objectfiles.push_back(value);
-						cFile* pFile2 = fs.open(value);
-						if (pFile2 != NULL)
-						{
-							Log(3,0,msgtable[4], value.c_str()); // Loading file
-							while(!pFile2->eof())
-							{
-								string line = pFile2->readline();
-								string pre = line.substr(0, line.find("|"));
-								string filename = line.substr(line.find("|")+1);
-
-								string cat = pre.substr(0, pre.rfind("/"));
-								string menuname = pre.substr(pre.rfind("/")+1);
-
-								if (cat != "" && itemsm.find(cat) == itemsm.end())
-								{
-									additem(itemsm, levelm, cat);
-								}
-								char* f = (char*)filename.c_str();
-								if(filename != "")
-								{
-									ADDMENUITEMDATA2(mm,itemsm[cat],menuname, &MenuCommand_model, filename, pre);
-								}
-								
-							}
-							Log(3,0,msgtable[5], value.c_str()); // Done Loading file
-							pFile2->close();
-						}
-						else
-							Log(1,0,msgtable[6], value.c_str()); // could not open %s
-					}
-					else if (option == "texture")
-					{
-						texturefiles.push_back(value);
-					}
-					else if (option == "undostack")
-						undosize = atoi(value.c_str());
-					else
-						Log(2,0,msgtable[7], option.c_str(), value.c_str()); // unknown config option
-
-				}			
-
-			}
-		}
-	}
-	pFile->close();
-
-
-	itemsm.clear();
-	levelm.clear();
-
-	models->sort();
 
 
 	lastlclick = 0;
@@ -825,6 +857,21 @@ int main(int argc, char *argv[])
 
 	Log(3,0,msgtable[4], "keymap.txt");
 	pFile = fs.open("keymap.txt");
+	if(pFile == NULL)
+	{
+		Log(3,0,"Keymap file not found, writing default");
+		ofstream pFile2("keymap.txt");
+		for(i = 0; i < SDLK_LAST-SDLK_FIRST; i++)
+		{
+			char buf[100];
+			sprintf(buf, "%i\n", i);
+			pFile2.write(buf, strlen(buf));
+			
+		}
+		pFile2.close();
+		pFile = fs.open("keymap.txt");
+
+	}
 	for(i = 0; i < SDLK_LAST-SDLK_FIRST; i++)
 	{
 		keymap[i] = atoi(pFile->readline().c_str());
@@ -868,12 +915,10 @@ int main(int argc, char *argv[])
 	pFile->close();
 	Log(3,0,msgtable[5], "effects.txt");
 
-	if (!Graphics.init())
-		return 1;
 
 	Log(3,0,msgtable[8]);
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "data\\cam_dun01").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "data\\prontera").c_str());
 #ifndef WIN32
 	Graphics.world.load();
 #endif
@@ -4663,6 +4708,13 @@ MENUCOMMAND(dolightmaps2)
 		}
 	}
 
+	int lightmap,lightmapleft,lightmaptop,lightmapright,lightmapbottom;
+	cLightmap* map;
+	cLightmap* mapleft;
+	cLightmap* maptop;
+	cLightmap* mapright;
+	cLightmap* mapbottom;
+
 
 	for(x = 1; x < Graphics.world.width-1; x++)
 	{
@@ -4673,33 +4725,40 @@ MENUCOMMAND(dolightmaps2)
 			int tiletop = Graphics.world.cubes[y-1][x].tileup;
 			int tileright = Graphics.world.cubes[y][x+1].tileup;
 			int tilebottom = Graphics.world.cubes[y+1][x].tileup;
-			if (tile != -1 && tileleft != -1 && tiletop != -1)
+			if (tile != -1)
 			{
-				int lightmap = Graphics.world.tiles[tile].lightmap;
-				int lightmapleft = Graphics.world.tiles[tileleft].lightmap;
-				int lightmaptop = Graphics.world.tiles[tiletop].lightmap;
-				int lightmapright = Graphics.world.tiles[tileright].lightmap;
-				int lightmapbottom = Graphics.world.tiles[tilebottom].lightmap;
+				if(tile != -1)
+					lightmap = Graphics.world.tiles[tile].lightmap;
+				if(tileleft != -1)
+					lightmapleft = Graphics.world.tiles[tileleft].lightmap;
+				if(tiletop != -1)
+					lightmaptop = Graphics.world.tiles[tiletop].lightmap;
+				if(tileright != -1)
+					lightmapright = Graphics.world.tiles[tileright].lightmap;
+				if(tilebottom != -1)
+					lightmapbottom = Graphics.world.tiles[tilebottom].lightmap;
 
-				if (lightmap < Graphics.world.lightmaps.size() && lightmapleft < Graphics.world.lightmaps.size() && lightmaptop < Graphics.world.lightmaps.size() &&
-					lightmap > -1 && lightmapleft > -1 && lightmaptop > -1)
+				if(tile != -1)
+					map = Graphics.world.lightmaps[lightmap];
+				if(tileleft != -1)
+					mapleft = Graphics.world.lightmaps[lightmapleft];
+				if(tiletop != -1)
+					maptop = Graphics.world.lightmaps[lightmaptop];
+				if(tileright != -1)
+					mapright = Graphics.world.lightmaps[lightmapright];
+				if(tilebottom != -1)
+					mapbottom = Graphics.world.lightmaps[lightmapbottom];
+
+				for(i = 0; i < 8; i++)
 				{
-					cLightmap* map = Graphics.world.lightmaps[lightmap];
-					cLightmap* mapleft = Graphics.world.lightmaps[lightmapleft];
-					cLightmap* maptop = Graphics.world.lightmaps[lightmaptop];
-					cLightmap* mapright = Graphics.world.lightmaps[lightmapright];
-					cLightmap* mapbottom = Graphics.world.lightmaps[lightmapbottom];
-
-					for(i = 0; i < 8; i++)
-					{
+					if(tileleft != -1)
 						mapleft->buf[8*i+7] = map->buf[8*i+1];
+					if(tiletop != -1)
 						maptop->buf[7*8+i] = map->buf[i+8];
+					if(tileright != -1)
 						mapright->buf[8*i] = map->buf[8*i+6];
+					if(tilebottom != -1)
 						mapbottom->buf[i] = map->buf[6*8+i];
-					}
-				}
-				else
-				{
 				}
 			}
 				
@@ -4741,7 +4800,7 @@ MENUCOMMAND(savelightmaps)
 
 MENUCOMMAND(loadlightmaps)
 {
-	int x,y;
+	int x,y,i;
 
 	map<int, bool, less<int> > used;
 	for(x = 0; x < Graphics.world.width; x++)
@@ -4807,6 +4866,15 @@ MENUCOMMAND(loadlightmaps)
 
 
 	Graphics.world.loadlightmap();
+
+		int lightmap,lightmapleft,lightmaptop,lightmapright,lightmapbottom;
+	cLightmap* map;
+	cLightmap* mapleft;
+	cLightmap* maptop;
+	cLightmap* mapright;
+	cLightmap* mapbottom;
+
+
 	for(x = 1; x < Graphics.world.width-1; x++)
 	{
 		for(y = 1; y < Graphics.world.height-1; y++)
@@ -4816,52 +4884,46 @@ MENUCOMMAND(loadlightmaps)
 			int tiletop = Graphics.world.cubes[y-1][x].tileup;
 			int tileright = Graphics.world.cubes[y][x+1].tileup;
 			int tilebottom = Graphics.world.cubes[y+1][x].tileup;
-			if (tile != -1 && tileleft != -1 && tiletop != -1)
+			if (tile != -1)
 			{
-				int lightmap = Graphics.world.tiles[tile].lightmap;
-				int lightmapleft = Graphics.world.tiles[tileleft].lightmap;
-				int lightmaptop = Graphics.world.tiles[tiletop].lightmap;
-				int lightmapright = Graphics.world.tiles[tileright].lightmap;
-				int lightmapbottom = Graphics.world.tiles[tilebottom].lightmap;
+				if(tile != -1)
+					lightmap = Graphics.world.tiles[tile].lightmap;
+				if(tileleft != -1)
+					lightmapleft = Graphics.world.tiles[tileleft].lightmap;
+				if(tiletop != -1)
+					lightmaptop = Graphics.world.tiles[tiletop].lightmap;
+				if(tileright != -1)
+					lightmapright = Graphics.world.tiles[tileright].lightmap;
+				if(tilebottom != -1)
+					lightmapbottom = Graphics.world.tiles[tilebottom].lightmap;
 
-				if (lightmap < Graphics.world.lightmaps.size() && lightmapleft < Graphics.world.lightmaps.size() && lightmaptop < Graphics.world.lightmaps.size() &&
-					lightmap > -1 && lightmapleft > -1 && lightmaptop > -1)
+				if(tile != -1)
+					map = Graphics.world.lightmaps[lightmap];
+				if(tileleft != -1)
+					mapleft = Graphics.world.lightmaps[lightmapleft];
+				if(tiletop != -1)
+					maptop = Graphics.world.lightmaps[lightmaptop];
+				if(tileright != -1)
+					mapright = Graphics.world.lightmaps[lightmapright];
+				if(tilebottom != -1)
+					mapbottom = Graphics.world.lightmaps[lightmapbottom];
+
+				for(i = 0; i < 8; i++)
 				{
-					cLightmap* map = Graphics.world.lightmaps[lightmap];
-					cLightmap* mapleft = Graphics.world.lightmaps[lightmapleft];
-					cLightmap* maptop = Graphics.world.lightmaps[lightmaptop];
-					cLightmap* mapright = Graphics.world.lightmaps[lightmapright];
-					cLightmap* mapbottom = Graphics.world.lightmaps[lightmapbottom];
-
-					for(int i = 0; i < 8; i++)
-					{
+					if(tileleft != -1)
 						mapleft->buf[8*i+7] = map->buf[8*i+1];
+					if(tiletop != -1)
 						maptop->buf[7*8+i] = map->buf[i+8];
+					if(tileright != -1)
 						mapright->buf[8*i] = map->buf[8*i+6];
+					if(tilebottom != -1)
 						mapbottom->buf[i] = map->buf[6*8+i];
-
-						mapleft->buf[64+3*(8*i+7)] = map->buf[64+3*(8*i+1)];
-						mapleft->buf[64+3*(8*i+7)+1] = map->buf[64+3*(8*i+1)+1];
-						mapleft->buf[64+3*(8*i+7)+2] = map->buf[64+3*(8*i+1)+2];
-						maptop->buf[64+3*(7*8+i)] = map->buf[64+3*(i+8)];
-						maptop->buf[64+3*(7*8+i)+1] = map->buf[64+3*(i+8)+1];
-						maptop->buf[64+3*(7*8+i)+2] = map->buf[64+3*(i+8)+2];
-						mapright->buf[64+3*(8*i)] = map->buf[64+3*(8*i+6)];
-						mapright->buf[64+3*(8*i)+1] = map->buf[64+3*(8*i+6)+1];
-						mapright->buf[64+3*(8*i)+2] = map->buf[64+3*(8*i+6)+2];
-						mapbottom->buf[64+3*(i)] = map->buf[64+3*(6*8+i)];
-						mapbottom->buf[64+3*(i)+1] = map->buf[64+3*(6*8+i)+1];
-						mapbottom->buf[64+3*(i)+2] = map->buf[64+3*(6*8+i)+2];
-					
-					}
-				}
-				else
-				{
 				}
 			}
 				
 		}
 	}
+
 	return true;
 }
 
