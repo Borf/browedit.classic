@@ -1020,6 +1020,8 @@ void cWorld::draw()
 		gluPerspective(45.0f,(GLfloat)Graphics.w()/(GLfloat)Graphics.h(),10.0f,10000.0f);
 	float camrad = 10;
 
+
+
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 	glLoadIdentity();									// Reset The Modelview Matrix
 	if (Graphics.topcamera)
@@ -1056,10 +1058,14 @@ void cWorld::draw()
 		glDisable(GL_LIGHTING);
 	else
 		glEnable(GL_LIGHTING);
+
+
 	if(Graphics.showambientlighting)
 		glColor4f(ambientlight.diffuse.x+ambientlight.shadow.x,ambientlight.diffuse.y+ambientlight.shadow.y,ambientlight.diffuse.z+ambientlight.shadow.z,1);
 	else
 		glColor4f(1,1,1,1);
+
+
 	for(x = 0; x < width; x++)
 	{
 		for(y = 0; y < height; y++)
@@ -1283,6 +1289,32 @@ void cWorld::draw()
 	mouse3dx = xxx;
 	mouse3dy = yyy;
 	mouse3dz = (height*10)-zzz;
+
+
+	glEnable(GL_BLEND);
+	glEnable(GL_TEXTURE_2D);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set the correct blending mode
+
+	glColor4f(1,1,1,0.5);
+
+	if(Graphics.showwater || editmode == MODE_WATER)
+	{
+		static float waterindex = 0;
+
+		glBindTexture(GL_TEXTURE_2D, Graphics.watertextures[water.type][(int)ceil(waterindex)]->texid());
+
+		if(Graphics.animatewater)
+			waterindex+=max(0,(Graphics.frameticks) / 50.0f);
+		if (waterindex > 31)
+			waterindex = 0;
+		glBegin(GL_QUADS);
+			glTexCoord2f(0,0); glVertex3f(0,-water.height,0);
+			glTexCoord2f(width/8,0); glVertex3f(10*width,-water.height,0);
+			glTexCoord2f(width/8,height/8); glVertex3f(10*width,-water.height,10*height);
+			glTexCoord2f(0,height/8); glVertex3f(0,-water.height,10*height);
+		glEnd();
+		glDisable(GL_BLEND);
+	}
 
 	if (editmode == MODE_GAT || Graphics.showgat)
 	{
@@ -1985,29 +2017,6 @@ void cWorld::draw()
 	glColor3f(1,1,1);
 */
 
-	glEnable(GL_BLEND);
-	glEnable(GL_TEXTURE_2D);
-
-	glColor4f(1,1,1,0.5);
-
-	if(Graphics.showwater || editmode == MODE_WATER)
-	{
-		static float waterindex = 0;
-
-		glBindTexture(GL_TEXTURE_2D, Graphics.watertextures[water.type][(int)ceil(waterindex)]->texid());
-
-		if(Graphics.animatewater)
-			waterindex+=max(0,(Graphics.frameticks) / 50.0f);
-		if (waterindex > 31)
-			waterindex = 0;
-		glBegin(GL_QUADS);
-			glTexCoord2f(0,0); glVertex3f(0,-water.height,0);
-			glTexCoord2f(width/8,0); glVertex3f(10*width,-water.height,0);
-			glTexCoord2f(width/8,height/8); glVertex3f(10*width,-water.height,10*height);
-			glTexCoord2f(0,height/8); glVertex3f(0,-water.height,10*height);
-		glEnd();
-		glDisable(GL_BLEND);
-	}
 
 	//glTranslatef(-Graphics.camerapointer.x, 0, -Graphics.camerapointer.y);
 

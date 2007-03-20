@@ -394,7 +394,7 @@ int cGraphics::init()
 			watertextures[i].push_back(TextureCache.load(buf));
 		}
 	}
-
+	Log(3,0,msgtable[DONELOADINGFILE], "water.txt");
 
 	previewmodel = NULL;
 
@@ -463,8 +463,8 @@ int cGraphics::InitGL(void)
     glFrontFace( GL_CCW );
     glEnable( GL_CULL_FACE );
 
-//	glEnable(GL_ALPHA_TEST);
-//	glAlphaFunc(GL_GREATER, 0.1f);
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.1f);
 
 
 	return 1;										// Initialization Went OK

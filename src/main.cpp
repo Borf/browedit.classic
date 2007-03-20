@@ -412,6 +412,7 @@ int main(int argc, char *argv[])
 
 
 
+#ifndef _NOCHECK_
 #ifdef WIN32
 	char fileBuffer[1024];
 	GetModuleFileName(NULL, fileBuffer, 1024);
@@ -621,6 +622,7 @@ int main(int argc, char *argv[])
 
 	RegCloseKey( hKey );
 #endif //win32
+#endif //_nocheck_
 	cMenu* mm;
 
 
