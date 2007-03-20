@@ -47,7 +47,7 @@ Global Height Edit
 Detail Terrain Edit...
 Wall Edit
 Object Edit
-GAT Edit"
+GAT Edit
 Water Edit
 Effects Edit
 Sounds Edit

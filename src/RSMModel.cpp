@@ -1005,7 +1005,7 @@ void cRSMModel::precollides()
 	glLoadIdentity();
 	//glTranslatef(0,0,Graphics.world.height*10);
 	//glScalef(1,1,-1);
-	glTranslatef(5*pos.x, -pos.y, 5*pos.z);
+	glTranslatef(5*pos.x, pos.y, 5*pos.z);
 	glRotatef(-rot.x, 1.0, 0.0, 0.0);
 	glRotatef(-rot.z, 0.0, 0.0, 1.0);
 	glRotatef(rot.y, 0.0, 1.0, 0.0);

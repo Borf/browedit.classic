@@ -611,7 +611,7 @@ cModelsWindow::cModelsWindow()
 
 	h = Graphics.h()-50;
 	w = Graphics.w()-50;
-	title = WINDOW_MODELS_TITLE;
+	title = msgtable[WINDOW_MODELS_TITLE];
 	center();
 
 	cWindowObject* o;

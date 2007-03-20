@@ -920,7 +920,7 @@ int main(int argc, char *argv[])
 
 	Log(3,0,msgtable[8]);
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "data\\prontera").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "data\\room").c_str());
 #ifndef WIN32
 	Graphics.world.load();
 #endif
@@ -4121,59 +4121,59 @@ MENUCOMMAND(mode)
 		mode->items[i]->ticked = false;
 	src->ticked = true;
 
-	if(title == "Global Heightmap Edit")
+	if(title == msgtable[MENU_GLOBALHEIGHTEDIT])
 	{
 		editmode = MODE_HEIGHTGLOBAL;
 		if (Graphics.texturestart >= Graphics.world.textures.size())
 			Graphics.texturestart = 0;
 	}
-	else if (title == "Detail Terrain Edit...")
+	else if (title == msgtable[MENU_DETAILTERRAINEDIT])
 	{
 		editmode = MODE_HEIGHTDETAIL;
 		if (Graphics.texturestart >= Graphics.world.textures.size())
 			Graphics.texturestart = 0;
 	}
-	else if (title == "Texture Edit")
+	else if (title == msgtable[MENU_TEXTUREEDIT])
 	{
 		editmode = MODE_TEXTURE;
 		if (Graphics.texturestart >= Graphics.world.textures.size())
 			Graphics.texturestart = 0;
 	}
-	else if (title == "Wall Edit")
+	else if (title == msgtable[MENU_WALLEDIT])
 	{
 		editmode = MODE_WALLS;
 	}
-	else if (title == "Object Edit")
+	else if (title == msgtable[MENU_OBJECTEDIT])
 	{
 		editmode = MODE_OBJECTS;
 		if (Graphics.texturestart >= Graphics.world.textures.size())
 			Graphics.texturestart = 0;
 	}
-	else if (title == "GAT Edit")
+	else if (title == msgtable[MENU_GATEDIT])
 	{
 		editmode = MODE_GAT;
 		if (Graphics.texturestart >= 6)
 			Graphics.texturestart = 0;
 	}
-	else if (title == "Water Edit")
+	else if (title == msgtable[MENU_WATEREDIT])
 	{
 		editmode = MODE_WATER;
 		Graphics.texturestart = Graphics.world.water.type;
 	}
-	else if (title == "Effects Edit")
+	else if (title == msgtable[MENU_EFFECTSEDIT])
 	{
 		editmode = MODE_EFFECTS;
 		Graphics.selectedobject = -1;
 	}
-	else if (title == "Sounds Edit")
+	else if (title == msgtable[MENU_SOUNDSEDIT])
 	{
 		editmode = MODE_SOUNDS;
 	}
-	else if (title == "Lights Edit")
+	else if (title == msgtable[MENU_LIGHTSEDIT])
 	{
 		editmode = MODE_LIGHTS;
 	}
-	else if (title == "Object Group Edit")
+	else if (title == msgtable[MENU_OBJECTGROUPEDIT])
 	{
 		editmode = MODE_OBJECTGROUP;
 	}
@@ -4554,7 +4554,7 @@ MENUCOMMAND(dolightmaps2)
 				for(int xx = 0; xx < 6; xx++)
 				{
 					cVector3 worldpos = cVector3(	10*x+(10/6.0)*xx, 
-													Graphics.world.cubes[y][x].cell1+Graphics.world.cubes[y][x].cell2+Graphics.world.cubes[y][x].cell3+Graphics.world.cubes[y][x].cell4,
+													-((Graphics.world.cubes[y][x].cell1+Graphics.world.cubes[y][x].cell2+Graphics.world.cubes[y][x].cell3+Graphics.world.cubes[y][x].cell4)/4),
 													10*y+(10/6.0)*yy);
 					for(i = 0; i < Graphics.world.lights.size(); i++)
 					{
