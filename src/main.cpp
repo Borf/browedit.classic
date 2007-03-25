@@ -977,15 +977,16 @@ int process_events()
 			keys[event.key.keysym.sym-SDLK_FIRST] = 0;
 			if (Graphics.WM.onkeyup(event.key.keysym.sym))
 				return 0;
+			if(keymap[event.key.keysym.sym] == SDLK_ESCAPE)
+				running = false;
+
 			switch (event.key.keysym.sym)
 			{
 			case SDLK_F4:
 				if(SDL_GetModState() & KMOD_ALT)
 					running = false;
 				break;
-			case SDLK_ESCAPE:
-				running = false;
-				break;
+
 			default:
 				break;
 			}

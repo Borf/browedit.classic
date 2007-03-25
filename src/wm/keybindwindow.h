@@ -339,6 +339,7 @@ public:
 			keymap[SDLK_8] = SDLK_8;
 			keymap[SDLK_9] = SDLK_9;
 			keymap[SDLK_0] = SDLK_0;
+			keymap[SDLK_ESCAPE] = parent->objects["Esc"]->GetInt(0);;
 
 
 			ofstream pFile("keymap.txt");
@@ -418,6 +419,35 @@ public:
 	};
 
 
+
+
+	class cClearButton : public cWindowButton
+	{
+		cKeyBindBox* clearbox;
+	public:
+		cClearButton(cWindow* parent, cKeyBindBox* box) : cWindowButton(parent)
+		{
+			text = "Clear";
+			resizeto(50,20);
+			alignment = ALIGN_TOPLEFT;
+			clearbox = box;
+		}
+		void click()
+		{
+			clearbox->SetInt(0,0);
+		}
+	};
+
+	void addclearbutton(cKeyBindBox* box)
+	{
+		cWindowObject* o = new cClearButton(this, box);
+		o->moveto(box->px()+100, box->py());
+		static int i = 0;
+		char buf[10];
+		sprintf(buf, "%i", i++);
+		objects[buf] = o;
+	}
+
 	cKeyBindBox* addbox(string name, int x, int y, int defval)
 	{
 		cKeyBindBox* o = new cKeyBindBox(this);
@@ -426,10 +456,10 @@ public:
 		o->resizeto(100,20);
 		o->SetInt(1, defval);
 		objects[name] = o;
+		addclearbutton(o);
 		return o;
 		
 	}
-
 	cKeyBindWindow()
 	{
 		wtype = WT_KEYBIND;
@@ -481,19 +511,20 @@ public:
 		addlabel("lblF3",		20, 650,"Local Height Edit Mode");
 		addlabel("lblF4",		20, 670,"Wall Edit Mode");
 
-		addlabel("lblF5",		400, 30,"Object Edit Mode");
-		addlabel("lblF6",		400, 50,"GAT Edit Mode");
-		addlabel("lblF7",		400, 70,"Water Edit Mode");
-		addlabel("lblF8",		400, 90,"Effect Edit Mode");
-		addlabel("lblF9",		400,110,"Sound Edit Mode");
-		addlabel("lblF10",		400,130,"Light Edit Mode");
-		addlabel("lblF11",		400,150,"Object Group Edit Mode");
+		addlabel("lblF5",		500, 30,"Object Edit Mode");
+		addlabel("lblF6",		500, 50,"GAT Edit Mode");
+		addlabel("lblF7",		500, 70,"Water Edit Mode");
+		addlabel("lblF8",		500, 90,"Effect Edit Mode");
+		addlabel("lblF9",		500,110,"Sound Edit Mode");
+		addlabel("lblF10",		500,130,"Light Edit Mode");
+		addlabel("lblF11",		500,150,"Object Group Edit Mode");
 
-		addlabel("lblU",		400,170,"Undo");
-		addlabel("lblT",		400,190,"Open Texture Window");
-		addlabel("lblM",		400,210,"Open Model select Window");
-		addlabel("lblReturn",	400,230,"Open object/light/effect properties");
-		addlabel("lblS",		400,250,"Smooth");
+		addlabel("lblU",		500,170,"Undo");
+		addlabel("lblT",		500,190,"Open Texture Window");
+		addlabel("lblM",		500,210,"Open Model select Window");
+		addlabel("lblReturn",	500,230,"Open object/light/effect properties");
+		addlabel("lblS",		500,250,"Smooth");
+		addlabel("lblEsc",		500,270,"Exit");
 
 
 		addbox("Up",250,30,keymap[SDLK_UP]);
@@ -530,18 +561,19 @@ public:
 		addbox("F3",250,650,keymap[SDLK_F3]);
 		addbox("F4",250,670,keymap[SDLK_F4]);
 
-		addbox("F5",650,30,keymap[SDLK_F5]);
-		addbox("F6",650,50,keymap[SDLK_F6]);
-		addbox("F7",650,70,keymap[SDLK_F7]);
-		addbox("F8",650,90,keymap[SDLK_F8]);
-		addbox("F9",650,110,keymap[SDLK_F9]);
-		addbox("F10",650,130,keymap[SDLK_F10]);
-		addbox("F11",650,150,keymap[SDLK_F11]);
-		addbox("U",650,170,keymap[SDLK_u]);
-		addbox("T",650,190,keymap[SDLK_t]);
-		addbox("M",650,210,keymap[SDLK_m]);
-		addbox("Return",650,230,keymap[SDLK_RETURN]);
-		addbox("S",650,250,keymap[SDLK_s]);
+		addbox("F5",740,30,keymap[SDLK_F5]);
+		addbox("F6",740,50,keymap[SDLK_F6]);
+		addbox("F7",740,70,keymap[SDLK_F7]);
+		addbox("F8",740,90,keymap[SDLK_F8]);
+		addbox("F9",740,110,keymap[SDLK_F9]);
+		addbox("F10",740,130,keymap[SDLK_F10]);
+		addbox("F11",740,150,keymap[SDLK_F11]);
+		addbox("U",740,170,keymap[SDLK_u]);
+		addbox("T",740,190,keymap[SDLK_t]);
+		addbox("M",740,210,keymap[SDLK_m]);
+		addbox("Return",740,230,keymap[SDLK_RETURN]);
+		addbox("S",740,250,keymap[SDLK_s]);
+		addbox("Esc",740,270,keymap[SDLK_ESCAPE]);
 
 
 

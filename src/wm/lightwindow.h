@@ -30,9 +30,9 @@ public:
 		objects["rollup"] = new cWindowRollupButton(this);
 		objects["close"] = new cWindowCloseButton(this);
 
-		addlabel("lblPos", 320, 60, msgtable[WINDOW_LIGHT_POSITION]);
-		addlabel("lblColor", 320, 80, msgtable[WINDOW_LIGHT_COLOR]);
-		addlabel("lblIntensity", 320, 100, msgtable[WINDOW_LIGHT_INTENSITY]);
+		addlabel("lblPos", 20, 60, msgtable[WINDOW_LIGHT_POSITION]);
+		addlabel("lblColor", 20, 80, msgtable[WINDOW_LIGHT_COLOR]);
+		addlabel("lblIntensity", 20, 100, msgtable[WINDOW_LIGHT_INTENSITY]);
 		
 		o = new cWindowFloatInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;
