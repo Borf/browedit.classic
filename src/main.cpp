@@ -151,6 +151,7 @@ cMenu* effectsmenu;
 
 vector<vector<vector<float> > > clipboard;
 vector<vector<int > > clipboardgat;
+vector<vector<cTile> > clipboardtexture;
 long lasttimer;
 
 
@@ -3256,6 +3257,53 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 			case SDLK_c:
 				{
+					if (editmode == MODE_TEXTURE)
+					{
+						if(startmousex < Graphics.w()-256)
+						{
+							float selsizex = (fabs(Graphics.selectionstart.x - Graphics.selectionend.x) / 32);
+							float selsizey = (fabs(Graphics.selectionstart.y - Graphics.selectionend.y) / 32);
+
+							selsizex = floor(selsizex*Graphics.brushsize);
+							selsizey = floor(selsizey*Graphics.brushsize);
+
+							int posx = (int)mouse3dx / 10;
+							int posy = (int)mouse3dz / 10;
+
+							clipboardtexture.clear();
+							clipboardgat.clear();
+
+							for(int x = posx; x > posx-selsizex; x--)
+							{
+								vector<cTile> row;
+								vector<int> row2;
+								for(int y = posy; y > posy-selsizey; y--)
+								{
+									if(x >= 0 && x < Graphics.world.width && y >= 0 && y < Graphics.world.height)
+									{
+										if(Graphics.world.cubes[y][x].tileup != -1)
+										{
+											row.push_back(Graphics.world.tiles[Graphics.world.cubes[y][x].tileup]);
+											row2.push_back(1);
+										}
+										else
+										{
+											row.push_back(cTile());
+											row2.push_back(2);
+										}
+									}
+									else
+									{
+										row.push_back(cTile());
+										row2.push_back(0);
+									}
+
+								}
+								clipboardtexture.push_back(row);
+								clipboardgat.push_back(row2);
+							}						
+						}
+					}
 					if (editmode == MODE_HEIGHTDETAIL)
 					{
 						int posx = (int)mouse3dx / 10;
@@ -3326,6 +3374,40 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 			case SDLK_p:
 				{
+					if (editmode == MODE_TEXTURE)
+					{
+						if(startmousex < Graphics.w()-256)
+						{
+							float selsizex = (fabs(Graphics.selectionstart.x - Graphics.selectionend.x) / 32);
+							float selsizey = (fabs(Graphics.selectionstart.y - Graphics.selectionend.y) / 32);
+
+							selsizex = floor(selsizex*Graphics.brushsize);
+							selsizey = floor(selsizey*Graphics.brushsize);
+
+							int posx = (int)mouse3dx / 10;
+							int posy = (int)mouse3dz / 10;
+
+							undostack.push(new cUndoTexture(posx-(int)selsizex+1, posy-(int)selsizey+1, posx+1, posy+1));
+
+							for(int x = posx; x > posx-selsizex; x--)
+							{
+								for(int y = posy; y > posy-selsizey; y--)
+								{
+									int xx = posx - x;
+									int yy = posy - y;
+									if(clipboardgat[xx][yy] == 2)
+									{
+										Graphics.world.cubes[y][x].tileup = -1;
+									}
+									if(clipboardgat[xx][yy] == 1)
+									{
+										Graphics.world.tiles.push_back(clipboardtexture[xx][yy]);
+										Graphics.world.cubes[y][x].tileup = Graphics.world.tiles.size()-1;
+									}
+								}
+							}						
+						}
+					}
 					if (editmode == MODE_HEIGHTDETAIL)
 					{
 						int posx = (int)mouse3dx / 10;
