@@ -1021,6 +1021,11 @@ void cWorld::draw()
 	float camrad = 10;
 
 
+	float camheight = 0;
+	if(-Graphics.camerapointer.x > 0 && -Graphics.camerapointer.x < width*10 && -Graphics.camerapointer.y > 0 && -Graphics.camerapointer.y < height*10)
+	{
+		camheight = -Graphics.world.cubes[height+(int)Graphics.camerapointer.y/10-1][-(int)Graphics.camerapointer.x/10].cell1;
+	}
 
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 	glLoadIdentity();									// Reset The Modelview Matrix
@@ -1034,9 +1039,9 @@ void cWorld::draw()
 					0,1,0);
 	else
 		gluLookAt(  -Graphics.camerapointer.x + Graphics.cameraheight*sin(Graphics.camerarot),
-					camrad+Graphics.cameraheight,
+					camrad+Graphics.cameraheight+camheight,
 					-Graphics.camerapointer.y + Graphics.cameraheight*cos(Graphics.camerarot),
-					-Graphics.camerapointer.x,camrad + Graphics.cameraheight * (Graphics.cameraangle/10.0f),-Graphics.camerapointer.y,
+					-Graphics.camerapointer.x,camrad + Graphics.cameraheight * (Graphics.cameraangle/10.0f)+camheight,-Graphics.camerapointer.y,
 					0,1,0);
 
 	glDisable(GL_CULL_FACE);
@@ -1106,7 +1111,7 @@ void cWorld::draw()
 			else if (Graphics.shownotiles)
 			{
 
-				glColor3f(1,1,1);
+				glColor3f(Graphics.notilecolor.x, Graphics.notilecolor.y, Graphics.notilecolor.z);
 				glDisable(GL_TEXTURE_2D);
 				glNormal3f(c->normal.x, c->normal.y, c->normal.z);
 				glBegin(GL_TRIANGLE_STRIP);
@@ -1116,6 +1121,7 @@ void cWorld::draw()
 					glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
 				glEnd();
 				glEnable(GL_TEXTURE_2D);
+				glColor3f(1,1,1);
 			}
 			if (c->tileaside != -1 && c->tileaside < tiles.size())
 			{
@@ -1955,6 +1961,12 @@ void cWorld::draw()
 	int d = 1;
 
 
+	glColor4f(1,1,0,1);
+	glDisable(GL_TEXTURE_2D);
+	glBegin(GL_POLYGON);
+		for(float ii = 0; ii < 2*PI; ii+= 2*PI/20.0)
+			glVertex3f(-Graphics.camerapointer.x+cos(ii)*2,camheight+0.1,-Graphics.camerapointer.y+sin(ii)*2);
+	glEnd();
 
 
 	cVector3 colors[] = {cVector3(1,1,1), cVector3(1,0,0), cVector3(1,1,0), cVector3(1,0,1), cVector3(0,1,0), cVector3(0,1,1), cVector3(0,0,1) };

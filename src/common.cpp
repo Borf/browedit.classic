@@ -135,7 +135,27 @@ void Log(int lvl, int options, char* fmt, ...)
 }
 
 
+vector<string> split(string tosplit, string seperator)
 
+{
+
+	vector<string> res;
+
+	while(tosplit.find(seperator) != string::npos)
+
+	{
+
+		res.push_back(tosplit.substr(0, tosplit.find(seperator)));
+
+		tosplit = tosplit.substr(tosplit.find(seperator)+seperator.length());
+
+	}
+
+	res.push_back(tosplit);
+
+	return res;
+
+}
 
 string lcase(string s)
 {

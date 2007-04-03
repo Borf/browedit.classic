@@ -36,7 +36,7 @@ int cGraphics::draw()
 	frameticks = SDL_GetTicks() - lasttick;
 	lasttick += frameticks;
 
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);				// Black Background
+	glClearColor(Graphics.backgroundcolor.x, Graphics.backgroundcolor.y, Graphics.backgroundcolor.z, 1.0f);				// Black Background
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 	glEnable(GL_BLEND);

@@ -74,6 +74,7 @@ void Log(int lvl, int options, char* fmt, ...);
 void log_open(const char*, char*, int);
 void log_close();
 
+vector<string> split(string, string);
 string lcase(string s);
 string ucase(string s);
 string replace(string s, string a, string b);

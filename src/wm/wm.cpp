@@ -411,6 +411,7 @@ void cWM::InputWindow(string title, cInputWindow::cInputWindowCaller* caller)
 	w->init(&texture, &font);
 	w->objects["text"]->SetText(0, title);
 	w->show();
+	w->objects["input"]->SetText(0,"");
 	addwindow(w);
 }
 

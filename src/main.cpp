@@ -711,6 +711,16 @@ int main(int argc, char *argv[])
 					}
 					else if (option == "undostack")
 						undosize = atoi(value.c_str());
+					else if (option == "bgcolor")
+					{
+						vector<string> splitted = split(value, ",");
+						Graphics.backgroundcolor = cVector3(atoi(splitted[0].c_str())/255.0,atoi(splitted[1].c_str())/255.0,atoi(splitted[2].c_str())/255.0);
+					}
+					else if (option == "notilecolor")
+					{
+						vector<string> splitted = split(value, ",");
+						Graphics.notilecolor = cVector3(atoi(splitted[0].c_str())/255.0,atoi(splitted[1].c_str())/255.0,atoi(splitted[2].c_str())/255.0);
+					}
 					else
 						Log(2,0,msgtable[7], option.c_str(), value.c_str()); // unknown config option
 
@@ -3513,11 +3523,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					{
 						for(int y = posy; y > posy-selsizey; y--)
 						{
-							int xx = posx - x;
-							int yy = posy - y;
-							if (y < 0 || yy >= Graphics.world.height)
+							if (y < 0 || y >= Graphics.world.height)
 								continue;
-							if (x < 0 || xx >= Graphics.world.width)
+							if (x < 0 || x >= Graphics.world.width)
 								continue;
 							Graphics.world.cubes[y][x].tileup = -1;
 						}
@@ -3860,10 +3868,12 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 								{
 									float to = Graphics.world.cubes[y][x].cell2;
 									Graphics.world.cubes[y][x].cell2 = to;
-									Graphics.world.cubes[y][x+1].cell1 = to;
+									if(x < Graphics.world.width-1)
+										Graphics.world.cubes[y][x+1].cell1 = to;
 									if (y > 0)	
 									{
-										Graphics.world.cubes[y-1][x+1].cell3 = to;
+										if(x < Graphics.world.width-1)
+											Graphics.world.cubes[y-1][x+1].cell3 = to;
 										Graphics.world.cubes[y-1][x].cell4 = to;
 									}
 								}
@@ -3874,17 +3884,88 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						{
 							for(y = posy-(int)floor(brushsize/2.0f)+1; y < posy+(int)ceil(brushsize/2.0f); y++)
 							{
-								if (x > 1 && x < Graphics.world.width-1 && y > 1 && y < Graphics.world.height-1)
+								if (x >= -1 && x < Graphics.world.width && y >= 0 && y <= Graphics.world.height)
 								{
-									float to = (Graphics.world.cubes[y+1][x-1].cell2 + Graphics.world.cubes[y+1][x].cell2 + Graphics.world.cubes[y+1][x+1].cell2 + Graphics.world.cubes[y][x-1].cell2 + Graphics.world.cubes[y][x].cell2 + Graphics.world.cubes[y][x+1].cell2 + Graphics.world.cubes[y-1][x-1].cell2 + Graphics.world.cubes[y-1][x].cell2 + Graphics.world.cubes[y-1][x+1].cell2) / 9.0f;
-									Graphics.world.cubes[y][x].cell2 = to;
-									Graphics.world.cubes[y][x+1].cell1 = to;
-									Graphics.world.cubes[y-1][x+1].cell3 = to;
-									Graphics.world.cubes[y-1][x].cell4 = to;
-									Graphics.world.cubes[y][x].calcnormal();
-									Graphics.world.cubes[y][x+1].calcnormal();
-									Graphics.world.cubes[y-1][x+1].calcnormal();
-									Graphics.world.cubes[y-1][x].calcnormal();
+									float to = 0;
+									int cnt = 0;
+									if(x >= 0 && y < Graphics.world.height)
+									{
+										if(y+1 < Graphics.world.width)
+										{
+											if(x > 0)
+											{
+												to += Graphics.world.cubes[y+1][x-1].cell2;
+												cnt++;
+											}
+											to += Graphics.world.cubes[y+1][x].cell2;
+											cnt++;
+											if(x+1 < Graphics.world.width)
+											{
+												to += Graphics.world.cubes[y+1][x+1].cell2;
+												cnt++;
+											}
+										}
+										if(x > 0)
+										{
+											to += Graphics.world.cubes[y][x-1].cell2;
+											cnt++;
+										}
+										to += Graphics.world.cubes[y][x].cell2;
+										cnt++;
+										if(x+1 < Graphics.world.width)
+										{
+											to += Graphics.world.cubes[y][x+1].cell2;
+											cnt++;
+										}
+										if(y > 0)
+										{
+											if(x > 0)
+											{
+												to += Graphics.world.cubes[y-1][x-1].cell2;
+												cnt++;
+											}
+											to += Graphics.world.cubes[y-1][x].cell2;
+											cnt++;
+											if(x+1 < Graphics.world.width)
+											{
+												to += Graphics.world.cubes[y-1][x+1].cell2;
+												cnt++;
+											}
+										}
+
+										to = to / (float)cnt;
+									}
+									else if(x == -1 && y < Graphics.world.height)
+										to = Graphics.world.cubes[y][x+1].cell2;
+									else if(x != -1 && y == Graphics.world.height)
+										to = Graphics.world.cubes[y-1][x].cell2;
+									else
+										to = Graphics.world.cubes[y-1][x+1].cell2;
+
+									if(x >= 0 && y < Graphics.world.height)
+										Graphics.world.cubes[y][x].cell2 = to;
+									if(x < Graphics.world.width-1 && y < Graphics.world.height)
+										Graphics.world.cubes[y][x+1].cell1 = to;
+									if(y > 0)
+									{
+										if(x < Graphics.world.width-1)
+											Graphics.world.cubes[y-1][x+1].cell3 = to;
+										if(x >= 0)
+											Graphics.world.cubes[y-1][x].cell4 = to;
+									}
+
+
+									if(x >= 0 && y < Graphics.world.height)
+										Graphics.world.cubes[y][x].calcnormal();
+									if(x < Graphics.world.width-1 && y < Graphics.world.height)
+										Graphics.world.cubes[y][x+1].calcnormal();
+									if(y > 0)
+									{
+										if(x < Graphics.world.width-1)
+											Graphics.world.cubes[y-1][x+1].calcnormal();
+										if(x >= 0)
+											Graphics.world.cubes[y-1][x].calcnormal();
+									}
 								}
 							}
 						}
@@ -4148,6 +4229,9 @@ int ClassifyPoint(cVector3 point, cVector3 pO, cVector3 pN)
 
 MENUCOMMAND(random1)
 {
+	int height = atoi(Graphics.WM.InputWindow("Height:").c_str());
+	int smooth  = atoi(Graphics.WM.InputWindow("Smoothing level (use 5-10 for decent results)").c_str());
+
 	undostack.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
 	int x,y;
 	for(y = 0; y < Graphics.world.height; y++)
@@ -4158,18 +4242,18 @@ MENUCOMMAND(random1)
 			Graphics.world.cubes[y][x].tileside = -1;
 		}
 	}
-	for(y = 2; y < Graphics.world.height/2-1; y++)
+	for(y = 0; y < Graphics.world.height; y++)
 	{
-		for(x = 2; x < Graphics.world.width/2-1; x++)
+		for(x = 0; x < Graphics.world.width; x++)
 		{
 		//	Graphics.world.cubes[2*y][2*x].tileup = 1;
 
-			Graphics.world.cubes[2*y][2*x].cell1 = 500-rand()%1000;
-			Graphics.world.cubes[2*y][2*x].cell2 = 500-rand()%1000;
-			Graphics.world.cubes[2*y][2*x].cell3 = 500-rand()%1000;
-			Graphics.world.cubes[2*y][2*x].cell4 = 500-rand()%1000;
+			Graphics.world.cubes[y][x].cell1 = height/2-rand()%height;
+			Graphics.world.cubes[y][x].cell2 = height/2-rand()%height;
+			Graphics.world.cubes[y][x].cell3 = height/2-rand()%height;
+			Graphics.world.cubes[y][x].cell4 = height/2-rand()%height;
 
-			Graphics.world.cubes[2*y][2*x-1].cell2 =	Graphics.world.cubes[2*y][2*x].cell1;
+/*			Graphics.world.cubes[2*y][2*x-1].cell2 =	Graphics.world.cubes[2*y][2*x].cell1;
 			Graphics.world.cubes[2*y-1][2*x-1].cell4 =	Graphics.world.cubes[2*y][2*x].cell1;
 			Graphics.world.cubes[2*y-1][2*x].cell3 =	Graphics.world.cubes[2*y][2*x].cell1;
 
@@ -4186,12 +4270,35 @@ MENUCOMMAND(random1)
 			Graphics.world.cubes[2*y][2*x+1].cell3 =	Graphics.world.cubes[2*y][2*x].cell4;
 			Graphics.world.cubes[2*y+1][2*x+1].cell1 =	Graphics.world.cubes[2*y][2*x].cell4;
 			Graphics.world.cubes[2*y+1][2*x].cell2 =	Graphics.world.cubes[2*y][2*x].cell4;
-		
+		*/
 		}
 	}
 
+	eMode m = editmode;
+	editmode = MODE_HEIGHTDETAIL;
+
+	SDL_Event ev;
+	ev.type = SDL_KEYDOWN;
+	ev.key.keysym.sym = SDLK_s;
+	for(int i = 0; i < smooth; i++)
+		SDL_PushEvent(&ev);
+
+	int b = brushsize;
+	mouse3dx = Graphics.world.width*5;
+	mouse3dz = Graphics.world.height*5;
+	brushsize = Graphics.world.width+Graphics.world.height;
+	
+	process_events();
+	brushsize = b;
 
 
+	ev.type = SDL_KEYUP;
+	ev.key.keysym.sym = SDLK_s;
+	SDL_PushEvent(&ev);
+
+
+
+	editmode = m;
 
 	return true;
 }

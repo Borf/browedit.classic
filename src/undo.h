@@ -130,7 +130,7 @@ public:
 			vector<int> row;
 			for(int xx = xfrom; xx < xto; xx++)
 			{
-				if (yy < 0 || yy >= Graphics.world.height || xx < 0 || xx > Graphics.world.width)
+				if (yy < 0 || yy >= Graphics.world.height || xx < 0 || xx >= Graphics.world.width)
 					row.push_back(0);
 				else
 					row.push_back(Graphics.world.cubes[yy][xx].tileup);
@@ -144,7 +144,7 @@ public:
 		{
 			for(int xx = 0; xx < data[yy].size(); xx++)
 			{
-				if (!(yy+y < 0 || yy+y >= Graphics.world.height || xx+x < 0 || xx+x > Graphics.world.width))
+				if (!(yy+y < 0 || yy+y >= Graphics.world.height || xx+x < 0 || xx+x >= Graphics.world.width))
 					Graphics.world.cubes[y+yy][x+xx].tileup = data[yy][xx];
 			}
 		}
@@ -170,7 +170,7 @@ public:
 			for(int xx = xfrom; xx < xto; xx++)
 			{
 				cCubeHeight c;
-				if (!(yy < 0 || yy >= Graphics.world.height || xx < 0 || xx > Graphics.world.width))
+				if (!(yy < 0 || yy >= Graphics.world.height || xx < 0 || xx >= Graphics.world.width))
 				{
 					c.cell1 = Graphics.world.cubes[yy][xx].cell1;
 					c.cell2 = Graphics.world.cubes[yy][xx].cell2;
@@ -188,7 +188,7 @@ public:
 		{
 			for(int xx = 0; xx < data[yy].size(); xx++)
 			{
-				if (!(yy+y < 0 || yy+y >= Graphics.world.height || xx+x < 0 || xx+x > Graphics.world.width))
+				if (!(yy+y < 0 || yy+y >= Graphics.world.height || xx+x < 0 || xx+x >= Graphics.world.width))
 				{
 					Graphics.world.cubes[y+yy][x+xx].cell1 = data[yy][xx].cell1;
 					Graphics.world.cubes[y+yy][x+xx].cell2 = data[yy][xx].cell2;
@@ -220,7 +220,7 @@ public:
 			for(int xx = xfrom; xx < xto; xx++)
 			{
 				cCubeHeight c;
-				if (!(yy < 0 || yy >= Graphics.world.gattiles.size() || xx < 0 || xx > Graphics.world.gattiles[0].size()))
+				if (!(yy < 0 || yy >= Graphics.world.gattiles.size() || xx < 0 || xx >= Graphics.world.gattiles[0].size()))
 				{
 					c.cell1 = Graphics.world.gattiles[yy][xx].cell1;
 					c.cell2 = Graphics.world.gattiles[yy][xx].cell2;
@@ -238,7 +238,7 @@ public:
 		{
 			for(int xx = 0; xx < data[yy].size(); xx++)
 			{
-				if (!(y+yy < 0 || y+yy >= Graphics.world.gattiles.size() || x+xx < 0 || x+xx > Graphics.world.gattiles[0].size()))
+				if (!(y+yy < 0 || y+yy >= Graphics.world.gattiles.size() || x+xx < 0 || x+xx >= Graphics.world.gattiles[0].size()))
 				{
 					Graphics.world.gattiles[y+yy][x+xx].cell1 = data[yy][xx].cell1;
 					Graphics.world.gattiles[y+yy][x+xx].cell2 = data[yy][xx].cell2;
@@ -264,7 +264,7 @@ public:
 			vector<int> row;
 			for(int xx = xfrom; xx < xto; xx++)
 			{
-				if (yy >= Graphics.world.gattiles.size() || yy < 0 || xx < 0 || xx > Graphics.world.gattiles[0].size())
+				if (yy >= Graphics.world.gattiles.size() || yy < 0 || xx < 0 || xx >= Graphics.world.gattiles[0].size())
 					row.push_back(0);
 				else
 					row.push_back(Graphics.world.gattiles[yy][xx].type);

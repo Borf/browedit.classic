@@ -54,6 +54,8 @@ public:
 		shownotiles = true;
 		selectioncenter = cVector3(-1,-1,-1);
 		showgat = false;
+		backgroundcolor = cVector3(0,0,0);
+		notilecolor = cVector3(1,1,1);
 	}
 
 	int						init();
@@ -173,6 +175,8 @@ public:
 	bool					fullscreen;
 
 	cVector3				selectioncenter;
+	cVector3				backgroundcolor;
+	cVector3				notilecolor;
 
 	cWM						WM;
 

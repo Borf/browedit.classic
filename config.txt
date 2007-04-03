@@ -19,6 +19,8 @@ grf=c:\program files\gravity\ro\bdata.grf
 grf=c:\program files\gravity\ro\sdata.grf
 grf=c:\program files\gravity\ro\data.grf
 undostack=50
+bgcolor=128,0,256
+notilecolor=255,255,128
 
 [ROdesktop]
 rodir=c:\games\ro\
