@@ -58,6 +58,7 @@ Sloping
 Snap Objects to floor
 Flatten map
 Fill with selected texture
+Fill area with selected texture
 Set GAT height
 Reset colors
 Clear Objects

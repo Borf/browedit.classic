@@ -93,6 +93,7 @@ MENUCOMMAND(grid);
 MENUCOMMAND(mode_detail);
 MENUCOMMAND(speed);
 MENUCOMMAND(fill);
+MENUCOMMAND(fillarea);
 MENUCOMMAND(showobjects);
 MENUCOMMAND(model);
 MENUCOMMAND(slope);
@@ -845,6 +846,7 @@ int main(int argc, char *argv[])
 
 	ADDMENUITEM(mm,edit,msgtable[MENU_FLATTEN],						&MenuCommand_flatten);
 	ADDMENUITEM(mm,edit,msgtable[MENU_FILL],						&MenuCommand_fill);
+	ADDMENUITEM(mm,edit,msgtable[MENU_FILLAREA],					&MenuCommand_fillarea);
 	ADDMENUITEM(mm,edit,msgtable[MENU_GATHEIGHT],					&MenuCommand_gatheight);
 	ADDMENUITEM(mm,edit,msgtable[MENU_RESETCOLORS],					&MenuCommand_fixcolors);
 	ADDMENUITEM(mm,edit,msgtable[MENU_CLEAROBJECTS],				&MenuCommand_clearobjects);
@@ -1953,43 +1955,45 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 					else if (editmode == MODE_HEIGHTGLOBAL)
 					{
-						if (mouse3dxstart > mouse3dx)
+						if(mousex < Graphics.w()-256)
 						{
-							double d = mouse3dx;
-							mouse3dx = mouse3dxstart;
-							mouse3dxstart = d;
-						}
-						if (mouse3dzstart > mouse3dz)
-						{
-							double d = mouse3dz;
-							mouse3dz = mouse3dzstart;
-							mouse3dzstart = d;
-						}
-						bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
-						bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
-
-						
-						int x,y;
-						if(!ctrl && !alt)
-						{
-							for(x = 0; x < Graphics.world.width; x++)
+							if (mouse3dxstart > mouse3dx)
 							{
-								for(y = 0; y < Graphics.world.height; y++)
-									Graphics.world.cubes[y][x].selected = false;
+								double d = mouse3dx;
+								mouse3dx = mouse3dxstart;
+								mouse3dxstart = d;
 							}
-						}
-
-						for(x = (int)floor(mouse3dxstart/10); x < floor(mouse3dx/10); x++)
-						{
-							for(y = (int)floor(mouse3dzstart/10); y < (int)floor(mouse3dz/10); y++)
+							if (mouse3dzstart > mouse3dz)
 							{
-								if (x >= 0 && x < Graphics.world.width && y >= 0 && y < Graphics.world.height)
+								double d = mouse3dz;
+								mouse3dz = mouse3dzstart;
+								mouse3dzstart = d;
+							}
+							bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
+							bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
+
+							
+							int x,y;
+							if(!ctrl && !alt)
+							{
+								for(x = 0; x < Graphics.world.width; x++)
 								{
-									Graphics.world.cubes[y][x].selected = !alt;
+									for(y = 0; y < Graphics.world.height; y++)
+										Graphics.world.cubes[y][x].selected = false;
+								}
+							}
+
+							for(x = (int)floor(mouse3dxstart/10); x < floor(mouse3dx/10); x++)
+							{
+								for(y = (int)floor(mouse3dzstart/10); y < (int)floor(mouse3dz/10); y++)
+								{
+									if (x >= 0 && x < Graphics.world.width && y >= 0 && y < Graphics.world.height)
+									{
+										Graphics.world.cubes[y][x].selected = !alt;
+									}
 								}
 							}
 						}
-
 					}
 					else if (editmode == MODE_OBJECTGROUP && !Graphics.groupeditmode)
 					{
@@ -5524,3 +5528,97 @@ MENUCOMMAND(preferences)
 	return true;
 }
 
+
+
+MENUCOMMAND(fillarea)
+{
+	int x,y,i;
+	map<int, bool, less<int> > used;
+
+	cLightmap* map = new cLightmap();
+	for(i = 0; i < 256; i++)
+		map->buf[i] = i < 64 ? 255 : 0;
+	Graphics.world.lightmaps.push_back(map);
+	map = new cLightmap();
+	for(i = 0; i < 256; i++)
+		map->buf[i] = i < 64 ? 255 : 0;
+	Graphics.world.lightmaps.push_back(map);
+
+
+	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+			if(Graphics.world.cubes[y][x].selected)
+			{
+				int xx = x % 4;
+				int yy = y % 4;
+				cTile t;
+				t.lightmap = Graphics.world.textures.size()-1;
+				t.texture = Graphics.texturestart + ((int)Graphics.selectionstart.y - 32) / 288;
+				t.u1 = xx/4.0;
+				t.v1 = yy/4.0;
+				t.u2 = (xx+1)/4.0;
+				t.v2 = (yy)/4.0;
+				t.u3 = (xx)/4.0;
+				t.v3 = (yy+1)/4.0;
+				t.u4 = (xx+1)/4.0;
+				t.v4 = (yy+1)/4.0;
+				t.color[0] = (char)255;
+				t.color[1] = (char)255;
+				t.color[2] = (char)255;
+				t.color[3] = (char)255;
+				Graphics.world.tiles.push_back(t);
+				Graphics.world.cubes[y][x].tileup = Graphics.world.tiles.size()-1;;
+			}
+		}
+	}
+
+
+	for(x = 0; x < Graphics.world.width; x++)
+	{
+		for(y = 0; y < Graphics.world.height; y++)
+		{
+			int tile = Graphics.world.cubes[y][x].tileup;
+			if(used.find(tile) != used.end())
+			{
+				cTile t = Graphics.world.tiles[tile];
+				tile = Graphics.world.tiles.size();
+				Graphics.world.tiles.push_back(t);
+				Graphics.world.cubes[y][x].tileup = tile;
+			}
+			used[tile] = 1;
+///////////////////////////////////////
+			tile = Graphics.world.cubes[y][x].tileside;
+			if (tile != -1)
+			{
+				if(used.find(tile) != used.end())
+				{
+					cTile t = Graphics.world.tiles[tile];
+					tile = Graphics.world.tiles.size();
+					Graphics.world.tiles.push_back(t);
+					Graphics.world.cubes[y][x].tileside = tile;
+				}
+				used[tile] = 1;
+			}
+/////////////////////////////////////
+			tile = Graphics.world.cubes[y][x].tileaside;
+			if (tile!= -1)
+			{
+				if(used.find(tile) != used.end())
+				{
+					cTile t = Graphics.world.tiles[tile];
+					tile = Graphics.world.tiles.size();
+					Graphics.world.tiles.push_back(t);
+					Graphics.world.cubes[y][x].tileaside = tile;
+				}
+				used[tile] = 1;
+			}
+		}
+	}
+
+
+	
+
+	return true;
+}
