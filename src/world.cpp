@@ -118,6 +118,10 @@ void cWorld::load()
 		gattiles[i].clear();
 	gattiles.clear();
 
+	water.height = 1;
+
+	int version;
+
 	Log(3,0,msgtable[WORLD_LOAD], filename);
 	cFile* pFile = fs.open(string(filename) + ".gnd");
 	if(pFile == NULL)
@@ -126,16 +130,34 @@ void cWorld::load()
 		return;
 	}
 	char buf[512];
-	pFile->read(buf, 26);
+	pFile->read(buf, 6);
 
-	width = *((int*)(buf+6));
-	height = *((int*)(buf+10));
-	tilescale = *((float*)(buf+14));
+	
+	if(buf[0] == 'G' && buf[1] == 'R' && buf[2] == 'G' && buf[3] == 'N')
+		version = ((BYTE)buf[4])<<8 | ((BYTE)buf[5]);
+	else
+		version = 0;
+
+	int nTextures = 0;
+	if(version > 0)
+	{
+		pFile->read(buf, 20);
+		width = *((int*)(buf));
+		height = *((int*)(buf+4));
+		tilescale = *((float*)(buf+8));
+		nTextures = *((int*)(buf+12));
+	}
+	else
+	{
+		pFile->read(buf+6, 6);
+		nTextures = *((int*)(buf));
+		width = *((int*)(buf+4));
+		height = *((int*)(buf+8));
+	}
 
 	Graphics.camerapointer = cVector2(-width*5,-height*5);
 
 
-	int nTextures = *((int*)(buf+18));
 	for(i = 0; i < nTextures; i++)
 	{
 		pFile->read(buf, 80);
@@ -147,70 +169,182 @@ void cWorld::load()
 		textures.push_back(t);
 	}
 
-	pFile->read(buf, 16);
-	lightmapWidth = *((int*)(buf+4));
-	lightmapHeight = *((int*)(buf+8));
-	gridSizeCell = *((int*)(buf+12));
-
-
-	int nLightmaps = *((int*)buf);
-	for(i = 0; i < nLightmaps; i++)
+	if(version > 0)
 	{
-		cLightmap* l = new cLightmap();
-		pFile->read(l->buf, 256);
-		lightmaps.push_back(l);
-	}
+		pFile->read(buf, 16);
+		lightmapWidth = *((int*)(buf+4));
+		lightmapHeight = *((int*)(buf+8));
+		gridSizeCell = *((int*)(buf+12));
 
-	long nTiles;
-	pFile->read((char*)&nTiles, 4);
-	for(i = 0; i < nTiles; i++)
-	{
-		pFile->read(buf, 40);
-		cTile t;
-		memcpy((char*)&t.u1, buf, 4);
-		memcpy((char*)&t.u2, buf+4, 4);
-		memcpy((char*)&t.u3, buf+8, 4);
-		memcpy((char*)&t.u4, buf+12, 4);
-		memcpy((char*)&t.v1, buf+16, 4);
-		memcpy((char*)&t.v2, buf+20, 4);
-		memcpy((char*)&t.v3, buf+24, 4);
-		memcpy((char*)&t.v4, buf+28, 4);
 
-		t.texture = ((BYTE)buf[32]) | (((BYTE)buf[33])<<8);
-		t.lightmap = ((BYTE)buf[34]) | (((BYTE)buf[35])<<8);
-
-		if(t.lightmap < 0 || t.lightmap > lightmaps.size())
-			t.lightmap = 0;
-		if(t.texture < 0 || t.texture > textures.size())
-			t.texture = 0;
-		memcpy(t.color, buf+36, 4);
-		tiles.push_back(t);
-	}
-
-	for(y = 0; y < height; y++)
-	{
-		vector<cCube> row;
-		row.clear();
-		for(x = 0; x < width; x++)
+		int nLightmaps = *((int*)buf);
+		for(i = 0; i < nLightmaps; i++)
 		{
-			pFile->read(buf, 28);
-			cCube c;
-			c.maxh = -99999;
-			c.minh = 99999;
-			memcpy((char*)&c.cell1, buf, 4);
-			memcpy((char*)&c.cell2, buf+4, 4);
-			memcpy((char*)&c.cell3, buf+8, 4);
-			memcpy((char*)&c.cell4, buf+12, 4);
-			c.tileup = *((int*)(buf+16));
-			c.tileside = *((int*)(buf+20));
-			c.tileaside = *((int*)(buf+24));
-			c.calcnormal();
-			c.selected = false;
-			row.push_back(c);
+			cLightmap* l = new cLightmap();
+			pFile->read(l->buf, 256);
+			lightmaps.push_back(l);
 		}
-		cubes.push_back(row);
-	}
+		long nTiles;
+		pFile->read((char*)&nTiles, 4);
+		for(i = 0; i < nTiles; i++)
+		{
+			pFile->read(buf, 40);
+			cTile t;
+			memcpy((char*)&t.u1, buf, 4);
+			memcpy((char*)&t.u2, buf+4, 4);
+			memcpy((char*)&t.u3, buf+8, 4);
+			memcpy((char*)&t.u4, buf+12, 4);
+			memcpy((char*)&t.v1, buf+16, 4);
+			memcpy((char*)&t.v2, buf+20, 4);
+			memcpy((char*)&t.v3, buf+24, 4);
+			memcpy((char*)&t.v4, buf+28, 4);
 
+			t.texture = ((BYTE)buf[32]) | (((BYTE)buf[33])<<8);
+			t.lightmap = ((BYTE)buf[34]) | (((BYTE)buf[35])<<8);
+
+			if(t.lightmap < 0 || t.lightmap > lightmaps.size())
+				t.lightmap = 0;
+			if(t.texture < 0 || t.texture > textures.size())
+				t.texture = 0;
+			memcpy(t.color, buf+36, 4);
+			tiles.push_back(t);
+		}
+
+		for(y = 0; y < height; y++)
+		{
+			vector<cCube> row;
+			row.clear();
+			for(x = 0; x < width; x++)
+			{
+				cCube c;
+				c.maxh = -99999;
+				c.minh = 99999;
+				c.selected = false;
+				if(version == 0x0106)
+				{
+					pFile->read(buf, 28);
+					memcpy((char*)&c.cell1, buf, 4);
+					memcpy((char*)&c.cell2, buf+4, 4);
+					memcpy((char*)&c.cell3, buf+8, 4);
+					memcpy((char*)&c.cell4, buf+12, 4);
+					c.tileup = *((int*)(buf+16));
+					c.tileside = *((int*)(buf+20));
+					c.tileaside = *((int*)(buf+24));
+				}
+				else
+				{
+					pFile->read(buf, 24);
+					memcpy((char*)&c.cell1, buf, 4);
+					memcpy((char*)&c.cell2, buf+4, 4);
+					memcpy((char*)&c.cell3, buf+8, 4);
+					memcpy((char*)&c.cell4, buf+12, 4);
+					c.tileup = *((short*)(buf+16));
+					c.tileside = *((short*)(buf+18));
+					c.tileaside = *((short*)(buf+20));
+				}
+				c.calcnormal();
+				row.push_back(c);
+			}
+			cubes.push_back(row);
+		}
+	}
+	else
+	{
+		cLightmap* l = new cLightmap;
+		lightmaps.push_back(l);
+		for(y = 0; y < height; y++)
+		{
+			vector<cCube> row;
+			for(x = 0; x < width; x++)
+			{
+				pFile->read(buf, 132);
+				cCube c;
+				cTile t;
+					
+				long texture = * ((long*)(buf));
+
+				if(texture > -1)
+				{
+					t.color[0] = 0;
+					t.color[1] = 0;
+					t.color[2] = 0;
+					t.color[3] = 0;
+					t.lightmap = 0;
+					t.texture = texture;
+
+					t.u1 = *((float*)(buf+36));
+					t.v1 = *((float*)(buf+40));
+					t.u2 = *((float*)(buf+44));
+					t.v2 = *((float*)(buf+48));
+					t.u3 = *((float*)(buf+52));
+					t.v3 = *((float*)(buf+56));
+					t.u4 = *((float*)(buf+60));
+					t.v4 = *((float*)(buf+64));
+					tiles.push_back(t);
+				}
+				c.tileup = texture == -1 ? -1 : tiles.size()-1;
+
+				texture = * ((long*)(buf+4));
+				if(texture > -1)
+				{
+					t.color[0] = 0;
+					t.color[1] = 0;
+					t.color[2] = 0;
+					t.color[3] = 0;
+					t.lightmap = 0;
+					t.texture = texture;
+					t.u1 = *((float*)(buf+68));
+					t.v1 = *((float*)(buf+72));
+					t.u2 = *((float*)(buf+76));
+					t.v2 = *((float*)(buf+80));
+					t.u3 = *((float*)(buf+84));
+					t.v3 = *((float*)(buf+88));
+					t.u4 = *((float*)(buf+92));
+					t.v4 = *((float*)(buf+96));
+					tiles.push_back(t);
+				}
+				c.tileaside = texture == -1 ? -1 : tiles.size()-1;
+				
+
+				texture = * ((long*)(buf+8));
+				if(texture > -1)
+				{
+					t.color[0] = 0;
+					t.color[1] = 0;
+					t.color[2] = 0;
+					t.color[3] = 0;
+					t.lightmap = 0;
+					t.texture = texture;
+					t.u1 = *((float*)(buf+100));
+					t.v1 = *((float*)(buf+104));
+					t.u2 = *((float*)(buf+108));
+					t.v2 = *((float*)(buf+112));
+					t.u3 = *((float*)(buf+116));
+					t.v3 = *((float*)(buf+120));
+					t.u4 = *((float*)(buf+124));
+					t.v4 = *((float*)(buf+128));
+					tiles.push_back(t);
+				}
+				c.tileside = texture == -1 ? -1 : tiles.size()-1;
+				
+				c.cell1 = *((float*)(buf+12));
+				c.cell2 = *((float*)(buf+16));
+				c.cell3 = *((float*)(buf+20));
+				c.cell4 = *((float*)(buf+24));
+				c.calcnormal();
+				c.maxh = -99999;
+				c.minh = 99999;
+				row.push_back(c);
+
+			}
+			cubes.push_back(row);
+		}
+		loaded = true;
+
+		lightmapWidth = 8;
+		lightmapHeight = 8;
+		gridSizeCell = 1;
+	}
 	reallightmaps.resize(height, vector<cRealLightMap*>(NULL));
 	for(i = 0; i < height; i++)
 		reallightmaps[i].resize(width, NULL);
@@ -236,8 +370,6 @@ void cWorld::load()
 		}
 	}
 
-
-
 	pFile->close();
 	loaded = true;
 	//clean();
@@ -247,161 +379,223 @@ void cWorld::load()
 	Log(3,0,msgtable[WORLD_LOAD], (filename + string(".rsw")).c_str());
 	pFile = fs.open(string(filename) + ".rsw");
 
-	pFile->read(buf, 242);
-	useless = string(buf+166, 76);
 
-	char* w = (char*)useless.c_str();
-	water.height = *((float*)(w));
-	water.type = *((int*)(w+4));
-	water.amplitude = *((float*)(w+8));
-	water.phase = *((float*)(w+12));
-	water.surfacecurve = *((float*)(w+16));
-	
-	ambientlight.ambientr = *((int*)(w+20));
-	ambientlight.ambientg = *((int*)(w+24));
-	ambientlight.ambientb = *((int*)(w+28));
+	pFile->read(buf, 6);
+	version = ((BYTE)buf[4])<<8 | ((BYTE)buf[5]);
 
-	ambientlight.diffuse.x = *((float*)(w+32));
-	ambientlight.diffuse.y = *((float*)(w+36));
-	ambientlight.diffuse.z = *((float*)(w+40));
-
-	ambientlight.shadow.x = *((float*)(w+44));
-	ambientlight.shadow.y = *((float*)(w+48));
-	ambientlight.shadow.z = *((float*)(w+52));
-
-	ambientlight.alpha = *((float*)(w+56));
-	
-
-	pFile->read(buf, 4);
-	long nObjects = *((long*)buf);
-
-
-	for(i = 0; i < nObjects; i++)
+	if(version >= 0x0200)
 	{
+		pFile->read(buf, 236);
+
+
+		useless = string(buf+166, 76);
+
+		char* w = (char*)useless.c_str();
+		water.height = *((float*)(w));
+		water.type = *((int*)(w+4));
+		water.amplitude = *((float*)(w+8));
+		water.phase = *((float*)(w+12));
+		water.surfacecurve = *((float*)(w+16));
+		
+		ambientlight.ambientr = *((int*)(w+20));
+		ambientlight.ambientg = *((int*)(w+24));
+		ambientlight.ambientb = *((int*)(w+28));
+
+		ambientlight.diffuse.x = *((float*)(w+32));
+		ambientlight.diffuse.y = *((float*)(w+36));
+		ambientlight.diffuse.z = *((float*)(w+40));
+
+		ambientlight.shadow.x = *((float*)(w+44));
+		ambientlight.shadow.y = *((float*)(w+48));
+		ambientlight.shadow.z = *((float*)(w+52));
+
+		ambientlight.alpha = *((float*)(w+56));
+		
+
 		pFile->read(buf, 4);
-		long type = *((long*)buf);
-		switch(type)
+		long nObjects = *((long*)buf);
+
+
+		for(i = 0; i < nObjects; i++)
 		{
-		case 1:
+			pFile->read(buf, 4);
+			long type = *((long*)buf);
+			switch(type)
 			{
-			pFile->read(buf, 248);
-			string filename = buf+52;
-			cRSMModel* m = new cRSMModel();
-			m->load(rodir+ "data\\model\\" + filename);
+			case 1:
+				{
+				pFile->read(buf, 248);
+				string filename = buf+52;
+				cRSMModel* m = new cRSMModel();
+				m->load(rodir+ "data\\model\\" + filename);
 
-			if (m->meshes.size() == 0)
-			{
-				Log(2,0,msgtable[WORLD_MODELFAIL], filename.c_str());
-			}
-
-
-			m->pos.x = *((float*)(buf+212));
-			m->pos.y = *((float*)(buf+216));
-			m->pos.z = *((float*)(buf+220));
+				if (m->meshes.size() == 0)
+				{
+					Log(2,0,msgtable[WORLD_MODELFAIL], filename.c_str());
+				}
 
 
-			m->pos.x = (m->pos.x / 5) + width;
-			m->pos.z = (m->pos.z / 5) + height;
+				m->pos.x = *((float*)(buf+212));
+				m->pos.y = *((float*)(buf+216));
+				m->pos.z = *((float*)(buf+220));
 
-			m->rot.x = *((float*)(buf+224));
-			m->rot.y = *((float*)(buf+228));
-			m->rot.z = *((float*)(buf+232));
 
-			m->scale.x = *((float*)(buf+236));
-			m->scale.y = *((float*)(buf+240));
-			m->scale.z = *((float*)(buf+244));
-			models.push_back(m);
-			}
-			break;
-		case 2:
-			{
-			pFile->read(buf, 108);
-			cLight l;
-			l.name = string(buf);
-			l.pos.x = *((float*)(buf+40));
-			l.pos.y = *((float*)(buf+44));
-			l.pos.z = *((float*)(buf+48));
+				m->pos.x = (m->pos.x / 5) + width;
+				m->pos.z = (m->pos.z / 5) + height;
 
-			l.pos.x = (l.pos.x / 5) + width;
-			l.pos.z = (l.pos.z / 5) + height;
+				m->rot.x = *((float*)(buf+224));
+				m->rot.y = *((float*)(buf+228));
+				m->rot.z = *((float*)(buf+232));
 
-			l.todo = string(buf+52, 40);
-			l.color.x = *((float*)(buf+92));
-			l.color.y = *((float*)(buf+96));
-			l.color.z = *((float*)(buf+100));
-			l.todo2 = *((float*)(buf+104));
-			lights.push_back(l);
-			}
-			break;
-		case 3:
-			{
-			pFile->read(buf, 192);
-			cSound s;			
-			s.name = string(buf);
-			s.todo1 = string(buf+40, 40);
-			s.filename = string(buf+80);
-			s.todo2 = string(buf+120,20);
-			s.pos.x = *((float*)(buf+140));
-			s.pos.y = *((float*)(buf+144));
-			s.pos.z = *((float*)(buf+148));
-			s.id = string(buf+152, 40);
-			s.pos.x = (s.pos.x / 5) + width;
-			s.pos.z = (s.pos.z / 5) + height;
-			sounds.push_back(s);
-			}
-			break;
-		case 4:
-			{
-			pFile->read(buf, 116);
-			cEffect e;
-			e.name = string(buf);
-			e.todo1 = *((float*)(buf+40));
-			e.todo2 = *((float*)(buf+44));
-			e.todo3 = *((float*)(buf+48));
-			e.rotation.x = *((float*)(buf+52));
-			e.rotation.y = *((float*)(buf+56));
-			e.rotation.z = *((float*)(buf+60));
-			e.scale.x = *((float*)(buf+64));
-			e.scale.y = *((float*)(buf+68));
-			e.scale.z = *((float*)(buf+72));
-			e.category = string(buf+76, 4);
-			e.pos.x = *((float*)(buf+80));
-			e.pos.y = *((float*)(buf+84));
-			e.pos.z = *((float*)(buf+88));
-			e.type = *((int*)(buf+92));
-			e.loop = *((float*)(buf+96));
-			e.todo10 = *((float*)(buf+100));
-			e.todo11 = *((float*)(buf+104));
-			e.todo12 = *((int*)(buf+108));
-			e.todo13 = *((int*)(buf+112));
-			e.pos.x = (e.pos.x / 5) + width;
-			e.pos.z = (e.pos.z / 5) + height;
+				m->scale.x = *((float*)(buf+236));
+				m->scale.y = *((float*)(buf+240));
+				m->scale.z = *((float*)(buf+244));
+				models.push_back(m);
+				}
+				break;
+			case 2:
+				{
+				pFile->read(buf, 108);
+				cLight l;
+				l.name = string(buf);
+				l.pos.x = *((float*)(buf+40));
+				l.pos.y = *((float*)(buf+44));
+				l.pos.z = *((float*)(buf+48));
 
-			char buf[100];
-			sprintf(buf, "%i", e.type);
-			cMenu* m = effectsmenu->finddata(buf);
-			if (m != NULL)
-				e.readablename = m->title;
-			effects.push_back(e);
-			}
-			break;
-		default:
-			Log(2,0,msgtable[WORLD_UNKNOWNOBJECT], type);
-			pFile->close();
-			return;
-		};
+				l.pos.x = (l.pos.x / 5) + width;
+				l.pos.z = (l.pos.z / 5) + height;
+
+				l.todo = string(buf+52, 40);
+				l.color.x = *((float*)(buf+92));
+				l.color.y = *((float*)(buf+96));
+				l.color.z = *((float*)(buf+100));
+				l.todo2 = *((float*)(buf+104));
+				lights.push_back(l);
+				}
+				break;
+			case 3:
+				{
+				pFile->read(buf, 192);
+				cSound s;			
+				s.name = string(buf);
+				s.todo1 = string(buf+40, 40);
+				s.filename = string(buf+80);
+				s.todo2 = string(buf+120,20);
+				s.pos.x = *((float*)(buf+140));
+				s.pos.y = *((float*)(buf+144));
+				s.pos.z = *((float*)(buf+148));
+				s.id = string(buf+152, 40);
+				s.pos.x = (s.pos.x / 5) + width;
+				s.pos.z = (s.pos.z / 5) + height;
+				sounds.push_back(s);
+				}
+				break;
+			case 4:
+				{
+				pFile->read(buf, 116);
+				cEffect e;
+				e.name = string(buf);
+				e.todo1 = *((float*)(buf+40));
+				e.todo2 = *((float*)(buf+44));
+				e.todo3 = *((float*)(buf+48));
+				e.rotation.x = *((float*)(buf+52));
+				e.rotation.y = *((float*)(buf+56));
+				e.rotation.z = *((float*)(buf+60));
+				e.scale.x = *((float*)(buf+64));
+				e.scale.y = *((float*)(buf+68));
+				e.scale.z = *((float*)(buf+72));
+				e.category = string(buf+76, 4);
+				e.pos.x = *((float*)(buf+80));
+				e.pos.y = *((float*)(buf+84));
+				e.pos.z = *((float*)(buf+88));
+				e.type = *((int*)(buf+92));
+				e.loop = *((float*)(buf+96));
+				e.todo10 = *((float*)(buf+100));
+				e.todo11 = *((float*)(buf+104));
+				e.todo12 = *((int*)(buf+108));
+				e.todo13 = *((int*)(buf+112));
+				e.pos.x = (e.pos.x / 5) + width;
+				e.pos.z = (e.pos.z / 5) + height;
+
+				char buf[100];
+				sprintf(buf, "%i", e.type);
+				cMenu* m = effectsmenu->finddata(buf);
+				if (m != NULL)
+					e.readablename = m->title;
+				effects.push_back(e);
+				}
+				break;
+			default:
+				Log(2,0,msgtable[WORLD_UNKNOWNOBJECT], type);
+				pFile->close();
+				return;
+			};
+		}
+		quadtreefloats.clear();
+		while(!pFile->eof())
+		{
+			cVector3 f;
+			pFile->read((char*)&f.x, 4);
+			pFile->read((char*)&f.y, 4);
+			pFile->read((char*)&f.z, 4);
+			quadtreefloats.push_back(f);
+		}
 	}
-	quadtreefloats.clear();
-	while(!pFile->eof())
+	else if (version == 0x0106)
 	{
-		cVector3 f;
-		pFile->read((char*)&f.x, 4);
-		pFile->read((char*)&f.y, 4);
-		pFile->read((char*)&f.z, 4);
-		quadtreefloats.push_back(f);
+		pFile->read(buf, 216);
+		
+		ambientlight.diffuse = cVector3(1,1,1);
+		ambientlight.shadow = cVector3(1,1,1);
+		
+		long nObjects = *((long*)(buf+212));
+
+		for(i = 0; i < nObjects; i++)
+		{
+			pFile->read(buf, 4);
+			long type = *((long*)buf);
+			switch(type)
+			{
+			case 1:
+				{
+				pFile->read(buf, 248);
+				string filename = buf+52;
+				cRSMModel* m = new cRSMModel();
+				m->load(rodir+ "data\\model\\" + filename);
+
+				if (m->meshes.size() == 0)
+				{
+					Log(2,0,msgtable[WORLD_MODELFAIL], filename.c_str());
+				}
+
+
+				m->pos.x = *((float*)(buf+212));
+				m->pos.y = *((float*)(buf+216));
+				m->pos.z = *((float*)(buf+220));
+
+
+				m->pos.x = (m->pos.x / 5) + width;
+				m->pos.z = (m->pos.z / 5) + height;
+
+				m->rot.x = *((float*)(buf+224));
+				m->rot.y = *((float*)(buf+228));
+				m->rot.z = *((float*)(buf+232));
+
+				m->scale.x = *((float*)(buf+236));
+				m->scale.y = *((float*)(buf+240));
+				m->scale.z = *((float*)(buf+244));
+				models.push_back(m);
+				}
+				break;
+			default:
+				Log(2,0,msgtable[WORLD_UNKNOWNOBJECT], type);
+				pFile->close();
+				return;
+			};
+		}
+
 	}
 	pFile->close(); 
-
 	
 	if(quadtreefloats.size() > 0)
 	{
@@ -409,7 +603,6 @@ void cWorld::load()
 		root->load(quadtreefloats, 0, 0);
 //		root->generate(width*10-1, height*10-1,-0.5,-0.5,5);
 	}
-
 
 	pFile = fs.open(string(filename) + ".gat");
 
@@ -779,7 +972,7 @@ void cWorld::save()
 		pFile.write((char*)&ambientlight.shadow.z, 4);
 		pFile.write((char*)&ambientlight.alpha, 4);
 
-		pFile.write(useless.c_str()+60, useless.length()-60);
+		pFile.write(useless.c_str()+54, useless.length()-54);
 
 		long count = models.size() + lights.size()+effects.size();// + sounds.size();
 
@@ -1311,7 +1504,7 @@ void cWorld::draw()
 
 		if(Graphics.animatewater)
 			waterindex+=max(0,(Graphics.frameticks) / 50.0f);
-		if (waterindex > 31)
+		if (waterindex > Graphics.watertextures[water.type].size()-1)
 			waterindex = 0;
 		glBegin(GL_QUADS);
 			glTexCoord2f(0,0); glVertex3f(0,-water.height,0);
@@ -1964,7 +2157,7 @@ void cWorld::draw()
 	glColor4f(1,1,0,1);
 	glDisable(GL_TEXTURE_2D);
 	glBegin(GL_POLYGON);
-		for(float ii = 0; ii < 2*PI; ii+= 2*PI/20.0)
+		for(double ii = 0; ii < 2*PI; ii+= 2*PI/20.0)
 			glVertex3f(-Graphics.camerapointer.x+cos(ii)*2,camheight+0.1,-Graphics.camerapointer.y+sin(ii)*2);
 	glEnd();
 
@@ -2575,7 +2768,7 @@ void cCube::calcnormal()
 
 
 
-void cWorld::importalpha()
+void cWorld::importarcturus()
 {
 	int x,y;
 	int i;
@@ -2767,7 +2960,7 @@ unsigned char rawData[76] =
     0x00, 0x00, 0x00, 0x3F, 0x09, 0x00, 0x00, 0x00, 0xD4, 0x84, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 
     0x00, 0x00, 0x00, 0x00, 
 } ;
-	useless = string((char*)rawData, 76);
+	useless = string((char*)rawData+6, 70);
 //	useless = string(buf+166, 76);
 
 /*	char* w = (char*)useless.c_str();
@@ -3088,3 +3281,15 @@ void cRealLightMap::reset()
 		generated2 = false;
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+

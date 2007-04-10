@@ -159,12 +159,12 @@ int cGraphics::draw()
 			}
 			else if (editmode == MODE_WATER)
 			{
-				if (i+world.water.type > 5)
+				if (i+world.water.type > Graphics.watercount)
 					continue;
 				static float frame = 0;
 				glBindTexture(GL_TEXTURE_2D, watertextures[i+world.water.type][(int)floor(frame)]->texid());
 				frame+=0.25;
-				if (frame > 31)
+				if (frame >= Graphics.watertextures[i+world.water.type].size())
 					frame = 0;
 			}
 			else
@@ -385,7 +385,7 @@ int cGraphics::init()
 
 	pFile->close();
 	watertextures.resize(watercount);
-	for(i = 0; i < 6; i++)
+	for(i = 0; i < watercount; i++)
 	{
 		for(int ii = 0; ii < 32; ii++)
 		{
@@ -394,6 +394,12 @@ int cGraphics::init()
 			watertextures[i].push_back(TextureCache.load(buf));
 		}
 	}
+	if(watercount == 0)
+	{
+		watertextures.resize(1);
+		watertextures[i].push_back(TextureCache.load(rodir + waterdir + "water" + waterext));
+	}
+
 	Log(3,0,msgtable[DONELOADINGFILE], "water.txt");
 
 	previewmodel = NULL;
@@ -481,9 +487,9 @@ void cGraphics::KillGLWindow(void)								// Properly Kill The Window
 	for(i = 0; i < 7; i++)
 		TextureCache.unload(gattextures[i]);
 
-	for(i = 0; i < 6; i++)
+	for(i = 0; i < watercount; i++)
 	{
-		for(int ii = 0; ii < 32; ii++)
+		for(int ii = 0; ii < watertextures[i].size(); ii++)
 		{
 			TextureCache.unload(watertextures[i][ii]);
 		}

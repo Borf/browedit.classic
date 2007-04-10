@@ -10,3 +10,7 @@ data\texture\wate\
 data\texture\ฟ๖ลอ\
 .jpg
 7
+[ROalpha]
+data\texture\
+.bmp
+0

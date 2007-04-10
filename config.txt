@@ -1,5 +1,5 @@
 language=english
-setting=ROdesktop
+setting=ROalpha
 
 [RO]
 rodir=c:\program files\gravity\ro\
@@ -52,3 +52,16 @@ fullscreen=0
 bpp=32
 font=tahoma
 undostack=50
+
+[ROalpha]
+rodir=d:\work\ro_alpha\
+model=romodels.txt
+texture=rotextures.txt
+resx=1024
+resy=768
+fullscreen=0
+bpp=32
+font=tahoma
+undostack=50
+bgcolor=128,0,256
+notilecolor=255,255,128

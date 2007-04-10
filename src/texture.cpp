@@ -523,7 +523,8 @@ BMPError cTexture::BMPLoad(std::string fname,BMPClass& bmp)
 				bmp.bytes[x+3] = 255;
 			if( (x%bmp.width) == 0 && x != 0)
 			{
-				for(int i = 0; i < internalwidth-3*bmp.width; i++)
+				//for(int i = 0; i < internalwidth-3*bmp.width; i++)
+				if(internalwidth-3*bmp.width == 1)
 					f->get();
 			}
 		}

@@ -248,7 +248,7 @@ public:
 	void draw();
 	void load();
 	void save();
-	void importalpha();
+	void importarcturus();
 	void exportheight();
 
 	void unload();

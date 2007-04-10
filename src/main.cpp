@@ -933,7 +933,7 @@ int main(int argc, char *argv[])
 
 	Log(3,0,msgtable[8]);
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "data\\room").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "data\\dungeon001").c_str());
 #ifndef WIN32
 	Graphics.world.load();
 #endif
@@ -4099,7 +4099,7 @@ MENUCOMMAND(importalpha)
 		Graphics.world.filename[strlen(Graphics.world.filename)-1] = '\0';
 
 		chdir(curdir);
-		Graphics.world.importalpha();
+		Graphics.world.importarcturus();
 	}
 #else
 
