@@ -220,7 +220,7 @@ void cWorld::load()
 				c.maxh = -99999;
 				c.minh = 99999;
 				c.selected = false;
-				if(version == 0x0106)
+				if(version >= 0x0106)
 				{
 					pFile->read(buf, 28);
 					memcpy((char*)&c.cell1, buf, 4);
@@ -370,6 +370,7 @@ void cWorld::load()
 		}
 	}
 
+
 	pFile->close();
 	loaded = true;
 	//clean();
@@ -388,7 +389,7 @@ void cWorld::load()
 		pFile->read(buf, 236);
 
 
-		useless = string(buf+166, 76);
+		useless = string(buf+160, 76);
 
 		char* w = (char*)useless.c_str();
 		water.height = *((float*)(w));
@@ -541,7 +542,7 @@ void cWorld::load()
 			quadtreefloats.push_back(f);
 		}
 	}
-	else if (version == 0x0106)
+	else if (version >= 0x0106)
 	{
 		pFile->read(buf, 216);
 		
@@ -972,7 +973,7 @@ void cWorld::save()
 		pFile.write((char*)&ambientlight.shadow.z, 4);
 		pFile.write((char*)&ambientlight.alpha, 4);
 
-		pFile.write(useless.c_str()+54, useless.length()-54);
+		pFile.write(useless.c_str()+60, useless.length()-60);
 
 		long count = models.size() + lights.size()+effects.size();// + sounds.size();
 
@@ -2154,13 +2155,15 @@ void cWorld::draw()
 	int d = 1;
 
 
-	glColor4f(1,1,0,1);
-	glDisable(GL_TEXTURE_2D);
-	glBegin(GL_POLYGON);
-		for(double ii = 0; ii < 2*PI; ii+= 2*PI/20.0)
-			glVertex3f(-Graphics.camerapointer.x+cos(ii)*2,camheight+0.1,-Graphics.camerapointer.y+sin(ii)*2);
-	glEnd();
-
+	if(Graphics.showdot)
+	{
+		glColor4f(1,1,0,1);
+		glDisable(GL_TEXTURE_2D);
+		glBegin(GL_POLYGON);
+			for(double ii = 0; ii < 2*PI; ii+= 2*PI/20.0)
+				glVertex3f(-Graphics.camerapointer.x+cos(ii)*2,camheight+0.1,-Graphics.camerapointer.y+sin(ii)*2);
+		glEnd();
+	}
 
 	cVector3 colors[] = {cVector3(1,1,1), cVector3(1,0,0), cVector3(1,1,0), cVector3(1,0,1), cVector3(0,1,0), cVector3(0,1,1), cVector3(0,0,1) };
 

@@ -56,6 +56,7 @@ public:
 		showgat = false;
 		backgroundcolor = cVector3(0,0,0);
 		notilecolor = cVector3(1,1,1);
+		showdot = true;
 	}
 
 	int						init();
@@ -179,6 +180,7 @@ public:
 	cVector3				notilecolor;
 
 	cWM						WM;
+	bool					showdot;
 
 
 private:

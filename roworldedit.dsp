@@ -54,7 +54,7 @@ LINK32=link.exe
 # ADD LINK32 ws2_32.lib sdl.lib sdlmain.lib zlib.lib bgd.lib opengl32.lib glu32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
-PreLink_Cmds=svnversion src/version.h
+PreLink_Cmds=svnver src/version.h
 # End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "roworldedit - Win32 Debug"

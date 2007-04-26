@@ -42,6 +42,7 @@ Invisible Tiles
 Ambient Lighting
 Water Animation
 Gat Tiles
+Show Dot
 Texture Edit
 Global Height Edit
 Detail Terrain Edit...

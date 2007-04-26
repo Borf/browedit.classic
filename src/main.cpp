@@ -807,6 +807,8 @@ int main(int argc, char *argv[])
 	ADDMENUITEMDATAP(mm,view,msgtable[MENU_WATERANIMATION],			&MenuCommand_toggle, (void*)&Graphics.animatewater);
 	mm->ticked = true;
 	ADDMENUITEMDATAP(mm,view,msgtable[MENU_GATTILES],				&MenuCommand_toggle, (void*)&Graphics.showgat);
+	ADDMENUITEMDATAP(mm,view,msgtable[MENU_SHOWDOT],				&MenuCommand_toggle, (void*)&Graphics.showdot);
+	mm->ticked = true;
 
 
 	ADDMENUITEM(mm,mode,msgtable[MENU_TEXTUREEDIT],					&MenuCommand_mode);
@@ -933,7 +935,7 @@ int main(int argc, char *argv[])
 
 	Log(3,0,msgtable[8]);
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "data\\dungeon001").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "data\\prontera").c_str());
 #ifndef WIN32
 	Graphics.world.load();
 #endif
