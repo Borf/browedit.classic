@@ -1837,7 +1837,7 @@ void cWorld::draw()
 		glColor3f(1,0,0);
 		int x = (int)mouse3dx / 10;
 		int y = (int)mouse3dz / 10;
-		if (x >= 1 && x < width-1 && y >= 1 && y< height-1)
+		if (x >= 0 && x < width-1 && y >= 0 && y< height-1)
 		{
 			cCube* c = &cubes[y][x];
 			glBegin(GL_LINE_LOOP);

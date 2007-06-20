@@ -933,6 +933,9 @@ int main(int argc, char *argv[])
 	Log(3,0,msgtable[5], "effects.txt");
 
 
+
+
+	
 	Log(3,0,msgtable[8]);
 	Graphics.world.newworld();
 	strcpy(Graphics.world.filename, string(rodir + "data\\prontera").c_str());
@@ -2597,7 +2600,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					int y = (int)mouse3dz / 10;
 					if (y < 0 || y > Graphics.world.cubes.size()-1)
 						break;
-					if (x < 0 || x > Graphics.world.cubes[0].size()-1)
+					if (x <= 0 || x > Graphics.world.cubes[y].size()-2)
 						break;
 
 					undostack.push(new cUndoChangeWall(1,x,y, Graphics.world.cubes[y][x].tileaside));
@@ -4758,7 +4761,7 @@ MENUCOMMAND(dolightmaps2)
 						cVector3 diff = worldpos - cVector3(l->pos.x*5, l->pos.y, l->pos.z*5);
 						float bla = diff.Magnitude();
 						bool obstructed = false;
-						if(l->todo2-bla < 0)
+						if(l->todo2-(0.1*bla*bla) < 0)
 							continue;
 						if(buf[yy*8 + xx + 9] == 255)
 							continue;
@@ -4771,7 +4774,7 @@ MENUCOMMAND(dolightmaps2)
 
 						if(!obstructed)
 						{
-							buf[yy*8 + xx + 9] = min(255, buf[yy*8 + xx + 9] + max(0, (int)(l->todo2 - bla)));
+							buf[yy*8 + xx + 9] = min(255, buf[yy*8 + xx + 9] + max(0, (int)(l->todo2 - (0.1*bla*bla))));
 
 							buf[64 + 3*(yy*8 + xx + 9)+0] = min(255, buf[64 + 3*(yy*8 + xx + 9)+0] + max(0, (int)ceil((l->todo2 - bla)*l->color.x)));
 							buf[64 + 3*(yy*8 + xx + 9)+1] = min(255, buf[64 + 3*(yy*8 + xx + 9)+1] + max(0, (int)ceil((l->todo2 - bla)*l->color.y)));

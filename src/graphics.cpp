@@ -239,13 +239,34 @@ int cGraphics::draw()
 
 	WM.draw();
 	menu->draw();
+	char buf[100];
 	if(currentobject != NULL)
-	{
-		char buf[100];
-		sprintf(buf, "File: %s", ((cMenuItem*)currentobject)->data2.c_str());
-		float l = font->textlen(buf);
-		font->print(0,0,0,width-l,height-14,buf);
-	}
+		sprintf(buf, "Editmode: %s, File: %s", 	editmode == MODE_TEXTURE ?		msgtable[MENU_TEXTUREEDIT] : 
+												editmode == MODE_HEIGHTDETAIL ? msgtable[MENU_GLOBALHEIGHTEDIT] : 
+												editmode == MODE_HEIGHTGLOBAL ? msgtable[MENU_DETAILTERRAINEDIT] :
+												editmode == MODE_WALLS ?		msgtable[MENU_WALLEDIT] :
+												editmode == MODE_OBJECTS ?		msgtable[MENU_OBJECTEDIT] :
+												editmode == MODE_GAT ?			msgtable[MENU_GATEDIT] :
+												editmode == MODE_WATER ?		msgtable[MENU_WATEREDIT] :
+												editmode == MODE_EFFECTS ?		msgtable[MENU_EFFECTSEDIT] :
+												editmode == MODE_SOUNDS ?		msgtable[MENU_SOUNDSEDIT] :
+												editmode == MODE_LIGHTS ?		msgtable[MENU_LIGHTSEDIT] :
+												editmode == MODE_OBJECTGROUP ?	msgtable[MENU_OBJECTGROUPEDIT] : "", 
+		((cMenuItem*)currentobject)->data2.c_str());
+	else
+		sprintf(buf, "Editmode: %s",	editmode == MODE_TEXTURE ?		msgtable[MENU_TEXTUREEDIT] : 
+										editmode == MODE_HEIGHTDETAIL ? msgtable[MENU_GLOBALHEIGHTEDIT] : 
+										editmode == MODE_HEIGHTGLOBAL ? msgtable[MENU_DETAILTERRAINEDIT] :
+										editmode == MODE_WALLS ?		msgtable[MENU_WALLEDIT] :
+										editmode == MODE_OBJECTS ?		msgtable[MENU_OBJECTEDIT] :
+										editmode == MODE_GAT ?			msgtable[MENU_GATEDIT] :
+										editmode == MODE_WATER ?		msgtable[MENU_WATEREDIT] :
+										editmode == MODE_EFFECTS ?		msgtable[MENU_EFFECTSEDIT] :
+										editmode == MODE_SOUNDS ?		msgtable[MENU_SOUNDSEDIT] :
+										editmode == MODE_LIGHTS ?		msgtable[MENU_LIGHTSEDIT] :
+										editmode == MODE_OBJECTGROUP ?	msgtable[MENU_OBJECTGROUPEDIT] : "");
+	float l = font->textlen(buf);
+	font->print(0,0,0,width-l,height-14,buf);
 
 
 	if (SDL_GetTicks() - lastmotion > 500)
