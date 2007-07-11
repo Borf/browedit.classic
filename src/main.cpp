@@ -4317,10 +4317,10 @@ MENUCOMMAND(random1)
 MENUCOMMAND(random2)
 {
 	int i;
-	int smooth  = 2;//atoi(Graphics.WM.InputWindow("Smoothing level (use 5-10 for decent results)").c_str());
+	int smooth  = 3;//atoi(Graphics.WM.InputWindow("Smoothing level (use 5-10 for decent results)").c_str());
 
 	undostack.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
-	int x,y;
+	float x,y;
 
 	Graphics.world.tiles.clear();
 	for(int tex = 0; tex < 3; tex++)
@@ -4379,42 +4379,50 @@ MENUCOMMAND(random2)
 	
 	int a = 0;
 	int lasta = 0;
-	for(i = 0; i < (Graphics.world.height+Graphics.world.width) / 20; i++)
+	int reali = 0;
+	for(i = 0; i < (Graphics.world.height+Graphics.world.width) / 30; i++)
 	{
-		a = rand()%4;
+		reali++;
+		a = rand()%8;
+		if(a % 2 == 1)
+			a = rand()%8;
 
 		if(a == lasta || ((a+2)%4) == lasta)
 			a = rand()%4;
 
 		lasta = a;
 
-		int c = rand() % 5+5;
-		if(Graphics.world.cubes[10*y][10*x].cell1 >= 0)
+		int c = (rand() % 5+5)*2;
+
+
+		if(Graphics.world.cubes[10*y][10*x].cell1 >= 0 && reali < 100)
 			i--;
 
 		for(int ii = 0; ii < c; ii++)
 		{
 
+			bool water = rand() % 20 == 0;
+
 			for(int xx = 0; xx < 10; xx++)
 			{
 				for(int yy = 0; yy < 10; yy++)
 				{
-					Graphics.world.cubes[10*y+yy][10*x+xx].cell1 = 0;//rand()%25;
-					Graphics.world.cubes[10*y+yy][10*x+xx].cell2 = 0;//rand()%25;
-					Graphics.world.cubes[10*y+yy][10*x+xx].cell3 = 0;//rand()%25;
-					Graphics.world.cubes[10*y+yy][10*x+xx].cell4 = 0;//rand()%25;
+					Graphics.world.cubes[10*y+yy][10*x+xx].cell1 = water ? 30 : 0;//rand()%25;
+					Graphics.world.cubes[10*y+yy][10*x+xx].cell2 = water ? 30 : 0;//rand()%25;
+					Graphics.world.cubes[10*y+yy][10*x+xx].cell3 = water ? 30 : 0;//rand()%25;
+					Graphics.world.cubes[10*y+yy][10*x+xx].cell4 = water ? 30 : 0;//rand()%25;
 					Graphics.world.cubes[10*y+yy][10*x+xx].tileup = 25 + (xx%5) + 5*(yy%5);
 				}
 			}
 
-			if(a == 0)
-				x++;
-			if(a == 1)
-				x--;
-			if(a == 2)
-				y++;
-			if(a == 3)
-				y--;
+			if(a > 1 && a < 4)
+				x+=0.5f;
+			if(a > 4)
+				x-=0.5f;
+			if(a > 2 && a < 6)
+				y+=0.5f;
+			if(a == 0 || a == 1 || a == 7)
+				y-=0.5f;
 
 
 			if(y < 1)
@@ -4462,11 +4470,12 @@ MENUCOMMAND(random2)
 		{
 			if((Graphics.world.cubes[y][x].cell1 <= -8 || Graphics.world.cubes[y][x].cell2 <= -8 || Graphics.world.cubes[y][x].cell3  <= -8|| Graphics.world.cubes[y][x].cell4 <= -8) && Graphics.world.cubes[y][x].cell1 > -63)
 			{
-				Graphics.world.cubes[y][x].tileup= 50 + (x%5) + 5*(y%5);
+				Graphics.world.cubes[y][x].tileup= 50 + ((int)x%5) + 5*((int)y%5);
 			}
 		}
 	}
 
+	Graphics.world.water.height = 12;
 
 
 	return true;
