@@ -85,6 +85,7 @@ MENUCOMMAND(saveAs);
 MENUCOMMAND(importalpha);
 MENUCOMMAND(exit);
 MENUCOMMAND(random1);
+MENUCOMMAND(random2);
 MENUCOMMAND(shading);
 MENUCOMMAND(exportheight);
 MENUCOMMAND(mode);
@@ -782,6 +783,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,file,msgtable[MENU_EXIT],						&MenuCommand_exit); // exit
 	
 	ADDMENUITEM(mm,rnd, msgtable[MENU_RANDOM1],						&MenuCommand_random1); // random1
+	ADDMENUITEM(mm,rnd, msgtable[MENU_RANDOM1],						&MenuCommand_random2); // random1
 	ADDMENUITEM(mm,rnd, msgtable[MENU_MAZESTUFF],					&MenuCommand_tempfunc); // Maze stuff
 	ADDMENUITEM(mm,rnd, msgtable[MENU_QUADTREE],					&MenuCommand_quadtree); // Quadtree
 	ADDMENUITEM(mm,rnd, msgtable[MENU_CALCULATELIGHTMAPS],			&MenuCommand_dolightmapsall); // Lightmaps
@@ -938,7 +940,7 @@ int main(int argc, char *argv[])
 	
 	Log(3,0,msgtable[8]);
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "data\\prontera").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "data\\randomtest").c_str());
 #ifndef WIN32
 	Graphics.world.load();
 #endif
@@ -4311,6 +4313,165 @@ MENUCOMMAND(random1)
 
 	return true;
 }
+
+MENUCOMMAND(random2)
+{
+	int i;
+	int smooth  = 2;//atoi(Graphics.WM.InputWindow("Smoothing level (use 5-10 for decent results)").c_str());
+
+	undostack.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
+	int x,y;
+
+	Graphics.world.tiles.clear();
+	for(int tex = 0; tex < 3; tex++)
+	{
+		for(y = 0; y < 5; y++)
+		{
+			for(x = 0; x < 5; x++)
+			{
+				cTile t;
+				t.lightmap = 1;
+				t.texture = tex;
+				t.u1 = x/5.0;
+				t.v1 = y/5.0;
+				t.u2 = (x+1)/5.0;
+				t.v2 = (y)/5.0;
+				t.u3 = (x)/5.0;
+				t.v3 = (y+1)/5.0;
+				t.u4 = (x+1)/5.0;
+				t.v4 = (y+1)/5.0;
+				t.color[0] = (char)255;
+				t.color[1] = (char)255;
+				t.color[2] = (char)255;
+				t.color[3] = (char)255;
+				Graphics.world.tiles.push_back(t);
+			}
+		}
+	}
+	
+	
+	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+			Graphics.world.cubes[y][x].tileaside = -1;
+			Graphics.world.cubes[y][x].tileside = -1;
+			Graphics.world.cubes[y][x].tileup = 0;
+		}
+	}
+
+
+	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+			Graphics.world.cubes[y][x].cell1 = -64;
+			Graphics.world.cubes[y][x].cell2 = -64;
+			Graphics.world.cubes[y][x].cell3 = -64;
+			Graphics.world.cubes[y][x].cell4 = -64;
+		}
+	}
+
+	
+	x = 1 + (rand()%((Graphics.world.width/10)-2));
+	y = 1 + (rand()%((Graphics.world.height/10)-2));
+
+	
+	int a = 0;
+	int lasta = 0;
+	for(i = 0; i < (Graphics.world.height+Graphics.world.width) / 20; i++)
+	{
+		a = rand()%4;
+
+		if(a == lasta || ((a+2)%4) == lasta)
+			a = rand()%4;
+
+		lasta = a;
+
+		int c = rand() % 5+5;
+		if(Graphics.world.cubes[10*y][10*x].cell1 >= 0)
+			i--;
+
+		for(int ii = 0; ii < c; ii++)
+		{
+
+			for(int xx = 0; xx < 10; xx++)
+			{
+				for(int yy = 0; yy < 10; yy++)
+				{
+					Graphics.world.cubes[10*y+yy][10*x+xx].cell1 = 0;//rand()%25;
+					Graphics.world.cubes[10*y+yy][10*x+xx].cell2 = 0;//rand()%25;
+					Graphics.world.cubes[10*y+yy][10*x+xx].cell3 = 0;//rand()%25;
+					Graphics.world.cubes[10*y+yy][10*x+xx].cell4 = 0;//rand()%25;
+					Graphics.world.cubes[10*y+yy][10*x+xx].tileup = 25 + (xx%5) + 5*(yy%5);
+				}
+			}
+
+			if(a == 0)
+				x++;
+			if(a == 1)
+				x--;
+			if(a == 2)
+				y++;
+			if(a == 3)
+				y--;
+
+
+			if(y < 1)
+				y = 1;
+			if(y >= (Graphics.world.height/10)-2)
+				y = (Graphics.world.height/10)-2;
+			if(x < 1)
+				x = 1;
+			if(x >= (Graphics.world.width/10)-2)
+				x = (Graphics.world.width/10)-2;
+		}		
+	}
+
+
+
+	eMode m = editmode;
+	editmode = MODE_HEIGHTDETAIL;
+
+	SDL_Event ev;
+	ev.type = SDL_KEYDOWN;
+	ev.key.keysym.sym = SDLK_s;
+	for(i = 0; i < smooth; i++)
+		SDL_PushEvent(&ev);
+
+	int b = brushsize;
+	mouse3dx = Graphics.world.width*5;
+	mouse3dz = Graphics.world.height*5;
+	brushsize = Graphics.world.width+Graphics.world.height;
+	
+	process_events();
+	brushsize = b;
+
+
+	ev.type = SDL_KEYUP;
+	ev.key.keysym.sym = SDLK_s;
+	SDL_PushEvent(&ev);
+
+
+
+	editmode = m;
+
+	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+			if((Graphics.world.cubes[y][x].cell1 <= -8 || Graphics.world.cubes[y][x].cell2 <= -8 || Graphics.world.cubes[y][x].cell3  <= -8|| Graphics.world.cubes[y][x].cell4 <= -8) && Graphics.world.cubes[y][x].cell1 > -63)
+			{
+				Graphics.world.cubes[y][x].tileup= 50 + (x%5) + 5*(y%5);
+			}
+		}
+	}
+
+
+
+	return true;
+}
+
 
 
 MENUCOMMAND(mode)
