@@ -1,7 +1,7 @@
 #ifndef __WINDOWOBJECT_H__
 #define __WINDOWOBJECT_H__
 
-#include "../common.h"
+#include <common.h>
 #include <string>
 using namespace std;
 
@@ -47,6 +47,7 @@ enum OBJECT_BASE
 	OBJECT_FRAME,
 	OBJECT_TREE,
 	OBJECT_MODEL,
+	OBJECT_BMLBOX,
 };
 
 
@@ -104,8 +105,8 @@ public:
 
 	int cursortype;
 	virtual cWindowObject* inobject();
-	void moveto(int xx, int yy)		{ x = xx; y = yy; }
-	void resizeto(int ww, int hh)	{ w = ww; h = hh; }
+	cWindowObject* moveto(int xx, int yy)		{ x = xx; y = yy; return this;}
+	cWindowObject* resizeto(int ww, int hh)	{ w = ww; h = hh; return this;}
 
 	int realx();
 	int realy();
@@ -123,6 +124,9 @@ public:
 	virtual int GetInt(int) { return -1; }
 	virtual void holddragover() {}
 	virtual void dragover() {}
+
+	virtual void scrollup() {}
+	virtual void scrolldown() {}
 
 	cWindow* parent;
 };

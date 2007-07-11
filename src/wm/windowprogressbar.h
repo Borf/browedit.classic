@@ -4,7 +4,7 @@
 #include "windowobject.h"
 #include <string>
 #include <vector>
-#include "../texture.h"
+#include <texture.h>
 using namespace std;
 
 class cWindowProgressBar: public cWindowObject
@@ -31,6 +31,7 @@ public:
 	virtual ~cWindowProgressBar() {}
 	virtual void draw(int,int,int,int);
 	virtual void click();
+	virtual string ppopup();
 
 	void SetInt(int, int);
 	int GetInt(int);

@@ -3,7 +3,7 @@
 
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
-#include "../graphics.h"
+#include <graphics.h>
 
 extern cGraphics Graphics;
 /*void cWindowObject::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)

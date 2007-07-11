@@ -1,14 +1,21 @@
 #include "window.h"
-#include "../graphics.h"
+#include <graphics.h>
 
 extern cGraphics Graphics;
 extern cWindowObject* draggingobject;
 
 #include "windowinputbox.h"
 #include "windowlabel.h"
+#include "windowcheckbox.h"
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
 
+
+#ifndef __NOXML__
+#include <tinyxml/tinyxml.h>
+extern TiXmlDocument	config;
+extern string			configfile;
+#endif
 
 void cWindow::draw()
 {
@@ -87,10 +94,9 @@ void cWindow::draw()
 	for(i = objects.begin(); i != objects.end(); i++)
 	{
 		cWindowObject* o = i->second;
-		if (!rolledup || o->realy2() > h-19)
+		if ((!rolledup && !checkborders) || (rolledup && o->realy2() > h-190) || (!rolledup && checkborders && o->realy() < h && o->realy() > 0 && o->realx() > 0 && o->realx() < w))
 		{
-			//if(i->second->realy() > 0)
-				o->draw();
+			o->draw();
 		}
 	}
 /*
@@ -255,6 +261,24 @@ int cWindow::getcursor()
 	return 0;
 }
 
+bool cWindow::onborder()
+{
+	if (!visible) return false;
+	if (resizable && !rolledup)
+	{
+		if(mousex < x+w && mousex > x+w - DRAGBORDER)
+			return true;
+		if((Graphics.h()-mousey) > y && (Graphics.h()-mousey) < y + DRAGBORDER)
+			return true;
+		if(mousex > x && mousex < x + DRAGBORDER)
+			return true;
+		if((Graphics.h()-mousey) < y+h && (Graphics.h()-mousey) > y+h - DRAGBORDER)
+			return true;
+	}
+
+	return false;
+}
+
 cWindowObject* cWindow::inobject()
 {
 	if (!visible) return false;
@@ -365,9 +389,9 @@ bool cWindow::onkeyup(int c)
 
 }
 
-void cWindow::close()
+void cWindow::close(bool force)
 {
-	if (closetype == HIDE)
+	if (closetype == HIDE && !force)
 	{
 		hide();
 		return;
@@ -409,8 +433,8 @@ void cWindow::rightclick()
 		cWindowObject* o = i->second->inobject();
 		if (o != NULL && i->second->selectable)
 		{
-			o->rightclick();
 			selectedobject = o;
+			o->rightclick();
 			break;
 		}
 	}
@@ -429,6 +453,29 @@ cWindowObject* cWindow::addlabel(string name, int x, int y, string text)
 	return o;
 }
 
+
+cWindowObject* cWindow::addinputbox(string name, int x, int y, int w, string text)
+{
+	cWindowObject* o = new cWindowInputBox(this);
+	o->alignment = ALIGN_TOPLEFT;
+	o->moveto(x,y);
+	o->resizeto(w, 20);
+	o->SetText(0,text);
+	objects[name] = o;
+	return o;
+}
+
+cWindowObject* cWindow::addcheckbox(string name, int x, int y, bool checked)
+{
+	cWindowObject* o = new cWindowCheckBox(this);
+	o->alignment = ALIGN_TOPLEFT;
+	o->moveto(x,y);
+	o->SetInt(0, checked ? 1 : 0);
+	objects[name] = o;
+	return o;
+}
+
+
 void cWindow::holddragover()
 {
 	cWindowObject* o = inobject();
@@ -441,4 +488,92 @@ void cWindow::dragover()
 	cWindowObject* o = inobject();
 	if(o != NULL)
 		o->dragover();	
+}
+
+void cWindow::scrollup()
+{
+	if (!visible) return;
+
+	for(objectlist::reverse_iterator i = objects.rbegin(); i != objects.rend(); i++)
+	{
+		cWindowObject* o = i->second->inobject();
+		if (o != NULL && i->second->selectable)
+		{
+			i->second->scrollup();
+			break;
+		}
+	}
+}
+
+void cWindow::scrolldown()
+{
+	if (!visible) return;
+
+	for(objectlist::reverse_iterator i = objects.rbegin(); i != objects.rend(); i++)
+	{
+		cWindowObject* o = i->second->inobject();
+		if (o != NULL)
+		{
+			cWindowObject* oo = i->second;
+			i->second->scrolldown();
+			break;
+		}
+	}
+}
+
+
+void cWindow::save()
+{
+#ifndef __NOXML__
+	if(saveprops != "")
+	{
+		char* elements[] = {"x","y","h","w" };
+
+		if(config.FirstChildElement("settings")->FirstChildElement(saveprops.c_str()) == NULL)
+			config.FirstChildElement("settings")->InsertEndChild(TiXmlElement(saveprops.c_str()));
+
+		for(int i = 0; i < 4; i++)
+		{
+			if(config.FirstChildElement("settings")->FirstChildElement(saveprops.c_str())->FirstChildElement(elements[i]) == NULL)
+			{
+				config.FirstChildElement("settings")->FirstChildElement(saveprops.c_str())->InsertEndChild(TiXmlElement(elements[i]));
+				config.FirstChildElement("settings")->FirstChildElement(saveprops.c_str())->FirstChildElement(elements[i])->InsertEndChild(TiXmlText(""));
+			}
+		}
+
+		char buf[10];
+		sprintf(buf, "%i", x);
+		config.FirstChildElement("settings")->FirstChildElement(saveprops.c_str())->FirstChildElement("x")->FirstChild()->SetValue(buf);
+
+		sprintf(buf, "%i", y);
+		config.FirstChildElement("settings")->FirstChildElement(saveprops.c_str())->FirstChildElement("y")->FirstChild()->SetValue(buf);
+
+		sprintf(buf, "%i", h);
+		config.FirstChildElement("settings")->FirstChildElement(saveprops.c_str())->FirstChildElement("h")->FirstChild()->SetValue(buf);
+
+		sprintf(buf, "%i", w);
+		config.FirstChildElement("settings")->FirstChildElement(saveprops.c_str())->FirstChildElement("w")->FirstChild()->SetValue(buf);
+
+		config.SaveFile(configfile.c_str());
+
+	}
+#endif
+}
+
+void cWindow::initprops(string s)
+{
+#ifndef __NOXML__
+	saveprops = s;
+	if(config.FirstChildElement("settings")->FirstChildElement(s.c_str()))
+	{
+		if(config.FirstChildElement("settings")->FirstChildElement(s.c_str())->FirstChildElement("x"))
+			x = atoi(config.FirstChildElement("settings")->FirstChildElement(s.c_str())->FirstChildElement("x")->FirstChild()->Value());
+		if(config.FirstChildElement("settings")->FirstChildElement(s.c_str())->FirstChildElement("y"))
+			y = atoi(config.FirstChildElement("settings")->FirstChildElement(s.c_str())->FirstChildElement("y")->FirstChild()->Value());
+		if(config.FirstChildElement("settings")->FirstChildElement(s.c_str())->FirstChildElement("h"))
+			h = atoi(config.FirstChildElement("settings")->FirstChildElement(s.c_str())->FirstChildElement("h")->FirstChild()->Value());
+		if(config.FirstChildElement("settings")->FirstChildElement(s.c_str())->FirstChildElement("w"))
+			w = atoi(config.FirstChildElement("settings")->FirstChildElement(s.c_str())->FirstChildElement("w")->FirstChild()->Value());
+	}
+#endif
 }

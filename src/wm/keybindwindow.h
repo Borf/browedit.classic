@@ -460,7 +460,7 @@ public:
 		return o;
 		
 	}
-	cKeyBindWindow()
+	cKeyBindWindow(cTexture* t, cFont* f) : cWindow(t,f)
 	{
 		wtype = WT_KEYBIND;
 		resizable = false;

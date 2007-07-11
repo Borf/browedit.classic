@@ -21,7 +21,7 @@ class cConfirmWindow : public cWindow
 			alignment = ALIGN_BOTTOMLEFT;
 			moveto(20, 20);
 			resizeto(100, 20);
-			text = msgtable[WINDOW_OK];
+			text = "Ok";
 		}
 		virtual ~cWindowOkButton() {}
 		void click()
@@ -38,7 +38,7 @@ class cConfirmWindow : public cWindow
 			alignment = ALIGN_BOTTOMRIGHT;
 			moveto(20, 20);
 			resizeto(100, 20);
-			text = msgtable[WINDOW_CANCEL];
+			text = "Cancel";
 		}
 		virtual ~cWindowCancelButton() {}
 		void click()
@@ -58,7 +58,7 @@ public:
 	cConfirmWindowCaller* caller;
 
 	
-	cConfirmWindow(cConfirmWindowCaller* c) : cWindow()
+	cConfirmWindow(cConfirmWindowCaller* c, cTexture* t, cFont* f) : cWindow(t, f)
 	{
 		caller = c;
 
@@ -69,7 +69,7 @@ public:
 
 		h = 200;
 		w = 350;
-		title = msgtable[WINDOW_CONFIRM_TITLE];
+		title = "Please confirm";
 		center();
 
 		defaultobject = "OkButton";

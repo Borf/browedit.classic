@@ -125,7 +125,7 @@ public:
 
 	map<cWindowTree::cTreeNode*, vector<pair<string, string> >, less<cWindowTree::cTreeNode*> > items;
 
-	cTextureWindow()
+	cTextureWindow(cTexture* t, cFont* f) : cWindow(t,f)
 	{
 		wtype = WT_TEXTURE;
 		closetype = HIDE;

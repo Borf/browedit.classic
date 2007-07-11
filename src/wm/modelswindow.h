@@ -44,7 +44,7 @@ public:
 
 
 	map<cWindowTree::cTreeNode*, vector<pair<string, string> >, less<cWindowTree::cTreeNode*> > items;
-	cModelsWindow();
+	cModelsWindow(cTexture*, cFont*);
 	void resizeto(int ww, int hh);
 	void stopdrag();
 	void* userfunc(void* param);

@@ -601,7 +601,7 @@ void addnode(vector<cWindowTree::cTreeNode*> &nodes, map<string, cWindowTree::cT
 
 }
 
-cModelsWindow::cModelsWindow()
+cModelsWindow::cModelsWindow(cTexture* t, cFont* f) : cWindow(t,f)
 {
 	wtype = WT_MODELS;
 	closetype = HIDE;

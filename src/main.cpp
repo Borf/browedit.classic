@@ -60,6 +60,7 @@ vector<string> texturefiles;
 vector<string> objectfiles;
 
 double mouse3dxstart, mouse3dystart, mouse3dzstart;
+float mousestartx, mousestarty;
 unsigned long keys[SDLK_LAST-SDLK_FIRST];
 
 
@@ -86,6 +87,7 @@ MENUCOMMAND(importalpha);
 MENUCOMMAND(exit);
 MENUCOMMAND(random1);
 MENUCOMMAND(random2);
+MENUCOMMAND(random3);
 MENUCOMMAND(shading);
 MENUCOMMAND(exportheight);
 MENUCOMMAND(mode);
@@ -784,6 +786,7 @@ int main(int argc, char *argv[])
 	
 	ADDMENUITEM(mm,rnd, msgtable[MENU_RANDOM1],						&MenuCommand_random1); // random1
 	ADDMENUITEM(mm,rnd, msgtable[MENU_RANDOM1],						&MenuCommand_random2); // random1
+	ADDMENUITEM(mm,rnd, msgtable[MENU_RANDOM1],						&MenuCommand_random3); // random1
 	ADDMENUITEM(mm,rnd, msgtable[MENU_MAZESTUFF],					&MenuCommand_tempfunc); // Maze stuff
 	ADDMENUITEM(mm,rnd, msgtable[MENU_QUADTREE],					&MenuCommand_quadtree); // Quadtree
 	ADDMENUITEM(mm,rnd, msgtable[MENU_CALCULATELIGHTMAPS],			&MenuCommand_dolightmapsall); // Lightmaps
@@ -1149,10 +1152,10 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			}
 			else if (lbuttondown && !rbuttondown)
 			{
-				if(startmousex > Graphics.w()-256)
+				if(mousestartx > Graphics.w()-256)
 				{
-					Graphics.selectionstart.x = floor(startmousex / 32)*32;
-					Graphics.selectionstart.y = floor(startmousey / 32)*32;
+					Graphics.selectionstart.x = floor(mousestartx / 32)*32;
+					Graphics.selectionstart.y = floor(mousestarty / 32)*32;
 					Graphics.selectionend.x = (int)ceil(mousex / 32)*32;
 					Graphics.selectionend.y = (int)ceil(mousey / 32)*32;
 					if(Graphics.selectionstart.x > Graphics.selectionend.x)
@@ -1384,8 +1387,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 		case SDL_MOUSEBUTTONDOWN:
 			{
 			movement = 0;
-			startmousex = mousex = event.motion.x;
-			startmousey = mousey = event.motion.y;
+			mousestartx = mousex = event.motion.x;
+			mousestarty = mousey = event.motion.y;
 
 			mouse3dxstart = mouse3dx;
 			mouse3dystart = mouse3dy;
@@ -1415,13 +1418,13 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						dragoffsety = (Graphics.h()-mousey) - w->py2();
 						Graphics.WM.click(false);
 						draggingwindow = Graphics.WM.inwindow();
-						if(startmousex < draggingwindow->px()+draggingwindow->pw() && startmousex > draggingwindow->px()+draggingwindow->pw() - DRAGBORDER)
+						if(mousestartx < draggingwindow->px()+draggingwindow->pw() && mousestartx > draggingwindow->px()+draggingwindow->pw() - DRAGBORDER)
 							draggingwindow->startresisingxy();
-						if((Graphics.h()-startmousey) > draggingwindow->py() && (Graphics.h()-startmousey) < draggingwindow->py() + DRAGBORDER)
+						if((Graphics.h()-mousestarty) > draggingwindow->py() && (Graphics.h()-mousestarty) < draggingwindow->py() + DRAGBORDER)
 							draggingwindow->startresizingyx();
-						if(startmousex > draggingwindow->px() && startmousex < draggingwindow->px() + DRAGBORDER)
+						if(mousestartx > draggingwindow->px() && mousestartx < draggingwindow->px() + DRAGBORDER)
 							draggingwindow->startresisingx();
-						if((Graphics.h()-startmousey) < draggingwindow->py()+draggingwindow->ph() && (Graphics.h()-startmousey) > draggingwindow->py()+draggingwindow->ph() - DRAGBORDER)
+						if((Graphics.h()-mousestarty) < draggingwindow->py()+draggingwindow->ph() && (Graphics.h()-mousestarty) > draggingwindow->py()+draggingwindow->ph() - DRAGBORDER)
 							draggingwindow->startresizingy();
 						return 0;
 					}
@@ -1452,7 +1455,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if (editmode == MODE_TEXTURE)
 					{
-						if(startmousex < Graphics.w()-256)
+						if(mousestartx < Graphics.w()-256)
 						{
 							float selsizex = (fabs(Graphics.selectionstart.x - Graphics.selectionend.x) / 32);
 							float selsizey = (fabs(Graphics.selectionstart.y - Graphics.selectionend.y) / 32);
@@ -3280,7 +3283,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if (editmode == MODE_TEXTURE)
 					{
-						if(startmousex < Graphics.w()-256)
+						if(mousestartx < Graphics.w()-256)
 						{
 							float selsizex = (fabs(Graphics.selectionstart.x - Graphics.selectionend.x) / 32);
 							float selsizey = (fabs(Graphics.selectionstart.y - Graphics.selectionend.y) / 32);
@@ -3397,7 +3400,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if (editmode == MODE_TEXTURE)
 					{
-						if(startmousex < Graphics.w()-256)
+						if(mousestartx < Graphics.w()-256)
 						{
 							float selsizex = (fabs(Graphics.selectionstart.x - Graphics.selectionend.x) / 32);
 							float selsizey = (fabs(Graphics.selectionstart.y - Graphics.selectionend.y) / 32);
@@ -3781,9 +3784,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					cWindow* w = Graphics.WM.getwindow(WT_TEXTURE);
 					if (w == NULL)
 					{
-						w = new cTextureWindow();
-						w->init(&Graphics.WM.texture, &Graphics.WM.font);
-						Graphics.WM.addwindow(w);
+						Graphics.WM.addwindow(new cTextureWindow(&Graphics.WM.texture, &Graphics.WM.font));
 					}
 					else
 					{
@@ -3800,8 +3801,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							cRSMModel* o = Graphics.world.models[Graphics.selectedobject];
 							cMenuItem* menuitem = (cMenuItem*)models->finddata("model\\" + o->rofilename);
 
-							cWindow* w = new cObjectWindow();
-							w->init(&Graphics.WM.texture, &Graphics.WM.font);
+							cWindow* w = new cObjectWindow(&Graphics.WM.texture, &Graphics.WM.font);
 							if (menuitem != NULL)
 								w->objects["objectmenu"]->SetText(0,menuitem->data2);
 							w->objects["posx"]->SetInt(3,(int)&o->pos.x);
@@ -3825,8 +3825,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						{
 							cEffect* o = &Graphics.world.effects[Graphics.selectedobject];
 
-							cWindow* w = new cEffectWindow();
-							w->init(&Graphics.WM.texture, &Graphics.WM.font);
+							cWindow* w = new cEffectWindow(&Graphics.WM.texture, &Graphics.WM.font);
 							w->objects["posx"]->SetInt(3,(int)&o->pos.x);
 							w->objects["posy"]->SetInt(3,(int)&o->pos.y);
 							w->objects["posz"]->SetInt(3,(int)&o->pos.z);
@@ -3848,8 +3847,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						{
 							cLight* l = &Graphics.world.lights[Graphics.selectedobject];
 
-							cWindow* w = new cLightWindow();
-							w->init(&Graphics.WM.texture, &Graphics.WM.font);
+							cWindow* w = new cLightWindow(&Graphics.WM.texture, &Graphics.WM.font);
 							w->objects["posx"]->SetInt(3,(int)&l->pos.x);
 							w->objects["posy"]->SetInt(3,(int)&l->pos.y);
 							w->objects["posz"]->SetInt(3,(int)&l->pos.z);
@@ -3992,9 +3990,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					cWindow* w = Graphics.WM.getwindow(WT_MODELS);
 					if (w == NULL)
 					{
-						w = new cModelsWindow();
-						w->init(&Graphics.WM.texture, &Graphics.WM.font);
-						Graphics.WM.addwindow(w);
+						Graphics.WM.addwindow(new cModelsWindow(&Graphics.WM.texture, &Graphics.WM.font)	);
 					}
 					else
 					{
@@ -4434,6 +4430,158 @@ MENUCOMMAND(random2)
 			if(x >= (Graphics.world.width/10)-2)
 				x = (Graphics.world.width/10)-2;
 		}		
+	}
+
+
+
+	eMode m = editmode;
+	editmode = MODE_HEIGHTDETAIL;
+
+	SDL_Event ev;
+	ev.type = SDL_KEYDOWN;
+	ev.key.keysym.sym = SDLK_s;
+	for(i = 0; i < smooth; i++)
+		SDL_PushEvent(&ev);
+
+	int b = brushsize;
+	mouse3dx = Graphics.world.width*5;
+	mouse3dz = Graphics.world.height*5;
+	brushsize = Graphics.world.width+Graphics.world.height;
+	
+	process_events();
+	brushsize = b;
+
+
+	ev.type = SDL_KEYUP;
+	ev.key.keysym.sym = SDLK_s;
+	SDL_PushEvent(&ev);
+
+
+
+	editmode = m;
+
+	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+			if((Graphics.world.cubes[y][x].cell1 <= -8 || Graphics.world.cubes[y][x].cell2 <= -8 || Graphics.world.cubes[y][x].cell3  <= -8|| Graphics.world.cubes[y][x].cell4 <= -8) && Graphics.world.cubes[y][x].cell1 > -63)
+			{
+				Graphics.world.cubes[y][x].tileup= 50 + ((int)x%5) + 5*((int)y%5);
+			}
+		}
+	}
+
+	Graphics.world.water.height = 12;
+
+
+	return true;
+}
+
+
+
+class cIntQuad
+{
+public:
+	int x;
+	int y;
+	int w;
+	int h;
+};
+
+MENUCOMMAND(random2)
+{
+	int i;
+	int smooth  = 3;//atoi(Graphics.WM.InputWindow("Smoothing level (use 5-10 for decent results)").c_str());
+
+	undostack.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
+	float x,y;
+
+	Graphics.world.tiles.clear();
+	for(int tex = 0; tex < 3; tex++)
+	{
+		for(y = 0; y < 5; y++)
+		{
+			for(x = 0; x < 5; x++)
+			{
+				cTile t;
+				t.lightmap = 1;
+				t.texture = tex;
+				t.u1 = x/5.0;
+				t.v1 = y/5.0;
+				t.u2 = (x+1)/5.0;
+				t.v2 = (y)/5.0;
+				t.u3 = (x)/5.0;
+				t.v3 = (y+1)/5.0;
+				t.u4 = (x+1)/5.0;
+				t.v4 = (y+1)/5.0;
+				t.color[0] = (char)255;
+				t.color[1] = (char)255;
+				t.color[2] = (char)255;
+				t.color[3] = (char)255;
+				Graphics.world.tiles.push_back(t);
+			}
+		}
+	}
+	
+	
+	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+			Graphics.world.cubes[y][x].tileaside = -1;
+			Graphics.world.cubes[y][x].tileside = -1;
+			Graphics.world.cubes[y][x].tileup = 0;
+		}
+	}
+
+
+	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+			Graphics.world.cubes[y][x].cell1 = 64;
+			Graphics.world.cubes[y][x].cell2 = 64;
+			Graphics.world.cubes[y][x].cell3 = 64;
+			Graphics.world.cubes[y][x].cell4 = 64;
+		}
+	}
+
+	
+	x = 1 + (rand()%((Graphics.world.width/10)-2));
+	y = 1 + (rand()%((Graphics.world.height/10)-2));
+
+	
+	int a = 0;
+	int lasta = 0;
+	int reali = 0;
+
+	int w,h;
+
+	
+	vector<cIntQuad> islands;
+
+
+	for(i = 0; i < 5; i++)
+	{
+		reali++;
+		a = rand()%4;
+
+		if(a == lasta || ((a+2)%4) == lasta)
+			a = rand()%4;
+		lasta = a;
+
+		
+		for(int xx = x; xx < x+w; xx++)
+		{
+			for(int yy = y; yy < y+h; yy++)
+			{
+				Graphics.world.cubes[10*y+yy][10*x+xx].cell1 = water ? 30 : 0;//rand()%25;
+				Graphics.world.cubes[10*y+yy][10*x+xx].cell2 = water ? 30 : 0;//rand()%25;
+				Graphics.world.cubes[10*y+yy][10*x+xx].cell3 = water ? 30 : 0;//rand()%25;
+				Graphics.world.cubes[10*y+yy][10*x+xx].cell4 = water ? 30 : 0;//rand()%25;
+				Graphics.world.cubes[10*y+yy][10*x+xx].tileup = 25 + (xx%5) + 5*(yy%5);
+			}
+		}
 	}
 
 
@@ -5575,8 +5723,7 @@ MENUCOMMAND(toggle)
 MENUCOMMAND(water)
 {
 	char buf[100];
-	cWindow* w = new cWaterWindow();
-	w->init(&Graphics.WM.texture, &Graphics.WM.font);
+	cWindow* w = new cWaterWindow(&Graphics.WM.texture, &Graphics.WM.font);
 	sprintf(buf, "%f", Graphics.world.water.amplitude);		w->objects["amplitude"]->SetText(0,buf);
 	sprintf(buf, "%f", Graphics.world.water.height);		w->objects["height"]->SetText(0,buf);
 	sprintf(buf, "%f", Graphics.world.water.phase);			w->objects["phase"]->SetText(0,buf);
@@ -5619,8 +5766,7 @@ MENUCOMMAND(cleantextures)
 MENUCOMMAND(ambientlight)
 {
 	char buf[100];
-	cWindow* w = new cAmbientLightWindow();
-	w->init(&Graphics.WM.texture, &Graphics.WM.font);
+	cWindow* w = new cAmbientLightWindow(&Graphics.WM.texture, &Graphics.WM.font);
 	sprintf(buf, "%i", Graphics.world.ambientlight.ambientr);		w->objects["ambientr"]->SetText(0,buf);
 	sprintf(buf, "%i", Graphics.world.ambientlight.ambientg);		w->objects["ambientg"]->SetText(0,buf);
 	sprintf(buf, "%i", Graphics.world.ambientlight.ambientb);		w->objects["ambientb"]->SetText(0,buf);
@@ -5697,9 +5843,7 @@ MENUCOMMAND(properties)
 
 MENUCOMMAND(preferences)
 {
-	cWindow* w = new cKeyBindWindow();
-	w->init(&Graphics.WM.texture, &Graphics.WM.font);
-	Graphics.WM.addwindow(w);
+	Graphics.WM.addwindow(new cKeyBindWindow(&Graphics.WM.texture, &Graphics.WM.font));
 	return true;
 }
 

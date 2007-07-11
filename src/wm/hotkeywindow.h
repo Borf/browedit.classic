@@ -170,7 +170,7 @@ public:
 
 
 
-	cHotkeyWindow()
+	cHotkeyWindow(cTexture* t, cFont* f) : cWindow(t,f)
 	{
 		wtype = WT_HOTKEY;
 		resizable = false;

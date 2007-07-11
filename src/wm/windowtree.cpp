@@ -1,6 +1,6 @@
 #include "windowtree.h"
 #include "window.h"
-#include "../graphics.h"
+#include <graphics.h>
 extern cGraphics Graphics;
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
@@ -282,7 +282,7 @@ void cWindowTree::drag()
 	yy -= realy();
 	yy -= parent->py();
 
-	if (startmousex - realx() - parent->px() > w-14 && startmousex - realx() - parent->px() < w)
+	if (mousestartx - realx() - parent->px() > w-14 && mousestartx - realx() - parent->px() < w)
 	{
 		int i;
 		vector<string> values;

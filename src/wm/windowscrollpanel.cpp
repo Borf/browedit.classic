@@ -2,13 +2,13 @@
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
 #include "window.h"
-#include "../graphics.h"
+#include <graphics.h>
 extern cGraphics Graphics;
 extern cWindowObject* draggingobject;
 
 cWindowScrollPanel::~cWindowScrollPanel()
 {
-	for(unsigned int i = 0; i < objects.size(); i++)
+	for(int i = 0; i < objects.size(); i++)
 		delete objects[i];
 	objects.clear();
 }
@@ -123,45 +123,49 @@ void cWindowScrollPanel::draw(int cutoffleft, int cutoffright, int cutofftop, in
 	glColor4fv(colors);
 
 
-	glTranslatef(x-scrollposx, -y+scrollposy,0);
+	GLint viewport[4];
+	glGetIntegerv(GL_VIEWPORT, viewport);			// (X, Y, Width, Height)
+	
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
+	glPushMatrix();
 
-	for(unsigned int i = 0; i < objects.size(); i++)
+	int xxx = parent->px() + realx();
+	int yyy = parent->py() + realy();
+	glViewport(xxx, yyy+(cutoffbottom)+14, w-14, h-(cutofftop) - (cutoffbottom)-14);
+	glLoadIdentity();
+	glOrtho(0,w-14,-scrollposy+14,-scrollposy+h,-10000,10000);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	for(int i = 0; i < objects.size(); i++)
 	{
 		cWindowObject* o = objects[i];
-		if (o->px() >= scrollposx && o->px() + o->pw() <= scrollposx + (w-18) &&
-			o->py() > scrollposy-o->ph() && o->py() < scrollposy + (h-18) && o->type != OBJECT_LINE)
-//			o->py() >= scrollposy && o->py() + o->ph() <= scrollposy + (h-18) && o->type != OBJECT_LINE)
-		{
-			int oy = o->py();
-			int ox = o->px();
+//		if (o->px() >= scrollposx && o->px() + o->pw() <= scrollposx + (w-18) &&
+//			o->py() >= scrollposy && o->ph() <= scrollposy + (h-18) && o->type == OBJECT_LINE)
+//		{
+			int oldx = o->px();
+			int oldy = o->py();
 
 			if(o->type == OBJECT_LABEL)
-				o->moveto(o->px() - scrollposx, o->py() - scrollposy);
-			if(o->type == OBJECT_MODEL)
-				o->moveto(o->px() + x - scrollposx, o->py() + y - scrollposy);
-
-			o->draw(0,
-					0,
-					scrollposy-oy > 0 ? scrollposy-oy : 0,
-					oy <= scrollposy + (h-18) && !(oy + o->ph() <= scrollposy + (h-18)) ? o->ph()-(scrollposy+(h-18) - oy) : 0);
-
-			if(o->type == OBJECT_LABEL)
-				o->moveto(o->px() + scrollposx, o->py() + scrollposy);
-			if(o->type == OBJECT_MODEL)
-				o->moveto(o->px() - x + scrollposx, o->py() - y + scrollposy);
-		}
-
-
-
-		if (o->px() >= scrollposx && o->px() + o->pw() <= scrollposx + (w-18) &&
-			o->py() >= scrollposy && o->ph() <= scrollposy + (h-18) && o->type == OBJECT_LINE)
-		{
+				o->moveto(o->px()+x-parent->px(),o->py()+y+parent->py());
+			else
+				o->moveto(o->px(),o->py());
 			o->draw();	
-		}
-	}
-	glTranslatef(-x+scrollposx, y-scrollposy,0);
-	glEnable(GL_TEXTURE_2D);
 
+			o->moveto(oldx, oldy);
+
+//		}
+	}
+
+	
+	glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
+	glMatrixMode(GL_MODELVIEW);
+	glPopMatrix();
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
 }
 
 
@@ -201,7 +205,7 @@ void cWindowScrollPanel::click()
 // in the box
 			parent->moveto(parent->px()+scrollposx+x, parent->py()+scrollposy-y);
 			bool found = false;
-			for(unsigned int i = 0; i < objects.size(); i++)
+			for(int i = 0; i < objects.size(); i++)
 			{
 				if (objects[i]->inobject())
 				{
@@ -254,12 +258,12 @@ void cWindowScrollPanel::drag()
 		return ;
 	}
 
-	if (startmousex - realx() - parent->px() > w-14 && startmousex - realx() - parent->px() < w)
+	if (mousestartx - realx() - parent->px() > w-14 && mousestartx - realx() - parent->px() < w)
 	{
 		scrollposy = (int)(((h-(((Graphics.h()-mousey)+(ybarheight/2)) -parent->py() - ybarheight)) / (float)(h-16)) * innerheight - h);
 		scrollposy = (int)min(max(scrollposy, 0), innerheight-h);
 	}
-	else if ((Graphics.h()-startmousey) - parent->py() - realy() < 14)
+	else if ((Graphics.h()-mousestarty) - parent->py() - realy() < 14)
 	{
 		scrollposx = (int)((mousex +(xbarwidth/2)- parent->px() - xbarwidth) / (float)(w-16))*innerwidth;
 		scrollposx = (int)min(max(scrollposx, 0), innerwidth-w);
@@ -267,7 +271,7 @@ void cWindowScrollPanel::drag()
 	else
 	{
 		parent->moveto(parent->px()+scrollposx+x, parent->py()+scrollposy-y);
-		for(unsigned int i = 0; i < objects.size(); i++)
+		for(int i = 0; i < objects.size(); i++)
 		{
 			if (objects[i]->inobject())
 			{
@@ -285,7 +289,7 @@ void cWindowScrollPanel::drag()
 
 bool cWindowScrollPanel::onkeyup(int keyid)
 {
-	for(unsigned int i = 0; i < objects.size(); i++)
+	for(int i = objects.size()-1; i >= 0; i--)
 	{
 		if (objects[i]->inobject())
 			return objects[i]->onkeyup(keyid);
@@ -295,7 +299,7 @@ bool cWindowScrollPanel::onkeyup(int keyid)
 
 bool cWindowScrollPanel::onkeydown(int keyid)
 {
-	for(unsigned int i = 0; i < objects.size(); i++)
+	for(int i = objects.size()-1; i >= 0; i--)
 	{
 		if (objects[i]->inobject())
 			return objects[i]->onkeydown(keyid);
@@ -305,7 +309,7 @@ bool cWindowScrollPanel::onkeydown(int keyid)
 
 bool cWindowScrollPanel::onchar(char keyid)
 {
-	for(unsigned int i = 0; i < objects.size(); i++)
+	for(int i = objects.size()-1; i >= 0; i--)
 	{
 		if (objects[i]->inobject())
 			return objects[i]->onchar(keyid);
@@ -315,23 +319,24 @@ bool cWindowScrollPanel::onchar(char keyid)
 
 void cWindowScrollPanel::doubleclick()
 {
-	parent->moveto(parent->px()-scrollposx-x, parent->py()+scrollposy-y);
-	for(unsigned int i = 0; i < objects.size(); i++)
+	parent->moveto(parent->px()+scrollposx+x, parent->py()+scrollposy-y);
+	for(int i = objects.size()-1; i >= 0; i--)
 	{
 		if (objects[i]->inobject())
 		{
-			parent->moveto(parent->px()+scrollposx+x, parent->py()-scrollposy+y);
+			parent->moveto(parent->px()-scrollposx-x, parent->py()-scrollposy+y);
 			objects[i]->doubleclick();
 			return;
 		}
 	}
-	parent->moveto(parent->px()+scrollposx+x, parent->py()-scrollposy+y);
+	parent->moveto(parent->px()-scrollposx-x, parent->py()-scrollposy+y);
 	return;
 }
 
 void cWindowScrollPanel::rightclick()
 {
-	for(unsigned int i = 0; i < objects.size(); i++)
+	parent->moveto(parent->px()+scrollposx+x, parent->py()+scrollposy-y);
+	for(int i = objects.size()-1; i >= 0; i--)
 	{
 		if (objects[i]->inobject())
 			objects[i]->rightclick();
@@ -343,7 +348,7 @@ void cWindowScrollPanel::rightclick()
 string cWindowScrollPanel::ppopup()
 {
 	parent->moveto(parent->px()+scrollposx+x, parent->py()+scrollposy-y);
-	for(unsigned int i = 0; i < objects.size(); i++)
+	for(int i = objects.size()-1; i >= 0; i--)
 	{
 		if (objects[i]->inobject())
 		{
@@ -359,7 +364,7 @@ string cWindowScrollPanel::ppopup()
 cWindowObject* cWindowScrollPanel::inobject()
 {
 	parent->moveto(parent->px()+scrollposx+x, parent->py()+scrollposy-y);
-	for(unsigned int i = 0; i < objects.size(); i++)
+	for(int i = objects.size()-1; i >= 0; i--)
 	{
 		if (objects[i]->inobject())
 		{
@@ -369,4 +374,17 @@ cWindowObject* cWindowScrollPanel::inobject()
 	}
 	parent->moveto(parent->px()-scrollposx-x, parent->py()-scrollposy+y);
 	return cWindowObject::inobject();
+}
+
+
+void cWindowScrollPanel::scrollup()
+{
+	scrollposy= scrollposy - h/2;
+	scrollposy = (int)max(min(scrollposy, innerheight-h), 0);
+}
+
+void cWindowScrollPanel::scrolldown()
+{
+	scrollposy = scrollposy + h/2;
+	scrollposy = (int)max(min(scrollposy, innerheight-h), 0);
 }

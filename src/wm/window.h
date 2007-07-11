@@ -1,12 +1,12 @@
 #ifndef __WINDOW_H__
 #define __WINDOW_H__
-#include "../common.h"
+#include <common.h>
 
 #include <map>
 using namespace std;
 
-#include "../texture.h"
-#include "../font.h"
+#include <texture.h>
+#include <font.h>
 #include "windowobject.h"
 
 typedef map<string, cWindowObject*, less<string> > objectlist;
@@ -29,7 +29,6 @@ enum WINDOW_TYPE
 	WT_KEYBIND,
 	WT_TOOLBOX,
 };
-
 enum CLOSE_TYPE
 {
 	CLOSE,
@@ -50,15 +49,17 @@ protected:
 	bool resizingxy;
 	bool resizingy;
 	bool resizingyx;
+	bool checkborders;
 	int minh, minw;
 	WINDOW_TYPE wtype;
 	string title;
 	CLOSE_TYPE closetype;
 	bool enabled;
+	string saveprops;
 public:
 	bool savewindow;
 	string defaultobject;
-	cWindow()
+	cWindow(cTexture* t, cFont* f)
 	{
 		visible = false;
 		rolledup = false;
@@ -68,12 +69,16 @@ public:
 		resizingy = false;
 		resizingxy = false;
 		resizingyx = false;
+		checkborders = false;
 		minh = 100;
 		minw = 100;
 		selectedobject = NULL;
 		closetype = CLOSE;
 		modal = false;
 		enabled = true;
+		texture = t;
+		font = f;
+		saveprops = "";
 	}
 	virtual ~cWindow()
 	{
@@ -116,32 +121,38 @@ public:
 	void enable()					{ enabled = true; }
 	bool isenabled()				{ return enabled; }
 	bool resizing()					{ return resizingxy | resizingyx | resizingx | resizingy; }
+	bool onborder();
 	void moveto(int xx, int yy)		{ x = xx; y = yy; }
 	virtual void resizeto(int ww, int hh)	{ w = ww; h = hh; }
+	void initprops(string);
 
 	void SetTitle(string t)			{ title = t; }
 	string gettitle()				{ return title; }
 
 	int getcursor();
-	void close();
+	virtual void close(bool force = false);
 
 	virtual bool inwindow();
 	cWindowObject* inobject();
 	bool drag();
 	virtual void click();
 	virtual void draw();
-	virtual void save() { };
+	virtual void save();
 	virtual void doubleclick();
 	virtual void rightclick();
 	virtual void stopdrag() {}
 	virtual void dragover();
 	virtual void holddragover();
+	virtual void scrollup();
+	virtual void scrolldown();
 
 	virtual bool onkeyup(int);
 	virtual bool onkeydown(int);
 	virtual bool onchar(char);
 
 	cWindowObject* addlabel(string, int,int,string);
+	cWindowObject* addinputbox(string, int,int,int,string);
+	cWindowObject* addcheckbox(string, int,int,bool);
 
 	void center();
 
@@ -153,6 +164,6 @@ public:
 	cWindowObject*	selectedobject;
 };
 
-extern float startmousex, startmousey, dragoffsetx, dragoffsety;
+extern float mousestartx, mousestarty, dragoffsetx, dragoffsety;
 
 #endif

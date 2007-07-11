@@ -36,7 +36,7 @@ public:
 class cWaterWindow : public cWindow
 {
 public:
-	cWaterWindow()
+	cWaterWindow(cTexture* t, cFont* f) : cWindow(t,f)
 	{
 		wtype = WT_WATER;
 		resizable = false;

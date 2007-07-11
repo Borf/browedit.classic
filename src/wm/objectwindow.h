@@ -104,7 +104,7 @@ class cObjectWindow : public cWindow
 public:
 	cUndoItem* undo;
 
-	cObjectWindow()
+	cObjectWindow(cTexture* t, cFont* f) : cWindow(t,f)
 	{
 		cWindowObject* o;
 		wtype = WT_OBJECT;

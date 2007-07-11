@@ -13,7 +13,7 @@
 class cLightWindow : public cWindow
 {
 public:
-	cLightWindow()
+	cLightWindow(cTexture* t, cFont* f) : cWindow(t,f)
 	{
 		wtype = WT_LIGHT;
 		resizable = false;

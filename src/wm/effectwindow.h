@@ -13,7 +13,7 @@
 class cEffectWindow : public cWindow
 {
 public:
-	cEffectWindow()
+	cEffectWindow(cTexture* t, cFont* f) : cWindow(t,f)
 	{
 		cWindowObject* o;
 		wtype = WT_EFFECT;

@@ -26,8 +26,8 @@ public:
 		glColor3i(r,g,b);
 		glDisable(GL_TEXTURE_2D);
 		glBegin(GL_LINES);
-			glVertex2f(min(x, parent->pw()),max(parent->ph() - y, 0));
-			glVertex2f(min(w, parent->pw()),max(parent->ph() - h, 0));
+			glVertex2f(x, parent->ph() - y);
+			glVertex2f(w, parent->ph() - h);
 		glEnd();
 		glEnable(GL_TEXTURE_2D);
 		glColor4fv(colors);
@@ -50,14 +50,14 @@ public:
 			b = val;
 	}
 
-	bool inobject()
+	cWindowObject* inobject()
 	{
 		int xx=mousex-parent->px();
 		int yy=mousey-parent->py();
 		if (xx > realx() && xx < w &&
 			yy > realy() && yy < h)
-			return true;
-		return false;
+			return this;
+		return NULL;
 	}
 };
 

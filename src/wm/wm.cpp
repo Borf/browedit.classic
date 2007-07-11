@@ -1,15 +1,17 @@
 #include "wm.h"
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
-#include "../graphics.h"
+#include <graphics.h>
 #include "messagewindow.h"
 #include "confirmwindow.h"
 extern cGraphics Graphics;
 extern cWindow* draggingwindow;
+
 extern void mainloop();
 
 int cWM::draw()
 {
+	glDisable(GL_LIGHTING);
 	glDisable(GL_DEPTH_TEST);
 	//glTranslatef(0,0,9000);
 	CleanWindows();
@@ -210,7 +212,7 @@ void cWM::togglewindow(WINDOW_TYPE wt)
 	}
 }
 
-int cWM::closewindow(WINDOW_TYPE wt)
+int cWM::closewindow(WINDOW_TYPE wt, bool force)
 {
 	for(int i = 0; i < (int)windows.size(); i++)
 	{
@@ -218,7 +220,7 @@ int cWM::closewindow(WINDOW_TYPE wt)
 		if (w != NULL)
 
 			if (w->isenabled() && w->windowtype() == wt)
-				w->close();
+				w->close(force);
 	}
 	return 0;
 
@@ -234,6 +236,66 @@ bool cWM::onchar(char c)
 
 bool cWM::onkeydown(int key)
 {
+	if(windows.size() == 0)
+		return false;
+
+/*	if (key == SDLK_RETURN && windows[0]->isenabled() && windows[0]->defaultobject == "")
+	{
+		cWindow* w = getwindow(WT_CHAT);
+		if (w != NULL)
+		{
+			int i;
+			for(i = 0; i < (int)windows.size(); i++)
+				if (windows[i]->windowtype() == WT_CHAT) break;
+			
+
+			
+
+			if (windows[0]->windowtype() == WT_CHAT && w->selectedobject != w->objects["inputbox"])
+			{
+				w->selectedobject = w->objects["inputbox"];
+				// selects
+				w->selectedobject->SetInt(1, w->selectedobject->GetText(0).length());
+				w->selectedobject->SetInt(2, 0);
+				return true;
+			}
+			else if(windows[0]->defaultobject == "" && i != 0)
+			{
+				for(int ii = i; ii > 0; ii--)
+				{
+					windows[ii]->istopwindow(false);
+					windows[ii] = windows[ii-1];
+				}
+				windows[0]->istopwindow(false);
+				windows[0] = w;
+				w->istopwindow(true);
+				w->selectedobject = w->objects["inputbox"];
+				w->selectedobject->SetInt(1, w->selectedobject->GetText(0).length());
+				w->selectedobject->SetInt(2, 0);
+				return true;
+			}
+
+		}
+	}
+
+	if (SDL_GetModState() & KMOD_CTRL)
+	{
+		cWindow* w = Graphics.WM.getwindow(WT_MAIN);
+		if (w != NULL)
+		{
+			if (key == '1')
+				w->objects["Status"]->click();
+			else if (key == '2')
+				w->objects["Equip"]->click();
+			else if (key == '3')
+				w->objects["Skills"]->click();
+			else if (key == '4')
+				w->objects["Items"]->click();
+			return true;
+		}
+	}*/
+
+	
 	if(windows.size() > 0)
 		if (windows[0]->isenabled() && windows[0]->isvisible())
 			return windows[0]->onkeydown(key);
@@ -302,8 +364,7 @@ void cWM::rightclick()
 
 void cWM::MessageBox(string message)
 {
-	cWindow* w = new cMessageWindow();
-	w->init(&texture, &font);
+	cWindow* w = new cMessageWindow(&texture, &font);
 	w->objects["text"]->SetText(0, message);
 	w->show();
 	addwindow(w);
@@ -380,8 +441,7 @@ void cWM::printdebug()
 
 void cWM::ConfirmWindow(string title, cConfirmWindow::cConfirmWindowCaller* caller)
 {
-	cWindow* w = new cConfirmWindow(caller);
-	w->init(&texture, &font);
+	cWindow* w = new cConfirmWindow(caller, &texture, &font);
 	w->objects["text"]->SetText(0, title);
 	w->show();
 	addwindow(w);
@@ -407,11 +467,11 @@ void cWM::defocus()
 
 void cWM::InputWindow(string title, cInputWindow::cInputWindowCaller* caller)
 {
-	cWindow* w = new cInputWindow(caller);
+	cWindow* w = new cInputWindow(caller, &texture, &font);
 	w->init(&texture, &font);
 	w->objects["text"]->SetText(0, title);
-	w->show();
 	w->objects["input"]->SetText(0,"");
+	w->show();
 	addwindow(w);
 }
 
@@ -448,10 +508,43 @@ string cWM::InputWindow(string title)
 	while(!b)
 	{
 		mainloop();
-		Sleep(100);
+		Sleep(1);
 	}
 
-	return data;	
+	return data;
+}
+
+
+bool cWM::ConfirmWindow(string title)
+{
+	class cDefaultConfirmWindowCaller : public cConfirmWindow::cConfirmWindowCaller
+	{
+	public:
+		int* b;
+		cDefaultConfirmWindowCaller(int* bb)
+		{
+			b = bb;
+		}
+		void Ok()
+		{
+			*b = 1;
+		}
+		void Cancel()
+		{
+			*b = -1;
+		}
+	};
+
+	int b = 0;
+
+	ConfirmWindow(title, new cDefaultConfirmWindowCaller(&b));
+	while(b == 0)
+	{
+		mainloop();
+		Sleep(1);
+	}
+
+	return b > 0;
 }
 
 

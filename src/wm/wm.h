@@ -1,9 +1,9 @@
 #ifndef __WM_H__
 #define __WM_H__
 
-#include "../common.h"
-#include "../font.h"
-#include "../texture.h"
+#include <common.h>
+#include <font.h>
+#include <texture.h>
 #include <list>
 
 #include <map>
@@ -22,7 +22,7 @@ public:
 	~cWM();
 	int					init();
 	int					openwindow(WINDOW_TYPE);
-	int					closewindow(WINDOW_TYPE);
+	int					closewindow(WINDOW_TYPE, bool = false);
 	void				showwindow(WINDOW_TYPE);
 	void				hidewindow(WINDOW_TYPE);
 	void				togglewindow(WINDOW_TYPE);
@@ -52,6 +52,7 @@ public:
 	int					focus;
 	void				MessageBox(string);
 	void				ConfirmWindow(string, cConfirmWindow::cConfirmWindowCaller* caller);
+	bool				ConfirmWindow(string);
 	void				InputWindow(string, cInputWindow::cInputWindowCaller* caller);
 	string				InputWindow(string);
 

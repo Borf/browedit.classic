@@ -1,6 +1,6 @@
 #include "windowpicturebox.h"
 #include "window.h"
-#include "../texturecache.h"
+#include <texturecache.h>
 
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
@@ -33,7 +33,9 @@ void cWindowPictureBox::draw(int cutoffleft, int cutoffright, int cutofftop, int
 					glColor3f(1.0f, 1.0f, 1.0f);
 			}
 			else if (highlightmode == 4)
-				glColor3f(0.3f, 0.3f, 0.3f);
+				glColor3f(0.6f, 0.6f, 0.6f);
+			else if (highlightmode == 5)
+				glColor3f(0.2f, 0.2f, 0.2f);
 
 
 			glEnable(GL_TEXTURE_2D);

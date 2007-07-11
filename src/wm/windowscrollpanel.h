@@ -46,6 +46,9 @@ public:
 	void rightclick();
 	cWindowObject* inobject();
 
+	void scrollup();
+	void scrolldown();
+
 	string ppopup();
 
 };

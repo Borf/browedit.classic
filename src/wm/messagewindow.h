@@ -1,35 +1,36 @@
 #ifndef __MESSAGEWINDOW_H__
 #define __MESSAGEWINDOW_H__
 
-#include "window.h"
+#include "../wm/window.h"
 
-#include "windowobject.h"
-#include "windowroundbutton.h"
-#include "windowbutton.h"
-#include "windowlabel.h"
+#include "../wm/windowobject.h"
+#include "../wm/windowroundbutton.h"
+#include "../wm/windowbutton.h"
+#include "../wm/windowlabel.h"
 
-class cWindowOkButton : public cWindowButton
-{
-public:
-	cWindowOkButton(cWindow* parent) : cWindowButton(parent)
-	{
-		alignment = ALIGN_BOTTOM;
-		moveto(0, 20);
-		resizeto(100, 20);
-		text = msgtable[WINDOW_OK];
-	}
-	virtual ~cWindowOkButton() {}
-	void click()
-	{
-		parent->close();
-	}
-};
 
 
 class cMessageWindow : public cWindow
 {
+	class cWindowOkButton : public cWindowButton
+	{
+	public:
+		cWindowOkButton(cWindow* parent) : cWindowButton(parent)
+		{
+			alignment = ALIGN_BOTTOM;
+			moveto(0, 20);
+			resizeto(100, 20);
+			text = "Ok";
+		}
+		virtual ~cWindowOkButton() {}
+		void click()
+		{
+			parent->close();
+		}
+	};
+
 public:
-	cMessageWindow()
+	cMessageWindow(cTexture* t, cFont* f) : cWindow(t,f)
 	{
 		wtype = WT_MESSAGE;
 		resizable = false;
@@ -38,7 +39,7 @@ public:
 
 		h = 200;
 		w = 350;
-		title = msgtable[WINDOW_MESSAGE_TITLE];
+		title = "Message...";
 		center();
 
 		defaultobject = "OkButton";

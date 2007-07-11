@@ -10,7 +10,6 @@ void cWindowProgressBar::draw(int cutoffleft, int cutoffright, int cutofftop, in
 	xx = realx();
 	yy = realy();
 
-
 	float ratio = ((float)value / (float)max-min);
 	float ww = (float)w*ratio;
 
@@ -123,4 +122,11 @@ void cWindowProgressBar::SetInt(int id, int val)
 		max = val;
 	else if (id == 3)
 		gradcolors = (val != 0);
+}
+
+string cWindowProgressBar::ppopup()
+{
+	char buf[100];
+	sprintf(buf ,"%i/%i (%.02f%%)", value, max-min, ((float)value / (float)(max-min))*100.0f);
+	return buf;
 }

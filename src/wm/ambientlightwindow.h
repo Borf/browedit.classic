@@ -44,7 +44,7 @@ public:
 class cAmbientLightWindow : public cWindow
 {
 public:
-	cAmbientLightWindow()
+	cAmbientLightWindow(cTexture* t, cFont* f) : cWindow(t,f)
 	{
 		wtype = WT_AMBIENTLIGHT;
 		resizable = false;

@@ -41,6 +41,7 @@ public:
 	void doubleclick();
 	void SetInt(int, int);
 	int GetInt(int);
+	string GetText(int);
 };
 
 

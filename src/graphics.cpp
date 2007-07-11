@@ -383,9 +383,7 @@ int cGraphics::init()
 	splash->Load("data/hamtaro.tga");
 	Log(3,0,msgtable[INIT_GRAPHICS_WM]);
 	WM.init();
-	cWindow* w = new cHotkeyWindow();
-	w->init(&WM.texture, &WM.font);
-	WM.addwindow(w);
+	WM.addwindow(new cHotkeyWindow(&WM.texture, &WM.font));
 
 	int i;
 	for(i = 0; i < 7; i++)

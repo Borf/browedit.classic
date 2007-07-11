@@ -4,8 +4,8 @@
 #include "windowobject.h"
 #include <string>
 #include <vector>
-#include "../texture.h"
-#include "../texturecache.h"
+#include <texture.h>
+#include <texturecache.h>
 using namespace std;
 
 class cWindowPictureBox : public cWindowObject
