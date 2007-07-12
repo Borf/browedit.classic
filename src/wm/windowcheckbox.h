@@ -22,7 +22,7 @@ public:
 	}
 	virtual void draw(int,int,int,int);
 	virtual void click();
-	bool onchar(char);
+	bool onchar(char, bool);
 	void SetInt(int, int);
 	int GetInt(int);
 };

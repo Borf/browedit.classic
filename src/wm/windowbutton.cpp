@@ -67,7 +67,7 @@ void cWindowButton::click()
 	Log(1,0, "You clicked the button!");
 }
 
-bool cWindowButton::onkeydown(int c)
+bool cWindowButton::onkeydown(int c, bool shift)
 {
 	if (c == SDLK_RETURN)
 	{

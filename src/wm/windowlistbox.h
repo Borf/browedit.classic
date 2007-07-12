@@ -32,7 +32,7 @@ public:
 	virtual ~cWindowListBox() {}
 	virtual void draw(int,int,int,int);
 	virtual void click();
-	bool onkeydown(int);
+	bool onkeydown(int, bool);
 //	void onchar(char);
 
 	void SetText(int, string);

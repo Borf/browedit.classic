@@ -153,7 +153,7 @@ void cWindowInputBox::click()
 }
 
 
-bool cWindowInputBox::onkeydown(int keyid)
+bool cWindowInputBox::onkeydown(int keyid, bool shift)
 {
 	if (editable)
 	{
@@ -162,7 +162,7 @@ bool cWindowInputBox::onkeydown(int keyid)
 		{
 			if (cursor > 0)
 				cursor--;
-			if (!(SDL_GetModState() & KMOD_SHIFT))
+			if (!shift)
 				selectionstart = cursor;
 			ret = true;
 		}
@@ -170,21 +170,21 @@ bool cWindowInputBox::onkeydown(int keyid)
 		{
 			if (cursor < (int)text.length())
 				cursor++;
-			if (!(SDL_GetModState() & KMOD_SHIFT))
+			if (!shift)
 				selectionstart = cursor;
 			ret = true;
 		}
 		if (keyid == SDLK_END)
 		{
 			cursor = text.length();
-			if (!(SDL_GetModState() & KMOD_SHIFT))
+			if (!shift)
 				selectionstart = cursor;
 			ret = true;
 		}
 		if (keyid == SDLK_HOME)
 		{
 			cursor = 0;
-			if (!(SDL_GetModState() & KMOD_SHIFT))
+			if (!shift)
 				selectionstart = cursor;
 			ret = true;
 		}		
@@ -231,7 +231,7 @@ bool cWindowInputBox::onkeydown(int keyid)
 	return false;
 }
 
-bool cWindowInputBox::onchar(char keyid)
+bool cWindowInputBox::onchar(char keyid, bool shift)
 {
 	if (keyid > 27 && editable)
 	{
@@ -247,7 +247,7 @@ bool cWindowInputBox::onchar(char keyid)
 		while(parent->font->textlen(text.substr(startindex, cursor-startindex)) > w-10)
 			startindex = min(startindex + 4, (int)text.length());
 
-		if (!(SDL_GetModState() & KMOD_SHIFT))
+		if (!shift)
 			selectionstart = cursor;
 		selectionstart = cursor;
 		return true;

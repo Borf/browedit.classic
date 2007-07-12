@@ -42,6 +42,7 @@ void cWindowTree::draw(int cutoffleft, int cutoffright, int cutofftop, int cutof
 	if (barpos != 0)
 		barpos = (int)((float)(h-16.0f) * ((float)liststart / (float)values.size()));
 
+	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, parent->texture->texid());
 	glBegin(GL_QUADS);
 // box
@@ -152,7 +153,7 @@ void cWindowTree::draw(int cutoffleft, int cutoffright, int cutofftop, int cutof
 
 
 
-bool cWindowTree::onkeydown(int key)
+bool cWindowTree::onkeydown(int key, bool shift)
 {
 	int i;
 	vector<string> values;
@@ -239,11 +240,11 @@ void cWindowTree::click()
 	{
 		if (yy < 8)
 		{ // arrow down
-			onkeydown(SDLK_DOWN);
+			onkeydown(SDLK_DOWN, false);
 		}
 		else if (yy+8 > h)
 		{
-			onkeydown(SDLK_UP);
+			onkeydown(SDLK_UP, false);
 		}
 		else
 		{

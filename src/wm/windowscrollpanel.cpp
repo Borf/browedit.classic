@@ -151,7 +151,7 @@ void cWindowScrollPanel::draw(int cutoffleft, int cutoffright, int cutofftop, in
 			if(o->type == OBJECT_LABEL)
 				o->moveto(o->px()+x-parent->px(),o->py()+y+parent->py());
 			else
-				o->moveto(o->px(),o->py());
+				o->moveto(o->px(),o->py()+y);
 			o->draw();	
 
 			o->moveto(oldx, oldy);
@@ -287,32 +287,32 @@ void cWindowScrollPanel::drag()
 
 }
 
-bool cWindowScrollPanel::onkeyup(int keyid)
+bool cWindowScrollPanel::onkeyup(int keyid, bool shift)
 {
 	for(int i = objects.size()-1; i >= 0; i--)
 	{
 		if (objects[i]->inobject())
-			return objects[i]->onkeyup(keyid);
+			return objects[i]->onkeyup(keyid, shift);
 	}
 	return false;
 }
 
-bool cWindowScrollPanel::onkeydown(int keyid)
+bool cWindowScrollPanel::onkeydown(int keyid, bool shift)
 {
 	for(int i = objects.size()-1; i >= 0; i--)
 	{
 		if (objects[i]->inobject())
-			return objects[i]->onkeydown(keyid);
+			return objects[i]->onkeydown(keyid, shift);
 	}
 	return false;
 }
 
-bool cWindowScrollPanel::onchar(char keyid)
+bool cWindowScrollPanel::onchar(char keyid, bool shift)
 {
 	for(int i = objects.size()-1; i >= 0; i--)
 	{
 		if (objects[i]->inobject())
-			return objects[i]->onchar(keyid);
+			return objects[i]->onchar(keyid, shift);
 	}
 	return false;
 }
@@ -341,6 +341,7 @@ void cWindowScrollPanel::rightclick()
 		if (objects[i]->inobject())
 			objects[i]->rightclick();
 	}
+	parent->moveto(parent->px()-scrollposx-x, parent->py()-scrollposy+y);
 }
 
 

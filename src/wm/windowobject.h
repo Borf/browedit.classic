@@ -112,9 +112,9 @@ public:
 	int realy();
 	int realy2();
 	
-	virtual bool onkeyup(int) { return false; }
-	virtual bool onkeydown(int) { return false; }
-	virtual bool onchar(char) { return false; }
+	virtual bool onkeyup(int,bool) { return false; }
+	virtual bool onkeydown(int,bool) { return false; }
+	virtual bool onchar(char,bool) { return false; }
 	virtual void doubleclick() {}
 	virtual void rightclick() {}
 

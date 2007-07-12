@@ -302,10 +302,10 @@ void cModelsWindow::cWindowModelCatSelect::rightclick()
 }
 
 
-bool cModelsWindow::cWindowModelCatSelect::onkeydown(int key)
+bool cModelsWindow::cWindowModelCatSelect::onkeydown(int key, bool shift)
 {
 	int i;
-	bool b = cWindowTree::onkeydown(key);
+	bool b = cWindowTree::onkeydown(key, shift);
 	if(b)
 		return true;
 	

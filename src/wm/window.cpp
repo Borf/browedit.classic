@@ -10,7 +10,6 @@ extern cWindowObject* draggingobject;
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
 
-
 #ifndef __NOXML__
 #include <tinyxml/tinyxml.h>
 extern TiXmlDocument	config;
@@ -194,7 +193,7 @@ void cWindow::click()
 //	yy-=y;
 	if (!visible) return;
 
-	for(objectlist::iterator i = objects.begin(); i != objects.end(); i++)
+	for(objectlist::reverse_iterator i = objects.rbegin(); i != objects.rend(); i++)
 	{
 		if (i->second->inobject() && i->second->selectable)
 		{
@@ -299,25 +298,25 @@ void cWindow::center()
 	y = (Graphics.h()/2)-(h/2);
 }
 
-bool cWindow::onchar(char c)
+bool cWindow::onchar(char c,bool shift)
 {
 	if (selectedobject != NULL)
-		return selectedobject->onchar(c);
+		return selectedobject->onchar(c, shift);
 	else if (objects.find(defaultobject) != objects.end())
-		return objects[defaultobject]->onchar(c);
+		return objects[defaultobject]->onchar(c, shift);
 	return false;
 }
-bool cWindow::onkeydown(int c)
+bool cWindow::onkeydown(int c,bool shift)
 {
 	if (selectedobject != NULL)
-		if(selectedobject->onkeydown(c))
+		if(selectedobject->onkeydown(c, shift))
 			return true;
 	if (c == SDLK_RETURN)
 	{
 		if (objects.find(defaultobject) != objects.end())
-			return objects[defaultobject]->onkeydown(c);
+			return objects[defaultobject]->onkeydown(c, shift);
 		else if (selectedobject != NULL)
-			return selectedobject->onkeydown(c);
+			return selectedobject->onkeydown(c, shift);
 
 	}
 	else if (c == SDLK_TAB)
@@ -331,7 +330,7 @@ bool cWindow::onkeydown(int c)
 
 		if (selcount > 0)
 		{
-			if (!(SDL_GetModState() & KMOD_SHIFT))
+			if (!shift)
 			{
 				do
 				{
@@ -374,17 +373,17 @@ bool cWindow::onkeydown(int c)
 		return true;
 	}
 	else if (objects.find(defaultobject) != objects.end())
-		return objects[defaultobject]->onkeydown(c);
+		return objects[defaultobject]->onkeydown(c,shift);
 	return false;
 }
-bool cWindow::onkeyup(int c)
+bool cWindow::onkeyup(int c,bool shift)
 {
 	if (selectedobject != NULL)
 	{
-		return selectedobject->onkeyup(c);
+		return selectedobject->onkeyup(c,shift);
 	}
 	else if (objects.find(defaultobject) != objects.end())
-		return objects[defaultobject]->onkeyup(c);
+		return objects[defaultobject]->onkeyup(c,shift);
 	return false;
 
 }

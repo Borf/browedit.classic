@@ -34,6 +34,7 @@ void cWindowListBox::draw(int cutoffleft, int cutoffright, int cutofftop, int cu
 	if (barpos != 0)
 		barpos = (int)((float)(h-16.0f) * ((float)liststart / (float)values.size()));
 
+	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, parent->texture->texid());
 	glBegin(GL_QUADS);
 // box
@@ -144,7 +145,7 @@ void cWindowListBox::draw(int cutoffleft, int cutoffright, int cutofftop, int cu
 
 
 
-bool cWindowListBox::onkeydown(int key)
+bool cWindowListBox::onkeydown(int key, bool shift)
 {
 	if (key == SDLK_DOWN && selected < (int)values.size()-1)
 	{
@@ -244,11 +245,11 @@ void cWindowListBox::click()
 	{
 		if (yy < 8)
 		{ // arrow down
-			onkeydown(SDLK_DOWN);
+			onkeydown(SDLK_DOWN, false);
 		}
 		else if (yy+8 > h)
 		{
-			onkeydown(SDLK_UP);
+			onkeydown(SDLK_UP, false);
 		}
 		else
 		{

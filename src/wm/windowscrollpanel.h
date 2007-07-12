@@ -39,9 +39,9 @@ public:
 	void draw(int,int,int,int);
 	void drag();
 	void click();
-	bool onkeyup(int);
-	bool onkeydown(int);
-	bool onchar(char);
+	bool onkeyup(int, bool);
+	bool onkeydown(int, bool);
+	bool onchar(char, bool);
 	void doubleclick();
 	void rightclick();
 	cWindowObject* inobject();

@@ -32,9 +32,9 @@ public:
 	void				click(bool);
 	void				drag(cWindow*);
 	cWindow*			inwindow();
-	bool				onchar(char);
-	bool				onkeyup(int);
-	bool				onkeydown(int);
+	bool				onchar(char, bool shift);
+	bool				onkeyup(int, bool shift);
+	bool				onkeydown(int, bool shift);
 	void				doubleclick();
 	void				rightclick();
 	cWindow*			getwindow(WINDOW_TYPE);

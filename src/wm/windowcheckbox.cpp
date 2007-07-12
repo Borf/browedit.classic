@@ -67,7 +67,7 @@ void cWindowCheckBox::click()
 }
 
 
-bool cWindowCheckBox::onchar(char keyid)
+bool cWindowCheckBox::onchar(char keyid, bool shift)
 {
 	if (keyid == ' ')
 	{

@@ -226,15 +226,15 @@ int cWM::closewindow(WINDOW_TYPE wt, bool force)
 
 }
 
-bool cWM::onchar(char c)
+bool cWM::onchar(char c, bool shift)
 {
 	if (windows.size() > 0)
 		if (windows[0]->isenabled() && windows[0]->isvisible())
-			return windows[0]->onchar(c);
+			return windows[0]->onchar(c, shift);
 	return false;
 }
 
-bool cWM::onkeydown(int key)
+bool cWM::onkeydown(int key, bool shift)
 {
 	if(windows.size() == 0)
 		return false;
@@ -298,17 +298,17 @@ bool cWM::onkeydown(int key)
 	
 	if(windows.size() > 0)
 		if (windows[0]->isenabled() && windows[0]->isvisible())
-			return windows[0]->onkeydown(key);
+			return windows[0]->onkeydown(key, shift);
 	return false;
 }
-bool cWM::onkeyup(int key)
+bool cWM::onkeyup(int key, bool shift)
 {
 	if(windows.size() > 0)
 	{
 		bool parsekey = true;
 
 		if (parsekey && windows[0]->isvisible() && windows[0]->isenabled())
-			return windows[0]->onkeyup(key);
+			return windows[0]->onkeyup(key, shift);
 	}
 	return false;
 }

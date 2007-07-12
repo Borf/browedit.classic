@@ -33,8 +33,8 @@ public:
 	virtual ~cWindowInputBox() {}
 	virtual void draw(int,int,int,int);
 	virtual void click();
-	bool onkeydown(int);
-	bool onchar(char);
+	bool onkeydown(int,bool);
+	bool onchar(char,bool);
 
 	void SetText(int, string);
 	void SetInt(int, int);

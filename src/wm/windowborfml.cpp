@@ -4,6 +4,9 @@
 #include "window.h"
 #include <graphics.h>
 #include <texturecache.h>
+
+#include <windows/questswindow.h>
+
 extern cGraphics Graphics;
 extern cWindowObject* draggingobject;
 
@@ -42,7 +45,10 @@ cVector2 cWindowBorfMLBox::drawnode(cVector2 curpos, TiXmlNode* n, int& lineheig
 					curpos.y += lineheight;
 					lineheight = 12*size.y;
 				}
-				curpos.x = parent->font->print(color.x, color.y, color.z,curpos.x,curpos.y,size.x,-size.y, "%s", word.c_str()).x;
+				if(draw)
+					curpos.x = parent->font->print(color.x, color.y, color.z,curpos.x,curpos.y,size.x,-size.y, "%s", word.c_str()).x;
+				else
+					curpos.x += parent->font->textlen(word) * size.x;
 				t = t.substr(t.find(" ")+1);
 			}
 			if(curpos.x > w - parent->font->textlen(t))
@@ -51,13 +57,10 @@ cVector2 cWindowBorfMLBox::drawnode(cVector2 curpos, TiXmlNode* n, int& lineheig
 				curpos.y += lineheight;
 				lineheight = 12*size.y;
 			}
-			curpos.x = parent->font->print(color.x, color.y, color.z,curpos.x,curpos.y,size.x,-size.y, "%s", t.c_str()).x;
-
-/*			
 			if(draw)
-				curpos.x = parent->font->print(color.x, color.y, color.z,curpos.x,curpos.y,size.x,-size.y, n->Value()).x;
+				curpos.x = parent->font->print(color.x, color.y, color.z,curpos.x,curpos.y,size.x,-size.y, "%s", t.c_str()).x;
 			else
-				curpos.x = curpos.x + parent->font->textlen(n->Value()) * size.x;*/
+				curpos.x += parent->font->textlen(t) * size.x;
 			lineheight = max(lineheight, 12*size.y);
 		}
 		else if(n->Type() == TiXmlNode::ELEMENT)
@@ -99,6 +102,21 @@ cVector2 cWindowBorfMLBox::drawnode(cVector2 curpos, TiXmlNode* n, int& lineheig
 					newcolor.z = atof(n->ToElement()->Attribute("b"));
 
 				curpos = drawnode(curpos, n->FirstChild(), lineheight, areas, newcolor, size, draw);
+			}
+			if(strcmp(n->Value(), "b") == 0)
+			{
+				drawnode(curpos+cVector2(1.0f,1.0f), n->FirstChild(), lineheight, areas, color+cVector3(0.3f,0.3f,0.3f), size, draw);
+				curpos = drawnode(curpos, n->FirstChild(), lineheight, areas, color, size, draw);
+			}
+			if(strcmp(n->Value(), "goal") == 0)
+			{
+				parent->font->print(color.x, color.y, color.z, curpos.x, curpos.y, "- %s","\7");
+				curpos.x += 10;
+				drawnode(curpos+cVector2(1.0f,1.0f), n->FirstChild(), lineheight, areas, color+cVector3(0.3f,0.3f,0.3f), size, draw);
+				if(((((cQuestsWindow*)parent)->questgoals >> atoi(n->ToElement()->Attribute("id")) ) & 1) != 0)
+					curpos = drawnode(curpos, n->FirstChild(), lineheight, areas, color+cVector3(0.5f,0.5f,0.5f), size, draw);
+				else
+					curpos = drawnode(curpos, n->FirstChild(), lineheight, areas, color+cVector3(0.5f,0,0.3f), size, draw);
 			}
 			if(strcmp(n->Value(), "img") == 0)
 			{
@@ -212,7 +230,7 @@ cVector2 cWindowBorfMLBox::drawnode(cVector2 curpos, TiXmlNode* n, int& lineheig
 
 					glEnd();
 				}
-				curpos = drawnode(curpos + cVector2(5,5), n->FirstChild(), lineheight, areas, color, size, draw);
+				curpos.x = drawnode(curpos + cVector2(5,5), n->FirstChild(), lineheight, areas, color, size, draw).x;
 				curpos.x += 10;
 			}
 		}
@@ -420,9 +438,9 @@ void cWindowBorfMLBox::click()
 	int ybarheight = (int)max(((float)h/(float)innerheight)*h, 16);
 	int xbarwidth = (int)max(((float)w/(float)innerwidth)*w, 16);
 
-	if (xx < w - 14)
+	if (xx < w - 14 || innerheight < h)
 	{ // not on the vertical scrollbar
-		if (yy < 8)
+		if (yy < 8 && innerwidth >= w)
 		{ // on the horizontal scrollbar
 			if (xx < 10)
 			{
@@ -522,6 +540,7 @@ cWindowObject* cWindowBorfMLBox::inobject()
 
 void cWindowBorfMLBox::SetText(int id, string text)
 {
+	body.Clear();
 	body.SetCondenseWhiteSpace(true);
 	body.Parse(text.c_str());
 }

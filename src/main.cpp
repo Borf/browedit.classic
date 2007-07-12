@@ -88,6 +88,7 @@ MENUCOMMAND(exit);
 MENUCOMMAND(random1);
 MENUCOMMAND(random2);
 MENUCOMMAND(random3);
+MENUCOMMAND(random4);
 MENUCOMMAND(shading);
 MENUCOMMAND(exportheight);
 MENUCOMMAND(mode);
@@ -787,6 +788,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,rnd, msgtable[MENU_RANDOM1],						&MenuCommand_random1); // random1
 	ADDMENUITEM(mm,rnd, msgtable[MENU_RANDOM1],						&MenuCommand_random2); // random1
 	ADDMENUITEM(mm,rnd, msgtable[MENU_RANDOM1],						&MenuCommand_random3); // random1
+	ADDMENUITEM(mm,rnd, msgtable[MENU_RANDOM1],						&MenuCommand_random4); // random1
 	ADDMENUITEM(mm,rnd, msgtable[MENU_MAZESTUFF],					&MenuCommand_tempfunc); // Maze stuff
 	ADDMENUITEM(mm,rnd, msgtable[MENU_QUADTREE],					&MenuCommand_quadtree); // Quadtree
 	ADDMENUITEM(mm,rnd, msgtable[MENU_CALCULATELIGHTMAPS],			&MenuCommand_dolightmapsall); // Lightmaps
@@ -998,7 +1000,7 @@ int process_events()
 			break;
 		case SDL_KEYUP:
 			keys[event.key.keysym.sym-SDLK_FIRST] = 0;
-			if (Graphics.WM.onkeyup(event.key.keysym.sym))
+			if (Graphics.WM.onkeyup(event.key.keysym.sym, (event.key.keysym.mod&KMOD_SHIFT) != 0))
 				return 0;
 			if(keymap[event.key.keysym.sym] == SDLK_ESCAPE)
 				running = false;
@@ -1017,12 +1019,12 @@ int process_events()
 		case SDL_KEYDOWN:
 			if(keys[event.key.keysym.sym-SDLK_FIRST] == 0)
 				keys[event.key.keysym.sym-SDLK_FIRST] = SDL_GetTicks() + 400;
-			if(Graphics.WM.onkeydown(event.key.keysym.sym))
+			if(Graphics.WM.onkeydown(event.key.keysym.sym, (event.key.keysym.mod&KMOD_SHIFT) != 0))
 				return 0;
 			if (strlen(SDL_GetKeyName(event.key.keysym.sym)) == 1 || event.key.keysym.sym == SDLK_SPACE)
 			{
 				if (event.key.keysym.unicode > 0 && event.key.keysym.unicode < 128)
-					if (Graphics.WM.onchar((char)event.key.keysym.unicode))
+					if (Graphics.WM.onchar((char)event.key.keysym.unicode, (event.key.keysym.mod&KMOD_SHIFT) != 0))
 						return 0;
 			}
 			break;
@@ -4302,9 +4304,6 @@ MENUCOMMAND(random1)
 	ev.type = SDL_KEYUP;
 	ev.key.keysym.sym = SDLK_s;
 	SDL_PushEvent(&ev);
-
-
-
 	editmode = m;
 
 	return true;
@@ -4369,67 +4368,91 @@ MENUCOMMAND(random2)
 	}
 
 	
-	x = 1 + (rand()%((Graphics.world.width/10)-2));
-	y = 1 + (rand()%((Graphics.world.height/10)-2));
+//	x = 1 + (rand()%((Graphics.world.width/10)-2));
+//	y = 1 + (rand()%((Graphics.world.height/10)-2));
+
+	x = Graphics.world.width/2;
+	y = Graphics.world.height/2;
 
 	
-	int a = 0;
-	int lasta = 0;
+	int a = rand()%360;
+	int lasta = a;
 	int reali = 0;
-	for(i = 0; i < (Graphics.world.height+Graphics.world.width) / 30; i++)
+	bool filledenough = false;
+	while(!filledenough) //(Graphics.world.height+Graphics.world.width) / 25
 	{
 		reali++;
-		a = rand()%8;
-		if(a % 2 == 1)
-			a = rand()%8;
-
-		if(a == lasta || ((a+2)%4) == lasta)
-			a = rand()%4;
+		a += (rand()%180)-90;
+		while(a < 0)
+			a+=360;
+		while(a > 360)
+			a-=360;
 
 		lasta = a;
 
-		int c = (rand() % 5+5)*2;
+		int c = rand() % 25+25;
 
-
-		if(Graphics.world.cubes[10*y][10*x].cell1 >= 0 && reali < 100)
-			i--;
-
+		float curve = ((rand() % 100)-50) / 50.0f;
 		for(int ii = 0; ii < c; ii++)
 		{
+			a += curve;
+			while(a < 0)
+				a+=360;
+			while(a > 360)
+				a-=360;
 
-			bool water = rand() % 20 == 0;
+			bool water = false;//rand() % 20 == 0;
 
 			for(int xx = 0; xx < 10; xx++)
 			{
 				for(int yy = 0; yy < 10; yy++)
 				{
-					Graphics.world.cubes[10*y+yy][10*x+xx].cell1 = water ? 30 : 0;//rand()%25;
-					Graphics.world.cubes[10*y+yy][10*x+xx].cell2 = water ? 30 : 0;//rand()%25;
-					Graphics.world.cubes[10*y+yy][10*x+xx].cell3 = water ? 30 : 0;//rand()%25;
-					Graphics.world.cubes[10*y+yy][10*x+xx].cell4 = water ? 30 : 0;//rand()%25;
-					Graphics.world.cubes[10*y+yy][10*x+xx].tileup = 25 + (xx%5) + 5*(yy%5);
+					Graphics.world.cubes[y+yy][x+xx].cell1 = water ? 30 : 0;//rand()%25;
+					Graphics.world.cubes[y+yy][x+xx].cell2 = water ? 30 : 0;//rand()%25;
+					Graphics.world.cubes[y+yy][x+xx].cell3 = water ? 30 : 0;//rand()%25;
+					Graphics.world.cubes[y+yy][x+xx].cell4 = water ? 30 : 0;//rand()%25;
 				}
 			}
 
-			if(a > 1 && a < 4)
-				x+=0.5f;
-			if(a > 4)
-				x-=0.5f;
-			if(a > 2 && a < 6)
-				y+=0.5f;
-			if(a == 0 || a == 1 || a == 7)
-				y-=0.5f;
+			x+=cos(a* (PI/180.0f));
+			y+=sin(a* (PI/180.0f));
 
 
-			if(y < 1)
-				y = 1;
-			if(y >= (Graphics.world.height/10)-2)
-				y = (Graphics.world.height/10)-2;
-			if(x < 1)
-				x = 1;
-			if(x >= (Graphics.world.width/10)-2)
-				x = (Graphics.world.width/10)-2;
-		}		
+			if(y < 5)
+			{
+				y = 5;
+				break;
+			}
+			if(y >= (Graphics.world.height)-15)
+			{
+				y = (Graphics.world.height)-15;
+				break;
+			}
+			if(x < 5)
+			{
+				x = 5;
+				break;
+			}
+			if(x >= (Graphics.world.width)-15)
+			{
+				x = (Graphics.world.width)-15;
+				break;
+			}
+		}
+		
+
+		int count = 0;
+		for(int yy = 0; yy < Graphics.world.height; yy++)
+		{
+			for(int xx = 0; xx < Graphics.world.width; xx++)
+			{
+				if(Graphics.world.cubes[yy][xx].cell1 == 0)
+					count++;
+			}
+		}
+		if(count > Graphics.world.height*Graphics.world.width / 2)
+			filledenough = true;
+
 	}
 
 
@@ -4465,14 +4488,16 @@ MENUCOMMAND(random2)
 		for(x = 0; x < Graphics.world.width; x++)
 		{
 			if((Graphics.world.cubes[y][x].cell1 <= -8 || Graphics.world.cubes[y][x].cell2 <= -8 || Graphics.world.cubes[y][x].cell3  <= -8|| Graphics.world.cubes[y][x].cell4 <= -8) && Graphics.world.cubes[y][x].cell1 > -63)
-			{
 				Graphics.world.cubes[y][x].tileup= 50 + ((int)x%5) + 5*((int)y%5);
-			}
+			else if(Graphics.world.cubes[y][x].cell1 >= -63)
+				Graphics.world.cubes[y][x].tileup= 25 + ((int)x%5) + 5*((int)y%5);
 		}
 	}
 
 	Graphics.world.water.height = 12;
 
+
+	Log(3,0,"Made %i iterations", reali);
 
 	return true;
 }
@@ -4486,18 +4511,27 @@ public:
 	int y;
 	int w;
 	int h;
+	vector<int> connections;
+	cIntQuad(int xx, int yy, int ww, int hh)
+	{
+		x = xx;
+		y = yy;
+		w = ww;
+		h = hh;
+	}
 };
 
-MENUCOMMAND(random2)
+MENUCOMMAND(random3)
 {
 	int i;
+	int xx,yy;
 	int smooth  = 3;//atoi(Graphics.WM.InputWindow("Smoothing level (use 5-10 for decent results)").c_str());
 
 	undostack.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
 	float x,y;
 
 	Graphics.world.tiles.clear();
-	for(int tex = 0; tex < 3; tex++)
+	for(int tex = 0; tex < 5; tex++)
 	{
 		for(y = 0; y < 5; y++)
 		{
@@ -4530,7 +4564,7 @@ MENUCOMMAND(random2)
 		{
 			Graphics.world.cubes[y][x].tileaside = -1;
 			Graphics.world.cubes[y][x].tileside = -1;
-			Graphics.world.cubes[y][x].tileup = 0;
+			Graphics.world.cubes[y][x].tileup = 75 + ((int)x%5) + 5*((int)y%5);
 		}
 	}
 
@@ -4539,16 +4573,14 @@ MENUCOMMAND(random2)
 	{
 		for(x = 0; x < Graphics.world.width; x++)
 		{
-			Graphics.world.cubes[y][x].cell1 = 64;
-			Graphics.world.cubes[y][x].cell2 = 64;
-			Graphics.world.cubes[y][x].cell3 = 64;
-			Graphics.world.cubes[y][x].cell4 = 64;
+			Graphics.world.cubes[y][x].cell1 = 16;
+			Graphics.world.cubes[y][x].cell2 = 16;
+			Graphics.world.cubes[y][x].cell3 = 16;
+			Graphics.world.cubes[y][x].cell4 = 16;
 		}
 	}
 
 	
-	x = 1 + (rand()%((Graphics.world.width/10)-2));
-	y = 1 + (rand()%((Graphics.world.height/10)-2));
 
 	
 	int a = 0;
@@ -4560,39 +4592,244 @@ MENUCOMMAND(random2)
 	
 	vector<cIntQuad> islands;
 
-
-	for(i = 0; i < 5; i++)
+	bool filledenough = false;
+	while(!filledenough)
 	{
+		int island = -1;
 		reali++;
-		a = rand()%4;
+		if(reali > 10000)
+			break;
 
-		if(a == lasta || ((a+2)%4) == lasta)
-			a = rand()%4;
-		lasta = a;
+		w = 10+rand() % 30;
+		h = 10+rand() % 30;
 
-		
-		for(int xx = x; xx < x+w; xx++)
+		if(islands.size() > 0)
 		{
-			for(int yy = y; yy < y+h; yy++)
+			island = rand() % islands.size();
+			if(islands[island].connections.size() > 1)
+				island = rand() % islands.size();
+
+
+			int a = rand()%4;
+			if(a == lasta || (a+2)%4 == lasta)
+				a = rand()%4;
+			lasta = a;
+
+			if(a == 0)
 			{
-				Graphics.world.cubes[10*y+yy][10*x+xx].cell1 = water ? 30 : 0;//rand()%25;
-				Graphics.world.cubes[10*y+yy][10*x+xx].cell2 = water ? 30 : 0;//rand()%25;
-				Graphics.world.cubes[10*y+yy][10*x+xx].cell3 = water ? 30 : 0;//rand()%25;
-				Graphics.world.cubes[10*y+yy][10*x+xx].cell4 = water ? 30 : 0;//rand()%25;
-				Graphics.world.cubes[10*y+yy][10*x+xx].tileup = 25 + (xx%5) + 5*(yy%5);
+				x = islands[island].x + islands[island].w + 5;
+				y = islands[island].y;
 			}
+			if(a == 1)
+			{
+				x = islands[island].x;
+				y = islands[island].y + islands[island].h + 5;
+			}
+			if(a == 2)
+			{
+				x = islands[island].x;
+				y = islands[island].y - h - 5;
+			}
+			if(a == 3)
+			{
+				x = islands[island].x - w - 5;
+				y = islands[island].y;
+			}
+
+		}
+		else
+		{
+			x = (Graphics.world.width-w)/2;
+			y = (Graphics.world.height-h)/2;
+		}
+
+		if(!(x + w >= Graphics.world.width-1 || y+h >= Graphics.world.height-1 || x <= 1 || y <= 1))
+		{
+			int takencount = 0;
+			for(xx = x; xx < x+w; xx++)
+			{
+				for(yy = y; yy < y+h; yy++)
+				{
+					if(Graphics.world.cubes[yy][xx].cell1 == 0)
+						takencount++;
+				}
+			}
+			if(takencount < 3)
+			{
+				for(xx = x; xx < x+w; xx++)
+				{
+					for(yy = y; yy < y+h; yy++)
+					{
+						Graphics.world.cubes[yy][xx].cell1 = 0;//rand()%25;
+						Graphics.world.cubes[yy][xx].cell2 = 0;//rand()%25;
+						Graphics.world.cubes[yy][xx].cell3 = 0;//rand()%25;
+						Graphics.world.cubes[yy][xx].cell4 = 0;//rand()%25;
+						Graphics.world.cubes[yy][xx].tileup = 50 + (xx%5) + 5*(yy%5);
+					}
+				}
+				if(island != -1)
+					islands[island].connections.push_back(islands.size());
+
+				islands.push_back(cIntQuad(x,y,w,h));
+				if(island != -1)
+					islands[islands.size()-1].connections.push_back(island);
+			}
+			int count = 0;
+			for(int yy = 0; yy < Graphics.world.height; yy++)
+			{
+				for(int xx = 0; xx < Graphics.world.width; xx++)
+				{
+					if(Graphics.world.cubes[yy][xx].cell1 == 0)
+						count++;
+				}
+			}
+			if(count > Graphics.world.height*Graphics.world.width / 2)
+				filledenough = true;
+
 		}
 	}
 
 
+	for(i = 0; i < islands.size(); i++)
+	{
+		for(int ii = 0; ii < islands[i].connections.size(); ii++)
+		{
+			x = islands[islands[i].connections[ii]].x;
+			y = islands[islands[i].connections[ii]].y;
+			w = islands[islands[i].connections[ii]].w;
+			h = islands[islands[i].connections[ii]].h;
 
+			xx = islands[i].x;
+			yy = islands[i].y;
+
+			if(xx - (x+w) == 5)
+				x+=w;
+			else if(yy - (y+h) == 5)
+				y+=h;
+			else if(y - (yy+islands[i].h) == 5)
+				yy+=islands[i].h;
+			else if(x - (xx+islands[i].w) == 5)
+				xx+=islands[i].w;
+
+
+			if(xx == x)
+			{
+				if(w < islands[i].w)
+					x = xx = xx + w/2;
+				else
+					x = xx = xx + islands[i].w/2;
+			}
+			if(yy == y)
+			{
+				if(h < islands[i].h)
+					y = yy = yy + h/2;
+				else
+					y = yy = yy + islands[i].h/2;
+			}
+
+
+			while(xx != x || yy != y)
+			{
+				for(int xxx = ((x == xx) ? -1 : 0); xxx < ((x==xx) ? 1 : 2); xxx++)
+				{
+					for(int yyy = ((y == yy) ? -1 : 0); yyy < ((y==yy) ? 1 : 2); yyy++)
+					{
+						Graphics.world.cubes[yy+yyy][xx+xxx].cell1 = 0;//rand()%25;
+						Graphics.world.cubes[yy+yyy][xx+xxx].cell2 = 0;//rand()%25;
+						Graphics.world.cubes[yy+yyy][xx+xxx].cell3 = 0;//rand()%25;
+						Graphics.world.cubes[yy+yyy][xx+xxx].cell4 = 0;//rand()%25;
+						Graphics.world.cubes[yy+yyy][xx+xxx].tileup = 25 + ((xx+xxx)%5) + 5*((yy+yyy)%5);
+						if(xx > x)
+							xx--;
+						if(xx < x)
+							xx++;
+						if(yy > y)
+							yy--;
+						if(yy < y)
+							yy++;
+
+						Graphics.world.cubes[yy+yyy][xx+xxx].cell1 = 0;//rand()%25;
+						Graphics.world.cubes[yy+yyy][xx+xxx].cell2 = 0;//rand()%25;
+						Graphics.world.cubes[yy+yyy][xx+xxx].cell3 = 0;//rand()%25;
+						Graphics.world.cubes[yy+yyy][xx+xxx].cell4 = 0;//rand()%25;
+						Graphics.world.cubes[yy+yyy][xx+xxx].tileup = 25 + ((xx+xxx)%5) + 5*((yy+yyy)%5);
+					}
+				}
+			}
+		}
+	}
+
+	Graphics.selectionstart.y = 320;
+	Graphics.texturestart = 0;
+	MenuCommand_addwalls(src);
+
+
+
+
+/*	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+			if((Graphics.world.cubes[y][x].cell1 <= -8 || Graphics.world.cubes[y][x].cell2 <= -8 || Graphics.world.cubes[y][x].cell3  <= -8|| Graphics.world.cubes[y][x].cell4 <= -8) && Graphics.world.cubes[y][x].cell1 > -63)
+			{
+				Graphics.world.cubes[y][x].tileup= 50 + ((int)x%5) + 5*((int)y%5);
+			}
+		}
+	}
+*/
+	Graphics.world.water.height = 8;
+
+
+	return true;
+}
+
+
+
+MENUCOMMAND(random4)
+{
+	int i;
+	int smooth  = 3;//atoi(Graphics.WM.InputWindow("Smoothing level (use 5-10 for decent results)").c_str());
+
+	undostack.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
+	int x,y;
+	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+			Graphics.world.cubes[y][x].tileaside = -1;
+			Graphics.world.cubes[y][x].tileside = -1;
+		}
+	}
+
+	float xding = rand() % 50 + 20;
+	float yding = rand() % 50 + 20;
+	float zding = rand() % 50 + 20;
+
+	float xding2 = rand() % 50 + 50;
+	float yding2 = rand() % 50 + 50;
+	float zding2 = rand() % 50 + 50;
+
+	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+
+			float f = xding2*sin(y/xding)+yding2*cos(x/yding) + zding*cos(x/zding+y/zding);
+			f = floor(f / 32.0f)*32;
+
+			Graphics.world.cubes[y][x].cell1 = f;
+			Graphics.world.cubes[y][x].cell2 = f;
+			Graphics.world.cubes[y][x].cell3 = f;
+			Graphics.world.cubes[y][x].cell4 = f;
+		}
+	}
 	eMode m = editmode;
 	editmode = MODE_HEIGHTDETAIL;
 
 	SDL_Event ev;
 	ev.type = SDL_KEYDOWN;
 	ev.key.keysym.sym = SDLK_s;
-	for(i = 0; i < smooth; i++)
+	for(i = 0; i < 3; i++)
 		SDL_PushEvent(&ev);
 
 	int b = brushsize;
@@ -4607,23 +4844,8 @@ MENUCOMMAND(random2)
 	ev.type = SDL_KEYUP;
 	ev.key.keysym.sym = SDLK_s;
 	SDL_PushEvent(&ev);
-
-
-
 	editmode = m;
 
-	for(y = 0; y < Graphics.world.height; y++)
-	{
-		for(x = 0; x < Graphics.world.width; x++)
-		{
-			if((Graphics.world.cubes[y][x].cell1 <= -8 || Graphics.world.cubes[y][x].cell2 <= -8 || Graphics.world.cubes[y][x].cell3  <= -8|| Graphics.world.cubes[y][x].cell4 <= -8) && Graphics.world.cubes[y][x].cell1 > -63)
-			{
-				Graphics.world.cubes[y][x].tileup= 50 + ((int)x%5) + 5*((int)y%5);
-			}
-		}
-	}
-
-	Graphics.world.water.height = 12;
 
 
 	return true;

@@ -146,9 +146,9 @@ public:
 	virtual void scrollup();
 	virtual void scrolldown();
 
-	virtual bool onkeyup(int);
-	virtual bool onkeydown(int);
-	virtual bool onchar(char);
+	virtual bool onkeyup(int,bool);
+	virtual bool onkeydown(int,bool);
+	virtual bool onchar(char,bool);
 
 	cWindowObject* addlabel(string, int,int,string);
 	cWindowObject* addinputbox(string, int,int,int,string);

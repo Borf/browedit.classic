@@ -86,9 +86,9 @@ public:
 		if (id == 3)
 			floatje = (float*)val;
 	}
-	bool onkeydown(int keyid)
+	bool onkeydown(int keyid, bool shift)
 	{
-		bool ret = cWindowInputBox::onkeydown(keyid);
+		bool ret = cWindowInputBox::onkeydown(keyid, shift);
 		if (keyid == SDLK_RETURN)
 		{
 			*floatje = atof(text.c_str());
