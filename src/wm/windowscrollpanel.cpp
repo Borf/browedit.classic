@@ -150,6 +150,8 @@ void cWindowScrollPanel::draw(int cutoffleft, int cutoffright, int cutofftop, in
 
 			if(o->type == OBJECT_LABEL)
 				o->moveto(o->px()+x-parent->px(),o->py()+y+parent->py());
+			else if(o->type == OBJECT_MODEL)
+				o->moveto(o->px()+x-scrollposx, o->py()+y-scrollposy);
 			else
 				o->moveto(o->px(),o->py()+y);
 			o->draw();	

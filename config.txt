@@ -43,7 +43,7 @@ undostack=50
 
 
 [Arcturus]
-rodir=c:\Program Files\Arcturus\
+rodir=d:\games\arcturus\
 model=arcturusmodels.txt
 texture=arctextures.txt
 resx=1024
@@ -52,6 +52,8 @@ fullscreen=0
 bpp=32
 font=tahoma
 undostack=50
+bgcolor=128,0,256
+notilecolor=255,255,128
 
 [ROalpha]
 rodir=d:\work\ro_alpha\

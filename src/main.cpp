@@ -1399,11 +1399,29 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			tilex = (int)mouse3dx / 10;
 			tiley = (int)mouse3dz / 10;
 
+			if(event.button.button == 4)
+			{ // scroll up
+				cWindow* w = Graphics.WM.inwindow();
+				if(w != NULL)
+					w->scrollup();
+				break;
+			}
+
+			if(event.button.button == 5)
+			{ // scroll down
+				cWindow* w = Graphics.WM.inwindow();
+				if(w != NULL)
+					w->scrolldown();
+				break;
+			}
+
+
 			dragged = false;
 			doubleclick = false;
 			if (SDL_GetTicks() - lastlclick < 250)
 				doubleclick = true;
 
+		
 			cMenu* m = menu->inwindow((int)mousex, Graphics.h()-(int)mousey);
 		
 
@@ -1770,6 +1788,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			break;
 			}
 		case SDL_MOUSEBUTTONUP:
+			if(event.button.button == 4 || event.button.button == 5)
+				break;
+			
 			if(event.button.button == SDL_BUTTON_LEFT)
 			{
 				cMenu* m = menu->inwindow((int)mousex, Graphics.h()-(int)mousey);
@@ -4787,17 +4808,46 @@ MENUCOMMAND(random3)
 
 MENUCOMMAND(random4)
 {
-	int i;
+	int i,x,y;
 	int smooth  = 3;//atoi(Graphics.WM.InputWindow("Smoothing level (use 5-10 for decent results)").c_str());
 
 	undostack.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
-	int x,y;
+
+
+	Graphics.world.tiles.clear();
+	for(int tex = 0; tex < 5; tex++)
+	{
+		for(y = 0; y < 5; y++)
+		{
+			for(x = 0; x < 5; x++)
+			{
+				cTile t;
+				t.lightmap = 1;
+				t.texture = tex;
+				t.u1 = x/5.0;
+				t.v1 = y/5.0;
+				t.u2 = (x+1)/5.0;
+				t.v2 = (y)/5.0;
+				t.u3 = (x)/5.0;
+				t.v3 = (y+1)/5.0;
+				t.u4 = (x+1)/5.0;
+				t.v4 = (y+1)/5.0;
+				t.color[0] = (char)255;
+				t.color[1] = (char)255;
+				t.color[2] = (char)255;
+				t.color[3] = (char)255;
+				Graphics.world.tiles.push_back(t);
+			}
+		}
+	}
+
 	for(y = 0; y < Graphics.world.height; y++)
 	{
 		for(x = 0; x < Graphics.world.width; x++)
 		{
 			Graphics.world.cubes[y][x].tileaside = -1;
 			Graphics.world.cubes[y][x].tileside = -1;
+			Graphics.world.cubes[y][x].tileup = 25 + ((int)x%5) + 5*((int)y%5);
 		}
 	}
 
@@ -4846,6 +4896,62 @@ MENUCOMMAND(random4)
 	SDL_PushEvent(&ev);
 	editmode = m;
 
+
+
+
+	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+			if(fabs(Graphics.world.cubes[y][x].cell1 - Graphics.world.cubes[y][x].cell2) > 5 ||
+				fabs(Graphics.world.cubes[y][x].cell1 - Graphics.world.cubes[y][x].cell3) > 5 ||
+				fabs(Graphics.world.cubes[y][x].cell1 - Graphics.world.cubes[y][x].cell4) > 5 ||
+				fabs(Graphics.world.cubes[y][x].cell2 - Graphics.world.cubes[y][x].cell3) > 5 ||
+				fabs(Graphics.world.cubes[y][x].cell2 - Graphics.world.cubes[y][x].cell4) > 5 ||
+				fabs(Graphics.world.cubes[y][x].cell3 - Graphics.world.cubes[y][x].cell4) > 5)
+				Graphics.world.cubes[y][x].tileup = 50 + ((int)x%5) + 5*((int)y%5);
+		}
+	}
+
+
+	vector<string>	randommodels;
+	for(i = 0; i < objectfiles.size(); i++)
+	{
+		cFile* pFile = fs.open(objectfiles[i]);
+		while(!pFile->eof())
+		{
+			string line = pFile->readline();
+			if (line == "")
+				continue;
+			string pre = line.substr(0, line.find("|"));
+			string filename = line.substr(line.find("|")+1);
+
+			string cat = pre.substr(0, pre.rfind("/"));
+			string name = pre.substr(pre.rfind("/")+1);
+
+			if(cat == "randomtrees")
+				randommodels.push_back(filename);
+		}
+	}
+
+
+
+	for(i = 0; i < 1000; i++)
+	{
+		cRSMModel* model = new cRSMModel();
+		model->load(rodir +  randommodels[rand() % randommodels.size()]);
+
+		model->pos = cVector3(rand()%(Graphics.world.width*2), 0, rand()%(Graphics.world.height*2));
+
+		while(Graphics.world.cubes[model->pos.z/2][model->pos.x/2].tileup > 50)
+			model->pos = cVector3(rand()%(Graphics.world.width*2), 0, rand()%(Graphics.world.height*2));
+
+
+		model->pos.y = Graphics.world.cubes[model->pos.z/2][model->pos.x/2].cell1;
+		model->scale = cVector3(1,1,1);
+		model->rot = cVector3(0,0,0);
+		Graphics.world.models.push_back(model);
+	}
 
 
 	return true;
