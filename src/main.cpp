@@ -1942,7 +1942,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							l.color.x = 0;
 							l.color.y = 0;
 							l.color.z = 0;
-							l.pos = cVector3(mouse3dx/5, mouse3dy/5, mouse3dz/5);
+							l.pos = cVector3(mouse3dx/5, mouse3dy+10, mouse3dz/5);
 							l.todo = string(buf, 40);
 							l.todo2 = 300;
 
