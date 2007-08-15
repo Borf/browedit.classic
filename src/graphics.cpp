@@ -159,7 +159,7 @@ int cGraphics::draw()
 			}
 			else if (editmode == MODE_WATER)
 			{
-				if (i+world.water.type > Graphics.watercount)
+				if (i+world.water.type >= Graphics.watercount)
 					continue;
 				static float frame = 0;
 				glBindTexture(GL_TEXTURE_2D, watertextures[i+world.water.type][(int)floor(frame)]->texid());

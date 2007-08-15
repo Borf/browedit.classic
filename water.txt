@@ -1,7 +1,7 @@
 [RO]
 data\texture\ฟ๖ลอ\
 .jpg
-7
+8
 [Arcturus]
 data\texture\wate\
 .bmp

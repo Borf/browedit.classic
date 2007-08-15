@@ -2281,7 +2281,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				else if (editmode == MODE_WATER)
 				{
-					Graphics.world.water.type = min(5, Graphics.world.water.type + 1);
+					Graphics.world.water.type = min(Graphics.watercount-1, Graphics.world.water.type + 1);
 				}
 				else if (editmode == MODE_OBJECTGROUP)
 				{
