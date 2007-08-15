@@ -63,8 +63,6 @@ double mouse3dxstart, mouse3dystart, mouse3dzstart;
 float mousestartx, mousestarty;
 unsigned long keys[SDLK_LAST-SDLK_FIRST];
 
-
-
 bool mouseouttexture(cMenu*);
 bool mouseovertexture(cMenu*);
 
@@ -1329,6 +1327,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 					bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
+					bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
 					for(i = 0; i < Graphics.world.models.size(); i++)
 					{
 						if (!Graphics.world.models[i]->selected)
@@ -1347,11 +1346,20 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						if(ctrl && !alt)
 						{
 							cVector2 diff = cVector2(Graphics.world.models[i]->pos.x - Graphics.selectioncenter.x, Graphics.world.models[i]->pos.z - Graphics.selectioncenter.z);
-							diff.rotate((mousex-oldmousex)/10.0f);
+							if(!shift)
+							{
+								Graphics.world.models[i]->rot.y -= (mousex - oldmousex)/10.0f;
+								diff.rotate((mousex-oldmousex)/10.0f);
+							}
+							else
+							{
+								diff.rotate((mousex-oldmousex)*9);
+								Graphics.world.models[i]->rot.y -= (mousex - oldmousex)*9;
+							}
+
 							Graphics.world.models[i]->pos.x = Graphics.selectioncenter.x + diff.x;
 							Graphics.world.models[i]->pos.z = Graphics.selectioncenter.z + diff.y;
 
-							Graphics.world.models[i]->rot.y -= (mousex - oldmousex)/10.0f;
 						}
 						if(alt && !ctrl)
 						{
