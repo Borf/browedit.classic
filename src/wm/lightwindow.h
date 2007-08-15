@@ -79,6 +79,23 @@ public:
 		objects["OkButton"] = new cWindowOkButton(this);
 		objects["CancelButton"] = new cWindowCancelButton(this);
 	}	
+
+	void* userfunc(void* param)
+	{
+		int p = (int)param;
+		if(p == 0) // cancel
+		{
+		}
+		else
+		{
+			for(map<string, cWindowObject*, less<string> >::iterator i = objects.begin(); i !=  objects.end(); i++)
+			{
+				if(i->second->type == OBJECT_FLOATINPUTBOX)
+					i->second->onkeydown(SDLK_RETURN, false);
+			}
+		}
+		return NULL;
+	}
 };
 
 #endif

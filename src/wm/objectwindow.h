@@ -46,7 +46,7 @@ public:
 	virtual ~cWindowCancelButton() {}
 	void click()
 	{
-		if (parent->windowtype() == WT_OBJECT || parent->windowtype() == WT_EFFECT)
+		if (parent->windowtype() == WT_OBJECT || parent->windowtype() == WT_EFFECT || parent->windowtype() == WT_LIGHT)
 		{
 			parent->userfunc((void*)0);
 		}
@@ -61,6 +61,7 @@ class cWindowFloatInputBox : public cWindowInputBox
 public:
 	cWindowFloatInputBox(cWindow* parent) : cWindowInputBox(parent)
 	{
+		type = OBJECT_FLOATINPUTBOX;
 		alignment = ALIGN_TOPLEFT;
 		resizeto(70,20);
 	}
@@ -211,6 +212,11 @@ public:
 		}
 		else
 		{
+			for(map<string, cWindowObject*, less<string> >::iterator i = objects.begin(); i !=  objects.end(); i++)
+			{
+				if(i->second->type == OBJECT_FLOATINPUTBOX)
+					i->second->onkeydown(SDLK_RETURN, false);
+			}
 			undostack.push(undo);
 		}
 

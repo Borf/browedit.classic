@@ -25,6 +25,7 @@ notilecolor=255,255,128
 [ROdesktop]
 rodir=d:\games\newro\
 model=romodels.txt
+model=alphamodels.txt
 //model=arcturusmodels.txt
 texture=rotextures.txt
 //texture=arctextures.txt
