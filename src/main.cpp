@@ -945,7 +945,7 @@ int main(int argc, char *argv[])
 	
 	Log(3,0,msgtable[8]);
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "data\\randomtest").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "data\\prontera").c_str());
 #ifndef WIN32
 	Graphics.world.load();
 #endif
@@ -1887,7 +1887,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							sprintf(buf, "obj%i", rand());
 							e.category = "\0\0\0\0";
 							e.loop = 40;
-							e.pos = cVector3(mouse3dx/5, mouse3dy/5, mouse3dz/5);
+							e.pos = cVector3(mouse3dx/5, mouse3dy+10, mouse3dz/5);
 							e.name = buf;
 							e.readablename = selectedeffect->title;
 							e.type = atoi(selectedeffect->data.c_str());

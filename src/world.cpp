@@ -1494,11 +1494,11 @@ void cWorld::draw()
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set the correct blending mode
-
 	glColor4f(1,1,1,0.5);
 
 	if(Graphics.showwater || editmode == MODE_WATER)
 	{
+		glDepthMask(0);
 		static float waterindex = 0;
 
 		glBindTexture(GL_TEXTURE_2D, Graphics.watertextures[water.type][(int)ceil(waterindex)]->texid());
@@ -1514,6 +1514,7 @@ void cWorld::draw()
 			glTexCoord2f(0,height/8); glVertex3f(0,-water.height,10*height);
 		glEnd();
 		glDisable(GL_BLEND);
+		glDepthMask(1);
 	}
 
 	if (editmode == MODE_GAT || Graphics.showgat)
@@ -2148,6 +2149,33 @@ void cWorld::draw()
 			glLineWidth(1);
 		}
 	}
+
+
+
+	if(Graphics.showwater || editmode == MODE_WATER)
+	{
+		glEnable(GL_BLEND);
+		glEnable(GL_TEXTURE_2D);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set the correct blending mode
+		glColor4f(1,1,1,0.5);
+		static float waterindex = 0;
+
+		glBindTexture(GL_TEXTURE_2D, Graphics.watertextures[water.type][(int)ceil(waterindex)]->texid());
+
+		if(Graphics.animatewater)
+			waterindex+=max(0,(Graphics.frameticks) / 50.0f);
+		if (waterindex > Graphics.watertextures[water.type].size()-1)
+			waterindex = 0;
+		glBegin(GL_QUADS);
+			glTexCoord2f(0,0); glVertex3f(0,-water.height,0);
+			glTexCoord2f(width/8,0); glVertex3f(10*width,-water.height,0);
+			glTexCoord2f(width/8,height/8); glVertex3f(10*width,-water.height,10*height);
+			glTexCoord2f(0,height/8); glVertex3f(0,-water.height,10*height);
+		glEnd();
+		glDisable(GL_TEXTURE_2D);
+		glDisable(GL_BLEND);
+	}
+
 
 
 
