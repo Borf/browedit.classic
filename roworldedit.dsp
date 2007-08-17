@@ -100,7 +100,7 @@ PreLink_Cmds=svnver src/version.h
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /D "GRF_STATIC" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /D "GRF_STATIC" /D "_NOCHECK_" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /I "src" /I "libs/include" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /D "GRF_STATIC" /D "_NOCHECK_" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
