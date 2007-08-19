@@ -20,6 +20,8 @@ cModelsWindow::cWindowModel::cWindowModel(cWindow* parent) : cWindowObject(paren
 }
 void cModelsWindow::cWindowModel::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {
+	if(cutoffbottom < 0)
+		cutoffbottom = 0;
 	glEnable(GL_DEPTH_TEST);
 	if(data != "" && model == NULL)
 	{

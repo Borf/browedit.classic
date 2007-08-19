@@ -4269,6 +4269,11 @@ MENUCOMMAND(random1)
 {
 	int height = atoi(Graphics.WM.InputWindow("Height:").c_str());
 	int smooth  = atoi(Graphics.WM.InputWindow("Smoothing level (use 5-10 for decent results)").c_str());
+	if(height == 0)
+	{
+		Graphics.WM.MessageBox("You must enter a height bigger then 0");
+		return true;
+	}
 
 	undostack.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
 	int x,y;
