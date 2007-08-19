@@ -606,9 +606,7 @@ arcturus/arcroot/signpn1.rsm|data\model\signpn1.rsm
 arcturus/arcroot/signpn2.rsm|data\model\signpn2.rsm
 arcturus/arcroot/signpn3.rsm|data\model\signpn3.rsm
 arcturus/arcroot/signpn4.rsm|data\model\signpn4.rsm
-arcturus/arcroot/siz-house.rsm|data\model\siz-house.rsm
 arcturus/arcroot/size-house-1.rsm|data\model\size-house-1.rsm
-arcturus/arcroot/size-house.rsm|data\model\size-house.rsm
 arcturus/arcroot/sofm-skullcho.rsm|data\model\sofm-skullcho.rsm
 arcturus/arcroot/step01.rsm|data\model\step01.rsm
 arcturus/arcroot/sttree01.rsm|data\model\sttree01.rsm

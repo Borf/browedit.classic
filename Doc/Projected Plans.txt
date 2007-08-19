@@ -1,0 +1,52 @@
+Post ideas of things you would like to add or wish to add here.
+since it all has to be up to borf im going to set it in this layout.
+
+-Idea
+	Decription
+ Borfs Approval[x]							[Added or no Revision# ] [Who added]
+------------------------------------------------------------------------------------------------------------
+
+Example:
+	-Add sounds
+		I would like to add sounds to brow.   
+ Approved[x]							[Added R200] [Borf]
+
+
+============================================================================
+-Add sounds
+	Not implemenented					
+ Approved[x]							[Rxxx] [unfin]
+
+-create new map 
+	Not implemented						
+ Approved[x]							[Rxxx] [unfin]
+
+-Model window
+	Im thinking about having the selected model only spin. 
+ Approved[]							[Rxxx] [unfin]
+
+-Wall Editing... 
+	Easier way?
+ Approved[]							[Rxxx] [unfin]
+
+-Arcturus models
+	Doors and etc move randomly.... fixable?
+ Approved[]							[Rxxx] [unfin]
+
+-Help menu
+	list guides, functions and etc preferably indexable with a table of contents,
+	 however text reference works just as well.
+ Approved[]							[Rxxx] [unfin]
+
+-About Brow menu
+	list developers, website, copyrights, terms of service etc....
+ Approved[]							[Rxxx] [unfin]
+
+
+
+
+
+
+
+
+

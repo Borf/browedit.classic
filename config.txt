@@ -1,5 +1,5 @@
 language=english
-setting=ROdesktop
+setting=A17alpha
 
 [RO]
 rodir=c:\games\ro\
@@ -65,6 +65,50 @@ resy=768
 fullscreen=0
 bpp=32
 font=tahoma
+undostack=50
+bgcolor=128,0,256
+notilecolor=255,255,128
+
+
+[A17]
+rodir=c:\Program Files\Asgard\Browedit\
+model=romodels.txt
+model=arcturusmodels.txt
+texture=rotextures.txt
+texture=arctextures.txt
+texture=texturescustom.txt
+texture=collection.txt
+resx=1024
+resy=768
+fullscreen=0
+bpp=32
+font=tahoma
+grf=c:\Program Files\Asgard\RO\asgdata.grf
+grf=c:\games\ro\bdata.grf
+grf=c:\games\ro\sdata.grf
+grf=c:\games\ro\data.grf
+undostack=50
+bgcolor=128,0,256
+notilecolor=255,255,128
+
+
+[A17alpha]
+rodir=c:\Program Files\Asgard\Alpha\
+model=romodels.txt
+model=arcturusmodels.txt
+texture=rotextures.txt
+texture=arctextures.txt
+texture=texturescustom.txt
+texture=collection.txt
+resx=1024
+resy=768
+fullscreen=0
+bpp=32
+font=tahoma
+grf=c:\Program Files\Asgard\RO\asgdata.grf
+grf=c:\games\ro\bdata.grf
+grf=c:\games\ro\sdata.grf
+grf=c:\games\ro\data.grf
 undostack=50
 bgcolor=128,0,256
 notilecolor=255,255,128

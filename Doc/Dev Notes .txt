@@ -1,0 +1,7 @@
+Added this more or less for my reference.
+Its going to be soemthing close to comments. only external of the actual program itself.
+==========================================================================================
+
+
+To add here Lsiting of each .C , .Cpp and .h file and what they consist of in general.
+

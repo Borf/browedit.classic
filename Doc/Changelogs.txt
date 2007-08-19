@@ -1,0 +1,1510 @@
+
+
+r231 | A-17 | 2007-08-19 09:31:00 +0000 (sun, 19 Aug 2007) | 2 line
+
+Fixed Arcturus model window crash when viewing Arc_root directory. 
+Added Dev Documentation to SVN
+
+--------------------------------------------------------------------------------
+
+r231 | borf | 2007-08-17 12:31:37 +0000 (Fri, 17 Aug 2007) | 1 line
+
+Fixed some compile errors by including zlib
+
+--------------------------------------------------------------------------------
+
+r230 | borf | 2007-08-15 22:55:01 +0000 (Wed, 15 Aug 2007) | 1 line
+
+Fixed watercount reading from the config, and added the veins texture
+
+--------------------------------------------------------------------------------
+
+r229 | borf | 2007-08-15 22:48:53 +0000 (Wed, 15 Aug 2007) | 1 line
+
+Added a rougher rotation for object group edit (ctrl+shift+drag)
+
+--------------------------------------------------------------------------------
+
+r228 | borf | 2007-08-15 22:34:05 +0000 (Wed, 15 Aug 2007) | 1 line
+
+Fixed water transparency not showing objects or gattiles through it
+
+--------------------------------------------------------------------------------
+
+r227 | borf | 2007-08-15 21:57:35 +0000 (Wed, 15 Aug 2007) | 2 lines
+
+Fixed lights appearing in the right position when you add them
+Added some lines to the readme
+
+--------------------------------------------------------------------------------
+
+r226 | borf | 2007-08-15 21:33:24 +0000 (Wed, 15 Aug 2007) | 2 lines
+
+Fixed water,object,light and effectwindows applying changes when you hit the OK button without hitting enter on the individual textfields
+added alphamodels.txt
+
+--------------------------------------------------------------------------------
+
+r225 | borf | 2007-08-09 00:22:52 +0000 (Thu, 09 Aug 2007) | 3 lines
+
+Fixed arcturus importing
+Fixed arcturus texture viewing
+Fixed lightmap loading
+
+--------------------------------------------------------------------------------
+
+r224 | borf | 2007-07-12 00:46:41 +0000 (Thu, 12 Jul 2007) | 4 lines
+
+Updated the WM a bit...
+Tweaked 2nd random generation
+Implemented 3rd random generation
+added 4th random generation
+
+--------------------------------------------------------------------------------
+
+r223 | borf | 2007-07-11 21:35:58 +0000 (Wed, 11 Jul 2007) | 2 lines
+
+Upgraded WM a bit, still have to tweak
+added 3rd random generation algorithm
+
+--------------------------------------------------------------------------------
+
+r222 | borf | 2007-07-11 14:28:49 +0000 (Wed, 11 Jul 2007) | 1 line
+
+Tweaked the random algorithm a bit
+
+--------------------------------------------------------------------------------
+
+r221 | borf | 2007-07-11 14:00:04 +0000 (Wed, 11 Jul 2007) | 2 lines
+
+Added libraries to SVN tree for easy coding access
+Added new random generator (www.borf.nl/random6.jpg)
+
+--------------------------------------------------------------------------------
+
+r220 | borf | 2007-06-20 23:30:08 +0000 (Wed, 20 Jun 2007) | 3 lines
+
+Added current mode to the menu bar
+Tweaked lighting engine a bit
+Fixed crash when adding walls on the corners of a map
+
+--------------------------------------------------------------------------------
+
+r219 | borf | 2007-04-26 11:15:36 +0000 (Thu, 26 Apr 2007) | 3 lines
+
+Fixed loading/saving
+Added a dot to mark the cursorposition
+
+
+--------------------------------------------------------------------------------
+
+r218 | borf | 2007-04-10 14:32:18 +0000 (Tue, 10 Apr 2007) | 1 line
+
+Added loading of alpha-maps
+
+--------------------------------------------------------------------------------
+
+r217 | borf | 2007-04-04 20:04:05 +0000 (Wed, 04 Apr 2007) | 1 line
+
+added an extra check to global height edit
+
+--------------------------------------------------------------------------------
+
+r216 | borf | 2007-04-03 00:07:12 +0000 (Tue, 03 Apr 2007) | 4 lines
+
+Fixed some border bugs
+Fixed random
+added a little marker to show what the camera is rotating around
+Made the camera change height dynamically when you go over higher areas
+
+--------------------------------------------------------------------------------
+
+r215 | borf | 2007-03-25 13:15:18 +0000 (Sun, 25 Mar 2007) | 1 line
+
+Added copy/paste for texture edit mode
+
+--------------------------------------------------------------------------------
+
+r214 | borf | 2007-03-25 12:47:56 +0000 (Sun, 25 Mar 2007) | 2 lines
+
+Added clear buttons to the hotkey preferences window
+added quit button to the hotkey preferences window
+
+--------------------------------------------------------------------------------
+
+r213 | borf | 2007-03-20 09:40:04 +0000 (Tue, 20 Mar 2007) | 3 lines
+
+Fixed the "Gat Edit" in the English file
+Fixed the edit mode menu not working if the english.txt file is changed
+Fixed the windowtitle of the models window
+
+--------------------------------------------------------------------------------
+
+r212 | borf | 2007-03-20 01:18:20 +0000 (Tue, 20 Mar 2007) | 1 line
+
+Fixed an alpha priority problem with objects & water
+
+--------------------------------------------------------------------------------
+
+r211 | borf | 2007-03-19 01:01:31 +0000 (Mon, 19 Mar 2007) | 5 lines
+
+Added languagefile errors if the languagefile isn't found
+Added warnings & default keymapping if keymap.txt is not found
+Fixed crash when importing lightmaps
+Fixed crash when calculating lightmaps
+Fixed crash when watching lightmaps
+
+--------------------------------------------------------------------------------
+
+r210 | borf | 2007-03-14 23:10:18 +0000 (Wed, 14 Mar 2007) | 1 line
+
+Added a keymap / preferences window
+
+--------------------------------------------------------------------------------
+
+r209 | borf | 2007-03-14 15:35:08 +0000 (Wed, 14 Mar 2007) | 1 line
+
+Finished externalizing strings...for now
+
+--------------------------------------------------------------------------------
+
+r208 | borf | 2007-03-14 14:53:08 +0000 (Wed, 14 Mar 2007) | 1 line
+
+More internationalisation
+
+--------------------------------------------------------------------------------
+
+r207 | borf | 2007-03-14 13:38:15 +0000 (Wed, 14 Mar 2007) | 1 line
+
+Reverted the project file, this might work on my laptop
+
+--------------------------------------------------------------------------------
+
+r206 | borf | 2007-03-14 10:35:27 +0000 (Wed, 14 Mar 2007) | 1 line
+
+Updated the VS8 project (yay, 1089 warnings)
+
+--------------------------------------------------------------------------------
+
+r205 | borf | 2007-03-14 00:40:47 +0000 (Wed, 14 Mar 2007) | 4 lines
+
+Updated svn versioning to give some output during builds
+added an enter as lastline in romodels.txt
+Fixed a readline thing in the filesystem
+Started working on the possibility to translate browedit
+
+--------------------------------------------------------------------------------
+
+r204 | borf | 2007-03-13 22:26:29 +0000 (Tue, 13 Mar 2007) | 4 lines
+
+Added deleting and creation of nodes in the models menu
+
+(man I'll have to do all this for the textures menu too >______<)
+
+
+--------------------------------------------------------------------------------
+
+r203 | borf | 2007-03-13 20:12:36 +0000 (Tue, 13 Mar 2007) | 1 line
+
+Fixed a texture reading bug, windows bmp files are padded to %4 bytes per row >_<
+
+--------------------------------------------------------------------------------
+
+r202 | borf | 2007-03-13 08:03:26 +0000 (Tue, 13 Mar 2007) | 1 line
+
+fixed windows going all flashy if you open them through the menu
+
+--------------------------------------------------------------------------------
+
+r201 | borf | 2007-03-12 23:48:40 +0000 (Mon, 12 Mar 2007) | 3 lines
+
+Prolly fixed lightmap loading
+Removed modelfile structure constraint
+Fixed some depth tests
+
+--------------------------------------------------------------------------------
+
+r200 | borf | 2007-03-12 16:48:24 +0000 (Mon, 12 Mar 2007) | 1 line
+
+forgot to add 2 files
+
+--------------------------------------------------------------------------------
+
+r199 | borf | 2007-03-12 11:40:13 +0000 (Mon, 12 Mar 2007) | 1 line
+
+Fixed svn versioning detection
+
+--------------------------------------------------------------------------------
+
+r198 | akira | 2007-03-12 10:56:17 +0000 (Mon, 12 Mar 2007) | 1 line
+
+new hamtaro image, now with "borf seal of quality"
+
+--------------------------------------------------------------------------------
+
+r197 | borf | 2007-03-12 08:13:16 +0000 (Mon, 12 Mar 2007) | 5 lines
+
+Added svn versioning
+Fixed a bug in the models window
+Added an inputbox
+
+
+
+--------------------------------------------------------------------------------
+
+r196 | borf | 2007-03-11 21:23:42 +0000 (Sun, 11 Mar 2007) | 1 line
+
+Added svn version tool by borf
+
+--------------------------------------------------------------------------------
+
+r195 | borf | 2007-03-11 21:22:50 +0000 (Sun, 11 Mar 2007) | 1 line
+
+Added a custom build step to include the svn version
+
+--------------------------------------------------------------------------------
+
+r194 | borf | 2007-03-10 23:50:24 +0000 (Sat, 10 Mar 2007) | 1 line
+
+Removed the NCB file
+
+--------------------------------------------------------------------------------
+
+r193 | borf | 2007-03-10 23:28:47 +0000 (Sat, 10 Mar 2007) | 1 line
+
+You can now copy, move and remove objects from the tree by (ctrl+)dragging them, or rightclicking them in the object window
+
+--------------------------------------------------------------------------------
+
+r192 | borf | 2007-03-10 16:40:39 +0000 (Sat, 10 Mar 2007) | 1 line
+
+Added dragging support for objects in the object window
+
+--------------------------------------------------------------------------------
+
+r191 | borf | 2007-03-09 16:40:05 +0000 (Fri, 09 Mar 2007) | 1 line
+
+Fixed some models not appearing in the model menu
+
+--------------------------------------------------------------------------------
+
+r190 | borf | 2007-03-09 16:35:58 +0000 (Fri, 09 Mar 2007) | 2 lines
+
+Fixed a bug with model positions
+fixed some drawpriorities
+
+--------------------------------------------------------------------------------
+
+r189 | borf | 2007-03-09 02:23:57 +0000 (Fri, 09 Mar 2007) | 2 lines
+
+Made the model window work
+Updated the scrollpanel
+
+--------------------------------------------------------------------------------
+
+r188 | borf | 2007-03-08 23:28:25 +0000 (Thu, 08 Mar 2007) | 2 lines
+
+Added a window base for picking models
+Fixed a bug in the keyrepeater
+
+--------------------------------------------------------------------------------
+
+r187 | borf | 2007-03-08 17:39:24 +0000 (Thu, 08 Mar 2007) | 1 line
+
+?\195?\128dded keyrepeating :)
+
+--------------------------------------------------------------------------------
+
+r186 | borf | 2007-03-05 15:27:24 +0000 (Mon, 05 Mar 2007) | 2 lines
+
+Added drag-support for gat-edit mode (messes up undo though :P)
+
+
+--------------------------------------------------------------------------------
+
+r185 | borf | 2007-03-05 13:12:28 +0000 (Mon, 05 Mar 2007) | 1 line
+
+Fixed the fill command giving black stuff
+
+--------------------------------------------------------------------------------
+
+r184 | borf | 2007-03-04 23:34:35 +0000 (Sun, 04 Mar 2007) | 3 lines
+
+Fixed linux compile warnings
+
+
+
+--------------------------------------------------------------------------------
+
+r183 | borf | 2007-02-27 12:52:17 +0000 (Tue, 27 Feb 2007) | 1 line
+
+Some more debuglines...
+
+--------------------------------------------------------------------------------
+
+r182 | borf | 2007-02-27 09:55:30 +0000 (Tue, 27 Feb 2007) | 1 line
+
+Added some logging lines
+
+--------------------------------------------------------------------------------
+
+r181 | borf | 2007-02-26 19:34:38 +0000 (Mon, 26 Feb 2007) | 5 lines
+
+Added "clear lights"
+updated readme.txt
+Fixed a crash in the texture select window
+Fixed the clicking position/popup text of objects in the scrollpanel
+Fixed a bug with opening a map, which wasn't clearing the lights of the previous map first ._.;
+
+--------------------------------------------------------------------------------
+
+r180 | borf | 2007-02-26 18:35:13 +0000 (Mon, 26 Feb 2007) | 4 lines
+
+Fixed a bug in the WM clicking priority
+Added a confirmwindow to saving if there's no quadtree info
+Seperated the main loop
+Fixed text popups
+
+--------------------------------------------------------------------------------
+
+r179 | borf | 2007-02-26 15:29:08 +0000 (Mon, 26 Feb 2007) | 1 line
+
+Added an undo stack limit (you can change it in the config.txt), to not overflow memory
+
+--------------------------------------------------------------------------------
+
+r178 | borf | 2007-02-26 15:05:17 +0000 (Mon, 26 Feb 2007) | 2 lines
+
+Added popup texts in the texture window
+fixed T toggling the texturewindow instead of opening a new one (so the previous state is saved)
+
+--------------------------------------------------------------------------------
+
+r177 | borf | 2007-02-25 22:23:32 +0000 (Sun, 25 Feb 2007) | 1 line
+
+Fixed textureadding through the new dialog
+
+--------------------------------------------------------------------------------
+
+r176 | borf | 2007-02-25 15:32:49 +0000 (Sun, 25 Feb 2007) | 1 line
+
+Forgot to update the project file
+
+--------------------------------------------------------------------------------
+
+r175 | borf | 2007-02-25 15:27:48 +0000 (Sun, 25 Feb 2007) | 2 lines
+
+Added the scrollpanel's culling
+Fixed culling of pictureboxes
+
+--------------------------------------------------------------------------------
+
+r174 | borf | 2007-02-24 14:38:04 +0000 (Sat, 24 Feb 2007) | 1 line
+
+Fixed a small bug in detail height edit mode
+
+--------------------------------------------------------------------------------
+
+r173 | borf | 2007-02-24 14:17:47 +0000 (Sat, 24 Feb 2007) | 3 lines
+
+Fixed the WM being under stuff
+Fixed the location bar previews
+Fixed the splashscreen
+
+--------------------------------------------------------------------------------
+
+r172 | borf | 2007-02-24 12:27:00 +0000 (Sat, 24 Feb 2007) | 1 line
+
+Added "show gat tiles" to the view menu
+
+--------------------------------------------------------------------------------
+
+r171 | borf | 2007-02-24 12:20:05 +0000 (Sat, 24 Feb 2007) | 3 lines
+
+Fixed the skin a bit
+Added a locations window (see http://browedit.excalibur-nw.com/?a=viewtopic&id=191).
+The locations are saved next to your map in a .locations file
+
+--------------------------------------------------------------------------------
+
+r170 | borf | 2007-02-24 10:27:05 +0000 (Sat, 24 Feb 2007) | 1 line
+
+Upgraded the WM
+
+--------------------------------------------------------------------------------
+
+r169 | borf | 2007-02-23 17:03:18 +0000 (Fri, 23 Feb 2007) | 1 line
+
+Fixed shadowcasting, now to optimize it :)
+
+--------------------------------------------------------------------------------
+
+r168 | borf | 2007-02-23 02:28:59 +0000 (Fri, 23 Feb 2007) | 1 line
+
+Fixed the texture loader/resizer
+
+--------------------------------------------------------------------------------
+
+r167 | borf | 2007-02-23 00:59:54 +0000 (Fri, 23 Feb 2007) | 1 line
+
+Fixed controls & lighting in topview mode
+
+--------------------------------------------------------------------------------
+
+r166 | borf | 2007-02-22 23:53:30 +0000 (Thu, 22 Feb 2007) | 3 lines
+
+Recoded the lightmapping engine, first part is done now :D
+Made the water-animation optional
+Added a window to edit the lights
+
+--------------------------------------------------------------------------------
+
+r165 | borf | 2007-02-21 22:44:44 +0000 (Wed, 21 Feb 2007) | 1 line
+
+Small fix when re-opening a map
+
+--------------------------------------------------------------------------------
+
+r164 | borf | 2007-02-21 22:43:20 +0000 (Wed, 21 Feb 2007) | 1 line
+
+Fixed borders inbetween lightmaps
+
+--------------------------------------------------------------------------------
+
+r163 | borf | 2007-02-21 22:26:46 +0000 (Wed, 21 Feb 2007) | 2 lines
+
+Optimized lightmap displaying a LOT
+todo: fix the borders of lightmaps
+
+--------------------------------------------------------------------------------
+
+r162 | borf | 2007-02-20 22:50:50 +0000 (Tue, 20 Feb 2007) | 1 line
+
+Added a "clear effects" thing
+
+--------------------------------------------------------------------------------
+
+r161 | borf | 2007-02-15 12:47:14 +0000 (Thu, 15 Feb 2007) | 2 lines
+
+Added "snap to floor" for object group edit mode
+Added pageup/pagedown for object group edit mode
+
+--------------------------------------------------------------------------------
+
+r160 | borf | 2007-02-12 13:26:01 +0000 (Mon, 12 Feb 2007) | 1 line
+
+Added F key for GAT mapping
+
+--------------------------------------------------------------------------------
+
+r159 | borf | 2007-02-12 13:15:25 +0000 (Mon, 12 Feb 2007) | 1 line
+
+Added local GAT mapping
+
+--------------------------------------------------------------------------------
+
+r158 | borf | 2007-02-12 13:02:31 +0000 (Mon, 12 Feb 2007) | 1 line
+
+Backported the WM from another project to browedit
+
+--------------------------------------------------------------------------------
+
+r157 | borf | 2007-02-10 11:33:55 +0000 (Sat, 10 Feb 2007) | 1 line
+
+Added undo copy/pasting the gat tiles and the gat height
+
+--------------------------------------------------------------------------------
+
+r156 | borf | 2007-02-10 01:21:38 +0000 (Sat, 10 Feb 2007) | 2 lines
+
+Improved the skin a lot
+added "M" key to open the last menu used (for easy access to the deeper menus)
+
+--------------------------------------------------------------------------------
+
+r155 | borf | 2007-02-09 00:39:03 +0000 (Fri, 09 Feb 2007) | 1 line
+
+Small fix in height edit mode where you could mouseover an area around the map
+
+--------------------------------------------------------------------------------
+
+r154 | borf | 2007-02-08 23:28:23 +0000 (Thu, 08 Feb 2007) | 1 line
+
+Some more undo fixes
+
+--------------------------------------------------------------------------------
+
+r153 | borf | 2007-02-08 22:46:31 +0000 (Thu, 08 Feb 2007) | 1 line
+
+Some undo bordercondition crashfixes
+
+--------------------------------------------------------------------------------
+
+r152 | borf | 2007-02-08 20:49:14 +0000 (Thu, 08 Feb 2007) | 1 line
+
+Added some undo items
+
+--------------------------------------------------------------------------------
+
+r151 | borf | 2007-02-08 11:46:08 +0000 (Thu, 08 Feb 2007) | 3 lines
+
+Updated readme.txt
+updated undo
+added a limit on the - key in gat/height edit
+
+--------------------------------------------------------------------------------
+
+r150 | borf | 2007-02-07 09:21:01 +0000 (Wed, 07 Feb 2007) | 1 line
+
+Updated the configfile a bit
+
+--------------------------------------------------------------------------------
+
+r149 | borf | 2007-02-06 16:00:58 +0000 (Tue, 06 Feb 2007) | 1 line
+
+Fixed moving objects in object group edit mode
+
+--------------------------------------------------------------------------------
+
+r148 | borf | 2007-02-06 15:13:31 +0000 (Tue, 06 Feb 2007) | 1 line
+
+Added double-rightclick to reset the camera
+
+--------------------------------------------------------------------------------
+
+r147 | borf | 2007-02-06 14:51:24 +0000 (Tue, 06 Feb 2007) | 2 lines
+
+Renamed Ayothaya models
+Started working on an undo function
+
+--------------------------------------------------------------------------------
+
+r146 | borf | 2007-02-06 09:29:58 +0000 (Tue, 06 Feb 2007) | 1 line
+
+Added scale & rotate to group object edit mode
+
+--------------------------------------------------------------------------------
+
+r145 | borf | 2007-02-06 01:07:01 +0000 (Tue, 06 Feb 2007) | 1 line
+
+Made a start on object group editing
+
+--------------------------------------------------------------------------------
+
+r144 | borf | 2007-02-05 23:33:28 +0000 (Mon, 05 Feb 2007) | 1 line
+
+Some fixes in the texture-adding
+
+--------------------------------------------------------------------------------
+
+r143 | borf | 2007-02-05 18:31:27 +0000 (Mon, 05 Feb 2007) | 1 line
+
+Cleaned the menu a bit, added a ctrl to detail heightedit mode, which is kinda similar to simcity's raise & lower mode
+
+--------------------------------------------------------------------------------
+
+r142 | borf | 2007-02-05 13:27:27 +0000 (Mon, 05 Feb 2007) | 1 line
+
+Hold down Ctrl in detail heightedit mode to use a "maximum"
+
+--------------------------------------------------------------------------------
+
+r141 | borf | 2007-02-05 13:10:01 +0000 (Mon, 05 Feb 2007) | 1 line
+
+Updated readme a bit
+
+--------------------------------------------------------------------------------
+
+r140 | borf | 2007-02-05 13:08:54 +0000 (Mon, 05 Feb 2007) | 1 line
+
+Added "global heightmap" mode implementation
+
+--------------------------------------------------------------------------------
+
+r139 | borf | 2007-02-05 12:01:30 +0000 (Mon, 05 Feb 2007) | 1 line
+
+Some tweaks in the model-file, fixed some compile things for release-mode
+
+--------------------------------------------------------------------------------
+
+r138 | borf | 2007-02-05 11:29:40 +0000 (Mon, 05 Feb 2007) | 1 line
+
+Changed the "datadir" option in the config to "rodir" because you can no longer give the datadir, but must give the rodir (due to grf reading)
+
+--------------------------------------------------------------------------------
+
+r137 | borf | 2007-02-05 11:27:18 +0000 (Mon, 05 Feb 2007) | 1 line
+
+Added something so you can show the ambient lighting in the editor. 
+
+--------------------------------------------------------------------------------
+
+r136 | borf | 2007-02-05 09:52:09 +0000 (Mon, 05 Feb 2007) | 1 line
+
+Added something so that if you keep your mouse still in detail height edit mode, you can keep raising the same tile(s)
+
+--------------------------------------------------------------------------------
+
+r135 | borf | 2007-02-05 08:01:14 +0000 (Mon, 05 Feb 2007) | 1 line
+
+Updated the model-list a bit
+
+--------------------------------------------------------------------------------
+
+r134 | borf | 2007-02-04 21:13:52 +0000 (Sun, 04 Feb 2007) | 1 line
+
+Updates the menus a bit
+
+--------------------------------------------------------------------------------
+
+r133 | borf | 2007-02-02 11:27:38 +0000 (Fri, 02 Feb 2007) | 2 lines
+
+small fixes
+added window for ambient light settings
+
+--------------------------------------------------------------------------------
+
+r132 | maever | 2007-02-01 23:55:51 +0000 (Thu, 01 Feb 2007) | 1 line
+
+
+
+--------------------------------------------------------------------------------
+
+r131 | borf | 2007-02-01 12:20:58 +0000 (Thu, 01 Feb 2007) | 1 line
+
+WOOOOOOOOOOOOOOOT finally got the ship in alb2trea rotated right, and the bridges in payon, and the stairs in culvert
+
+--------------------------------------------------------------------------------
+
+r130 | borf | 2007-01-31 22:36:16 +0000 (Wed, 31 Jan 2007) | 3 lines
+
+Made some linux fixes
+
+
+
+--------------------------------------------------------------------------------
+
+r129 | borf | 2007-01-31 21:59:23 +0000 (Wed, 31 Jan 2007) | 2 lines
+
+Fixed GRF-reading, added options in the config.txt to add/change the GRFs read.
+Fixed texture-reading for non-2^x textures
+
+--------------------------------------------------------------------------------
+
+r128 | borf | 2007-01-31 21:29:19 +0000 (Wed, 31 Jan 2007) | 1 line
+
+Added grf-reading
+
+--------------------------------------------------------------------------------
+
+r127 | borf | 2007-01-29 18:50:24 +0000 (Mon, 29 Jan 2007) | 3 lines
+
+Linux compile fixes :)
+
+
+
+--------------------------------------------------------------------------------
+
+r126 | borf | 2007-01-28 23:46:06 +0000 (Sun, 28 Jan 2007) | 1 line
+
+Made wall-texturing use the object-grid (numbers 0-9, shift+0-9) to change the alignment of the walls you set with the W-button
+
+--------------------------------------------------------------------------------
+
+r125 | borf | 2007-01-28 21:10:57 +0000 (Sun, 28 Jan 2007) | 1 line
+
+Added texture cleanup
+
+--------------------------------------------------------------------------------
+
+r124 | borf | 2007-01-28 14:44:55 +0000 (Sun, 28 Jan 2007) | 2 lines
+
+Added a window to edit the water properties
+Added backspace in textureedit so you can remove textures for indoor maps
+
+--------------------------------------------------------------------------------
+
+r123 | borf | 2007-01-24 15:56:10 +0000 (Wed, 24 Jan 2007) | 1 line
+
+Added effects-window
+
+--------------------------------------------------------------------------------
+
+r122 | borf | 2007-01-24 15:13:27 +0000 (Wed, 24 Jan 2007) | 1 line
+
+Some gui fixes
+
+--------------------------------------------------------------------------------
+
+r121 | borf | 2007-01-24 14:45:23 +0000 (Wed, 24 Jan 2007) | 2 lines
+
+Fixed a small crash with double-rightclick
+Fixed input of the inputboxes
+
+--------------------------------------------------------------------------------
+
+r120 | borf | 2007-01-24 12:03:00 +0000 (Wed, 24 Jan 2007) | 1 line
+
+Small cleanup
+
+--------------------------------------------------------------------------------
+
+r119 | borf | 2007-01-24 12:02:16 +0000 (Wed, 24 Jan 2007) | 1 line
+
+The window variables now get updated when you drag an object around :D
+
+--------------------------------------------------------------------------------
+
+r118 | borf | 2007-01-24 11:49:48 +0000 (Wed, 24 Jan 2007) | 3 lines
+
+Some small fixes in the input button
+Changed tab-key to keydown instead of keyup
+Added a box with the menu position of an object
+
+--------------------------------------------------------------------------------
+
+r117 | borf | 2007-01-24 11:32:41 +0000 (Wed, 24 Jan 2007) | 2 lines
+
+Added a feature so you can select your own font, and added 11 new fonts
+Resized the boxes in the objects window a bit
+
+--------------------------------------------------------------------------------
+
+r116 | borf | 2007-01-24 10:49:10 +0000 (Wed, 24 Jan 2007) | 1 line
+
+Added a small line around textures
+
+--------------------------------------------------------------------------------
+
+r115 | borf | 2007-01-24 02:36:36 +0000 (Wed, 24 Jan 2007) | 1 line
+
+Some fixes in the guicode...
+
+--------------------------------------------------------------------------------
+
+r114 | borf | 2007-01-24 02:14:01 +0000 (Wed, 24 Jan 2007) | 2 lines
+
+Added a basic GUI
+made a start on the object properties window
+
+--------------------------------------------------------------------------------
+
+r113 | borf | 2007-01-23 23:46:10 +0000 (Tue, 23 Jan 2007) | 2 lines
+
+Added something so you can easily make minimaps
+added some menucode
+
+--------------------------------------------------------------------------------
+
+r112 | borf | 2007-01-23 20:20:05 +0000 (Tue, 23 Jan 2007) | 1 line
+
+Fixed what I hope to be the last object rotation/positioning bug
+
+--------------------------------------------------------------------------------
+
+r111 | borf | 2007-01-23 15:07:29 +0000 (Tue, 23 Jan 2007) | 1 line
+
+finished effects for now, a better visual estimation will be made later, this works for now
+
+--------------------------------------------------------------------------------
+
+r110 | borf | 2007-01-22 21:38:07 +0000 (Mon, 22 Jan 2007) | 1 line
+
+Working on adding effects (and and decoding the effects blocks)
+
+--------------------------------------------------------------------------------
+
+r109 | borf | 2007-01-20 16:12:41 +0000 (Sat, 20 Jan 2007) | 4 lines
+
+Added effect names (see http://browedit.excalibur-nw.com/?pic=8&a=media)
+Added effect pulldownmenu
+updated OGL-lighting so it displays better
+
+
+--------------------------------------------------------------------------------
+
+r108 | borf | 2007-01-18 21:21:45 +0000 (Thu, 18 Jan 2007) | 1 line
+
+Added options to change the resolution & fullscreen-ness
+
+--------------------------------------------------------------------------------
+
+r107 | borf | 2007-01-18 19:59:42 +0000 (Thu, 18 Jan 2007) | 1 line
+
+Added texture replacing (hit shift+selecttexture to replace the selected texture)
+
+--------------------------------------------------------------------------------
+
+r106 | borf | 2007-01-18 19:12:33 +0000 (Thu, 18 Jan 2007) | 1 line
+
+Made a start on the texture replacement
+
+--------------------------------------------------------------------------------
+
+r105 | borf | 2007-01-17 00:26:22 +0000 (Wed, 17 Jan 2007) | 2 lines
+
+You can move effects now
+list of effects added
+
+--------------------------------------------------------------------------------
+
+r104 | borf | 2007-01-16 21:59:12 +0000 (Tue, 16 Jan 2007) | 1 line
+
+added a secret ninja feature
+
+--------------------------------------------------------------------------------
+
+r103 | borf | 2007-01-16 20:44:41 +0000 (Tue, 16 Jan 2007) | 1 line
+
+Effects, sounds and lights are now saved
+
+--------------------------------------------------------------------------------
+
+r102 | borf | 2007-01-16 19:05:54 +0000 (Tue, 16 Jan 2007) | 1 line
+
+Added objectflipping
+
+--------------------------------------------------------------------------------
+
+r101 | borf | 2007-01-15 14:46:19 +0000 (Mon, 15 Jan 2007) | 3 lines
+
+Made BrowEdit compile under linux, native
+
+
+
+--------------------------------------------------------------------------------
+
+r100 | borf | 2007-01-15 13:13:40 +0000 (Mon, 15 Jan 2007) | 1 line
+
+Fixed a bug in the VS6 project file
+
+--------------------------------------------------------------------------------
+
+r99 | borf | 2007-01-15 13:08:34 +0000 (Mon, 15 Jan 2007) | 1 line
+
+Added Visual Studio 8 solution
+
+--------------------------------------------------------------------------------
+
+r98 | borf | 2007-01-14 22:34:11 +0000 (Sun, 14 Jan 2007) | 1 line
+
+Some small fixes
+
+--------------------------------------------------------------------------------
+
+r97 | borf | 2007-01-14 21:59:02 +0000 (Sun, 14 Jan 2007) | 1 line
+
+Cleaned up the development directory a bit, moved source and other compiling things to a seperate directory
+
+--------------------------------------------------------------------------------
+
+r96 | borf | 2007-01-14 21:54:19 +0000 (Sun, 14 Jan 2007) | 1 line
+
+Added better camera control
+
+--------------------------------------------------------------------------------
+
+r95 | borf | 2007-01-14 19:55:24 +0000 (Sun, 14 Jan 2007) | 11 lines
+
+Added customizable object-grid (by size & offset)
+1,2,3,4,5,6,7,8,9,0 Change grid-size
+shift+1,2,3,4,5,6,7,8,9,0 Change grid-x-offset
+ctrl+1,2,3,4,5,6,7,8,9,0 Change grid-y-offset
+
+Fixed the initialisation-screen
+removed the "error opening datafile" message
+Changed texturecache behaviour to unload textures when they're not needed
+Added a visible grid in objectmode (hit G to toggle it)
+Changed the object-blocks to be shown/hidden with the O button
+Updated the romodels.txt for Rachel & Umbala (umbala needs to be grouped though)
+
+--------------------------------------------------------------------------------
+
+r94 | borf | 2007-01-10 01:44:04 +0000 (Wed, 10 Jan 2007) | 1 line
+
+Added a basic texture-preview, click once on a texture to see it, and a 2nd time to add it to your map
+
+--------------------------------------------------------------------------------
+
+r93 | borf | 2007-01-10 01:18:56 +0000 (Wed, 10 Jan 2007) | 1 line
+
+Updated the menucode so it resembles a normal dropdownmenu
+
+--------------------------------------------------------------------------------
+
+r92 | borf | 2007-01-10 00:14:07 +0000 (Wed, 10 Jan 2007) | 1 line
+
+Fixed walleditmode and added a marker-function to walledit mode (see readme)
+
+--------------------------------------------------------------------------------
+
+r91 | borf | 2007-01-08 23:52:24 +0000 (Mon, 08 Jan 2007) | 1 line
+
+Fixed 3/4th of the wall-texture-splatting-generation-thingy
+
+--------------------------------------------------------------------------------
+
+r90 | borf | 2007-01-08 20:19:11 +0000 (Mon, 08 Jan 2007) | 3 lines
+
+Added a function to reset obect rotation (hit R)
+Added something to not always have objects stick to the floor
+updated readme a bit
+
+--------------------------------------------------------------------------------
+
+r89 | borf | 2007-01-06 11:29:02 +0000 (Sat, 06 Jan 2007) | 1 line
+
+Small fix with textures/models menu-mixups
+
+--------------------------------------------------------------------------------
+
+r88 | borf | 2007-01-03 17:09:06 +0000 (Wed, 03 Jan 2007) | 5 lines
+
+Updated configfiles for easier switching of games 
+update your config.txt !!!
+This will allow you to add "profiles" for different directories with different models and textures
+
+Added quadtree generation
+
+--------------------------------------------------------------------------------
+
+r87 | borf | 2007-01-03 01:02:10 +0000 (Wed, 03 Jan 2007) | 2 lines
+
+Fixed a crash when pasting heighttiles with a different brushsize
+might have fixed leftmousedrag + rightmousebutton
+
+--------------------------------------------------------------------------------
+
+r86 | borf | 2007-01-02 02:36:02 +0000 (Tue, 02 Jan 2007) | 4 lines
+
+Added water configfile
+Added RO Alpha map loading (works for the game "Arcturus" too)
+Added Water config-file + loading (now you can have more then 7 types of water, and change the directory the water is loaded from, and the filetype of the water)
+Added a fix for loading of older rsmmodels
+
+--------------------------------------------------------------------------------
+
+r85 | akira | 2007-01-01 08:17:56 +0000 (Mon, 01 Jan 2007) | 1 line
+
+small touch up in the hamtaro splash image :P
+
+--------------------------------------------------------------------------------
+
+r84 | akira | 2006-12-31 02:56:19 +0000 (Sun, 31 Dec 2006) | 2 lines
+
+updates some texture folder and categories, moved some ground/crap to respective cataloga like basics/[city name] and a new catalog named dungeons and fields so may be easier to find the desired texture based in the town/dungeon/field we look for.
+Later will rename "basocs" as cities but later when i have it more organized, enjoy and i hope you find it useful and handy the order im trying to build .__.;;; [cyber]
+
+--------------------------------------------------------------------------------
+
+r83 | borf | 2006-12-31 00:12:44 +0000 (Sun, 31 Dec 2006) | 4 lines
+
+updated the model-rotation speed in the objectedit mode so they don't spin like a mofo
+small fix in lightmap export
+Tweaked object movement/rotation with the arrow keys a bit
+
+
+--------------------------------------------------------------------------------
+
+r82 | akira | 2006-12-30 09:52:02 +0000 (Sat, 30 Dec 2006) | 1 line
+
+added more models from the nocats to cities
+
+--------------------------------------------------------------------------------
+
+r81 | borf | 2006-12-30 01:21:11 +0000 (Sat, 30 Dec 2006) | 5 lines
+
+Updated the private system again (thanks blackhole89)
+Started on adding support for RO Alpha maps
+Fixed W key a bit, and added support for scaled textures over multiple wallsegments (hold shift+w)
+Changed , and . to have the initial texture layout as selected in the texture on the right
+speeded up lightmap generation a tiiiiny bit
+
+--------------------------------------------------------------------------------
+
+r80 | borf | 2006-12-27 20:29:35 +0000 (Wed, 27 Dec 2006) | 2 lines
+
+Organized the comodo models
+tweaked some lightmap stuff
+
+--------------------------------------------------------------------------------
+
+r79 | borf | 2006-12-25 19:42:50 +0000 (Mon, 25 Dec 2006) | 1 line
+
+Lightmap fixes, color lightmap import/export added
+
+--------------------------------------------------------------------------------
+
+r78 | borf | 2006-12-23 21:21:24 +0000 (Sat, 23 Dec 2006) | 2 lines
+
+Fixed a serious bug with loading/saving maps, can cause crashes while saving/loading
+Started improving lightmaps
+
+--------------------------------------------------------------------------------
+
+r77 | borf | 2006-12-22 08:14:09 +0000 (Fri, 22 Dec 2006) | 1 line
+
+some model.txt updates
+
+--------------------------------------------------------------------------------
+
+r76 | borf | 2006-12-21 23:44:08 +0000 (Thu, 21 Dec 2006) | 1 line
+
+Updated GAT tile graphics, fixed some bugs, added splashscreen
+
+--------------------------------------------------------------------------------
+
+r75 | borf | 2006-12-21 16:30:53 +0000 (Thu, 21 Dec 2006) | 1 line
+
+Added smooooooothing ( hit S in detail height edit mode )
+
+--------------------------------------------------------------------------------
+
+r74 | borf | 2006-12-21 08:49:45 +0000 (Thu, 21 Dec 2006) | 1 line
+
+Fixed speed option in the menu so it actually works
+
+--------------------------------------------------------------------------------
+
+r73 | borf | 2006-12-21 00:13:44 +0000 (Thu, 21 Dec 2006) | 1 line
+
+Some fixes to lightmap calculation
+
+--------------------------------------------------------------------------------
+
+r72 | borf | 2006-12-20 19:24:56 +0000 (Wed, 20 Dec 2006) | 1 line
+
+Fixed a small bug with water animation speed
+
+--------------------------------------------------------------------------------
+
+r71 | borf | 2006-12-20 18:35:14 +0000 (Wed, 20 Dec 2006) | 1 line
+
+Fixed rotation of models =D=D
+
+--------------------------------------------------------------------------------
+
+r70 | borf | 2006-12-20 18:17:08 +0000 (Wed, 20 Dec 2006) | 2 lines
+
+Fixed loading of multiple maps
+Fixed water animation-speed
+
+--------------------------------------------------------------------------------
+
+r69 | borf | 2006-12-19 23:32:03 +0000 (Tue, 19 Dec 2006) | 1 line
+
+
+
+--------------------------------------------------------------------------------
+
+r68 | borf | 2006-12-19 01:45:29 +0000 (Tue, 19 Dec 2006) | 1 line
+
+Added stuff for closed alpha release
+
+--------------------------------------------------------------------------------
+
+r67 | borf | 2006-12-17 19:28:55 +0000 (Sun, 17 Dec 2006) | 2 lines
+
+Added OGL lighting when the lightmap is disabled so it's easier to see the difference between walls & floors.
+Added some options to the option-menu, Set GAT collsion sets all tiles that are different from 0 to non-walkable and the tiles that are 0 to walkable, the Add Walls adds walls to all the tiles with different height as borders
+
+--------------------------------------------------------------------------------
+
+r66 | borf | 2006-12-14 21:15:23 +0000 (Thu, 14 Dec 2006) | 1 line
+
+Fix with quadtree calculation that crashed when objects were put outside the map
+
+--------------------------------------------------------------------------------
+
+r65 | borf | 2006-12-14 20:31:46 +0000 (Thu, 14 Dec 2006) | 1 line
+
+Added function to remove all objects from a map
+
+--------------------------------------------------------------------------------
+
+r64 | borf | 2006-12-14 07:23:48 +0000 (Thu, 14 Dec 2006) | 1 line
+
+changed quadtree calculation. It takes a bit longer now, but it works better
+
+--------------------------------------------------------------------------------
+
+r63 | maever | 2006-12-14 00:27:18 +0000 (Thu, 14 Dec 2006) | 1 line
+
+Added some Jawaii textures
+
+--------------------------------------------------------------------------------
+
+r62 | borf | 2006-12-13 23:02:39 +0000 (Wed, 13 Dec 2006) | 1 line
+
+Added lightmap rendering to the walls
+
+--------------------------------------------------------------------------------
+
+r61 | borf | 2006-12-13 12:30:56 +0000 (Wed, 13 Dec 2006) | 1 line
+
+Now it's using a better light-position
+
+--------------------------------------------------------------------------------
+
+r60 | borf | 2006-12-13 01:41:31 +0000 (Wed, 13 Dec 2006) | 1 line
+
+Added a small security-check in release builds
+
+--------------------------------------------------------------------------------
+
+r59 | borf | 2006-12-13 00:46:52 +0000 (Wed, 13 Dec 2006) | 1 line
+
+Fixed lightmaps, they're a bit better now. Also added lightmap import/export
+
+--------------------------------------------------------------------------------
+
+r58 | borf | 2006-12-12 22:53:40 +0000 (Tue, 12 Dec 2006) | 1 line
+
+Added lightmap import/export
+
+--------------------------------------------------------------------------------
+
+r57 | borf | 2006-12-12 07:42:42 +0000 (Tue, 12 Dec 2006) | 1 line
+
+shadowcasting...
+
+--------------------------------------------------------------------------------
+
+r56 | borf | 2006-12-10 22:47:19 +0000 (Sun, 10 Dec 2006) | 1 line
+
+Added shadow-casting (takes (too) long to calculate though >_<)
+
+--------------------------------------------------------------------------------
+
+r55 | borf | 2006-12-10 15:11:36 +0000 (Sun, 10 Dec 2006) | 1 line
+
+Fixed lightmaps on graphics adaptors that don't support non-8^n+border textures
+
+--------------------------------------------------------------------------------
+
+r54 | borf | 2006-12-10 13:52:43 +0000 (Sun, 10 Dec 2006) | 1 line
+
+Added a basic shadowcasting engine...pre-alpha material :P
+
+--------------------------------------------------------------------------------
+
+r53 | maever | 2006-12-07 22:20:45 +0000 (Thu, 07 Dec 2006) | 1 line
+
+Added Hugel textures, very nice for towns
+
+--------------------------------------------------------------------------------
+
+r52 | borf | 2006-12-07 14:17:03 +0000 (Thu, 07 Dec 2006) | 1 line
+
+Added lightmap thingies and a toggle button. The colors aren't 100% right because they ignore the ambient lighting
+
+--------------------------------------------------------------------------------
+
+r51 | borf | 2006-12-07 02:26:59 +0000 (Thu, 07 Dec 2006) | 1 line
+
+Started working on displaying the lightmap
+
+--------------------------------------------------------------------------------
+
+r50 | borf | 2006-12-07 00:28:01 +0000 (Thu, 07 Dec 2006) | 1 line
+
+Some color changes
+
+--------------------------------------------------------------------------------
+
+r49 | borf | 2006-12-06 23:24:05 +0000 (Wed, 06 Dec 2006) | 1 line
+
+Added basic support for water
+
+--------------------------------------------------------------------------------
+
+r48 | borf | 2006-12-06 14:09:41 +0000 (Wed, 06 Dec 2006) | 1 line
+
+Updated readme a bit
+
+--------------------------------------------------------------------------------
+
+r47 | maever | 2006-12-06 00:16:52 +0000 (Wed, 06 Dec 2006) | 1 line
+
+a fix
+
+--------------------------------------------------------------------------------
+
+r46 | maever | 2006-12-05 23:26:06 +0000 (Tue, 05 Dec 2006) | 1 line
+
+More models listed
+
+--------------------------------------------------------------------------------
+
+r45 | maever | 2006-12-05 16:38:57 +0000 (Tue, 05 Dec 2006) | 1 line
+
+Another fix concerning some models + added some stuff
+
+--------------------------------------------------------------------------------
+
+r44 | maever | 2006-12-05 15:16:24 +0000 (Tue, 05 Dec 2006) | 1 line
+
+Fixed small buggy
+
+--------------------------------------------------------------------------------
+
+r43 | maever | 2006-12-05 15:14:21 +0000 (Tue, 05 Dec 2006) | 1 line
+
+added others dir with some handy models
+
+--------------------------------------------------------------------------------
+
+r42 | borf | 2006-12-05 09:36:42 +0000 (Tue, 05 Dec 2006) | 1 line
+
+Added a small logging line to see how many objects are in your level
+
+--------------------------------------------------------------------------------
+
+r41 | borf | 2006-12-05 00:22:17 +0000 (Tue, 05 Dec 2006) | 2 lines
+
+Hide the blocks in object-mode with G
+fixed heightmapping on the borders of the map
+
+--------------------------------------------------------------------------------
+
+r40 | borf | 2006-12-04 13:53:26 +0000 (Mon, 04 Dec 2006) | 2 lines
+
+Change case of some things in the modelfile
+changed the grid of objects
+
+--------------------------------------------------------------------------------
+
+r39 | akira | 2006-12-03 19:34:32 +0000 (Sun, 03 Dec 2006) | 1 line
+
+
+
+--------------------------------------------------------------------------------
+
+r38 | borf | 2006-12-03 18:17:28 +0000 (Sun, 03 Dec 2006) | 2 lines
+
+gat support improved
+heightmapping improved
+
+--------------------------------------------------------------------------------
+
+r37 | maever | 2006-12-03 15:31:07 +0000 (Sun, 03 Dec 2006) | 1 line
+
+Some prontera / Field textures are organized under the 'basics' menu-item
+
+--------------------------------------------------------------------------------
+
+r36 | borf | 2006-12-03 15:21:55 +0000 (Sun, 03 Dec 2006) | 1 line
+
+basic GAT support
+
+--------------------------------------------------------------------------------
+
+r35 | borf | 2006-12-01 01:37:09 +0000 (Fri, 01 Dec 2006) | 1 line
+
+added a hack to load maps without quadtrees
+
+--------------------------------------------------------------------------------
+
+r34 | borf | 2006-12-01 01:29:53 +0000 (Fri, 01 Dec 2006) | 1 line
+
+Generated 100% of the quadtree information
+
+--------------------------------------------------------------------------------
+
+r33 | borf | 2006-11-30 22:49:09 +0000 (Thu, 30 Nov 2006) | 1 line
+
+Copy of model now sets the model as selected model too
+
+--------------------------------------------------------------------------------
+
+r32 | borf | 2006-11-30 21:17:48 +0000 (Thu, 30 Nov 2006) | 1 line
+
+Added a text on the topright telling the current model selected from the menu, [ key is broken though
+
+--------------------------------------------------------------------------------
+
+r31 | borf | 2006-11-30 20:26:32 +0000 (Thu, 30 Nov 2006) | 1 line
+
+Fixed saving of the quadtree, it now saves 100% right, it just doesn't use the objects for height calculation
+
+--------------------------------------------------------------------------------
+
+r30 | borf | 2006-11-30 02:09:02 +0000 (Thu, 30 Nov 2006) | 1 line
+
+First (and biggest) part of quadtree generation is done
+
+--------------------------------------------------------------------------------
+
+r29 | borf | 2006-11-30 01:18:22 +0000 (Thu, 30 Nov 2006) | 1 line
+
+Now pre-calculating the boundingboxes
+
+--------------------------------------------------------------------------------
+
+r28 | borf | 2006-11-30 00:38:27 +0000 (Thu, 30 Nov 2006) | 1 line
+
+woot, boundingboxes (but VERY slow now)
+
+--------------------------------------------------------------------------------
+
+r27 | borf | 2006-11-29 23:49:00 +0000 (Wed, 29 Nov 2006) | 1 line
+
+Added boundingboxes
+
+--------------------------------------------------------------------------------
+
+r26 | borf | 2006-11-29 22:55:08 +0000 (Wed, 29 Nov 2006) | 2 lines
+
+Updated models.txt (someone forgot a |)
+Fixed ] in object select mode
+
+--------------------------------------------------------------------------------
+
+r25 | maever | 2006-11-29 22:26:52 +0000 (Wed, 29 Nov 2006) | 1 line
+
+Reorganized models.txt now Prontera, culvert and Lutie stuff is very nicely categorized![maever]
+
+--------------------------------------------------------------------------------
+
+r24 | maever | 2006-11-29 20:29:00 +0000 (Wed, 29 Nov 2006) | 1 line
+
+Updated modelslist on prontera for 85%
+
+--------------------------------------------------------------------------------
+
+r23 | borf | 2006-11-29 01:18:24 +0000 (Wed, 29 Nov 2006) | 1 line
+
+Loading the quadtree properly now, have to re-generate it now though ( on save )
+
+--------------------------------------------------------------------------------
+
+r22 | borf | 2006-11-29 00:57:25 +0000 (Wed, 29 Nov 2006) | 1 line
+
+Solved the great mystery of the rsw floats. They're a quadtree!
+
+--------------------------------------------------------------------------------
+
+r21 | borf | 2006-11-28 23:52:21 +0000 (Tue, 28 Nov 2006) | 1 line
+
+This frustum culling is evil!
+
+--------------------------------------------------------------------------------
+
+r20 | borf | 2006-11-28 20:24:17 +0000 (Tue, 28 Nov 2006) | 1 line
+
+Updated the .exe for maever :p
+
+--------------------------------------------------------------------------------
+
+r19 | borf | 2006-11-28 20:21:34 +0000 (Tue, 28 Nov 2006) | 1 line
+
+Added textureloading (don't use it yet though, it will break map saving)
+
+--------------------------------------------------------------------------------
+
+r18 | borf | 2006-11-28 18:42:48 +0000 (Tue, 28 Nov 2006) | 1 line
+
+Some small fixes...
+
+--------------------------------------------------------------------------------
+
+r17 | borf | 2006-11-28 02:35:19 +0000 (Tue, 28 Nov 2006) | 1 line
+
+blimp?
+
+--------------------------------------------------------------------------------
+
+r16 | borf | 2006-11-28 02:12:12 +0000 (Tue, 28 Nov 2006) | 1 line
+
+Changed the structure of the models menu
+
+--------------------------------------------------------------------------------
+
+r15 | borf | 2006-11-28 00:47:21 +0000 (Tue, 28 Nov 2006) | 1 line
+
+Copy/paste for objects added
+
+--------------------------------------------------------------------------------
+
+r14 | borf | 2006-11-27 22:49:47 +0000 (Mon, 27 Nov 2006) | 1 line
+
+Small update, no default map loaded
+
+--------------------------------------------------------------------------------
+
+r13 | borf | 2006-11-27 22:42:22 +0000 (Mon, 27 Nov 2006) | 1 line
+
+Finally got models right, animation is just a bit weird, but it'll work out :)
+
+--------------------------------------------------------------------------------
+
+r12 | borf | 2006-11-27 17:14:20 +0000 (Mon, 27 Nov 2006) | 1 line
+
+removed default loaded map :P
+
+--------------------------------------------------------------------------------
+
+r11 | borf | 2006-11-27 15:32:46 +0000 (Mon, 27 Nov 2006) | 1 line
+
+New binary, started on a readme
+
+--------------------------------------------------------------------------------
+
+r10 | borf | 2006-11-27 02:18:10 +0000 (Mon, 27 Nov 2006) | 1 line
+
+Oops, forgot 2 files
+
+--------------------------------------------------------------------------------
+
+r9 | borf | 2006-11-27 01:41:21 +0000 (Mon, 27 Nov 2006) | 3 lines
+
+Finished drag&drop of models
+
+todo: adding models & saving
+
+--------------------------------------------------------------------------------
+
+r8 | borf | 2006-11-26 19:08:25 +0000 (Sun, 26 Nov 2006) | 1 line
+
+
+--------------------------------------------------------------------------------
+
+r7 | borf | 2006-11-26 16:56:49 +0000 (Sun, 26 Nov 2006) | 1 line
+
+Finally got objects right
+
+--------------------------------------------------------------------------------
+
+r6 | borf | 2006-11-26 12:58:29 +0000 (Sun, 26 Nov 2006) | 1 line
+
+Some compile fixes...
+
+--------------------------------------------------------------------------------
+
+r5 | borf | 2006-11-26 12:25:24 +0000 (Sun, 26 Nov 2006) | 1 line
+
+Some modelling-work
+
+--------------------------------------------------------------------------------
+
+r4 | borf | 2006-11-23 02:10:13 +0000 (Thu, 23 Nov 2006) | 1 line
+
+objects...
+
+--------------------------------------------------------------------------------
+
+r3 | borf | 2006-11-22 01:26:32 +0000 (Wed, 22 Nov 2006) | 1 line
+
+wall selection tools
+
+--------------------------------------------------------------------------------
+
+r2 | borf | 2006-11-21 23:09:09 +0000 (Tue, 21 Nov 2006) | 1 line
+
+Added small cleaner
+
+--------------------------------------------------------------------------------
+
+r1 | borf | 2006-11-21 18:57:56 +0000 (Tue, 21 Nov 2006) | 1 line
+
+initial import
