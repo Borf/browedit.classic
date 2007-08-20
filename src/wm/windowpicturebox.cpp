@@ -41,10 +41,14 @@ void cWindowPictureBox::draw(int cutoffleft, int cutoffright, int cutofftop, int
 			glEnable(GL_TEXTURE_2D);
 			glBindTexture(GL_TEXTURE_2D, tex->texid());
 			glBegin(GL_QUADS);
-				glTexCoord2f(0,cutoffbottom / (float)h);		glVertex2d(xx+cutoffleft,		yy+cutoffbottom);
+/*				glTexCoord2f(0,cutoffbottom / (float)h);		glVertex2d(xx+cutoffleft,		yy+cutoffbottom);
 				glTexCoord2f(1,cutoffbottom / (float)h);		glVertex2d(xx+w-cutoffright,	yy+cutoffbottom);
 				glTexCoord2f(1,1 - cutofftop / (float)h);			glVertex2d(xx+w-cutoffright,	yy+h-cutofftop);
-				glTexCoord2f(0,1 - cutofftop / (float)h);			glVertex2d(xx+cutoffleft,		yy+h-cutofftop);
+				glTexCoord2f(0,1 - cutofftop / (float)h);			glVertex2d(xx+cutoffleft,		yy+h-cutofftop);*/
+				glTexCoord2f(0,0);		glVertex2d(xx,		yy);
+				glTexCoord2f(1,0);		glVertex2d(xx+w,	yy);
+				glTexCoord2f(1,1);		glVertex2d(xx+w,	yy+h);
+				glTexCoord2f(0,1);		glVertex2d(xx,		yy+h);
 			glEnd();
 			glColor4fv(colors);
 		}

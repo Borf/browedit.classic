@@ -126,7 +126,7 @@ int cFile::close()
 
 bool cFile::eof()
 {
-	return (index == size);
+	return (index >= size);
 }
 
 

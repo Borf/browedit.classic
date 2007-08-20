@@ -42,7 +42,7 @@ public:
 	float ftodo[10];
 	string name;
 	string parent;
-	vector<cTexture*> textures;
+	vector<int> textures;
 	float trans[22];
 
 	int nVertices;

@@ -10,6 +10,7 @@
 #include "windowtree.h"
 #include "windowscrollpanel.h"
 #include "windowpicturebox.h"
+#include "rsmeditwindow.h"
 
 #include "../filesystem.h"
 extern cFileSystem fs;
@@ -33,33 +34,42 @@ class cTextureWindow : public cWindow
 
 		void click()
 		{
-			if(SDL_GetModState() & KMOD_SHIFT)
+			cWindow* w = Graphics.WM.getwindow(WT_RSMEDIT);
+			if(w != NULL)
 			{
-				int id = Graphics.texturestart + (int)(Graphics.selectionstart.y - 32) / 288;
-				TextureCache.unload(Graphics.world.textures[id]->texture);
-				delete Graphics.world.textures[id];
-
-				cTextureContainer* t = new cTextureContainer();
-				t->RoFilename = data;
-				char buf[40];
-				ZeroMemory(buf, 40);
-				sprintf(buf, "%i%i", rand(), rand());
-				t->RoFilename2 = string(buf,40);
-				t->texture = TextureCache.load(rodir + "data\\texture\\" + data);
-				Graphics.world.textures[id] = t;
-
+				((cRSMEditWindow*)w)->changetexture("data\\texture\\" + data);
+				parent->close();
 			}
 			else
 			{
-				cTextureContainer* t = new cTextureContainer();
-				t->RoFilename = data;
-				char buf[40];
-				ZeroMemory(buf, 40);
-				sprintf(buf, "%i%i", rand(), rand());
-				t->RoFilename2 = string(buf,40);
-				t->texture = TextureCache.load(rodir + "data\\texture\\" + data);
-				Graphics.world.textures.push_back(t);
-				Graphics.texturestart = Graphics.world.textures.size() - 2;
+				if(SDL_GetModState() & KMOD_SHIFT)
+				{
+					int id = Graphics.texturestart + (int)(Graphics.selectionstart.y - 32) / 288;
+					TextureCache.unload(Graphics.world.textures[id]->texture);
+					delete Graphics.world.textures[id];
+
+					cTextureContainer* t = new cTextureContainer();
+					t->RoFilename = data;
+					char buf[40];
+					ZeroMemory(buf, 40);
+					sprintf(buf, "%i%i", rand(), rand());
+					t->RoFilename2 = string(buf,40);
+					t->texture = TextureCache.load(rodir + "data\\texture\\" + data);
+					Graphics.world.textures[id] = t;
+
+				}
+				else
+				{
+					cTextureContainer* t = new cTextureContainer();
+					t->RoFilename = data;
+					char buf[40];
+					ZeroMemory(buf, 40);
+					sprintf(buf, "%i%i", rand(), rand());
+					t->RoFilename2 = string(buf,40);
+					t->texture = TextureCache.load(rodir + "data\\texture\\" + data);
+					Graphics.world.textures.push_back(t);
+					Graphics.texturestart = Graphics.world.textures.size() - 2;
+				}
 			}
 		}
 		void SetText(int i, string s)

@@ -417,3 +417,18 @@ bool LineIntersectPolygon( cVector3 *Vertices,
 	t = tt;	
 	return true;
 }
+#ifdef WIN32
+HWND GetConsoleHwnd()
+{
+	HWND hwndFound;
+	char TempWindowTitle[1024];
+	char WindowTitle[1024];
+	GetConsoleTitle(WindowTitle, 1024);
+	wsprintf(TempWindowTitle,"%d/%d", GetTickCount(), GetCurrentProcessId());
+	SetConsoleTitle(TempWindowTitle);
+	Sleep(40);
+	hwndFound=FindWindow(NULL, TempWindowTitle);
+	SetConsoleTitle(WindowTitle);
+	return(hwndFound);
+}
+#endif

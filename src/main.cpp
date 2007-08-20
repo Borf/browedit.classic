@@ -18,6 +18,7 @@ unsigned long keymap[SDLK_LAST-SDLK_FIRST];
 #include "wm/texturewindow.h"
 #include "wm/modelswindow.h"
 #include "wm/keybindwindow.h"
+#include "wm/rsmeditwindow.h"
 #include "undo.h"
 
 #include "texturecache.h"
@@ -127,6 +128,7 @@ MENUCOMMAND(modelwindow);
 MENUCOMMAND(texturewindow);
 MENUCOMMAND(properties);
 MENUCOMMAND(preferences);
+MENUCOMMAND(rsmedit);
 
 cMenu*	menu;
 cMenu* grid;
@@ -743,6 +745,10 @@ int main(int argc, char *argv[])
 	
 	if (!Graphics.init())
 		return 1;
+#ifdef WIN32
+	if(GetSystemMetrics(80) > 1)
+		SetWindowPos(GetConsoleHwnd(), GetConsoleHwnd(), GetSystemMetrics(SM_CXSCREEN),0,0,0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
+#endif
 
 	cMenu* file;
 	cMenu* rnd;
@@ -871,6 +877,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,windows,msgtable[MENU_PROPERTIES],				&MenuCommand_properties);
 	ADDMENUITEM(mm,windows,msgtable[MENU_WATER],					&MenuCommand_water);
 	ADDMENUITEM(mm,windows,msgtable[MENU_PREFERENCES],				&MenuCommand_preferences);
+	ADDMENUITEM(mm,windows,"RSM Editor",							&MenuCommand_rsmedit);
 
 
 
@@ -6310,5 +6317,13 @@ MENUCOMMAND(fillarea)
 
 	
 
+	return true;
+}
+
+
+
+MENUCOMMAND(rsmedit)
+{
+	Graphics.WM.addwindow(new cRSMEditWindow(&Graphics.WM.texture, &Graphics.WM.font));
 	return true;
 }

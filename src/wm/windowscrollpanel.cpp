@@ -142,7 +142,7 @@ void cWindowScrollPanel::draw(int cutoffleft, int cutoffright, int cutofftop, in
 	for(int i = 0; i < objects.size(); i++)
 	{
 		cWindowObject* o = objects[i];
-		if (o->px() >= scrollposx && o->px() + o->pw() <= scrollposx + (w-18) &&
+		if (//o->px() >= scrollposx && o->px() + o->pw() <= scrollposx + (w-18) &&
 			o->py()+o->ph() >= scrollposy && o->py() <= scrollposy + (h-18))
 		{
 			int oldx = o->px();

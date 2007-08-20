@@ -106,7 +106,7 @@ void cRSMModelMesh::load(cFile* pFile, cRSMModel* model, bool main)
 		if (id < 0 || id > model->textures.size())
 			textures.push_back(0);
 		else
-			textures.push_back(model->textures[id]);
+			textures.push_back(id);
 	}
 
 	pFile->read((char*)trans, 22*4);	// trans
@@ -595,7 +595,7 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 		for(i = 0; i < nFaces; i++)
 		{
 			cRSMModelFace* f = &faces[i];
-			glBindTexture(GL_TEXTURE_2D, textures[f->texid]->texid());
+			glBindTexture(GL_TEXTURE_2D, model->textures[textures[f->texid]]->texid());
 			glBegin(GL_TRIANGLES);
 				glTexCoord2f(texcoords[f->t[0]].y, 1-texcoords[f->t[0]].z); glVertex3f(vertices[f->v[0]].x, vertices[f->v[0]].y, vertices[f->v[0]].z);
 				glTexCoord2f(texcoords[f->t[1]].y, 1-texcoords[f->t[1]].z); glVertex3f(vertices[f->v[1]].x, vertices[f->v[1]].y, vertices[f->v[1]].z);
