@@ -42,6 +42,11 @@ Example:
 	list developers, website, copyrights, terms of service etc....
  Approved[]							[Rxxx] [unfin]
 
+-RSM Retexturizer
+	create a window to dupe and rehex a rsm with a different bmp.
+	with a graphical interface.
+ Approved[x]							[Rxxx] [unfin]
+
 
 
 

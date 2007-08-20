@@ -24,7 +24,10 @@ Import Arcturus maps
 Export Lightmaps
 Import Lightmaps
 Exit
-Random1
+Hills
+Valleys
+Culverts
+Mountains
 Maze Stuff
 Quadtree
 Calculate Lightmaps

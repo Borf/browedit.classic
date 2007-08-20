@@ -21,24 +21,24 @@ Example:
 
 -textures window ... 
 	texture closes to a minimize but if clicked twice becomes unretrievable.... 
+								[R233] [unused]
 
 -Models window
 	minimize for models icon is gone? 			
-								[R231] [Broken]
+								[R233] [unused]
 	When closed by icon window becomes unretrievable	
-								[R231] [Broken]
+								[R231] [unused]
 
 -remove the models tab in the menu...
 	the generating windows list is to large for the window.	
 								[R231] [Broken]
-
 
 -Rename the randoms later ... 
 	random 1 top  rolling hills?
 	random 1 2nd  valleys?
 	random 1 3rd  culverts?
 	random 1 4th  Mountains?
-								[R231] [Broken]
+								[R233] [Fixed]
 
 
 -fix paste crash if accidental  

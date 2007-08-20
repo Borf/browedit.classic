@@ -1,6 +1,18 @@
 
+r234 | borf | 2007-08-19 22:55:33 +0000 (Sun, 19 Aug 2007) | 1 line
 
-r231 | A-17 | 2007-08-19 09:31:00 +0000 (sun, 19 Aug 2007) | 2 line
+Probably fixed "gridding" in the 2nd lightmap after an import
+
+--------------------------------------------------------------------------------
+
+r233 | borf | 2007-08-19 22:48:04 +0000 (Sun, 19 Aug 2007) | 2 lines
+
+Fixed random generation type 1 crashing when you don't enter a height
+Fixed models menu culling, will now be a lot faster on large folders
+
+--------------------------------------------------------------------------------
+
+r232 | a17kaliva | 2007-08-19 22:01:00 +0000 (Sun, 19 Aug 2007) | 3 lines
 
 Fixed Arcturus model window crash when viewing Arc_root directory. 
 Added Dev Documentation to SVN

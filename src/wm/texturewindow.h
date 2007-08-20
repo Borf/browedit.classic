@@ -209,8 +209,8 @@ public:
 		o->resizeto(100,100);
 		objects["textures"] = o;
 
-		objects["rollup"] = new cWindowRollupButton(this);
-		objects["close"] = new cWindowCloseButton(this);
+//		objects["rollup"] = new cWindowRollupButton(this);
+//		objects["close"] = new cWindowCloseButton(this);
 
 		resizeto(w,h);
 	}	

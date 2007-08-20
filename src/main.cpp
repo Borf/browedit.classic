@@ -783,10 +783,10 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,file,msgtable[MENU_IMPORTLIGHTMAPS],				&MenuCommand_loadlightmaps); // import lightmaps
 	ADDMENUITEM(mm,file,msgtable[MENU_EXIT],						&MenuCommand_exit); // exit
 	
-	ADDMENUITEM(mm,rnd, msgtable[MENU_RANDOM1],						&MenuCommand_random1); // random1
-	ADDMENUITEM(mm,rnd, msgtable[MENU_RANDOM1],						&MenuCommand_random2); // random1
-	ADDMENUITEM(mm,rnd, msgtable[MENU_RANDOM1],						&MenuCommand_random3); // random1
-	ADDMENUITEM(mm,rnd, msgtable[MENU_RANDOM1],						&MenuCommand_random4); // random1
+	ADDMENUITEM(mm,rnd, msgtable[MENU_RANDOM1],						&MenuCommand_random1); // random1 Hills
+	ADDMENUITEM(mm,rnd, msgtable[MENU_RANDOM2],						&MenuCommand_random2); // random2 Valleys 
+	ADDMENUITEM(mm,rnd, msgtable[MENU_RANDOM3],						&MenuCommand_random3); // random3 Culverts
+	ADDMENUITEM(mm,rnd, msgtable[MENU_RANDOM4],						&MenuCommand_random4); // random4 Mountains 
 	ADDMENUITEM(mm,rnd, msgtable[MENU_MAZESTUFF],					&MenuCommand_tempfunc); // Maze stuff
 	ADDMENUITEM(mm,rnd, msgtable[MENU_QUADTREE],					&MenuCommand_quadtree); // Quadtree
 	ADDMENUITEM(mm,rnd, msgtable[MENU_CALCULATELIGHTMAPS],			&MenuCommand_dolightmapsall); // Lightmaps
