@@ -31,24 +31,29 @@ Example:
 
 -Arcturus models
 	Doors and etc move randomly.... fixable?
+	Could be done with a model-animation-ripper that strips animations of 
+	a model. Could be hard to make though...
  Approved[]							[Rxxx] [unfin]
 
 -Help menu
 	list guides, functions and etc preferably indexable with a table of contents,
 	 however text reference works just as well.
- Approved[]							[Rxxx] [unfin]
+	At first, a html-file or set of html-files would be nice.
+ Approved[x]							[Rxxx] [unfin]
 
 -About Brow menu
 	list developers, website, copyrights, terms of service etc....
- Approved[]							[Rxxx] [unfin]
+ Approved[x]							[Rxxx] [unfin]
 
 -RSM Retexturizer
 	create a window to dupe and rehex a rsm with a different bmp.
 	with a graphical interface.
  Approved[x]							[Rxxx] [unfin]
 
-
-
+-Texture mapper
+	create a new way to select and rotate textures, to allow simpler code
+	and pasting textures on any size (putting a square texture on a 4x1 block)
+ Approved[x]
 
 
 
