@@ -48,15 +48,20 @@ Example:
 -RSM Retexturizer
 	create a window to dupe and rehex a rsm with a different bmp.
 	with a graphical interface.
- Approved[x]							[Rxxx] [unfin]
+ Approved[x]							[R237] [unfin]
 
 -Texture mapper
 	create a new way to select and rotate textures, to allow simpler code
 	and pasting textures on any size (putting a square texture on a 4x1 block)
- Approved[x]
+ Approved[x]							[Rxxx] [unfin]
 
+-Map File List Generator
+	Auto Generate Map list for all models and textures on a map.
+ Approved[x]							[Rxxx] [unfin]
 
-
-
-
+-Map Exporter
+	Auto export all models textures, models, and map files of a map to a GRF or Folder.
+	Make sure that when it exports it exports each map to a seperate grf or folder.	
+	Don't export gravitys models, textures. 
+ Approved[x]							[Rxxx] [unfin]
 

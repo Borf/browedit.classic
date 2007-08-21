@@ -302,8 +302,8 @@ class cRSMEditWindow : public cWindow
 			{
 				if(SDL_GetModState() & KMOD_SHIFT)
 				{
-					model->pos.y += (oldy - mousey) / 2.0f;
-					model->pos.x += (oldx - mousex) / 2.0f;
+					model->pos.y -= (oldy - mousey) * 2.0f;
+					model->pos.x -= (oldx - mousex) / 2.0f;
 				}
 				else
 					roty += (oldy-mousey) / 2.0f;

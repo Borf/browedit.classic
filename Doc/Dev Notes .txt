@@ -4,4 +4,95 @@ Its going to be soemthing close to comments. only external of the actual program
 
 
 To add here Lsiting of each .C , .Cpp and .h file and what they consist of in general.
+==========================================================================================
+ (Link: http://www.browedit.excalibur-nw.com/wiki/index.php/Starting_up_your_map)http://www.browedit.excalibur-nw.com/wiki/index.php/Starting_up_your_map <-- and try this guide
 
+
+
+A brief description of what each .c and header deals with.
+-----------------------------------------------------------
+in the left part of VC you'll see the files grouped in directories
+
+  common.cpp / common.h 
+	:is a bit of a library with common functions i use throughout my projects
+
+  filesystem.cpp / filesystem.h 
+	:is a wrapper around file access
+		cFile* pFile = fs.open("config.txt");
+ 			while(!pFile.eof())
+ 			{
+   				Log(3,0,"%s", pFile.getline().c_str());
+ 			}
+ 				pFile.close();
+
+  font.cpp / font.h 
+	:is to display text
+
+  font.print() 
+	:to display  (read the params for more info)
+
+  frustum.cpp /frustum.h :is for frustum culling...
+   	:it's used to determine what points are visible with the current camera
+
+  graphics.cpp / graphics.h 
+	:is about graphics xD it contains the main draw() function that's called every frame, and has an instance of the editing world
+
+  main.cpp 
+	:is the main file, it contains all the menus and editing logic
+
+  md5.c / md5.h 
+	:is to calculate the md5 hash of data, it's used for my security system
+
+  RSMmodel.cpp / RSMmodel.h 
+	:is about loading / displaying the rsm models
+
+  svnver.cpp / svnver.h 
+	:is for SVN versioning
+
+  texture.cpp / texture.h 	
+	:is to load textures
+
+  texturecache.h / texturecache.cpp 
+	:is a little cache wrapper I made around the textures so that textures won't get loaded twice
+
+  texturemodel.cpp 
+	:is a pointsprite or billboard, it's used to display the effect-sprites (that always face the camera)
+
+  undo.cpp / undo.h 
+	:is for the undo system
+
+  world.cpp / world.h 
+	:is the world / displaying of the world
+
+  mymath.h 
+	:is a collection of cVector2 and cVector3 and some other math stuff I use
+   
+  WM directory
+	:contains the window manager stuff
+
+  grflib
+	 :for reading grfs
+
+=========================================================================================================================
+4 most graphics adaptors to load a texture
+ the texture has to be 2^n x 2^m
+
+Log(3,0,"test: %i", bla);
+ 3 = logging level
+ 3 = normal
+ 2 = warning
+ 1 = error
+ 0 = severe error
+the 2nd parameter is the display type, 0 = normal, you can enter "BOLD" in there too
+
+
+opengl's quite readable..
+
+ glBindTexture(GL_TEXTURE_2D, textureid);
+ glBegin(TYPE_OF_RENDERING);
+ glTexCoord2f(texx,texy); glVertex3f(x,y,z);
+ glTexCoord2f(texx,texy); glVertex3f(x,y,z);
+ glTexCoord2f(texx,texy); glVertex3f(x,y,z);
+ glTexCoord2f(texx,texy); glVertex3f(x,y,z);
+ glEnd(); 
+and it draws something
