@@ -191,6 +191,7 @@ class cRSMEditWindow : public cWindow
 		cRSMModel* model;
 		string data;
 		float roty;
+		long oldx;
 		long oldy;
 		cWindowModel(cWindow* parent) : cWindowObject(parent)
 		{
@@ -298,8 +299,17 @@ class cRSMEditWindow : public cWindow
 		void drag()
 		{
 			if(oldy != -1)
-				roty += (oldy-mousey) / 2.0f;
+			{
+				if(SDL_GetModState() & KMOD_SHIFT)
+				{
+					model->pos.y += (oldy - mousey) / 2.0f;
+					model->pos.x += (oldx - mousex) / 2.0f;
+				}
+				else
+					roty += (oldy-mousey) / 2.0f;
+			}
 			oldy = mousey;
+			oldx = mousex;
 		}
 
 		void SetText(int i, string s)

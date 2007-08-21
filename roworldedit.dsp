@@ -321,6 +321,10 @@ SOURCE=.\src\wm\objectwindow.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\wm\rsmeditwindow.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\wm\texturewindow.h
 # End Source File
 # Begin Source File
