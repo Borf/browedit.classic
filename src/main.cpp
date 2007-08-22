@@ -635,11 +635,11 @@ int main(int argc, char *argv[])
 	models = new cMenu();
 //	models->parent = NULL;
 //	models->title = msgtable[MENU_MODELS]; 
-//	models->item = false; 
-//	models->drawstyle = 1; 
-//	models->y = 20; 
-//	models->x = 0; 
-//	models->w = 50; 
+	models->item = false; 
+	models->drawstyle = 1; 
+	models->y = 20; 
+	models->x = 0; 
+	models->w = 50; 
 	
 
 	map<string, cMenu*, less<string> > itemsm;

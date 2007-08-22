@@ -8,8 +8,6 @@ Example:
 		Null imput error 			
 								[R230] -Fixed Borf
 
-
-
 ==============================================================================================
 -===  Known Errors  ===-
 ==============================================================================================
@@ -18,30 +16,7 @@ Example:
  	if you export import several times it begins to grow.	
 								[R231] [Broken]
 
-
--textures window ... 
-	texture closes to a minimize but if clicked twice becomes unretrievable.... 
-								[R233] [unused]
-
--Models window
-	minimize for models icon is gone? 			
-								[R233] [unused]
-	When closed by icon window becomes unretrievable	
-								[R231] [unused]
-
--remove the models tab in the menu...
-	the generating windows list is to large for the window.	
-								[R231] [Broken]
-
--Rename the randoms later ... 
-	random 1 top  rolling hills?
-	random 1 2nd  valleys?
-	random 1 3rd  culverts?
-	random 1 4th  Mountains?
-								[R233] [Fixed]
-
-
--fix paste crash if accidental  
+fix paste crash if accidental  
 	paste in texture mode? or just in texture window?	
 								[R231] [Broken]
 
@@ -60,3 +35,28 @@ Example:
 -Fix the holes and other bugs in the lighting
 								[R231] [Broken]
 
+----------------------------------------------------------------------------------------------
+
+-textures window ... 
+	texture closes to a minimize but if clicked twice becomes unretrievable.... 
+								[R235] [Fixed/Unused]
+
+-Models window
+	minimize for models icon is gone? 			
+								[R235] [Fixed/Unused]
+	When closed by icon window becomes unretrievable	
+								[R235] [Fixed/Unused]
+
+-remove the models tab in the menu...
+	the generating windows list is to large for the window.	
+								[R240] [Fixed]
+
+-Rename the randoms later ... 
+	random 1 top  rolling hills?
+	random 1 2nd  valleys?
+	random 1 3rd  culverts?
+	random 1 4th  Mountains?
+								[R233] [Fixed]
+
+
+-
