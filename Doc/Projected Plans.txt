@@ -58,9 +58,17 @@ Example:
 -Map File List Generator
 	Auto Generate Map list for all models and textures on a map.
  Approved[x]							[Rxxx] [unfin]
+-Map File List Generator
+	Auto Generate Map list for all models and textures on a map.
+ Approved[x]							[Rxxx] [unfin]
+	group edit to edit it all the time
+ Approved[x]
 
+-Favorite Models
 -Map Exporter
+	Allows you to add/remove models to some kind of "favorite" system for easy access
 	Auto export all models textures, models, and map files of a map to a GRF or Folder.
+ Approved[x]
 	Make sure that when it exports it exports each map to a seperate grf or folder.	
 	Don't export gravitys models, textures. 
  Approved[x]							[Rxxx] [unfin]
