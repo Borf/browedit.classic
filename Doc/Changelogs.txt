@@ -1,3 +1,34 @@
+r239 | a17kaliva | 2007-08-21 18:23:19 +0000 (Tue, 21 Aug 2007) | 2 lines
+
+Fixed RSM Texture Editor drag contols to match mouse movement as closely as possible. 
+Updated DEV notes and Projected Plans lists.
+
+--------------------------------------------------------------------------------
+
+r238 | borf | 2007-08-21 16:13:55 +0000 (Tue, 21 Aug 2007) | 1 line
+
+Added panning to the rsm editor
+
+--------------------------------------------------------------------------------
+
+r237 | borf | 2007-08-20 23:00:40 +0000 (Mon, 20 Aug 2007) | 1 line
+
+Added an RSM editor to change/replace textures. It's still very rough (the texture-selecter sometimes appears on the background, the save-button isn't working yet)
+
+--------------------------------------------------------------------------------
+
+r236 | borf | 2007-08-20 10:04:15 +0000 (Mon, 20 Aug 2007) | 1 line
+
+Updated the plans
+
+--------------------------------------------------------------------------------
+
+r235 | A17kaliva | 2007-08-20 09:51:41 +0000 (Mon, 20 Aug 2007) | 2 lines
+
+Fixed Model/Texture windows to remove closing no retrieval bug.
+Updated Random Generator Menu tabs to Display a descriptive name.
+
+--------------------------------------------------------------------------------
 
 r234 | borf | 2007-08-19 22:55:33 +0000 (Sun, 19 Aug 2007) | 1 line
 

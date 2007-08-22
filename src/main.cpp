@@ -633,13 +633,13 @@ int main(int argc, char *argv[])
 
 
 	models = new cMenu();
-	models->parent = NULL;
-	models->title = msgtable[MENU_MODELS]; 
-	models->item = false; 
-	models->drawstyle = 1; 
-	models->y = 20; 
-	models->x = 0; 
-	models->w = 50; 
+//	models->parent = NULL;
+//	models->title = msgtable[MENU_MODELS]; 
+//	models->item = false; 
+//	models->drawstyle = 1; 
+//	models->y = 20; 
+//	models->x = 0; 
+//	models->w = 50; 
 	
 
 	map<string, cMenu*, less<string> > itemsm;
@@ -772,11 +772,11 @@ int main(int argc, char *argv[])
 	ADDMENU2(mode,		menu, msgtable[MENU_EDITMODE],	posx); // edit mode
 	ADDMENU2(edit,		menu, msgtable[MENU_EDIT],		posx); // edit
 	//ADDMENU2(models,		menu, msgtable[MENU_MODELS],	posx); // models
-	models->parent = menu;
-	menu->items.push_back(models);
-	models->x = posx;
-	models->w = Graphics.font->textlen(models->title)+10;
-	posx+=models->w;
+//	models->parent = menu;
+//	menu->items.push_back(models);
+//	models->x = posx;
+//	models->w = Graphics.font->textlen(models->title)+10;
+//	posx+=models->w;
 	ADDMENU2(effectsmenu,menu, msgtable[MENU_EFFECTS],	posx); // effects
 	ADDMENU2(windows,	menu, msgtable[MENU_WINDOWS],	posx); // windows
 
