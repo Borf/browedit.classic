@@ -8,6 +8,7 @@
 #include "../wm/windowroundbutton.h"
 #include "../wm/windowbutton.h"
 #include "../wm/windowlabel.h"
+#include "../wm/windowrgbpicker.h"
 extern cFileSystem fs;
 
 
@@ -193,12 +194,16 @@ class cRSMEditWindow : public cWindow
 		float roty;
 		long oldx;
 		long oldy;
+
+		cVector3 backgroundcolor;
+
 		cWindowModel(cWindow* parent) : cWindowObject(parent)
 		{
 			type = OBJECT_MODEL;
 			model = NULL;
 			roty=0;
 			oldy = -1;
+			backgroundcolor = cVector3(1,1,1);
 		}
 		void draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 		{
@@ -275,8 +280,16 @@ class cRSMEditWindow : public cWindow
 				glVertex2f(-w,h);
 			glEnd();
 			glLineWidth(1);
-			glEnable(GL_TEXTURE_2D);
+			glColor4f(backgroundcolor.x, backgroundcolor.y, backgroundcolor.z,1);
+			glBegin(GL_QUADS);
+				glVertex2f(-w+2,-h+2);
+				glVertex2f(w-2,-h+2);
+				glVertex2f(w-2,h-2);
+				glVertex2f(-w+2,h-2);
+			glEnd();
 			glColor4f(1,1,1,1);
+			glEnable(GL_TEXTURE_2D);
+
 
 			if (model != NULL)
 			{
@@ -327,12 +340,12 @@ class cRSMEditWindow : public cWindow
 
 		void SetInt(int i, int id)
 		{
-			data = "";
-			if (model != NULL)
-			{
-				delete model;
-				model = NULL;
-			}
+			if(i == 0)
+				backgroundcolor.x = id/256.0f;
+			else if(i == 1)
+				backgroundcolor.y = id/256.0f;
+			else if(i == 2)
+				backgroundcolor.z = id/256.0f;
 		}
 		~cWindowModel()
 		{
@@ -379,6 +392,28 @@ class cRSMEditWindow : public cWindow
 	};
 
 
+	class cRGBPicker : public cWindowRGBPicker
+	{
+	public:
+		cRGBPicker(cWindow* p) : cWindowRGBPicker(p)
+		{
+			moveto(160,20);
+			resizeto(p->pw()-170,20);
+			alignment = ALIGN_TOPLEFT;
+		}
+
+
+		void click()
+		{
+			cWindowRGBPicker::click();
+			parent->objects["model"]->SetInt(0,r*256);
+			parent->objects["model"]->SetInt(1,g*256);
+			parent->objects["model"]->SetInt(2,b*256);
+		}
+	
+	};
+
+
 public:
 
 	char filename[255];
@@ -392,8 +427,8 @@ public:
 		resizable = true;
 		visible = true;
 
-		h = 400;
-		w = 450;
+		h = Graphics.h()-50;
+		w = Graphics.w()-50;
 		title = "RSM Editor";
 		center();
 
@@ -415,6 +450,8 @@ public:
 
 		objects["scroll"] = o;
 
+		objects["rgbpicker"] = new cRGBPicker(this);
+
 
 		open();
 	}	
@@ -425,6 +462,7 @@ public:
 		objects["model"]->resizeto(w-150, h-60);
 		objects["scroll"]->moveto(w-138, 50);
 		objects["scroll"]->resizeto(140, h-60);
+		objects["rgbpicker"]->resizeto(w-170,20);
 	}
 
 

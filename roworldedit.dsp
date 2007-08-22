@@ -421,6 +421,14 @@ SOURCE=.\src\wm\windowprogressbar.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\wm\windowrgbpicker.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\windowrgbpicker.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\wm\windowroundbutton.cpp
 # End Source File
 # Begin Source File
