@@ -49,7 +49,7 @@ fix paste crash if accidental
 
 -remove the models tab in the menu...
 	the generating windows list is to large for the window.	
-								[R240] [Fixed]
+								[R241] [Fixed]
 
 -Rename the randoms later ... 
 	random 1 top  rolling hills?

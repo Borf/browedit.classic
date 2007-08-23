@@ -75,7 +75,68 @@ Example:
 	Don't export gravitys models, textures. 
  Approved[x]							[Rxxx] [unfin]
 
+-Brow Map Database Exporter
+	Export to browedit map database
+	which will upload the map to the map database located
+	here -->  http://browedit.excalibur-nw.com/?a=maps
+ Approved[x]							[Rxxx] [unfin]
+
+-Website
+	finish map database, add tags & map downloads
+ Approved[x]							[Rxxx] [unfin]
+
 -Walledit tilemarkers
 	Add something so that tiles can be marked in walledit mode, and the W/alt+w keys,
 	and the h/v keys only apply to those tiles
  Approved[x]							[Rxxx] [unfin]
+
+
+-----
+
+-Copy/Paste Multi map support.
+	Allows you move/copy/paste from one map to another.
+	Combine with Group copy and paste for full map Duping.
+	May need selection modes, such as select just lights,
+	models, textures, effects or etc to save CPU.
+ Approved[]							[Rxxx] [unfin]
+
+-Single light lightmap generation
+	Allows you to view a single light effect witout bleed over. 
+	Should be exportable to lightmap.
+ Approved[]							[Rxxx] [unfin]
+
+-Color Selector Window For lightmapping.
+	Allows you to view and select a color for your lighting effects.
+ Approved[x]							[Rxxx] [unfin]
+
+-NEW Copy Commands
+	*copy lights command for quick dupe of the settings.
+	*copy Effects command for quick dupe of the settings.
+ Approved[]	
+						[Rxxx] [unfin]
+-NEW Gat editing mode
+	Gat editing with drag support.
+	Press shift and right mouse button + drag mouse to select an area.
+	Press another button (not defined yet) to apply the gat tile to the area.
+ Approved[]							[Rxxx] [unfin]
+
+-Tile Markers w/ Multi mode support.
+	Setable markers that cover the gat tile as in wall edit.
+	Add a class sprite height scaler for proportioning models correctly.
+	Press ctrl and right mouse button + drag mouse to raise/lower Sprite Scaler. 
+ Approved[]							[Rxxx] [unfin]
+
+-NPC/Char Sprites in Brow?.
+	Setable markers npc/class sprites For pictures.
+	Need NPCID list.
+ Approved[]							[Rxxx] [unfin]
+
+-Screenshot Function
+	With the above set This might be more widely used. 
+	Also add A Minimap Generator to the function. 
+ Approved[]							[Rxxx] [unfin]
+
+
+
+
+
