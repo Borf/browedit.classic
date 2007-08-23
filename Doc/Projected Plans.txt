@@ -58,18 +58,24 @@ Example:
 -Map File List Generator
 	Auto Generate Map list for all models and textures on a map.
  Approved[x]							[Rxxx] [unfin]
--Map File List Generator
-	Auto Generate Map list for all models and textures on a map.
+
+
+-Model Grouper
+	Allows you to group certain models together so you can move/copy/paste them
+	together, so you don't have to switch to group edit to edit it all the time
  Approved[x]							[Rxxx] [unfin]
-	group edit to edit it all the time
- Approved[x]
 
 -Favorite Models
--Map Exporter
 	Allows you to add/remove models to some kind of "favorite" system for easy access
 	Auto export all models textures, models, and map files of a map to a GRF or Folder.
- Approved[x]
+ Approved[x]							[Rxxx] [unfin]
+
+-Map Exporter
 	Make sure that when it exports it exports each map to a seperate grf or folder.	
 	Don't export gravitys models, textures. 
  Approved[x]							[Rxxx] [unfin]
 
+-Walledit tilemarkers
+	Add something so that tiles can be marked in walledit mode, and the W/alt+w keys,
+	and the h/v keys only apply to those tiles
+ Approved[x]							[Rxxx] [unfin]
