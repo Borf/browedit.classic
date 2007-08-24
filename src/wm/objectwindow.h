@@ -24,7 +24,7 @@ public:
 	virtual ~cWindowOkButton() {}
 	void click()
 	{
-		if (parent->windowtype() == WT_OBJECT || parent->windowtype() == WT_EFFECT)
+		if (parent->windowtype() == WT_OBJECT || parent->windowtype() == WT_LIGHT)
 		{
 			parent->userfunc((void*)1);
 		}

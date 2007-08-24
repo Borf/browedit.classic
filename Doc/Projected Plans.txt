@@ -11,7 +11,9 @@ Example:
 		I would like to add sounds to brow.   
  Approved[x]							[Added R200] [Borf]
 
-
+============================================================================
+http://www.borf.nl/browtodo.php			-> Todo List (this file)
+http://browedit.excalibur-nw.com/?a=log		-> SVN Update Log
 ============================================================================
 -Add sounds
 	Not implemenented					
@@ -135,6 +137,30 @@ Example:
 	With the above set This might be more widely used. 
 	Also add A Minimap Generator to the function. 
  Approved[]							[Rxxx] [unfin]
+
+-Gaussian Blur
+	Add Gaussian blur tool setting to the lightmaps to smooth light outlining.  
+ Approved[]							[Rxxx] [unfin]
+
+-Lighting Bleed through of 255 0 255 colors on models?
+	If possible to do in a non cpu eating manor with minimal hastle this may
+	remove alot of the dark patching in lightmap generation.  
+ Approved[]							[Rxxx] [unfin]
+
+-Gat tile Transparancy
+	Transparancy for gat edit tiles. 
+	Allows you to see clearly the underlying textures for better gat results.
+ Approved[]							[Rxxx] [unfin]
+
+-Model Transparancy
+	Transparancy for Models. 
+	Allows you to see clearly the underlying areas your working with.
+	*Probably best to be set with a toggle button selectable from the menu dropdown. 
+	menu Edit mode -> Objects -> Transparent or Standard.   
+	*Or use a toggle button to turn it on or off while in object mode.
+ Approved[]							[Rxxx] [unfin]
+
+
 
 
 
