@@ -139,3 +139,10 @@ SurfaceCycle:
 TextureCycle:
 Type:
 Preferences...
+Area Copy Preferences...
+Models:
+Textures:
+Height:
+Gat:
+Lights:
+Effects:

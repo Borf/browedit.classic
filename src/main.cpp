@@ -19,6 +19,8 @@ unsigned long keymap[SDLK_LAST-SDLK_FIRST];
 #include "wm/modelswindow.h"
 #include "wm/keybindwindow.h"
 #include "wm/rsmeditwindow.h"
+#include "wm/windowcheckbox.h"
+#include "wm/areacopywindow.h"
 #include "undo.h"
 
 #include "texturecache.h"
@@ -3319,6 +3321,13 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 			case SDLK_c:
 				{
+					if (editmode == MODE_HEIGHTGLOBAL)
+
+					{
+						cWindow* w = Graphics.WM.getwindow(WT_AREACOPY);
+						Graphics.WM.addwindow(new cAreaCopyWindow(&Graphics.WM.texture, &Graphics.WM.font) );
+					}
+
 					if (editmode == MODE_TEXTURE)
 					{
 						if(mousestartx < Graphics.w()-256)
