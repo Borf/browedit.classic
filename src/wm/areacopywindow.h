@@ -3,6 +3,7 @@
 
 #include <SDL/SDL_syswm.h>
 #include "window.h"
+#include "window.cpp"
 #include "windowobject.h"
 #include "windowroundbutton.h"
 #include "windowbutton.h"
@@ -11,31 +12,33 @@
 #include "windowcheckbox.h"
 extern cFileSystem fs;
 
-class cAreaCopyWindowOkButton : public cWindowButton
-{
-public:
-	cAreaCopyWindowOkButton(cWindow* parent) : cWindowButton(parent)
-	{
-		alignment = ALIGN_BOTTOM;
-		moveto(0, 20);
-		resizeto(100, 20);
-		text = msgtable[WINDOW_OK];
-	}
-	virtual ~cAreaCopyWindowOkButton() {}
-	void click()
-	{
-/*		Graphics.world.areac.AreaCModel = atof(parent->objects["amplitude"]->GetText(0).c_str());
-		Graphics.world.areac.AreaCTextures = atof(parent->objects["height"]->GetText(0).c_str());
-		Graphics.world.areac.AreaCHeight = atof(parent->objects["phase"]->GetText(0).c_str());
-		Graphics.world.areac.AreaCGat = atof(parent->objects["surfacecurve"]->GetText(0).c_str());
-		Graphics.world.areac.AreaCLights = atoi(parent->objects["type"]->GetText(0).c_str());
-*/		parent->close();
-	}
-};
 
 
 class cAreaCopyWindow : public cWindow
 {
+private:
+	class cAreaCopyWindowOkButton : public cWindowButton
+	{
+	public:
+		cAreaCopyWindowOkButton(cWindow* parent) : cWindowButton(parent)
+		{
+			alignment = ALIGN_BOTTOM;
+			moveto(0, 20);
+			resizeto(100, 20);
+			text = msgtable[WINDOW_OK];
+		}
+		virtual ~cAreaCopyWindowOkButton() {}
+		void click()
+		{
+/*			Graphics.world.areac.AreaCModel = atof(parent->objects["amplitude"]->GetText(0).c_str());
+			Graphics.world.areac.AreaCTextures = atof(parent->objects["height"]->GetText(0).c_str());
+			Graphics.world.areac.AreaCHeight = atof(parent->objects["phase"]->GetText(0).c_str());
+			Graphics.world.areac.AreaCGat = atof(parent->objects["surfacecurve"]->GetText(0).c_str());
+			Graphics.world.areac.AreaCLights = atoi(parent->objects["type"]->GetText(0).c_str());
+			parent->close();
+*/
+		}
+	};
 public:
 	cAreaCopyWindow(cTexture* t, cFont* f) : cWindow(t,f)
 	{
@@ -50,7 +53,7 @@ public:
 
 		defaultobject = "OkButton";
 
-//		cWindowObject* o;
+		cWindowObject* o;
 		
 		objects["rollup"] = new cWindowRollupButton(this);
 		objects["close"] = new cWindowCloseButton(this);
@@ -62,46 +65,52 @@ public:
 		addlabel("lblAareaCGat", 15,40,msgtable[WINDOW_AREACOPY_GAT]);
 		addlabel("lblAreaCLights", 15,100,msgtable[WINDOW_AREACOPY_LIGHTS]);
 		addlabel("lblAreaCEffects", 15,120,msgtable[WINDOW_AREACOPY_EFFECTS]);
+	
+	o = new cWindowCheckBox(this);
+	o->alignment = ALIGN_TOPLEFT;
+	o->moveto(120,20);
+	o->SetInt(0,1);
+	objects["Models"] = o;
+//	return o;
+  
+	o = new cWindowCheckBox(this);
+	o->alignment = ALIGN_TOPLEFT;
+	o->moveto(120,40);
+	o->SetInt(0,1);
+	objects["Textures"] = o;
+//	return o;
 
+	o = new cWindowCheckBox(this);
+	o->alignment = ALIGN_TOPLEFT;
+	o->moveto(120,60);
+	o->SetInt(0,1);
+	objects["Height"] = o;
+//	return o;
 
-/*		o = new cWindowInputBox(this);
-		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(120,20);
-		o->resizeto(70,20);
-		objects["amplitude"] = o;
-		
-		o = new cWindowInputBox(this);
-		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(120,40);
-		o->resizeto(70,20);
-		objects["height"] = o;
+	o = new cWindowCheckBox(this);
+	o->alignment = ALIGN_TOPLEFT;
+	o->moveto(120,80);
+	o->SetInt(0,1);
+	objects["Gat"] = o;
+//	return o;
 
-		o = new cWindowInputBox(this);
-		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(120,60);
-		o->resizeto(70,20);
-		objects["phase"] = o;
+	o = new cWindowCheckBox(this);
+	o->alignment = ALIGN_TOPLEFT;
+	o->moveto(120,80);
+	o->SetInt(0,1);
+	objects["Lights"] = o;
+//	return o;
 
-		o = new cWindowInputBox(this);
-		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(120,80);
-		o->resizeto(70,20);
-		objects["surfacecurve"] = o;
+	o = new cWindowCheckBox(this);
+	o->alignment = ALIGN_TOPLEFT;
+	o->moveto(120,100);
+	o->SetInt(0,1);
+	objects["Effects"] = o;
+//	return o;
 
-		o = new cWindowInputBox(this);
-		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(120,100);
-		o->resizeto(70,20);
-		objects["texcycle"] = o;
-
-		o = new cWindowInputBox(this);
-		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(120,120);
-		o->resizeto(70,20);
-		objects["type"] = o;
-*/		
 		objects["OkButton"] = new cAreaCopyWindowOkButton(this);
 	}	
 };
 
 #endif
+
