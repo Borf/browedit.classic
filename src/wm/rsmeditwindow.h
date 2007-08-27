@@ -75,7 +75,60 @@ class cRSMEditWindow : public cWindow
 		}
 		void click()
 		{
-			parent->close();
+			if(!Graphics.WM.ConfirmWindow("Are you sure you want to overwrite this file?"))
+				return;
+			int i;
+			cFile* pFile = fs.open(((cRSMEditWindow*)parent)->filename);
+
+			char buffer[100];
+			char header[100];
+			pFile->read(header, 6); // header
+			if (header[5] == 4)
+				pFile->read(header+6, 25); // unknown
+			else
+				pFile->read(header+6, 24); // unknown
+
+			pFile->read(buffer, 4); // ntextures;
+			long nTextures;
+			memcpy((char*)&nTextures, buffer, 4);
+
+			for(i = 0; i < nTextures; i++)
+				pFile->read(buffer, 40);
+
+			string rest = "";
+			while(!pFile->eof())
+			{
+				char buf[1024];
+				int read = pFile->read(buf, 1024);
+				rest += string(buf, read);
+			}
+
+			pFile->close();
+			ofstream pFile2;
+			pFile2.open(((cRSMEditWindow*)parent)->filename, ios_base::out | ios_base::binary);
+			pFile2.write(header, header[5] == 4 ? 31 : 30);
+
+
+			cWindowModel* model = ((cWindowModel*)parent->objects["model"]);
+			nTextures = model->model->textures.size();
+			pFile2.write((char*)&nTextures, 4);
+			for(i = 0; i < model->model->textures.size(); i++)
+			{
+				char bufje[40];
+				ZeroMemory(bufje, 40);
+				string t = model->model->textures[i]->getfilename();
+				t = t.substr(rodir.length()+13);
+				strcpy(bufje, t.c_str());
+				pFile2.write(bufje, 40);
+			}
+
+			pFile2.write(rest.c_str(), rest.length()-1);
+
+			pFile2.close();
+
+
+
+		
 		}
 	};
 	class cWindowSaveAsButton : public cWindowButton
@@ -434,7 +487,6 @@ public:
 
 		defaultobject = "OkButton";
 
-		objects["rollup"] = new cWindowRollupButton(this);
 		objects["close"] = new cWindowCloseButton(this);
 
 		objects["OpenButton"] = new cWindowOpenButton(this);

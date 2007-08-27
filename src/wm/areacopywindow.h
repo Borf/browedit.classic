@@ -3,7 +3,6 @@
 
 #include <SDL/SDL_syswm.h>
 #include "window.h"
-#include "window.cpp"
 #include "windowobject.h"
 #include "windowroundbutton.h"
 #include "windowbutton.h"

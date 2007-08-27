@@ -3835,7 +3835,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 					else
 					{
-						w->togglevis();
+						Graphics.WM.togglewindow(WT_TEXTURE);
 					}
 					break;
 				}
@@ -4041,7 +4041,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 					else
 					{
-						w->togglevis();
+						Graphics.WM.togglewindow(WT_MODELS);
 					}
 				}
 

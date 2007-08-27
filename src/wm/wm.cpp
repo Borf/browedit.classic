@@ -11,6 +11,7 @@ extern void mainloop();
 
 int cWM::draw()
 {
+	int i;
 	glDisable(GL_LIGHTING);
 	glDisable(GL_DEPTH_TEST);
 	//glTranslatef(0,0,9000);
@@ -18,12 +19,27 @@ int cWM::draw()
 	glEnable(GL_TEXTURE_2D);
 	glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
 	int size = windows.size()-1;
-	for(int i = size; i >= 0; i--)
+	int topwindow = 0;
+	for(i = 0; i < windows.size(); i++)
 	{
 		cWindow* w = windows[i];
 		if (w->isenabled())
 		{
-			if (i == 0)
+			if(w->isvisible() && w->isenabled())
+			{
+				topwindow = i;
+				break;
+			}
+		}
+	}
+
+
+	for(i = size; i >= 0; i--)
+	{
+		cWindow* w = windows[i];
+		if (w->isenabled())
+		{
+			if (i == topwindow)
 			{
 				glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 				w->istopwindow(true);

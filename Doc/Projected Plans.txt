@@ -47,11 +47,6 @@ http://browedit.excalibur-nw.com/?a=log		-> SVN Update Log
 	list developers, website, copyrights, terms of service etc....
  Approved[x]							[Rxxx] [unfin]
 
--RSM Retexturizer
-	create a window to dupe and rehex a rsm with a different bmp.
-	with a graphical interface.
- Approved[x]							[R237] [unfin]
-
 -Texture mapper
 	create a new way to select and rotate textures, to allow simpler code
 	and pasting textures on any size (putting a square texture on a 4x1 block)
@@ -164,5 +159,11 @@ http://browedit.excalibur-nw.com/?a=log		-> SVN Update Log
 
 
 
+-------------------------------------------------------------------------------
+Finished plans
 
 
+-RSM Retexturizer
+	create a window to dupe and rehex a rsm with a different bmp.
+	with a graphical interface.
+ Approved[x]							[R237] [R248]
