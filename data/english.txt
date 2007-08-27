@@ -31,6 +31,7 @@ Maze Stuff
 Quadtree
 Calculate Lightmaps
 Calculate Selected lightmaps
+Calculate Lightmaps for selected lights
 Clear Map
 Grid
 Objects

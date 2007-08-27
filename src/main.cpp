@@ -107,6 +107,7 @@ MENUCOMMAND(quadtree);
 MENUCOMMAND(gatheight);
 MENUCOMMAND(dolightmaps);
 MENUCOMMAND(dolightmapsall);
+MENUCOMMAND(dolightmapslights);
 MENUCOMMAND(dolightmaps2);
 MENUCOMMAND(fixcolors);
 MENUCOMMAND(clearobjects);
@@ -799,6 +800,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,rnd, msgtable[MENU_QUADTREE],					&MenuCommand_quadtree); // Quadtree
 	ADDMENUITEM(mm,rnd, msgtable[MENU_CALCULATELIGHTMAPS],			&MenuCommand_dolightmapsall); // Lightmaps
 	ADDMENUITEM(mm,rnd, msgtable[MENU_CALCULATELIGHTMAPSLOCAL],		&MenuCommand_dolightmaps); // Selected lightmaps
+	ADDMENUITEM(mm,rnd, msgtable[MENU_CALCULATELIGHTMAPSLIGHT],		&MenuCommand_dolightmapslights); // Selected lightmaps
 	ADDMENUITEM(mm,rnd,	msgtable[MENU_CLEARMAP],					&MenuCommand_clearstuff); // clear map
 
 	ADDMENUITEM(grid,view,msgtable[MENU_GRID],						&MenuCommand_grid); //grid
@@ -5293,17 +5295,27 @@ MENUCOMMAND(gatheight)
 
 cVector3 lightpos = cVector3(-20000,20000,-20000);
 bool selectonly;
+bool lightonly;
 
 MENUCOMMAND(dolightmaps)
 {
 	selectonly = true;
+	lightonly = false;
 	return MenuCommand_dolightmaps2(src);
 }
 MENUCOMMAND(dolightmapsall)
 {
 	selectonly = false;
+	lightonly = false;
 	return MenuCommand_dolightmaps2(src);
 }
+MENUCOMMAND(dolightmapslights)
+{
+	selectonly = false;
+	lightonly = true;
+	return MenuCommand_dolightmaps2(src);
+}
+
 
 
 MENUCOMMAND(dolightmaps2)
@@ -5430,7 +5442,15 @@ MENUCOMMAND(dolightmaps2)
 					cVector3 worldpos = cVector3(	10*x+(10/6.0)*xx, 
 													-((Graphics.world.cubes[y][x].cell1+Graphics.world.cubes[y][x].cell2+Graphics.world.cubes[y][x].cell3+Graphics.world.cubes[y][x].cell4)/4),
 													10*y+(10/6.0)*yy);
-					for(i = 0; i < Graphics.world.lights.size(); i++)
+					
+					int from = 0;
+					int to = Graphics.world.lights.size();
+					if(lightonly)
+					{
+						from = Graphics.selectedobject;
+						to = from+1;
+					}
+					for(i = from; i < to; i++)
 					{
 						cLight* l = &Graphics.world.lights[i];
 						cVector3 diff = worldpos - cVector3(l->pos.x*5, l->pos.y, l->pos.z*5);
