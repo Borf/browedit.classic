@@ -20,7 +20,6 @@ unsigned long keymap[SDLK_LAST-SDLK_FIRST];
 #include "wm/modelswindow.h"
 #include "wm/keybindwindow.h"
 #include "wm/rsmeditwindow.h"
-#include "wm/windowcheckbox.h"
 #include "wm/areacopywindow.h"
 #include "undo.h"
 
