@@ -247,6 +247,7 @@ class cRSMEditWindow : public cWindow
 		float roty;
 		long oldx;
 		long oldy;
+		long rotate;
 
 		cVector3 backgroundcolor;
 
@@ -257,6 +258,7 @@ class cRSMEditWindow : public cWindow
 			roty=0;
 			oldy = -1;
 			backgroundcolor = cVector3(1,1,1);
+			rotate = 0;
 		}
 		void draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 		{
@@ -343,11 +345,11 @@ class cRSMEditWindow : public cWindow
 			glColor4f(1,1,1,1);
 			glEnable(GL_TEXTURE_2D);
 
-
 			if (model != NULL)
 			{
 				model->draw(false);
-				model->rot.y+=40*(Graphics.frameticks / 1000.0f);
+				if(rotate < tickcount())
+					model->rot.y+=40*(Graphics.frameticks / 1000.0f);
 				model->rot.x = roty;
 			}
 
@@ -372,7 +374,11 @@ class cRSMEditWindow : public cWindow
 					model->pos.x -= (oldx - mousex) / 2.0f;
 				}
 				else
+				{
 					roty += (oldy-mousey) / 2.0f;
+					model->rot.y -= (oldx - mousex) / 2.0f;
+					rotate = tickcount() + 5000;
+				}
 			}
 			oldy = mousey;
 			oldx = mousex;
