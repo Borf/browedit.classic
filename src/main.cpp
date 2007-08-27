@@ -132,6 +132,7 @@ MENUCOMMAND(texturewindow);
 MENUCOMMAND(properties);
 MENUCOMMAND(preferences);
 MENUCOMMAND(rsmedit);
+MENUCOMMAND(exportmapfiles);
 
 cMenu*	menu;
 cMenu* grid;
@@ -790,6 +791,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,file,msgtable[MENU_IMPORTARCTURUS],				&MenuCommand_importalpha); // Import arcturus maps
 	ADDMENUITEM(mm,file,msgtable[MENU_EXPORTLIGHTMAPS],				&MenuCommand_savelightmaps); // export lightmaps
 	ADDMENUITEM(mm,file,msgtable[MENU_IMPORTLIGHTMAPS],				&MenuCommand_loadlightmaps); // import lightmaps
+	ADDMENUITEM(mm,file,msgtable[MENU_EXPORTMAPFILES],				&MenuCommand_exportmapfiles);
 	ADDMENUITEM(mm,file,msgtable[MENU_EXIT],						&MenuCommand_exit); // exit
 	
 	ADDMENUITEM(mm,rnd, msgtable[MENU_RANDOM1],						&MenuCommand_random1); // random1 Hills
@@ -6354,5 +6356,75 @@ MENUCOMMAND(fillarea)
 MENUCOMMAND(rsmedit)
 {
 	Graphics.WM.addwindow(new cRSMEditWindow(&Graphics.WM.texture, &Graphics.WM.font));
+	return true;
+}
+
+MENUCOMMAND(exportmapfiles)
+{
+	int i;
+	ofstream pFile((string(Graphics.world.filename) + ".txt").c_str());
+	for(i = 0; i < Graphics.world.textures.size(); i++)
+	{
+		cFile* pF = fs.open(rodir + "data\\texture\\" + Graphics.world.textures[i]->RoFilename);
+		if(pF->location != -1)
+		{
+			pF->close();
+			continue;
+		}
+		pF->close();
+
+
+		
+		pFile.write("texture\\", 8);
+		pFile.write(Graphics.world.textures[i]->RoFilename.c_str(), Graphics.world.textures[i]->RoFilename.length());
+		pFile.put('\r');
+		pFile.put('\n');
+	}
+
+	map<string, bool, less<string> > usedmodels;
+
+	for(i = 0; i < Graphics.world.models.size(); i++)
+	{
+		if(usedmodels.find(Graphics.world.models[i]->rofilename) != usedmodels.end())
+			continue;
+
+		cFile* pF = fs.open(Graphics.world.models[i]->filename);
+		if(pF->location != -1)
+		{
+			pF->close();
+			continue;
+		}
+		pF->close();
+
+
+
+		usedmodels[Graphics.world.models[i]->rofilename] = true;
+		pFile.write("model\\", 6);
+		pFile.write(Graphics.world.models[i]->rofilename.c_str(), Graphics.world.models[i]->rofilename.length());
+		pFile.put('\r');
+		pFile.put('\n');
+
+		for(int ii = 0; ii < Graphics.world.models[i]->textures.size(); ii++)
+		{
+			string file = Graphics.world.models[i]->textures[ii]->getfilename();
+			cFile* pF = fs.open(file);
+			if(pF->location != -1)
+			{
+				pF->close();
+				continue;
+			}
+			pF->close();
+
+			file = file.substr(rodir.length()+5);
+			pFile.write(file.c_str(), file.length());
+			pFile.put('\r');
+			pFile.put('\n');
+		}
+		
+	}
+
+
+	pFile.close();
+	ShellExecute(NULL,"open",(string(Graphics.world.filename) + ".txt").c_str(),NULL,"c:\\",SW_SHOW);
 	return true;
 }

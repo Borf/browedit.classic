@@ -22,6 +22,7 @@ Save As
 Import Arcturus maps
 Export Lightmaps
 Import Lightmaps
+Export Map Files
 Exit
 Hills
 Valleys
