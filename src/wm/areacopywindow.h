@@ -18,6 +18,7 @@ class cAreaCopyWindow : public cWindow
 private:
 	class cAreaCopyWindowOkButton : public cWindowButton
 	{
+
 	public:
 		cAreaCopyWindowOkButton(cWindow* parent) : cWindowButton(parent)
 		{
@@ -29,6 +30,7 @@ private:
 		virtual ~cAreaCopyWindowOkButton() {}
 		void click()
 		{
+
 /*			Graphics.world.areac.AreaCModel = atof(parent->objects["amplitude"]->GetText(0).c_str());
 			Graphics.world.areac.AreaCTextures = atof(parent->objects["height"]->GetText(0).c_str());
 			Graphics.world.areac.AreaCHeight = atof(parent->objects["phase"]->GetText(0).c_str());
@@ -59,9 +61,9 @@ public:
 
 
 		addlabel("lblAreaCModel", 15,20,GetMsg("wm/areacopy/MODELS"));
-		addlabel("lblAreaCTextures", 15,80,GetMsg("wm/areacopy/TEXTURES"));
+		addlabel("lblAreaCTextures", 15,40,GetMsg("wm/areacopy/TEXTURES"));
 		addlabel("lblAreaCHeight", 15,60,GetMsg("wm/areacopy/HEIGHT"));
-		addlabel("lblAareaCGat", 15,40,GetMsg("wm/areacopy/GAT"));
+		addlabel("lblAareaCGat", 15,80,GetMsg("wm/areacopy/GAT"));
 		addlabel("lblAreaCLights", 15,100,GetMsg("wm/areacopy/LIGHTS"));
 		addlabel("lblAreaCEffects", 15,120,GetMsg("wm/areacopy/EFFECTS"));
 	
@@ -95,14 +97,14 @@ public:
 
 	o = new cWindowCheckBox(this);
 	o->alignment = ALIGN_TOPLEFT;
-	o->moveto(120,80);
+	o->moveto(120,100);
 	o->SetInt(0,1);
 	objects["Lights"] = o;
 //	return o;
 
 	o = new cWindowCheckBox(this);
 	o->alignment = ALIGN_TOPLEFT;
-	o->moveto(120,100);
+	o->moveto(120,120);
 	o->SetInt(0,1);
 	objects["Effects"] = o;
 //	return o;
