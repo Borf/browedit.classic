@@ -160,6 +160,7 @@ enum eMode
 	MODE_SOUNDS,
 	MODE_LIGHTS,
 	MODE_OBJECTGROUP,
+	MODE_SPRITES,
 };
 
 
@@ -180,6 +181,28 @@ bool LineIntersectPolygon( cVector3 *,int,cVector3 &,cVector3 &, float &);
 
 
 char* GetMsg(string s);
+
+/**
+ * Container for process handlers
+ */
+class cProcessManagement
+{
+public:
+	int main_process_events(SDL_Event &);
+
+	int textureedit_process_events(SDL_Event &);
+	int detailheightedit_process_events(SDL_Event &);
+	int globalheightedit_process_events(SDL_Event &);
+	int walledit_process_events(SDL_Event &);
+	int objectedit_process_events(SDL_Event &);
+	int gatedit_process_events(SDL_Event &);
+	int wateredit_process_events(SDL_Event &);
+	int effectedit_process_events(SDL_Event &);
+	int lightedit_process_events(SDL_Event &);
+	int soundedit_process_events(SDL_Event &);
+	int objectgroupedit_process_events(SDL_Event &);
+	int spriteedit_process_events(SDL_Event &);
+};
 
 
 

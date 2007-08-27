@@ -8,7 +8,7 @@
 #include "windowbutton.h"
 #include "windowlabel.h"
 #include "windowinputbox.h"
-
+#include "objectwindow.h"
 
 class cEffectWindow : public cWindow
 {

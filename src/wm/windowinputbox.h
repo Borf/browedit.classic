@@ -43,6 +43,51 @@ public:
 };
 
 
+class cWindowFloatInputBox : public cWindowInputBox
+{
+	float* floatje;
+	float lastvalue;
+public:
+	cWindowFloatInputBox(cWindow* parent) : cWindowInputBox(parent)
+	{
+		type = OBJECT_FLOATINPUTBOX;
+		alignment = ALIGN_TOPLEFT;
+		resizeto(70,20);
+	}
+	void draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
+	{
+		if(*floatje != lastvalue)
+		{
+			char buf[100];
+			sprintf(buf, "%f", *floatje);
+			while(buf[strlen(buf)-1] == '0')
+				buf[strlen(buf)-1] = '\0';
+			if(buf[strlen(buf)-1] == '.')
+				buf[strlen(buf)-1] = '\0';
+			text = buf;
+			lastvalue = *floatje;
+		}
+		cWindowInputBox::draw(cutoffleft, cutoffright, cutofftop, cutoffbottom);
+	}
+
+	void SetInt(int id, int val)
+	{
+		cWindowInputBox::SetInt(id,val);
+		if (id == 3)
+			floatje = (float*)val;
+	}
+	bool onkeydown(int keyid, bool shift)
+	{
+		bool ret = cWindowInputBox::onkeydown(keyid, shift);
+		if (keyid == SDLK_RETURN)
+		{
+			*floatje = atof(text.c_str());
+			ret = true;
+		}
+		return ret;
+	}
+};
+
 
 
 #endif

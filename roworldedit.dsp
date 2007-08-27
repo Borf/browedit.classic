@@ -120,6 +120,58 @@ LINK32=link.exe
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
+# Begin Group "eventhandlers"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\src\detailheightedit.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\effectedit.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\gatedit.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\globalheightedit.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\lightedit.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\objectedit.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\objectgroupedit.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\soundedit.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\spriteedit.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\textureedit.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\walledit.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wateredit.cpp
+# End Source File
+# End Group
 # Begin Source File
 
 SOURCE=.\src\common.cpp
