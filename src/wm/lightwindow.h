@@ -21,7 +21,7 @@ public:
 
 		h = 200;
 		w = 350;
-		title = msgtable[WINDOW_LIGHT_TITLE];
+		title = GetMsg("wm/light/TITLE");
 		center();
 
 		defaultobject = "OkButton";
@@ -30,9 +30,9 @@ public:
 		objects["rollup"] = new cWindowRollupButton(this);
 		objects["close"] = new cWindowCloseButton(this);
 
-		addlabel("lblPos", 20, 60, msgtable[WINDOW_LIGHT_POSITION]);
-		addlabel("lblColor", 20, 80, msgtable[WINDOW_LIGHT_COLOR]);
-		addlabel("lblIntensity", 20, 100, msgtable[WINDOW_LIGHT_INTENSITY]);
+		addlabel("lblPos", 20, 60, GetMsg("wm/light/POSITION"));
+		addlabel("lblColor", 20, 80, GetMsg("wm/light/COLOR"));
+		addlabel("lblIntensity", 20, 100, GetMsg("wm/light/INTENSITY"));
 		
 		o = new cWindowFloatInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;

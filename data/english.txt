@@ -1,150 +1,212 @@
-Could not look up host '%s', are you connected to the internet?
-Cannot create socket, please reboot
-You do not have the latest version of Browedit
-Loading file %s
-Done Loading file %s
-Could not open %s
-Unknown config option: %s = %s
-Done Initializing
-Calculating model %i out of %i (%.2%%)
-%f %%
-File
-Generate
-View
-Edit Mode
-Edit
-Effects
-Windows
-New
-Open
-Save
-Save As
-Import Arcturus maps
-Export Lightmaps
-Import Lightmaps
-Export Map Files
-Exit
-Hills
-Valleys
-Culverts
-Mountains
-Maze Stuff
-Quadtree
-Calculate Lightmaps
-Calculate Selected lightmaps
-Calculate Lightmaps for selected lights
-Clear Map
-Grid
-Objects
-Boundingboxes
-Lightmaps
-Show OGL Lighting
-Tilecolors
-Water
-Topcamera
-Invisible Tiles
-Ambient Lighting
-Water Animation
-Gat Tiles
-Show Dot
-Texture Edit
-Global Height Edit
-Detail Terrain Edit...
-Wall Edit
-Object Edit
-GAT Edit
-Water Edit
-Effects Edit
-Sounds Edit
-Lights Edit
-Object Group Edit
-Raise/Lowerspeed
-Sloping
-Snap Objects to floor
-Flatten map
-Fill with selected texture
-Fill area with selected texture
-Set GAT height
-Reset colors
-Clear Objects
-Clear Effects
-Clear Lights
-Add Walls
-Set GAT Collision
-Clear Lightmaps
-Clean Lightmaps
-Remove unused textures
-Ambient Lighting
-Models
-Textures
-Properties
-Water
-Preferences
-FS: Error opening grf %s
-FS: Done reading grf  %s
-FS: Could not open file %s
-Font: Loading font %s
-Font: Done Loading %s
-Initializing Graphics
-Video Initialization failed: %s
-Video Query Failed: %s
-Video Mode Set Failed: %s
-OpenGL init failed
-Opening general textures
-Initializing WM
-Unable to load texture %s
-Texturecache: Trying to unload texture %s, but this texture hasn't been loaded through the texturecache!
-Texturecache: Texture %s is being unloaded too often!
-Texturecache: Texture %s is still %i times loaded
-World: Loading map %s
-World: Could not open map %s
-World: Done loading %s
-World: Could not open model %s
-World: Unknown object type %i
-Quadtree: looking at model %i out of %i (%.2f%%)
-Too Many lightmaps!
-World: %i models written
-World: %i tiles are used
-World: %i tiles left
-Ok
-Cancel
-Ambient Light
-Ambient:
-Diffuse:
-Shadow:
-Alpha:
-Please Confirm...
-Effect
-Position:
-Scale:
-Rotation:
-Please Input...
-Light...
-Position:
-Color:
-Intensity:
-Message...
-Model Select...
-Are you sure you want to remove this model from the list?
-Please enter the name of the new node
-Object...
-Object:
-Position:
-Scale:
-Rotation:
-Texture Select...
-Water...
-Amplitude:
-Height:
-Phase:
-SurfaceCycle:
-TextureCycle:
-Type:
-Preferences...
-Area Copy Preferences...
-Models:
-Textures:
-Height:
-Gat:
-Lights:
-Effects:
+<?xml version="1.0" encoding="UTF-8" ?>
+<language>
+	<net>
+		<HOSTNOTFOUND>Could not look up host '%s', are you connected to the internet?</HOSTNOTFOUND>
+		<NOSOCKET>Cannot create socket, please reboot</NOSOCKET>
+		<VERSIONERROR>You do not have the latest version of Browedit</VERSIONERROR>
+	</net>
+	<file>
+		<LOADING>Loading file %s</LOADING>
+		<DONELOADING>Done Loading file %s</DONELOADING>
+		<COULDNOTOPEN>Could not open %s</COULDNOTOPEN>
+	</file>
+	<UNKNOWNCONFIG>Unknown config option: %s = %s</UNKNOWNCONFIG>
+	<DONEINIT>Done Initializing</DONEINIT>
+	<CALCMODEL>Calculating model %i out of %i (%.2%%)</CALCMODEL>
+	<PERCENTAGE>%f %%</PERCENTAGE>
+
+	<menu>
+		<file>
+			<TITLE>File</TITLE>
+			<NEW>New</NEW>
+			<OPEN>Open</OPEN>
+			<SAVE>Save</SAVE>
+			<SAVEAS>Save As</SAVEAS>
+			<IMPORTARCTURUS>Import Arcturus maps</IMPORTARCTURUS>
+			<EXPORTLIGHTMAPS>Export Lightmaps</EXPORTLIGHTMAPS>
+			<IMPORTLIGHTMAPS>Import Lightmaps</IMPORTLIGHTMAPS>
+			<EXPORTMAPFILES>Export Map Files</EXPORTMAPFILES>
+			<EXIT>Exit</EXIT>
+		</file>
+		<generate>
+			<TITLE>Generate</TITLE>
+			<RANDOM1>Hills</RANDOM1>
+			<RANDOM2>Valleys</RANDOM2>
+			<RANDOM3>Culverts</RANDOM3>
+			<RANDOM4>Mountains</RANDOM4>
+			<MAZESTUFF>Maze Stuff</MAZESTUFF>
+			<QUADTREE>Quadtree</QUADTREE>
+			<CALCULATELIGHTMAPS>Calculate Lightmaps</CALCULATELIGHTMAPS>
+			<CALCULATELIGHTMAPSLOCAL>Calculate Selected lightmaps</CALCULATELIGHTMAPSLOCAL>
+			<CALCULATELIGHTMAPSLIGHT>Calculate Lightmaps for selected lights</CALCULATELIGHTMAPSLIGHT>
+			<CLEARMAP>Clear Map</CLEARMAP>
+		</generate>
+		<view>
+			<TITLE>View</TITLE>
+			<GRID>Grid</GRID>
+			<OBJECTS>Objects</OBJECTS>
+			<BOUNDINGBOXES>Boundingboxes</BOUNDINGBOXES>
+			<LIGHTMAPS>Lightmaps</LIGHTMAPS>
+			<OGLLIGHTING>Show OGL Lighting</OGLLIGHTING>
+			<TILECOLORS>Tilecolors</TILECOLORS>
+			<SHOWWATER>Water</SHOWWATER>
+			<TOPCAMERA>Topcamera</TOPCAMERA>
+			<INVISIBLETILES>Invisible Tiles</INVISIBLETILES>
+			<SHOWAMBIENTLIGHTING>Ambient Lighting</SHOWAMBIENTLIGHTING>
+			<WATERANIMATION>Water Animation</WATERANIMATION>
+			<GATTILES>Gat Tiles</GATTILES>
+			<SHOWDOT>Show Dot</SHOWDOT>
+		</view>
+		<editmode>
+			<TITLE>Edit Mode</TITLE>
+			<TEXTUREEDIT>Texture Edit</TEXTUREEDIT>
+			<GLOBALHEIGHTEDIT>Global Height Edit</GLOBALHEIGHTEDIT>
+			<DETAILTERRAINEDIT>Detail Terrain Edit...</DETAILTERRAINEDIT>
+			<WALLEDIT>Wall Edit</WALLEDIT>
+			<OBJECTEDIT>Object Edit</OBJECTEDIT>
+			<GATEDIT>GAT Edit</GATEDIT>
+			<WATEREDIT>Water Edit</WATEREDIT>
+			<EFFECTSEDIT>Effects Edit</EFFECTSEDIT>
+			<SOUNDSEDIT>Sounds Edit</SOUNDSEDIT>
+			<LIGHTSEDIT>Lights Edit</LIGHTSEDIT>
+			<OBJECTGROUPEDIT>Object Group Edit</OBJECTGROUPEDIT>
+		</editmode>
+		<edit>
+			<TITLE>Edit</TITLE>
+				<SPEED>Raise/Lowerspeed</SPEED>
+				<SLOPING>Sloping</SLOPING>
+				<SNAPOBJECTS>Snap Objects to floor</SNAPOBJECTS>
+				<FLATTEN>Flatten map</FLATTEN>
+				<FILL>Fill with selected texture</FILL>
+				<FILLAREA>Fill area with selected texture</FILLAREA>
+				<GATHEIGHT>Set GAT height</GATHEIGHT>
+				<RESETCOLORS>Reset colors</RESETCOLORS>
+				<CLEAROBJECTS>Clear Objects</CLEAROBJECTS>
+				<CLEAREFFECTS>Clear Effects</CLEAREFFECTS>
+				<CLEARLIGHTS>Clear Lights</CLEARLIGHTS>
+				<ADDWALLS>Add Walls</ADDWALLS>
+				<GATCOLLISION>Set GAT Collision</GATCOLLISION>
+				<CLEARLIGHTMAPS>Clear Lightmaps</CLEARLIGHTMAPS>
+				<CLEANLIGHTMAPS>Clean Lightmaps</CLEANLIGHTMAPS>
+				<REMOVETEXTURES>Remove unused textures</REMOVETEXTURES>
+		</edit>
+		<effects>
+			<TITLE>Effects</TITLE>
+		</effects>
+		<windows>
+			<TITLE>Windows</TITLE>
+			<AMBIENTLIGHTING>Ambient Lighting</AMBIENTLIGHTING>
+			<MODELWINDOW>Models</MODELWINDOW>
+			<TEXTURES>Textures</TEXTURES>
+			<PROPERTIES>Properties</PROPERTIES>
+			<WATER>Water</WATER>
+			<PREFERENCES>Preferences</PREFERENCES>
+			<RSMEDITOR>RSM Editor</RSMEDITOR>
+		</windows>
+	</menu>
+	<fs>
+		<GRFOPENERROR>FS: Error opening grf %s</GRFOPENERROR>
+		<GRFOPENDONE>FS: Done reading grf  %s</GRFOPENDONE>
+		<FILEERROR>FS: Could not open file %s</FILEERROR>
+	</fs>
+	<font>
+		<LOADING>Font: Loading font %s</LOADING>
+		<DONELOADING>Font: Done Loading %s</DONELOADING>
+	</font>
+
+	<graphics>
+		<INIT>Initializing Graphics</INIT>
+		<INITFAIL>Video Initialization failed: %s</INITFAIL>
+		<QUERYFAIL>Video Query Failed: %s</QUERYFAIL>
+		<VIDEOMODEFAIL>Video Mode Set Failed: %s</VIDEOMODEFAIL>
+		<OPENGLFAIL>OpenGL init failed</OPENGLFAIL>
+		<OPENINGTEXTURES>Opening general textures</OPENINGTEXTURES>
+		<INITIALIZINGWM>Initializing WM</INITIALIZINGWM>
+		<TEXTUREFAIL>Unable to load texture %s</TEXTUREFAIL>
+		<texturecache>
+			<UNLOADFAIL>Texturecache: Trying to unload texture %s, but this texture hasn't been loaded through the texturecache!</UNLOADFAIL>
+			<UNLOADALOT>Texturecache: Texture %s is being unloaded too often!</UNLOADALOT>
+			<STILLLOADED>Texturecache: Texture %s is still %i times loaded</STILLLOADED>
+		</texturecache>
+	</graphics>
+	<world>
+		<LOAD>World: Loading map %s</LOAD>
+		<LOADFAIL>World: Could not open map %s</LOADFAIL>
+		<LOADDONE>World: Done loading %s</LOADDONE>
+		<MODELFAIL>World: Could not open model %s</MODELFAIL>
+		<UNKNOWNOBJECT>World: Unknown object type %i</UNKNOWNOBJECT>
+		<QUADTREECALC>Quadtree: looking at model %i out of %i (%.2f%%)</QUADTREECALC>
+		<TOOMANYLIGHTMAPS>Too Many lightmaps!</TOOMANYLIGHTMAPS>
+		<MODELCOUNT>World: %i models written</MODELCOUNT>
+		<TILESUSED>World: %i tiles are used</TILESUSED>
+		<TILESLEFT>World: %i tiles left</TILESLEFT>
+	</world>
+	<wm>
+		<OK>Ok</OK>
+		<CANCEL>Cancel</CANCEL>
+		<ambient>
+			<TITLE>Ambient Light</TITLE>
+			<AMBIENT>Ambient:</AMBIENT>
+			<DIFFUSE>Diffuse:</DIFFUSE>
+			<SHADOW>Shadow:</SHADOW>
+			<ALPHA>Alpha:</ALPHA>
+		</ambient>
+		<confirm>
+			<TITLE>Please Confirm...</TITLE>
+		</confirm>
+		<effect>
+			<TITLE>Effect</TITLE>
+			<POSITION>Position:</POSITION>
+			<SCALE>Scale:</SCALE>
+			<ROTATION>Rotation:</ROTATION>
+		</effect>
+		<input>
+			<TITLE>Please Input...</TITLE>
+		</input>
+		<light>
+			<TITLE>Light...</TITLE>
+			<POSITION>Position:</POSITION>
+			<COLOR>Color:</COLOR>
+			<INTENSITY>Intensity:</INTENSITY>
+		</light>
+		<message>
+			<TITLE>Message...</TITLE>
+		</message>
+		<model>
+			<TITLE>Model Select...</TITLE>
+			<DELETECONFIRM>Are you sure you want to remove this model from the list?</DELETECONFIRM>
+			<NODENAME>Please enter the name of the new node</NODENAME>
+		</model>
+		<object>
+			<TITLE>Object...</TITLE>
+			<OBJECT>Object:</OBJECT>
+			<POSITION>Position:</POSITION>
+			<SCALE>Scale:</SCALE>
+			<ROTATION>Rotation:</ROTATION>
+		</object>
+		<texture>
+			<TITLE>Texture Select...</TITLE>
+		</texture>
+		<water>
+			<TITLE>Water...</TITLE>
+			<AMPLITUDE>Amplitude:</AMPLITUDE>
+			<HEIGHT>Height:</HEIGHT>
+			<PHASE>Phase:</PHASE>
+			<SURFACECYCLE>SurfaceCycle:</SURFACECYCLE>
+			<TEXTURECYCLE>TextureCycle:</TEXTURECYCLE>
+			<TYPE>Type:</TYPE>
+		</water>
+		<preferences>
+			<TITLE>Preferences...</TITLE>
+		</preferences>
+		<areacopy>
+			<TITLE>Area Copy Preferences...</TITLE>
+			<MODELS>Models:</MODELS>
+			<TEXTURES>Textures:</TEXTURES>
+			<HEIGHT>Height:</HEIGHT>
+			<GAT>Gat:</GAT>
+			<LIGHTS>Lights:</LIGHTS>
+			<EFFECTS>Effects:</EFFECTS>
+		</areacopy>
+	</wm>
+</language>

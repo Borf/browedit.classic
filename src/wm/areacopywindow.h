@@ -24,7 +24,7 @@ private:
 			alignment = ALIGN_BOTTOM;
 			moveto(0, 20);
 			resizeto(100, 20);
-			text = msgtable[WINDOW_OK];
+			text = GetMsg("wm/OK");
 		}
 		virtual ~cAreaCopyWindowOkButton() {}
 		void click()
@@ -47,7 +47,7 @@ public:
 
 		h = 200;
 		w = 350;
-		title = msgtable[WINDOW_AREACOPY_TITLE];
+		title = GetMsg("wm/areacopy/TITLE");
 		center();
 
 		defaultobject = "OkButton";
@@ -58,12 +58,12 @@ public:
 		objects["close"] = new cWindowCloseButton(this);
 
 
-		addlabel("lblAreaCModel", 15,20,msgtable[WINDOW_AREACOPY_MODELS]);
-		addlabel("lblAreaCTextures", 15,80,msgtable[WINDOW_AREACOPY_TEXTURES]);
-		addlabel("lblAreaCHeight", 15,60,msgtable[WINDOW_AREACOPY_HEIGHT]);
-		addlabel("lblAareaCGat", 15,40,msgtable[WINDOW_AREACOPY_GAT]);
-		addlabel("lblAreaCLights", 15,100,msgtable[WINDOW_AREACOPY_LIGHTS]);
-		addlabel("lblAreaCEffects", 15,120,msgtable[WINDOW_AREACOPY_EFFECTS]);
+		addlabel("lblAreaCModel", 15,20,GetMsg("wm/areacopy/MODELS"));
+		addlabel("lblAreaCTextures", 15,80,GetMsg("wm/areacopy/TEXTURES"));
+		addlabel("lblAreaCHeight", 15,60,GetMsg("wm/areacopy/HEIGHT"));
+		addlabel("lblAareaCGat", 15,40,GetMsg("wm/areacopy/GAT"));
+		addlabel("lblAreaCLights", 15,100,GetMsg("wm/areacopy/LIGHTS"));
+		addlabel("lblAreaCEffects", 15,120,GetMsg("wm/areacopy/EFFECTS"));
 	
 	o = new cWindowCheckBox(this);
 	o->alignment = ALIGN_TOPLEFT;

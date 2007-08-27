@@ -52,7 +52,7 @@ public:
 
 		h = 200;
 		w = 350;
-		title = msgtable[WINDOW_AMBIENT_TITLE];
+		title = GetMsg("wm/ambient/TITLE");
 		center();
 
 		defaultobject = "OkButton";
@@ -62,10 +62,10 @@ public:
 
 		cWindowObject* o;
 
-		addlabel("lblAmbient", 15,20,msgtable[WINDOW_AMBIENT_AMBIENT]);
-		addlabel("lblDiffuse", 15,40,msgtable[WINDOW_AMBIENT_DIFFUSE]);
-		addlabel("lblShadow",15,60,msgtable[WINDOW_AMBIENT_SHADOW]);
-		addlabel("lblAlpha", 15,80,msgtable[WINDOW_AMBIENT_ALPHA]);
+		addlabel("lblAmbient", 15,20,GetMsg("wm/ambient/AMBIENT"));
+		addlabel("lblDiffuse", 15,40,GetMsg("wm/ambient/DIFFUSE"));
+		addlabel("lblShadow",15,60,GetMsg("wm/ambient/SHADOW"));
+		addlabel("lblAlpha", 15,80,GetMsg("wm/ambient/ALPHA"));
 
 		o = new cWindowInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;

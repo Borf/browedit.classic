@@ -22,7 +22,7 @@ public:
 
 		h = 200;
 		w = 350;
-		title = msgtable[WINDOW_EFFECT_TITLE];
+		title = GetMsg("wm/effect/TITLE");
 		center();
 
 		defaultobject = "OkButton";
@@ -30,9 +30,9 @@ public:
 		objects["rollup"] = new cWindowRollupButton(this);
 		objects["close"] = new cWindowCloseButton(this);
 
-		addlabel("lblPos", 15,60,msgtable[WINDOW_EFFECT_POS]);
-		addlabel("lblScale", 15,80, msgtable[WINDOW_EFFECT_SCALE]);
-		addlabel("lblRot", 15,100,msgtable[WINDOW_EFFECT_ROT]);
+		addlabel("lblPos", 15,60,GetMsg("wm/effect/POS"));
+		addlabel("lblScale", 15,80, GetMsg("wm/effect/SCALE"));
+		addlabel("lblRot", 15,100,GetMsg("wm/effect/ROT"));
 
 		o = new cWindowInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;

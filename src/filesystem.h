@@ -8,6 +8,7 @@
 #include <vector>
 #include <map>
 #include "grflib/grf.h"
+#include "tinyxml/tinyxml.h"
 
 using namespace std;
 
@@ -66,6 +67,8 @@ public:
 	int LoadFile(string);
 	cFile*	open(string);
 	vector<cGRFFile*>	locations;
+	TiXmlDocument getxml(string);
+
 };
 
 #endif

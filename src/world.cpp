@@ -122,11 +122,11 @@ void cWorld::load()
 
 	int version;
 
-	Log(3,0,msgtable[WORLD_LOAD], filename);
+	Log(3,0,GetMsg("world/LOAD"), filename);
 	cFile* pFile = fs.open(string(filename) + ".gnd");
 	if(pFile == NULL)
 	{
-		Log(1,0,msgtable[WORLD_LOADFAIL], (string(filename) + ".gnd").c_str());
+		Log(1,0,GetMsg("world/LOADFAIL"), (string(filename) + ".gnd").c_str());
 		return;
 	}
 	char buf[512];
@@ -375,9 +375,9 @@ void cWorld::load()
 	loaded = true;
 	//clean();
 
-	Log(3,0,msgtable[WORLD_LOADDONE], "gnd");
+	Log(3,0,GetMsg("world/LOADDONE"), "gnd");
 
-	Log(3,0,msgtable[WORLD_LOAD], (filename + string(".rsw")).c_str());
+	Log(3,0,GetMsg("world/LOAD"), (filename + string(".rsw")).c_str());
 	pFile = fs.open(string(filename) + ".rsw");
 
 
@@ -432,7 +432,7 @@ void cWorld::load()
 
 				if (m->meshes.size() == 0)
 				{
-					Log(2,0,msgtable[WORLD_MODELFAIL], filename.c_str());
+					Log(2,0,GetMsg("world/MODELFAIL"), filename.c_str());
 				}
 
 
@@ -527,7 +527,7 @@ void cWorld::load()
 				}
 				break;
 			default:
-				Log(2,0,msgtable[WORLD_UNKNOWNOBJECT], type);
+				Log(2,0,GetMsg("world/UNKNOWNOBJECT"), type);
 				pFile->close();
 				return;
 			};
@@ -566,7 +566,7 @@ void cWorld::load()
 
 				if (m->meshes.size() == 0)
 				{
-					Log(2,0,msgtable[WORLD_MODELFAIL], filename.c_str());
+					Log(2,0,GetMsg("world/MODELFAIL"), filename.c_str());
 				}
 
 
@@ -589,7 +589,7 @@ void cWorld::load()
 				}
 				break;
 			default:
-				Log(2,0,msgtable[WORLD_UNKNOWNOBJECT], type);
+				Log(2,0,GetMsg("world/UNKNOWNOBJECT"), type);
 				pFile->close();
 				return;
 			};
@@ -661,7 +661,7 @@ void cWorld::load()
 	}
 
 
-	Log(3,0,msgtable[WORLD_LOADDONE], filename);
+	Log(3,0,GetMsg("world/LOADDONE"), filename);
 
 }
 
@@ -819,7 +819,7 @@ void cWorld::save()
 			for(int i = 0; i < models.size(); i++)
 			{
 				if(i % 10 == 0)
-					Log(3,0,msgtable[WORLD_QUADTREECALC], i, Graphics.world.models.size(), (i/(float)Graphics.world.models.size())*100);
+					Log(3,0,GetMsg("world/QUADTREECALC"), i, Graphics.world.models.size(), (i/(float)Graphics.world.models.size())*100);
 				models[i]->draw(false,false,true);
 			}
 
@@ -880,7 +880,7 @@ void cWorld::save()
 		pFile.write((char*)&gridSizeCell, 4);
 
 		if(nLightmaps > 65025)
-			Log(1,0,msgtable[WORLD_TOOMANYLIGHTMAPS]);
+			Log(1,0,GetMsg("world/TOOMANYLIGHTMAPS"));
 		for(i = 0; i < lightmaps.size(); i++)
 		{
 			pFile.write(lightmaps[i]->buf, 256);
@@ -1035,7 +1035,7 @@ void cWorld::save()
 			pFile.write((char*)&m->scale.z, 4);
 
 		}
-		Log(3,0,msgtable[WORLD_MODELCOUNT], models.size());
+		Log(3,0,GetMsg("world/MODELCOUNT"), models.size());
 		for(i = 0; i < lights.size(); i++)
 		{
 			long l = 2;
@@ -2290,7 +2290,7 @@ void cWorld::clean()
 		}
 	}
 
-	Log(3,0,msgtable[WORLD_TILESUSED], tilesused.size());
+	Log(3,0,GetMsg("world/TILESUSED"), tilesused.size());
 
 	for(i = tiles.size()-1; i > 0; i--)
 	{
@@ -2314,7 +2314,7 @@ void cWorld::clean()
 
 			count++;
 			if(count % 100 == 0)
-				Log(3,0,msgtable[WORLD_TILESLEFT], tiles.size() - count);
+				Log(3,0,GetMsg("world/TILESLEFT"), tiles.size() - count);
 		}
 		else
 			tiles[i].used = true;
@@ -2848,11 +2848,11 @@ void cWorld::importarcturus()
 		gattiles[i].clear();
 	gattiles.clear();
 
-	Log(3,0,msgtable[WORLD_LOAD], (filename + string("gnd")).c_str());
+	Log(3,0,GetMsg("world/LOAD"), (filename + string("gnd")).c_str());
 	cFile* pFile = fs.open(string(filename) + ".gnd");
 	if(pFile == NULL)
 	{
-		Log(1,0,msgtable[WORLD_LOADFAIL], (string(filename) + ".gnd").c_str());
+		Log(1,0,GetMsg("world/LOADFAIL"), (string(filename) + ".gnd").c_str());
 		return;
 	}
 	char buf[512];
@@ -2985,9 +2985,9 @@ void cWorld::importarcturus()
 
 	pFile->close();
 
-	Log(3,0,msgtable[WORLD_LOADDONE], "gnd");
+	Log(3,0,GetMsg("world/LOADDONE"), "gnd");
 
-	Log(3,0,msgtable[WORLD_LOAD], "rsw");
+	Log(3,0,GetMsg("world/LOAD"), "rsw");
 	pFile = fs.open(string(filename) + ".rsw");
 
 	pFile->read(buf, 218);
@@ -3140,7 +3140,7 @@ unsigned char rawData[82] =
 
 
 
-	Log(3,0,msgtable[WORLD_LOADDONE], filename);
+	Log(3,0,GetMsg("world/LOADDONE"), filename);
 }
 
 

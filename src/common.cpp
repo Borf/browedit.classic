@@ -432,3 +432,36 @@ HWND GetConsoleHwnd()
 	return(hwndFound);
 }
 #endif
+
+
+
+
+char* GetMsg(string s)
+{
+	string olds = s;
+	TiXmlNode* n = msgtable.FirstChildElement("language");
+
+	while(s.find("/") != string::npos)
+	{
+		string a = s.substr(0, s.find("/"));
+		n = n->FirstChildElement(a.c_str());
+		if(n == NULL)
+		{
+			Log(1,0,"Could not find translation for %s", olds.c_str());
+			return "NULL";
+		}
+		s = s.substr(s.find("/")+1);
+	}
+	if(n == NULL)
+	{
+		Log(1,0,"Could not find translation for %s", olds.c_str());
+		return "NULL";
+	}
+	n = n->FirstChildElement(s.c_str());
+	if(n == NULL)
+	{
+		Log(1,0,"Could not find translation for %s", olds.c_str());
+		return "NULL";
+	}
+	return (char*)n->FirstChild()->Value();
+}

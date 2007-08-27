@@ -22,7 +22,7 @@ void cTextureCache::unload(cTexture* tex)
 {
 	if (used.find(tex) == used.end())
 	{
-		Log(3,0,msgtable[TEXTURECACHE_UNLOADFAIL], tex->getfilename().c_str());
+		Log(3,0,GetMsg("graphics/texturecache/UNLOADFAIL"), tex->getfilename().c_str());
 		return;
 	}
 	used[tex]--;
@@ -35,7 +35,7 @@ void cTextureCache::unload(cTexture* tex)
 	}
 	if (used[tex] < 0)
 	{
-		Log(3,0,msgtable[TEXTURECACHE_UNLOADALOT], tex->getfilename().c_str());
+		Log(3,0,GetMsg("graphics/texturecache/UNLOADALOT"), tex->getfilename().c_str());
 	}
 }
 
@@ -46,7 +46,7 @@ void cTextureCache::status()
 	{
 		if (used[i->second] > 0)
 		{
-			Log(3,0,msgtable[TEXTURECACHE_STILLLOADED], i->first.c_str(), used[i->second]);
+			Log(3,0,GetMsg("graphics/texturecache/STILLLOADED"), i->first.c_str(), used[i->second]);
 		}
 	}
 

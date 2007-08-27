@@ -1,6 +1,7 @@
 #define _MAIN_CPP_
+#include "tinyxml/tinyxml.h"
+TiXmlDocument msgtable;
 #include "common.h"
-vector<char*> msgtable;
 unsigned long keymap[SDLK_LAST-SDLK_FIRST];
 #include "filesystem.h"
 #include <math.h>
@@ -22,6 +23,7 @@ unsigned long keymap[SDLK_LAST-SDLK_FIRST];
 #include "wm/windowcheckbox.h"
 #include "wm/areacopywindow.h"
 #include "undo.h"
+
 
 #include "texturecache.h"
 #ifdef WIN32
@@ -185,7 +187,7 @@ string downloadfile(string url, long &filesize)
 	host = gethostbyname("206.222.12.202");
 	if(host==NULL)
 	{
-		Log(1,0,msgtable[HOSTNOTFOUND], server.c_str());
+		Log(1,0,GetMsg("net/HOSTNOTFOUND"), server.c_str());
 		return 0;
 	}
 	addr.sin_family = host->h_addrtype;
@@ -195,7 +197,7 @@ string downloadfile(string url, long &filesize)
 
 	if ((s = socket(AF_INET,SOCK_STREAM,0)) == -1)
 	{
-		Log(1,0,msgtable[NOSOCKET]);
+		Log(1,0,GetMsg("net/NOSOCKET"));
 		return 0;
 	}
 
@@ -393,28 +395,7 @@ int main(int argc, char *argv[])
 
 	string language = pFile->readline();
 	language = language.substr(language.find("=")+1);
-	cFile* pLangFile = fs.open("data/" + language + ".txt");
-	if(pLangFile == NULL)
-	{
-		Log(1,0,"Language file not found! Trying english");
-		pLangFile = fs.open("data/english.txt");
-		if(pLangFile == NULL)
-		{
-			Log(1,0,"English languagefile not found, quitting...");
-			exit(0);
-		}
-	}
-	msgtable.resize(1);
-	msgtable.back() = new char[64];
-	sprintf(msgtable.back(), "No Message");
-
-	while(!pLangFile->eof())
-	{
-		msgtable.resize(msgtable.size()+1);
-		msgtable.back() = new char[512];
-		pLangFile->readline(msgtable.back(), 512);
-	}
-	pLangFile->close();
+	msgtable = fs.getxml("data/" + language + ".txt");
 
 	config = pFile->readline();
 	config = config.substr(config.find("=")+1);
@@ -604,7 +585,7 @@ int main(int argc, char *argv[])
 			ok = false;
 		if (res == updatebuf)
 		{
-			Log(3,0,msgtable[VERSIONERROR]); // you do not have the latest version
+			Log(3,0,GetMsg("met/VERSIONERROR")); // you do not have the latest version
 			sleep(10);
 			exit(0);
 		}
@@ -687,7 +668,7 @@ int main(int argc, char *argv[])
 						cFile* pFile2 = fs.open(value);
 						if (pFile2 != NULL)
 						{
-							Log(3,0,msgtable[4], value.c_str()); // Loading file
+							Log(3,0,GetMsg("file/LOADING"), value.c_str()); // Loading file
 							while(!pFile2->eof())
 							{
 								string line = pFile2->readline();
@@ -708,11 +689,11 @@ int main(int argc, char *argv[])
 								}
 								
 							}
-							Log(3,0,msgtable[5], value.c_str()); // Done Loading file
+							Log(3,0,GetMsg("file/DONELOADING"), value.c_str()); // Done Loading file
 							pFile2->close();
 						}
 						else
-							Log(1,0,msgtable[6], value.c_str()); // could not open %s
+							Log(1,0,GetMsg("file/COULDNOTOPEN"), value.c_str()); // could not open %s
 					}
 					else if (option == "texture")
 					{
@@ -731,7 +712,7 @@ int main(int argc, char *argv[])
 						Graphics.notilecolor = cVector3(atoi(splitted[0].c_str())/255.0,atoi(splitted[1].c_str())/255.0,atoi(splitted[2].c_str())/255.0);
 					}
 					else
-						Log(2,0,msgtable[7], option.c_str(), value.c_str()); // unknown config option
+						Log(2,0,GetMsg("UNKNOWNCONFIG"), option.c_str(), value.c_str()); // unknown config option
 
 				}			
 
@@ -770,68 +751,68 @@ int main(int argc, char *argv[])
 	menu->w = Graphics.w();
 	
 	int posx = 0;
-	ADDMENU2(file,		menu, msgtable[MENU_FILE],		posx); // File
-	ADDMENU2(rnd,		menu, msgtable[MENU_GENERATE],	posx); // Generate
-	ADDMENU2(view,		menu, msgtable[MENU_VIEW],		posx); // view
-	ADDMENU2(mode,		menu, msgtable[MENU_EDITMODE],	posx); // edit mode
-	ADDMENU2(edit,		menu, msgtable[MENU_EDIT],		posx); // edit
+	ADDMENU2(file,		menu, GetMsg("menu/file/TITLE"),		posx); // File
+	ADDMENU2(rnd,		menu, GetMsg("menu/generate/TITLE"),	posx); // Generate
+	ADDMENU2(view,		menu, GetMsg("menu/view/TITLE"),		posx); // view
+	ADDMENU2(mode,		menu, GetMsg("menu/editmode/TITLE"),	posx); // edit mode
+	ADDMENU2(edit,		menu, GetMsg("menu/edit/TITLE"),		posx); // edit
 	//ADDMENU2(models,		menu, msgtable[MENU_MODELS],	posx); // models
 //	models->parent = menu;
 //	menu->items.push_back(models);
 //	models->x = posx;
 //	models->w = Graphics.font->textlen(models->title)+10;
 //	posx+=models->w;
-	ADDMENU2(effectsmenu,menu, msgtable[MENU_EFFECTS],	posx); // effects
-	ADDMENU2(windows,	menu, msgtable[MENU_WINDOWS],	posx); // windows
+	ADDMENU2(effectsmenu,menu, GetMsg("menu/effects/TITLE"),	posx); // effects
+	ADDMENU2(windows,	menu, GetMsg("menu/windows/TITLE"),	posx); // windows
 
-	ADDMENUITEM(mm,file,msgtable[MENU_NEW],							&MenuCommand_new); //new
-	ADDMENUITEM(mm,file,msgtable[MENU_OPEN],						&MenuCommand_open); //open
-	ADDMENUITEM(mm,file,msgtable[MENU_SAVE],						&MenuCommand_save); //save
-	ADDMENUITEM(mm,file,msgtable[MENU_SAVEAS],						&MenuCommand_saveAs); //save as
-	ADDMENUITEM(mm,file,msgtable[MENU_IMPORTARCTURUS],				&MenuCommand_importalpha); // Import arcturus maps
-	ADDMENUITEM(mm,file,msgtable[MENU_EXPORTLIGHTMAPS],				&MenuCommand_savelightmaps); // export lightmaps
-	ADDMENUITEM(mm,file,msgtable[MENU_IMPORTLIGHTMAPS],				&MenuCommand_loadlightmaps); // import lightmaps
-	ADDMENUITEM(mm,file,msgtable[MENU_EXPORTMAPFILES],				&MenuCommand_exportmapfiles);
-	ADDMENUITEM(mm,file,msgtable[MENU_EXIT],						&MenuCommand_exit); // exit
+	ADDMENUITEM(mm,file,GetMsg("menu/file/NEW"),							&MenuCommand_new); //new
+	ADDMENUITEM(mm,file,GetMsg("menu/file/OPEN"),						&MenuCommand_open); //open
+	ADDMENUITEM(mm,file,GetMsg("menu/file/SAVE"),						&MenuCommand_save); //save
+	ADDMENUITEM(mm,file,GetMsg("menu/file/SAVEAS"),						&MenuCommand_saveAs); //save as
+	ADDMENUITEM(mm,file,GetMsg("menu/file/IMPORTARCTURUS"),				&MenuCommand_importalpha); // Import arcturus maps
+	ADDMENUITEM(mm,file,GetMsg("menu/file/EXPORTLIGHTMAPS"),				&MenuCommand_savelightmaps); // export lightmaps
+	ADDMENUITEM(mm,file,GetMsg("menu/file/IMPORTLIGHTMAPS"),				&MenuCommand_loadlightmaps); // import lightmaps
+	ADDMENUITEM(mm,file,GetMsg("menu/file/EXPORTMAPFILES"),				&MenuCommand_exportmapfiles);
+	ADDMENUITEM(mm,file,GetMsg("menu/file/EXIT"),						&MenuCommand_exit); // exit
 	
-	ADDMENUITEM(mm,rnd, msgtable[MENU_RANDOM1],						&MenuCommand_random1); // random1 Hills
-	ADDMENUITEM(mm,rnd, msgtable[MENU_RANDOM2],						&MenuCommand_random2); // random2 Valleys 
-	ADDMENUITEM(mm,rnd, msgtable[MENU_RANDOM3],						&MenuCommand_random3); // random3 Culverts
-	ADDMENUITEM(mm,rnd, msgtable[MENU_RANDOM4],						&MenuCommand_random4); // random4 Mountains 
-	ADDMENUITEM(mm,rnd, msgtable[MENU_MAZESTUFF],					&MenuCommand_tempfunc); // Maze stuff
-	ADDMENUITEM(mm,rnd, msgtable[MENU_QUADTREE],					&MenuCommand_quadtree); // Quadtree
-	ADDMENUITEM(mm,rnd, msgtable[MENU_CALCULATELIGHTMAPS],			&MenuCommand_dolightmapsall); // Lightmaps
-	ADDMENUITEM(mm,rnd, msgtable[MENU_CALCULATELIGHTMAPSLOCAL],		&MenuCommand_dolightmaps); // Selected lightmaps
-	ADDMENUITEM(mm,rnd, msgtable[MENU_CALCULATELIGHTMAPSLIGHT],		&MenuCommand_dolightmapslights); // Selected lightmaps
-	ADDMENUITEM(mm,rnd,	msgtable[MENU_CLEARMAP],					&MenuCommand_clearstuff); // clear map
+	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/RANDOM1"),						&MenuCommand_random1); // random1 Hills
+	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/RANDOM2"),						&MenuCommand_random2); // random2 Valleys 
+	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/RANDOM3"),						&MenuCommand_random3); // random3 Culverts
+	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/RANDOM4"),						&MenuCommand_random4); // random4 Mountains 
+	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/MAZESTUFF"),					&MenuCommand_tempfunc); // Maze stuff
+	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/QUADTREE"),					&MenuCommand_quadtree); // Quadtree
+	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/CALCULATELIGHTMAPS"),			&MenuCommand_dolightmapsall); // Lightmaps
+	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/CALCULATELIGHTMAPSLOCAL"),		&MenuCommand_dolightmaps); // Selected lightmaps
+	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/CALCULATELIGHTMAPSLIGHT"),		&MenuCommand_dolightmapslights); // Selected lightmaps
+	ADDMENUITEM(mm,rnd,	GetMsg("menu/generate/CLEARMAP"),					&MenuCommand_clearstuff); // clear map
 
-	ADDMENUITEM(grid,view,msgtable[MENU_GRID],						&MenuCommand_grid); //grid
+	ADDMENUITEM(grid,view,GetMsg("menu/view/GRID"),						&MenuCommand_grid); //grid
 	grid->ticked = true;
-	ADDMENUITEM(showobjects,view,msgtable[MENU_OBJECTS],			&MenuCommand_showobjects);
-	ADDMENUITEMDATAP(mm,view,msgtable[MENU_BOUNDINGBOXES],			&MenuCommand_toggle, (void*)&Graphics.showboundingboxes);
-	ADDMENUITEMDATAP(mm,view,msgtable[MENU_LIGHTMAPS],				&MenuCommand_toggle, (void*)&Graphics.showlightmaps);
-	ADDMENUITEMDATAP(mm,view,msgtable[MENU_OGLLIGHTING],			&MenuCommand_toggle, (void*)&Graphics.showoglighting);
+	ADDMENUITEM(showobjects,view,GetMsg("menu/view/OBJECTS"),			&MenuCommand_showobjects);
+	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/BOUNDINGBOXES"),			&MenuCommand_toggle, (void*)&Graphics.showboundingboxes);
+	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/LIGHTMAPS"),				&MenuCommand_toggle, (void*)&Graphics.showlightmaps);
+	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/OGLLIGHTING"),			&MenuCommand_toggle, (void*)&Graphics.showoglighting);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,msgtable[MENU_TILECOLORS],				&MenuCommand_toggle, (void*)&Graphics.showtilecolors);
+	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/TILECOLORS"),				&MenuCommand_toggle, (void*)&Graphics.showtilecolors);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,msgtable[MENU_SHOWWATER],				&MenuCommand_toggle, (void*)&Graphics.showwater);
+	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/SHOWWATER"),				&MenuCommand_toggle, (void*)&Graphics.showwater);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,msgtable[MENU_TOPCAMERA],				&MenuCommand_toggle, (void*)&Graphics.topcamera);
-	ADDMENUITEMDATAP(mm,view,msgtable[MENU_INVISIBLETILES],			&MenuCommand_toggle, (void*)&Graphics.shownotiles);
+	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/TOPCAMERA"),				&MenuCommand_toggle, (void*)&Graphics.topcamera);
+	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/INVISIBLETILES"),			&MenuCommand_toggle, (void*)&Graphics.shownotiles);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,msgtable[MENU_SHOWAMBIENTLIGHTING],	&MenuCommand_toggle, (void*)&Graphics.showambientlighting);
+	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/SHOWAMBIENTLIGHTING"),	&MenuCommand_toggle, (void*)&Graphics.showambientlighting);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,msgtable[MENU_WATERANIMATION],			&MenuCommand_toggle, (void*)&Graphics.animatewater);
+	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/WATERANIMATION"),			&MenuCommand_toggle, (void*)&Graphics.animatewater);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,msgtable[MENU_GATTILES],				&MenuCommand_toggle, (void*)&Graphics.showgat);
-	ADDMENUITEMDATAP(mm,view,msgtable[MENU_SHOWDOT],				&MenuCommand_toggle, (void*)&Graphics.showdot);
+	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/GATTILES"),				&MenuCommand_toggle, (void*)&Graphics.showgat);
+	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/SHOWDOT"),				&MenuCommand_toggle, (void*)&Graphics.showdot);
 	mm->ticked = true;
 
 
-	ADDMENUITEM(mm,mode,msgtable[MENU_TEXTUREEDIT],					&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/TEXTUREEDIT"),					&MenuCommand_mode);
 	mm->ticked = true;
-	ADDMENUITEM(mm,mode,msgtable[MENU_GLOBALHEIGHTEDIT],			&MenuCommand_mode);
-	ADDMENU(editdetail,mode,msgtable[MENU_DETAILTERRAINEDIT],		400,100);
+	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/GLOBALHEIGHTEDIT"),			&MenuCommand_mode);
+	ADDMENU(editdetail,mode,GetMsg("menu/editmode/DETAILTERRAINEDIT"),		400,100);
 
 	ADDMENUITEM(mm, editdetail, "1",								&MenuCommand_mode_detail);
 	ADDMENUITEM(mm, editdetail, "2",								&MenuCommand_mode_detail);
@@ -841,17 +822,17 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm, editdetail, "32",								&MenuCommand_mode_detail);
 	ADDMENUITEM(mm, editdetail, "64",								&MenuCommand_mode_detail);
 
-	ADDMENUITEM(mm,mode,msgtable[MENU_WALLEDIT],					&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,msgtable[MENU_OBJECTEDIT],					&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,msgtable[MENU_GATEDIT],						&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,msgtable[MENU_WATEREDIT],					&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,msgtable[MENU_EFFECTSEDIT],					&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,msgtable[MENU_SOUNDSEDIT],					&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,msgtable[MENU_LIGHTSEDIT],					&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,msgtable[MENU_OBJECTGROUPEDIT],				&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/WALLEDIT"),					&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/OBJECTEDIT"),					&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/GATEDIT"),						&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/WATEREDIT"),					&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/EFFECTSEDIT"),					&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/SOUNDSEDIT"),					&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/LIGHTSEDIT"),					&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/OBJECTGROUPEDIT"),				&MenuCommand_mode);
 
 
-	ADDMENU(speed,edit, msgtable[MENU_SPEED],						480, 100);
+	ADDMENU(speed,edit, GetMsg("menu/edit/SPEED"),						480, 100);
 	ADDMENUITEM(mm,speed,"5",										&MenuCommand_speed);
 	ADDMENUITEM(mm,speed,"10",										&MenuCommand_speed);
 	ADDMENUITEM(mm,speed,"25",										&MenuCommand_speed);
@@ -859,38 +840,38 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,speed,"100",										&MenuCommand_speed);
 	ADDMENUITEM(mm,speed,"250",										&MenuCommand_speed);
 	ADDMENUITEM(mm,speed,"500",										&MenuCommand_speed);
-	ADDMENUITEM(mm,edit,msgtable[MENU_SLOPING],						&MenuCommand_slope);
-	ADDMENUITEM(snaptofloor,edit,msgtable[MENU_SNAPOBJECTS],		&MenuCommand_snaptofloor);
+	ADDMENUITEM(mm,edit,GetMsg("menu/edit/SLOPING"),						&MenuCommand_slope);
+	ADDMENUITEM(snaptofloor,edit,GetMsg("menu/edit/SNAPOBJECTS"),		&MenuCommand_snaptofloor);
 	snaptofloor->ticked = true;
 
-	ADDMENUITEM(mm,edit,msgtable[MENU_FLATTEN],						&MenuCommand_flatten);
-	ADDMENUITEM(mm,edit,msgtable[MENU_FILL],						&MenuCommand_fill);
-	ADDMENUITEM(mm,edit,msgtable[MENU_FILLAREA],					&MenuCommand_fillarea);
-	ADDMENUITEM(mm,edit,msgtable[MENU_GATHEIGHT],					&MenuCommand_gatheight);
-	ADDMENUITEM(mm,edit,msgtable[MENU_RESETCOLORS],					&MenuCommand_fixcolors);
-	ADDMENUITEM(mm,edit,msgtable[MENU_CLEAROBJECTS],				&MenuCommand_clearobjects);
-	ADDMENUITEM(mm,edit,msgtable[MENU_CLEAREFFECTS],				&MenuCommand_cleareffects);
-	ADDMENUITEM(mm,edit,msgtable[MENU_CLEARLIGHTS],					&MenuCommand_clearlights);
-	ADDMENUITEM(mm,edit,msgtable[MENU_ADDWALLS],					&MenuCommand_addwalls);
-	ADDMENUITEM(mm,edit,msgtable[MENU_GATCOLLISION],				&MenuCommand_gatcollision);
-	ADDMENUITEM(mm,edit,msgtable[MENU_CLEARLIGHTMAPS],				&MenuCommand_clearlightmaps);
-	ADDMENUITEM(mm,edit,msgtable[MENU_CLEANLIGHTMAPS],			&MenuCommand_cleanuplightmaps);
-	ADDMENUITEM(mm,edit,msgtable[MENU_REMOVETEXTURES],				&MenuCommand_cleantextures);
+	ADDMENUITEM(mm,edit,GetMsg("menu/edit/FLATTEN"),						&MenuCommand_flatten);
+	ADDMENUITEM(mm,edit,GetMsg("menu/edit/FILL"),						&MenuCommand_fill);
+	ADDMENUITEM(mm,edit,GetMsg("menu/edit/FILLAREA"),					&MenuCommand_fillarea);
+	ADDMENUITEM(mm,edit,GetMsg("menu/edit/GATHEIGHT"),					&MenuCommand_gatheight);
+	ADDMENUITEM(mm,edit,GetMsg("menu/edit/RESETCOLORS"),					&MenuCommand_fixcolors);
+	ADDMENUITEM(mm,edit,GetMsg("menu/edit/CLEAROBJECTS"),				&MenuCommand_clearobjects);
+	ADDMENUITEM(mm,edit,GetMsg("menu/edit/CLEAREFFECTS"),				&MenuCommand_cleareffects);
+	ADDMENUITEM(mm,edit,GetMsg("menu/edit/CLEARLIGHTS"),					&MenuCommand_clearlights);
+	ADDMENUITEM(mm,edit,GetMsg("menu/edit/ADDWALLS"),					&MenuCommand_addwalls);
+	ADDMENUITEM(mm,edit,GetMsg("menu/edit/GATCOLLISION"),				&MenuCommand_gatcollision);
+	ADDMENUITEM(mm,edit,GetMsg("menu/edit/CLEARLIGHTMAPS"),				&MenuCommand_clearlightmaps);
+	ADDMENUITEM(mm,edit,GetMsg("menu/edit/CLEANLIGHTMAPS"),			&MenuCommand_cleanuplightmaps);
+	ADDMENUITEM(mm,edit,GetMsg("menu/edit/REMOVETEXTURES"),				&MenuCommand_cleantextures);
 
-	ADDMENUITEM(mm,windows,msgtable[MENU_AMBIENTLIGHTING],			&MenuCommand_ambientlight);
-	ADDMENUITEM(mm,windows,msgtable[MENU_MODELWINDOW],				&MenuCommand_modelwindow);
-	ADDMENUITEM(mm,windows,msgtable[MENU_TEXTURES],					&MenuCommand_texturewindow);
-	ADDMENUITEM(mm,windows,msgtable[MENU_PROPERTIES],				&MenuCommand_properties);
-	ADDMENUITEM(mm,windows,msgtable[MENU_WATER],					&MenuCommand_water);
-	ADDMENUITEM(mm,windows,msgtable[MENU_PREFERENCES],				&MenuCommand_preferences);
-	ADDMENUITEM(mm,windows,"RSM Editor",							&MenuCommand_rsmedit);
+	ADDMENUITEM(mm,windows,GetMsg("menu/windows/AMBIENTLIGHTING"),			&MenuCommand_ambientlight);
+	ADDMENUITEM(mm,windows,GetMsg("menu/windows/MODELWINDOW"),				&MenuCommand_modelwindow);
+	ADDMENUITEM(mm,windows,GetMsg("menu/windows/TEXTURES"),					&MenuCommand_texturewindow);
+	ADDMENUITEM(mm,windows,GetMsg("menu/windows/PROPERTIES"),				&MenuCommand_properties);
+	ADDMENUITEM(mm,windows,GetMsg("menu/windows/WATER"),					&MenuCommand_water);
+	ADDMENUITEM(mm,windows,GetMsg("menu/windows/PREFERENCES"),				&MenuCommand_preferences);
+	ADDMENUITEM(mm,windows,GetMsg("menu/windows/RSMEDITOR"),				&MenuCommand_rsmedit);
 
 
 
 	lastlclick = 0;
 	lastrclick = 0;
 
-	Log(3,0,msgtable[4], "keymap.txt");
+	Log(3,0,GetMsg("file/LOADING"), "keymap.txt");
 	pFile = fs.open("keymap.txt");
 	if(pFile == NULL)
 	{
@@ -913,10 +894,10 @@ int main(int argc, char *argv[])
 	}
 
 	pFile->close();
-	Log(3,0,msgtable[5], "keymap.txt");
+	Log(3,0,GetMsg("file/DONELOADING"), "keymap.txt");
 
 
-	Log(3,0,msgtable[4], "effects.txt");
+	Log(3,0,GetMsg("file/LOADING"), "effects.txt");
 	vector<cMenu*> effectssubmenu;
 
 	pFile = fs.open("effects.txt");
@@ -948,13 +929,13 @@ int main(int argc, char *argv[])
 	}
 
 	pFile->close();
-	Log(3,0,msgtable[5], "effects.txt");
+	Log(3,0,GetMsg("file/DONELOADING"), "effects.txt");
 
 
 
 
 	
-	Log(3,0,msgtable[8]);
+	Log(3,0,GetMsg("DONEINIT"));
 	Graphics.world.newworld();
 	strcpy(Graphics.world.filename, string(rodir + "data\\prontera").c_str());
 #ifndef WIN32
@@ -4999,59 +4980,59 @@ MENUCOMMAND(mode)
 		mode->items[i]->ticked = false;
 	src->ticked = true;
 
-	if(title == msgtable[MENU_GLOBALHEIGHTEDIT])
+	if(title == GetMsg("menu/editmode/GLOBALHEIGHTEDIT"))
 	{
 		editmode = MODE_HEIGHTGLOBAL;
 		if (Graphics.texturestart >= Graphics.world.textures.size())
 			Graphics.texturestart = 0;
 	}
-	else if (title == msgtable[MENU_DETAILTERRAINEDIT])
+	else if (title == GetMsg("menu/editmode/DETAILTERRAINEDIT"))
 	{
 		editmode = MODE_HEIGHTDETAIL;
 		if (Graphics.texturestart >= Graphics.world.textures.size())
 			Graphics.texturestart = 0;
 	}
-	else if (title == msgtable[MENU_TEXTUREEDIT])
+	else if (title == GetMsg("menu/editmode/TEXTUREEDIT"))
 	{
 		editmode = MODE_TEXTURE;
 		if (Graphics.texturestart >= Graphics.world.textures.size())
 			Graphics.texturestart = 0;
 	}
-	else if (title == msgtable[MENU_WALLEDIT])
+	else if (title == GetMsg("menu/editmode/WALLEDIT"))
 	{
 		editmode = MODE_WALLS;
 	}
-	else if (title == msgtable[MENU_OBJECTEDIT])
+	else if (title == GetMsg("menu/editmode/OBJECTEDIT"))
 	{
 		editmode = MODE_OBJECTS;
 		if (Graphics.texturestart >= Graphics.world.textures.size())
 			Graphics.texturestart = 0;
 	}
-	else if (title == msgtable[MENU_GATEDIT])
+	else if (title == GetMsg("menu/editmode/GATEDIT"))
 	{
 		editmode = MODE_GAT;
 		if (Graphics.texturestart >= 6)
 			Graphics.texturestart = 0;
 	}
-	else if (title == msgtable[MENU_WATEREDIT])
+	else if (title == GetMsg("menu/editmode/WATEREDIT"))
 	{
 		editmode = MODE_WATER;
 		Graphics.texturestart = Graphics.world.water.type;
 	}
-	else if (title == msgtable[MENU_EFFECTSEDIT])
+	else if (title == GetMsg("menu/editmode/EFFECTSEDIT"))
 	{
 		editmode = MODE_EFFECTS;
 		Graphics.selectedobject = -1;
 	}
-	else if (title == msgtable[MENU_SOUNDSEDIT])
+	else if (title == GetMsg("menu/editmode/SOUNDSEDIT"))
 	{
 		editmode = MODE_SOUNDS;
 	}
-	else if (title == msgtable[MENU_LIGHTSEDIT])
+	else if (title == GetMsg("menu/editmode/LIGHTSEDIT"))
 	{
 		editmode = MODE_LIGHTS;
 	}
-	else if (title == msgtable[MENU_OBJECTGROUPEDIT])
+	else if (title == GetMsg("menu/editmode/OBJECTGROUPEDIT"))
 	{
 		editmode = MODE_OBJECTGROUP;
 	}
@@ -5248,7 +5229,7 @@ MENUCOMMAND(quadtree)
 
 	for(int i = 0; i < Graphics.world.models.size(); i++)
 	{
-		Log(3,0,msgtable[9], i, Graphics.world.models.size(), (i/(float)Graphics.world.models.size())*100);
+		Log(3,0,GetMsg("CALCMODEL"), i, Graphics.world.models.size(), (i/(float)Graphics.world.models.size())*100);
 		Graphics.world.models[i]->draw(false,false,true);
 	}
 
@@ -5431,7 +5412,7 @@ MENUCOMMAND(dolightmaps2)
 			cCube* c = &Graphics.world.cubes[y][x];
 			if(selectonly && !c->selected)
 				continue;
-			Log(3,0,msgtable[10], (y*Graphics.world.width+x) / (float)(Graphics.world.height * Graphics.world.width)*100); // %f %%
+			Log(3,0,GetMsg("PERCENTAGE"), (y*Graphics.world.width+x) / (float)(Graphics.world.height * Graphics.world.width)*100); // %f %%
 			if(Graphics.world.cubes[y][x].tileup == -1)
 				continue;
 			Graphics.world.reallightmaps[y][x]->reset();

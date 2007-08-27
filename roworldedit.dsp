@@ -597,5 +597,33 @@ SOURCE=.\src\grflib\rgz.c
 SOURCE=.\src\grflib\rgz.h
 # End Source File
 # End Group
+# Begin Group "tinyxml"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\src\tinyxml\tinystr.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\tinyxml\tinystr.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\tinyxml\tinyxml.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\tinyxml\tinyxml.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\tinyxml\tinyxmlerror.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\tinyxml\tinyxmlparser.cpp
+# End Source File
+# End Group
 # End Target
 # End Project

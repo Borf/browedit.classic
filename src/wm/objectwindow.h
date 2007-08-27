@@ -19,7 +19,7 @@ public:
 		alignment = ALIGN_BOTTOM;
 		moveto(100, 20);
 		resizeto(100, 20);
-		text = msgtable[WINDOW_OK];
+		text = GetMsg("wm/OK");
 	}
 	virtual ~cWindowOkButton() {}
 	void click()
@@ -41,7 +41,7 @@ public:
 		alignment = ALIGN_BOTTOM;
 		moveto(-100, 20);
 		resizeto(100, 20);
-		text = msgtable[WINDOW_CANCEL];
+		text = GetMsg("wm/CANCEL");
 	}
 	virtual ~cWindowCancelButton() {}
 	void click()
@@ -114,7 +114,7 @@ public:
 
 		h = 200;
 		w = 350;
-		title = msgtable[WINDOW_OBJECT_TITLE];
+		title = GetMsg("wm/object/TITLE");
 		center();
 
 		defaultobject = "OkButton";
@@ -123,10 +123,10 @@ public:
 		objects["close"] = new cWindowCloseButton(this);
 
 
-		addlabel("text", 15,20,msgtable[WINDOW_OBJECT_OBJECT]);
-		addlabel("lblPos", 15, 60, msgtable[WINDOW_OBJECT_POSITION]);
-		addlabel("lblScale", 15,80, msgtable[WINDOW_OBJECT_SCALE]);
-		addlabel("lblRot", 15,100,msgtable[WINDOW_OBJECT_ROTATION]);
+		addlabel("text", 15,20,GetMsg("wm/object/OBJECT"));
+		addlabel("lblPos", 15, 60, GetMsg("wm/object/POSITION"));
+		addlabel("lblScale", 15,80, GetMsg("wm/object/SCALE"));
+		addlabel("lblRot", 15,100,GetMsg("wm/object/ROTATION"));
 
 		o = new cWindowInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;

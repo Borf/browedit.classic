@@ -18,7 +18,7 @@ public:
 		alignment = ALIGN_BOTTOM;
 		moveto(0, 20);
 		resizeto(100, 20);
-		text = msgtable[WINDOW_OK];
+		text = GetMsg("wm/OK");
 	}
 	virtual ~cWaterWindowOkButton() {}
 	void click()
@@ -44,7 +44,7 @@ public:
 
 		h = 200;
 		w = 350;
-		title = msgtable[WINDOW_WATER_TITLE];
+		title = GetMsg("wm/water/TITLE");
 		center();
 
 		defaultobject = "OkButton";
@@ -54,12 +54,12 @@ public:
 		objects["rollup"] = new cWindowRollupButton(this);
 		objects["close"] = new cWindowCloseButton(this);
 
-		addlabel("lblAmplitude", 15,20,msgtable[WINDOW_WATER_AMPLITUDE]);
-		addlabel("lblHeight", 15,40,msgtable[WINDOW_WATER_HEIGHT]);
-		addlabel("lblPhase", 15,60,msgtable[WINDOW_WATER_PHASE]);
-		addlabel("lblSurfaceCycle", 15,80,msgtable[WINDOW_WATER_SURFACECYCLE]);
-		addlabel("lblTexCycle", 15,100,msgtable[WINDOW_WATER_TEXTURECYCLE]);
-		addlabel("lblType", 15,120,msgtable[WINDOW_WATER_TYPE]);
+		addlabel("lblAmplitude", 15,20,GetMsg("wm/water/AMPLITUDE"));
+		addlabel("lblHeight", 15,40,GetMsg("wm/water/HEIGHT"));
+		addlabel("lblPhase", 15,60,GetMsg("wm/water/PHASE"));
+		addlabel("lblSurfaceCycle", 15,80,GetMsg("wm/water/SURFACECYCLE"));
+		addlabel("lblTexCycle", 15,100,GetMsg("wm/water/TEXTURECYCLE"));
+		addlabel("lblType", 15,120,GetMsg("wm/water/TYPE"));
 
 
 		o = new cWindowInputBox(this);

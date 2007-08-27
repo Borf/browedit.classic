@@ -378,7 +378,7 @@ int cFont::print3d(float r, float g, float b, float a, float x, float y, float z
 
 int cFont::load(string filename)
 {
-	Log(5,0,msgtable[FONT_LOADING], filename.c_str());
+	Log(5,0,GetMsg("font/LOADING"), filename.c_str());
 	if (texture.Load(filename, false) == 0)
 		return 0;
 	
@@ -435,7 +435,7 @@ int cFont::load(string filename)
 	}                                              // Loop Until All 256 Are Built
 
 	free(texture.imageData);
-	Log(3,0,msgtable[FONT_DONELOADING], filename.c_str());
+	Log(3,0,GetMsg("font/DONELOADING"), filename.c_str());
 
 	return 1;
 }

@@ -249,7 +249,7 @@ class cConfirmDeleteModel : public cConfirmWindow::cConfirmWindowCaller
 void cModelsWindow::cWindowModel::rightclick()
 {
 	((cModelsWindow*)parent)->stopdrag();
-	Graphics.WM.ConfirmWindow(msgtable[WINDOW_MODELS_DELETECONFIRM], new cConfirmDeleteModel(this));
+	Graphics.WM.ConfirmWindow(GetMsg("wm/models/DELETECONFIRM"), new cConfirmDeleteModel(this));
 }
 
 void cModelsWindow::cWindowModelCatSelect::rightclick()
@@ -266,7 +266,7 @@ void cModelsWindow::cWindowModelCatSelect::rightclick()
 	}
 	if(node != NULL)
 	{
-		string newnode = Graphics.WM.InputWindow(msgtable[WINDOW_MODELS_NODENAME]);
+		string newnode = Graphics.WM.InputWindow(GetMsg("wm/models/NODENAME"));
 		if(newnode == "")
 			return;
 		cTreeNode* n = new cTreeNode(newnode);
@@ -293,7 +293,7 @@ void cModelsWindow::cWindowModelCatSelect::rightclick()
 	}
 	else if (node == NULL)
 	{
-		string newnode = Graphics.WM.InputWindow(msgtable[WINDOW_MODELS_NODENAME]);
+		string newnode = Graphics.WM.InputWindow(GetMsg("wm/models/NODENAME"));
 		if(newnode == "")
 			return;
 		cTreeNode* n = new cTreeNode(newnode);
@@ -613,7 +613,7 @@ cModelsWindow::cModelsWindow(cTexture* t, cFont* f) : cWindow(t,f)
 
 	h = Graphics.h()-50;
 	w = Graphics.w()-50;
-	title = msgtable[WINDOW_MODELS_TITLE];
+	title = GetMsg("wm/model/TITLE");
 	center();
 
 	cWindowObject* o;

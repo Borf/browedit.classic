@@ -241,30 +241,30 @@ int cGraphics::draw()
 	menu->draw();
 	char buf[100];
 	if(currentobject != NULL)
-		sprintf(buf, "Editmode: %s, File: %s", 	editmode == MODE_TEXTURE ?		msgtable[MENU_TEXTUREEDIT] : 
-												editmode == MODE_HEIGHTDETAIL ? msgtable[MENU_GLOBALHEIGHTEDIT] : 
-												editmode == MODE_HEIGHTGLOBAL ? msgtable[MENU_DETAILTERRAINEDIT] :
-												editmode == MODE_WALLS ?		msgtable[MENU_WALLEDIT] :
-												editmode == MODE_OBJECTS ?		msgtable[MENU_OBJECTEDIT] :
-												editmode == MODE_GAT ?			msgtable[MENU_GATEDIT] :
-												editmode == MODE_WATER ?		msgtable[MENU_WATEREDIT] :
-												editmode == MODE_EFFECTS ?		msgtable[MENU_EFFECTSEDIT] :
-												editmode == MODE_SOUNDS ?		msgtable[MENU_SOUNDSEDIT] :
-												editmode == MODE_LIGHTS ?		msgtable[MENU_LIGHTSEDIT] :
-												editmode == MODE_OBJECTGROUP ?	msgtable[MENU_OBJECTGROUPEDIT] : "", 
+		sprintf(buf, "Editmode: %s, File: %s", 	editmode == MODE_TEXTURE ?		GetMsg("menu/editmode/TEXTUREEDIT") : 
+												editmode == MODE_HEIGHTDETAIL ? GetMsg("menu/editmode/GLOBALHEIGHTEDIT") : 
+												editmode == MODE_HEIGHTGLOBAL ? GetMsg("menu/editmode/DETAILTERRAINEDIT") :
+												editmode == MODE_WALLS ?		GetMsg("menu/editmode/WALLEDIT") :
+												editmode == MODE_OBJECTS ?		GetMsg("menu/editmode/OBJECTEDIT") :
+												editmode == MODE_GAT ?			GetMsg("menu/editmode/GATEDIT") :
+												editmode == MODE_WATER ?		GetMsg("menu/editmode/WATEREDIT") :
+												editmode == MODE_EFFECTS ?		GetMsg("menu/editmode/EFFECTSEDIT") :
+												editmode == MODE_SOUNDS ?		GetMsg("menu/editmode/SOUNDSEDIT") :
+												editmode == MODE_LIGHTS ?		GetMsg("menu/editmode/LIGHTSEDIT") :
+												editmode == MODE_OBJECTGROUP ?	GetMsg("menu/editmode/OBJECTGROUPEDIT") : "", 
 		((cMenuItem*)currentobject)->data2.c_str());
 	else
-		sprintf(buf, "Editmode: %s",	editmode == MODE_TEXTURE ?		msgtable[MENU_TEXTUREEDIT] : 
-										editmode == MODE_HEIGHTDETAIL ? msgtable[MENU_GLOBALHEIGHTEDIT] : 
-										editmode == MODE_HEIGHTGLOBAL ? msgtable[MENU_DETAILTERRAINEDIT] :
-										editmode == MODE_WALLS ?		msgtable[MENU_WALLEDIT] :
-										editmode == MODE_OBJECTS ?		msgtable[MENU_OBJECTEDIT] :
-										editmode == MODE_GAT ?			msgtable[MENU_GATEDIT] :
-										editmode == MODE_WATER ?		msgtable[MENU_WATEREDIT] :
-										editmode == MODE_EFFECTS ?		msgtable[MENU_EFFECTSEDIT] :
-										editmode == MODE_SOUNDS ?		msgtable[MENU_SOUNDSEDIT] :
-										editmode == MODE_LIGHTS ?		msgtable[MENU_LIGHTSEDIT] :
-										editmode == MODE_OBJECTGROUP ?	msgtable[MENU_OBJECTGROUPEDIT] : "");
+		sprintf(buf, "Editmode: %s",	editmode == MODE_TEXTURE ?		GetMsg("menu/editmode/TEXTUREEDIT") : 
+										editmode == MODE_HEIGHTDETAIL ? GetMsg("menu/editmode/GLOBALHEIGHTEDIT") : 
+										editmode == MODE_HEIGHTGLOBAL ? GetMsg("menu/editmode/DETAILTERRAINEDIT") :
+										editmode == MODE_WALLS ?		GetMsg("menu/editmode/WALLEDIT") :
+										editmode == MODE_OBJECTS ?		GetMsg("menu/editmode/OBJECTEDIT") :
+										editmode == MODE_GAT ?			GetMsg("menu/editmode/GATEDIT") :
+										editmode == MODE_WATER ?		GetMsg("menu/editmode/WATEREDIT") :
+										editmode == MODE_EFFECTS ?		GetMsg("menu/editmode/EFFECTSEDIT") :
+										editmode == MODE_SOUNDS ?		GetMsg("menu/editmode/SOUNDSEDIT") :
+										editmode == MODE_LIGHTS ?		GetMsg("menu/editmode/LIGHTSEDIT") :
+										editmode == MODE_OBJECTGROUP ?	GetMsg("menu/editmode/OBJECTGROUPEDIT") : "");
 	float l = font->textlen(buf);
 	font->print(0,0,0,width-l,height-14,buf);
 
@@ -317,7 +317,7 @@ glDisable(GL_DEPTH_TEST);
 
 int cGraphics::init()
 {
-	Log(3,0,msgtable[INIT_GRAPHICS]);	
+	Log(3,0,GetMsg("graphics/INIT"));	
 	cameraheight = 123;
 	camerarot = 0.0f;
 	//camerapointer = cVector2(980,980);
@@ -328,14 +328,14 @@ int cGraphics::init()
 	int flags = 0;
 	const SDL_VideoInfo* info = NULL;
 	if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) {
-		Log( 1,0, msgtable[INIT_GRAPHICS_VIDEO_FAILED], SDL_GetError( ) );
+		Log( 1,0, GetMsg("graphics/INITFAIL"), SDL_GetError( ) );
 		return 0;
 	}
 	SDL_EnableUNICODE(1);
 	info = SDL_GetVideoInfo( );
 
 	if( !info ) {
-		Log(1,0,msgtable[INIT_GRAPHICS_QUERY_FAILED], SDL_GetError( ) );
+		Log(1,0,GetMsg("graphics/QUERYFAIL"), SDL_GetError( ) );
 		return -1;
 	}
 
@@ -353,7 +353,7 @@ int cGraphics::init()
 		flags = SDL_OPENGL | SDL_FULLSCREEN;
 	}
 	if( SDL_SetVideoMode( width, height, bpp, flags ) == 0 ) {
-		Log( 1,0, msgtable[INIT_GRAPHICS_MODE_FAILED], SDL_GetError( ) );
+		Log( 1,0, GetMsg("graphics/VIDEOMODEFAIL"), SDL_GetError( ) );
 		return -1;
 	}
 
@@ -366,11 +366,11 @@ int cGraphics::init()
 	if (InitGL() == 0)							// Initialize Our Newly Created GL Window
 	{
 		KillGLWindow();								// Reset The Display
-		Log(1,0,msgtable[INIT_GRAPHICS_OPENGL_FAILED]);
+		Log(1,0,GetMsg("graphics/OPENGLFAIL"));
 		return 0;						// Return FALSE
 	}
 
-	Log(3,0,msgtable[INIT_GRAPHICS_TEXTURES]);
+	Log(3,0,GetMsg("graphics/OPENINGTEXTURES"));
 
 	glDisable(GL_LIGHTING);
 	font = new cFont();
@@ -381,7 +381,7 @@ int cGraphics::init()
 	mask->Load("data/bulb.tga");
 	splash = new cTexture();
 	splash->Load("data/hamtaro.tga");
-	Log(3,0,msgtable[INIT_GRAPHICS_WM]);
+	Log(3,0,GetMsg("graphics/INITIALIZINGWM"));
 	WM.init();
 	WM.addwindow(new cHotkeyWindow(&WM.texture, &WM.font));
 
@@ -394,7 +394,7 @@ int cGraphics::init()
 	}
 
 	
-	Log(3,0,msgtable[LOADINGFILE], "water.txt");
+	Log(3,0,GetMsg("file/LOADING"), "water.txt");
 	cFile* pFile = fs.open("water.txt");
 	while(pFile->readline() != "[" + config + "]" && !pFile->eof());
 
@@ -419,7 +419,7 @@ int cGraphics::init()
 		watertextures[i].push_back(TextureCache.load(rodir + waterdir + "water" + waterext));
 	}
 
-	Log(3,0,msgtable[DONELOADINGFILE], "water.txt");
+	Log(3,0,GetMsg("file/DONELOADING"), "water.txt");
 
 	previewmodel = NULL;
 

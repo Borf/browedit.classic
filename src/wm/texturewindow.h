@@ -145,7 +145,7 @@ public:
 
 		h = Graphics.h()-50;
 		w = Graphics.w()-50;
-		title = msgtable[WINDOW_TEXTURE_TITLE];
+		title = GetMsg("wm/texture/TITLE");
 		center();
 
 		cWindowObject* o;

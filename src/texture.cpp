@@ -100,11 +100,11 @@ GLuint cTexture::texid()
 				}
 			}
 			else
-				Log(2,0,msgtable[TEXTURE_OPEN_FAILED], filename.c_str());
+				Log(2,0,GetMsg("graphics/TEXTUREFAIL"), filename.c_str());
 			
 		}
 		else
-			Log(2,0,msgtable[TEXTURE_OPEN_FAILED], filename.c_str());
+			Log(2,0,GetMsg("graphics/TEXTUREFAIL"), filename.c_str());
 		loaded = true;
 	}
 	return tid;

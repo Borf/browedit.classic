@@ -469,7 +469,7 @@ public:
 
 		resizeto(900,700);
 		center();
-		title = msgtable[WINDOW_PREFERENCES_TITLE];
+		title = GetMsg("wm/preferences/TITLE");
 
 
 /*		o = new cKeyBindBox(this);

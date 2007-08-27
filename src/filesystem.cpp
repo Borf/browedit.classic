@@ -20,7 +20,7 @@ int cFileSystem::LoadFile(string grffilename)
 	grffile->grf = grf_open(grffilename.c_str(), "rb", &error);
 	if (grffile->grf == NULL)
 	{
-		Log(2,0,msgtable[FS_GRFOPENERROR], grffilename.c_str());
+		Log(2,0,GetMsg("fs/GRFOPENERROR"), grffilename.c_str());
 		return -1;
 	}
 	
@@ -33,7 +33,7 @@ int cFileSystem::LoadFile(string grffilename)
 	}
 
 
-	Log(3,0,msgtable[FS_GRFOPENDONE], grffilename.c_str());
+	Log(3,0,GetMsg("fs/GRFOPENDONE"), grffilename.c_str());
 
 	return 0;
 }
@@ -82,7 +82,7 @@ int cFile::open()
 		pFile.open(filename.c_str(), ios_base::in | ios_base::binary);
 		if(pFile.bad())
 		{
-			Log(1,0,msgtable[FS_FILEERROR], filename.c_str());
+			Log(1,0,GetMsg("fs/FILEERROR"), filename.c_str());
 			#ifdef WIN32
 //			MessageBox(NULL, ("Error: could not open file: " + filename).c_str(), "File not found", MB_OK);
 			#endif
@@ -207,4 +207,29 @@ string cFile::readline()
 			index++;
 	}
 	return s;
+}
+
+
+TiXmlDocument cFileSystem::getxml(string filename)
+{
+	TiXmlDocument ret;
+	ret.SetCondenseWhiteSpace(false);
+	cFile* pFile = open(filename);
+	if(pFile == NULL)
+	{
+		Log(1,0,"Couldn't open %s", filename.c_str());
+		return ret;
+	}
+	string xmldata;
+	while(!pFile->eof())
+		xmldata += pFile->readline() + "\n";
+	pFile->close();
+
+	ret.Parse( xmldata.c_str() );
+	if ( ret.Error() )
+	{
+		Log(1,0,"could not load '%s': error in %s: %s at line %i, col %i\n", filename.c_str(), ret.Value(), ret.ErrorDesc() , ret.ErrorRow(), ret.ErrorCol());
+		return ret;
+	}
+	return ret;
 }
