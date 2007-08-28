@@ -1,5 +1,10 @@
 #ifndef __MENU_H__
 #define __MENU_H__
+
+
+#include "common.h"
+#include <string>
+
 class cMenuItem;
 class cMenu;
 bool cmp(cMenu* a, cMenu* b);

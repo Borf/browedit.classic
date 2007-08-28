@@ -1,0 +1,2387 @@
+#include "menucommands.h"
+#include "graphics.h"
+#include <SDL/SDL_syswm.h>
+#include "undo.h"
+#include "filesystem.h"
+#include "wm/waterwindow.h"
+#include "wm/ambientlightwindow.h"
+#include "wm/keybindwindow.h"
+#include "wm/rsmeditwindow.h"
+
+extern cGraphics Graphics;
+extern bool running;
+extern cUndoStack undostack;
+extern eMode editmode;
+extern int brushsize;
+extern double mouse3dx, mouse3dy, mouse3dz;
+int process_events( );
+extern vector<string> objectfiles;
+extern cFileSystem fs;
+extern string rodir;
+extern cMenu* mode;
+extern cMenu* editdetail;
+extern cMenu* speed;
+extern cMenu* models;
+extern cMenu* currentobject;
+extern float paintspeed;
+
+
+cMenuItem* selectedeffect = NULL;
+
+MENUCOMMAND(new)
+{
+	Graphics.WM.MessageBox("This feature isn't working yet...");
+	return true;
+}
+
+
+
+MENUCOMMAND(open)
+{
+#ifdef WIN32
+	char curdir[100];
+	getcwd(curdir, 100);
+	SDL_SysWMinfo wmInfo;
+	SDL_VERSION(&wmInfo.version)	;
+	SDL_GetWMInfo(&wmInfo);
+	HWND hWnd = wmInfo.window;
+	OPENFILENAME ofn;
+	ZeroMemory(&ofn, sizeof(ofn));
+	ofn.lStructSize = sizeof(ofn);
+	ofn.hwndOwner = hWnd;
+
+	strcpy(Graphics.world.filename, replace(Graphics.world.filename, "/", "\\").c_str());
+	ofn.lpstrFile = Graphics.world.filename;
+	ofn.nMaxFile = 256;
+	ofn.lpstrFilter = "All\0*.*\0RO Maps\0*.rsw\0";
+	ofn.nFilterIndex = 2;
+	ofn.lpstrFileTitle = NULL;
+	ofn.nMaxFileTitle = 0;
+	ofn.lpstrInitialDir = NULL;
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_ENABLESIZING;
+	if (GetOpenFileName(&ofn))
+	{
+		while(Graphics.world.filename[strlen(Graphics.world.filename)-1] != '.')
+			Graphics.world.filename[strlen(Graphics.world.filename)-1] = '\0';
+		Graphics.world.filename[strlen(Graphics.world.filename)-1] = '\0';
+
+		chdir(curdir);
+		Graphics.world.load();
+	}
+#else
+
+
+#endif
+	return true;
+}
+
+
+MENUCOMMAND(importalpha)
+{
+#ifdef WIN32
+	char curdir[100];
+	getcwd(curdir, 100);
+	SDL_SysWMinfo wmInfo;
+	SDL_VERSION(&wmInfo.version)	;
+	SDL_GetWMInfo(&wmInfo);
+	HWND hWnd = wmInfo.window;
+	OPENFILENAME ofn;
+	ZeroMemory(&ofn, sizeof(ofn));
+	ofn.lStructSize = sizeof(ofn);
+	ofn.hwndOwner = hWnd;
+
+	strcpy(Graphics.world.filename, replace(Graphics.world.filename, "/", "\\").c_str());
+	ofn.lpstrFile = Graphics.world.filename;
+	ofn.nMaxFile = 256;
+	ofn.lpstrFilter = "All\0*.*\0RO ALPHA Maps\0*.rsw\0";
+	ofn.nFilterIndex = 2;
+	ofn.lpstrFileTitle = NULL;
+	ofn.nMaxFileTitle = 0;
+	ofn.lpstrInitialDir = NULL;
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_ENABLESIZING;
+	if (GetOpenFileName(&ofn))
+	{
+		while(Graphics.world.filename[strlen(Graphics.world.filename)-1] != '.')
+			Graphics.world.filename[strlen(Graphics.world.filename)-1] = '\0';
+		Graphics.world.filename[strlen(Graphics.world.filename)-1] = '\0';
+
+		chdir(curdir);
+		Graphics.world.importarcturus();
+	}
+#else
+
+
+#endif
+	return true;
+}
+
+
+MENUCOMMAND(save)
+{
+#ifdef WIN32
+	if(Graphics.world.filename[0] == '\0')
+	{
+		char curdir[100];
+		getcwd(curdir, 100);
+		SDL_SysWMinfo wmInfo;
+		SDL_VERSION(&wmInfo.version);
+		SDL_GetWMInfo(&wmInfo);
+		HWND hWnd = wmInfo.window;
+		OPENFILENAME ofn;
+		ZeroMemory(&ofn, sizeof(ofn));
+		ofn.lStructSize = sizeof(ofn);
+		ofn.hwndOwner = hWnd;
+		strcpy(Graphics.world.filename, replace(Graphics.world.filename, "/", "\\").c_str());
+		ofn.lpstrFile = Graphics.world.filename;
+		ofn.nMaxFile = 256;
+		ofn.lpstrFilter = "All\0*.*\0RO maps\0*.rsw\0";
+		ofn.nFilterIndex = 2;
+		ofn.lpstrFileTitle = NULL;
+		ofn.nMaxFileTitle = 0;
+		ofn.lpstrInitialDir = NULL;
+		ofn.Flags = OFN_PATHMUSTEXIST | OFN_ENABLESIZING | OFN_OVERWRITEPROMPT;
+		if (GetSaveFileName(&ofn))
+		{
+			while(Graphics.world.filename[strlen(Graphics.world.filename)-1] != '.')
+				Graphics.world.filename[strlen(Graphics.world.filename)-1] = '\0';
+			Graphics.world.filename[strlen(Graphics.world.filename)-1] = '\0';
+			Graphics.world.save();
+		}
+		chdir(curdir);
+	}
+	else
+		Graphics.world.save();
+#else
+
+#endif
+
+	return true;
+}
+MENUCOMMAND(saveAs)
+{
+#ifdef WIN32
+	char curdir[100];
+	getcwd(curdir, 100);
+	SDL_SysWMinfo wmInfo;
+	SDL_VERSION(&wmInfo.version);
+	SDL_GetWMInfo(&wmInfo);
+	HWND hWnd = wmInfo.window;
+	OPENFILENAME ofn;
+	ZeroMemory(&ofn, sizeof(ofn));
+	ofn.lStructSize = sizeof(ofn);
+	ofn.hwndOwner = hWnd;
+	strcpy(Graphics.world.filename, replace(Graphics.world.filename, "/", "\\").c_str());
+	ofn.lpstrFile = Graphics.world.filename;
+	ofn.nMaxFile = 256;
+	ofn.lpstrFilter = "All\0*.*\0RO maps\0*.rsw\0";
+	ofn.nFilterIndex = 2;
+	ofn.lpstrFileTitle = NULL;
+	ofn.nMaxFileTitle = 0;
+	ofn.lpstrInitialDir = NULL;
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_ENABLESIZING | OFN_OVERWRITEPROMPT;
+	if (!GetSaveFileName(&ofn))
+	{
+		Graphics.world.filename[0] = '\0';
+		chdir(curdir);
+	}
+	else
+	{
+		if (strcmp(Graphics.world.filename+strlen(Graphics.world.filename)-4, ".rsw") == 0)
+		{ 
+			while(Graphics.world.filename[strlen(Graphics.world.filename)-1] != '.')
+				Graphics.world.filename[strlen(Graphics.world.filename)-1] = '\0';
+			Graphics.world.filename[strlen(Graphics.world.filename)-1] = '\0';
+		}
+		chdir(curdir);
+		Graphics.world.save();
+
+	}
+#else
+	message = "Sorry, you can't save-as in linux, since I don't know how to make a save-as box yet";
+	showmessage = true;
+#endif
+	return true;
+}
+MENUCOMMAND(exit)
+{
+	running = false;
+	return true;
+}	
+MENUCOMMAND(undo)
+{
+	SDL_Event ev;
+	ev.type = SDL_KEYDOWN;
+	ev.key.keysym.sym = SDLK_u;
+	SDL_PushEvent(&ev);
+	ev.type = SDL_KEYUP;
+	ev.key.keysym.sym = SDLK_u;
+	SDL_PushEvent(&ev);
+	return true;
+}
+
+
+int ClassifyPoint(cVector3 point, cVector3 pO, cVector3 pN)
+{
+	cVector3 TempVect;
+	TempVect.x = pO.x - point.x;
+	TempVect.y = pO.y - point.y;
+	TempVect.z = pO.z - point.z;
+	cVector3 dir = TempVect;
+	GLfloat d = dir.Dot(pN);;
+	
+	if (d < -0.00001f)
+		return 1;
+	else
+		if (d > 0.00001f)
+			return -1;
+		return 0;
+}
+
+
+MENUCOMMAND(random1)
+{
+	int height = atoi(Graphics.WM.InputWindow("Height:").c_str());
+	int smooth  = atoi(Graphics.WM.InputWindow("Smoothing level (use 5-10 for decent results)").c_str());
+	if(height == 0)
+	{
+		Graphics.WM.MessageBox("You must enter a height bigger then 0");
+		return true;
+	}
+
+	undostack.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
+	int x,y;
+	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+			Graphics.world.cubes[y][x].tileaside = -1;
+			Graphics.world.cubes[y][x].tileside = -1;
+		}
+	}
+	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+		//	Graphics.world.cubes[2*y][2*x].tileup = 1;
+
+			Graphics.world.cubes[y][x].cell1 = height/2-rand()%height;
+			Graphics.world.cubes[y][x].cell2 = height/2-rand()%height;
+			Graphics.world.cubes[y][x].cell3 = height/2-rand()%height;
+			Graphics.world.cubes[y][x].cell4 = height/2-rand()%height;
+
+/*			Graphics.world.cubes[2*y][2*x-1].cell2 =	Graphics.world.cubes[2*y][2*x].cell1;
+			Graphics.world.cubes[2*y-1][2*x-1].cell4 =	Graphics.world.cubes[2*y][2*x].cell1;
+			Graphics.world.cubes[2*y-1][2*x].cell3 =	Graphics.world.cubes[2*y][2*x].cell1;
+
+
+			Graphics.world.cubes[2*y][2*x+1].cell1 =	Graphics.world.cubes[2*y][2*x].cell2;
+			Graphics.world.cubes[2*y-1][2*x+1].cell3 =	Graphics.world.cubes[2*y][2*x].cell2;
+			Graphics.world.cubes[2*y-1][2*x].cell4 =	Graphics.world.cubes[2*y][2*x].cell2;
+		
+
+			Graphics.world.cubes[2*y][2*x-1].cell4 =	Graphics.world.cubes[2*y][2*x].cell3;
+			Graphics.world.cubes[2*y+1][2*x-1].cell2 =	Graphics.world.cubes[2*y][2*x].cell3;
+			Graphics.world.cubes[2*y+1][2*x].cell1 =	Graphics.world.cubes[2*y][2*x].cell3;
+
+			Graphics.world.cubes[2*y][2*x+1].cell3 =	Graphics.world.cubes[2*y][2*x].cell4;
+			Graphics.world.cubes[2*y+1][2*x+1].cell1 =	Graphics.world.cubes[2*y][2*x].cell4;
+			Graphics.world.cubes[2*y+1][2*x].cell2 =	Graphics.world.cubes[2*y][2*x].cell4;
+		*/
+		}
+	}
+
+	eMode m = editmode;
+	editmode = MODE_HEIGHTDETAIL;
+
+	SDL_Event ev;
+	ev.type = SDL_KEYDOWN;
+	ev.key.keysym.sym = SDLK_s;
+	for(int i = 0; i < smooth; i++)
+		SDL_PushEvent(&ev);
+
+	int b = brushsize;
+	mouse3dx = Graphics.world.width*5;
+	mouse3dz = Graphics.world.height*5;
+	brushsize = Graphics.world.width+Graphics.world.height;
+	
+	process_events();
+	brushsize = b;
+
+
+	ev.type = SDL_KEYUP;
+	ev.key.keysym.sym = SDLK_s;
+	SDL_PushEvent(&ev);
+	editmode = m;
+
+	return true;
+}
+
+MENUCOMMAND(random2)
+{
+	int i;
+	int smooth  = 3;//atoi(Graphics.WM.InputWindow("Smoothing level (use 5-10 for decent results)").c_str());
+
+	undostack.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
+	float x,y;
+
+	Graphics.world.tiles.clear();
+	for(int tex = 0; tex < 3; tex++)
+	{
+		for(y = 0; y < 5; y++)
+		{
+			for(x = 0; x < 5; x++)
+			{
+				cTile t;
+				t.lightmap = 1;
+				t.texture = tex;
+				t.u1 = x/5.0;
+				t.v1 = y/5.0;
+				t.u2 = (x+1)/5.0;
+				t.v2 = (y)/5.0;
+				t.u3 = (x)/5.0;
+				t.v3 = (y+1)/5.0;
+				t.u4 = (x+1)/5.0;
+				t.v4 = (y+1)/5.0;
+				t.color[0] = (char)255;
+				t.color[1] = (char)255;
+				t.color[2] = (char)255;
+				t.color[3] = (char)255;
+				Graphics.world.tiles.push_back(t);
+			}
+		}
+	}
+	
+	
+	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+			Graphics.world.cubes[y][x].tileaside = -1;
+			Graphics.world.cubes[y][x].tileside = -1;
+			Graphics.world.cubes[y][x].tileup = 0;
+		}
+	}
+
+
+	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+			Graphics.world.cubes[y][x].cell1 = -64;
+			Graphics.world.cubes[y][x].cell2 = -64;
+			Graphics.world.cubes[y][x].cell3 = -64;
+			Graphics.world.cubes[y][x].cell4 = -64;
+		}
+	}
+
+	
+//	x = 1 + (rand()%((Graphics.world.width/10)-2));
+//	y = 1 + (rand()%((Graphics.world.height/10)-2));
+
+	x = Graphics.world.width/2;
+	y = Graphics.world.height/2;
+
+	
+	int a = rand()%360;
+	int lasta = a;
+	int reali = 0;
+	bool filledenough = false;
+	while(!filledenough) //(Graphics.world.height+Graphics.world.width) / 25
+	{
+		reali++;
+		a += (rand()%180)-90;
+		while(a < 0)
+			a+=360;
+		while(a > 360)
+			a-=360;
+
+		lasta = a;
+
+		int c = rand() % 25+25;
+
+		float curve = ((rand() % 100)-50) / 50.0f;
+		for(int ii = 0; ii < c; ii++)
+		{
+			a += curve;
+			while(a < 0)
+				a+=360;
+			while(a > 360)
+				a-=360;
+
+			bool water = false;//rand() % 20 == 0;
+
+			for(int xx = 0; xx < 10; xx++)
+			{
+				for(int yy = 0; yy < 10; yy++)
+				{
+					Graphics.world.cubes[y+yy][x+xx].cell1 = water ? 30 : 0;//rand()%25;
+					Graphics.world.cubes[y+yy][x+xx].cell2 = water ? 30 : 0;//rand()%25;
+					Graphics.world.cubes[y+yy][x+xx].cell3 = water ? 30 : 0;//rand()%25;
+					Graphics.world.cubes[y+yy][x+xx].cell4 = water ? 30 : 0;//rand()%25;
+				}
+			}
+
+			x+=cos(a* (PI/180.0f));
+			y+=sin(a* (PI/180.0f));
+
+
+			if(y < 5)
+			{
+				y = 5;
+				break;
+			}
+			if(y >= (Graphics.world.height)-15)
+			{
+				y = (Graphics.world.height)-15;
+				break;
+			}
+			if(x < 5)
+			{
+				x = 5;
+				break;
+			}
+			if(x >= (Graphics.world.width)-15)
+			{
+				x = (Graphics.world.width)-15;
+				break;
+			}
+		}
+		
+
+		int count = 0;
+		for(int yy = 0; yy < Graphics.world.height; yy++)
+		{
+			for(int xx = 0; xx < Graphics.world.width; xx++)
+			{
+				if(Graphics.world.cubes[yy][xx].cell1 == 0)
+					count++;
+			}
+		}
+		if(count > Graphics.world.height*Graphics.world.width / 2)
+			filledenough = true;
+
+	}
+
+
+
+	eMode m = editmode;
+	editmode = MODE_HEIGHTDETAIL;
+
+	SDL_Event ev;
+	ev.type = SDL_KEYDOWN;
+	ev.key.keysym.sym = SDLK_s;
+	for(i = 0; i < smooth; i++)
+		SDL_PushEvent(&ev);
+
+	int b = brushsize;
+	mouse3dx = Graphics.world.width*5;
+	mouse3dz = Graphics.world.height*5;
+	brushsize = Graphics.world.width+Graphics.world.height;
+	
+	process_events();
+	brushsize = b;
+
+
+	ev.type = SDL_KEYUP;
+	ev.key.keysym.sym = SDLK_s;
+	SDL_PushEvent(&ev);
+
+
+
+	editmode = m;
+
+	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+			if((Graphics.world.cubes[y][x].cell1 <= -8 || Graphics.world.cubes[y][x].cell2 <= -8 || Graphics.world.cubes[y][x].cell3  <= -8|| Graphics.world.cubes[y][x].cell4 <= -8) && Graphics.world.cubes[y][x].cell1 > -63)
+				Graphics.world.cubes[y][x].tileup= 50 + ((int)x%5) + 5*((int)y%5);
+			else if(Graphics.world.cubes[y][x].cell1 >= -63)
+				Graphics.world.cubes[y][x].tileup= 25 + ((int)x%5) + 5*((int)y%5);
+		}
+	}
+
+	Graphics.world.water.height = 12;
+
+
+	Log(3,0,"Made %i iterations", reali);
+
+	return true;
+}
+
+
+
+class cIntQuad
+{
+public:
+	int x;
+	int y;
+	int w;
+	int h;
+	vector<int> connections;
+	cIntQuad(int xx, int yy, int ww, int hh)
+	{
+		x = xx;
+		y = yy;
+		w = ww;
+		h = hh;
+	}
+};
+
+MENUCOMMAND(random3)
+{
+	int i;
+	int xx,yy;
+	int smooth  = 3;//atoi(Graphics.WM.InputWindow("Smoothing level (use 5-10 for decent results)").c_str());
+
+	undostack.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
+	float x,y;
+
+	Graphics.world.tiles.clear();
+	for(int tex = 0; tex < 5; tex++)
+	{
+		for(y = 0; y < 5; y++)
+		{
+			for(x = 0; x < 5; x++)
+			{
+				cTile t;
+				t.lightmap = 1;
+				t.texture = tex;
+				t.u1 = x/5.0;
+				t.v1 = y/5.0;
+				t.u2 = (x+1)/5.0;
+				t.v2 = (y)/5.0;
+				t.u3 = (x)/5.0;
+				t.v3 = (y+1)/5.0;
+				t.u4 = (x+1)/5.0;
+				t.v4 = (y+1)/5.0;
+				t.color[0] = (char)255;
+				t.color[1] = (char)255;
+				t.color[2] = (char)255;
+				t.color[3] = (char)255;
+				Graphics.world.tiles.push_back(t);
+			}
+		}
+	}
+	
+	
+	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+			Graphics.world.cubes[y][x].tileaside = -1;
+			Graphics.world.cubes[y][x].tileside = -1;
+			Graphics.world.cubes[y][x].tileup = 75 + ((int)x%5) + 5*((int)y%5);
+		}
+	}
+
+
+	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+			Graphics.world.cubes[y][x].cell1 = 16;
+			Graphics.world.cubes[y][x].cell2 = 16;
+			Graphics.world.cubes[y][x].cell3 = 16;
+			Graphics.world.cubes[y][x].cell4 = 16;
+		}
+	}
+
+	
+
+	
+	int a = 0;
+	int lasta = 0;
+	int reali = 0;
+
+	int w,h;
+
+	
+	vector<cIntQuad> islands;
+
+	bool filledenough = false;
+	while(!filledenough)
+	{
+		int island = -1;
+		reali++;
+		if(reali > 10000)
+			break;
+
+		w = 10+rand() % 30;
+		h = 10+rand() % 30;
+
+		if(islands.size() > 0)
+		{
+			island = rand() % islands.size();
+			if(islands[island].connections.size() > 1)
+				island = rand() % islands.size();
+
+
+			int a = rand()%4;
+			if(a == lasta || (a+2)%4 == lasta)
+				a = rand()%4;
+			lasta = a;
+
+			if(a == 0)
+			{
+				x = islands[island].x + islands[island].w + 5;
+				y = islands[island].y;
+			}
+			if(a == 1)
+			{
+				x = islands[island].x;
+				y = islands[island].y + islands[island].h + 5;
+			}
+			if(a == 2)
+			{
+				x = islands[island].x;
+				y = islands[island].y - h - 5;
+			}
+			if(a == 3)
+			{
+				x = islands[island].x - w - 5;
+				y = islands[island].y;
+			}
+
+		}
+		else
+		{
+			x = (Graphics.world.width-w)/2;
+			y = (Graphics.world.height-h)/2;
+		}
+
+		if(!(x + w >= Graphics.world.width-1 || y+h >= Graphics.world.height-1 || x <= 1 || y <= 1))
+		{
+			int takencount = 0;
+			for(xx = x; xx < x+w; xx++)
+			{
+				for(yy = y; yy < y+h; yy++)
+				{
+					if(Graphics.world.cubes[yy][xx].cell1 == 0)
+						takencount++;
+				}
+			}
+			if(takencount < 3)
+			{
+				for(xx = x; xx < x+w; xx++)
+				{
+					for(yy = y; yy < y+h; yy++)
+					{
+						Graphics.world.cubes[yy][xx].cell1 = 0;//rand()%25;
+						Graphics.world.cubes[yy][xx].cell2 = 0;//rand()%25;
+						Graphics.world.cubes[yy][xx].cell3 = 0;//rand()%25;
+						Graphics.world.cubes[yy][xx].cell4 = 0;//rand()%25;
+						Graphics.world.cubes[yy][xx].tileup = 50 + (xx%5) + 5*(yy%5);
+					}
+				}
+				if(island != -1)
+					islands[island].connections.push_back(islands.size());
+
+				islands.push_back(cIntQuad(x,y,w,h));
+				if(island != -1)
+					islands[islands.size()-1].connections.push_back(island);
+			}
+			int count = 0;
+			for(int yy = 0; yy < Graphics.world.height; yy++)
+			{
+				for(int xx = 0; xx < Graphics.world.width; xx++)
+				{
+					if(Graphics.world.cubes[yy][xx].cell1 == 0)
+						count++;
+				}
+			}
+			if(count > Graphics.world.height*Graphics.world.width / 2)
+				filledenough = true;
+
+		}
+	}
+
+
+	for(i = 0; i < islands.size(); i++)
+	{
+		for(int ii = 0; ii < islands[i].connections.size(); ii++)
+		{
+			x = islands[islands[i].connections[ii]].x;
+			y = islands[islands[i].connections[ii]].y;
+			w = islands[islands[i].connections[ii]].w;
+			h = islands[islands[i].connections[ii]].h;
+
+			xx = islands[i].x;
+			yy = islands[i].y;
+
+			if(xx - (x+w) == 5)
+				x+=w;
+			else if(yy - (y+h) == 5)
+				y+=h;
+			else if(y - (yy+islands[i].h) == 5)
+				yy+=islands[i].h;
+			else if(x - (xx+islands[i].w) == 5)
+				xx+=islands[i].w;
+
+
+			if(xx == x)
+			{
+				if(w < islands[i].w)
+					x = xx = xx + w/2;
+				else
+					x = xx = xx + islands[i].w/2;
+			}
+			if(yy == y)
+			{
+				if(h < islands[i].h)
+					y = yy = yy + h/2;
+				else
+					y = yy = yy + islands[i].h/2;
+			}
+
+
+			while(xx != x || yy != y)
+			{
+				for(int xxx = ((x == xx) ? -1 : 0); xxx < ((x==xx) ? 1 : 2); xxx++)
+				{
+					for(int yyy = ((y == yy) ? -1 : 0); yyy < ((y==yy) ? 1 : 2); yyy++)
+					{
+						Graphics.world.cubes[yy+yyy][xx+xxx].cell1 = 0;//rand()%25;
+						Graphics.world.cubes[yy+yyy][xx+xxx].cell2 = 0;//rand()%25;
+						Graphics.world.cubes[yy+yyy][xx+xxx].cell3 = 0;//rand()%25;
+						Graphics.world.cubes[yy+yyy][xx+xxx].cell4 = 0;//rand()%25;
+						Graphics.world.cubes[yy+yyy][xx+xxx].tileup = 25 + ((xx+xxx)%5) + 5*((yy+yyy)%5);
+						if(xx > x)
+							xx--;
+						if(xx < x)
+							xx++;
+						if(yy > y)
+							yy--;
+						if(yy < y)
+							yy++;
+
+						Graphics.world.cubes[yy+yyy][xx+xxx].cell1 = 0;//rand()%25;
+						Graphics.world.cubes[yy+yyy][xx+xxx].cell2 = 0;//rand()%25;
+						Graphics.world.cubes[yy+yyy][xx+xxx].cell3 = 0;//rand()%25;
+						Graphics.world.cubes[yy+yyy][xx+xxx].cell4 = 0;//rand()%25;
+						Graphics.world.cubes[yy+yyy][xx+xxx].tileup = 25 + ((xx+xxx)%5) + 5*((yy+yyy)%5);
+					}
+				}
+			}
+		}
+	}
+
+	Graphics.selectionstart.y = 320;
+	Graphics.texturestart = 0;
+	MenuCommand_addwalls(src);
+
+
+
+
+/*	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+			if((Graphics.world.cubes[y][x].cell1 <= -8 || Graphics.world.cubes[y][x].cell2 <= -8 || Graphics.world.cubes[y][x].cell3  <= -8|| Graphics.world.cubes[y][x].cell4 <= -8) && Graphics.world.cubes[y][x].cell1 > -63)
+			{
+				Graphics.world.cubes[y][x].tileup= 50 + ((int)x%5) + 5*((int)y%5);
+			}
+		}
+	}
+*/
+	Graphics.world.water.height = 8;
+
+
+	return true;
+}
+
+
+
+MENUCOMMAND(random4)
+{
+	int i,x,y;
+	int smooth  = 3;//atoi(Graphics.WM.InputWindow("Smoothing level (use 5-10 for decent results)").c_str());
+
+	undostack.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
+
+
+	Graphics.world.tiles.clear();
+	for(int tex = 0; tex < 5; tex++)
+	{
+		for(y = 0; y < 5; y++)
+		{
+			for(x = 0; x < 5; x++)
+			{
+				cTile t;
+				t.lightmap = 1;
+				t.texture = tex;
+				t.u1 = x/5.0;
+				t.v1 = y/5.0;
+				t.u2 = (x+1)/5.0;
+				t.v2 = (y)/5.0;
+				t.u3 = (x)/5.0;
+				t.v3 = (y+1)/5.0;
+				t.u4 = (x+1)/5.0;
+				t.v4 = (y+1)/5.0;
+				t.color[0] = (char)255;
+				t.color[1] = (char)255;
+				t.color[2] = (char)255;
+				t.color[3] = (char)255;
+				Graphics.world.tiles.push_back(t);
+			}
+		}
+	}
+
+	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+			Graphics.world.cubes[y][x].tileaside = -1;
+			Graphics.world.cubes[y][x].tileside = -1;
+			Graphics.world.cubes[y][x].tileup = 25 + ((int)x%5) + 5*((int)y%5);
+		}
+	}
+
+	float xding = rand() % 50 + 20;
+	float yding = rand() % 50 + 20;
+	float zding = rand() % 50 + 20;
+
+	float xding2 = rand() % 50 + 50;
+	float yding2 = rand() % 50 + 50;
+	float zding2 = rand() % 50 + 50;
+
+	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+
+			float f = xding2*sin(y/xding)+yding2*cos(x/yding) + zding*cos(x/zding+y/zding);
+			f = floor(f / 32.0f)*32;
+
+			Graphics.world.cubes[y][x].cell1 = f;
+			Graphics.world.cubes[y][x].cell2 = f;
+			Graphics.world.cubes[y][x].cell3 = f;
+			Graphics.world.cubes[y][x].cell4 = f;
+		}
+	}
+	eMode m = editmode;
+	editmode = MODE_HEIGHTDETAIL;
+
+	SDL_Event ev;
+	ev.type = SDL_KEYDOWN;
+	ev.key.keysym.sym = SDLK_s;
+	for(i = 0; i < 3; i++)
+		SDL_PushEvent(&ev);
+
+	int b = brushsize;
+	mouse3dx = Graphics.world.width*5;
+	mouse3dz = Graphics.world.height*5;
+	brushsize = Graphics.world.width+Graphics.world.height;
+	
+	process_events();
+	brushsize = b;
+
+
+	ev.type = SDL_KEYUP;
+	ev.key.keysym.sym = SDLK_s;
+	SDL_PushEvent(&ev);
+	editmode = m;
+
+
+
+
+	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+			if(fabs(Graphics.world.cubes[y][x].cell1 - Graphics.world.cubes[y][x].cell2) > 5 ||
+				fabs(Graphics.world.cubes[y][x].cell1 - Graphics.world.cubes[y][x].cell3) > 5 ||
+				fabs(Graphics.world.cubes[y][x].cell1 - Graphics.world.cubes[y][x].cell4) > 5 ||
+				fabs(Graphics.world.cubes[y][x].cell2 - Graphics.world.cubes[y][x].cell3) > 5 ||
+				fabs(Graphics.world.cubes[y][x].cell2 - Graphics.world.cubes[y][x].cell4) > 5 ||
+				fabs(Graphics.world.cubes[y][x].cell3 - Graphics.world.cubes[y][x].cell4) > 5)
+				Graphics.world.cubes[y][x].tileup = 50 + ((int)x%5) + 5*((int)y%5);
+		}
+	}
+
+
+	vector<string>	randommodels;
+	for(i = 0; i < objectfiles.size(); i++)
+	{
+		cFile* pFile = fs.open(objectfiles[i]);
+		while(!pFile->eof())
+		{
+			string line = pFile->readline();
+			if (line == "")
+				continue;
+			string pre = line.substr(0, line.find("|"));
+			string filename = line.substr(line.find("|")+1);
+
+			string cat = pre.substr(0, pre.rfind("/"));
+			string name = pre.substr(pre.rfind("/")+1);
+
+			if(cat == "randomtrees")
+				randommodels.push_back(filename);
+		}
+	}
+
+
+
+	for(i = 0; i < 1000; i++)
+	{
+		cRSMModel* model = new cRSMModel();
+		model->load(rodir +  randommodels[rand() % randommodels.size()]);
+
+		model->pos = cVector3(rand()%(Graphics.world.width*2), 0, rand()%(Graphics.world.height*2));
+
+		while(Graphics.world.cubes[model->pos.z/2][model->pos.x/2].tileup > 50)
+			model->pos = cVector3(rand()%(Graphics.world.width*2), 0, rand()%(Graphics.world.height*2));
+
+
+		model->pos.y = Graphics.world.cubes[model->pos.z/2][model->pos.x/2].cell1;
+		model->scale = cVector3(1,1,1);
+		model->rot = cVector3(0,0,0);
+		Graphics.world.models.push_back(model);
+	}
+
+
+	return true;
+}
+
+
+
+MENUCOMMAND(mode)
+{
+	string title = src->title;
+	for(int i = 0; i < mode->items.size(); i++)
+		mode->items[i]->ticked = false;
+	src->ticked = true;
+
+	if(title == GetMsg("menu/editmode/GLOBALHEIGHTEDIT"))
+	{
+		editmode = MODE_HEIGHTGLOBAL;
+		if (Graphics.texturestart >= Graphics.world.textures.size())
+			Graphics.texturestart = 0;
+	}
+	else if (title == GetMsg("menu/editmode/DETAILTERRAINEDIT"))
+	{
+		editmode = MODE_HEIGHTDETAIL;
+		if (Graphics.texturestart >= Graphics.world.textures.size())
+			Graphics.texturestart = 0;
+	}
+	else if (title == GetMsg("menu/editmode/TEXTUREEDIT"))
+	{
+		editmode = MODE_TEXTURE;
+		if (Graphics.texturestart >= Graphics.world.textures.size())
+			Graphics.texturestart = 0;
+	}
+	else if (title == GetMsg("menu/editmode/WALLEDIT"))
+	{
+		editmode = MODE_WALLS;
+	}
+	else if (title == GetMsg("menu/editmode/OBJECTEDIT"))
+	{
+		editmode = MODE_OBJECTS;
+		if (Graphics.texturestart >= Graphics.world.textures.size())
+			Graphics.texturestart = 0;
+	}
+	else if (title == GetMsg("menu/editmode/GATEDIT"))
+	{
+		editmode = MODE_GAT;
+		if (Graphics.texturestart >= 6)
+			Graphics.texturestart = 0;
+	}
+	else if (title == GetMsg("menu/editmode/WATEREDIT"))
+	{
+		editmode = MODE_WATER;
+		Graphics.texturestart = Graphics.world.water.type;
+	}
+	else if (title == GetMsg("menu/editmode/EFFECTSEDIT"))
+	{
+		editmode = MODE_EFFECTS;
+		Graphics.selectedobject = -1;
+	}
+	else if (title == GetMsg("menu/editmode/SOUNDSEDIT"))
+	{
+		editmode = MODE_SOUNDS;
+	}
+	else if (title == GetMsg("menu/editmode/LIGHTSEDIT"))
+	{
+		editmode = MODE_LIGHTS;
+	}
+	else if (title == GetMsg("menu/editmode/OBJECTGROUPEDIT"))
+	{
+		editmode = MODE_OBJECTGROUP;
+	}
+	else if (title == GetMsg("menu/editmode/SPRITEEDIT"))
+	{
+		editmode = MODE_SPRITE;
+	}
+	return true;
+}
+
+MENUCOMMAND(flatten)
+{
+	undostack.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
+	for(int y = 0; y < Graphics.world.height; y++)
+	{
+		for(int x = 0; x < Graphics.world.width; x++)
+		{
+			Graphics.world.cubes[y][x].tileaside = -1;
+			Graphics.world.cubes[y][x].tileside = -1;
+			Graphics.world.cubes[y][x].cell1 = 0;
+			Graphics.world.cubes[y][x].cell2 = 0;
+			Graphics.world.cubes[y][x].cell3 = 0;
+			Graphics.world.cubes[y][x].cell4 = 0;
+			Graphics.world.cubes[y][x].calcnormal();
+		}
+	}
+	return true;	
+}
+
+MENUCOMMAND(grid)
+{
+	src->ticked = !src->ticked;
+	Graphics.showgrid = src->ticked;
+	return true;
+}
+
+MENUCOMMAND(mode_detail)
+{
+	int i;
+	for(i = 0; i < mode->items.size(); i++)
+		mode->items[i]->ticked = (mode->items[i]->title == "Detail Terrain Edit" ? true : false);
+	for(i = 0; i < editdetail->items.size(); i++)
+		editdetail->items[i]->ticked = false;
+	src->ticked = true;
+	editmode = MODE_HEIGHTDETAIL;
+	brushsize = atoi(src->title.c_str());
+
+	return true;
+}
+MENUCOMMAND(speed)
+{
+	for(int i =0 ; i < speed->items.size(); i++)
+		speed->items[i]->ticked = false;
+	src->ticked = true;
+	paintspeed = atof(src->title.c_str());
+	return true;
+}
+
+MENUCOMMAND(fill)
+{
+	int x,y,i;
+	map<int, bool, less<int> > used;
+
+	Graphics.world.tiles.clear();
+	Graphics.world.lightmaps.clear();
+	cLightmap* map = new cLightmap();
+	for(i = 0; i < 256; i++)
+		map->buf[i] = i < 64 ? 255 : 0;
+	Graphics.world.lightmaps.push_back(map);
+	map = new cLightmap();
+	for(i = 0; i < 256; i++)
+		map->buf[i] = i < 64 ? 255 : 0;
+	Graphics.world.lightmaps.push_back(map);
+	for(y = 0; y < 4; y++)
+	{
+		for(x = 0; x < 4; x++)
+		{
+			cTile t;
+			t.lightmap = 1;
+			t.texture = Graphics.texturestart + ((int)Graphics.selectionstart.y - 32) / 288;
+			t.u1 = x/4.0;
+			t.v1 = y/4.0;
+			t.u2 = (x+1)/4.0;
+			t.v2 = (y)/4.0;
+			t.u3 = (x)/4.0;
+			t.v3 = (y+1)/4.0;
+			t.u4 = (x+1)/4.0;
+			t.v4 = (y+1)/4.0;
+			t.color[0] = (char)255;
+			t.color[1] = (char)255;
+			t.color[2] = (char)255;
+			t.color[3] = (char)255;
+			Graphics.world.tiles.push_back(t);
+		}
+	}
+
+
+	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+			Graphics.world.cubes[y][x].tileup = (x%4) + 4*(y % 4);
+			Graphics.world.cubes[y][x].tileside = -1;
+			Graphics.world.cubes[y][x].tileaside = -1;
+		}
+	}
+
+
+	for(x = 0; x < Graphics.world.width; x++)
+	{
+		for(y = 0; y < Graphics.world.height; y++)
+		{
+			int tile = Graphics.world.cubes[y][x].tileup;
+			if(used.find(tile) != used.end())
+			{
+				cTile t = Graphics.world.tiles[tile];
+				tile = Graphics.world.tiles.size();
+				Graphics.world.tiles.push_back(t);
+				Graphics.world.cubes[y][x].tileup = tile;
+			}
+			used[tile] = 1;
+///////////////////////////////////////
+			tile = Graphics.world.cubes[y][x].tileside;
+			if (tile != -1)
+			{
+				if(used.find(tile) != used.end())
+				{
+					cTile t = Graphics.world.tiles[tile];
+					tile = Graphics.world.tiles.size();
+					Graphics.world.tiles.push_back(t);
+					Graphics.world.cubes[y][x].tileside = tile;
+				}
+				used[tile] = 1;
+			}
+/////////////////////////////////////
+			tile = Graphics.world.cubes[y][x].tileaside;
+			if (tile!= -1)
+			{
+				if(used.find(tile) != used.end())
+				{
+					cTile t = Graphics.world.tiles[tile];
+					tile = Graphics.world.tiles.size();
+					Graphics.world.tiles.push_back(t);
+					Graphics.world.cubes[y][x].tileaside = tile;
+				}
+				used[tile] = 1;
+			}
+		}
+	}
+
+
+	
+
+	return true;
+}
+
+MENUCOMMAND(showobjects)
+{
+	src->ticked = !src->ticked;
+	Graphics.showobjects = src->ticked;
+	return true;
+}
+
+
+MENUCOMMAND(model)
+{
+	delete Graphics.previewmodel;
+	Graphics.previewmodel = new cRSMModel();
+	Graphics.previewmodel->load(rodir + src->data);
+	Graphics.previewmodel->rot = cVector3(0,0,0);
+	Graphics.previewmodel->scale = cVector3(4,4,4);
+
+	Graphics.previewmodel->pos = cVector3(40,-40,-40);
+
+	if (editmode != MODE_OBJECTS)
+		Graphics.previewcolor = 200;
+	currentobject = src;
+	return true;
+}
+
+
+MENUCOMMAND(slope)
+{
+	src->ticked = !src->ticked;
+	Graphics.slope = src->ticked;
+	return true;
+}
+
+MENUCOMMAND(quadtree)
+{
+	int x,y;
+	for(x = 0; x < Graphics.world.width; x++)
+		for(y = 0; y < Graphics.world.height; y++)
+		{
+			Graphics.world.cubes[y][x].maxh = -99999;
+			Graphics.world.cubes[y][x].minh = 99999;
+		}
+
+	for(int i = 0; i < Graphics.world.models.size(); i++)
+	{
+		Log(3,0,GetMsg("CALCMODEL"), i, Graphics.world.models.size(), (i/(float)Graphics.world.models.size())*100);
+		Graphics.world.models[i]->draw(false,false,true);
+	}
+
+
+	Graphics.world.root->recalculate();
+	return true;
+}
+
+MENUCOMMAND(gatheight)
+{
+	undostack.push(new cUndoGatHeightEdit(0,0,Graphics.world.gattiles[0].size(), Graphics.world.gattiles.size()));
+	int x,y;
+	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+			cCube* c = &Graphics.world.cubes[y][x];
+			Graphics.world.gattiles[2*y][2*x].cell1 = (c->cell1+c->cell1) / 2.0f;
+			Graphics.world.gattiles[2*y][2*x].cell2 = (c->cell1+c->cell2) / 2.0f;
+			Graphics.world.gattiles[2*y][2*x].cell3 = (c->cell1+c->cell3) / 2.0f;
+			Graphics.world.gattiles[2*y][2*x].cell4 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
+
+			Graphics.world.gattiles[2*y][2*x+1].cell1 = (c->cell1+c->cell2) / 2.0f;
+			Graphics.world.gattiles[2*y][2*x+1].cell2 = (c->cell2+c->cell2) / 2.0f;
+			Graphics.world.gattiles[2*y][2*x+1].cell3 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
+			Graphics.world.gattiles[2*y][2*x+1].cell4 = (c->cell4+c->cell2) / 2.0f;
+
+			Graphics.world.gattiles[2*y+1][2*x+1].cell1 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
+			Graphics.world.gattiles[2*y+1][2*x+1].cell2 = (c->cell4 + c->cell2) / 2.0f;
+			Graphics.world.gattiles[2*y+1][2*x+1].cell3 = (c->cell4 + c->cell3) / 2.0f;
+			Graphics.world.gattiles[2*y+1][2*x+1].cell4 = (c->cell4 + c->cell4) / 2.0f;
+
+			Graphics.world.gattiles[2*y+1][2*x].cell1 = (c->cell3 + c->cell1) / 2.0f;
+			Graphics.world.gattiles[2*y+1][2*x].cell2 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
+			Graphics.world.gattiles[2*y+1][2*x].cell3 = (c->cell3 + c->cell3) / 2.0f;
+			Graphics.world.gattiles[2*y+1][2*x].cell4 = (c->cell3 + c->cell4) / 2.0f;
+		}
+
+	}
+	
+	return true;
+}
+
+
+
+
+cVector3 lightpos = cVector3(-20000,20000,-20000);
+bool selectonly;
+bool lightonly;
+
+MENUCOMMAND(dolightmaps)
+{
+	selectonly = true;
+	lightonly = false;
+	return MenuCommand_dolightmaps2(src);
+}
+MENUCOMMAND(dolightmapsall)
+{
+	selectonly = false;
+	lightonly = false;
+	return MenuCommand_dolightmaps2(src);
+}
+MENUCOMMAND(dolightmapslights)
+{
+	selectonly = false;
+	lightonly = true;
+	return MenuCommand_dolightmaps2(src);
+}
+
+
+
+MENUCOMMAND(dolightmaps2)
+{
+	int x,y,i;
+
+	map<int, bool, less<int> > used;
+
+	for(x = 0; x < Graphics.world.width; x++)
+	{
+		for(y = 0; y < Graphics.world.height; y++)
+		{
+			if(selectonly && !Graphics.world.cubes[y][x].selected)
+				continue;
+			int tile = Graphics.world.cubes[y][x].tileup;
+			if(used.find(tile) != used.end())
+			{
+				cTile t = Graphics.world.tiles[tile];
+				tile = Graphics.world.tiles.size();
+				Graphics.world.tiles.push_back(t);
+				Graphics.world.cubes[y][x].tileup = tile;
+			}
+			used[tile] = 1;
+			if(tile != -1)
+			{
+				cLightmap* map = new cLightmap();
+				for(int i = 0; i < 256; i++)
+					map->buf[i] = i < 64 ? 0 : 0;
+				Graphics.world.tiles[tile].lightmap = Graphics.world.lightmaps.size();
+				Graphics.world.lightmaps.push_back(map);
+			}
+///////////////////////////////////////
+			tile = Graphics.world.cubes[y][x].tileside;
+			if (tile != -1)
+			{
+				if(used.find(tile) != used.end())
+				{
+					cTile t = Graphics.world.tiles[tile];
+					tile = Graphics.world.tiles.size();
+					Graphics.world.tiles.push_back(t);
+					Graphics.world.cubes[y][x].tileside = tile;
+				}
+				used[tile] = 1;
+				if(tile != -1)
+				{
+					cLightmap* map = new cLightmap();
+					for(int i = 0; i < 256; i++)
+						map->buf[i] = i < 64 ? 255 : 0;
+					Graphics.world.tiles[tile].lightmap = Graphics.world.lightmaps.size();
+					Graphics.world.lightmaps.push_back(map);
+				}
+			}
+/////////////////////////////////////
+			tile = Graphics.world.cubes[y][x].tileaside;
+			if (tile!= -1)
+			{
+				if(used.find(tile) != used.end())
+				{
+					cTile t = Graphics.world.tiles[tile];
+					tile = Graphics.world.tiles.size();
+					Graphics.world.tiles.push_back(t);
+					Graphics.world.cubes[y][x].tileaside = tile;
+				}
+				used[tile] = 1;
+				if(tile != -1)
+				{
+					cLightmap* map = new cLightmap();
+					for(int i = 0; i < 256; i++)
+						map->buf[i] = i < 64 ? 255 : 0;
+					Graphics.world.tiles[tile].lightmap = Graphics.world.lightmaps.size();
+					Graphics.world.lightmaps.push_back(map);
+				}
+			}
+		}
+	}
+
+	int ww = Graphics.w();
+	ww -= 256;
+	int hh = Graphics.h()-20;
+
+	glEnable(GL_DEPTH_TEST);
+	glViewport(0,0,ww,hh);						// Reset The Current Viewport
+
+	float camrad = 10;
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);				// Black Background
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
+	glLoadIdentity();									// Reset The Projection Matrix
+	gluPerspective(45.0f,(GLfloat)Graphics.w()/(GLfloat)Graphics.h(),10.0f,10000.0f);
+	gluLookAt(  -Graphics.camerapointer.x + Graphics.cameraheight*sin(Graphics.camerarot),
+				camrad+Graphics.cameraheight,
+				-Graphics.camerapointer.y + Graphics.cameraheight*cos(Graphics.camerarot),
+				-Graphics.camerapointer.x,camrad + Graphics.cameraheight * (Graphics.cameraangle/10.0f),-Graphics.camerapointer.y,
+				0,1,0);
+	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
+	glLoadIdentity();									// Reset The Modelview Matrix
+//	glTranslatef(0,0,Graphics.world.height*10);
+//	glScalef(1,1,-1);
+
+	for(i = 0; i < Graphics.world.models.size(); i++)
+		Graphics.world.models[i]->precollides();
+
+	for(y = 0; y < Graphics.world.height; y++)
+//	for(y = 40; y < 60; y++)
+	{
+		if(y == 99)
+			Sleep(0);
+		for(x = 0; x < Graphics.world.width; x++)
+//		for(x = 40; x < 60; x++)
+		{
+			cCube* c = &Graphics.world.cubes[y][x];
+			if(selectonly && !c->selected)
+				continue;
+			Log(3,0,GetMsg("PERCENTAGE"), (y*Graphics.world.width+x) / (float)(Graphics.world.height * Graphics.world.width)*100); // %f %%
+			if(Graphics.world.cubes[y][x].tileup == -1)
+				continue;
+			Graphics.world.reallightmaps[y][x]->reset();
+			BYTE* buf = (BYTE*)Graphics.world.lightmaps[Graphics.world.tiles[Graphics.world.cubes[y][x].tileup].lightmap]->buf;
+
+			for(int yy = 0; yy < 6; yy++)
+			{
+				for(int xx = 0; xx < 6; xx++)
+				{
+					cVector3 worldpos = cVector3(	10*x+(10/6.0)*xx, 
+													-((Graphics.world.cubes[y][x].cell1+Graphics.world.cubes[y][x].cell2+Graphics.world.cubes[y][x].cell3+Graphics.world.cubes[y][x].cell4)/4),
+													10*y+(10/6.0)*yy);
+					
+					int from = 0;
+					int to = Graphics.world.lights.size();
+					if(lightonly)
+					{
+						from = Graphics.selectedobject;
+						to = from+1;
+					}
+					for(i = from; i < to; i++)
+					{
+						cLight* l = &Graphics.world.lights[i];
+						cVector3 diff = worldpos - cVector3(l->pos.x*5, l->pos.y, l->pos.z*5);
+						float bla = diff.Magnitude();
+						bool obstructed = false;
+						if(l->todo2-(0.1*bla*bla) < 0)
+							continue;
+						if(buf[yy*8 + xx + 9] == 255)
+							continue;
+
+						for(int ii = 0; ii < Graphics.world.models.size() && !obstructed; ii++)
+						{
+							if(Graphics.world.models[ii]->collides(worldpos, cVector3(l->pos.x*5, l->pos.y, l->pos.z*5)))
+								obstructed = true;
+						}
+
+						if(!obstructed)
+						{
+							buf[yy*8 + xx + 9] = min(255, buf[yy*8 + xx + 9] + max(0, (int)(l->todo2 - (0.1*bla*bla))));
+
+							buf[64 + 3*(yy*8 + xx + 9)+0] = min(255, buf[64 + 3*(yy*8 + xx + 9)+0] + max(0, (int)ceil((l->todo2 - bla)*l->color.x)));
+							buf[64 + 3*(yy*8 + xx + 9)+1] = min(255, buf[64 + 3*(yy*8 + xx + 9)+1] + max(0, (int)ceil((l->todo2 - bla)*l->color.y)));
+							buf[64 + 3*(yy*8 + xx + 9)+2] = min(255, buf[64 + 3*(yy*8 + xx + 9)+2] + max(0, (int)ceil((l->todo2 - bla)*l->color.z)));
+						}
+						else
+						{
+						}
+					}
+				}
+			}
+		}
+	}
+
+
+
+/*
+	for(i = 0; i < Graphics.world.models.size(); i++)
+	{
+		Log(3,0,"Doing model %i out of %i (%.2f%%)", i, Graphics.world.models.size(), (i/(float)Graphics.world.models.size())*100);
+		Graphics.world.models[i]->draw(false,false,false, true);
+	}*/
+
+/*	float t;
+	for(x = 0; x < Graphics.world.width; x++)
+	{
+		Log(3,0,"%f%%", (x/(float)Graphics.world.width)*100.0f);
+		for(y = 0; y < Graphics.world.height; y++)
+		{
+			int tile = Graphics.world.cubes[y][x].tileup;
+			if (tile != -1)
+			{
+				float cellheight = -Graphics.world.cubes[y][x].cell1;
+				cLightmap* l = Graphics.world.lightmaps[Graphics.world.tiles[tile].lightmap];
+				for(int xx = 0; xx < 6; xx++)
+				{
+					for(int yy = 0; yy < 6; yy++)
+					{
+						cVector3 pos = cVector3(10*x+10*(xx/6.0),cellheight, 10*y+10*(yy/6.0));
+						char* lightmappos = &l->buf[xx + (8*yy)+1+8];
+
+						for(int xxx = max(0,x - 1); xxx <= min(Graphics.world.width-1,x+1); xxx++)
+						{
+							for(int yyy = max(0,y - 1); yyy <= min(Graphics.world.height-1,y+1); yyy++)
+							{
+								if(*lightmappos == 127)
+									break;
+								if (xxx == x && yyy == y)
+									continue;
+								cCube* c = &Graphics.world.cubes[yyy][xxx];
+								cVector3 triangle[6];
+								triangle[2] = cVector3(xxx*10+10, -c->cell2, yyy*10);
+								triangle[1] = cVector3(xxx*10, -c->cell3, yyy*10-10);
+								triangle[0] = cVector3(xxx*10+10, -c->cell4, yyy*10-10);
+
+								triangle[5] = cVector3(xxx*10, -c->cell4, yyy*10-10);
+								triangle[4] = cVector3(xxx*10+10, -c->cell2, yyy*10);
+								triangle[3] = cVector3(xxx*10, -c->cell1, yyy*10);
+
+								if (LineIntersectPolygon(triangle, 3, lightpos, pos, t))
+								{
+									if (t < 1)
+										*lightmappos = 127;//((BYTE)l->buf[xx + (8*yy)+1+8]) / 1.6;
+								}
+								else if (LineIntersectPolygon(triangle+3, 3, lightpos, pos, t))
+								{
+									if (t < 1)
+										*lightmappos = 127;//((BYTE)l->buf[xx + (8*yy)+1+8]) / 1.6;
+								}
+
+								if (c->tileaside != -1)
+								{
+									triangle[2] = cVector3(xxx*10+10,-c->cell4,yyy*10);
+									triangle[1] = cVector3(xxx*10+10,-(c+1)->cell1,yyy*10);
+									triangle[0] = cVector3(xxx*10+10,-(c+1)->cell3,yyy*10+10);
+
+									triangle[3] = cVector3(xxx*10+10,-(c+1)->cell1,yyy*10+10);
+									triangle[4] = cVector3(xxx*10+10,-c->cell4,yyy*10+10);
+									triangle[5] = cVector3(xxx*10+10,-c->cell2,yyy*10);
+
+									if (LineIntersectPolygon(triangle, 3, lightpos, pos, t))
+									{
+										if (t < 1)
+											*lightmappos = 127;//((BYTE)l->buf[xx + (8*yy)+1+8]) / 1.6;
+									}
+									else if (LineIntersectPolygon(triangle+3, 3, lightpos, pos, t))
+									{
+										if (t < 1)
+											*lightmappos = 127;//((BYTE)l->buf[xx + (8*yy)+1+8]) / 1.6;
+									}
+								}
+								if (c->tileside != -1 && y < Graphics.world.width - 1)
+								{
+
+									triangle[0] = cVector3(xxx*10,-c->cell3,yyy*10+10);
+									triangle[1] = cVector3(xxx*10+10,-c->cell4,yyy*10+10);
+									triangle[2] = cVector3(xxx*10,-Graphics.world.cubes[y+1][x].cell1,yyy*10+10);
+									
+									
+									triangle[3] = cVector3(xxx*10+10,-Graphics.world.cubes[y+1][x].cell2,yyy*10+10);
+									triangle[4] = cVector3(xxx*10,-Graphics.world.cubes[y+1][x].cell1,yyy*10+10);
+									triangle[5] = cVector3(xxx*10+10,-c->cell4,yyy*10+10);
+
+									if (LineIntersectPolygon(triangle, 3, lightpos, pos, t))
+									{
+										if(t < 1)
+											*lightmappos = 127;//((BYTE)l->buf[xx + (8*yy)+1+8]) / 1.6;
+									}
+									else if (LineIntersectPolygon(triangle+3, 3, lightpos, pos, t))
+									{
+										if(t < 1)
+											*lightmappos = 127;//((BYTE)l->buf[xx + (8*yy)+1+8]) / 1.6;
+									}
+								}
+							
+							}
+						}
+					}
+				}
+
+			}
+				
+		}
+	}
+*/
+
+	for(x = 1; x < (Graphics.world.width*6)-1; x++)
+	{
+		for(y = 1; y < (Graphics.world.height*6)-1; y++)
+		{
+
+		}
+	}
+
+	int lightmap,lightmapleft,lightmaptop,lightmapright,lightmapbottom;
+	cLightmap* map;
+	cLightmap* mapleft;
+	cLightmap* maptop;
+	cLightmap* mapright;
+	cLightmap* mapbottom;
+
+
+	for(x = 1; x < Graphics.world.width-1; x++)
+	{
+		for(y = 1; y < Graphics.world.height-1; y++)
+		{
+			int tile = Graphics.world.cubes[y][x].tileup;
+			int tileleft = Graphics.world.cubes[y][x-1].tileup;
+			int tiletop = Graphics.world.cubes[y-1][x].tileup;
+			int tileright = Graphics.world.cubes[y][x+1].tileup;
+			int tilebottom = Graphics.world.cubes[y+1][x].tileup;
+			if (tile != -1)
+			{
+				if(tile != -1)
+					lightmap = Graphics.world.tiles[tile].lightmap;
+				if(tileleft != -1)
+					lightmapleft = Graphics.world.tiles[tileleft].lightmap;
+				if(tiletop != -1)
+					lightmaptop = Graphics.world.tiles[tiletop].lightmap;
+				if(tileright != -1)
+					lightmapright = Graphics.world.tiles[tileright].lightmap;
+				if(tilebottom != -1)
+					lightmapbottom = Graphics.world.tiles[tilebottom].lightmap;
+
+				if(tile != -1)
+					map = Graphics.world.lightmaps[lightmap];
+				if(tileleft != -1)
+					mapleft = Graphics.world.lightmaps[lightmapleft];
+				if(tiletop != -1)
+					maptop = Graphics.world.lightmaps[lightmaptop];
+				if(tileright != -1)
+					mapright = Graphics.world.lightmaps[lightmapright];
+				if(tilebottom != -1)
+					mapbottom = Graphics.world.lightmaps[lightmapbottom];
+
+				for(i = 0; i < 8; i++)
+				{
+					if(tileleft != -1)
+						mapleft->buf[8*i+7] = map->buf[8*i+1];
+					if(tiletop != -1)
+						maptop->buf[7*8+i] = map->buf[i+8];
+					if(tileright != -1)
+						mapright->buf[8*i] = map->buf[8*i+6];
+					if(tilebottom != -1)
+						mapbottom->buf[i] = map->buf[6*8+i];
+				}
+			}
+				
+		}
+	}
+		
+
+	
+
+
+	return true;
+}
+
+MENUCOMMAND(fixcolors)
+{
+	int x,y;
+	for(x = 0; x < Graphics.world.width; x++)
+		for(y = 0; y < Graphics.world.height; y++)
+		{
+			int tile = Graphics.world.cubes[y][x].tileup;
+			if(tile != -1)
+			{
+				Graphics.world.tiles[tile].color[0] = '\255';
+				Graphics.world.tiles[tile].color[1] = '\255';
+				Graphics.world.tiles[tile].color[2] = '\255';
+				Graphics.world.tiles[tile].color[3] = '\255';
+			}			
+		}
+
+	return true;
+}
+
+
+MENUCOMMAND(savelightmaps)
+{
+	Graphics.world.savelightmap();
+	return true;
+}
+
+MENUCOMMAND(loadlightmaps)
+{
+	int x,y,i;
+
+	map<int, bool, less<int> > used;
+	for(x = 0; x < Graphics.world.width; x++)
+	{
+		for(y = 0; y < Graphics.world.height; y++)
+		{
+			Graphics.world.reallightmaps[y][x]->reset();
+			int tile = Graphics.world.cubes[y][x].tileup;
+			if(used.find(tile) != used.end())
+			{
+				cTile t = Graphics.world.tiles[tile];
+				tile = Graphics.world.tiles.size();
+				Graphics.world.tiles.push_back(t);
+				Graphics.world.cubes[y][x].tileup = tile;
+			}
+			used[tile] = 1;
+			if(tile != -1)
+			{
+				cLightmap* map = new cLightmap();
+				for(int i = 0; i < 256; i++)
+					map->buf[i] = i < 64 ? 255 : 0;
+				Graphics.world.tiles[tile].lightmap = Graphics.world.lightmaps.size();
+				Graphics.world.lightmaps.push_back(map);
+			}
+//////////////////////////////////
+			tile = Graphics.world.cubes[y][x].tileside;
+			if(used.find(tile) != used.end() && tile != -1)
+			{
+				cTile t = Graphics.world.tiles[tile];
+				tile = Graphics.world.tiles.size();
+				Graphics.world.tiles.push_back(t);
+				Graphics.world.cubes[y][x].tileside = tile;
+			}
+			used[tile] = 1;
+			if(tile != -1)
+			{
+				cLightmap* map = new cLightmap();
+				for(int i = 0; i < 256; i++)
+					map->buf[i] = i < 64 ? 255 : 0;
+				Graphics.world.tiles[tile].lightmap = Graphics.world.lightmaps.size();
+				Graphics.world.lightmaps.push_back(map);
+			}
+////////////////////////////////
+			tile = Graphics.world.cubes[y][x].tileaside;
+			if(used.find(tile) != used.end() && tile != -1)
+			{
+				cTile t = Graphics.world.tiles[tile];
+				tile = Graphics.world.tiles.size();
+				Graphics.world.tiles.push_back(t);
+				Graphics.world.cubes[y][x].tileaside = tile;
+			}
+			used[tile] = 1;
+			if(tile != -1)
+			{
+				cLightmap* map = new cLightmap();
+				for(int i = 0; i < 256; i++)
+					map->buf[i] = i < 64 ? 255 : 0;
+				Graphics.world.tiles[tile].lightmap = Graphics.world.lightmaps.size();
+				Graphics.world.lightmaps.push_back(map);
+			}
+		}
+	}
+
+
+	Graphics.world.loadlightmap();
+
+		int lightmap,lightmapleft,lightmaptop,lightmapright,lightmapbottom;
+	cLightmap* map;
+	cLightmap* mapleft;
+	cLightmap* maptop;
+	cLightmap* mapright;
+	cLightmap* mapbottom;
+
+
+	for(x = 1; x < Graphics.world.width-1; x++)
+	{
+		for(y = 1; y < Graphics.world.height-1; y++)
+		{
+			int tile = Graphics.world.cubes[y][x].tileup;
+			int tileleft = Graphics.world.cubes[y][x-1].tileup;
+			int tiletop = Graphics.world.cubes[y-1][x].tileup;
+			int tileright = Graphics.world.cubes[y][x+1].tileup;
+			int tilebottom = Graphics.world.cubes[y+1][x].tileup;
+			if (tile != -1)
+			{
+				if(tile != -1)
+					lightmap = Graphics.world.tiles[tile].lightmap;
+				if(tileleft != -1)
+					lightmapleft = Graphics.world.tiles[tileleft].lightmap;
+				if(tiletop != -1)
+					lightmaptop = Graphics.world.tiles[tiletop].lightmap;
+				if(tileright != -1)
+					lightmapright = Graphics.world.tiles[tileright].lightmap;
+				if(tilebottom != -1)
+					lightmapbottom = Graphics.world.tiles[tilebottom].lightmap;
+
+				if(tile != -1)
+					map = Graphics.world.lightmaps[lightmap];
+				if(tileleft != -1)
+					mapleft = Graphics.world.lightmaps[lightmapleft];
+				if(tiletop != -1)
+					maptop = Graphics.world.lightmaps[lightmaptop];
+				if(tileright != -1)
+					mapright = Graphics.world.lightmaps[lightmapright];
+				if(tilebottom != -1)
+					mapbottom = Graphics.world.lightmaps[lightmapbottom];
+
+				for(i = 0; i < 8; i++)
+				{
+					if(tileleft != -1)
+						mapleft->buf[8*i+7] = map->buf[8*i+1];
+					if(tiletop != -1)
+						maptop->buf[7*8+i] = map->buf[i+8];
+					if(tileright != -1)
+						mapright->buf[8*i] = map->buf[8*i+6];
+					if(tilebottom != -1)
+						mapbottom->buf[i] = map->buf[6*8+i];
+				}
+
+				for(i = 0; i < 8; i++)
+				{
+					if(tileleft != -1)
+					{
+						mapleft->buf[64+3*(8*i+7)] = map->buf[64+3*(8*i+1)];
+						mapleft->buf[64+3*(8*i+7)+1] = map->buf[64+3*(8*i+1)+1];
+						mapleft->buf[64+3*(8*i+7)+2] = map->buf[64+3*(8*i+1)+2];
+					}
+					if(tiletop != -1)
+					{
+						maptop->buf[64+3*(7*8+i)] = map->buf[64+3*(i+8)];
+						maptop->buf[64+3*(7*8+i)+1] = map->buf[64+3*(i+8)+1];
+						maptop->buf[64+3*(7*8+i)+2] = map->buf[64+3*(i+8)+2];
+					}
+					if(tileright != -1)
+					{
+						mapright->buf[64+3*(8*i)] = map->buf[64+3*(8*i+6)];
+						mapright->buf[64+3*(8*i)+1] = map->buf[64+3*(8*i+6)+1];
+						mapright->buf[64+3*(8*i)+2] = map->buf[64+3*(8*i+6)+2];
+					}
+					if(tilebottom != -1)
+					{
+						mapbottom->buf[64+3*(i)] = map->buf[64+3*(6*8+i)];
+						mapbottom->buf[64+3*(i)+1] = map->buf[64+3*(6*8+i)+1];
+						mapbottom->buf[64+3*(i)+2] = map->buf[64+3*(6*8+i)+2];
+					}
+				}
+			
+			
+			}
+				
+		}
+	}
+
+	return true;
+}
+
+
+MENUCOMMAND(clearobjects)
+{
+	int i;
+	vector<cUndoObjectsDelete::cObject> objectsdeleted;
+	for(i = 0; i < Graphics.world.models.size(); i++)
+	{
+		cUndoObjectsDelete::cObject object;
+		object.filename = Graphics.world.models[i]->filename;
+		object.pos = Graphics.world.models[i]->pos;
+		object.rot = Graphics.world.models[i]->rot;
+		object.scale = Graphics.world.models[i]->scale;
+		object.id = i;
+		objectsdeleted.push_back(object);
+	}
+	undostack.push(new cUndoObjectsDelete(objectsdeleted));
+	for(i = 0; i < Graphics.world.models.size(); i++)
+		delete Graphics.world.models[i];
+	Graphics.world.models.clear();
+	return true;
+}
+
+MENUCOMMAND(addwalls)
+{
+	int x,y;
+	for(x = 0; x < Graphics.world.width-1; x++)
+	{
+		for(y = 0; y < Graphics.world.height-1; y++)
+		{
+			cCube* c = &Graphics.world.cubes[y][x];
+			if (c->tileaside == -1)
+			{
+				if (c->cell4 != (c+1)->cell1 && c->cell2 != (c+1)->cell3)
+				{
+					cTile t;
+					t.color[0] = (char)255;
+					t.color[1] = (char)255;
+					t.color[2] = (char)255;
+					t.color[3] = (char)255;
+					t.texture = Graphics.texturestart + ((int)Graphics.selectionstart.y - 32) / 288;
+					t.lightmap = 0;
+					t.u1 = 0;
+					t.v1 = 0;
+
+					t.u2 = 1;
+					t.v2 = 0;
+					
+					t.u3 = 0;
+					t.v3 = 1;
+					
+					t.u4 = 1;
+					t.v4 = 1;
+					Graphics.world.tiles.push_back(t);
+					Graphics.world.cubes[y][x].tileaside = Graphics.world.tiles.size()-1;
+				}
+			}
+			if (c->tileside == -1)
+			{
+				if (c->cell4 != Graphics.world.cubes[y+1][x].cell1 && c->cell3 != Graphics.world.cubes[y+1][x].cell2)
+				{
+					cTile t;
+					t.color[0] = (char)255;
+					t.color[1] = (char)255;
+					t.color[2] = (char)255;
+					t.color[3] = (char)255;
+					t.texture = Graphics.texturestart + ((int)Graphics.selectionstart.y - 32) / 288;
+					t.lightmap = 0;
+					t.u1 = 0;
+					t.v1 = 0;
+
+					t.u2 = 1;
+					t.v2 = 0;
+					
+					t.u3 = 0;
+					t.v3 = 1;
+					
+					t.u4 = 1;
+					t.v4 = 1;
+					Graphics.world.tiles.push_back(t);
+					Graphics.world.cubes[y][x].tileside = Graphics.world.tiles.size()-1;
+				}
+			}
+		}
+	}
+	return true;
+}
+
+MENUCOMMAND(gatcollision)
+{
+	int x,y;
+	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+			cCube* c = &Graphics.world.cubes[y][x];
+			Graphics.world.gattiles[2*y][2*x].type = (c->cell1+c->cell2+c->cell3+c->cell4) != 0 ? '\1' : '\0';
+			Graphics.world.gattiles[2*y][2*x+1].type = (c->cell1+c->cell2+c->cell3+c->cell4) != 0 ? '\1' : '\0';
+			Graphics.world.gattiles[2*y+1][2*x].type = (c->cell1+c->cell2+c->cell3+c->cell4) != 0 ? '\1' : '\0';
+			Graphics.world.gattiles[2*y+1][2*x+1].type = (c->cell1+c->cell2+c->cell3+c->cell4) != 0 ? '\1' : '\0';
+		}
+
+	}
+	return true;
+}
+
+MENUCOMMAND(clearlightmaps)
+{
+	unsigned int i;
+	for(i = 0; i < Graphics.world.lightmaps.size(); i++)
+		delete 	Graphics.world.lightmaps[i];
+	Graphics.world.lightmaps.clear();
+	cLightmap* m = new cLightmap();
+	for(i = 0; i < 256; i++)
+		m->buf[i] = i < 64 ? 255 : 0;
+	Graphics.world.lightmaps.push_back(m);
+
+	for(i = 0; i < Graphics.world.tiles.size(); i++)
+		Graphics.world.tiles[i].lightmap = 0;
+
+	return true;
+}
+
+
+MENUCOMMAND(cleanuplightmaps)
+{
+	unsigned int i;
+	vector<int> newvalue;
+	map<int, bool, less<int> > used;
+	for(i = 0; i < Graphics.world.lightmaps.size(); i++)
+	{
+		for(int ii = 0; ii < i; ii++)
+		{
+			if(memcmp(Graphics.world.lightmaps[i]->buf, Graphics.world.lightmaps[ii]->buf, 256) == 0)
+			{
+				newvalue.push_back(ii);
+				break;
+			}
+		}
+		if (newvalue.size() <= i)
+			newvalue.push_back(i);
+	}
+
+	for(i = 0; i < Graphics.world.tiles.size(); i++)
+	{
+		Graphics.world.tiles[i].lightmap = newvalue[Graphics.world.tiles[i].lightmap];
+	}
+	return true;
+}
+
+
+MENUCOMMAND(tempfunc)
+{
+	glColor4f(1,1,1,0.7f);
+	glEnable(GL_BLEND);
+
+	cTile t;
+	t.color[0] = (char)255;
+	t.color[1] = (char)255;
+	t.color[2] = (char)255;
+	t.color[3] = (char)255;
+	t.texture = Graphics.texturestart + ((int)Graphics.selectionstart.y - 32) / 288;
+	t.lightmap = 0;
+	t.u1 = 0;
+	t.v1 = 0;
+
+	t.u2 = 1;
+	t.v2 = 0;
+	
+	t.u3 = 0;
+	t.v3 = 1;
+	
+	t.u4 = 1;
+	t.v4 = 1;
+	Graphics.world.tiles.push_back(t);
+	Graphics.world.tiles.push_back(t);
+	int x,y;
+	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+			cCube* c = &Graphics.world.cubes[y][x];
+			if(Graphics.world.lightmaps[Graphics.world.tiles[c->tileup].lightmap]->buf[10] == 0)
+			{
+				c->cell1 = -20;
+				c->cell2 = -20;
+				c->cell3 = -20;
+				c->cell4 = -20;
+
+				c->tileup = Graphics.world.tiles.size()-2;
+				c->tileside = -1;
+				c->tileaside = -1;
+			}
+			else
+			{
+				c->tileside = -1;
+				c->tileaside = -1;
+			}
+
+		}
+
+	}
+	return true;
+
+}
+
+MENUCOMMAND(snaptofloor)
+{
+	src->ticked = !src->ticked;
+	return true;
+}
+
+
+bool mouseovertexture(cMenu* src)
+{
+	if (Graphics.texturepreview == NULL || Graphics.texturepreview->getfilename() != rodir + "data\\texture\\" + ((cMenuItem*)src)->data)
+	{
+		Graphics.texturepreview = new cTexture();
+		Graphics.texturepreview->Load(rodir + "data\\texture\\" + ((cMenuItem*)src)->data);
+		return false;
+	}
+	else
+	{
+		Graphics.texturepreview->unLoad();
+		delete Graphics.texturepreview;
+		Graphics.texturepreview = NULL;
+		return true;
+	}
+}
+bool mouseouttexture(cMenu* src)
+{
+	if (Graphics.texturepreview != NULL)
+	{
+		Graphics.texturepreview->unLoad();
+		delete Graphics.texturepreview;
+		Graphics.texturepreview = NULL;
+	}
+	return true;
+}
+
+MENUCOMMAND(clearstuff)
+{
+	MenuCommand_flatten(src);
+	MenuCommand_clearobjects(src);
+	MenuCommand_clearlightmaps(src);
+	MenuCommand_fill(src);
+	MenuCommand_fixcolors(src);
+	Graphics.world.effects.clear();
+	Graphics.world.lights.clear();
+	Graphics.world.sounds.clear();
+	return true;
+}
+
+MENUCOMMAND(effect)
+{
+	if (selectedeffect != NULL)
+		selectedeffect->ticked = false;
+	src->ticked = true;
+	if (Graphics.selectedobject != -1)
+	{
+		Graphics.world.effects[Graphics.selectedobject].type = atoi(src->data.c_str());
+		Graphics.world.effects[Graphics.selectedobject].readablename = src->title;
+	}
+	selectedeffect = src;
+	return true;
+}
+
+MENUCOMMAND(toggle)
+{
+	src->ticked = !src->ticked;
+	*((bool*)src->pdata) = src->ticked;
+
+	return true;
+}
+
+MENUCOMMAND(water)
+{
+	char buf[100];
+	cWindow* w = new cWaterWindow(&Graphics.WM.texture, &Graphics.WM.font);
+	sprintf(buf, "%f", Graphics.world.water.amplitude);		w->objects["amplitude"]->SetText(0,buf);
+	sprintf(buf, "%f", Graphics.world.water.height);		w->objects["height"]->SetText(0,buf);
+	sprintf(buf, "%f", Graphics.world.water.phase);			w->objects["phase"]->SetText(0,buf);
+	sprintf(buf, "%f", Graphics.world.water.surfacecurve);	w->objects["surfacecurve"]->SetText(0,buf);
+	sprintf(buf, "%i", Graphics.world.water.type);			w->objects["type"]->SetText(0,buf);
+	Graphics.WM.addwindow(w);
+	return true;
+}
+
+MENUCOMMAND(cleantextures)
+{
+	Graphics.world.clean();
+	vector<bool> used;
+	int i;
+	used.resize(Graphics.world.textures.size(), false);
+	for(i = 0; i < Graphics.world.tiles.size(); i++)
+	{
+		used[Graphics.world.tiles[i].texture] = true;
+	}
+	
+	for(i = used.size()-1; i > -1; i--)
+	{
+		if (!used[i])
+		{
+			for(int ii = 0; ii < Graphics.world.tiles.size(); ii++)
+			{
+				if(Graphics.world.tiles[i].texture > i)
+					Graphics.world.tiles[i].texture--;
+			}
+			TextureCache.unload(Graphics.world.textures[i]->texture);
+			delete Graphics.world.textures[i]->texture;
+			delete Graphics.world.textures[i];
+			Graphics.world.textures.erase(Graphics.world.textures.begin() + i);
+		}
+	}
+
+	return true;
+}
+
+MENUCOMMAND(ambientlight)
+{
+	char buf[100];
+	cWindow* w = new cAmbientLightWindow(&Graphics.WM.texture, &Graphics.WM.font);
+	sprintf(buf, "%i", Graphics.world.ambientlight.ambientr);		w->objects["ambientr"]->SetText(0,buf);
+	sprintf(buf, "%i", Graphics.world.ambientlight.ambientg);		w->objects["ambientg"]->SetText(0,buf);
+	sprintf(buf, "%i", Graphics.world.ambientlight.ambientb);		w->objects["ambientb"]->SetText(0,buf);
+
+	sprintf(buf, "%f", Graphics.world.ambientlight.diffuse.x);		w->objects["diffuser"]->SetText(0,buf);
+	sprintf(buf, "%f", Graphics.world.ambientlight.diffuse.y);		w->objects["diffuseg"]->SetText(0,buf);
+	sprintf(buf, "%f", Graphics.world.ambientlight.diffuse.z);		w->objects["diffuseb"]->SetText(0,buf);
+
+	sprintf(buf, "%f", Graphics.world.ambientlight.shadow.x);		w->objects["shadowr"]->SetText(0,buf);
+	sprintf(buf, "%f", Graphics.world.ambientlight.shadow.y);		w->objects["shadowg"]->SetText(0,buf);
+	sprintf(buf, "%f", Graphics.world.ambientlight.shadow.z);		w->objects["shadowb"]->SetText(0,buf);
+	
+	sprintf(buf, "%f", Graphics.world.ambientlight.alpha);			w->objects["alpha"]->SetText(0,buf);
+
+	Graphics.WM.addwindow(w);
+	return true;
+}
+
+
+MENUCOMMAND(cleareffects)
+{
+	int i;
+	vector<int> objectsdeleted;
+	for(i = 0; i < Graphics.world.effects.size(); i++)
+		objectsdeleted.push_back(i);
+	undostack.push(new cUndoEffectsDelete(objectsdeleted));
+
+	Graphics.world.effects.clear();
+	return true;
+}
+
+MENUCOMMAND(clearlights)
+{
+	Graphics.world.lights.clear();
+	return true;
+}
+
+MENUCOMMAND(texturewindow)
+{
+	SDL_Event ev;
+	ev.type = SDL_KEYDOWN;
+	ev.key.keysym.sym = SDLK_t;
+	SDL_PushEvent(&ev);
+	ev.type = SDL_KEYUP;
+	ev.key.keysym.sym = SDLK_t;
+	SDL_PushEvent(&ev);
+	return true;
+}
+
+MENUCOMMAND(modelwindow)
+{
+	SDL_Event ev;
+	ev.type = SDL_KEYDOWN;
+	ev.key.keysym.sym = SDLK_m;
+	SDL_PushEvent(&ev);
+	ev.type = SDL_KEYUP;
+	ev.key.keysym.sym = SDLK_m;
+	SDL_PushEvent(&ev);
+	return true;
+}
+
+MENUCOMMAND(properties)
+{
+	SDL_Event ev;
+	ev.type = SDL_KEYDOWN;
+	ev.key.keysym.sym = SDLK_RETURN;
+	SDL_PushEvent(&ev);
+	ev.type = SDL_KEYUP;
+	ev.key.keysym.sym = SDLK_RETURN;
+	SDL_PushEvent(&ev);
+	return true;
+}
+
+
+MENUCOMMAND(preferences)
+{
+	Graphics.WM.addwindow(new cKeyBindWindow(&Graphics.WM.texture, &Graphics.WM.font));
+	return true;
+}
+
+
+
+MENUCOMMAND(fillarea)
+{
+	int x,y,i;
+	map<int, bool, less<int> > used;
+
+	cLightmap* map = new cLightmap();
+	for(i = 0; i < 256; i++)
+		map->buf[i] = i < 64 ? 255 : 0;
+	Graphics.world.lightmaps.push_back(map);
+	map = new cLightmap();
+	for(i = 0; i < 256; i++)
+		map->buf[i] = i < 64 ? 255 : 0;
+	Graphics.world.lightmaps.push_back(map);
+
+
+	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+			if(Graphics.world.cubes[y][x].selected)
+			{
+				int xx = x % 4;
+				int yy = y % 4;
+				cTile t;
+				t.lightmap = Graphics.world.textures.size()-1;
+				t.texture = Graphics.texturestart + ((int)Graphics.selectionstart.y - 32) / 288;
+				t.u1 = xx/4.0;
+				t.v1 = yy/4.0;
+				t.u2 = (xx+1)/4.0;
+				t.v2 = (yy)/4.0;
+				t.u3 = (xx)/4.0;
+				t.v3 = (yy+1)/4.0;
+				t.u4 = (xx+1)/4.0;
+				t.v4 = (yy+1)/4.0;
+				t.color[0] = (char)255;
+				t.color[1] = (char)255;
+				t.color[2] = (char)255;
+				t.color[3] = (char)255;
+				Graphics.world.tiles.push_back(t);
+				Graphics.world.cubes[y][x].tileup = Graphics.world.tiles.size()-1;;
+			}
+		}
+	}
+
+
+	for(x = 0; x < Graphics.world.width; x++)
+	{
+		for(y = 0; y < Graphics.world.height; y++)
+		{
+			int tile = Graphics.world.cubes[y][x].tileup;
+			if(used.find(tile) != used.end())
+			{
+				cTile t = Graphics.world.tiles[tile];
+				tile = Graphics.world.tiles.size();
+				Graphics.world.tiles.push_back(t);
+				Graphics.world.cubes[y][x].tileup = tile;
+			}
+			used[tile] = 1;
+///////////////////////////////////////
+			tile = Graphics.world.cubes[y][x].tileside;
+			if (tile != -1)
+			{
+				if(used.find(tile) != used.end())
+				{
+					cTile t = Graphics.world.tiles[tile];
+					tile = Graphics.world.tiles.size();
+					Graphics.world.tiles.push_back(t);
+					Graphics.world.cubes[y][x].tileside = tile;
+				}
+				used[tile] = 1;
+			}
+/////////////////////////////////////
+			tile = Graphics.world.cubes[y][x].tileaside;
+			if (tile!= -1)
+			{
+				if(used.find(tile) != used.end())
+				{
+					cTile t = Graphics.world.tiles[tile];
+					tile = Graphics.world.tiles.size();
+					Graphics.world.tiles.push_back(t);
+					Graphics.world.cubes[y][x].tileaside = tile;
+				}
+				used[tile] = 1;
+			}
+		}
+	}
+
+
+	
+
+	return true;
+}
+
+
+
+MENUCOMMAND(rsmedit)
+{
+	Graphics.WM.addwindow(new cRSMEditWindow(&Graphics.WM.texture, &Graphics.WM.font));
+	return true;
+}
+
+MENUCOMMAND(exportmapfiles)
+{
+	int i;
+	ofstream pFile((string(Graphics.world.filename) + ".txt").c_str());
+	for(i = 0; i < Graphics.world.textures.size(); i++)
+	{
+		cFile* pF = fs.open(rodir + "data\\texture\\" + Graphics.world.textures[i]->RoFilename);
+		if(pF->location != -1)
+		{
+			pF->close();
+			continue;
+		}
+		pF->close();
+
+
+		
+		pFile.write("texture\\", 8);
+		pFile.write(Graphics.world.textures[i]->RoFilename.c_str(), Graphics.world.textures[i]->RoFilename.length());
+		pFile.put('\r');
+		pFile.put('\n');
+	}
+
+	map<string, bool, less<string> > usedmodels;
+
+	for(i = 0; i < Graphics.world.models.size(); i++)
+	{
+		if(usedmodels.find(Graphics.world.models[i]->rofilename) != usedmodels.end())
+			continue;
+
+		cFile* pF = fs.open(Graphics.world.models[i]->filename);
+		if(pF->location != -1)
+		{
+			pF->close();
+			continue;
+		}
+		pF->close();
+
+
+
+		usedmodels[Graphics.world.models[i]->rofilename] = true;
+		pFile.write("model\\", 6);
+		pFile.write(Graphics.world.models[i]->rofilename.c_str(), Graphics.world.models[i]->rofilename.length());
+		pFile.put('\r');
+		pFile.put('\n');
+
+		for(int ii = 0; ii < Graphics.world.models[i]->textures.size(); ii++)
+		{
+			string file = Graphics.world.models[i]->textures[ii]->getfilename();
+			cFile* pF = fs.open(file);
+			if(pF->location != -1)
+			{
+				pF->close();
+				continue;
+			}
+			pF->close();
+
+			file = file.substr(rodir.length()+5);
+			pFile.write(file.c_str(), file.length());
+			pFile.put('\r');
+			pFile.put('\n');
+		}
+		
+	}
+
+
+	pFile.close();
+	ShellExecute(NULL,"open",(string(Graphics.world.filename) + ".txt").c_str(),NULL,"c:\\",SW_SHOW);
+	return true;
+}

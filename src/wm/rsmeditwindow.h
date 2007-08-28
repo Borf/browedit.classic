@@ -9,6 +9,8 @@
 #include "../wm/windowbutton.h"
 #include "../wm/windowlabel.h"
 #include "../wm/windowrgbpicker.h"
+#include "../wm/windowpicturebox.h"
+#include "../wm/windowscrollpanel.h"
 extern cFileSystem fs;
 
 

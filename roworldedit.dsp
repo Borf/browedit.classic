@@ -202,6 +202,14 @@ SOURCE=.\src\md5.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\menucommands.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\menucommands.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\RSMModel.cpp
 # End Source File
 # Begin Source File

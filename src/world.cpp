@@ -663,6 +663,7 @@ void cWorld::load()
 	cSprite* sprite = new cSprite();
 	sprite->loadhead(rodir + "data\\sprite\\인간족\\머리통\\여\\7_여");
 	sprite->loadbody(rodir + "data\\sprite\\인간족\\몸통\\여\\산타_여");
+	sprite->addextra(rodir + "data\\sprite\\악세사리\\여\\여_호주국기모자");
 	sprite->pos = cVector3(width,0,height);
 	sprites.push_back(sprite);
 

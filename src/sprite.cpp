@@ -212,17 +212,19 @@ void cSprite::cActSpr::load(string filename)
 
 void cSprite::draw()
 {
+	int i;
 	glPushMatrix();
 	glTranslatef(5*pos.x, pos.y, 5*pos.z);
 	float modelview[16];
 	glGetFloatv(GL_MODELVIEW_MATRIX, modelview);
 
-	for(int i = 0; i < 3; i++)
+	for(i = 0; i < 3; i++)
 		for(int j = 0; j < 3; j++)
 			modelview[i*4+j] = ((i == j) ? 1.0 : 0.0);
 	glLoadMatrixf(modelview);
 	glScalef(0.2f, 0.2f,1);
 
+	glTranslatef(0,0,10);
 
 
 
@@ -247,8 +249,6 @@ void cSprite::draw()
 
 	width/=2;
 	height/=2;
-
-	glDisable(GL_DEPTH_TEST);
 	glTranslatef(-subframe->offsetx, -subframe->offsety, 0);
 	glBegin(GL_QUADS);
 		glTexCoord2f(direction,0);		glVertex2f(width,height);
@@ -257,7 +257,6 @@ void cSprite::draw()
 		glTexCoord2f(direction,1);		glVertex2f(width,-height);
 	glEnd();
 	glTranslatef(subframe->offsetx, subframe->offsety, 0);
-	glEnable(GL_DEPTH_TEST);
 
 
 
@@ -281,16 +280,42 @@ void cSprite::draw()
 	width/=2;
 	height/=2;
 
-	glDisable(GL_DEPTH_TEST);
+	glPushMatrix();
 	glTranslatef(-(subframe->offsetx + bodyframe->extrax - myframe->extrax), -(subframe->offsety + bodyframe->extray - myframe->extray), 0);
 	glBegin(GL_QUADS);
-		glTexCoord2f(direction,0);		glVertex2f(width,height);
-		glTexCoord2f(1-direction,0);	glVertex2f(-width,height);
-		glTexCoord2f(1-direction,1);	glVertex2f(-width,-height);
-		glTexCoord2f(direction,1);		glVertex2f(width,-height);
+		glTexCoord2f(direction,0);		glVertex3f(width,height,1);
+		glTexCoord2f(1-direction,0);	glVertex3f(-width,height,1);
+		glTexCoord2f(1-direction,1);	glVertex3f(-width,-height,1);
+		glTexCoord2f(direction,1);		glVertex3f(width,-height,1);
 	glEnd();
-	glEnable(GL_DEPTH_TEST);
+	glPopMatrix();
 
+	for(i = 0; i < extras.size(); i++)
+	{
+		subframe = extras[i]->actions[id]->frames[0]->subframes[0];
+		cActSpr::cAction::cFrame* myframe = extras[i]->actions[id]->frames[0];
+		frame = subframe->image;
+		//frame = 1;
+		direction = subframe->direction;
+		
+		glBindTexture(GL_TEXTURE_2D, extras[i]->frames[frame].tex);
+		width = extras[i]->frames[frame].w;
+		height = extras[i]->frames[frame].h;
+
+		width/=2;
+		height/=2;
+
+		glPushMatrix();
+		glTranslatef(-(subframe->offsetx + bodyframe->extrax - myframe->extrax), -(subframe->offsety + bodyframe->extray - myframe->extray), 0);
+		glBegin(GL_QUADS);
+			glTexCoord2f(direction,0);		glVertex3f(width,height,1);
+			glTexCoord2f(1-direction,0);	glVertex3f(-width,height,1);
+			glTexCoord2f(1-direction,1);	glVertex3f(-width,-height,1);
+			glTexCoord2f(direction,1);		glVertex3f(width,-height,1);
+		glEnd();
+		glPopMatrix();
+
+	}
 	
 	glPopMatrix();
 }
