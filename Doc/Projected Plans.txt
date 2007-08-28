@@ -147,13 +147,6 @@ http://browedit.excalibur-nw.com/?a=log		-> SVN Update Log
 	Allows you to see clearly the underlying textures for better gat results.
  Approved[]							[Rxxx] [unfin]
 
--Model Transparancy
-	Transparancy for Models. 
-	Allows you to see clearly the underlying areas your working with.
-	*Probably best to be set with a toggle button selectable from the menu dropdown. 
-	menu Edit mode -> Objects -> Transparent or Standard.   
-	*Or use a toggle button to turn it on or off while in object mode.
- Approved[]							[Rxxx] [unfin]
 
 
 
@@ -167,3 +160,14 @@ Finished plans
 	create a window to dupe and rehex a rsm with a different bmp.
 	with a graphical interface.
  Approved[x]							[R237] [R248]
+
+
+-Model Transparancy
+	Transparancy for Models. 
+	Allows you to see clearly the underlying areas your working with.
+	*Probably best to be set with a toggle button selectable from the menu dropdown. 
+	menu Edit mode -> Objects -> Transparent or Standard.   
+	*Or use a toggle button to turn it on or off while in object mode.
+	
+	hit Shift+O or use the option in the view menu
+ Approved[x]							[R257] [R257]

@@ -1875,8 +1875,7 @@ void cWorld::draw()
 
 	if ((Graphics.showobjects || editmode == MODE_OBJECTS) && editmode != MODE_OBJECTGROUP)
 	{
-		glDisable(GL_BLEND);
-		glColor4f(1,1,1,1);
+		glEnable(GL_BLEND);
 
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
@@ -1885,14 +1884,15 @@ void cWorld::draw()
 		for(i = 0; i < models.size(); i++)
 		{
 			if(i == Graphics.selectedobject && editmode == MODE_OBJECTS)
-				glColor3f(1,0,0);
+				glColor4f(1,0,0, Graphics.transparentobjects ? 0.2f : 1);
 			else
-				glColor3f(1,1,1);
+				glColor4f(1,1,1,Graphics.transparentobjects ? 0.2f : 1);
 			models[i]->collides(cVector3(0,0,0), cVector3(0,0,0));
 			models[i]->draw();
 		}
 		glScalef(1,1,-1);
 		glTranslatef(0,0,-height*10);
+		glColor4f(1,1,1,1);
 
 
 		if (editmode != MODE_EFFECTS && editmode != MODE_LIGHTS && editmode != MODE_SOUNDS)

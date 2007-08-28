@@ -154,6 +154,7 @@ public:
 	bool					showtilecolors;
 	bool					showwater;
 	bool					animatewater;
+	bool					transparentobjects;
 
 
 	int						quadtreeview;
