@@ -660,6 +660,11 @@ void cWorld::load()
 		}
 	}
 
+	cSprite* sprite = new cSprite();
+	sprite->loadhead(rodir + "data\\sprite\\인간족\\머리통\\여\\7_여");
+	sprite->loadbody(rodir + "data\\sprite\\인간족\\몸통\\여\\산타_여");
+	sprite->pos = cVector3(width,0,height);
+	sprites.push_back(sprite);
 
 	Log(3,0,GetMsg("world/LOADDONE"), filename);
 
@@ -2017,9 +2022,9 @@ void cWorld::draw()
 		for(i = 0; i < models.size(); i++)
 		{
 			if(i == Graphics.selectedobject && editmode == MODE_OBJECTS)
-				glColor3f(1,0,0);
+				glColor4f(1,0,0, Graphics.transparentobjects ? 0.2f : 1);
 			else
-				glColor3f(1,1,1);
+				glColor4f(1,1,1, Graphics.transparentobjects ? 0.2f : 1);
 			models[i]->draw();
 		}
 		glScalef(1,1,-1);
@@ -2263,7 +2268,10 @@ void cWorld::draw()
 //			y = heightMap(Graphics.camerapointer.x,Graphics.camerapointer.y),
 //			z = tilescale*Graphics.camerapointer.y;
 
-
+	for(i = 0; i < sprites.size(); i++)
+	{
+		sprites[i]->draw();
+	}
 
 
 }

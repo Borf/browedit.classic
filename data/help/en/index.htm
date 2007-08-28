@@ -13,7 +13,7 @@
 
 	</style>
 </head>
-<body>
+<body onLoad="loader()">
 <div>
 <div class="dtree" style="float: left; width: 200px;">
 
@@ -97,7 +97,7 @@
 		d.openAll();
 
 
-		document.onload = function() {
+		function loader() {
 			setInterval("checkfunction()", 200);
 		}
 		var lastsubpage;

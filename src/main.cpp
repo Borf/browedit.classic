@@ -826,6 +826,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/SOUNDSEDIT"),					&MenuCommand_mode);
 	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/LIGHTSEDIT"),					&MenuCommand_mode);
 	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/OBJECTGROUPEDIT"),			&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/SPRITEEDIT"),					&MenuCommand_mode);
 
 
 	ADDMENU(speed,edit, GetMsg("menu/edit/SPEED"),						480, 100);
@@ -1032,10 +1033,10 @@ int process_events()
 			case MODE_GAT:				processManagement.gatedit_process_events(event);			break;
 			case MODE_WATER:			processManagement.wateredit_process_events(event);			break;
 			case MODE_EFFECTS:			processManagement.effectedit_process_events(event);			break;
-			case MODE_SOUNDS:			processManagement.lightedit_process_events(event);			break;
-			case MODE_LIGHTS:			processManagement.soundedit_process_events(event);			break;
+			case MODE_SOUNDS:			processManagement.soundedit_process_events(event);			break;
+			case MODE_LIGHTS:			processManagement.lightedit_process_events(event);			break;
 			case MODE_OBJECTGROUP:		processManagement.objectgroupedit_process_events(event);	break;
-			case MODE_SPRITES:			processManagement.spriteedit_process_events(event);			break;
+			case MODE_SPRITE:			processManagement.spriteedit_process_events(event);			break;
 			}
 		}
 
@@ -2504,6 +2505,10 @@ MENUCOMMAND(mode)
 	else if (title == GetMsg("menu/editmode/OBJECTGROUPEDIT"))
 	{
 		editmode = MODE_OBJECTGROUP;
+	}
+	else if (title == GetMsg("menu/editmode/SPRITEEDIT"))
+	{
+		editmode = MODE_SPRITE;
 	}
 	return true;
 }

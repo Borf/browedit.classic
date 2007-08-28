@@ -45,6 +45,7 @@
 			<TITLE>View</TITLE>
 			<GRID>Grid</GRID>
 			<OBJECTS>Objects</OBJECTS>
+			<TRANSPARENTOBJECTS>Transparent Objects</TRANSPARENTOBJECTS>
 			<BOUNDINGBOXES>Boundingboxes</BOUNDINGBOXES>
 			<LIGHTMAPS>Lightmaps</LIGHTMAPS>
 			<OGLLIGHTING>Show OGL Lighting</OGLLIGHTING>
@@ -70,6 +71,7 @@
 			<SOUNDSEDIT>Sounds Edit</SOUNDSEDIT>
 			<LIGHTSEDIT>Lights Edit</LIGHTSEDIT>
 			<OBJECTGROUPEDIT>Object Group Edit</OBJECTGROUPEDIT>
+			<SPRITEEDIT>Sprite Edit</SPRITEEDIT>
 		</editmode>
 		<edit>
 			<TITLE>Edit</TITLE>

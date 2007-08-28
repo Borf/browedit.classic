@@ -206,6 +206,10 @@ SOURCE=.\src\RSMModel.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\sprite.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\svnver.cpp
 # End Source File
 # Begin Source File
@@ -271,6 +275,10 @@ SOURCE=.\src\mymath.h
 # Begin Source File
 
 SOURCE=.\src\RSMModel.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\sprite.h
 # End Source File
 # Begin Source File
 

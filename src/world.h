@@ -10,6 +10,8 @@
 #include "RSMModel.h"
 #include "texturecache.h"
 #include "texturemodel.h"
+#include "sprite.h"
+
 
 class cLightmap
 {
@@ -228,6 +230,7 @@ public:
 	vector<cLight>		lights;
 	vector<cSound>		sounds;
 	vector<cEffect>		effects;
+	vector<cSprite*>	sprites;
 
 	cTexture*			notile;
 
