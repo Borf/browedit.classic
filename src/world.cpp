@@ -2086,7 +2086,16 @@ void cWorld::draw()
 		for(i = 0; i < effects.size(); i++)
 		{
 			if (i == Graphics.selectedobject)
+			{
+				glDisable(GL_TEXTURE_2D);
+				glColor3f(1,1,0);
+				glBegin(GL_LINES);
+					glVertex3f(5*effects[i].pos.x,9999, 5*(2*height-effects[i].pos.z));
+					glVertex3f(5*effects[i].pos.x,-9999, 5*(2*height-effects[i].pos.z));
+				glEnd();
 				glColor4f(1,0,0,1);
+				glEnable(GL_TEXTURE_2D);
+			}
 			else
 				glColor4f(1,1,1,1);
 
@@ -2105,14 +2114,23 @@ void cWorld::draw()
 		for(i = 0; i < lights.size(); i++)
 		{
 			cVector3 p = lights[i].pos;
-			glTranslatef(5*lights[i].pos.x,lights[i].pos.y+5, 5*(2*height-lights[i].pos.z));
 			glColor3f(1,1,1);
 			light2->draw();
 
 			if (i == Graphics.selectedobject)
+			{
+				glDisable(GL_TEXTURE_2D);
+				glColor3f(1,1,0);
+				glBegin(GL_LINES);
+					glVertex3f(5*lights[i].pos.x,999, 5*(2*height-lights[i].pos.z));
+					glVertex3f(5*lights[i].pos.x,-999, 5*(2*height-lights[i].pos.z));
+				glEnd();
 				glColor4f(1,0,0,1);
+				glEnable(GL_TEXTURE_2D);
+			}
 			else
 				glColor3f(lights[i].color.x, lights[i].color.y, lights[i].color.z);
+			glTranslatef(5*lights[i].pos.x,lights[i].pos.y+5, 5*(2*height-lights[i].pos.z));
 			light->draw();
 			glTranslatef(-5*lights[i].pos.x,-lights[i].pos.y-5, -5*(2*height-lights[i].pos.z));
 		}

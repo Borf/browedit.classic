@@ -12,13 +12,14 @@ extern float oldmousex, oldmousey;
 extern int movement;
 extern cMenuItem* selectedeffect;
 extern cMenu* effectsmenu;
-
+extern bool lbuttondown;
 
 cProcessManagement::effectedit_process_events(SDL_Event &event)
 {
 	switch(event.type)
 	{
 		case SDL_MOUSEMOTION:
+			if(lbuttondown)
 			{
 				if (Graphics.world.effects.size() == 0)
 					break;

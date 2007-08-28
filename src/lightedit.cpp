@@ -10,6 +10,7 @@ extern cUndoStack undostack;
 extern bool	doneaction;
 extern float oldmousex, oldmousey;
 extern int movement;
+extern bool lbuttondown;
 
 
 cProcessManagement::lightedit_process_events(SDL_Event &event)
@@ -17,6 +18,7 @@ cProcessManagement::lightedit_process_events(SDL_Event &event)
 	switch(event.type)
 	{
 		case SDL_MOUSEMOTION:
+			if(lbuttondown)
 			{
 				if (Graphics.world.lights.size() == 0)
 					break;

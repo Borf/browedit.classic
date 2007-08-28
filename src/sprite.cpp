@@ -4,6 +4,10 @@
 extern cFileSystem fs;
 extern cGraphics Graphics;
 
+
+#define SPRITESIZE 128
+
+
 cSprite::cSprite()
 {
 	body = NULL;
@@ -91,27 +95,27 @@ void cSprite::cActSpr::load(string filename)
 		}
 
 		
-		char* image = new char[256*256*4];
+		char* image = new char[SPRITESIZE*SPRITESIZE*4];
 
-		for(y = 0; y < 256; y++)
+		for(y = 0; y < SPRITESIZE; y++)
 		{
-			for(x = 0; x < 256; x++)
+			for(x = 0; x < SPRITESIZE; x++)
 			{
-				int xx = x * (width / 256.0f);
-				int yy = y * (height / 256.0f);
+				int xx = x * (width / (float)SPRITESIZE);
+				int yy = y * (height / (float)SPRITESIZE);
 
 				BYTE index = data[xx+width*yy];
 				
-				image[4*(x+256*y)] = pFile->data[pFile->size-1024 + index*4];
-				image[4*(x+256*y)+1] = pFile->data[pFile->size-1024 + index*4+1];
-				image[4*(x+256*y)+2] = pFile->data[pFile->size-1024 + index*4+2];
-				image[4*(x+256*y)+3] = index==0 ? 0 : 255;
+				image[4*(x+SPRITESIZE*y)] = pFile->data[pFile->size-1024 + index*4];
+				image[4*(x+SPRITESIZE*y)+1] = pFile->data[pFile->size-1024 + index*4+1];
+				image[4*(x+SPRITESIZE*y)+2] = pFile->data[pFile->size-1024 + index*4+2];
+				image[4*(x+SPRITESIZE*y)+3] = index==0 ? 0 : 255;
 			}
 		}
 		GLuint tid;
 		glGenTextures(1, &tid);
 		glBindTexture(GL_TEXTURE_2D, tid);
-		glTexImage2D(GL_TEXTURE_2D,0,4,256,256,0,GL_RGBA,GL_UNSIGNED_BYTE,image);
+		glTexImage2D(GL_TEXTURE_2D,0,4,SPRITESIZE,SPRITESIZE,0,GL_RGBA,GL_UNSIGNED_BYTE,image);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 		delete[] image;
@@ -217,7 +221,7 @@ void cSprite::draw()
 		for(int j = 0; j < 3; j++)
 			modelview[i*4+j] = ((i == j) ? 1.0 : 0.0);
 	glLoadMatrixf(modelview);
-	glScalef(0.4f, 0.4f,1);
+	glScalef(0.2f, 0.2f,1);
 
 
 
