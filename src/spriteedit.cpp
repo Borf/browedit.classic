@@ -97,8 +97,6 @@ cProcessManagement::spriteedit_process_events(SDL_Event &event)
 					sprite->pos = cVector3(mouse3dx/5, mouse3dy, mouse3dz/5);
 					Graphics.world.sprites.push_back(sprite);
 
-
-					Graphics.world.sprites.push_back(sprite);
 					//undostack.push(new cUndoNewSprite());
 				}
 				else
