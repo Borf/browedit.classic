@@ -206,10 +206,6 @@ SOURCE=.\src\menucommands.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\src\menucommands.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\src\RSMModel.cpp
 # End Source File
 # Begin Source File
@@ -275,6 +271,10 @@ SOURCE=.\src\md5.h
 # Begin Source File
 
 SOURCE=.\src\menu.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\menucommands.h
 # End Source File
 # Begin Source File
 
@@ -390,6 +390,10 @@ SOURCE=.\src\wm\objectwindow.h
 # Begin Source File
 
 SOURCE=.\src\wm\rsmeditwindow.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\spritewindow.h
 # End Source File
 # Begin Source File
 

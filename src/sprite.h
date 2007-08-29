@@ -37,6 +37,7 @@ public:
 					long color;
 					float scalex;
 					float scaley;
+					long  rotation;
 					long dontjump;
 					long sizex;
 					long sizey;

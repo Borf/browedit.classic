@@ -740,6 +740,8 @@ int main(int argc, char *argv[])
 	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/GATTILES"),					&MenuCommand_toggle, (void*)&Graphics.showgat);
 	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/SHOWDOT"),					&MenuCommand_toggle, (void*)&Graphics.showdot);
 	mm->ticked = true;
+	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/SHOWSPRITES"),				&MenuCommand_toggle, (void*)&Graphics.showsprites);
+	mm->ticked = true;
 
 
 	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/TEXTUREEDIT"),				&MenuCommand_mode);
@@ -1358,9 +1360,16 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				break;
 			case SDLK_F1:
-				editmode = MODE_TEXTURE;
-				if (Graphics.texturestart >= Graphics.world.textures.size())
-					Graphics.texturestart = 0;
+				if((event.key.keysym.mod&KMOD_SHIFT) == 0)
+				{
+					editmode = MODE_TEXTURE;
+					if (Graphics.texturestart >= Graphics.world.textures.size())
+						Graphics.texturestart = 0;
+				}
+				else
+				{
+					editmode = MODE_SPRITE;
+				}
 				break;
 			case SDLK_F2:
 				editmode = MODE_HEIGHTGLOBAL;

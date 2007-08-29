@@ -57,6 +57,7 @@ public:
 		backgroundcolor = cVector3(0,0,0);
 		notilecolor = cVector3(1,1,1);
 		showdot = true;
+		showsprites = true;
 	}
 
 	int						init();
@@ -155,6 +156,7 @@ public:
 	bool					showwater;
 	bool					animatewater;
 	bool					transparentobjects;
+	bool					showsprites;
 
 
 	int						quadtreeview;

@@ -660,13 +660,6 @@ void cWorld::load()
 		}
 	}
 
-	cSprite* sprite = new cSprite();
-	sprite->loadhead(rodir + "data\\sprite\\인간족\\머리통\\여\\7_여");
-	sprite->loadbody(rodir + "data\\sprite\\인간족\\몸통\\여\\산타_여");
-	sprite->addextra(rodir + "data\\sprite\\악세사리\\여\\여_호주국기모자");
-	sprite->pos = cVector3(width,0,height);
-	sprites.push_back(sprite);
-
 	Log(3,0,GetMsg("world/LOADDONE"), filename);
 
 }
@@ -1170,28 +1163,44 @@ void cWorld::save()
 		pFile.close();
 	}
 	{
-		ofstream pFile((string(filename) + ".locations").c_str(), ios_base::out | ios_base::binary);
+		int i;
 		cWindow* w = Graphics.WM.getwindow(WT_HOTKEY);
-		for(int i = 0; i < 8; i++)
+		int loadcount = 0;
+		for(i = 0; i < 8; i++)
 		{
 			char buf[10];
 			sprintf(buf, "obj%i", i);
 			cHotkeyWindow::cHotkeyButton* o = (cHotkeyWindow::cHotkeyButton*)w->objects[buf];
 			if (o->loaded)
-			{
-				pFile.put(i);
-				pFile.write((char*)&o->cameraangle, 4);
-				pFile.write((char*)&o->cameraheight, 4);
-				pFile.write((char*)&o->camerarot, 4);
-				pFile.write((char*)&o->camerapointer.x, 4);
-				pFile.write((char*)&o->camerapointer.y, 4);
-				pFile.put(o->topcamera ? 1 : 0);
-				pFile.write(o->im, 256*256*3);
-			}
-			
+				loadcount++;
 		}
 
-		pFile.close();
+
+		if(loadcount > 0)
+		{
+			ofstream pFile((string(filename) + ".locations").c_str(), ios_base::out | ios_base::binary);
+			
+			for(i = 0; i < 8; i++)
+			{
+				char buf[10];
+				sprintf(buf, "obj%i", i);
+				cHotkeyWindow::cHotkeyButton* o = (cHotkeyWindow::cHotkeyButton*)w->objects[buf];
+				if (o->loaded)
+				{
+					pFile.put(i);
+					pFile.write((char*)&o->cameraangle, 4);
+					pFile.write((char*)&o->cameraheight, 4);
+					pFile.write((char*)&o->camerarot, 4);
+					pFile.write((char*)&o->camerapointer.x, 4);
+					pFile.write((char*)&o->camerapointer.y, 4);
+					pFile.put(o->topcamera ? 1 : 0);
+					pFile.write(o->im, 256*256*3);
+				}
+				
+			}
+
+			pFile.close();
+		}
 	}
 }
 
@@ -2173,6 +2182,18 @@ void cWorld::draw()
 			glLineWidth(1);
 		}
 	}
+	if(editmode == MODE_SPRITE  || Graphics.showsprites)
+	{
+		for(i = 0; i < sprites.size(); i++)
+		{
+			if(editmode == MODE_SPRITE && i == Graphics.selectedobject)
+				glColor4f(1,0,0,1);
+			else
+				glColor4f(1,1,1,1);
+
+			sprites[i]->draw();
+		}
+	}
 
 
 
@@ -2286,11 +2307,6 @@ void cWorld::draw()
 //	float	x = tilescale*Graphics.camerapointer.x,
 //			y = heightMap(Graphics.camerapointer.x,Graphics.camerapointer.y),
 //			z = tilescale*Graphics.camerapointer.y;
-
-	for(i = 0; i < sprites.size(); i++)
-	{
-		sprites[i]->draw();
-	}
 
 
 }

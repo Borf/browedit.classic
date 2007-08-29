@@ -3,15 +3,27 @@
 #include "filesystem.h"
 extern cFileSystem fs;
 extern cGraphics Graphics;
-
+extern string rodir;
 
 #define SPRITESIZE 128
+
+
+
+string sexes[] = { "여", "남" };
+string bodies[] = { "검사","마법사","궁수","성직자","상인","도둑","기사","프리스트","위저드","제철공","헌터","어세신","페코페코_기사","크루세이더","몽크","세이지","로그","연금술사","신페코크루세이더","결혼","슈퍼노비스","건너","닌자","산타","검사","마법사","궁수","성직자","상인","도둑","로드나이트","하이프리","하이위저드","화이트스미스","스나이퍼","어쌔신크로스","로드페코","팔라딘","챔피온","프로페서","스토커","크리에이터","클라운","집시","페코팔라딘","검사","마법사","궁수","성직자","상인","도둑","기사","프리스트","위저드","제철공","헌터","어세신","페코페코_기사","크루세이더","몽크","세이지","로그","연금술사","구페코크루세이더","슈퍼노비스","태권소년","권성","권성융합","소울링커","성직자","기사","세이지","초보자" };
+
+
+
 
 
 cSprite::cSprite()
 {
 	body = NULL;
 	head = NULL;
+	body = new cActSpr();
+	int sex = rand() % 2;
+	int bodyid = rand() % (sizeof(bodies)/sizeof(string));
+	body->load(rodir + "data\\sprite\\인간족\\몸통\\" + sexes[sex] + "\\" + bodies[bodyid] + "_" + sexes[sex]);
 }
 
 
@@ -154,6 +166,7 @@ void cSprite::cActSpr::load(string filename)
 		{
 			pFile->read(buf, 32);
 			cAction::cFrame* frame = new cAction::cFrame();
+			
 			pFile->read((char*)&frame->subframecount, 4);
 			for(int iii = 0; iii < frame->subframecount; iii++)
 			{
@@ -192,9 +205,9 @@ void cSprite::cActSpr::load(string filename)
 				pFile->read((char*)&frame->extrarotation,4);
 				pFile->read((char*)&frame->extrax,4);
 				pFile->read((char*)&frame->extray,4);
+				pFile->read(buf,4);
 
 			}
-			pFile->read(buf,4);
 			action->frames.push_back(frame);
 
 		}
@@ -214,7 +227,7 @@ void cSprite::draw()
 {
 	int i;
 	glPushMatrix();
-	glTranslatef(5*pos.x, pos.y, 5*pos.z);
+	glTranslatef(5*pos.x, pos.y, Graphics.world.height*10-5*pos.z);
 	float modelview[16];
 	glGetFloatv(GL_MODELVIEW_MATRIX, modelview);
 
@@ -233,7 +246,6 @@ void cSprite::draw()
 
 
 	glEnable(GL_BLEND);
-	glColor4f(1,1,1,1);
 	glEnable(GL_TEXTURE_2D);
 
 	
