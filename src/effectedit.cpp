@@ -90,7 +90,7 @@ cProcessManagement::effectedit_process_events(SDL_Event &event)
 					sprintf(buf, "obj%i", rand());
 					e.category = "\0\0\0\0";
 					e.loop = 40;
-					e.pos = cVector3(mouse3dx/5, mouse3dy+10, mouse3dz/5);
+					e.pos = cVector3(mouse3dx/5, mouse3dy-10, mouse3dz/5);
 					e.name = buf;
 					e.readablename = selectedeffect->title;
 					e.type = atoi(selectedeffect->data.c_str());

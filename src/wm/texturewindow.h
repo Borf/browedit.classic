@@ -135,8 +135,11 @@ public:
 
 	map<cWindowTree::cTreeNode*, vector<pair<string, string> >, less<cWindowTree::cTreeNode*> > items;
 
+	int iconsize;
+
 	cTextureWindow(cTexture* t, cFont* f) : cWindow(t,f)
 	{
+		iconsize = 128;
 		wtype = WT_TEXTURE;
 		closetype = HIDE;
 		resizable = true;
@@ -239,21 +242,43 @@ public:
 		for(int i = 0; i < panel->objects.size(); i++)
 		{
 			panel->objects[i]->moveto(x,y);
-			x+=130;
-			if(x+130 > panel->innerwidth-18)
+			panel->objects[i]->resizeto(iconsize,iconsize);
+			x+=iconsize+2;
+			if(x+iconsize+2 > panel->innerwidth-18)
 			{
 				x = 0;
-				y += 130;
+				y += iconsize+2;
 			}
 		}
 		panel->scrollposx = 0;
 		panel->scrollposy = 0;
-		panel->innerheight = y+130;
+		panel->innerheight = y+iconsize+2;
 	}
 
 	void* userfunc(void* param)
 	{
 		return &items[(cWindowTree::cTreeNode*)param];
+	}
+
+	bool onkeydown(int keyid, bool shift)
+	{
+		bool b = cWindow::onkeydown(keyid, shift);
+		if(!b)
+		{
+			if(keyid == SDLK_MINUS)
+			{
+				iconsize/=1.5;
+				if(iconsize < 1)
+					iconsize = 1;
+				resizeto(w,h);
+			}
+			if(keyid == SDLK_EQUALS)
+			{
+				iconsize*=1.5;
+				resizeto(w,h);
+			}
+		}
+		return b;
 	}
 
 };

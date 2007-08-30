@@ -210,5 +210,8 @@
 			<LIGHTS>Lights:</LIGHTS>
 			<EFFECTS>Effects:</EFFECTS>
 		</areacopy>
+		<sprite>
+			<TITLE>Sprite...</TITLE>
+		</sprite>
 	</wm>
 </language>

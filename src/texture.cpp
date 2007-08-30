@@ -85,6 +85,12 @@ GLuint cTexture::texid()
 							data[4*(x+lWidthPixels*y)+1] = bmp.bytes[target+1];
 							data[4*(x+lWidthPixels*y)+2] = bmp.bytes[target+2];
 							data[4*(x+lWidthPixels*y)+3] = bmp.bytes[target+3];
+						/*	if(x > bmp.width || y > bmp.height)
+								continue;
+							data[4*(x+lWidthPixels*y)+0] = bmp.bytes[x+bmp.width*y+0];
+							data[4*(x+lWidthPixels*y)+1] = bmp.bytes[x+bmp.width*y+1];
+							data[4*(x+lWidthPixels*y)+2] = bmp.bytes[x+bmp.width*y+2];
+							data[4*(x+lWidthPixels*y)+3] = bmp.bytes[x+bmp.width*y+3];*/
 						}
 					}
 					glGenTextures(1, &tid);
@@ -497,36 +503,35 @@ BMPError cTexture::BMPLoad(std::string fname,BMPClass& bmp)
 
 	int bits=int(header[28]);		//colourdepth
 
-	int internalwidth = bmp.width*(bits/8);
-	internalwidth += (4-(internalwidth%4))%4;
-
-	//now the bitmap knows how big it is it can allocate its memory
+ 	//now the bitmap knows how big it is it can allocate its memory
 	bmp.allocateMem();
 
 
-	int x,y,c;
+	int x,y,c,i;
 	BYTE cols[256*4];				//colourtable
 	switch(bits)
 	{
 	case(24):
 		f->seek(offset,beg);
-		for(x=0;x<bmp.width*bmp.height*4;x+=4)			//except the format is BGR, grr
+		i = 0;
+		for(y=0;y<bmp.height;y++)
 		{
-			f->read((char*)bmp.bytes+x,3);	//24bit is easy
-			BYTE temp=bmp.bytes[x];
-			bmp.bytes[x]=bmp.bytes[x+2];
-			bmp.bytes[x+2]=temp;
-
-			if(bmp.bytes[x] == 255 && bmp.bytes[x+1] == 0 && bmp.bytes[x+2] == 255)
-				bmp.bytes[x+3] = 0;
-			else
-				bmp.bytes[x+3] = 255;
-			if( (x%bmp.width) == 0 && x != 0)
+			for(x = 0; x < bmp.width; x++)
 			{
-				//for(int i = 0; i < internalwidth-3*bmp.width; i++)
-				if(internalwidth-3*bmp.width == 1)
-					f->get();
+				f->read((char*)bmp.bytes+i,3);	//24bit is easy
+				BYTE temp=bmp.bytes[i];
+				bmp.bytes[i]=bmp.bytes[i+2];
+				bmp.bytes[i+2]=temp;
+
+				if(bmp.bytes[i] == 255 && bmp.bytes[i+1] == 0 && bmp.bytes[i+2] == 255)
+					bmp.bytes[i+3] = 0;
+				else
+					bmp.bytes[i+3] = 255;
+				i+=4;
 			}
+			int bytesleft = (bmp.width*3)%4;
+			for(int ii = 0; ii < (4-bytesleft)%4; ii++)
+				f->get();
 		}
 		break;
 
@@ -545,7 +550,8 @@ BMPError cTexture::BMPLoad(std::string fname,BMPClass& bmp)
 				else
 					bmp.pixel(x,y,3) = 255;
 			}
-			for(int i = 0; i < internalwidth-bmp.width; i++)
+			int bytesleft = bmp.width%4;
+			for(int ii = 0; ii < (4-bytesleft)%4; ii++)
 				f->get();
 		}
 		break;
