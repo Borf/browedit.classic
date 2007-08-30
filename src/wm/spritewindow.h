@@ -201,10 +201,24 @@ public:
 
 			if(node->children.size() == 0)
 			{
-				cSpriteWindow::cSpriteInfo* info = &((cSpriteWindow*)parent)->lookupmap[node];
-			//	Graphics.WM.MessageBox("Selected: " + info->filename);
 
 				int selectedtab = parent->objects["tabpanel"]->GetInt(0);
+				if(((cSpriteWindow*)parent)->lookupmap.find(node) == ((cSpriteWindow*)parent)->lookupmap.end())
+				{
+					if(selectedtab == 2)
+					{
+						delete ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->head;
+						((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->head = NULL;
+					}
+					if(selectedtab > 2)
+					{
+						delete ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[selectedtab-3];
+						((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[selectedtab-3] = NULL;
+					}
+					return;
+				}
+				cSpriteWindow::cSpriteInfo* info = &((cSpriteWindow*)parent)->lookupmap[node];
+			//	Graphics.WM.MessageBox("Selected: " + info->filename);
 				if(selectedtab == 0)
 					((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->loadbody(rodir + "data\\sprite\\" + info->filename);
 				if(selectedtab == 1)
@@ -218,6 +232,26 @@ public:
 			}
 			
 
+		}
+	};
+
+
+	class cActionChangeButton : public cWindowButton
+	{
+	public:
+		cActionChangeButton(cWindow* p) : cWindowButton(p)
+		{
+			alignment = ALIGN_TOPLEFT;
+			moveto(10, 200);
+			resizeto(100, 20);
+			text = "Action 1";
+		}
+		void click()
+		{
+			((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->action = (((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->action + 1) % 12;
+			char buf[32];
+			sprintf(buf, "Action: %i", ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->action);
+			text = buf;
 		}
 	};
 
@@ -249,7 +283,7 @@ public:
 		o->moveto(135, 40);
 		o->resizeto(w - 145, h- 50);
 		objects["tree"] = o;
-
+		objects["actionbutton"] = new cActionChangeButton(this);
 		sprites = fs.getxml("sprites.xml");
 
 		((cTabPanel*)objects["tabpanel"])->tabchange(-1);

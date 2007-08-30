@@ -30,6 +30,8 @@ cSprite::cSprite()
 	sprintf(buf, "%i", headid);
 	head->load(rodir + "data\\sprite\\인간족\\머리통\\" + sexes[sex] + "\\" + buf + "_" + sexes[sex]);
 
+	action = 0;
+	direction = 0;
 }
 
 
@@ -271,7 +273,7 @@ void cSprite::draw()
 	}
 
 
-	int id = ((int)mousex/10) % body->actions.size();
+	int id = (8*action+direction) % body->actions.size();
 
 	if(body->actions[id]->framecount == 0)
 	{
@@ -287,8 +289,10 @@ void cSprite::draw()
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
 
+
+
 	
-	cActSpr::cAction::cFrame* bodyframe = body->actions[id]->frames[(tickcount()/100) % body->actions[id]->framecount];
+	cActSpr::cAction::cFrame* bodyframe = body->actions[id]->frames[(tickcount()/100) % ((body->actions[id]->framecount != 3 || (action != 0 && action != 2)) ? body->actions[id]->framecount : 1)];
 	cActSpr::cAction::cFrame::cSubFrame* subframe = bodyframe->subframes[0];
 	int frame = subframe->image;
 	int direction = subframe->direction;
@@ -311,9 +315,17 @@ void cSprite::draw()
 
 
 
+	if(head == NULL)
+	{
+		glPopMatrix();
+		return;
+	}
 
-
-
+	if(!head->loaded)
+	{
+		glPopMatrix();
+		return;
+	}
 
 
 

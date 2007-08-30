@@ -77,6 +77,10 @@ public:
 	void addextra(string);
 
 	void draw();
+
+
+	int action;
+	int direction;
 	
 };
 
