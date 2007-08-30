@@ -172,6 +172,7 @@ bool cWindowTree::onkeydown(int key, bool shift)
 		selected++;
 		if (liststart < values.size() - (h/12))
 			liststart++;
+		onchange();
 		return true;
 	}
 	else if (key == SDLK_UP)
@@ -182,11 +183,13 @@ bool cWindowTree::onkeydown(int key, bool shift)
 			if (liststart > 0)
 				liststart--;
 		}
+		onchange();
 		return true;
 	}
 	else if(key == SDLK_RIGHT || key == SDLK_LEFT)
 	{
 		doubleclick();
+		onchange();
 		return true;
 	}
 	return false;
@@ -235,6 +238,7 @@ void cWindowTree::click()
 		selected = liststart + ((h-yy-3) / 12);
 		if (selected > (int)values.size() || selected < 0)
 			selected = s;
+		onchange();
 	}
 	else
 	{
@@ -398,4 +402,31 @@ void cWindowTree::cTreeNode::addchild(cWindowTree::cTreeNode* newnode)
 {
 	children.push_back(newnode);
 	newnode->parent = this;
+}
+
+
+void cWindowTree::scrollup()
+{
+	liststart-=5;
+	if (liststart <= 0)
+		liststart = 0;
+}
+void cWindowTree::scrolldown()
+{
+	int i;
+	vector<string> values;
+	for(i = 0; i < nodes.size(); i++)
+		nodes[i]->getdata(values);
+
+	int yy = realy()+h-5-12;
+	while(yy+10 > realy() && i < (int)values.size())
+	{
+		i++;
+		yy-=12;
+	}
+
+	liststart+=5;
+	if(liststart >= values.size() - (h/12))
+		liststart = values.size() - (h/12)-1;
+
 }

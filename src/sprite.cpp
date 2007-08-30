@@ -18,12 +18,18 @@ string bodies[] = { "검사","마법사","궁수","성직자","상인","도둑","기사","프리스
 
 cSprite::cSprite()
 {
-	body = NULL;
-	head = NULL;
 	body = new cActSpr();
+	head = new cActSpr();
+	scale = 0.2f;
+
 	int sex = rand() % 2;
 	int bodyid = rand() % (sizeof(bodies)/sizeof(string));
 	body->load(rodir + "data\\sprite\\인간족\\몸통\\" + sexes[sex] + "\\" + bodies[bodyid] + "_" + sexes[sex]);
+	int headid = rand() % 23;
+	char buf[20];
+	sprintf(buf, "%i", headid);
+	head->load(rodir + "data\\sprite\\인간족\\머리통\\" + sexes[sex] + "\\" + buf + "_" + sexes[sex]);
+
 }
 
 
@@ -49,6 +55,25 @@ void cSprite::addextra(string filename)
 	spr->load(filename);
 	extras.push_back(spr);
 
+}
+
+void cSprite::setextra(int id, string filename)
+{
+	while(extras.size() <= id)
+		extras.push_back(NULL);
+
+	cActSpr* spr = new cActSpr();
+	spr->load(filename);
+	if(extras[id] != NULL)
+		delete extras[id];
+	extras[id] = spr;
+
+}
+
+
+cSprite::cActSpr::cActSpr()
+{
+	loaded = false;
 }
 
 
@@ -218,7 +243,7 @@ void cSprite::cActSpr::load(string filename)
 
 	pFile->close();
 
-
+	loaded = true;
 
 }
 
@@ -235,21 +260,35 @@ void cSprite::draw()
 		for(int j = 0; j < 3; j++)
 			modelview[i*4+j] = ((i == j) ? 1.0 : 0.0);
 	glLoadMatrixf(modelview);
-	glScalef(0.2f, 0.2f,1);
+	glScalef(scale,scale,1);
 
 	glTranslatef(0,0,10);
 
-
+	if(!body->loaded)
+	{
+		glPopMatrix();
+		return;
+	}
 
 
 	int id = ((int)mousex/10) % body->actions.size();
 
+	if(body->actions[id]->framecount == 0)
+	{
+		glPopMatrix();
+		return;
+	}
+	if(body->actions[id]->frames[0]->subframecount == 0)
+	{
+		glPopMatrix();
+		return;
+	}
 
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
 
 	
-	cActSpr::cAction::cFrame* bodyframe = body->actions[id]->frames[0];
+	cActSpr::cAction::cFrame* bodyframe = body->actions[id]->frames[(tickcount()/100) % body->actions[id]->framecount];
 	cActSpr::cAction::cFrame::cSubFrame* subframe = bodyframe->subframes[0];
 	int frame = subframe->image;
 	int direction = subframe->direction;
@@ -304,6 +343,10 @@ void cSprite::draw()
 
 	for(i = 0; i < extras.size(); i++)
 	{
+		if(extras[i] == NULL)
+			continue;
+		if(!extras[i]->loaded)
+			continue;
 		subframe = extras[i]->actions[id]->frames[0]->subframes[0];
 		cActSpr::cAction::cFrame* myframe = extras[i]->actions[id]->frames[0];
 		frame = subframe->image;

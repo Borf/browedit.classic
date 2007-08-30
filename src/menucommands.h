@@ -15,6 +15,7 @@ MENUCOMMAND(random1);
 MENUCOMMAND(random2);
 MENUCOMMAND(random3);
 MENUCOMMAND(random4);
+MENUCOMMAND(random5);
 MENUCOMMAND(shading);
 MENUCOMMAND(exportheight);
 MENUCOMMAND(mode);

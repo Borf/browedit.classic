@@ -711,6 +711,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/RANDOM2"),					&MenuCommand_random2); // random2 Valleys 
 	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/RANDOM3"),					&MenuCommand_random3); // random3 Culverts
 	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/RANDOM4"),					&MenuCommand_random4); // random4 Mountains 
+	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/RANDOM5"),					&MenuCommand_random5); // random4 Mountains 
 	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/MAZESTUFF"),					&MenuCommand_tempfunc); // Maze stuff
 	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/QUADTREE"),					&MenuCommand_quadtree); // Quadtree
 	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/CALCULATELIGHTMAPS"),			&MenuCommand_dolightmapsall); // Lightmaps

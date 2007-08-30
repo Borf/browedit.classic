@@ -33,6 +33,10 @@ public:
 	void draw(int,int,int,int);
 	void click();
 
+	int GetInt(int id)
+	{
+		return selectedtab;
+	}
 
 	virtual void tabchange(int ) {};
 

@@ -729,6 +729,16 @@ cProcessManagement::walledit_process_events(SDL_Event &event)
 
 				}
 				break;
+			case SDLK_LEFTBRACKET:
+				Graphics.texturestart--;
+				if (Graphics.texturestart < 0)
+					Graphics.texturestart = 0;
+				break;
+			case SDLK_RIGHTBRACKET:
+				Graphics.texturestart++;
+				if (Graphics.texturestart > ((int)Graphics.world.textures.size()) - (Graphics.h() / 288))
+					Graphics.texturestart--;
+				break;
 
 			default:
 				break;

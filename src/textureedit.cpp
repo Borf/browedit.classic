@@ -160,6 +160,13 @@ cProcessManagement::textureedit_process_events(SDL_Event &event)
 		{
 			switch (event.key.keysym.sym)
 			{
+			case SDLK_MINUS:
+				if (Graphics.brushsize > 0.125)
+					Graphics.brushsize/=2.0f;
+				break;
+			case SDLK_EQUALS:
+				Graphics.brushsize*=2;
+				break;
 			case SDLK_SPACE:
 				Graphics.texturerot = (Graphics.texturerot + 1) % 4;
 				break;

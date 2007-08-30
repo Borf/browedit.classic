@@ -2385,3 +2385,268 @@ MENUCOMMAND(exportmapfiles)
 	ShellExecute(NULL,"open",(string(Graphics.world.filename) + ".txt").c_str(),NULL,"c:\\",SW_SHOW);
 	return true;
 }
+
+
+
+
+MENUCOMMAND(random5)
+{
+	int i;
+	int xx,yy;
+	int smooth  = 3;//atoi(Graphics.WM.InputWindow("Smoothing level (use 5-10 for decent results)").c_str());
+
+	undostack.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
+	float x,y;
+
+	Graphics.world.tiles.clear();
+	for(int tex = 0; tex < 5; tex++)
+	{
+		for(y = 0; y < 5; y++)
+		{
+			for(x = 0; x < 5; x++)
+			{
+				cTile t;
+				t.lightmap = 1;
+				t.texture = tex;
+				t.u1 = x/5.0;
+				t.v1 = y/5.0;
+				t.u2 = (x+1)/5.0;
+				t.v2 = (y)/5.0;
+				t.u3 = (x)/5.0;
+				t.v3 = (y+1)/5.0;
+				t.u4 = (x+1)/5.0;
+				t.v4 = (y+1)/5.0;
+				t.color[0] = (char)255;
+				t.color[1] = (char)255;
+				t.color[2] = (char)255;
+				t.color[3] = (char)255;
+				Graphics.world.tiles.push_back(t);
+			}
+		}
+	}
+	
+	
+	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+			Graphics.world.cubes[y][x].tileaside = -1;
+			Graphics.world.cubes[y][x].tileside = -1;
+			Graphics.world.cubes[y][x].tileup = 0 + ((int)x%5) + 5*((int)y%5);
+		}
+	}
+
+
+	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+			Graphics.world.cubes[y][x].cell1 = -32;
+			Graphics.world.cubes[y][x].cell2 = -32;
+			Graphics.world.cubes[y][x].cell3 = -32;
+			Graphics.world.cubes[y][x].cell4 = -32;
+		}
+	}
+
+	
+
+	
+	int a = 0;
+	int lasta = 0;
+	int reali = 0;
+
+	int w,h;
+
+	
+	vector<cIntQuad> islands;
+
+	bool filledenough = false;
+	while(!filledenough)
+	{
+		int island = -1;
+		reali++;
+		if(reali > 10000)
+			break;
+
+		w = 5+rand() % 10;
+		h = 5+rand() % 10;
+
+		if(islands.size() > 0)
+		{
+			island = rand() % islands.size();
+			if(islands[island].connections.size() > 1)
+				island = rand() % islands.size();
+
+
+			int a = rand()%4;
+			if(a == lasta || (a+2)%4 == lasta)
+				a = rand()%4;
+			lasta = a;
+
+			if(a == 0)
+			{
+				x = islands[island].x + islands[island].w + 2;
+				y = islands[island].y;
+			}
+			if(a == 1)
+			{
+				x = islands[island].x;
+				y = islands[island].y + islands[island].h + 2;
+			}
+			if(a == 2)
+			{
+				x = islands[island].x;
+				y = islands[island].y - h - 2;
+			}
+			if(a == 3)
+			{
+				x = islands[island].x - w - 2;
+				y = islands[island].y;
+			}
+
+		}
+		else
+		{
+			x = (Graphics.world.width-w)/2;
+			y = (Graphics.world.height-h)/2;
+		}
+
+		if(!(x + w >= Graphics.world.width-1 || y+h >= Graphics.world.height-1 || x <= 1 || y <= 1))
+		{
+			int takencount = 0;
+			for(xx = x; xx < x+w; xx++)
+			{
+				for(yy = y; yy < y+h; yy++)
+				{
+					if(Graphics.world.cubes[yy][xx].cell1 == 0)
+						takencount++;
+				}
+			}
+			if(takencount < 3)
+			{
+				for(xx = x; xx < x+w; xx++)
+				{
+					for(yy = y; yy < y+h; yy++)
+					{
+						Graphics.world.cubes[yy][xx].cell1 = 0;//rand()%25;
+						Graphics.world.cubes[yy][xx].cell2 = 0;//rand()%25;
+						Graphics.world.cubes[yy][xx].cell3 = 0;//rand()%25;
+						Graphics.world.cubes[yy][xx].cell4 = 0;//rand()%25;
+						Graphics.world.cubes[yy][xx].tileup = 25 + (xx%5) + 5*(yy%5);
+					}
+				}
+				if(island != -1)
+					islands[island].connections.push_back(islands.size());
+
+				islands.push_back(cIntQuad(x,y,w,h));
+				if(island != -1)
+					islands[islands.size()-1].connections.push_back(island);
+			}
+			int count = 0;
+			for(int yy = 0; yy < Graphics.world.height; yy++)
+			{
+				for(int xx = 0; xx < Graphics.world.width; xx++)
+				{
+					if(Graphics.world.cubes[yy][xx].cell1 == 0)
+						count++;
+				}
+			}
+			if(count > Graphics.world.height*Graphics.world.width / 2)
+				filledenough = true;
+
+		}
+	}
+
+
+	for(i = 0; i < islands.size(); i++)
+	{
+		for(int ii = 0; ii < islands[i].connections.size(); ii++)
+		{
+			x = islands[islands[i].connections[ii]].x;
+			y = islands[islands[i].connections[ii]].y;
+			w = islands[islands[i].connections[ii]].w;
+			h = islands[islands[i].connections[ii]].h;
+
+			xx = islands[i].x;
+			yy = islands[i].y;
+
+			if(xx - (x+w) == 5)
+				x+=w;
+			else if(yy - (y+h) == 5)
+				y+=h;
+			else if(y - (yy+islands[i].h) == 5)
+				yy+=islands[i].h;
+			else if(x - (xx+islands[i].w) == 5)
+				xx+=islands[i].w;
+
+
+			if(xx == x)
+			{
+				if(w < islands[i].w)
+					x = xx = xx + w/2;
+				else
+					x = xx = xx + islands[i].w/2;
+			}
+			if(yy == y)
+			{
+				if(h < islands[i].h)
+					y = yy = yy + h/2;
+				else
+					y = yy = yy + islands[i].h/2;
+			}
+
+
+			while(xx != x || yy != y)
+			{
+				for(int xxx = ((x == xx) ? -1 : 0); xxx < ((x==xx) ? 1 : 2); xxx++)
+				{
+					for(int yyy = ((y == yy) ? -1 : 0); yyy < ((y==yy) ? 1 : 2); yyy++)
+					{
+						Graphics.world.cubes[yy+yyy][xx+xxx].cell1 = 0;//rand()%25;
+						Graphics.world.cubes[yy+yyy][xx+xxx].cell2 = 0;//rand()%25;
+						Graphics.world.cubes[yy+yyy][xx+xxx].cell3 = 0;//rand()%25;
+						Graphics.world.cubes[yy+yyy][xx+xxx].cell4 = 0;//rand()%25;
+						Graphics.world.cubes[yy+yyy][xx+xxx].tileup = 25 + ((xx+xxx)%5) + 5*((yy+yyy)%5);
+						if(xx > x)
+							xx--;
+						if(xx < x)
+							xx++;
+						if(yy > y)
+							yy--;
+						if(yy < y)
+							yy++;
+
+						Graphics.world.cubes[yy+yyy][xx+xxx].cell1 = 0;//rand()%25;
+						Graphics.world.cubes[yy+yyy][xx+xxx].cell2 = 0;//rand()%25;
+						Graphics.world.cubes[yy+yyy][xx+xxx].cell3 = 0;//rand()%25;
+						Graphics.world.cubes[yy+yyy][xx+xxx].cell4 = 0;//rand()%25;
+						Graphics.world.cubes[yy+yyy][xx+xxx].tileup = 25 + ((xx+xxx)%5) + 5*((yy+yyy)%5);
+					}
+				}
+			}
+		}
+	}
+
+	Graphics.selectionstart.y = 320;
+	Graphics.texturestart = 1;
+	MenuCommand_addwalls(src);
+
+
+
+
+/*	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+			if((Graphics.world.cubes[y][x].cell1 <= -8 || Graphics.world.cubes[y][x].cell2 <= -8 || Graphics.world.cubes[y][x].cell3  <= -8|| Graphics.world.cubes[y][x].cell4 <= -8) && Graphics.world.cubes[y][x].cell1 > -63)
+			{
+				Graphics.world.cubes[y][x].tileup= 50 + ((int)x%5) + 5*((int)y%5);
+			}
+		}
+	}
+*/
+	Graphics.world.water.height = 8;
+
+
+	return true;
+}

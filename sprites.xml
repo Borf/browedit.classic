@@ -1,6 +1,6 @@
-<sprites directory="data\\sprite\\">
-	<body directory="인간족\\">
-		<male directory="몸통\\남\\">
+<sprites directory="data\sprite\">
+	<body directory="">
+		<male directory="인간족\몸통\남\">
 			<sprite id="1" name="">검사_남</sprite>
 			<sprite id="2" name="">마법사_남</sprite>
 			<sprite id="3" name="">궁수_남</sprite>
@@ -81,7 +81,7 @@
 			<sprite id="102" name="">세이지_남</sprite>
 			<sprite id="103" name="">*초보자_남</sprite>
 		</male>
-		<female directory="몸통\\여\\">
+		<female directory="인간족\몸통\여\">
 			<sprite id="1" name="">검사_여</sprite>
 			<sprite id="2" name="">마법사_여</sprite>
 			<sprite id="3" name="">궁수_여</sprite>
@@ -162,7 +162,7 @@
 			<sprite id="102" name="">세이지_여</sprite>
 			<sprite id="103" name="">*초보자_여</sprite>
 		</female>
-		<npc directory="npc">
+		<npc directory="npc\">
 			<sprite id="0" name="Novice">Novice</sprite>
 			<sprite id="1" name="Swordman">Swordman</sprite>
 			<sprite id="2" name="Mage">Mage</sprite>
@@ -513,6 +513,109 @@
 			<sprite id="945" name="4_M_DST_GRAND">4_M_DST_GRAND</sprite>
 			<sprite id="946" name="4_M_DST_MASTER">4_M_DST_MASTER</sprite>
 			<sprite id="947" name="4_M_DST_TOUGH">4_M_DST_TOUGH</sprite>
+
+
+			<sprite id="4001" name="Novice High">Novice High</sprite>
+			<sprite id="4002" name="Swordman High">Swordman High</sprite>
+			<sprite id="4003" name="Magician High">Magician High</sprite>
+			<sprite id="4004" name="Archer High">Archer High</sprite>
+			<sprite id="4005" name="Acolyte High">Acolyte High</sprite>
+			<sprite id="4006" name="Merchant High">Merchant High</sprite>
+			<sprite id="4007" name="Thief High">Thief High</sprite>
+			<sprite id="4008" name="Lord Knight">Lord Knight</sprite>
+			<sprite id="4009" name="High Priest">High Priest</sprite>
+			<sprite id="4010" name="High Wizard">High Wizard</sprite>
+			<sprite id="4011" name="Whitesmith">Whitesmith</sprite>
+			<sprite id="4012" name="Sniper">Sniper</sprite>
+			<sprite id="4013" name="Assassin Cross">Assassin Cross</sprite>
+			<sprite id="4014" name="Lord Knight">Lord Knight</sprite>
+			<sprite id="4015" name="Paladin">Paladin</sprite>
+			<sprite id="4016" name="Champion">Champion</sprite>
+			<sprite id="4017" name="Professor">Professor</sprite>
+			<sprite id="4018" name="Stalker">Stalker</sprite>
+			<sprite id="4019" name="Creator">Creator</sprite>
+			<sprite id="4020" name="Clown">Clown</sprite>
+			<sprite id="4021" name="Gypsy">Gypsy</sprite>
+			<sprite id="4022" name="Paladin">Paladin</sprite>
+			<sprite id="4023" name="Baby">Baby</sprite>
+			<sprite id="4024" name="Baby Swordman">Baby Swordman</sprite>
+			<sprite id="4025" name="Baby Magician">Baby Magician</sprite>
+			<sprite id="4026" name="Baby Archer">Baby Archer</sprite>
+			<sprite id="4027" name="Baby Acolyte">Baby Acolyte</sprite>
+			<sprite id="4028" name="Baby Merchant">Baby Merchant</sprite>
+			<sprite id="4029" name="Baby Thief">Baby Thief</sprite>
+			<sprite id="4030" name="Baby Knight">Baby Knight</sprite>
+			<sprite id="4031" name="Baby Priest">Baby Priest</sprite>
+			<sprite id="4032" name="Baby Wizard">Baby Wizard</sprite>
+			<sprite id="4033" name="Baby Blacksmith">Baby Blacksmith</sprite>
+			<sprite id="4034" name="Baby Hunter">Baby Hunter</sprite>
+			<sprite id="4035" name="Baby Assassin">Baby Assassin</sprite>
+			<sprite id="4036" name="Baby Knight">Baby Knight</sprite>
+			<sprite id="4037" name="Baby Crusader">Baby Crusader</sprite>
+			<sprite id="4038" name="Baby Monk">Baby Monk</sprite>
+			<sprite id="4039" name="Baby Sage">Baby Sage</sprite>
+			<sprite id="4040" name="Baby Rogue">Baby Rogue</sprite>
+			<sprite id="4041" name="Baby Alchemist">Baby Alchemist</sprite>
+			<sprite id="4042" name="Baby Bard">Baby Bard</sprite>
+			<sprite id="4043" name="Baby Dancer">Baby Dancer</sprite>
+			<sprite id="4044" name="Baby Crusader">Baby Crusader</sprite>
+			<sprite id="4045" name="Super Baby">Super Baby</sprite>
+			<sprite id="4046" name="TaeKwon Boy">TaeKwon Boy</sprite>
+			<sprite id="4047" name="Star Gladiator">Star Gladiator</sprite>
+			<sprite id="4048" name="Star Gladiator">Star Gladiator</sprite>
+			<sprite id="4049" name="Soul Linker">Soul Linker</sprite>
+			<sprite id="4050" name="Munak">Munak</sprite>
+			<sprite id="4051" name="Death Knight">Death Knight</sprite>
+			<sprite id="4052" name="Dark Collector">Dark Collector</sprite>
+			<sprite id="6001" name="LIF">LIF</sprite>
+			<sprite id="6002" name="AMISTR">AMISTR</sprite>
+			<sprite id="6003" name="FILIR">FILIR</sprite>
+			<sprite id="6004" name="VANILMIRTH">VANILMIRTH</sprite>
+			<sprite id="6005" name="LIF2">LIF2</sprite>
+			<sprite id="6006" name="AMISTR2">AMISTR2</sprite>
+			<sprite id="6007" name="FILIR2">FILIR2</sprite>
+			<sprite id="6008" name="VANILMIRTH2">VANILMIRTH2</sprite>
+			<sprite id="6009" name="LIF_H">LIF_H</sprite>
+			<sprite id="6010" name="AMISTR_H">AMISTR_H</sprite>
+			<sprite id="6011" name="FILIR_H">FILIR_H</sprite>
+			<sprite id="6012" name="VANILMIRTH_H">VANILMIRTH_H</sprite>
+			<sprite id="6013" name="LIF_H2">LIF_H2</sprite>
+			<sprite id="6014" name="AMISTR_H2">AMISTR_H2</sprite>
+			<sprite id="6015" name="FILIR_H2">FILIR_H2</sprite>
+			<sprite id="6016" name="VANILMIRTH_H2">VANILMIRTH_H2</sprite>
+			<sprite id="6017" name="여\활용병">여\활용병</sprite>
+			<sprite id="6018" name="여\활용병">여\활용병</sprite>
+			<sprite id="6019" name="여\활용병">여\활용병</sprite>
+			<sprite id="6020" name="여\활용병">여\활용병</sprite>
+			<sprite id="6021" name="여\활용병">여\활용병</sprite>
+			<sprite id="6022" name="여\활용병">여\활용병</sprite>
+			<sprite id="6023" name="여\활용병">여\활용병</sprite>
+			<sprite id="6024" name="여\활용병">여\활용병</sprite>
+			<sprite id="6025" name="여\활용병">여\활용병</sprite>
+			<sprite id="6026" name="여\활용병">여\활용병</sprite>
+			<sprite id="6027" name="남\창용병">남\창용병</sprite>
+			<sprite id="6028" name="남\창용병">남\창용병</sprite>
+			<sprite id="6029" name="남\창용병">남\창용병</sprite>
+			<sprite id="6030" name="남\창용병">남\창용병</sprite>
+			<sprite id="6031" name="남\창용병">남\창용병</sprite>
+			<sprite id="6032" name="남\창용병">남\창용병</sprite>
+			<sprite id="6033" name="남\창용병">남\창용병</sprite>
+			<sprite id="6034" name="남\창용병">남\창용병</sprite>
+			<sprite id="6035" name="남\창용병">남\창용병</sprite>
+			<sprite id="6036" name="남\창용병">남\창용병</sprite>
+			<sprite id="6037" name="남\검용병">남\검용병</sprite>
+			<sprite id="6038" name="남\검용병">남\검용병</sprite>
+			<sprite id="6039" name="남\검용병">남\검용병</sprite>
+			<sprite id="6040" name="남\검용병">남\검용병</sprite>
+			<sprite id="6041" name="남\검용병">남\검용병</sprite>
+			<sprite id="6042" name="남\검용병">남\검용병</sprite>
+			<sprite id="6043" name="남\검용병">남\검용병</sprite>
+			<sprite id="6044" name="남\검용병">남\검용병</sprite>
+			<sprite id="6045" name="남\검용병">남\검용병</sprite>
+			<sprite id="6046" name="남\검용병">남\검용병</sprite>
+			<sprite id="6047" name="*1_ETC_01">*1_ETC_01</sprite>
+		</npc>
+		<mobs directory="몬스터\">
 			<sprite id="1000" name="Scorpion">Scorpion</sprite>
 			<sprite id="1001" name="Scorpion">Scorpion</sprite>
 			<sprite id="1002" name="Poring">Poring</sprite>
@@ -1350,109 +1453,10 @@
 			<sprite id="1837" name="IMP">IMP</sprite>
 			<sprite id="1838" name="KNOCKER">KNOCKER</sprite>
 			<sprite id="1839" name="BYORGUE">BYORGUE</sprite>
-			<sprite id="4001" name="Novice High">Novice High</sprite>
-			<sprite id="4002" name="Swordman High">Swordman High</sprite>
-			<sprite id="4003" name="Magician High">Magician High</sprite>
-			<sprite id="4004" name="Archer High">Archer High</sprite>
-			<sprite id="4005" name="Acolyte High">Acolyte High</sprite>
-			<sprite id="4006" name="Merchant High">Merchant High</sprite>
-			<sprite id="4007" name="Thief High">Thief High</sprite>
-			<sprite id="4008" name="Lord Knight">Lord Knight</sprite>
-			<sprite id="4009" name="High Priest">High Priest</sprite>
-			<sprite id="4010" name="High Wizard">High Wizard</sprite>
-			<sprite id="4011" name="Whitesmith">Whitesmith</sprite>
-			<sprite id="4012" name="Sniper">Sniper</sprite>
-			<sprite id="4013" name="Assassin Cross">Assassin Cross</sprite>
-			<sprite id="4014" name="Lord Knight">Lord Knight</sprite>
-			<sprite id="4015" name="Paladin">Paladin</sprite>
-			<sprite id="4016" name="Champion">Champion</sprite>
-			<sprite id="4017" name="Professor">Professor</sprite>
-			<sprite id="4018" name="Stalker">Stalker</sprite>
-			<sprite id="4019" name="Creator">Creator</sprite>
-			<sprite id="4020" name="Clown">Clown</sprite>
-			<sprite id="4021" name="Gypsy">Gypsy</sprite>
-			<sprite id="4022" name="Paladin">Paladin</sprite>
-			<sprite id="4023" name="Baby">Baby</sprite>
-			<sprite id="4024" name="Baby Swordman">Baby Swordman</sprite>
-			<sprite id="4025" name="Baby Magician">Baby Magician</sprite>
-			<sprite id="4026" name="Baby Archer">Baby Archer</sprite>
-			<sprite id="4027" name="Baby Acolyte">Baby Acolyte</sprite>
-			<sprite id="4028" name="Baby Merchant">Baby Merchant</sprite>
-			<sprite id="4029" name="Baby Thief">Baby Thief</sprite>
-			<sprite id="4030" name="Baby Knight">Baby Knight</sprite>
-			<sprite id="4031" name="Baby Priest">Baby Priest</sprite>
-			<sprite id="4032" name="Baby Wizard">Baby Wizard</sprite>
-			<sprite id="4033" name="Baby Blacksmith">Baby Blacksmith</sprite>
-			<sprite id="4034" name="Baby Hunter">Baby Hunter</sprite>
-			<sprite id="4035" name="Baby Assassin">Baby Assassin</sprite>
-			<sprite id="4036" name="Baby Knight">Baby Knight</sprite>
-			<sprite id="4037" name="Baby Crusader">Baby Crusader</sprite>
-			<sprite id="4038" name="Baby Monk">Baby Monk</sprite>
-			<sprite id="4039" name="Baby Sage">Baby Sage</sprite>
-			<sprite id="4040" name="Baby Rogue">Baby Rogue</sprite>
-			<sprite id="4041" name="Baby Alchemist">Baby Alchemist</sprite>
-			<sprite id="4042" name="Baby Bard">Baby Bard</sprite>
-			<sprite id="4043" name="Baby Dancer">Baby Dancer</sprite>
-			<sprite id="4044" name="Baby Crusader">Baby Crusader</sprite>
-			<sprite id="4045" name="Super Baby">Super Baby</sprite>
-			<sprite id="4046" name="TaeKwon Boy">TaeKwon Boy</sprite>
-			<sprite id="4047" name="Star Gladiator">Star Gladiator</sprite>
-			<sprite id="4048" name="Star Gladiator">Star Gladiator</sprite>
-			<sprite id="4049" name="Soul Linker">Soul Linker</sprite>
-			<sprite id="4050" name="Munak">Munak</sprite>
-			<sprite id="4051" name="Death Knight">Death Knight</sprite>
-			<sprite id="4052" name="Dark Collector">Dark Collector</sprite>
-			<sprite id="6001" name="LIF">LIF</sprite>
-			<sprite id="6002" name="AMISTR">AMISTR</sprite>
-			<sprite id="6003" name="FILIR">FILIR</sprite>
-			<sprite id="6004" name="VANILMIRTH">VANILMIRTH</sprite>
-			<sprite id="6005" name="LIF2">LIF2</sprite>
-			<sprite id="6006" name="AMISTR2">AMISTR2</sprite>
-			<sprite id="6007" name="FILIR2">FILIR2</sprite>
-			<sprite id="6008" name="VANILMIRTH2">VANILMIRTH2</sprite>
-			<sprite id="6009" name="LIF_H">LIF_H</sprite>
-			<sprite id="6010" name="AMISTR_H">AMISTR_H</sprite>
-			<sprite id="6011" name="FILIR_H">FILIR_H</sprite>
-			<sprite id="6012" name="VANILMIRTH_H">VANILMIRTH_H</sprite>
-			<sprite id="6013" name="LIF_H2">LIF_H2</sprite>
-			<sprite id="6014" name="AMISTR_H2">AMISTR_H2</sprite>
-			<sprite id="6015" name="FILIR_H2">FILIR_H2</sprite>
-			<sprite id="6016" name="VANILMIRTH_H2">VANILMIRTH_H2</sprite>
-			<sprite id="6017" name="여\\활용병">여\\활용병</sprite>
-			<sprite id="6018" name="여\\활용병">여\\활용병</sprite>
-			<sprite id="6019" name="여\\활용병">여\\활용병</sprite>
-			<sprite id="6020" name="여\\활용병">여\\활용병</sprite>
-			<sprite id="6021" name="여\\활용병">여\\활용병</sprite>
-			<sprite id="6022" name="여\\활용병">여\\활용병</sprite>
-			<sprite id="6023" name="여\\활용병">여\\활용병</sprite>
-			<sprite id="6024" name="여\\활용병">여\\활용병</sprite>
-			<sprite id="6025" name="여\\활용병">여\\활용병</sprite>
-			<sprite id="6026" name="여\\활용병">여\\활용병</sprite>
-			<sprite id="6027" name="남\\창용병">남\\창용병</sprite>
-			<sprite id="6028" name="남\\창용병">남\\창용병</sprite>
-			<sprite id="6029" name="남\\창용병">남\\창용병</sprite>
-			<sprite id="6030" name="남\\창용병">남\\창용병</sprite>
-			<sprite id="6031" name="남\\창용병">남\\창용병</sprite>
-			<sprite id="6032" name="남\\창용병">남\\창용병</sprite>
-			<sprite id="6033" name="남\\창용병">남\\창용병</sprite>
-			<sprite id="6034" name="남\\창용병">남\\창용병</sprite>
-			<sprite id="6035" name="남\\창용병">남\\창용병</sprite>
-			<sprite id="6036" name="남\\창용병">남\\창용병</sprite>
-			<sprite id="6037" name="남\\검용병">남\\검용병</sprite>
-			<sprite id="6038" name="남\\검용병">남\\검용병</sprite>
-			<sprite id="6039" name="남\\검용병">남\\검용병</sprite>
-			<sprite id="6040" name="남\\검용병">남\\검용병</sprite>
-			<sprite id="6041" name="남\\검용병">남\\검용병</sprite>
-			<sprite id="6042" name="남\\검용병">남\\검용병</sprite>
-			<sprite id="6043" name="남\\검용병">남\\검용병</sprite>
-			<sprite id="6044" name="남\\검용병">남\\검용병</sprite>
-			<sprite id="6045" name="남\\검용병">남\\검용병</sprite>
-			<sprite id="6046" name="남\\검용병">남\\검용병</sprite>
-			<sprite id="6047" name="*1_ETC_01">*1_ETC_01</sprite>
-		</npc>
+		</mobs>
 	</body>
-	<face directory="인간족\\머리통\\">
-		<male directory="남\\">
+	<face directory="인간족\머리통\">
+		<male directory="남\">
 			<sprite id="1" name="1">1_남</sprite>
 			<sprite id="1" name="2">2_남</sprite>
 			<sprite id="1" name="3">3_남</sprite>
@@ -1477,7 +1481,7 @@
 			<sprite id="1" name="22">22_남</sprite>
 			<sprite id="1" name="23">23_남</sprite>
 		</male>
-		<female directory="여\\">
+		<female directory="여\">
 			<sprite id="1" name="1">1_여</sprite>
 			<sprite id="1" name="2">2_여</sprite>
 			<sprite id="1" name="3">3_여</sprite>

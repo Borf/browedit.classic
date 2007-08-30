@@ -63,6 +63,7 @@ public:
 	virtual ~cWindowTree() {}
 	virtual void draw(int,int,int,int);
 	virtual void click();
+	virtual void onchange() {};
 	bool onkeydown(int, bool);
 //	void onchar(char);
 
@@ -72,6 +73,8 @@ public:
 	void doubleclick();
 	void SetInt(int, int);
 	int GetInt(int);
+	void scrollup();
+	void scrolldown();
 };
 
 

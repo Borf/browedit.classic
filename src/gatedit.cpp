@@ -77,6 +77,9 @@ cProcessManagement::gatedit_process_events(SDL_Event &event)
 		{
 			switch (event.key.keysym.sym)
 			{
+			case SDLK_EQUALS:
+				Graphics.brushsize*=2;
+				break;
 			case SDLK_MINUS:
 				if (Graphics.brushsize > 1)
 					Graphics.brushsize/=2;

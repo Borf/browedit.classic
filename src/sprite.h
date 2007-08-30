@@ -13,6 +13,8 @@ public:
 	class cActSpr
 	{
 	public:
+		cActSpr();
+
 		class cFrame
 		{
 		public:
@@ -58,6 +60,7 @@ public:
 
 
 		void load(string);
+		bool loaded;
 	};
 	
 	cSprite();
@@ -65,10 +68,12 @@ public:
 	cVector3			pos;
 	cActSpr*			body;
 	cActSpr*			head;
+	float				scale;
 	vector<cActSpr*>	extras;
 
 	void loadbody(string);
 	void loadhead(string);
+	void setextra(int, string);
 	void addextra(string);
 
 	void draw();

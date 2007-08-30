@@ -34,6 +34,7 @@
 			<RANDOM2>Valleys</RANDOM2>
 			<RANDOM3>Culverts</RANDOM3>
 			<RANDOM4>Mountains</RANDOM4>
+			<RANDOM5>Room maze</RANDOM5>
 			<MAZESTUFF>Maze Stuff</MAZESTUFF>
 			<QUADTREE>Quadtree</QUADTREE>
 			<CALCULATELIGHTMAPS>Calculate Lightmaps</CALCULATELIGHTMAPS>
@@ -57,6 +58,7 @@
 			<WATERANIMATION>Water Animation</WATERANIMATION>
 			<GATTILES>Gat Tiles</GATTILES>
 			<SHOWDOT>Show Dot</SHOWDOT>
+			<SHOWSPRITES>Show Sprites</SHOWSPRITES>
 		</view>
 		<editmode>
 			<TITLE>Edit Mode</TITLE>
