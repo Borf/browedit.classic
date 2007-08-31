@@ -154,7 +154,7 @@ public:
 			{
 				if(strcmp(n->Value(), "sprite") == 0)
 				{
-					cWindowTree::cTreeNode* node = new cWindowTree::cTreeNode(n->FirstChild()->Value());
+					cWindowTree::cTreeNode* node = new cWindowTree::cTreeNode(n->ToElement()->Attribute("name"));
 					
 					((cSpriteWindow*)parent)->lookupmap[node] = cSpriteInfo(dir + n->FirstChild()->Value());
 					if(treenode == NULL)
