@@ -6481,7 +6481,6 @@ RO/basic_interface/close2|유저인터페이스\basic_interface\close2.bmp
 RO/basic_interface/close2_a|유저인터페이스\basic_interface\close2_a.bmp
 RO/basic_interface/close_a|유저인터페이스\basic_interface\close_a.bmp
 RO/basic_interface/collection_bg|유저인터페이스\basic_interface\collection_bg.bmp
-RO/basic_interface/cutline_0|유저인터페이스\basic_interface\cutline_0.bmp
 RO/basic_interface/del|유저인터페이스\basic_interface\del.bmp
 RO/basic_interface/del_a|유저인터페이스\basic_interface\del_a.bmp
 RO/basic_interface/dialbtn_his|유저인터페이스\basic_interface\dialbtn_his.bmp
@@ -6589,7 +6588,6 @@ RO/basic_interface/skillcollection|유저인터페이스\basic_interface\skillcollectio
 RO/basic_interface/skill_up_a|유저인터페이스\basic_interface\skill_up_a.bmp
 RO/basic_interface/skill_up_b|유저인터페이스\basic_interface\skill_up_b.bmp
 RO/basic_interface/skill_up_c|유저인터페이스\basic_interface\skill_up_c.bmp
-RO/basic_interface/sprite_bg|유저인터페이스\basic_interface\sprite_bg.bmp
 RO/basic_interface/statwin0_bg|유저인터페이스\basic_interface\statwin0_bg.bmp
 RO/basic_interface/statwin1_bg|유저인터페이스\basic_interface\statwin1_bg.bmp
 RO/basic_interface/statwin2_bg|유저인터페이스\basic_interface\statwin2_bg.bmp

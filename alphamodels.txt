@@ -1,5 +1,6 @@
 
-
+roalpha/|
+roalpha/게페니아/|
 roalpha/게페니아/게페이나탑.|data\model\게페니아\게페이나탑.rsm
 roalpha/게페니아/도구점.|data\model\게페니아\도구점.rsm
 roalpha/게페니아/무기점.|data\model\게페니아\무기점.rsm
@@ -11,6 +12,8 @@ roalpha/게페니아/연구소.|data\model\게페니아\연구소.rsm
 roalpha/게페니아/중앙탑.|data\model\게페니아\중앙탑.rsm
 roalpha/게페니아/크리스탈.|data\model\게페니아\크리스탈.rsm
 roalpha/게페니아/크리스탈받침.|data\model\게페니아\크리스탈받침.rsm
+
+roalpha/나무잡초꽃/|
 roalpha/나무잡초꽃/꽃밭01.|data\model\나무잡초꽃\꽃밭01.rsm
 roalpha/나무잡초꽃/꽃밭02.|data\model\나무잡초꽃\꽃밭02.rsm
 roalpha/나무잡초꽃/나무01.|data\model\나무잡초꽃\나무01.rsm
@@ -47,6 +50,8 @@ roalpha/나무잡초꽃/화분01.|data\model\나무잡초꽃\화분01.rsm
 roalpha/나무잡초꽃/화분02.|data\model\나무잡초꽃\화분02.rsm
 roalpha/나무잡초꽃/화분03.|data\model\나무잡초꽃\화분03.rsm
 roalpha/나무잡초꽃/화분04.|data\model\나무잡초꽃\화분04.rsm
+
+roalpha/내부소품/|
 roalpha/내부소품/blig.|data\model\내부소품\blig.rsm
 roalpha/내부소품/desk2.|data\model\내부소품\desk2.rsm
 roalpha/내부소품/가구1.|data\model\내부소품\가구1.rsm
@@ -188,6 +193,8 @@ roalpha/내부소품/하늘벽.|data\model\내부소품\하늘벽.rsm
 roalpha/내부소품/하얀장벽01.|data\model\내부소품\하얀장벽01.rsm
 roalpha/내부소품/하프01.|data\model\내부소품\하프01.rsm
 roalpha/내부소품/화분1.|data\model\내부소품\화분1.rsm
+
+roalpha/모로코/|
 roalpha/모로코/궁수과녁01.|data\model\모로코\궁수과녁01.rsm
 roalpha/모로코/궁수과녁02.|data\model\모로코\궁수과녁02.rsm
 roalpha/모로코/궁수길드.|data\model\모로코\궁수길드.rsm
@@ -221,6 +228,8 @@ roalpha/모로코/여관.|data\model\모로코\여관.rsm
 roalpha/모로코/입구01.|data\model\모로코\입구01.rsm
 roalpha/모로코/카펫상점.|data\model\모로코\카펫상점.rsm
 roalpha/모로코/피라미드.|data\model\모로코\피라미드.rsm
+
+roalpha/외부소품/|
 roalpha/외부소품/가로등01.|data\model\외부소품\가로등01.rsm
 roalpha/외부소품/가로등02.|data\model\외부소품\가로등02.rsm
 roalpha/외부소품/간판01.|data\model\외부소품\간판01.rsm
@@ -298,6 +307,8 @@ roalpha/외부소품/항아리01.|data\model\외부소품\항아리01.rsm
 roalpha/외부소품/항아리02.|data\model\외부소품\항아리02.rsm
 roalpha/외부소품/항아리03.|data\model\외부소품\항아리03.rsm
 roalpha/외부소품/화단01.|data\model\외부소품\화단01.rsm
+
+roalpha/페이욘/|
 roalpha/페이욘/기와벽1.|data\model\페이욘\기와벽1.rsm
 roalpha/페이욘/기와벽2.|data\model\페이욘\기와벽2.rsm
 roalpha/페이욘/깃발.|data\model\페이욘\깃발.rsm
@@ -306,6 +317,8 @@ roalpha/페이욘/중앙계단.|data\model\페이욘\중앙계단.rsm
 roalpha/페이욘/중앙궁.|data\model\페이욘\중앙궁.rsm
 roalpha/페이욘/탑.|data\model\페이욘\탑.rsm
 roalpha/페이욘/화로.|data\model\페이욘\화로.rsm
+
+roalpha/프론테라/|
 roalpha/프론테라/가로등01.|data\model\프론테라\가로등01.rsm
 roalpha/프론테라/가로등02.|data\model\프론테라\가로등02.rsm
 roalpha/프론테라/교역소.|data\model\프론테라\교역소.rsm
