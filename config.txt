@@ -1,5 +1,5 @@
 language=english
-setting=RO
+setting=A17
 
 [RO]
 rodir=c:\Program Files\gravity\ro\
@@ -8,7 +8,6 @@ model=romodels.txt
 texture=rotextures.txt
 //texture=arctextures.txt
 texture=texturescustom.txt
-texture=collection.txt
 resx=1024
 resy=768
 fullscreen=0
@@ -27,7 +26,6 @@ model=alphamodels.txt
 texture=rotextures.txt
 //texture=arctextures.txt
 texture=texturescustom.txt
-texture=collection.txt
 resx=1024
 resy=768
 fullscreen=0
@@ -68,20 +66,25 @@ notilecolor=255,255,128
 
 
 [A17]
-rodir=c:\Program Files\Asgard\Browedit\
+//rodir=c:\Program Files\Asgard\Browedit\
+//rodir=c:\Program Files\Asgard\Alpha\
+//grf=c:\program files\gravity\ro\sdata.grf
+rodir=c:\Program Files\Gravity\RO\
 model=romodels.txt
 model=arcturusmodels.txt
-texture=rotextures.txt
-texture=arctextures.txt
+model=alphamodels.txt
 texture=texturescustom.txt
-texture=collection.txt
+texture=rotga.txt
+texture=arctextures.txt
+texture=AlphaTextures.txt
+texture=rotextures.txt
 resx=1024
 resy=768
 fullscreen=0
 bpp=32
 font=tahoma
 grf=c:\Program Files\Asgard\RO\asgdata.grf
-grf=c:\games\ro\bdata.grf
+grf=c:\Program Files\Asgard\Alpha\data.grf
 grf=c:\games\ro\sdata.grf
 grf=c:\games\ro\data.grf
 undostack=50
@@ -89,23 +92,3 @@ bgcolor=128,0,256
 notilecolor=255,255,128
 
 
-[A17alpha]
-rodir=c:\Program Files\Asgard\Alpha\
-model=romodels.txt
-model=arcturusmodels.txt
-texture=rotextures.txt
-texture=arctextures.txt
-texture=texturescustom.txt
-texture=collection.txt
-resx=1024
-resy=768
-fullscreen=0
-bpp=32
-font=tahoma
-grf=c:\Program Files\Asgard\RO\asgdata.grf
-grf=c:\games\ro\bdata.grf
-grf=c:\games\ro\sdata.grf
-grf=c:\games\ro\data.grf
-undostack=50
-bgcolor=128,0,256
-notilecolor=255,255,128

@@ -1,3 +1,5 @@
+
+
 roalpha/게페니아/게페이나탑.|data\model\게페니아\게페이나탑.rsm
 roalpha/게페니아/도구점.|data\model\게페니아\도구점.rsm
 roalpha/게페니아/무기점.|data\model\게페니아\무기점.rsm

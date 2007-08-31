@@ -52,11 +52,6 @@ http://browedit.excalibur-nw.com/?a=log		-> SVN Update Log
 	and pasting textures on any size (putting a square texture on a 4x1 block)
  Approved[x]							[Rxxx] [unfin]
 
--Map File List Generator
-	Auto Generate Map list for all models and textures on a map.
- Approved[x]							[Rxxx] [unfin]
-
-
 -Model Grouper
 	Allows you to group certain models together so you can move/copy/paste them
 	together, so you don't have to switch to group edit to edit it all the time
@@ -87,19 +82,11 @@ http://browedit.excalibur-nw.com/?a=log		-> SVN Update Log
 	and the h/v keys only apply to those tiles
  Approved[x]							[Rxxx] [unfin]
 
-
------
-
 -Copy/Paste Multi map support.
 	Allows you move/copy/paste from one map to another.
 	Combine with Group copy and paste for full map Duping.
 	May need selection modes, such as select just lights,
 	models, textures, effects or etc to save CPU.
- Approved[]							[Rxxx] [unfin]
-
--Single light lightmap generation
-	Allows you to view a single light effect witout bleed over. 
-	Should be exportable to lightmap.
  Approved[]							[Rxxx] [unfin]
 
 -Color Selector Window For lightmapping.
@@ -126,7 +113,7 @@ http://browedit.excalibur-nw.com/?a=log		-> SVN Update Log
 -NPC/Char Sprites in Brow?.
 	Setable markers npc/class sprites For pictures.
 	Need NPCID list.
- Approved[]							[Rxxx] [unfin]
+ Approved[x]							[R258] [unfin]
 
 -Screenshot Function
 	With the above set This might be more widely used. 
@@ -135,7 +122,7 @@ http://browedit.excalibur-nw.com/?a=log		-> SVN Update Log
 
 -Gaussian Blur
 	Add Gaussian blur tool setting to the lightmaps to smooth light outlining.  
- Approved[]							[Rxxx] [unfin]
+ Approved[x]							[Rxxx] [unfin]
 
 -Lighting Bleed through of 255 0 255 colors on models?
 	If possible to do in a non cpu eating manor with minimal hastle this may
@@ -145,16 +132,19 @@ http://browedit.excalibur-nw.com/?a=log		-> SVN Update Log
 -Gat tile Transparancy
 	Transparancy for gat edit tiles. 
 	Allows you to see clearly the underlying textures for better gat results.
- Approved[]							[Rxxx] [unfin]
+ Approved[x]							[Rxxx] [unfin]
+
+
+-Import Heightmaps
+	Set up importing heightmap functions. 
+ Approved[x]							[Rxxx] [unfin]
 
 
 
 
-
-
--------------------------------------------------------------------------------
-Finished plans
-
+===============================================================================
+-=== Finished plans ===-
+===============================================================================
 
 -RSM Retexturizer
 	create a window to dupe and rehex a rsm with a different bmp.
@@ -171,3 +161,16 @@ Finished plans
 	
 	hit Shift+O or use the option in the view menu
  Approved[x]							[R257] [R257]
+
+
+-Single light lightmap generation
+	Allows you to view a single light effect witout bleed over. 
+	Should be exportable to lightmap.
+ Approved[x]							[R251] [R251]
+
+
+
+-Map File List Generator
+	Auto Generate Map list for all models and textures on a map.
+ Approved[x]							[R252] [R252]
+
