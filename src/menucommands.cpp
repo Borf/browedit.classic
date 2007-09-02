@@ -350,8 +350,8 @@ MENUCOMMAND(random2)
 			}
 		}
 	}
-	
-	
+	Graphics.draw();
+	SDL_GL_SwapBuffers();
 	for(y = 0; y < Graphics.world.height; y++)
 	{
 		for(x = 0; x < Graphics.world.width; x++)
@@ -361,6 +361,8 @@ MENUCOMMAND(random2)
 			Graphics.world.cubes[y][x].tileup = 0;
 		}
 	}
+	Graphics.draw();
+	SDL_GL_SwapBuffers();
 
 
 	for(y = 0; y < Graphics.world.height; y++)
@@ -388,6 +390,8 @@ MENUCOMMAND(random2)
 	bool filledenough = false;
 	while(!filledenough) //(Graphics.world.height+Graphics.world.width) / 25
 	{
+		Graphics.draw();
+		SDL_GL_SwapBuffers();
 		reali++;
 		a += (rand()%180)-90;
 		while(a < 0)
@@ -462,6 +466,59 @@ MENUCOMMAND(random2)
 
 	}
 
+	vector<string>	randommodels;
+	for(i = 0; i < objectfiles.size(); i++)
+	{
+		cFile* pFile = fs.open(objectfiles[i]);
+		while(!pFile->eof())
+		{
+			string line = pFile->readline();
+			if (line == "")
+				continue;
+			string pre = line.substr(0, line.find("|"));
+			string filename = line.substr(line.find("|")+1);
+
+			string cat = pre.substr(0, pre.rfind("/"));
+			string name = pre.substr(pre.rfind("/")+1);
+
+			if(cat == "Random2 Objects")
+				randommodels.push_back(filename);
+		}
+	}
+	for(i = 0; i < Graphics.world.models.size(); i++)
+		delete Graphics.world.models[i];
+	Graphics.world.models.clear();
+
+	for(i = 0; i < 50; i++)
+	{
+		cRSMModel* model = new cRSMModel();
+		model->load(rodir +  randommodels[rand() % randommodels.size()]);
+
+		bool ok = false;
+		while(!ok || Graphics.world.cubes[model->pos.z/2][model->pos.x/2].cell1 != 0)
+		{
+			model->pos = cVector3(rand()%(Graphics.world.width*2), 0, rand()%(Graphics.world.height*2));
+			ok = true;
+			for(int x = -4; x < 4; x++)
+			{
+				for(int y = -4; y < 4; y++)
+				{
+					if(model->pos.z/2+x < 0 || model->pos.z/2+x >= Graphics.world.height-1 ||
+						model->pos.x/2+y < 0 || model->pos.x/2+y >= Graphics.world.width-1)
+						continue;
+					if(Graphics.world.cubes[model->pos.z/2+x][model->pos.x/2+y].cell1 != 0)
+						ok = false;
+				}
+			}
+
+		}
+
+
+		model->pos.y = Graphics.world.cubes[model->pos.z/2][model->pos.x/2].cell1;
+		model->scale = cVector3(1,1,1);
+		model->rot = cVector3(0,rand()%360,0);
+		Graphics.world.models.push_back(model);
+	}
 
 
 	eMode m = editmode;
@@ -479,6 +536,9 @@ MENUCOMMAND(random2)
 	brushsize = Graphics.world.width+Graphics.world.height;
 	
 	process_events();
+	Graphics.draw();
+	SDL_GL_SwapBuffers();
+
 	brushsize = b;
 
 
@@ -502,6 +562,56 @@ MENUCOMMAND(random2)
 	}
 
 	Graphics.world.water.height = 12;
+
+
+
+
+
+
+	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+			cCube* c = &Graphics.world.cubes[y][x];
+			Graphics.world.gattiles[2*y][2*x].type = (c->cell1+c->cell2+c->cell3+c->cell4) < -10 ? '\1' : '\0';
+			Graphics.world.gattiles[2*y][2*x+1].type = (c->cell1+c->cell2+c->cell3+c->cell4) < -10 ? '\1' : '\0';
+			Graphics.world.gattiles[2*y+1][2*x].type = (c->cell1+c->cell2+c->cell3+c->cell4) < -10 ? '\1' : '\0';
+			Graphics.world.gattiles[2*y+1][2*x+1].type = (c->cell1+c->cell2+c->cell3+c->cell4) < -10 ? '\1' : '\0';
+		}
+
+	}
+
+	MenuCommand_gatheight(src);
+
+
+
+	for(x = 0; x < Graphics.world.width; x++)
+		for(y = 0; y < Graphics.world.height; y++)
+		{
+			Graphics.world.cubes[y][x].maxh = -99999;
+			Graphics.world.cubes[y][x].minh = 99999;
+		}
+
+	for(i = 0; i < Graphics.world.models.size(); i++)
+		Graphics.world.models[i]->draw(false,false,true);
+
+
+	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+			cCube* c = &Graphics.world.cubes[y][x];
+			if(Graphics.world.cubes[y][x].maxh != -99999)
+			{
+				Graphics.world.gattiles[2*y][2*x].type = '\1';
+				Graphics.world.gattiles[2*y][2*x+1].type = '\1';
+				Graphics.world.gattiles[2*y+1][2*x].type = '\1';
+				Graphics.world.gattiles[2*y+1][2*x+1].type = '\1';
+			}
+		}
+
+	}
+	Graphics.world.root->recalculate();
 
 
 	Log(3,0,"Made %i iterations", reali);
@@ -588,6 +698,8 @@ MENUCOMMAND(random3)
 	}
 
 	
+	Graphics.draw();
+	SDL_GL_SwapBuffers();
 
 	
 	int a = 0;
@@ -600,8 +712,15 @@ MENUCOMMAND(random3)
 	vector<cIntQuad> islands;
 
 	bool filledenough = false;
+	int lastsize = 0;
 	while(!filledenough)
 	{
+		if(lastsize != islands.size())
+		{
+			Graphics.draw();
+			SDL_GL_SwapBuffers();
+			lastsize = islands.size();
+		}
 		int island = -1;
 		reali++;
 		if(reali > 10000)
@@ -624,22 +743,22 @@ MENUCOMMAND(random3)
 
 			if(a == 0)
 			{
-				x = islands[island].x + islands[island].w + 5;
+				x = islands[island].x + islands[island].w + 4;
 				y = islands[island].y;
 			}
 			if(a == 1)
 			{
 				x = islands[island].x;
-				y = islands[island].y + islands[island].h + 5;
+				y = islands[island].y + islands[island].h + 4;
 			}
 			if(a == 2)
 			{
 				x = islands[island].x;
-				y = islands[island].y - h - 5;
+				y = islands[island].y - h - 4;
 			}
 			if(a == 3)
 			{
-				x = islands[island].x - w - 5;
+				x = islands[island].x - w - 4;
 				y = islands[island].y;
 			}
 
@@ -696,11 +815,17 @@ MENUCOMMAND(random3)
 		}
 	}
 
+	for(i = 0; i < Graphics.world.models.size(); i++)
+		delete Graphics.world.models[i];
+	Graphics.world.models.clear();
+
 
 	for(i = 0; i < islands.size(); i++)
 	{
 		for(int ii = 0; ii < islands[i].connections.size(); ii++)
 		{
+			Graphics.draw();
+			SDL_GL_SwapBuffers();
 			x = islands[islands[i].connections[ii]].x;
 			y = islands[islands[i].connections[ii]].y;
 			w = islands[islands[i].connections[ii]].w;
@@ -709,13 +834,13 @@ MENUCOMMAND(random3)
 			xx = islands[i].x;
 			yy = islands[i].y;
 
-			if(xx - (x+w) == 5)
+			if(xx - (x+w) == 4)
 				x+=w;
-			else if(yy - (y+h) == 5)
+			else if(yy - (y+h) == 4)
 				y+=h;
-			else if(y - (yy+islands[i].h) == 5)
+			else if(y - (yy+islands[i].h) == 4)
 				yy+=islands[i].h;
-			else if(x - (xx+islands[i].w) == 5)
+			else if(x - (xx+islands[i].w) == 4)
 				xx+=islands[i].w;
 
 
@@ -735,34 +860,15 @@ MENUCOMMAND(random3)
 			}
 
 
-			while(xx != x || yy != y)
-			{
-				for(int xxx = ((x == xx) ? -1 : 0); xxx < ((x==xx) ? 1 : 2); xxx++)
-				{
-					for(int yyy = ((y == yy) ? -1 : 0); yyy < ((y==yy) ? 1 : 2); yyy++)
-					{
-						Graphics.world.cubes[yy+yyy][xx+xxx].cell1 = 0;//rand()%25;
-						Graphics.world.cubes[yy+yyy][xx+xxx].cell2 = 0;//rand()%25;
-						Graphics.world.cubes[yy+yyy][xx+xxx].cell3 = 0;//rand()%25;
-						Graphics.world.cubes[yy+yyy][xx+xxx].cell4 = 0;//rand()%25;
-						Graphics.world.cubes[yy+yyy][xx+xxx].tileup = 25 + ((xx+xxx)%5) + 5*((yy+yyy)%5);
-						if(xx > x)
-							xx--;
-						if(xx < x)
-							xx++;
-						if(yy > y)
-							yy--;
-						if(yy < y)
-							yy++;
+			cRSMModel* model = new cRSMModel();
+			model->load(rodir +  "data\\model\\郴何家前\\枚促府.rsm");
+			model->pos.x = (xx+x) + ((xx == x) ? 1 : 0);
+			model->pos.z = (yy+y) + ((yy == y) ? 1 : 0);
+			model->pos.y = 10;
+			model->scale = cVector3((xx == x) ? 0.95f : 1,1,(yy == y) ? 0.95f : 1);
+			model->rot = cVector3(0,xx==x ? 0 : 90,0);
+			Graphics.world.models.push_back(model);
 
-						Graphics.world.cubes[yy+yyy][xx+xxx].cell1 = 0;//rand()%25;
-						Graphics.world.cubes[yy+yyy][xx+xxx].cell2 = 0;//rand()%25;
-						Graphics.world.cubes[yy+yyy][xx+xxx].cell3 = 0;//rand()%25;
-						Graphics.world.cubes[yy+yyy][xx+xxx].cell4 = 0;//rand()%25;
-						Graphics.world.cubes[yy+yyy][xx+xxx].tileup = 25 + ((xx+xxx)%5) + 5*((yy+yyy)%5);
-					}
-				}
-			}
 		}
 	}
 
@@ -771,20 +877,61 @@ MENUCOMMAND(random3)
 	MenuCommand_addwalls(src);
 
 
+	Graphics.world.water.height = 8;
 
 
-/*	for(y = 0; y < Graphics.world.height; y++)
+
+
+
+	for(y = 0; y < Graphics.world.height; y++)
 	{
 		for(x = 0; x < Graphics.world.width; x++)
 		{
-			if((Graphics.world.cubes[y][x].cell1 <= -8 || Graphics.world.cubes[y][x].cell2 <= -8 || Graphics.world.cubes[y][x].cell3  <= -8|| Graphics.world.cubes[y][x].cell4 <= -8) && Graphics.world.cubes[y][x].cell1 > -63)
+			cCube* c = &Graphics.world.cubes[y][x];
+			Graphics.world.gattiles[2*y][2*x].type = (c->cell1+c->cell2+c->cell3+c->cell4) != 0 ? '\1' : '\0';
+			Graphics.world.gattiles[2*y][2*x+1].type = (c->cell1+c->cell2+c->cell3+c->cell4) != 0 ? '\1' : '\0';
+			Graphics.world.gattiles[2*y+1][2*x].type = (c->cell1+c->cell2+c->cell3+c->cell4) != 0 ? '\1' : '\0';
+			Graphics.world.gattiles[2*y+1][2*x+1].type = (c->cell1+c->cell2+c->cell3+c->cell4) != 0 ? '\1' : '\0';
+		}
+
+	}
+
+	MenuCommand_gatheight(src);
+
+
+
+	for(x = 0; x < Graphics.world.width; x++)
+		for(y = 0; y < Graphics.world.height; y++)
+		{
+			Graphics.world.cubes[y][x].maxh = -99999;
+			Graphics.world.cubes[y][x].minh = 99999;
+		}
+
+	for(i = 0; i < Graphics.world.models.size(); i++)
+		Graphics.world.models[i]->draw(false,false,true);
+
+
+	for(y = 0; y < Graphics.world.height; y++)
+	{
+		for(x = 0; x < Graphics.world.width; x++)
+		{
+			cCube* c = &Graphics.world.cubes[y][x];
+			if(Graphics.world.cubes[y][x].maxh != -99999)
 			{
-				Graphics.world.cubes[y][x].tileup= 50 + ((int)x%5) + 5*((int)y%5);
+				Graphics.world.gattiles[2*y][2*x].type = '\0';
+				Graphics.world.gattiles[2*y][2*x+1].type = '\0';
+				Graphics.world.gattiles[2*y+1][2*x].type = '\0';
+				Graphics.world.gattiles[2*y+1][2*x+1].type = '\0';
+
+				Graphics.world.gattiles[2*y][2*x].cell1 = Graphics.world.gattiles[2*y][2*x].cell2 = Graphics.world.gattiles[2*y][2*x].cell3 = Graphics.world.gattiles[2*y][2*x].cell4 = 0;
+				Graphics.world.gattiles[2*y][2*x+1].cell1 = Graphics.world.gattiles[2*y][2*x+1].cell2 = Graphics.world.gattiles[2*y][2*x+1].cell3 = Graphics.world.gattiles[2*y][2*x+1].cell4 = 0;
+				Graphics.world.gattiles[2*y+1][2*x].cell1 = Graphics.world.gattiles[2*y+1][2*x].cell2 = Graphics.world.gattiles[2*y+1][2*x].cell3 = Graphics.world.gattiles[2*y+1][2*x].cell4 = 0;
+				Graphics.world.gattiles[2*y+1][2*x+1].cell1 = Graphics.world.gattiles[2*y+1][2*x+1].cell2 = Graphics.world.gattiles[2*y+1][2*x+1].cell3 = Graphics.world.gattiles[2*y+1][2*x+1].cell4 = 0;
 			}
 		}
+
 	}
-*/
-	Graphics.world.water.height = 8;
+	Graphics.world.root->recalculate();
 
 
 	return true;
@@ -2461,8 +2608,15 @@ MENUCOMMAND(random5)
 	vector<cIntQuad> islands;
 
 	bool filledenough = false;
+	int oldsize = 0;
 	while(!filledenough)
 	{
+		if(oldsize != islands.size())
+		{
+			Graphics.draw();
+			SDL_GL_SwapBuffers();
+			oldsize = islands.size();
+		}
 		int island = -1;
 		reali++;
 		if(reali > 10000)
@@ -2560,8 +2714,11 @@ MENUCOMMAND(random5)
 
 	for(i = 0; i < islands.size(); i++)
 	{
+		Graphics.draw();
+		SDL_GL_SwapBuffers();
 		for(int ii = 0; ii < islands[i].connections.size(); ii++)
 		{
+
 			x = islands[islands[i].connections[ii]].x;
 			y = islands[islands[i].connections[ii]].y;
 			w = islands[islands[i].connections[ii]].w;
@@ -2632,6 +2789,10 @@ MENUCOMMAND(random5)
 	MenuCommand_addwalls(src);
 
 
+	MenuCommand_gatheight(src);
+	MenuCommand_gatcollision(src);
+
+
 
 
 /*	for(y = 0; y < Graphics.world.height; y++)
@@ -2646,6 +2807,44 @@ MENUCOMMAND(random5)
 	}
 */
 	Graphics.world.water.height = 8;
+
+
+	return true;
+}
+
+
+
+
+
+MENUCOMMAND(99dun)
+{
+	srand(atoi(Graphics.WM.InputWindow("Random Seed: ").c_str()));
+
+	for(int i = 0; i < 10; i++)
+	{
+		int mode = rand() % 3;
+
+		if(mode == 0)
+		{
+			sprintf(Graphics.world.filename, "%sdata\\random_pay", rodir.c_str());
+			Graphics.world.load();
+			MenuCommand_random2(src);
+		}
+		else if (mode == 1)
+		{
+			sprintf(Graphics.world.filename, "%sdata\\random_cul", rodir.c_str());
+			Graphics.world.load();
+			MenuCommand_random3(src);
+		}
+		else if (mode == 2)
+		{
+			sprintf(Graphics.world.filename, "%sdata\\random_ama", rodir.c_str());
+			Graphics.world.load();
+			MenuCommand_random5(src);
+		}
+		sprintf(Graphics.world.filename, "%sdata\\ulti_dun%02i", rodir.c_str(), i);
+		Graphics.world.save();
+	}
 
 
 	return true;

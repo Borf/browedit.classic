@@ -70,7 +70,8 @@ void cWorld::load()
 	{
 		for(x = 0; x < reallightmaps[y].size(); x+=21)
 		{
-			delete reallightmaps[y][x];
+			if(reallightmaps[y][x] != NULL)
+				delete reallightmaps[y][x];
 		}
 	}
 

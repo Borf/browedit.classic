@@ -6,6 +6,7 @@ Other/거북이섬/거북_끈적이3.|data\model\거북이섬\거북_끈적이3.rsm
 Other/거북이섬/거북_나무.|data\model\거북이섬\거북_나무.rsm
 Other/거북이섬/거북_나무잎.|data\model\거북이섬\거북_나무잎.rsm
 Other/거북이섬/거북_던젼입구.|data\model\거북이섬\거북_던젼입구.rsm
+Random2 Objects/거북_덩쿨1.|data\model\거북이섬\거북_덩쿨1.rsm
 Other/거북이섬/거북_덩쿨1.|data\model\거북이섬\거북_덩쿨1.rsm
 Other/거북이섬/거북_덩쿨2.|data\model\거북이섬\거북_덩쿨2.rsm
 Other/거북이섬/거북_돌.|data\model\거북이섬\거북_돌.rsm
@@ -102,6 +103,7 @@ Other/글래스트/글래스트_기둥2.|data\model\글래스트\글래스트_기둥2.rsm
 Other/글래스트/글래스트_기둥3.|data\model\글래스트\글래스트_기둥3.rsm
 Other/글래스트/글래스트_기둥4.|data\model\글래스트\글래스트_기둥4.rsm
 Other/글래스트/글래스트_기둥5.|data\model\글래스트\글래스트_기둥5.rsm
+Random2 Objects/글래스트_기둥6.|data\model\글래스트\글래스트_기둥6.rsm
 Other/글래스트/글래스트_기둥6.|data\model\글래스트\글래스트_기둥6.rsm
 Other/글래스트/글래스트_기둥7.|data\model\글래스트\글래스트_기둥7.rsm
 Other/글래스트/글래스트_기둥8.|data\model\글래스트\글래스트_기둥8.rsm
@@ -139,6 +141,7 @@ Other/글래스트/글래스트_넝쿨.|data\model\글래스트\글래스트_넝쿨.rsm
 Other/글래스트/글래스트_넝쿨01.|data\model\글래스트\글래스트_넝쿨01.rsm
 Other/글래스트/글래스트_넝쿨기둥01.|data\model\글래스트\글래스트_넝쿨기둥01.rsm
 Other/글래스트/글래스트_넝쿨기둥02.|data\model\글래스트\글래스트_넝쿨기둥02.rsm
+Random2 Objects/글래스트_던전기둥1.|data\model\글래스트\글래스트_던전기둥1.rsm
 Other/글래스트/글래스트_던전기둥1.|data\model\글래스트\글래스트_던전기둥1.rsm
 Other/글래스트/글래스트_던전기둥2.|data\model\글래스트\글래스트_던전기둥2.rsm
 Other/글래스트/글래스트_던전기둥3.|data\model\글래스트\글래스트_던전기둥3.rsm
@@ -1341,6 +1344,7 @@ Other/어비스/보물07.|data\model\어비스\보물07.rsm
 Other/어비스/보물08.|data\model\어비스\보물08.rsm
 Other/어비스/보물09.|data\model\어비스\보물09.rsm
 Other/어비스/보물10.|data\model\어비스\보물10.rsm
+Random2 Objects/보물11.|data\model\어비스\보물11.rsm
 Other/어비스/보물11.|data\model\어비스\보물11.rsm
 Other/어비스/보물상자.|data\model\어비스\보물상자.rsm
 Other/어비스/뿔기둥01.|data\model\어비스\뿔기둥01.rsm
@@ -1352,6 +1356,7 @@ Other/어비스/종유석04.|data\model\어비스\종유석04.rsm
 Other/어비스/종유석05.|data\model\어비스\종유석05.rsm
 Other/어비스/종유석06.|data\model\어비스\종유석06.rsm
 Other/어비스/종유석07.|data\model\어비스\종유석07.rsm
+Random2 Objects/종유석08.|data\model\어비스\종유석08.rsm
 Other/어비스/종유석08.|data\model\어비스\종유석08.rsm
 Other/어비스/풀더미.|data\model\어비스\풀더미.rsm
 Other/용암동굴/유노_드래곤.|data\model\용암동굴\유노_드래곤.rsm
@@ -1769,6 +1774,7 @@ Other/자와이/파란색커튼.|data\model\자와이\파란색커튼.rsm
 Other/자와이/파란풍선.|data\model\자와이\파란풍선.rsm
 Other/지하감옥/고문실_해골1.|data\model\지하감옥\고문실_해골1.rsm
 Other/지하감옥/고문실_해골2.|data\model\지하감옥\고문실_해골2.rsm
+Random2 Objects/고문실_해골3.|data\model\지하감옥\고문실_해골3.rsm
 Other/지하감옥/고문실_해골3.|data\model\지하감옥\고문실_해골3.rsm
 Other/지하감옥/사형단.|data\model\지하감옥\사형단.rsm
 Other/지하감옥/새장1.|data\model\지하감옥\새장1.rsm

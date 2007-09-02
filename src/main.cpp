@@ -729,6 +729,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/CALCULATELIGHTMAPSLOCAL"),	&MenuCommand_dolightmaps); // Selected lightmaps
 	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/CALCULATELIGHTMAPSLIGHT"),	&MenuCommand_dolightmapslights); // Selected lightmaps
 	ADDMENUITEM(mm,rnd,	GetMsg("menu/generate/CLEARMAP"),					&MenuCommand_clearstuff); // clear map
+	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/DUN99"),						&MenuCommand_99dun); // 99 level dungeon
 
 	ADDMENUITEM(grid,view,GetMsg("menu/view/GRID"),							&MenuCommand_grid); //grid
 	grid->ticked = true;
@@ -885,7 +886,7 @@ int main(int argc, char *argv[])
 	
 	Log(3,0,GetMsg("DONEINIT"));
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "data\\prontera").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "data\\random_cul").c_str());
 #ifndef WIN32
 	Graphics.world.load();
 #endif
@@ -1327,8 +1328,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						break;
 					}
 				}
-				//if(!found)
-					//return 1;
+				if(!found)
+					return 1;
 			}
 
 			switch (event.key.keysym.sym)
@@ -1479,7 +1480,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						ev.key.keysym.mod = (SDLMod)(KMOD_SHIFT | KMOD_CTRL);
 						SDL_PushEvent(&ev);
 						process_events();
-						Graphics.camerarot += 10*(PI/180.0f);
+						Graphics.camerarot += 10.0f*((float)PI/180.0f);
 					}
 					return true;
 				}

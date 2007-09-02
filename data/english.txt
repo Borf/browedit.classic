@@ -41,6 +41,7 @@
 			<CALCULATELIGHTMAPSLOCAL>Calculate Selected lightmaps</CALCULATELIGHTMAPSLOCAL>
 			<CALCULATELIGHTMAPSLIGHT>Calculate Lightmaps for selected lights</CALCULATELIGHTMAPSLIGHT>
 			<CLEARMAP>Clear Map</CLEARMAP>
+			<DUN99>Generate 99 random dungeon floors</DUN99>
 		</generate>
 		<view>
 			<TITLE>View</TITLE>

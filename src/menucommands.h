@@ -59,6 +59,6 @@ MENUCOMMAND(properties);
 MENUCOMMAND(preferences);
 MENUCOMMAND(rsmedit);
 MENUCOMMAND(exportmapfiles);
-
+MENUCOMMAND(99dun);
 
 #endif
