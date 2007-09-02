@@ -14,15 +14,21 @@ public:
 	{
 	public:
 		cActSpr();
+		~cActSpr();
 
 		class cFrame
 		{
 		public:
+			~cFrame();
+
+			bool loaded;
 			GLuint tex;
+			char* data;
 			int w;
 			int h;
+			GLuint texid();
 		};
-		vector<cFrame> frames;
+		vector<cFrame*> frames;
 		class cAction
 		{
 		public:
@@ -44,6 +50,7 @@ public:
 					long sizex;
 					long sizey;
 				};
+				~cFrame();
 				vector<cSubFrame*> subframes;
 				int subframecount;
 				int   framecount;
@@ -52,6 +59,8 @@ public:
 				long  extrax;
 				long  extray;
 			};
+
+			~cAction();
 			vector<cFrame*> frames;
 			int framecount;
 		};
@@ -64,6 +73,7 @@ public:
 	};
 	
 	cSprite();
+	~cSprite();
 
 	cVector3			pos;
 	cActSpr*			body;

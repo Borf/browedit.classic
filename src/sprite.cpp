@@ -25,7 +25,7 @@ cSprite::cSprite()
 	int sex = rand() % 2;
 	int bodyid = rand() % (sizeof(bodies)/sizeof(string));
 	body->load(rodir + "data\\sprite\\인간족\\몸통\\" + sexes[sex] + "\\" + bodies[bodyid] + "_" + sexes[sex]);
-	int headid = rand() % 23;
+	int headid = 1+ rand() % 22;
 	char buf[20];
 	sprintf(buf, "%i", headid);
 	head->load(rodir + "data\\sprite\\인간족\\머리통\\" + sexes[sex] + "\\" + buf + "_" + sexes[sex]);
@@ -34,6 +34,38 @@ cSprite::cSprite()
 	direction = 0;
 }
 
+GLuint cSprite::cActSpr::cFrame::texid()
+{
+	if(loaded)
+		return tex;
+
+	glGenTextures(1, &tex);
+	glBindTexture(GL_TEXTURE_2D, tex);
+	glTexImage2D(GL_TEXTURE_2D,0,4,SPRITESIZE,SPRITESIZE,0,GL_RGBA,GL_UNSIGNED_BYTE,data);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+	loaded = true;
+	return tex;
+
+
+}
+
+
+cSprite::~cSprite()
+{
+	if(head != NULL)
+		delete head;
+	if(body != NULL)
+		delete body;
+	for(int i = 0; i < extras.size(); i++)
+	{
+		if(extras[i] != NULL)
+			delete extras[i];
+	}
+	extras.clear();
+
+
+}
 
 void cSprite::loadbody(string filename)
 {
@@ -77,7 +109,14 @@ cSprite::cActSpr::cActSpr()
 {
 	loaded = false;
 }
-
+cSprite::cActSpr::~cActSpr()
+{
+	int i;
+	for(i = 0; i < frames.size(); i++)
+		delete frames[i];
+	for(i = 0; i < actions.size(); i++)
+		delete actions[i];
+}
 
 void cSprite::cActSpr::load(string filename)
 {
@@ -151,19 +190,14 @@ void cSprite::cActSpr::load(string filename)
 				image[4*(x+SPRITESIZE*y)+3] = index==0 ? 0 : 255;
 			}
 		}
-		GLuint tid;
-		glGenTextures(1, &tid);
-		glBindTexture(GL_TEXTURE_2D, tid);
-		glTexImage2D(GL_TEXTURE_2D,0,4,SPRITESIZE,SPRITESIZE,0,GL_RGBA,GL_UNSIGNED_BYTE,image);
-		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-		delete[] image;
 		delete[] data;
 
-		cFrame f;
-		f.tex = tid;
-		f.h = height;
-		f.w = width;
+		cFrame* f = new cFrame();
+		f->tex = -1;
+		f->loaded = false;
+		f->data = image;
+		f->h = height;
+		f->w = width;
 		frames.push_back(f);
 
 	}
@@ -297,9 +331,9 @@ void cSprite::draw()
 	int frame = subframe->image;
 	int direction = subframe->direction;
 	
-	glBindTexture(GL_TEXTURE_2D, body->frames[frame].tex);
-	float width = body->frames[frame].w;
-	float height = body->frames[frame].h;
+	glBindTexture(GL_TEXTURE_2D, body->frames[frame]->texid());
+	float width = body->frames[frame]->w;
+	float height = body->frames[frame]->h;
 	float bodyheight = height;
 
 	width/=2;
@@ -336,9 +370,9 @@ void cSprite::draw()
 	//frame = 1;
 	direction = subframe->direction;
 	
-	glBindTexture(GL_TEXTURE_2D, head->frames[frame].tex);
-	width = head->frames[frame].w;
-	height = head->frames[frame].h;
+	glBindTexture(GL_TEXTURE_2D, head->frames[frame]->texid());
+	width = head->frames[frame]->w;
+	height = head->frames[frame]->h;
 
 	width/=2;
 	height/=2;
@@ -365,9 +399,9 @@ void cSprite::draw()
 		//frame = 1;
 		direction = subframe->direction;
 		
-		glBindTexture(GL_TEXTURE_2D, extras[i]->frames[frame].tex);
-		width = extras[i]->frames[frame].w;
-		height = extras[i]->frames[frame].h;
+		glBindTexture(GL_TEXTURE_2D, extras[i]->frames[frame]->texid());
+		width = extras[i]->frames[frame]->w;
+		height = extras[i]->frames[frame]->h;
 
 		width/=2;
 		height/=2;
@@ -385,4 +419,27 @@ void cSprite::draw()
 	}
 	
 	glPopMatrix();
+}
+
+
+
+cSprite::cActSpr::cFrame::~cFrame()
+{
+	delete[] data;
+	if(loaded)
+		glDeleteTextures(1, &tex);
+	loaded = false;
+
+}
+
+cSprite::cActSpr::cAction::~cAction()
+{
+	for(int i = 0; i < frames.size(); i++)
+		delete frames[i];
+}
+
+cSprite::cActSpr::cAction::cFrame::~cFrame()
+{
+	for(int i = 0; i < subframes.size(); i++)
+		delete subframes[i];
 }

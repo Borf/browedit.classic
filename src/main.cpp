@@ -98,6 +98,17 @@ vector<vector<vector<float> > > clipboard;
 long lasttimer;
 
 
+
+unsigned char * getPixelsBGR()
+{
+  int screenStats[4];
+  glGetIntegerv(GL_VIEWPORT, screenStats);
+  unsigned char *pixels;
+  pixels = new unsigned char[screenStats[2]*screenStats[3]*3];
+  glReadPixels(0, 0, screenStats[2], screenStats[3], GL_BGR_EXT, GL_UNSIGNED_BYTE, pixels);
+  return pixels;
+}
+
 string downloadfile(string url, long &filesize)
 {
 //#define DOWNLOADBUFFERSIZE 1
@@ -1316,8 +1327,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						break;
 					}
 				}
-				if(!found)
-					return 1;
+				//if(!found)
+					//return 1;
 			}
 
 			switch (event.key.keysym.sym)
@@ -1448,6 +1459,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						Graphics.WM.togglewindow(WT_TEXTURE);
 					break;
 				}
+				break;
 			case SDLK_m:
 				{
 					cWindow* w = Graphics.WM.getwindow(WT_MODELS);
@@ -1456,10 +1468,105 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					else
 						Graphics.WM.togglewindow(WT_MODELS);
 				}
-
+				break;
+			case SDLK_KP0:
+				{
+					for(int i = 0; i < 360; i+=10)
+					{
+						SDL_Event ev;
+						ev.type = SDL_KEYUP;
+						ev.key.keysym.sym = SDLK_PRINT;
+						ev.key.keysym.mod = (SDLMod)(KMOD_SHIFT | KMOD_CTRL);
+						SDL_PushEvent(&ev);
+						process_events();
+						Graphics.camerarot += 10*(PI/180.0f);
+					}
+					return true;
+				}
+				break;
 			default:
 				break;
-		}
+			}
+			break;
+		case SDL_KEYUP:
+			if(event.key.keysym.sym == SDLK_PRINT || event.key.keysym.sym == SDLK_SYSREQ)
+			{
+				if((event.key.keysym.mod&KMOD_SHIFT) != 0)
+				{
+				if (!Graphics.draw(false))
+					running = false;
+				SDL_GL_SwapBuffers();
+
+				}
+
+				WIN32_FIND_DATA FileData;													// thingy for searching through a directory
+				HANDLE hSearch;																// thingy for searching through a directory
+
+				bool fFinished = false;														// not finished with looking yet....
+				int nFiles = 0;
+				hSearch = FindFirstFile("ScreenShots/*.*", &FileData);						// look for all files
+				if (hSearch != INVALID_HANDLE_VALUE)										// if there are results...
+				{
+					while (!fFinished)														// loop through all the files
+					{ 
+						if (string(FileData.cFileName) != "." && string(FileData.cFileName) != ".." && string(FileData.cFileName) != "CVS")	// if this is a real folder, not . or .. or CVS
+							nFiles++;
+						if (!FindNextFile(hSearch, &FileData))								// find next file in the resultset
+						{
+							if (GetLastError() == ERROR_NO_MORE_FILES)						// we're finished when there are no more files
+								fFinished = true; 
+							else 
+								return -1;													// wow, something really weird happened
+						}
+					}
+				}
+ 				FindClose(hSearch);															// Close the search handle. 
+				
+				unsigned char *pixels;
+				pixels = getPixelsBGR();
+
+				FILE * shot;
+				char buf[100];
+				sprintf(buf, "Screenshots/Shot%i.tga", nFiles);
+				if((shot=fopen(buf, "wb"))!=NULL)
+				{
+					int screenStats[4];
+					glGetIntegerv(GL_VIEWPORT, screenStats);
+					unsigned char TGAheader[12]={0,0,2,0,0,0,0,0,0,0,0,0};
+
+					int xfrom = 0;
+					int yfrom = 0;
+					int xto = screenStats[2];
+					int yto = screenStats[3];
+
+					if((event.key.keysym.mod&KMOD_CTRL) != 0)
+					{
+						yfrom = 19;
+						xto = Graphics.w() - 256;
+					}
+
+					int w= xto - xfrom;
+					int h= yto - yfrom;
+
+
+					unsigned char Header[6]={((int)(w%256)),((int)(w/256)),((int)(h%256)),((int)(h/256)),24,0};
+					fwrite(TGAheader, sizeof(unsigned char), 12, shot);
+					fwrite(Header, sizeof(unsigned char), 6, shot);
+
+					for(int y = yfrom; y < yto; y++)
+					{
+						for(int x = xfrom; x < xto; x++)
+						{
+							fwrite(pixels+3*(x+y*screenStats[2]), sizeof(unsigned char), 3, shot);
+						}
+					}
+					delete [] pixels;
+					fclose(shot);
+				}
+			}
+			break;
+		default:
+			break;
 
 	}
 	return 0;

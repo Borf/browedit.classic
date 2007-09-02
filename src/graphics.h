@@ -61,7 +61,7 @@ public:
 	}
 
 	int						init();
-	int						draw();
+	int						draw(bool = true);
 	int						ReSizeGLScene(int, int);
 
 	void					KillGLWindow(void);

@@ -18,11 +18,11 @@
 
 extern string rodir;
 extern cFileSystem fs;
+TiXmlDocument sprites;
 
 class cSpriteWindow : public cWindow
 {
 public:
-	TiXmlDocument sprites;
 	class cSpriteInfo
 	{
 	public:
@@ -136,7 +136,7 @@ public:
 			cWindowTree* tree = (cWindowTree*)parent->objects["tree"];
 			tree->nodes.clear();
 			
-			TiXmlNode* n = ((cSpriteWindow*)parent)->sprites.FirstChildElement("sprites");
+			TiXmlNode* n = sprites.FirstChildElement("sprites");
 			if(selectedtab == 0)
 				n = n->FirstChildElement("body");
 			else if(selectedtab == 1)
@@ -243,7 +243,7 @@ public:
 		{
 			alignment = ALIGN_TOPLEFT;
 			moveto(10, 200);
-			resizeto(100, 20);
+			resizeto(120, 20);
 			text = "Action 1";
 		}
 		void click()
@@ -254,6 +254,59 @@ public:
 			text = buf;
 		}
 	};
+
+	class cDirectionButton : public cWindowButton
+	{
+		int direction;
+	public:
+		cDirectionButton(cWindow* p, int dir) : cWindowButton(p)
+		{
+			direction = dir;
+			char* directions[] = { "S", "SE","E","NE","N","NW","W","SW" };
+			text = directions[dir];
+			resizeto(50,20);
+			alignment = ALIGN_TOPLEFT;
+			moveto(45+35*sin(dir/8.0f*2*PI), 310+     (dir<5 ? (-20*dir) : -20*(8-dir))     );
+
+		}
+
+		void click()
+		{
+			((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->direction = direction;
+		}
+	};
+
+	class cOkButton : public cWindowButton
+	{
+	public:
+		cOkButton(cWindow* parent) : cWindowButton(parent)
+		{
+			alignment = ALIGN_TOPLEFT;
+			moveto(10, 340);
+			resizeto(120, 20);
+			text = "Ok";
+		}
+		void click()
+		{
+
+		}
+	};
+	class cCancelButton : public cWindowButton
+	{
+	public:
+		cCancelButton(cWindow* parent) : cWindowButton(parent)
+		{
+			alignment = ALIGN_TOPLEFT;
+			moveto(10, 360);
+			resizeto(120, 20);
+			text = "Cancel";
+		}
+		void click()
+		{
+			parent->close();
+		}
+	};
+
 
 	cSpriteWindow(cTexture* t, cFont* f) : cWindow(t,f)
 	{
@@ -284,9 +337,21 @@ public:
 		o->resizeto(w - 145, h- 50);
 		objects["tree"] = o;
 		objects["actionbutton"] = new cActionChangeButton(this);
-		sprites = fs.getxml("sprites.xml");
+		objects["ok"] = new cOkButton(this);
+		objects["cancel"] = new cCancelButton(this);
+
+		for(int i = 0; i < 8; i++)
+		{
+			char buf[10];
+			sprintf(buf, "dir%i", i);
+			objects[buf] = new cDirectionButton(this, i);
+		}
+
+		if(!sprites.FirstChild())
+			sprites = fs.getxml("sprites.xml");
 
 		((cTabPanel*)objects["tabpanel"])->tabchange(-1);
+
 
 	}
 

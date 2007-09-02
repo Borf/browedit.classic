@@ -31,7 +31,7 @@ double mouse3dx, mouse3dy, mouse3dz;
 
 extern string			config;
 
-int cGraphics::draw()
+int cGraphics::draw(bool drawwm)
 {
 	frameticks = SDL_GetTicks() - lasttick;
 	lasttick += frameticks;
@@ -237,7 +237,8 @@ int cGraphics::draw()
 	}
 	glEnable(GL_BLEND);
 
-	WM.draw();
+	if(drawwm)
+		WM.draw();
 	menu->draw();
 	char buf[100];
 	if(currentobject != NULL)
