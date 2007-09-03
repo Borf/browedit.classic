@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
 <sprites directory="data\sprite\">
 	<body directory="">
 		<male directory="ÀÎ°£Á·\¸öÅë\³²\">
@@ -1400,269 +1401,269 @@
 		</female>
 	</face>
 	<headgear>
-		<sprite id="1" name="_°í±Û">_°í±Û</sprite>
-		<sprite id="2" name="_°í¾çÀÌ¸Ó¸®¶ì">_°í¾çÀÌ¸Ó¸®¶ì</sprite>
-		<sprite id="3" name="_±Û·¡½º">_±Û·¡½º</sprite>
-		<sprite id="4" name="_²É">_²É</sprite>
-		<sprite id="5" name="_²É¸Ó¸®¶ì">_²É¸Ó¸®¶ì</sprite>
-		<sprite id="6" name="_µÎ°Ç">_µÎ°Ç</sprite>
-		<sprite id="7" name="_µÕ±Ù¸ðÀÚ">_µÕ±Ù¸ðÀÚ</sprite>
-		<sprite id="8" name="_¸¶½ºÅ©">_¸¶½ºÅ©</sprite>
-		<sprite id="9" name="_¸Ó¸®¶ì">_¸Ó¸®¶ì</sprite>
-		<sprite id="10" name="_¹°¾È°æ">_¹°¾È°æ</sprite>
-		<sprite id="11" name="_ºñ·¹Å¸">_ºñ·¹Å¸</sprite>
-		<sprite id="12" name="_¼±±Û·¡½º">_¼±±Û·¡½º</sprite>
-		<sprite id="13" name="_¾È´ë">_¾È´ë</sprite>
-		<sprite id="14" name="_Ä¸">_Ä¸</sprite>
-		<sprite id="15" name="_Åä³¢¸Ó¸®¶ì">_Åä³¢¸Ó¸®¶ì</sprite>
-		<sprite id="16" name="_ÇÞ">_ÇÞ</sprite>
-		<sprite id="17" name="_¸®º»">_¸®º»</sprite>
+		<sprite id="1" name="Goggles">_°í±Û</sprite>
+		<sprite id="2" name="Kitty Band">_°í¾çÀÌ¸Ó¸®¶ì</sprite>
+		<sprite id="3" name="Glasses">_±Û·¡½º</sprite>
+		<sprite id="4" name="Fancy Flower">_²É</sprite>
+		<sprite id="5" name="Flower Band">_²É¸Ó¸®¶ì</sprite>
+		<sprite id="6" name="Bandana">_µÎ°Ç</sprite>
+		<sprite id="7" name="Turban">_µÕ±Ù¸ðÀÚ</sprite>
+		<sprite id="8" name="Flu Mask">_¸¶½ºÅ©</sprite>
+		<sprite id="9" name="Hairband">_¸Ó¸®¶ì</sprite>
+		<sprite id="10" name="Diver's Goggles">_¹°¾È°æ</sprite>
+		<sprite id="11" name="Biretta">_ºñ·¹Å¸</sprite>
+		<sprite id="12" name="Sunglasses">_¼±±Û·¡½º</sprite>
+		<sprite id="13" name="Eyepatch">_¾È´ë</sprite>
+		<sprite id="14" name="Cap">_Ä¸</sprite>
+		<sprite id="15" name="Bunny Band">_Åä³¢¸Ó¸®¶ì</sprite>
+		<sprite id="16" name="Hat (Y'know, the pink one)">_ÇÞ</sprite>
+		<sprite id="17" name="Ribbon">_¸®º»</sprite>
 		<sprite id="18" name="_¼­Å¬¸´">_¼­Å¬¸´</sprite>
-		<sprite id="19" name="_Æ¼¾Æ¶ó">_Æ¼¾Æ¶ó</sprite>
-		<sprite id="20" name="_»êÅ¸¸ðÀÚ">_»êÅ¸¸ðÀÚ</sprite>
-		<sprite id="21" name="_ÅÎ¼ö¿°">_ÅÎ¼ö¿°</sprite>
-		<sprite id="22" name="_Äà¼ö¿°">_Äà¼ö¿°</sprite>
-		<sprite id="23" name="_¿Ü´«¾È°æ">_¿Ü´«¾È°æ</sprite>
-		<sprite id="24" name="_¼ö¿°">_¼ö¿°</sprite>
-		<sprite id="25" name="_Èò¼ö¿°">_Èò¼ö¿°</sprite>
-		<sprite id="26" name="_°í±Þ¼±±Û·¡½º">_°í±Þ¼±±Û·¡½º</sprite>
-		<sprite id="27" name="_½ºÇÉ±Û·¡½º">_½ºÇÉ±Û·¡½º</sprite>
-		<sprite id="28" name="_¿Õ¸®º»">_¿Õ¸®º»</sprite>
-		<sprite id="29" name="_½ºÀ§Æ®Á¨Æ²">_½ºÀ§Æ®Á¨Æ²</sprite>
-		<sprite id="30" name="_°ñµçÇìµå±â¾î">_°ñµçÇìµå±â¾î</sprite>
-		<sprite id="31" name="_¿Ãµå½ºÅÍ·Î¸Ç½º">_¿Ãµå½ºÅÍ·Î¸Ç½º</sprite>
-		<sprite id="32" name="_¿þ½ºÅÏ±×·¹ÀÌ½º">_¿þ½ºÅÏ±×·¹ÀÌ½º</sprite>
-		<sprite id="33" name="_ÄÚ·Î³Ý">_ÄÚ·Î³Ý</sprite>
-		<sprite id="34" name="_¸Ó¸®²ö">_¸Ó¸®²ö</sprite>
-		<sprite id="35" name="_¼ºÁ÷ÀÚÀÇ¸ðÀÚ">_¼ºÁ÷ÀÚÀÇ¸ðÀÚ</sprite>
-		<sprite id="36" name="_À§ÀúµåÇÞ">_À§ÀúµåÇÞ</sprite>
-		<sprite id="37" name="_Àå½Ä¿ëÇØ¹Ù¶ó±â">_Àå½Ä¿ëÇØ¹Ù¶ó±â</sprite>
-		<sprite id="38" name="_Ãµ»çÀÇ¸Ó¸®¶ì">_Ãµ»çÀÇ¸Ó¸®¶ì</sprite>
-		<sprite id="39" name="_¾Ç¸¶ÀÇ¸Ó¸®¶ì">_¾Ç¸¶ÀÇ¸Ó¸®¶ì</sprite>
-		<sprite id="40" name="_Çï¸§">_Çï¸§</sprite>
-		<sprite id="41" name="_¸¶Á¦½ºÆ½°í¿ìÆ®">_¸¶Á¦½ºÆ½°í¿ìÆ®</sprite>
-		<sprite id="42" name="_»õÇÏ¾á»Ô">_»õÇÏ¾á»Ô</sprite>
-		<sprite id="43" name="_»þÇÁÇìµå±â¾î">_»þÇÁÇìµå±â¾î</sprite>
-		<sprite id="44" name="_¸é»çÆ÷">_¸é»çÆ÷</sprite>
-		<sprite id="45" name="_Å©¶ó¿î">_Å©¶ó¿î</sprite>
-		<sprite id="46" name="_ÇÁ·ÎÆç¶ó">_ÇÁ·ÎÆç¶ó</sprite>
-		<sprite id="47" name="_¹Ì´Ï±Û·¡½º">_¹Ì´Ï±Û·¡½º</sprite>
-		<sprite id="48" name="_ÇÁ·ÐÅ×¶ó±º¸ð">_ÇÁ·ÐÅ×¶ó±º¸ð</sprite>
-		<sprite id="49" name="_±¤´ëÄÚ">_±¤´ëÄÚ</sprite>
-		<sprite id="50" name="_ÀÇÀû¾È´ë">_ÀÇÀû¾È´ë</sprite>
-		<sprite id="51" name="_¹«³«¸ðÀÚ">_¹«³«¸ðÀÚ</sprite>
-		<sprite id="52" name="_½ÃÀ§¿ë¸¶½ºÅ©">_½ÃÀ§¿ë¸¶½ºÅ©</sprite>
-		<sprite id="53" name="_¾ÆÀÌ¾ðÄÉÀÎ">_¾ÆÀÌ¾ðÄÉÀÎ</sprite>
-		<sprite id="54" name="_´ã¹è">_´ã¹è</sprite>
-		<sprite id="55" name="_ÆÄÀÌÇÁ´ã¹è">_ÆÄÀÌÇÁ´ã¹è</sprite>
-		<sprite id="56" name="_²ÉÀÙ">_²ÉÀÙ</sprite>
-		<sprite id="57" name="_Ç®ÀÙ">_Ç®ÀÙ</sprite>
-		<sprite id="58" name="_¸Ó¸®¾È°æ">_¸Ó¸®¾È°æ</sprite>
-		<sprite id="59" name="_Á¤ÁöÇ¥ÁöÆÇ">_Á¤ÁöÇ¥ÁöÆÇ</sprite>
-		<sprite id="60" name="_ÀÇ»ç¸Ó¸®¶ì">_ÀÇ»ç¸Ó¸®¶ì</sprite>
-		<sprite id="61" name="_¸ÁÀÚÀÇ¸Ó¸®¶ì">_¸ÁÀÚÀÇ¸Ó¸®¶ì</sprite>
-		<sprite id="62" name="_¹Ý´Ù³ª">_¹Ý´Ù³ª</sprite>
-		<sprite id="63" name="_µµ³¢´«">_µµ³¢´«</sprite>
-		<sprite id="64" name="_°£È£¸ð">_°£È£¸ð</sprite>
-		<sprite id="65" name="_½º¸¶ÀÏ">_½º¸¶ÀÏ</sprite>
-		<sprite id="66" name="_½ÉÁö">_½ÉÁö</sprite>
-		<sprite id="67" name="_»ñ°«">_»ñ°«</sprite>
-		<sprite id="68" name="_¿ÀÆä¶ó°¡¸é">_¿ÀÆä¶ó°¡¸é</sprite>
-		<sprite id="69" name="_¿µÈ¥°í¸®">_¿µÈ¥°í¸®</sprite>
-		<sprite id="70" name="_±Í¸¶°³">_±Í¸¶°³</sprite>
-		<sprite id="71" name="_»ç½¿»Ô">_»ç½¿»Ô</sprite>
-		<sprite id="72" name="_¸í»ç¼öÀÇ»ç°ú">_¸í»ç¼öÀÇ»ç°ú</sprite>
-		<sprite id="73" name="_¿äÁ¤ÀÇ±Í">_¿äÁ¤ÀÇ±Í</sprite>
-		<sprite id="74" name="_ÇØÀûµÎ°Ç">_ÇØÀûµÎ°Ç</sprite>
-		<sprite id="75" name="_½ºÅ©·¡Ä¡¸¶½ºÅ©">_½ºÅ©·¡Ä¡¸¶½ºÅ©</sprite>
-		<sprite id="76" name="_°Å½Ã±â">_°Å½Ã±â</sprite>
-		<sprite id="77" name="_Àå·Ê°Ç">_Àå·Ê°Ç</sprite>
-		<sprite id="78" name="_³ªºñ°¡¸é">_³ªºñ°¡¸é</sprite>
-		<sprite id="79" name="_¿ëÁ¢¸¶½ºÅ©">_¿ëÁ¢¸¶½ºÅ©</sprite>
-		<sprite id="80" name="_¿¬±Ø¼Òµµ±¸">_¿¬±Ø¼Òµµ±¸</sprite>
-		<sprite id="81" name="_½ºÅ¸´õ½ºÆ®">_½ºÅ¸´õ½ºÆ®</sprite>
-		<sprite id="82" name="_´«°¡¸®°³">_´«°¡¸®°³</sprite>
-		<sprite id="83" name="_¸Á¿ø°æ">_¸Á¿ø°æ</sprite>
-		<sprite id="84" name="_°íºí¸°Á·°¡¸é">_°íºí¸°Á·°¡¸é</sprite>
-		<sprite id="85" name="_ÃÊ·Ï´õµëÀÌ">_ÃÊ·Ï´õµëÀÌ</sprite>
-		<sprite id="86" name="_¿ÀÅ©Á·Çï¸§">_¿ÀÅ©Á·Çï¸§</sprite>
-		<sprite id="87" name="_ÇìµåÆù">_ÇìµåÆù</sprite>
-		<sprite id="88" name="_Áê¾óÅ©¶ó¿î">_Áê¾óÅ©¶ó¿î</sprite>
-		<sprite id="89" name="_±¤´ë¸ðÀÚ">_±¤´ë¸ðÀÚ</sprite>
-		<sprite id="90" name="_»ê¼Ò¸¶½ºÅ©">_»ê¼Ò¸¶½ºÅ©</sprite>
-		<sprite id="91" name="_°¡½º¸¶½ºÅ©">_°¡½º¸¶½ºÅ©</sprite>
-		<sprite id="92" name="_ÇÏÆ®ÆÄ¿îµ¥ÀÌ¼Ç">_ÇÏÆ®ÆÄ¿îµ¥ÀÌ¼Ç</sprite>
+		<sprite id="19" name="Tiara">_Æ¼¾Æ¶ó</sprite>
+		<sprite id="20" name="Santa Hat">_»êÅ¸¸ðÀÚ</sprite>
+		<sprite id="21" name="Bandit Beard">_ÅÎ¼ö¿°</sprite>
+		<sprite id="22" name="Moustache">_Äà¼ö¿°</sprite>
+		<sprite id="23" name="Single Glass">_¿Ü´«¾È°æ</sprite>
+		<sprite id="24" name="Beard">_¼ö¿°</sprite>
+		<sprite id="25" name="Grandpa Beard">_Èò¼ö¿°</sprite>
+		<sprite id="26" name="Purple Glasses">_°í±Þ¼±±Û·¡½º</sprite>
+		<sprite id="27" name="Geek Glasses">_½ºÇÉ±Û·¡½º</sprite>
+		<sprite id="28" name="Queen Ribbon">_¿Õ¸®º»</sprite>
+		<sprite id="29" name="Sweet Gent">_½ºÀ§Æ®Á¨Æ²</sprite>
+		<sprite id="30" name="Golden Gear">_°ñµçÇìµå±â¾î</sprite>
+		<sprite id="31" name="Romantic Gent">_¿Ãµå½ºÅÍ·Î¸Ç½º</sprite>
+		<sprite id="32" name="Western Grace">_¿þ½ºÅÏ±×·¹ÀÌ½º</sprite>
+		<sprite id="33" name="Coronet">_ÄÚ·Î³Ý</sprite>
+		<sprite id="34" name="Cutie Band">_¸Ó¸®²ö</sprite>
+		<sprite id="35" name="Monk Cap">_¼ºÁ÷ÀÚÀÇ¸ðÀÚ</sprite>
+		<sprite id="36" name="Wizard Hat">_À§ÀúµåÇÞ</sprite>
+		<sprite id="37" name="Sunflower">_Àå½Ä¿ëÇØ¹Ù¶ó±â</sprite>
+		<sprite id="38" name="Angel Band">_Ãµ»çÀÇ¸Ó¸®¶ì</sprite>
+		<sprite id="39" name="Evil Band">_¾Ç¸¶ÀÇ¸Ó¸®¶ì</sprite>
+		<sprite id="40" name="Helm">_Çï¸§</sprite>
+		<sprite id="41" name="Majestic Goat">_¸¶Á¦½ºÆ½°í¿ìÆ®</sprite>
+		<sprite id="42" name="Snow Horn">_»õÇÏ¾á»Ô</sprite>
+		<sprite id="43" name="Spiky Band">_»þÇÁÇìµå±â¾î</sprite>
+		<sprite id="44" name="Wedding Veil">_¸é»çÆ÷</sprite>
+		<sprite id="45" name="Crown">_Å©¶ó¿î</sprite>
+		<sprite id="46" name="Propeller">_ÇÁ·ÎÆç¶ó</sprite>
+		<sprite id="47" name="Miniglasses (I think?)">_¹Ì´Ï±Û·¡½º</sprite>
+		<sprite id="48" name="Army Cap (Needs to be made a normal drop NOW.)">_ÇÁ·ÐÅ×¶ó±º¸ð</sprite>
+		<sprite id="49" name="Pierrot Nose">_±¤´ëÄÚ</sprite>
+		<sprite id="50" name="Zorro Mask (I think?)">_ÀÇÀû¾È´ë</sprite>
+		<sprite id="51" name="Munak Hat">_¹«³«¸ðÀÚ</sprite>
+		<sprite id="52" name="Gangster Mask">_½ÃÀ§¿ë¸¶½ºÅ©</sprite>
+		<sprite id="53" name="Iron Cain">_¾ÆÀÌ¾ðÄÉÀÎ</sprite>
+		<sprite id="54" name="Cigar">_´ã¹è</sprite>
+		<sprite id="55" name="Pipe">_ÆÄÀÌÇÁ´ã¹è</sprite>
+		<sprite id="56" name="Romantic Flower">_²ÉÀÙ</sprite>
+		<sprite id="57" name="Romantic Leaf">_Ç®ÀÙ</sprite>
+		<sprite id="58" name="Jack A Dandy">_¸Ó¸®¾È°æ</sprite>
+		<sprite id="59" name="Stop Post">_Á¤ÁöÇ¥ÁöÆÇ</sprite>
+		<sprite id="60" name="Doctor Band">_ÀÇ»ç¸Ó¸®¶ì</sprite>
+		<sprite id="61" name="Ghost Bandana">_¸ÁÀÚÀÇ¸Ó¸®¶ì</sprite>
+		<sprite id="62" name="Red Bandana">_¹Ý´Ù³ª</sprite>
+		<sprite id="63" name="Eagle Eyes">_µµ³¢´«</sprite>
+		<sprite id="64" name="Nurse Cap">_°£È£¸ð</sprite>
+		<sprite id="65" name="Mr. Smile (SATAN!!)">_½º¸¶ÀÏ</sprite>
+		<sprite id="66" name="Bomb Wick">_½ÉÁö</sprite>
+		<sprite id="67" name="Sakkat">_»ñ°«</sprite>
+		<sprite id="68" name="Opera Masque">_¿ÀÆä¶ó°¡¸é</sprite>
+		<sprite id="69" name="Heaven Ring">_¿µÈ¥°í¸®</sprite>
+		<sprite id="70" name="Earmuffs">_±Í¸¶°³</sprite>
+		<sprite id="71" name="Antlers">_»ç½¿»Ô</sprite>
+		<sprite id="72" name="Apple O' Archer">_¸í»ç¼öÀÇ»ç°ú</sprite>
+		<sprite id="73" name="Elven Ears">_¿äÁ¤ÀÇ±Í</sprite>
+		<sprite id="74" name="Pirate Bandana">_ÇØÀûµÎ°Ç</sprite>
+		<sprite id="75" name="Mr. Scream">_½ºÅ©·¡Ä¡¸¶½ºÅ©</sprite>
+		<sprite id="76" name="Poopoo Hat">_°Å½Ã±â</sprite>
+		<sprite id="77" name="Funeral Hat">_Àå·Ê°Ç</sprite>
+		<sprite id="78" name="Masquerade">_³ªºñ°¡¸é</sprite>
+		<sprite id="79" name="Welding Mask">_¿ëÁ¢¸¶½ºÅ©</sprite>
+		<sprite id="80" name="Pretend Murdered">_¿¬±Ø¼Òµµ±¸</sprite>
+		<sprite id="81" name="Stellar">_½ºÅ¸´õ½ºÆ®</sprite>
+		<sprite id="82" name="Blinker">_´«°¡¸®°³</sprite>
+		<sprite id="83" name="Binoculars">_¸Á¿ø°æ</sprite>
+		<sprite id="84" name="Goblin Mask">_°íºí¸°Á·°¡¸é</sprite>
+		<sprite id="85" name="Green Feelers">_ÃÊ·Ï´õµëÀÌ</sprite>
+		<sprite id="86" name="Orc Helm">_¿ÀÅ©Á·Çï¸§</sprite>
+		<sprite id="87" name="Headset">_ÇìµåÆù</sprite>
+		<sprite id="88" name="Gemmed Crown">_Áê¾óÅ©¶ó¿î</sprite>
+		<sprite id="89" name="Joker Jester">_±¤´ë¸ðÀÚ</sprite>
+		<sprite id="90" name="Oxygen Mask">_»ê¼Ò¸¶½ºÅ©</sprite>
+		<sprite id="91" name="Gas Mask">_°¡½º¸¶½ºÅ©</sprite>
+		<sprite id="92" name="Machoman Glasses (again?)">_ÇÏÆ®ÆÄ¿îµ¥ÀÌ¼Ç</sprite>
 		<sprite id="93" name="_·Îµå¼­Å¬¸´">_·Îµå¼­Å¬¸´</sprite>
-		<sprite id="94" name="_Ç²»ç¶û">_Ç²»ç¶û</sprite>
-		<sprite id="95" name="_¾ÈÀü¸ð">_¾ÈÀü¸ð</sprite>
-		<sprite id="96" name="_¿øÁÖ¹Î¸Ó¸®¶ì">_¿øÁÖ¹Î¸Ó¸®¶ì</sprite>
-		<sprite id="97" name="_¾ÈÅ×³ª">_¾ÈÅ×³ª</sprite>
-		<sprite id="98" name="_ÇÐ»ç¸ð">_ÇÐ»ç¸ð</sprite>
-		<sprite id="99" name="_·ÎµåÄ«È£ÀÇ»Ô">_·ÎµåÄ«È£ÀÇ»Ô</sprite>
-		<sprite id="100" name="_ÇÉÇï¸§">_ÇÉÇï¸§</sprite>
-		<sprite id="101" name="_Àå½Ä¿ë¾Ë²®Áú">_Àå½Ä¿ë¾Ë²®Áú</sprite>
-		<sprite id="102" name="_ÇÐ»ý¸ð">_ÇÐ»ý¸ð</sprite>
-		<sprite id="103" name="_º»Çï¸§">_º»Çï¸§</sprite>
-		<sprite id="104" name="_±êÅÐ¸ðÀÚ">_±êÅÐ¸ðÀÚ</sprite>
-		<sprite id="105" name="_Ä¿¼¼¾î">_Ä¿¼¼¾î</sprite>
-		<sprite id="106" name="_Ä«ÇÁ¶óÀÇ¸Ó¸®¶ì">_Ä«ÇÁ¶óÀÇ¸Ó¸®¶ì</sprite>
-		<sprite id="107" name="_µ·ÀÒÀºÀÚÀÇ¸¶À½">_µ·ÀÒÀºÀÚÀÇ¸¶À½</sprite>
-		<sprite id="108" name="_º¸µû¸®¸ð">_º¸µû¸®¸ð</sprite>
-		<sprite id="109" name="_ÄÉÀÌÅ©¸ðÀÚ">_ÄÉÀÌÅ©¸ðÀÚ</sprite>
-		<sprite id="110" name="_Ãµ»çÀÇÅõ±¸">_Ãµ»çÀÇÅõ±¸</sprite>
-		<sprite id="111" name="_¿ä¸®»çÀÇ¸ðÀÚ">_¿ä¸®»çÀÇ¸ðÀÚ</sprite>
-		<sprite id="112" name="_¸¶¹ý»çÀÇ¸ðÀÚ">_¸¶¹ý»çÀÇ¸ðÀÚ</sprite>
-		<sprite id="113" name="_ÃÐºÒ">_ÃÐºÒ</sprite>
-		<sprite id="114" name="_½ºÆ÷¾Æ¸ðÀÚ">_½ºÆ÷¾Æ¸ðÀÚ</sprite>
-		<sprite id="115" name="_ÆÒ´õ°õ¸ðÀÚ">_ÆÒ´õ°õ¸ðÀÚ</sprite>
-		<sprite id="116" name="_±¤»êÇï¸ä">_±¤»êÇï¸ä</sprite>
-		<sprite id="117" name="_³ªµéÀÌ¸ðÀÚ">_³ªµéÀÌ¸ðÀÚ</sprite>
-		<sprite id="118" name="_³Ê±¸¸®¸ðÀÚ">_³Ê±¸¸®¸ðÀÚ</sprite>
-		<sprite id="119" name="_Àü±¸¸Ó¸®¶ì">_Àü±¸¸Ó¸®¶ì</sprite>
-		<sprite id="120" name="_Æ÷¸µ¸ðÀÚ">_Æ÷¸µ¸ðÀÚ</sprite>
-		<sprite id="121" name="_½ÊÀÚ¸Ó¸®¶ì">_½ÊÀÚ¸Ó¸®¶ì</sprite>
+		<sprite id="94" name="Puppy Love">_Ç²»ç¶û</sprite>
+		<sprite id="95" name="Safety Helmet">_¾ÈÀü¸ð</sprite>
+		<sprite id="96" name="Indian Fillet">_¿øÁÖ¹Î¸Ó¸®¶ì</sprite>
+		<sprite id="97" name="Antennae">_¾ÈÅ×³ª</sprite>
+		<sprite id="98" name="Ph.D Hat">_ÇÐ»ç¸ð</sprite>
+		<sprite id="99" name="Lord Kaho's Horns">_·ÎµåÄ«È£ÀÇ»Ô</sprite>
+		<sprite id="100" name="Fin Helm">_ÇÉÇï¸§</sprite>
+		<sprite id="101" name="Eggshell Hat">_Àå½Ä¿ë¾Ë²®Áú</sprite>
+		<sprite id="102" name="Boys Cap">_ÇÐ»ý¸ð</sprite>
+		<sprite id="103" name="Bone Helm">_º»Çï¸§</sprite>
+		<sprite id="104" name="Feather Bonnet">_±êÅÐ¸ðÀÚ</sprite>
+		<sprite id="105" name="Corsair">_Ä¿¼¼¾î</sprite>
+		<sprite id="106" name="Kafra Band">_Ä«ÇÁ¶óÀÇ¸Ó¸®¶ì</sprite>
+		<sprite id="107" name="Heart of Merchant">_µ·ÀÒÀºÀÚÀÇ¸¶À½</sprite>
+		<sprite id="108" name="Handkerchief">_º¸µû¸®¸ð</sprite>
+		<sprite id="109" name="Cake Hat">_ÄÉÀÌÅ©¸ðÀÚ</sprite>
+		<sprite id="110" name="Angel Helm">_Ãµ»çÀÇÅõ±¸</sprite>
+		<sprite id="111" name="Chef Hat">_¿ä¸®»çÀÇ¸ðÀÚ</sprite>
+		<sprite id="112" name="Hat of Magic Instructor">_¸¶¹ý»çÀÇ¸ðÀÚ</sprite>
+		<sprite id="113" name="Candle">_ÃÐºÒ</sprite>
+		<sprite id="114" name="Spore Hat">_½ºÆ÷¾Æ¸ðÀÚ</sprite>
+		<sprite id="115" name="Panda Hat">_ÆÒ´õ°õ¸ðÀÚ</sprite>
+		<sprite id="116" name="Miner Hat">_±¤»êÇï¸ä</sprite>
+		<sprite id="117" name="Picnic Hat">_³ªµéÀÌ¸ðÀÚ</sprite>
+		<sprite id="118" name="Smokie Hat">_³Ê±¸¸®¸ðÀÚ</sprite>
+		<sprite id="119" name="Lightbulb Hairband">_Àü±¸¸Ó¸®¶ì</sprite>
+		<sprite id="120" name="Poring Hat">_Æ÷¸µ¸ðÀÚ</sprite>
+		<sprite id="121" name="Cross Hairband">_½ÊÀÚ¸Ó¸®¶ì</sprite>
 		<sprite id="122" name="_¿­¸Å²®Áú">_¿­¸Å²®Áú</sprite>
-		<sprite id="123" name="_»õ³¢¾Ç¸¶¸ðÀÚ">_»õ³¢¾Ç¸¶¸ðÀÚ</sprite>
-		<sprite id="124" name="_¾Ë·Ï´Þ·Ï¾Ë²®Áú">_¾Ë·Ï´Þ·Ï¾Ë²®Áú</sprite>
-		<sprite id="125" name="_¹ß±×·¹">_¹ß±×·¹</sprite>
-		<sprite id="126" name="_ÇÏÆ®¸Ó¸®ÇÉ">_ÇÏÆ®¸Ó¸®ÇÉ</sprite>
-		<sprite id="127" name="_¸Ó¸®Æ÷ÀÚ±â">_¸Ó¸®Æ÷ÀÚ±â</sprite>
-		<sprite id="128" name="_¿ÀÆä¶óÀ¯·É°¡¸é">_¿ÀÆä¶óÀ¯·É°¡¸é</sprite>
-		<sprite id="129" name="_¾Ç¸¶ÀÇ³¯°³">_¾Ç¸¶ÀÇ³¯°³</sprite>
-		<sprite id="130" name="_¸¶¼ú»çÀÇ¸ðÀÚ">_¸¶¼ú»çÀÇ¸ðÀÚ</sprite>
-		<sprite id="131" name="_ÆÐ¼Ç¼±±Û·¡½º">_ÆÐ¼Ç¼±±Û·¡½º</sprite>
-		<sprite id="132" name="_ÃÊ½Â´Þ¸Ó¸®ÇÉ">_ÃÊ½Â´Þ¸Ó¸®ÇÉ</sprite>
-		<sprite id="133" name="_ÁÙ¹«´Ì¸Ó¸®¶ì">_ÁÙ¹«´Ì¸Ó¸®¶ì</sprite>
+		<sprite id="123" name="Deviruchi Hat">_»õ³¢¾Ç¸¶¸ðÀÚ</sprite>
+		<sprite id="124" name="Spotted Eggshell">_¾Ë·Ï´Þ·Ï¾Ë²®Áú</sprite>
+		<sprite id="125" name="Innocence of Maiden (Make up your mind, Gravity!)">_¹ß±×·¹</sprite>
+		<sprite id="126" name="Heart Hairpin">_ÇÏÆ®¸Ó¸®ÇÉ</sprite>
+		<sprite id="127" name="Dumpling Decoration">_¸Ó¸®Æ÷ÀÚ±â</sprite>
+		<sprite id="128" name="Phantom of Opera">_¿ÀÆä¶óÀ¯·É°¡¸é</sprite>
+		<sprite id="129" name="Innocence of Maiden (again?)">_¾Ç¸¶ÀÇ³¯°³</sprite>
+		<sprite id="130" name="Magic Hat">_¸¶¼ú»çÀÇ¸ðÀÚ</sprite>
+		<sprite id="131" name="Fashion Sunglasses">_ÆÐ¼Ç¼±±Û·¡½º</sprite>
+		<sprite id="132" name="Crescent Moon Hairpin">_ÃÊ½Â´Þ¸Ó¸®ÇÉ</sprite>
+		<sprite id="133" name="Striped Bandana">_ÁÙ¹«´Ì¸Ó¸®¶ì</sprite>
 		<sprite id="134" name="_½ÅºñÇÑ¿­¸Å²®Áú">_½ÅºñÇÑ¿­¸Å²®Áú</sprite>
-		<sprite id="135" name="_°í¾çÀÌ¹æ¿ï">_°í¾çÀÌ¹æ¿ï</sprite>
-		<sprite id="136" name="_Ã»»ö¸Ó¸®¶ì">_Ã»»ö¸Ó¸®¶ì</sprite>
-		<sprite id="137" name="_½ºÇÎÅ©½º¸ðÀÚ">_½ºÇÎÅ©½º¸ðÀÚ</sprite>
-		<sprite id="138" name="_ÅÂ¾ç½ÅÀÇ¸ðÀÚ">_ÅÂ¾ç½ÅÀÇ¸ðÀÚ</sprite>
-		<sprite id="139" name="_º»°Ç¸ðÀÚ">_º»°Ç¸ðÀÚ</sprite>
+		<sprite id="135" name="Innocence of Maiden">_°í¾çÀÌ¹æ¿ï</sprite>
+		<sprite id="136" name="Blue Bandana">_Ã»»ö¸Ó¸®¶ì</sprite>
+		<sprite id="137" name="Sphinx Hat">_½ºÇÎÅ©½º¸ðÀÚ</sprite>
+		<sprite id="138" name="Solar God Helm">_ÅÂ¾ç½ÅÀÇ¸ðÀÚ</sprite>
+		<sprite id="139" name="Bon Gun Hat">_º»°Ç¸ðÀÚ</sprite>
 		<sprite id="140" name="_»ç¶ûÀÇ¿­¸Å">_»ç¶ûÀÇ¿­¸Å</sprite>
-		<sprite id="141" name="_°ËÀº°í¾çÀÌ±Í">_°ËÀº°í¾çÀÌ±Í</sprite>
-		<sprite id="142" name="_´Ã¾îÁø°í¾çÀÌ">_´Ã¾îÁø°í¾çÀÌ</sprite>
-		<sprite id="143" name="_°õµ¹ÀÌ¸ðÀÚ">_°õµ¹ÀÌ¸ðÀÚ</sprite>
-		<sprite id="144" name="_²¿±ò¸ðÀÚ">_²¿±ò¸ðÀÚ</sprite>
-		<sprite id="145" name="_²É¸Ó¸®ÇÉ">_²É¸Ó¸®ÇÉ</sprite>
-		<sprite id="146" name="_¹ÐÂ¤¸ðÀÚ">_¹ÐÂ¤¸ðÀÚ</sprite>
-		<sprite id="147" name="_¹ÝÃ¢°í">_¹ÝÃ¢°í</sprite>
-		<sprite id="148" name="_³ª¹µÀÙÅõ±¸">_³ª¹µÀÙÅõ±¸</sprite>
-		<sprite id="149" name="_»ý¼±¸ðÀÚ">_»ý¼±¸ðÀÚ</sprite>
+		<sprite id="141" name="Black Cat Ears">_°ËÀº°í¾çÀÌ±Í</sprite>
+		<sprite id="142" name="Drooping Cat">_´Ã¾îÁø°í¾çÀÌ</sprite>
+		<sprite id="143" name="Teddybear Hat">_°õµ¹ÀÌ¸ðÀÚ</sprite>
+		<sprite id="144" name="Party Hat">_²¿±ò¸ðÀÚ</sprite>
+		<sprite id="145" name="Flower Hairpin">_²É¸Ó¸®ÇÉ</sprite>
+		<sprite id="146" name="Straw Hat">_¹ÐÂ¤¸ðÀÚ</sprite>
+		<sprite id="147" name="Giant Band Aid">_¹ÝÃ¢°í</sprite>
+		<sprite id="148" name="Smokie Leaf">_³ª¹µÀÙÅõ±¸</sprite>
+		<sprite id="149" name="Blue Fish">_»ý¼±¸ðÀÚ</sprite>
 		<sprite id="150" name="_¼­Å¥¹ö½º»Ô">_¼­Å¥¹ö½º»Ô</sprite>
-		<sprite id="151" name="_¼Øºê·¹·Î">_¼Øºê·¹·Î</sprite>
-		<sprite id="152" name="_¾Ç¸¶³¯°³±Í">_¾Ç¸¶³¯°³±Í</sprite>
-		<sprite id="153" name="_¿©¿ì°¡¸é">_¿©¿ì°¡¸é</sprite>
+		<sprite id="151" name="Sombrero">_¼Øºê·¹·Î</sprite>
+		<sprite id="152" name="Evil Wing Ears">_¾Ç¸¶³¯°³±Í</sprite>
+		<sprite id="153" name="Fox Mask">_¿©¿ì°¡¸é</sprite>
 		<sprite id="154" name="_¿­Ç÷¸Ó¸®¶ì">_¿­Ç÷¸Ó¸®¶ì</sprite>
-		<sprite id="155" name="_ÀÎµð¾È¸Ó¸®¶ì">_ÀÎµð¾È¸Ó¸®¶ì</sprite>
-		<sprite id="156" name="_ÀÎÅ¥¹ö½º»Ô">_ÀÎÅ¥¹ö½º»Ô</sprite>
-		<sprite id="157" name="_ÀÚ¼¼±³Á¤¸ðÀÚ">_ÀÚ¼¼±³Á¤¸ðÀÚ</sprite>
-		<sprite id="158" name="_Ãµ»ç³¯°³±Í">_Ãµ»ç³¯°³±Í</sprite>
-		<sprite id="159" name="_Ä«¿ìº¸ÀÌ¸ðÀÚ">_Ä«¿ìº¸ÀÌ¸ðÀÚ</sprite>
-		<sprite id="160" name="_ÅÐ¸ðÀÚ">_ÅÐ¸ðÀÚ</sprite>
-		<sprite id="161" name="_Æ«¸³¸Ó¸®ÇÉ">_Æ«¸³¸Ó¸®ÇÉ</sprite>
-		<sprite id="162" name="_ÇØ´Þ¸ðÀÚ">_ÇØ´Þ¸ðÀÚ</sprite>
+		<sprite id="155" name="Indian Headband">_ÀÎµð¾È¸Ó¸®¶ì</sprite>
+		<sprite id="156" name="Incubus Horn">_ÀÎÅ¥¹ö½º»Ô</sprite>
+		<sprite id="157" name="Model Training Hat">_ÀÚ¼¼±³Á¤¸ðÀÚ</sprite>
+		<sprite id="158" name="Angel Wing Ears">_Ãµ»ç³¯°³±Í</sprite>
+		<sprite id="159" name="Cowboy Hat">_Ä«¿ìº¸ÀÌ¸ðÀÚ</sprite>
+		<sprite id="160" name="Beanie">_ÅÐ¸ðÀÚ</sprite>
+		<sprite id="161" name="Tulip Hairpin">_Æ«¸³¸Ó¸®ÇÉ</sprite>
+		<sprite id="162" name="Sea Otter Hat">_ÇØ´Þ¸ðÀÚ</sprite>
 		<sprite id="163" name="_XÀÚ¸Ó¸®ÇÉ">_XÀÚ¸Ó¸®ÇÉ</sprite>
-		<sprite id="164" name="_¿©¿ÕÀÇÅõ±¸">_¿©¿ÕÀÇÅõ±¸</sprite>
-		<sprite id="165" name="_¹Ì½ºÆ®·¹½º¿Õ°ü">_¹Ì½ºÆ®·¹½º¿Õ°ü</sprite>
-		<sprite id="166" name="_¹ö¼¸¸Ó¸®¶ì">_¹ö¼¸¸Ó¸®¶ì</sprite>
-		<sprite id="167" name="_»¡°£Å×ÀÏ¸®º»">_»¡°£Å×ÀÏ¸®º»</sprite>
-		<sprite id="168" name="_±ÍÂúÀº³Ê±¸¸®">_±ÍÂúÀº³Ê±¸¸®</sprite>
-		<sprite id="169" name="_¾çÂÊ±Í¹Ø¸®º»">_¾çÂÊ±Í¹Ø¸®º»</sprite>
-		<sprite id="170" name="_¾Ë¶÷°¡¸é">_¾Ë¶÷°¡¸é</sprite>
-		<sprite id="171" name="_°íºí¸°°¡¸é1È£">_°íºí¸°°¡¸é1È£</sprite>
-		<sprite id="172" name="_°íºí¸°°¡¸é2È£">_°íºí¸°°¡¸é2È£</sprite>
-		<sprite id="173" name="_°íºí¸°°¡¸é3È£">_°íºí¸°°¡¸é3È£</sprite>
-		<sprite id="174" name="_°íºí¸°°¡¸é4È£">_°íºí¸°°¡¸é4È£</sprite>
-		<sprite id="175" name="_´ëÇü±Ý¹æ¿ï">_´ëÇü±Ý¹æ¿ï</sprite>
-		<sprite id="176" name="_¼ö³à¸ðÀÚ">_¼ö³à¸ðÀÚ</sprite>
-		<sprite id="177" name="_¼ö³à¸ðÀÚ">_¼ö³à¸ðÀÚ</sprite>
-		<sprite id="178" name="_¿ÀÅ©È÷¾î·ÎÅõ±¸">_¿ÀÅ©È÷¾î·ÎÅõ±¸</sprite>
-		<sprite id="179" name="_¿ÀÅ©È÷¾î·ÎÅõ±¸">_¿ÀÅ©È÷¾î·ÎÅõ±¸</sprite>
-		<sprite id="180" name="_¾î»õ½Å¸¶½ºÅ©">_¾î»õ½Å¸¶½ºÅ©</sprite>
-		<sprite id="181" name="_Å¸ÀÌ°Å¸¶½ºÅ©">_Å¸ÀÌ°Å¸¶½ºÅ©</sprite>
-		<sprite id="182" name="_°í¾çÀÌ¸ðÀÚ">_°í¾çÀÌ¸ðÀÚ</sprite>
-		<sprite id="183" name="_¼¼ÀÏÇ¥ÁöÆÇ">_¼¼ÀÏÇ¥ÁöÆÇ</sprite>
-		<sprite id="184" name="_Å¸Å°¿ì½º´«°¡¸®°³">_Å¸Å°¿ì½º´«°¡¸®°³</sprite>
+		<sprite id="164" name="Crown of Ancient Queen">_¿©¿ÕÀÇÅõ±¸</sprite>
+		<sprite id="165" name="Crown of Mistress">_¹Ì½ºÆ®·¹½º¿Õ°ü</sprite>
+		<sprite id="166" name="Decorative Mushroom">_¹ö¼¸¸Ó¸®¶ì</sprite>
+		<sprite id="167" name="Red Ribbon">_»¡°£Å×ÀÏ¸®º»</sprite>
+		<sprite id="168" name="Lazy Smokie">_±ÍÂúÀº³Ê±¸¸®</sprite>
+		<sprite id="169" name="Small Ribbons">_¾çÂÊ±Í¹Ø¸®º»</sprite>
+		<sprite id="170" name="Alarm Mask">_¾Ë¶÷°¡¸é</sprite>
+		<sprite id="171" name="Poker Face">_°íºí¸°°¡¸é1È£</sprite>
+		<sprite id="172" name="Surprised Mask">_°íºí¸°°¡¸é2È£</sprite>
+		<sprite id="173" name="Annoyed Mask">_°íºí¸°°¡¸é3È£</sprite>
+		<sprite id="174" name="Goblin Leader Mask">_°íºí¸°°¡¸é4È£</sprite>
+		<sprite id="175" name="Golden Bells">_´ëÇü±Ý¹æ¿ï</sprite>
+		<sprite id="176" name="Coif (Nun Hat)">_¼ö³à¸ðÀÚ</sprite>
+		<sprite id="177" name="Coif (Nun Hat)">_¼ö³à¸ðÀÚ</sprite>
+		<sprite id="178" name="Orc Hero Helm">_¿ÀÅ©È÷¾î·ÎÅõ±¸</sprite>
+		<sprite id="179" name="Orc Hero Helm">_¿ÀÅ©È÷¾î·ÎÅõ±¸</sprite>
+		<sprite id="180" name="Assassin Mask">_¾î»õ½Å¸¶½ºÅ©</sprite>
+		<sprite id="181" name="Tiger Mask">_Å¸ÀÌ°Å¸¶½ºÅ©</sprite>
+		<sprite id="182" name="Neko Mimi (mo?forget it)">_°í¾çÀÌ¸ðÀÚ</sprite>
+		<sprite id="183" name="Sales Sign">_¼¼ÀÏÇ¥ÁöÆÇ</sprite>
+		<sprite id="184" name="Takius's Blinker">_Å¸Å°¿ì½º´«°¡¸®°³</sprite>
 		<sprite id="185" name="_¹èÆ²¿Â¶óÀÎ">_¹èÆ²¿Â¶óÀÎ</sprite>
-		<sprite id="186" name="_ÇØ¹Ù¶ó±âÇÉ">_ÇØ¹Ù¶ó±âÇÉ</sprite>
-		<sprite id="187" name="_°ËÀº´«°¡¸®°³">_°ËÀº´«°¡¸®°³</sprite>
-		<sprite id="188" name="_Åä½ºÆ®">_Åä½ºÆ®</sprite>
-		<sprite id="189" name="_Å½Á¤¸ðÀÚ">_Å½Á¤¸ðÀÚ</sprite>
-		<sprite id="190" name="_Â÷¾ç¸ðÀÚ">_Â÷¾ç¸ðÀÚ</sprite>
-		<sprite id="191" name="_Á¥²ÀÁö">_Á¥²ÀÁö</sprite>
-		<sprite id="192" name="_¿À¸®¸ðÀÚ">_¿À¸®¸ðÀÚ</sprite>
-		<sprite id="193" name="_½´³ë¸ðÀÚ">_½´³ë¸ðÀÚ</sprite>
-		<sprite id="194" name="_ºÐ³ëÀÔ">_ºÐ³ëÀÔ</sprite>
-		<sprite id="195" name="_º¡°ÅÁö¸ðÀÚ">_º¡°ÅÁö¸ðÀÚ</sprite>
-		<sprite id="196" name="_¹æÇÑ¸ðÀÚ">_¹æÇÑ¸ðÀÚ</sprite>
-		<sprite id="197" name="_¹Ù³ª³ª¸ðÀÚ">_¹Ù³ª³ª¸ðÀÚ</sprite>
-		<sprite id="198" name="_¹Ì½ºÆ½·ÎÁî">_¹Ì½ºÆ½·ÎÁî</sprite>
+		<sprite id="186" name="Sunflower Hairpin">_ÇØ¹Ù¶ó±âÇÉ</sprite>
+		<sprite id="187" name="Dark Blinder">_°ËÀº´«°¡¸®°³</sprite>
+		<sprite id="188" name="Crunch Toast">_Åä½ºÆ®</sprite>
+		<sprite id="189" name="Renown Detective's Cap (Sherlocke maybe?)">_Å½Á¤¸ðÀÚ</sprite>
+		<sprite id="190" name="Red Bonnet">_Â÷¾ç¸ðÀÚ</sprite>
+		<sprite id="191" name="Baby Pacifier">_Á¥²ÀÁö</sprite>
+		<sprite id="192" name="Galapago Hat">_¿À¸®¸ðÀÚ</sprite>
+		<sprite id="193" name="Super Novice Hat">_½´³ë¸ðÀÚ</sprite>
+		<sprite id="194" name="Angry Snarl">_ºÐ³ëÀÔ</sprite>
+		<sprite id="195" name="Bucket Hat">_º¡°ÅÁö¸ðÀÚ</sprite>
+		<sprite id="196" name="Winter Hat">_¹æÇÑ¸ðÀÚ</sprite>
+		<sprite id="197" name="Banana Hat">_¹Ù³ª³ª¸ðÀÚ</sprite>
+		<sprite id="198" name="Mystic Rose">_¹Ì½ºÆ½·ÎÁî</sprite>
 		<sprite id="199" name="_°­¾ÆÁö±Í">_°­¾ÆÁö±Í</sprite>
-		<sprite id="200" name="_Áö¸£Å¸½º°¡¸é">_Áö¸£Å¸½º°¡¸é</sprite>
-		<sprite id="201" name="_»õµÕÁö">_»õµÕÁö</sprite>
-		<sprite id="202" name="_¶óÀÌ¿Â¸¶½ºÅ©">_¶óÀÌ¿Â¸¶½ºÅ©</sprite>
-		<sprite id="203" name="_Å¬·Î½ºÇï¸ä">_Å¬·Î½ºÇï¸ä</sprite>
-		<sprite id="204" name="_¿£Á©¸µ¸ðÀÚ">_¿£Á©¸µ¸ðÀÚ</sprite>
-		<sprite id="205" name="_¾ç¸ðÀÚ">_¾ç¸ðÀÚ</sprite>
-		<sprite id="206" name="_È£¹Ú¸ðÀÚ">_È£¹Ú¸ðÀÚ</sprite>
-		<sprite id="207" name="_»çÀÌÅ¬·Ó½º¾ÆÀÌ">_»çÀÌÅ¬·Ó½º¾ÆÀÌ</sprite>
-		<sprite id="208" name="_¿¤¸®½º¸ðÀÚ">_¿¤¸®½º¸ðÀÚ</sprite>
-		<sprite id="209" name="_¸ÅÁ÷¾ÆÀÌÁî">_¸ÅÁ÷¾ÆÀÌÁî</sprite>
-		<sprite id="210" name="_ºÎ¿ë">_ºÎ¿ë</sprite>
-		<sprite id="211" name="_¿¹»Û¸®º»">_¿¹»Û¸®º»</sprite>
-		<sprite id="212" name="_¸¶¸®¿À³Ý¸ðÀÚ">_¸¶¸®¿À³Ý¸ðÀÚ</sprite>
-		<sprite id="213" name="_ÃÊ½Â´ÞÅõ±¸">_ÃÊ½Â´ÞÅõ±¸</sprite>
-		<sprite id="214" name="_°¡ºÎÅ°°¡¸é">_°¡ºÎÅ°°¡¸é</sprite>
-		<sprite id="215" name="_ÄÚ³¢¸®¸ðÀÚ">_ÄÚ³¢¸®¸ðÀÚ</sprite>
-		<sprite id="216" name="_¾ß±¸¸ðÀÚ">_¾ß±¸¸ðÀÚ</sprite>
-		<sprite id="217" name="_±¹°æÀÏ¸ðÀÚ">_±¹°æÀÏ¸ðÀÚ</sprite>
-		<sprite id="218" name="_½Ç¹öÆ¼¾Æ¶ó">_½Ç¹öÆ¼¾Æ¶ó</sprite>
-		<sprite id="219" name="_±¤´ë¸ðÀÚ_">_±¤´ë¸ðÀÚ_</sprite>
-		<sprite id="220" name="_À½Ç¥ÇìµåÆù">_À½Ç¥ÇìµåÆù</sprite>
-		<sprite id="221" name="_ºÀ°ü">_ºÀ°ü</sprite>
-		<sprite id="222" name="_¿£Á©¸µÇÉ">_¿£Á©¸µÇÉ</sprite>
-		<sprite id="223" name="_°¢½ÃÅ»">_°¢½ÃÅ»</sprite>
-		<sprite id="224" name="_±êÅÐº£·¹¸ð">_±êÅÐº£·¹¸ð</sprite>
-		<sprite id="225" name="_¹ßÅ°¸®Åõ±¸">_¹ßÅ°¸®Åõ±¸</sprite>
-		<sprite id="226" name="_º£·¹¸ð">_º£·¹¸ð</sprite>
-		<sprite id="227" name="_»ç¶Ç¸ðÀÚ">_»ç¶Ç¸ðÀÚ</sprite>
-		<sprite id="228" name="_¾Æ¾ä">_¾Æ¾ä</sprite>
-		<sprite id="229" name="_ÀÍ¸í¿äÃ»">_ÀÍ¸í¿äÃ»</sprite>
-		<sprite id="230" name="_ÇÏÈ¸Å»">_ÇÏÈ¸Å»</sprite>
-		<sprite id="231" name="_»çÀÚÅ»">_»çÀÚÅ»</sprite>
-		<sprite id="232" name="_°ñµåÆ¼¾Æ¶ó">_°ñµåÆ¼¾Æ¶ó</sprite>
-		<sprite id="233" name="_¾ÏÈæÀÇÅõ±¸">_¾ÏÈæÀÇÅõ±¸</sprite>
+		<sprite id="200" name="Zherlthsh Mask (Zeolotus Mask)">_Áö¸£Å¸½º°¡¸é</sprite>
+		<sprite id="201" name="Bird Nest">_»õµÕÁö</sprite>
+		<sprite id="202" name="Lion Mask">_¶óÀÌ¿Â¸¶½ºÅ©</sprite>
+		<sprite id="203" name="Close Helmet">_Å¬·Î½ºÇï¸ä</sprite>
+		<sprite id="204" name="Angeling Hat">_¿£Á©¸µ¸ðÀÚ</sprite>
+		<sprite id="205" name="Sheep Hat">_¾ç¸ðÀÚ</sprite>
+		<sprite id="206" name="Pumpkin Head">_È£¹Ú¸ðÀÚ</sprite>
+		<sprite id="207" name="Cyclops Eye">_»çÀÌÅ¬·Ó½º¾ÆÀÌ</sprite>
+		<sprite id="208" name="Alice Doll Hat">_¿¤¸®½º¸ðÀÚ</sprite>
+		<sprite id="209" name="Magic Eyes (Wizardy looking)">_¸ÅÁ÷¾ÆÀÌÁî</sprite>
+		<sprite id="210" name="Lotus">_ºÎ¿ë</sprite>
+		<sprite id="211" name="Kawaii Ribbon">_¿¹»Û¸®º»</sprite>
+		<sprite id="212" name="Marionette Doll Hat">_¸¶¸®¿À³Ý¸ðÀÚ</sprite>
+		<sprite id="213" name="Crescent Helm">_ÃÊ½Â´ÞÅõ±¸</sprite>
+		<sprite id="214" name="Kabuki Mask">_°¡ºÎÅ°°¡¸é</sprite>
+		<sprite id="215" name="Elephant Hat">_ÄÚ³¢¸®¸ðÀÚ</sprite>
+		<sprite id="216" name="Baseball Hat">_¾ß±¸¸ðÀÚ</sprite>
+		<sprite id="217" name="National Holiday Hat">_±¹°æÀÏ¸ðÀÚ</sprite>
+		<sprite id="218" name="Silver Tiara">_½Ç¹öÆ¼¾Æ¶ó</sprite>
+		<sprite id="219" name="Brazil Event Hat">_±¤´ë¸ðÀÚ_</sprite>
+		<sprite id="220" name="Note Headphones">_À½Ç¥ÇìµåÆù</sprite>
+		<sprite id="221" name="Phoenix Crown">_ºÀ°ü</sprite>
+		<sprite id="222" name="Angeling Pin">_¿£Á©¸µÇÉ</sprite>
+		<sprite id="223" name="Bride Mask">_°¢½ÃÅ»</sprite>
+		<sprite id="224" name="Feather Beret">_±êÅÐº£·¹¸ð</sprite>
+		<sprite id="225" name="Valkyrie Helm">_¹ßÅ°¸®Åõ±¸</sprite>
+		<sprite id="226" name="Beret">_º£·¹¸ð</sprite>
+		<sprite id="227" name="Judge Hat">_»ç¶Ç¸ðÀÚ</sprite>
+		<sprite id="228" name="A-yam">_¾Æ¾ä</sprite>
+		<sprite id="229" name="Anonymity Request">_ÀÍ¸í¿äÃ»</sprite>
+		<sprite id="230" name="Smiling Mask">_ÇÏÈ¸Å»</sprite>
+		<sprite id="231" name="Lion Masquerade">_»çÀÚÅ»</sprite>
+		<sprite id="232" name="Golden Tiara">_°ñµåÆ¼¾Æ¶ó</sprite>
+		<sprite id="233" name="Helm of Darkness">_¾ÏÈæÀÇÅõ±¸</sprite>
 		<sprite id="234" name="_°­¾ÆÁö¸ðÀÚ">_°­¾ÆÁö¸ðÀÚ</sprite>
-		<sprite id="235" name="_»õµÕÁö¸ðÀÚ">_»õµÕÁö¸ðÀÚ</sprite>
-		<sprite id="236" name="_¼±ÀåÀÇ¸ðÀÚ">_¼±ÀåÀÇ¸ðÀÚ</sprite>
-		<sprite id="237" name="_¿ù°è¼ö°ü">_¿ù°è¼ö°ü</sprite>
-		<sprite id="238" name="_Àå½Ä¿ëÁö¿À±×·¡ÆÛ">_Àå½Ä¿ëÁö¿À±×·¡ÆÛ</sprite>
-		<sprite id="239" name="_Æ®À©¸®º»">_Æ®À©¸®º»</sprite>
-		<sprite id="240" name="_À½À¯½ÃÀÎ¸ðÀÚ">_À½À¯½ÃÀÎ¸ðÀÚ</sprite>
-		<sprite id="241" name="_³«¿±">_³«¿±</sprite>
-		<sprite id="242" name="_¸®º»_°ËÁ¤">_¸®º»_°ËÁ¤</sprite>
-		<sprite id="243" name="_¸®º»_³ë¶û">_¸®º»_³ë¶û</sprite>
-		<sprite id="244" name="_¸®º»_ÃÊ·Ï">_¸®º»_ÃÊ·Ï</sprite>
-		<sprite id="245" name="_¸®º»_ºÐÈ«">_¸®º»_ºÐÈ«</sprite>
+		<sprite id="235" name="Nest Hat">_»õµÕÁö¸ðÀÚ</sprite>
+		<sprite id="236" name="Captain's Hat">_¼±ÀåÀÇ¸ðÀÚ</sprite>
+		<sprite id="237" name="Laurel Crown">_¿ù°è¼ö°ü</sprite>
+		<sprite id="238" name="Geographer Decoration">_Àå½Ä¿ëÁö¿À±×·¡ÆÛ</sprite>
+		<sprite id="239" name="Twin Ribbon">_Æ®À©¸®º»</sprite>
+		<sprite id="240" name="Wandering Minstrel Hat">_À½À¯½ÃÀÎ¸ðÀÚ</sprite>
+		<sprite id="241" name="Autumn Leaves">_³«¿±</sprite>
+		<sprite id="242" name="Black Ribbon">_¸®º»_°ËÁ¤</sprite>
+		<sprite id="243" name="Yellow Ribbon">_¸®º»_³ë¶û</sprite>
+		<sprite id="244" name="Green Ribbon">_¸®º»_ÃÊ·Ï</sprite>
+		<sprite id="245" name="Pink Ribbon">_¸®º»_ºÐÈ«</sprite>
 		<sprite id="246" name="_¸®º»_»¡°­">_¸®º»_»¡°­</sprite>
-		<sprite id="247" name="_¸®º»_ÁÖÈ«">_¸®º»_ÁÖÈ«</sprite>
-		<sprite id="248" name="_¸®º»_ÇÏ¾ç">_¸®º»_ÇÏ¾ç</sprite>
-		<sprite id="249" name="_´Ã¾îÁøÅä³¢">_´Ã¾îÁøÅä³¢</sprite>
-		<sprite id="250" name="_¸Þ±äÄ¸">_¸Þ±äÄ¸</sprite>
+		<sprite id="247" name="Orange Ribbon">_¸®º»_ÁÖÈ«</sprite>
+		<sprite id="248" name="White Ribbon">_¸®º»_ÇÏ¾ç</sprite>
+		<sprite id="249" name="Drooping Bunny">_´Ã¾îÁøÅä³¢</sprite>
+		<sprite id="250" name="Magni's Cap">_¸Þ±äÄ¸</sprite>
 		<sprite id="251" name="_ÇÁ¸®Ä«¼­Å¬¸´">_ÇÁ¸®Ä«¼­Å¬¸´</sprite>
-		<sprite id="252" name="_ÄÚÆú¶ó">_ÄÚÆú¶ó</sprite>
-		<sprite id="253" name="_¸Þ·Õ°¡¸é">_¸Þ·Õ°¡¸é</sprite>
-		<sprite id="254" name="_¿ïÄ¸">_¿ïÄ¸</sprite>
-		<sprite id="255" name="_Ãµ»çÀÇÀÔ¸ÂÃã">_Ãµ»çÀÇÀÔ¸ÂÃã</sprite>
-		<sprite id="256" name="_¸ð¸£ÇÇ¼Å½ºµÎ°Ç">_¸ð¸£ÇÇ¼Å½ºµÎ°Ç</sprite>
-		<sprite id="257" name="_¸ð¸®¾Æ³×Çï¸§">_¸ð¸®¾Æ³×Çï¸§</sprite>
-		<sprite id="258" name="_°Ôºê³×ÀÌÅõ±¸">_°Ôºê³×ÀÌÅõ±¸</sprite>
-		<sprite id="259" name="_ÇÏ¾á²ÉÀÙ">_ÇÏ¾á²ÉÀÙ</sprite>
-		<sprite id="260" name="_±Ý»ö°í¸®">_±Ý»ö°í¸®</sprite>
-		<sprite id="261" name="_¿ù°è°ü">_¿ù°è°ü</sprite>
-		<sprite id="262" name="_¶óÀÌµå¿öµå">_¶óÀÌµå¿öµå</sprite>
-		<sprite id="263" name="_³ë¶õ¾ß±¸¸ðÀÚ">_³ë¶õ¾ß±¸¸ðÀÚ</sprite>
+		<sprite id="252" name="Coppola (Pink Hat)">_ÄÚÆú¶ó</sprite>
+		<sprite id="253" name="Smiling Tongue Mask">_¸Þ·Õ°¡¸é</sprite>
+		<sprite id="254" name="Ulle's Cap">_¿ïÄ¸</sprite>
+		<sprite id="255" name="Angel's Kiss">_Ãµ»çÀÇÀÔ¸ÂÃã</sprite>
+		<sprite id="256" name="Blue Headband Looking Thing">_¸ð¸£ÇÇ¼Å½ºµÎ°Ç</sprite>
+		<sprite id="257" name="Morrigane's Helm">_¸ð¸®¾Æ³×Çï¸§</sprite>
+		<sprite id="258" name="Goibne's Helmet">_°Ôºê³×ÀÌÅõ±¸</sprite>
+		<sprite id="259" name="White Romantic/Centimental Flower">_ÇÏ¾á²ÉÀÙ</sprite>
+		<sprite id="260" name="Golden Halo">_±Ý»ö°í¸®</sprite>
+		<sprite id="261" name="Another Laurel without flowers?">_¿ù°è°ü</sprite>
+		<sprite id="262" name="Rideword Hat">_¶óÀÌµå¿öµå</sprite>
+		<sprite id="263" name="Brown Baseball Cap">_³ë¶õ¾ß±¸¸ðÀÚ</sprite>
 		<sprite id="264" name="_ºñ»óÇÏ´ÂÃµ»ç">_ºñ»óÇÏ´ÂÃµ»ç</sprite>
 		<sprite id="265" name="_µå·¹½ºÇÞ">_µå·¹½ºÇÞ</sprite>
 		<sprite id="266" name="_»õÆ²¶óÀÌÆ®Çì¾î¹êµå">_»õÆ²¶óÀÌÆ®Çì¾î¹êµå</sprite>
@@ -1686,15 +1687,15 @@
 		<sprite id="284" name="_È¸»ö¸¶¹ý»çÀÇ¸ðÀÚ">_È¸»ö¸¶¹ý»çÀÇ¸ðÀÚ</sprite>
 		<sprite id="285" name="_ÆÄ¶û¸¶¹ý»çÀÇ¸ðÀÚ">_ÆÄ¶û¸¶¹ý»çÀÇ¸ðÀÚ</sprite>
 		<sprite id="286" name="_³ë¶û¸¶¹ý»çÀÇ¸ðÀÚ">_³ë¶û¸¶¹ý»çÀÇ¸ðÀÚ</sprite>
-		<sprite id="287" name="_ÇÏ¾á²ÉÀÙ">_ÇÏ¾á²ÉÀÙ</sprite>
-		<sprite id="288" name="_´«°¡¸®°³">_´«°¡¸®°³</sprite>
-		<sprite id="289" name="_¼±±Û·¡½º">_¼±±Û·¡½º</sprite>
-		<sprite id="290" name="_Ãµ»çÀÇ¸Ó¸®¶ì">_Ãµ»çÀÇ¸Ó¸®¶ì</sprite>
-		<sprite id="291" name="_¾Ç¸¶ÀÇ¸Ó¸®¶ì">_¾Ç¸¶ÀÇ¸Ó¸®¶ì</sprite>
-		<sprite id="292" name="_¿äÁ¤ÀÇ±Í">_¿äÁ¤ÀÇ±Í</sprite>
-		<sprite id="293" name="_¿äÁ¤ÀÇ±Í">_¿äÁ¤ÀÇ±Í</sprite>
-		<sprite id="294" name="_¿äÁ¤ÀÇ±Í">_¿äÁ¤ÀÇ±Í</sprite>
-		<sprite id="295" name="_¿äÁ¤ÀÇ±Í">_¿äÁ¤ÀÇ±Í</sprite>
+		<sprite id="287" name="White Romantic/Centimental Flower">_ÇÏ¾á²ÉÀÙ</sprite>
+		<sprite id="288" name="Blinker">_´«°¡¸®°³</sprite>
+		<sprite id="289" name="Sunglasses">_¼±±Û·¡½º</sprite>
+		<sprite id="290" name="Angel Band">_Ãµ»çÀÇ¸Ó¸®¶ì</sprite>
+		<sprite id="291" name="Evil Band">_¾Ç¸¶ÀÇ¸Ó¸®¶ì</sprite>
+		<sprite id="292" name="Elven Ears">_¿äÁ¤ÀÇ±Í</sprite>
+		<sprite id="293" name="Elven Ears">_¿äÁ¤ÀÇ±Í</sprite>
+		<sprite id="294" name="Elven Ears">_¿äÁ¤ÀÇ±Í</sprite>
+		<sprite id="295" name="Elven Ears">_¿äÁ¤ÀÇ±Í</sprite>
 		<sprite id="296" name="_´Ã¾îÁø±¸¹ÌÈ£">_´Ã¾îÁø±¸¹ÌÈ£</sprite>
 		<sprite id="297" name="_¸®ÇÁÀÎÇü¸ðÀÚ">_¸®ÇÁÀÎÇü¸ðÀÚ</sprite>
 		<sprite id="298" name="_µ¥ºô¸µ¸ðÀÚ">_µ¥ºô¸µ¸ðÀÚ</sprite>

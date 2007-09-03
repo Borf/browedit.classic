@@ -169,6 +169,8 @@ cProcessManagement::spriteedit_process_events(SDL_Event &event)
 					((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->action = Graphics.world.sprites[Graphics.selectedobject]->action;
 					((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->direction = Graphics.world.sprites[Graphics.selectedobject]->direction;
 
+					((cWindowTabPanel*)w->objects["tabpanel"])->tabchange(-1);
+
 					Graphics.WM.addwindow(w);
 
 /*					cWindow* w = new cLightWindow(&Graphics.WM.texture, &Graphics.WM.font);

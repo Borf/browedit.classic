@@ -171,6 +171,7 @@ public:
 				{
 					name = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[0]->filename;
 					name = name.substr(name.rfind("\\")+1);
+					name = name.substr(name.find("_"));
 				}
 			}
 			if(selectedtab == 3 && ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras.size() > 1)
@@ -178,7 +179,8 @@ public:
 				if(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[1] != NULL)
 				{
 					name = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[1]->filename;
-					name = name.substr(name.rfind("\\")+1);
+					name = name.substr(name.rfind("\\"));
+					name = name.substr(name.find("_")+1);
 				}
 			}
 			if(selectedtab == 4 && ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras.size() > 2)
@@ -187,6 +189,7 @@ public:
 				{
 					name = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[2]->filename;
 					name = name.substr(name.rfind("\\")+1);
+					name = name.substr(name.find("_"));
 				}
 			}
 			
@@ -307,30 +310,33 @@ public:
 				int selectedtab = parent->objects["tabpanel"]->GetInt(0);
 				if(((cSpriteWindow*)parent)->lookupmap.find(node) == ((cSpriteWindow*)parent)->lookupmap.end())
 				{
-					if(selectedtab == 2)
+					if(selectedtab == 1)
 					{
 						delete ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->head;
 						((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->head = NULL;
 					}
-					if(selectedtab > 2)
+					if(selectedtab > 1)
 					{
-						delete ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[selectedtab-3];
+						delete ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[selectedtab-2];
 						((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[selectedtab-3] = NULL;
 					}
 					return;
 				}
-				cSpriteWindow::cSpriteInfo* info = &((cSpriteWindow*)parent)->lookupmap[node];
-			//	Graphics.WM.MessageBox("Selected: " + info->filename);
-				if(selectedtab == 0)
-					((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->loadbody(rodir + "data\\sprite\\" + info->filename);
-				if(selectedtab == 1)
-					((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->loadhead(rodir + "data\\sprite\\" + info->filename);
-				if(selectedtab == 2)
-					((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->setextra(0, rodir + "data\\sprite\\악세사리\\" + (((cSpriteWindow*)parent)->male ? "남\\남" : "여\\여")+ info->filename);
-				if(selectedtab == 3)
-					((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->setextra(1, rodir + "data\\sprite\\악세사리\\" + (((cSpriteWindow*)parent)->male ? "남\\남" : "여\\여")+ info->filename);
-				if(selectedtab == 4)
-					((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->setextra(2, rodir + "data\\sprite\\악세사리\\" + (((cSpriteWindow*)parent)->male ? "남\\남" : "여\\여")+ info->filename);
+				else
+				{
+					cSpriteWindow::cSpriteInfo* info = &((cSpriteWindow*)parent)->lookupmap[node];
+				//	Graphics.WM.MessageBox("Selected: " + info->filename);
+					if(selectedtab == 0)
+						((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->loadbody(rodir + "data\\sprite\\" + info->filename);
+					if(selectedtab == 1)
+						((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->loadhead(rodir + "data\\sprite\\" + info->filename);
+					if(selectedtab == 2)
+						((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->setextra(0, rodir + "data\\sprite\\악세사리\\" + (((cSpriteWindow*)parent)->male ? "남\\남" : "여\\여")+ info->filename);
+					if(selectedtab == 3)
+						((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->setextra(1, rodir + "data\\sprite\\악세사리\\" + (((cSpriteWindow*)parent)->male ? "남\\남" : "여\\여")+ info->filename);
+					if(selectedtab == 4)
+						((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->setextra(2, rodir + "data\\sprite\\악세사리\\" + (((cSpriteWindow*)parent)->male ? "남\\남" : "여\\여")+ info->filename);
+				}
 			}
 			
 
