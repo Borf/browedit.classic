@@ -32,6 +32,8 @@ public:
 		void getdata(vector<string>&, int = 0);
 		bool haschild(string);
 		cTreeNode* getnode(int&);
+		cTreeNode* getnode(string);
+		void getnodes(vector<cTreeNode*> &);
 
 		void addchild(cTreeNode*);
 		int id;

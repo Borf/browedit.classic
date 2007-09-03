@@ -92,8 +92,17 @@ cProcessManagement::spriteedit_process_events(SDL_Event &event)
 				if (SDL_GetModState() & KMOD_CTRL)
 				{
 					cSprite* sprite = new cSprite();
-					sprite->loadhead(rodir + "data\\sprite\\인간족\\머리통\\여\\7_여");
-//					sprite->loadbody(rodir + "data\\sprite\\인간족\\몸통\\여\\산타_여");
+					string sexes[] = { "여", "남" };
+					string bodies[] = { "검사","마법사","궁수","성직자","상인","도둑","기사","프리스트","위저드","제철공","헌터","어세신","페코페코_기사","크루세이더","몽크","세이지","로그","연금술사","신페코크루세이더","결혼","슈퍼노비스","건너","닌자","산타","검사","마법사","궁수","성직자","상인","도둑","로드나이트","하이프리","하이위저드","화이트스미스","스나이퍼","어쌔신크로스","로드페코","팔라딘","챔피온","프로페서","스토커","크리에이터","클라운","집시","페코팔라딘","검사","마법사","궁수","성직자","상인","도둑","기사","프리스트","위저드","제철공","헌터","어세신","페코페코_기사","크루세이더","몽크","세이지","로그","연금술사","구페코크루세이더","슈퍼노비스","태권소년","권성","권성융합","소울링커","성직자","기사","세이지","초보자" };
+
+					int sex = rand() % 2;
+					int bodyid = rand() % (sizeof(bodies)/sizeof(string));
+					sprite->loadbody(rodir + "data\\sprite\\인간족\\몸통\\" + sexes[sex] + "\\" + bodies[bodyid] + "_" + sexes[sex]);
+					int headid = 1+ rand() % 22;
+					char buf[20];
+					sprintf(buf, "%i", headid);
+					sprite->loadhead(rodir + "data\\sprite\\인간족\\머리통\\" + sexes[sex] + "\\" + buf + "_" + sexes[sex]);
+					
 					sprite->pos = cVector3(mouse3dx/5, mouse3dy, mouse3dz/5);
 					Graphics.world.sprites.push_back(sprite);
 
@@ -123,6 +132,10 @@ cProcessManagement::spriteedit_process_events(SDL_Event &event)
 					Graphics.selectedobject = minobj;
 				}
 			}
+			else if(event.button.button == SDL_BUTTON_RIGHT && movement < 3)
+			{
+				Graphics.selectedobject = -1;
+			}
 			break;
 		case SDL_KEYDOWN:
 		{
@@ -137,11 +150,24 @@ cProcessManagement::spriteedit_process_events(SDL_Event &event)
 				}
 				break;
 			case SDLK_RETURN:
-				if (Graphics.selectedobject != -1)
+				if (Graphics.selectedobject != -1 && Graphics.WM.getwindow(WT_SPRITE) == NULL)
 				{
 					cSprite* l = Graphics.world.sprites[Graphics.selectedobject];
 
 					cWindow* w = new cSpriteWindow(&Graphics.WM.texture, &Graphics.WM.font);
+
+					((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->loadhead(Graphics.world.sprites[Graphics.selectedobject]->head->filename);
+					((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->loadbody(Graphics.world.sprites[Graphics.selectedobject]->body->filename);
+
+					for(int i = 0; i < Graphics.world.sprites[Graphics.selectedobject]->extras.size(); i++)
+					{
+						if(Graphics.world.sprites[Graphics.selectedobject]->extras[i] != NULL)
+						{
+							((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->setextra(i, Graphics.world.sprites[Graphics.selectedobject]->extras[i]->filename);
+						}
+					}
+					((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->action = Graphics.world.sprites[Graphics.selectedobject]->action;
+					((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->direction = Graphics.world.sprites[Graphics.selectedobject]->direction;
 
 					Graphics.WM.addwindow(w);
 

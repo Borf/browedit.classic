@@ -147,6 +147,106 @@ public:
 			if(selectedtab != 0)
 				tree->nodes.push_back(new cWindowTree::cTreeNode("Nothing"));
 			addxml(tree, n->FirstChildElement(), NULL, n->ToElement()->Attribute("directory") != NULL ? n->ToElement()->Attribute("directory") : "");
+
+			tree->selected = 0;
+
+			if(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite == NULL)
+				return;
+			
+
+			string name = "";
+			if(selectedtab == 0 && ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->body != NULL)
+			{
+				name = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->body->filename;
+				name = name.substr(rodir.length() + 12);
+			}
+			if(selectedtab == 1 && ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->head != NULL)
+			{
+				name = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->head->filename;
+				name = name.substr(rodir.length() + 12);
+			}
+			if(selectedtab == 2 && ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras.size() > 0)
+			{
+				if(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[0] != NULL)
+				{
+					name = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[0]->filename;
+					name = name.substr(name.rfind("\\")+1);
+				}
+			}
+			if(selectedtab == 3 && ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras.size() > 1)
+			{
+				if(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[1] != NULL)
+				{
+					name = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[1]->filename;
+					name = name.substr(name.rfind("\\")+1);
+				}
+			}
+			if(selectedtab == 4 && ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras.size() > 2)
+			{
+				if(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[2] != NULL)
+				{
+					name = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[2]->filename;
+					name = name.substr(name.rfind("\\")+1);
+				}
+			}
+			
+
+			cWindowTree::cTreeNode* node = NULL;
+			for(map<cWindowTree::cTreeNode*, cSpriteInfo, less<cWindowTree::cTreeNode*> >::iterator it = ((cSpriteWindow*)parent)->lookupmap.begin(); it != ((cSpriteWindow*)parent)->lookupmap.end(); it++)
+			{
+				string f = it->second.filename;
+				if(it->second.filename == name)
+				{
+					node = it->first;
+				}
+			}
+
+			
+
+			cWindowTree::cTreeNode* nn = node;
+			while(node != NULL)
+			{
+				node->open = true;
+				node = node->parent;
+			}
+
+			node = nn;
+			if(node != NULL)
+			{
+				int i;
+				tree->selected = 0;
+				vector<cWindowTree::cTreeNode*> values;
+				for(i = 0; i < tree->nodes.size(); i++)
+					tree->nodes[i]->getnodes(values);
+
+				for(i = 0; i < values.size(); i++)
+				{
+					if(values[i] == node)
+						tree->selected = i;
+				}
+
+				tree->liststart = tree->selected - ((tree->ph()/2) / 20);
+				if(tree->liststart < 0)
+					tree->liststart = 0;
+
+				int yy = tree->realy()+h-5-12;
+				while(yy+10 > tree->realy() && i < (int)values.size())
+				{
+					i++;
+					yy-=12;
+				}
+
+				if(tree->ph()/12 > values.size())
+					tree->liststart = 0;
+
+				if(tree->liststart >= values.size() - (tree->ph()/12))
+					tree->liststart = values.size() - (tree->ph()/12);
+
+
+
+			}
+
+
 		}
 		void addxml(cWindowTree* tree, TiXmlNode* n, cWindowTree::cTreeNode* treenode, string dir = "")
 		{
@@ -198,6 +298,8 @@ public:
 				 if(node != NULL)
 					 break;
 			}
+			if(node == NULL)
+				return;
 
 			if(node->children.size() == 0)
 			{
@@ -288,7 +390,21 @@ public:
 		}
 		void click()
 		{
+			Graphics.world.sprites[Graphics.selectedobject]->loadhead(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->head->filename);
+			Graphics.world.sprites[Graphics.selectedobject]->loadbody(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->body->filename);
 
+			for(int i = 0; i < ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras.size(); i++)
+			{
+				if(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[i] != NULL)
+				{
+					Graphics.world.sprites[Graphics.selectedobject]->setextra(i, ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[i]->filename);
+				}
+			}
+			Graphics.world.sprites[Graphics.selectedobject]->action = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->action;
+			Graphics.world.sprites[Graphics.selectedobject]->direction = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->direction;
+
+			
+			parent->close();
 		}
 	};
 	class cCancelButton : public cWindowButton

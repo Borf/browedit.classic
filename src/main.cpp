@@ -886,7 +886,7 @@ int main(int argc, char *argv[])
 	
 	Log(3,0,GetMsg("DONEINIT"));
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "data\\random_cul").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "data\\prontera").c_str());
 #ifndef WIN32
 	Graphics.world.load();
 #endif

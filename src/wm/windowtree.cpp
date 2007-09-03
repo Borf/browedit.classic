@@ -370,6 +370,17 @@ void cWindowTree::cTreeNode::getdata(vector<string> &data, int level)
 	}
 }
 
+void cWindowTree::cTreeNode::getnodes(vector<cTreeNode*> &data)
+{
+	data.push_back(this);
+	if (open)
+	{
+		for(int i = 0; i < children.size(); i++)
+			children[i]->getnodes(data);
+	}
+}
+
+
 cWindowTree::cTreeNode* cWindowTree::cTreeNode::getnode(int &nr)
 {
 	if (nr == 0)
@@ -426,7 +437,26 @@ void cWindowTree::scrolldown()
 	}
 
 	liststart+=5;
+	if(h/12 > values.size())
+		liststart = 0;
 	if(liststart >= values.size() - (h/12))
-		liststart = values.size() - (h/12)-1;
+		liststart = values.size() - (h/12);
 
 }
+
+
+
+
+cWindowTree::cTreeNode* cWindowTree::cTreeNode::getnode(string s)
+{
+	if(text == s)
+		return this;
+	for(int i = 0; i < children.size(); i++)
+	{
+		cTreeNode* n = children[i]->getnode(s);
+		if (n != NULL)
+			return n;
+	}
+	return NULL;
+}
+

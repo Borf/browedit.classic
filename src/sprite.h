@@ -68,6 +68,7 @@ public:
 		vector<cAction*> actions;
 
 
+		string filename;
 		void load(string);
 		bool loaded;
 	};
@@ -87,6 +88,7 @@ public:
 	void addextra(string);
 
 	void draw();
+
 
 
 	int action;
