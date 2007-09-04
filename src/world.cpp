@@ -30,10 +30,15 @@ extern bool lbuttondown;
 extern long userid;
 extern double mouse3dxstart, mouse3dystart, mouse3dzstart;
 extern void mainloop();
+extern cWindow*				draggingwindow;
+extern cWindowObject*		draggingobject;
 
 
 void cWorld::load()
 {
+	Graphics.selectedobject = NULL;
+	draggingwindow = NULL;
+	draggingobject = NULL;
 	int i,x,y;
 	if(light == NULL)
 	{
@@ -661,6 +666,37 @@ void cWorld::load()
 		}
 	}
 
+	TiXmlDocument sprdoc = fs.getxml(string(filename) + ".sprites");
+
+	if(sprdoc.FirstChild())
+	{
+		TiXmlElement* sprite = sprdoc.FirstChildElement("sprites")->FirstChildElement("sprite");
+		while(sprite != NULL)
+		{
+			cSprite* s = new cSprite();
+			s->pos.x = atof(sprite->Attribute("x"));
+			s->pos.y = atof(sprite->Attribute("y"));
+			s->pos.z = atof(sprite->Attribute("z"));
+
+			s->direction = atoi(sprite->Attribute("direction"));
+			s->action = atoi(sprite->Attribute("action"));
+
+			if(sprite->FirstChildElement("body"))
+				s->loadbody(rodir + sprite->FirstChildElement("body")->FirstChild()->Value());
+			if(sprite->FirstChildElement("head"))
+				s->loadhead(rodir + sprite->FirstChildElement("head")->FirstChild()->Value());
+			TiXmlElement* el = sprite->FirstChildElement("extra");
+
+			while(el != NULL)
+			{
+				s->setextra(atoi(el->Attribute("id")), rodir + el->FirstChild()->Value());
+				el = el->NextSiblingElement();
+			}
+			sprites.push_back(s);
+			sprite = sprite->NextSiblingElement();
+		}
+	}
+
 	Log(3,0,GetMsg("world/LOADDONE"), filename);
 
 }
@@ -1202,6 +1238,56 @@ void cWorld::save()
 
 			pFile.close();
 		}
+	}
+	if(sprites.size() > 0)
+	{
+		TiXmlDocument doc;
+		TiXmlElement headnode("sprites");
+		for(int i = 0; i < sprites.size(); i++)
+		{
+			TiXmlElement el("sprite");
+			char buf[100];
+			sprintf(buf, "%f", sprites[i]->pos.x);
+			el.SetAttribute("x", buf);
+			sprintf(buf, "%f", sprites[i]->pos.y);
+			el.SetAttribute("y", buf);
+			sprintf(buf, "%f", sprites[i]->pos.z);
+			el.SetAttribute("z", buf);
+			el.SetAttribute("action", sprites[i]->action);
+			el.SetAttribute("direction", sprites[i]->direction);
+
+			if(sprites[i]->body != NULL)
+			{
+				TiXmlElement body("body");
+				body.InsertEndChild(TiXmlText(sprites[i]->body->filename.substr(rodir.length()).c_str()));
+				el.InsertEndChild(body);
+			}
+			if(sprites[i]->head != NULL)
+			{
+				TiXmlElement head("head");
+				head.InsertEndChild(TiXmlText(sprites[i]->head->filename.substr(rodir.length()).c_str()));
+				el.InsertEndChild(head);
+			}
+			for(int ii = 0; ii < sprites[i]->extras.size(); ii++)
+			{
+				if(sprites[i]->extras[ii] != NULL)
+				{
+					TiXmlElement extra("extra");
+					extra.InsertEndChild(TiXmlText(sprites[i]->extras[ii]->filename.substr(rodir.length()).c_str()));
+					extra.SetAttribute("id", ii);
+					el.InsertEndChild(extra);
+				}
+			}
+
+			headnode.InsertEndChild(el);
+		}
+
+		doc.InsertEndChild(headnode);
+		doc.SaveFile((string(filename) + ".sprites").c_str());
+	}
+	else
+	{
+		DeleteFile((string(filename) + ".sprites").c_str());
 	}
 }
 

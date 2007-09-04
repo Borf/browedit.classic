@@ -156,7 +156,8 @@ cProcessManagement::spriteedit_process_events(SDL_Event &event)
 
 					cWindow* w = new cSpriteWindow(&Graphics.WM.texture, &Graphics.WM.font);
 
-					((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->loadhead(Graphics.world.sprites[Graphics.selectedobject]->head->filename);
+					if(Graphics.world.sprites[Graphics.selectedobject]->head)
+						((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->loadhead(Graphics.world.sprites[Graphics.selectedobject]->head->filename);
 					((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->loadbody(Graphics.world.sprites[Graphics.selectedobject]->body->filename);
 
 					for(int i = 0; i < Graphics.world.sprites[Graphics.selectedobject]->extras.size(); i++)

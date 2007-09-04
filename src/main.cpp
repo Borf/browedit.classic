@@ -1031,7 +1031,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				tiley = (int)mouse3dz / 10;
 			}
 			if(m != NULL)
-				break;
+				return 1;
 
 			movement++;
 
@@ -1130,6 +1130,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						Graphics.selectionstart.y = Graphics.selectionend.y;
 						Graphics.selectionend.y = f;
 					}
+					return 1;
 				}
 			}
 			return 0;

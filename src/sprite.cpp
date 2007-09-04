@@ -209,18 +209,18 @@ void cSprite::cActSpr::load(string fname)
 	char buf[100];
 	pFile->read(buf, 10);
 
-	for(i = 0; i < actioncount; i++)
+	for(i = 0; i < actioncount && !pFile->eof(); i++)
 	{
 		cAction* action = new cAction();
 		
 		pFile->read((char*)&action->framecount,4);
-		for(ii = 0; ii < action->framecount; ii++)
+		for(ii = 0; ii < action->framecount && !pFile->eof(); ii++)
 		{
 			pFile->read(buf, 32);
 			cAction::cFrame* frame = new cAction::cFrame();
 			
 			pFile->read((char*)&frame->subframecount, 4);
-			for(int iii = 0; iii < frame->subframecount; iii++)
+			for(int iii = 0; iii < frame->subframecount && !pFile->eof(); iii++)
 			{
 				cAction::cFrame::cSubFrame* subframe = new cAction::cFrame::cSubFrame();
 				pFile->read((char*)&subframe->offsetx,4);
@@ -259,6 +259,11 @@ void cSprite::cActSpr::load(string fname)
 				pFile->read((char*)&frame->extray,4);
 				pFile->read(buf,4);
 
+			}
+			else
+			{
+				frame->extrax = 0;
+				frame->extray = 0;
 			}
 			action->frames.push_back(frame);
 
