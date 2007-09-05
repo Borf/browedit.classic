@@ -396,34 +396,37 @@ public:
 		}
 		void click()
 		{
-			if(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->head != NULL)
-				Graphics.world.sprites[Graphics.selectedobject]->loadhead(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->head->filename);
-			else
+			if(Graphics.world.sprites.size() > Graphics.selectedobject && Graphics.selectedobject != -1)
 			{
-				delete Graphics.world.sprites[Graphics.selectedobject]->head;
-				Graphics.world.sprites[Graphics.selectedobject]->head = NULL;
-			}
-			Graphics.world.sprites[Graphics.selectedobject]->loadbody(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->body->filename);
 
-			for(int i = 0; i < ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras.size(); i++)
-			{
-				if(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[i] != NULL)
-				{
-					Graphics.world.sprites[Graphics.selectedobject]->setextra(i, ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[i]->filename);
-				}
+				if(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->head != NULL)
+					Graphics.world.sprites[Graphics.selectedobject]->loadhead(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->head->filename);
 				else
 				{
-					if(Graphics.world.sprites[Graphics.selectedobject]->extras.size() > i)
-						if(Graphics.world.sprites[Graphics.selectedobject]->extras[i] != NULL)
-						{
-							delete Graphics.world.sprites[Graphics.selectedobject]->extras[i];
-							Graphics.world.sprites[Graphics.selectedobject]->extras[i] = NULL;
-						}
+					delete Graphics.world.sprites[Graphics.selectedobject]->head;
+					Graphics.world.sprites[Graphics.selectedobject]->head = NULL;
 				}
-			}
-			Graphics.world.sprites[Graphics.selectedobject]->action = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->action;
-			Graphics.world.sprites[Graphics.selectedobject]->direction = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->direction;
+				Graphics.world.sprites[Graphics.selectedobject]->loadbody(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->body->filename);
 
+				for(int i = 0; i < ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras.size(); i++)
+				{
+					if(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[i] != NULL)
+					{
+						Graphics.world.sprites[Graphics.selectedobject]->setextra(i, ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[i]->filename);
+					}
+					else
+					{
+						if(Graphics.world.sprites[Graphics.selectedobject]->extras.size() > i)
+							if(Graphics.world.sprites[Graphics.selectedobject]->extras[i] != NULL)
+							{
+								delete Graphics.world.sprites[Graphics.selectedobject]->extras[i];
+								Graphics.world.sprites[Graphics.selectedobject]->extras[i] = NULL;
+							}
+					}
+				}
+				Graphics.world.sprites[Graphics.selectedobject]->action = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->action;
+				Graphics.world.sprites[Graphics.selectedobject]->direction = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->direction;
+			}
 			
 			parent->close();
 		}
