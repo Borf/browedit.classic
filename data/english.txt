@@ -173,6 +173,10 @@
 			<POSITION>Position:</POSITION>
 			<COLOR>Color:</COLOR>
 			<INTENSITY>Intensity:</INTENSITY>
+			<RANGE>Range:</RANGE>
+			<MAXLIGHTINCREMENT>Max. Light Increment</MAXLIGHTINCREMENT>
+			<LIGHTFALLOFF>Light Falloff (0-1)</LIGHTFALLOFF>
+			<CASTSSHADOW>Casts Shadows</CASTSSHADOW>
 		</light>
 		<message>
 			<TITLE>Message...</TITLE>

@@ -697,6 +697,24 @@ void cWorld::load()
 		}
 	}
 
+	TiXmlDocument extradoc = fs.getxml(string(filename) + ".extra");
+	if(extradoc.FirstChild())
+	{
+		TiXmlElement* light = extradoc.FirstChildElement("lights")->FirstChildElement("light");
+		while(light != NULL)
+		{
+			int id = atoi(light->Attribute("id"));
+			lights[id].range = atof(light->FirstChildElement("range")->FirstChild()->Value());
+			lights[id].maxlightincrement = atof(light->FirstChildElement("range")->FirstChild()->Value());
+			lights[id].givesshadow = string(light->Attribute("givesshadow")) == "true";
+			lights[id].lightfalloff = atof(light->FirstChildElement("lightfalloff")->FirstChild()->Value());
+			light = light->NextSiblingElement();
+
+		}
+
+	}
+
+
 	Log(3,0,GetMsg("world/LOADDONE"), filename);
 
 }
@@ -1101,17 +1119,10 @@ void cWorld::save()
 
 			TiXmlElement light("light");
 			light.SetAttribute("id", i);
-			TiXmlElement type("type");
-			if(lights[i].type == cLight::LIGHT_LINEAR)
-				type.InsertEndChild(TiXmlText("LINEAR"));
-			else
-				type.InsertEndChild(TiXmlText("QUADRATIC"));
-			light.InsertEndChild(type);
-
 			if(lights[i].givesshadow)
-				type.SetAttribute("givesshadow", "true");
+				light.SetAttribute("givesshadow", "true");
 			else
-				type.SetAttribute("givesshadow", "false");
+				light.SetAttribute("givesshadow", "false");
 
 			
 			TiXmlElement range("range");
@@ -1124,6 +1135,11 @@ void cWorld::save()
 			maxlightincrement.InsertEndChild(TiXmlText(buf));
 			light.InsertEndChild(maxlightincrement);
 
+
+			TiXmlElement lightfalloff("lightfalloff");
+			sprintf(buf, "%f", lights[i].lightfalloff);
+			lightfalloff.InsertEndChild(TiXmlText(buf));
+			light.InsertEndChild(lightfalloff);
 
 
 			xmllights.InsertEndChild(light);

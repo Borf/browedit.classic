@@ -9,6 +9,7 @@
 #include "windowlabel.h"
 #include "windowinputbox.h"
 #include "objectwindow.h"
+#include "windowcheckbox.h"
 
 class cLightWindow : public cWindow
 {
@@ -19,7 +20,7 @@ public:
 		resizable = false;
 		visible = true;
 
-		h = 200;
+		h = 260;
 		w = 350;
 		title = GetMsg("wm/light/TITLE");
 		center();
@@ -33,6 +34,10 @@ public:
 		addlabel("lblPos", 20, 60, GetMsg("wm/light/POSITION"));
 		addlabel("lblColor", 20, 80, GetMsg("wm/light/COLOR"));
 		addlabel("lblIntensity", 20, 100, GetMsg("wm/light/INTENSITY"));
+		addlabel("lblRange", 20, 120, GetMsg("wm/light/RANGE"));
+		addlabel("lblMaxlightincrement", 20, 140, GetMsg("wm/light/MAXLIGHTINCREMENT"));
+		addlabel("lblLightfalloff", 20, 160, GetMsg("wm/light/LIGHTFALLOFF"));
+		addlabel("lblCastsShadow", 20, 180, GetMsg("wm/light/CASTSSHADOW"));
 		
 		o = new cWindowFloatInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;
@@ -72,9 +77,33 @@ public:
 		
 		o = new cWindowFloatInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(100,100);
-		o->resizeto(210,20);
+		o->moveto(170,100);
+		o->resizeto(140,20);
 		objects["intensity"] = o;
+
+		o = new cWindowFloatInputBox(this);
+		o->alignment = ALIGN_TOPLEFT;
+		o->moveto(170,120);
+		o->resizeto(140,20);
+		objects["range"] = o;
+
+		o = new cWindowFloatInputBox(this);
+		o->alignment = ALIGN_TOPLEFT;
+		o->moveto(170,140);
+		o->resizeto(140,20);
+		objects["maxlightincrement"] = o;
+
+		o = new cWindowFloatInputBox(this);
+		o->alignment = ALIGN_TOPLEFT;
+		o->moveto(170,160);
+		o->resizeto(140,20);
+		objects["lightfalloff"] = o;
+
+		o = new cWindowCheckBox(this);
+		o->alignment = ALIGN_TOPLEFT;
+		o->moveto(170,182);
+		objects["castshadow"] = o;
+
 
 		objects["OkButton"] = new cWindowOkButton(this);
 		objects["CancelButton"] = new cWindowCancelButton(this);

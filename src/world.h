@@ -114,15 +114,10 @@ public:
 	float todo2;
 // custom properties
 
-	enum eLightType
-	{
-		LIGHT_LINEAR,
-		LIGHT_QUADRATIC,
-	};
-	eLightType type;
 	float range;
 	float maxlightincrement;
 	bool  givesshadow;
+	float lightfalloff;
 };
 
 
