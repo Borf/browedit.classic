@@ -822,6 +822,8 @@ void cWorld::save()
 	srand(tickcount());
 	if (!loaded)
 		return;
+	TiXmlDocument extraproperties;
+
 	{
 		clean();
 		quadtreefloats.clear();
@@ -1072,6 +1074,8 @@ void cWorld::save()
 
 		}
 		Log(3,0,GetMsg("world/MODELCOUNT"), models.size());
+		TiXmlElement xmllights("lights");
+
 		for(i = 0; i < lights.size(); i++)
 		{
 			long l = 2;
@@ -1094,7 +1098,38 @@ void cWorld::save()
 			pFile.write((char*)&lights[i].color.y,4);
 			pFile.write((char*)&lights[i].color.z,4);
 			pFile.write((char*)&lights[i].todo2,4);
+
+			TiXmlElement light("light");
+			light.SetAttribute("id", i);
+			TiXmlElement type("type");
+			if(lights[i].type == cLight::LIGHT_LINEAR)
+				type.InsertEndChild(TiXmlText("LINEAR"));
+			else
+				type.InsertEndChild(TiXmlText("QUADRATIC"));
+			light.InsertEndChild(type);
+
+			if(lights[i].givesshadow)
+				type.SetAttribute("givesshadow", "true");
+			else
+				type.SetAttribute("givesshadow", "false");
+
+			
+			TiXmlElement range("range");
+			sprintf(buf, "%f", lights[i].range);
+			range.InsertEndChild(TiXmlText(buf));
+			light.InsertEndChild(range);
+
+			TiXmlElement maxlightincrement("maxlightincrement");
+			sprintf(buf, "%f", lights[i].maxlightincrement);
+			maxlightincrement.InsertEndChild(TiXmlText(buf));
+			light.InsertEndChild(maxlightincrement);
+
+
+
+			xmllights.InsertEndChild(light);
 		}
+
+		extraproperties.InsertEndChild(xmllights);
 
 
 		/*for(i = 0; i < sounds.size(); i++)
@@ -1289,6 +1324,8 @@ void cWorld::save()
 	{
 		DeleteFile((string(filename) + ".sprites").c_str());
 	}
+
+	extraproperties.SaveFile((string(filename) + ".extra").c_str());
 }
 
 

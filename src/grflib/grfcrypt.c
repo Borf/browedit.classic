@@ -592,11 +592,11 @@ GRF_MixedProcess(char *dst, const char *src, uint32_t len, uint8_t cycle, const 
 					else if (!(tmp-=0x1D))	/* 0x48 */
 						dst[7]=0x77;
 					else if (!(tmp-=0x18))	/* 0x60 */
-						dst[7]=0xFF;
+						dst[7]=(char)0xFF;
 					else if (!(tmp-=0x08))	/* 0x68 */
 						dst[7]=0x01;
 					else if (!(tmp-=0x04))	/* 0x6C */
-						dst[7]=0x80;
+						dst[7]=(char)0x80;
 					else
 						dst[7]=src[7];
 				}
@@ -604,13 +604,13 @@ GRF_MixedProcess(char *dst, const char *src, uint32_t len, uint8_t cycle, const 
 					if (!(tmp-=0x80))	/* 0x80 */
 						dst[7]=0x6C;
 					else if (!(tmp-=0x39))	/* 0xB9 */
-						dst[7]=0xC0;
+						dst[7]=(char)0xC0;
 					else if (!(tmp-=0x07))	/* 0xC0 */
-						dst[7]=0xB9;
+						dst[7]=(char)0xB9;
 					else if (!(tmp-=0x2B))	/* 0xEB */
-						dst[7]=0xFE;
+						dst[7]=(char)0xFE;
 					else if (!(tmp-=0x13))	/* 0xFE */
-						dst[7]=0xEB;
+						dst[7]=(char)0xEB;
 					else if (!(--tmp))	/* 0xFF */
 						dst[7]=0x60;
 					else
