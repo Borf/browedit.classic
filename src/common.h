@@ -165,7 +165,6 @@ enum eMode
 
 
 
-const float EPSILON = 0.001f;
 struct tPlane
 {
 	cVector3 Normal;

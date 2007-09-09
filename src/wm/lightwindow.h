@@ -99,7 +99,7 @@ public:
 		o->resizeto(140,20);
 		objects["lightfalloff"] = o;
 
-		o = new cWindowCheckBox(this);
+		o = new cWindowBoolCheckBox(this);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(170,182);
 		objects["castshadow"] = o;

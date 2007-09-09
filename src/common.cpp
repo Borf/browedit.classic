@@ -14,6 +14,10 @@
 #include <memory.h>
 #include "mymath.h"
 
+
+const float EPSILON = 0.001f;
+
+
 float DistLineToPoint(cVector2 LineStart, cVector2 LineEnd, cVector2 point)
 {
     float LineMag;
@@ -414,6 +418,7 @@ bool LineIntersectPolygon( cVector3 *Vertices,
 		if (EdgePlane.Normal.Dot(Intersection) + EdgePlane.D < 0.0f)
 			return false;
 	}
+
 	t = tt;	
 	return true;
 }

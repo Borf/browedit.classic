@@ -1527,8 +1527,6 @@ MENUCOMMAND(dolightmaps2)
 	for(y = 0; y < Graphics.world.height; y++)
 //	for(y = 40; y < 60; y++)
 	{
-		if(y == 99)
-			Sleep(0);
 		for(x = 0; x < Graphics.world.width; x++)
 //		for(x = 40; x < 60; x++)
 		{
@@ -1536,17 +1534,18 @@ MENUCOMMAND(dolightmaps2)
 			if(selectonly && !c->selected)
 				continue;
 			Log(3,0,GetMsg("PERCENTAGE"), (y*Graphics.world.width+x) / (float)(Graphics.world.height * Graphics.world.width)*100); // %f %%
-			if(Graphics.world.cubes[y][x].tileup == -1)
+			if(c->tileup == -1)
 				continue;
 			Graphics.world.reallightmaps[y][x]->reset();
-			BYTE* buf = (BYTE*)Graphics.world.lightmaps[Graphics.world.tiles[Graphics.world.cubes[y][x].tileup].lightmap]->buf;
+
+			BYTE* buf = (BYTE*)Graphics.world.lightmaps[Graphics.world.tiles[c->tileup].lightmap]->buf;
 
 			for(int yy = 0; yy < 6; yy++)
 			{
 				for(int xx = 0; xx < 6; xx++)
 				{
 					cVector3 worldpos = cVector3(	10*x+(10/6.0)*xx, 
-													-((Graphics.world.cubes[y][x].cell1+Graphics.world.cubes[y][x].cell2+Graphics.world.cubes[y][x].cell3+Graphics.world.cubes[y][x].cell4)/4),
+													-((c->cell1+c->cell2+c->cell3+c->cell4)/4),
 													10*y+(10/6.0)*yy);
 					
 					int from = 0;
@@ -1560,29 +1559,35 @@ MENUCOMMAND(dolightmaps2)
 					{
 						cLight* l = &Graphics.world.lights[i];
 						cVector3 diff = worldpos - cVector3(l->pos.x*5, l->pos.y, l->pos.z*5);
-						float bla = diff.Magnitude();
+						float length = diff.Magnitude();
 						bool obstructed = false;
-						if(l->todo2-(0.1*bla*bla) < 0)
-							continue;
 						if(buf[yy*8 + xx + 9] == 255)
 							continue;
+						if(length > l->range)
+							continue;
 
-						for(int ii = 0; ii < Graphics.world.models.size() && !obstructed; ii++)
+						if(l->givesshadow)
 						{
-							if(Graphics.world.models[ii]->collides(worldpos, cVector3(l->pos.x*5, l->pos.y, l->pos.z*5)))
-								obstructed = true;
+							for(int ii = 0; ii < Graphics.world.models.size() && !obstructed; ii++)
+							{
+								if(Graphics.world.models[ii]->collides(worldpos, cVector3(l->pos.x*5, l->pos.y, l->pos.z*5)))
+									obstructed = true;
+							}
 						}
+
+						float intensity = max(l->maxlightincrement, pow(1-(length / l->range), l->lightfalloff) * l->todo2);
 
 						if(!obstructed)
 						{
-							buf[yy*8 + xx + 9] = min(255, buf[yy*8 + xx + 9] + max(0, (int)(l->todo2 - (0.1*bla*bla))));
+							buf[yy*8 + xx + 9] = min(255, buf[yy*8 + xx + 9] + max(0, (int)(intensity)));
 
-							buf[64 + 3*(yy*8 + xx + 9)+0] = min(255, buf[64 + 3*(yy*8 + xx + 9)+0] + max(0, (int)ceil((l->todo2 - bla)*l->color.x)));
-							buf[64 + 3*(yy*8 + xx + 9)+1] = min(255, buf[64 + 3*(yy*8 + xx + 9)+1] + max(0, (int)ceil((l->todo2 - bla)*l->color.y)));
-							buf[64 + 3*(yy*8 + xx + 9)+2] = min(255, buf[64 + 3*(yy*8 + xx + 9)+2] + max(0, (int)ceil((l->todo2 - bla)*l->color.z)));
+//							buf[64 + 3*(yy*8 + xx + 9)+0] = min(255, buf[64 + 3*(yy*8 + xx + 9)+0] + max(0, (int)ceil((l->todo2 - bla)*l->color.x)));
+//							buf[64 + 3*(yy*8 + xx + 9)+1] = min(255, buf[64 + 3*(yy*8 + xx + 9)+1] + max(0, (int)ceil((l->todo2 - bla)*l->color.y)));
+//							buf[64 + 3*(yy*8 + xx + 9)+2] = min(255, buf[64 + 3*(yy*8 + xx + 9)+2] + max(0, (int)ceil((l->todo2 - bla)*l->color.z)));
 						}
 						else
 						{
+//							Sleep(0);
 						}
 					}
 				}

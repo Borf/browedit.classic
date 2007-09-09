@@ -29,5 +29,34 @@ public:
 
 
 
+class cWindowBoolCheckBox : public cWindowCheckBox
+{
+	bool* boolvalue;
+public:
+	cWindowBoolCheckBox(cWindow* parent) : cWindowCheckBox(parent)
+	{
+		alignment = ALIGN_TOPLEFT;
+		boolvalue = NULL;
+	}
+	void draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
+	{
+		if(boolvalue != NULL)
+			*boolvalue = value;
+		cWindowCheckBox::draw(cutoffleft, cutoffright, cutofftop, cutoffbottom);
+	}
+
+	void SetInt(int id, int val)
+	{
+		cWindowCheckBox::SetInt(id,val);
+		if (id == 3)
+		{
+			boolvalue = (bool*)val;
+			value  = *boolvalue;
+		}
+	}
+};
+
+
+
 
 #endif

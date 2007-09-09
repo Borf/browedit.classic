@@ -656,6 +656,26 @@ cRSMModel::~cRSMModel()
 
 bool cRSMModel::collides(cVector3 start, cVector3 end)
 {
+/* optimize that should be tested
+	if(start.x > end.x && pos.x > start.x)
+		return false;
+	if(start.x > end.x && pos.x < end.x)
+		return false;
+	if(start.x < end.x && pos.x < start.x)
+		return false;
+	if(start.x < end.x && pos.x > end.x)
+		return false;
+
+  if(start.z > end.z && pos.z > start.z)
+		return false;
+	if(start.z > end.z && pos.z < end.z)
+		return false;
+	if(start.z < end.z && pos.z < start.z)
+		return false;
+	if(start.z < end.z && pos.z > end.z)
+		return false;
+
+*/
 	cVector3 triangle[3];
 	float t = 0;
 
@@ -1010,7 +1030,7 @@ void cRSMModel::precollides()
 	glRotatef(-rot.z, 0.0, 0.0, 1.0);
 	glRotatef(rot.y, 0.0, 1.0, 0.0);
 
-	glScalef(scale.x, -scale.y, scale.z);
+	glScalef(5*scale.x, -5*scale.y, 5*scale.z);
 
 	glTranslatef(-bb2.bbrange[0], -bb2.bbmin[1], -bb2.bbrange[2]);
 

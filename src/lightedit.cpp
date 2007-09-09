@@ -157,6 +157,7 @@ cProcessManagement::lightedit_process_events(SDL_Event &event)
 					w->objects["range"]->SetInt(3,(int)&l->range);
 					w->objects["maxlightincrement"]->SetInt(3,(int)&l->maxlightincrement);
 					w->objects["lightfalloff"]->SetInt(3,(int)&l->lightfalloff);
+					w->objects["castshadow"]->SetInt(3,(int)&l->givesshadow);
 					//((cEffectWindow*)w)->undo = new cUndoChangeEffect(Graphics.selectedobject);
 					Graphics.WM.addwindow(w);
 				}
