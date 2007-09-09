@@ -1575,7 +1575,7 @@ MENUCOMMAND(dolightmaps2)
 							}
 						}
 
-						float intensity = max(l->maxlightincrement, pow(1-(length / l->range), l->lightfalloff) * l->todo2);
+						float intensity = min(l->maxlightincrement, pow(1-(length / l->range), l->lightfalloff) * l->todo2);
 
 						if(!obstructed)
 						{
