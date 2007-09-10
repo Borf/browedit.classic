@@ -310,7 +310,7 @@ void cSprite::draw()
 	if(scale != 1)
 		id = (8*action+((int)(8+direction-((Graphics.camerarot/(PI/180.0f)-22.5)/45))%8)) % body->actions.size();
 
-	if(body->actions[id]->framecount == 0)
+	if(body->actions[id]->framecount <= 0)
 	{
 		glPopMatrix();
 		return;

@@ -233,3 +233,25 @@ TiXmlDocument cFileSystem::getxml(string filename)
 	}
 	return ret;
 }
+
+
+
+bool cFileSystem::isfile(string filename)
+{
+	#ifndef WIN32
+	filename = replace(filename, "\\", "/");
+	#endif
+
+	FILE* f = fopen(filename.c_str(), "rb");
+	if (f != NULL)
+	{
+		fclose(f);
+		return true;
+	}
+
+	filename = replace(filename,"/","\\");
+	for(int i = 0; i < locations.size(); i++)
+		if(locations[i]->files.find(lcase(filename)) != locations[i]->files.end())
+			return true;
+	return false;
+}

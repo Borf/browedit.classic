@@ -24,6 +24,7 @@ extern cMenu* speed;
 extern cMenu* models;
 extern cMenu* currentobject;
 extern float paintspeed;
+extern TiXmlDocument sprites;
 
 
 cMenuItem* selectedeffect = NULL;
@@ -2850,6 +2851,94 @@ MENUCOMMAND(99dun)
 		sprintf(Graphics.world.filename, "%sdata\\ulti_dun%02i", rodir.c_str(), i);
 		Graphics.world.save();
 	}
+
+
+	return true;
+}
+
+
+string scriptmap;
+char dirmap[] = { 4,3,2,1,0,7,6,5 };
+
+void readscript(string filename)
+{
+	Log(3,0,"Reading %s", filename.c_str());
+	cFile* pFile = fs.open("C:\\Documents and Settings\\Borf\\Desktop\\eathena\\" + filename);
+	if(pFile == NULL)
+		return;
+
+	while(!pFile->eof())
+	{
+		string line = pFile->readline();
+		if(ltrim(rtrim(line)).substr(0,4) == "npc:")
+			readscript(ltrim(ltrim(rtrim(line)).substr(4)));
+		else if(ltrim(rtrim(line)).substr(0,7) == "import:")
+			readscript(ltrim(ltrim(rtrim(line)).substr(7)));
+		else if(line.find("\tscript\t") != string::npos || line.find("\tduplicate") != string::npos)
+		{
+			char mapname[256];
+			char npcname[256];
+			ZeroMemory(mapname, 256);
+			ZeroMemory(npcname, 256);
+			int x,y,direction,spriteid;
+
+			char buf[256];
+			sprintf(buf, "%s", line.c_str());
+			int ret = sscanf(buf, "%15[^,],%d,%d,%d\tscript\t%250[^\t]%d", mapname,&x,&y,&direction, npcname, &spriteid);
+			if(line.find("\tduplicate") != string::npos)
+			{
+				char crapzor[256];
+				ret = sscanf(buf, "%15[^,],%d,%d,%d\tduplicate(%250[^)])\t%250[^\t]%d", mapname,&x,&y,&direction, crapzor, npcname, &spriteid);
+				ret--;
+			}
+			if(ret == 6 && mapname == scriptmap)
+			{
+				// we got an NPC :D
+				Log(3,0,"We got NPC %s at %s (%i,%i)", npcname, mapname, x,y);
+				TiXmlElement* el = sprites.FirstChildElement("sprites")->FirstChildElement("body")->FirstChildElement("npc")->FirstChildElement("sprite");
+				while(el != NULL)
+				{
+					if(atoi(el->Attribute("id")) == spriteid)
+					{
+						if(string(el->FirstChild()->Value()).find("gr2") == string::npos)
+						{
+							cSprite* s = new cSprite();
+							s->pos.x = x;
+							s->pos.z = y;
+							s->pos.y = 0;
+							if(direction < 0 || direction > 8)
+								direction = 0;
+							s->direction = dirmap[(8-direction)%8];
+							s->loadbody(rodir + "data\\sprite\\npc\\" + el->FirstChild()->Value());
+							Graphics.world.sprites.push_back(s);
+						}
+						break;
+					}
+					el = el->NextSiblingElement("sprite");
+				}
+			}
+		}
+
+	}
+
+
+	pFile->close();
+}
+
+
+MENUCOMMAND(eascript)
+{
+	for(int i = 0; i < Graphics.world.sprites.size(); i++)
+		delete Graphics.world.sprites[i];
+
+	Graphics.world.sprites.clear();
+	scriptmap = Graphics.world.filename;
+	scriptmap = scriptmap.substr(scriptmap.rfind("\\")+1);
+	if(!sprites.FirstChild())
+		sprites = fs.getxml("sprites.xml");
+
+
+	readscript("npc\\scripts_main.conf");
 
 
 	return true;

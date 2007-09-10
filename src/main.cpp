@@ -730,6 +730,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/CALCULATELIGHTMAPSLIGHT"),	&MenuCommand_dolightmapslights); // Selected lightmaps
 	ADDMENUITEM(mm,rnd,	GetMsg("menu/generate/CLEARMAP"),					&MenuCommand_clearstuff); // clear map
 	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/DUN99"),						&MenuCommand_99dun); // 99 level dungeon
+	ADDMENUITEM(mm,rnd, "eAthena Script",						&MenuCommand_eascript);
 
 	ADDMENUITEM(grid,view,GetMsg("menu/view/GRID"),							&MenuCommand_grid); //grid
 	grid->ticked = true;
@@ -886,7 +887,7 @@ int main(int argc, char *argv[])
 	
 	Log(3,0,GetMsg("DONEINIT"));
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "data\\morocc").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "data\\prontera").c_str());
 #ifndef WIN32
 	Graphics.world.load();
 #endif

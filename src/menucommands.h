@@ -60,5 +60,6 @@ MENUCOMMAND(preferences);
 MENUCOMMAND(rsmedit);
 MENUCOMMAND(exportmapfiles);
 MENUCOMMAND(99dun);
+MENUCOMMAND(eascript);
 
 #endif

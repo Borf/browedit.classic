@@ -666,10 +666,9 @@ void cWorld::load()
 		}
 	}
 
-	TiXmlDocument sprdoc = fs.getxml(string(filename) + ".sprites");
-
-	if(sprdoc.FirstChild())
+	if(fs.isfile(string(filename) + ".sprites"))
 	{
+		TiXmlDocument sprdoc = fs.getxml(string(filename) + ".sprites");;
 		TiXmlElement* sprite = sprdoc.FirstChildElement("sprites")->FirstChildElement("sprite");
 		while(sprite != NULL)
 		{
@@ -697,9 +696,9 @@ void cWorld::load()
 		}
 	}
 
-	TiXmlDocument extradoc = fs.getxml(string(filename) + ".extra");
-	if(extradoc.FirstChild())
+	if(fs.isfile(string(filename) + ".extra"))
 	{
+		TiXmlDocument extradoc = fs.getxml(string(filename) + ".extra");
 		TiXmlElement* light = extradoc.FirstChildElement("lights")->FirstChildElement("light");
 		while(light != NULL)
 		{

@@ -97,7 +97,7 @@ http://browedit.excalibur-nw.com/?a=log		-> SVN Update Log
 	*copy lights command for quick dupe of the settings.
 	*copy Effects command for quick dupe of the settings.
  Approved[]	
-						[Rxxx] [unfin]
+								[Rxxx] [unfin]
 -NEW Gat editing mode
 	Gat editing with drag support.
 	Press shift and right mouse button + drag mouse to select an area.
@@ -114,11 +114,6 @@ http://browedit.excalibur-nw.com/?a=log		-> SVN Update Log
 	Setable markers npc/class sprites For pictures.
 	Need NPCID list.
  Approved[x]							[R258] [unfin]
-
--Screenshot Function
-	With the above set This might be more widely used. 
-	Also add A Minimap Generator to the function. 
- Approved[]							[Rxxx] [unfin]
 
 -Gaussian Blur
 	Add Gaussian blur tool setting to the lightmaps to smooth light outlining.  
@@ -174,3 +169,9 @@ http://browedit.excalibur-nw.com/?a=log		-> SVN Update Log
 	Auto Generate Map list for all models and textures on a map.
  Approved[x]							[R252] [R252]
 
+
+
+-Screenshot Function
+	With the above set This might be more widely used. 
+	Also add A Minimap Generator to the function. 
+ Approved[x]							[R269] [R269]

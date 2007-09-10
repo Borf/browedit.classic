@@ -68,6 +68,7 @@ public:
 	cFile*	open(string);
 	vector<cGRFFile*>	locations;
 	TiXmlDocument getxml(string);
+	bool	isfile(string);
 
 };
 

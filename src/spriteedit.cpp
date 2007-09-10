@@ -152,7 +152,7 @@ cProcessManagement::spriteedit_process_events(SDL_Event &event)
 			case SDLK_RETURN:
 				if (Graphics.selectedobject != -1 && Graphics.WM.getwindow(WT_SPRITE) == NULL)
 				{
-					if(Graphics.selectedobject <= Graphics.world.sprites.size())
+					if(Graphics.selectedobject >= Graphics.world.sprites.size())
 						break;
 					cSprite* l = Graphics.world.sprites[Graphics.selectedobject];
 
