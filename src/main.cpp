@@ -1352,6 +1352,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					MenuCommand_toggle((cMenuItem*)menu->find("Water"));
 					return 1;
 				}
+				break;
 			case SDLK_o:
 			{
 				if((event.key.keysym.mod&KMOD_SHIFT) == 0)
