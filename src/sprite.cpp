@@ -136,6 +136,8 @@ void cSprite::cActSpr::load(string fname)
 		
 		BYTE* data = new BYTE[width*height];
 		int iii = 0;
+		if (width > 1000 || height > 1000)
+			return;
 		for(ii = 0; ii < framelen && iii < width*height; ii++)
 		{
 			BYTE c = pFile->get();

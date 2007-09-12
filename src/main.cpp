@@ -888,6 +888,11 @@ int main(int argc, char *argv[])
 	Log(3,0,GetMsg("DONEINIT"));
 	Graphics.world.newworld();
 	strcpy(Graphics.world.filename, string(rodir + "data\\prontera").c_str());
+	if(argc > 1)
+	{
+		strcpy(Graphics.world.filename, string(rodir + "data\\" + argv[1]).c_str());
+		Graphics.world.load();
+	}
 #ifndef WIN32
 	Graphics.world.load();
 #endif

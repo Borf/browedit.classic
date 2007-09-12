@@ -1429,6 +1429,8 @@ MENUCOMMAND(dolightmaps2)
 {
 	int x,y,i;
 
+	Log(3,0,"Starting Lightmap Clearing");
+
 	map<int, bool, less<int> > used;
 
 	for(x = 0; x < Graphics.world.width; x++)
@@ -1438,7 +1440,9 @@ MENUCOMMAND(dolightmaps2)
 			if(selectonly && !Graphics.world.cubes[y][x].selected)
 				continue;
 			int tile = Graphics.world.cubes[y][x].tileup;
-			if(used.find(tile) != used.end())
+			if(tile == -1)
+				continue;
+			if(used.find(tile) != used.end() && tile)
 			{
 				cTile t = Graphics.world.tiles[tile];
 				tile = Graphics.world.tiles.size();
@@ -1498,6 +1502,7 @@ MENUCOMMAND(dolightmaps2)
 			}
 		}
 	}
+	Log(3,0,"Done initializing for lightmaps...");
 
 	int ww = Graphics.w();
 	ww -= 256;
@@ -1525,6 +1530,7 @@ MENUCOMMAND(dolightmaps2)
 	for(i = 0; i < Graphics.world.models.size(); i++)
 		Graphics.world.models[i]->precollides();
 
+	Log(3,0, "Done Model boundingbox calculations");
 	for(y = 0; y < Graphics.world.height; y++)
 //	for(y = 40; y < 60; y++)
 	{

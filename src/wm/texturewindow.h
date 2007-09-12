@@ -159,6 +159,8 @@ public:
 		for(int i = 0; i < texturefiles.size(); i++)
 		{
 			cFile* pFile = fs.open(texturefiles[i]);
+			if(pFile == NULL)
+				continue;
 			while(!pFile->eof())
 			{
 				string line = pFile->readline();
