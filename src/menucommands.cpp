@@ -2909,11 +2909,19 @@ void readscript(string filename)
 						if(string(el->FirstChild()->Value()).find("gr2") == string::npos)
 						{
 							cSprite* s = new cSprite();
-							s->pos.x = x;
-							s->pos.z = y;
+							s->pos.x = x+0.5;
+							s->pos.z = y+0.5;
 							s->pos.y = 0;
+							if(y < Graphics.world.gattiles.size())
+							{
+								if(x < Graphics.world.gattiles[y].size())
+								{
+									s->pos.y = -Graphics.world.gattiles[y][x].cell1;
+								}
+							}
 							if(direction < 0 || direction > 8)
 								direction = 0;
+							s->action = 0;
 							s->direction = dirmap[(8-direction)%8];
 							s->loadbody(rodir + "data\\sprite\\npc\\" + el->FirstChild()->Value());
 							Graphics.world.sprites.push_back(s);
@@ -2947,5 +2955,142 @@ MENUCOMMAND(eascript)
 	readscript("npc\\scripts_main.conf");
 
 
+	return true;
+}
+
+
+
+#include <gd/gd.h>
+extern unsigned char * getPixelsBGR();
+
+
+
+void checknpcs()
+{
+	scriptmap = Graphics.world.filename;
+	scriptmap = scriptmap.substr(scriptmap.rfind("\\")+1);
+
+	int i,ii;
+	for(i = 0; i < Graphics.world.sprites.size(); i++)
+	{
+		Graphics.camerapointer.x = -5*Graphics.world.sprites[i]->pos.x;
+		Graphics.camerapointer.y = -10*Graphics.world.height+5*Graphics.world.sprites[i]->pos.z;
+		Graphics.camerarot = 0;
+
+
+
+	    FILE *out;
+		char filename[255];
+		sprintf(filename, "npcs/%s_%i_%i.gif", scriptmap.c_str(), (int)Graphics.world.sprites[i]->pos.x, (int)Graphics.world.sprites[i]->pos.z);
+
+	    out = fopen(filename, "wb");
+
+		int size;
+		gdImage* im = gdImageCreateTrueColor(320,240);
+		void* ptr = gdImageGifAnimBeginPtr(im, &size, 1, 3);
+		fwrite(ptr, size, 1, out); gdFree(ptr);
+
+		gdImage* images[40];
+		ZeroMemory(images, sizeof(images));
+
+		for(ii = 0; ii < 16; ii++)
+		{
+			Graphics.draw(false);
+			SDL_GL_SwapBuffers();
+			Graphics.camerarot += 22.5f*((float)PI/180.0f);
+			while(Graphics.camerarot > 360)
+				Graphics.camerarot-=360;
+
+
+			unsigned char *pixels;
+			pixels = getPixelsBGR();
+			int screenStats[4];
+			glGetIntegerv(GL_VIEWPORT, screenStats);
+			int w= screenStats[2];
+			int h = screenStats[3];
+
+
+			gdImage* im3 = gdImageCreateTrueColor(w-256,h-20);
+			for(int x = 0; x < w-256; x++)
+			{
+				for(int y = 0; y < h-20; y++)
+				{
+					gdImageSetPixel(im3, x, h-20-y, gdTrueColor(pixels[3*(x+y*w)+2], pixels[3*(x+y*w)+1], pixels[3*(x+y*w)+0]));
+				}
+			}
+			delete[] pixels;
+
+			images[ii+1] = gdImageCreateTrueColor(320,240);
+			gdImageCopyResized(images[ii+1], im3, 0, 0, 0, 0, 320, 240, w-256,h-20);
+
+			gdImageTrueColorToPalette(images[ii+1], 0, 256);
+
+
+			ptr = gdImageGifAnimAddPtr(images[ii+1], &size, 1, 0, 0, 50, 1, images[ii]);
+			fwrite(ptr, size, 1, out); gdFree(ptr);
+		    gdImageDestroy(im3);
+
+		}
+		putc (';', out);
+	    fclose(out);
+		gdImageDestroy(im);
+		for(ii = 1; ii < 40; ii++)
+		{
+			if(images[ii] != NULL)
+			{
+				gdImageDestroy(images[ii]);
+			}
+		}
+
+	}
+}
+
+
+
+
+MENUCOMMAND(npcscreenies)
+{
+
+	WIN32_FIND_DATA FileData;													// thingy for searching through a directory
+	HANDLE hSearch;																// thingy for searching through a directory
+	
+	hSearch = FindFirstFile(string(rodir + "data/*.rsw").c_str(), &FileData);						// look for all files
+	if (hSearch != INVALID_HANDLE_VALUE)										// if there are results...
+	{
+		while (true)														// loop through all the files
+		{ 
+			string filename = FileData.cFileName;
+			if(filename != "." && filename != "..")
+			{
+				strcpy(Graphics.world.filename, (rodir + "data\\" + filename.substr(0, filename.rfind("."))).c_str());
+				Graphics.world.load();
+				if(!sprites.FirstChild())
+					sprites = fs.getxml("sprites.xml");
+
+
+				readscript("npc\\scripts_main.conf");
+
+				
+				checknpcs();
+			}
+
+			if (!FindNextFile(hSearch, &FileData))								// find next file in the resultset
+			{
+				if (GetLastError() == ERROR_NO_MORE_FILES)						// we're finished when there are no more files
+					break;
+				else 
+					return false;													// wow, something really weird happened
+			}
+		}
+	}
+ 	FindClose(hSearch);															// Close the search handle. 
+
+
+
+
+
+
+	checknpcs();
+	
 	return true;
 }

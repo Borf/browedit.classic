@@ -666,6 +666,11 @@ void cWorld::load()
 		}
 	}
 
+	for(i = 0; i < Graphics.world.sprites.size(); i++)
+		delete Graphics.world.sprites[i];
+
+	Graphics.world.sprites.clear();
+
 	if(fs.isfile(string(filename) + ".sprites"))
 	{
 		TiXmlDocument sprdoc = fs.getxml(string(filename) + ".sprites");;

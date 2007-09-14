@@ -169,7 +169,8 @@ cProcessManagement::spriteedit_process_events(SDL_Event &event)
 							((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->setextra(i, Graphics.world.sprites[Graphics.selectedobject]->extras[i]->filename);
 						}
 					}
-					((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->action = Graphics.world.sprites[Graphics.selectedobject]->action;
+					((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->action = Graphics.world.sprites[Graphics.selectedobject]->action-1;
+					w->objects["actionbutton"]->click();
 					((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->direction = Graphics.world.sprites[Graphics.selectedobject]->direction;
 
 					((cWindowTabPanel*)w->objects["tabpanel"])->tabchange(-1);

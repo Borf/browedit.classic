@@ -224,8 +224,11 @@ void cRSMModel::draw(bool checkfrust, bool dodraw, bool setheight, bool dolightm
 {
 	if (checkfrust)
 	{
-		if(!Graphics.frustum.PointInFrustum(5*pos.x, -pos.y, 5*(Graphics.world.height*2-pos.z)))
+		if(!Graphics.frustum.CubeInFrustum(5*pos.x, -pos.y, 5*(Graphics.world.height*2-pos.z), max(max(bb.bbmax[0],bb.bbmax[1]), bb.bbmax[2])))
+//		if(!Graphics.frustum.PointInFrustum(5*pos.x, -pos.y, 5*(Graphics.world.height*2-pos.z)))
+		{
 			return;
+		}
 	}
 	if (meshes.size() == 0)
 		return;

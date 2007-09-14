@@ -731,6 +731,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,rnd,	GetMsg("menu/generate/CLEARMAP"),					&MenuCommand_clearstuff); // clear map
 	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/DUN99"),						&MenuCommand_99dun); // 99 level dungeon
 	ADDMENUITEM(mm,rnd, "eAthena Script",						&MenuCommand_eascript);
+	ADDMENUITEM(mm,rnd, "NPC stuff",							&MenuCommand_npcscreenies);
 
 	ADDMENUITEM(grid,view,GetMsg("menu/view/GRID"),							&MenuCommand_grid); //grid
 	grid->ticked = true;
@@ -1084,7 +1085,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					else
 					{
 						Graphics.cameraheight += (oldmousey - mousey) / 2.0f;
-						Graphics.cameraheight = max(min(Graphics.cameraheight, 15000), 5);
+						Graphics.cameraheight = max(min(Graphics.cameraheight, 15000), -5);
 						Graphics.camerarot += (oldmousex - mousex) / 100.0f;
 						while(Graphics.camerarot < 0)
 							Graphics.camerarot+=2*(float)PI;

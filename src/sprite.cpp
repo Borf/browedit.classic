@@ -18,7 +18,7 @@ cSprite::cSprite()
 {
 	body = NULL;
 	head = NULL;
-	scale = 0.2f;
+	scale = 0.15f;
 
 	action = 0;
 	direction = 0;
@@ -284,11 +284,14 @@ void cSprite::cActSpr::load(string fname)
 
 void cSprite::draw()
 {
+
 	if(body == NULL)
 		return;
 	int i;
 	glPushMatrix();
 	glTranslatef(5*pos.x, pos.y, Graphics.world.height*10-5*pos.z);
+
+	
 	float modelview[16];
 	glGetFloatv(GL_MODELVIEW_MATRIX, modelview);
 
@@ -298,7 +301,7 @@ void cSprite::draw()
 	glLoadMatrixf(modelview);
 	glScalef(scale,scale,1);
 
-	glTranslatef(0,0,10);
+	//glTranslatef(0,0,10);
 
 	if(!body->loaded)
 	{
@@ -308,6 +311,11 @@ void cSprite::draw()
 
 
 	int id = (8*action+direction) % body->actions.size();
+
+	while(Graphics.camerarot > 360)
+		Graphics.camerarot-=360;
+	while(Graphics.camerarot < 0)
+		Graphics.camerarot+=360;
 
 	if(scale != 1)
 		id = (8*action+((int)(8+direction-((Graphics.camerarot/(PI/180.0f)-22.5)/45))%8)) % body->actions.size();
@@ -332,7 +340,7 @@ void cSprite::draw()
 	cActSpr::cAction::cFrame* bodyframe = body->actions[id]->frames[(tickcount()/100) % ((body->actions[id]->framecount != 3 || (action != 0 && action != 2)) ? body->actions[id]->framecount : 1)];
 	cActSpr::cAction::cFrame::cSubFrame* subframe = bodyframe->subframes[0];
 	int frame = subframe->image;
-	int direction = subframe->direction;
+	int dir = subframe->direction;
 	
 	glBindTexture(GL_TEXTURE_2D, body->frames[frame]->texid());
 	float width = body->frames[frame]->w;
@@ -343,10 +351,10 @@ void cSprite::draw()
 	height/=2;
 	glTranslatef(-subframe->offsetx, -subframe->offsety, 0);
 	glBegin(GL_QUADS);
-		glTexCoord2f(direction,0);		glVertex2f(width,height);
-		glTexCoord2f(1-direction,0);	glVertex2f(-width,height);
-		glTexCoord2f(1-direction,1);	glVertex2f(-width,-height);
-		glTexCoord2f(direction,1);		glVertex2f(width,-height);
+		glTexCoord2f(dir,0);		glVertex3f(width,height,10);
+		glTexCoord2f(1-dir,0);		glVertex3f(-width,height,10);
+		glTexCoord2f(1-dir,1);		glVertex3f(-width,-height,10);
+		glTexCoord2f(dir,1);		glVertex3f(width,-height,10);
 	glEnd();
 	glTranslatef(subframe->offsetx, subframe->offsety, 0);
 
@@ -371,7 +379,7 @@ void cSprite::draw()
 	cActSpr::cAction::cFrame* myframe = head->actions[id]->frames[0];
 	frame = subframe->image;
 	//frame = 1;
-	direction = subframe->direction;
+	dir = subframe->direction;
 	
 	glBindTexture(GL_TEXTURE_2D, head->frames[frame]->texid());
 	width = head->frames[frame]->w;
@@ -383,10 +391,10 @@ void cSprite::draw()
 	glPushMatrix();
 	glTranslatef(-(subframe->offsetx + bodyframe->extrax - myframe->extrax), -(subframe->offsety + bodyframe->extray - myframe->extray), 0);
 	glBegin(GL_QUADS);
-		glTexCoord2f(direction,0);		glVertex3f(width,height,1);
-		glTexCoord2f(1-direction,0);	glVertex3f(-width,height,1);
-		glTexCoord2f(1-direction,1);	glVertex3f(-width,-height,1);
-		glTexCoord2f(direction,1);		glVertex3f(width,-height,1);
+		glTexCoord2f(dir,0);		glVertex3f(width,height,1);
+		glTexCoord2f(1-dir,0);	glVertex3f(-width,height,1);
+		glTexCoord2f(1-dir,1);	glVertex3f(-width,-height,1);
+		glTexCoord2f(dir,1);		glVertex3f(width,-height,1);
 	glEnd();
 	glPopMatrix();
 
@@ -400,7 +408,7 @@ void cSprite::draw()
 		cActSpr::cAction::cFrame* myframe = extras[i]->actions[id]->frames[0];
 		frame = subframe->image;
 		//frame = 1;
-		direction = subframe->direction;
+		dir = subframe->direction;
 		
 		glBindTexture(GL_TEXTURE_2D, extras[i]->frames[frame]->texid());
 		width = extras[i]->frames[frame]->w;
@@ -412,10 +420,10 @@ void cSprite::draw()
 		glPushMatrix();
 		glTranslatef(-(subframe->offsetx + bodyframe->extrax - myframe->extrax), -(subframe->offsety + bodyframe->extray - myframe->extray), 0);
 		glBegin(GL_QUADS);
-			glTexCoord2f(direction,0);		glVertex3f(width,height,1);
-			glTexCoord2f(1-direction,0);	glVertex3f(-width,height,1);
-			glTexCoord2f(1-direction,1);	glVertex3f(-width,-height,1);
-			glTexCoord2f(direction,1);		glVertex3f(width,-height,1);
+			glTexCoord2f(dir,0);		glVertex3f(width,height,1);
+			glTexCoord2f(1-dir,0);	glVertex3f(-width,height,1);
+			glTexCoord2f(1-dir,1);	glVertex3f(-width,-height,1);
+			glTexCoord2f(dir,1);		glVertex3f(width,-height,1);
 		glEnd();
 		glPopMatrix();
 

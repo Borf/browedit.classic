@@ -728,9 +728,9 @@ void cMenu::click(int xx, int yy)
 							return;
 					}
 					lastmenu = this;
-					((cMenuItem*)items[i])->proc((cMenuItem*)items[i]);
 					menu->closemenu();
 					menu->opened = true;
+					((cMenuItem*)items[i])->proc((cMenuItem*)items[i]);
 					return;
 				}
 				else
