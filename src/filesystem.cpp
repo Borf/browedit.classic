@@ -136,6 +136,13 @@ char cFile::get()
 	return data[index-1];
 }
 
+int cFile::getword()
+{
+	index+=2;
+	return ((BYTE)data[index-2]) | (((BYTE)data[index-1])<<8);
+}
+
+
 int cFile::read(char* buffer, int length)
 {
   	int i = min((long)length, size+1-index);

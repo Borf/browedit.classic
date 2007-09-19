@@ -128,16 +128,19 @@ void cSprite::cActSpr::load(string fname)
 
 	for(i = 0; i < framecount; i++)
 	{
-		int width = ((BYTE)pFile->get()) | (((BYTE)pFile->get())<<8);
-		int height = ((BYTE)pFile->get()) | (((BYTE)pFile->get())<<8);
+		int width = pFile->getword();
+		int height = pFile->getword();
 		int framelen = width*height;
 		if(version1 != 0)
-			framelen = ((BYTE)pFile->get()) | (((BYTE)pFile->get())<<8);
+			framelen = pFile->getword();
 		
 		BYTE* data = new BYTE[width*height];
 		int iii = 0;
 		if (width > 1000 || height > 1000)
+		{
+			Log(2,0,"Invalid sprite height: %i x %i", width, height);
 			return;
+		}
 		for(ii = 0; ii < framelen && iii < width*height; ii++)
 		{
 			BYTE c = pFile->get();
@@ -207,7 +210,7 @@ void cSprite::cActSpr::load(string fname)
 
 	version1 = pFile->get();
 	pFile->get();
-	int actioncount = ((BYTE)pFile->get()) | (((BYTE)pFile->get())<<8);
+	int actioncount = pFile->getword();
 	char buf[100];
 	pFile->read(buf, 10);
 
@@ -277,6 +280,7 @@ void cSprite::cActSpr::load(string fname)
 
 	pFile->close();
 
+	Log(3,0,"Done loading sprite %s", filename.c_str());
 	loaded = true;
 
 }
@@ -284,7 +288,6 @@ void cSprite::cActSpr::load(string fname)
 
 void cSprite::draw()
 {
-
 	if(body == NULL)
 		return;
 	int i;
@@ -351,10 +354,10 @@ void cSprite::draw()
 	height/=2;
 	glTranslatef(-subframe->offsetx, -subframe->offsety, 0);
 	glBegin(GL_QUADS);
-		glTexCoord2f(dir,0);		glVertex3f(width,height,10);
-		glTexCoord2f(1-dir,0);		glVertex3f(-width,height,10);
-		glTexCoord2f(1-dir,1);		glVertex3f(-width,-height,10);
-		glTexCoord2f(dir,1);		glVertex3f(width,-height,10);
+		glTexCoord2f(dir,0);		glVertex3f(width,height,0);
+		glTexCoord2f(1-dir,0);		glVertex3f(-width,height,0);
+		glTexCoord2f(1-dir,1);		glVertex3f(-width,-height,0);
+		glTexCoord2f(dir,1);		glVertex3f(width,-height,0);
 	glEnd();
 	glTranslatef(subframe->offsetx, subframe->offsety, 0);
 
@@ -391,10 +394,10 @@ void cSprite::draw()
 	glPushMatrix();
 	glTranslatef(-(subframe->offsetx + bodyframe->extrax - myframe->extrax), -(subframe->offsety + bodyframe->extray - myframe->extray), 0);
 	glBegin(GL_QUADS);
-		glTexCoord2f(dir,0);		glVertex3f(width,height,1);
-		glTexCoord2f(1-dir,0);	glVertex3f(-width,height,1);
-		glTexCoord2f(1-dir,1);	glVertex3f(-width,-height,1);
-		glTexCoord2f(dir,1);		glVertex3f(width,-height,1);
+		glTexCoord2f(dir,0);		glVertex3f(width,height,0);
+		glTexCoord2f(1-dir,0);	glVertex3f(-width,height,0);
+		glTexCoord2f(1-dir,1);	glVertex3f(-width,-height,0);
+		glTexCoord2f(dir,1);		glVertex3f(width,-height,0);
 	glEnd();
 	glPopMatrix();
 

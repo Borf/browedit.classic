@@ -99,7 +99,10 @@ cProcessManagement::lightedit_process_events(SDL_Event &event)
 					l.color.z = 0;
 					l.pos = cVector3(mouse3dx/5, mouse3dy+10, mouse3dz/5);
 					l.todo = string(buf, 40);
-					l.todo2 = 300;
+					l.todo2 = 192;
+					l.maxlightincrement = 256;
+					l.range = 1000;
+					l.lightfalloff = 1;
 
 					Graphics.world.lights.push_back(l);
 					undostack.push(new cUndoNewLight());

@@ -44,6 +44,7 @@ public:
 	void	seek(int, STARTPOS);
 
 	char	get();
+	int		getword();
 	int		read(char*, int);
 	int		readline(char*, int);
 	string	readline();
