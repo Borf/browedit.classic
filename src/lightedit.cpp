@@ -1,6 +1,8 @@
 #include <common.h>
 #include "graphics.h"
 #include "undo.h"
+#include "menu.h"
+#include "menucommands.h"
 #include "wm/lightwindow.h"
 
 extern float mousestartx, mousestarty;
@@ -12,6 +14,7 @@ extern float oldmousex, oldmousey;
 extern int movement;
 extern bool lbuttondown;
 
+extern cMenu* popupmenu;
 
 cProcessManagement::lightedit_process_events(SDL_Event &event)
 {
@@ -53,6 +56,7 @@ cProcessManagement::lightedit_process_events(SDL_Event &event)
 					}
 					if(!ctrl && alt)
 					{
+						Graphics.world.lights[Graphics.selectedobject].range += (mousey-oldmousey);
 					}
 				}
 			}
@@ -101,7 +105,7 @@ cProcessManagement::lightedit_process_events(SDL_Event &event)
 					l.todo = string(buf, 40);
 					l.todo2 = 192;
 					l.maxlightincrement = 256;
-					l.range = 1000;
+					l.range = 200;
 					l.lightfalloff = 1;
 
 					Graphics.world.lights.push_back(l);
@@ -129,6 +133,37 @@ cProcessManagement::lightedit_process_events(SDL_Event &event)
 						}
 					}
 					Graphics.selectedobject = minobj;
+				}
+			}
+			else
+			{
+				if(movement < 3)
+				{
+					popupmenu = new cMenu();
+					popupmenu->parent = NULL;
+					popupmenu->drawstyle = 1;
+					popupmenu->x = mousex;
+					popupmenu->y = mousey;
+					popupmenu->w = 150;
+					popupmenu->opened = true;
+					cMenuItem* mm;
+					cMenu* favs;
+					ADDMENUITEM(mm,popupmenu,"Deselect light",		&MenuCommand_new); //new
+					ADDMENU(favs,		popupmenu, "Favorites",		popupmenu->x + 150,200); // File
+					favs->y = 100;
+
+					ADDMENUITEM(mm,popupmenu,"Disable Shadows",		&MenuCommand_new); //new
+					ADDMENUITEM(mm,popupmenu,"Snap to floor",		&MenuCommand_new); //new
+					ADDMENUITEM(mm,popupmenu,"Set to 50 over floor",		&MenuCommand_new); //new
+					ADDMENUITEM(mm,popupmenu,"Set as sunlight",		&MenuCommand_new); //new
+
+					ADDMENUITEM(mm,favs,"Torch",		&MenuCommand_new); //new
+					ADDMENUITEM(mm,favs,"Spotlight",		&MenuCommand_new); //new
+					ADDMENUITEM(mm,favs,"Disco Red",		&MenuCommand_new); //new
+					ADDMENUITEM(mm,favs,"Disco Green",		&MenuCommand_new); //new
+					ADDMENUITEM(mm,favs,"Disco Blue",		&MenuCommand_new); //new
+					ADDMENUITEM(mm,favs,"Faint stuff",		&MenuCommand_new); //new
+					ADDMENUITEM(mm,favs,"Random Colors",		&MenuCommand_new); //new
 				}
 			}
 			break;

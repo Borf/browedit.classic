@@ -6,6 +6,7 @@
 #include <math.h>
 #include <map>
 #include "wm/hotkeywindow.h"
+#include "menucommands.h"
 
 #include "graphics.h"
 #include "menu.h"
@@ -30,6 +31,8 @@ extern cMenu*			lastmenu;
 double mouse3dx, mouse3dy, mouse3dz;
 
 extern string			config;
+
+cMenu* popupmenu = NULL;
 
 int cGraphics::draw(bool drawwm)
 {
@@ -297,6 +300,13 @@ int cGraphics::draw(bool drawwm)
 			}
 		}
 	}
+
+	if(popupmenu != NULL)
+	{
+		glDisable(GL_DEPTH_TEST);
+		popupmenu->draw();
+		glEnable(GL_DEPTH_TEST);
+	}
 	
 
 	
@@ -447,6 +457,32 @@ int cGraphics::init()
 	glEnable(GL_LIGHTING);
 	glEnable(GL_COLOR_MATERIAL);
 
+
+	/*popupmenu = new cMenu();
+	popupmenu->parent = NULL;
+	popupmenu->drawstyle = 1;
+	popupmenu->x = 100;
+	popupmenu->y = 100;
+	popupmenu->w = 150;
+	popupmenu->opened = true;
+	cMenuItem* mm;
+	cMenu* favs;
+	ADDMENU(favs,		popupmenu, "Favorites",		popupmenu->x + 150,200); // File
+	favs->y = 100;
+
+	ADDMENUITEM(mm,popupmenu,"Disable Shadows",		&MenuCommand_new); //new
+	ADDMENUITEM(mm,popupmenu,"Snap to floor",		&MenuCommand_new); //new
+	ADDMENUITEM(mm,popupmenu,"Set to 50 over floor",		&MenuCommand_new); //new
+	ADDMENUITEM(mm,popupmenu,"Set as sunlight",		&MenuCommand_new); //new
+
+	ADDMENUITEM(mm,favs,"Torch",		&MenuCommand_new); //new
+	ADDMENUITEM(mm,favs,"Spotlight",		&MenuCommand_new); //new
+	ADDMENUITEM(mm,favs,"Disco Red",		&MenuCommand_new); //new
+	ADDMENUITEM(mm,favs,"Disco Green",		&MenuCommand_new); //new
+	ADDMENUITEM(mm,favs,"Disco Blue",		&MenuCommand_new); //new
+	ADDMENUITEM(mm,favs,"Faint stuff",		&MenuCommand_new); //new
+	ADDMENUITEM(mm,favs,"Random Colors",		&MenuCommand_new); //new
+	favs->opened = true;*/
 	return 1;
 }
 
@@ -633,7 +669,7 @@ void cMenu::draw()
 			if(items[i]->opened)
 				items[i]->draw();
 		}
-		if(w != maxlen && !updatedchildrenpos)
+		if(w != maxlen && !updatedchildrenpos && parent != NULL)
 		{
 			if(parent->drawstyle != 0)
 				w = maxlen;
@@ -706,13 +742,16 @@ void cMenu::click(int xx, int yy)
 	else //if (opened)
 	{
 		m = w;
-		if (parent->drawstyle == 0)
+		if(parent != NULL)
 		{
-			for(i = 0; i < (int)items.size(); i++)
+			if (parent->drawstyle == 0)
 			{
-				if (Graphics.font->textlen(items[i]->title.c_str()) > m-50)
-					m = Graphics.font->textlen(items[i]->title.c_str())+50;
+				for(i = 0; i < (int)items.size(); i++)
+				{
+					if (Graphics.font->textlen(items[i]->title.c_str()) > m-50)
+						m = Graphics.font->textlen(items[i]->title.c_str())+50;
 
+				}
 			}
 		}
 		for(i = 0; i < (int)items.size(); i++)

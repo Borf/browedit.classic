@@ -2279,6 +2279,24 @@ void cWorld::draw()
 					glVertex3f(5*lights[i].pos.x,999, 5*(2*height-lights[i].pos.z));
 					glVertex3f(5*lights[i].pos.x,-999, 5*(2*height-lights[i].pos.z));
 				glEnd();
+
+				glColor4f(1,1,1,0.3f);
+
+				//glDisable(GL_DEPTH_TEST);
+				glDepthMask(GL_FALSE);
+
+				static GLUquadric* sph = NULL;
+				if (sph == NULL)
+					sph = gluNewQuadric();
+				glPushMatrix();
+				glTranslatef(5*lights[i].pos.x,lights[i].pos.y, 5*(2*height-lights[i].pos.z));
+				gluSphere(sph, lights[i].range,32,32);
+				glPopMatrix();
+				glDepthMask(GL_TRUE);
+
+				//glEnable(GL_DEPTH_TEST);
+
+
 				glColor4f(1,0,0,1);
 				glEnable(GL_TEXTURE_2D);
 			}

@@ -676,7 +676,7 @@ cModelsWindow::cModelsWindow(cTexture* t, cFont* f) : cWindow(t,f)
 	objects["zdragger"] = o;
 
 //	objects["rollup"] = new cWindowRollupButton(this);
-//	objects["close"] = new cWindowCloseButton(this);
+	objects["close"] = new cWindowCloseButton(this);
 
 	resizeto(w,h);
 }	

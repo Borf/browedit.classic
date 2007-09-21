@@ -49,6 +49,7 @@ cWindow*				draggingwindow = NULL;
 cWindowObject*			draggingobject = NULL;
 string fontname = "tahoma";
 bool	doneaction = true;
+extern cMenu* popupmenu;
 
 int undosize = 50;
 vector<string> texturefiles;
@@ -80,12 +81,6 @@ cMenu* lastmenu = NULL;
 
 int cursorsize = 1;
 
-#define ADDMENUITEM(m, p, t, pr) m = new cMenuItem(); m->parent = p; m->title = t; m->item = true; m->drawstyle = 1; ((cMenuItem*)m)->proc = pr; p->items.push_back(m);
-#define ADDMENUITEMDATA(m, p, t, pr,d) m = new cMenuItem(); m->parent = p; m->title = t; m->item = true; m->drawstyle = 1; ((cMenuItem*)m)->proc = pr; ((cMenuItem*)m)->data = d; p->items.push_back(m);
-#define ADDMENUITEMDATA2(m, p, t, pr,d,d2) m = new cMenuItem(); m->parent = p; m->title = t; m->item = true; m->drawstyle = 1; ((cMenuItem*)m)->proc = pr; ((cMenuItem*)m)->data = d; ((cMenuItem*)m)->data2 = d2; p->items.push_back(m);
-#define ADDMENUITEMDATAP(m, p, t, pr,d) m = new cMenuItem(); m->parent = p; m->title = t; m->item = true; m->drawstyle = 1; ((cMenuItem*)m)->proc = pr; ((cMenuItem*)m)->pdata = d; p->items.push_back(m);
-#define ADDMENU(m,p,t,xpos,width) m = new cMenu(); m->parent = p; m->title = t; m->item = false; m->drawstyle = 1; m->y = 20; m->x = xpos; m->w = width; p->items.push_back(m);
-#define ADDMENU2(m,p,t,xpos) m = new cMenu(); m->parent = p; m->title = t; m->item = false; m->drawstyle = 1; m->y = 20; m->x = xpos; m->w = Graphics.font->textlen(t)+10; p->items.push_back(m); xpos += Graphics.font->textlen(t)+10;
 cMenu* mode;
 cMenu* editdetail;
 cMenu* speed;
@@ -1180,8 +1175,14 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 		
 			cMenu* m = menu->inwindow((int)mousex, Graphics.h()-(int)mousey);
 		
+			cMenu* pm = NULL;
+			if(popupmenu != NULL)
+			{
+				pm = popupmenu->inwindow((int)mousex, Graphics.h()-(int)mousey);
+				return 1;
+			}
 
-			if (!dragged && !doubleclick && m == NULL && event.button.button == SDL_BUTTON_LEFT)
+			if (!dragged && !doubleclick && m == NULL && pm == NULL && event.button.button == SDL_BUTTON_LEFT)
 			{
 				draggingobject = NULL;
 				draggingwindow = NULL;
@@ -1225,6 +1226,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				rbuttondown = true;
 			if(m != NULL)
 				return 1;
+			if(pm != NULL)
+				return 1;
 			return 0;
 			}
 		case SDL_MOUSEBUTTONUP:
@@ -1234,6 +1237,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			if(event.button.button == SDL_BUTTON_LEFT)
 			{
 				cMenu* m = menu->inwindow((int)mousex, Graphics.h()-(int)mousey);
+				cMenu* pm = NULL;
+				if(popupmenu != NULL)
+					pm = popupmenu->inwindow((int)mousex, Graphics.h()-(int)mousey);
 				doneaction = true;
 				lbuttondown = false;
 				mousex = event.motion.x;
@@ -1266,6 +1272,13 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				else
 					lastlclick = SDL_GetTicks();
 				menu->unmouseover();
+				if(pm != NULL)
+					pm->unmouseover();
+				if(pm == NULL && popupmenu != NULL)
+				{
+					delete popupmenu;
+					popupmenu = NULL;
+				}
 				if (m == NULL)
 				{
 					menu->closemenu();
@@ -1274,6 +1287,13 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				if (m != NULL && m->opened)
 				{
 					m->click((int)mousex, Graphics.h()-(int)mousey);
+					return 1;
+				}
+				else if (pm != NULL && pm->opened)
+				{
+					pm->click((int)mousex, Graphics.h()-(int)mousey);
+					delete popupmenu;
+					popupmenu = NULL;
 					return 1;
 				}
 				else // no menu
@@ -1285,11 +1305,22 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			else // right button
 			{
 				cMenu* m = menu->inwindow((int)mousex, Graphics.h()-(int)mousey);
+				cMenu* pm = NULL;
+				if(popupmenu != NULL)
+					pm = popupmenu->inwindow((int)mousex, Graphics.h()-(int)mousey);
 				menu->unmouseover();
+				if(pm != NULL)
+					pm->unmouseover();
 				if (m == NULL)
 				{
 					menu->closemenu();
 					menu->opened = true;
+				}
+				if(pm == NULL && popupmenu != NULL)
+				{
+					delete popupmenu;
+					popupmenu = NULL;
+					return 1;
 				}
 
 				rbuttondown = false;
@@ -1316,7 +1347,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				mousex = event.motion.x;
 				mousey = event.motion.y;
 
-				if(movement < 3 && (editmode == MODE_OBJECTS || editmode == MODE_EFFECTS || editmode == MODE_LIGHTS))
+				if(movement < 3 && (editmode == MODE_OBJECTS || editmode == MODE_EFFECTS))
 				{
 					Graphics.selectedobject = -1;
 					return 1;

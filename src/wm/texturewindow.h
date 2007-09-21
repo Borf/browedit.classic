@@ -225,7 +225,7 @@ public:
 		objects["textures"] = o;
 
 //		objects["rollup"] = new cWindowRollupButton(this);
-//		objects["close"] = new cWindowCloseButton(this);
+		objects["close"] = new cWindowCloseButton(this);
 
 		resizeto(w,h);
 	}	
