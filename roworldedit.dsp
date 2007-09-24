@@ -357,6 +357,10 @@ SOURCE=.\src\wm\effectwindow.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\wm\favoritelights.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\wm\hotkeywindow.h
 # End Source File
 # Begin Source File

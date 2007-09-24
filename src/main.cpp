@@ -50,6 +50,7 @@ cWindowObject*			draggingobject = NULL;
 string fontname = "tahoma";
 bool	doneaction = true;
 extern cMenu* popupmenu;
+TiXmlDocument favoritelights;
 
 int undosize = 50;
 vector<string> texturefiles;
@@ -665,7 +666,8 @@ int main(int argc, char *argv[])
 
 	models->sort();
 	
-	
+	favoritelights = fs.getxml("data/lights.txt");
+
 	if (!Graphics.init())
 		return 1;
 #ifdef WIN32
@@ -811,6 +813,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,windows,GetMsg("menu/windows/WATER"),					&MenuCommand_water);
 	ADDMENUITEM(mm,windows,GetMsg("menu/windows/PREFERENCES"),				&MenuCommand_preferences);
 	ADDMENUITEM(mm,windows,GetMsg("menu/windows/RSMEDITOR"),				&MenuCommand_rsmedit);
+	ADDMENUITEM(mm,windows,GetMsg("menu/windows/FAVLIGHTS"),				&MenuCommand_favlights);
 
 
 
@@ -1292,8 +1295,11 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				else if (pm != NULL && pm->opened)
 				{
 					pm->click((int)mousex, Graphics.h()-(int)mousey);
-					delete popupmenu;
-					popupmenu = NULL;
+					if(!pm->opened)
+					{
+						delete popupmenu;
+						popupmenu = NULL;
+					}
 					return 1;
 				}
 				else // no menu

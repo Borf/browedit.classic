@@ -7,6 +7,7 @@
 #include "wm/ambientlightwindow.h"
 #include "wm/keybindwindow.h"
 #include "wm/rsmeditwindow.h"
+#include "wm/favoritelights.h"
 
 extern cGraphics Graphics;
 extern bool running;
@@ -25,6 +26,7 @@ extern cMenu* models;
 extern cMenu* currentobject;
 extern float paintspeed;
 extern TiXmlDocument sprites;
+extern double mouseclickx, mouseclicky, mouseclickz;
 
 
 cMenuItem* selectedeffect = NULL;
@@ -2475,6 +2477,13 @@ MENUCOMMAND(rsmedit)
 	return true;
 }
 
+MENUCOMMAND(favlights)
+{
+	Graphics.WM.addwindow(new cFavoriteLightsWindow(&Graphics.WM.texture, &Graphics.WM.font));
+	return true;
+}
+
+
 MENUCOMMAND(exportmapfiles)
 {
 	int i;
@@ -3092,5 +3101,39 @@ MENUCOMMAND(npcscreenies)
 
 	checknpcs();
 	
+	return true;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+MENUCOMMAND(addfavorite)
+{
+	cLight l;
+	char buf[100];
+	sprintf(buf, "obj%i", rand());
+	l.name = buf;
+	l.color.x = 0;
+	l.color.y = 0;
+	l.color.z = 0;
+	l.pos = cVector3(mouseclickx/5, mouseclicky+10, mouseclickz/5);
+	l.todo = string(buf, 40);
+	l.todo2 = 192;
+	l.maxlightincrement = 256;
+	l.range = 200;
+	l.lightfalloff = 1;
+
+	Graphics.selectedobject = Graphics.world.lights.size();
+
+	Graphics.world.lights.push_back(l);
+	undostack.push(new cUndoNewLight());
 	return true;
 }

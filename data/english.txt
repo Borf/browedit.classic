@@ -107,6 +107,7 @@
 			<WATER>Water</WATER>
 			<PREFERENCES>Preferences</PREFERENCES>
 			<RSMEDITOR>RSM Editor</RSMEDITOR>
+			<FAVLIGHTS>Favorite lights</FAVLIGHTS>
 		</windows>
 	</menu>
 	<fs>
@@ -178,6 +179,16 @@
 			<LIGHTFALLOFF>Light Falloff (0-1)</LIGHTFALLOFF>
 			<CASTSSHADOW>Casts Shadows</CASTSSHADOW>
 		</light>
+		<favlight>
+			<TITLE>Favorite Lights</TITLE>
+			<POSITION>Position:</POSITION>
+			<COLOR>Color:</COLOR>
+			<INTENSITY>Intensity:</INTENSITY>
+			<RANGE>Range:</RANGE>
+			<MAXLIGHTINCREMENT>Max. Light Increment</MAXLIGHTINCREMENT>
+			<LIGHTFALLOFF>Light Falloff (0-1)</LIGHTFALLOFF>
+			<CASTSSHADOW>Casts Shadows</CASTSSHADOW>
+		</favlight>
 		<message>
 			<TITLE>Message...</TITLE>
 		</message>

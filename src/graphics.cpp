@@ -768,12 +768,13 @@ void cMenu::click(int xx, int yy)
 					}
 					lastmenu = this;
 					menu->closemenu();
-					menu->opened = true;
+					closemenu();
 					((cMenuItem*)items[i])->proc((cMenuItem*)items[i]);
 					return;
 				}
 				else
 				{
+					opened = true;
 					for(int ii = 0; ii < items.size(); ii++)
 					{
 						if(i != ii)

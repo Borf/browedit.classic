@@ -70,5 +70,12 @@ MENUCOMMAND(exportmapfiles);
 MENUCOMMAND(99dun);
 MENUCOMMAND(eascript);
 MENUCOMMAND(npcscreenies);
+MENUCOMMAND(favlights);
+
+
+
+// popup menu
+
+MENUCOMMAND(addfavorite);
 
 #endif

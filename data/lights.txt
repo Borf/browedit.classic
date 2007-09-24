@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<lights>
+	<light>
+		<name>default</name>
+		<color r="0" g="0" b="0"></color>
+		<range>200</range>
+		<brightness>127</brightness>
+		<maxlight>256</maxlight>
+		<givesshadow>1</givesshadow>
+		<lightfalloff>1</lightfalloff>
+		<height>10</height>
+	</light>
+</lights>

@@ -16,6 +16,8 @@ extern bool lbuttondown;
 
 extern cMenu* popupmenu;
 
+double mouseclickx, mouseclicky, mouseclickz;
+
 cProcessManagement::lightedit_process_events(SDL_Event &event)
 {
 	switch(event.type)
@@ -139,6 +141,10 @@ cProcessManagement::lightedit_process_events(SDL_Event &event)
 			{
 				if(movement < 3)
 				{
+					mouseclickx = mouse3dx;
+					mouseclicky = mouse3dy;
+					mouseclickz = mouse3dz;
+
 					popupmenu = new cMenu();
 					popupmenu->parent = NULL;
 					popupmenu->drawstyle = 1;
@@ -150,20 +156,22 @@ cProcessManagement::lightedit_process_events(SDL_Event &event)
 					cMenu* favs;
 					ADDMENUITEM(mm,popupmenu,"Deselect light",		&MenuCommand_new); //new
 					ADDMENU(favs,		popupmenu, "Favorites",		popupmenu->x + 150,200); // File
-					favs->y = 100;
+					favs->y = popupmenu->y;
+					favs->x = popupmenu->x + popupmenu->w;
+					favs->w = 200;
 
 					ADDMENUITEM(mm,popupmenu,"Disable Shadows",		&MenuCommand_new); //new
 					ADDMENUITEM(mm,popupmenu,"Snap to floor",		&MenuCommand_new); //new
 					ADDMENUITEM(mm,popupmenu,"Set to 50 over floor",		&MenuCommand_new); //new
 					ADDMENUITEM(mm,popupmenu,"Set as sunlight",		&MenuCommand_new); //new
 
-					ADDMENUITEM(mm,favs,"Torch",		&MenuCommand_new); //new
-					ADDMENUITEM(mm,favs,"Spotlight",		&MenuCommand_new); //new
-					ADDMENUITEM(mm,favs,"Disco Red",		&MenuCommand_new); //new
-					ADDMENUITEM(mm,favs,"Disco Green",		&MenuCommand_new); //new
-					ADDMENUITEM(mm,favs,"Disco Blue",		&MenuCommand_new); //new
-					ADDMENUITEM(mm,favs,"Faint stuff",		&MenuCommand_new); //new
-					ADDMENUITEM(mm,favs,"Random Colors",		&MenuCommand_new); //new
+					ADDMENUITEM(mm,favs,"Torch",		&MenuCommand_addfavorite); //new
+					ADDMENUITEM(mm,favs,"Spotlight",		&MenuCommand_addfavorite); //new
+					ADDMENUITEM(mm,favs,"Disco Red",		&MenuCommand_addfavorite); //new
+					ADDMENUITEM(mm,favs,"Disco Green",		&MenuCommand_addfavorite); //new
+					ADDMENUITEM(mm,favs,"Disco Blue",		&MenuCommand_addfavorite); //new
+					ADDMENUITEM(mm,favs,"Faint stuff",		&MenuCommand_addfavorite); //new
+					ADDMENUITEM(mm,favs,"Random Colors",		&MenuCommand_addfavorite); //new
 				}
 			}
 			break;

@@ -1,13 +1,12 @@
 language=english
-setting=ROdesktop
-
+setting=RO
 [RO]
 rodir=c:\Program Files\gravity\ro\
-model=romodels.txt
-//model=arcturusmodels.txt
-texture=rotextures.txt
-//texture=arctextures.txt
-texture=texturescustom.txt
+model=data/romodels.txt
+//model=data/arcturusmodels.txt
+texture=data/rotextures.txt
+//texture=data/arctextures.txt
+texture=data/texturescustom.txt
 resx=1024
 resy=768
 fullscreen=0
@@ -20,12 +19,12 @@ notilecolor=255,255,128
 
 [ROdesktop]
 rodir=d:\games\newro\
-model=romodels.txt
-model=alphamodels.txt
-//model=arcturusmodels.txt
-texture=rotextures.txt
-//texture=arctextures.txt
-texture=texturescustom.txt
+model=data/romodels.txt
+model=data/alphamodels.txt
+//model=data/arcturusmodels.txt
+texture=data/rotextures.txt
+//texture=data/arctextures.txt
+texture=data/texturescustom.txt
 resx=1024
 resy=768
 fullscreen=0
@@ -39,8 +38,8 @@ undostack=50
 
 [Arcturus]
 rodir=d:\games\arcturus\
-model=arcturusmodels.txt
-texture=arctextures.txt
+model=data/arcturusmodels.txt
+texture=data/arctextures.txt
 resx=1024
 resy=768
 fullscreen=0
@@ -52,8 +51,8 @@ notilecolor=255,255,128
 
 [ROalpha]
 rodir=d:\work\ro_alpha\
-model=romodels.txt
-texture=rotextures.txt
+model=data/romodels.txt
+texture=data/rotextures.txt
 resx=1024
 resy=768
 fullscreen=0
@@ -69,14 +68,14 @@ notilecolor=255,255,128
 //rodir=c:\Program Files\Asgard\Alpha\
 //grf=c:\program files\gravity\ro\sdata.grf
 rodir=c:\Program Files\Gravity\RO\
-model=romodels.txt
-model=arcturusmodels.txt
-model=alphamodels.txt
-texture=texturescustom.txt
-texture=rotga.txt
-texture=arctextures.txt
-texture=AlphaTextures.txt
-texture=rotextures.txt
+model=data/romodels.txt
+model=data/arcturusmodels.txt
+model=data/alphamodels.txt
+texture=data/texturescustom.txt
+texture=data/rotga.txt
+texture=data/arctextures.txt
+texture=data/AlphaTextures.txt
+texture=data/rotextures.txt
 resx=1024
 resy=768
 fullscreen=0
