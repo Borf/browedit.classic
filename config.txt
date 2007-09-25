@@ -1,5 +1,5 @@
 language=english
-setting=RO
+setting=ROdesktop
 [RO]
 rodir=c:\Program Files\gravity\ro\
 model=data/romodels.txt
@@ -30,9 +30,9 @@ resy=768
 fullscreen=0
 bpp=32
 font=tahoma
-grf=d:\games\newro\edata.grf
+//grf=d:\games\newro\edata.grf
 grf=d:\games\newro\sdata.grf
-grf=d:\games\newro\data.grf
+//grf=d:\games\newro\data.grf
 undostack=50
 
 
