@@ -77,5 +77,6 @@ MENUCOMMAND(favlights);
 // popup menu
 
 MENUCOMMAND(addfavorite);
+MENUCOMMAND(deselectlight);
 
 #endif

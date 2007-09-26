@@ -1590,9 +1590,9 @@ MENUCOMMAND(dolightmaps2)
 						{
 							buf[yy*8 + xx + 9] = min(255, buf[yy*8 + xx + 9] + max(0, (int)(intensity)));
 
-//							buf[64 + 3*(yy*8 + xx + 9)+0] = min(255, buf[64 + 3*(yy*8 + xx + 9)+0] + max(0, (int)ceil((l->todo2 - bla)*l->color.x)));
-//							buf[64 + 3*(yy*8 + xx + 9)+1] = min(255, buf[64 + 3*(yy*8 + xx + 9)+1] + max(0, (int)ceil((l->todo2 - bla)*l->color.y)));
-//							buf[64 + 3*(yy*8 + xx + 9)+2] = min(255, buf[64 + 3*(yy*8 + xx + 9)+2] + max(0, (int)ceil((l->todo2 - bla)*l->color.z)));
+							buf[64 + 3*(yy*8 + xx + 9)+0] = min(255, buf[64 + 3*(yy*8 + xx + 9)+0] + max(0, (int)intensity*l->color.x));
+							buf[64 + 3*(yy*8 + xx + 9)+1] = min(255, buf[64 + 3*(yy*8 + xx + 9)+1] + max(0, (int)intensity*l->color.y));
+							buf[64 + 3*(yy*8 + xx + 9)+2] = min(255, buf[64 + 3*(yy*8 + xx + 9)+2] + max(0, (int)intensity*l->color.z));
 						}
 						else
 						{
@@ -3135,5 +3135,12 @@ MENUCOMMAND(addfavorite)
 
 	Graphics.world.lights.push_back(l);
 	undostack.push(new cUndoNewLight());
+	return true;
+}
+
+
+MENUCOMMAND(deselectlight)
+{
+	Graphics.selectedobject = -1;
 	return true;
 }

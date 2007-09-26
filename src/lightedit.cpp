@@ -154,7 +154,7 @@ cProcessManagement::lightedit_process_events(SDL_Event &event)
 					popupmenu->opened = true;
 					cMenuItem* mm;
 					cMenu* favs;
-					ADDMENUITEM(mm,popupmenu,"Deselect light",		&MenuCommand_new); //new
+					ADDMENUITEM(mm,popupmenu,"Deselect light",		&MenuCommand_deselectlight); //new
 					ADDMENU(favs,		popupmenu, "Favorites",		popupmenu->x + 150,200); // File
 					favs->y = popupmenu->y;
 					favs->x = popupmenu->x + popupmenu->w;
