@@ -181,7 +181,8 @@
 		</light>
 		<favlight>
 			<TITLE>Favorite Lights</TITLE>
-			<POSITION>Position:</POSITION>
+			<NAME>Name:</NAME>
+			<HEIGHT>Height:</HEIGHT>
 			<COLOR>Color:</COLOR>
 			<INTENSITY>Intensity:</INTENSITY>
 			<RANGE>Range:</RANGE>
