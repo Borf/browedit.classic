@@ -65,6 +65,7 @@ public:
 	virtual ~cWindowTree() {}
 	virtual void draw(int,int,int,int);
 	virtual void click();
+	virtual void rightclick();
 	virtual void onchange() {};
 	bool onkeydown(int, bool);
 //	void onchar(char);

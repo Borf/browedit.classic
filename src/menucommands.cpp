@@ -3117,19 +3117,42 @@ MENUCOMMAND(npcscreenies)
 
 MENUCOMMAND(addfavorite)
 {
+	vector<int> keys;
+	string key = src->data;
+	while(key != "")
+	{
+		int k = atoi(key.substr(0, key.find("|")).c_str());
+		keys.push_back(k);
+		key = key.substr(key.find("|")+1);
+	}
+
+
+	TiXmlNode* n = favoritelights.FirstChild();
+	for(int i = 0; i < keys[keys.size()-1]; i++)
+		n = n->NextSibling();
+
+	for(i = keys.size()-2; i > -1; i--)
+	{
+		n = n->FirstChild();
+		for(int ii = 0; ii < keys[i]; ii++)
+			n = n->NextSibling();
+	}
+
+	
+	
 	cLight l;
 	char buf[100];
 	sprintf(buf, "obj%i", rand());
 	l.name = buf;
-	l.color.x = 0;
-	l.color.y = 0;
-	l.color.z = 0;
-	l.pos = cVector3(mouseclickx/5, mouseclicky+10, mouseclickz/5);
+	l.color.x = atof(n->FirstChildElement("color")->Attribute("r"));
+	l.color.y = atof(n->FirstChildElement("color")->Attribute("g"));
+	l.color.z = atof(n->FirstChildElement("color")->Attribute("b"));
+	l.pos = cVector3(mouseclickx/5, mouseclicky+atoi(n->FirstChildElement("height")->FirstChild()->Value()), mouseclickz/5);
 	l.todo = string(buf, 40);
-	l.todo2 = 192;
-	l.maxlightincrement = 256;
-	l.range = 200;
-	l.lightfalloff = 1;
+	l.todo2 = atoi(n->FirstChildElement("brightness")->FirstChild()->Value());
+	l.maxlightincrement = atoi(n->FirstChildElement("maxlight")->FirstChild()->Value());
+	l.range = atoi(n->FirstChildElement("range")->FirstChild()->Value());
+	l.lightfalloff = atof(n->FirstChildElement("lightfalloff")->FirstChild()->Value());
 
 	Graphics.selectedobject = Graphics.world.lights.size();
 

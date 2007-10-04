@@ -12,6 +12,7 @@
 #include "objectwindow.h"
 #include "windowcheckbox.h"
 extern TiXmlDocument favoritelights;
+extern cMenu* popupmenu;
 
 
 
@@ -85,6 +86,23 @@ public:
 			resizeto(200, parent->ph()-30);
 			alignment = ALIGN_TOPLEFT;
 		}
+
+		void rightclick()
+		{
+			cWindowTree::rightclick();
+			popupmenu = new cMenu();
+			popupmenu->parent = NULL;
+			popupmenu->drawstyle = 1;
+			popupmenu->x = mousex;
+			popupmenu->y = mousey;
+			popupmenu->w = 150;
+			popupmenu->opened = true;
+			cMenuItem* mm;
+			ADDMENUITEM(mm,popupmenu,"Remove light",		&MenuCommand_new); //new
+			ADDMENUITEM(mm,popupmenu,"Insert light",		&MenuCommand_new); //new
+			ADDMENUITEM(mm,popupmenu,"Insert category",		&MenuCommand_new); //new
+		}
+
 		void onchange()
 		{
 			int i;

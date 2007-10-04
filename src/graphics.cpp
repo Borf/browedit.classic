@@ -613,6 +613,7 @@ void cMenu::draw()
 				items[i]->closemenu();
 
 			Graphics.font->print(0,0,0,x+items[i]->x+3,Graphics.h()-y-18,"%s",items[i]->title.c_str());
+
 			if(items[i]->opened)
 				items[i]->draw();
 		}
@@ -666,6 +667,11 @@ void cMenu::draw()
 			if (items[i]->ticked)
 				Graphics.font->print(color,color,color,x+5,Graphics.h()-y-20*i-18,"X");
 			Graphics.font->print(color,color,color,x+23,Graphics.h()-y-20*i-18,"%s",items[i]->title.c_str());
+			if(items[i]->items.size() > 0)
+			{
+				Graphics.font->print(color,color,color,x+maxlen-12,Graphics.h()-y-20*i-18,">");
+				Graphics.font->print(color,color,color,x+maxlen-12+1,Graphics.h()-y-20*i-18-1,"%c",7);
+			}
 			if(items[i]->opened)
 				items[i]->draw();
 		}

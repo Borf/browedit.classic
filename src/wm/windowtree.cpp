@@ -217,6 +217,11 @@ int cWindowTree::GetInt(int index)
 	return selected;
 }
 
+void cWindowTree::rightclick()
+{
+	click();
+}
+
 void cWindowTree::click()
 {
 	int i;

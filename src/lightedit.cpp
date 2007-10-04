@@ -15,8 +15,57 @@ extern int movement;
 extern bool lbuttondown;
 
 extern cMenu* popupmenu;
+extern TiXmlDocument favoritelights;
 
 double mouseclickx, mouseclicky, mouseclickz;
+
+
+void addmenustuff(cMenu* m, TiXmlElement* el)
+{
+	while(el != NULL)
+	{
+		if(strcmp(el->Value(), "light") == 0)
+		{
+			string keys;
+			TiXmlNode* e = el;
+			while(e != NULL)
+			{
+				TiXmlNode* pel = e->Parent();
+				if(pel != NULL)
+				{
+					TiXmlNode* child = pel->FirstChild();
+					for(int i = 0; child != NULL; i++)
+					{
+						if(child == e)
+						{
+							char buf[20];
+							sprintf(buf, "%i|", i);
+							keys += buf;
+							break;
+						}
+						child=child->NextSibling();
+					}
+				}
+				e = e->Parent();
+			}
+
+			
+			cMenu* mm;
+			ADDMENUITEMDATA(mm,m,el->FirstChildElement("name")->FirstChild()->Value(),		&MenuCommand_addfavorite, keys); //new
+			
+		}
+		else
+		{
+			cMenu* mm;
+			ADDMENU(mm,		m, string(el->Value()) + ".....",		m->x + 150,m->y); // File
+			addmenustuff(mm, el->FirstChildElement());
+		}
+
+		el = el->NextSiblingElement();
+	}
+
+}
+
 
 cProcessManagement::lightedit_process_events(SDL_Event &event)
 {
@@ -154,24 +203,21 @@ cProcessManagement::lightedit_process_events(SDL_Event &event)
 					popupmenu->opened = true;
 					cMenuItem* mm;
 					cMenu* favs;
-					ADDMENUITEM(mm,popupmenu,"Deselect light",		&MenuCommand_deselectlight); //new
-					ADDMENU(favs,		popupmenu, "Favorites",		popupmenu->x + 150,200); // File
+					ADDMENUITEM(mm,popupmenu,"Deselect light",		&MenuCommand_deselectlight);
+					ADDMENUITEM(mm,popupmenu,"Properties",		&MenuCommand_properties);
+					ADDMENU(favs,		popupmenu, "Favorites",		popupmenu->x + 150,200);
 					favs->y = popupmenu->y;
 					favs->x = popupmenu->x + popupmenu->w;
 					favs->w = 200;
 
-					ADDMENUITEM(mm,popupmenu,"Disable Shadows",		&MenuCommand_new); //new
-					ADDMENUITEM(mm,popupmenu,"Snap to floor",		&MenuCommand_new); //new
-					ADDMENUITEM(mm,popupmenu,"Set to 50 over floor",		&MenuCommand_new); //new
-					ADDMENUITEM(mm,popupmenu,"Set as sunlight",		&MenuCommand_new); //new
+					ADDMENUITEM(mm,popupmenu,"Disable Shadows",		&MenuCommand_new);
+					ADDMENUITEM(mm,popupmenu,"Snap to floor",		&MenuCommand_new);
+					ADDMENUITEM(mm,popupmenu,"Set to 50 over floor",		&MenuCommand_new);
+					ADDMENUITEM(mm,popupmenu,"Set as sunlight",		&MenuCommand_new);
 
-					ADDMENUITEM(mm,favs,"Torch",		&MenuCommand_addfavorite); //new
-					ADDMENUITEM(mm,favs,"Spotlight",		&MenuCommand_addfavorite); //new
-					ADDMENUITEM(mm,favs,"Disco Red",		&MenuCommand_addfavorite); //new
-					ADDMENUITEM(mm,favs,"Disco Green",		&MenuCommand_addfavorite); //new
-					ADDMENUITEM(mm,favs,"Disco Blue",		&MenuCommand_addfavorite); //new
-					ADDMENUITEM(mm,favs,"Faint stuff",		&MenuCommand_addfavorite); //new
-					ADDMENUITEM(mm,favs,"Random Colors",		&MenuCommand_addfavorite); //new
+
+					addmenustuff(favs, favoritelights.FirstChildElement("lights")->FirstChildElement());
+
 				}
 			}
 			break;
@@ -190,22 +236,25 @@ cProcessManagement::lightedit_process_events(SDL_Event &event)
 			case SDLK_RETURN:
 				if (Graphics.selectedobject != -1)
 				{
-					cLight* l = &Graphics.world.lights[Graphics.selectedobject];
+					if(Graphics.selectedobject < Graphics.world.lights.size())
+					{
+						cLight* l = &Graphics.world.lights[Graphics.selectedobject];
 
-					cWindow* w = new cLightWindow(&Graphics.WM.texture, &Graphics.WM.font);
-					w->objects["posx"]->SetInt(3,(int)&l->pos.x);
-					w->objects["posy"]->SetInt(3,(int)&l->pos.y);
-					w->objects["posz"]->SetInt(3,(int)&l->pos.z);
-					w->objects["colorr"]->SetInt(3,(int)&l->color.x);
-					w->objects["colorg"]->SetInt(3,(int)&l->color.y);
-					w->objects["colorb"]->SetInt(3,(int)&l->color.z);
-					w->objects["intensity"]->SetInt(3,(int)&l->todo2);
-					w->objects["range"]->SetInt(3,(int)&l->range);
-					w->objects["maxlightincrement"]->SetInt(3,(int)&l->maxlightincrement);
-					w->objects["lightfalloff"]->SetInt(3,(int)&l->lightfalloff);
-					w->objects["castshadow"]->SetInt(3,(int)&l->givesshadow);
-					//((cEffectWindow*)w)->undo = new cUndoChangeEffect(Graphics.selectedobject);
-					Graphics.WM.addwindow(w);
+						cWindow* w = new cLightWindow(&Graphics.WM.texture, &Graphics.WM.font);
+						w->objects["posx"]->SetInt(3,(int)&l->pos.x);
+						w->objects["posy"]->SetInt(3,(int)&l->pos.y);
+						w->objects["posz"]->SetInt(3,(int)&l->pos.z);
+						w->objects["colorr"]->SetInt(3,(int)&l->color.x);
+						w->objects["colorg"]->SetInt(3,(int)&l->color.y);
+						w->objects["colorb"]->SetInt(3,(int)&l->color.z);
+						w->objects["intensity"]->SetInt(3,(int)&l->todo2);
+						w->objects["range"]->SetInt(3,(int)&l->range);
+						w->objects["maxlightincrement"]->SetInt(3,(int)&l->maxlightincrement);
+						w->objects["lightfalloff"]->SetInt(3,(int)&l->lightfalloff);
+						w->objects["castshadow"]->SetInt(3,(int)&l->givesshadow);
+						//((cEffectWindow*)w)->undo = new cUndoChangeEffect(Graphics.selectedobject);
+						Graphics.WM.addwindow(w);
+					}
 				}
 				break;
 			default:

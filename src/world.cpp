@@ -2279,8 +2279,10 @@ void cWorld::draw()
 					glVertex3f(5*lights[i].pos.x,999, 5*(2*height-lights[i].pos.z));
 					glVertex3f(5*lights[i].pos.x,-999, 5*(2*height-lights[i].pos.z));
 				glEnd();
-
-				glColor4f(1,1,1,0.3f);
+			}
+			if(i == Graphics.selectedobject || Graphics.showalllights)
+			{
+				glColor4f(lights[i].color.x,lights[i].color.y,lights[i].color.z,0.3f);
 
 				//glDisable(GL_DEPTH_TEST);
 				glDepthMask(GL_FALSE);

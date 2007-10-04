@@ -754,6 +754,7 @@ int main(int argc, char *argv[])
 	mm->ticked = true;
 	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/SHOWSPRITES"),				&MenuCommand_toggle, (void*)&Graphics.showsprites);
 	mm->ticked = true;
+	ADDMENUITEMDATAP(mm,view,"Show all light spheres",						&MenuCommand_toggle, (void*)&Graphics.showalllights);
 
 
 	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/TEXTUREEDIT"),				&MenuCommand_mode);
@@ -1253,7 +1254,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					draggingwindow->stopresizing();
 				}
 				draggingwindow = NULL;
-				if (movement <= 1 && m == NULL)
+				if (movement <= 1 && m == NULL && popupmenu == NULL)
 					Graphics.WM.click(true);
 				if (draggingobject != NULL && m == NULL)
 				{
@@ -1334,7 +1335,10 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				if (movement < 2)
 				{
 					if(Graphics.WM.inwindow() != NULL)
+					{
 						Graphics.WM.rightclick();
+						return 1;
+					}
 				}
 				long l = SDL_GetTicks();
 				if (l - lastrclick < 250)
