@@ -3167,3 +3167,274 @@ MENUCOMMAND(deselectlight)
 	Graphics.selectedobject = -1;
 	return true;
 }
+
+
+MENUCOMMAND(light_disableshadow)
+{
+	Graphics.world.lights[Graphics.selectedobject].givesshadow = !Graphics.world.lights[Graphics.selectedobject].givesshadow;
+	return true;
+}
+MENUCOMMAND(light_snaptofloor)
+{
+	Graphics.world.lights[Graphics.selectedobject].pos.y = Graphics.world.cubes[(int)Graphics.world.lights[Graphics.selectedobject].pos.z/2][(int)Graphics.world.lights[Graphics.selectedobject].pos.x/2].cell1;
+	return true;
+}
+MENUCOMMAND(light_setheight)
+{
+	delete popupmenu;
+	popupmenu = NULL;
+
+
+	MenuCommand_light_snaptofloor(src);
+	Graphics.world.lights[Graphics.selectedobject].pos.y += atoi(Graphics.WM.InputWindow("Height:").c_str());
+
+
+	return true;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+MENUCOMMAND(removefavlight)
+{
+	cFavoriteLightsWindow* w = (cFavoriteLightsWindow*)Graphics.WM.getwindow(WT_FAVLIGHTS);
+	if(w != NULL)
+	{
+		cFavoriteLightsWindow::cFavoritesTree* tree = (cFavoriteLightsWindow::cFavoritesTree*)w->objects["list"];
+		int i;
+		int a = tree->selected;
+		cWindowTree::cTreeNode* node;
+		for(i = 0; i < tree->nodes.size(); i++)
+		{
+			 node = tree->nodes[i]->getnode(a);
+			 if(node != NULL)
+				 break;
+		}
+		if(node == NULL)
+			return false;
+
+		if(node->parent == NULL)
+		{
+			for(i = 0; i < tree->nodes.size(); i++)
+			{
+				if(tree->nodes[i] == node)
+				{
+					tree->nodes.erase(tree->nodes.begin() + i);
+					break;
+				}
+			}
+		}
+		else
+		{
+			for(i = 0; i < node->parent->children.size(); i++)
+			{
+				if(node->parent->children[i] == node)
+				{
+					node->parent->children.erase(node->parent->children.begin() + i);
+					break;
+				}
+			}
+		}
+
+		vector<int> keys = ((cFavoriteLightsWindow::cFavoriteTreeNode*)node)->keys;
+		delete node;
+
+		TiXmlNode* n = favoritelights.FirstChild();
+		for(i = 0; i < keys[keys.size()-1]; i++)
+			n = n->NextSibling();
+
+		for(i = keys.size()-2; i > -1; i--)
+		{
+			n = n->FirstChild();
+			for(int ii = 0; ii < keys[i]; ii++)
+				n = n->NextSibling();
+		}
+
+		n->Parent()->RemoveChild(n);
+		
+
+		for(i = 0; i < tree->nodes.size(); i++)
+			delete tree->nodes[i];
+		tree->nodes.clear();
+
+// rebuild tree with keys
+		vector<cWindowTree::cTreeNode*> nodes;
+		cFavoriteLightsWindow::cFavoriteTreeNode* windownode = new cFavoriteLightsWindow::cFavoriteTreeNode("root");
+		n = favoritelights.FirstChildElement();
+		cFavoriteLightsWindow::addlights(windownode, n);
+		cWindowTree::cTreeNode* root = windownode->children[0];
+		windownode->children.clear(); // to prevend the children from being deleted;
+		delete windownode;
+		root->parent = NULL;
+		tree->nodes.push_back(root);
+	
+	}
+	return true;
+}
+
+MENUCOMMAND(addfavlight)
+{
+	delete popupmenu;
+	popupmenu = NULL;
+	cFavoriteLightsWindow* w = (cFavoriteLightsWindow*)Graphics.WM.getwindow(WT_FAVLIGHTS);
+	if(w != NULL)
+	{
+		cFavoriteLightsWindow::cFavoritesTree* tree = (cFavoriteLightsWindow::cFavoritesTree*)w->objects["list"];
+		int i;
+		int a = tree->selected;
+		cWindowTree::cTreeNode* node;
+		for(i = 0; i < tree->nodes.size(); i++)
+		{
+			 node = tree->nodes[i]->getnode(a);
+			 if(node != NULL)
+				 break;
+		}
+		if(node == NULL)
+			return false;
+
+		if(!((cFavoriteLightsWindow::cFavoriteTreeNode*)node)->iscat)
+		{
+			Graphics.WM.MessageBox("You can't add a light to another light, you can only add lights to categories");
+			return false;
+		}
+
+		vector<int> keys = ((cFavoriteLightsWindow::cFavoriteTreeNode*)node)->keys;
+
+		TiXmlNode* n = favoritelights.FirstChild();
+		for(i = 0; i < keys[keys.size()-1]; i++)
+			n = n->NextSibling();
+
+		for(i = keys.size()-2; i > -1; i--)
+		{
+			n = n->FirstChild();
+			for(int ii = 0; ii < keys[i]; ii++)
+				n = n->NextSibling();
+		}
+
+		string name = Graphics.WM.InputWindow("Light name:");
+		if(name == "")
+			return false;
+
+		TiXmlElement light("light");
+		TiXmlElement color("color");
+		color.SetAttribute("r","0");
+		color.SetAttribute("g","0");
+		color.SetAttribute("b","0");
+		light.InsertEndChild(color);
+		light.InsertEndChild(TiXmlElement("name"))->InsertEndChild(TiXmlText(name.c_str()));
+		light.InsertEndChild(TiXmlElement("range"))->InsertEndChild(TiXmlText("100"));
+		light.InsertEndChild(TiXmlElement("brightness"))->InsertEndChild(TiXmlText("127"));
+		light.InsertEndChild(TiXmlElement("maxlight"))->InsertEndChild(TiXmlText("256"));
+		light.InsertEndChild(TiXmlElement("givesshadow"))->InsertEndChild(TiXmlText("1"));
+		light.InsertEndChild(TiXmlElement("lightfalloff"))->InsertEndChild(TiXmlText("1"));
+		light.InsertEndChild(TiXmlElement("height"))->InsertEndChild(TiXmlText("10"));
+
+		n->InsertEndChild(light);
+
+
+		
+// rebuild tree with keys
+		vector<cWindowTree::cTreeNode*> nodes;
+		cFavoriteLightsWindow::cFavoriteTreeNode* windownode = new cFavoriteLightsWindow::cFavoriteTreeNode("root");
+		n = favoritelights.FirstChildElement();
+		cFavoriteLightsWindow::addlights(windownode, n);
+		cWindowTree::cTreeNode* root = windownode->children[0];
+		windownode->children.clear(); // to prevend the children from being deleted;
+		delete windownode;
+		root->parent = NULL;
+
+		for(i = 0; i < tree->nodes.size(); i++)
+			delete tree->nodes[i];
+		tree->nodes.clear();
+		tree->nodes.push_back(root);
+
+
+		return true;
+	}
+	else
+		return false;
+}
+
+
+MENUCOMMAND(addfavlightcat)
+{
+	delete popupmenu;
+	popupmenu = NULL;
+	cFavoriteLightsWindow* w = (cFavoriteLightsWindow*)Graphics.WM.getwindow(WT_FAVLIGHTS);
+	if(w != NULL)
+	{
+		cFavoriteLightsWindow::cFavoritesTree* tree = (cFavoriteLightsWindow::cFavoritesTree*)w->objects["list"];
+		int i;
+		int a = tree->selected;
+		cWindowTree::cTreeNode* node;
+		for(i = 0; i < tree->nodes.size(); i++)
+		{
+			 node = tree->nodes[i]->getnode(a);
+			 if(node != NULL)
+				 break;
+		}
+		if(node == NULL)
+			return false;
+
+		if(!((cFavoriteLightsWindow::cFavoriteTreeNode*)node)->iscat)
+		{
+			Graphics.WM.MessageBox("You can't add a category to a light, you can only add lights to categories");
+			return false;
+		}
+
+		vector<int> keys = ((cFavoriteLightsWindow::cFavoriteTreeNode*)node)->keys;
+
+		TiXmlNode* n = favoritelights.FirstChild();
+		for(i = 0; i < keys[keys.size()-1]; i++)
+			n = n->NextSibling();
+
+		for(i = keys.size()-2; i > -1; i--)
+		{
+			n = n->FirstChild();
+			for(int ii = 0; ii < keys[i]; ii++)
+				n = n->NextSibling();
+		}
+
+		string catname = Graphics.WM.InputWindow("Category name:");
+		if(catname == "")
+			return false;
+
+		TiXmlElement cat(catname.c_str());
+
+		n->InsertEndChild(cat);
+
+
+		
+// rebuild tree with keys
+		vector<cWindowTree::cTreeNode*> nodes;
+		cFavoriteLightsWindow::cFavoriteTreeNode* windownode = new cFavoriteLightsWindow::cFavoriteTreeNode("root");
+		n = favoritelights.FirstChildElement();
+		cFavoriteLightsWindow::addlights(windownode, n);
+		cWindowTree::cTreeNode* root = windownode->children[0];
+		windownode->children.clear(); // to prevend the children from being deleted;
+		delete windownode;
+		root->parent = NULL;
+
+		for(i = 0; i < tree->nodes.size(); i++)
+			delete tree->nodes[i];
+		tree->nodes.clear();
+		tree->nodes.push_back(root);
+
+
+		return true;
+	}
+	else
+		return false;
+}

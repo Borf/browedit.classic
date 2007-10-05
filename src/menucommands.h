@@ -78,5 +78,14 @@ MENUCOMMAND(favlights);
 
 MENUCOMMAND(addfavorite);
 MENUCOMMAND(deselectlight);
+MENUCOMMAND(light_disableshadow);
+MENUCOMMAND(light_snaptofloor);
+MENUCOMMAND(light_setheight);
+
+
+// fav lights popup menu
+MENUCOMMAND(removefavlight);
+MENUCOMMAND(addfavlight);
+MENUCOMMAND(addfavlightcat);
 
 #endif

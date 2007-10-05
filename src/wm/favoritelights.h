@@ -28,50 +28,53 @@ public:
 
 
 		vector<int> keys;
+		bool		iscat;
 
 	};
 
 	
-	void addlights(cFavoriteTreeNode* parent, TiXmlNode* n)
+	static void addlights(cFavoriteTreeNode* parent, TiXmlNode* n)
 	{
 		while(n != NULL)
 		{
+			cFavoriteTreeNode* windowtreenode = NULL;
 			if(strcmp(n->Value(), "light") == 0)
 			{
-				cFavoriteTreeNode* windowtreenode = new cFavoriteTreeNode(n->FirstChildElement("name")->FirstChild()->Value());
+				windowtreenode = new cFavoriteTreeNode(n->FirstChildElement("name")->FirstChild()->Value());
+				windowtreenode->iscat = false;
 				parent->addchild(windowtreenode);
-
-				vector<int> keys;
-				TiXmlNode* el = n;
-				while(el != NULL)
-				{
-					TiXmlNode* pel = el->Parent();
-					if(pel != NULL)
-					{
-						TiXmlNode* child = pel->FirstChild();
-						for(int i = 0; child != NULL; i++)
-						{
-							if(child == el)
-							{
-								keys.push_back(i);
-								break;
-							}
-							child=child->NextSibling();
-						}
-					}
-					el = el->Parent();
-				}
-				windowtreenode->keys = keys;
-
-
 			}
 			else
 			{
-				cFavoriteTreeNode* windowtreenode = new cFavoriteTreeNode(n->Value());
+				windowtreenode = new cFavoriteTreeNode(n->Value());
 				windowtreenode->open = true;
+				windowtreenode->iscat = true;;
 				parent->addchild(windowtreenode);
 				addlights(windowtreenode, n->FirstChildElement());
 			}
+			vector<int> keys;
+			TiXmlNode* el = n;
+			while(el != NULL)
+			{
+				TiXmlNode* pel = el->Parent();
+				if(pel != NULL)
+				{
+					TiXmlNode* child = pel->FirstChild();
+					for(int i = 0; child != NULL; i++)
+					{
+						if(child == el)
+						{
+							keys.push_back(i);
+							break;
+						}
+						child=child->NextSibling();
+					}
+				}
+				el = el->Parent();
+			}
+			windowtreenode->keys = keys;
+
+			
 			n = n->NextSiblingElement();
 		}
 	}
@@ -98,9 +101,9 @@ public:
 			popupmenu->w = 150;
 			popupmenu->opened = true;
 			cMenuItem* mm;
-			ADDMENUITEM(mm,popupmenu,"Remove light",		&MenuCommand_new); //new
-			ADDMENUITEM(mm,popupmenu,"Insert light",		&MenuCommand_new); //new
-			ADDMENUITEM(mm,popupmenu,"Insert category",		&MenuCommand_new); //new
+			ADDMENUITEM(mm,popupmenu,"Remove light/category",		&MenuCommand_removefavlight); //new
+			ADDMENUITEM(mm,popupmenu,"Insert light",		&MenuCommand_addfavlight); //new
+			ADDMENUITEM(mm,popupmenu,"Insert category",		&MenuCommand_addfavlightcat); //new
 		}
 
 		void onchange()
@@ -131,21 +134,25 @@ public:
 					for(int ii = 0; ii < key[i]; ii++)
 						n = n->NextSibling();
 				}
-				n->FirstChildElement("name")->FirstChild()->SetValue(parent->objects["name"]->GetText(0).c_str());
-				n->FirstChildElement("color")->SetAttribute("r", parent->objects["colorr"]->GetText(0).c_str());
-				n->FirstChildElement("color")->SetAttribute("g", parent->objects["colorg"]->GetText(0).c_str());
-				n->FirstChildElement("color")->SetAttribute("b", parent->objects["colorb"]->GetText(0).c_str());
-				n->FirstChildElement("brightness")->FirstChild()->SetValue(parent->objects["intensity"]->GetText(0).c_str());
-				n->FirstChildElement("range")->FirstChild()->SetValue(parent->objects["range"]->GetText(0).c_str());
-				n->FirstChildElement("maxlight")->FirstChild()->SetValue(parent->objects["lightfalloff"]->GetText(0).c_str());
-				n->FirstChildElement("lightfalloff")->FirstChild()->SetValue(parent->objects["lightfalloff"]->GetText(0).c_str());
-				n->FirstChildElement("givesshadow")->FirstChild()->SetValue(parent->objects["castshadow"]->GetText(0).c_str());
-				n->FirstChildElement("height")->FirstChild()->SetValue(parent->objects["height"]->GetText(0).c_str());
+
+				if(n != NULL)
+				{
+					n->FirstChildElement("name")->FirstChild()->SetValue(parent->objects["name"]->GetText(0).c_str());
+					n->FirstChildElement("color")->SetAttribute("r", parent->objects["colorr"]->GetText(0).c_str());
+					n->FirstChildElement("color")->SetAttribute("g", parent->objects["colorg"]->GetText(0).c_str());
+					n->FirstChildElement("color")->SetAttribute("b", parent->objects["colorb"]->GetText(0).c_str());
+					n->FirstChildElement("brightness")->FirstChild()->SetValue(parent->objects["intensity"]->GetText(0).c_str());
+					n->FirstChildElement("range")->FirstChild()->SetValue(parent->objects["range"]->GetText(0).c_str());
+					n->FirstChildElement("maxlight")->FirstChild()->SetValue(parent->objects["maxlightincrement"]->GetText(0).c_str());
+					n->FirstChildElement("lightfalloff")->FirstChild()->SetValue(parent->objects["lightfalloff"]->GetText(0).c_str());
+					n->FirstChildElement("givesshadow")->FirstChild()->SetValue(parent->objects["castshadow"]->GetText(0).c_str());
+					n->FirstChildElement("height")->FirstChild()->SetValue(parent->objects["height"]->GetText(0).c_str());
+				}
 			}
 
-			if(node->children.size() != 0)
+			if(node->children.size() != 0 || ((cFavoriteTreeNode*)node)->iscat)
 			{
-				parent->objects["name"]->SetText(0, "");
+				parent->objects["name"]->SetText(0, "CATEGORY");
 				parent->objects["colorr"]->SetText(0, "");
 				parent->objects["colorg"]->SetText(0, "");
 				parent->objects["colorb"]->SetText(0, "");

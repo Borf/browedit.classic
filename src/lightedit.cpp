@@ -210,9 +210,9 @@ cProcessManagement::lightedit_process_events(SDL_Event &event)
 					favs->x = popupmenu->x + popupmenu->w;
 					favs->w = 200;
 
-					ADDMENUITEM(mm,popupmenu,"Disable Shadows",		&MenuCommand_new);
-					ADDMENUITEM(mm,popupmenu,"Snap to floor",		&MenuCommand_new);
-					ADDMENUITEM(mm,popupmenu,"Set to 50 over floor",		&MenuCommand_new);
+					ADDMENUITEM(mm,popupmenu,"Disable Shadows",		&MenuCommand_light_disableshadow);
+					ADDMENUITEM(mm,popupmenu,"Snap to floor",		&MenuCommand_light_snaptofloor);
+					ADDMENUITEM(mm,popupmenu,"Set height",			&MenuCommand_light_setheight);
 					ADDMENUITEM(mm,popupmenu,"Set as sunlight",		&MenuCommand_new);
 
 

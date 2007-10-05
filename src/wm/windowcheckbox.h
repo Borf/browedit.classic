@@ -25,6 +25,7 @@ public:
 	bool onchar(char, bool);
 	void SetInt(int, int);
 	int GetInt(int);
+	string GetText(int);
 };
 
 

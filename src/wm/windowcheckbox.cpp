@@ -87,3 +87,8 @@ int cWindowCheckBox::GetInt(int id)
 	return value ? 1 : 0;
 }
 
+
+string cWindowCheckBox::GetText(int id)
+{
+	return value ? "1" : "0";
+}
