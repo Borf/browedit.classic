@@ -53,7 +53,7 @@ cProcessManagement::effectedit_process_events(SDL_Event &event)
 				}
 			}
 			break;
-		case SDL_MOUSEBUTTONUP:
+		case SDL_MOUSEBUTTONDOWN:
 			if(event.button.button == SDL_BUTTON_LEFT)
 			{
 				if(Graphics.world.effects.size() == 0)
@@ -78,7 +78,7 @@ cProcessManagement::effectedit_process_events(SDL_Event &event)
 				Graphics.objectstartdrag = Graphics.selectedobject == minobj;
 			}
 			break;
-		case SDL_MOUSEBUTTONDOWN:
+		case SDL_MOUSEBUTTONUP:
 			if(event.button.button == SDL_BUTTON_LEFT && movement < 3)
 			{
 				if (SDL_GetModState() & KMOD_CTRL)
@@ -90,7 +90,7 @@ cProcessManagement::effectedit_process_events(SDL_Event &event)
 					sprintf(buf, "obj%i", rand());
 					e.category = "\0\0\0\0";
 					e.loop = 40;
-					e.pos = cVector3(mouse3dx/5, mouse3dy-10, mouse3dz/5);
+					e.pos = cVector3(mouse3dx/5, -mouse3dy-10, mouse3dz/5);
 					e.name = buf;
 					e.readablename = selectedeffect->title;
 					e.type = atoi(selectedeffect->data.c_str());
