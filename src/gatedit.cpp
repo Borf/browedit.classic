@@ -115,14 +115,14 @@ cProcessManagement::gatedit_process_events(SDL_Event &event)
 									Graphics.world.gattiles[y][x].cell3 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
 									Graphics.world.gattiles[y][x].cell4 = (c->cell4+c->cell2) / 2.0f;
 								}
-								if (y%2 == 1 && x%2 == 0)
+								if (y%2 == 1 && x%2 == 1)
 								{
 									Graphics.world.gattiles[y][x].cell1 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
 									Graphics.world.gattiles[y][x].cell2 = (c->cell4 + c->cell2) / 2.0f;
 									Graphics.world.gattiles[y][x].cell3 = (c->cell4 + c->cell3) / 2.0f;
 									Graphics.world.gattiles[y][x].cell4 = (c->cell4 + c->cell4) / 2.0f;
 								}
-								if (y%2 == 1 && x%2 == 1)
+								if (y%2 == 1 && x%2 == 0)
 								{
 									Graphics.world.gattiles[y][x].cell1 = (c->cell3 + c->cell1) / 2.0f;
 									Graphics.world.gattiles[y][x].cell2 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
