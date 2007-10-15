@@ -37,6 +37,31 @@ int cWM::draw()
 	for(i = size; i >= 0; i--)
 	{
 		cWindow* w = windows[i];
+		if(!w->isalwaysontop())
+			continue;
+		if (w->isenabled())
+		{
+			if (i == topwindow)
+			{
+				glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+				w->istopwindow(true);
+			}
+			else
+			{
+				glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
+				w->istopwindow(false);
+			}
+			if(w->isvisible() && w->isenabled())
+				w->draw();
+		}
+		if (windows[i] != w)
+			break;	
+	}
+	for(i = size; i >= 0; i--)
+	{
+		cWindow* w = windows[i];
+		if(w->isalwaysontop())
+			continue;
 		if (w->isenabled())
 		{
 			if (i == topwindow)

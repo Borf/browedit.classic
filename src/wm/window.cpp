@@ -171,7 +171,7 @@ bool cWindow::drag()
 		}
 	}
 
-	if (movable && !resizing())
+	if (movable && !(resizing() && resizable))
 	{
 		x=(int)mousex-(int)dragoffsetx;
 		y=(Graphics.h()-(int)mousey)-(int)dragoffsety;

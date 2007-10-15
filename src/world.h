@@ -227,7 +227,6 @@ class cWorld
 {
 
 public:
-	TiXmlDocument extradoc;
 	cAmbientLight ambientlight;
 	cWater water;
 	bool loaded;

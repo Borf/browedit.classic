@@ -168,8 +168,6 @@ public:
 
 
 
-
-
 	cHotkeyWindow(cTexture* t, cFont* f) : cWindow(t,f)
 	{
 		wtype = WT_HOTKEY;
@@ -184,7 +182,6 @@ public:
 		title = "Hotkey";
 
 		cWindowObject* o;
-
 
 		for(int i = 0; i < 8; i++)
 		{

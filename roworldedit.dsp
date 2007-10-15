@@ -385,6 +385,10 @@ SOURCE=.\src\wm\messagewindow.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\wm\minimapwindow.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\wm\modeloverviewwindow.h
 # End Source File
 # Begin Source File

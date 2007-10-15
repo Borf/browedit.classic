@@ -18,6 +18,7 @@ unsigned long keymap[SDLK_LAST-SDLK_FIRST];
 #include "menucommands.h"
 #include "wm/modeloverviewwindow.h"
 #include "wm/lightoverviewwindow.h"
+#include "wm/minimapwindow.h"
 
 #include "texturecache.h"
 #ifdef WIN32
@@ -1228,6 +1229,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			{
 				draggingobject = NULL;
 				draggingwindow = NULL;
+				Log(3,0,"NULL!");
 				if (Graphics.WM.inwindow() != NULL)
 				{
 					cWindow* w = Graphics.WM.inwindow();
@@ -1236,6 +1238,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						dragoffsetx = mousex - w->px();
 						dragoffsety = (Graphics.h()-mousey) - w->py2();
 						Graphics.WM.click(false);
+						Log(3,0,"NOT NULL");
 						draggingwindow = Graphics.WM.inwindow();
 						if(mousestartx < draggingwindow->px()+draggingwindow->pw() && mousestartx > draggingwindow->px()+draggingwindow->pw() - DRAGBORDER)
 							draggingwindow->startresisingxy();
@@ -1578,6 +1581,14 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			}
 			break;
 		case SDL_KEYUP:
+			if(event.key.keysym.sym == SDLK_TAB)
+			{
+				cWindow* w = Graphics.WM.getwindow(WT_MINIMAP);
+				if (w == NULL)
+					Graphics.WM.addwindow(new cMiniMapWindow(&Graphics.WM.texture, &Graphics.WM.font)	);
+				else
+					Graphics.WM.togglewindow(WT_MINIMAP);
+			}
 			if(event.key.keysym.sym == SDLK_PRINT || event.key.keysym.sym == SDLK_SYSREQ)
 			{
 				if((event.key.keysym.mod&KMOD_SHIFT) != 0)

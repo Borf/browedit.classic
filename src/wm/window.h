@@ -34,6 +34,7 @@ enum WINDOW_TYPE
 	WT_FAVLIGHTS,
 	WT_MODELOVERVIEW,
 	WT_LIGHTOVERVIEW,
+	WT_MINIMAP,
 };
 enum CLOSE_TYPE
 {
@@ -62,6 +63,7 @@ protected:
 	CLOSE_TYPE closetype;
 	bool enabled;
 	string saveprops;
+	bool alwaysontop;
 public:
 	bool savewindow;
 	string defaultobject;
@@ -76,6 +78,7 @@ public:
 		resizingxy = false;
 		resizingyx = false;
 		checkborders = false;
+		alwaysontop = false;
 		minh = 100;
 		minw = 100;
 		selectedobject = NULL;
@@ -126,6 +129,7 @@ public:
 	void disable()					{ enabled = false; }
 	void enable()					{ enabled = true; }
 	bool isenabled()				{ return enabled; }
+	bool isalwaysontop()			{ return alwaysontop; }
 	bool resizing()					{ return resizingxy | resizingyx | resizingx | resizingy; }
 	bool onborder();
 	void moveto(int xx, int yy)		{ x = xx; y = yy; }

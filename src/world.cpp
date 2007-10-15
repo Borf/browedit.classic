@@ -704,7 +704,7 @@ void cWorld::load()
 
 	if(fs.isfile(string(filename) + ".extra"))
 	{
-		extradoc = fs.getxml(string(filename) + ".extra");
+		TiXmlDocument extradoc = fs.getxml(string(filename) + ".extra");
 		TiXmlElement* light = extradoc.FirstChildElement("lights")->FirstChildElement("light");
 		while(light != NULL)
 		{
