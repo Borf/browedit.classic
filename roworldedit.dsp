@@ -373,11 +373,19 @@ SOURCE=.\src\wm\keybindwindow.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\wm\lightoverviewwindow.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\wm\lightwindow.h
 # End Source File
 # Begin Source File
 
 SOURCE=.\src\wm\messagewindow.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\wm\modeloverviewwindow.h
 # End Source File
 # Begin Source File
 

@@ -4,6 +4,7 @@
 #include "menu.h"
 #include "menucommands.h"
 #include "wm/lightwindow.h"
+#include "wm/lightoverviewwindow.h"
 
 extern float mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
@@ -147,7 +148,7 @@ cProcessManagement::lightedit_process_events(SDL_Event &event)
 				{
 					cLight l;
 					char buf[100];
-					sprintf(buf, "obj%i", rand());
+					sprintf(buf, "Light%i", rand());
 					l.name = buf;
 					l.color.x = 0;
 					l.color.y = 0;
@@ -185,6 +186,14 @@ cProcessManagement::lightedit_process_events(SDL_Event &event)
 					}
 					Graphics.selectedobject = minobj;
 				}
+				cWindow* w = Graphics.WM.getwindow(WT_LIGHTOVERVIEW);
+				if(w != NULL)
+				{
+					w->userfunc(NULL);
+					cLightOverViewWindow::cLightOverViewTree* tree = (cLightOverViewWindow::cLightOverViewTree*)w->objects["list"];
+					tree->getobject(Graphics.world.lights[Graphics.selectedobject]);
+				}
+
 			}
 			else
 			{
@@ -231,6 +240,11 @@ cProcessManagement::lightedit_process_events(SDL_Event &event)
 					undostack.push(new cUndoLightDelete(Graphics.selectedobject));
 					Graphics.world.lights.erase(Graphics.world.lights.begin() + Graphics.selectedobject);
 					Graphics.selectedobject = -1;
+					cWindow* w = Graphics.WM.getwindow(WT_LIGHTOVERVIEW);
+					if(w != NULL)
+						w->userfunc(NULL);
+
+				
 				}
 				break;
 			case SDLK_RETURN:

@@ -108,6 +108,7 @@
 			<PREFERENCES>Preferences</PREFERENCES>
 			<RSMEDITOR>RSM Editor</RSMEDITOR>
 			<FAVLIGHTS>Favorite lights</FAVLIGHTS>
+			<OVERVIEW>Map Overview</OVERVIEW>
 		</windows>
 	</menu>
 	<fs>
@@ -232,5 +233,8 @@
 		<sprite>
 			<TITLE>Sprite...</TITLE>
 		</sprite>
+		<overview>
+			<TITLE>Map Overview...</TITLE>
+		</overview>
 	</wm>
 </language>

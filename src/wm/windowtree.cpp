@@ -139,7 +139,7 @@ void cWindowTree::draw(int cutoffleft, int cutoffright, int cutofftop, int cutof
 	
 	i = liststart;
 	yy = realy()+h-5-12;
-	while(yy+10 > realy() && i < (int)values.size())
+	while(yy > realy() && i < (int)values.size())
 	{
 		parent->font->print(0,0,0,parent->px()+xx+5,parent->py()+yy,"%s", values[i].c_str());
 		i++;
@@ -465,3 +465,53 @@ cWindowTree::cTreeNode* cWindowTree::cTreeNode::getnode(string s)
 	return NULL;
 }
 
+
+bool treeComp(cWindowTree::cTreeNode* a, cWindowTree::cTreeNode* b)
+{
+	return a->text > b->text;
+}
+
+void cWindowTree::cTreeNode::sort()
+{
+	mergesort<cTreeNode*>(children, treeComp);
+	for(int i = 0; i < children.size(); i++)
+		children[i]->sort();
+}
+
+
+int cWindowTree::cTreeNode::getselectionnr(cTreeNode* child)
+{
+	int ret = 0;
+	if(parent != NULL)
+		ret = parent->getselectionnr(this);
+
+	for(int i = 0; i < children.size(); i++)
+	{
+		if(children[i] == child)
+		{
+			ret += i+1;
+			break;
+		}
+		if(children[i]->open)
+		{
+			ret += children[i]->openchildcount()-1;
+		}
+	}
+	return ret;
+}
+
+int cWindowTree::cTreeNode::openchildcount()
+{
+	int ret = 1;
+	if(!open)
+		return ret;
+
+	for(int i = 0; i < children.size(); i++)
+	{
+		if(children[i]->open)
+			ret += children[i]->openchildcount();
+		else
+			ret++;
+	}
+	return ret;
+}

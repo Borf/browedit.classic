@@ -76,6 +76,7 @@ public:
 	{
 		selected = false;
 	}
+	string name;
 	string filename;
 	string rofilename;
 

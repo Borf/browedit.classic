@@ -92,12 +92,11 @@ public:
 		o->SetInt(0,0);
 		objects["objectmenu"] = o;
 
-		o = new cWindowInputBox(this);
+		o = new cWindowStringInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,40);
 		o->resizeto(210,20);
 		o->SetText(0,"");
-		o->SetInt(0,0);
 		objects["objectname"] = o;
 		
 		o = new cWindowFloatInputBox(this);
@@ -168,11 +167,15 @@ public:
 		}
 		else
 		{
+
 			for(map<string, cWindowObject*, less<string> >::iterator i = objects.begin(); i !=  objects.end(); i++)
 			{
 				if(i->second->type == OBJECT_FLOATINPUTBOX)
 					i->second->onkeydown(SDLK_RETURN, false);
 			}
+			cWindow* w = Graphics.WM.getwindow(WT_MODELOVERVIEW);
+			if(w != NULL)
+				w->userfunc(NULL);
 			undostack.push(undo);
 		}
 

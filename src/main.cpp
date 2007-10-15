@@ -16,6 +16,8 @@ unsigned long keymap[SDLK_LAST-SDLK_FIRST];
 #include "wm/modelswindow.h"
 #include "undo.h"
 #include "menucommands.h"
+#include "wm/modeloverviewwindow.h"
+#include "wm/lightoverviewwindow.h"
 
 #include "texturecache.h"
 #ifdef WIN32
@@ -290,7 +292,43 @@ void mainloop()
 		}
 	}
 
-		
+	static eMode lasteditmode = editmode;
+	
+	if(editmode != lasteditmode)
+	{
+		lasteditmode = editmode;
+		cWindow* w = Graphics.WM.getwindow(WT_MODELOVERVIEW);
+		if(editmode == MODE_OBJECTS)
+		{
+			if(w == NULL)
+				Graphics.WM.addwindow(new cModelOverViewWindow(&Graphics.WM.texture, &Graphics.WM.font));
+			else
+			{
+				w->userfunc(NULL);
+				w->show();
+			}
+		}
+		else if(w != NULL)
+			w->close();
+
+
+		w = Graphics.WM.getwindow(WT_LIGHTOVERVIEW);
+		if (editmode == MODE_LIGHTS)
+		{
+			if(w == NULL)
+				Graphics.WM.addwindow(new cLightOverViewWindow(&Graphics.WM.texture, &Graphics.WM.font));
+			else
+			{
+				w->userfunc(NULL);
+				w->show();
+			}
+		}
+		else if(w != NULL)
+			w->close();
+
+
+	}
+
 	if (!Graphics.draw())
 		running = false;
 	SDL_GL_SwapBuffers();

@@ -231,6 +231,9 @@ cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 					Graphics.selectedobject = -1;
 					if (objectsdeleted.size() > 0)
 						undostack.push(new cUndoObjectsDelete(objectsdeleted));
+					cWindow* w = Graphics.WM.getwindow(WT_MODELOVERVIEW);
+					if(w != NULL)
+						w->userfunc(NULL);
 				}
 				break;
 

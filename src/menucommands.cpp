@@ -8,6 +8,8 @@
 #include "wm/keybindwindow.h"
 #include "wm/rsmeditwindow.h"
 #include "wm/favoritelights.h"
+#include "wm/modeloverviewwindow.h"
+#include "wm/lightoverviewwindow.h"
 
 extern cGraphics Graphics;
 extern bool running;
@@ -3155,6 +3157,13 @@ MENUCOMMAND(addfavorite)
 	l.lightfalloff = atof(n->FirstChildElement("lightfalloff")->FirstChild()->Value());
 
 	Graphics.selectedobject = Graphics.world.lights.size();
+	cWindow* w = Graphics.WM.getwindow(WT_LIGHTOVERVIEW);
+	if(w != NULL)
+	{
+		w->userfunc(NULL);
+		cLightOverViewWindow::cLightOverViewTree* tree = (cLightOverViewWindow::cLightOverViewTree*)w->objects["list"];
+		tree->getobject(Graphics.world.lights[Graphics.selectedobject]);
+	}
 
 	Graphics.world.lights.push_back(l);
 	undostack.push(new cUndoNewLight());

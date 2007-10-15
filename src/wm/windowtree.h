@@ -33,9 +33,12 @@ public:
 		bool haschild(string);
 		cTreeNode* getnode(int&);
 		cTreeNode* getnode(string);
+		int getselectionnr(cTreeNode* = NULL);
 		void getnodes(vector<cTreeNode*> &);
 
 		void addchild(cTreeNode*);
+		int openchildcount();
+		void sort();
 		int id;
 	};
 

@@ -88,6 +88,49 @@ public:
 	}
 };
 
+class cWindowStringInputBox : public cWindowInputBox
+{
+	string* stringetje;
+	string lastvalue;
+public:
+	cWindowStringInputBox(cWindow* parent) : cWindowInputBox(parent)
+	{
+		type = OBJECT_FLOATINPUTBOX;
+		alignment = ALIGN_TOPLEFT;
+		resizeto(70,20);
+	}
+	void draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
+	{
+		if(*stringetje != lastvalue)
+		{
+			char buf[255];
+			sprintf(buf, "%s", stringetje->c_str());
+			while(buf[strlen(buf)-1] == '0')
+				buf[strlen(buf)-1] = '\0';
+			if(buf[strlen(buf)-1] == '.')
+				buf[strlen(buf)-1] = '\0';
+			text = buf;
+			lastvalue = *stringetje;
+		}
+		cWindowInputBox::draw(cutoffleft, cutoffright, cutofftop, cutoffbottom);
+	}
 
+	void SetInt(int id, int val)
+	{
+		cWindowInputBox::SetInt(id,val);
+		if (id == 3)
+			stringetje = (string*)val;
+	}
+	bool onkeydown(int keyid, bool shift)
+	{
+		bool ret = cWindowInputBox::onkeydown(keyid, shift);
+		if (keyid == SDLK_RETURN)
+		{
+			*stringetje = text;
+			ret = true;
+		}
+		return ret;
+	}
+};
 
 #endif

@@ -3,7 +3,7 @@
 #include "undo.h"
 #include "menu.h"
 #include "wm/objectwindow.h"
-
+#include "wm/modeloverviewwindow.h"
 
 #define MENUCOMMAND(x) bool MenuCommand_ ## x (cMenuItem* src)
 MENUCOMMAND(model);
@@ -103,6 +103,8 @@ cProcessManagement::objectedit_process_events(SDL_Event &event)
 					model->pos = cVector3(mouse3dx/5, -mouse3dy, mouse3dz/5);
 					model->scale = cVector3(1,1,1);
 					model->rot = cVector3(0,0,0);
+					char buf[100];
+					sprintf(buf, "%s-%i", Graphics.previewmodel->rofilename, rand()%100);
 					Graphics.world.models.push_back(model);
 					Graphics.selectedobject = Graphics.world.models.size()-1;
 					undostack.push(new cUndoNewObject());
@@ -127,6 +129,13 @@ cProcessManagement::objectedit_process_events(SDL_Event &event)
 						}
 					}
 					Graphics.selectedobject = minobj;
+				}
+				cWindow* w = Graphics.WM.getwindow(WT_MODELOVERVIEW);
+				if(w != NULL)
+				{
+					w->userfunc(NULL);
+					cModelOverViewWindow::cModelOverViewTree* tree = (cModelOverViewWindow::cModelOverViewTree*)w->objects["list"];
+					tree->getobject(Graphics.world.models[Graphics.selectedobject]);
 				}
 			}
 		case SDL_KEYDOWN:
@@ -303,6 +312,9 @@ cProcessManagement::objectedit_process_events(SDL_Event &event)
 					delete Graphics.world.models[Graphics.selectedobject];
 					Graphics.world.models.erase(Graphics.world.models.begin() + Graphics.selectedobject);
 					Graphics.selectedobject = -1;
+					cWindow* w = Graphics.WM.getwindow(WT_MODELOVERVIEW);
+					if(w != NULL)
+						w->userfunc(NULL);
 				}
 				break;
 			case SDLK_i:
@@ -320,7 +332,7 @@ cProcessManagement::objectedit_process_events(SDL_Event &event)
 				if (Graphics.selectedobject != -1)
 				{
 					cRSMModel* o = Graphics.world.models[Graphics.selectedobject];
-					cMenuItem* menuitem = (cMenuItem*)models->finddata("model\\" + o->rofilename);
+					cMenuItem* menuitem = (cMenuItem*)models->finddata("data\\model\\" + o->rofilename);
 
 					cWindow* w = new cObjectWindow(&Graphics.WM.texture, &Graphics.WM.font);
 					if (menuitem != NULL)
@@ -334,7 +346,7 @@ cProcessManagement::objectedit_process_events(SDL_Event &event)
 					w->objects["scalex"]->SetInt(3,(int)&o->scale.x);
 					w->objects["scaley"]->SetInt(3,(int)&o->scale.y);
 					w->objects["scalez"]->SetInt(3,(int)&o->scale.z);
-					w->objects["objectname"]->SetText(0, o->rofilename);
+					w->objects["objectname"]->SetInt(3, (int)&o->name);
 					((cObjectWindow*)w)->undo = new cUndoChangeObject(Graphics.selectedobject);
 
 					Graphics.WM.addwindow(w);

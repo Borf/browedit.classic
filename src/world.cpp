@@ -441,6 +441,7 @@ void cWorld::load()
 					Log(2,0,GetMsg("world/MODELFAIL"), filename.c_str());
 				}
 
+				m->name = string(buf);
 
 				m->pos.x = *((float*)(buf+212));
 				m->pos.y = *((float*)(buf+216));
@@ -703,7 +704,7 @@ void cWorld::load()
 
 	if(fs.isfile(string(filename) + ".extra"))
 	{
-		TiXmlDocument extradoc = fs.getxml(string(filename) + ".extra");
+		extradoc = fs.getxml(string(filename) + ".extra");
 		TiXmlElement* light = extradoc.FirstChildElement("lights")->FirstChildElement("light");
 		while(light != NULL)
 		{
@@ -1053,7 +1054,7 @@ void cWorld::save()
 			pFile.write((char*)&l, 4);
 
 			ZeroMemory(buf, 100);
-			sprintf(buf, "%i", rand());
+			sprintf(buf, "%s", m->name.c_str());
 			pFile.write(buf, 40);
 
 			l = 2;
@@ -3245,6 +3246,7 @@ unsigned char rawData[82] =
 			string filename = buf+52;
 			cRSMModel* m = new cRSMModel();
 			m->load(rodir+ "data\\model\\" + filename);
+			m->name = string(buf);
 
 			m->pos.x = *((float*)(buf+212));
 			m->pos.y = *((float*)(buf+216));

@@ -7,6 +7,7 @@
 #else
 #include <gd.h>
 #endif
+#include <tinyxml/tinyxml.h>
 #include "RSMModel.h"
 #include "texturecache.h"
 #include "texturemodel.h"
@@ -118,6 +119,18 @@ public:
 	float maxlightincrement;
 	bool  givesshadow;
 	float lightfalloff;
+	bool operator == (cLight other)
+	{
+		return	name == other.name &&
+				pos == other.pos &&
+				todo == other.todo &&
+				color == other.color &&
+				todo2 == other.todo2 &&
+				range == other.range &&
+				maxlightincrement == other.maxlightincrement &&
+				givesshadow == other.givesshadow &&
+				lightfalloff == other.lightfalloff;
+	}
 };
 
 
@@ -214,6 +227,7 @@ class cWorld
 {
 
 public:
+	TiXmlDocument extradoc;
 	cAmbientLight ambientlight;
 	cWater water;
 	bool loaded;
