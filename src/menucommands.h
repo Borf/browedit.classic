@@ -42,6 +42,7 @@ MENUCOMMAND(gatheight);
 MENUCOMMAND(dolightmaps);
 MENUCOMMAND(dolightmapsall);
 MENUCOMMAND(dolightmapslights);
+MENUCOMMAND(dolightmapsnoshadow);
 MENUCOMMAND(dolightmaps2);
 MENUCOMMAND(fixcolors);
 MENUCOMMAND(clearobjects);

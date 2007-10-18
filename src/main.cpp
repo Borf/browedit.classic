@@ -763,7 +763,8 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/QUADTREE"),					&MenuCommand_quadtree); // Quadtree
 	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/CALCULATELIGHTMAPS"),			&MenuCommand_dolightmapsall); // Lightmaps
 	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/CALCULATELIGHTMAPSLOCAL"),	&MenuCommand_dolightmaps); // Selected lightmaps
-	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/CALCULATELIGHTMAPSLIGHT"),	&MenuCommand_dolightmapslights); // Selected lightmaps
+	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/CALCULATELIGHTMAPSLIGHT"),	&MenuCommand_dolightmapslights); // Selected light
+	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/CALCULATELIGHTMAPSNOSHADOW"),	&MenuCommand_dolightmapsnoshadow); // 
 	ADDMENUITEM(mm,rnd,	GetMsg("menu/generate/CLEARMAP"),					&MenuCommand_clearstuff); // clear map
 	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/DUN99"),						&MenuCommand_99dun); // 99 level dungeon
 	ADDMENUITEM(mm,rnd, "eAthena Script",						&MenuCommand_eascript);

@@ -1407,26 +1407,38 @@ MENUCOMMAND(gatheight)
 cVector3 lightpos = cVector3(-20000,20000,-20000);
 bool selectonly;
 bool lightonly;
+bool noshadow;
 
 MENUCOMMAND(dolightmaps)
 {
 	selectonly = true;
 	lightonly = false;
+	noshadow = false;
 	return MenuCommand_dolightmaps2(src);
 }
 MENUCOMMAND(dolightmapsall)
 {
 	selectonly = false;
 	lightonly = false;
+	noshadow = false;
 	return MenuCommand_dolightmaps2(src);
 }
 MENUCOMMAND(dolightmapslights)
 {
 	selectonly = false;
 	lightonly = true;
+	noshadow = false;
 	return MenuCommand_dolightmaps2(src);
 }
 
+MENUCOMMAND(dolightmapsnoshadow)
+{
+	selectonly = false;
+	lightonly = false;
+	noshadow = true;
+	return MenuCommand_dolightmaps2(src);
+	
+}
 
 
 MENUCOMMAND(dolightmaps2)
@@ -1577,7 +1589,7 @@ MENUCOMMAND(dolightmaps2)
 						if(length > l->range)
 							continue;
 
-						if(l->givesshadow)
+						if(l->givesshadow && !noshadow)
 						{
 							for(int ii = 0; ii < Graphics.world.models.size() && !obstructed; ii++)
 							{
