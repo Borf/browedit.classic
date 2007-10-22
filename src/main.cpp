@@ -1199,6 +1199,11 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				cWindow* w = Graphics.WM.inwindow();
 				if(w != NULL)
 					w->scrollup();
+				else
+				{
+					Graphics.cameraheight*=1.1f;
+					Graphics.cameraheight = max(min(Graphics.cameraheight, 15000), -5);
+				}
 				return 1;
 			}
 
@@ -1207,6 +1212,11 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				cWindow* w = Graphics.WM.inwindow();
 				if(w != NULL)
 					w->scrolldown();
+				else
+				{
+					Graphics.cameraheight/=1.1f;
+					Graphics.cameraheight = max(min(Graphics.cameraheight, 15000), -5);
+				}
 				return 1;
 			}
 
@@ -1230,7 +1240,6 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			{
 				draggingobject = NULL;
 				draggingwindow = NULL;
-				Log(3,0,"NULL!");
 				if (Graphics.WM.inwindow() != NULL)
 				{
 					cWindow* w = Graphics.WM.inwindow();
@@ -1239,7 +1248,6 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						dragoffsetx = mousex - w->px();
 						dragoffsety = (Graphics.h()-mousey) - w->py2();
 						Graphics.WM.click(false);
-						Log(3,0,"NOT NULL");
 						draggingwindow = Graphics.WM.inwindow();
 						if(mousestartx < draggingwindow->px()+draggingwindow->pw() && mousestartx > draggingwindow->px()+draggingwindow->pw() - DRAGBORDER)
 							draggingwindow->startresisingxy();
@@ -1582,7 +1590,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			}
 			break;
 		case SDL_KEYUP:
-			if(event.key.keysym.sym == SDLK_TAB)
+			if(event.key.keysym.sym == SDLK_TAB && event.key.keysym.mod& KMOD_CTRL)
 			{
 				cWindow* w = Graphics.WM.getwindow(WT_MINIMAP);
 				if (w == NULL)
@@ -1590,6 +1598,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				else
 					Graphics.WM.togglewindow(WT_MINIMAP);
 			}
+
 			if(event.key.keysym.sym == SDLK_PRINT || event.key.keysym.sym == SDLK_SYSREQ)
 			{
 				if((event.key.keysym.mod&KMOD_SHIFT) != 0)

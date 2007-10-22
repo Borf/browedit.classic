@@ -1598,10 +1598,10 @@ MENUCOMMAND(dolightmaps2)
 							}
 						}
 
-						float intensity = min(l->maxlightincrement, pow(1-(length / l->range), l->lightfalloff) * l->todo2);
 
 						if(!obstructed)
 						{
+							float intensity = min(l->maxlightincrement, pow(1-(length / l->range), l->lightfalloff) * l->todo2);
 							buf[yy*8 + xx + 9] = min(255, buf[yy*8 + xx + 9] + max(0, (int)(intensity)));
 
 							buf[64 + 3*(yy*8 + xx + 9)+0] = min(255, buf[64 + 3*(yy*8 + xx + 9)+0] + max(0, (int)intensity*l->color.x));

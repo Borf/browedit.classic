@@ -48,7 +48,6 @@ public:
 					glEnd();
 				}
 			}
-
 		}
 		void click()
 		{
