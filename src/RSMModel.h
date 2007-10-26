@@ -75,6 +75,8 @@ public:
 	cRSMModel()
 	{
 		selected = false;
+		displaylisted = false;
+		displaylist = 0;
 	}
 	string name;
 	string filename;
@@ -98,6 +100,9 @@ public:
 	void boundingbox();
 	bool recalcbb;
 	bool selected;
+	bool displaylisted;
+	bool animated;
+	GLuint displaylist;
 
 
 

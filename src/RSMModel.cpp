@@ -30,7 +30,7 @@ void cRSMModel::load(string fname)
 
 	long ntextures = *((long*)buffer);
 
-
+	animated = false;
 	if(ntextures < 1 || ntextures > 1000)
 		return;
 
@@ -144,6 +144,8 @@ void cRSMModelMesh::load(cFile* pFile, cRSMModel* model, bool main)
 		faces.push_back(f);
 	}
 	pFile->read((char*)&nFrameAnimations, 4);
+	if(nFrameAnimations != 0)
+		model->animated = true;
 	for(i = 0; i < nFrameAnimations; i++)
 	{
 		cRSMModelFrame f;
@@ -287,7 +289,21 @@ void cRSMModel::draw(bool checkfrust, bool dodraw, bool setheight, bool dolightm
 	}
 
 
-	draw2(&bb,0, NULL, meshes.size() == 1, dodraw, setheight, dolightmaps);
+	if(!displaylisted && !setheight && !dolightmaps && dodraw && !animated)
+	{
+		displaylist=glGenLists(1);
+		glNewList(displaylist,GL_COMPILE);	
+		draw2(&bb,0, NULL, meshes.size() == 1, dodraw, setheight, dolightmaps);
+		glEndList();
+		displaylisted = true;
+		draw2(&bb,0, NULL, meshes.size() == 1, dodraw, setheight, dolightmaps);
+	}
+	else if (displaylisted && dodraw && !setheight && !dolightmaps)
+	{
+		glCallList(displaylist);
+	}
+	else
+		draw2(&bb,0, NULL, meshes.size() == 1, dodraw, setheight, dolightmaps);
 	recalcbb = false;
 
 
