@@ -2,6 +2,8 @@
 
 #include "../filesystem.h"
 #include "../graphics.h"
+#include "../menu.h"
+#include "../menucommands.h"
 extern cGraphics Graphics;
 extern cFileSystem fs;
 extern string rodir;
@@ -10,7 +12,8 @@ extern cWindowObject* draggingobject;
 extern eMode editmode;
 
 extern vector<string> objectfiles;
-
+extern cMenu* popupmenu;
+extern vector<pair<string, string> > translations;
 
 
 cModelsWindow::cWindowModel::cWindowModel(cWindow* parent) : cWindowObject(parent)
@@ -249,7 +252,19 @@ class cConfirmDeleteModel : public cConfirmWindow::cConfirmWindowCaller
 void cModelsWindow::cWindowModel::rightclick()
 {
 	((cModelsWindow*)parent)->stopdrag();
-	Graphics.WM.ConfirmWindow(GetMsg("wm/models/DELETECONFIRM"), new cConfirmDeleteModel(this));
+
+	popupmenu = new cMenu();
+	popupmenu->parent = NULL;
+	popupmenu->drawstyle = 1;
+	popupmenu->x = mousex;
+	popupmenu->y = mousey;
+	popupmenu->w = 150;
+	popupmenu->opened = true;
+	cMenuItem* mm;
+	ADDMENUITEM(mm,popupmenu,"Remove model from list",		&MenuCommand_new);
+	ADDMENUITEM(mm,popupmenu,"Rename Model",				&MenuCommand_new);
+
+	//Graphics.WM.ConfirmWindow(GetMsg("wm/model/DELETECONFIRM"), new cConfirmDeleteModel(this));
 }
 
 void cModelsWindow::cWindowModelCatSelect::rightclick()
@@ -266,6 +281,20 @@ void cModelsWindow::cWindowModelCatSelect::rightclick()
 	}
 	if(node != NULL)
 	{
+		popupmenu = new cMenu();
+		popupmenu->parent = NULL;
+		popupmenu->drawstyle = 1;
+		popupmenu->x = mousex;
+		popupmenu->y = mousey;
+		popupmenu->w = 150;
+		popupmenu->opened = true;
+		cMenuItem* mm;
+		ADDMENUITEM(mm,popupmenu,"Add new category",		&MenuCommand_new);
+		ADDMENUITEM(mm,popupmenu,"Rename category",			&MenuCommand_new);
+
+		
+		
+		
 		string newnode = Graphics.WM.InputWindow(GetMsg("wm/models/NODENAME"));
 		if(newnode == "")
 			return;
@@ -634,6 +663,12 @@ cModelsWindow::cModelsWindow(cTexture* t, cFont* f) : cWindow(t,f)
 
 			string cat = pre.substr(0, pre.rfind("/"));
 			string name = pre.substr(pre.rfind("/")+1);
+
+			for(int ii = 0; ii < translations.size(); ii++)
+			{
+				name = replace(name, translations[ii].first, translations[ii].second);
+				cat = replace(cat, translations[ii].first, translations[ii].second);
+			}
 
 			if(lookup.find(cat) == lookup.end())
 			{

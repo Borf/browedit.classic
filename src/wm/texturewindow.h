@@ -17,6 +17,7 @@ extern cFileSystem fs;
 extern string rodir;
 extern cWindow* draggingwindow;
 extern cWindowObject* draggingobject;
+extern vector<pair<string, string> > translations;
 
 
 extern vector<string> texturefiles;
@@ -171,6 +172,13 @@ public:
 
 				string cat = pre.substr(0, pre.rfind("/"));
 				string name = pre.substr(pre.rfind("/")+1);
+
+				for(int ii = 0; ii < translations.size(); ii++)
+				{
+					name = replace(name, translations[ii].first, translations[ii].second);
+					cat = replace(cat, translations[ii].first, translations[ii].second);
+				}
+
 
 				if(lookup.find(cat) == lookup.end())
 				{

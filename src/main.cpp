@@ -62,6 +62,7 @@ vector<string> objectfiles;
 double mouse3dxstart, mouse3dystart, mouse3dzstart;
 float mousestartx, mousestarty;
 unsigned long keys[SDLK_LAST-SDLK_FIRST];
+vector<pair<string, string> > translations;
 
 bool mouseouttexture(cMenu*);
 bool mouseovertexture(cMenu*);
@@ -359,6 +360,11 @@ void additem(map<string, cMenu*, less<string> > &itemsm, map<cMenu*, int, less<c
 }
 
 
+
+bool translationcomp(pair<string, string> a, pair<string, string> b)
+{
+	return a.first.length() > b.first.length();
+}
 
 
 int main(int argc, char *argv[])
@@ -697,6 +703,17 @@ int main(int argc, char *argv[])
 			}
 		}
 	}
+	pFile->close();
+
+
+	pFile = fs.open("data/korean2english.txt");
+	while(!pFile->eof())
+	{
+		string a = pFile->readline();
+		string b = pFile->readline();
+		translations.push_back(pair<string, string>(a,b));
+	}
+	mergesort<pair<string, string> >(translations, translationcomp);
 	pFile->close();
 
 
