@@ -207,6 +207,7 @@ public:
 		wtype = WT_LIGHTOVERVIEW;
 		visible = true;
 		closetype = HIDE;
+		notransparency = true;
 
 
 		resizable = false;

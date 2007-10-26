@@ -989,7 +989,7 @@ int process_events()
 			{
 			case SDLK_F4:
 				if(SDL_GetModState() & KMOD_ALT)
-					running = false;
+					PostQuitMessage(0);
 				break;
 
 			default:

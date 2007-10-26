@@ -209,6 +209,7 @@ public:
 		wtype = WT_MODELOVERVIEW;
 		visible = true;
 		closetype = HIDE;
+		notransparency = true;
 
 
 		resizable = false;

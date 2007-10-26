@@ -173,6 +173,7 @@
 		</input>
 		<light>
 			<TITLE>Light...</TITLE>
+			<NAME>Name:</NAME>
 			<POSITION>Position:</POSITION>
 			<COLOR>Color:</COLOR>
 			<INTENSITY>Intensity:</INTENSITY>

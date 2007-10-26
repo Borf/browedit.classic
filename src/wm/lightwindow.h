@@ -31,6 +31,7 @@ public:
 		objects["rollup"] = new cWindowRollupButton(this);
 		objects["close"] = new cWindowCloseButton(this);
 
+		addlabel("lblName", 20, 40, GetMsg("wm/light/NAME"));
 		addlabel("lblPos", 20, 60, GetMsg("wm/light/POSITION"));
 		addlabel("lblColor", 20, 80, GetMsg("wm/light/COLOR"));
 		addlabel("lblIntensity", 20, 100, GetMsg("wm/light/INTENSITY"));
@@ -38,6 +39,12 @@ public:
 		addlabel("lblMaxlightincrement", 20, 140, GetMsg("wm/light/MAXLIGHTINCREMENT"));
 		addlabel("lblLightfalloff", 20, 160, GetMsg("wm/light/LIGHTFALLOFF"));
 		addlabel("lblCastsShadow", 20, 180, GetMsg("wm/light/CASTSSHADOW"));
+		
+		o = new cWindowStringInputBox(this);
+		o->alignment = ALIGN_TOPLEFT;
+		o->moveto(170,40);
+		o->resizeto(140,20);
+		objects["name"] = o;
 		
 		o = new cWindowFloatInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;
@@ -122,6 +129,9 @@ public:
 				if(i->second->type == OBJECT_FLOATINPUTBOX)
 					i->second->onkeydown(SDLK_RETURN, false);
 			}
+			cWindow* w = Graphics.WM.getwindow(WT_LIGHTOVERVIEW);
+			if(w != NULL)
+				w->userfunc(NULL);
 		}
 		return NULL;
 	}

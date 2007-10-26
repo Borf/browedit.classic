@@ -147,7 +147,7 @@ int cGraphics::draw(bool drawwm)
 		}
 		glEnable(GL_DEPTH_TEST);
 	}
-	if(world.loaded && editmode != MODE_OBJECTS && editmode != MODE_OBJECTGROUP)
+	if(world.loaded && editmode != MODE_OBJECTS && editmode != MODE_OBJECTGROUP && editmode != MODE_LIGHTS)
 	{
 		int i;
 		glEnable(GL_TEXTURE_2D);
@@ -226,7 +226,7 @@ int cGraphics::draw(bool drawwm)
 			sprintf(buf, "Editing");
 		font->print(1,1,1,width-font->textlen(buf), height-40, buf);
 	}
-	else if (editmode != MODE_OBJECTS)
+	else if (!world.loaded)
 	{
 		glEnable(GL_TEXTURE_2D);
 		glColor3f(1,1,1);

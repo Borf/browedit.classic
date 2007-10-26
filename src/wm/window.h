@@ -64,11 +64,13 @@ protected:
 	bool enabled;
 	string saveprops;
 	bool alwaysontop;
+	bool notransparency;
 public:
 	bool savewindow;
 	string defaultobject;
 	cWindow(cTexture* t, cFont* f)
 	{
+		notransparency = false;
 		visible = false;
 		rolledup = false;
 		resizable = true;
@@ -131,6 +133,7 @@ public:
 	bool isenabled()				{ return enabled; }
 	bool isalwaysontop()			{ return alwaysontop; }
 	bool resizing()					{ return resizingxy | resizingyx | resizingx | resizingy; }
+	bool canbetransparent()			{ return !notransparency; }
 	bool onborder();
 	void moveto(int xx, int yy)		{ x = xx; y = yy; }
 	virtual void resizeto(int ww, int hh)	{ w = ww; h = hh; }

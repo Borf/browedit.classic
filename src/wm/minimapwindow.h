@@ -78,6 +78,7 @@ public:
 		visible = true;
 		modal = false;
 		alwaysontop = true;
+		notransparency = true;
 
 		h = Graphics.world.height+10;
 		w = Graphics.world.width+10;
