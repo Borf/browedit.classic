@@ -974,15 +974,17 @@ int process_events()
 		switch(event.type)
 		{
 		case SDL_QUIT:
-			running = false;
+			if(Graphics.WM.ConfirmWindow("Are you sure you want to quit?"))
+				running = false;
 			break;
 		case SDL_KEYUP:
 			keys[event.key.keysym.sym-SDLK_FIRST] = 0;
 			if (Graphics.WM.onkeyup(event.key.keysym.sym, (event.key.keysym.mod&KMOD_SHIFT) != 0))
 				return 0;
+#ifdef _DEBUG
 			if(keymap[event.key.keysym.sym] == SDLK_ESCAPE)
 				running = false;
-
+#endif
 			switch (event.key.keysym.sym)
 			{
 			case SDLK_F4:
