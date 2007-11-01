@@ -1790,6 +1790,35 @@ MENUCOMMAND(dolightmaps2)
 					if(tilebottom != -1)
 						mapbottom->buf[i] = map->buf[6*8+i];
 				}
+
+				for(i = 0; i < 8; i++)
+				{
+					if(tileleft != -1)
+					{
+						mapleft->buf[64+3*(8*i+7)] = map->buf[64+3*(8*i+1)];
+						mapleft->buf[64+3*(8*i+7)+1] = map->buf[64+3*(8*i+1)+1];
+						mapleft->buf[64+3*(8*i+7)+2] = map->buf[64+3*(8*i+1)+2];
+					}
+					if(tiletop != -1)
+					{
+						maptop->buf[64+3*(7*8+i)] = map->buf[64+3*(i+8)];
+						maptop->buf[64+3*(7*8+i)+1] = map->buf[64+3*(i+8)+1];
+						maptop->buf[64+3*(7*8+i)+2] = map->buf[64+3*(i+8)+2];
+					}
+					if(tileright != -1)
+					{
+						mapright->buf[64+3*(8*i)] = map->buf[64+3*(8*i+6)];
+						mapright->buf[64+3*(8*i)+1] = map->buf[64+3*(8*i+6)+1];
+						mapright->buf[64+3*(8*i)+2] = map->buf[64+3*(8*i+6)+2];
+					}
+					if(tilebottom != -1)
+					{
+						mapbottom->buf[64+3*(i)] = map->buf[64+3*(6*8+i)];
+						mapbottom->buf[64+3*(i)+1] = map->buf[64+3*(6*8+i)+1];
+						mapbottom->buf[64+3*(i)+2] = map->buf[64+3*(6*8+i)+2];
+					}
+				}
+			
 			}
 				
 		}
