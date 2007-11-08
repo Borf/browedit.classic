@@ -96,18 +96,30 @@ cProcessManagement::objectedit_process_events(SDL_Event &event)
 		case SDL_MOUSEBUTTONUP:
 			if(event.button.button == SDL_BUTTON_LEFT && movement < 3)
 			{
+				Log(3,0,"Selecting model...");
 				if (SDL_GetModState() & KMOD_CTRL && Graphics.previewmodel != NULL)
 				{
+					Log(3,0,"1");
 					cRSMModel* model = new cRSMModel();
+					Log(3,0,"2");
 					model->load(Graphics.previewmodel->filename);
+					Log(3,0,"3");
 					model->pos = cVector3(mouse3dx/5, -mouse3dy, mouse3dz/5);
+					Log(3,0,"4");
 					model->scale = cVector3(1,1,1);
+					Log(3,0,"5");
 					model->rot = cVector3(0,0,0);
+					Log(3,0,"6");
 					char buf[100];
-					sprintf(buf, "%s-%i", Graphics.previewmodel->rofilename, rand()%100);
+					Log(3,0,"7");
+					sprintf(buf, "%s-%i", Graphics.previewmodel->rofilename.c_str(), rand()%100);
+					Log(3,0,"8");
 					Graphics.world.models.push_back(model);
+					Log(3,0,"9");
 					Graphics.selectedobject = Graphics.world.models.size()-1;
+					Log(3,0,"0");
 					undostack.push(new cUndoNewObject());
+					Log(3,0,"11");
 				}
 				else
 				{
@@ -133,9 +145,13 @@ cProcessManagement::objectedit_process_events(SDL_Event &event)
 				cWindow* w = Graphics.WM.getwindow(WT_MODELOVERVIEW);
 				if(w != NULL)
 				{
+					Log(3,0,"Updating...");
 					w->userfunc(NULL);
-					cModelOverViewWindow::cModelOverViewTree* tree = (cModelOverViewWindow::cModelOverViewTree*)w->objects["list"];
-					tree->getobject(Graphics.world.models[Graphics.selectedobject]);
+					if(Graphics.selectedobject >= 0 && Graphics.selectedobject < Graphics.world.models.size()-1)
+					{
+						cModelOverViewWindow::cModelOverViewTree* tree = (cModelOverViewWindow::cModelOverViewTree*)w->objects["list"];
+						tree->getobject(Graphics.world.models[Graphics.selectedobject]);
+					}
 				}
 			}
 		case SDL_KEYDOWN:

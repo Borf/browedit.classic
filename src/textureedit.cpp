@@ -228,7 +228,7 @@ cProcessManagement::textureedit_process_events(SDL_Event &event)
 						clipboardgat.push_back(row2);
 					}						
 				}
-				break;
+				break; 
 			case SDLK_p:
 				if(mousex < Graphics.w()-256)
 				{
