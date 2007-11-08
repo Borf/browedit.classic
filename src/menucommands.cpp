@@ -2529,6 +2529,9 @@ MENUCOMMAND(favlights)
 
 MENUCOMMAND(exportmapfiles)
 {
+	CreateDirectory(Graphics.world.filename, NULL);
+	CreateDirectory((Graphics.world.filename + string("\\texture\\")).c_str(), NULL);
+
 	int i;
 	ofstream pFile((string(Graphics.world.filename) + ".txt").c_str());
 	for(i = 0; i < Graphics.world.textures.size(); i++)
@@ -2542,7 +2545,7 @@ MENUCOMMAND(exportmapfiles)
 		pF->close();
 
 
-		
+		CopyFile((rodir + "data\\texture\\" + Graphics.world.textures[i]->RoFilename).c_str(), (string(Graphics.world.filename) + "\\texture\\" + Graphics.world.textures[i]->RoFilename2).c_str(), false);
 		pFile.write("texture\\", 8);
 		pFile.write(Graphics.world.textures[i]->RoFilename.c_str(), Graphics.world.textures[i]->RoFilename.length());
 		pFile.put('\r');
