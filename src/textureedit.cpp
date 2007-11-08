@@ -177,13 +177,20 @@ cProcessManagement::textureedit_process_events(SDL_Event &event)
 				Graphics.flipv = !Graphics.flipv;
 				break;
 			case SDLK_c:
-				if(mousestartx < Graphics.w()-256)
+				if(mousex < Graphics.w()-256)
 				{
 					float selsizex = (fabs(Graphics.selectionstart.x - Graphics.selectionend.x) / 32);
 					float selsizey = (fabs(Graphics.selectionstart.y - Graphics.selectionend.y) / 32);
 
 					selsizex = floor(selsizex*Graphics.brushsize);
 					selsizey = floor(selsizey*Graphics.brushsize);
+
+					if (Graphics.texturerot % 2 == 1)
+					{
+						float a = selsizex;
+						selsizex = selsizey;
+						selsizey = a;
+					}
 
 					int posx = (int)mouse3dx / 10;
 					int posy = (int)mouse3dz / 10;
@@ -223,7 +230,7 @@ cProcessManagement::textureedit_process_events(SDL_Event &event)
 				}
 				break;
 			case SDLK_p:
-				if(mousestartx < Graphics.w()-256)
+				if(mousex < Graphics.w()-256)
 				{
 					float selsizex = (fabs(Graphics.selectionstart.x - Graphics.selectionend.x) / 32);
 					float selsizey = (fabs(Graphics.selectionstart.y - Graphics.selectionend.y) / 32);
@@ -234,6 +241,14 @@ cProcessManagement::textureedit_process_events(SDL_Event &event)
 					int posx = (int)mouse3dx / 10;
 					int posy = (int)mouse3dz / 10;
 
+					if (Graphics.texturerot % 2 == 1)
+					{
+						float a = selsizex;
+						selsizex = selsizey;
+						selsizey = a;
+					}
+
+					
 					undostack.push(new cUndoTexture(posx-(int)selsizex+1, posy-(int)selsizey+1, posx+1, posy+1));
 
 					for(int x = posx; x > posx-selsizex; x--)
@@ -263,6 +278,14 @@ cProcessManagement::textureedit_process_events(SDL_Event &event)
 					float selsizey = (fabs((int)Graphics.selectionstart.y - Graphics.selectionend.y) / 32);
 					selsizex = (int)floor(selsizex*Graphics.brushsize);
 					selsizey = (int)floor(selsizey*Graphics.brushsize);
+
+					if (Graphics.texturerot % 2 == 1)
+					{
+						float a = selsizex;
+						selsizex = selsizey;
+						selsizey = a;
+					}
+
 
 					undostack.push(new cUndoTexture(posx-(int)selsizex+1, posy-(int)selsizey+1, posx+1, posy+1));
 					for(int x = posx; x > posx-selsizex; x--)
