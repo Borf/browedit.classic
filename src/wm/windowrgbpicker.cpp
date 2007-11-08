@@ -73,7 +73,7 @@ void cWindowRGBPicker::draw(int cutoffleft, int cutoffright, int cutofftop, int 
 	glBegin(GL_LINES);
 	for(int i = 0; i < w-8; i++)
 	{
-		color = (i/(float)(w-8)) * 16777216;
+		color = (int)((i/(float)(w-8)) * 16777216);
 //		color = color & 16776960;
 		glColor3f((color&255)/256.0f,((color>>8)&255)/256.0f,((color>>16)&255)/256.0f);
 		glVertex2f(xx+4 + i, yy+4);
@@ -91,7 +91,7 @@ void cWindowRGBPicker::draw(int cutoffleft, int cutoffright, int cutofftop, int 
 void cWindowRGBPicker::click()
 {
 	float clickx = mousex - (x + 4);
-	int color = (clickx/(float)(w-8)) * 16777216;
+	int color = (int)((clickx/(float)(w-8)) * 16777216);
 
 	r = (color&255)/256.0f;
 	g = ((color>>8)&255)/256.0f;

@@ -29,6 +29,8 @@ extern cMenu* currentobject;
 extern float paintspeed;
 extern TiXmlDocument sprites;
 extern double mouseclickx, mouseclicky, mouseclickz;
+extern string message;
+extern bool showmessage;
 
 
 cMenuItem* selectedeffect = NULL;
@@ -361,9 +363,9 @@ MENUCOMMAND(random2)
 	{
 		for(x = 0; x < Graphics.world.width; x++)
 		{
-			Graphics.world.cubes[y][x].tileaside = -1;
-			Graphics.world.cubes[y][x].tileside = -1;
-			Graphics.world.cubes[y][x].tileup = 0;
+			Graphics.world.cubes[(int)y][(int)x].tileaside = -1;
+			Graphics.world.cubes[(int)y][(int)x].tileside = -1;
+			Graphics.world.cubes[(int)y][(int)x].tileup = 0;
 		}
 	}
 	Graphics.draw();
@@ -374,10 +376,10 @@ MENUCOMMAND(random2)
 	{
 		for(x = 0; x < Graphics.world.width; x++)
 		{
-			Graphics.world.cubes[y][x].cell1 = -64;
-			Graphics.world.cubes[y][x].cell2 = -64;
-			Graphics.world.cubes[y][x].cell3 = -64;
-			Graphics.world.cubes[y][x].cell4 = -64;
+			Graphics.world.cubes[(int)y][(int)x].cell1 = -64;
+			Graphics.world.cubes[(int)y][(int)x].cell2 = -64;
+			Graphics.world.cubes[(int)y][(int)x].cell3 = -64;
+			Graphics.world.cubes[(int)y][(int)x].cell4 = -64;
 		}
 	}
 
@@ -411,7 +413,7 @@ MENUCOMMAND(random2)
 		float curve = ((rand() % 100)-50) / 50.0f;
 		for(int ii = 0; ii < c; ii++)
 		{
-			a += curve;
+			a += (int)curve;
 			while(a < 0)
 				a+=360;
 			while(a > 360)
@@ -423,10 +425,10 @@ MENUCOMMAND(random2)
 			{
 				for(int yy = 0; yy < 10; yy++)
 				{
-					Graphics.world.cubes[y+yy][x+xx].cell1 = water ? 30 : 0;//rand()%25;
-					Graphics.world.cubes[y+yy][x+xx].cell2 = water ? 30 : 0;//rand()%25;
-					Graphics.world.cubes[y+yy][x+xx].cell3 = water ? 30 : 0;//rand()%25;
-					Graphics.world.cubes[y+yy][x+xx].cell4 = water ? 30 : 0;//rand()%25;
+					Graphics.world.cubes[(int)y+yy][(int)x+xx].cell1 = water ? 30 : 0;//rand()%25;
+					Graphics.world.cubes[(int)y+yy][(int)x+xx].cell2 = water ? 30 : 0;//rand()%25;
+					Graphics.world.cubes[(int)y+yy][(int)x+xx].cell3 = water ? 30 : 0;//rand()%25;
+					Graphics.world.cubes[(int)y+yy][(int)x+xx].cell4 = water ? 30 : 0;//rand()%25;
 				}
 			}
 
@@ -500,7 +502,7 @@ MENUCOMMAND(random2)
 		model->load(rodir +  randommodels[rand() % randommodels.size()]);
 
 		bool ok = false;
-		while(!ok || Graphics.world.cubes[model->pos.z/2][model->pos.x/2].cell1 != 0)
+		while(!ok || Graphics.world.cubes[(int)(model->pos.z/2)][(int)(model->pos.x/2)].cell1 != 0)
 		{
 			model->pos = cVector3(rand()%(Graphics.world.width*2), 0, rand()%(Graphics.world.height*2));
 			ok = true;
@@ -511,7 +513,7 @@ MENUCOMMAND(random2)
 					if(model->pos.z/2+x < 0 || model->pos.z/2+x >= Graphics.world.height-1 ||
 						model->pos.x/2+y < 0 || model->pos.x/2+y >= Graphics.world.width-1)
 						continue;
-					if(Graphics.world.cubes[model->pos.z/2+x][model->pos.x/2+y].cell1 != 0)
+					if(Graphics.world.cubes[(int)(model->pos.z/2+x)][(int)(model->pos.x/2+y)].cell1 != 0)
 						ok = false;
 				}
 			}
@@ -519,7 +521,7 @@ MENUCOMMAND(random2)
 		}
 
 
-		model->pos.y = Graphics.world.cubes[model->pos.z/2][model->pos.x/2].cell1;
+		model->pos.y = Graphics.world.cubes[(int)(model->pos.z/2)][(int)(model->pos.x/2)].cell1;
 		model->scale = cVector3(1,1,1);
 		model->rot = cVector3(0,rand()%360,0);
 		Graphics.world.models.push_back(model);
@@ -559,10 +561,10 @@ MENUCOMMAND(random2)
 	{
 		for(x = 0; x < Graphics.world.width; x++)
 		{
-			if((Graphics.world.cubes[y][x].cell1 <= -8 || Graphics.world.cubes[y][x].cell2 <= -8 || Graphics.world.cubes[y][x].cell3  <= -8|| Graphics.world.cubes[y][x].cell4 <= -8) && Graphics.world.cubes[y][x].cell1 > -63)
-				Graphics.world.cubes[y][x].tileup= 50 + ((int)x%5) + 5*((int)y%5);
-			else if(Graphics.world.cubes[y][x].cell1 >= -63)
-				Graphics.world.cubes[y][x].tileup= 25 + ((int)x%5) + 5*((int)y%5);
+			if((Graphics.world.cubes[(int)y][(int)x].cell1 <= -8 || Graphics.world.cubes[(int)y][(int)x].cell2 <= -8 || Graphics.world.cubes[(int)y][(int)x].cell3  <= -8|| Graphics.world.cubes[(int)y][(int)x].cell4 <= -8) && Graphics.world.cubes[(int)y][(int)x].cell1 > -63)
+				Graphics.world.cubes[(int)y][(int)x].tileup= 50 + ((int)x%5) + 5*((int)y%5);
+			else if(Graphics.world.cubes[(int)y][(int)x].cell1 >= -63)
+				Graphics.world.cubes[(int)y][(int)x].tileup= 25 + ((int)x%5) + 5*((int)y%5);
 		}
 	}
 
@@ -577,11 +579,11 @@ MENUCOMMAND(random2)
 	{
 		for(x = 0; x < Graphics.world.width; x++)
 		{
-			cCube* c = &Graphics.world.cubes[y][x];
-			Graphics.world.gattiles[2*y][2*x].type = (c->cell1+c->cell2+c->cell3+c->cell4) < -10 ? '\1' : '\0';
-			Graphics.world.gattiles[2*y][2*x+1].type = (c->cell1+c->cell2+c->cell3+c->cell4) < -10 ? '\1' : '\0';
-			Graphics.world.gattiles[2*y+1][2*x].type = (c->cell1+c->cell2+c->cell3+c->cell4) < -10 ? '\1' : '\0';
-			Graphics.world.gattiles[2*y+1][2*x+1].type = (c->cell1+c->cell2+c->cell3+c->cell4) < -10 ? '\1' : '\0';
+			cCube* c = &Graphics.world.cubes[(int)y][(int)x];
+			Graphics.world.gattiles[2*(int)y][2*(int)x].type = (c->cell1+c->cell2+c->cell3+c->cell4) < -10 ? '\1' : '\0';
+			Graphics.world.gattiles[2*(int)y][2*(int)x+1].type = (c->cell1+c->cell2+c->cell3+c->cell4) < -10 ? '\1' : '\0';
+			Graphics.world.gattiles[2*(int)y+1][2*(int)x].type = (c->cell1+c->cell2+c->cell3+c->cell4) < -10 ? '\1' : '\0';
+			Graphics.world.gattiles[2*(int)y+1][2*(int)x+1].type = (c->cell1+c->cell2+c->cell3+c->cell4) < -10 ? '\1' : '\0';
 		}
 
 	}
@@ -593,8 +595,8 @@ MENUCOMMAND(random2)
 	for(x = 0; x < Graphics.world.width; x++)
 		for(y = 0; y < Graphics.world.height; y++)
 		{
-			Graphics.world.cubes[y][x].maxh = -99999;
-			Graphics.world.cubes[y][x].minh = 99999;
+			Graphics.world.cubes[(int)y][(int)x].maxh = -99999;
+			Graphics.world.cubes[(int)y][(int)x].minh = 99999;
 		}
 
 	for(i = 0; i < Graphics.world.models.size(); i++)
@@ -605,13 +607,13 @@ MENUCOMMAND(random2)
 	{
 		for(x = 0; x < Graphics.world.width; x++)
 		{
-			cCube* c = &Graphics.world.cubes[y][x];
-			if(Graphics.world.cubes[y][x].maxh != -99999)
+			cCube* c = &Graphics.world.cubes[(int)y][(int)x];
+			if(Graphics.world.cubes[(int)y][(int)x].maxh != -99999)
 			{
-				Graphics.world.gattiles[2*y][2*x].type = '\1';
-				Graphics.world.gattiles[2*y][2*x+1].type = '\1';
-				Graphics.world.gattiles[2*y+1][2*x].type = '\1';
-				Graphics.world.gattiles[2*y+1][2*x+1].type = '\1';
+				Graphics.world.gattiles[2*(int)y][2*(int)x].type = '\1';
+				Graphics.world.gattiles[2*(int)y][2*(int)x+1].type = '\1';
+				Graphics.world.gattiles[2*(int)y+1][2*(int)x].type = '\1';
+				Graphics.world.gattiles[2*(int)y+1][2*(int)x+1].type = '\1';
 			}
 		}
 
@@ -684,9 +686,9 @@ MENUCOMMAND(random3)
 	{
 		for(x = 0; x < Graphics.world.width; x++)
 		{
-			Graphics.world.cubes[y][x].tileaside = -1;
-			Graphics.world.cubes[y][x].tileside = -1;
-			Graphics.world.cubes[y][x].tileup = 75 + ((int)x%5) + 5*((int)y%5);
+			Graphics.world.cubes[(int)y][(int)x].tileaside = -1;
+			Graphics.world.cubes[(int)y][(int)x].tileside = -1;
+			Graphics.world.cubes[(int)y][(int)x].tileup = 75 + ((int)x%5) + 5*((int)y%5);
 		}
 	}
 
@@ -695,10 +697,10 @@ MENUCOMMAND(random3)
 	{
 		for(x = 0; x < Graphics.world.width; x++)
 		{
-			Graphics.world.cubes[y][x].cell1 = 16;
-			Graphics.world.cubes[y][x].cell2 = 16;
-			Graphics.world.cubes[y][x].cell3 = 16;
-			Graphics.world.cubes[y][x].cell4 = 16;
+			Graphics.world.cubes[(int)y][(int)x].cell1 = 16;
+			Graphics.world.cubes[(int)y][(int)x].cell2 = 16;
+			Graphics.world.cubes[(int)y][(int)x].cell3 = 16;
+			Graphics.world.cubes[(int)y][(int)x].cell4 = 16;
 		}
 	}
 
@@ -777,9 +779,9 @@ MENUCOMMAND(random3)
 		if(!(x + w >= Graphics.world.width-1 || y+h >= Graphics.world.height-1 || x <= 1 || y <= 1))
 		{
 			int takencount = 0;
-			for(xx = x; xx < x+w; xx++)
+			for(xx = (int)x; xx < (int)x+w; xx++)
 			{
-				for(yy = y; yy < y+h; yy++)
+				for(yy = (int)y; yy < (int)y+h; yy++)
 				{
 					if(Graphics.world.cubes[yy][xx].cell1 == 0)
 						takencount++;
@@ -787,9 +789,9 @@ MENUCOMMAND(random3)
 			}
 			if(takencount < 3)
 			{
-				for(xx = x; xx < x+w; xx++)
+				for(xx = (int)x; xx < (int)x+w; xx++)
 				{
-					for(yy = y; yy < y+h; yy++)
+					for(yy = (int)y; yy < (int)y+h; yy++)
 					{
 						Graphics.world.cubes[yy][xx].cell1 = 0;//rand()%25;
 						Graphics.world.cubes[yy][xx].cell2 = 0;//rand()%25;
@@ -801,7 +803,7 @@ MENUCOMMAND(random3)
 				if(island != -1)
 					islands[island].connections.push_back(islands.size());
 
-				islands.push_back(cIntQuad(x,y,w,h));
+				islands.push_back(cIntQuad((int)x,(int)y,w,h));
 				if(island != -1)
 					islands[islands.size()-1].connections.push_back(island);
 			}
@@ -892,11 +894,11 @@ MENUCOMMAND(random3)
 	{
 		for(x = 0; x < Graphics.world.width; x++)
 		{
-			cCube* c = &Graphics.world.cubes[y][x];
-			Graphics.world.gattiles[2*y][2*x].type = (c->cell1+c->cell2+c->cell3+c->cell4) != 0 ? '\1' : '\0';
-			Graphics.world.gattiles[2*y][2*x+1].type = (c->cell1+c->cell2+c->cell3+c->cell4) != 0 ? '\1' : '\0';
-			Graphics.world.gattiles[2*y+1][2*x].type = (c->cell1+c->cell2+c->cell3+c->cell4) != 0 ? '\1' : '\0';
-			Graphics.world.gattiles[2*y+1][2*x+1].type = (c->cell1+c->cell2+c->cell3+c->cell4) != 0 ? '\1' : '\0';
+			cCube* c = &Graphics.world.cubes[(int)y][(int)x];
+			Graphics.world.gattiles[2*(int)y][2*(int)x].type = (c->cell1+c->cell2+c->cell3+c->cell4) != 0 ? '\1' : '\0';
+			Graphics.world.gattiles[2*(int)y][2*(int)x+1].type = (c->cell1+c->cell2+c->cell3+c->cell4) != 0 ? '\1' : '\0';
+			Graphics.world.gattiles[2*(int)y+1][2*(int)x].type = (c->cell1+c->cell2+c->cell3+c->cell4) != 0 ? '\1' : '\0';
+			Graphics.world.gattiles[2*(int)y+1][2*(int)x+1].type = (c->cell1+c->cell2+c->cell3+c->cell4) != 0 ? '\1' : '\0';
 		}
 
 	}
@@ -908,8 +910,8 @@ MENUCOMMAND(random3)
 	for(x = 0; x < Graphics.world.width; x++)
 		for(y = 0; y < Graphics.world.height; y++)
 		{
-			Graphics.world.cubes[y][x].maxh = -99999;
-			Graphics.world.cubes[y][x].minh = 99999;
+			Graphics.world.cubes[(int)y][(int)x].maxh = -99999;
+			Graphics.world.cubes[(int)y][(int)x].minh = 99999;
 		}
 
 	for(i = 0; i < Graphics.world.models.size(); i++)
@@ -920,18 +922,18 @@ MENUCOMMAND(random3)
 	{
 		for(x = 0; x < Graphics.world.width; x++)
 		{
-			cCube* c = &Graphics.world.cubes[y][x];
-			if(Graphics.world.cubes[y][x].maxh != -99999)
+			cCube* c = &Graphics.world.cubes[(int)y][(int)x];
+			if(Graphics.world.cubes[(int)y][(int)x].maxh != -99999)
 			{
-				Graphics.world.gattiles[2*y][2*x].type = '\0';
-				Graphics.world.gattiles[2*y][2*x+1].type = '\0';
-				Graphics.world.gattiles[2*y+1][2*x].type = '\0';
-				Graphics.world.gattiles[2*y+1][2*x+1].type = '\0';
+				Graphics.world.gattiles[2*(int)y][2*(int)x].type = '\0';
+				Graphics.world.gattiles[2*(int)y][2*(int)x+1].type = '\0';
+				Graphics.world.gattiles[2*(int)y+1][2*(int)x].type = '\0';
+				Graphics.world.gattiles[2*(int)y+1][2*(int)x+1].type = '\0';
 
-				Graphics.world.gattiles[2*y][2*x].cell1 = Graphics.world.gattiles[2*y][2*x].cell2 = Graphics.world.gattiles[2*y][2*x].cell3 = Graphics.world.gattiles[2*y][2*x].cell4 = 0;
-				Graphics.world.gattiles[2*y][2*x+1].cell1 = Graphics.world.gattiles[2*y][2*x+1].cell2 = Graphics.world.gattiles[2*y][2*x+1].cell3 = Graphics.world.gattiles[2*y][2*x+1].cell4 = 0;
-				Graphics.world.gattiles[2*y+1][2*x].cell1 = Graphics.world.gattiles[2*y+1][2*x].cell2 = Graphics.world.gattiles[2*y+1][2*x].cell3 = Graphics.world.gattiles[2*y+1][2*x].cell4 = 0;
-				Graphics.world.gattiles[2*y+1][2*x+1].cell1 = Graphics.world.gattiles[2*y+1][2*x+1].cell2 = Graphics.world.gattiles[2*y+1][2*x+1].cell3 = Graphics.world.gattiles[2*y+1][2*x+1].cell4 = 0;
+				Graphics.world.gattiles[2*(int)y][2*(int)x].cell1 = 	Graphics.world.gattiles[2*(int)y][2*(int)x].cell2 = 	Graphics.world.gattiles[2*(int)y][2*(int)x].cell3 = 	Graphics.world.gattiles[2*(int)y][2*(int)x].cell4 = 0;
+				Graphics.world.gattiles[2*(int)y][2*(int)x+1].cell1 = 	Graphics.world.gattiles[2*(int)y][2*(int)x+1].cell2 = 	Graphics.world.gattiles[2*(int)y][2*(int)x+1].cell3	= 	Graphics.world.gattiles[2*(int)y][2*(int)x+1].cell4 = 0;
+				Graphics.world.gattiles[2*(int)y+1][2*(int)x].cell1 = 	Graphics.world.gattiles[2*(int)y+1][2*(int)x].cell2 = 	Graphics.world.gattiles[2*(int)y+1][2*(int)x].cell3	= 	Graphics.world.gattiles[2*(int)y+1][2*(int)x].cell4 = 0;
+				Graphics.world.gattiles[2*(int)y+1][2*(int)x+1].cell1 = Graphics.world.gattiles[2*(int)y+1][2*(int)x+1].cell2 = Graphics.world.gattiles[2*(int)y+1][2*(int)x+1].cell3 = Graphics.world.gattiles[2*(int)y+1][2*(int)x+1].cell4 = 0;
 			}
 		}
 
@@ -1081,11 +1083,11 @@ MENUCOMMAND(random4)
 
 		model->pos = cVector3(rand()%(Graphics.world.width*2), 0, rand()%(Graphics.world.height*2));
 
-		while(Graphics.world.cubes[model->pos.z/2][model->pos.x/2].tileup > 50)
+		while(Graphics.world.cubes[(int)(model->pos.z/2)][(int)(model->pos.x/2)].tileup > 50)
 			model->pos = cVector3(rand()%(Graphics.world.width*2), 0, rand()%(Graphics.world.height*2));
 
 
-		model->pos.y = Graphics.world.cubes[model->pos.z/2][model->pos.x/2].cell1;
+		model->pos.y = Graphics.world.cubes[(int)(model->pos.z/2)][(int)(model->pos.x/2)].cell1;
 		model->scale = cVector3(1,1,1);
 		model->rot = cVector3(0,0,0);
 		Graphics.world.models.push_back(model);
@@ -1601,12 +1603,12 @@ MENUCOMMAND(dolightmaps2)
 
 						if(!obstructed)
 						{
-							float intensity = min(l->maxlightincrement, pow(1-(length / l->range), l->lightfalloff) * l->todo2);
+							float intensity = (int)min(l->maxlightincrement, pow(1-(length / l->range), l->lightfalloff) * l->todo2);
 							buf[yy*8 + xx + 9] = min(255, buf[yy*8 + xx + 9] + max(0, (int)(intensity)));
 
-							buf[64 + 3*(yy*8 + xx + 9)+0] = min(255, buf[64 + 3*(yy*8 + xx + 9)+0] + max(0, (int)intensity*l->color.x));
-							buf[64 + 3*(yy*8 + xx + 9)+1] = min(255, buf[64 + 3*(yy*8 + xx + 9)+1] + max(0, (int)intensity*l->color.y));
-							buf[64 + 3*(yy*8 + xx + 9)+2] = min(255, buf[64 + 3*(yy*8 + xx + 9)+2] + max(0, (int)intensity*l->color.z));
+							buf[64 + 3*(yy*8 + xx + 9)+0] = min(255, buf[64 + 3*(yy*8 + xx + 9)+0] + max(0, (int)(intensity*l->color.x)));
+							buf[64 + 3*(yy*8 + xx + 9)+1] = min(255, buf[64 + 3*(yy*8 + xx + 9)+1] + max(0, (int)(intensity*l->color.y)));
+							buf[64 + 3*(yy*8 + xx + 9)+2] = min(255, buf[64 + 3*(yy*8 + xx + 9)+2] + max(0, (int)(intensity*l->color.z)));
 						}
 						else
 						{
@@ -2529,6 +2531,7 @@ MENUCOMMAND(favlights)
 
 MENUCOMMAND(exportmapfiles)
 {
+#ifdef WIN32
 	CreateDirectory(Graphics.world.filename, NULL);
 	CreateDirectory((Graphics.world.filename + string("\\texture\\")).c_str(), NULL);
 
@@ -2597,6 +2600,7 @@ MENUCOMMAND(exportmapfiles)
 
 	pFile.close();
 	ShellExecute(NULL,"open",(string(Graphics.world.filename) + ".txt").c_str(),NULL,"c:\\",SW_SHOW);
+#endif
 	return true;
 }
 
@@ -2644,9 +2648,9 @@ MENUCOMMAND(random5)
 	{
 		for(x = 0; x < Graphics.world.width; x++)
 		{
-			Graphics.world.cubes[y][x].tileaside = -1;
-			Graphics.world.cubes[y][x].tileside = -1;
-			Graphics.world.cubes[y][x].tileup = 0 + ((int)x%5) + 5*((int)y%5);
+			Graphics.world.cubes[(int)y][(int)x].tileaside = -1;
+			Graphics.world.cubes[(int)y][(int)x].tileside = -1;
+			Graphics.world.cubes[(int)y][(int)x].tileup = 0 + ((int)x%5) + 5*((int)y%5);
 		}
 	}
 
@@ -2655,10 +2659,10 @@ MENUCOMMAND(random5)
 	{
 		for(x = 0; x < Graphics.world.width; x++)
 		{
-			Graphics.world.cubes[y][x].cell1 = -32;
-			Graphics.world.cubes[y][x].cell2 = -32;
-			Graphics.world.cubes[y][x].cell3 = -32;
-			Graphics.world.cubes[y][x].cell4 = -32;
+			Graphics.world.cubes[(int)y][(int)x].cell1 = -32;
+			Graphics.world.cubes[(int)y][(int)x].cell2 = -32;
+			Graphics.world.cubes[(int)y][(int)x].cell3 = -32;
+			Graphics.world.cubes[(int)y][(int)x].cell4 = -32;
 		}
 	}
 
@@ -2735,9 +2739,9 @@ MENUCOMMAND(random5)
 		if(!(x + w >= Graphics.world.width-1 || y+h >= Graphics.world.height-1 || x <= 1 || y <= 1))
 		{
 			int takencount = 0;
-			for(xx = x; xx < x+w; xx++)
+			for(xx = (int)x; xx < (int)x+w; xx++)
 			{
-				for(yy = y; yy < y+h; yy++)
+				for(yy = (int)y; yy < (int)y+h; yy++)
 				{
 					if(Graphics.world.cubes[yy][xx].cell1 == 0)
 						takencount++;
@@ -2745,9 +2749,9 @@ MENUCOMMAND(random5)
 			}
 			if(takencount < 3)
 			{
-				for(xx = x; xx < x+w; xx++)
+				for(xx = (int)x; xx < (int)x+w; xx++)
 				{
-					for(yy = y; yy < y+h; yy++)
+					for(yy = (int)y; yy < (int)y+h; yy++)
 					{
 						Graphics.world.cubes[yy][xx].cell1 = 0;//rand()%25;
 						Graphics.world.cubes[yy][xx].cell2 = 0;//rand()%25;
@@ -2759,7 +2763,7 @@ MENUCOMMAND(random5)
 				if(island != -1)
 					islands[island].connections.push_back(islands.size());
 
-				islands.push_back(cIntQuad(x,y,w,h));
+				islands.push_back(cIntQuad((int)x,(int)y,w,h));
 				if(island != -1)
 					islands[islands.size()-1].connections.push_back(island);
 			}
@@ -3014,8 +3018,11 @@ MENUCOMMAND(eascript)
 }
 
 
-
+#ifdef WIN32
 #include <gd/gd.h>
+#else
+#include <gd.h>
+#endif
 extern unsigned char * getPixelsBGR();
 
 
@@ -3105,7 +3112,7 @@ void checknpcs()
 
 MENUCOMMAND(npcscreenies)
 {
-
+#ifdef WIN32
 	WIN32_FIND_DATA FileData;													// thingy for searching through a directory
 	HANDLE hSearch;																// thingy for searching through a directory
 	
@@ -3146,7 +3153,7 @@ MENUCOMMAND(npcscreenies)
 
 
 	checknpcs();
-	
+#endif
 	return true;
 }
 
@@ -3163,6 +3170,7 @@ MENUCOMMAND(npcscreenies)
 
 MENUCOMMAND(addfavorite)
 {
+	int i;
 	vector<int> keys;
 	string key = src->data;
 	while(key != "")
@@ -3174,7 +3182,7 @@ MENUCOMMAND(addfavorite)
 
 
 	TiXmlNode* n = favoritelights.FirstChild();
-	for(int i = 0; i < keys[keys.size()-1]; i++)
+	for(i = 0; i < keys[keys.size()-1]; i++)
 		n = n->NextSibling();
 
 	for(i = keys.size()-2; i > -1; i--)

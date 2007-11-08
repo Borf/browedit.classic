@@ -2,6 +2,7 @@
 #define __KEYBINDWINDOW_H__
 
 #include "window.h"
+#include <fstream>
 
 
 string keytostring(SDLKey key)
@@ -601,3 +602,4 @@ public:
 
 
 #endif
+

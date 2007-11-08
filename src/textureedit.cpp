@@ -10,7 +10,7 @@ extern vector<vector<int > > clipboardgat;
 
 vector<vector<cTile> > clipboardtexture;
 
-cProcessManagement::textureedit_process_events(SDL_Event &event)
+int cProcessManagement::textureedit_process_events(SDL_Event &event)
 {
 	switch(event.type)
 	{

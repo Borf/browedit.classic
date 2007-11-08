@@ -96,8 +96,8 @@ public:
 			popupmenu = new cMenu();
 			popupmenu->parent = NULL;
 			popupmenu->drawstyle = 1;
-			popupmenu->x = mousex;
-			popupmenu->y = mousey;
+			popupmenu->x = (int)mousex;
+			popupmenu->y = (int)mousey;
 			popupmenu->w = 150;
 			popupmenu->opened = true;
 			cMenuItem* mm;

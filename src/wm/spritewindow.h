@@ -1,8 +1,8 @@
 #ifndef __SPRITEWINDOW_H__
 #define __SPRITEWINDOW_H__
 
-#include "tinyxml/tinyxml.h"
-#include "filesystem.h"
+#include <tinyxml/tinyxml.h>
+#include <filesystem.h>
 
 #include "window.h"
 
@@ -374,7 +374,7 @@ public:
 			text = directions[dir];
 			resizeto(50,20);
 			alignment = ALIGN_TOPLEFT;
-			moveto(45+35*sin(dir/8.0f*2*PI), 310+     (dir<5 ? (-20*dir) : -20*(8-dir))     );
+			moveto(45+(int)(35*sin(dir/8.0f*2*PI)), 310+     (dir<5 ? (-20*dir) : -20*(8-dir))     );
 
 		}
 

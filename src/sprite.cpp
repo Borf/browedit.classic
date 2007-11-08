@@ -175,8 +175,8 @@ void cSprite::cActSpr::load(string fname)
 		{
 			for(x = 0; x < SPRITESIZE; x++)
 			{
-				int xx = x * (width / (float)SPRITESIZE);
-				int yy = y * (height / (float)SPRITESIZE);
+				int xx = (int)(x * (width / (float)SPRITESIZE));
+				int yy = (int)(y * (height / (float)SPRITESIZE));
 
 				BYTE index = data[xx+width*yy];
 				

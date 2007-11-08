@@ -68,7 +68,7 @@ void addmenustuff(cMenu* m, TiXmlElement* el)
 }
 
 
-cProcessManagement::lightedit_process_events(SDL_Event &event)
+int cProcessManagement::lightedit_process_events(SDL_Event &event)
 {
 	switch(event.type)
 	{
@@ -206,8 +206,8 @@ cProcessManagement::lightedit_process_events(SDL_Event &event)
 					popupmenu = new cMenu();
 					popupmenu->parent = NULL;
 					popupmenu->drawstyle = 1;
-					popupmenu->x = mousex;
-					popupmenu->y = mousey;
+					popupmenu->x = (int)mousex;
+					popupmenu->y = (int)mousey;
 					popupmenu->w = 150;
 					popupmenu->opened = true;
 					cMenuItem* mm;

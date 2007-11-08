@@ -14,7 +14,7 @@ extern vector<vector<vector<float> > > clipboard;
 
 
 
-cProcessManagement::detailheightedit_process_events(SDL_Event &event)
+int cProcessManagement::detailheightedit_process_events(SDL_Event &event)
 {
 	switch(event.type)
 	{

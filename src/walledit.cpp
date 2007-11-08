@@ -8,7 +8,7 @@ extern cGraphics Graphics;
 extern cUndoStack undostack;
 extern int movement;
 
-cProcessManagement::walledit_process_events(SDL_Event &event)
+int cProcessManagement::walledit_process_events(SDL_Event &event)
 {
 	switch(event.type)
 	{

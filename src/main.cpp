@@ -1006,7 +1006,13 @@ int process_events()
 			{
 			case SDLK_F4:
 				if(SDL_GetModState() & KMOD_ALT)
+				{
+#ifdef WIN32
 					PostQuitMessage(0);
+#else
+					exit(0);
+#endif
+				}
 				break;
 
 			default:
@@ -1627,7 +1633,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				SDL_GL_SwapBuffers();
 
 				}
-
+#ifdef WIN32
 				WIN32_FIND_DATA FileData;													// thingy for searching through a directory
 				HANDLE hSearch;																// thingy for searching through a directory
 
@@ -1650,7 +1656,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 				}
  				FindClose(hSearch);															// Close the search handle. 
-				
+#else
+				int nFiles = rand();
+#endif				
 				unsigned char *pixels;
 				pixels = getPixelsBGR();
 

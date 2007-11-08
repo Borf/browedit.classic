@@ -36,7 +36,7 @@ extern cWindowObject*		draggingobject;
 
 void cWorld::load()
 {
-	Graphics.selectedobject = NULL;
+	Graphics.selectedobject = -1;
 	draggingwindow = NULL;
 	draggingobject = NULL;
 	int i,x,y;
@@ -351,9 +351,8 @@ void cWorld::load()
 		lightmapHeight = 8;
 		gridSizeCell = 1;
 	}
-	reallightmaps.resize(height, vector<cRealLightMap*>(NULL));
-	for(i = 0; i < height; i++)
-		reallightmaps[i].resize(width, NULL);
+	cRealLightMap* m = NULL;
+	reallightmaps.resize(height, vector<cRealLightMap*>(width, m));
 
 	for(y = 0; y < height; y+=21)
 	{
@@ -1343,7 +1342,11 @@ void cWorld::save()
 	}
 	else
 	{
+#ifdef WIN32
 		DeleteFile((string(filename) + ".sprites").c_str());
+#else
+		unlink((string(filename) + ".sprites").c_str());
+#endif
 	}
 
 	extraproperties.SaveFile((string(filename) + ".extra").c_str());

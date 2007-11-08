@@ -247,8 +247,8 @@ class cRSMEditWindow : public cWindow
 		cRSMModel* model;
 		string data;
 		float roty;
-		long oldx;
-		long oldy;
+		float oldx;
+		float oldy;
 		long rotate;
 
 		cVector3 backgroundcolor;
@@ -467,9 +467,9 @@ class cRSMEditWindow : public cWindow
 		void click()
 		{
 			cWindowRGBPicker::click();
-			parent->objects["model"]->SetInt(0,r*256);
-			parent->objects["model"]->SetInt(1,g*256);
-			parent->objects["model"]->SetInt(2,b*256);
+			parent->objects["model"]->SetInt(0,(int)r*256);
+			parent->objects["model"]->SetInt(1,(int)g*256);
+			parent->objects["model"]->SetInt(2,(int)b*256);
 		}
 	
 	};

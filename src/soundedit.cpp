@@ -8,7 +8,7 @@ extern cGraphics Graphics;
 extern cUndoStack undostack;
 
 
-cProcessManagement::soundedit_process_events(SDL_Event &event)
+int cProcessManagement::soundedit_process_events(SDL_Event &event)
 {
 	switch(event.type)
 	{

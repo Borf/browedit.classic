@@ -12,7 +12,7 @@
 #include "objectwindow.h"
 #include "windowcheckbox.h"
 extern cMenu* popupmenu;
-#include "menucommands.h" 
+#include "../menucommands.h" 
 
 
 class cModelOverViewWindow : public cWindow
@@ -106,8 +106,8 @@ public:
 			popupmenu = new cMenu();
 			popupmenu->parent = NULL;
 			popupmenu->drawstyle = 1;
-			popupmenu->x = mousex;
-			popupmenu->y = mousey;
+			popupmenu->x = (int)mousex;
+			popupmenu->y = (int)mousey;
 			popupmenu->w = 150;
 			popupmenu->opened = true;
 			cMenuItem* mm;

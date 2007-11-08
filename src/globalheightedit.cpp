@@ -10,7 +10,7 @@ extern double mouse3dxstart, mouse3dystart, mouse3dzstart;
 #include "wm/areacopywindow.h"
 
 
-cProcessManagement::globalheightedit_process_events(SDL_Event &event)
+int cProcessManagement::globalheightedit_process_events(SDL_Event &event)
 {
 	switch(event.type)
 	{

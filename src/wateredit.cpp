@@ -8,7 +8,7 @@ extern cGraphics Graphics;
 extern cUndoStack undostack;
 
 
-cProcessManagement::wateredit_process_events(SDL_Event &event)
+int cProcessManagement::wateredit_process_events(SDL_Event &event)
 {
 	switch(event.type)
 	{

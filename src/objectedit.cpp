@@ -20,7 +20,7 @@ extern int movement;
 extern cMenu* currentobject;
 extern cMenu* models;
 
-cProcessManagement::objectedit_process_events(SDL_Event &event)
+int cProcessManagement::objectedit_process_events(SDL_Event &event)
 {
 	switch(event.type)
 	{

@@ -11,7 +11,7 @@ extern vector<vector<vector<float> > > clipboard;
 vector<vector<int > > clipboardgat;
 
 
-cProcessManagement::gatedit_process_events(SDL_Event &event)
+int cProcessManagement::gatedit_process_events(SDL_Event &event)
 {
 	switch(event.type)
 	{

@@ -13,7 +13,7 @@ extern float oldmousex, oldmousey;
 extern double mouse3dxstart, mouse3dystart, mouse3dzstart;
 
 
-cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
+int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 {
 	switch(event.type)
 	{

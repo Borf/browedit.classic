@@ -1,9 +1,11 @@
 #include "modelswindow.h"
 
-#include "../filesystem.h"
+#include <filesystem.h>
 #include "../graphics.h"
 #include "../menu.h"
 #include "../menucommands.h"
+#include <fstream>
+
 extern cGraphics Graphics;
 extern cFileSystem fs;
 extern string rodir;
@@ -136,7 +138,7 @@ string cModelsWindow::cWindowModel::GetText(int i)
 
 void cModelsWindow::cWindowModel::drag()
 {
-	parent->objects["zdragger"]->moveto(mousex-parent->px(),mousey-(Graphics.h()-parent->ph()-parent->py()));
+	parent->objects["zdragger"]->moveto((int)mousex-parent->px(),(int)mousey-(Graphics.h()-parent->ph()-parent->py()));
 	parent->objects["zdragger"]->SetText(1, data);
 }
 
@@ -256,8 +258,8 @@ void cModelsWindow::cWindowModel::rightclick()
 	popupmenu = new cMenu();
 	popupmenu->parent = NULL;
 	popupmenu->drawstyle = 1;
-	popupmenu->x = mousex;
-	popupmenu->y = mousey;
+	popupmenu->x = (int)mousex;
+	popupmenu->y = (int)mousey;
 	popupmenu->w = 150;
 	popupmenu->opened = true;
 	cMenuItem* mm;
@@ -284,8 +286,8 @@ void cModelsWindow::cWindowModelCatSelect::rightclick()
 		popupmenu = new cMenu();
 		popupmenu->parent = NULL;
 		popupmenu->drawstyle = 1;
-		popupmenu->x = mousex;
-		popupmenu->y = mousey;
+		popupmenu->x = (int)mousex;
+		popupmenu->y = (int)mousey;
 		popupmenu->w = 150;
 		popupmenu->opened = true;
 		cMenuItem* mm;

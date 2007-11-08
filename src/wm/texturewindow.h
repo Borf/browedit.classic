@@ -12,7 +12,7 @@
 #include "windowpicturebox.h"
 #include "rsmeditwindow.h"
 
-#include "../filesystem.h"
+#include <filesystem.h>
 extern cFileSystem fs;
 extern string rodir;
 extern cWindow* draggingwindow;
@@ -277,14 +277,14 @@ public:
 		{
 			if(keyid == SDLK_MINUS)
 			{
-				iconsize/=1.5;
+				iconsize=(int)(iconsize/1.5);
 				if(iconsize < 1)
 					iconsize = 1;
 				resizeto(w,h);
 			}
 			if(keyid == SDLK_EQUALS)
 			{
-				iconsize*=1.5;
+				iconsize=(int)(iconsize*1.5);
 				resizeto(w,h);
 			}
 		}

@@ -14,7 +14,7 @@ extern cMenuItem* selectedeffect;
 extern cMenu* effectsmenu;
 extern bool lbuttondown;
 
-cProcessManagement::effectedit_process_events(SDL_Event &event)
+int cProcessManagement::effectedit_process_events(SDL_Event &event)
 {
 	switch(event.type)
 	{

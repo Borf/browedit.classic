@@ -14,7 +14,7 @@ extern int movement;
 extern string rodir;
 
 
-cProcessManagement::spriteedit_process_events(SDL_Event &event)
+int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 {
 	switch(event.type)
 	{
@@ -208,3 +208,4 @@ cProcessManagement::spriteedit_process_events(SDL_Event &event)
 
 
 }
+
