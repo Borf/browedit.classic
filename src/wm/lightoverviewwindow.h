@@ -155,7 +155,7 @@ public:
 						n->open = true;
 						n = n->parent;
 					}
-
+					return;
 					
 					int i;
 					vector<string> values;

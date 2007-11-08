@@ -195,7 +195,7 @@ cProcessManagement::lightedit_process_events(SDL_Event &event)
 				}
 
 			}
-			else
+			if(event.button.button == SDL_BUTTON_RIGHT && movement < 3)
 			{
 				if(movement < 3)
 				{

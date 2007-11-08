@@ -400,7 +400,7 @@ int main(int argc, char *argv[])
 	{
 		filesize = FileData.nFileSizeLow;
 #ifndef _DEBUG
-		if(filesize > 220000)
+		if(filesize > 500000)
 			return 0;
 #endif
 	}

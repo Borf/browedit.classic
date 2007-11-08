@@ -3182,10 +3182,10 @@ MENUCOMMAND(addfavorite)
 	}
 
 	
-	
+	Log(3,0,"Adding..., %i", n);
 	cLight l;
 	char buf[100];
-	sprintf(buf, "obj%i", rand());
+	sprintf(buf, "Light%i", rand());
 	l.name = buf;
 	l.color.x = atof(n->FirstChildElement("color")->Attribute("r"));
 	l.color.y = atof(n->FirstChildElement("color")->Attribute("g"));
@@ -3197,17 +3197,19 @@ MENUCOMMAND(addfavorite)
 	l.range = atoi(n->FirstChildElement("range")->FirstChild()->Value());
 	l.lightfalloff = atof(n->FirstChildElement("lightfalloff")->FirstChild()->Value());
 
+	Graphics.world.lights.push_back(l);
+	undostack.push(new cUndoNewLight());
+
 	Graphics.selectedobject = Graphics.world.lights.size();
 	cWindow* w = Graphics.WM.getwindow(WT_LIGHTOVERVIEW);
 	if(w != NULL)
 	{
 		w->userfunc(NULL);
 		cLightOverViewWindow::cLightOverViewTree* tree = (cLightOverViewWindow::cLightOverViewTree*)w->objects["list"];
+		Log(3,0,"Calling getobject for %i", tree);
 		tree->getobject(Graphics.world.lights[Graphics.selectedobject]);
 	}
 
-	Graphics.world.lights.push_back(l);
-	undostack.push(new cUndoNewLight());
 	return true;
 }
 
