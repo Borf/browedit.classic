@@ -1374,7 +1374,7 @@ void cWorld::draw()
 	if (Graphics.topcamera)
 		glOrtho(0,width+Graphics.cameraheight,0,height+Graphics.cameraheight,-10000,10000);
 	else
-		gluPerspective(45.0f,(GLfloat)Graphics.w()/(GLfloat)Graphics.h(),10.0f,10000.0f);
+		gluPerspective(45.0f,(GLfloat)(ww)/(GLfloat)hh,10.0f,10000.0f);
 	float camrad = 10;
 
 
