@@ -59,9 +59,10 @@ ifeq ($(PLATFORM),win32)
 CFLAGS += -mconsole
 CC=mingw32-gcc
 CXX=mingw32-g++
+WINDRES=mingw32-windres
 BINARY_EXT=.exe
 INCLUDES += -Ilibs/include
-LIBS = -L. -lzlib1 -lSDL -lbgd -lopengl32 -lglu32 -lws2_32 -lcomdlg32 -lmingw32
+LIBS = -L. -lzlib1 -lSDL -lbgd -lopengl32 -lglu32 -lws2_32 -lcomdlg32
 # ws2_32.lib sdl.lib sdlmain.lib zlib.lib bgd.lib opengl32.lib glu32.lib 
 endif
 
@@ -87,7 +88,7 @@ OBJECTS_ZLIB=$(patsubst src/grflib/zlib/%.c,obj/zlib_%_$(PLATFORM).o,$(wildcard 
 
 ifeq ($(PLATFORM),win32)
 # Fix: Win32 build needs this one
-OBJECTS_SRC += obj/src_md5_$(PLATFORM).o
+OBJECTS_SRC += obj/src_md5_$(PLATFORM).o obj/src_Script1_rc_$(PLATFORM).o
 endif
 
 OBJECTS_ALL=$(OBJECTS_SRC) $(OBJECTS_WM) $(OBJECTS_TINYXML) $(OBJECTS_GRFLIB) $(OBJECTS_ZLIB)
@@ -97,6 +98,10 @@ all: $(TARGET)
 obj/src_%_$(PLATFORM).o: src/%.c
 	@echo -e "    [1mCC\033[1m\t\033[22;34m$<\033[39m"
 	@$(CC) $(CFLAGS) $(INCLUDES) $(DEFINES) -c -o $@ $<
+
+obj/src_%_rc_$(PLATFORM).o: src/%.rc
+	@echo -e "    [1mRC\033[1m\t\033[22;34m$<\033[39m"
+	@$(WINDRES) -I src -i $< -o $@
 
 obj/src_%_$(PLATFORM).o: src/%.cpp
 	@echo -e "    [1mCC\033[1m\t\033[22;34m$<\033[39m"

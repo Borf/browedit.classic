@@ -101,6 +101,7 @@ GRFEXTERN_BEGIN
 	/* Integer types */
 	#ifdef __MINGW32__
 		#include <stdint.h>
+		typedef unsigned int grf_uintptr_t; // !borf ?
 	#else
 		#ifndef _INC_WINDOWS
 			#include <windows.h>
@@ -128,6 +129,7 @@ GRFEXTERN_BEGIN
 #else /* WIN32 */
 	/* Integer types */
 	#include <inttypes.h>
+	typedef uintptr_t grf_uintptr_t;
 	
 	/* Pack to 1 byte boundaries */
 	#pragma pack(1)

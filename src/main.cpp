@@ -370,6 +370,81 @@ bool translationcomp(pair<string, string> a, pair<string, string> b)
 	return a.first.length() > b.first.length();
 }
 
+#ifdef __MINGW32__
+// mingw32 complains about not finding WinMain, so let's just give him what he want!
+// Code adapted and modified from Allegro
+int main(int argc, char *argv[]);
+
+//int WinMain(void *hInst, void *hPrev, char *Cmd, int nShow)
+int WinMain(HINSTANCE hInst,HINSTANCE hPrev, LPSTR Cmd,int nShow) 
+{
+	char *argbuf;
+	char *cmdline;
+	char **argv;
+	int argc;
+	int argc_max;
+	int i, q;
+
+	/* can't use parameter because it doesn't include the executable name */
+	cmdline = GetCommandLine();
+	i = strlen(cmdline) + 1;
+	argbuf = (char*)malloc(i);
+	memcpy(argbuf, cmdline, i);
+
+	argc = 0;
+	argc_max = 64; // mess with me at your own risk
+	argv = (char**)malloc(sizeof(char *) * argc_max);
+	if (!argv) {
+		free(argbuf);
+		return 1; // OUT OF MEMORY
+	}
+
+	i=0;
+
+	/* parse commandline into argc/argv format */
+	while (argbuf[i]) {
+		while ((argbuf[i]) && (argbuf[i]==' '))
+			i++;
+		if (argbuf[i]) {
+			if ((argbuf[i] == '\'') || (argbuf[i] == '"')) {
+				q = argbuf[i++];
+				if (!argbuf[i]) break;
+			} else {
+				q = 0;
+			}
+			argv[argc++] = &argbuf[i];
+			if (argc >= argc_max) {
+				argc_max += 64;
+				argv = (char**)realloc(argv, sizeof(char *) * argc_max);
+				if (!argv) {
+					free(argbuf);
+					return 1; // OUT OF MEMORY
+				}
+			}
+
+			while ((argbuf[i]) && ((q) ? (argbuf[i] != q) : (argbuf[i]!= ' ')))
+				i++;
+
+			if (argbuf[i]) {
+				argbuf[i] = 0;
+				i++;
+			}
+		}
+	}
+
+	argv[argc] = NULL;
+
+	/* call the application entry point */
+	i = main(argc, argv);
+
+	free(argv);
+	free(argbuf);
+
+	return i;
+}
+#endif
+
+
 
 int main(int argc, char *argv[])
 {
@@ -979,7 +1054,6 @@ int main(int argc, char *argv[])
 	log_close();
 	return 0;							// Exit The Program
 }
-
 
 cProcessManagement processManagement;
 
