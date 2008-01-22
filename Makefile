@@ -1,101 +1,113 @@
 #!make
 LIBS = -lz -lGL -lSDL -lgd -lGLU
 INCLUDES = -Isrc -DGRF_STATIC -D__NOXML__
-CC = g++
+CXX = g++
+CC = gcc
 DEFINES = 
-CFLAGS = -g
+CFLAGS = -Wall -pipe
 
-obj/%.o: src/%.cpp
+#####
+## PLATFORM DETECTION CODE
+#####
+ifeq ($(PLATFORM),)
+UNAME=$(shell uname -s | sed -e 's/_.*$$//')
+UNAME_CPU=$(shell uname -m)
+
+## Cygwin
+ifeq ($(UNAME),CYGWIN)
+# can't do linux build anyway on cygwin
+PLATFORM=win32
+endif
+
+## Linux
+ifeq ($(UNAME),Linux)
+# detect 64bit
+ifeq ($(UNAME_CPU),x86_64)
+PLATFORM=linux64
+else
+PLATFORM=linux32
+endif
+endif
+
+endif
+
+#####
+## END OF PLATFORM DETECTION CODE
+#####
+
+## Per-platform settings
+
+ifeq ($(PLATFORM),linux32)
+CFLAGS += -m32
+CC=gcc
+CXX=g++
+endif
+
+ifeq ($(PLATFORM),linux64)
+CFLAGS += -m64
+CC=gcc
+CXX=g++
+endif
+
+ifeq ($(PLATFORM),win32)
+CFLAGS += -mwindows
+CC=mingw32-gcc
+CXX=mingw32-g++
+endif
+
+## Debug build?
+
+ifeq ($(DEBUG),)
+DEBUG=yes
+endif
+
+ifeq ($(DEBUG),yes)
+CFLAGS += -g -ggdb
+else
+CFLAGS += -O3
+endif
+
+TARGET=roworldedit_$(PLATFORM)
+
+OBJECTS_SRC=$(patsubst src/%.cpp,obj/src_%_$(PLATFORM).o,$(wildcard src/*.cpp))
+OBJECTS_WM=$(patsubst src/wm/%.cpp,obj/wm_%_$(PLATFORM).o,$(wildcard src/wm/*.cpp))
+OBJECTS_TINYXML=$(patsubst src/tinyxml/%.cpp,obj/tinyxml_%_$(PLATFORM).o,$(wildcard src/tinyxml/*.cpp))
+OBJECTS_GRFLIB=$(patsubst src/grflib/%.c,obj/grflib_%_$(PLATFORM).o,$(wildcard src/grflib/*.c))
+OBJECTS_ZLIB=$(patsubst src/grflib/zlib/%.c,obj/zlib_%_$(PLATFORM).o,$(wildcard src/grflib/zlib/*.c))
+
+OBJECTS_ALL=$(OBJECTS_SRC) $(OBJECTS_WM) $(OBJECTS_TINYXML) $(OBJECTS_GRFLIB) $(OBJECTS_ZLIB)
+
+all: $(TARGET)
+
+obj/src_%_$(PLATFORM).o: src/%.cpp
+	@echo -e "    [1mCC\033[1m\t\033[22;34m$<\033[39m"
+	@$(CXX) $(CFLAGS) $(INCLUDES) $(DEFINES) -c -o $@ $<
+
+obj/src_%_$(PLATFORM).o: src/%.c
 	@echo -e "    [1mCC\033[1m\t\033[22;34m$<\033[39m"
 	@$(CC) $(CFLAGS) $(INCLUDES) $(DEFINES) -c -o $@ $<
-obj/%.o: src/wm/%.cpp
+
+obj/wm_%_$(PLATFORM).o: src/wm/%.cpp
+	@echo -e "    [1mCC\033[1m\t\033[22;34m$<\033[39m"
+	@$(CXX) $(CFLAGS) $(INCLUDES) $(DEFINES) -c -o $@ $<
+
+obj/tinyxml_%_$(PLATFORM).o: src/tinyxml/%.cpp
+	@echo -e "    [1mCC\033[1m\t\033[22;34m$<\033[39m"
+	@$(CXX) $(CFLAGS) $(INCLUDES) $(DEFINES) -c -o $@ $<
+
+obj/grflib_%_$(PLATFORM).o: src/grflib/%.c
 	@echo -e "    [1mCC\033[1m\t\033[22;34m$<\033[39m"
 	@$(CC) $(CFLAGS) $(INCLUDES) $(DEFINES) -c -o $@ $<
-obj/%.o: src/tinyxml/%.cpp
+
+obj/zlib_%_$(PLATFORM).o: src/grflib/zlib/%.c
 	@echo -e "    [1mCC\033[1m\t\033[22;34m$<\033[39m"
 	@$(CC) $(CFLAGS) $(INCLUDES) $(DEFINES) -c -o $@ $<
-obj/%.o: src/grflib/%.c
-	@echo -e "    [1mCC\033[1m\t\033[22;34m$<\033[39m"
-	@gcc $(CFLAGS) $(INCLUDES) $(DEFINES) -c -o $@ $<
-obj/%.o: src/grflib/zlib/%.c
-	@echo -e "    [1mCC\033[1m\t\033[22;34m$<\033[39m"
-	@gcc $(CFLAGS) $(INCLUDES) $(DEFINES) -c -o $@ $<
-obj/%.o: src/%.c
-	@echo -e "    [1mCC\033[1m\t\033[22;34m$<\033[39m"
-	@gcc $(CFLAGS) $(INCLUDES) $(DEFINES) -c -o $@ $<
 
-roworldedit:  obj/RSMModel.o obj/common.o obj/detailheightedit.o obj/effectedit.o obj/filesystem.o obj/font.o obj/frustum.o obj/gatedit.o obj/globalheightedit.o obj/graphics.o obj/lightedit.o obj/main.o obj/md5.o obj/menucommands.o obj/objectedit.o obj/objectgroupedit.o obj/soundedit.o obj/sprite.o obj/spriteedit.o obj/svnver.o obj/texture.o obj/texturecache.o obj/textureedit.o obj/texturemodel.o obj/undo.o obj/walledit.o obj/wateredit.o obj/world.o obj/grf.o obj/grfcrypt.o obj/grfsupport.o obj/rgz.o obj/tinystr.o obj/tinyxml.o obj/tinyxmlerror.o obj/tinyxmlparser.o obj/modelswindow.o obj/window.o obj/windowbutton.o obj/windowcheckbox.o obj/windowframe.o obj/windowinputbox.o obj/windowlabel.o obj/windowlistbox.o obj/windowmainbutton.o obj/windowobject.o obj/windowpicturebox.o obj/windowprogressbar.o obj/windowrgbpicker.o obj/windowroundbutton.o obj/windowscrollpanel.o obj/windowtabpanel.o obj/windowtree.o obj/wm.o obj/adler32.o obj/compress.o obj/crc32.o obj/deflate.o obj/inffast.o obj/inflate.o obj/inftrees.o obj/trees.o obj/zutil.o 
 
+$(TARGET): $(OBJECTS_ALL)
 	@echo -e "    \033[1mLD\033[1m\t\033[22;35m$@\033[39m"
-	@$(CC) $(LIBS) $(LDFLAGS) -o $@  obj/RSMModel.o obj/common.o obj/detailheightedit.o obj/effectedit.o obj/filesystem.o obj/font.o obj/frustum.o obj/gatedit.o obj/globalheightedit.o obj/graphics.o obj/lightedit.o obj/main.o obj/md5.o obj/menucommands.o obj/objectedit.o obj/objectgroupedit.o obj/soundedit.o obj/sprite.o obj/spriteedit.o obj/svnver.o obj/texture.o obj/texturecache.o obj/textureedit.o obj/texturemodel.o obj/undo.o obj/walledit.o obj/wateredit.o obj/world.o obj/grf.o obj/grfcrypt.o obj/grfsupport.o obj/rgz.o obj/tinystr.o obj/tinyxml.o obj/tinyxmlerror.o obj/tinyxmlparser.o obj/modelswindow.o obj/window.o obj/windowbutton.o obj/windowcheckbox.o obj/windowframe.o obj/windowinputbox.o obj/windowlabel.o obj/windowlistbox.o obj/windowmainbutton.o obj/windowobject.o obj/windowpicturebox.o obj/windowprogressbar.o obj/windowrgbpicker.o obj/windowroundbutton.o obj/windowscrollpanel.o obj/windowtabpanel.o obj/windowtree.o obj/wm.o obj/adler32.o obj/compress.o obj/crc32.o obj/deflate.o obj/inffast.o obj/inflate.o obj/inftrees.o obj/trees.o obj/zutil.o 
-
-
-
-obj/RSMModel.o: src/RSMModel.cpp src/RSMModel.h src/common.h src/svnver.h src/tinyxml/tinyxml.h src/tinyxml/tinystr.h src/mymath.h src/texture.h src/filesystem.h src/grflib/grf.h src/grflib/grftypes.h src/grflib/grfsupport.h src/graphics.h src/world.h src/texturecache.h src/texturemodel.h src/sprite.h src/font.h src/frustum.h src/wm/wm.h src/wm/confirmwindow.h src/wm/window.h src/wm/windowobject.h src/wm/windowroundbutton.h src/wm/windowbutton.h src/wm/windowlabel.h src/wm/inputwindow.h src/wm/windowinputbox.h
-obj/common.o: src/common.cpp src/common.h src/svnver.h src/tinyxml/tinyxml.h src/tinyxml/tinystr.h src/mymath.h
-obj/detailheightedit.o: src/detailheightedit.cpp src/graphics.h src/common.h src/svnver.h src/tinyxml/tinyxml.h src/tinyxml/tinystr.h src/mymath.h src/world.h src/texture.h src/filesystem.h src/grflib/grf.h src/grflib/grftypes.h src/grflib/grfsupport.h src/RSMModel.h src/texturecache.h src/texturemodel.h src/sprite.h src/font.h src/frustum.h src/wm/wm.h src/wm/confirmwindow.h src/wm/window.h src/wm/windowobject.h src/wm/windowroundbutton.h src/wm/windowbutton.h src/wm/windowlabel.h src/wm/inputwindow.h src/wm/windowinputbox.h src/undo.h
-obj/effectedit.o: src/effectedit.cpp src/graphics.h src/common.h src/svnver.h src/tinyxml/tinyxml.h src/tinyxml/tinystr.h src/mymath.h src/world.h src/texture.h src/filesystem.h src/grflib/grf.h src/grflib/grftypes.h src/grflib/grfsupport.h src/RSMModel.h src/texturecache.h src/texturemodel.h src/sprite.h src/font.h src/frustum.h src/wm/wm.h src/wm/confirmwindow.h src/wm/window.h src/wm/windowobject.h src/wm/windowroundbutton.h src/wm/windowbutton.h src/wm/windowlabel.h src/wm/inputwindow.h src/wm/windowinputbox.h src/undo.h src/menu.h src/wm/effectwindow.h src/wm/objectwindow.h src/wm/../undo.h src/wm/../common.h src/wm/../svnver.h src/wm/../tinyxml/tinyxml.h src/wm/../tinyxml/tinystr.h src/wm/../mymath.h src/wm/../graphics.h src/wm/../world.h src/wm/../texture.h src/wm/../filesystem.h src/wm/../grflib/grf.h src/wm/../grflib/grftypes.h src/wm/../grflib/grfsupport.h src/wm/../RSMModel.h src/wm/../texturecache.h src/wm/../texturemodel.h src/wm/../sprite.h src/wm/../font.h src/wm/../frustum.h src/wm/../wm/wm.h src/wm/../wm/confirmwindow.h src/wm/../wm/window.h src/wm/../wm/windowobject.h src/wm/../wm/windowroundbutton.h src/wm/../wm/windowbutton.h src/wm/../wm/windowlabel.h src/wm/../wm/inputwindow.h src/wm/../wm/windowinputbox.h
-obj/filesystem.o: src/filesystem.cpp src/common.h src/svnver.h src/tinyxml/tinyxml.h src/tinyxml/tinystr.h src/mymath.h src/filesystem.h src/grflib/grf.h src/grflib/grftypes.h src/grflib/grfsupport.h
-obj/font.o: src/font.cpp src/font.h src/common.h src/svnver.h src/tinyxml/tinyxml.h src/tinyxml/tinystr.h src/mymath.h src/texture.h src/filesystem.h src/grflib/grf.h src/grflib/grftypes.h src/grflib/grfsupport.h
-obj/frustum.o: src/frustum.cpp src/frustum.h src/common.h src/svnver.h src/tinyxml/tinyxml.h src/tinyxml/tinystr.h src/mymath.h
-obj/gatedit.o: src/gatedit.cpp src/graphics.h src/common.h src/svnver.h src/tinyxml/tinyxml.h src/tinyxml/tinystr.h src/mymath.h src/world.h src/texture.h src/filesystem.h src/grflib/grf.h src/grflib/grftypes.h src/grflib/grfsupport.h src/RSMModel.h src/texturecache.h src/texturemodel.h src/sprite.h src/font.h src/frustum.h src/wm/wm.h src/wm/confirmwindow.h src/wm/window.h src/wm/windowobject.h src/wm/windowroundbutton.h src/wm/windowbutton.h src/wm/windowlabel.h src/wm/inputwindow.h src/wm/windowinputbox.h src/undo.h
-obj/globalheightedit.o: src/globalheightedit.cpp src/graphics.h src/common.h src/svnver.h src/tinyxml/tinyxml.h src/tinyxml/tinystr.h src/mymath.h src/world.h src/texture.h src/filesystem.h src/grflib/grf.h src/grflib/grftypes.h src/grflib/grfsupport.h src/RSMModel.h src/texturecache.h src/texturemodel.h src/sprite.h src/font.h src/frustum.h src/wm/wm.h src/wm/confirmwindow.h src/wm/window.h src/wm/windowobject.h src/wm/windowroundbutton.h src/wm/windowbutton.h src/wm/windowlabel.h src/wm/inputwindow.h src/wm/windowinputbox.h src/undo.h src/wm/areacopywindow.h src/wm/windowcheckbox.h
-obj/graphics.o: src/graphics.cpp src/main.h src/common.h src/svnver.h src/tinyxml/tinyxml.h src/tinyxml/tinystr.h src/mymath.h src/graphics.h src/world.h src/texture.h src/filesystem.h src/grflib/grf.h src/grflib/grftypes.h src/grflib/grfsupport.h src/RSMModel.h src/texturecache.h src/texturemodel.h src/sprite.h src/font.h src/frustum.h src/wm/wm.h src/wm/confirmwindow.h src/wm/window.h src/wm/windowobject.h src/wm/windowroundbutton.h src/wm/windowbutton.h src/wm/windowlabel.h src/wm/inputwindow.h src/wm/windowinputbox.h src/wm/hotkeywindow.h src/wm/windowpicturebox.h src/wm/../graphics.h src/wm/../common.h src/wm/../svnver.h src/wm/../tinyxml/tinyxml.h src/wm/../tinyxml/tinystr.h src/wm/../mymath.h src/wm/../world.h src/wm/../texture.h src/wm/../filesystem.h src/wm/../grflib/grf.h src/wm/../grflib/grftypes.h src/wm/../grflib/grfsupport.h src/wm/../RSMModel.h src/wm/../texturecache.h src/wm/../texturemodel.h src/wm/../sprite.h src/wm/../font.h src/wm/../frustum.h src/wm/../wm/wm.h src/wm/../wm/confirmwindow.h src/wm/../wm/window.h src/wm/../wm/windowobject.h src/wm/../wm/windowroundbutton.h src/wm/../wm/windowbutton.h src/wm/../wm/windowlabel.h src/wm/../wm/inputwindow.h src/wm/../wm/windowinputbox.h src/menucommands.h src/menu.h
-obj/lightedit.o: src/lightedit.cpp src/graphics.h src/common.h src/svnver.h src/tinyxml/tinyxml.h src/tinyxml/tinystr.h src/mymath.h src/world.h src/texture.h src/filesystem.h src/grflib/grf.h src/grflib/grftypes.h src/grflib/grfsupport.h src/RSMModel.h src/texturecache.h src/texturemodel.h src/sprite.h src/font.h src/frustum.h src/wm/wm.h src/wm/confirmwindow.h src/wm/window.h src/wm/windowobject.h src/wm/windowroundbutton.h src/wm/windowbutton.h src/wm/windowlabel.h src/wm/inputwindow.h src/wm/windowinputbox.h src/undo.h src/menu.h src/menucommands.h src/wm/lightwindow.h src/wm/objectwindow.h src/wm/../undo.h src/wm/../common.h src/wm/../svnver.h src/wm/../tinyxml/tinyxml.h src/wm/../tinyxml/tinystr.h src/wm/../mymath.h src/wm/../graphics.h src/wm/../world.h src/wm/../texture.h src/wm/../filesystem.h src/wm/../grflib/grf.h src/wm/../grflib/grftypes.h src/wm/../grflib/grfsupport.h src/wm/../RSMModel.h src/wm/../texturecache.h src/wm/../texturemodel.h src/wm/../sprite.h src/wm/../font.h src/wm/../frustum.h src/wm/../wm/wm.h src/wm/../wm/confirmwindow.h src/wm/../wm/window.h src/wm/../wm/windowobject.h src/wm/../wm/windowroundbutton.h src/wm/../wm/windowbutton.h src/wm/../wm/windowlabel.h src/wm/../wm/inputwindow.h src/wm/../wm/windowinputbox.h src/wm/windowcheckbox.h src/wm/lightoverviewwindow.h src/wm/windowtree.h src/wm/../menucommands.h src/wm/../menu.h
-obj/main.o: src/main.cpp src/tinyxml/tinyxml.h src/tinyxml/tinystr.h src/common.h src/svnver.h src/mymath.h src/filesystem.h src/grflib/grf.h src/grflib/grftypes.h src/grflib/grfsupport.h src/main.h src/graphics.h src/world.h src/texture.h src/RSMModel.h src/texturecache.h src/texturemodel.h src/sprite.h src/font.h src/frustum.h src/wm/wm.h src/wm/confirmwindow.h src/wm/window.h src/wm/windowobject.h src/wm/windowroundbutton.h src/wm/windowbutton.h src/wm/windowlabel.h src/wm/inputwindow.h src/wm/windowinputbox.h src/menu.h src/md5.h src/wm/lightwindow.h src/wm/objectwindow.h src/wm/../undo.h src/wm/../common.h src/wm/../svnver.h src/wm/../tinyxml/tinyxml.h src/wm/../tinyxml/tinystr.h src/wm/../mymath.h src/wm/../graphics.h src/wm/../world.h src/wm/../texture.h src/wm/../filesystem.h src/wm/../grflib/grf.h src/wm/../grflib/grftypes.h src/wm/../grflib/grfsupport.h src/wm/../RSMModel.h src/wm/../texturecache.h src/wm/../texturemodel.h src/wm/../sprite.h src/wm/../font.h src/wm/../frustum.h src/wm/../wm/wm.h src/wm/../wm/confirmwindow.h src/wm/../wm/window.h src/wm/../wm/windowobject.h src/wm/../wm/windowroundbutton.h src/wm/../wm/windowbutton.h src/wm/../wm/windowlabel.h src/wm/../wm/inputwindow.h src/wm/../wm/windowinputbox.h src/wm/windowcheckbox.h src/wm/texturewindow.h src/wm/windowlistbox.h src/wm/windowtree.h src/wm/windowscrollpanel.h src/wm/windowpicturebox.h src/wm/rsmeditwindow.h src/wm/../wm/windowrgbpicker.h src/wm/../wm/windowpicturebox.h src/wm/../wm/windowscrollpanel.h src/wm/modelswindow.h src/undo.h src/menucommands.h src/wm/modeloverviewwindow.h src/wm/../menucommands.h src/wm/../menu.h src/wm/lightoverviewwindow.h src/wm/minimapwindow.h
-obj/md5.o: src/md5.c src/md5.h
-obj/menucommands.o: src/menucommands.cpp src/menucommands.h src/menu.h src/common.h src/svnver.h src/tinyxml/tinyxml.h src/tinyxml/tinystr.h src/mymath.h src/graphics.h src/world.h src/texture.h src/filesystem.h src/grflib/grf.h src/grflib/grftypes.h src/grflib/grfsupport.h src/RSMModel.h src/texturecache.h src/texturemodel.h src/sprite.h src/font.h src/frustum.h src/wm/wm.h src/wm/confirmwindow.h src/wm/window.h src/wm/windowobject.h src/wm/windowroundbutton.h src/wm/windowbutton.h src/wm/windowlabel.h src/wm/inputwindow.h src/wm/windowinputbox.h src/undo.h src/wm/waterwindow.h src/wm/ambientlightwindow.h src/wm/keybindwindow.h src/wm/rsmeditwindow.h src/wm/../wm/window.h src/wm/../wm/windowobject.h src/wm/../wm/windowroundbutton.h src/wm/../wm/windowbutton.h src/wm/../wm/windowlabel.h src/wm/../wm/windowrgbpicker.h src/wm/../wm/windowpicturebox.h src/wm/../wm/windowscrollpanel.h src/wm/favoritelights.h src/wm/windowtree.h src/wm/objectwindow.h src/wm/../undo.h src/wm/../common.h src/wm/../svnver.h src/wm/../tinyxml/tinyxml.h src/wm/../tinyxml/tinystr.h src/wm/../mymath.h src/wm/../graphics.h src/wm/../world.h src/wm/../texture.h src/wm/../filesystem.h src/wm/../grflib/grf.h src/wm/../grflib/grftypes.h src/wm/../grflib/grfsupport.h src/wm/../RSMModel.h src/wm/../texturecache.h src/wm/../texturemodel.h src/wm/../sprite.h src/wm/../font.h src/wm/../frustum.h src/wm/../wm/wm.h src/wm/../wm/confirmwindow.h src/wm/../wm/inputwindow.h src/wm/../wm/windowinputbox.h src/wm/windowcheckbox.h src/wm/modeloverviewwindow.h src/wm/../menucommands.h src/wm/../menu.h src/wm/lightoverviewwindow.h
-obj/objectedit.o: src/objectedit.cpp src/graphics.h src/common.h src/svnver.h src/tinyxml/tinyxml.h src/tinyxml/tinystr.h src/mymath.h src/world.h src/texture.h src/filesystem.h src/grflib/grf.h src/grflib/grftypes.h src/grflib/grfsupport.h src/RSMModel.h src/texturecache.h src/texturemodel.h src/sprite.h src/font.h src/frustum.h src/wm/wm.h src/wm/confirmwindow.h src/wm/window.h src/wm/windowobject.h src/wm/windowroundbutton.h src/wm/windowbutton.h src/wm/windowlabel.h src/wm/inputwindow.h src/wm/windowinputbox.h src/undo.h src/menu.h src/wm/objectwindow.h src/wm/../undo.h src/wm/../common.h src/wm/../svnver.h src/wm/../tinyxml/tinyxml.h src/wm/../tinyxml/tinystr.h src/wm/../mymath.h src/wm/../graphics.h src/wm/../world.h src/wm/../texture.h src/wm/../filesystem.h src/wm/../grflib/grf.h src/wm/../grflib/grftypes.h src/wm/../grflib/grfsupport.h src/wm/../RSMModel.h src/wm/../texturecache.h src/wm/../texturemodel.h src/wm/../sprite.h src/wm/../font.h src/wm/../frustum.h src/wm/../wm/wm.h src/wm/../wm/confirmwindow.h src/wm/../wm/window.h src/wm/../wm/windowobject.h src/wm/../wm/windowroundbutton.h src/wm/../wm/windowbutton.h src/wm/../wm/windowlabel.h src/wm/../wm/inputwindow.h src/wm/../wm/windowinputbox.h src/wm/modeloverviewwindow.h src/wm/windowtree.h src/wm/windowcheckbox.h src/wm/../menucommands.h src/wm/../menu.h
-obj/objectgroupedit.o: src/objectgroupedit.cpp src/graphics.h src/common.h src/svnver.h src/tinyxml/tinyxml.h src/tinyxml/tinystr.h src/mymath.h src/world.h src/texture.h src/filesystem.h src/grflib/grf.h src/grflib/grftypes.h src/grflib/grfsupport.h src/RSMModel.h src/texturecache.h src/texturemodel.h src/sprite.h src/font.h src/frustum.h src/wm/wm.h src/wm/confirmwindow.h src/wm/window.h src/wm/windowobject.h src/wm/windowroundbutton.h src/wm/windowbutton.h src/wm/windowlabel.h src/wm/inputwindow.h src/wm/windowinputbox.h src/undo.h src/menu.h
-obj/soundedit.o: src/soundedit.cpp src/graphics.h src/common.h src/svnver.h src/tinyxml/tinyxml.h src/tinyxml/tinystr.h src/mymath.h src/world.h src/texture.h src/filesystem.h src/grflib/grf.h src/grflib/grftypes.h src/grflib/grfsupport.h src/RSMModel.h src/texturecache.h src/texturemodel.h src/sprite.h src/font.h src/frustum.h src/wm/wm.h src/wm/confirmwindow.h src/wm/window.h src/wm/windowobject.h src/wm/windowroundbutton.h src/wm/windowbutton.h src/wm/windowlabel.h src/wm/inputwindow.h src/wm/windowinputbox.h src/undo.h
-obj/sprite.o: src/sprite.cpp src/sprite.h src/graphics.h src/common.h src/svnver.h src/tinyxml/tinyxml.h src/tinyxml/tinystr.h src/mymath.h src/world.h src/texture.h src/filesystem.h src/grflib/grf.h src/grflib/grftypes.h src/grflib/grfsupport.h src/RSMModel.h src/texturecache.h src/texturemodel.h src/font.h src/frustum.h src/wm/wm.h src/wm/confirmwindow.h src/wm/window.h src/wm/windowobject.h src/wm/windowroundbutton.h src/wm/windowbutton.h src/wm/windowlabel.h src/wm/inputwindow.h src/wm/windowinputbox.h
-obj/spriteedit.o: src/spriteedit.cpp src/graphics.h src/common.h src/svnver.h src/tinyxml/tinyxml.h src/tinyxml/tinystr.h src/mymath.h src/world.h src/texture.h src/filesystem.h src/grflib/grf.h src/grflib/grftypes.h src/grflib/grfsupport.h src/RSMModel.h src/texturecache.h src/texturemodel.h src/sprite.h src/font.h src/frustum.h src/wm/wm.h src/wm/confirmwindow.h src/wm/window.h src/wm/windowobject.h src/wm/windowroundbutton.h src/wm/windowbutton.h src/wm/windowlabel.h src/wm/inputwindow.h src/wm/windowinputbox.h src/undo.h src/wm/spritewindow.h src/wm/objectwindow.h src/wm/../undo.h src/wm/../common.h src/wm/../svnver.h src/wm/../tinyxml/tinyxml.h src/wm/../tinyxml/tinystr.h src/wm/../mymath.h src/wm/../graphics.h src/wm/../world.h src/wm/../texture.h src/wm/../filesystem.h src/wm/../grflib/grf.h src/wm/../grflib/grftypes.h src/wm/../grflib/grfsupport.h src/wm/../RSMModel.h src/wm/../texturecache.h src/wm/../texturemodel.h src/wm/../sprite.h src/wm/../font.h src/wm/../frustum.h src/wm/../wm/wm.h src/wm/../wm/confirmwindow.h src/wm/../wm/window.h src/wm/../wm/windowobject.h src/wm/../wm/windowroundbutton.h src/wm/../wm/windowbutton.h src/wm/../wm/windowlabel.h src/wm/../wm/inputwindow.h src/wm/../wm/windowinputbox.h src/wm/windowtabpanel.h src/wm/windowtree.h
-obj/svnver.o: src/svnver.cpp src/version.h
-obj/texture.o: src/texture.cpp src/texture.h src/common.h src/svnver.h src/tinyxml/tinyxml.h src/tinyxml/tinystr.h src/mymath.h src/filesystem.h src/grflib/grf.h src/grflib/grftypes.h src/grflib/grfsupport.h
-obj/texturecache.o: src/texturecache.cpp src/texturecache.h src/common.h src/svnver.h src/tinyxml/tinyxml.h src/tinyxml/tinystr.h src/mymath.h src/texture.h src/filesystem.h src/grflib/grf.h src/grflib/grftypes.h src/grflib/grfsupport.h
-obj/textureedit.o: src/textureedit.cpp src/graphics.h src/common.h src/svnver.h src/tinyxml/tinyxml.h src/tinyxml/tinystr.h src/mymath.h src/world.h src/texture.h src/filesystem.h src/grflib/grf.h src/grflib/grftypes.h src/grflib/grfsupport.h src/RSMModel.h src/texturecache.h src/texturemodel.h src/sprite.h src/font.h src/frustum.h src/wm/wm.h src/wm/confirmwindow.h src/wm/window.h src/wm/windowobject.h src/wm/windowroundbutton.h src/wm/windowbutton.h src/wm/windowlabel.h src/wm/inputwindow.h src/wm/windowinputbox.h src/undo.h
-obj/texturemodel.o: src/texturemodel.cpp src/texturemodel.h src/common.h src/svnver.h src/tinyxml/tinyxml.h src/tinyxml/tinystr.h src/mymath.h src/texture.h src/filesystem.h src/grflib/grf.h src/grflib/grftypes.h src/grflib/grfsupport.h src/texturecache.h src/graphics.h src/world.h src/RSMModel.h src/sprite.h src/font.h src/frustum.h src/wm/wm.h src/wm/confirmwindow.h src/wm/window.h src/wm/windowobject.h src/wm/windowroundbutton.h src/wm/windowbutton.h src/wm/windowlabel.h src/wm/inputwindow.h src/wm/windowinputbox.h
-obj/undo.o: src/undo.cpp src/undo.h src/common.h src/svnver.h src/tinyxml/tinyxml.h src/tinyxml/tinystr.h src/mymath.h src/graphics.h src/world.h src/texture.h src/filesystem.h src/grflib/grf.h src/grflib/grftypes.h src/grflib/grfsupport.h src/RSMModel.h src/texturecache.h src/texturemodel.h src/sprite.h src/font.h src/frustum.h src/wm/wm.h src/wm/confirmwindow.h src/wm/window.h src/wm/windowobject.h src/wm/windowroundbutton.h src/wm/windowbutton.h src/wm/windowlabel.h src/wm/inputwindow.h src/wm/windowinputbox.h
-obj/walledit.o: src/walledit.cpp src/graphics.h src/common.h src/svnver.h src/tinyxml/tinyxml.h src/tinyxml/tinystr.h src/mymath.h src/world.h src/texture.h src/filesystem.h src/grflib/grf.h src/grflib/grftypes.h src/grflib/grfsupport.h src/RSMModel.h src/texturecache.h src/texturemodel.h src/sprite.h src/font.h src/frustum.h src/wm/wm.h src/wm/confirmwindow.h src/wm/window.h src/wm/windowobject.h src/wm/windowroundbutton.h src/wm/windowbutton.h src/wm/windowlabel.h src/wm/inputwindow.h src/wm/windowinputbox.h src/undo.h
-obj/wateredit.o: src/wateredit.cpp src/graphics.h src/common.h src/svnver.h src/tinyxml/tinyxml.h src/tinyxml/tinystr.h src/mymath.h src/world.h src/texture.h src/filesystem.h src/grflib/grf.h src/grflib/grftypes.h src/grflib/grfsupport.h src/RSMModel.h src/texturecache.h src/texturemodel.h src/sprite.h src/font.h src/frustum.h src/wm/wm.h src/wm/confirmwindow.h src/wm/window.h src/wm/windowobject.h src/wm/windowroundbutton.h src/wm/windowbutton.h src/wm/windowlabel.h src/wm/inputwindow.h src/wm/windowinputbox.h src/undo.h
-obj/world.o: src/world.cpp src/main.h src/common.h src/svnver.h src/tinyxml/tinyxml.h src/tinyxml/tinystr.h src/mymath.h src/graphics.h src/world.h src/texture.h src/filesystem.h src/grflib/grf.h src/grflib/grftypes.h src/grflib/grfsupport.h src/RSMModel.h src/texturecache.h src/texturemodel.h src/sprite.h src/font.h src/frustum.h src/wm/wm.h src/wm/confirmwindow.h src/wm/window.h src/wm/windowobject.h src/wm/windowroundbutton.h src/wm/windowbutton.h src/wm/windowlabel.h src/wm/inputwindow.h src/wm/windowinputbox.h src/menu.h src/wm/hotkeywindow.h src/wm/windowpicturebox.h src/wm/../graphics.h src/wm/../common.h src/wm/../svnver.h src/wm/../tinyxml/tinyxml.h src/wm/../tinyxml/tinystr.h src/wm/../mymath.h src/wm/../world.h src/wm/../texture.h src/wm/../filesystem.h src/wm/../grflib/grf.h src/wm/../grflib/grftypes.h src/wm/../grflib/grfsupport.h src/wm/../RSMModel.h src/wm/../texturecache.h src/wm/../texturemodel.h src/wm/../sprite.h src/wm/../font.h src/wm/../frustum.h src/wm/../wm/wm.h src/wm/../wm/confirmwindow.h src/wm/../wm/window.h src/wm/../wm/windowobject.h src/wm/../wm/windowroundbutton.h src/wm/../wm/windowbutton.h src/wm/../wm/windowlabel.h src/wm/../wm/inputwindow.h src/wm/../wm/windowinputbox.h
-obj/grf.o: src/grflib/grf.c src/grflib/grftypes.h src/grflib/grfsupport.h src/grflib/grfcrypt.h src/grflib/grf.h
-obj/grfcrypt.o: src/grflib/grfcrypt.c src/grflib/grftypes.h src/grflib/grfcrypt.h
-obj/grfsupport.o: src/grflib/grfsupport.c src/grflib/grftypes.h src/grflib/grfsupport.h
-obj/rgz.o: src/grflib/rgz.c src/grflib/rgz.h src/grflib/grf.h src/grflib/grftypes.h src/grflib/grfsupport.h
-obj/tinystr.o: src/tinyxml/tinystr.cpp src/tinyxml/tinystr.h
-obj/tinyxml.o: src/tinyxml/tinyxml.cpp src/tinyxml/tinyxml.h src/tinyxml/tinystr.h
-obj/tinyxmlerror.o: src/tinyxml/tinyxmlerror.cpp src/tinyxml/tinyxml.h src/tinyxml/tinystr.h
-obj/tinyxmlparser.o: src/tinyxml/tinyxmlparser.cpp src/tinyxml/tinyxml.h src/tinyxml/tinystr.h
-obj/modelswindow.o: src/wm/modelswindow.cpp src/wm/modelswindow.h src/wm/window.h src/wm/windowobject.h src/wm/windowroundbutton.h src/wm/windowtree.h src/wm/windowscrollpanel.h src/wm/../RSMModel.h src/wm/../common.h src/wm/../svnver.h src/wm/../tinyxml/tinyxml.h src/wm/../tinyxml/tinystr.h src/wm/../mymath.h src/wm/../texture.h src/wm/../filesystem.h src/wm/../grflib/grf.h src/wm/../grflib/grftypes.h src/wm/../grflib/grfsupport.h src/wm/../graphics.h src/wm/../world.h src/wm/../texturecache.h src/wm/../texturemodel.h src/wm/../sprite.h src/wm/../font.h src/wm/../frustum.h src/wm/../wm/wm.h src/wm/../wm/confirmwindow.h src/wm/../wm/window.h src/wm/../wm/windowobject.h src/wm/../wm/windowroundbutton.h src/wm/../wm/windowbutton.h src/wm/../wm/windowlabel.h src/wm/../wm/inputwindow.h src/wm/../wm/windowinputbox.h src/wm/../menu.h src/wm/../menucommands.h
-obj/window.o: src/wm/window.cpp src/wm/window.h src/wm/windowobject.h src/wm/windowinputbox.h src/wm/windowlabel.h src/wm/windowcheckbox.h
-obj/windowbutton.o: src/wm/windowbutton.cpp src/wm/windowbutton.h src/wm/windowobject.h src/wm/window.h
-obj/windowcheckbox.o: src/wm/windowcheckbox.cpp src/wm/windowcheckbox.h src/wm/windowobject.h src/wm/window.h
-obj/windowframe.o: src/wm/windowframe.cpp src/wm/windowframe.h src/wm/windowobject.h src/wm/window.h
-obj/windowinputbox.o: src/wm/windowinputbox.cpp src/wm/windowinputbox.h src/wm/windowobject.h src/wm/window.h
-obj/windowlabel.o: src/wm/windowlabel.cpp src/wm/windowlabel.h src/wm/windowobject.h src/wm/window.h
-obj/windowlistbox.o: src/wm/windowlistbox.cpp src/wm/windowlistbox.h src/wm/windowobject.h src/wm/window.h
-obj/windowmainbutton.o: src/wm/windowmainbutton.cpp src/wm/windowmainbutton.h src/wm/windowobject.h src/wm/windowbutton.h src/wm/window.h
-obj/windowobject.o: src/wm/windowobject.cpp src/wm/windowobject.h src/wm/window.h
-obj/windowpicturebox.o: src/wm/windowpicturebox.cpp src/wm/windowpicturebox.h src/wm/windowobject.h src/wm/window.h
-obj/windowprogressbar.o: src/wm/windowprogressbar.cpp src/wm/windowprogressbar.h src/wm/windowobject.h src/wm/window.h
-obj/windowrgbpicker.o: src/wm/windowrgbpicker.cpp src/wm/windowrgbpicker.h src/wm/windowobject.h src/wm/window.h
-obj/windowroundbutton.o: src/wm/windowroundbutton.cpp src/wm/windowroundbutton.h src/wm/windowobject.h src/wm/window.h
-obj/windowscrollpanel.o: src/wm/windowscrollpanel.cpp src/wm/windowscrollpanel.h src/wm/windowobject.h src/wm/window.h
-obj/windowtabpanel.o: src/wm/windowtabpanel.cpp src/wm/windowtabpanel.h src/wm/windowobject.h src/wm/window.h
-obj/windowtree.o: src/wm/windowtree.cpp src/wm/windowtree.h src/wm/windowobject.h src/wm/window.h
-obj/wm.o: src/wm/wm.cpp src/wm/wm.h src/wm/confirmwindow.h src/wm/window.h src/wm/windowobject.h src/wm/windowroundbutton.h src/wm/windowbutton.h src/wm/windowlabel.h src/wm/inputwindow.h src/wm/windowinputbox.h src/wm/messagewindow.h src/wm/../wm/window.h src/wm/../wm/windowobject.h src/wm/../wm/windowroundbutton.h src/wm/../wm/windowbutton.h src/wm/../wm/windowlabel.h
-obj/adler32.o: src/grflib/zlib/adler32.c src/grflib/zlib/zlib.h src/grflib/zlib/zconf.h
-obj/compress.o: src/grflib/zlib/compress.c src/grflib/zlib/zlib.h src/grflib/zlib/zconf.h
-obj/crc32.o: src/grflib/zlib/crc32.c src/grflib/zlib/zutil.h src/grflib/zlib/zlib.h src/grflib/zlib/zconf.h src/grflib/zlib/crc32.h
-obj/deflate.o: src/grflib/zlib/deflate.c src/grflib/zlib/deflate.h src/grflib/zlib/zutil.h src/grflib/zlib/zlib.h src/grflib/zlib/zconf.h
-obj/inffast.o: src/grflib/zlib/inffast.c src/grflib/zlib/zutil.h src/grflib/zlib/zlib.h src/grflib/zlib/zconf.h src/grflib/zlib/inftrees.h src/grflib/zlib/inflate.h src/grflib/zlib/inffast.h
-obj/inflate.o: src/grflib/zlib/inflate.c src/grflib/zlib/zutil.h src/grflib/zlib/zlib.h src/grflib/zlib/zconf.h src/grflib/zlib/inftrees.h src/grflib/zlib/inflate.h src/grflib/zlib/inffast.h
-obj/inftrees.o: src/grflib/zlib/inftrees.c src/grflib/zlib/zutil.h src/grflib/zlib/zlib.h src/grflib/zlib/zconf.h src/grflib/zlib/inftrees.h
-obj/trees.o: src/grflib/zlib/trees.c src/grflib/zlib/deflate.h src/grflib/zlib/zutil.h src/grflib/zlib/zlib.h src/grflib/zlib/zconf.h
-obj/zutil.o: src/grflib/zlib/zutil.c src/grflib/zlib/zutil.h src/grflib/zlib/zlib.h src/grflib/zlib/zconf.h
-
-
+	@$(CXX) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
 
 clean:
-	rm -f obj/*.o
+	$(RM) obj/*.o $(TARGET)
+
