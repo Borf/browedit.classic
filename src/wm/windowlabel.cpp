@@ -168,7 +168,7 @@ string cWindowLabel::GetText(int i)
 }
 
 
-int cWindowLabel::GetInt(int i)
+intptr_t cWindowLabel::GetInt(int i)
 {
 	if (i == 0)
 		return lines.size();

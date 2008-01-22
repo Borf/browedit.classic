@@ -37,17 +37,17 @@ public:
 	bool onchar(char,bool);
 
 	void SetText(int, string);
-	void SetInt(int, int);
-	int GetInt(int);
+	void SetInt(int, intptr_t);
+	intptr_t GetInt(int);
 	string GetText(int);
 };
 
 
 class cWindowFloatInputBox : public cWindowInputBox
 {
-	float* floatje;
 	float lastvalue;
 public:
+	float* floatje;
 	cWindowFloatInputBox(cWindow* parent) : cWindowInputBox(parent)
 	{
 		type = OBJECT_FLOATINPUTBOX;
@@ -70,7 +70,7 @@ public:
 		cWindowInputBox::draw(cutoffleft, cutoffright, cutofftop, cutoffbottom);
 	}
 
-	void SetInt(int id, int val)
+	void SetInt(int id, intptr_t val)
 	{
 		cWindowInputBox::SetInt(id,val);
 		if (id == 3)
@@ -115,7 +115,7 @@ public:
 		cWindowInputBox::draw(cutoffleft, cutoffright, cutofftop, cutoffbottom);
 	}
 
-	void SetInt(int id, int val)
+	void SetInt(int id, intptr_t val)
 	{
 		cWindowInputBox::SetInt(id,val);
 		if (id == 3)

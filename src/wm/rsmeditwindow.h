@@ -399,7 +399,7 @@ class cRSMEditWindow : public cWindow
 		}
 
 
-		void SetInt(int i, int id)
+		void SetInt(int i, intptr_t id)
 		{
 			if(i == 0)
 				backgroundcolor.x = id/256.0f;

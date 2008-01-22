@@ -23,8 +23,8 @@ public:
 	virtual void draw(int,int,int,int);
 	virtual void click();
 	bool onchar(char, bool);
-	void SetInt(int, int);
-	int GetInt(int);
+	void SetInt(int, intptr_t);
+	intptr_t GetInt(int);
 	string GetText(int);
 };
 
@@ -46,7 +46,7 @@ public:
 		cWindowCheckBox::draw(cutoffleft, cutoffright, cutofftop, cutoffbottom);
 	}
 
-	void SetInt(int id, int val)
+	void SetInt(int id, intptr_t val)
 	{
 		cWindowCheckBox::SetInt(id,val);
 		if (id == 3)

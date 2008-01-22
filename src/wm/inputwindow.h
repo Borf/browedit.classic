@@ -96,7 +96,7 @@ public:
 	void* userfunc(void* param)
 	{
 		caller->data = objects["input"]->GetText(0);
-		if ((int)param == 1)
+		if ((uintptr_t)param == 1)
 			caller->Ok();
 		else
 			caller->Cancel();

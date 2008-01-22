@@ -255,18 +255,18 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 						cLight* l = &Graphics.world.lights[Graphics.selectedobject];
 
 						cWindow* w = new cLightWindow(&Graphics.WM.texture, &Graphics.WM.font);
-						w->objects["name"]->SetInt(3,(int)&l->name);
-						w->objects["posx"]->SetInt(3,(int)&l->pos.x);
-						w->objects["posy"]->SetInt(3,(int)&l->pos.y);
-						w->objects["posz"]->SetInt(3,(int)&l->pos.z);
-						w->objects["colorr"]->SetInt(3,(int)&l->color.x);
-						w->objects["colorg"]->SetInt(3,(int)&l->color.y);
-						w->objects["colorb"]->SetInt(3,(int)&l->color.z);
-						w->objects["intensity"]->SetInt(3,(int)&l->todo2);
-						w->objects["range"]->SetInt(3,(int)&l->range);
-						w->objects["maxlightincrement"]->SetInt(3,(int)&l->maxlightincrement);
-						w->objects["lightfalloff"]->SetInt(3,(int)&l->lightfalloff);
-						w->objects["castshadow"]->SetInt(3,(int)&l->givesshadow);
+						w->objects["name"]->SetInt(3,(intptr_t)&l->name);
+						w->objects["posx"]->SetInt(3,(intptr_t)&l->pos.x);
+						w->objects["posy"]->SetInt(3,(intptr_t)&l->pos.y);
+						w->objects["posz"]->SetInt(3,(intptr_t)&l->pos.z);
+						w->objects["colorr"]->SetInt(3,(intptr_t)&l->color.x);
+						w->objects["colorg"]->SetInt(3,(intptr_t)&l->color.y);
+						w->objects["colorb"]->SetInt(3,(intptr_t)&l->color.z);
+						w->objects["intensity"]->SetInt(3,(intptr_t)&l->todo2);
+						w->objects["range"]->SetInt(3,(intptr_t)&l->range);
+						w->objects["maxlightincrement"]->SetInt(3,(intptr_t)&l->maxlightincrement);
+						w->objects["lightfalloff"]->SetInt(3,(intptr_t)&l->lightfalloff);
+						w->objects["castshadow"]->SetInt(3,(intptr_t)&l->givesshadow);
 						//((cEffectWindow*)w)->undo = new cUndoChangeEffect(Graphics.selectedobject);
 						Graphics.WM.addwindow(w);
 					}

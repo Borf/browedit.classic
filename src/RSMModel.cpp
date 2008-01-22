@@ -573,12 +573,12 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 				printf(".");
 				float t = 0;
 
-				int x2 = (int)min(Graphics.world.width, model->pos.x/2+mmax*2);
-				int y2 = (int)min(Graphics.world.height, model->pos.z/2+ mmax*2);
+				int x2 = (int)min((int)Graphics.world.width, (int)(model->pos.x/2+mmax*2));
+				int y2 = (int)min((int)Graphics.world.height, (int)(model->pos.z/2+ mmax*2));
 
-				for(int x = (int)max(0, model->pos.x/2 + mmin*2); x < x2; x++)
+				for(int x = (int)max(0, (int)(model->pos.x/2 + mmin*2)); x < x2; x++)
 				{
-					for(int y = (int)max(0, model->pos.z/2 + mmin*2); y < y2; y++)
+					for(int y = (int)max(0, (int)(model->pos.z/2 + mmin*2)); y < y2; y++)
 					{
 						for(int xx = 0; xx < 6; xx++)
 						{

@@ -6,6 +6,7 @@
 
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
+#include <GL/glext.h>											// We use a define from this file: GL_BGRA_EXT
 
 #include <stdexcept>
 #include <vector>
@@ -199,11 +200,11 @@ int cFont::print(float r, float g, float b, float x, float y, const char *fmt, .
 			glColor3ub(r2, g2, b2);
 		}
 
-		int tmp = (int)strstr(pointer, colorcode) - 1;
+		intptr_t tmp = (intptr_t)strstr(pointer, colorcode) - 1;
 
-		if (tmp != -1)
+		if (tmp != -1) // notice the -1 on previous line... :/
 		{
-			tmp -= ((int)pointer-1);
+			tmp -= ((intptr_t)pointer-1);
 			pointer[tmp] = '\0';
 		}
 
@@ -331,11 +332,11 @@ int cFont::print3d(float r, float g, float b, float a, float x, float y, float z
 			glColor3ub(r2, g2, b2);
 		}
 
-		int tmp = (int)strstr(pointer, colorcode) - 1;
+		intptr_t tmp = (intptr_t)strstr(pointer, colorcode) - 1;
 
 		if (tmp != -1)
 		{
-			tmp -= ((int)pointer-1);
+			tmp -= ((intptr_t)pointer-1);
 			pointer[tmp] = '\0';
 		}
 

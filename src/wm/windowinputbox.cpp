@@ -265,7 +265,7 @@ void cWindowInputBox::SetText(int i, string t)
 		mask = t;
 }
 
-void cWindowInputBox::SetInt(int id, int val)
+void cWindowInputBox::SetInt(int id, intptr_t val)
 {
 	if (id == 0)
 		editable = (val == 1);
@@ -280,7 +280,7 @@ string cWindowInputBox::GetText(int id)
 	return text;
 }
 
-int cWindowInputBox::GetInt(int id)
+intptr_t cWindowInputBox::GetInt(int id)
 {
 	if (id == 0)
 		return editable ? 1 : 0;

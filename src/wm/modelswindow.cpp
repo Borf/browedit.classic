@@ -142,7 +142,7 @@ void cModelsWindow::cWindowModel::drag()
 	parent->objects["zdragger"]->SetText(1, data);
 }
 
-void cModelsWindow::cWindowModel::SetInt(int i, int id)
+void cModelsWindow::cWindowModel::SetInt(int i, intptr_t id)
 {
 	data = "";
 	if (model != NULL)

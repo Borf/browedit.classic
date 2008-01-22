@@ -37,22 +37,32 @@ endif
 
 ## Per-platform settings
 
+# Linux 32bit
 ifeq ($(PLATFORM),linux32)
 CFLAGS += -m32
 CC=gcc
 CXX=g++
+BINARY_EXT=
 endif
 
+# Linux 64bit
 ifeq ($(PLATFORM),linux64)
 CFLAGS += -m64
 CC=gcc
 CXX=g++
+BINARY_EXT=
 endif
 
+# Windows 32bit
 ifeq ($(PLATFORM),win32)
-CFLAGS += -mwindows
+# Mh, we don't use GUI only mode, but console instead?
+CFLAGS += -mconsole
 CC=mingw32-gcc
 CXX=mingw32-g++
+BINARY_EXT=.exe
+INCLUDES += -Ilibs/include
+LIBS = -L. -lzlib1 -lSDL -lbgd -lopengl32 -lglu32 -lws2_32 -lcomdlg32 -lmingw32
+# ws2_32.lib sdl.lib sdlmain.lib zlib.lib bgd.lib opengl32.lib glu32.lib 
 endif
 
 ## Debug build?
@@ -67,7 +77,7 @@ else
 CFLAGS += -O3
 endif
 
-TARGET=roworldedit_$(PLATFORM)
+TARGET=roworldedit_$(PLATFORM)$(BINARY_EXT)
 
 OBJECTS_SRC=$(patsubst src/%.cpp,obj/src_%_$(PLATFORM).o,$(wildcard src/*.cpp))
 OBJECTS_WM=$(patsubst src/wm/%.cpp,obj/wm_%_$(PLATFORM).o,$(wildcard src/wm/*.cpp))
@@ -75,9 +85,18 @@ OBJECTS_TINYXML=$(patsubst src/tinyxml/%.cpp,obj/tinyxml_%_$(PLATFORM).o,$(wildc
 OBJECTS_GRFLIB=$(patsubst src/grflib/%.c,obj/grflib_%_$(PLATFORM).o,$(wildcard src/grflib/*.c))
 OBJECTS_ZLIB=$(patsubst src/grflib/zlib/%.c,obj/zlib_%_$(PLATFORM).o,$(wildcard src/grflib/zlib/*.c))
 
+ifeq ($(PLATFORM),win32)
+# Fix: Win32 build needs this one
+OBJECTS_SRC += obj/src_md5_$(PLATFORM).o
+endif
+
 OBJECTS_ALL=$(OBJECTS_SRC) $(OBJECTS_WM) $(OBJECTS_TINYXML) $(OBJECTS_GRFLIB) $(OBJECTS_ZLIB)
 
 all: $(TARGET)
+
+obj/src_%_$(PLATFORM).o: src/%.c
+	@echo -e "    [1mCC\033[1m\t\033[22;34m$<\033[39m"
+	@$(CC) $(CFLAGS) $(INCLUDES) $(DEFINES) -c -o $@ $<
 
 obj/src_%_$(PLATFORM).o: src/%.cpp
 	@echo -e "    [1mCC\033[1m\t\033[22;34m$<\033[39m"

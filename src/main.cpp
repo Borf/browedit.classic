@@ -25,6 +25,8 @@ unsigned long keymap[SDLK_LAST-SDLK_FIRST];
 #include <windows.h>
 #endif
 
+#include <GL/glext.h>											// We use a define from this file: GL_BGRA_EXT
+
 cFileSystem fs;
 
 string inputboxresult;
@@ -1139,7 +1141,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					if (SDL_GetModState() & KMOD_CTRL)
 					{
 						Graphics.cameraangle += (oldmousey - mousey) / 10.0f;
-						Graphics.cameraangle = max(min(Graphics.cameraangle, 20), -10);
+						Graphics.cameraangle = max(min(Graphics.cameraangle, (float)20), (float)-10);
 						Graphics.camerarot += (oldmousex - mousex) / 100.0f;
 						while(Graphics.camerarot < 0)
 							Graphics.camerarot+=2*(float)PI;
@@ -1149,7 +1151,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					else
 					{
 						Graphics.cameraheight += (oldmousey - mousey) / 2.0f;
-						Graphics.cameraheight = max(min(Graphics.cameraheight, 15000), -5);
+						Graphics.cameraheight = max(min(Graphics.cameraheight, (float)15000), (float)-5);
 						Graphics.camerarot += (oldmousex - mousex) / 100.0f;
 						while(Graphics.camerarot < 0)
 							Graphics.camerarot+=2*(float)PI;
@@ -1227,7 +1229,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				else
 				{
 					Graphics.cameraheight*=1.1f;
-					Graphics.cameraheight = max(min(Graphics.cameraheight, 15000), -5);
+					Graphics.cameraheight = max(min(Graphics.cameraheight, (float)15000), (float)-5);
 				}
 				return 1;
 			}
@@ -1240,7 +1242,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				else
 				{
 					Graphics.cameraheight/=1.1f;
-					Graphics.cameraheight = max(min(Graphics.cameraheight, 15000), -5);
+					Graphics.cameraheight = max(min(Graphics.cameraheight, (float)15000), (float)-5);
 				}
 				return 1;
 			}

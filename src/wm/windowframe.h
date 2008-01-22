@@ -20,7 +20,7 @@ public:
 		drawinner = false;
 	}
 	virtual void draw(int,int,int,int);
-	void SetInt(int,int);
+	void SetInt(int,intptr_t);
 };
 
 

@@ -38,7 +38,7 @@ public:
 		void SetText(int i, string s);
 		string GetText(int i);
 		void drag();
-		void SetInt(int i, int id);
+		void SetInt(int i, intptr_t id);
 		~cWindowModel();
 	};
 

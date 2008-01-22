@@ -185,8 +185,8 @@ void cWindowScrollPanel::click()
 	yy -= realy();
 	yy -= parent->py();
 
-	int ybarheight = (int)max(((float)h/(float)innerheight)*h, 16);
-	int xbarwidth = (int)max(((float)w/(float)innerwidth)*w, 16);
+	int ybarheight = (int)max((int)(((float)h/(float)innerheight)*h), 16);
+	int xbarwidth = (int)max((int)(((float)w/(float)innerwidth)*w), 16);
 
 	if (xx < w - 14)
 	{ // not on the vertical scrollbar
@@ -252,8 +252,8 @@ void cWindowScrollPanel::drag()
 	int yy = (Graphics.h()-(int)mousey);
 	yy -= realy();
 	yy -= parent->py();
-	int ybarheight = (int)max(((float)h/(float)innerheight)*h, 16);
-	int xbarwidth = (int)max(((float)w/(float)innerwidth)*(w-16 - 13),18);
+	int ybarheight = (int)max((int)(((float)h/(float)innerheight)*h), 16);
+	int xbarwidth = (int)max((int)(((float)w/(float)innerwidth)*(w-16 - 13)),18);
 
 
 	if(draggingobject != NULL)

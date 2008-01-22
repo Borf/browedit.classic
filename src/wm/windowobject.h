@@ -121,9 +121,9 @@ public:
 	virtual void rightclick() {}
 
 	virtual void SetText(int, string) {}
-	virtual void SetInt(int, int) {}
+	virtual void SetInt(int, intptr_t) {}
 	virtual string GetText(int) { return "NULL"; }
-	virtual int GetInt(int) { return -1; }
+	virtual intptr_t GetInt(int) { return -1; }
 	virtual void holddragover() {}
 	virtual void dragover() {}
 

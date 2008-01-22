@@ -6,6 +6,45 @@
 #include "svnver.h"
 #include "tinyxml/tinyxml.h"
 
+/* Some definitions common to C99, ported to ANSI C if not available
+ * This include some handy types like uintptr_t (integer with size of a pointer)
+ */
+
+#ifndef __cplusplus
+#if __STDC_VERSION__ >= 199901L
+#include <stdint.h>
+#ifndef __bool_true_false_are_defined
+#include <stdbool.h>
+#endif /* __bool_true_false_are_defined */
+#endif /* __STDC_VERSION__ >= 199901L */
+#endif /* !__cplusplus */
+
+#ifndef _STDINT_H
+#ifndef __cplusplus
+#define true 1
+#define false 0
+#endif /* !__cplusplus */
+
+/* get typedef for all required stuff */
+typedef unsigned char uint8_t;
+typedef signed char int8_t;
+typedef unsigned short int uint16_t;
+typedef signed short int int16_t;
+typedef unsigned int uint32_t;
+typedef signed int int32_t;
+typedef unsigned long long int uint64_t;
+typedef signed long long int int64_t;
+
+#if __WORDSIZE == 64
+typedef uint64_t uintptr_t;
+typedef int64_t intptr_t;
+#else
+typedef uint32_t uintptr_t;
+typedef int32_t intptr_t;
+#endif
+
+#endif
+
 #ifdef WIN32
 	#include <windows.h>
 	#pragma warning( disable : 4786 )
@@ -18,10 +57,7 @@
 	#define msgbox(x, y) MessageBox(NULL, x, y, MB_OK);
 	#include <direct.h>
 
-typedef unsigned int uint32_t;
-typedef unsigned char uint8_t;
 	HWND GetConsoleHwnd();
-
 
 #else
 	#include <netdb.h>

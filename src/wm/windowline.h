@@ -32,7 +32,7 @@ public:
 		glEnable(GL_TEXTURE_2D);
 		glColor4fv(colors);
 	}
-	void SetInt(int index, int val)
+	void SetInt(int index, intptr_t val)
 	{
 		if (index == 0)
 			x = val;

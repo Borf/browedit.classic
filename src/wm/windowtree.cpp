@@ -199,7 +199,7 @@ bool cWindowTree::onkeydown(int key, bool shift)
 void cWindowTree::SetText(int index, string text)
 {
 }
-void cWindowTree::SetInt(int index, int value)
+void cWindowTree::SetInt(int index, intptr_t value)
 {
 	if (index == -3)
 	{
@@ -210,10 +210,10 @@ void cWindowTree::SetInt(int index, int value)
 		showscroll = value != 0;
 	}
 }
-int cWindowTree::GetInt(int index)
+intptr_t cWindowTree::GetInt(int index)
 {
 	if (index == 1)
-		return (int)&nodes;
+		return (intptr_t)&nodes;
 	return selected;
 }
 

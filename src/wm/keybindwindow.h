@@ -404,11 +404,11 @@ public:
 		}
 
 
-		void SetInt(int id, int val)
+		void SetInt(int id, intptr_t val)
 		{
 			key = (SDLKey)val;
 		}
-		int GetInt(int id)
+		intptr_t GetInt(int id)
 		{
 			return key;
 		}

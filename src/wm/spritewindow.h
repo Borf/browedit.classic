@@ -307,7 +307,7 @@ public:
 			if(node->children.size() == 0)
 			{
 
-				int selectedtab = parent->objects["tabpanel"]->GetInt(0);
+				intptr_t selectedtab = parent->objects["tabpanel"]->GetInt(0);
 				if(((cSpriteWindow*)parent)->lookupmap.find(node) == ((cSpriteWindow*)parent)->lookupmap.end())
 				{
 					if(selectedtab == 1)

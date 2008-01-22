@@ -166,16 +166,16 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 					cEffect* o = &Graphics.world.effects[Graphics.selectedobject];
 
 					cWindow* w = new cEffectWindow(&Graphics.WM.texture, &Graphics.WM.font);
-					w->objects["posx"]->SetInt(3,(int)&o->pos.x);
-					w->objects["posy"]->SetInt(3,(int)&o->pos.y);
-					w->objects["posz"]->SetInt(3,(int)&o->pos.z);
-					w->objects["rotx"]->SetInt(3,(int)&o->rotation.x);
-					w->objects["roty"]->SetInt(3,(int)&o->rotation.y);
-					w->objects["rotz"]->SetInt(3,(int)&o->rotation.z);
-					w->objects["scalex"]->SetInt(3,(int)&o->scale.x);
-					w->objects["scaley"]->SetInt(3,(int)&o->scale.y);
-					w->objects["scalez"]->SetInt(3,(int)&o->scale.z);
-					w->objects["looptime"]->SetInt(3,(int)&o->loop);
+					w->objects["posx"]->SetInt(3,(intptr_t)&o->pos.x);
+					w->objects["posy"]->SetInt(3,(intptr_t)&o->pos.y);
+					w->objects["posz"]->SetInt(3,(intptr_t)&o->pos.z);
+					w->objects["rotx"]->SetInt(3,(intptr_t)&o->rotation.x);
+					w->objects["roty"]->SetInt(3,(intptr_t)&o->rotation.y);
+					w->objects["rotz"]->SetInt(3,(intptr_t)&o->rotation.z);
+					w->objects["scalex"]->SetInt(3,(intptr_t)&o->scale.x);
+					w->objects["scaley"]->SetInt(3,(intptr_t)&o->scale.y);
+					w->objects["scalez"]->SetInt(3,(intptr_t)&o->scale.z);
+					w->objects["looptime"]->SetInt(3,(intptr_t)&o->loop);
 					w->objects["objectname"]->SetText(0, o->readablename);
 					((cEffectWindow*)w)->undo = new cUndoChangeEffect(Graphics.selectedobject);
 					Graphics.WM.addwindow(w);

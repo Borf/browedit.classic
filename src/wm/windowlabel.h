@@ -29,7 +29,7 @@ public:
 	void SetText(int, string);
 	string GetText(int);
 
-	int GetInt(int);
+	intptr_t GetInt(int);
 
 };
 

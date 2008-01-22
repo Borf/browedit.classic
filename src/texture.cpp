@@ -5,6 +5,8 @@
 #include <gd.h>
 #endif
 
+#include <GL/glext.h>											// We use a define from this file: GL_BGRA_EXT
+
 extern cFileSystem fs;
 
 int cTexture::Load(string Filename, bool freedat)

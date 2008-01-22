@@ -187,7 +187,7 @@ void cWindowListBox::SetText(int index, string text)
 		values[index] = text;
 	}
 }
-void cWindowListBox::SetInt(int index, int value)
+void cWindowListBox::SetInt(int index, intptr_t value)
 {
 	if (index == -1)
 		properties.push_back(value);
@@ -214,7 +214,7 @@ void cWindowListBox::SetInt(int index, int value)
 		properties[index] = value;
 	}
 }
-int cWindowListBox::GetInt(int index)
+intptr_t cWindowListBox::GetInt(int index)
 {
 	if (index == -1)
 		return selected;

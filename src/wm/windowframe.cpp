@@ -64,7 +64,7 @@ void cWindowFrame::draw(int cutoffleft, int cutoffright, int cutofftop, int cuto
 }
 
 
-void cWindowFrame::SetInt(int id, int val)
+void cWindowFrame::SetInt(int id, intptr_t val)
 {
 	drawinner = val != 0;
 }

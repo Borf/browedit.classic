@@ -77,8 +77,8 @@ public:
 
 	void drag();
 	void doubleclick();
-	void SetInt(int, int);
-	int GetInt(int);
+	void SetInt(int, intptr_t);
+	intptr_t GetInt(int);
 	void scrollup();
 	void scrolldown();
 };

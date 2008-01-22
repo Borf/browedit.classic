@@ -118,7 +118,7 @@ public:
 
 	void* userfunc(void* param)
 	{
-		int p = (int)param;
+		intptr_t p = (intptr_t)param;
 		if(p == 0) // cancel
 		{
 		}

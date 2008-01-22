@@ -1667,7 +1667,7 @@ void cWorld::draw()
 		glBindTexture(GL_TEXTURE_2D, Graphics.watertextures[water.type][(int)ceil(waterindex)]->texid());
 
 		if(Graphics.animatewater)
-			waterindex+=max(0,(Graphics.frameticks) / 50.0f);
+			waterindex+=max((float)0,(Graphics.frameticks) / 50.0f);
 		if (waterindex > Graphics.watertextures[water.type].size()-1)
 			waterindex = 0;
 		glBegin(GL_QUADS);
@@ -2376,7 +2376,7 @@ void cWorld::draw()
 		glBindTexture(GL_TEXTURE_2D, Graphics.watertextures[water.type][(int)ceil(waterindex)]->texid());
 
 		if(Graphics.animatewater)
-			waterindex+=max(0,(Graphics.frameticks) / 50.0f);
+			waterindex+=max((float)0,(Graphics.frameticks) / 50.0f);
 		if (waterindex > Graphics.watertextures[water.type].size()-1)
 			waterindex = 0;
 		glBegin(GL_QUADS);

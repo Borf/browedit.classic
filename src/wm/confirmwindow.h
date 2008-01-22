@@ -84,7 +84,7 @@ public:
 
 	void* userfunc(void* param)
 	{
-		if ((int)param == 1)
+		if ((uintptr_t)param == 1)
 			caller->Ok();
 		else
 			caller->Cancel();
