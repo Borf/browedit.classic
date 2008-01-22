@@ -108,9 +108,9 @@ GRFEXTERN_BEGIN
 		typedef unsigned int uint32_t;
 		typedef unsigned short uint16_t;
 		typedef unsigned char uint8_t;
-#ifndef VC8
+/*#ifndef VC8
 		typedef unsigned int* uintptr_t; // borf
-#endif
+#endif*/
 	#endif /* __MINGW32__ */
 
 	/* Pack to 1 byte boundaries */

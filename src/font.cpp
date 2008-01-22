@@ -6,7 +6,9 @@
 
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
+#ifdef __MINGW32__
 #include <GL/glext.h>											// We use a define from this file: GL_BGRA_EXT
+#endif
 
 #include <stdexcept>
 #include <vector>

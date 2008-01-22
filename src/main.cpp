@@ -25,7 +25,9 @@ unsigned long keymap[SDLK_LAST-SDLK_FIRST];
 #include <windows.h>
 #endif
 
+#ifdef __MINGW32__
 #include <GL/glext.h>											// We use a define from this file: GL_BGRA_EXT
+#endif
 
 cFileSystem fs;
 
