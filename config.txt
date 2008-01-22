@@ -1,5 +1,6 @@
 language=english
 setting=ROdesktop
+
 [RO]
 rodir=c:\Program Files\gravity\ro\
 model=data/romodels.txt
@@ -85,6 +86,27 @@ grf=c:\Program Files\Asgard\RO\asgdata.grf
 grf=c:\Program Files\Asgard\Alpha\data.grf
 grf=c:\games\ro\sdata.grf
 grf=c:\games\ro\data.grf
+undostack=50
+bgcolor=128,0,256
+notilecolor=255,255,128
+
+[ROtux]
+rodir=/home/magicaltux/.wine/drive_c/Program Files/Gravity/Ragnarok_france/
+model=data/romodels.txt
+model=data/arcturusmodels.txt
+model=data/alphamodels.txt
+texture=data/texturescustom.txt
+texture=data/rotga.txt
+texture=data/arctextures.txt
+texture=data/AlphaTextures.txt
+texture=data/rotextures.txt
+resx=1024
+resy=768
+fullscreen=0
+bpp=32
+font=tahoma
+grf=/home/magicaltux/.wine/drive_c/Program Files/Gravity/Ragnarok_france/data.grf
+grf=/home/magicaltux/.wine/drive_c/Program Files/Gravity/Ragnarok_france/event.grf
 undostack=50
 bgcolor=128,0,256
 notilecolor=255,255,128
