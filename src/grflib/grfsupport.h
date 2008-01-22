@@ -81,7 +81,7 @@ GRFEXPORT const char *grf_strerror(GrfError err);
  * \sa GRF_SETERR
  * \sa GRF_SETERR_2
  */
-#define GRF_SETERR_ADD(a,b,e,f) GRF_SetError(a,b,__LINE__,__FILE__,#e,(uintptr_t*)f)    /* NOTE: ? => uintptr_t* conversion */
+#define GRF_SETERR_ADD(a,b,e,f) GRF_SetError(a,b,__LINE__,__FILE__,#e,(grf_uintptr_t*)f)    /* NOTE: ? => grf_uintptr_t* conversion */
 /*! \brief Simplification Macro
  *
  * Simplifies setting an error to a GrfError pointer

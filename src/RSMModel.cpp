@@ -289,6 +289,7 @@ void cRSMModel::draw(bool checkfrust, bool dodraw, bool setheight, bool dolightm
 	}
 
 
+#ifdef DISPLAYLIST
 	if(!displaylisted && !setheight && !dolightmaps && dodraw && !animated)
 	{
 		displaylist=glGenLists(1);
@@ -304,6 +305,11 @@ void cRSMModel::draw(bool checkfrust, bool dodraw, bool setheight, bool dolightm
 	}
 	else
 		draw2(&bb,0, NULL, meshes.size() == 1, dodraw, setheight, dolightmaps);
+#else
+	draw2(&bb,0, NULL, meshes.size() == 1, dodraw, setheight, dolightmaps);
+#endif
+
+	
 	recalcbb = false;
 
 

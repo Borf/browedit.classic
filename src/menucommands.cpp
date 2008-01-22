@@ -3208,10 +3208,10 @@ MENUCOMMAND(addfavorite)
 	l.range = atoi(n->FirstChildElement("range")->FirstChild()->Value());
 	l.lightfalloff = atof(n->FirstChildElement("lightfalloff")->FirstChild()->Value());
 
+	Graphics.selectedobject = Graphics.world.lights.size();
 	Graphics.world.lights.push_back(l);
 	undostack.push(new cUndoNewLight());
 
-	Graphics.selectedobject = Graphics.world.lights.size();
 	cWindow* w = Graphics.WM.getwindow(WT_LIGHTOVERVIEW);
 	if(w != NULL)
 	{

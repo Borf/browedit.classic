@@ -160,6 +160,7 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 					l.range = 200;
 					l.lightfalloff = 1;
 
+					Graphics.selectedobject = Graphics.world.lights.size();
 					Graphics.world.lights.push_back(l);
 					undostack.push(new cUndoNewLight());
 				}
