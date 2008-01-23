@@ -5,12 +5,13 @@ CXX = g++
 CC = gcc
 DEFINES = 
 CFLAGS = -Wall -pipe
+# Host platform
+UNAME=$(shell uname -s | sed -e 's/_.*$$//')
 
 #####
 ## PLATFORM DETECTION CODE
 #####
 ifeq ($(PLATFORM),)
-UNAME=$(shell uname -s | sed -e 's/_.*$$//')
 UNAME_CPU=$(shell uname -m)
 
 ## Cygwin
@@ -57,8 +58,15 @@ endif
 ifeq ($(PLATFORM),win32)
 # Mh, we don't use GUI only mode, but console instead?
 CFLAGS += -mconsole
+ifeq ($(UNAME),CYGWIN)
+# On cygwin, use provided gcc, but tell to not use cygwin's dlls
+CC=gcc
+CXX=g++
+CFLAGS += -mno-cygwin
+else
 CC=mingw32-gcc
 CXX=mingw32-g++
+endif
 WINDRES=mingw32-windres
 BINARY_EXT=.exe
 INCLUDES += -Ilibs/include
@@ -73,9 +81,10 @@ DEBUG=yes
 endif
 
 ifeq ($(DEBUG),yes)
-CFLAGS += -g -ggdb
+CFLAGS += -g -ggdb -fstack-protector-all 
 else
-CFLAGS += -O3
+# We suppose everyone have SSE. If this cause problems, switch back to 387
+CFLAGS += -O3 -fomit-frame-pointer -momit-leaf-frame-pointer -mfpmath=sse
 endif
 
 TARGET=roworldedit_$(PLATFORM)$(BINARY_EXT)
