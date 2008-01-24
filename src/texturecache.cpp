@@ -1,3 +1,4 @@
+#include "common.h"
 #include "texturecache.h"
 
 
@@ -6,8 +7,7 @@ cTexture* cTextureCache::load(string filename)
 {
 	if (textures.find(filename) == textures.end())
 	{
-		cTexture* tex = new cTexture();
-		tex->Load(filename);
+		cTexture* tex = cTextureLoaders::load(filename);
 		textures[filename] = tex;
 		
 		used[tex] = 1;

@@ -11,6 +11,53 @@
 #include <string>
 using namespace std;
 
+class cTextureLoader;
+
+class cTexture
+{
+private:
+	bool				loaded;
+	string				filename;
+	GLuint				tid;
+public:
+	cTexture(string,bool);
+	void				resizeToLog();
+
+	bool				freedata;
+	int					width;
+	int					height;
+
+	int					widthOriginal;
+	int					heightOriginal;
+
+	int					bpp;
+	BYTE*				data;
+	int					datatype;
+
+	void				generate();	
+	string				getfilename() { return filename; }
+	GLuint				texid();
+	void				unLoad();
+
+
+};
+
+
+class cTextureLoaders
+{
+public:
+	static vector<cTextureLoader*>	loaders;
+	static cTexture*				load(string, bool = true);
+	static void						load(string, cTexture*);
+};
+
+
+#include "textureloaders/textureloader.h"
+
+/*
+
+
+
 class cTexture
 {
 	class BMPClass
@@ -68,5 +115,5 @@ private:
 
 };
 
-
+*/
 #endif

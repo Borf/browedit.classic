@@ -713,5 +713,41 @@ SOURCE=.\src\tinyxml\tinyxmlerror.cpp
 SOURCE=.\src\tinyxml\tinyxmlparser.cpp
 # End Source File
 # End Group
+# Begin Group "textureloaders"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\src\textureloaders\bitmaptextureloader.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\textureloaders\bitmaptextureloader.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\textureloaders\jpegtextureloader.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\textureloaders\jpegtextureloader.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\textureloaders\textureloader.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\textureloaders\textureloader.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\textureloaders\tgatextureloader.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\src\textureloaders\tgatextureloader.h
+# End Source File
+# End Group
 # End Target
 # End Project

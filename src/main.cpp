@@ -307,7 +307,7 @@ void mainloop()
 		if(editmode == MODE_OBJECTS)
 		{
 			if(w == NULL)
-				Graphics.WM.addwindow(new cModelOverViewWindow(&Graphics.WM.texture, &Graphics.WM.font));
+				Graphics.WM.addwindow(new cModelOverViewWindow(Graphics.WM.texture, &Graphics.WM.font));
 			else
 			{
 				w->userfunc(NULL);
@@ -322,7 +322,7 @@ void mainloop()
 		if (editmode == MODE_LIGHTS)
 		{
 			if(w == NULL)
-				Graphics.WM.addwindow(new cLightOverViewWindow(&Graphics.WM.texture, &Graphics.WM.font));
+				Graphics.WM.addwindow(new cLightOverViewWindow(Graphics.WM.texture, &Graphics.WM.font));
 			else
 			{
 				w->userfunc(NULL);
@@ -1658,7 +1658,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					cWindow* w = Graphics.WM.getwindow(WT_TEXTURE);
 					if (w == NULL)
-						Graphics.WM.addwindow(new cTextureWindow(&Graphics.WM.texture, &Graphics.WM.font));
+						Graphics.WM.addwindow(new cTextureWindow(Graphics.WM.texture, &Graphics.WM.font));
 					else
 						Graphics.WM.togglewindow(WT_TEXTURE);
 					break;
@@ -1668,7 +1668,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					cWindow* w = Graphics.WM.getwindow(WT_MODELS);
 					if (w == NULL)
-						Graphics.WM.addwindow(new cModelsWindow(&Graphics.WM.texture, &Graphics.WM.font)	);
+						Graphics.WM.addwindow(new cModelsWindow(Graphics.WM.texture, &Graphics.WM.font)	);
 					else
 						Graphics.WM.togglewindow(WT_MODELS);
 				}
@@ -1697,7 +1697,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			{
 				cWindow* w = Graphics.WM.getwindow(WT_MINIMAP);
 				if (w == NULL)
-					Graphics.WM.addwindow(new cMiniMapWindow(&Graphics.WM.texture, &Graphics.WM.font)	);
+					Graphics.WM.addwindow(new cMiniMapWindow(Graphics.WM.texture, &Graphics.WM.font)	);
 				else
 					Graphics.WM.togglewindow(WT_MINIMAP);
 			}

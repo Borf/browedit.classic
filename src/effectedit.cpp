@@ -165,7 +165,7 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 				{
 					cEffect* o = &Graphics.world.effects[Graphics.selectedobject];
 
-					cWindow* w = new cEffectWindow(&Graphics.WM.texture, &Graphics.WM.font);
+					cWindow* w = new cEffectWindow(Graphics.WM.texture, &Graphics.WM.font);
 					w->objects["posx"]->SetInt(3,(intptr_t)&o->pos.x);
 					w->objects["posy"]->SetInt(3,(intptr_t)&o->pos.y);
 					w->objects["posz"]->SetInt(3,(intptr_t)&o->pos.z);

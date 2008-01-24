@@ -94,7 +94,7 @@ int cWM::draw()
 
 int cWM::init()
 {
-	texture.Load("data\\window.tga");
+	texture = cTextureLoaders::load("data\\window.tga");
 	font.load("data\\fonts\\tahoma.tga");
 
 	focus = 0;
@@ -411,7 +411,7 @@ void cWM::rightclick()
 
 void cWM::MessageBox(string message)
 {
-	cWindow* w = new cMessageWindow(&texture, &font);
+	cWindow* w = new cMessageWindow(texture, &font);
 	w->objects["text"]->SetText(0, message);
 	w->show();
 	addwindow(w);
@@ -488,7 +488,7 @@ void cWM::printdebug()
 
 void cWM::ConfirmWindow(string title, cConfirmWindow::cConfirmWindowCaller* caller)
 {
-	cWindow* w = new cConfirmWindow(caller, &texture, &font);
+	cWindow* w = new cConfirmWindow(caller, texture, &font);
 	w->objects["text"]->SetText(0, title);
 	w->show();
 	addwindow(w);
@@ -514,8 +514,8 @@ void cWM::defocus()
 
 void cWM::InputWindow(string title, cInputWindow::cInputWindowCaller* caller)
 {
-	cWindow* w = new cInputWindow(caller, &texture, &font);
-	w->init(&texture, &font);
+	cWindow* w = new cInputWindow(caller, texture, &font);
+	w->init(texture, &font);
 	w->objects["text"]->SetText(0, title);
 	w->objects["input"]->SetText(0,"");
 	w->show();

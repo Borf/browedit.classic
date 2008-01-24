@@ -12,9 +12,9 @@ class cFont
 public:
 	int	width[256];
 
+	cTexture* texture;
 
 	GLuint	list_base;
-	cTexture	texture;
 
 	cFont();
 	~cFont();

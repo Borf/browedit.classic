@@ -11,6 +11,101 @@
 
 extern cFileSystem fs;
 
+cTexture::cTexture(string pFilename, bool pFreedata)
+{
+	filename = pFilename;
+	loaded = false;
+	freedata = pFreedata;
+	data = NULL;
+	datatype = 0;
+}
+
+GLuint cTexture::texid()
+{
+	if(!loaded && filename != "")
+	{
+		cTextureLoaders::load(filename, this);
+		loaded = true;
+	}
+	return tid;
+}
+
+
+void cTexture::unLoad()
+{
+	if (!freedata)
+		delete[] data;
+	glDeleteTextures(1, &tid);
+	loaded = false;
+}
+
+
+vector<cTextureLoader*> cTextureLoaders::loaders;
+cTexture* cTextureLoaders::load(string filename, bool freedata)
+{
+	cTexture* t = new cTexture(filename, freedata);
+	return t;
+}
+
+void cTexture::generate()
+{
+	glGenTextures(1, &tid);
+	glBindTexture(GL_TEXTURE_2D, tid);
+	if(datatype == 0)
+		datatype = GL_RGB;
+
+
+	glTexImage2D(GL_TEXTURE_2D,0,bpp/8,width,height,0,datatype,GL_UNSIGNED_BYTE,data);
+
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+	//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+	//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+
+
+
+	if(freedata)
+		delete[] data;
+
+}
+
+
+void cTextureLoaders::load(string filename, cTexture* tex)
+{
+	string ext = lcase(filename.substr(filename.rfind(".")));
+	for(int i = 0; i < loaders.size(); i++)
+	{
+		for(int ii = 0; ii < loaders[i]->extensions.size(); ii++)
+		{
+			if(loaders[i]->extensions[ii] == ext)
+			{
+				cFile* pFile = fs.open(filename);
+				loaders[i]->load(pFile->data, pFile->size, tex);
+				if(tex->data == NULL)
+					Log(2,0,"Error loading texture %s!", filename.c_str());
+				else
+				{
+					pFile->close();
+					tex->resizeToLog();
+					tex->generate();
+				}
+				return;
+			}
+		}
+	}
+	Log(1,0,"Unknown texture type: %s at file %s", ext.c_str(), filename.c_str()); 
+}
+
+
+
+
+void cTexture::resizeToLog()
+{
+
+}
+
+
+/*
 int cTexture::Load(string Filename, bool freedat)
 {
 	loaded = false;
@@ -20,6 +115,9 @@ int cTexture::Load(string Filename, bool freedat)
 		return texid();
 	return 1;
 }
+
+
+
 
 GLuint cTexture::texid()
 {
@@ -89,12 +187,12 @@ GLuint cTexture::texid()
 							data[4*(x+lWidthPixels*y)+1] = bmp.bytes[target+1];
 							data[4*(x+lWidthPixels*y)+2] = bmp.bytes[target+2];
 							data[4*(x+lWidthPixels*y)+3] = bmp.bytes[target+3];
-						/*	if(x > bmp.width || y > bmp.height)
-								continue;
-							data[4*(x+lWidthPixels*y)+0] = bmp.bytes[x+bmp.width*y+0];
-							data[4*(x+lWidthPixels*y)+1] = bmp.bytes[x+bmp.width*y+1];
-							data[4*(x+lWidthPixels*y)+2] = bmp.bytes[x+bmp.width*y+2];
-							data[4*(x+lWidthPixels*y)+3] = bmp.bytes[x+bmp.width*y+3];*/
+						//	if(x > bmp.width || y > bmp.height)
+						//		continue;
+						//	data[4*(x+lWidthPixels*y)+0] = bmp.bytes[x+bmp.width*y+0];
+						//	data[4*(x+lWidthPixels*y)+1] = bmp.bytes[x+bmp.width*y+1];
+						//	data[4*(x+lWidthPixels*y)+2] = bmp.bytes[x+bmp.width*y+2];
+						//	data[4*(x+lWidthPixels*y)+3] = bmp.bytes[x+bmp.width*y+3];
 						}
 					}
 					glGenTextures(1, &tid);
@@ -604,3 +702,4 @@ BMPError cTexture::BMPLoad(std::string fname,BMPClass& bmp)
 
 	return BMPNOERROR;
 }
+*/

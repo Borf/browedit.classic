@@ -255,7 +255,7 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 					{
 						cLight* l = &Graphics.world.lights[Graphics.selectedobject];
 
-						cWindow* w = new cLightWindow(&Graphics.WM.texture, &Graphics.WM.font);
+						cWindow* w = new cLightWindow(Graphics.WM.texture, &Graphics.WM.font);
 						w->objects["name"]->SetInt(3,(intptr_t)&l->name);
 						w->objects["posx"]->SetInt(3,(intptr_t)&l->pos.x);
 						w->objects["posy"]->SetInt(3,(intptr_t)&l->pos.y);

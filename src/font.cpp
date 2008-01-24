@@ -62,7 +62,7 @@ int cFont::print(float r, float g, float b, float x, float y, const char *fmt, .
 	glPushMatrix();
 
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set the correct blending mode
-	glBindTexture(GL_TEXTURE_2D, texture.texid());
+	glBindTexture(GL_TEXTURE_2D, texture->texid());
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
 
@@ -155,7 +155,7 @@ int cFont::print(float r, float g, float b, float x, float y, const char *fmt, .
 	glPushMatrix();
 
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set the correct blending mode
-	glBindTexture(GL_TEXTURE_2D, texture.texid());
+	glBindTexture(GL_TEXTURE_2D, texture->texid());
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
 
@@ -276,7 +276,7 @@ int cFont::print3d(float r, float g, float b, float a, float x, float y, float z
 	glGetBooleanv(GL_BLEND, &blending);
 
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set the correct blending mode
-	glBindTexture(GL_TEXTURE_2D, texture.texid());
+	glBindTexture(GL_TEXTURE_2D, texture->texid());
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
 
@@ -381,17 +381,14 @@ int cFont::print3d(float r, float g, float b, float a, float x, float y, float z
 
 int cFont::load(string filename)
 {
-	Log(5,0,GetMsg("font/LOADING"), filename.c_str());
-	if (texture.Load(filename, false) == 0)
-		return 0;
-	
-	if (texture.type != GL_BGRA_EXT)
-		return 0;
+	texture = cTextureLoaders::load(filename,false);
 
+	Log(5,0,GetMsg("font/LOADING"), filename.c_str());
+	
 	float cx, cy;
 
 	list_base=glGenLists(256);                          // Creating 256 Display Lists
-	glBindTexture(GL_TEXTURE_2D, texture.texid());	 // Select Our Font Texture
+	glBindTexture(GL_TEXTURE_2D, texture->texid());	 // Select Our Font Texture
 
 	for (int loop1=0; loop1<256; loop1++)              // Loop Through All 256 Lists
 	{
@@ -399,12 +396,12 @@ int cFont::load(string filename)
 		cy=(float)(loop1/16)/16.0f;                  // Y Position Of Current Character
 	
 		int w = 2;
-		for(int x = (int)(cx*(float)texture.width)+2; x < (int)((cx+(1.0f/16.0f))*(float)texture.width); x++)
+		for(int x = (int)(cx*(float)texture->width)+2; x < (int)((cx+(1.0f/16.0f))*(float)texture->width); x++)
 		{
 			bool found = false;
-			for(int y = (int)(cy*(float)texture.height); y < (int)((cy+(1.0f/16.0f))*(float)texture.height); y++)
+			for(int y = (int)(cy*(float)texture->height); y < (int)((cy+(1.0f/16.0f))*(float)texture->height); y++)
 			{
-				if (texture.imageData[4*(texture.width*y+x)+3] > 1)
+				if (texture->data[4*(texture->width*y+x)+3] > 1)
 					found = true;
 			}
 			if (found)
@@ -437,7 +434,7 @@ int cFont::load(string filename)
 		glEndList();                                 // Done Building The Display List
 	}                                              // Loop Until All 256 Are Built
 
-	free(texture.imageData);
+	free(texture->data);
 	Log(3,0,GetMsg("font/DONELOADING"), filename.c_str());
 
 	return 1;

@@ -101,7 +101,9 @@ int cFile::open()
 	{
 		cGRFFile* grffile = fs.locations[location];
 		GrfError error;
-		char* dat = (char*)grf_get(grffile->grf, filename.c_str(), (unsigned int*)&size, &error);
+		unsigned int size2 = 0;
+		char* dat = (char*)grf_get(grffile->grf, filename.c_str(), &size2, &error);
+		size = size2;
 		if(!dat)
 		{
 			return 0;

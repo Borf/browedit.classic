@@ -159,7 +159,7 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 						break;
 					cSprite* l = Graphics.world.sprites[Graphics.selectedobject];
 
-					cWindow* w = new cSpriteWindow(&Graphics.WM.texture, &Graphics.WM.font);
+					cWindow* w = new cSpriteWindow(Graphics.WM.texture, &Graphics.WM.font);
 
 					if(Graphics.world.sprites[Graphics.selectedobject]->head)
 						((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->loadhead(Graphics.world.sprites[Graphics.selectedobject]->head->filename);

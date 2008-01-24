@@ -386,15 +386,12 @@ int cGraphics::init()
 	glDisable(GL_LIGHTING);
 	font = new cFont();
 	font->load("data/fonts/"+fontname+".tga");
-	mask = new cTexture();
-	mask->Load("data/mask.tga");
-	bulb = new cTexture();
-	mask->Load("data/bulb.tga");
-	splash = new cTexture();
-	splash->Load("data/hamtaro.tga");
+	mask = cTextureLoaders::load("data/mask.tga");
+	bulb = cTextureLoaders::load("data/bulb.tga");
+	splash = cTextureLoaders::load("data/hamtaro.tga");
 	Log(3,0,GetMsg("graphics/INITIALIZINGWM"));
 	WM.init();
-	WM.addwindow(new cHotkeyWindow(&WM.texture, &WM.font));
+	WM.addwindow(new cHotkeyWindow(WM.texture, &WM.font));
 
 	int i;
 	for(i = 0; i < 7; i++)

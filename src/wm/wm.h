@@ -42,7 +42,7 @@ public:
 
 //properties
 	vector<cWindow*>	windows; //vector of windows, 0 = topwindow
-	cTexture			texture;
+	cTexture*			texture;
 	cFont				font;
 
 	void				addwindow(cWindow*);

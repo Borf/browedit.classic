@@ -337,7 +337,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 					cRSMModel* o = Graphics.world.models[Graphics.selectedobject];
 					cMenuItem* menuitem = (cMenuItem*)models->finddata("data\\model\\" + o->rofilename);
 
-					cWindow* w = new cObjectWindow(&Graphics.WM.texture, &Graphics.WM.font);
+					cWindow* w = new cObjectWindow(Graphics.WM.texture, &Graphics.WM.font);
 					if (menuitem != NULL)
 						w->objects["objectmenu"]->SetText(0,menuitem->data2);
 					w->objects["posx"]->SetInt(3,(intptr_t)&o->pos.x);

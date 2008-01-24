@@ -2234,14 +2234,12 @@ bool mouseovertexture(cMenu* src)
 {
 	if (Graphics.texturepreview == NULL || Graphics.texturepreview->getfilename() != rodir + "data\\texture\\" + ((cMenuItem*)src)->data)
 	{
-		Graphics.texturepreview = new cTexture();
-		Graphics.texturepreview->Load(rodir + "data\\texture\\" + ((cMenuItem*)src)->data);
+		Graphics.texturepreview = TextureCache.load(rodir + "data\\texture\\" + ((cMenuItem*)src)->data);
 		return false;
 	}
 	else
 	{
-		Graphics.texturepreview->unLoad();
-		delete Graphics.texturepreview;
+		TextureCache.unload(Graphics.texturepreview);
 		Graphics.texturepreview = NULL;
 		return true;
 	}
@@ -2250,8 +2248,7 @@ bool mouseouttexture(cMenu* src)
 {
 	if (Graphics.texturepreview != NULL)
 	{
-		Graphics.texturepreview->unLoad();
-		delete Graphics.texturepreview;
+		TextureCache.unload(Graphics.texturepreview);
 		Graphics.texturepreview = NULL;
 	}
 	return true;
@@ -2295,7 +2292,7 @@ MENUCOMMAND(toggle)
 MENUCOMMAND(water)
 {
 	char buf[100];
-	cWindow* w = new cWaterWindow(&Graphics.WM.texture, &Graphics.WM.font);
+	cWindow* w = new cWaterWindow(Graphics.WM.texture, &Graphics.WM.font);
 	sprintf(buf, "%f", Graphics.world.water.amplitude);		w->objects["amplitude"]->SetText(0,buf);
 	sprintf(buf, "%f", Graphics.world.water.height);		w->objects["height"]->SetText(0,buf);
 	sprintf(buf, "%f", Graphics.world.water.phase);			w->objects["phase"]->SetText(0,buf);
@@ -2338,7 +2335,7 @@ MENUCOMMAND(cleantextures)
 MENUCOMMAND(ambientlight)
 {
 	char buf[100];
-	cWindow* w = new cAmbientLightWindow(&Graphics.WM.texture, &Graphics.WM.font);
+	cWindow* w = new cAmbientLightWindow(Graphics.WM.texture, &Graphics.WM.font);
 	sprintf(buf, "%i", Graphics.world.ambientlight.ambientr);		w->objects["ambientr"]->SetText(0,buf);
 	sprintf(buf, "%i", Graphics.world.ambientlight.ambientg);		w->objects["ambientg"]->SetText(0,buf);
 	sprintf(buf, "%i", Graphics.world.ambientlight.ambientb);		w->objects["ambientb"]->SetText(0,buf);
@@ -2415,7 +2412,7 @@ MENUCOMMAND(properties)
 
 MENUCOMMAND(preferences)
 {
-	Graphics.WM.addwindow(new cKeyBindWindow(&Graphics.WM.texture, &Graphics.WM.font));
+	Graphics.WM.addwindow(new cKeyBindWindow(Graphics.WM.texture, &Graphics.WM.font));
 	return true;
 }
 
@@ -2518,13 +2515,13 @@ MENUCOMMAND(fillarea)
 
 MENUCOMMAND(rsmedit)
 {
-	Graphics.WM.addwindow(new cRSMEditWindow(&Graphics.WM.texture, &Graphics.WM.font));
+	Graphics.WM.addwindow(new cRSMEditWindow(Graphics.WM.texture, &Graphics.WM.font));
 	return true;
 }
 
 MENUCOMMAND(favlights)
 {
-	Graphics.WM.addwindow(new cFavoriteLightsWindow(&Graphics.WM.texture, &Graphics.WM.font));
+	Graphics.WM.addwindow(new cFavoriteLightsWindow(Graphics.WM.texture, &Graphics.WM.font));
 	return true;
 }
 
