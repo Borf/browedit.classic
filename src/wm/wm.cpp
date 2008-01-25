@@ -119,6 +119,7 @@ void cWM::unload()
 	for(int i = 0; i < (int)windows.size(); i++)
 		delete(windows[i]);
 	windows.clear();
+	texture->unLoad();
 }
 
 cWM::~cWM()

@@ -18,8 +18,8 @@ void cBitmapTextureLoader::load(char* filedata,int datlen, cTexture* tex)
 	}
 	int offset=*(unsigned int*)(header+10);
 	
-	tex->width = *(int*)(header+18);
-	tex->height = *(int*)(header+22);
+	tex->widthOriginal = tex->width = *(int*)(header+18);
+	tex->heightOriginal = tex->height = *(int*)(header+22);
 	tex->bpp = int(header[28]);
 
 	tex->data = new BYTE[tex->width*tex->height*4];

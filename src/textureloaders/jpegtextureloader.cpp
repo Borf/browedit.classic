@@ -22,8 +22,8 @@ void cJpegTextureLoader::load(char* filedata,int datlen, cTexture* tex)
 		return;
 	tex->data = new BYTE[pImageData->sx*pImageData->sy*3];
 
-	tex->width = pImageData->sx;
-	tex->height = pImageData->sy;
+	tex->widthOriginal = tex->width = pImageData->sx;
+	tex->heightOriginal = tex->height = pImageData->sy;
 	tex->bpp = 24;
 	tex->datatype = GL_BGR_EXT;
 
