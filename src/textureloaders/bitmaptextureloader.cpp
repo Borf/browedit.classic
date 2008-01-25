@@ -5,7 +5,7 @@ cBitmapTextureLoader	BitmapTextureLoader;
 cBitmapTextureLoader::cBitmapTextureLoader()
 {
 	extensions.push_back(".bmp");
-	cTextureLoaders::loaders.push_back(this);
+	GetTextureLoaders().loaders.push_back(this);
 }
 
 void cBitmapTextureLoader::load(char* filedata,int datlen, cTexture* tex)

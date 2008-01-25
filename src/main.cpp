@@ -1034,7 +1034,7 @@ int main(int argc, char *argv[])
 #endif
 
 #ifdef _DEBUG
-	Graphics.world.load();
+//	Graphics.world.load();
 //	Graphics.world.importalpha();
 #endif
 

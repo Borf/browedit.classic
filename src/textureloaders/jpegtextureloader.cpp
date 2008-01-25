@@ -12,7 +12,7 @@ cJpegTextureLoader	JpegTextureLoader;
 cJpegTextureLoader::cJpegTextureLoader()
 {
 	extensions.push_back(".jpg");
-	cTextureLoaders::loaders.push_back(this);
+	GetTextureLoaders().loaders.push_back(this);
 }
 
 void cJpegTextureLoader::load(char* filedata,int datlen, cTexture* tex)

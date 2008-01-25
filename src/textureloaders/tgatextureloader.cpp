@@ -7,7 +7,7 @@ cTGATextureLoader	tgaTextureLoader;
 cTGATextureLoader::cTGATextureLoader()
 {
 	extensions.push_back(".tga");
-	cTextureLoaders::loaders.push_back(this);
+	GetTextureLoaders().loaders.push_back(this);
 }
 
 

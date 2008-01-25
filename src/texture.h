@@ -51,6 +51,8 @@ public:
 	static void						load(string, cTexture*);
 };
 
+cTextureLoaders& GetTextureLoaders();
+
 
 #include "textureloaders/textureloader.h"
 

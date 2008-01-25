@@ -34,6 +34,11 @@ void cTexture::unLoad()
 	loaded = false;
 }
 
+cTextureLoaders& GetTextureLoaders()
+{
+	static cTextureLoaders* l = new cTextureLoaders();
+	return *l;
+}
 
 vector<cTextureLoader*> cTextureLoaders::loaders;
 cTexture* cTextureLoaders::load(string filename, bool freedata)
