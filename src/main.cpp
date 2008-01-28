@@ -59,7 +59,7 @@ bool	doneaction = true;
 extern cMenu* popupmenu;
 TiXmlDocument favoritelights;
 
-int undosize = 50;
+extern unsigned int undosize = 50;
 vector<string> texturefiles;
 vector<string> objectfiles;
 

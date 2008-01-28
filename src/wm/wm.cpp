@@ -35,7 +35,7 @@ int cWM::draw()
 	}
 	
 
-	for(int ii = size; ii >= 0; ii--)
+	for(ii = size; ii >= 0; ii--)
 	{
 		cWindow* w = windows[ii];
 		if(w->isalwaysontop())
