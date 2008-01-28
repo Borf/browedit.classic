@@ -12,7 +12,7 @@ void cWindowTree::draw(int cutoffleft, int cutoffright, int cutofftop, int cutof
 	glGetFloatv(GL_CURRENT_COLOR, colors);
 
 	glEnable(GL_BLEND);
-	int i;
+	unsigned int i;
 
 	vector<string> values;
 	for(i = 0; i < nodes.size(); i++)
@@ -28,7 +28,7 @@ void cWindowTree::draw(int cutoffleft, int cutoffright, int cutofftop, int cutof
 
 	i = 0;
 	yy = realy()+h-5-12;
-	while(yy+10 > realy() && i < (int)values.size())
+	while(yy+10 > realy() && i < values.size())
 	{
 		i++;
 		yy-=12;
@@ -51,7 +51,7 @@ void cWindowTree::draw(int cutoffleft, int cutoffright, int cutofftop, int cutof
 		glTexCoord2f((371.0f)/512.0f,	(337.0f)/512.0f);				glVertex2d(xx+ww-4, yy+h-4);
 		glTexCoord2f((371.0f)/512.0f,	(337.0f)/512.0f);				glVertex2d(xx+4, yy+h-4);
 ///selection
-		if (selected >= liststart && selected < liststart+i && showselection)
+		if (selected >= liststart && selected < liststart+(int)i && showselection)
 		{
 			glTexCoord2f((421.0f)/512.0f,		(424.0f)/512.0f);			glVertex2d(xx+4, yy+h-12*(selected-liststart)-12-4);
 			glTexCoord2f((430.0f)/512.0f,		(424.0f)/512.0f);			glVertex2d(xx+ww-4,yy+h-12*(selected-liststart)-12-4);
@@ -139,7 +139,7 @@ void cWindowTree::draw(int cutoffleft, int cutoffright, int cutofftop, int cutof
 	
 	i = liststart;
 	yy = realy()+h-5-12;
-	while(yy > realy() && i < (int)values.size())
+	while(yy > realy() && i < values.size())
 	{
 		parent->font->print(0,0,0,parent->px()+xx+5,parent->py()+yy,"%s", values[i].c_str());
 		i++;
@@ -155,7 +155,7 @@ void cWindowTree::draw(int cutoffleft, int cutoffright, int cutofftop, int cutof
 
 bool cWindowTree::onkeydown(int key, bool shift)
 {
-	int i;
+	unsigned int i;
 	vector<string> values;
 	for(i = 0; i < nodes.size(); i++)
 		nodes[i]->getdata(values);
@@ -163,14 +163,14 @@ bool cWindowTree::onkeydown(int key, bool shift)
 	{
 		i = 0;
 		int yy = realy()+h-5-12;
-		while(yy+10 > realy() && i < (int)values.size())
+		while(yy+10 > realy() && i < values.size())
 		{
 			i++;
 			yy-=12;
 		}
 	
 		selected++;
-		if (liststart < values.size() - (h/12))
+		if (liststart < (int)values.size() - (h/12))
 			liststart++;
 		onchange();
 		return true;
@@ -224,7 +224,7 @@ void cWindowTree::rightclick()
 
 void cWindowTree::click()
 {
-	int i;
+	unsigned int i;
 	vector<string> values;
 	for(i = 0; i < nodes.size(); i++)
 		nodes[i]->getdata(values);
@@ -294,14 +294,14 @@ void cWindowTree::drag()
 
 	if (mousestartx - realx() - parent->px() > w-14 && mousestartx - realx() - parent->px() < w)
 	{
-		int i;
+		unsigned int i;
 		vector<string> values;
 		for(i = 0; i < nodes.size(); i++)
 			nodes[i]->getdata(values);
 
 		i = 0;
 		int yyy = realy()+h-5-12;
-		while(yyy+10 > realy() && i < (int)values.size())
+		while(yyy+10 > realy() && i < values.size())
 		{
 			i++;
 			yyy-=12;
@@ -322,7 +322,7 @@ void cWindowTree::drag()
 		sprintf(buf, "%i - %i", barpos, (int)(((float)barpos / (float)(h-16.0f)) * (float)values.size()));
 
 		int oldliststart = liststart;
-		liststart = max(min((int)((((float)barpos / (float)(h-16.0f)) * (float)values.size())+0.5f), (int)values.size()-i), 0);
+		liststart = max(min((int)((((float)barpos / (float)(h-16.0f)) * (float)values.size())+0.5f), (int)(values.size()-i)), 0);
 		if (oldliststart != liststart)
 			dragoffsety = yy;
 	}
@@ -332,7 +332,7 @@ void cWindowTree::doubleclick()
 {
 	int a = selected;
 	cTreeNode* node = NULL;
-	for(int i = 0; i < nodes.size(); i++)
+	for(unsigned int i = 0; i < nodes.size(); i++)
 	{
 		 node = nodes[i]->getnode(a);
 		 if(node != NULL)
@@ -354,8 +354,8 @@ void cWindowTree::cTreeNode::getdata(vector<string> &data, int level)
 {
 	string d;
 
-	int i;
-	for(i = 0; i < level; i++)
+	unsigned int i;
+	for(i = 0; i < (unsigned int)level; i++)
 	{
 		d += "    ";
 	}
@@ -380,7 +380,7 @@ void cWindowTree::cTreeNode::getnodes(vector<cTreeNode*> &data)
 	data.push_back(this);
 	if (open)
 	{
-		for(int i = 0; i < children.size(); i++)
+		for(unsigned int i = 0; i < children.size(); i++)
 			children[i]->getnodes(data);
 	}
 }
@@ -394,7 +394,7 @@ cWindowTree::cTreeNode* cWindowTree::cTreeNode::getnode(int &nr)
 
 	if (open)
 	{
-		for(int i = 0; i < children.size(); i++)
+		for(unsigned int i = 0; i < children.size(); i++)
 		{
 			cTreeNode* n = children[i]->getnode(nr);
 			if (n != NULL)
@@ -406,7 +406,7 @@ cWindowTree::cTreeNode* cWindowTree::cTreeNode::getnode(int &nr)
 
 bool cWindowTree::cTreeNode::haschild(string tofind)
 {
-	for(int i = 0; i < children.size(); i++)
+	for(unsigned int i = 0; i < children.size(); i++)
 		if (children[i]->text == tofind)
 			return true;
 
@@ -429,22 +429,22 @@ void cWindowTree::scrollup()
 }
 void cWindowTree::scrolldown()
 {
-	int i;
+	unsigned int i;
 	vector<string> values;
 	for(i = 0; i < nodes.size(); i++)
 		nodes[i]->getdata(values);
 
 	int yy = realy()+h-5-12;
-	while(yy+10 > realy() && i < (int)values.size())
+	while(yy+10 > realy() && i < values.size())
 	{
 		i++;
 		yy-=12;
 	}
 
 	liststart+=5;
-	if(h/12 > values.size())
+	if(h/12 > (int)values.size())
 		liststart = 0;
-	if(liststart >= values.size() - (h/12))
+	if(liststart >= (int)values.size() - (h/12))
 		liststart = values.size() - (h/12);
 
 }
@@ -456,7 +456,7 @@ cWindowTree::cTreeNode* cWindowTree::cTreeNode::getnode(string s)
 {
 	if(text == s)
 		return this;
-	for(int i = 0; i < children.size(); i++)
+	for(unsigned int i = 0; i < children.size(); i++)
 	{
 		cTreeNode* n = children[i]->getnode(s);
 		if (n != NULL)
@@ -474,7 +474,7 @@ bool treeComp(cWindowTree::cTreeNode* a, cWindowTree::cTreeNode* b)
 void cWindowTree::cTreeNode::sort()
 {
 	mergesort<cTreeNode*>(children, treeComp);
-	for(int i = 0; i < children.size(); i++)
+	for(unsigned int i = 0; i < children.size(); i++)
 		children[i]->sort();
 }
 
@@ -485,7 +485,7 @@ int cWindowTree::cTreeNode::getselectionnr(cTreeNode* child)
 	if(parent != NULL)
 		ret = parent->getselectionnr(this);
 
-	for(int i = 0; i < children.size(); i++)
+	for(unsigned int i = 0; i < children.size(); i++)
 	{
 		if(children[i] == child)
 		{
@@ -506,7 +506,7 @@ int cWindowTree::cTreeNode::openchildcount()
 	if(!open)
 		return ret;
 
-	for(int i = 0; i < children.size(); i++)
+	for(unsigned int i = 0; i < children.size(); i++)
 	{
 		if(children[i]->open)
 			ret += children[i]->openchildcount();

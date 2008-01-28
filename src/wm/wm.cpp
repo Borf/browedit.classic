@@ -11,7 +11,8 @@ extern void mainloop();
 
 int cWM::draw()
 {
-	int i;
+	unsigned int i;
+	int ii;
 	glDisable(GL_LIGHTING);
 	glDisable(GL_DEPTH_TEST);
 	//glTranslatef(0,0,9000);
@@ -32,16 +33,16 @@ int cWM::draw()
 			}
 		}
 	}
+	
 
-
-	for(i = size; i >= 0; i--)
+	for(int ii = size; ii >= 0; ii--)
 	{
-		cWindow* w = windows[i];
+		cWindow* w = windows[ii];
 		if(w->isalwaysontop())
 			continue;
 		if (w->isenabled())
 		{
-			if (i == topwindow)
+			if (ii == topwindow)
 			{
 				glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 				w->istopwindow(true);
@@ -57,17 +58,17 @@ int cWM::draw()
 			if(w->isvisible() && w->isenabled())
 				w->draw();
 		}
-		if (windows[i] != w)
+		if (windows[ii] != w)
 			break;	
 	}
-	for(i = size; i >= 0; i--)
+	for(ii = size; ii >= 0; ii--)
 	{
-		cWindow* w = windows[i];
+		cWindow* w = windows[ii];
 		if(!w->isalwaysontop())
 			continue;
 		if (w->isenabled())
 		{
-			if (i == topwindow)
+			if (ii == topwindow)
 			{
 				glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 				w->istopwindow(true);
@@ -83,7 +84,7 @@ int cWM::draw()
 			if(w->isvisible() && w->isenabled())
 				w->draw();
 		}
-		if (windows[i] != w)
+		if (windows[ii] != w)
 			break;	
 	}
 	glEnable(GL_DEPTH_TEST);
@@ -509,7 +510,7 @@ void confirmitemdrop(cWindow* caller, bool okclicked)
 
 void cWM::defocus()
 {
-	for(int i = 0; i < windows.size(); i++)
+	for(unsigned int i = 0; i < windows.size(); i++)
 		windows[i]->selectedobject = NULL;
 }
 

@@ -42,7 +42,7 @@ public:
 				string firstpart = n.substr(0, n.find("\\"));
 				string secondpart = n.substr(n.find("\\")+1);
 			
-				for(int i = 0; i < children.size(); i++)
+				for(unsigned int i = 0; i < children.size(); i++)
 				{
 					if(children[i]->text == firstpart)
 					{
@@ -118,7 +118,7 @@ public:
 
 		void onchange()
 		{
-			int i;
+			unsigned int i;
 			int a = selected;
 			cWindowTree::cTreeNode* node;
 			for(i = 0; i < nodes.size(); i++)
@@ -144,7 +144,7 @@ public:
 		}
 		void getobject(cRSMModel* m)
 		{
-			for(int i = 0; i < nodes.size(); i++)
+			for(unsigned int i = 0; i < nodes.size(); i++)
 			{
 				
 				cTreeNode* n = ((cModelOverViewTreeNode*)nodes[i])->getnode(m);
@@ -158,22 +158,20 @@ public:
 						n = n->parent;
 					}
 
-					
-					int i;
 					vector<string> values;
 					for(i = 0; i < nodes.size(); i++)
 						nodes[i]->getdata(values);
 
 					i = 0;
 					int yyy = realy()+h-5-12;
-					while(yyy+10 > realy() && i < (int)values.size())
+					while(yyy+10 > realy() && i < values.size())
 					{
 						i++;
 						yyy-=12;
 					}
 
 					selected = nn->getselectionnr();
-					if(selected < liststart || selected > liststart+i)
+					if(selected < liststart || selected > liststart+(int)i)
 						liststart = min((int)values.size()-i+1 , selected-(i/2));
 					if(liststart < 0)
 						liststart = 0;
@@ -195,7 +193,7 @@ public:
 			windowtreenode->iscat = true;
 			parent->addchild(windowtreenode);
 
-			for(int i = 0; i < Graphics.world.models.size(); i++)
+			for(unsigned int i = 0; i < Graphics.world.models.size(); i++)
 			{
 				cModelOverViewTreeNode* node = windowtreenode->addNodeTree(Graphics.world.models[i]->name);
 				node->iscat = false;
@@ -241,7 +239,7 @@ public:
 		windownode->sort();
 
 		((cModelOverViewTreeNode*)windownode->children[0])->checkopening(((cWindowTree*)objects["list"])->nodes);
-		for(int i = 0; i < windownode->children.size(); i++)
+		for(unsigned int i = 0; i < windownode->children.size(); i++)
 		{
 			windownode->children[i]->parent = NULL;
 			nodes.push_back(windownode->children[i]);

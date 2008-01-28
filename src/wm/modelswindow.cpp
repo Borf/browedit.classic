@@ -173,7 +173,7 @@ class cConfirmDeleteModel : public cConfirmWindow::cConfirmWindowCaller
 		}
 		void Ok()
 		{
-			int i;
+			unsigned int i;
 			cModelsWindow::cWindowModelCatSelect* tree = (cModelsWindow::cWindowModelCatSelect*)model->parent->objects["tree"];
 			int a = tree->selected;
 			cWindowTree::cTreeNode* node = NULL;
@@ -271,7 +271,7 @@ void cModelsWindow::cWindowModel::rightclick()
 
 void cModelsWindow::cWindowModelCatSelect::rightclick()
 {
-	int i;
+	unsigned int i;
 	click();
 	int a = selected;
 	cTreeNode* node = NULL;
@@ -337,7 +337,7 @@ void cModelsWindow::cWindowModelCatSelect::rightclick()
 
 bool cModelsWindow::cWindowModelCatSelect::onkeydown(int key, bool shift)
 {
-	int i;
+	unsigned int i;
 	bool b = cWindowTree::onkeydown(key, shift);
 	if(b)
 		return true;
@@ -434,7 +434,7 @@ void cModelsWindow::cWindowModelCatSelect::holddragover()
 {
 	if(originalselection == -1)
 		originalselection = selected;
-	int i;
+	unsigned int i;
 	vector<string> values;
 	for(i = 0; i < nodes.size(); i++)
 		nodes[i]->getdata(values);
@@ -459,7 +459,7 @@ void cModelsWindow::cWindowModelCatSelect::holddragover()
 void cModelsWindow::cWindowModelCatSelect::dragover()
 {
 	bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
-	int i;
+	unsigned int i;
 	int a = selected;
 	cTreeNode* node = NULL;
 	for(i = 0; i < nodes.size(); i++)
@@ -577,7 +577,7 @@ void cModelsWindow::cWindowModelCatSelect::dragover()
 
 void cModelsWindow::cWindowModelCatSelect::refreshmodels()
 {
-	int i;
+	unsigned int i;
 	cWindowScrollPanel* box = (cWindowScrollPanel*)parent->objects["models"];
 	for(i = 0; i < box->objects.size(); i++)
 		delete box->objects[i];
@@ -652,7 +652,7 @@ cModelsWindow::cModelsWindow(cTexture* t, cFont* f) : cWindow(t,f)
 	vector<cWindowTree::cTreeNode*> nodes;
 	map<string, cWindowTree::cTreeNode*, less<string> > lookup;
 
-	for(int i = 0; i < objectfiles.size(); i++)
+	for(unsigned int i = 0; i < objectfiles.size(); i++)
 	{
 		cFile* pFile = fs.open(objectfiles[i]);
 		while(!pFile->eof())
@@ -666,7 +666,7 @@ cModelsWindow::cModelsWindow(cTexture* t, cFont* f) : cWindow(t,f)
 			string cat = pre.substr(0, pre.rfind("/"));
 			string name = pre.substr(pre.rfind("/")+1);
 
-			for(int ii = 0; ii < translations.size(); ii++)
+			for(unsigned int ii = 0; ii < translations.size(); ii++)
 			{
 				name = replace(name, translations[ii].first, translations[ii].second);
 				cat = replace(cat, translations[ii].first, translations[ii].second);
@@ -729,7 +729,7 @@ void cModelsWindow::resizeto(int ww, int hh)
 
 	int x = 0;
 	int y = 0;
-	for(int i = 0; i < panel->objects.size(); i++)
+	for(unsigned int i = 0; i < panel->objects.size(); i++)
 	{
 		panel->objects[i]->moveto(x,y);
 		x+=130;

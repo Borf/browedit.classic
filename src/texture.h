@@ -46,7 +46,7 @@ public:
 class cTextureLoaders
 {
 public:
-	static vector<cTextureLoader*>	loaders;
+	vector<cTextureLoader*>	loaders;
 	static cTexture*				load(string, bool = true);
 	static void						load(string, cTexture*);
 };

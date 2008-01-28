@@ -52,6 +52,7 @@ public:
 	class cInputWindowCaller
 	{
 	public:
+		virtual ~cInputWindowCaller() {};
 		string data;
 
 		cInputWindowCaller() {};

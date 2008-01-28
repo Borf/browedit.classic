@@ -19,7 +19,7 @@ public:
 			parent = NULL;
 			text = t;
 			children = items;
-			for(int i = 0; i < children.size(); i++)
+			for(unsigned int i = 0; i < children.size(); i++)
 				children[i]->parent = this;
 			open = false;
 		}

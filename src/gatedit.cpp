@@ -232,7 +232,7 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 
 					int f = (int)ceil(Graphics.brushsize);
 
-					if (clipboard.size() != f)
+					if ((int)clipboard.size() != f)
 						break;
 
 					undostack.push(new cUndoGatHeightEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));

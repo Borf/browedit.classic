@@ -78,6 +78,7 @@ endif
 
 ifeq ($(DEBUG),)
 DEBUG=yes
+DEFINES += -D_DEBUG
 endif
 
 ifeq ($(DEBUG),yes)
@@ -94,13 +95,14 @@ OBJECTS_WM=$(patsubst src/wm/%.cpp,obj/wm_%_$(PLATFORM).o,$(wildcard src/wm/*.cp
 OBJECTS_TINYXML=$(patsubst src/tinyxml/%.cpp,obj/tinyxml_%_$(PLATFORM).o,$(wildcard src/tinyxml/*.cpp))
 OBJECTS_GRFLIB=$(patsubst src/grflib/%.c,obj/grflib_%_$(PLATFORM).o,$(wildcard src/grflib/*.c))
 OBJECTS_ZLIB=$(patsubst src/grflib/zlib/%.c,obj/zlib_%_$(PLATFORM).o,$(wildcard src/grflib/zlib/*.c))
+OBJECTS_TEXLOADERS=$(patsubst src/textureloaders/%.cpp,obj/texloaders_%_$(PLATFORM).o,$(wildcard src/textureloaders/*.cpp))
 
 ifeq ($(PLATFORM),win32)
 # Fix: Win32 build needs this one
 OBJECTS_SRC += obj/src_md5_$(PLATFORM).o obj/src_Script1_rc_$(PLATFORM).o
 endif
 
-OBJECTS_ALL=$(OBJECTS_SRC) $(OBJECTS_WM) $(OBJECTS_TINYXML) $(OBJECTS_GRFLIB) $(OBJECTS_ZLIB)
+OBJECTS_ALL=$(OBJECTS_SRC) $(OBJECTS_WM) $(OBJECTS_TINYXML) $(OBJECTS_GRFLIB) $(OBJECTS_ZLIB) $(OBJECTS_TEXLOADERS)
 
 all: $(TARGET)
 
@@ -135,6 +137,10 @@ obj/grflib_%_$(PLATFORM).o: src/grflib/%.c
 obj/zlib_%_$(PLATFORM).o: src/grflib/zlib/%.c
 	@echo -e "    [1mCC\033[1m\t\033[22;34m$<\033[39m"
 	@$(CC) $(CFLAGS) $(INCLUDES) $(DEFINES) -c -o $@ $<
+
+obj/texloaders_%_$(PLATFORM).o: src/textureloaders/%.cpp
+	@echo -e "    [1mCC\033[1m\t\033[22;34m$<\033[39m"
+	@$(CXX) $(CFLAGS) $(INCLUDES) $(DEFINES) -c -o $@ $<
 
 
 $(TARGET): $(OBJECTS_ALL)

@@ -8,7 +8,7 @@ extern cWindowObject* draggingobject;
 
 cWindowScrollPanel::~cWindowScrollPanel()
 {
-	for(int i = 0; i < objects.size(); i++)
+	for(unsigned int i = 0; i < objects.size(); i++)
 		delete objects[i];
 	objects.clear();
 }
@@ -139,7 +139,7 @@ void cWindowScrollPanel::draw(int cutoffleft, int cutoffright, int cutofftop, in
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	for(int i = 0; i < objects.size(); i++)
+	for(unsigned int i = 0; i < objects.size(); i++)
 	{
 		cWindowObject* o = objects[i];
 		if (//o->px() >= scrollposx && o->px() + o->pw() <= scrollposx + (w-18) &&
@@ -211,7 +211,7 @@ void cWindowScrollPanel::click()
 // in the box
 			parent->moveto(parent->px()+scrollposx+x, parent->py()+scrollposy-y);
 			bool found = false;
-			for(int i = 0; i < objects.size(); i++)
+			for(unsigned int i = 0; i < objects.size(); i++)
 			{
 				if (objects[i]->inobject())
 				{
@@ -277,7 +277,7 @@ void cWindowScrollPanel::drag()
 	else
 	{
 		parent->moveto(parent->px()+scrollposx+x, parent->py()+scrollposy-y);
-		for(int i = 0; i < objects.size(); i++)
+		for(unsigned int i = 0; i < objects.size(); i++)
 		{
 			if (objects[i]->inobject())
 			{

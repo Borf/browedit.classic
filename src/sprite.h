@@ -84,7 +84,7 @@ public:
 
 	void loadbody(string);
 	void loadhead(string);
-	void setextra(int, string);
+	void setextra(unsigned int, string);
 	void addextra(string);
 
 	void draw();

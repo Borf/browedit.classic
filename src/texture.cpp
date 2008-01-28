@@ -40,7 +40,7 @@ cTextureLoaders& GetTextureLoaders()
 	return *l;
 }
 
-vector<cTextureLoader*> cTextureLoaders::loaders;
+//vector<cTextureLoader*> cTextureLoaders::loaders;
 cTexture* cTextureLoaders::load(string filename, bool freedata)
 {
 	cTexture* t = new cTexture(filename, freedata);
@@ -72,10 +72,12 @@ void cTexture::generate()
 
 void cTextureLoaders::load(string filename, cTexture* tex)
 {
+	vector<cTextureLoader*> loaders = GetTextureLoaders().loaders;
+
 	string ext = lcase(filename.substr(filename.rfind(".")));
-	for(int i = 0; i < loaders.size(); i++)
+	for(unsigned int i = 0; i < loaders.size(); i++)
 	{
-		for(int ii = 0; ii < loaders[i]->extensions.size(); ii++)
+		for(unsigned int ii = 0; ii < loaders[i]->extensions.size(); ii++)
 		{
 			if(loaders[i]->extensions[ii] == ext)
 			{

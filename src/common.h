@@ -80,7 +80,7 @@ typedef int32_t intptr_t;
 	#include <vector>
 	using namespace std;
 	extern TiXmlDocument msgtable;
-	extern unsigned long keymap[SDLK_LAST-SDLK_FIRST];
+	extern int keymap[SDLK_LAST-SDLK_FIRST];
 #endif
 
 #include <vector>

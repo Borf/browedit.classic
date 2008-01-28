@@ -83,9 +83,9 @@ int cProcessManagement::globalheightedit_process_events(SDL_Event &event)
 							Graphics.world.cubes[y][x].cell4 += 1;
 						}
 					}
-					for(int y = 0; y < Graphics.world.gattiles.size(); y++)
+					for(unsigned int y = 0; y < Graphics.world.gattiles.size(); y++)
 					{
-						for(int x = 0; x < Graphics.world.gattiles[y].size(); x++)
+						for(unsigned int x = 0; x < Graphics.world.gattiles[y].size(); x++)
 						{
 							if(!Graphics.world.cubes[y/2][x/2].selected)
 								continue;
@@ -112,9 +112,9 @@ int cProcessManagement::globalheightedit_process_events(SDL_Event &event)
 							Graphics.world.cubes[y][x].cell4 -= 1;
 						}
 					}
-					for(int y = 0; y < Graphics.world.gattiles.size(); y++)
+					for(unsigned int y = 0; y < Graphics.world.gattiles.size(); y++)
 					{
-						for(int x = 0; x < Graphics.world.gattiles[y].size(); x++)
+						for(unsigned int x = 0; x < Graphics.world.gattiles[y].size(); x++)
 						{
 							if(!Graphics.world.cubes[y/2][x/2].selected)
 								continue;

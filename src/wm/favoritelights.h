@@ -111,7 +111,7 @@ public:
 			int i;
 			int a = selected;
 			cWindowTree::cTreeNode* node;
-			for(i = 0; i < nodes.size(); i++)
+			for(i = 0; i < (int)nodes.size(); i++)
 			{
 				 node = nodes[i]->getnode(a);
 				 if(node != NULL)

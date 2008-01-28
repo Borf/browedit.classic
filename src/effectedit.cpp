@@ -23,8 +23,6 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 			{
 				if (Graphics.world.effects.size() == 0)
 					break;
-				int minobj = 0;
-				float mindist = 999999;
 				if(Graphics.objectstartdrag)
 				{
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
@@ -60,7 +58,7 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 					break;
 				int minobj = 0;
 				float mindist = 999999;
-				for(int i = 0; i < Graphics.world.effects.size(); i++)
+				for(unsigned int i = 0; i < Graphics.world.effects.size(); i++)
 				{
 					cVector3 d = Graphics.world.effects[i].pos;
 					d.x = d.x;
@@ -112,7 +110,7 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 						break;
 					int minobj = 0;
 					float mindist = 999999;
-					for(int i = 0; i < Graphics.world.effects.size(); i++)
+					for(unsigned int i = 0; i < Graphics.world.effects.size(); i++)
 					{
 						cVector3 d = Graphics.world.effects[i].pos;
 						d.x = d.x;
@@ -130,7 +128,6 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 					Graphics.selectedobject = minobj;
 					char buf[100];
 					sprintf(buf, "%i", Graphics.world.effects[Graphics.selectedobject].type);
-					cMenu* m = effectsmenu->finddata(buf);
 				}
 			}
 			break;
@@ -153,7 +150,7 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 				}
 				break;
 			case SDLK_BACKSPACE:
-				if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.effects.size())
+				if (Graphics.selectedobject > -1 && Graphics.selectedobject < (int)Graphics.world.effects.size())
 				{
 					undostack.push(new cUndoEffectDelete(Graphics.selectedobject));
 					Graphics.world.effects.erase(Graphics.world.effects.begin() + Graphics.selectedobject);

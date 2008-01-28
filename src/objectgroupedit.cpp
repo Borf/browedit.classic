@@ -20,7 +20,7 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 		case SDL_MOUSEMOTION:
 			if (lbuttondown && !rbuttondown && Graphics.groupeditmode)
 			{
-				int i;
+				unsigned int i;
 				if(doneaction)
 				{
 					vector<int> objectsselected;
@@ -81,7 +81,7 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 				{
 					int count = 0;
 					Graphics.selectioncenter = cVector3(0,0,0);
-					for(int i = 0; i < Graphics.world.models.size(); i++)
+					for(unsigned int i = 0; i < Graphics.world.models.size(); i++)
 					{
 						if (Graphics.world.models[i]->selected)
 						{
@@ -112,7 +112,7 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 				bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 
 				
-				int i;
+				unsigned int i;
 				if(!ctrl && !alt)
 				{
 					for(i = 0; i < Graphics.world.models.size(); i++)
@@ -144,7 +144,7 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 					Graphics.groupeditmode = !Graphics.groupeditmode;
 					int count = 0;
 					Graphics.selectioncenter = cVector3(0,0,0);
-					for(int i = 0; i < Graphics.world.models.size(); i++)
+					for(unsigned int i = 0; i < Graphics.world.models.size(); i++)
 					{
 						if (Graphics.world.models[i]->selected)
 						{
@@ -160,7 +160,7 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 					Graphics.groupeditmode = !Graphics.groupeditmode;
 					int count = 0;
 					Graphics.selectioncenter = cVector3(0,0,0);
-					for(int i = 0; i < Graphics.world.models.size(); i++)
+					for(unsigned int i = 0; i < Graphics.world.models.size(); i++)
 					{
 						if (Graphics.world.models[i]->selected)
 						{
@@ -195,14 +195,14 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 				break;
 			case SDLK_PAGEDOWN:
 				{
-					for(int i = 0; i < Graphics.world.models.size(); i++)
+					for(unsigned int i = 0; i < Graphics.world.models.size(); i++)
 						if(Graphics.world.models[i]->selected)
 							Graphics.world.models[i]->pos.y++;
 				}
 				break;
 			case SDLK_PAGEUP:
 				{
-					for(int i = 0; i < Graphics.world.models.size(); i++)
+					for(unsigned int i = 0; i < Graphics.world.models.size(); i++)
 						if(Graphics.world.models[i]->selected)
 							Graphics.world.models[i]->pos.y--;
 				}
@@ -211,7 +211,7 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 				{
 					vector<cUndoObjectsDelete::cObject> objectsdeleted;
 					int idoff = 0;
-					for(int i = 0; i < Graphics.world.models.size(); i++)
+					for(unsigned int i = 0; i < Graphics.world.models.size(); i++)
 					{
 						if (Graphics.world.models[i]->selected)
 						{

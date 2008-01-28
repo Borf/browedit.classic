@@ -325,8 +325,8 @@ MENUCOMMAND(random1)
 
 MENUCOMMAND(random2)
 {
-	int i;
-	int smooth  = 3;//atoi(Graphics.WM.InputWindow("Smoothing level (use 5-10 for decent results)").c_str());
+	unsigned int i;
+	unsigned int smooth  = 3;//atoi(Graphics.WM.InputWindow("Smoothing level (use 5-10 for decent results)").c_str());
 
 	undostack.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
 	float x,y;
@@ -607,7 +607,6 @@ MENUCOMMAND(random2)
 	{
 		for(x = 0; x < Graphics.world.width; x++)
 		{
-			cCube* c = &Graphics.world.cubes[(int)y][(int)x];
 			if(Graphics.world.cubes[(int)y][(int)x].maxh != -99999)
 			{
 				Graphics.world.gattiles[2*(int)y][2*(int)x].type = '\1';
@@ -647,9 +646,8 @@ public:
 
 MENUCOMMAND(random3)
 {
-	int i;
+	unsigned int i;
 	int xx,yy;
-	int smooth  = 3;//atoi(Graphics.WM.InputWindow("Smoothing level (use 5-10 for decent results)").c_str());
 
 	undostack.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
 	float x,y;
@@ -709,7 +707,6 @@ MENUCOMMAND(random3)
 	SDL_GL_SwapBuffers();
 
 	
-	int a = 0;
 	int lasta = 0;
 	int reali = 0;
 
@@ -719,7 +716,7 @@ MENUCOMMAND(random3)
 	vector<cIntQuad> islands;
 
 	bool filledenough = false;
-	int lastsize = 0;
+	unsigned int lastsize = 0;
 	while(!filledenough)
 	{
 		if(lastsize != islands.size())
@@ -829,7 +826,7 @@ MENUCOMMAND(random3)
 
 	for(i = 0; i < islands.size(); i++)
 	{
-		for(int ii = 0; ii < islands[i].connections.size(); ii++)
+		for(unsigned int ii = 0; ii < islands[i].connections.size(); ii++)
 		{
 			Graphics.draw();
 			SDL_GL_SwapBuffers();
@@ -922,7 +919,6 @@ MENUCOMMAND(random3)
 	{
 		for(x = 0; x < Graphics.world.width; x++)
 		{
-			cCube* c = &Graphics.world.cubes[(int)y][(int)x];
 			if(Graphics.world.cubes[(int)y][(int)x].maxh != -99999)
 			{
 				Graphics.world.gattiles[2*(int)y][2*(int)x].type = '\0';
@@ -948,8 +944,8 @@ MENUCOMMAND(random3)
 
 MENUCOMMAND(random4)
 {
-	int i,x,y;
-	int smooth  = 3;//atoi(Graphics.WM.InputWindow("Smoothing level (use 5-10 for decent results)").c_str());
+	unsigned int i;
+	int x,y;
 
 	undostack.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
 
@@ -997,7 +993,6 @@ MENUCOMMAND(random4)
 
 	float xding2 = rand() % 50 + 50;
 	float yding2 = rand() % 50 + 50;
-	float zding2 = rand() % 50 + 50;
 
 	for(y = 0; y < Graphics.world.height; y++)
 	{
@@ -1102,26 +1097,26 @@ MENUCOMMAND(random4)
 MENUCOMMAND(mode)
 {
 	string title = src->title;
-	for(int i = 0; i < mode->items.size(); i++)
+	for(unsigned int i = 0; i < mode->items.size(); i++)
 		mode->items[i]->ticked = false;
 	src->ticked = true;
 
 	if(title == GetMsg("menu/editmode/GLOBALHEIGHTEDIT"))
 	{
 		editmode = MODE_HEIGHTGLOBAL;
-		if (Graphics.texturestart >= Graphics.world.textures.size())
+		if (Graphics.texturestart >= (int)Graphics.world.textures.size())
 			Graphics.texturestart = 0;
 	}
 	else if (title == GetMsg("menu/editmode/DETAILTERRAINEDIT"))
 	{
 		editmode = MODE_HEIGHTDETAIL;
-		if (Graphics.texturestart >= Graphics.world.textures.size())
+		if (Graphics.texturestart >= (int)Graphics.world.textures.size())
 			Graphics.texturestart = 0;
 	}
 	else if (title == GetMsg("menu/editmode/TEXTUREEDIT"))
 	{
 		editmode = MODE_TEXTURE;
-		if (Graphics.texturestart >= Graphics.world.textures.size())
+		if (Graphics.texturestart >= (int)Graphics.world.textures.size())
 			Graphics.texturestart = 0;
 	}
 	else if (title == GetMsg("menu/editmode/WALLEDIT"))
@@ -1131,7 +1126,7 @@ MENUCOMMAND(mode)
 	else if (title == GetMsg("menu/editmode/OBJECTEDIT"))
 	{
 		editmode = MODE_OBJECTS;
-		if (Graphics.texturestart >= Graphics.world.textures.size())
+		if (Graphics.texturestart >= (int)Graphics.world.textures.size())
 			Graphics.texturestart = 0;
 	}
 	else if (title == GetMsg("menu/editmode/GATEDIT"))
@@ -1197,7 +1192,7 @@ MENUCOMMAND(grid)
 
 MENUCOMMAND(mode_detail)
 {
-	int i;
+	unsigned int i;
 	for(i = 0; i < mode->items.size(); i++)
 		mode->items[i]->ticked = (mode->items[i]->title == "Detail Terrain Edit" ? true : false);
 	for(i = 0; i < editdetail->items.size(); i++)
@@ -1210,7 +1205,7 @@ MENUCOMMAND(mode_detail)
 }
 MENUCOMMAND(speed)
 {
-	for(int i =0 ; i < speed->items.size(); i++)
+	for(unsigned int i =0 ; i < speed->items.size(); i++)
 		speed->items[i]->ticked = false;
 	src->ticked = true;
 	paintspeed = atof(src->title.c_str());
@@ -1357,7 +1352,7 @@ MENUCOMMAND(quadtree)
 			Graphics.world.cubes[y][x].minh = 99999;
 		}
 
-	for(int i = 0; i < Graphics.world.models.size(); i++)
+	for(unsigned int i = 0; i < Graphics.world.models.size(); i++)
 	{
 		Log(3,0,GetMsg("CALCMODEL"), i, Graphics.world.models.size(), (i/(float)Graphics.world.models.size())*100);
 		Graphics.world.models[i]->draw(false,false,true);
@@ -1445,7 +1440,8 @@ MENUCOMMAND(dolightmapsnoshadow)
 
 MENUCOMMAND(dolightmaps2)
 {
-	int x,y,i;
+	int x,y;
+	unsigned int i;
 
 	Log(3,0,"Starting Lightmap Clearing");
 
@@ -1574,7 +1570,7 @@ MENUCOMMAND(dolightmaps2)
 													10*y+(10/6.0)*yy);
 					
 					int from = 0;
-					int to = Graphics.world.lights.size();
+					unsigned int to = Graphics.world.lights.size();
 					if(lightonly)
 					{
 						from = Graphics.selectedobject;
@@ -1593,7 +1589,7 @@ MENUCOMMAND(dolightmaps2)
 
 						if(l->givesshadow && !noshadow)
 						{
-							for(int ii = 0; ii < Graphics.world.models.size() && !obstructed; ii++)
+							for(unsigned int ii = 0; ii < Graphics.world.models.size() && !obstructed; ii++)
 							{
 								if(Graphics.world.models[ii]->collides(worldpos, cVector3(l->pos.x*5, l->pos.y, l->pos.z*5)))
 									obstructed = true;
@@ -2021,7 +2017,7 @@ MENUCOMMAND(loadlightmaps)
 
 MENUCOMMAND(clearobjects)
 {
-	int i;
+	unsigned int i;
 	vector<cUndoObjectsDelete::cObject> objectsdeleted;
 	for(i = 0; i < Graphics.world.models.size(); i++)
 	{
@@ -2148,7 +2144,7 @@ MENUCOMMAND(cleanuplightmaps)
 	map<int, bool, less<int> > used;
 	for(i = 0; i < Graphics.world.lightmaps.size(); i++)
 	{
-		for(int ii = 0; ii < i; ii++)
+		for(unsigned int ii = 0; ii < i; ii++)
 		{
 			if(memcmp(Graphics.world.lightmaps[i]->buf, Graphics.world.lightmaps[ii]->buf, 256) == 0)
 			{
@@ -2308,16 +2304,16 @@ MENUCOMMAND(cleantextures)
 	vector<bool> used;
 	int i;
 	used.resize(Graphics.world.textures.size(), false);
-	for(i = 0; i < Graphics.world.tiles.size(); i++)
+	for(i = 0; i < (int)Graphics.world.tiles.size(); i++)
 	{
 		used[Graphics.world.tiles[i].texture] = true;
 	}
 	
-	for(i = used.size()-1; i > -1; i--)
+	for(i = (int)used.size()-1; i >= 0; i--)
 	{
 		if (!used[i])
 		{
-			for(int ii = 0; ii < Graphics.world.tiles.size(); ii++)
+			for(unsigned int ii = 0; ii < Graphics.world.tiles.size(); ii++)
 			{
 				if(Graphics.world.tiles[i].texture > i)
 					Graphics.world.tiles[i].texture--;
@@ -2357,7 +2353,7 @@ MENUCOMMAND(ambientlight)
 
 MENUCOMMAND(cleareffects)
 {
-	int i;
+	unsigned int i;
 	vector<int> objectsdeleted;
 	for(i = 0; i < Graphics.world.effects.size(); i++)
 		objectsdeleted.push_back(i);
@@ -2606,9 +2602,8 @@ MENUCOMMAND(exportmapfiles)
 
 MENUCOMMAND(random5)
 {
-	int i;
+	unsigned int i;
 	int xx,yy;
-	int smooth  = 3;//atoi(Graphics.WM.InputWindow("Smoothing level (use 5-10 for decent results)").c_str());
 
 	undostack.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
 	float x,y;
@@ -2666,7 +2661,6 @@ MENUCOMMAND(random5)
 	
 
 	
-	int a = 0;
 	int lasta = 0;
 	int reali = 0;
 
@@ -2676,7 +2670,7 @@ MENUCOMMAND(random5)
 	vector<cIntQuad> islands;
 
 	bool filledenough = false;
-	int oldsize = 0;
+	unsigned int oldsize = 0;
 	while(!filledenough)
 	{
 		if(oldsize != islands.size())
@@ -2784,7 +2778,7 @@ MENUCOMMAND(random5)
 	{
 		Graphics.draw();
 		SDL_GL_SwapBuffers();
-		for(int ii = 0; ii < islands[i].connections.size(); ii++)
+		for(unsigned int ii = 0; ii < islands[i].connections.size(); ii++)
 		{
 
 			x = islands[islands[i].connections[ii]].x;
@@ -2968,9 +2962,9 @@ void readscript(string filename)
 							s->pos.x = x+0.5;
 							s->pos.z = y+0.5;
 							s->pos.y = 0;
-							if(y < Graphics.world.gattiles.size())
+							if(y < (int)Graphics.world.gattiles.size())
 							{
-								if(x < Graphics.world.gattiles[y].size())
+								if(x < (int)Graphics.world.gattiles[y].size())
 								{
 									s->pos.y = -Graphics.world.gattiles[y][x].cell1;
 								}
@@ -2998,7 +2992,7 @@ void readscript(string filename)
 
 MENUCOMMAND(eascript)
 {
-	for(int i = 0; i < Graphics.world.sprites.size(); i++)
+	for(unsigned int i = 0; i < Graphics.world.sprites.size(); i++)
 		delete Graphics.world.sprites[i];
 
 	Graphics.world.sprites.clear();
@@ -3029,7 +3023,7 @@ void checknpcs()
 	scriptmap = Graphics.world.filename;
 	scriptmap = scriptmap.substr(scriptmap.rfind("\\")+1);
 
-	int i,ii;
+	unsigned int i,ii;
 	for(i = 0; i < Graphics.world.sprites.size(); i++)
 	{
 		Graphics.camerapointer.x = -5*Graphics.world.sprites[i]->pos.x;
@@ -3276,7 +3270,7 @@ MENUCOMMAND(removefavlight)
 		int i;
 		int a = tree->selected;
 		cWindowTree::cTreeNode* node;
-		for(i = 0; i < tree->nodes.size(); i++)
+		for(i = 0; i < (int)tree->nodes.size(); i++)
 		{
 			 node = tree->nodes[i]->getnode(a);
 			 if(node != NULL)
@@ -3287,7 +3281,7 @@ MENUCOMMAND(removefavlight)
 
 		if(node->parent == NULL)
 		{
-			for(i = 0; i < tree->nodes.size(); i++)
+			for(i = 0; i < (int)tree->nodes.size(); i++)
 			{
 				if(tree->nodes[i] == node)
 				{
@@ -3298,7 +3292,7 @@ MENUCOMMAND(removefavlight)
 		}
 		else
 		{
-			for(i = 0; i < node->parent->children.size(); i++)
+			for(i = 0; i < (int)node->parent->children.size(); i++)
 			{
 				if(node->parent->children[i] == node)
 				{
@@ -3325,7 +3319,7 @@ MENUCOMMAND(removefavlight)
 		n->Parent()->RemoveChild(n);
 		
 
-		for(i = 0; i < tree->nodes.size(); i++)
+		for(i = 0; i < (int)tree->nodes.size(); i++)
 			delete tree->nodes[i];
 		tree->nodes.clear();
 
@@ -3355,7 +3349,7 @@ MENUCOMMAND(addfavlight)
 		int i;
 		int a = tree->selected;
 		cWindowTree::cTreeNode* node;
-		for(i = 0; i < tree->nodes.size(); i++)
+		for(i = 0; i < (int)tree->nodes.size(); i++)
 		{
 			 node = tree->nodes[i]->getnode(a);
 			 if(node != NULL)
@@ -3415,7 +3409,7 @@ MENUCOMMAND(addfavlight)
 		delete windownode;
 		root->parent = NULL;
 
-		for(i = 0; i < tree->nodes.size(); i++)
+		for(i = 0; i < (int)tree->nodes.size(); i++)
 			delete tree->nodes[i];
 		tree->nodes.clear();
 		tree->nodes.push_back(root);
@@ -3439,7 +3433,7 @@ MENUCOMMAND(addfavlightcat)
 		int i;
 		int a = tree->selected;
 		cWindowTree::cTreeNode* node;
-		for(i = 0; i < tree->nodes.size(); i++)
+		for(i = 0; i < (int)tree->nodes.size(); i++)
 		{
 			 node = tree->nodes[i]->getnode(a);
 			 if(node != NULL)
@@ -3487,7 +3481,7 @@ MENUCOMMAND(addfavlightcat)
 		delete windownode;
 		root->parent = NULL;
 
-		for(i = 0; i < tree->nodes.size(); i++)
+		for(i = 0; i < (int)tree->nodes.size(); i++)
 			delete tree->nodes[i];
 		tree->nodes.clear();
 		tree->nodes.push_back(root);

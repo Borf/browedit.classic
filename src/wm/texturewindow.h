@@ -94,7 +94,7 @@ class cTextureWindow : public cWindow
 
 		void click()
 		{
-			int i;
+			unsigned int i;
 			cWindowTree::click();
 			cWindowScrollPanel* box = (cWindowScrollPanel*)parent->objects["textures"];
 			for(i = 0; i < box->objects.size(); i++)
@@ -157,7 +157,7 @@ public:
 		vector<cWindowTree::cTreeNode*> nodes;
 		map<string, cWindowTree::cTreeNode*, less<string> > lookup;
 
-		for(int i = 0; i < texturefiles.size(); i++)
+		for(unsigned int i = 0; i < texturefiles.size(); i++)
 		{
 			cFile* pFile = fs.open(texturefiles[i]);
 			if(pFile == NULL)
@@ -173,7 +173,7 @@ public:
 				string cat = pre.substr(0, pre.rfind("/"));
 				string name = pre.substr(pre.rfind("/")+1);
 
-				for(int ii = 0; ii < translations.size(); ii++)
+				for(unsigned int ii = 0; ii < translations.size(); ii++)
 				{
 					name = replace(name, translations[ii].first, translations[ii].second);
 					cat = replace(cat, translations[ii].first, translations[ii].second);
@@ -249,7 +249,7 @@ public:
 
 		int x = 0;
 		int y = 0;
-		for(int i = 0; i < panel->objects.size(); i++)
+		for(unsigned int i = 0; i < panel->objects.size(); i++)
 		{
 			panel->objects[i]->moveto(x,y);
 			panel->objects[i]->resizeto(iconsize,iconsize);

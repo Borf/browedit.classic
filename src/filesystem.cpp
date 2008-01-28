@@ -24,7 +24,7 @@ int cFileSystem::LoadFile(string grffilename)
 		return -1;
 	}
 	
-	for(int i =0 ; i < grffile->grf->nfiles; i++)
+	for(unsigned int i =0 ; i < grffile->grf->nfiles; i++)
 	{
 		string filename = replace(lcase(rodir + grffile->grf->files[i].name),"/","\\");
 		grffile->files[filename] = new cFile();
@@ -62,7 +62,7 @@ cFile* cFileSystem::open(string filename)
 	}
 
 	filename = replace(filename,"/","\\");
-	for(int i = 0; i < locations.size(); i++)
+	for(unsigned int i = 0; i < locations.size(); i++)
 	{
 		if(locations[i]->files.find(lcase(filename)) != locations[i]->files.end())
 		{
@@ -259,7 +259,7 @@ bool cFileSystem::isfile(string filename)
 	}
 
 	filename = replace(filename,"/","\\");
-	for(int i = 0; i < locations.size(); i++)
+	for(unsigned int i = 0; i < locations.size(); i++)
 		if(locations[i]->files.find(lcase(filename)) != locations[i]->files.end())
 			return true;
 	return false;

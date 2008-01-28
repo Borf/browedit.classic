@@ -51,6 +51,7 @@ public:
 	class cConfirmWindowCaller
 	{
 	public:
+		virtual ~cConfirmWindowCaller() { };
 		cConfirmWindowCaller() {};
 		virtual void Ok() = 0;
 		virtual void Cancel() {};

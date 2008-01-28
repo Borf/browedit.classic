@@ -39,7 +39,8 @@ void cWorld::load()
 	Graphics.selectedobject = -1;
 	draggingwindow = NULL;
 	draggingobject = NULL;
-	int i,x,y;
+	unsigned int i;
+	unsigned int x,y;
 	if(light == NULL)
 	{
 		light = new cTextureModel();
@@ -144,7 +145,7 @@ void cWorld::load()
 	else
 		version = 0;
 
-	int nTextures = 0;
+	unsigned int nTextures = 0;
 	if(version > 0)
 	{
 		pFile->read(buf, 20);
@@ -183,14 +184,14 @@ void cWorld::load()
 		gridSizeCell = *((int*)(buf+12));
 
 
-		int nLightmaps = *((int*)buf);
+		unsigned int nLightmaps = *((int*)buf);
 		for(i = 0; i < nLightmaps; i++)
 		{
 			cLightmap* l = new cLightmap();
 			pFile->read(l->buf, 256);
 			lightmaps.push_back(l);
 		}
-		long nTiles;
+		unsigned int nTiles;
 		pFile->read((char*)&nTiles, 4);
 		for(i = 0; i < nTiles; i++)
 		{
@@ -208,19 +209,19 @@ void cWorld::load()
 			t.texture = ((BYTE)buf[32]) | (((BYTE)buf[33])<<8);
 			t.lightmap = ((BYTE)buf[34]) | (((BYTE)buf[35])<<8);
 
-			if(t.lightmap < 0 || t.lightmap > lightmaps.size())
+			if(t.lightmap < 0 || t.lightmap > (int)lightmaps.size())
 				t.lightmap = 0;
-			if(t.texture < 0 || t.texture > textures.size())
+			if(t.texture < 0 || t.texture > (int)textures.size())
 				t.texture = 0;
 			memcpy(t.color, buf+36, 4);
 			tiles.push_back(t);
 		}
 
-		for(y = 0; y < height; y++)
+		for(y = 0; y < (unsigned int)height; y++)
 		{
 			vector<cCube> row;
 			row.clear();
-			for(x = 0; x < width; x++)
+			for(x = 0; x < (unsigned int)width; x++)
 			{
 				cCube c;
 				c.maxh = -99999;
@@ -258,10 +259,10 @@ void cWorld::load()
 	{
 		cLightmap* l = new cLightmap;
 		lightmaps.push_back(l);
-		for(y = 0; y < height; y++)
+		for(y = 0; y < (unsigned int)height; y++)
 		{
 			vector<cCube> row;
-			for(x = 0; x < width; x++)
+			for(x = 0; x < (unsigned int)width; x++)
 			{
 				pFile->read(buf, 132);
 				cCube c;
@@ -354,9 +355,9 @@ void cWorld::load()
 	cRealLightMap* m = NULL;
 	reallightmaps.resize(height, vector<cRealLightMap*>(width, m));
 
-	for(y = 0; y < height; y+=21)
+	for(y = 0; y < (unsigned int)height; y+=21)
 	{
-		for(x = 0; x < width; x+=21)
+		for(x = 0; x < (unsigned int)width; x+=21)
 		{
 			cRealLightMap* l = new cRealLightMap();
 			l->x = x;
@@ -364,9 +365,9 @@ void cWorld::load()
 			reallightmaps[y][x] = l;
 		}
 	}
-	for(y = 0; y < height; y++)
+	for(y = 0; y < (unsigned int)height; y++)
 	{
-		for(x = 0; x < width; x++)
+		for(x = 0; x < (unsigned int)width; x++)
 		{
 			cRealLightMap* l = reallightmaps[y - (y%21)][x - (x%21)];
 			if(l != NULL)
@@ -419,7 +420,7 @@ void cWorld::load()
 		
 
 		pFile->read(buf, 4);
-		long nObjects = *((long*)buf);
+		unsigned int nObjects = *((unsigned int*)buf);
 
 
 		for(i = 0; i < nObjects; i++)
@@ -555,7 +556,7 @@ void cWorld::load()
 		ambientlight.diffuse = cVector3(1,1,1);
 		ambientlight.shadow = cVector3(1,1,1);
 		
-		long nObjects = *((long*)(buf+212));
+		unsigned int nObjects = *((unsigned int*)(buf+212));
 
 		for(i = 0; i < nObjects; i++)
 		{
@@ -615,10 +616,10 @@ void cWorld::load()
 
 	pFile->read(buf, 14);
 	
-	for(y = 0; y < height*2; y++)
+	for(y = 0; y < (unsigned int)height*2; y++)
 	{
 		vector<cGatTile> row;
-		for(x = 0; x < width*2; x++)
+		for(x = 0; x < (unsigned int)width*2; x++)
 		{
 			cGatTile g;
 			pFile->read((char*)&g.cell1, 4);
@@ -876,7 +877,7 @@ void cWorld::save()
 					cubes[y][x].minh = 99999;
 				}
 
-			for(int i = 0; i < models.size(); i++)
+			for(unsigned int i = 0; i < models.size(); i++)
 			{
 				if(i % 10 == 0)
 					Log(3,0,GetMsg("world/QUADTREECALC"), i, Graphics.world.models.size(), (i/(float)Graphics.world.models.size())*100);
@@ -905,14 +906,14 @@ void cWorld::save()
 
 		int nTextures = textures.size();
 		pFile.write((char*)&nTextures, 4);
-		int i = 80;
+		unsigned int i = 80;
 		pFile.write((char*)&i, 4);
 
 
-		int rnd = rand() % textures.size();
+		unsigned int rnd = rand() % textures.size();
 		while(textures[rnd]->RoFilename.length() > 35)
 			rnd = rand() % textures.size();
-		int ii;
+		unsigned int ii;
 		for(i = 0; i < textures.size(); i++)
 		{
 			pFile.write(textures[i]->RoFilename.c_str(), textures[i]->RoFilename.length());
@@ -924,7 +925,7 @@ void cWorld::save()
 			}
 			else
 			{
-				for(int ii = 0; ii < 40-textures[i]->RoFilename.length(); ii++)
+				for(ii = 0; ii < 40-textures[i]->RoFilename.length(); ii++)
 					pFile.put('\0');
 			}
 			pFile.write(textures[i]->RoFilename2.c_str(), textures[i]->RoFilename2.length());
@@ -993,7 +994,7 @@ void cWorld::save()
 		ZeroMemory(fname, 50);
 		strcpy(fname, fname2.substr(fname2.rfind("\\")+1).c_str());
 
-		int i;
+		unsigned int i;
 		ofstream pFile((string(filename) + ".rsw").c_str(), ios_base::out | ios_base::binary);
 		pFile.write("GRSW\2\1", 6);
 		for(i = 0; i < 40; i++) // ini file
@@ -1039,7 +1040,7 @@ void cWorld::save()
 
 		pFile.write((char*)&count, 4);
 
-		int rnd = 0;
+		unsigned int rnd = 0;
 		if (models.size() != 0)
 			rnd = rand() % models.size();
 
@@ -1064,7 +1065,7 @@ void cWorld::save()
 			pFile.write((char*)&f, 4); // unknown >_<
 
 			pFile.write(m->rofilename.c_str(), m->rofilename.length());
-			for(int ii = 0; ii < 40-m->rofilename.length(); ii++)
+			for(unsigned int ii = 0; ii < 40-m->rofilename.length(); ii++)
 				pFile.put('\0');	 // filename
 			
 			pFile.write(buf, 40); // reserved
@@ -1298,7 +1299,7 @@ void cWorld::save()
 	{
 		TiXmlDocument doc;
 		TiXmlElement headnode("sprites");
-		for(int i = 0; i < sprites.size(); i++)
+		for(unsigned int i = 0; i < sprites.size(); i++)
 		{
 			TiXmlElement el("sprite");
 			char buf[100];
@@ -1323,7 +1324,7 @@ void cWorld::save()
 				head.InsertEndChild(TiXmlText(sprites[i]->head->filename.substr(rodir.length()).c_str()));
 				el.InsertEndChild(head);
 			}
-			for(int ii = 0; ii < sprites[i]->extras.size(); ii++)
+			for(unsigned int ii = 0; ii < sprites[i]->extras.size(); ii++)
 			{
 				if(sprites[i]->extras[ii] != NULL)
 				{
@@ -1362,7 +1363,8 @@ void cWorld::draw()
 {
 	if(!loaded)
 		return;
-	int x,y,i;
+	unsigned int x,y,i;
+	
 	int ww = Graphics.w();
 	ww -= 256;
 	int hh = Graphics.h()-20;
@@ -1428,17 +1430,17 @@ void cWorld::draw()
 		glColor4f(1,1,1,1);
 
 
-	for(x = 0; x < width; x++)
+	for(x = 0; x < (unsigned int)width; x++)
 	{
-		for(y = 0; y < height; y++)
+		for(y = 0; y < (unsigned int)height; y++)
 		{
 			cCube* c = &cubes[y][x];
 			if(!Graphics.frustum.CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 10))
 				continue;
-			if (c->tileup > -1 && c->tileup < tiles.size())
+			if (c->tileup > -1 && c->tileup < (int)tiles.size())
 			{
 				cTile* t = &tiles[c->tileup];
-				if(t->texture >= textures.size())
+				if(t->texture >= (int)textures.size())
 					t->texture = 0;
 				if(t->texture < 0)
 					t->texture = 0;
@@ -1480,10 +1482,10 @@ void cWorld::draw()
 				glEnable(GL_TEXTURE_2D);
 				glColor3f(1,1,1);
 			}
-			if (c->tileaside != -1 && c->tileaside < tiles.size())
+			if (c->tileaside != -1 && c->tileaside < (int)tiles.size())
 			{
 				cTile* t = &tiles[c->tileaside];
-				if(t->texture >= textures.size())
+				if(t->texture >= (int)textures.size())
 					break;
 				int texture = textures[t->texture]->texid();
 				glBindTexture(GL_TEXTURE_2D, texture);
@@ -1499,10 +1501,10 @@ void cWorld::draw()
 					glTexCoord2f(t->u4, 1-t->v4); glVertex3f(x*10+10,-(c+1)->cell1,(height-y)*10);
 				glEnd();
 			}
-			if (c->tileside != -1 && y < height-1 && c->tileside < tiles.size())
+			if (c->tileside != -1 && (int)y < height-1 && c->tileside < (int)tiles.size())
 			{
 				cTile* t = &tiles[c->tileside];
-				if(t->texture >= textures.size())
+				if(t->texture >= (int)textures.size())
 					break;
  				int texture = textures[t->texture]->texid();
 				glBindTexture(GL_TEXTURE_2D, texture);
@@ -1526,16 +1528,16 @@ void cWorld::draw()
 	glEnable(GL_BLEND);
 	if(Graphics.showlightmaps)
 	{
-		for(x = 0; x < width; x++)
+		for(x = 0; (int)x < width; x++)
 		{
-			for(y = 0; y < height; y++)
+			for(y = 0; (int)y < height; y++)
 			{
 				cCube* c = &cubes[y][x];
 				if(!Graphics.frustum.CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 10))
 					continue;
 				if (c->tileup != -1)
 				{
-					cTile* t = &tiles[c->tileup];
+//					cTile* t = &tiles[c->tileup];
 //					int lightmap = lightmaps[t->lightmap]->texid();
 //					int lightmap2 = lightmaps[t->lightmap]->texid2();
 					if(reallightmaps[y][x] == NULL)
@@ -1564,7 +1566,7 @@ void cWorld::draw()
 					glEnd();
 				}
 				
-				if (c->tileaside != -1 && c->tileaside < tiles.size())
+				if (c->tileaside != -1 && c->tileaside < (int)tiles.size())
 				{
 					cTile* t = &tiles[c->tileaside];
 					int lightmap = lightmaps[t->lightmap]->texid();
@@ -1588,7 +1590,7 @@ void cWorld::draw()
 						glTexCoord2f(0.875,0.875);					glVertex3f(x*10+10,-(c+1)->cell1,(height-y)*10);
 					glEnd();
 				}
-				if (c->tileside != -1 && y < height-1 && c->tileside < tiles.size())
+				if (c->tileside != -1 && (int)y < height-1 && c->tileside < (int)tiles.size())
 				{
 					cTile* t = &tiles[c->tileside];
 					int lightmap = lightmaps[t->lightmap]->texid();
@@ -1733,7 +1735,7 @@ void cWorld::draw()
 			{
 				for(y = posy-(int)floor(s/2.0f); y < posy+ceil(s/2.0f); y++)
 				{
-					if (y < 0 || y >= height*2 || x < 0 || x >= width*2)
+					if (y < 0 || y >= (unsigned int)height*2 || x < 0 || x >= (unsigned int)width*2)
 						continue;
 					cGatTile* c = &gattiles[y][x];
 					glBegin(GL_LINE_LOOP);
@@ -1807,7 +1809,7 @@ void cWorld::draw()
 						continue;
 					cTile t;
 					t.texture = Graphics.texturestart + ((int)Graphics.selectionstart.y - 32) / 288;
-					if(t.texture >= Graphics.world.textures.size())
+					if(t.texture >= (int)Graphics.world.textures.size())
 						break;
 					if (Graphics.texturerot == 0)
 					{
@@ -1914,9 +1916,9 @@ void cWorld::draw()
 			glDisable(GL_TEXTURE_2D);
 			glBegin(GL_LINES);
 			glColor3f(0,0,1);
-			for(x = 1; x < width-1; x++)
+			for(x = 1; x < (unsigned int)width-1; x++)
 			{
-				for(y = 1; y < height-1; y++)
+				for(y = 1; y < (unsigned int)height-1; y++)
 				{
 					cCube* c = &cubes[y][x];
 					if(!Graphics.frustum.CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 10))
@@ -1979,7 +1981,7 @@ void cWorld::draw()
 		{
 			for(y = posy-(int)floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
 			{
-				if (y >= height || y < 0 || x < 0 || x >= width)
+				if (y >= (unsigned int)height || y < 0 || x < 0 || x >= (unsigned int)width)
 					continue;
 				cCube* c = &cubes[y][x];
 				if(!Graphics.frustum.CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 10))
@@ -2046,7 +2048,7 @@ void cWorld::draw()
 		glScalef(1,1,-1);
 		for(i = 0; i < models.size(); i++)
 		{
-			if(i == Graphics.selectedobject && editmode == MODE_OBJECTS)
+			if((int)i == Graphics.selectedobject && editmode == MODE_OBJECTS)
 				glColor4f(1,0,0, Graphics.transparentobjects ? 0.2f : 1);
 			else
 				glColor4f(1,1,1,Graphics.transparentobjects ? 0.2f : 1);
@@ -2098,7 +2100,7 @@ void cWorld::draw()
 			{
 				cVector3 pos = models[i]->pos;
 
-				if(Graphics.selectedobject == i)
+				if(Graphics.selectedobject == (int)i)
 					glColor4f(1,1,0,0.5);
 				else
 					glColor4f(1,0,0,0.5);
@@ -2179,7 +2181,7 @@ void cWorld::draw()
 		glScalef(1,1,-1);
 		for(i = 0; i < models.size(); i++)
 		{
-			if(i == Graphics.selectedobject && editmode == MODE_OBJECTS)
+			if((int)i == Graphics.selectedobject && editmode == MODE_OBJECTS)
 				glColor4f(1,0,0, Graphics.transparentobjects ? 0.2f : 1);
 			else
 				glColor4f(1,1,1, Graphics.transparentobjects ? 0.2f : 1);
@@ -2243,7 +2245,7 @@ void cWorld::draw()
 		glEnable(GL_BLEND);
 		for(i = 0; i < effects.size(); i++)
 		{
-			if (i == Graphics.selectedobject)
+			if ((int)i == Graphics.selectedobject)
 			{
 				glDisable(GL_TEXTURE_2D);
 				glColor3f(1,1,0);
@@ -2275,7 +2277,7 @@ void cWorld::draw()
 			glColor3f(1,1,1);
 			light2->draw();
 
-			if (i == Graphics.selectedobject)
+			if ((int)i == Graphics.selectedobject)
 			{
 				glDisable(GL_TEXTURE_2D);
 				glColor3f(1,1,0);
@@ -2284,7 +2286,7 @@ void cWorld::draw()
 					glVertex3f(5*lights[i].pos.x,-999, 5*(2*height-lights[i].pos.z));
 				glEnd();
 			}
-			if(i == Graphics.selectedobject || Graphics.showalllights)
+			if((int)i == Graphics.selectedobject || Graphics.showalllights)
 			{
 				glColor4f(lights[i].color.x,lights[i].color.y,lights[i].color.z,0.3f);
 
@@ -2354,7 +2356,7 @@ void cWorld::draw()
 	{
 		for(i = 0; i < sprites.size(); i++)
 		{
-			if(editmode == MODE_SPRITE && i == Graphics.selectedobject)
+			if(editmode == MODE_SPRITE && (int)i == Graphics.selectedobject)
 				glColor4f(1,0,0,1);
 			else
 				glColor4f(1,1,1,1);
@@ -2389,13 +2391,6 @@ void cWorld::draw()
 		glDisable(GL_BLEND);
 	}
 
-
-
-
-	int c = 1;
-	int d = 1;
-
-
 	if(Graphics.showdot)
 	{
 		glColor4f(1,1,0,1);
@@ -2406,7 +2401,7 @@ void cWorld::draw()
 		glEnd();
 	}
 
-	cVector3 colors[] = {cVector3(1,1,1), cVector3(1,0,0), cVector3(1,1,0), cVector3(1,0,1), cVector3(0,1,0), cVector3(0,1,1), cVector3(0,0,1) };
+//	cVector3 colors[] = {cVector3(1,1,1), cVector3(1,0,0), cVector3(1,1,0), cVector3(1,0,1), cVector3(0,1,0), cVector3(0,1,1), cVector3(0,0,1) };
 
 
 	glDisable(GL_TEXTURE_2D);
@@ -2486,7 +2481,8 @@ void cWorld::clean()
 {
 	int count = 0 ;
 
-	int i,ii,xx,yy;
+	unsigned int i,ii;
+	int xx,yy;
 	map<int, bool, less<int> > tilesused;
 
 	cCube* c;
@@ -2513,11 +2509,11 @@ void cWorld::clean()
 				for(int xx = 0; xx < width; xx++)
 				{
 					c = &cubes[yy][xx];
-					if (c->tileup > i)
+					if (c->tileup > (int)i)
 						c->tileup--;
-					if (c->tileside > i)
+					if (c->tileside > (int)i)
 						c->tileside--;
-					if (c->tileaside > i)
+					if (c->tileaside > (int)i)
 						c->tileaside--;
 
 				}
@@ -2561,7 +2557,7 @@ void cWorld::clean()
 	}
 
 	count = 0;
-	for(i = lightmaps.size()-1; i > -1; i--)
+	for(i = lightmaps.size()-1; i >= 0; i--)
 	{
 		if (lightmapsused.find(i) == lightmapsused.end())
 		{
@@ -2574,7 +2570,7 @@ void cWorld::clean()
 			}
 			for(ii = 0; ii < tiles.size(); ii++)
 			{
-				if(tiles[ii].lightmap > i)
+				if(tiles[ii].lightmap > (int)i)
 					tiles[ii].lightmap--;
 			}
 
@@ -2595,7 +2591,7 @@ void cWorld::clean()
 
 void cWorld::unload()
 {
-	int i;
+	unsigned int i;
 	for(i = 0; i < models.size(); i++)
 		delete models[i];
 	for(i = 0; i < textures.size(); i++)
@@ -2867,7 +2863,6 @@ void cWorld::savelightmap()
 				{
 					if (cubes[y][x].tileup != -1)
 					{
-						int lightmap = tiles[cubes[y][x].tileup].lightmap;
 						imgdata[3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8+8+1];
 						imgdata[3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy+1] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8+8+1];
 						imgdata[3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy+2] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[xx+yy*8+8+1];
@@ -2889,7 +2884,6 @@ void cWorld::savelightmap()
 				{
 					if (cubes[y][x].tileup != -1)
 					{
-						int lightmap = tiles[cubes[y][x].tileup].lightmap;
 						imgdata[3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[64+3*(xx+yy*8+8+1)];
 						imgdata[3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy+1] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[64+3*(xx+yy*8+8+1)+1];
 						imgdata[3*6*x + 6*6*3*width * y + 3*xx + 6*3*width*yy+2] = lightmaps[tiles[cubes[y][x].tileup].lightmap]->buf[64+3*(xx+yy*8+8+1)+2];
@@ -3013,7 +3007,7 @@ void cCube::calcnormal()
 void cWorld::importarcturus()
 {
 	int x,y;
-	int i;
+	unsigned int i;
 	if(light == NULL)
 	{
 		light = new cTextureModel();
@@ -3076,7 +3070,7 @@ void cWorld::importarcturus()
 	Graphics.camerapointer = cVector2(-width*5,-height*5);
 
 
-	int nTextures = *((int*)(buf));
+	unsigned int nTextures = *((unsigned int*)(buf));
 	for(i = 0; i < nTextures; i++)
 	{
 		pFile->read(buf, 80);
@@ -3234,7 +3228,7 @@ unsigned char rawData[82] =
 	
 
 	pFile->read(buf, 4);
-	long nObjects = *((long*)buf);
+	unsigned int nObjects = *((unsigned int*)buf);
 
 
 	for(i = 0; i < nObjects; i++)

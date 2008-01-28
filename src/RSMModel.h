@@ -45,13 +45,13 @@ public:
 	vector<int> textures;
 	float trans[22];
 
-	int nVertices;
+	unsigned int nVertices;
 	vector<cVector3> vertices;
-	int nTexCoord;
+	unsigned int nTexCoord;
 	vector<cVector3> texcoords;
-	int nFaces;
+	unsigned int nFaces;
 	vector<cRSMModelFace> faces;
-	int nFrameAnimations;
+	unsigned int nFrameAnimations;
 	vector<cRSMModelFrame> frames;
 	cBoundingbox bb;
 	cBoundingbox realbb;

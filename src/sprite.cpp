@@ -47,7 +47,7 @@ cSprite::~cSprite()
 		delete head;
 	if(body != NULL)
 		delete body;
-	for(int i = 0; i < extras.size(); i++)
+	for(unsigned int i = 0; i < extras.size(); i++)
 	{
 		if(extras[i] != NULL)
 			delete extras[i];
@@ -81,7 +81,7 @@ void cSprite::addextra(string filename)
 
 }
 
-void cSprite::setextra(int id, string filename)
+void cSprite::setextra(unsigned int id, string filename)
 {
 	while(extras.size() <= id)
 		extras.push_back(NULL);
@@ -101,7 +101,7 @@ cSprite::cActSpr::cActSpr()
 }
 cSprite::cActSpr::~cActSpr()
 {
-	int i;
+	unsigned int i;
 	for(i = 0; i < frames.size(); i++)
 		delete frames[i];
 	for(i = 0; i < actions.size(); i++)
@@ -120,10 +120,10 @@ void cSprite::cActSpr::load(string fname)
 	}
 	pFile->get(); pFile->get();
 	BYTE version1 = pFile->get();
-	BYTE version2 = pFile->get();
+	pFile->get();//	BYTE version2 = pFile->get();
 	BYTE framecount = pFile->get();
 	pFile->get();
-	BYTE framecount32 = pFile->get();
+	pFile->get(); //BYTE framecount32 = pFile->get();
 	pFile->get();
 
 	for(i = 0; i < framecount; i++)
@@ -290,7 +290,7 @@ void cSprite::draw()
 {
 	if(body == NULL)
 		return;
-	int i;
+	unsigned int i;
 	glPushMatrix();
 	glTranslatef(5*pos.x, pos.y, Graphics.world.height*10-5*pos.z);
 
@@ -299,7 +299,7 @@ void cSprite::draw()
 	glGetFloatv(GL_MODELVIEW_MATRIX, modelview);
 
 	for(i = 0; i < 3; i++)
-		for(int j = 0; j < 3; j++)
+		for(unsigned int j = 0; j < 3; j++)
 			modelview[i*4+j] = ((i == j) ? 1.0 : 0.0);
 	glLoadMatrixf(modelview);
 	glScalef(scale,scale,1);
@@ -348,7 +348,7 @@ void cSprite::draw()
 	glBindTexture(GL_TEXTURE_2D, body->frames[frame]->texid());
 	float width = body->frames[frame]->w;
 	float height = body->frames[frame]->h;
-	float bodyheight = height;
+//	float bodyheight = height;
 
 	width/=2;
 	height/=2;
@@ -448,12 +448,12 @@ cSprite::cActSpr::cFrame::~cFrame()
 
 cSprite::cActSpr::cAction::~cAction()
 {
-	for(int i = 0; i < frames.size(); i++)
+	for(unsigned int i = 0; i < frames.size(); i++)
 		delete frames[i];
 }
 
 cSprite::cActSpr::cAction::cFrame::~cFrame()
 {
-	for(int i = 0; i < subframes.size(); i++)
+	for(unsigned int i = 0; i < subframes.size(); i++)
 		delete subframes[i];
 }

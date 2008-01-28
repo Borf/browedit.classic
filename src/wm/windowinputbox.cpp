@@ -72,7 +72,7 @@ void cWindowInputBox::draw(int cutoffleft, int cutoffright, int cutofftop, int c
 	}
 
 	string t = text;
-	if (startindex > t.length())
+	if (startindex > (int)t.length())
 		startindex = 0;
 	t = t.substr(startindex);
 	int l = t.size();

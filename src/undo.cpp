@@ -1,6 +1,6 @@
 #include "undo.h"
 
-extern int undosize;
+extern unsigned int undosize;
 
 void cUndoStack::undo()
 {

@@ -23,8 +23,6 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 			{
 				if (Graphics.world.sprites.size() == 0)
 					break;
-				int minobj = 0;
-				float mindist = 999999;
 				if(Graphics.objectstartdrag)
 				{
 					if(doneaction)
@@ -66,7 +64,7 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 					break;
 				int minobj = 0;
 				float mindist = 999999;
-				for(int i = 0; i < Graphics.world.sprites.size(); i++)
+				for(unsigned int i = 0; i < Graphics.world.sprites.size(); i++)
 				{
 					cVector3 d = Graphics.world.sprites[i]->pos;
 					d.x = d.x;
@@ -117,7 +115,7 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 						break;
 					int minobj = 0;
 					float mindist = 999999;
-					for(int i = 0; i < Graphics.world.sprites.size(); i++)
+					for(unsigned int i = 0; i < Graphics.world.sprites.size(); i++)
 					{
 						cVector3 d = Graphics.world.sprites[i]->pos;
 						d.x = d.x;
@@ -145,7 +143,7 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 			switch (event.key.keysym.sym)
 			{
 			case SDLK_BACKSPACE:
-				if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.sprites.size())
+				if (Graphics.selectedobject > -1 && Graphics.selectedobject < (int)Graphics.world.sprites.size())
 				{
 					//undostack.push(new cUndoSpriteDelete(Graphics.selectedobject));
 					Graphics.world.sprites.erase(Graphics.world.sprites.begin() + Graphics.selectedobject);
@@ -155,9 +153,8 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 			case SDLK_RETURN:
 				if (Graphics.selectedobject != -1 && Graphics.WM.getwindow(WT_SPRITE) == NULL)
 				{
-					if(Graphics.selectedobject >= Graphics.world.sprites.size())
+					if(Graphics.selectedobject >= (int)Graphics.world.sprites.size())
 						break;
-					cSprite* l = Graphics.world.sprites[Graphics.selectedobject];
 
 					cWindow* w = new cSpriteWindow(Graphics.WM.texture, &Graphics.WM.font);
 
@@ -165,7 +162,7 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 						((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->loadhead(Graphics.world.sprites[Graphics.selectedobject]->head->filename);
 					((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->loadbody(Graphics.world.sprites[Graphics.selectedobject]->body->filename);
 
-					for(int i = 0; i < Graphics.world.sprites[Graphics.selectedobject]->extras.size(); i++)
+					for(unsigned int i = 0; i < Graphics.world.sprites[Graphics.selectedobject]->extras.size(); i++)
 					{
 						if(Graphics.world.sprites[Graphics.selectedobject]->extras[i] != NULL)
 						{

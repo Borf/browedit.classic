@@ -8,7 +8,7 @@ extern cGraphics Graphics;
 
 void cWindowTabPanel::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {
-	int i;
+	unsigned int i;
 	GLfloat colors[4];
 	glGetFloatv(GL_CURRENT_COLOR, colors);
 	int xx, yy;
@@ -28,7 +28,7 @@ void cWindowTabPanel::draw(int cutoffleft, int cutoffright, int cutofftop, int c
 		float right = (w/(float)tabs.size()) * (i+1);
 		if (overtabs && mousex - parent->px() - xx > left && mousex - parent->px() - xx < right)
 			glColor3f(0.65f, 0.65f, 1.0f);
-		else if (i == selectedtab)
+		else if ((int)i == selectedtab)
 			glColor3f(0.85f, 0.85f, 1.0f);
 		else
 			glColor4fv(colors);

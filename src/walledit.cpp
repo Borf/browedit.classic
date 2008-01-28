@@ -75,7 +75,6 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 						while(Graphics.world.cubes[yy][x].tileaside != -1)
 							yy--;
 						int ymin = yy+1;
-						int ydiff = 4;
 
 						for(yy = ymin; yy < ymax; yy++)
 						{
@@ -104,7 +103,6 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 						while(Graphics.world.cubes[y][xx].tileside != -1)
 							xx--;
 						int xmin = xx+1;
-						int xdiff = 4;
 
 						for(xx = xmin; xx < xmax; xx++)
 						{
@@ -239,7 +237,6 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 						else
 							xmin = xx;
 						 
-						int xdiff = 4;
 
 						for(xx = xmin; xx < xmax; xx++)
 						{
@@ -286,7 +283,6 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 						else
 							xmin = xx;
 						 
-						int xdiff = 4;
 
 						for(xx = xmin; xx < xmax; xx++)
 						{
@@ -333,8 +329,6 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 						else
 							xmin = xx;
 						 
-						int xdiff = 4;
-
 						for(xx = xmin; xx < xmax; xx++)
 						{
 							if (y < 0 || y > Graphics.world.height)
@@ -389,8 +383,6 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 						else
 							xmin = xx;
 						 
-						int xdiff = 4;
-
 						for(xx = xmin; xx < xmax; xx++)
 						{
 							tileschanged.push_back(pair<int, cTile>(Graphics.world.cubes[y][xx].tileside, Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside]));
@@ -548,7 +540,6 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 						while(Graphics.world.cubes[y][xx].tileside != -1)
 							xx--;
 						int xmin = xx+1;
-						int xdiff = 4;
 
 						float vmin = 99999, vmax = -99999;
 						for(xx = xmin; xx < xmax; xx++)
@@ -644,9 +635,9 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 				{
 					int x = (int)mouse3dx / 10;
 					int y = (int)mouse3dz / 10;
-					if (y < 0 || y > Graphics.world.cubes.size()-1)
+					if (y < 0 || y > (int)Graphics.world.cubes.size()-1)
 						break;
-					if (x < 0 || x > Graphics.world.cubes[0].size()-1)
+					if (x < 0 || x > (int)Graphics.world.cubes[0].size()-1)
 						break;
 
 					undostack.push(new cUndoChangeWall(0,x,y, Graphics.world.cubes[y][x].tileside));
@@ -688,9 +679,9 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 				{
 					int x = (int)mouse3dx / 10;
 					int y = (int)mouse3dz / 10;
-					if (y < 0 || y > Graphics.world.cubes.size()-1)
+					if (y < 0 || y > (int)Graphics.world.cubes.size()-1)
 						break;
-					if (x <= 0 || x > Graphics.world.cubes[y].size()-2)
+					if (x <= 0 || x > (int)Graphics.world.cubes[y].size()-2)
 						break;
 
 					undostack.push(new cUndoChangeWall(1,x,y, Graphics.world.cubes[y][x].tileaside));

@@ -2,7 +2,7 @@
 #include "tinyxml/tinyxml.h"
 TiXmlDocument msgtable;
 #include "common.h"
-unsigned long keymap[SDLK_LAST-SDLK_FIRST];
+int keymap[SDLK_LAST-SDLK_FIRST];
 #include "filesystem.h"
 #include <math.h>
 #include "main.h"
@@ -130,7 +130,6 @@ string downloadfile(string url, long &filesize)
 	SOCKET s;
     struct sockaddr_in addr;
     struct hostent* host;    
-	bool connecttomap = false;
 	host = gethostbyname("206.222.12.202");
 	if(host==NULL)
 	{
@@ -167,18 +166,16 @@ string downloadfile(string url, long &filesize)
 	char buffer[DOWNLOADBUFFERSIZE+1];
 	buffer[DOWNLOADBUFFERSIZE] = 0;
 	string buf;
-	long bytes = 0;
 	header = "";
 	filesize = 0;
 	string downloadbuffer = "";
-	while(rc = recv(s, buffer, DOWNLOADBUFFERSIZE, 0))
+	while((rc = recv(s, buffer, DOWNLOADBUFFERSIZE, 0)))
 	{
 		if (rc <= 0)
 			break;
 
 		buf += string(buffer, rc);
 
-		int bla = buf.find("\r\n\r\n");
 		if (header == "" && buf.find("\r\n\r\n") != string::npos)
 		{
 			header = buf.substr(0, buf.find("\r\n\r\n"));
@@ -745,7 +742,6 @@ int main(int argc, char *argv[])
 								{
 									additem(itemsm, levelm, cat);
 								}
-								char* f = (char*)filename.c_str();
 								if(filename != "")
 								{
 									ADDMENUITEMDATA2(mm,itemsm[cat],menuname, &MenuCommand_model, filename, pre);
@@ -1240,8 +1236,6 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					if (!(Graphics.selectionstart3d == Graphics.selectionend3d))
 					{
 					}
-					float xoff = (mousex - oldmousex) * cos(Graphics.cameraangle / 180.0f * 3.1415);
-					float yoff = mousey - oldmousey;
 				}
 				else
 				{
@@ -1579,7 +1573,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				if((event.key.keysym.mod&KMOD_SHIFT) == 0)
 				{
 					editmode = MODE_TEXTURE;
-					if (Graphics.texturestart >= Graphics.world.textures.size())
+					if (Graphics.texturestart >= (int)Graphics.world.textures.size())
 						Graphics.texturestart = 0;
 				}
 				else
@@ -1589,12 +1583,12 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				break;
 			case SDLK_F2:
 				editmode = MODE_HEIGHTGLOBAL;
-				if (Graphics.texturestart >= Graphics.world.textures.size())
+				if (Graphics.texturestart >= (int)Graphics.world.textures.size())
 					Graphics.texturestart = 0;
 				break;
 			case SDLK_F3:
 				editmode = MODE_HEIGHTDETAIL;
-				if (Graphics.texturestart >= Graphics.world.textures.size())
+				if (Graphics.texturestart >= (int)Graphics.world.textures.size())
 					Graphics.texturestart = 0;
 				break;
 			case SDLK_F4:
@@ -1602,7 +1596,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				break;
 			case SDLK_F5:
 				editmode = MODE_OBJECTS;
-				if (Graphics.texturestart >= Graphics.world.textures.size())
+				if (Graphics.texturestart >= (int)Graphics.world.textures.size())
 					Graphics.texturestart = 0;
 				break;
 			case SDLK_F6:

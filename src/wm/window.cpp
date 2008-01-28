@@ -513,7 +513,6 @@ void cWindow::scrolldown()
 		cWindowObject* o = i->second->inobject();
 		if (o != NULL)
 		{
-			cWindowObject* oo = i->second;
 			i->second->scrolldown();
 			break;
 		}

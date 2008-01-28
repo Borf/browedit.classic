@@ -137,7 +137,7 @@ int cProcessManagement::detailheightedit_process_events(SDL_Event &event)
 				{
 					int posx = (int)mouse3dx / 10;
 					int posy = (int)mouse3dz / 10;
-					if (clipboard.size() != brushsize)
+					if ((int)clipboard.size() != brushsize)
 						break;
 
 					undostack.push(new cUndoHeightEdit(posx-(int)floor(brushsize/2.0f), posy-(int)floor(brushsize/2.0f), posx+(int)ceil(brushsize/2.0f), posy+(int)ceil(brushsize/2.0f)));

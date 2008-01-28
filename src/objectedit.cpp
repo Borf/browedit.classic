@@ -27,8 +27,6 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 		case SDL_MOUSEMOTION:
 			if (lbuttondown && !rbuttondown)
 			{
-				int minobj = 0;
-				float mindist = 999999;
 				if(Graphics.objectstartdrag && Graphics.selectedobject != -1)
 				{
 					if (doneaction)
@@ -75,7 +73,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 			{
 				int minobj = 0;
 				float mindist = 999999;
-				for(int i = 0; i < Graphics.world.models.size(); i++)
+				for(unsigned int i = 0; i < Graphics.world.models.size(); i++)
 				{
 					cVector3 d = Graphics.world.models[i]->pos;
 					d.x = d.x;
@@ -113,7 +111,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 				{
 					int minobj = 0;
 					float mindist = 999999;
-					for(int i = 0; i < Graphics.world.models.size(); i++)
+					for(unsigned int i = 0; i < Graphics.world.models.size(); i++)
 					{
 						cVector3 d = Graphics.world.models[i]->pos;
 						d.x = d.x;
@@ -134,7 +132,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 				if(w != NULL)
 				{
 					w->userfunc(NULL);
-					if(Graphics.selectedobject >= 0 && Graphics.selectedobject < Graphics.world.models.size()-1)
+					if(Graphics.selectedobject >= 0 && Graphics.selectedobject < (int)Graphics.world.models.size()-1)
 					{
 						cModelOverViewWindow::cModelOverViewTree* tree = (cModelOverViewWindow::cModelOverViewTree*)w->objects["list"];
 						tree->getobject(Graphics.world.models[Graphics.selectedobject]);
@@ -146,7 +144,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 			switch (event.key.keysym.sym)
 			{
 			case SDLK_UP:
-				if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.models.size())
+				if (Graphics.selectedobject > -1 && Graphics.selectedobject < (int)Graphics.world.models.size())
 				{
 					undostack.push(new cUndoChangeObject(Graphics.selectedobject));
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
@@ -161,7 +159,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 				}						
 				break;
 			case SDLK_DOWN:
-				if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.models.size())
+				if (Graphics.selectedobject > -1 && Graphics.selectedobject < (int)Graphics.world.models.size())
 				{
 					undostack.push(new cUndoChangeObject(Graphics.selectedobject));
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
@@ -176,7 +174,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 				}
 				break;
 			case SDLK_RIGHT:
-				if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.models.size())
+				if (Graphics.selectedobject > -1 && Graphics.selectedobject < (int)Graphics.world.models.size())
 				{
 					undostack.push(new cUndoChangeObject(Graphics.selectedobject));
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
@@ -191,7 +189,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 				}						
 				break;
 			case SDLK_LEFT:
-				if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.models.size())
+				if (Graphics.selectedobject > -1 && Graphics.selectedobject < (int)Graphics.world.models.size())
 				{
 					undostack.push(new cUndoChangeObject(Graphics.selectedobject));
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
@@ -245,7 +243,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 				}
 				break;
 			case SDLK_PAGEDOWN:
-				if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.models.size())
+				if (Graphics.selectedobject > -1 && Graphics.selectedobject < (int)Graphics.world.models.size())
 				{
 					undostack.push(new cUndoChangeObject(Graphics.selectedobject));
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
@@ -260,7 +258,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 				}						
 				break;
 			case SDLK_PAGEUP:
-				if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.models.size())
+				if (Graphics.selectedobject > -1 && Graphics.selectedobject < (int)Graphics.world.models.size())
 				{
 					undostack.push(new cUndoChangeObject(Graphics.selectedobject));
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
@@ -309,7 +307,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 				}
 				break;
 			case SDLK_BACKSPACE:
-				if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.models.size())
+				if (Graphics.selectedobject > -1 && Graphics.selectedobject < (int)Graphics.world.models.size())
 				{
 					undostack.push(new cUndoObjectDelete(Graphics.selectedobject));
 					delete Graphics.world.models[Graphics.selectedobject];

@@ -44,5 +44,4 @@ void cJpegTextureLoader::load(char* filedata,int datlen, cTexture* tex)
 		}
 	}
 	gdImageDestroy(pImageData);
-
 }

@@ -80,6 +80,7 @@ class cRSMEditWindow : public cWindow
 			if(!Graphics.WM.ConfirmWindow("Are you sure you want to overwrite this file?"))
 				return;
 			int i;
+			unsigned int ii;
 			cFile* pFile = fs.open(((cRSMEditWindow*)parent)->filename);
 
 			char buffer[100];
@@ -114,11 +115,11 @@ class cRSMEditWindow : public cWindow
 			cWindowModel* model = ((cWindowModel*)parent->objects["model"]);
 			nTextures = model->model->textures.size();
 			pFile2.write((char*)&nTextures, 4);
-			for(i = 0; i < model->model->textures.size(); i++)
+			for(ii = 0; ii < model->model->textures.size(); ii++)
 			{
 				char bufje[40];
 				ZeroMemory(bufje, 40);
-				string t = model->model->textures[i]->getfilename();
+				string t = model->model->textures[ii]->getfilename();
 				t = t.substr(rodir.length()+13);
 				strcpy(bufje, t.c_str());
 				pFile2.write(bufje, 40);
@@ -264,7 +265,7 @@ class cRSMEditWindow : public cWindow
 		}
 		void draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 		{
-			int i;
+			unsigned int i;
 			if(cutoffbottom < 0)
 				cutoffbottom = 0;
 			glEnable(GL_DEPTH_TEST);
@@ -528,7 +529,6 @@ public:
 
 	void open()
 	{
-		int i;
 		if (objects.find("model") != objects.end())
 		{
 			delete objects["model"];
@@ -545,7 +545,7 @@ public:
 
 		cWindowScrollPanel* scroll = (cWindowScrollPanel*)objects["scroll"];
 
-		for(i = 0; i < scroll->objects.size(); i++)
+		for(unsigned int i = 0; i < scroll->objects.size(); i++)
 			delete scroll->objects[i];
 		scroll->objects.clear();
 

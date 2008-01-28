@@ -216,7 +216,7 @@ public:
 			node = nn;
 			if(node != NULL)
 			{
-				int i;
+				unsigned int i;
 				tree->selected = 0;
 				vector<cWindowTree::cTreeNode*> values;
 				for(i = 0; i < tree->nodes.size(); i++)
@@ -233,16 +233,16 @@ public:
 					tree->liststart = 0;
 
 				int yy = tree->realy()+h-5-12;
-				while(yy+10 > tree->realy() && i < (int)values.size())
+				while(yy+10 > tree->realy() && i < values.size())
 				{
 					i++;
 					yy-=12;
 				}
 
-				if(tree->ph()/12 > values.size())
+				if(tree->ph()/12 > (int)values.size())
 					tree->liststart = 0;
 
-				if(tree->liststart >= values.size() - (tree->ph()/12))
+				if(tree->liststart >= (int)values.size() - (tree->ph()/12))
 					tree->liststart = values.size() - (tree->ph()/12);
 
 
@@ -292,7 +292,7 @@ public:
 
 		void onchange()
 		{
-			int i;
+			unsigned int i;
 			int a = selected;
 			cWindowTree::cTreeNode* node;
 			for(i = 0; i < nodes.size(); i++)
@@ -396,7 +396,7 @@ public:
 		}
 		void click()
 		{
-			if(Graphics.world.sprites.size() > Graphics.selectedobject && Graphics.selectedobject != -1)
+			if((int)Graphics.world.sprites.size() > Graphics.selectedobject && Graphics.selectedobject != -1)
 			{
 
 				if(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->head != NULL)
@@ -408,7 +408,7 @@ public:
 				}
 				Graphics.world.sprites[Graphics.selectedobject]->loadbody(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->body->filename);
 
-				for(int i = 0; i < ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras.size(); i++)
+				for(unsigned int i = 0; i < ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras.size(); i++)
 				{
 					if(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[i] != NULL)
 					{

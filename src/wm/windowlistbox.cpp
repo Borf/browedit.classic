@@ -158,7 +158,7 @@ bool cWindowListBox::onkeydown(int key, bool shift)
 		}
 	
 		selected++;
-		if (liststart < values.size() - (h/12))
+		if (liststart < (int)values.size() - (h/12))
 			liststart++;
 		return true;
 	}

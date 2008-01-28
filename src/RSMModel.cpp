@@ -9,7 +9,7 @@ extern cVector3 lightpos;
 
 void cRSMModel::load(string fname)
 {
-	int i;
+	unsigned int i;
 //	Log(3,0,"Loading %s", fname.c_str());
 	recalcbb = true;
 	filename = fname;
@@ -28,7 +28,7 @@ void cRSMModel::load(string fname)
 
 	pFile->read(buffer, 4); // ntextures;
 
-	long ntextures = *((long*)buffer);
+	unsigned long ntextures = *((long*)buffer);
 
 	animated = false;
 	if(ntextures < 1 || ntextures > 1000)
@@ -57,7 +57,7 @@ void cRSMModel::load(string fname)
 	for(i = 1; i < meshes.size(); i++)
 	{
 		bool found = false;
-		for(int j = 0; j < meshes.size(); j++)
+		for(unsigned int j = 0; j < meshes.size(); j++)
 		{
 			if (i != j && meshes[i]->name == meshes[j]->name)
 			{
@@ -81,7 +81,7 @@ void cRSMModel::load(string fname)
 
 void cRSMModelMesh::load(cFile* pFile, cRSMModel* model, bool main)
 {
-	int i;
+	unsigned int i;
 	char buffer[100];
 	pFile->read(buffer, 40);			//	naam
 	name = buffer;
@@ -95,13 +95,13 @@ void cRSMModelMesh::load(cFile* pFile, cRSMModel* model, bool main)
 	if(main)
 		pFile->read((char*)&ftodo, 40);			// ftodo
 
-	int nTextures;
+	unsigned int nTextures;
 	pFile->read((char*)&nTextures, 4);
 	if (nTextures > 1000 || nTextures < 0)
 		return;
 	for(i = 0; i < nTextures; i++)
 	{
-		int id;
+		unsigned int id;
 		pFile->read((char*)&id, 4);
 		if (id < 0 || id > model->textures.size())
 			textures.push_back(0);
@@ -166,10 +166,9 @@ void MatrixMultVect(const float *M, cVector3 Vin, float *Vout)
 
 void cRSMModelMesh::boundingbox(float* ptransf, bool only)
 {
-	bool main = (ptransf == NULL);
 	GLfloat Rot[16];
-	int i;
-	int j;
+	unsigned int i;
+	unsigned int j;
 
 	Rot[0] = trans[0];
 	Rot[1] = trans[1];
@@ -317,15 +316,15 @@ void cRSMModel::draw(bool checkfrust, bool dodraw, bool setheight, bool dolightm
 	{
 		bb2.bbmin[0] = bb2.bbmin[1] = bb2.bbmin[2] = 999999;
 		bb2.bbmax[0] = bb2.bbmax[1] = bb2.bbmax[2] = -999999;
-		for(int i = 0; i < meshes.size(); i++)
+		for(unsigned int i = 0; i < meshes.size(); i++)
 		{
-			for(int ii = 0; ii < 3; ii++)
+			for(unsigned int ii = 0; ii < 3; ii++)
 			{
 				bb2.bbmin[ii] = min(bb2.bbmin[ii], meshes[i]->realbb.bbmin[ii]);
 				bb2.bbmax[ii] = max(bb2.bbmax[ii], meshes[i]->realbb.bbmax[ii]);
 			}
 		}
-		for (int j=0; j < 3; j++)
+		for (unsigned int j=0; j < 3; j++)
 			bb2.bbrange[j] = (bb2.bbmax[j]+bb2.bbmin[j])/2.0;
 	}
 
@@ -337,9 +336,9 @@ void cRSMModel::draw2(cBoundingbox* box, int mesh, float* transf, bool only, boo
 	glPushMatrix();
 	meshes[mesh]->draw(box,transf, meshes.size() == 1, this, dodraw, setheight, dolightmaps);
 
-	for(int i = 0; i < meshes.size(); i++)
+	for(unsigned int i = 0; i < meshes.size(); i++)
 	{
-		if(i != mesh && fathers[i] == mesh)
+		if((int)i != mesh && fathers[i] == mesh)
 			draw2((mesh == 0) ? box : NULL, i, meshes[mesh]->trans, only, dodraw, setheight, dolightmaps);
 	}
 	glPopMatrix();
@@ -356,7 +355,7 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 	bool main = (ptransf == NULL);
 	GLfloat Rot[16];
 	GLfloat Ori[16];
-	int i;
+	unsigned int i;
 
 	Rot[0] = trans[0];
 	Rot[1] = trans[1];
@@ -379,9 +378,9 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 	Rot[15] = 1.0;
 
 	if(frames.size() > 0)
-	{	int i;
+	{	unsigned int i;
 		int current = 0;
-		int next;
+		unsigned int next;
 		GLfloat t;
 
 		for (i = 0; i < frames.size(); i++) {
@@ -534,9 +533,7 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 					for(float yi = 0; yi < xi; yi+=0.1f)
 					{
 						
-						int y1 = (int)ceil((v1.z+xinc.z*xi+yinc.z*yi)/10.0);
 						int y2 = (int)floor((v1.z+xinc.z*xi+yinc.z*yi)/10.0);
-						int x1 = (int)ceil((v1.x+xinc.x*xi+yinc.x*yi)/10.0);
 						int x2 = (int)floor((v1.x+xinc.x*xi+yinc.x*yi)/10.0);
 
 					//	if (y1 < 0 || y2 < 0 || x1 < 0 || x2 < 0 ||
@@ -636,7 +633,7 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 
 void cRSMModel::boundingbox()
 {
-	int i;
+	unsigned int i;
 	meshes[0]->boundingbox(NULL, meshes.size() == 1);
 	
 
@@ -650,7 +647,7 @@ void cRSMModel::boundingbox()
 	{
 		bb.bbmax[i] = meshes[0]->bb.bbmax[i];
 		bb.bbmin[i] = meshes[0]->bb.bbmin[i];
-		for(int j = 1; j < meshes.size(); j++)
+		for(unsigned int j = 1; j < meshes.size(); j++)
 		{
 			if (fathers[j] == 0)
 			{
@@ -666,7 +663,7 @@ void cRSMModel::boundingbox()
 
 cRSMModel::~cRSMModel()
 {
-	int i;
+	unsigned int i;
 	for(i = 0; i < meshes.size(); i++)
 	{
 		delete meshes[i];
@@ -846,9 +843,9 @@ bool cRSMModel::collides2(cBoundingbox* box, int mesh, float* transf, bool only,
 	if(b)
 		return true;
 
-	for(int i = 0; i < meshes.size(); i++)
+	for(unsigned int i = 0; i < meshes.size(); i++)
 	{
-		if(i != mesh && fathers[i] == mesh)
+		if((int)i != mesh && fathers[i] == mesh)
 		{
 			b = collides2((mesh == 0) ? box : NULL, i, meshes[mesh]->trans, only, start, end);
 			if (b)
@@ -868,7 +865,7 @@ bool cRSMModelMesh::collides(cBoundingbox* box, float* ptransf, bool only, cRSMM
 	bool main = (ptransf == NULL);
 	GLfloat Rot[16];
 	GLfloat Ori[16];
-	int i;
+	unsigned int i;
 
 	Rot[0] = trans[0];
 	Rot[1] = trans[1];
@@ -891,9 +888,10 @@ bool cRSMModelMesh::collides(cBoundingbox* box, float* ptransf, bool only, cRSMM
 	Rot[15] = 1.0;
 
 	if(frames.size() > 0)
-	{	int i;
+	{	
+		unsigned int i;
 		int current = 0;
-		int next;
+		unsigned int next;
 		GLfloat t;
 
 		for (i = 0; i < frames.size(); i++) {

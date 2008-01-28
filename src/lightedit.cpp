@@ -77,8 +77,6 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 			{
 				if (Graphics.world.lights.size() == 0)
 					break;
-				int minobj = 0;
-				float mindist = 999999;
 				if(Graphics.objectstartdrag)
 				{
 					if(doneaction)
@@ -121,7 +119,7 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 					break;
 				int minobj = 0;
 				float mindist = 999999;
-				for(int i = 0; i < Graphics.world.lights.size(); i++)
+				for(unsigned int i = 0; i < Graphics.world.lights.size(); i++)
 				{
 					cVector3 d = Graphics.world.lights[i].pos;
 					d.x = d.x;
@@ -170,7 +168,7 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 						break;
 					int minobj = 0;
 					float mindist = 999999;
-					for(int i = 0; i < Graphics.world.lights.size(); i++)
+					for(unsigned int i = 0; i < Graphics.world.lights.size(); i++)
 					{
 						cVector3 d = Graphics.world.lights[i].pos;
 						d.x = d.x;
@@ -236,7 +234,7 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 			switch (event.key.keysym.sym)
 			{
 			case SDLK_BACKSPACE:
-				if (Graphics.selectedobject > -1 && Graphics.selectedobject < Graphics.world.lights.size())
+				if (Graphics.selectedobject > -1 && Graphics.selectedobject < (int)Graphics.world.lights.size())
 				{
 					undostack.push(new cUndoLightDelete(Graphics.selectedobject));
 					Graphics.world.lights.erase(Graphics.world.lights.begin() + Graphics.selectedobject);
@@ -251,7 +249,7 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 			case SDLK_RETURN:
 				if (Graphics.selectedobject != -1)
 				{
-					if(Graphics.selectedobject < Graphics.world.lights.size())
+					if(Graphics.selectedobject < (int)Graphics.world.lights.size())
 					{
 						cLight* l = &Graphics.world.lights[Graphics.selectedobject];
 

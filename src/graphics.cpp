@@ -172,7 +172,7 @@ int cGraphics::draw(bool drawwm)
 			}
 			else
 			{
-				if (i+texturestart >= world.textures.size())
+				if (i+texturestart >= (int)world.textures.size())
 					continue;
 				glBindTexture(GL_TEXTURE_2D, world.textures[i+texturestart]->texid());
 			}
@@ -542,7 +542,7 @@ void cGraphics::KillGLWindow(void)								// Properly Kill The Window
 
 	for(i = 0; i < watercount; i++)
 	{
-		for(int ii = 0; ii < watertextures[i].size(); ii++)
+		for(unsigned int ii = 0; ii < watertextures[i].size(); ii++)
 		{
 			TextureCache.unload(watertextures[i][ii]);
 		}
@@ -678,11 +678,11 @@ void cMenu::draw()
 				w = maxlen;
 			else
 				updatedchildrenpos = true;
-			for(int ii = 0; ii < items.size(); ii++)
+			for(unsigned int ii = 0; ii < items.size(); ii++)
 			{
 				items[ii]->x = x+maxlen;
 				items[ii]->y = y+ii*20;
-				if (items[ii]->y + items[ii]->items.size()*20 > Graphics.h())
+				if (items[ii]->y + (int)items[ii]->items.size()*20 > Graphics.h())
 					items[ii]->y = Graphics.h() - items[ii]->items.size()*20;
 			}
 		}
@@ -723,13 +723,14 @@ cMenu* cMenu::inwindow(int xx, int yy)
 
 void cMenu::click(int xx, int yy)
 {
-	int i,ii,m;
+	unsigned int i,ii;
+	int m;
 	if (drawstyle == 0)
 	{
-		for(i = 0; i < (int)items.size(); i++)
+		for(i = 0; i < items.size(); i++)
 		{
 			m = items[i]->w;
-			for(ii = 0; ii < (int)items[i]->items.size(); ii++)
+			for(ii = 0; ii < items[i]->items.size(); ii++)
 			{
 				if (Graphics.font->textlen(items[i]->items[ii]->title.c_str()) > m-50)
 					m = Graphics.font->textlen(items[i]->items[ii]->title.c_str())+50;
@@ -749,7 +750,7 @@ void cMenu::click(int xx, int yy)
 		{
 			if (parent->drawstyle == 0)
 			{
-				for(i = 0; i < (int)items.size(); i++)
+				for(i = 0; i < items.size(); i++)
 				{
 					if (Graphics.font->textlen(items[i]->title.c_str()) > m-50)
 						m = Graphics.font->textlen(items[i]->title.c_str())+50;
@@ -757,7 +758,7 @@ void cMenu::click(int xx, int yy)
 				}
 			}
 		}
-		for(i = 0; i < (int)items.size(); i++)
+		for(i = 0; i < items.size(); i++)
 		{
 
 			if (mousex > x && mousex < x+m && (mousey) > y+20*i && (mousey) < y+20*i+20)
@@ -778,7 +779,7 @@ void cMenu::click(int xx, int yy)
 				else
 				{
 					opened = true;
-					for(int ii = 0; ii < items.size(); ii++)
+					for(unsigned int ii = 0; ii < items.size(); ii++)
 					{
 						if(i != ii)
 							items[ii]->closemenu();
@@ -844,11 +845,11 @@ bool cmp(cMenu* a, cMenu* b)
 
 cMenu* cMenu::getnext(cMenu* curitem)
 {
-	for(int i = 0; i < items.size(); i++)
+	for(unsigned int i = 0; i < items.size(); i++)
 	{
 		if(items[i] == curitem)
 		{
-			if (i < ((int)items.size()) - 1)
+			if (i < (items.size()) - 1)
 			{
 				if (items[i+1]->item)
 					return items[i+1];
@@ -864,7 +865,7 @@ cMenu* cMenu::getnext(cMenu* curitem)
 
 cMenu* cMenu::getprev(cMenu* curitem)
 {
-	for(int i = 0; i < items.size(); i++)
+	for(unsigned int i = 0; i < items.size(); i++)
 	{
 		if(items[i] == curitem)
 		{
@@ -912,7 +913,7 @@ cMenu* cMenu::finddata(string d)
 		if(((cMenuItem*)this)->data == d)
 			return this;
 	}
-	for(int i = 0; i < items.size(); i++)
+	for(unsigned int i = 0; i < items.size(); i++)
 	{
 		cMenu* m = items[i]->finddata(d);
 		if (m != NULL)

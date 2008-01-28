@@ -16,6 +16,7 @@ enum eUndoItem
 class cUndoItem
 {
 public:
+	virtual ~cUndoItem() {};
 	eUndoItem	type;
 	virtual void undo() = 0;
 };
@@ -82,7 +83,7 @@ public:
 	cUndoChangeObjects(vector<int> ob)
 	{
 		type = UNDO_OTHER;
-		for(int i = 0; i < ob.size(); i++)
+		for(unsigned int i = 0; i < ob.size(); i++)
 		{
 			cObject o;
 			o.pos = Graphics.world.models[ob[i]]->pos;
@@ -94,7 +95,7 @@ public:
 	}
 	void undo()
 	{
-		int i;
+		unsigned int i;
 		for(i = 0; i < objects.size(); i++)
 		{
 			Graphics.world.models[objects[i].objectid]->pos = objects[i].pos;
@@ -140,9 +141,9 @@ public:
 	}
 	void undo()
 	{
-		for(int yy = 0; yy < data.size(); yy++)
+		for(int yy = 0; yy < (int)data.size(); yy++)
 		{
-			for(int xx = 0; xx < data[yy].size(); xx++)
+			for(int xx = 0; xx < (int)data[yy].size(); xx++)
 			{
 				if (!(yy+y < 0 || yy+y >= Graphics.world.height || xx+x < 0 || xx+x >= Graphics.world.width))
 					Graphics.world.cubes[y+yy][x+xx].tileup = data[yy][xx];
@@ -184,9 +185,9 @@ public:
 	}
 	void undo()
 	{
-		for(int yy = 0; yy < data.size(); yy++)
+		for(int yy = 0; yy < (int)data.size(); yy++)
 		{
-			for(int xx = 0; xx < data[yy].size(); xx++)
+			for(int xx = 0; xx < (int)data[yy].size(); xx++)
 			{
 				if (!(yy+y < 0 || yy+y >= Graphics.world.height || xx+x < 0 || xx+x >= Graphics.world.width))
 				{
@@ -220,7 +221,7 @@ public:
 			for(int xx = xfrom; xx < xto; xx++)
 			{
 				cCubeHeight c;
-				if (!(yy < 0 || yy >= Graphics.world.gattiles.size() || xx < 0 || xx >= Graphics.world.gattiles[0].size()))
+				if (!(yy < 0 || yy >= (int)Graphics.world.gattiles.size() || xx < 0 || xx >= (int)Graphics.world.gattiles[0].size()))
 				{
 					c.cell1 = Graphics.world.gattiles[yy][xx].cell1;
 					c.cell2 = Graphics.world.gattiles[yy][xx].cell2;
@@ -234,9 +235,9 @@ public:
 	}
 	void undo()
 	{
-		for(int yy = 0; yy < data.size(); yy++)
+		for(unsigned int yy = 0; yy < data.size(); yy++)
 		{
-			for(int xx = 0; xx < data[yy].size(); xx++)
+			for(unsigned int xx = 0; xx < data[yy].size(); xx++)
 			{
 				if (!(y+yy < 0 || y+yy >= Graphics.world.gattiles.size() || x+xx < 0 || x+xx >= Graphics.world.gattiles[0].size()))
 				{
@@ -264,7 +265,7 @@ public:
 			vector<int> row;
 			for(int xx = xfrom; xx < xto; xx++)
 			{
-				if (yy >= Graphics.world.gattiles.size() || yy < 0 || xx < 0 || xx >= Graphics.world.gattiles[0].size())
+				if (yy >= (int)Graphics.world.gattiles.size() || yy < 0 || xx < 0 || xx >= (int)Graphics.world.gattiles[0].size())
 					row.push_back(0);
 				else
 					row.push_back(Graphics.world.gattiles[yy][xx].type);
@@ -274,9 +275,9 @@ public:
 	}
 	void undo()
 	{
-		for(int yy = 0; yy < data.size(); yy++)
+		for(unsigned int yy = 0; yy < data.size(); yy++)
 		{
-			for(int xx = 0; xx < data[yy].size(); xx++)
+			for(unsigned int xx = 0; xx < data[yy].size(); xx++)
 			{
 				if (!(yy+y >= Graphics.world.gattiles.size() || yy+y < 0 || xx+x < 0 || xx+x > Graphics.world.gattiles[0].size()))
 					Graphics.world.gattiles[y+yy][x+xx].type = data[yy][xx];
@@ -296,7 +297,7 @@ public:
 	}
 	void undo()
 	{
-		for(int i = 0; i < data.size(); i++)
+		for(unsigned int i = 0; i < data.size(); i++)
 		{
 			Graphics.world.tiles[data[i].first] = data[i].second;
 		}
@@ -321,12 +322,12 @@ public:
 class cUndoNewObjects : public cUndoItem
 {
 	vector<int> prevselection;
-	int size;
+	unsigned int size;
 public:
 	cUndoNewObjects(int previoussize)
 	{
 		size = previoussize;
-		for(int i = 0; i < Graphics.world.models.size(); i++)
+		for(unsigned int i = 0; i < Graphics.world.models.size(); i++)
 		{
 			if (Graphics.world.models[i]->selected)
 				prevselection.push_back(i);
@@ -339,7 +340,7 @@ public:
 			delete Graphics.world.models.back();
 			Graphics.world.models.erase(Graphics.world.models.begin() + (Graphics.world.models.size()-1));
 		}
-		for(int i = 0; i < prevselection.size(); i++)
+		for(unsigned int i = 0; i < prevselection.size(); i++)
 			Graphics.world.models[prevselection[i]]->selected = true;
 	}
 };
@@ -379,12 +380,12 @@ public:
 	{
 		if (type == 0)
 		{
-			for(int i = 0; i < vals.size(); i++)
+			for(unsigned int i = 0; i < vals.size(); i++)
 				Graphics.world.cubes[vals[i].first.second][vals[i].first.first].tileside = vals[i].second;
 		}
 		else
 		{
-			for(int i = 0; i < vals.size(); i++)
+			for(unsigned int i = 0; i < vals.size(); i++)
 				Graphics.world.cubes[vals[i].first.second][vals[i].first.first].tileaside = vals[i].second;
 		}
 	}
@@ -456,14 +457,14 @@ class cUndoEffectsDelete : public cUndoItem
 public:
 	cUndoEffectsDelete(vector<int> e)
 	{
-		for(int i = 0; i < e.size(); i++)
+		for(unsigned int i = 0; i < e.size(); i++)
 		{
 			effects.push_back(pair<int, cEffect>(e[i], Graphics.world.effects[e[i]]));
 		}
 	}
 	void undo()
 	{
-		for(int i = 0; i < effects.size(); i++)
+		for(unsigned int i = 0; i < effects.size(); i++)
 		{
 			Graphics.world.effects.insert(Graphics.world.effects.begin() + effects[i].first, effects[i].second);
 		}
@@ -553,7 +554,7 @@ public:
 	}
 	void undo()
 	{
-		for(int i = 0; i < objects.size(); i++)
+		for(unsigned int i = 0; i < objects.size(); i++)
 		{
 			cRSMModel* model = new cRSMModel();
 			model->load(objects[i].filename);
