@@ -107,7 +107,7 @@ using namespace std;
 
 // prototypes
 void Log(int lvl, int options, const char* fmt, ...);
-void log_open(const char*, char*, int);
+void log_open(const char*, const char*, int);
 void log_close();
 
 vector<string> split(string, string);
@@ -213,7 +213,7 @@ bool LineIntersectPolygon( cVector3 *,int,cVector3 &,cVector3 &, float &);
 #endif*/
 
 
-char* GetMsg(string s);
+const char* GetMsg(string s);
 
 /**
  * Container for process handlers

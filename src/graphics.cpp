@@ -704,7 +704,7 @@ cMenu* cMenu::inwindow(int xx, int yy)
 	}
 		
 	mouseover = false;
-	if (xx > x && xx < x+m && Graphics.h()-yy > y && Graphics.h()-yy < y+h() && opened)
+	if (xx > x && xx < x+m && Graphics.h()-yy > y && Graphics.h()-yy < y+(int)h() && opened)
 	{
 		mouseover = true;
 		return this;

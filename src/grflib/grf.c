@@ -341,7 +341,7 @@ static int GRF_readVer1_info(Grf *grf, GrfError *error, GrfOpenCallback callback
 	#endif /* GRF_FIXED_KEYSCHEDULE */
 	) {
 		/* Get the name length */
-		len = LittleEndian32(buf + offset);
+		len = LittleEndian32((uint8_t*)buf + offset);
 		offset += 4;
 
 		/* Decide how to decode the name */
@@ -425,11 +425,11 @@ static int GRF_readVer1_info(Grf *grf, GrfError *error, GrfOpenCallback callback
 		offset+=len;
 
 		/* Grab the rest of the file information */
-		grf->files[i].compressed_len=LittleEndian32(buf+offset)-LittleEndian32(buf+offset+8)-0x02CB;
-		grf->files[i].compressed_len_aligned=LittleEndian32(buf+offset+4)-0x92CB;
-		grf->files[i].real_len=LittleEndian32(buf+offset+8);
+		grf->files[i].compressed_len=LittleEndian32((uint8_t*)buf+offset)-LittleEndian32((uint8_t*)buf+offset+8)-0x02CB;
+		grf->files[i].compressed_len_aligned=LittleEndian32((uint8_t*)buf+offset+4)-0x92CB;
+		grf->files[i].real_len=LittleEndian32((uint8_t*)buf+offset+8);
 		grf->files[i].flags=*(uint8_t*)(buf+offset+0xC);
-		grf->files[i].pos=LittleEndian32(buf+offset+0xD)+GRF_HEADER_FULL_LEN;
+		grf->files[i].pos=LittleEndian32((uint8_t*)buf+offset+0xD)+GRF_HEADER_FULL_LEN;
 		grf->files[i].hash=GRF_NameHash(grf->files[i].name);
 
 		/* Check if the file is a special file */
@@ -506,7 +506,7 @@ static int GRF_readVer2_info(Grf *grf, GrfError *error, GrfOpenCallback callback
 	}
 
 	/* Allocate memory and read the compressed file table */
-	len=LittleEndian32(buf);
+	len=LittleEndian32((uint8_t*)buf);
 	if ((zbuf=(char*)malloc(len))==NULL) {
 		free(buf);
 		GRF_SETERR(error,GE_ERRNO,malloc);
@@ -522,7 +522,7 @@ static int GRF_readVer2_info(Grf *grf, GrfError *error, GrfOpenCallback callback
 		return 1;
 	}
 
-	if (0==(len2=LittleEndian32(buf+4))) {
+	if (0==(len2=LittleEndian32((uint8_t*)buf+4))) {
 		free(zbuf);
 		return 0;
 	}
@@ -561,11 +561,11 @@ static int GRF_readVer2_info(Grf *grf, GrfError *error, GrfOpenCallback callback
 		offset+=len;
 
 		/* Grab the rest of the information */
-		grf->files[i].compressed_len=LittleEndian32(buf+offset);
-		grf->files[i].compressed_len_aligned=LittleEndian32(buf+offset+4);
-		grf->files[i].real_len=LittleEndian32(buf+offset+8);
+		grf->files[i].compressed_len=LittleEndian32((uint8_t*)buf+offset);
+		grf->files[i].compressed_len_aligned=LittleEndian32((uint8_t*)buf+offset+4);
+		grf->files[i].real_len=LittleEndian32((uint8_t*)buf+offset+8);
 		grf->files[i].flags=*(uint8_t*)(buf+offset+0xC);
-		grf->files[i].pos=LittleEndian32(buf+offset+0xD)+GRF_HEADER_FULL_LEN;
+		grf->files[i].pos=LittleEndian32((uint8_t*)buf+offset+0xD)+GRF_HEADER_FULL_LEN;
 		grf->files[i].hash=GRF_NameHash(grf->files[i].name);
 
 		/* Advance to the next file */
@@ -605,6 +605,8 @@ static int GRF_readVer2_info(Grf *grf, GrfError *error, GrfOpenCallback callback
  * \return The first offset in the GRF in which at least len amount of
  *	unused space was found, or 0 if none was found
  */
+// This function seems unused, at least gcc claims so
+#if 0
 static uint32_t
 GRF_find_unused (Grf *grf, uint32_t len)
 {
@@ -694,6 +696,7 @@ GRF_find_unused (Grf *grf, uint32_t len)
 	}
 #endif  /* 0 */
 }
+#endif /* 0 too */
 
 
 /********************
@@ -858,10 +861,10 @@ grf_callback_open (const char *fname, const char *mode, GrfError *error, GrfOpen
 	grf->type=GRF_TYPE_GRF;
 
 	/* Read the version */
-	grf->version=LittleEndian32(buf+GRF_HEADER_MID_LEN+0xC);
+	grf->version=LittleEndian32((uint8_t*)buf+GRF_HEADER_MID_LEN+0xC);
 
 	/* Read the number of files */
-	grf->nfiles=LittleEndian32(buf+GRF_HEADER_MID_LEN+8)-LittleEndian32(buf+GRF_HEADER_MID_LEN+4)-7;
+	grf->nfiles=LittleEndian32((uint8_t *)buf+GRF_HEADER_MID_LEN+8)-LittleEndian32((uint8_t*)buf+GRF_HEADER_MID_LEN+4)-7;
 
 	/* Create the array of files */
 	if (grf->nfiles) {
@@ -886,7 +889,7 @@ grf_callback_open (const char *fname, const char *mode, GrfError *error, GrfOpen
 	grf->len=ftell(grf->f);
 
 	/* Seek to the offset of the file tables */
-	if (fseek(grf->f, LittleEndian32(buf+GRF_HEADER_MID_LEN)+GRF_HEADER_FULL_LEN, SEEK_SET)) {
+	if (fseek(grf->f, LittleEndian32((uint8_t*)buf+GRF_HEADER_MID_LEN)+GRF_HEADER_FULL_LEN, SEEK_SET)) {
 		grf_free(grf);
 		GRF_SETERR(error,GE_ERRNO,fseek);
 		return NULL;

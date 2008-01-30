@@ -317,7 +317,7 @@ DES_ProcessBlock(uint8_t rounds, uint8_t *dst, const uint8_t *src, const char *k
 
 	if (rounds>0) {
 		for(i=0;i<rounds;i++) {
-			DES_RawProcessBlock(dst,ks+(dir==GRFCRYPT_DECRYPT? 0xF-i:i)*8);
+			DES_RawProcessBlock(dst,(uint8_t*)ks+(dir==GRFCRYPT_DECRYPT? 0xF-i:i)*8);
 
 			/* Swap L and R */
 			memcpy(tmp,dst,4);

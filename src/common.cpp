@@ -49,7 +49,7 @@ string logfilename;
 int loglines = 0;
 char logname[32];
 
-void log_open(const char* filename, char* name, int color)
+void log_open(const char* filename, const char* name, int color)
 {
 	logfilename = filename;
 	pFile = fopen(filename, "w");
@@ -441,7 +441,7 @@ HWND GetConsoleHwnd()
 
 
 
-char* GetMsg(string s)
+const char* GetMsg(string s)
 {
 	string olds = s;
 	TiXmlNode* n = msgtable.FirstChildElement("language");

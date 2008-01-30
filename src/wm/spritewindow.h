@@ -370,7 +370,7 @@ public:
 		cDirectionButton(cWindow* p, int dir) : cWindowButton(p)
 		{
 			direction = dir;
-			char* directions[] = { "S", "SE","E","NE","N","NW","W","SW" };
+			const char* directions[] = { "S", "SE","E","NE","N","NW","W","SW" };
 			text = directions[dir];
 			resizeto(50,20);
 			alignment = ALIGN_TOPLEFT;
