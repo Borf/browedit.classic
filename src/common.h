@@ -106,7 +106,7 @@ float min(float x, float y);
 using namespace std;
 
 // prototypes
-void Log(int lvl, int options, char* fmt, ...);
+void Log(int lvl, int options, const char* fmt, ...);
 void log_open(const char*, char*, int);
 void log_close();
 

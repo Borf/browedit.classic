@@ -71,7 +71,7 @@ void log_close()
 	fclose(pFile);
 }
 
-void Log(int lvl, int options, char* fmt, ...)
+void Log(int lvl, int options, const char* fmt, ...)
 {
 	char text[10240];
 	va_list ap;
