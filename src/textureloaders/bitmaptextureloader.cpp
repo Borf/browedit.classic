@@ -1,4 +1,6 @@
 #include "bitmaptextureloader.h"
+#include <GL/glext.h> // for GL_BGRA_EXT
+
 cBitmapTextureLoader	BitmapTextureLoader;
 
 

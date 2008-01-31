@@ -1,4 +1,5 @@
 #include "jpegtextureloader.h"
+#include <GL/glext.h> // for GL_BGR_EXT
 #ifdef _WIN32
 #include <gd/gd.h>
 #else
