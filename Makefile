@@ -5,6 +5,8 @@ CXX = g++
 CC = gcc
 DEFINES = 
 CFLAGS = -Wall -pipe
+# where are source files located?
+SOURCE_DIRS= src src/wm src/tinyxml src/grflib src/textureloaders
 # Host platform
 UNAME=$(shell uname -s | sed -e 's/_.*$$//')
 
@@ -36,7 +38,9 @@ endif
 ## END OF PLATFORM DETECTION CODE
 #####
 
-## Per-platform settings
+#####
+## PER-PLATFORM SETTINGS
+#####
 
 # Linux 32bit
 ifeq ($(PLATFORM),linux32)
@@ -74,79 +78,85 @@ LIBS = -L. -lzlib1 -lSDL -lbgd -lopengl32 -lglu32 -lws2_32 -lcomdlg32
 # ws2_32.lib sdl.lib sdlmain.lib zlib.lib bgd.lib opengl32.lib glu32.lib 
 endif
 
-## Debug build?
+#####
+## END OF PER-PLATFORM SETTINGS
+#####
 
+## Debug build?
 ifeq ($(DEBUG),)
 DEBUG=yes
-DEFINES += -D_DEBUG
 endif
 
 ifeq ($(DEBUG),yes)
-CFLAGS += -g -ggdb -fstack-protector-all 
+CFLAGS += -g -ggdb -fstack-protector-all -D_DEBUG
 else
-# We suppose everyone have SSE. If this cause problems, switch back to 387
+# We suppose everyone have SSE. If this cause problems, switch mfpmath back to 387
 CFLAGS += -O3 -fomit-frame-pointer -momit-leaf-frame-pointer -mfpmath=sse
 endif
 
 TARGET=roworldedit_$(PLATFORM)$(BINARY_EXT)
 
-OBJECTS_SRC=$(patsubst src/%.cpp,obj/src_%_$(PLATFORM).o,$(wildcard src/*.cpp))
-OBJECTS_WM=$(patsubst src/wm/%.cpp,obj/wm_%_$(PLATFORM).o,$(wildcard src/wm/*.cpp))
-OBJECTS_TINYXML=$(patsubst src/tinyxml/%.cpp,obj/tinyxml_%_$(PLATFORM).o,$(wildcard src/tinyxml/*.cpp))
-OBJECTS_GRFLIB=$(patsubst src/grflib/%.c,obj/grflib_%_$(PLATFORM).o,$(wildcard src/grflib/*.c))
-OBJECTS_ZLIB=$(patsubst src/grflib/zlib/%.c,obj/zlib_%_$(PLATFORM).o,$(wildcard src/grflib/zlib/*.c))
-OBJECTS_TEXLOADERS=$(patsubst src/textureloaders/%.cpp,obj/texloaders_%_$(PLATFORM).o,$(wildcard src/textureloaders/*.cpp))
+# Define path where make will find source files :)
+VPATH=$(subst  ,:,$(SOURCE_DIRS))
+
+# list all source files
+SOURCE_ALL=$(foreach dir,$(SOURCE_DIRS),$(wildcard $(dir)/*.c $(dir)/*.cpp))
+
+# list all object files
+OBJECTS_ALL=$(patsubst %,obj/%_$(PLATFORM).o,$(notdir $(basename $(SOURCE_ALL))))
+
+# list all .dep files
+DEP_ALL=$(patsubst %,obj/%_$(PLATFORM).dep,$(notdir $(basename $(filter %.c %.cpp,$(SOURCE_ALL)))))
 
 ifeq ($(PLATFORM),win32)
 # Fix: Win32 build needs this one
-OBJECTS_SRC += obj/src_md5_$(PLATFORM).o obj/src_Script1_rc_$(PLATFORM).o
+OBJECTS_SRC += obj/src_Script1_rc_$(PLATFORM).o
 endif
-
-OBJECTS_ALL=$(OBJECTS_SRC) $(OBJECTS_WM) $(OBJECTS_TINYXML) $(OBJECTS_GRFLIB) $(OBJECTS_ZLIB) $(OBJECTS_TEXLOADERS)
 
 all: $(TARGET)
 
-obj/src_%_$(PLATFORM).o: src/%.c
-	@echo -e "    [1mCC\033[1m\t\033[22;34m$<\033[39m"
-	@$(CC) $(CFLAGS) $(INCLUDES) $(DEFINES) -c -o $@ $<
+# Depencies
 
-obj/src_%_rc_$(PLATFORM).o: src/%.rc
-	@echo -e "    [1mRC\033[1m\t\033[22;34m$<\033[39m"
+.PHONY: dep
+
+dep: obj/depencies.mak
+
+obj/depencies.mak: $(DEP_ALL)
+	@echo -e "    \033[1mDEP\033[1m\t\033[22;34m$@\033[39m                           "
+	@cat $^ >$@
+
+-include obj/depencies.mak
+
+# type-specific targets (compile, target = %.o)
+
+obj/%_$(PLATFORM).o: %.c
+	@echo -e "    \033[1mCC\033[1m\t\033[22;34m$<\033[39m"
+	@$(CC) $(CFLAGS) $(INCLUDES) -c -o $@ $<
+
+obj/%_rc_$(PLATFORM).o: %.rc
+	@echo -e "    \033[1mRC\033[1m\t\033[22;34m$<\033[39m"
 	@$(WINDRES) -I src -i $< -o $@
 
-obj/src_%_$(PLATFORM).o: src/%.cpp
-	@echo -e "    [1mCC\033[1m\t\033[22;34m$<\033[39m"
-	@$(CXX) $(CFLAGS) $(INCLUDES) $(DEFINES) -c -o $@ $<
+obj/%_$(PLATFORM).o: %.cpp
+	@echo -e "    \033[1mCC\033[1m\t\033[22;34m$<\033[39m"
+	@$(CXX) $(CFLAGS) $(INCLUDES) -c -o $@ $<
 
-obj/src_%_$(PLATFORM).o: src/%.c
-	@echo -e "    [1mCC\033[1m\t\033[22;34m$<\033[39m"
-	@$(CC) $(CFLAGS) $(INCLUDES) $(DEFINES) -c -o $@ $<
+# depencies
 
-obj/wm_%_$(PLATFORM).o: src/wm/%.cpp
-	@echo -e "    [1mCC\033[1m\t\033[22;34m$<\033[39m"
-	@$(CXX) $(CFLAGS) $(INCLUDES) $(DEFINES) -c -o $@ $<
+obj/%_$(PLATFORM).dep: %.c
+	@echo -en "    \033[1mDEP\033[1m\t\033[22;34m$<\033[39m                           \r"
+	@$(CC) $(CFLAGS) $(INCLUDES) -MM -MF $@ $<
 
-obj/tinyxml_%_$(PLATFORM).o: src/tinyxml/%.cpp
-	@echo -e "    [1mCC\033[1m\t\033[22;34m$<\033[39m"
-	@$(CXX) $(CFLAGS) $(INCLUDES) $(DEFINES) -c -o $@ $<
+obj/%_$(PLATFORM).dep: %.cpp
+	@echo -en "    \033[1mDEP\033[1m\t\033[22;34m$<\033[39m                           \r"
+	@$(CXX) $(CFLAGS) $(INCLUDES) -MM -MF $@ $<
 
-obj/grflib_%_$(PLATFORM).o: src/grflib/%.c
-	@echo -e "    [1mCC\033[1m\t\033[22;34m$<\033[39m"
-	@$(CC) $(CFLAGS) $(INCLUDES) $(DEFINES) -c -o $@ $<
-
-obj/zlib_%_$(PLATFORM).o: src/grflib/zlib/%.c
-	@echo -e "    [1mCC\033[1m\t\033[22;34m$<\033[39m"
-	@$(CC) $(CFLAGS) $(INCLUDES) $(DEFINES) -c -o $@ $<
-
-obj/texloaders_%_$(PLATFORM).o: src/textureloaders/%.cpp
-	@echo -e "    [1mCC\033[1m\t\033[22;34m$<\033[39m"
-	@$(CXX) $(CFLAGS) $(INCLUDES) $(DEFINES) -c -o $@ $<
-
+# Main target
 
 $(TARGET): $(OBJECTS_ALL)
 	@echo -e "    \033[1mLD\033[1m\t\033[22;35m$@\033[39m"
 	@$(CXX) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
 
 clean:
-	$(RM) obj/*.o $(TARGET)
+	$(RM) obj/*.o obj/*.dep obj/depencies.mak $(TARGET)
 
