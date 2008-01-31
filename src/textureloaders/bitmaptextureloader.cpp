@@ -1,6 +1,7 @@
 #include "bitmaptextureloader.h"
+#ifdef __MINGW32__
 #include <GL/glext.h> // for GL_BGRA_EXT
-
+#endif
 cBitmapTextureLoader	BitmapTextureLoader;
 
 
@@ -27,7 +28,7 @@ void cBitmapTextureLoader::load(char* filedata,int datlen, cTexture* tex)
 	tex->data = new BYTE[tex->width*tex->height*4];
 	tex->datatype = GL_BGRA_EXT;
 
-	int x,y,c,i;
+	int x,y,i;
 	int index = 0;
 	BYTE cols[256*4];				//colourtable
 	switch(tex->bpp)
@@ -40,7 +41,7 @@ void cBitmapTextureLoader::load(char* filedata,int datlen, cTexture* tex)
 			for(x = 0; x < tex->width; x++)
 			{
 				memcpy(tex->data+i, filedata+index, 3);
-
+				index+=3;
 				if(tex->data[i] == 255 && tex->data[i+1] == 0 && tex->data[i+2] == 255)
 					tex->data[i+3] = 0;
 				else
