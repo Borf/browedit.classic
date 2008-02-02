@@ -115,17 +115,23 @@ endif
 
 all: $(TARGET)
 
+clean:
+	$(RM) obj/*.o obj/*.dep obj/*.mak $(TARGET)
+
 # Depencies
 
 .PHONY: dep
 
-dep: obj/depencies.mak
+dep: obj/depencies_$(PLATFORM).mak
 
-obj/depencies.mak: $(DEP_ALL)
+obj/depencies_$(PLATFORM).mak: $(DEP_ALL)
 	@echo -e "    \033[1mDEP\033[1m\t\033[22;34m$@\033[39m                           "
-	@cat $^ >$@
+# build depencies for objects
+	@cat $^ | sed -r -e 's#^([a-zA-Z0-9]+)\.o#obj/\1_$(PLATFORM).o#' >$@
+# build depencies for depencies
+	@cat $^ | sed -r -e 's#^([a-zA-Z0-9]+)\.o#obj/\1_$(PLATFORM).dep#' >>$@
 
--include obj/depencies.mak
+-include obj/depencies_$(PLATFORM).mak
 
 # type-specific targets (compile, target = %.o)
 
@@ -157,6 +163,4 @@ $(TARGET): $(OBJECTS_ALL)
 	@echo -e "    \033[1mLD\033[1m\t\033[22;35m$@\033[39m"
 	@$(CXX) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
 
-clean:
-	$(RM) obj/*.o obj/*.dep obj/depencies.mak $(TARGET)
 
