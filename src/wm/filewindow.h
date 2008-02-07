@@ -1,0 +1,77 @@
+#ifndef __FILEWINDOW_H__
+#define __FILEWINDOW_H__
+
+#include "window.h"
+
+#include "windowobject.h"
+#include "windowroundbutton.h"
+#include "windowbutton.h"
+#include "windowlabel.h"
+#include "windowinputbox.h"
+#include "windowscrollpanel.h"
+
+
+class cFileWindow : public cWindow
+{
+
+	class cOkButton : public cWindowButton
+	{
+	public:
+		void callback(string);
+		cOkButton(cWindow* parent, void pCallback(string)) : cWindowButton(parent)
+		{
+			callback = pCallback;
+		}
+
+		void click()
+		{
+
+			callback(parent->objects["filebox"]->GetText(-1));
+		}
+	};
+public:
+	cFileWindow(cTexture* t, cFont* f, void pCallback(string)) : cWindow(t,f)
+	{
+		callback = pCallback;
+		wtype = WT_FILE;
+		resizable = false;
+		visible = true;
+
+		h = 300;
+		w = 350;
+		title = GetMsg("wm/file/TITLE");
+		center();
+
+		defaultobject = "OkButton";
+
+		cWindowObject* o;
+		
+		objects["close"] = new cWindowCloseButton(this);
+
+		addlabel("lblLookIn", 15,20,GetMsg("wm/file/SELECTMAP"));
+		
+
+		o = new cWindowListBox(this);
+		o->alignment = ALIGN_TOPLEFT;
+		o->moveto(5,40);
+		o->resizeto(w-10, ((h-80)/12)*12-8);
+		objects["filebox"] = o;
+
+		
+		for(unsigned int i = 0; i < fs.locations.size(); i++)
+		{
+			for(map<string, cFile*, less<string> >::iterator it = fs.locations[i]->files.begin(); it != fs.locations[i]->files.end(); it++)
+			{
+				if(it->first.find(".rsw") != string::npos)
+					o->SetText(-1,it->first.substr(rodir.length()));
+
+			}
+		}
+
+		mergesort<string>(((cWindowListBox*)o)->values, compare<string>);
+
+		objects["OkButton"] = new cOkButton(this, pCallback);
+	}
+};
+
+#endif

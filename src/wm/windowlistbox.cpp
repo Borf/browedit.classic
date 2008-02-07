@@ -329,5 +329,34 @@ string cWindowListBox::GetText(int id)
 {
 	if(id > -1)
 		return values[id];
+	if(id == -1)
+		return values[selected];
 	return "NULL";
+}
+
+
+
+void cWindowListBox::scrollup()
+{
+	liststart-=5;
+	if (liststart <= 0)
+		liststart = 0;
+}
+void cWindowListBox::scrolldown()
+{
+	unsigned int i = 0;
+
+	int yy = realy()+h-5-12;
+	while(yy+10 > realy() && i < values.size())
+	{
+		i++;
+		yy-=12;
+	}
+
+	liststart+=5;
+	if(h/12 > (int)values.size())
+		liststart = 0;
+	if(liststart >= (int)values.size() - (h/12))
+		liststart = values.size() - (h/12);
+
 }

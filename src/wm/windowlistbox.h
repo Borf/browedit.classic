@@ -42,6 +42,8 @@ public:
 	void SetInt(int, intptr_t);
 	intptr_t GetInt(int);
 	string GetText(int);
+	void scrollup();
+	void scrolldown();
 };
 
 

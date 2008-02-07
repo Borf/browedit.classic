@@ -179,6 +179,11 @@ template <class T> void mergesort(vector<T> &tosort, bool compare(T,T))
 	}
 }
 
+template <class T> bool compare(T a,T b)
+{
+	return a < b;
+}
+
 
 
 enum eMode

@@ -238,5 +238,9 @@
 		<overview>
 			<TITLE>Map Overview...</TITLE>
 		</overview>
+		<file>
+			<TITLE>File...</TITLE>
+			<SELECTMAP>Select Map</SELECTMAP>
+		</file>
 	</wm>
 </language>

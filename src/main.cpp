@@ -20,6 +20,8 @@ int keymap[SDLK_LAST-SDLK_FIRST];
 #include "wm/lightoverviewwindow.h"
 #include "wm/minimapwindow.h"
 
+#include "wm/filewindow.h"
+
 #include "texturecache.h"
 #ifdef WIN32
 #include <windows.h>
@@ -1017,6 +1019,8 @@ int main(int argc, char *argv[])
 
 
 	
+	Graphics.WM.addwindow(new cFileWindow(Graphics.WM.texture, &Graphics.WM.font));
+
 	Log(3,0,GetMsg("DONEINIT"));
 	Graphics.world.newworld();
 	strcpy(Graphics.world.filename, string(rodir + "data\\prontera").c_str());
@@ -1030,7 +1034,7 @@ int main(int argc, char *argv[])
 #endif
 
 #ifdef _DEBUG
-//	Graphics.world.load();
+	Graphics.world.load();
 //	Graphics.world.importalpha();
 #endif
 

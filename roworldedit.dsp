@@ -361,6 +361,10 @@ SOURCE=.\src\wm\favoritelights.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\wm\filewindow.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\wm\hotkeywindow.h
 # End Source File
 # Begin Source File
