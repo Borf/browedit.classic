@@ -7,8 +7,7 @@
 #include "windowroundbutton.h"
 #include "windowbutton.h"
 #include "windowlabel.h"
-#include "windowinputbox.h"
-#include "windowscrollpanel.h"
+#include "windowlistbox.h"
 
 
 class cFileWindow : public cWindow
@@ -17,22 +16,27 @@ class cFileWindow : public cWindow
 	class cOkButton : public cWindowButton
 	{
 	public:
-		void callback(string);
-		cOkButton(cWindow* parent, void pCallback(string)) : cWindowButton(parent)
+		void (*callback)(string);
+		cOkButton(cWindow* parent, void (*pCallback)(string)) : cWindowButton(parent)
 		{
 			callback = pCallback;
+			alignment = ALIGN_BOTTOMRIGHT;
+			resizeto(100,20);
+			moveto(10,10);
+			text = "Load";
 		}
 
 		void click()
 		{
-
-			callback(parent->objects["filebox"]->GetText(-1));
+			string filename = parent->objects["filebox"]->GetText(-1);
+			filename = filename.substr(0, filename.length()-4);
+			parent->close();
+			callback(rodir + filename);
 		}
 	};
 public:
-	cFileWindow(cTexture* t, cFont* f, void pCallback(string)) : cWindow(t,f)
+	cFileWindow(cTexture* t, cFont* f, void (*pCallback)(string)) : cWindow(t,f)
 	{
-		callback = pCallback;
 		wtype = WT_FILE;
 		resizable = false;
 		visible = true;

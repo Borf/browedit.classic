@@ -20,8 +20,6 @@ int keymap[SDLK_LAST-SDLK_FIRST];
 #include "wm/lightoverviewwindow.h"
 #include "wm/minimapwindow.h"
 
-#include "wm/filewindow.h"
-
 #include "texturecache.h"
 #ifdef WIN32
 #include <windows.h>
@@ -445,6 +443,7 @@ int WinMain(HINSTANCE hInst,HINSTANCE hPrev, LPSTR Cmd,int nShow)
 
 
 
+
 int main(int argc, char *argv[])
 {
 	int i;
@@ -840,6 +839,7 @@ int main(int argc, char *argv[])
 
 	ADDMENUITEM(mm,file,GetMsg("menu/file/NEW"),							&MenuCommand_new); //new
 	ADDMENUITEM(mm,file,GetMsg("menu/file/OPEN"),							&MenuCommand_open); //open
+	ADDMENUITEM(mm,file,GetMsg("menu/file/OPENGRF"),						&MenuCommand_opengrf); //open
 	ADDMENUITEM(mm,file,GetMsg("menu/file/SAVE"),							&MenuCommand_save); //save
 	ADDMENUITEM(mm,file,GetMsg("menu/file/SAVEAS"),							&MenuCommand_saveAs); //save as
 	ADDMENUITEM(mm,file,GetMsg("menu/file/IMPORTARCTURUS"),					&MenuCommand_importalpha); // Import arcturus maps
@@ -1014,12 +1014,6 @@ int main(int argc, char *argv[])
 
 	pFile->close();
 	Log(3,0,GetMsg("file/DONELOADING"), "effects.txt");
-
-
-
-
-	
-	Graphics.WM.addwindow(new cFileWindow(Graphics.WM.texture, &Graphics.WM.font));
 
 	Log(3,0,GetMsg("DONEINIT"));
 	Graphics.world.newworld();

@@ -10,6 +10,7 @@
 #include "wm/favoritelights.h"
 #include "wm/modeloverviewwindow.h"
 #include "wm/lightoverviewwindow.h"
+#include "wm/filewindow.h"
 
 extern cGraphics Graphics;
 extern bool running;
@@ -82,6 +83,21 @@ MENUCOMMAND(open)
 	return true;
 }
 
+
+
+
+void openfunc(string param)
+{
+	ZeroMemory(Graphics.world.filename, 128);
+	memcpy(Graphics.world.filename, param.c_str(), param.length());
+	Graphics.world.load();
+}
+
+MENUCOMMAND(opengrf)
+{
+	Graphics.WM.addwindow(new cFileWindow(Graphics.WM.texture, &Graphics.WM.font, openfunc));
+	return true;
+}
 
 MENUCOMMAND(importalpha)
 {

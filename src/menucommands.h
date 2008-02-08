@@ -16,6 +16,7 @@
 MENUCOMMAND(new);
 MENUCOMMAND(open);
 MENUCOMMAND(save);
+MENUCOMMAND(opengrf);
 MENUCOMMAND(saveAs);
 MENUCOMMAND(importalpha);
 MENUCOMMAND(exit);

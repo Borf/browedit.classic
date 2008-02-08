@@ -20,6 +20,7 @@
 			<TITLE>File</TITLE>
 			<NEW>New</NEW>
 			<OPEN>Open</OPEN>
+			<OPENGRF>Open from GRF</OPENGRF>
 			<SAVE>Save</SAVE>
 			<SAVEAS>Save As</SAVEAS>
 			<IMPORTARCTURUS>Import Arcturus maps</IMPORTARCTURUS>
