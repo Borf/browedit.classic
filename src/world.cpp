@@ -2557,7 +2557,7 @@ void cWorld::clean()
 	}
 
 	count = 0;
-	for(i = lightmaps.size()-1; i >= 0; i--)
+	for(i = lightmaps.size()-1; (signed int)i >= 0; i--)
 	{
 		if (lightmapsused.find(i) == lightmapsused.end())
 		{
