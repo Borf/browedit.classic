@@ -56,6 +56,7 @@ public:
 class cGRFFile
 {
 public:
+	~cGRFFile();
 	Grf* grf;
 	map<string, cFile*, less<string> > files;
 	long	nroffiles;
@@ -65,6 +66,7 @@ class cFileSystem
 {
 private:
 public:
+	~cFileSystem();
 	int LoadFile(string);
 	cFile*	open(string);
 	vector<cGRFFile*>	locations;

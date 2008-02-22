@@ -80,6 +80,7 @@ void cWorld::load()
 				delete reallightmaps[y][x];
 		}
 	}
+	reallightmaps.clear();
 
 	cWindow* wnd = Graphics.WM.getwindow(WT_HOTKEY);
 	if (wnd != NULL)
@@ -115,14 +116,18 @@ void cWorld::load()
 	for(i = 0; i < models.size(); i++)
 		delete models[i];
 	models.clear();
+	
 	delete root;
 	root = NULL;
+	
 	quadtreefloats.clear();
 	sounds.clear();
 	effects.clear();
 	lights.clear();
+	
 	for(i = 0; i < gattiles.size(); i++)
 		gattiles[i].clear();
+		
 	gattiles.clear();
 
 	water.height = 1;
@@ -352,12 +357,14 @@ void cWorld::load()
 		lightmapHeight = 8;
 		gridSizeCell = 1;
 	}
-	cRealLightMap* m = NULL;
-	reallightmaps.resize(height, vector<cRealLightMap*>(width, m));
+	reallightmaps.clear();
 
-	for(y = 0; y < (unsigned int)height; y+=21)
+	cRealLightMap* m = NULL;
+	reallightmaps.resize(height+21, vector<cRealLightMap*>(width+21, m));
+
+	for(y = 0; y < (unsigned int)height+21; y+=21)
 	{
-		for(x = 0; x < (unsigned int)width; x+=21)
+		for(x = 0; x < (unsigned int)width+21; x+=21)
 		{
 			cRealLightMap* l = new cRealLightMap();
 			l->x = x;
@@ -372,6 +379,8 @@ void cWorld::load()
 			cRealLightMap* l = reallightmaps[y - (y%21)][x - (x%21)];
 			if(l != NULL)
 				reallightmaps[y][x] = l;
+			if(l == NULL)
+				Log(1,0,"Something went wrong with the reallightmaps");
 
 		}
 	}
@@ -2591,16 +2600,50 @@ void cWorld::clean()
 
 void cWorld::unload()
 {
-	unsigned int i;
+	unsigned int x,y,i;
+	for(i = 0; i < textures.size(); i++)
+		TextureCache.unload(textures[i]->texture);
+	textures.clear();
+
+	for(y = 0; y < reallightmaps.size(); y+=21)
+	{
+		for(x = 0; x < reallightmaps[y].size(); x+=21)
+		{
+			if(reallightmaps[y][x] != NULL)
+				delete reallightmaps[y][x];
+		}
+	}
+	reallightmaps.clear();
+
+	tiles.clear();
+	for(i = 0; i < cubes.size(); i++)
+		cubes[i].clear();
+	cubes.clear();
+
+	for(i = 0; i < lightmaps.size(); i++)
+	{
+		lightmaps[i]->del();
+		lightmaps[i]->del2();
+		delete lightmaps[i];
+	}
+	lightmaps.clear();
+
 	for(i = 0; i < models.size(); i++)
 		delete models[i];
-	for(i = 0; i < textures.size(); i++)
-	{
-		TextureCache.unload(textures[i]->texture);
-		delete textures[i];
-	}
 	models.clear();
-	textures.clear();
+	
+	delete root;
+	root = NULL;
+	
+	quadtreefloats.clear();
+	sounds.clear();
+	effects.clear();
+	lights.clear();
+	
+	for(i = 0; i < gattiles.size(); i++)
+		gattiles[i].clear();
+		
+	gattiles.clear();
 
 }
 
@@ -3541,8 +3584,24 @@ void cRealLightMap::reset()
 
 
 
+cQuadTreeNode::~cQuadTreeNode()
+{
+	if(child1)
+		delete child1;
+	if(child2)
+		delete child2;
+	if(child3)
+		delete child3;
+	if(child4)
+		delete child4;
+		
+	child1 = NULL;
+	child2 = NULL;
+	child3 = NULL;
+	child4 = NULL;
+	
 
-
+}
 
 
 

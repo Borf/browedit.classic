@@ -13,6 +13,7 @@ cTexture::cTexture(string pFilename, bool pFreedata)
 	freedata = pFreedata;
 	data = NULL;
 	datatype = 0;
+	tid = 0;
 }
 
 GLuint cTexture::texid()
@@ -30,7 +31,8 @@ void cTexture::unLoad()
 {
 	if (!freedata)
 		delete[] data;
-	glDeleteTextures(1, &tid);
+	if(tid != 0)
+		glDeleteTextures(1, &tid);
 	loaded = false;
 }
 

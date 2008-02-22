@@ -56,6 +56,7 @@ cFile* cFileSystem::open(string filename)
 
 		fseek(f, 0, SEEK_END);
 		fil->size = ftell(f);
+		fil->index = 0;
 		fclose(f);
 		fil->open();
 		return fil;
@@ -87,6 +88,7 @@ int cFile::open()
 //			MessageBox(NULL, ("Error: could not open file: " + filename).c_str(), "File not found", MB_OK);
 			#endif
 		}
+		index = 0;
 		data = new char[size+1];
 		if(!data)
 			return 0;
@@ -197,11 +199,15 @@ int cFile::readline(char* buf, int maxlen)
 }
 string cFile::readline()
 {
-	string s;
+	if(eof())
+		return "";
+	string s = "";
 	while(data[index] != '\r' && data[index] != '\n' && !eof())
 	{
 		s+=data[index];
 		index++;
+		if(eof())
+			return s;
 	}
 	if (data[index] == '\r')
 	{
@@ -212,6 +218,8 @@ string cFile::readline()
 	else if (data[index] == '\n')
 	{
 		index++;
+		if(eof())
+			return s;
 		if (data[index] == '\r')
 			index++;
 	}
@@ -264,3 +272,28 @@ bool cFileSystem::isfile(string filename)
 			return true;
 	return false;
 }
+
+
+
+cFileSystem::~cFileSystem()
+{
+	printf("Cleaning grf files\n");
+	for(unsigned int i = 0; i < locations.size(); i++)
+		delete locations[i];
+	locations.clear();
+}
+
+cGRFFile::~cGRFFile()
+{
+	for(map<string, cFile*, less<string> >::iterator i = files.begin(); i != files.end(); i++)
+		delete i->second;
+	files.clear();
+
+	if(grf)
+	{
+		grf_close(grf);
+//		grf_free(grf);
+	}
+	grf = NULL;
+}
+

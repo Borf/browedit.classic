@@ -188,6 +188,8 @@ public:
 	cQuadTreeNode* child2;
 	cQuadTreeNode* child3;
 	cQuadTreeNode* child4;
+	
+	~cQuadTreeNode();
 };
 
 

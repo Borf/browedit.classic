@@ -240,9 +240,17 @@ int cGraphics::draw(bool drawwm)
 	}
 	glEnable(GL_BLEND);
 
+		
+	glColor3f(1,1,1);
+	glEnable(GL_TEXTURE_2D);
+	glDisable(GL_BLEND);
+	glDisable(GL_LIGHTING);
+	menu->draw();
+
 	if(drawwm)
 		WM.draw();
-	menu->draw();
+
+
 	char buf[100];
 	if(currentobject != NULL)
 		sprintf(buf, "Editmode: %s, File: %s", 	editmode == MODE_TEXTURE ?		GetMsg("menu/editmode/TEXTUREEDIT") : 

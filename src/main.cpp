@@ -463,7 +463,6 @@ int main(int argc, char *argv[])
 
 
 
-
 #ifndef _NOCHECK_
 #ifdef WIN32
 	char fileBuffer[1024];
@@ -1015,6 +1014,9 @@ int main(int argc, char *argv[])
 	pFile->close();
 	Log(3,0,GetMsg("file/DONELOADING"), "effects.txt");
 
+
+
+
 	Log(3,0,GetMsg("DONEINIT"));
 	Graphics.world.newworld();
 	strcpy(Graphics.world.filename, string(rodir + "data\\prontera").c_str());
@@ -1024,7 +1026,7 @@ int main(int argc, char *argv[])
 		Graphics.world.load();
 	}
 #ifndef WIN32
-	Graphics.world.load();
+//	Graphics.world.load();
 #endif
 
 #ifdef _DEBUG

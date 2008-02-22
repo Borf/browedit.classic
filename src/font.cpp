@@ -434,7 +434,7 @@ int cFont::load(string filename)
 		glEndList();                                 // Done Building The Display List
 	}                                              // Loop Until All 256 Are Built
 
-	free(texture->data);
+	delete[] texture->data;
 	Log(3,0,GetMsg("font/DONELOADING"), filename.c_str());
 
 	return 1;

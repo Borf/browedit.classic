@@ -31,6 +31,25 @@ public:
 	float bbmin[3];
 	float bbmax[3];
 	float bbrange[3];
+	
+	cBoundingbox()
+	{
+		for(int i = 0; i < 3; i++)
+		{
+			bbmin[i] = 0;
+			bbmax[i] = 0;
+			bbrange[i] = 0;
+		}
+	}
+	cBoundingbox(cBoundingbox &other)
+	{
+		for(int i = 0; i < 3; i++)
+		{
+			bbmin[i] = other.bbmin[i];
+			bbmax[i] = other.bbmax[i];
+			bbrange[i] = other.bbrange[i];
+		}
+	}
 };
 
 class cRSMModelMesh

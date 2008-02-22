@@ -1,8 +1,8 @@
 language=english
-setting=ROdesktop
+setting=RO
 
 [RO]
-rodir=c:\Program Files\gravity\ro\
+rodir=/media/host/Program Files/Gravity/RO/
 model=data/romodels.txt
 //model=data/arcturusmodels.txt
 texture=data/rotextures.txt
@@ -13,7 +13,7 @@ resy=768
 fullscreen=0
 bpp=32
 font=tahoma
-grf=c:\program files\gravity\ro\data.grf
+grf=/media/host/Program Files/Gravity/RO/data.grf
 undostack=50
 bgcolor=128,0,256
 notilecolor=255,255,128
