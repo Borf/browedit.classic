@@ -515,7 +515,7 @@ void cWM::defocus()
 		windows[i]->selectedobject = NULL;
 }
 
-void cWM::InputWindow(string title, cInputWindow::cInputWindowCaller* caller)
+cWindow* cWM::InputWindow(string title, cInputWindow::cInputWindowCaller* caller)
 {
 	cWindow* w = new cInputWindow(caller, texture, &font);
 	w->init(texture, &font);
@@ -523,10 +523,11 @@ void cWM::InputWindow(string title, cInputWindow::cInputWindowCaller* caller)
 	w->objects["input"]->SetText(0,"");
 	w->show();
 	addwindow(w);
+	return w;
 }
 
 
-string cWM::InputWindow(string title)
+string cWM::InputWindow(string title, string defaulttext)
 {
 	class cDefaultInputWindowCaller : public cInputWindow::cInputWindowCaller
 	{
@@ -554,7 +555,8 @@ string cWM::InputWindow(string title)
 	bool b = false;
 	string data = "";
 
-	InputWindow(title, new cDefaultInputWindowCaller(&b, &data));
+	cWindow* w = InputWindow(title, new cDefaultInputWindowCaller(&b, &data));
+	w->objects["input"]->SetText(0, defaulttext);
 	while(!b)
 	{
 		mainloop();

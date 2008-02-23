@@ -53,8 +53,8 @@ public:
 	void				MessageBox(string);
 	void				ConfirmWindow(string, cConfirmWindow::cConfirmWindowCaller* caller);
 	bool				ConfirmWindow(string);
-	void				InputWindow(string, cInputWindow::cInputWindowCaller* caller);
-	string				InputWindow(string);
+	cWindow*			InputWindow(string, cInputWindow::cInputWindowCaller* caller);
+	string				InputWindow(string, string = "");
 
 	void				printdebug();
 	void				defocus();

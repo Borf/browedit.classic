@@ -74,6 +74,12 @@ void cTexture::generate()
 
 void cTextureLoaders::load(string filename, cTexture* tex)
 {
+	if(filename.rfind(".") == string::npos)
+	{
+		Log(1,0,"Error loading texture %s, not able to determine filetype!", filename.c_str());
+		return;
+	}
+
 	vector<cTextureLoader*> loaders = GetTextureLoaders().loaders;
 
 	string ext = lcase(filename.substr(filename.rfind(".")));

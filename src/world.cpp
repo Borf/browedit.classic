@@ -856,6 +856,8 @@ void cWorld::save()
 		return;
 	TiXmlDocument extraproperties;
 
+	strcpy(filename, replace(filename, "\\","/").c_str());
+
 	{
 		clean();
 		quadtreefloats.clear();
@@ -1002,6 +1004,18 @@ void cWorld::save()
 		char fname[50];
 		ZeroMemory(fname, 50);
 		strcpy(fname, fname2.substr(fname2.rfind("\\")+1).c_str());
+		
+		if(strlen(fname) > 40)
+			strcpy(fname, fname2.substr(fname2.rfind("/")+1).c_str());
+		
+		
+		if(strlen(fname) > 40)
+		{
+			Graphics.WM.MessageBox("Please use a shorter name");
+			Log(2,0,"Error: |%s| is too long", fname);
+			return;
+		}
+		
 
 		unsigned int i;
 		ofstream pFile((string(filename) + ".rsw").c_str(), ios_base::out | ios_base::binary);
@@ -1372,7 +1386,9 @@ void cWorld::draw()
 {
 	if(!loaded)
 		return;
-	unsigned int x,y,i;
+	int x,y;
+	unsigned int i;
+	
 	
 	int ww = Graphics.w();
 	ww -= 256;
@@ -1439,9 +1455,9 @@ void cWorld::draw()
 		glColor4f(1,1,1,1);
 
 
-	for(x = 0; x < (unsigned int)width; x++)
+	for(x = 0; x < width; x++)
 	{
-		for(y = 0; y < (unsigned int)height; y++)
+		for(y = 0; y < height; y++)
 		{
 			cCube* c = &cubes[y][x];
 			if(!Graphics.frustum.CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 10))
@@ -1694,11 +1710,11 @@ void cWorld::draw()
 	if (editmode == MODE_GAT || Graphics.showgat)
 	{
 		glEnable(GL_BLEND);
-		for(y = 0; y < gattiles.size(); y++)
+		for(y = 0; y < (int)gattiles.size(); y++)
 		{
 			if(!Graphics.frustum.BoxInFrustum(0,-1000,(2*height-y)*5, gattiles[y].size()*5,1000,(2*height-y)*5-5))
 				continue;
-			for(x = 0; x < gattiles[y].size(); x++)
+			for(x = 0; x < (int)gattiles[y].size(); x++)
 			{
 				cGatTile* c = &gattiles[y][x];
 				if(!Graphics.frustum.CubeInFrustum(x*5+2.5,-c->cell1,(2*height-y)*5-2.5, 5))
@@ -1744,7 +1760,7 @@ void cWorld::draw()
 			{
 				for(y = posy-(int)floor(s/2.0f); y < posy+ceil(s/2.0f); y++)
 				{
-					if (y < 0 || y >= (unsigned int)height*2 || x < 0 || x >= (unsigned int)width*2)
+					if (y < 0 || y >= height*2 || x < 0 || x >= width*2)
 						continue;
 					cGatTile* c = &gattiles[y][x];
 					glBegin(GL_LINE_LOOP);
@@ -1925,9 +1941,9 @@ void cWorld::draw()
 			glDisable(GL_TEXTURE_2D);
 			glBegin(GL_LINES);
 			glColor3f(0,0,1);
-			for(x = 1; x < (unsigned int)width-1; x++)
+			for(x = 1; x < width-1; x++)
 			{
-				for(y = 1; y < (unsigned int)height-1; y++)
+				for(y = 1; y < height-1; y++)
 				{
 					cCube* c = &cubes[y][x];
 					if(!Graphics.frustum.CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 10))
@@ -1990,7 +2006,7 @@ void cWorld::draw()
 		{
 			for(y = posy-(int)floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
 			{
-				if (y >= (unsigned int)height || y < 0 || x < 0 || x >= (unsigned int)width)
+				if (y >= height || y < 0 || x < 0 || x >= width)
 					continue;
 				cCube* c = &cubes[y][x];
 				if(!Graphics.frustum.CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 10))
@@ -2061,7 +2077,7 @@ void cWorld::draw()
 				glColor4f(1,0,0, Graphics.transparentobjects ? 0.2f : 1);
 			else
 				glColor4f(1,1,1,Graphics.transparentobjects ? 0.2f : 1);
-			models[i]->collides(cVector3(0,0,0), cVector3(0,0,0));
+//			models[i]->collides(cVector3(0,0,0), cVector3(0,0,0));
 			models[i]->draw();
 		}
 		glScalef(1,1,-1);

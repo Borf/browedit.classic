@@ -1030,7 +1030,8 @@ int main(int argc, char *argv[])
 #endif
 
 #ifdef _DEBUG
-	Graphics.world.load();
+	if(argc == 0)
+		Graphics.world.load();
 //	Graphics.world.importalpha();
 #endif
 

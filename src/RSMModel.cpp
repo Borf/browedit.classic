@@ -698,11 +698,14 @@ bool cRSMModel::collides(cVector3 start, cVector3 end)
 		return false;
 
 */
-	cVector3 triangle[3];
+	if(meshes.size() == 0)
+		return false;
+		
+	cVector3 triangle[3] = { cVector3(0,0,0), cVector3(0,0,0), cVector3(0,0,0) };
 	float t = 0;
 
 	bool collide = false;
-	do
+/*	do
 	{
 		//bottom
 		triangle[0] = cVector3(absolutebbv1_[0], -absolutebbv1_[1], absolutebbv1_[2]);
@@ -815,7 +818,7 @@ bool cRSMModel::collides(cVector3 start, cVector3 end)
 
 	if(!collide)
 		return false;
-
+*/
 	//return true;
 
 	glPushMatrix();

@@ -220,8 +220,14 @@ MENUCOMMAND(saveAs)
 
 	}
 #else
-	message = "Sorry, you can't save-as in linux, since I don't know how to make a save-as box yet";
-	showmessage = true;
+	string input = Graphics.WM.InputWindow("Filename (so not add .rsw): ", Graphics.world.filename);
+	if(input != "")
+	{
+		sprintf(Graphics.world.filename, "%s", input.c_str());
+		Graphics.world.save();
+		
+	}
+
 #endif
 	return true;
 }
@@ -1577,13 +1583,13 @@ MENUCOMMAND(dolightmaps2)
 
 			BYTE* buf = (BYTE*)Graphics.world.lightmaps[Graphics.world.tiles[c->tileup].lightmap]->buf;
 
-			for(int yy = 0; yy < 6; yy++)
+			for(int yy = 1; yy < 7; yy++)
 			{
-				for(int xx = 0; xx < 6; xx++)
+				for(int xx = 1; xx < 7; xx++)
 				{
-					cVector3 worldpos = cVector3(	10*x+(10/6.0)*xx, 
+					cVector3 worldpos = cVector3(	10*x+(10/6.0)*(xx-1), 
 													-((c->cell1+c->cell2+c->cell3+c->cell4)/4),
-													10*y+(10/6.0)*yy);
+													10*y+(10/6.0)*(yy-1));
 					
 					int from = 0;
 					unsigned int to = Graphics.world.lights.size();
@@ -1594,15 +1600,16 @@ MENUCOMMAND(dolightmaps2)
 					}
 					for(i = from; i < to; i++)
 					{
+						if(buf[yy*8 + xx] == 255)
+							continue;
+
 						cLight* l = &Graphics.world.lights[i];
 						cVector3 diff = worldpos - cVector3(l->pos.x*5, l->pos.y, l->pos.z*5);
 						float length = diff.Magnitude();
-						bool obstructed = false;
-						if(buf[yy*8 + xx + 9] == 255)
-							continue;
 						if(length > l->range)
 							continue;
 
+						bool obstructed = false;
 						if(l->givesshadow && !noshadow)
 						{
 							for(unsigned int ii = 0; ii < Graphics.world.models.size() && !obstructed; ii++)
@@ -1616,11 +1623,11 @@ MENUCOMMAND(dolightmaps2)
 						if(!obstructed)
 						{
 							float intensity = (int)min((int)(l->maxlightincrement), (int)(pow(1-(length / l->range), l->lightfalloff) * l->todo2));
-							buf[yy*8 + xx + 9] = min(255, buf[yy*8 + xx + 9] + max(0, (int)(intensity)));
+							buf[yy*8 + xx] = min(255, buf[yy*8 + xx] + max(0, (int)(intensity)));
 
-							buf[64 + 3*(yy*8 + xx + 9)+0] = min(255, buf[64 + 3*(yy*8 + xx + 9)+0] + max(0, (int)(intensity*l->color.x)));
-							buf[64 + 3*(yy*8 + xx + 9)+1] = min(255, buf[64 + 3*(yy*8 + xx + 9)+1] + max(0, (int)(intensity*l->color.y)));
-							buf[64 + 3*(yy*8 + xx + 9)+2] = min(255, buf[64 + 3*(yy*8 + xx + 9)+2] + max(0, (int)(intensity*l->color.z)));
+/*							buf[64 + 3*(yy*8 + xx)+0] = min(255, buf[64 + 3*(yy*8 + xx)+0] + max(0, (int)(intensity*l->color.x)));
+							buf[64 + 3*(yy*8 + xx)+1] = min(255, buf[64 + 3*(yy*8 + xx)+1] + max(0, (int)(intensity*l->color.y)));
+							buf[64 + 3*(yy*8 + xx)+2] = min(255, buf[64 + 3*(yy*8 + xx)+2] + max(0, (int)(intensity*l->color.z)));*/
 						}
 						else
 						{
@@ -1632,6 +1639,8 @@ MENUCOMMAND(dolightmaps2)
 		}
 	}
 
+
+	return true;
 
 
 /*
@@ -1744,14 +1753,6 @@ MENUCOMMAND(dolightmaps2)
 	}
 */
 
-	for(x = 1; x < (Graphics.world.width*6)-1; x++)
-	{
-		for(y = 1; y < (Graphics.world.height*6)-1; y++)
-		{
-
-		}
-	}
-
 	int lightmap,lightmapleft,lightmaptop,lightmapright,lightmapbottom;
 	cLightmap* map;
 	cLightmap* mapleft;
@@ -1759,87 +1760,124 @@ MENUCOMMAND(dolightmaps2)
 	cLightmap* mapright;
 	cLightmap* mapbottom;
 
-
-	for(x = 1; x < Graphics.world.width-1; x++)
-	{
-		for(y = 1; y < Graphics.world.height-1; y++)
+	for(int repeat = 0; repeat < 0; repeat++)
+	{ // fix borders once, then blur, and then fix the borders again
+		for(x = 1; x < Graphics.world.width-1; x++)
 		{
-			int tile = Graphics.world.cubes[y][x].tileup;
-			int tileleft = Graphics.world.cubes[y][x-1].tileup;
-			int tiletop = Graphics.world.cubes[y-1][x].tileup;
-			int tileright = Graphics.world.cubes[y][x+1].tileup;
-			int tilebottom = Graphics.world.cubes[y+1][x].tileup;
-			if (tile != -1)
+			for(y = 1; y < Graphics.world.height-1; y++)
 			{
-				if(tile != -1)
-					lightmap = Graphics.world.tiles[tile].lightmap;
-				if(tileleft != -1)
-					lightmapleft = Graphics.world.tiles[tileleft].lightmap;
-				if(tiletop != -1)
-					lightmaptop = Graphics.world.tiles[tiletop].lightmap;
-				if(tileright != -1)
-					lightmapright = Graphics.world.tiles[tileright].lightmap;
-				if(tilebottom != -1)
-					lightmapbottom = Graphics.world.tiles[tilebottom].lightmap;
-
-				if(tile != -1)
-					map = Graphics.world.lightmaps[lightmap];
-				if(tileleft != -1)
-					mapleft = Graphics.world.lightmaps[lightmapleft];
-				if(tiletop != -1)
-					maptop = Graphics.world.lightmaps[lightmaptop];
-				if(tileright != -1)
-					mapright = Graphics.world.lightmaps[lightmapright];
-				if(tilebottom != -1)
-					mapbottom = Graphics.world.lightmaps[lightmapbottom];
-
-				for(i = 0; i < 8; i++)
+				int tile = Graphics.world.cubes[y][x].tileup;
+				int tileleft = Graphics.world.cubes[y][x-1].tileup;
+				int tiletop = Graphics.world.cubes[y-1][x].tileup;
+				int tileright = Graphics.world.cubes[y][x+1].tileup;
+				int tilebottom = Graphics.world.cubes[y+1][x].tileup;
+				if (tile != -1)
 				{
+					if(tile != -1)
+						lightmap = Graphics.world.tiles[tile].lightmap;
 					if(tileleft != -1)
-						mapleft->buf[8*i+7] = map->buf[8*i+1];
+						lightmapleft = Graphics.world.tiles[tileleft].lightmap;
 					if(tiletop != -1)
-						maptop->buf[7*8+i] = map->buf[i+8];
+						lightmaptop = Graphics.world.tiles[tiletop].lightmap;
 					if(tileright != -1)
-						mapright->buf[8*i] = map->buf[8*i+6];
+						lightmapright = Graphics.world.tiles[tileright].lightmap;
 					if(tilebottom != -1)
-						mapbottom->buf[i] = map->buf[6*8+i];
-				}
+						lightmapbottom = Graphics.world.tiles[tilebottom].lightmap;
 
-				for(i = 0; i < 8; i++)
-				{
+					if(tile != -1)
+						map = Graphics.world.lightmaps[lightmap];
 					if(tileleft != -1)
-					{
-						mapleft->buf[64+3*(8*i+7)] = map->buf[64+3*(8*i+1)];
-						mapleft->buf[64+3*(8*i+7)+1] = map->buf[64+3*(8*i+1)+1];
-						mapleft->buf[64+3*(8*i+7)+2] = map->buf[64+3*(8*i+1)+2];
-					}
+						mapleft = Graphics.world.lightmaps[lightmapleft];
 					if(tiletop != -1)
-					{
-						maptop->buf[64+3*(7*8+i)] = map->buf[64+3*(i+8)];
-						maptop->buf[64+3*(7*8+i)+1] = map->buf[64+3*(i+8)+1];
-						maptop->buf[64+3*(7*8+i)+2] = map->buf[64+3*(i+8)+2];
-					}
+						maptop = Graphics.world.lightmaps[lightmaptop];
 					if(tileright != -1)
-					{
-						mapright->buf[64+3*(8*i)] = map->buf[64+3*(8*i+6)];
-						mapright->buf[64+3*(8*i)+1] = map->buf[64+3*(8*i+6)+1];
-						mapright->buf[64+3*(8*i)+2] = map->buf[64+3*(8*i+6)+2];
-					}
+						mapright = Graphics.world.lightmaps[lightmapright];
 					if(tilebottom != -1)
-					{
-						mapbottom->buf[64+3*(i)] = map->buf[64+3*(6*8+i)];
-						mapbottom->buf[64+3*(i)+1] = map->buf[64+3*(6*8+i)+1];
-						mapbottom->buf[64+3*(i)+2] = map->buf[64+3*(6*8+i)+2];
-					}
-				}
-			
-			}
-				
-		}
-	}
-		
-
+						mapbottom = Graphics.world.lightmaps[lightmapbottom];
 	
+					for(i = 0; i < 8; i++)
+					{
+						if(tileleft != -1)
+							mapleft->buf[8*i+7] = map->buf[8*i+1];
+						if(tiletop != -1)
+							maptop->buf[7*8+i] = map->buf[i+8];
+						if(tileright != -1)
+							mapright->buf[8*i] = map->buf[8*i+6];
+						if(tilebottom != -1)
+							mapbottom->buf[i] = map->buf[6*8+i];
+					}
+	
+					for(i = 0; i < 8; i++)
+					{
+						if(tileleft != -1)
+						{
+							mapleft->buf[64+3*(8*i+7)] = map->buf[64+3*(8*i+1)];
+							mapleft->buf[64+3*(8*i+7)+1] = map->buf[64+3*(8*i+1)+1];
+							mapleft->buf[64+3*(8*i+7)+2] = map->buf[64+3*(8*i+1)+2];
+						}
+						if(tiletop != -1)
+						{
+							maptop->buf[64+3*(7*8+i)] = map->buf[64+3*(i+8)];
+							maptop->buf[64+3*(7*8+i)+1] = map->buf[64+3*(i+8)+1];
+							maptop->buf[64+3*(7*8+i)+2] = map->buf[64+3*(i+8)+2];
+						}
+						if(tileright != -1)
+						{
+							mapright->buf[64+3*(8*i)] = map->buf[64+3*(8*i+6)];
+							mapright->buf[64+3*(8*i)+1] = map->buf[64+3*(8*i+6)+1];
+							mapright->buf[64+3*(8*i)+2] = map->buf[64+3*(8*i+6)+2];
+						}
+						if(tilebottom != -1)
+						{
+							mapbottom->buf[64+3*(i)] = map->buf[64+3*(6*8+i)];
+							mapbottom->buf[64+3*(i)+1] = map->buf[64+3*(6*8+i)+1];
+							mapbottom->buf[64+3*(i)+2] = map->buf[64+3*(6*8+i)+2];
+						}
+					}
+				
+				}
+					
+			}
+		}
+		/*
+
+		if(repeat == 0)
+		{
+			for(y = 0; y < Graphics.world.height; y++)
+			{
+				for(x = 0; x < Graphics.world.width; x++)
+				{
+					int tile = Graphics.world.cubes[y][x].tileup;
+					if(tile != -1)
+					{
+						char newmap[64];
+						map = Graphics.world.lightmaps[Graphics.world.tiles[tile].lightmap];
+						for(int xx = 1; xx < 6; xx++)
+						{
+							for(int yy = 1; yy < 6; yy++)
+							{
+								int total = 0;
+								total += map->buf[(yy-1)*8 + (xx-1) + 9];
+								total += map->buf[(yy-1)*8 + (xx+0) + 9];
+								total += map->buf[(yy-1)*8 + (xx+1) + 9];
+								total += map->buf[(yy+0)*8 + (xx-1) + 9];
+								total += map->buf[(yy+0)*8 + (xx+0) + 9];
+								total += map->buf[(yy+0)*8 + (xx+1) + 9];
+								total += map->buf[(yy+1)*8 + (xx-1) + 9];
+								total += map->buf[(yy+1)*8 + (xx+0) + 9];
+								total += map->buf[(yy+1)*8 + (xx+1) + 9];
+								
+								newmap[yy*8 + xx + 9] = total / 9;	
+							}					
+						}
+						memcpy(map->buf, newmap, 64);
+						
+					}
+				
+				}	
+			}
+		}*/
+	}
 
 
 	return true;
