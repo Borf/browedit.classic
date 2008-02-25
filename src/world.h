@@ -302,6 +302,8 @@ public:
 	cQuadTreeNode* root;
 
 
+	void		fixgridding();
+
 	string useless;
 
 

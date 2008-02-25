@@ -2,7 +2,7 @@ language=english
 setting=RO
 
 [RO]
-rodir=/media/host/Program Files/Gravity/RO/
+rodir=c:\Program Files\gravity\ro\
 model=data/romodels.txt
 //model=data/arcturusmodels.txt
 texture=data/rotextures.txt
@@ -13,7 +13,7 @@ resy=768
 fullscreen=0
 bpp=32
 font=tahoma
-grf=/media/host/Program Files/Gravity/RO/data.grf
+grf=c:\program files\gravity\ro\data.grf
 undostack=50
 bgcolor=128,0,256
 notilecolor=255,255,128
