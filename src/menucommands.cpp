@@ -10,6 +10,7 @@
 #include "wm/favoritelights.h"
 #include "wm/modeloverviewwindow.h"
 #include "wm/lightoverviewwindow.h"
+#include "wm/progresswindow.h"
 #include "wm/filewindow.h"
 
 extern cGraphics Graphics;
@@ -32,6 +33,8 @@ extern TiXmlDocument sprites;
 extern double mouseclickx, mouseclicky, mouseclickz;
 extern string message;
 extern bool showmessage;
+
+void mainloop();
 
 
 cMenuItem* selectedeffect = NULL;
@@ -1465,6 +1468,16 @@ MENUCOMMAND(dolightmaps2)
 	int x,y;
 	unsigned int i;
 
+	bool rendering = true;
+
+
+	cProgressWindow* w = new cProgressWindow(Graphics.WM.texture, &Graphics.WM.font, &rendering);
+	Graphics.WM.addwindow(w);
+	w->objects["progress"]->SetInt(1,0);
+	w->objects["progress"]->SetInt(2,Graphics.world.height * Graphics.world.width);
+
+	mainloop();
+
 	Log(3,0,"Starting Lightmap Clearing");
 
 	map<int, bool, less<int> > used;
@@ -1567,19 +1580,22 @@ MENUCOMMAND(dolightmaps2)
 		Graphics.world.models[i]->precollides();
 
 	Log(3,0, "Done Model boundingbox calculations");
-	for(y = 0; y < Graphics.world.height; y++)
+	for(y = 0; y < Graphics.world.height && rendering; y++)
 //	for(y = 40; y < 60; y++)
 	{
-		for(x = 0; x < Graphics.world.width; x++)
+		for(x = 0; x < Graphics.world.width && rendering; x++)
 //		for(x = 40; x < 60; x++)
 		{
 			cCube* c = &Graphics.world.cubes[y][x];
 			if(selectonly && !c->selected)
 				continue;
-			Log(3,0,GetMsg("PERCENTAGE"), (y*Graphics.world.width+x) / (float)(Graphics.world.height * Graphics.world.width)*100); // %f %%
+//			Log(3,0,GetMsg("PERCENTAGE"), (y*Graphics.world.width+x) / (float)(Graphics.world.height * Graphics.world.width)*100); // %f %%
+			w->objects["progress"]->SetInt(0, y*Graphics.world.width + x);
+			Graphics.camerapointer.x = -10*x + 5;
+			Graphics.camerapointer.y = -10*(Graphics.world.height-y) + 5;
+			mainloop();
 			if(c->tileup == -1)
 				continue;
-			Graphics.world.reallightmaps[y][x]->reset();
 
 			BYTE* buf = (BYTE*)Graphics.world.lightmaps[Graphics.world.tiles[c->tileup].lightmap]->buf;
 
@@ -1625,9 +1641,9 @@ MENUCOMMAND(dolightmaps2)
 							float intensity = (int)min((int)(l->maxlightincrement), (int)(pow(1-(length / l->range), l->lightfalloff) * l->todo2));
 							buf[yy*8 + xx] = min(255, buf[yy*8 + xx] + max(0, (int)(intensity)));
 
-/*							buf[64 + 3*(yy*8 + xx)+0] = min(255, buf[64 + 3*(yy*8 + xx)+0] + max(0, (int)(intensity*l->color.x)));
+							buf[64 + 3*(yy*8 + xx)+0] = min(255, buf[64 + 3*(yy*8 + xx)+0] + max(0, (int)(intensity*l->color.x)));
 							buf[64 + 3*(yy*8 + xx)+1] = min(255, buf[64 + 3*(yy*8 + xx)+1] + max(0, (int)(intensity*l->color.y)));
-							buf[64 + 3*(yy*8 + xx)+2] = min(255, buf[64 + 3*(yy*8 + xx)+2] + max(0, (int)(intensity*l->color.z)));*/
+							buf[64 + 3*(yy*8 + xx)+2] = min(255, buf[64 + 3*(yy*8 + xx)+2] + max(0, (int)(intensity*l->color.z)));
 						}
 						else
 						{
@@ -1636,11 +1652,14 @@ MENUCOMMAND(dolightmaps2)
 					}
 				}
 			}
+			Graphics.world.reallightmaps[y][x]->reset();
 		}
 	}
 
 	Graphics.world.fixgridding();
 
+
+	w->close();
 
 //	return true;
 

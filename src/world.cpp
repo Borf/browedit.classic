@@ -720,7 +720,7 @@ void cWorld::load()
 		{
 			int id = atoi(light->Attribute("id"));
 			lights[id].range = atof(light->FirstChildElement("range")->FirstChild()->Value());
-			lights[id].maxlightincrement = atof(light->FirstChildElement("range")->FirstChild()->Value());
+			lights[id].maxlightincrement = atof(light->FirstChildElement("maxlightincrement")->FirstChild()->Value());
 			lights[id].givesshadow = string(light->Attribute("givesshadow")) == "true";
 			lights[id].lightfalloff = atof(light->FirstChildElement("lightfalloff")->FirstChild()->Value());
 			light = light->NextSiblingElement();
@@ -1006,11 +1006,11 @@ void cWorld::save()
 		ZeroMemory(fname, 50);
 		strcpy(fname, fname2.substr(fname2.rfind("\\")+1).c_str());
 		
-		if(strlen(fname) > 40)
+		if(strlen(fname) > 16)
 			strcpy(fname, fname2.substr(fname2.rfind("/")+1).c_str());
 		
 		
-		if(strlen(fname) > 40)
+		if(strlen(fname) > 16)
 		{
 			Graphics.WM.MessageBox("Please use a shorter name");
 			Log(2,0,"Error: |%s| is too long", fname);

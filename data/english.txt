@@ -243,5 +243,8 @@
 			<TITLE>File...</TITLE>
 			<SELECTMAP>Select Map</SELECTMAP>
 		</file>
+		<progress>
+			<TITLE>Progress:</TITLE>
+		</progress>
 	</wm>
 </language>

@@ -409,6 +409,10 @@ SOURCE=.\src\wm\objectwindow.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\wm\progresswindow.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\wm\rsmeditwindow.h
 # End Source File
 # Begin Source File
