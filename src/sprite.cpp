@@ -439,7 +439,10 @@ void cSprite::draw()
 
 cSprite::cActSpr::cFrame::~cFrame()
 {
-	delete[] data;
+	if(data != NULL)
+		delete[] data;
+	data = NULL;
+
 	if(loaded)
 		glDeleteTextures(1, &tex);
 	loaded = false;

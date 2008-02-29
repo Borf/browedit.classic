@@ -146,6 +146,7 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 				if (Graphics.selectedobject > -1 && Graphics.selectedobject < (int)Graphics.world.sprites.size())
 				{
 					//undostack.push(new cUndoSpriteDelete(Graphics.selectedobject));
+					delete Graphics.world.sprites[Graphics.selectedobject];
 					Graphics.world.sprites.erase(Graphics.world.sprites.begin() + Graphics.selectedobject);
 					Graphics.selectedobject = -1;
 				}
