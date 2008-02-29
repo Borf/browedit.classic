@@ -2207,7 +2207,7 @@ void cWorld::draw()
 		glScalef(1,1,-1);
 		for(i = 0; i < models.size(); i++)
 		{
-			if((int)i == Graphics.selectedobject && editmode == MODE_OBJECTS)
+			if(models[i]->selected)
 				glColor4f(1,0,0, Graphics.transparentobjects ? 0.2f : 1);
 			else
 				glColor4f(1,1,1, Graphics.transparentobjects ? 0.2f : 1);
@@ -2224,7 +2224,7 @@ void cWorld::draw()
 		{
 			cVector3 pos = models[i]->pos;
 
-			if(5*models[i]->selected)
+			if(models[i]->selected)
 				glColor4f(1,1,0,0.5);
 			else
 				glColor4f(1,0,0,0.5);

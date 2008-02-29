@@ -442,8 +442,6 @@ int WinMain(HINSTANCE hInst,HINSTANCE hPrev, LPSTR Cmd,int nShow)
 #endif
 
 
-
-
 int main(int argc, char *argv[])
 {
 	int i;
@@ -1019,7 +1017,7 @@ int main(int argc, char *argv[])
 
 	Log(3,0,GetMsg("DONEINIT"));
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "data\\lighttest").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "data\\camelot").c_str());
 	if(argc > 1)
 	{
 		strcpy(Graphics.world.filename, string(rodir + "data\\" + argv[1]).c_str());

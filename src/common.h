@@ -116,6 +116,8 @@ string ucase(string s);
 string replace(string s, string a, string b);
 string ltrim(string s);
 string rtrim(string s);
+string inttostring(int);
+
 long tickcount();
 void RotateShortestAngle(float &i, float angle);
 void RotateShortestAngle(float &i, float angle, float mult);

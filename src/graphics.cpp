@@ -128,7 +128,7 @@ int cGraphics::draw(bool drawwm)
 			if (previewcolor > -1)
 				previewcolor--;
 		}
-		glColor4f(1,1,1,1);
+	/*	glColor4f(1,1,1,1);
 		if (editmode == MODE_OBJECTS)
 		{
 			glDisable(GL_TEXTURE_2D);
@@ -145,7 +145,7 @@ int cGraphics::draw(bool drawwm)
 			previewmodel->draw(false);
 			previewmodel->rot.y+=40*(frameticks / 1000.0f);
 		}
-		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_DEPTH_TEST);*/
 	}
 	if(world.loaded && editmode != MODE_OBJECTS && editmode != MODE_OBJECTGROUP && editmode != MODE_LIGHTS)
 	{

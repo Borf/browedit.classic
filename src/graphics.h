@@ -145,6 +145,7 @@ public:
 	cVector3				clipboardrot;
 	cVector3				clipboardscale;
 	string					clipboardfile;
+	string					clipboardname;
 	float					clipboardy;
 	GLfloat LightAmbient[4];
 	GLfloat LightDiffuse[4];

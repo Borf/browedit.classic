@@ -203,6 +203,15 @@ string rtrim(string s)
 	return s;
 }
 
+
+string inttostring(int i)
+{
+	char buf[10];
+	itoa(i, buf, 10);
+	return buf;
+}
+
+
 // rotates i to angle over the shortest angle
 void RotateShortestAngle(float &i, float angle)	
 {
@@ -283,7 +292,7 @@ void drawlogo()
 	Log(3,0,"//    | |_) |_ __ _____      _| |__   __| |_| |_            //");
 	Log(3,0,"//    |  _ <| '__/ _ \\ \\ /\\ / /  __| / _` | | __|           //");
 	Log(3,0,"//    | |_) | | | (_) \\ V  V /| |___| (_| | | |_            //");
-	Log(3,0,"//    |____/|_|  \\___/ \\_/\\_/ |______\\__,_|_|\\__|	         //");
+	Log(3,0,"//    |____/|_|  \\___/ \\_/\\_/ |______\\__,_|_|\\__|	     //");
 	Log(3,0,"//                                                          //");
 	Log(3,0,"//                   Coded by:      Borf                    //");
 	Log(3,0,"//                     Libraries used:                      //");

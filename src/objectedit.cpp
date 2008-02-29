@@ -101,6 +101,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 					model->pos = cVector3(mouse3dx/5, -mouse3dy, mouse3dz/5);
 					model->scale = cVector3(1,1,1);
 					model->rot = cVector3(0,0,0);
+					model->name = "Object" + inttostring(rand()%1000);
 					char buf[100];
 					sprintf(buf, "%s-%i", Graphics.previewmodel->rofilename.c_str(), rand()%100);
 					Graphics.world.models.push_back(model);
@@ -279,6 +280,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 					Graphics.clipboardscale = Graphics.world.models[Graphics.selectedobject]->scale;
 					Graphics.clipboardfile = Graphics.world.models[Graphics.selectedobject]->filename;
 					Graphics.clipboardy = Graphics.world.models[Graphics.selectedobject]->pos.y;
+					Graphics.clipboardname = Graphics.world.models[Graphics.selectedobject]->name;
 					currentobject = models->finddata("data\\model\\" + Graphics.world.models[Graphics.selectedobject]->rofilename);
 					if(currentobject != NULL)
 						MenuCommand_model((cMenuItem*)currentobject);
@@ -300,6 +302,32 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 							model->pos.y = Graphics.clipboardy;
 						model->scale = Graphics.clipboardscale;
 						model->rot = Graphics.clipboardrot;
+
+						model->name = Graphics.clipboardname;
+
+						int i = model->name.length()-1;
+						while((atoi(model->name.substr(i).c_str()) != 0 || model->name.substr(i,1) == "0") && i > 0)
+							i--;
+
+						char buf[100];
+						int newid = atoi(model->name.substr(i+1).c_str());
+
+						bool found = true;
+
+						while(found)
+						{
+							newid++;
+							found = false;
+							sprintf(buf, "%s%i", model->name.substr(0,i+1).c_str(), newid);
+
+							for(int ii = 0; ii < Graphics.world.models.size() && !found; ii++)
+							{
+								if(Graphics.world.models[ii]->name == buf)
+									found = true;
+							}
+						}
+						model->name = buf;
+
 						Graphics.world.models.push_back(model);
 						Graphics.selectedobject = Graphics.world.models.size()-1;
 						undostack.push(new cUndoNewObject());

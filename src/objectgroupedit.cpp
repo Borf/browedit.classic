@@ -193,6 +193,31 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 
 				}
 				break;
+			case SDLK_r:
+				{
+
+					string cat = Graphics.WM.InputWindow("Input Category");
+
+					if(cat == "")
+						break;
+
+					int ii = 0;
+					for(unsigned int i = 0; i < Graphics.world.models.size(); i++)
+					{
+						if(Graphics.world.models[i]->selected)
+						{
+							char buf[100];
+							sprintf(buf, "%s\\%i", cat.c_str(), ii);
+							Graphics.world.models[i]->name = buf;
+							ii++;
+						}
+					}
+					cWindow* w = Graphics.WM.getwindow(WT_MODELOVERVIEW);
+					if(w != NULL)
+						w->userfunc(NULL);
+
+					break;
+				}
 			case SDLK_PAGEDOWN:
 				{
 					for(unsigned int i = 0; i < Graphics.world.models.size(); i++)
