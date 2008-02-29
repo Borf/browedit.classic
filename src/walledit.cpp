@@ -434,11 +434,11 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 							break;
 
 						int yy = y;
-						while(Graphics.world.cubes[yy][x].tileaside != -1)
+						while(Graphics.world.cubes[yy][x].tileaside != -1 && yy < Graphics.world.height-1)
 							yy++;
 						int ymax = yy;
 						yy = y;
-						while(Graphics.world.cubes[yy][x].tileaside != -1)
+						while(Graphics.world.cubes[yy][x].tileaside != -1 && yy > 0)
 							yy--;
 						int ymin = yy+1;
 
@@ -533,11 +533,11 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 							break;
 
 						int xx = x;
-						while(Graphics.world.cubes[y][xx].tileside != -1)
+						while(Graphics.world.cubes[y][xx].tileside != -1 && xx < Graphics.world.width)
 							xx++;
 						int xmax = xx;
 						xx = x;
-						while(Graphics.world.cubes[y][xx].tileside != -1)
+						while(Graphics.world.cubes[y][xx].tileside != -1 && xx > 0)
 							xx--;
 						int xmin = xx+1;
 
@@ -641,38 +641,76 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 						break;
 
 					undostack.push(new cUndoChangeWall(0,x,y, Graphics.world.cubes[y][x].tileside));
-					if(Graphics.world.cubes[y][x].tileside != -1)
+
+					int from = x;
+					int to = x+1;
+
+					if(event.key.keysym.mod&KMOD_CTRL)
 					{
-						Graphics.world.cubes[y][x].tileside = -1;
-						break;
+						while( (Graphics.world.cubes[y][from].cell1 +
+								Graphics.world.cubes[y][from].cell2) !=
+							   (Graphics.world.cubes[y+1][from].cell3 + 
+							    Graphics.world.cubes[y+1][from].cell4))
+						{
+							if(from == 0)
+								break;
+							from--;
+						}
+
+
+						from++;
+
+						while( (Graphics.world.cubes[y][to].cell1 +
+								Graphics.world.cubes[y][to].cell2) !=
+							   (Graphics.world.cubes[y+1][to].cell3 + 
+							    Graphics.world.cubes[y+1][to].cell4))
+						{
+							to++;
+							if(to == Graphics.world.width)
+								break;
+						}
+					
 					}
 
-					cTile t;
-					t.color[0] = (char)255;
-					t.color[1] = (char)255;
-					t.color[2] = (char)255;
-					t.color[3] = (char)255;
-					t.texture = Graphics.texturestart + ((int)Graphics.selectionstart.y - 32) / 288;
-					t.lightmap = 0;
-					float selstartx = (((Graphics.selectionstart.x - (Graphics.w()-256)) / 32.0f)) / 8.0f;
-					float selstarty = (((int)(Graphics.selectionstart.y - 32) % 288) / 32) / 8.0f;
-					float selendx = (((Graphics.selectionend.x - (Graphics.w()-256)) / 32.0f)) / 8.0f;
-					float selendy = (((int)(Graphics.selectionend.y - 32) % 288) / 32) / 8.0f;
 
-					
-					t.u1 = selstartx;
-					t.v1 = selstarty;
+					bool set = Graphics.world.cubes[y][x].tileside != -1;
 
-					t.u2 = selendx;
-					t.v2 = selstarty;
-					
-					t.u3 = selstartx;
-					t.v3 = selendy;
-					
-					t.u4 = selendx;
-					t.v4 = selendy;
-					Graphics.world.tiles.push_back(t);
-					Graphics.world.cubes[y][x].tileside = Graphics.world.tiles.size()-1;
+					for(int xx = from; xx < to; xx++)
+					{
+						if(set)
+						{
+							Graphics.world.cubes[y][xx].tileside = -1;
+						}
+						else
+						{
+							cTile t;
+							t.color[0] = (char)255;
+							t.color[1] = (char)255;
+							t.color[2] = (char)255;
+							t.color[3] = (char)255;
+							t.texture = Graphics.texturestart + ((int)Graphics.selectionstart.y - 32) / 288;
+							t.lightmap = 0;
+							float selstartx = (((Graphics.selectionstart.x - (Graphics.w()-256)) / 32.0f)) / 8.0f;
+							float selstarty = (((int)(Graphics.selectionstart.y - 32) % 288) / 32) / 8.0f;
+							float selendx = (((Graphics.selectionend.x - (Graphics.w()-256)) / 32.0f)) / 8.0f;
+							float selendy = (((int)(Graphics.selectionend.y - 32) % 288) / 32) / 8.0f;
+
+							
+							t.u1 = selstartx;
+							t.v1 = selstarty;
+
+							t.u2 = selendx;
+							t.v2 = selstarty;
+							
+							t.u3 = selstartx;
+							t.v3 = selendy;
+							
+							t.u4 = selendx;
+							t.v4 = selendy;
+							Graphics.world.tiles.push_back(t);
+							Graphics.world.cubes[y][xx].tileside = Graphics.world.tiles.size()-1;
+						}
+					}
 				}
 				break;
 			case SDLK_PERIOD:
@@ -685,39 +723,74 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 						break;
 
 					undostack.push(new cUndoChangeWall(1,x,y, Graphics.world.cubes[y][x].tileaside));
-					if(Graphics.world.cubes[y][x].tileaside != -1)
+
+					int from = y;
+					int to = y+1;
+
+					if(event.key.keysym.mod&KMOD_CTRL)
 					{
-						Graphics.world.cubes[y][x].tileaside = -1;
-						break;
+						while( (Graphics.world.cubes[from][x].cell1 +
+								Graphics.world.cubes[from][x].cell3) !=
+							   (Graphics.world.cubes[from][x+1].cell2 + 
+							    Graphics.world.cubes[from][x+1].cell4))
+						{
+							if(from == 0)
+								break;
+							from--;
+						}
+
+
+						from++;
+
+						while( (Graphics.world.cubes[to][x].cell1 +
+								Graphics.world.cubes[to][x].cell3) !=
+							   (Graphics.world.cubes[to][x+1].cell2 + 
+							    Graphics.world.cubes[to][x+1].cell4))
+						{
+							to++;
+							if(to == Graphics.world.height)
+								break;
+						}
+					
 					}
 
-					cTile t;
-					t.color[0] = (char)255;
-					t.color[1] = (char)255;
-					t.color[2] = (char)255;
-					t.color[3] = (char)255;
-					t.texture = Graphics.texturestart + (int)(Graphics.selectionstart.y - 32) / 288;
-					t.lightmap = 0;
-					float selstartx = (((Graphics.selectionstart.x - (Graphics.w()-256)) / 32.0f)) / 8.0f;
-					float selstarty = (((int)(Graphics.selectionstart.y - 32) % 288) / 32) / 8.0f;
-					float selendx = (((Graphics.selectionend.x - (Graphics.w()-256)) / 32.0f)) / 8.0f;
-					float selendy = (((int)(Graphics.selectionend.y - 32) % 288) / 32) / 8.0f;
 
-					
-					t.u1 = selstartx;
-					t.v1 = selstarty;
+					bool set = Graphics.world.cubes[y][x].tileaside != -1;
 
-					t.u2 = selendx;
-					t.v2 = selstarty;
-					
-					t.u3 = selstartx;
-					t.v3 = selendy;
-					
-					t.u4 = selendx;
-					t.v4 = selendy;
-					Graphics.world.tiles.push_back(t);
-					Graphics.world.cubes[y][x].tileaside = Graphics.world.tiles.size()-1;
+					for(int yy = from; yy < to; yy++)
+					{
+						if(set)
+							Graphics.world.cubes[yy][x].tileaside = -1;
+						else
+						{
+							cTile t;
+							t.color[0] = (char)255;
+							t.color[1] = (char)255;
+							t.color[2] = (char)255;
+							t.color[3] = (char)255;
+							t.texture = Graphics.texturestart + (int)(Graphics.selectionstart.y - 32) / 288;
+							t.lightmap = 0;
+							float selstartx = (((Graphics.selectionstart.x - (Graphics.w()-256)) / 32.0f)) / 8.0f;
+							float selstarty = (((int)(Graphics.selectionstart.y - 32) % 288) / 32) / 8.0f;
+							float selendx = (((Graphics.selectionend.x - (Graphics.w()-256)) / 32.0f)) / 8.0f;
+							float selendy = (((int)(Graphics.selectionend.y - 32) % 288) / 32) / 8.0f;
 
+							
+							t.u1 = selstartx;
+							t.v1 = selstarty;
+
+							t.u2 = selendx;
+							t.v2 = selstarty;
+							
+							t.u3 = selstartx;
+							t.v3 = selendy;
+							
+							t.u4 = selendx;
+							t.v4 = selendy;
+							Graphics.world.tiles.push_back(t);
+							Graphics.world.cubes[yy][x].tileaside = Graphics.world.tiles.size()-1;
+						}
+					}
 				}
 				break;
 			case SDLK_LEFTBRACKET:
