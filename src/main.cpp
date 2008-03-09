@@ -1332,6 +1332,10 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				return 1;
 			}
 
+			if(doubleclick && m == NULL && pm == NULL && event.button.button == SDL_BUTTON_LEFT)
+			{
+				return 1;
+			}
 			if (!dragged && !doubleclick && m == NULL && pm == NULL && event.button.button == SDL_BUTTON_LEFT)
 			{
 				draggingobject = NULL;

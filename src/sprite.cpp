@@ -29,12 +29,6 @@ GLuint cSprite::cActSpr::cFrame::texid()
 	if(loaded)
 		return tex;
 
-	glGenTextures(1, &tex);
-	glBindTexture(GL_TEXTURE_2D, tex);
-	glTexImage2D(GL_TEXTURE_2D,0,4,SPRITESIZE,SPRITESIZE,0,GL_RGBA,GL_UNSIGNED_BYTE,data);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-	loaded = true;
 	return tex;
 
 
@@ -194,6 +188,14 @@ void cSprite::cActSpr::load(string fname)
 		f->data = image;
 		f->h = height;
 		f->w = width;
+		glGenTextures(1, &f->tex);
+		glBindTexture(GL_TEXTURE_2D, f->tex);
+		glTexImage2D(GL_TEXTURE_2D,0,4,SPRITESIZE,SPRITESIZE,0,GL_RGBA,GL_UNSIGNED_BYTE,image);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+		f->loaded = true;
+		delete[] f->data;
+
 		frames.push_back(f);
 
 	}
