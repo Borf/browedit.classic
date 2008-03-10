@@ -1,5 +1,5 @@
 language=english
-setting=RO
+setting=ROportable
 
 [RO]
 rodir=c:\Program Files\gravity\ro\
@@ -14,6 +14,23 @@ fullscreen=0
 bpp=32
 font=tahoma
 grf=c:\program files\gravity\ro\data.grf
+undostack=50
+bgcolor=128,0,256
+notilecolor=255,255,128
+
+[ROportable]
+rodir=..\ro\
+model=data/romodels.txt
+//model=data/arcturusmodels.txt
+texture=data/rotextures.txt
+//texture=data/arctextures.txt
+texture=data/texturescustom.txt
+resx=1024
+resy=768
+fullscreen=0
+bpp=32
+font=tahoma
+grf=..\ro\data.grf
 undostack=50
 bgcolor=128,0,256
 notilecolor=255,255,128

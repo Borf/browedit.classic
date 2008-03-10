@@ -414,6 +414,12 @@ int cGraphics::init()
 	cFile* pFile = fs.open("water.txt");
 	while(pFile->readline() != "[" + config + "]" && !pFile->eof());
 
+	if(pFile->eof())
+	{
+		Log(1,0,"No matching water-section found!");
+		exit(0);
+	}
+
 	waterdir = pFile->readline();
 	waterext = pFile->readline();
 	watercount = atoi(pFile->readline().c_str());

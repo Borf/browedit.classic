@@ -2,6 +2,10 @@
 data\texture\워터\
 .jpg
 8
+[ROportable]
+data\texture\워터\
+.jpg
+8
 [Arcturus]
 data\texture\wate\
 .bmp

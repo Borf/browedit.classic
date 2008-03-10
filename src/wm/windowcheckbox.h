@@ -32,8 +32,8 @@ public:
 
 class cWindowBoolCheckBox : public cWindowCheckBox
 {
-	bool* boolvalue;
 public:
+	bool* boolvalue;
 	cWindowBoolCheckBox(cWindow* parent) : cWindowCheckBox(parent)
 	{
 		alignment = ALIGN_TOPLEFT;

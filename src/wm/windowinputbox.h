@@ -74,7 +74,10 @@ public:
 	{
 		cWindowInputBox::SetInt(id,val);
 		if (id == 3)
+		{
+			Log(3,0,"Use of depricated method, do not use!");
 			floatje = (float*)val;
+		}
 	}
 	bool onkeydown(int keyid, bool shift)
 	{
@@ -90,9 +93,9 @@ public:
 
 class cWindowStringInputBox : public cWindowInputBox
 {
-	string* stringetje;
 	string lastvalue;
 public:
+	string* stringetje;
 	cWindowStringInputBox(cWindow* parent) : cWindowInputBox(parent)
 	{
 		type = OBJECT_FLOATINPUTBOX;
@@ -126,6 +129,7 @@ public:
 		bool ret = cWindowInputBox::onkeydown(keyid, shift);
 		if (keyid == SDLK_RETURN)
 		{
+			Log(3,0,"Use of depricated method, do not use!");
 			*stringetje = text;
 			ret = true;
 		}

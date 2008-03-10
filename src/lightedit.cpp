@@ -254,18 +254,19 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 						cLight* l = &Graphics.world.lights[Graphics.selectedobject];
 
 						cWindow* w = new cLightWindow(Graphics.WM.texture, &Graphics.WM.font);
-						w->objects["name"]->SetInt(3,(intptr_t)&l->name);
-						w->objects["posx"]->SetInt(3,(intptr_t)&l->pos.x);
-						w->objects["posy"]->SetInt(3,(intptr_t)&l->pos.y);
-						w->objects["posz"]->SetInt(3,(intptr_t)&l->pos.z);
-						w->objects["colorr"]->SetInt(3,(intptr_t)&l->color.x);
-						w->objects["colorg"]->SetInt(3,(intptr_t)&l->color.y);
-						w->objects["colorb"]->SetInt(3,(intptr_t)&l->color.z);
-						w->objects["intensity"]->SetInt(3,(intptr_t)&l->todo2);
-						w->objects["range"]->SetInt(3,(intptr_t)&l->range);
-						w->objects["maxlightincrement"]->SetInt(3,(intptr_t)&l->maxlightincrement);
-						w->objects["lightfalloff"]->SetInt(3,(intptr_t)&l->lightfalloff);
-						w->objects["castshadow"]->SetInt(3,(intptr_t)&l->givesshadow);
+						((cWindowStringInputBox*)w->objects["name"])->stringetje = &l->name;
+						((cWindowFloatInputBox*)w->objects["posx"])->floatje = &l->pos.x;
+						((cWindowFloatInputBox*)w->objects["posy"])->floatje = &l->pos.y;
+						((cWindowFloatInputBox*)w->objects["posz"])->floatje = &l->pos.z;
+						((cWindowFloatInputBox*)w->objects["colorr"])->floatje = &l->color.x;
+						((cWindowFloatInputBox*)w->objects["colorg"])->floatje = &l->color.y;
+						((cWindowFloatInputBox*)w->objects["colorb"])->floatje = &l->color.z;
+						((cWindowFloatInputBox*)w->objects["intensity"])->floatje = &l->todo2;
+						((cWindowFloatInputBox*)w->objects["range"])->floatje = &l->range;
+						((cWindowFloatInputBox*)w->objects["maxlightincrement"])->floatje = &l->maxlightincrement;
+						((cWindowFloatInputBox*)w->objects["lightfalloff"])->floatje = &l->lightfalloff;
+						((cWindowBoolCheckBox*)w->objects["castshadow"])->boolvalue = &l->givesshadow;
+
 						//((cEffectWindow*)w)->undo = new cUndoChangeEffect(Graphics.selectedobject);
 						Graphics.WM.addwindow(w);
 					}

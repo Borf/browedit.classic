@@ -366,16 +366,17 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 					cWindow* w = new cObjectWindow(Graphics.WM.texture, &Graphics.WM.font);
 					if (menuitem != NULL)
 						w->objects["objectmenu"]->SetText(0,menuitem->data2);
-					w->objects["posx"]->SetInt(3,(intptr_t)&o->pos.x);
-					w->objects["posy"]->SetInt(3,(intptr_t)&o->pos.y);
-					w->objects["posz"]->SetInt(3,(intptr_t)&o->pos.z);
-					w->objects["rotx"]->SetInt(3,(intptr_t)&o->rot.x);
-					w->objects["roty"]->SetInt(3,(intptr_t)&o->rot.y);
-					w->objects["rotz"]->SetInt(3,(intptr_t)&o->rot.z);
-					w->objects["scalex"]->SetInt(3,(intptr_t)&o->scale.x);
-					w->objects["scaley"]->SetInt(3,(intptr_t)&o->scale.y);
-					w->objects["scalez"]->SetInt(3,(intptr_t)&o->scale.z);
-					w->objects["objectname"]->SetInt(3, (intptr_t)&o->name);
+					((cWindowFloatInputBox*)w->objects["posx"])->floatje = &o->pos.x;
+					((cWindowFloatInputBox*)w->objects["posy"])->floatje = &o->pos.y;
+					((cWindowFloatInputBox*)w->objects["posz"])->floatje = &o->pos.z;
+					((cWindowFloatInputBox*)w->objects["rotx"])->floatje = &o->rot.x;
+					((cWindowFloatInputBox*)w->objects["roty"])->floatje = &o->rot.y;
+					((cWindowFloatInputBox*)w->objects["rotz"])->floatje = &o->rot.z;
+					((cWindowFloatInputBox*)w->objects["scalex"])->floatje = &o->scale.x;
+					((cWindowFloatInputBox*)w->objects["scaley"])->floatje = &o->scale.y;
+					((cWindowFloatInputBox*)w->objects["scalez"])->floatje = &o->scale.z;
+					((cWindowStringInputBox*)w->objects["objectname"])->stringetje = &o->name;
+					
 					((cObjectWindow*)w)->undo = new cUndoChangeObject(Graphics.selectedobject);
 
 					Graphics.WM.addwindow(w);
