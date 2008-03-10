@@ -74,6 +74,9 @@ MENUCOMMAND(eascript);
 MENUCOMMAND(npcscreenies);
 MENUCOMMAND(favlights);
 
+MENUCOMMAND(rebuildtexturefile);
+MENUCOMMAND(rebuildmodelfile);
+
 
 
 // popup menu

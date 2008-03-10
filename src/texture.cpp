@@ -136,8 +136,8 @@ void cTexture::resizeToLog()
 	float factorx = (float)widthOriginal / (float)width;
 	float factory = (float)heightOriginal / (float)height;
 
-	char* data2 = new char[width* height*bpp];
-	ZeroMemory(data2, width*height*bpp);
+	char* data2 = new char[width* height*(bpp/8)];
+	ZeroMemory(data2, width*height*(bpp/8));
 
 	for(int x = 0; x < width; x++)
 	{
@@ -145,11 +145,10 @@ void cTexture::resizeToLog()
 		{
 			int tx = (int)floor(x*factorx);
 			int ty = (int)floor(y*factory);
-			int target = 4*(tx+(widthOriginal)*ty);
-  			data2[4*(x+width*y)] = data[target];
-			data2[4*(x+width*y)+1] = data[target+1];
-			data2[4*(x+width*y)+2] = data[target+2];
-			data2[4*(x+width*y)+3] = data[target+3];
+			int target = (bpp/8)*(tx+(widthOriginal)*ty);
+
+			for(int i = 0; i < (bpp/8); i++)
+	  			data2[(bpp/8)*(x+width*y)+i] = data[target+i];
 		}
 	}
 	delete[] data;

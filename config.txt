@@ -4,6 +4,7 @@ setting=ROportable
 [RO]
 rodir=c:\Program Files\gravity\ro\
 model=data/romodels.txt
+model=data/randommodels.txt
 //model=data/arcturusmodels.txt
 texture=data/rotextures.txt
 //texture=data/arctextures.txt
@@ -21,6 +22,7 @@ notilecolor=255,255,128
 [ROportable]
 rodir=..\ro\
 model=data/romodels.txt
+model=data/randommodels.txt
 //model=data/arcturusmodels.txt
 texture=data/rotextures.txt
 //texture=data/arctextures.txt
@@ -39,6 +41,7 @@ notilecolor=255,255,128
 rodir=d:\games\newro\
 model=data/romodels.txt
 model=data/alphamodels.txt
+model=data/randommodels.txt
 //model=data/arcturusmodels.txt
 texture=data/rotextures.txt
 //texture=data/arctextures.txt

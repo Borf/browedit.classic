@@ -44,8 +44,8 @@ With Person
 Dungeon
 지하묘지
 Catacomb
-집시마을
-House Hour Village
+집시
+House Hour
 중국
 China
 크리스마스
@@ -82,3 +82,19 @@ Lighthouse
 Amendment
 풀
 Grass
+필드
+Field
+바닥
+Bottom
+유저인터페이스
+Your Interface
+게페
+Geffen
+기타
+Other
+게펜
+Geffen
+알베르타
+Treasure Ship
+워터
+Water

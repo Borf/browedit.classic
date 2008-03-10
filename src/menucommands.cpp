@@ -3444,3 +3444,58 @@ MENUCOMMAND(addfavlightcat)
 	else
 		return false;
 }
+
+
+MENUCOMMAND(rebuildtexturefile)
+{
+	string file = Graphics.WM.InputWindow("File to output:", "data/rotextures.txt");
+	if(file == "")
+		return false;
+	ofstream pFile(file.c_str(), ios_base::binary | ios_base::out);
+	unsigned int i;
+	for(i = 0; i < fs.locations.size(); i++)
+	{
+		for(map<string, cFile*, less<string> >::iterator it = fs.locations[i]->files.begin(); it != fs.locations[i]->files.end(); it++)
+		{
+			if(it->first.substr(rodir.length(),13) != "data\\texture\\")
+				continue;
+			string ext = it->first.substr(it->first.length()-4);
+			if(ext == ".jpg" || ext == ".bmp" || ext == ".tga")
+			{
+				string filename = it->first.substr(rodir.length()+13);
+				filename = "RO/" + replace(filename, "\\", "/").substr(0, filename.length()-4) + "|" + filename + "\r\n";
+				pFile.write(filename.c_str(), filename.length());
+			}
+		}
+	}
+	pFile.close();
+	return true;
+}
+
+
+MENUCOMMAND(rebuildmodelfile)
+{
+	string file = Graphics.WM.InputWindow("File to output:", "data/romodels.txt");
+	if(file == "")
+		return false;
+	ofstream pFile(file.c_str(), ios_base::binary | ios_base::out);
+	unsigned int i;
+	for(i = 0; i < fs.locations.size(); i++)
+	{
+		for(map<string, cFile*, less<string> >::iterator it = fs.locations[i]->files.begin(); it != fs.locations[i]->files.end(); it++)
+		{
+			if(it->first.substr(rodir.length(),11) != "data\\model\\")
+				continue;
+			string ext = it->first.substr(it->first.length()-4);
+			if(ext == ".rsm")
+			{
+				string filename = it->first.substr(rodir.length());
+				string shortname = filename.substr(11);
+				filename = "RO/" + replace(shortname, "\\", "/").substr(0, shortname.length()-4) + "|" + filename + "\r\n";
+				pFile.write(filename.c_str(), filename.length());
+			}
+		}
+	}
+	pFile.close();
+	return true;
+}

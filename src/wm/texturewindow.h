@@ -157,6 +157,10 @@ public:
 		vector<cWindowTree::cTreeNode*> nodes;
 		map<string, cWindowTree::cTreeNode*, less<string> > lookup;
 
+		string line, pre, filename, cat, name;
+
+		map<string, string, less<string> > translationcache;
+
 		for(unsigned int i = 0; i < texturefiles.size(); i++)
 		{
 			cFile* pFile = fs.open(texturefiles[i]);
@@ -164,21 +168,24 @@ public:
 				continue;
 			while(!pFile->eof())
 			{
-				string line = pFile->readline();
+				line = pFile->readline();
 				if (line == "")
 					continue;
-				string pre = line.substr(0, line.find("|"));
-				string filename = line.substr(line.find("|")+1);
+				pre = line.substr(0, line.find("|"));
+				filename = line.substr(line.find("|")+1);
 
-				string cat = pre.substr(0, pre.rfind("/"));
-				string name = pre.substr(pre.rfind("/")+1);
+				cat = pre.substr(0, pre.rfind("/"));
+				name = pre.substr(pre.rfind("/")+1);
 
-				for(unsigned int ii = 0; ii < translations.size(); ii++)
+				if(translationcache.find(cat) != translationcache.end())
+					cat = translationcache[cat];
+				else
 				{
-					name = replace(name, translations[ii].first, translations[ii].second);
-					cat = replace(cat, translations[ii].first, translations[ii].second);
+					string origcat = cat;
+					for(unsigned int ii = 0; ii < translations.size(); ii++)
+						cat = replace(cat, translations[ii].first, translations[ii].second);
+					translationcache[origcat] = cat;
 				}
-
 
 				if(lookup.find(cat) == lookup.end())
 				{
@@ -208,6 +215,7 @@ public:
 					if (items.find(lookup[cat]) == items.end())
 					{
 						items[lookup[cat]] = vector<pair<string, string> >();
+						items[lookup[cat]].reserve(100);
 					}
 					items[lookup[cat]].push_back(pair<string,string>(name,filename));
 				}
