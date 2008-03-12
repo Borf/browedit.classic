@@ -643,7 +643,7 @@ int main(int argc, char *argv[])
 			ok = false;
 		if (res == updatebuf)
 		{
-			Log(3,0,GetMsg("met/VERSIONERROR")); // you do not have the latest version
+			Log(3,0,GetMsg("net/VERSIONERROR")); // you do not have the latest version
 			sleep(10);
 			exit(0);
 		}
