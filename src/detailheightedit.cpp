@@ -311,10 +311,6 @@ int cProcessManagement::detailheightedit_process_events(SDL_Event &event)
 
 				}
 				break;
-
-
-
-
 			default:
 				break;
 			}

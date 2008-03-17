@@ -498,11 +498,30 @@ void cWorld::load()
 				s.name = string(buf);
 				s.todo1 = string(buf+40, 40);
 				s.filename = string(buf+80);
-				s.todo2 = string(buf+120,20);
-				s.pos.x = *((float*)(buf+140));
-				s.pos.y = *((float*)(buf+144));
-				s.pos.z = *((float*)(buf+148));
-				s.id = string(buf+152, 40);
+
+				s.unknown8 = *((float*)(buf+120));	//0
+				s.unknown7 = *((float*)(buf+124));	//-435.095
+				s.rotation.x = *((float*)(buf+128));
+				s.rotation.y = *((float*)(buf+132));
+				s.rotation.z = *((float*)(buf+136));
+				
+				s.scale.x = *((float*)(buf+140));
+				s.scale.y = *((float*)(buf+144));
+				s.scale.z = *((float*)(buf+148));
+
+				memcpy(s.unknown6, buf+152, 8);		//	152-159 -> 8 bytes of unknown
+
+				s.pos.x = *((float*)(buf+160));
+				s.pos.y = *((float*)(buf+164));
+				s.pos.z = *((float*)(buf+168));
+
+				s.unknown5 = *((float*)(buf+172));	//1
+				s.unknown4 = *((float*)(buf+176));	//50
+				s.unknown3 = *((float*)(buf+180));	//45
+				s.unknown2 = *((float*)(buf+184));	//70
+				s.unknown1 = *((float*)(buf+188));	//4
+
+
 				s.pos.x = (s.pos.x / 5) + width;
 				s.pos.z = (s.pos.z / 5) + height;
 				sounds.push_back(s);
@@ -1060,7 +1079,7 @@ void cWorld::save()
 
 		pFile.write(useless.c_str()+60, useless.length()-60);
 
-		long count = models.size() + lights.size()+effects.size();// + sounds.size();
+		long count = models.size() + lights.size()+effects.size() + sounds.size();
 
 		pFile.write((char*)&count, 4);
 
@@ -1177,7 +1196,7 @@ void cWorld::save()
 		extraproperties.InsertEndChild(xmllights);
 
 
-		/*for(i = 0; i < sounds.size(); i++)
+		for(i = 0; i < sounds.size(); i++)
 		{
 			long l = 3;
 			pFile.write((char*)&l, 4);
@@ -1185,26 +1204,40 @@ void cWorld::save()
 			ZeroMemory(buf,41);
 			strcpy(buf, sounds[i].name.c_str());
 			pFile.write(buf, 40);
+
 			ZeroMemory(buf,41);
 			strcpy(buf, sounds[i].todo1.c_str());
 			pFile.write(buf, 40);
+
 			ZeroMemory(buf,41);
 			strcpy(buf, sounds[i].filename.c_str());
 			pFile.write(buf, 40);
-			ZeroMemory(buf,41);
-			strcpy(buf, sounds[i].todo2.c_str());
-			pFile.write(buf, 20);
 
-			float f = (sounds[i].pos.x - width) * 5.0;
-			pFile.write((char*)&f, 4);
-			pFile.write((char*)&sounds[i].pos.y, 4);
-			f = (sounds[i].pos.z - height) * 5.0;
-			pFile.write((char*)&f, 4);
+			pFile.write((char*)&sounds[i].unknown8, 4);		//120
+			pFile.write((char*)&sounds[i].unknown7, 4);		//124
 
-			ZeroMemory(buf,41);
-			strcpy(buf, sounds[i].id.c_str());
-			pFile.write(buf, 40);
-		}*/
+			
+			pFile.write((char*)&sounds[i].rotation.x, 4);		//128
+			pFile.write((char*)&sounds[i].rotation.y, 4);		//132
+			pFile.write((char*)&sounds[i].rotation.z, 4);		//136
+
+			pFile.write((char*)&sounds[i].scale.x, 4);			//140
+			pFile.write((char*)&sounds[i].scale.y, 4);			//144
+			pFile.write((char*)&sounds[i].scale.z, 4);			//148
+
+		
+			pFile.write(sounds[i].unknown6, 8);					//	152-159 -> 8 bytes of unknown
+
+			pFile.write((char*)&sounds[i].pos.x, 4);			//160
+			pFile.write((char*)&sounds[i].pos.y, 4);			//164
+			pFile.write((char*)&sounds[i].pos.z, 4);			//168
+
+			pFile.write((char*)&sounds[i].unknown5,4);			//172
+			pFile.write((char*)&sounds[i].unknown4,4);			//176
+			pFile.write((char*)&sounds[i].unknown3,4);			//180
+			pFile.write((char*)&sounds[i].unknown2,4);			//184
+			pFile.write((char*)&sounds[i].unknown1,4);			//188
+		}
 
 		for(i = 0; i < effects.size(); i++)
 		{
@@ -2290,6 +2323,34 @@ void cWorld::draw()
 			effect->draw();
 			Graphics.font->print3d(0,0,1,1,0,0,0,0.4f,"%s", effects[i].readablename.c_str());
 			glTranslatef(-5*effects[i].pos.x, effects[i].pos.y, -5*(2*height-effects[i].pos.z));
+
+		}
+	}
+	if(editmode == MODE_SOUNDS)
+	{
+		glEnable(GL_TEXTURE_2D);
+		glEnable(GL_BLEND);
+		for(i = 0; i < sounds.size(); i++)
+		{
+			if ((int)i == Graphics.selectedobject)
+			{
+				glDisable(GL_TEXTURE_2D);
+				glColor3f(1,1,0);
+				glBegin(GL_LINES);
+					glVertex3f(5*sounds[i].pos.x,9999, 5*(2*height-sounds[i].pos.z));
+					glVertex3f(5*sounds[i].pos.x,-9999, 5*(2*height-sounds[i].pos.z));
+				glEnd();
+				glColor4f(1,0,0,1);
+				glEnable(GL_TEXTURE_2D);
+			}
+			else
+				glColor4f(1,1,1,1);
+
+			cVector3 p = sounds[i].pos;
+			glTranslatef(5*sounds[i].pos.x,-sounds[i].pos.y, 5*(2*height-sounds[i].pos.z));
+			sound->draw();
+			Graphics.font->print3d(0,0,1,1,0,0,0,0.4f,"%s", sounds[i].filename.c_str());
+			glTranslatef(-5*sounds[i].pos.x, sounds[i].pos.y, -5*(2*height-sounds[i].pos.z));
 
 		}
 	}

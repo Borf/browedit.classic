@@ -248,5 +248,13 @@
 		<progress>
 			<TITLE>Progress:</TITLE>
 		</progress>
+		<sound>
+			<TITLE>Sounds...</TITLE>
+			<NAME>Name:</NAME>
+			<FILE>File:</FILE>
+			<POSITION>Position:</POSITION>
+			<SCALE>Scale:</SCALE>
+			<ROTATION>Rotation:</ROTATION>
+		</sound>
 	</wm>
 </language>

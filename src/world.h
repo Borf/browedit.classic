@@ -140,9 +140,20 @@ public:
 	string name;
 	string todo1;
 	string filename;
-	string todo2;
 	cVector3 pos;
-	string id;
+	cVector3 rotation;
+	cVector3 scale;
+
+	float unknown1;
+	float unknown2;
+	float unknown3;
+	float unknown4;
+	float unknown5;
+	char unknown6[6];
+	float unknown7;
+	float unknown8;
+
+
 };
 
 class cEffect

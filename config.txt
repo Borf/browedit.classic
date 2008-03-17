@@ -20,7 +20,7 @@ bgcolor=128,0,256
 notilecolor=255,255,128
 
 [ROportable]
-rodir=..\ro\
+rodir=..\..\ro\
 model=data/romodels.txt
 model=data/randommodels.txt
 //model=data/arcturusmodels.txt
@@ -32,7 +32,7 @@ resy=768
 fullscreen=0
 bpp=32
 font=tahoma
-grf=..\ro\data.grf
+grf=..\..\ro\data.grf
 undostack=50
 bgcolor=128,0,256
 notilecolor=255,255,128

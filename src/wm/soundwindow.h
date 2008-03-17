@@ -1,5 +1,5 @@
-#ifndef __OBJECTWINDOW_H__
-#define __OBJECTWINDOW_H__
+#ifndef __SOUNDWINDOW_H__
+#define __SOUNDWINDOW_H__
 
 #include "window.h"
 
@@ -8,69 +8,25 @@
 #include "windowbutton.h"
 #include "windowlabel.h"
 #include "windowinputbox.h"
+#include "objectwindow.h"
 #include "../undo.h"
 extern cUndoStack undostack;
 
-class cWindowOkButton : public cWindowButton
-{
-public:
-	cWindowOkButton(cWindow* parent) : cWindowButton(parent)
-	{
-		alignment = ALIGN_BOTTOM;
-		moveto(100, 20);
-		resizeto(100, 20);
-		text = GetMsg("wm/OK");
-	}
-	virtual ~cWindowOkButton() {}
-	void click()
-	{
-		if (parent->windowtype() == WT_OBJECT || parent->windowtype() == WT_LIGHT || parent->windowtype() == WT_SOUND)
-		{
-			parent->userfunc((void*)1);
-		}
-		parent->close();
-	}
-};
-
-
-class cWindowCancelButton : public cWindowButton
-{
-public:
-	cWindowCancelButton(cWindow* parent) : cWindowButton(parent)
-	{
-		alignment = ALIGN_BOTTOM;
-		moveto(-100, 20);
-		resizeto(100, 20);
-		text = GetMsg("wm/CANCEL");
-	}
-	virtual ~cWindowCancelButton() {}
-	void click()
-	{
-		if (parent->windowtype() == WT_OBJECT || parent->windowtype() == WT_EFFECT || parent->windowtype() == WT_LIGHT)
-		{
-			parent->userfunc((void*)0);
-		}
-		parent->close();
-	}
-};
-
-
-
-class cObjectWindow : public cWindow
+class cSoundWindow : public cWindow
 {
 public:
 	cUndoItem* undo;
 
-	cObjectWindow(cTexture* t, cFont* f) : cWindow(t,f)
+	cSoundWindow(cTexture* t, cFont* f) : cWindow(t,f)
 	{
 		cWindowObject* o;
-		wtype = WT_OBJECT;
+		wtype = WT_LIGHT;
 		resizable = false;
 		visible = true;
 
-		h = 200;
+		h = 340;
 		w = 350;
-		title = GetMsg("wm/object/TITLE");
+		title = GetMsg("wm/sound/TITLE");
 		center();
 
 		defaultobject = "OkButton";
@@ -79,10 +35,13 @@ public:
 		objects["close"] = new cWindowCloseButton(this);
 
 
-		addlabel("text", 15,20,GetMsg("wm/object/OBJECT"));
-		addlabel("lblPos", 15, 60, GetMsg("wm/object/POSITION"));
-		addlabel("lblScale", 15,80, GetMsg("wm/object/SCALE"));
-		addlabel("lblRot", 15,100,GetMsg("wm/object/ROTATION"));
+		addlabel("lblName", 15,20,GetMsg("wm/sound/NAME"));
+		addlabel("lblFile", 15,40,GetMsg("wm/sound/FILE"));
+		addlabel("lblPos", 15, 60, GetMsg("wm/sound/POSITION"));
+		addlabel("lblScale", 15,80, GetMsg("wm/sound/SCALE"));
+		addlabel("lblRot", 15,100,GetMsg("wm/sound/ROTATION"));
+
+
 
 		o = new cWindowInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;
@@ -90,14 +49,14 @@ public:
 		o->resizeto(210,20);
 		o->SetText(0,"");
 		o->SetInt(0,0);
-		objects["objectmenu"] = o;
+		objects["objectname"] = o;
 
 		o = new cWindowStringInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,40);
 		o->resizeto(210,20);
 		o->SetText(0,"");
-		objects["objectname"] = o;
+		objects["objectfile"] = o;
 		
 		o = new cWindowFloatInputBox(this);
 		o->alignment = ALIGN_TOPLEFT;
@@ -152,6 +111,56 @@ public:
 		o->moveto(240,100);
 		o->resizeto(70,20);
 		objects["rotz"] = o;
+////////////////
+		o = new cWindowFloatInputBox(this);
+		o->alignment = ALIGN_TOPLEFT;
+		o->moveto(100,120);
+		o->resizeto(210,20);
+		objects["unknown1"] = o;
+
+		o = new cWindowFloatInputBox(this);
+		o->alignment = ALIGN_TOPLEFT;
+		o->moveto(100,140);
+		o->resizeto(210,20);
+		objects["unknown2"] = o;
+
+		o = new cWindowFloatInputBox(this);
+		o->alignment = ALIGN_TOPLEFT;
+		o->moveto(100,160);
+		o->resizeto(210,20);
+		objects["unknown3"] = o;
+
+		o = new cWindowFloatInputBox(this);
+		o->alignment = ALIGN_TOPLEFT;
+		o->moveto(100,180);
+		o->resizeto(210,20);
+		objects["unknown4"] = o;
+
+		o = new cWindowFloatInputBox(this);
+		o->alignment = ALIGN_TOPLEFT;
+		o->moveto(100,200);
+		o->resizeto(210,20);
+		objects["unknown5"] = o;
+
+		o = new cWindowInputBox(this);
+		o->alignment = ALIGN_TOPLEFT;
+		o->moveto(100,220);
+		o->resizeto(210,20);
+		objects["unknown6"] = o;
+
+		o = new cWindowFloatInputBox(this);
+		o->alignment = ALIGN_TOPLEFT;
+		o->moveto(100,240);
+		o->resizeto(210,20);
+		objects["unknown7"] = o;
+
+		o = new cWindowFloatInputBox(this);
+		o->alignment = ALIGN_TOPLEFT;
+		o->moveto(100,260);
+		o->resizeto(210,20);
+		objects["unknown8"] = o;
+
+
 
 		objects["OkButton"] = new cWindowOkButton(this);
 		objects["CancelButton"] = new cWindowCancelButton(this);
@@ -173,9 +182,9 @@ public:
 				if(i->second->type == OBJECT_FLOATINPUTBOX)
 					i->second->onkeydown(SDLK_RETURN, false);
 			}
-			cWindow* w = Graphics.WM.getwindow(WT_MODELOVERVIEW);
+/*			cWindow* w = Graphics.WM.getwindow(WT_MODELOVERVIEW);
 			if(w != NULL)
-				w->userfunc(NULL);
+				w->userfunc(NULL);*/
 			undostack.push(undo);
 		}
 

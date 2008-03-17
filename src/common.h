@@ -186,6 +186,14 @@ template <class T> bool compare(T a,T b)
 	return a < b;
 }
 
+template <class T> int linsearch(T needle, vector<T> &haystack)
+{
+	for(int i = 0; i < haystack.size(); i++)
+		if(haystack[i] == needle)
+			return i;
+	return -1;
+}
+
 
 
 enum eMode

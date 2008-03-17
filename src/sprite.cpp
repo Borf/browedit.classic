@@ -195,6 +195,7 @@ void cSprite::cActSpr::load(string fname)
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 		f->loaded = true;
 		delete[] f->data;
+		f->data = NULL;
 
 		frames.push_back(f);
 

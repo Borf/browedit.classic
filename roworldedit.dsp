@@ -417,6 +417,10 @@ SOURCE=.\src\wm\rsmeditwindow.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\wm\soundwindow.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\wm\spritewindow.h
 # End Source File
 # Begin Source File
