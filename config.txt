@@ -1,5 +1,5 @@
 language=english
-setting=ROportable
+setting=ROdesktop
 
 [RO]
 rodir=c:\Program Files\gravity\ro\

@@ -232,6 +232,34 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 							Graphics.world.models[i]->pos.y--;
 				}
 				break;
+			case SDLK_UP:
+				{
+					for(unsigned int i = 0; i < Graphics.world.models.size(); i++)
+						if(Graphics.world.models[i]->selected)
+							Graphics.world.models[i]->pos.z++;
+				}
+				break;
+			case SDLK_DOWN:
+				{
+					for(unsigned int i = 0; i < Graphics.world.models.size(); i++)
+						if(Graphics.world.models[i]->selected)
+							Graphics.world.models[i]->pos.z--;
+				}
+				break;
+			case SDLK_LEFT:
+				{
+					for(unsigned int i = 0; i < Graphics.world.models.size(); i++)
+						if(Graphics.world.models[i]->selected)
+							Graphics.world.models[i]->pos.x--;
+				}
+				break;
+			case SDLK_RIGHT:
+				{
+					for(unsigned int i = 0; i < Graphics.world.models.size(); i++)
+						if(Graphics.world.models[i]->selected)
+							Graphics.world.models[i]->pos.x++;
+				}
+				break;
 			case SDLK_BACKSPACE:
 				{
 					vector<cUndoObjectsDelete::cObject> objectsdeleted;

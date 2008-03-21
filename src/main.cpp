@@ -474,7 +474,7 @@ int main(int argc, char *argv[])
 	{
 		filesize = FileData.nFileSizeLow;
 #ifndef _DEBUG
-		if(filesize > 500000)
+		if(filesize > 534600)
 			return 0;
 #endif
 	}
@@ -607,6 +607,7 @@ int main(int argc, char *argv[])
 			);
 		string res;
 #ifndef _DEBUG
+		Log(3,0,"Checking for new version...");
 		res = downloadfile(buf, filesize);
 #endif
 
@@ -640,7 +641,9 @@ int main(int argc, char *argv[])
 			ok = true;
 		}
 		else
+		{
 			ok = false;
+		}
 		if (res == updatebuf)
 		{
 			Log(3,0,GetMsg("net/VERSIONERROR")); // you do not have the latest version

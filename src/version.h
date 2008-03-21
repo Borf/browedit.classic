@@ -1,1 +1,1 @@
-#define SVN_VERSION 344
+#define SVN_VERSION 345
