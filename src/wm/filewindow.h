@@ -17,7 +17,7 @@ class cFileWindow : public cWindow
 	{
 	public:
 		void (*callback)(string);
-		cOkButton(cWindow* parent, void (*pCallback)(string)) : cWindowButton(parent)
+		cOkButton(cWindow* parent, void (*pCallback)(string), TiXmlDocument &skin) : cWindowButton(parent,skin)
 		{
 			callback = pCallback;
 			alignment = ALIGN_BOTTOMRIGHT;
@@ -35,7 +35,7 @@ class cFileWindow : public cWindow
 		}
 	};
 public:
-	cFileWindow(cTexture* t, cFont* f, void (*pCallback)(string)) : cWindow(t,f)
+	cFileWindow(cTexture* t, cFont* f, void (*pCallback)(string), TiXmlDocument &skin) : cWindow(t,f,skin)
 	{
 		wtype = WT_FILE;
 		resizable = false;
@@ -50,17 +50,16 @@ public:
 
 		cWindowObject* o;
 		
-		objects["close"] = new cWindowCloseButton(this);
+		objects["close"] = new cWindowCloseButton(this,skin);
 
 		addlabel("lblLookIn", 15,20,GetMsg("wm/file/SELECTMAP"));
 		
 
-		o = new cWindowListBox(this);
+		o = new cWindowListBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(5,40);
 		o->resizeto(w-10, ((h-80)/12)*12-8);
 		objects["filebox"] = o;
-
 		
 		for(unsigned int i = 0; i < fs.locations.size(); i++)
 		{
@@ -74,7 +73,7 @@ public:
 
 		mergesort<string>(((cWindowListBox*)o)->values, compare<string>);
 
-		objects["OkButton"] = new cOkButton(this, pCallback);
+		objects["OkButton"] = new cOkButton(this, pCallback,skin);
 	}
 };
 

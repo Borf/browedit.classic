@@ -33,7 +33,7 @@ public:
 	void draw(int,int,int,int);
 	void click();
 
-	intptr_t GetInt(int id)
+	int GetInt(int id)
 	{
 		return selectedtab;
 	}

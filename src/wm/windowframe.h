@@ -9,7 +9,7 @@ class cWindowFrame : public cWindowObject
 {
 	bool drawinner;
 public:
-	cWindowFrame(cWindow* parent) : cWindowObject(parent)
+	cWindowFrame(cWindow* parent, TiXmlDocument &skin) : cWindowObject(parent, skin.FirstChildElement("skin")->FirstChildElement("frame"))
 	{
 		w = 100;
 		h = 25;
@@ -20,7 +20,7 @@ public:
 		drawinner = false;
 	}
 	virtual void draw(int,int,int,int);
-	void SetInt(int,intptr_t);
+	void SetInt(int,int);
 };
 
 

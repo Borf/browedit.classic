@@ -17,35 +17,4 @@ public:
 	cWindowObject* inobject();
 };
 
-
-class cWindowCloseButton : public cWindowRoundButton
-{
-public:
-	cWindowCloseButton(cWindow* parent) : cWindowRoundButton(parent)
-	{
-		resizeto(11, 11);
-		moveto(4, 4);
-		alignment = ALIGN_TOPRIGHT;
-	}
-	void click()
-	{
-		parent->close();
-	}
-};
-
-class cWindowRollupButton : public cWindowRoundButton
-{
-public:
-	cWindowRollupButton(cWindow* parent) : cWindowRoundButton(parent)
-	{
-		resizeto(11, 11);
-		moveto(16, 4);
-		alignment = ALIGN_TOPRIGHT;
-	}
-	void click()
-	{
-		parent->toggleroll();
-	}
-};
-
 #endif

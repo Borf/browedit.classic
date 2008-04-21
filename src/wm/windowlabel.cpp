@@ -147,7 +147,7 @@ void cWindowLabel::draw(int cutoffleft, int cutoffright, int cutofftop, int cuto
 
 	for(int i = 0; i < (int)lines.size(); i++)
 	{
-		parent->font->print(0,0,0,parent->px()+xx, h+parent->py()+yy+iii, "%s", lines[i].c_str());
+		parent->font->print(parent->fontcolor[0], parent->fontcolor[1], parent->fontcolor[2],parent->px()+xx, h+parent->py()+yy+iii, "%s", lines[i].c_str());
 		iii-=12;
 	}
 
@@ -168,7 +168,7 @@ string cWindowLabel::GetText(int i)
 }
 
 
-intptr_t cWindowLabel::GetInt(int i)
+int cWindowLabel::GetInt(int i)
 {
 	if (i == 0)
 		return lines.size();

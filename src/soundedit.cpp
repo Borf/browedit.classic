@@ -3,7 +3,7 @@
 #include "undo.h"
 #include <wm/soundwindow.h>
 
-extern float mousestartx, mousestarty;
+extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
 extern cGraphics Graphics;
 extern cUndoStack undostack;
@@ -115,7 +115,7 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 				{
 					cSound* o = &Graphics.world.sounds[Graphics.selectedobject];
 
-					cWindow* w = new cSoundWindow(Graphics.WM.texture, &Graphics.WM.font);
+					cWindow* w = new cSoundWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin);
 
 					((cWindowFloatInputBox*)w->objects["posx"])->floatje = &o->pos.x;
 					((cWindowFloatInputBox*)w->objects["posy"])->floatje = &o->pos.y;

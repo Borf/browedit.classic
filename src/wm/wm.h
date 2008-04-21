@@ -17,10 +17,10 @@ using namespace std;
 
 class cWM
 {
-private:
 public:
+	TiXmlDocument		skin;
 	~cWM();
-	int					init();
+	int					init(string);
 	int					openwindow(WINDOW_TYPE);
 	int					closewindow(WINDOW_TYPE, bool = false);
 	void				showwindow(WINDOW_TYPE);

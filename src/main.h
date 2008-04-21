@@ -20,7 +20,7 @@ using namespace std;
 
 cGraphics		Graphics;
 
-float mousex, mousey;
+long mousex, mousey;
 float oldmousex, oldmousey;
 
 float translatedstartmousex, translatedstartmousey;

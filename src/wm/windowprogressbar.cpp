@@ -107,12 +107,12 @@ void cWindowProgressBar::click()
 }
 
 
-intptr_t cWindowProgressBar::GetInt(int id)
+int cWindowProgressBar::GetInt(int id)
 {
 	return 0;
 }
 
-void cWindowProgressBar::SetInt(int id, intptr_t val)
+void cWindowProgressBar::SetInt(int id, int val)
 {
 	if (id == 0)
 		value = val;

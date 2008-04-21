@@ -2,7 +2,7 @@
 #include "graphics.h"
 #include "undo.h"
 
-extern float mousestartx, mousestarty;
+extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
 extern cGraphics Graphics;
 extern cUndoStack undostack;
@@ -129,7 +129,7 @@ int cProcessManagement::globalheightedit_process_events(SDL_Event &event)
 			case SDLK_c:
 				if(Graphics.WM.getwindow(WT_AREACOPY) != NULL)
 					return 0;
-				Graphics.WM.addwindow(new cAreaCopyWindow(Graphics.WM.texture, &Graphics.WM.font) );
+				Graphics.WM.addwindow(new cAreaCopyWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin) );
 				break;
 
 			default:

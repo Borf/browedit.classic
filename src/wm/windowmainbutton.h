@@ -10,7 +10,7 @@ class cWindowMainButton : public cWindowButton
 protected:
 	string text;
 public:
-	cWindowMainButton(cWindow* parent) : cWindowButton(parent)
+	cWindowMainButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent,skin)
 	{
 		cursortype = 1;
 		type = OBJECT_MAINBUTTON;

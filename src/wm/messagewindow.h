@@ -15,7 +15,7 @@ class cMessageWindow : public cWindow
 	class cWindowOkButton : public cWindowButton
 	{
 	public:
-		cWindowOkButton(cWindow* parent) : cWindowButton(parent)
+		cWindowOkButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent,skin)
 		{
 			alignment = ALIGN_BOTTOM;
 			moveto(0, 20);
@@ -30,7 +30,7 @@ class cMessageWindow : public cWindow
 	};
 
 public:
-	cMessageWindow(cTexture* t, cFont* f) : cWindow(t,f)
+	cMessageWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWindow(t,f,skin)
 	{
 		wtype = WT_MESSAGE;
 		resizable = false;
@@ -44,11 +44,11 @@ public:
 
 		defaultobject = "OkButton";
 
-		objects["rollup"] = new cWindowRollupButton(this);
-		objects["close"] = new cWindowCloseButton(this);
+//		objects["rollup"] = new cWindowRollupButton(this);
+//		objects["close"] = new cWindowCloseButton(this);
 
 		addlabel("text", 15,40, "UserId")->resizeto(320, 100);;
-		objects["OkButton"] = new cWindowOkButton(this);
+		objects["OkButton"] = new cWindowOkButton(this,skin);
 	}	
 };
 

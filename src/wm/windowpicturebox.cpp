@@ -71,12 +71,12 @@ void cWindowPictureBox::SetText(int i, string fil)
 	}
 }
 
-void cWindowPictureBox::SetInt(int i, intptr_t v)
+void cWindowPictureBox::SetInt(int i, int v)
 {
 	highlightmode = v;
 }
 
-intptr_t cWindowPictureBox::GetInt(int i)
+int cWindowPictureBox::GetInt(int i)
 {
 	return highlightmode;
 }

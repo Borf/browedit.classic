@@ -38,6 +38,7 @@ enum WINDOW_TYPE
 	WT_FILE,
 	WT_PROGRESS,
 	WT_SOUND,
+
 };
 enum CLOSE_TYPE
 {
@@ -68,10 +69,31 @@ protected:
 	string saveprops;
 	bool alwaysontop;
 	bool notransparency;
+
+//skinning
+	float titlecolor[3];
+	int	skinTopHeight;
+	int skinTop;
+	int skinBottomHeight;
+	int skinBottom;
+
+	int skinLeft;
+	int skinLeftWidth;
+	int skinRight;
+	int skinRightWidth;
+
+
+	int titlexoff,titleyoff;
+
+
+
+
+
 public:
+	float fontcolor[3];
 	bool savewindow;
 	string defaultobject;
-	cWindow(cTexture* t, cFont* f)
+	cWindow(cTexture* t, cFont* f, TiXmlDocument& skin)
 	{
 		notransparency = false;
 		visible = false;
@@ -93,6 +115,32 @@ public:
 		texture = t;
 		font = f;
 		saveprops = "";
+
+		string color = skin.FirstChildElement("skin")->FirstChildElement("window")->FirstChildElement("fontcolor")->FirstChild()->Value();
+		fontcolor[0] = hex2dec(color.substr(0,2)) / 256.0f;
+		fontcolor[1] = hex2dec(color.substr(2,2)) / 256.0f;
+		fontcolor[2] = hex2dec(color.substr(4,2)) / 256.0f;
+
+		color = skin.FirstChildElement("skin")->FirstChildElement("window")->FirstChildElement("title")->FirstChildElement("fontcolor")->FirstChild()->Value();
+		titlecolor[0] = hex2dec(color.substr(0,2)) / 256.0f;
+		titlecolor[1] = hex2dec(color.substr(2,2)) / 256.0f;
+		titlecolor[2] = hex2dec(color.substr(4,2)) / 256.0f;
+
+		titlexoff = atoi(skin.FirstChildElement("skin")->FirstChildElement("window")->FirstChildElement("title")->FirstChildElement("xoff")->FirstChild()->Value());
+		titleyoff = atoi(skin.FirstChildElement("skin")->FirstChildElement("window")->FirstChildElement("title")->FirstChildElement("yoff")->FirstChild()->Value());
+
+
+		TiXmlElement* wSkin = skin.FirstChildElement("skin")->FirstChildElement("window");
+
+		skinTopHeight = atoi(wSkin->FirstChildElement("top")->Attribute("height"));
+		skinTop =		512 - atoi(wSkin->FirstChildElement("top")->FirstChild()->Value());
+		skinBottomHeight = atoi(wSkin->FirstChildElement("bottom")->Attribute("height"));
+		skinBottom =		512 - atoi(wSkin->FirstChildElement("bottom")->FirstChild()->Value());
+		
+		skinLeftWidth = atoi(wSkin->FirstChildElement("left")->Attribute("width"));
+		skinLeft =		atoi(wSkin->FirstChildElement("left")->FirstChild()->Value());
+		skinRightWidth = atoi(wSkin->FirstChildElement("right")->Attribute("width"));
+		skinRight =		atoi(wSkin->FirstChildElement("right")->FirstChild()->Value());
 	}
 	virtual ~cWindow()
 	{
@@ -167,7 +215,7 @@ public:
 	virtual bool onchar(char,bool);
 
 	cWindowObject* addlabel(string, int,int,string);
-	cWindowObject* addinputbox(string, int,int,int,string);
+	cWindowObject* addinputbox(string, int,int,int,string, TiXmlDocument &skin);
 	cWindowObject* addcheckbox(string, int,int,bool);
 
 	void center();
@@ -180,6 +228,6 @@ public:
 	cWindowObject*	selectedobject;
 };
 
-extern float mousestartx, mousestarty, dragoffsetx, dragoffsety;
+extern long mousestartx, mousestarty, dragoffsetx, dragoffsety;
 
 #endif

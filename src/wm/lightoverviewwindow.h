@@ -91,7 +91,7 @@ public:
 	class cLightOverViewTree : public cWindowTree
 	{
 	public:
-		cLightOverViewTree(cWindow* parent, vector<cWindowTree::cTreeNode*> nodes) : cWindowTree(parent, nodes)
+		cLightOverViewTree(cWindow* parent, vector<cWindowTree::cTreeNode*> nodes, TiXmlDocument &skin) : cWindowTree(parent, nodes, skin)
 		{
 			moveto(5,20);
 			resizeto(400, parent->ph()-30);
@@ -201,7 +201,7 @@ public:
 		}
 	}
 
-	cLightOverViewWindow(cTexture* t, cFont* f) : cWindow(t,f)
+	cLightOverViewWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWindow(t,f,skin)
 	{
 		wtype = WT_LIGHTOVERVIEW;
 		visible = true;
@@ -218,11 +218,11 @@ public:
 		x = Graphics.w() - w;
 
 //		cWindowObject* o;
-		objects["close"] = new cWindowCloseButton(this);
+		objects["close"] = new cWindowCloseButton(this,skin);
 
 
 		vector<cWindowTree::cTreeNode*> nodes;
-		objects["list"] = new cLightOverViewTree(this, nodes);
+		objects["list"] = new cLightOverViewTree(this, nodes,skin);
 	
 
 		resizeto(w,h);

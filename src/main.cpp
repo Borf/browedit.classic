@@ -38,7 +38,7 @@ long userid;
 void MakeUndo();
 void Undo();
 int movement;
-float dragoffsety, dragoffsetx;
+long dragoffsety, dragoffsetx;
 
 void ChangeGrid();
 void UpdateTriangleMenu();
@@ -58,13 +58,14 @@ string fontname = "tahoma";
 bool	doneaction = true;
 extern cMenu* popupmenu;
 TiXmlDocument favoritelights;
+string skinFile;
 
 unsigned int undosize = 50;
 vector<string> texturefiles;
 vector<string> objectfiles;
 
 double mouse3dxstart, mouse3dystart, mouse3dzstart;
-float mousestartx, mousestarty;
+long mousestartx, mousestarty;
 unsigned long keys[SDLK_LAST-SDLK_FIRST];
 vector<pair<string, string> > translations;
 
@@ -304,7 +305,7 @@ void mainloop()
 		if(editmode == MODE_OBJECTS)
 		{
 			if(w == NULL)
-				Graphics.WM.addwindow(new cModelOverViewWindow(Graphics.WM.texture, &Graphics.WM.font));
+				Graphics.WM.addwindow(new cModelOverViewWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin));
 			else
 			{
 				w->userfunc(NULL);
@@ -319,7 +320,7 @@ void mainloop()
 		if (editmode == MODE_LIGHTS)
 		{
 			if(w == NULL)
-				Graphics.WM.addwindow(new cLightOverViewWindow(Graphics.WM.texture, &Graphics.WM.font));
+				Graphics.WM.addwindow(new cLightOverViewWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin));
 			else
 			{
 				w->userfunc(NULL);
@@ -692,7 +693,6 @@ int main(int argc, char *argv[])
 	map<cMenu*, int, less<cMenu*> > levelm;
 	levelm[models] = 0;
 	
-
 	while(!pFile->eof())
 	{
 		string line = pFile->readline();
@@ -723,6 +723,8 @@ int main(int argc, char *argv[])
 						Graphics.fullscreen = value == "1";
 					else if(option == "font")
 						fontname = value;
+					else if(option == "skin")
+						skinFile = value;
 					else if (option == "model")
 					{
 						objectfiles.push_back(value);
@@ -1660,7 +1662,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					cWindow* w = Graphics.WM.getwindow(WT_TEXTURE);
 					if (w == NULL)
-						Graphics.WM.addwindow(new cTextureWindow(Graphics.WM.texture, &Graphics.WM.font));
+						Graphics.WM.addwindow(new cTextureWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin));
 					else
 						Graphics.WM.togglewindow(WT_TEXTURE);
 					break;
@@ -1670,7 +1672,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					cWindow* w = Graphics.WM.getwindow(WT_MODELS);
 					if (w == NULL)
-						Graphics.WM.addwindow(new cModelsWindow(Graphics.WM.texture, &Graphics.WM.font)	);
+						Graphics.WM.addwindow(new cModelsWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin)	);
 					else
 						Graphics.WM.togglewindow(WT_MODELS);
 				}
@@ -1699,7 +1701,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			{
 				cWindow* w = Graphics.WM.getwindow(WT_MINIMAP);
 				if (w == NULL)
-					Graphics.WM.addwindow(new cMiniMapWindow(Graphics.WM.texture, &Graphics.WM.font)	);
+					Graphics.WM.addwindow(new cMiniMapWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin)	);
 				else
 					Graphics.WM.togglewindow(WT_MINIMAP);
 			}

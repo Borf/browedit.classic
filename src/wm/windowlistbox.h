@@ -3,6 +3,7 @@
 
 #include "windowobject.h"
 #include <string>
+#include <tinyxml/tinyxml.h>
 #include <vector>
 using namespace std;
 
@@ -13,10 +14,32 @@ protected:
 	int				selected;
 	bool			showselection;
 	bool			showscroll;
+
+	int skinBarWidth;
+	int skinButtonUpLeft;
+	int skinButtonUpTop;
+	int skinButtonUpHeight;
+	int skinButtonDownLeft;
+	int skinButtonDownTop;
+	int skinButtonDownHeight;
+
+	int	skinBarTopHeight;
+	int skinBarTop;
+	int skinBarBottomHeight;
+	int skinBarBottom;
+
+	int skinBarBackTop;
+	int skinBarBackHeight;
+	int skinBarBackLeft;
+
+
+	int skinBarLeft;
+
+
 public:
 	vector<string>	values;
 	vector<int>		properties;
-	cWindowListBox(cWindow* parent) : cWindowObject(parent)
+	cWindowListBox(cWindow* parent, TiXmlDocument &skin) : cWindowObject(parent,skin.FirstChildElement("skin")->FirstChildElement("list"))
 	{
 		w = 280;
 		h = 100;
@@ -28,6 +51,26 @@ public:
 		showselection = true;
 		showscroll = true;
 		type = OBJECT_LISTBOX;
+		TiXmlElement* bSkin = skin.FirstChildElement("skin")->FirstChildElement("list")->FirstChildElement("scroll");
+
+		skinBarWidth =			atoi(bSkin->FirstChildElement("width")->FirstChild()->Value());
+		skinBarLeft =			atoi(bSkin->FirstChildElement("left")->FirstChild()->Value());
+		skinButtonUpLeft =		atoi(bSkin->FirstChildElement("buttonup")->FirstChildElement("left")->FirstChild()->Value());
+		skinButtonUpTop =		512-atoi(bSkin->FirstChildElement("buttonup")->FirstChildElement("top")->FirstChild()->Value());
+		skinButtonUpHeight =	atoi(bSkin->FirstChildElement("buttonup")->FirstChildElement("height")->FirstChild()->Value());
+		skinButtonDownLeft =	atoi(bSkin->FirstChildElement("buttondown")->FirstChildElement("left")->FirstChild()->Value());
+		skinButtonDownTop =		512-atoi(bSkin->FirstChildElement("buttondown")->FirstChildElement("top")->FirstChild()->Value());
+		skinButtonDownHeight =	atoi(bSkin->FirstChildElement("buttondown")->FirstChildElement("height")->FirstChild()->Value());
+
+		skinBarTopHeight = atoi(bSkin->FirstChildElement("top")->Attribute("height"));
+		skinBarTop =		512 - atoi(bSkin->FirstChildElement("top")->FirstChild()->Value());
+		skinBarBottomHeight = atoi(bSkin->FirstChildElement("bottom")->Attribute("height"));
+		skinBarBottom =		512 - atoi(bSkin->FirstChildElement("bottom")->FirstChild()->Value());
+
+		skinBarBackTop=		512-atoi(bSkin->FirstChildElement("background")->FirstChildElement("top")->FirstChild()->Value());
+		skinBarBackHeight =	atoi(bSkin->FirstChildElement("background")->FirstChildElement("height")->FirstChild()->Value());
+		skinBarBackLeft =	atoi(bSkin->FirstChildElement("background")->FirstChildElement("left")->FirstChild()->Value());
+
 	}
 	virtual ~cWindowListBox() {}
 	virtual void draw(int,int,int,int);
@@ -39,8 +82,8 @@ public:
 
 	void drag();
 	void doubleclick();
-	void SetInt(int, intptr_t);
-	intptr_t GetInt(int);
+	void SetInt(int, int);
+	int GetInt(int);
 	string GetText(int);
 	void scrollup();
 	void scrolldown();

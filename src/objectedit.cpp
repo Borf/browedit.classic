@@ -8,7 +8,7 @@
 #define MENUCOMMAND(x) bool MenuCommand_ ## x (cMenuItem* src)
 MENUCOMMAND(model);
 
-extern float mousestartx, mousestarty;
+extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
 extern cGraphics Graphics;
 extern cUndoStack undostack;
@@ -363,7 +363,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 					cRSMModel* o = Graphics.world.models[Graphics.selectedobject];
 					cMenuItem* menuitem = (cMenuItem*)models->finddata("data\\model\\" + o->rofilename);
 
-					cWindow* w = new cObjectWindow(Graphics.WM.texture, &Graphics.WM.font);
+					cWindow* w = new cObjectWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin);
 					if (menuitem != NULL)
 						w->objects["objectmenu"]->SetText(0,menuitem->data2);
 					((cWindowFloatInputBox*)w->objects["posx"])->floatje = &o->pos.x;

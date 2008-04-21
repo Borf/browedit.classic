@@ -21,7 +21,7 @@ extern cMenu* effectsmenu;
 extern cGraphics Graphics;
 
 extern double mouse3dx, mouse3dy, mouse3dz;
-extern float mousex, mousey;
+extern long mousex, mousey;
 extern cFileSystem fs;
 extern eMode	editmode;
 extern int brushsize;

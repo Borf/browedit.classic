@@ -17,7 +17,7 @@ class cSoundWindow : public cWindow
 public:
 	cUndoItem* undo;
 
-	cSoundWindow(cTexture* t, cFont* f) : cWindow(t,f)
+	cSoundWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWindow(t,f,skin)
 	{
 		cWindowObject* o;
 		wtype = WT_LIGHT;
@@ -31,8 +31,8 @@ public:
 
 		defaultobject = "OkButton";
 
-		objects["rollup"] = new cWindowRollupButton(this);
-		objects["close"] = new cWindowCloseButton(this);
+		objects["rollup"] = new cWindowRollupButton(this,skin);
+		objects["close"] = new cWindowCloseButton(this,skin);
 
 
 		addlabel("lblName", 15,20,GetMsg("wm/sound/NAME"));
@@ -43,7 +43,7 @@ public:
 
 
 
-		o = new cWindowInputBox(this);
+		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,20);
 		o->resizeto(210,20);
@@ -51,110 +51,110 @@ public:
 		o->SetInt(0,0);
 		objects["objectname"] = o;
 
-		o = new cWindowStringInputBox(this);
+		o = new cWindowStringInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,40);
 		o->resizeto(210,20);
 		o->SetText(0,"");
 		objects["objectfile"] = o;
 		
-		o = new cWindowFloatInputBox(this);
+		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,60);
 		o->resizeto(70,20);
 		objects["posx"] = o;
 
-		o = new cWindowFloatInputBox(this);
+		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(170,60);
 		o->resizeto(70,20);
 		objects["posy"] = o;
 		
-		o = new cWindowFloatInputBox(this);
+		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(240,60);
 		o->resizeto(70,20);
 		objects["posz"] = o;
 		
-		o = new cWindowFloatInputBox(this);
+		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,80);
 		o->resizeto(70,20);
 		objects["scalex"] = o;
 
-		o = new cWindowFloatInputBox(this);
+		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(170,80);
 		o->resizeto(70,20);
 		objects["scaley"] = o;
 		
-		o = new cWindowFloatInputBox(this);
+		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(240,80);
 		o->resizeto(70,20);
 		objects["scalez"] = o;
 		
-		o = new cWindowFloatInputBox(this);
+		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,100);
 		o->resizeto(70,20);
 		objects["rotx"] = o;
 
-		o = new cWindowFloatInputBox(this);
+		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(170,100);
 		o->resizeto(70,20);
 		objects["roty"] = o;
 		
-		o = new cWindowFloatInputBox(this);
+		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(240,100);
 		o->resizeto(70,20);
 		objects["rotz"] = o;
 ////////////////
-		o = new cWindowFloatInputBox(this);
+		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,120);
 		o->resizeto(210,20);
 		objects["unknown1"] = o;
 
-		o = new cWindowFloatInputBox(this);
+		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,140);
 		o->resizeto(210,20);
 		objects["unknown2"] = o;
 
-		o = new cWindowFloatInputBox(this);
+		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,160);
 		o->resizeto(210,20);
 		objects["unknown3"] = o;
 
-		o = new cWindowFloatInputBox(this);
+		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,180);
 		o->resizeto(210,20);
 		objects["unknown4"] = o;
 
-		o = new cWindowFloatInputBox(this);
+		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,200);
 		o->resizeto(210,20);
 		objects["unknown5"] = o;
 
-		o = new cWindowInputBox(this);
+		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,220);
 		o->resizeto(210,20);
 		objects["unknown6"] = o;
 
-		o = new cWindowFloatInputBox(this);
+		o = new cWindowFloatInputBox(this, skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,240);
 		o->resizeto(210,20);
 		objects["unknown7"] = o;
 
-		o = new cWindowFloatInputBox(this);
+		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,260);
 		o->resizeto(210,20);
@@ -162,8 +162,8 @@ public:
 
 
 
-		objects["OkButton"] = new cWindowOkButton(this);
-		objects["CancelButton"] = new cWindowCancelButton(this);
+		objects["OkButton"] = new cWindowOkButton(this,skin);
+		objects["CancelButton"] = new cWindowCancelButton(this,skin);
 	}	
 
 	void* userfunc(void* param)

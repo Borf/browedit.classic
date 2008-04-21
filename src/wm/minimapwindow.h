@@ -71,7 +71,7 @@ public:
 
 
 
-	cMiniMapWindow(cTexture* t, cFont* f) : cWindow(t,f)
+	cMiniMapWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWindow(t,f,skin)
 	{
 		wtype = WT_MINIMAP;
 		resizable = false;

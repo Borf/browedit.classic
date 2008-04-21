@@ -14,8 +14,9 @@ protected:
 	string mask;
 	bool editable;
 	int selectionstart;
+
 public:
-	cWindowInputBox(cWindow* parent) : cWindowObject(parent)
+	cWindowInputBox(cWindow* parent, TiXmlDocument &skin) : cWindowObject(parent, skin.FirstChildElement("skin")->FirstChildElement("input"))
 	{
 		w = 100;
 		h = 25;
@@ -29,6 +30,7 @@ public:
 		selectionstart = cursor;
 		selectable = true;
 		type = OBJECT_INPUTBOX;
+	
 	}
 	virtual ~cWindowInputBox() {}
 	virtual void draw(int,int,int,int);
@@ -37,8 +39,8 @@ public:
 	bool onchar(char,bool);
 
 	void SetText(int, string);
-	void SetInt(int, intptr_t);
-	intptr_t GetInt(int);
+	void SetInt(int, int);
+	int GetInt(int);
 	string GetText(int);
 };
 
@@ -48,7 +50,7 @@ class cWindowFloatInputBox : public cWindowInputBox
 	float lastvalue;
 public:
 	float* floatje;
-	cWindowFloatInputBox(cWindow* parent) : cWindowInputBox(parent)
+	cWindowFloatInputBox(cWindow* parent, TiXmlDocument &skin) : cWindowInputBox(parent, skin)
 	{
 		type = OBJECT_FLOATINPUTBOX;
 		alignment = ALIGN_TOPLEFT;
@@ -70,7 +72,7 @@ public:
 		cWindowInputBox::draw(cutoffleft, cutoffright, cutofftop, cutoffbottom);
 	}
 
-	void SetInt(int id, intptr_t val)
+	void SetInt(int id, int val)
 	{
 		cWindowInputBox::SetInt(id,val);
 		if (id == 3)
@@ -96,7 +98,7 @@ class cWindowStringInputBox : public cWindowInputBox
 	string lastvalue;
 public:
 	string* stringetje;
-	cWindowStringInputBox(cWindow* parent) : cWindowInputBox(parent)
+	cWindowStringInputBox(cWindow* parent, TiXmlDocument &skin) : cWindowInputBox(parent,skin)
 	{
 		type = OBJECT_FLOATINPUTBOX;
 		alignment = ALIGN_TOPLEFT;
@@ -118,7 +120,7 @@ public:
 		cWindowInputBox::draw(cutoffleft, cutoffright, cutofftop, cutoffbottom);
 	}
 
-	void SetInt(int id, intptr_t val)
+	void SetInt(int id, int val)
 	{
 		cWindowInputBox::SetInt(id,val);
 		if (id == 3)

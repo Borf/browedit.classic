@@ -275,7 +275,7 @@ public:
 	class cWindowOkButton : public cWindowButton
 	{
 	public:
-		cWindowOkButton(cWindow* parent) : cWindowButton(parent)
+		cWindowOkButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent,skin)
 		{
 			text = "Ok";
 			alignment = ALIGN_BOTTOMRIGHT;
@@ -358,7 +358,7 @@ public:
 	class cCancelButton : public cWindowButton
 	{
 	public:
-		cCancelButton(cWindow* parent) : cWindowButton(parent)
+		cCancelButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent,skin)
 		{
 			alignment = ALIGN_BOTTOMRIGHT;
 			moveto(110,10);
@@ -376,7 +376,7 @@ public:
 	{
 		SDLKey key;
 	public:
-		cKeyBindBox(cWindow* parent) : cWindowInputBox(parent)
+		cKeyBindBox(cWindow* parent, TiXmlDocument &skin) : cWindowInputBox(parent,skin)
 		{
 			key = SDLK_UNKNOWN;
 		}
@@ -426,7 +426,7 @@ public:
 	{
 		cKeyBindBox* clearbox;
 	public:
-		cClearButton(cWindow* parent, cKeyBindBox* box) : cWindowButton(parent)
+		cClearButton(cWindow* parent, cKeyBindBox* box, TiXmlDocument &skin) : cWindowButton(parent,skin)
 		{
 			text = "Clear";
 			resizeto(50,20);
@@ -439,9 +439,9 @@ public:
 		}
 	};
 
-	void addclearbutton(cKeyBindBox* box)
+	void addclearbutton(cKeyBindBox* box, TiXmlDocument &skin)
 	{
-		cWindowObject* o = new cClearButton(this, box);
+		cWindowObject* o = new cClearButton(this, box, skin);
 		o->moveto(box->px()+100, box->py());
 		static int i = 0;
 		char buf[10];
@@ -449,19 +449,19 @@ public:
 		objects[buf] = o;
 	}
 
-	cKeyBindBox* addbox(string name, int x, int y, int defval)
+	cKeyBindBox* addbox(string name, int x, int y, int defval, TiXmlDocument &skin)
 	{
-		cKeyBindBox* o = new cKeyBindBox(this);
+		cKeyBindBox* o = new cKeyBindBox(this,skin);
 		o->moveto(x,y);
 		o->alignment = ALIGN_TOPLEFT;
 		o->resizeto(100,20);
 		o->SetInt(1, defval);
 		objects[name] = o;
-		addclearbutton(o);
+		addclearbutton(o,skin);
 		return o;
 		
 	}
-	cKeyBindWindow(cTexture* t, cFont* f) : cWindow(t,f)
+	cKeyBindWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWindow(t,f,skin)
 	{
 		wtype = WT_KEYBIND;
 		resizable = false;
@@ -528,61 +528,61 @@ public:
 		addlabel("lblEsc",		500,270,"Exit");
 
 
-		addbox("Up",250,30,keymap[SDLK_UP]);
-		addbox("Down",250,50,keymap[SDLK_DOWN]);
-		addbox("Left",250,70,keymap[SDLK_LEFT]);
-		addbox("Right",250,90,keymap[SDLK_RIGHT]);
-		addbox("Minus",250,110,keymap[SDLK_MINUS]);
-		addbox("Equals",250,130,keymap[SDLK_EQUALS]);
-		addbox("lbracket",250,150,keymap[SDLK_LEFTBRACKET]);
-		addbox("rbracket",250,170,keymap[SDLK_RIGHTBRACKET]);
-		addbox("Space",250,190,keymap[SDLK_SPACE]);
-		addbox("H",250,210,keymap[SDLK_h]);
-		addbox("V",250,230,keymap[SDLK_v]);
-		addbox("G",250,250,keymap[SDLK_g]);
-		addbox("L",250,270,keymap[SDLK_l]);
-		addbox("D",250,290,keymap[SDLK_d]);
-		addbox("Comma",250,310,keymap[SDLK_COMMA]);
-		addbox("Period",250,330,keymap[SDLK_PERIOD]);
-		addbox("Pageup",250,350,keymap[SDLK_PAGEUP]);
-		addbox("Pagedown",250,370,keymap[SDLK_PAGEDOWN]);
-		addbox("Home",250,390,keymap[SDLK_HOME]);
-		addbox("End",250,410,keymap[SDLK_END]);
-		addbox("W",250,430,keymap[SDLK_w]);
-		addbox("C",250,450,keymap[SDLK_c]);
-		addbox("P",250,470,keymap[SDLK_p]);
-		addbox("O",250,490,keymap[SDLK_o]);
-		addbox("Backspace",250,510,keymap[SDLK_BACKSPACE]);
-		addbox("F",250,530,keymap[SDLK_f]);
-		addbox("Ins",250,550,keymap[SDLK_INSERT]);
-		addbox("Del",250,570,keymap[SDLK_DELETE]);
-		addbox("R",250,590,keymap[SDLK_r]);
-		addbox("F1",250,610,keymap[SDLK_F1]);
-		addbox("F2",250,630,keymap[SDLK_F2]);
-		addbox("F3",250,650,keymap[SDLK_F3]);
-		addbox("F4",250,670,keymap[SDLK_F4]);
+		addbox("Up",250,30,keymap[SDLK_UP],skin);
+		addbox("Down",250,50,keymap[SDLK_DOWN],skin);
+		addbox("Left",250,70,keymap[SDLK_LEFT],skin);
+		addbox("Right",250,90,keymap[SDLK_RIGHT],skin);
+		addbox("Minus",250,110,keymap[SDLK_MINUS],skin);
+		addbox("Equals",250,130,keymap[SDLK_EQUALS],skin);
+		addbox("lbracket",250,150,keymap[SDLK_LEFTBRACKET],skin);
+		addbox("rbracket",250,170,keymap[SDLK_RIGHTBRACKET],skin);
+		addbox("Space",250,190,keymap[SDLK_SPACE],skin);
+		addbox("H",250,210,keymap[SDLK_h],skin);
+		addbox("V",250,230,keymap[SDLK_v],skin);
+		addbox("G",250,250,keymap[SDLK_g],skin);
+		addbox("L",250,270,keymap[SDLK_l],skin);
+		addbox("D",250,290,keymap[SDLK_d],skin);
+		addbox("Comma",250,310,keymap[SDLK_COMMA],skin);
+		addbox("Period",250,330,keymap[SDLK_PERIOD],skin);
+		addbox("Pageup",250,350,keymap[SDLK_PAGEUP],skin);
+		addbox("Pagedown",250,370,keymap[SDLK_PAGEDOWN],skin);
+		addbox("Home",250,390,keymap[SDLK_HOME],skin);
+		addbox("End",250,410,keymap[SDLK_END],skin);
+		addbox("W",250,430,keymap[SDLK_w],skin);
+		addbox("C",250,450,keymap[SDLK_c],skin);
+		addbox("P",250,470,keymap[SDLK_p],skin);
+		addbox("O",250,490,keymap[SDLK_o],skin);
+		addbox("Backspace",250,510,keymap[SDLK_BACKSPACE],skin);
+		addbox("F",250,530,keymap[SDLK_f],skin);
+		addbox("Ins",250,550,keymap[SDLK_INSERT],skin);
+		addbox("Del",250,570,keymap[SDLK_DELETE],skin);
+		addbox("R",250,590,keymap[SDLK_r],skin);
+		addbox("F1",250,610,keymap[SDLK_F1],skin);
+		addbox("F2",250,630,keymap[SDLK_F2],skin);
+		addbox("F3",250,650,keymap[SDLK_F3],skin);
+		addbox("F4",250,670,keymap[SDLK_F4],skin);
 
-		addbox("F5",740,30,keymap[SDLK_F5]);
-		addbox("F6",740,50,keymap[SDLK_F6]);
-		addbox("F7",740,70,keymap[SDLK_F7]);
-		addbox("F8",740,90,keymap[SDLK_F8]);
-		addbox("F9",740,110,keymap[SDLK_F9]);
-		addbox("F10",740,130,keymap[SDLK_F10]);
-		addbox("F11",740,150,keymap[SDLK_F11]);
-		addbox("U",740,170,keymap[SDLK_u]);
-		addbox("T",740,190,keymap[SDLK_t]);
-		addbox("M",740,210,keymap[SDLK_m]);
-		addbox("Return",740,230,keymap[SDLK_RETURN]);
-		addbox("S",740,250,keymap[SDLK_s]);
-		addbox("Esc",740,270,keymap[SDLK_ESCAPE]);
+		addbox("F5",740,30,keymap[SDLK_F5],skin);
+		addbox("F6",740,50,keymap[SDLK_F6],skin);
+		addbox("F7",740,70,keymap[SDLK_F7],skin);
+		addbox("F8",740,90,keymap[SDLK_F8],skin);
+		addbox("F9",740,110,keymap[SDLK_F9],skin);
+		addbox("F10",740,130,keymap[SDLK_F10],skin);
+		addbox("F11",740,150,keymap[SDLK_F11],skin);
+		addbox("U",740,170,keymap[SDLK_u],skin);
+		addbox("T",740,190,keymap[SDLK_t],skin);
+		addbox("M",740,210,keymap[SDLK_m],skin);
+		addbox("Return",740,230,keymap[SDLK_RETURN],skin);
+		addbox("S",740,250,keymap[SDLK_s],skin);
+		addbox("Esc",740,270,keymap[SDLK_ESCAPE],skin);
 
 
 
-		objects["closebutton"] = new cWindowCloseButton(this);
-		objects["rollupbutton"] = new cWindowRollupButton(this);
+		objects["closebutton"] = new cWindowCloseButton(this,skin);
+		objects["rollupbutton"] = new cWindowRollupButton(this,skin);
 
-		objects["okbutton"] = new cWindowOkButton(this);
-		objects["cancelbutton"] = new cCancelButton(this);
+		objects["okbutton"] = new cWindowOkButton(this,skin);
+		objects["cancelbutton"] = new cCancelButton(this,skin);
 		
 	}
 

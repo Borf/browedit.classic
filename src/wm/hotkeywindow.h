@@ -168,7 +168,7 @@ public:
 
 
 
-	cHotkeyWindow(cTexture* t, cFont* f) : cWindow(t,f)
+	cHotkeyWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWindow(t,f,skin)
 	{
 		wtype = WT_HOTKEY;
 		resizable = false;

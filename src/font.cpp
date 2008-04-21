@@ -127,10 +127,8 @@ int cFont::print(float r, float g, float b, float x, float y, const char *fmt, .
 
 int cFont::print(float r, float g, float b, float x, float y, const char *fmt, ...)
 {
-	char type = 0;
 	char    text[1024];                            // Holds Our String
 	int screenStats[4],blendSrc,blendDst;
-	char typ=type;
 	unsigned char blending;
 
 	va_list ap;                                    // Pointer To List Of Arguments
@@ -142,100 +140,50 @@ int cFont::print(float r, float g, float b, float x, float y, const char *fmt, .
 		vsprintf(text, fmt, ap);                       // And Converts Symbols To Actual Numbers
 	va_end(ap);                                    // Results Are Stored In Text
 
-	if (type>3)                                     // Did User Choose An Invalid Character Set?
-		type=3;                                       // If So, Select Set 2 (Italic)
-
 
 	glGetIntegerv(GL_VIEWPORT, screenStats);
-
 	glGetIntegerv(GL_BLEND_SRC, &blendSrc);
 	glGetIntegerv(GL_BLEND_DST, &blendDst);
 	glGetBooleanv(GL_BLEND, &blending);
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
-
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set the correct blending mode
 	glBindTexture(GL_TEXTURE_2D, texture->texid());
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
 
-
 	if (r != 2 && g != 2 && b != 2)
 		glColor3f(r,g,b);
 
-	if(type>1) typ=typ-2;
 	glLoadIdentity();
 	glTranslated(x,y,0);
-	char* pointer = text;
 
-	char colorcode[2] = "\1";
-
-	do
+	string txt = text;
+	string colorcode = "#";
+	glListBase(list_base);
+	while(txt.find(colorcode) != string::npos)
 	{
-		string s2 = "";
-		if (pointer[0] == (char)1)
+		string before = txt.substr(0, txt.find(colorcode));		
+		string color = txt.substr(txt.find(colorcode)+colorcode.length(),6);
+
+		if(color.substr(0,colorcode.length()) == colorcode)
 		{
-			char tmp;
-			pointer++;
-			
-			tmp = pointer[3];
-			pointer[3] = '\0';
+			before = before + colorcode;
+			color = "";
+			txt = txt.substr(txt.find(colorcode)+2*colorcode.length());
 
-			int r2 = atoi(pointer);
-
-			pointer[3] = tmp;
-			pointer+=3;
-			tmp = pointer[3];
-			pointer[3] = '\0';
-
-			int g2 = atoi(pointer);
-
-			pointer[3] = tmp;
-			pointer+=3;
-			tmp = pointer[3];
-			pointer[3] = '\0';
-
-			int b2 = atoi(pointer);
-			pointer[3] = tmp;
-			pointer+=3;
-
-			glColor3ub(r2, g2, b2);
-		}
-
-		intptr_t tmp = (intptr_t)strstr(pointer, colorcode) - 1;
-
-		if (tmp != -1) // notice the -1 on previous line... :/
-		{
-			tmp -= ((intptr_t)pointer-1);
-			pointer[tmp] = '\0';
-		}
-
-
-		if (type == 0)
-		{
-			glListBase(list_base);
-			if (tmp == -1)
-				glCallLists(strlen(pointer),GL_UNSIGNED_BYTE, pointer); // Write The Text To The Screen
-			else
-				glCallLists(tmp,GL_UNSIGNED_BYTE, pointer); // Write The Text To The Screen
-
-		}
-		if(type>0)
-		{
-			glListBase((signed int)list_base);
-			if (tmp == -1)
-				glCallLists(strlen(pointer),GL_UNSIGNED_BYTE, pointer); // Write The Text To The Screen
-			else
-				glCallLists(tmp,GL_UNSIGNED_BYTE, pointer); // Write The Text To The Screen
-		}
-		if (tmp != -1)
-		{
-			pointer[tmp] = '\1';
-			pointer += tmp;
 		}
 		else
-			break;
-	} while (strstr(pointer, colorcode) != NULL);
+			txt = txt.substr(txt.find(colorcode)+colorcode.length()+6);
+
+
+		glCallLists(before.length(),GL_UNSIGNED_BYTE, before.c_str());
+		if(color != "")
+			glColor3ub(hex2dec(color.substr(0,2)),hex2dec(color.substr(2,2)),hex2dec(color.substr(4,2)));
+	}
+	glCallLists(txt.length(),GL_UNSIGNED_BYTE, txt.c_str());
+
+
 	glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();
 
@@ -296,78 +244,31 @@ int cFont::print3d(float r, float g, float b, float a, float x, float y, float z
 	
 	glScalef(scale, scale, scale);
 	
-	char* pointer = text;
-
-	char colorcode[2] = "\1";
-
-	glTranslatef(-textlen(text)/2.0f,0,0);
-
-	do
+	string txt = text;
+	string colorcode = "#";
+	glListBase(list_base);
+	while(txt.find(colorcode) != string::npos)
 	{
-		string s2 = "";
-		if (pointer[0] == (char)1)
+		string before = txt.substr(0, txt.find(colorcode));		
+		string color = txt.substr(txt.find(colorcode)+colorcode.length(),6);
+
+		if(color.substr(0,colorcode.length()) == colorcode)
 		{
-			char tmp;
-			pointer++;
-			
-			tmp = pointer[3];
-			pointer[3] = '\0';
+			before = before + colorcode;
+			color = "";
+			txt = txt.substr(txt.find(colorcode)+2*colorcode.length());
 
-			int r2 = atoi(pointer);
-
-			pointer[3] = tmp;
-			pointer+=3;
-			tmp = pointer[3];
-			pointer[3] = '\0';
-
-			int g2 = atoi(pointer);
-
-			pointer[3] = tmp;
-			pointer+=3;
-			tmp = pointer[3];
-			pointer[3] = '\0';
-
-			int b2 = atoi(pointer);
-			pointer[3] = tmp;
-			pointer+=3;
-
-			glColor3ub(r2, g2, b2);
-		}
-
-		intptr_t tmp = (intptr_t)strstr(pointer, colorcode) - 1;
-
-		if (tmp != -1)
-		{
-			tmp -= ((intptr_t)pointer-1);
-			pointer[tmp] = '\0';
-		}
-
-
-		if (type == 0)
-		{
-			glListBase(list_base);
-			if (tmp == -1)
-				glCallLists(strlen(pointer),GL_UNSIGNED_BYTE, pointer); // Write The Text To The Screen
-			else
-				glCallLists(tmp,GL_UNSIGNED_BYTE, pointer); // Write The Text To The Screen
-
-		}
-		if(type>0)
-		{
-			glListBase((signed int)list_base);
-			if (tmp == -1)
-				glCallLists(strlen(pointer),GL_UNSIGNED_BYTE, pointer); // Write The Text To The Screen
-			else
-				glCallLists(tmp,GL_UNSIGNED_BYTE, pointer); // Write The Text To The Screen
-		}
-		if (tmp != -1)
-		{
-			pointer[tmp] = '\1';
-			pointer += tmp;
 		}
 		else
-			break;
-	} while (strstr(pointer, colorcode) != NULL);
+			txt = txt.substr(txt.find(colorcode)+colorcode.length()+6);
+
+
+		glCallLists(before.length(),GL_UNSIGNED_BYTE, before.c_str());
+		if(color != "")
+			glColor3ub(hex2dec(color.substr(0,2)),hex2dec(color.substr(2,2)),hex2dec(color.substr(4,2)));
+	}
+	glCallLists(txt.length(),GL_UNSIGNED_BYTE, txt.c_str());
+
 
 	if (!blending)
 		glDisable(GL_BLEND);
@@ -379,17 +280,35 @@ int cFont::print3d(float r, float g, float b, float a, float x, float y, float z
 }
 
 
+
+
+int	cFont::textlen(string s)
+{
+	int l = 0;
+	for(int i = 0; i < (int)s.length(); i++)
+	{
+		if (((BYTE)s[i]) < 255)
+		{
+			l = l + width[((BYTE)s[i])]+1;
+			if(width[((BYTE)s[i])] == 0)
+				l+=10;
+		}
+		else
+			l = l + 10;
+
+	}
+	return l;
+}
+
+
+
 int cFont::load(string filename)
 {
 	texture = cTextureLoaders::load(filename,false);
-
-	Log(5,0,GetMsg("font/LOADING"), filename.c_str());
-	
+	Log(5,0,"Loading font %s", filename.c_str());
 	float cx, cy;
-
 	list_base=glGenLists(256);                          // Creating 256 Display Lists
 	glBindTexture(GL_TEXTURE_2D, texture->texid());	 // Select Our Font Texture
-
 	for (int loop1=0; loop1<256; loop1++)              // Loop Through All 256 Lists
 	{
 		cx=(float)(loop1%16)/16.0f;                  // X Position Of Current Character
@@ -415,7 +334,6 @@ int cFont::load(string filename)
 		#define fontwidth  0.059f
 		#define fontheight 0.0625f
 
-
 		glNewList(list_base+loop1,GL_COMPILE);            // Start Building A List
 		glBegin(GL_QUADS);                           // Use A Quad For Each Character
 			glTexCoord2f(cx,cy);          // Texture Coord (Bottom Left)
@@ -433,27 +351,7 @@ int cFont::load(string filename)
 		glTranslated(width[loop1]+1,0,0);                        // Move To The Right Of The Character
 		glEndList();                                 // Done Building The Display List
 	}                                              // Loop Until All 256 Are Built
-
 	delete[] texture->data;
-	Log(3,0,GetMsg("font/DONELOADING"), filename.c_str());
-
+	Log(3,0,"Done loading font %s", filename.c_str());
 	return 1;
-}
-
-int	cFont::textlen(string s)
-{
-	int l = 0;
-	for(int i = 0; i < (int)s.length(); i++)
-	{
-		if (((BYTE)s[i]) < 255)
-		{
-			l = l + width[((BYTE)s[i])]+1;
-			if(width[((BYTE)s[i])] == 0)
-				l+=10;
-		}
-		else
-			l = l + 10;
-
-	}
-	return l;
 }

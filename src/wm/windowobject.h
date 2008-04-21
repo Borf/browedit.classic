@@ -3,6 +3,7 @@
 
 #include <common.h>
 #include <string>
+#include <tinyxml/tinyxml.h>
 using namespace std;
 
 
@@ -61,6 +62,21 @@ protected:
 	int	x, y;
 	int h, w;
 	string popup;
+	bool	enabled;
+
+//skinning
+	float fontcolor[3];
+	int	skinTopHeight;
+	int skinTop;
+	int skinBottomHeight;
+	int skinBottom;
+
+	int skinLeft;
+	int skinLeftWidth;
+	int skinRight;
+	int skinRightWidth;
+
+
 public:
 	cWindowObject()
 	{
@@ -73,8 +89,9 @@ public:
 		alignment = ALIGN_CENTER;
 		selectable = true;
 		type = OBJECT_UNDEFINED;
+		enabled = true;
 	}	
-	cWindowObject(cWindow* p)
+	cWindowObject(cWindow* p, TiXmlElement* skin = NULL)
 	{
 		parent = p;
 		x = 10;
@@ -85,6 +102,24 @@ public:
 		alignment = ALIGN_CENTER;
 		selectable = true;
 		type = OBJECT_UNDEFINED;
+
+		if(skin != NULL)
+		{
+			string color = skin->FirstChildElement("fontcolor")->FirstChild()->Value();
+			fontcolor[0] = hex2dec(color.substr(0,2)) / 256.0f;
+			fontcolor[1] = hex2dec(color.substr(2,2)) / 256.0f;
+			fontcolor[2] = hex2dec(color.substr(4,2)) / 256.0f;
+
+			skinTopHeight = atoi(skin->FirstChildElement("top")->Attribute("height"));
+			skinTop =		512 - atoi(skin->FirstChildElement("top")->FirstChild()->Value());
+			skinBottomHeight = atoi(skin->FirstChildElement("bottom")->Attribute("height"));
+			skinBottom =		512 - atoi(skin->FirstChildElement("bottom")->FirstChild()->Value());
+			
+			skinLeftWidth = atoi(skin->FirstChildElement("left")->Attribute("width"));
+			skinLeft =		atoi(skin->FirstChildElement("left")->FirstChild()->Value());
+			skinRightWidth = atoi(skin->FirstChildElement("right")->Attribute("width"));
+			skinRight =		atoi(skin->FirstChildElement("right")->FirstChild()->Value());
+		}
 	}
 
 	virtual ~cWindowObject() {}
@@ -98,10 +133,13 @@ public:
 	int  ph()						{ return h; }
 	virtual string ppopup()					{ return popup; }
 	void setpopup(string s)			{ popup = s; }
+	bool isEnabled()				{ return enabled; }
+	void enable()					{ enabled = true; };
+	void disable()					{ enabled = false; };
 
 	bool selectable;
 	
-	virtual void draw(int = 0, int = 0, int = 0, int = 0) = 0;
+	virtual void draw(int = 0, int = 0, int = 0, int = 0);
 	virtual void click();
 	virtual void drag() {}
 
@@ -121,9 +159,9 @@ public:
 	virtual void rightclick() {}
 
 	virtual void SetText(int, string) {}
-	virtual void SetInt(int, intptr_t) {}
+	virtual void SetInt(int, int) {}
 	virtual string GetText(int) { return "NULL"; }
-	virtual intptr_t GetInt(int) { return -1; }
+	virtual int GetInt(int) { return -1; }
 	virtual void holddragover() {}
 	virtual void dragover() {}
 
@@ -133,6 +171,6 @@ public:
 	cWindow* parent;
 };
 
-extern float mousex, mousey;
+extern long mousex, mousey;
 
 #endif

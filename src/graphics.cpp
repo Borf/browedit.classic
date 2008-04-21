@@ -11,7 +11,7 @@
 #include "graphics.h"
 #include "menu.h"
 
-extern float			mousex, mousey;
+extern long			mousex, mousey;
 extern eState			state;
 extern cFileSystem		fs;
 extern void				ChangeGrid();
@@ -27,7 +27,7 @@ extern string			rodir;
 extern long				lastmotion;
 extern string			fontname;
 extern cMenu*			lastmenu;
-
+extern string			skinFile;
 double mouse3dx, mouse3dy, mouse3dz;
 
 extern string			config;
@@ -398,8 +398,8 @@ int cGraphics::init()
 	bulb = cTextureLoaders::load("data/bulb.tga");
 	splash = cTextureLoaders::load("data/hamtaro.tga");
 	Log(3,0,GetMsg("graphics/INITIALIZINGWM"));
-	WM.init();
-	WM.addwindow(new cHotkeyWindow(WM.texture, &WM.font));
+	WM.init(skinFile);
+	WM.addwindow(new cHotkeyWindow(WM.texture, &WM.font, Graphics.WM.skin));
 
 	int i;
 	for(i = 0; i < 7; i++)

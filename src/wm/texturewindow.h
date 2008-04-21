@@ -87,7 +87,7 @@ class cTextureWindow : public cWindow
 	class cWindowTextureCatSelect : public cWindowTree
 	{
 	public:
-		cWindowTextureCatSelect(cWindow* parent, vector<cWindowTree::cTreeNode*> n) : cWindowTree(parent, n)
+		cWindowTextureCatSelect(cWindow* parent, vector<cWindowTree::cTreeNode*> n, TiXmlDocument &skin) : cWindowTree(parent, n,skin)
 		{
 			
 		}
@@ -138,7 +138,7 @@ public:
 
 	int iconsize;
 
-	cTextureWindow(cTexture* t, cFont* f) : cWindow(t,f)
+	cTextureWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWindow(t,f,skin)
 	{
 		iconsize = 128;
 		wtype = WT_TEXTURE;
@@ -222,9 +222,9 @@ public:
 			}
 		}
 
-		o = new cWindowTextureCatSelect(this, nodes);
+		o = new cWindowTextureCatSelect(this, nodes, skin);
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(20,20);
+		o->moveto(20,30);
 		o->resizeto(400,400);
 		objects["tree"] = o;
 
@@ -234,14 +234,14 @@ public:
 		o->resizeto(100,100);
 		objects["textures"] = o;*/
 
-		o = new cWindowScrollPanel(this);
+		o = new cWindowScrollPanel(this, skin);
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(20, 20);
+		o->moveto(20, 30);
 		o->resizeto(100,100);
 		objects["textures"] = o;
 
 //		objects["rollup"] = new cWindowRollupButton(this);
-		objects["close"] = new cWindowCloseButton(this);
+		objects["close"] = new cWindowCloseButton(this,skin);
 
 		resizeto(w,h);
 	}	
@@ -249,11 +249,11 @@ public:
 	void resizeto(int ww, int hh)
 	{
 		cWindow::resizeto(ww,hh);
-		objects["tree"]->resizeto(200, hh-30);
+		objects["tree"]->resizeto(200, hh-40);
 		cWindowScrollPanel* panel = (cWindowScrollPanel*)objects["textures"];
-		panel->moveto(220, 20);
-		panel->resizeto(ww-220, hh-30);
-		panel->innerwidth = ww-220;
+		panel->moveto(220, 30);
+		panel->resizeto(ww-230, hh-40);
+		panel->innerwidth = ww-230;
 
 		int x = 0;
 		int y = 0;

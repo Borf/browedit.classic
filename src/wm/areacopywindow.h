@@ -20,7 +20,7 @@ private:
 	{
 
 	public:
-		cAreaCopyWindowOkButton(cWindow* parent) : cWindowButton(parent)
+		cAreaCopyWindowOkButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent,skin)
 		{
 			alignment = ALIGN_BOTTOM;
 			moveto(0, 20);
@@ -41,7 +41,7 @@ private:
 		}
 	};
 public:
-	cAreaCopyWindow(cTexture* t, cFont* f) : cWindow(t,f)
+	cAreaCopyWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWindow(t,f,skin)
 	{
 		wtype = WT_AREACOPY;
 		resizable = false;
@@ -56,8 +56,8 @@ public:
 
 		cWindowObject* o;
 		
-		objects["rollup"] = new cWindowRollupButton(this);
-		objects["close"] = new cWindowCloseButton(this);
+		objects["rollup"] = new cWindowRollupButton(this,skin);
+		objects["close"] = new cWindowCloseButton(this,skin);
 
 
 		addlabel("lblAreaCModel", 15,20,GetMsg("wm/areacopy/MODELS"));
@@ -109,7 +109,7 @@ public:
 	objects["Effects"] = o;
 //	return o;
 
-		objects["OkButton"] = new cAreaCopyWindowOkButton(this);
+		objects["OkButton"] = new cAreaCopyWindowOkButton(this,skin);
 	}	
 };
 

@@ -4,7 +4,7 @@
 #include "menu.h"
 #include "wm/effectwindow.h"
 
-extern float mousestartx, mousestarty;
+extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
 extern cGraphics Graphics;
 extern cUndoStack undostack;
@@ -162,7 +162,7 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 				{
 					cEffect* o = &Graphics.world.effects[Graphics.selectedobject];
 
-					cWindow* w = new cEffectWindow(Graphics.WM.texture, &Graphics.WM.font);
+					cWindow* w = new cEffectWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin);
 					((cWindowFloatInputBox*)w->objects["posx"])->floatje = &o->pos.x;
 					((cWindowFloatInputBox*)w->objects["posy"])->floatje = &o->pos.y;
 					((cWindowFloatInputBox*)w->objects["posz"])->floatje = &o->pos.z;

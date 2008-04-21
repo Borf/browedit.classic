@@ -77,12 +77,12 @@ bool cWindowCheckBox::onchar(char keyid, bool shift)
 	return false;
 }
 
-void cWindowCheckBox::SetInt(int id, intptr_t val)
+void cWindowCheckBox::SetInt(int id, int val)
 {
 	value = val != 0;
 }
 
-intptr_t cWindowCheckBox::GetInt(int id)
+int cWindowCheckBox::GetInt(int id)
 {
 	return value ? 1 : 0;
 }

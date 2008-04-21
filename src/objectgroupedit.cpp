@@ -3,7 +3,7 @@
 #include "undo.h"
 #include "menu.h"
 
-extern float mousestartx, mousestarty;
+extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
 extern cGraphics Graphics;
 extern cUndoStack undostack;

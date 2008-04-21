@@ -35,8 +35,8 @@ public:
 	virtual void click();
 
 	virtual void SetText(int, string);
-	void SetInt(int, intptr_t);
-	intptr_t GetInt(int);
+	void SetInt(int, int);
+	int GetInt(int);
 	bool loaded;
 };
 

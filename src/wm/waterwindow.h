@@ -13,7 +13,7 @@
 class cWaterWindowOkButton : public cWindowButton
 {
 public:
-	cWaterWindowOkButton(cWindow* parent) : cWindowButton(parent)
+	cWaterWindowOkButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent,skin)
 	{
 		alignment = ALIGN_BOTTOM;
 		moveto(0, 20);
@@ -36,7 +36,7 @@ public:
 class cWaterWindow : public cWindow
 {
 public:
-	cWaterWindow(cTexture* t, cFont* f) : cWindow(t,f)
+	cWaterWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWindow(t,f,skin)
 	{
 		wtype = WT_WATER;
 		resizable = false;
@@ -51,8 +51,8 @@ public:
 
 		cWindowObject* o;
 		
-		objects["rollup"] = new cWindowRollupButton(this);
-		objects["close"] = new cWindowCloseButton(this);
+		objects["rollup"] = new cWindowRollupButton(this,skin);
+		objects["close"] = new cWindowCloseButton(this,skin);
 
 		addlabel("lblAmplitude", 15,20,GetMsg("wm/water/AMPLITUDE"));
 		addlabel("lblHeight", 15,40,GetMsg("wm/water/HEIGHT"));
@@ -62,43 +62,43 @@ public:
 		addlabel("lblType", 15,120,GetMsg("wm/water/TYPE"));
 
 
-		o = new cWindowInputBox(this);
+		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(120,20);
 		o->resizeto(70,20);
 		objects["amplitude"] = o;
 		
-		o = new cWindowInputBox(this);
+		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(120,40);
 		o->resizeto(70,20);
 		objects["height"] = o;
 
-		o = new cWindowInputBox(this);
+		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(120,60);
 		o->resizeto(70,20);
 		objects["phase"] = o;
 
-		o = new cWindowInputBox(this);
+		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(120,80);
 		o->resizeto(70,20);
 		objects["surfacecurve"] = o;
 
-		o = new cWindowInputBox(this);
+		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(120,100);
 		o->resizeto(70,20);
 		objects["texcycle"] = o;
 
-		o = new cWindowInputBox(this);
+		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(120,120);
 		o->resizeto(70,20);
 		objects["type"] = o;
 		
-		objects["OkButton"] = new cWaterWindowOkButton(this);
+		objects["OkButton"] = new cWaterWindowOkButton(this,skin);
 	}	
 };
 

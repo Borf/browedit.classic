@@ -14,7 +14,7 @@ extern cUndoStack undostack;
 class cWindowOkButton : public cWindowButton
 {
 public:
-	cWindowOkButton(cWindow* parent) : cWindowButton(parent)
+	cWindowOkButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent, skin)
 	{
 		alignment = ALIGN_BOTTOM;
 		moveto(100, 20);
@@ -36,7 +36,7 @@ public:
 class cWindowCancelButton : public cWindowButton
 {
 public:
-	cWindowCancelButton(cWindow* parent) : cWindowButton(parent)
+	cWindowCancelButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent,skin)
 	{
 		alignment = ALIGN_BOTTOM;
 		moveto(-100, 20);
@@ -61,7 +61,7 @@ class cObjectWindow : public cWindow
 public:
 	cUndoItem* undo;
 
-	cObjectWindow(cTexture* t, cFont* f) : cWindow(t,f)
+	cObjectWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWindow(t,f,skin)
 	{
 		cWindowObject* o;
 		wtype = WT_OBJECT;
@@ -75,8 +75,8 @@ public:
 
 		defaultobject = "OkButton";
 
-		objects["rollup"] = new cWindowRollupButton(this);
-		objects["close"] = new cWindowCloseButton(this);
+		objects["rollup"] = new cWindowRollupButton(this,skin);
+		objects["close"] = new cWindowCloseButton(this,skin);
 
 
 		addlabel("text", 15,20,GetMsg("wm/object/OBJECT"));
@@ -84,7 +84,7 @@ public:
 		addlabel("lblScale", 15,80, GetMsg("wm/object/SCALE"));
 		addlabel("lblRot", 15,100,GetMsg("wm/object/ROTATION"));
 
-		o = new cWindowInputBox(this);
+		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,20);
 		o->resizeto(210,20);
@@ -92,69 +92,69 @@ public:
 		o->SetInt(0,0);
 		objects["objectmenu"] = o;
 
-		o = new cWindowStringInputBox(this);
+		o = new cWindowStringInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,40);
 		o->resizeto(210,20);
 		o->SetText(0,"");
 		objects["objectname"] = o;
 		
-		o = new cWindowFloatInputBox(this);
+		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,60);
 		o->resizeto(70,20);
 		objects["posx"] = o;
 
-		o = new cWindowFloatInputBox(this);
+		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(170,60);
 		o->resizeto(70,20);
 		objects["posy"] = o;
 		
-		o = new cWindowFloatInputBox(this);
+		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(240,60);
 		o->resizeto(70,20);
 		objects["posz"] = o;
 		
-		o = new cWindowFloatInputBox(this);
+		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,80);
 		o->resizeto(70,20);
 		objects["scalex"] = o;
 
-		o = new cWindowFloatInputBox(this);
+		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(170,80);
 		o->resizeto(70,20);
 		objects["scaley"] = o;
 		
-		o = new cWindowFloatInputBox(this);
+		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(240,80);
 		o->resizeto(70,20);
 		objects["scalez"] = o;
 		
-		o = new cWindowFloatInputBox(this);
+		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,100);
 		o->resizeto(70,20);
 		objects["rotx"] = o;
 
-		o = new cWindowFloatInputBox(this);
+		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(170,100);
 		o->resizeto(70,20);
 		objects["roty"] = o;
 		
-		o = new cWindowFloatInputBox(this);
+		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(240,100);
 		o->resizeto(70,20);
 		objects["rotz"] = o;
 
-		objects["OkButton"] = new cWindowOkButton(this);
-		objects["CancelButton"] = new cWindowCancelButton(this);
+		objects["OkButton"] = new cWindowOkButton(this,skin);
+		objects["CancelButton"] = new cWindowCancelButton(this,skin);
 	}	
 
 	void* userfunc(void* param)

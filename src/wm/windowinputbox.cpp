@@ -12,54 +12,8 @@ void cWindowInputBox::draw(int cutoffleft, int cutoffright, int cutofftop, int c
 	xx = realx();
 	yy = realy();
 
-	glBindTexture(GL_TEXTURE_2D, parent->texture->texid());
-	glBegin(GL_QUADS);
-		glTexCoord2f((371.0f)/512.0f,	(337.0f)/512.0f);				glVertex2d(xx+3, yy+3);
-		glTexCoord2f((371.0f)/512.0f,	(337.0f)/512.0f);				glVertex2d(xx+w-3, yy+3);
-		glTexCoord2f((371.0f)/512.0f,	(337.0f)/512.0f);				glVertex2d(xx+w-3, yy+h-3);
-		glTexCoord2f((371.0f)/512.0f,	(337.0f)/512.0f);				glVertex2d(xx+3, yy+h-3);
+	cWindowObject::draw(cutoffleft, cutoffright, cutofftop, cutoffbottom);
 
-// borders
-		glTexCoord2f((258.0f+4.0f)/512.0f,	(340.0f+4.0f)/512.0f);		glVertex2d(xx+w-4, yy+4);
-		glTexCoord2f((258.0f)/512.0f,		(340.0f+4.0f)/512.0f);		glVertex2d(xx+w, yy+4);
-		glTexCoord2f((258.0f)/512.0f,		(469.0f-4.0f)/512.0f);		glVertex2d(xx+w, yy+h-4);
-		glTexCoord2f((258.0f+4.0f)/512.0f,	(469.0f-4.0f)/512.0f);		glVertex2d(xx+w-4, yy+h-4);
-
-		glTexCoord2f((387.0f)/512.0f,		(340.0f+4.0f)/512.0f);		glVertex2d(xx, yy+4);
-		glTexCoord2f((387.0f-4.0f)/512.0f,	(340.0f+4.0f)/512.0f);		glVertex2d(xx+4, yy+4);
-		glTexCoord2f((387.0f-4.0f)/512.0f,	(469.0f-4.0f)/512.0f);		glVertex2d(xx+4, yy+h-4);
-		glTexCoord2f((387.0f)/512.0f,		(469.0f-4.0f)/512.0f);		glVertex2d(xx, yy+h-4);
-
-		glTexCoord2f((258.0f+4.0f)/512.0f,	(340.0f)/512.0f);			glVertex2d(xx+4, yy+h);
-		glTexCoord2f((258.0f+4.0f)/512.0f,	(340.0f+4.0f)/512.0f);		glVertex2d(xx+4, yy+h-4);
-		glTexCoord2f((387.0f-4.0f)/512.0f,	(340.0f+4.0f)/512.0f);		glVertex2d(xx+w-4, yy+h-4);
-		glTexCoord2f((387.0f-4.0f)/512.0f,	(340.0f)/512.0f);			glVertex2d(xx+w-4, yy+h);
-		
-		glTexCoord2f((258.0f+4.0f)/512.0f,	(469.0f-4.0f)/512.0f);		glVertex2d(xx+4, yy+4);
-		glTexCoord2f((258.0f+4.0f)/512.0f,	(469.0f)/512.0f);			glVertex2d(xx+4, yy);
-		glTexCoord2f((387.0f-4.0f)/512.0f,	(469.0f)/512.0f);			glVertex2d(xx+w-4, yy);
-		glTexCoord2f((387.0f-4.0f)/512.0f,	(469.0f-4.0f)/512.0f);		glVertex2d(xx+w-4, yy+4);
-//corners
-		glTexCoord2f((258.0f)/512.0f,		(469.0f-4.0f)/512.0f);		glVertex2d(xx, yy+h-4);
-		glTexCoord2f((258.0f+4.0f)/512.0f,	(469.0f-4.0f)/512.0f);		glVertex2d(xx+4, yy+h-4);
-		glTexCoord2f((258.0f+4.0f)/512.0f,	(469.0f)/512.0f);			glVertex2d(xx+4, yy+h);
-		glTexCoord2f((258.0f)/512.0f,		(469.0f)/512.0f);			glVertex2d(xx, yy+h);
-
-		glTexCoord2f((387.0f-4.0f)/512.0f,	(469.0f-4.0f)/512.0f);		glVertex2d(xx+w-4, yy+h-4);
-		glTexCoord2f((387.0f)/512.0f,		(469.0f-4.0f)/512.0f);		glVertex2d(xx+w, yy+h-4);
-		glTexCoord2f((387.0f)/512.0f,		(469.0f)/512.0f);			glVertex2d(xx+w, yy+h);
-		glTexCoord2f((387.0f-4.0f)/512.0f,	(469.0f)/512.0f);			glVertex2d(xx+w-4, yy+h);
-
-		glTexCoord2f((258.0f)/512.0f,		(340.0f)/512.0f);			glVertex2d(xx, yy);
-		glTexCoord2f((258.0f+4.0f)/512.0f,	(340.0f)/512.0f);			glVertex2d(xx+4, yy);
-		glTexCoord2f((258.0f+4.0f)/512.0f,	(340.0f+4.0f)/512.0f);		glVertex2d(xx+4, yy+4);
-		glTexCoord2f((258.0f)/512.0f,		(340.0f+4.0f)/512.0f);		glVertex2d(xx, yy+4);
-
-		glTexCoord2f((387.0f-4.0f)/512.0f,	(340.0f)/512.0f);			glVertex2d(xx+w-4, yy);
-		glTexCoord2f((387.0f)/512.0f,		(340.0f)/512.0f);			glVertex2d(xx+w, yy);
-		glTexCoord2f((387.0f)/512.0f,		(340.0f+4.0f)/512.0f);		glVertex2d(xx+w, yy+4);
-		glTexCoord2f((387.0f-4.0f)/512.0f,	(340.0f+4.0f)/512.0f);		glVertex2d(xx+w-4, yy+4);	
-	glEnd();
 	glDisable(GL_TEXTURE_2D);
 
 	string temptext = text;
@@ -109,13 +63,13 @@ void cWindowInputBox::draw(int cutoffleft, int cutoffright, int cutofftop, int c
 	glColor3f(0,0,0);
 
 	if (mask == "")
-		parent->font->print(0,0,0, parent->px()+xx+5, parent->py()+yy+2, "%s", t.c_str());
+		parent->font->print(fontcolor[0], fontcolor[1], fontcolor[2], parent->px()+xx+5, parent->py()+yy+2, "%s", t.c_str());
 	else
 	{
-		parent->font->print(0,0,0, parent->px()+xx+5, parent->py()+yy+2, t.c_str());
+		parent->font->print(fontcolor[0], fontcolor[1], fontcolor[2], parent->px()+xx+5, parent->py()+yy+2, t.c_str());
 	}
 	if (editable && focussed && (SDL_GetTicks() % 1000) > 500)
-		parent->font->print(0,0,0,parent->px()+2+xx+parent->font->textlen(t.substr(0, cursor-startindex)), parent->py()+yy+2, "|");
+		parent->font->print(fontcolor[0], fontcolor[1], fontcolor[2],parent->px()+2+xx+parent->font->textlen(t.substr(0, cursor-startindex)), parent->py()+yy+2, "|");
 
 	text = temptext;
 
@@ -265,7 +219,7 @@ void cWindowInputBox::SetText(int i, string t)
 		mask = t;
 }
 
-void cWindowInputBox::SetInt(int id, intptr_t val)
+void cWindowInputBox::SetInt(int id, int val)
 {
 	if (id == 0)
 		editable = (val == 1);
@@ -280,7 +234,7 @@ string cWindowInputBox::GetText(int id)
 	return text;
 }
 
-intptr_t cWindowInputBox::GetInt(int id)
+int cWindowInputBox::GetInt(int id)
 {
 	if (id == 0)
 		return editable ? 1 : 0;

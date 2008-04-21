@@ -420,7 +420,7 @@ bool cModelsWindow::cWindowModelCatSelect::onkeydown(int key, bool shift)
 	return false;
 }
 
-cModelsWindow::cWindowModelCatSelect::cWindowModelCatSelect(cWindow* parent, vector<cWindowTree::cTreeNode*> n) : cWindowTree(parent, n)
+cModelsWindow::cWindowModelCatSelect::cWindowModelCatSelect(cWindow* parent, vector<cWindowTree::cTreeNode*> n, TiXmlDocument &skin) : cWindowTree(parent, n,skin)
 {
 	originalselection = -1;
 }
@@ -634,7 +634,7 @@ void addnode(vector<cWindowTree::cTreeNode*> &nodes, map<string, cWindowTree::cT
 
 }
 
-cModelsWindow::cModelsWindow(cTexture* t, cFont* f) : cWindow(t,f)
+cModelsWindow::cModelsWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWindow(t,f,skin)
 {
 	wtype = WT_MODELS;
 	closetype = HIDE;
@@ -687,9 +687,9 @@ cModelsWindow::cModelsWindow(cTexture* t, cFont* f) : cWindow(t,f)
 		}
 	}
 
-	o = new cWindowModelCatSelect(this, nodes);
+	o = new cWindowModelCatSelect(this, nodes, skin);
 	o->alignment = ALIGN_TOPLEFT;
-	o->moveto(20,20);
+	o->moveto(20,30);
 	o->resizeto(400,400);
 	objects["tree"] = o;
 
@@ -699,9 +699,9 @@ cModelsWindow::cModelsWindow(cTexture* t, cFont* f) : cWindow(t,f)
 	o->resizeto(100,100);
 	objects["textures"] = o;*/
 
-	o = new cWindowScrollPanel(this);
+	o = new cWindowScrollPanel(this, skin);
 	o->alignment = ALIGN_TOPLEFT;
-	o->moveto(20, 20);
+	o->moveto(20, 30);
 	o->resizeto(100,100);
 	objects["models"] = o;
 
@@ -713,7 +713,7 @@ cModelsWindow::cModelsWindow(cTexture* t, cFont* f) : cWindow(t,f)
 	objects["zdragger"] = o;
 
 //	objects["rollup"] = new cWindowRollupButton(this);
-	objects["close"] = new cWindowCloseButton(this);
+	objects["close"] = new cWindowCloseButton(this,skin);
 
 	resizeto(w,h);
 }	
@@ -721,11 +721,11 @@ cModelsWindow::cModelsWindow(cTexture* t, cFont* f) : cWindow(t,f)
 void cModelsWindow::resizeto(int ww, int hh)
 {
 	cWindow::resizeto(ww,hh);
-	objects["tree"]->resizeto(200, hh-30);
+	objects["tree"]->resizeto(200, hh-40);
 	cWindowScrollPanel* panel = (cWindowScrollPanel*)objects["models"];
-	panel->moveto(220, 20);
-	panel->resizeto(ww-220, hh-30);
-	panel->innerwidth = ww-220;
+	panel->moveto(220, 30);
+	panel->resizeto(ww-230, hh-40);
+	panel->innerwidth = ww-230;
 
 	int x = 0;
 	int y = 0;

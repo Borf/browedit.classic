@@ -20,7 +20,7 @@ class cProgressWindow : public cWindow
 	private:
 		bool* cancel;
 	public:
-		cCancelButton(cWindow* parent, bool* pCancel) : cWindowButton(parent)
+		cCancelButton(cWindow* parent, bool* pCancel, TiXmlDocument &skin) : cWindowButton(parent,skin)
 		{
 			cancel = pCancel;
 			text = "Cancel";
@@ -37,7 +37,7 @@ class cProgressWindow : public cWindow
 	};
 
 public:
-	cProgressWindow(cTexture* t, cFont* f, bool* cancel) : cWindow(t,f)
+	cProgressWindow(cTexture* t, cFont* f, bool* cancel, TiXmlDocument &skin) : cWindow(t,f,skin)
 	{
 		wtype = WT_PROGRESS;
 		resizable = false;
@@ -58,7 +58,7 @@ public:
 		o->resizeto(w-10, 10);
 		objects["progress"] = o;
 
-		objects["cancel"] = new cCancelButton(this, cancel);
+		objects["cancel"] = new cCancelButton(this, cancel,skin);
 
 
 		//objects["ClButton"] = new cOkButton(this, pCallback);

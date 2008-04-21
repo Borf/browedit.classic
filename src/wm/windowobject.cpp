@@ -6,9 +6,61 @@
 #include <graphics.h>
 
 extern cGraphics Graphics;
-/*void cWindowObject::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
+void cWindowObject::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {
-}*/
+	int xx, yy;
+	xx = realx();
+	yy = realy();
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, parent->texture->texid());
+	glBegin(GL_QUADS);
+		glTexCoord2f(skinLeft/512.0f,					(skinTop-skinTopHeight)/512.0f);		glVertex2d(xx+0,				yy+h-skinTopHeight);
+		glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	(skinTop-skinTopHeight)/512.0f);		glVertex2d(xx+skinLeftWidth,	yy+h-skinTopHeight);
+		glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	skinTop/512.0f);						glVertex2d(xx+skinLeftWidth,	yy+h);
+		glTexCoord2f(skinLeft/512.0f,					skinTop/512.0f);						glVertex2d(xx+0,				yy+h);
+
+		glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	(skinTop-skinTopHeight)/512.0f);		glVertex2d(xx+skinLeftWidth,	yy+h-skinTopHeight);
+		glTexCoord2f(skinRight/512.0f,					(skinTop-skinTopHeight)/512.0f);		glVertex2d(xx+w-skinRightWidth,	yy+h-skinTopHeight);
+		glTexCoord2f(skinRight/512.0f,					skinTop/512.0f);						glVertex2d(xx+w-skinRightWidth,	yy+h);
+		glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	skinTop/512.0f);						glVertex2d(xx+skinLeftWidth,	yy+h);
+
+		glTexCoord2f(skinRight/512.0f,					(skinTop-skinTopHeight)/512.0f);		glVertex2d(xx+w-skinRightWidth,	yy+h-skinTopHeight);
+		glTexCoord2f((skinRight+skinRightWidth)/512.0f,	(skinTop-skinTopHeight)/512.0f);		glVertex2d(xx+w,				yy+h-skinTopHeight);
+		glTexCoord2f((skinRight+skinRightWidth)/512.0f,	skinTop/512.0f);						glVertex2d(xx+w,				yy+h);
+		glTexCoord2f(skinRight/512.0f,					skinTop/512.0f);						glVertex2d(xx+w-skinRightWidth,	yy+h);
+
+		glTexCoord2f(skinLeft/512.0f,					skinBottom/512.0f);						glVertex2d(xx+0,				yy+skinBottomHeight);
+		glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	skinBottom/512.0f);						glVertex2d(xx+skinLeftWidth,	yy+skinBottomHeight);
+		glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	(skinTop-skinTopHeight)/512.0f);		glVertex2d(xx+skinLeftWidth,	yy+h-skinTopHeight);
+		glTexCoord2f(skinLeft/512.0f,					(skinTop-skinTopHeight)/512.0f);		glVertex2d(xx+0,				yy+h-skinTopHeight);
+
+		glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	skinBottom/512.0f);						glVertex2d(xx+skinLeftWidth,	yy+skinBottomHeight);
+		glTexCoord2f(skinRight/512.0f,					skinBottom/512.0f);						glVertex2d(xx+w-skinRightWidth,	yy+skinBottomHeight);
+		glTexCoord2f(skinRight/512.0f,					(skinTop-skinTopHeight)/512.0f);		glVertex2d(xx+w-skinRightWidth,	yy+h-skinTopHeight);
+		glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	(skinTop-skinTopHeight)/512.0f);		glVertex2d(xx+skinLeftWidth,	yy+h-skinTopHeight);
+
+		glTexCoord2f(skinRight/512.0f,					skinBottom/512.0f);						glVertex2d(xx+w-skinRightWidth,	yy+skinBottomHeight);
+		glTexCoord2f((skinRight+skinRightWidth)/512.0f,	skinBottom/512.0f);						glVertex2d(xx+w,				yy+skinBottomHeight);
+		glTexCoord2f((skinRight+skinRightWidth)/512.0f,	(skinTop-skinTopHeight)/512.0f);		glVertex2d(xx+w,				yy+h-skinTopHeight);
+		glTexCoord2f(skinRight/512.0f,					(skinTop-skinTopHeight)/512.0f);		glVertex2d(xx+w-skinRightWidth,	yy+h-skinTopHeight);
+///////////////			
+		glTexCoord2f(skinLeft/512.0f,					(skinBottom-skinBottomHeight)/512.0f);	glVertex2d(xx+0,				yy+0);
+		glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	(skinBottom-skinBottomHeight)/512.0f);	glVertex2d(xx+skinLeftWidth,	yy+0);
+		glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	skinBottom/512.0f);						glVertex2d(xx+skinLeftWidth,	yy+skinBottomHeight);
+		glTexCoord2f(skinLeft/512.0f,					skinBottom/512.0f);						glVertex2d(xx+0,				yy+skinBottomHeight);
+
+		glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	(skinBottom-skinBottomHeight)/512.0f);	glVertex2d(xx+skinLeftWidth,	yy+0);
+		glTexCoord2f(skinRight/512.0f,					(skinBottom-skinBottomHeight)/512.0f);	glVertex2d(xx+w-skinRightWidth,	yy+0);
+		glTexCoord2f(skinRight/512.0f,					skinBottom/512.0f);						glVertex2d(xx+w-skinRightWidth,	yy+skinBottomHeight);
+		glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	skinBottom/512.0f);						glVertex2d(xx+skinLeftWidth,	yy+skinBottomHeight);
+
+		glTexCoord2f(skinRight/512.0f,					(skinBottom-skinBottomHeight)/512.0f);	glVertex2d(xx+w-skinRightWidth,	yy+0);
+		glTexCoord2f((skinRight+skinRightWidth)/512.0f,	(skinBottom-skinBottomHeight)/512.0f);	glVertex2d(xx+w,				yy+0);
+		glTexCoord2f((skinRight+skinRightWidth)/512.0f,	skinBottom/512.0f);						glVertex2d(xx+w,				yy+skinBottomHeight);
+		glTexCoord2f(skinRight/512.0f,					skinBottom/512.0f);						glVertex2d(xx+w-skinRightWidth,	yy+skinBottomHeight);
+
+	glEnd();
+}
 
 
 

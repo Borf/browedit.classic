@@ -4,7 +4,7 @@
 #include "sprite.h"
 #include "wm/spritewindow.h"
 
-extern float mousestartx, mousestarty;
+extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
 extern cGraphics Graphics;
 extern cUndoStack undostack;
@@ -157,7 +157,7 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 					if(Graphics.selectedobject >= (int)Graphics.world.sprites.size())
 						break;
 
-					cWindow* w = new cSpriteWindow(Graphics.WM.texture, &Graphics.WM.font);
+					cWindow* w = new cSpriteWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin);
 
 					if(Graphics.world.sprites[Graphics.selectedobject]->head)
 						((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->loadhead(Graphics.world.sprites[Graphics.selectedobject]->head->filename);

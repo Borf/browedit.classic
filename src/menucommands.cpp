@@ -98,7 +98,7 @@ void openfunc(string param)
 
 MENUCOMMAND(opengrf)
 {
-	Graphics.WM.addwindow(new cFileWindow(Graphics.WM.texture, &Graphics.WM.font, openfunc));
+	Graphics.WM.addwindow(new cFileWindow(Graphics.WM.texture, &Graphics.WM.font, openfunc,Graphics.WM.skin));
 	return true;
 }
 
@@ -1471,7 +1471,7 @@ MENUCOMMAND(dolightmaps2)
 	bool rendering = true;
 
 
-	cProgressWindow* w = new cProgressWindow(Graphics.WM.texture, &Graphics.WM.font, &rendering);
+	cProgressWindow* w = new cProgressWindow(Graphics.WM.texture, &Graphics.WM.font, &rendering, Graphics.WM.skin);
 	Graphics.WM.addwindow(w);
 	w->objects["progress"]->SetInt(1,0);
 	w->objects["progress"]->SetInt(2,Graphics.world.height * Graphics.world.width);
@@ -2240,7 +2240,7 @@ MENUCOMMAND(toggle)
 MENUCOMMAND(water)
 {
 	char buf[100];
-	cWindow* w = new cWaterWindow(Graphics.WM.texture, &Graphics.WM.font);
+	cWindow* w = new cWaterWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin);
 	sprintf(buf, "%f", Graphics.world.water.amplitude);		w->objects["amplitude"]->SetText(0,buf);
 	sprintf(buf, "%f", Graphics.world.water.height);		w->objects["height"]->SetText(0,buf);
 	sprintf(buf, "%f", Graphics.world.water.phase);			w->objects["phase"]->SetText(0,buf);
@@ -2283,7 +2283,7 @@ MENUCOMMAND(cleantextures)
 MENUCOMMAND(ambientlight)
 {
 	char buf[100];
-	cWindow* w = new cAmbientLightWindow(Graphics.WM.texture, &Graphics.WM.font);
+	cWindow* w = new cAmbientLightWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin);
 	sprintf(buf, "%i", Graphics.world.ambientlight.ambientr);		w->objects["ambientr"]->SetText(0,buf);
 	sprintf(buf, "%i", Graphics.world.ambientlight.ambientg);		w->objects["ambientg"]->SetText(0,buf);
 	sprintf(buf, "%i", Graphics.world.ambientlight.ambientb);		w->objects["ambientb"]->SetText(0,buf);
@@ -2360,7 +2360,7 @@ MENUCOMMAND(properties)
 
 MENUCOMMAND(preferences)
 {
-	Graphics.WM.addwindow(new cKeyBindWindow(Graphics.WM.texture, &Graphics.WM.font));
+	Graphics.WM.addwindow(new cKeyBindWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin));
 	return true;
 }
 
@@ -2463,13 +2463,13 @@ MENUCOMMAND(fillarea)
 
 MENUCOMMAND(rsmedit)
 {
-	Graphics.WM.addwindow(new cRSMEditWindow(Graphics.WM.texture, &Graphics.WM.font));
+	Graphics.WM.addwindow(new cRSMEditWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin));
 	return true;
 }
 
 MENUCOMMAND(favlights)
 {
-	Graphics.WM.addwindow(new cFavoriteLightsWindow(Graphics.WM.texture, &Graphics.WM.font));
+	Graphics.WM.addwindow(new cFavoriteLightsWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin));
 	return true;
 }
 

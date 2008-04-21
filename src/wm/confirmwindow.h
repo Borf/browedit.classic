@@ -16,7 +16,7 @@ class cConfirmWindow : public cWindow
 	class cWindowOkButton : public cWindowButton
 	{
 	public:
-		cWindowOkButton(cWindow* parent) : cWindowButton(parent)
+		cWindowOkButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent, skin)
 		{
 			alignment = ALIGN_BOTTOMLEFT;
 			moveto(20, 20);
@@ -33,7 +33,7 @@ class cConfirmWindow : public cWindow
 	class cWindowCancelButton : public cWindowButton
 	{
 	public:
-		cWindowCancelButton(cWindow* parent) : cWindowButton(parent)
+		cWindowCancelButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent, skin)
 		{
 			alignment = ALIGN_BOTTOMRIGHT;
 			moveto(20, 20);
@@ -59,7 +59,7 @@ public:
 	cConfirmWindowCaller* caller;
 
 	
-	cConfirmWindow(cConfirmWindowCaller* c, cTexture* t, cFont* f) : cWindow(t, f)
+	cConfirmWindow(cConfirmWindowCaller* c, cTexture* t, cFont* f, TiXmlDocument &skin) : cWindow(t, f,skin)
 	{
 		caller = c;
 
@@ -75,17 +75,17 @@ public:
 
 		defaultobject = "OkButton";
 
-		objects["rollup"] = new cWindowRollupButton(this);
-		objects["close"] = new cWindowCloseButton(this);;
+		objects["rollup"] = new cWindowRollupButton(this,skin);
+		objects["close"] = new cWindowCloseButton(this,skin);
 		addlabel("text", 15,40,"UserId")->resizeto(w-30, h-100);
-		objects["OkButton"] = new cWindowOkButton(this);
-		objects["CancelButton"] = new cWindowCancelButton(this);
+		objects["OkButton"] = new cWindowOkButton(this, skin);
+		objects["CancelButton"] = new cWindowCancelButton(this, skin);
 	
 	}	
 
 	void* userfunc(void* param)
 	{
-		if ((uintptr_t)param == 1)
+		if ((int)param == 1)
 			caller->Ok();
 		else
 			caller->Cancel();

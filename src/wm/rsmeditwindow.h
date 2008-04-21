@@ -22,7 +22,7 @@ class cRSMEditWindow : public cWindow
 	class cWindowOpenButton : public cWindowButton
 	{
 	public:
-		cWindowOpenButton(cWindow* parent) : cWindowButton(parent)
+		cWindowOpenButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent,skin)
 		{
 			alignment = ALIGN_TOPLEFT;
 			moveto(5, 20);
@@ -68,7 +68,7 @@ class cRSMEditWindow : public cWindow
 	class cWindowSaveButton : public cWindowButton
 	{
 	public:
-		cWindowSaveButton(cWindow* parent) : cWindowButton(parent)
+		cWindowSaveButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent,skin)
 		{
 			alignment = ALIGN_TOPLEFT;
 			moveto(55, 20);
@@ -137,7 +137,7 @@ class cRSMEditWindow : public cWindow
 	class cWindowSaveAsButton : public cWindowButton
 	{
 	public:
-		cWindowSaveAsButton(cWindow* parent) : cWindowButton(parent)
+		cWindowSaveAsButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent,skin)
 		{
 			alignment = ALIGN_TOPLEFT;
 			moveto(105, 20);
@@ -482,7 +482,7 @@ public:
 	int selected;
 
 
-	cRSMEditWindow(cTexture* t, cFont* f) : cWindow(t,f)
+	cRSMEditWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWindow(t,f,skin)
 	{
 		strcpy(filename, string(rodir + "data\\model\\프론테라\\분수대.rsm").c_str());
 		wtype = WT_RSMEDIT;
@@ -496,13 +496,13 @@ public:
 
 		defaultobject = "OkButton";
 
-		objects["close"] = new cWindowCloseButton(this);
+		objects["close"] = new cWindowCloseButton(this,skin);
 
-		objects["OpenButton"] = new cWindowOpenButton(this);
-		objects["SaveButton"] = new cWindowSaveButton(this);
-		objects["SaveAsButton"] = new cWindowSaveAsButton(this);
+		objects["OpenButton"] = new cWindowOpenButton(this,skin);
+		objects["SaveButton"] = new cWindowSaveButton(this,skin);
+		objects["SaveAsButton"] = new cWindowSaveAsButton(this,skin);
 
-		cWindowObject* o = new cWindowScrollPanel(this);
+		cWindowObject* o = new cWindowScrollPanel(this, skin);
 		o->moveto(w-138, 50);
 		o->resizeto(140, h-60);
 		o->alignment = ALIGN_TOPLEFT;

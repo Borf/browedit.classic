@@ -3,24 +3,30 @@
 
 #include "windowobject.h"
 #include <string>
+#include <tinyxml/tinyxml.h>
 using namespace std;
 
 class cWindowButton : public cWindowObject
 {
 protected:
 	string text;
+
+
 public:
-	cWindowButton(cWindow* parent) : cWindowObject(parent)
+	cWindowButton(cWindow* parent, TiXmlDocument &skin) : cWindowObject(parent, skin.FirstChildElement("skin")->FirstChildElement("button"))
 	{
 		w = 100;
 		h = 25;
-		x = 10;
+		x = 15;
 		y = 10;
 		alignment = ALIGN_CENTER;
 		text = "Default";
 		cursortype = 1;
 		selectable = true;
 		type = OBJECT_BUTTON;
+
+	
+	
 	}
 	virtual ~cWindowButton() {}
 	virtual void draw(int,int,int,int);
@@ -35,6 +41,40 @@ public:
 
 };
 
+
+#include "window.h"
+
+class cWindowCloseButton : public cWindowButton
+{
+public:
+	cWindowCloseButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent,skin)
+	{
+		resizeto(16, 14);
+		moveto(4, 4);
+		alignment = ALIGN_TOPRIGHT;
+		text = "x";
+	}
+	void click()
+	{
+		parent->close();
+	}
+};
+
+class cWindowRollupButton : public cWindowButton
+{
+public:
+	cWindowRollupButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent,skin)
+	{
+		resizeto(16, 14);
+		moveto(20, 4);
+		alignment = ALIGN_TOPRIGHT;
+		text = "_";
+	}
+	void click()
+	{
+		parent->toggleroll();
+	}
+};
 
 
 

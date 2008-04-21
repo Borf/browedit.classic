@@ -44,11 +44,11 @@ public:
 	{
 	public:
 		cSprite* sprite;
-		cWindowSprite(cWindow* parent) : cWindowObject(parent)
+		cWindowSprite(cWindow* parent, TiXmlDocument &skin) : cWindowObject(parent, skin.FirstChildElement("skin")->FirstChildElement("frame"))
 		{
 			alignment = ALIGN_TOPLEFT;
-			moveto(10,20);
-			resizeto(120,170);
+			moveto(10,30);
+			resizeto(120,160);
 			sprite = new cSprite();
 		}
 		void draw(int,int,int,int)
@@ -59,55 +59,7 @@ public:
 			xx = realx();
 			yy = realy();
 
-			glBindTexture(GL_TEXTURE_2D, parent->texture->texid());
-			glBegin(GL_QUADS);
-				glTexCoord2f((371.0f)/512.0f,	(337.0f)/512.0f);				glVertex2d(xx+3, yy+3);
-				glTexCoord2f((371.0f)/512.0f,	(337.0f)/512.0f);				glVertex2d(xx+w-3, yy+3);
-				glTexCoord2f((371.0f)/512.0f,	(337.0f)/512.0f);				glVertex2d(xx+w-3, yy+h-3);
-				glTexCoord2f((371.0f)/512.0f,	(337.0f)/512.0f);				glVertex2d(xx+3, yy+h-3);
-
-		// borders
-				glTexCoord2f((258.0f+4.0f)/512.0f,	(340.0f+4.0f)/512.0f);		glVertex2d(xx+w-4, yy+4);
-				glTexCoord2f((258.0f)/512.0f,		(340.0f+4.0f)/512.0f);		glVertex2d(xx+w, yy+4);
-				glTexCoord2f((258.0f)/512.0f,		(469.0f-4.0f)/512.0f);		glVertex2d(xx+w, yy+h-4);
-				glTexCoord2f((258.0f+4.0f)/512.0f,	(469.0f-4.0f)/512.0f);		glVertex2d(xx+w-4, yy+h-4);
-
-				glTexCoord2f((387.0f)/512.0f,		(340.0f+4.0f)/512.0f);		glVertex2d(xx, yy+4);
-				glTexCoord2f((387.0f-4.0f)/512.0f,	(340.0f+4.0f)/512.0f);		glVertex2d(xx+4, yy+4);
-				glTexCoord2f((387.0f-4.0f)/512.0f,	(469.0f-4.0f)/512.0f);		glVertex2d(xx+4, yy+h-4);
-				glTexCoord2f((387.0f)/512.0f,		(469.0f-4.0f)/512.0f);		glVertex2d(xx, yy+h-4);
-
-				glTexCoord2f((258.0f+4.0f)/512.0f,	(340.0f)/512.0f);			glVertex2d(xx+4, yy+h);
-				glTexCoord2f((258.0f+4.0f)/512.0f,	(340.0f+4.0f)/512.0f);		glVertex2d(xx+4, yy+h-4);
-				glTexCoord2f((387.0f-4.0f)/512.0f,	(340.0f+4.0f)/512.0f);		glVertex2d(xx+w-4, yy+h-4);
-				glTexCoord2f((387.0f-4.0f)/512.0f,	(340.0f)/512.0f);			glVertex2d(xx+w-4, yy+h);
-				
-				glTexCoord2f((258.0f+4.0f)/512.0f,	(469.0f-4.0f)/512.0f);		glVertex2d(xx+4, yy+4);
-				glTexCoord2f((258.0f+4.0f)/512.0f,	(469.0f)/512.0f);			glVertex2d(xx+4, yy);
-				glTexCoord2f((387.0f-4.0f)/512.0f,	(469.0f)/512.0f);			glVertex2d(xx+w-4, yy);
-				glTexCoord2f((387.0f-4.0f)/512.0f,	(469.0f-4.0f)/512.0f);		glVertex2d(xx+w-4, yy+4);
-		//corners
-				glTexCoord2f((258.0f)/512.0f,		(469.0f-4.0f)/512.0f);		glVertex2d(xx, yy+h-4);
-				glTexCoord2f((258.0f+4.0f)/512.0f,	(469.0f-4.0f)/512.0f);		glVertex2d(xx+4, yy+h-4);
-				glTexCoord2f((258.0f+4.0f)/512.0f,	(469.0f)/512.0f);			glVertex2d(xx+4, yy+h);
-				glTexCoord2f((258.0f)/512.0f,		(469.0f)/512.0f);			glVertex2d(xx, yy+h);
-
-				glTexCoord2f((387.0f-4.0f)/512.0f,	(469.0f-4.0f)/512.0f);		glVertex2d(xx+w-4, yy+h-4);
-				glTexCoord2f((387.0f)/512.0f,		(469.0f-4.0f)/512.0f);		glVertex2d(xx+w, yy+h-4);
-				glTexCoord2f((387.0f)/512.0f,		(469.0f)/512.0f);			glVertex2d(xx+w, yy+h);
-				glTexCoord2f((387.0f-4.0f)/512.0f,	(469.0f)/512.0f);			glVertex2d(xx+w-4, yy+h);
-
-				glTexCoord2f((258.0f)/512.0f,		(340.0f)/512.0f);			glVertex2d(xx, yy);
-				glTexCoord2f((258.0f+4.0f)/512.0f,	(340.0f)/512.0f);			glVertex2d(xx+4, yy);
-				glTexCoord2f((258.0f+4.0f)/512.0f,	(340.0f+4.0f)/512.0f);		glVertex2d(xx+4, yy+4);
-				glTexCoord2f((258.0f)/512.0f,		(340.0f+4.0f)/512.0f);		glVertex2d(xx, yy+4);
-
-				glTexCoord2f((387.0f-4.0f)/512.0f,	(340.0f)/512.0f);			glVertex2d(xx+w-4, yy);
-				glTexCoord2f((387.0f)/512.0f,		(340.0f)/512.0f);			glVertex2d(xx+w, yy);
-				glTexCoord2f((387.0f)/512.0f,		(340.0f+4.0f)/512.0f);		glVertex2d(xx+w, yy+4);
-				glTexCoord2f((387.0f-4.0f)/512.0f,	(340.0f+4.0f)/512.0f);		glVertex2d(xx+w-4, yy+4);	
-			glEnd();
-			glDisable(GL_TEXTURE_2D);
+			cWindowObject::draw(0,0,0,0);
 
 			sprite->pos = cVector3(xx/5 + w/2/5,yy+h/4,0);
 			sprite->scale = 1;
@@ -285,7 +237,7 @@ public:
 	class cTree : public cWindowTree
 	{
 	public:
-		cTree(cWindow* parent, vector<cTreeNode*> n) : cWindowTree(parent, n)
+		cTree(cWindow* parent, vector<cTreeNode*> n, TiXmlDocument &skin) : cWindowTree(parent, n,skin)
 		{
 
 		}
@@ -347,7 +299,7 @@ public:
 	class cActionChangeButton : public cWindowButton
 	{
 	public:
-		cActionChangeButton(cWindow* p) : cWindowButton(p)
+		cActionChangeButton(cWindow* p, TiXmlDocument &skin) : cWindowButton(p,skin)
 		{
 			alignment = ALIGN_TOPLEFT;
 			moveto(10, 200);
@@ -367,7 +319,7 @@ public:
 	{
 		int direction;
 	public:
-		cDirectionButton(cWindow* p, int dir) : cWindowButton(p)
+		cDirectionButton(cWindow* p, int dir, TiXmlDocument &skin) : cWindowButton(p,skin)
 		{
 			direction = dir;
 			const char* directions[] = { "S", "SE","E","NE","N","NW","W","SW" };
@@ -387,7 +339,7 @@ public:
 	class cOkButton : public cWindowButton
 	{
 	public:
-		cOkButton(cWindow* parent) : cWindowButton(parent)
+		cOkButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent,skin)
 		{
 			alignment = ALIGN_TOPLEFT;
 			moveto(10, 340);
@@ -434,7 +386,7 @@ public:
 	class cCancelButton : public cWindowButton
 	{
 	public:
-		cCancelButton(cWindow* parent) : cWindowButton(parent)
+		cCancelButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent, skin)
 		{
 			alignment = ALIGN_TOPLEFT;
 			moveto(10, 360);
@@ -448,7 +400,7 @@ public:
 	};
 
 
-	cSpriteWindow(cTexture* t, cFont* f) : cWindow(t,f)
+	cSpriteWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWindow(t,f,skin)
 	{
 		male = true;
 		cWindowObject* o;
@@ -464,27 +416,27 @@ public:
 
 		defaultobject = "OkButton";
 
-		objects["rollup"] = new cWindowRollupButton(this);
-		objects["close"] = new cWindowCloseButton(this);
+		objects["rollup"] = new cWindowRollupButton(this,skin);
+		objects["close"] = new cWindowCloseButton(this,skin);
 
-		objects["spritewindow"] = new cWindowSprite(this);
+		objects["spritewindow"] = new cWindowSprite(this,skin);
 
 		objects["tabpanel"] = new cTabPanel(this);
 		vector<cWindowTree::cTreeNode*> nodes;
-		o = new cTree(this,nodes);
+		o = new cTree(this,nodes, skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(135, 40);
 		o->resizeto(w - 145, h- 50);
 		objects["tree"] = o;
-		objects["actionbutton"] = new cActionChangeButton(this);
-		objects["ok"] = new cOkButton(this);
-		objects["cancel"] = new cCancelButton(this);
+		objects["actionbutton"] = new cActionChangeButton(this,skin);
+		objects["ok"] = new cOkButton(this,skin);
+		objects["cancel"] = new cCancelButton(this,skin);
 
 		for(int i = 0; i < 8; i++)
 		{
 			char buf[10];
 			sprintf(buf, "dir%i", i);
-			objects[buf] = new cDirectionButton(this, i);
+			objects[buf] = new cDirectionButton(this, i,skin);
 		}
 
 		if(!sprites.FirstChild())

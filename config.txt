@@ -1,5 +1,5 @@
 language=english
-setting=ROdesktop
+setting=ROportable
 
 [RO]
 rodir=c:\Program Files\gravity\ro\
@@ -18,6 +18,7 @@ grf=c:\program files\gravity\ro\data.grf
 undostack=50
 bgcolor=128,0,256
 notilecolor=255,255,128
+skin=data/win2k.xml
 
 [ROportable]
 rodir=..\..\ro\
@@ -36,6 +37,7 @@ grf=..\..\ro\data.grf
 undostack=50
 bgcolor=128,0,256
 notilecolor=255,255,128
+skin=data/win2k.xml
 
 [ROdesktop]
 rodir=d:\games\newro\
@@ -55,7 +57,7 @@ font=tahoma
 grf=d:\games\newro\sdata.grf
 //grf=d:\games\newro\data.grf
 undostack=50
-
+skin=data/win2k.xml
 
 [Arcturus]
 rodir=d:\games\arcturus\
@@ -109,7 +111,7 @@ grf=c:\games\ro\data.grf
 undostack=50
 bgcolor=128,0,256
 notilecolor=255,255,128
-
+skin=data/win2k.xml
 [ROtux]
 rodir=/home/magicaltux/.wine/drive_c/Program Files/Gravity/Ragnarok_france/
 model=data/romodels.txt
@@ -130,5 +132,5 @@ grf=/home/magicaltux/.wine/drive_c/Program Files/Gravity/Ragnarok_france/event.g
 undostack=50
 bgcolor=128,0,256
 notilecolor=255,255,128
-
+skin=data/win2k.xml
 

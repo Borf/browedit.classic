@@ -14,7 +14,7 @@
 class cLightWindow : public cWindow
 {
 public:
-	cLightWindow(cTexture* t, cFont* f) : cWindow(t,f)
+	cLightWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWindow(t,f,skin)
 	{
 		wtype = WT_LIGHT;
 		resizable = false;
@@ -28,8 +28,8 @@ public:
 		defaultobject = "OkButton";
 
 		cWindowObject* o;
-		objects["rollup"] = new cWindowRollupButton(this);
-		objects["close"] = new cWindowCloseButton(this);
+		objects["rollup"] = new cWindowRollupButton(this,skin);
+		objects["close"] = new cWindowCloseButton(this,skin);
 
 		addlabel("lblName", 20, 40, GetMsg("wm/light/NAME"));
 		addlabel("lblPos", 20, 60, GetMsg("wm/light/POSITION"));
@@ -40,67 +40,67 @@ public:
 		addlabel("lblLightfalloff", 20, 160, GetMsg("wm/light/LIGHTFALLOFF"));
 		addlabel("lblCastsShadow", 20, 180, GetMsg("wm/light/CASTSSHADOW"));
 		
-		o = new cWindowStringInputBox(this);
+		o = new cWindowStringInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(170,40);
 		o->resizeto(140,20);
 		objects["name"] = o;
 		
-		o = new cWindowFloatInputBox(this);
+		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,60);
 		o->resizeto(70,20);
 		objects["posx"] = o;
 
-		o = new cWindowFloatInputBox(this);
+		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(170,60);
 		o->resizeto(70,20);
 		objects["posy"] = o;
 		
-		o = new cWindowFloatInputBox(this);
+		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(240,60);
 		o->resizeto(70,20);
 		objects["posz"] = o;
 		
-		o = new cWindowFloatInputBox(this);
+		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,80);
 		o->resizeto(70,20);
 		objects["colorr"] = o;
 
-		o = new cWindowFloatInputBox(this);
+		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(170,80);
 		o->resizeto(70,20);
 		objects["colorg"] = o;
 		
-		o = new cWindowFloatInputBox(this);
+		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(240,80);
 		o->resizeto(70,20);
 		objects["colorb"] = o;
 		
-		o = new cWindowFloatInputBox(this);
+		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(170,100);
 		o->resizeto(140,20);
 		objects["intensity"] = o;
 
-		o = new cWindowFloatInputBox(this);
+		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(170,120);
 		o->resizeto(140,20);
 		objects["range"] = o;
 
-		o = new cWindowFloatInputBox(this);
+		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(170,140);
 		o->resizeto(140,20);
 		objects["maxlightincrement"] = o;
 
-		o = new cWindowFloatInputBox(this);
+		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(170,160);
 		o->resizeto(140,20);
@@ -112,8 +112,8 @@ public:
 		objects["castshadow"] = o;
 
 
-		objects["OkButton"] = new cWindowOkButton(this);
-		objects["CancelButton"] = new cWindowCancelButton(this);
+		objects["OkButton"] = new cWindowOkButton(this,skin);
+		objects["CancelButton"] = new cWindowCancelButton(this,skin);
 	}	
 
 	void* userfunc(void* param)

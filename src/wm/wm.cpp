@@ -5,6 +5,7 @@
 #include "messagewindow.h"
 #include "confirmwindow.h"
 extern cGraphics Graphics;
+extern cFileSystem fs;
 extern cWindow* draggingwindow;
 
 extern void mainloop();
@@ -93,10 +94,11 @@ int cWM::draw()
 }
 
 
-int cWM::init()
+int cWM::init(string sSkin)
 {
-	texture = cTextureLoaders::load("data\\window.tga");
-	font.load("data\\fonts\\tahoma.tga");
+	skin = fs.getxml(sSkin);
+	texture = cTextureLoaders::load(skin.FirstChildElement("skin")->FirstChildElement("texture")->FirstChild()->Value());
+	font.load(skin.FirstChildElement("skin")->FirstChildElement("font")->FirstChild()->Value());
 
 	focus = 0;
 	Log(3,0,"Window Manager initialized");
@@ -414,7 +416,7 @@ void cWM::rightclick()
 
 void cWM::MessageBox(string message)
 {
-	cWindow* w = new cMessageWindow(texture, &font);
+	cWindow* w = new cMessageWindow(texture, &font,skin);
 	w->objects["text"]->SetText(0, message);
 	w->show();
 	addwindow(w);
@@ -491,7 +493,7 @@ void cWM::printdebug()
 
 void cWM::ConfirmWindow(string title, cConfirmWindow::cConfirmWindowCaller* caller)
 {
-	cWindow* w = new cConfirmWindow(caller, texture, &font);
+	cWindow* w = new cConfirmWindow(caller, texture, &font,skin);
 	w->objects["text"]->SetText(0, title);
 	w->show();
 	addwindow(w);
@@ -517,7 +519,7 @@ void cWM::defocus()
 
 cWindow* cWM::InputWindow(string title, cInputWindow::cInputWindowCaller* caller)
 {
-	cWindow* w = new cInputWindow(caller, texture, &font);
+	cWindow* w = new cInputWindow(caller, texture, &font,skin);
 	w->init(texture, &font);
 	w->objects["text"]->SetText(0, title);
 	w->objects["input"]->SetText(0,"");

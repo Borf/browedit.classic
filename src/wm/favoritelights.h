@@ -83,7 +83,7 @@ public:
 	class cFavoritesTree : public cWindowTree
 	{
 	public:
-		cFavoritesTree(cWindow* parent, vector<cWindowTree::cTreeNode*> nodes) : cWindowTree(parent, nodes)
+		cFavoritesTree(cWindow* parent, vector<cWindowTree::cTreeNode*> nodes, TiXmlDocument &skin) : cWindowTree(parent, nodes,skin)
 		{
 			moveto(5,20);
 			resizeto(200, parent->ph()-30);
@@ -196,7 +196,7 @@ public:
 	class cWindowOkButton : public cWindowButton
 	{
 	public:
-		cWindowOkButton(cWindow* parent) : cWindowButton(parent)
+		cWindowOkButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent,skin)
 		{
 			alignment = ALIGN_BOTTOM;
 			moveto(100, 20);
@@ -214,7 +214,7 @@ public:
 	class cWindowCancelButton : public cWindowButton
 	{
 	public:
-		cWindowCancelButton(cWindow* parent) : cWindowButton(parent)
+		cWindowCancelButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent,skin)
 		{
 			alignment = ALIGN_BOTTOM;
 			moveto(-100, 20);
@@ -231,7 +231,7 @@ public:
 
 
 	vector<int> currentkey;
-	cFavoriteLightsWindow(cTexture* t, cFont* f) : cWindow(t,f)
+	cFavoriteLightsWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWindow(t,f,skin)
 	{
 		wtype = WT_FAVLIGHTS;
 		resizable = false;
@@ -245,8 +245,8 @@ public:
 		defaultobject = "OkButton";
 
 		cWindowObject* o;
-		objects["rollup"] = new cWindowRollupButton(this);
-		objects["close"] = new cWindowCloseButton(this);
+		objects["rollup"] = new cWindowRollupButton(this,skin);
+		objects["close"] = new cWindowCloseButton(this,skin);
 
 
 		vector<cWindowTree::cTreeNode*> nodes;
@@ -259,7 +259,7 @@ public:
 		root->parent = NULL;
 		nodes.push_back(root);
 
-		objects["list"] = new cFavoritesTree(this, nodes);
+		objects["list"] = new cFavoritesTree(this, nodes, skin);
 
 		addlabel("lblName", 220, 60, GetMsg("wm/favlight/NAME"));
 		addlabel("lblColor", 220, 80, GetMsg("wm/favlight/COLOR"));
@@ -270,49 +270,49 @@ public:
 		addlabel("lblCastsShadow", 220, 180, GetMsg("wm/favlight/CASTSSHADOW"));
 		addlabel("lblHeight", 220, 200, GetMsg("wm/favlight/HEIGHT"));
 		
-		o = new cWindowInputBox(this);
+		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(370,60);
 		o->resizeto(140,20);
 		objects["name"] = o;
 	
-		o = new cWindowInputBox(this);
+		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(300,80);
 		o->resizeto(70,20);
 		objects["colorr"] = o;
 
-		o = new cWindowInputBox(this);
+		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(370,80);
 		o->resizeto(70,20);
 		objects["colorg"] = o;
 		
-		o = new cWindowInputBox(this);
+		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(440,80);
 		o->resizeto(70,20);
 		objects["colorb"] = o;
 		
-		o = new cWindowInputBox(this);
+		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(370,100);
 		o->resizeto(140,20);
 		objects["intensity"] = o;
 
-		o = new cWindowInputBox(this);
+		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(370,120);
 		o->resizeto(140,20);
 		objects["range"] = o;
 
-		o = new cWindowInputBox(this);
+		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(370,140);
 		o->resizeto(140,20);
 		objects["maxlightincrement"] = o;
 
-		o = new cWindowInputBox(this);
+		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(370,160);
 		o->resizeto(140,20);
@@ -323,7 +323,7 @@ public:
 		o->moveto(370,182);
 		objects["castshadow"] = o;
 
-		o = new cWindowInputBox(this);
+		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(370,200);
 		o->resizeto(140,20);
@@ -332,8 +332,8 @@ public:
 
 		((cWindowTree*)objects["list"])->onchange();
 
-		objects["OkButton"] = new cWindowOkButton(this);
-		objects["CancelButton"] = new cWindowCancelButton(this);
+		objects["OkButton"] = new cWindowOkButton(this,skin);
+		objects["CancelButton"] = new cWindowCancelButton(this,skin);
 		objects["CancelButton"]->moveto(0,20);
 	}	
 };

@@ -22,71 +22,53 @@ void cWindow::draw()
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, texture->texid());
 	glBegin(GL_QUADS);
-		glTexCoord2f(0,				496.0f/512.0f);		glVertex2d(0,  h-16);
-		glTexCoord2f(3/512.0f,		496.0f/512.0f);		glVertex2d(3, h-16);
-		glTexCoord2f(3/512.0f,		1);					glVertex2d(3, h);
-		glTexCoord2f(0,				1);					glVertex2d(0,  h);
+		glTexCoord2f(skinLeft/512.0f,					(skinTop-skinTopHeight)/512.0f);		glVertex2d(0,				h-skinTopHeight);
+		glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	(skinTop-skinTopHeight)/512.0f);		glVertex2d(skinLeftWidth,	h-skinTopHeight);
+		glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	skinTop/512.0f);						glVertex2d(skinLeftWidth,	h);
+		glTexCoord2f(skinLeft/512.0f,					skinTop/512.0f);						glVertex2d(0,				h);
 
-		glTexCoord2f(3/512.0f,		496.0f/512.0f);		glVertex2d(3,  h-16);
-		glTexCoord2f(509/512.0f,	496.0f/512.0f);		glVertex2d(w-3, h-16);
-		glTexCoord2f(509/512.0f,	1);					glVertex2d(w-3, h);
-		glTexCoord2f(3/512.0f,		1);					glVertex2d(3,  h);
+		glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	(skinTop-skinTopHeight)/512.0f);		glVertex2d(skinLeftWidth,	h-skinTopHeight);
+		glTexCoord2f(skinRight/512.0f,					(skinTop-skinTopHeight)/512.0f);		glVertex2d(w-skinRightWidth,h-skinTopHeight);
+		glTexCoord2f(skinRight/512.0f,					skinTop/512.0f);						glVertex2d(w-skinRightWidth,h);
+		glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	skinTop/512.0f);						glVertex2d(skinLeftWidth,	h);
 
-		glTexCoord2f(509/512.0f,	496.0f/512.0f);		glVertex2d(w-3,  h-16);
-		glTexCoord2f(1,				496.0f/512.0f);		glVertex2d(w, h-16);
-		glTexCoord2f(1,				1);					glVertex2d(w, h);
-		glTexCoord2f(509/512.0f,	1);					glVertex2d(w-3,  h);
+		glTexCoord2f(skinRight/512.0f,					(skinTop-skinTopHeight)/512.0f);		glVertex2d(w-skinRightWidth,h-skinTopHeight);
+		glTexCoord2f((skinRight+skinRightWidth)/512.0f,	(skinTop-skinTopHeight)/512.0f);		glVertex2d(w,				h-skinTopHeight);
+		glTexCoord2f((skinRight+skinRightWidth)/512.0f,	skinTop/512.0f);						glVertex2d(w,				h);
+		glTexCoord2f(skinRight/512.0f,					skinTop/512.0f);						glVertex2d(w-skinRightWidth,h);
 
 
 		if (!rolledup)
 		{
-			glTexCoord2f(0,				493.0f/512.0f);		glVertex2d(0,  h-19);
-			glTexCoord2f(3/512.0f,		493.0f/512.0f);		glVertex2d(3, h-19);
-			glTexCoord2f(3/512.0f,		496.0f/512.0f);		glVertex2d(3, h-16);
-			glTexCoord2f(0,				496.0f/512.0f);		glVertex2d(0,  h-16);
+			glTexCoord2f(skinLeft/512.0f,					skinBottom/512.0f);						glVertex2d(0,				skinBottomHeight);
+			glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	skinBottom/512.0f);						glVertex2d(skinLeftWidth,	skinBottomHeight);
+			glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	(skinTop-skinTopHeight)/512.0f);		glVertex2d(skinLeftWidth,	h-skinTopHeight);
+			glTexCoord2f(skinLeft/512.0f,					(skinTop-skinTopHeight)/512.0f);		glVertex2d(0,				h-skinTopHeight);
 
-			glTexCoord2f(3/512.0f,		493.0f/512.0f);		glVertex2d(3,  h-19);
-			glTexCoord2f(509/512.0f,	493.0f/512.0f);		glVertex2d(w-3, h-19);
-			glTexCoord2f(509/512.0f,	496.0f/512.0f);		glVertex2d(w-3, h-16);
-			glTexCoord2f(3/512.0f,		496.0f/512.0f);		glVertex2d(3,  h-16);
+			glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	skinBottom/512.0f);						glVertex2d(skinLeftWidth,	skinBottomHeight);
+			glTexCoord2f(skinRight/512.0f,					skinBottom/512.0f);						glVertex2d(w-skinRightWidth,skinBottomHeight);
+			glTexCoord2f(skinRight/512.0f,					(skinTop-skinTopHeight)/512.0f);		glVertex2d(w-skinRightWidth,h-skinTopHeight);
+			glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	(skinTop-skinTopHeight)/512.0f);		glVertex2d(skinLeftWidth,	h-skinTopHeight);
 
-			glTexCoord2f(509/512.0f,	493.0f/512.0f);		glVertex2d(w-3,  h-19);
-			glTexCoord2f(1,				493.0f/512.0f);		glVertex2d(w, h-19);
-			glTexCoord2f(1,				496.0f/512.0f);		glVertex2d(w, h-16);
-			glTexCoord2f(509/512.0f,	496.0f/512.0f);		glVertex2d(w-3,  h-16);
+			glTexCoord2f(skinRight/512.0f,					skinBottom/512.0f);						glVertex2d(w-skinRightWidth,skinBottomHeight);
+			glTexCoord2f((skinRight+skinRightWidth)/512.0f,	skinBottom/512.0f);						glVertex2d(w,				skinBottomHeight);
+			glTexCoord2f((skinRight+skinRightWidth)/512.0f,	(skinTop-skinTopHeight)/512.0f);		glVertex2d(w,				h-skinTopHeight);
+			glTexCoord2f(skinRight/512.0f,					(skinTop-skinTopHeight)/512.0f);		glVertex2d(w-skinRightWidth,h-skinTopHeight);
+///////////////			
+			glTexCoord2f(skinLeft/512.0f,					(skinBottom-skinBottomHeight)/512.0f);	glVertex2d(0,				0);
+			glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	(skinBottom-skinBottomHeight)/512.0f);	glVertex2d(skinLeftWidth,	0);
+			glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	skinBottom/512.0f);						glVertex2d(skinLeftWidth,	skinBottomHeight);
+			glTexCoord2f(skinLeft/512.0f,					skinBottom/512.0f);						glVertex2d(0,				skinBottomHeight);
 
+			glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	(skinBottom-skinBottomHeight)/512.0f);	glVertex2d(skinLeftWidth,	0);
+			glTexCoord2f(skinRight/512.0f,					(skinBottom-skinBottomHeight)/512.0f);	glVertex2d(w-skinRightWidth,0);
+			glTexCoord2f(skinRight/512.0f,					skinBottom/512.0f);						glVertex2d(w-skinRightWidth,skinBottomHeight);
+			glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	skinBottom/512.0f);						glVertex2d(skinLeftWidth,	skinBottomHeight);
 
-			glTexCoord2f(0,				474.0f/512.0f);		glVertex2d(0,  4);
-			glTexCoord2f(3/512.0f,		474.0f/512.0f);		glVertex2d(3, 4);
-			glTexCoord2f(3/512.0f,		493.0f/512.0f);		glVertex2d(3, h-19);
-			glTexCoord2f(0,				493.0f/512.0f);		glVertex2d(0,  h-19);
-
-			glTexCoord2f(3/512.0f,		474.0f/512.0f);		glVertex2d(3,  4);
-			glTexCoord2f(509/512.0f,	474.0f/512.0f);		glVertex2d(w-3, 4);
-			glTexCoord2f(509/512.0f,	493.0f/512.0f);		glVertex2d(w-3, h-19);
-			glTexCoord2f(3/512.0f,		493.0f/512.0f);		glVertex2d(3,  h-19);
-
-			glTexCoord2f(509/512.0f,	474.0f/512.0f);		glVertex2d(w-3,  4);
-			glTexCoord2f(1,				474.0f/512.0f);		glVertex2d(w, 4);
-			glTexCoord2f(1,				493.0f/512.0f);		glVertex2d(w, h-19);
-			glTexCoord2f(509/512.0f,	493.0f/512.0f);		glVertex2d(w-3,  h-19);
-
-
-
-			glTexCoord2f(0,				470.0f/512.0f);		glVertex2d(0,  0);
-			glTexCoord2f(3/512.0f,		470.0f/512.0f);		glVertex2d(3, 0);
-			glTexCoord2f(3/512.0f,		474.0f/512.0f);		glVertex2d(3, 4);
-			glTexCoord2f(0,				474.0f/512.0f);		glVertex2d(0,  4);
-
-			glTexCoord2f(3/512.0f,		470.0f/512.0f);		glVertex2d(3,  0);
-			glTexCoord2f(509/512.0f,	470.0f/512.0f);		glVertex2d(w-3, 0);
-			glTexCoord2f(509/512.0f,	474.0f/512.0f);		glVertex2d(w-3, 4);
-			glTexCoord2f(3/512.0f,		474.0f/512.0f);		glVertex2d(3,  4);
-
-			glTexCoord2f(509/512.0f,	470.0f/512.0f);		glVertex2d(w-3,  0);
-			glTexCoord2f(1,				470.0f/512.0f);		glVertex2d(w, 0);
-			glTexCoord2f(1,				474.0f/512.0f);		glVertex2d(w, 4);
-			glTexCoord2f(509/512.0f,	474.0f/512.0f);		glVertex2d(w-3,  4);
+			glTexCoord2f(skinRight/512.0f,					(skinBottom-skinBottomHeight)/512.0f);	glVertex2d(w-skinRightWidth,0);
+			glTexCoord2f((skinRight+skinRightWidth)/512.0f,	(skinBottom-skinBottomHeight)/512.0f);	glVertex2d(w,				0);
+			glTexCoord2f((skinRight+skinRightWidth)/512.0f,	skinBottom/512.0f);						glVertex2d(w,				skinBottomHeight);
+			glTexCoord2f(skinRight/512.0f,					skinBottom/512.0f);						glVertex2d(w-skinRightWidth,skinBottomHeight);
 		}
 	glEnd();
 	map<string, cWindowObject*, less<string> >::iterator i;
@@ -113,7 +95,7 @@ void cWindow::draw()
 		glColor3f(1,1,1);
 	}
 */
-	font->print(0,0,0,x+5,y+h-17,title.c_str());
+	font->print(titlecolor[0], titlecolor[1], titlecolor[2],x+titlexoff,y+h-(titleyoff+12),title.c_str());
 	glTranslatef(-x, -y, 0);
 }
 
@@ -195,7 +177,7 @@ void cWindow::click()
 
 	for(objectlist::reverse_iterator i = objects.rbegin(); i != objects.rend(); i++)
 	{
-		if (i->second->inobject() && i->second->selectable)
+		if (i->second->inobject() && i->second->selectable && i->second->isEnabled())
 		{
 			i->second->click();
 			selectedobject = i->second;
@@ -453,9 +435,9 @@ cWindowObject* cWindow::addlabel(string name, int x, int y, string text)
 }
 
 
-cWindowObject* cWindow::addinputbox(string name, int x, int y, int w, string text)
+cWindowObject* cWindow::addinputbox(string name, int x, int y, int w, string text, TiXmlDocument &skin)
 {
-	cWindowObject* o = new cWindowInputBox(this);
+	cWindowObject* o = new cWindowInputBox(this,skin);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveto(x,y);
 	o->resizeto(w, 20);

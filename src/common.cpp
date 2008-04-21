@@ -479,3 +479,14 @@ const char* GetMsg(string s)
 	}
 	return (char*)n->FirstChild()->Value();
 }
+
+
+int hex2dec(string s, int mult)
+{
+	static string lookup = "0123456789ABCDEF";
+	int val = lookup.find(s[s.length()-1]);
+	if(s.length() == 1)
+		return pow(16,mult) * val;
+	else
+		return pow(16,mult) * val  + hex2dec(s.substr(0,s.length()-1), mult+1);
+}

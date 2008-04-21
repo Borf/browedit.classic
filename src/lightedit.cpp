@@ -6,7 +6,7 @@
 #include "wm/lightwindow.h"
 #include "wm/lightoverviewwindow.h"
 
-extern float mousestartx, mousestarty;
+extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
 extern cGraphics Graphics;
 extern cUndoStack undostack;
@@ -253,7 +253,7 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 					{
 						cLight* l = &Graphics.world.lights[Graphics.selectedobject];
 
-						cWindow* w = new cLightWindow(Graphics.WM.texture, &Graphics.WM.font);
+						cWindow* w = new cLightWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin);
 						((cWindowStringInputBox*)w->objects["name"])->stringetje = &l->name;
 						((cWindowFloatInputBox*)w->objects["posx"])->floatje = &l->pos.x;
 						((cWindowFloatInputBox*)w->objects["posy"])->floatje = &l->pos.y;
