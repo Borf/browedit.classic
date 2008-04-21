@@ -24,6 +24,7 @@ public:
 		cursortype = 1;
 		selectable = true;
 		type = OBJECT_BUTTON;
+		enabled = true;
 
 	
 	

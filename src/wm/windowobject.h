@@ -102,6 +102,7 @@ public:
 		alignment = ALIGN_CENTER;
 		selectable = true;
 		type = OBJECT_UNDEFINED;
+		enabled = true;
 
 		if(skin != NULL)
 		{
