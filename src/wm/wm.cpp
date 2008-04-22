@@ -19,7 +19,9 @@ int cWM::draw()
 	//glTranslatef(0,0,9000);
 	CleanWindows();
 	glEnable(GL_TEXTURE_2D);
+	glDisable(GL_ALPHA_TEST);
 	glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
+	glEnable(GL_BLEND);
 	int size = windows.size()-1;
 	int topwindow = 0;
 	for(i = 0; i < windows.size(); i++)
@@ -88,6 +90,7 @@ int cWM::draw()
 		if (windows[ii] != w)
 			break;	
 	}
+	glEnable(GL_ALPHA_TEST);
 	glEnable(GL_DEPTH_TEST);
 	//glTranslatef(0,0,-9000);
 	return 1;

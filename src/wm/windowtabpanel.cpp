@@ -22,26 +22,111 @@ void cWindowTabPanel::draw(int cutoffleft, int cutoffright, int cutofftop, int c
 
 	glTranslatef((float)xx, (float)yy, 0);
 	glBindTexture(GL_TEXTURE_2D, parent->texture->texid());
+
+	int hh = h - max(skinTabHeight[0], skinTabHeight[1]);
+
+	glBegin(GL_QUADS);
+		glTexCoord2f(skinLeft/512.0f,					(skinTop-skinTopHeight)/512.0f);		glVertex2d(0,				hh-skinTopHeight);
+		glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	(skinTop-skinTopHeight)/512.0f);		glVertex2d(skinLeftWidth,	hh-skinTopHeight);
+		glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	skinTop/512.0f);						glVertex2d(skinLeftWidth,	hh);
+		glTexCoord2f(skinLeft/512.0f,					skinTop/512.0f);						glVertex2d(0,				hh);
+
+		glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	(skinTop-skinTopHeight)/512.0f);		glVertex2d(skinLeftWidth,	hh-skinTopHeight);
+		glTexCoord2f(skinRight/512.0f,					(skinTop-skinTopHeight)/512.0f);		glVertex2d(w-skinRightWidth,hh-skinTopHeight);
+		glTexCoord2f(skinRight/512.0f,					skinTop/512.0f);						glVertex2d(w-skinRightWidth,hh);
+		glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	skinTop/512.0f);						glVertex2d(skinLeftWidth,	hh);
+
+		glTexCoord2f(skinRight/512.0f,					(skinTop-skinTopHeight)/512.0f);		glVertex2d(w-skinRightWidth,hh-skinTopHeight);
+		glTexCoord2f((skinRight+skinRightWidth)/512.0f,	(skinTop-skinTopHeight)/512.0f);		glVertex2d(w,				hh-skinTopHeight);
+		glTexCoord2f((skinRight+skinRightWidth)/512.0f,	skinTop/512.0f);						glVertex2d(w,				hh);
+		glTexCoord2f(skinRight/512.0f,					skinTop/512.0f);						glVertex2d(w-skinRightWidth,hh);
+
+		glTexCoord2f(skinLeft/512.0f,					skinBottom/512.0f);						glVertex2d(0,				skinBottomHeight);
+		glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	skinBottom/512.0f);						glVertex2d(skinLeftWidth,	skinBottomHeight);
+		glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	(skinTop-skinTopHeight)/512.0f);		glVertex2d(skinLeftWidth,	hh-skinTopHeight);
+		glTexCoord2f(skinLeft/512.0f,					(skinTop-skinTopHeight)/512.0f);		glVertex2d(0,				hh-skinTopHeight);
+
+		glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	skinBottom/512.0f);						glVertex2d(skinLeftWidth,	skinBottomHeight);
+		glTexCoord2f(skinRight/512.0f,					skinBottom/512.0f);						glVertex2d(w-skinRightWidth,skinBottomHeight);
+		glTexCoord2f(skinRight/512.0f,					(skinTop-skinTopHeight)/512.0f);		glVertex2d(w-skinRightWidth,hh-skinTopHeight);
+		glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	(skinTop-skinTopHeight)/512.0f);		glVertex2d(skinLeftWidth,	hh-skinTopHeight);
+
+		glTexCoord2f(skinRight/512.0f,					skinBottom/512.0f);						glVertex2d(w-skinRightWidth,skinBottomHeight);
+		glTexCoord2f((skinRight+skinRightWidth)/512.0f,	skinBottom/512.0f);						glVertex2d(w,				skinBottomHeight);
+		glTexCoord2f((skinRight+skinRightWidth)/512.0f,	(skinTop-skinTopHeight)/512.0f);		glVertex2d(w,				hh-skinTopHeight);
+		glTexCoord2f(skinRight/512.0f,					(skinTop-skinTopHeight)/512.0f);		glVertex2d(w-skinRightWidth,hh-skinTopHeight);
+///////////////			
+		glTexCoord2f(skinLeft/512.0f,					(skinBottom-skinBottomHeight)/512.0f);	glVertex2d(0,				0);
+		glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	(skinBottom-skinBottomHeight)/512.0f);	glVertex2d(skinLeftWidth,	0);
+		glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	skinBottom/512.0f);						glVertex2d(skinLeftWidth,	skinBottomHeight);
+		glTexCoord2f(skinLeft/512.0f,					skinBottom/512.0f);						glVertex2d(0,				skinBottomHeight);
+
+		glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	(skinBottom-skinBottomHeight)/512.0f);	glVertex2d(skinLeftWidth,	0);
+		glTexCoord2f(skinRight/512.0f,					(skinBottom-skinBottomHeight)/512.0f);	glVertex2d(w-skinRightWidth,0);
+		glTexCoord2f(skinRight/512.0f,					skinBottom/512.0f);						glVertex2d(w-skinRightWidth,skinBottomHeight);
+		glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	skinBottom/512.0f);						glVertex2d(skinLeftWidth,	skinBottomHeight);
+
+		glTexCoord2f(skinRight/512.0f,					(skinBottom-skinBottomHeight)/512.0f);	glVertex2d(w-skinRightWidth,0);
+		glTexCoord2f((skinRight+skinRightWidth)/512.0f,	(skinBottom-skinBottomHeight)/512.0f);	glVertex2d(w,				0);
+		glTexCoord2f((skinRight+skinRightWidth)/512.0f,	skinBottom/512.0f);						glVertex2d(w,				skinBottomHeight);
+		glTexCoord2f(skinRight/512.0f,					skinBottom/512.0f);						glVertex2d(w-skinRightWidth,skinBottomHeight);
+	glEnd();
+	
+	
+	
+	int maxOverlapLeft = max(skinTabOverlapLeft[0], skinTabOverlapLeft[1]);
+	int maxOverlapRight = max(skinTabOverlapRight[0], skinTabOverlapRight[1]);
+
 	for(i = 0; i < tabs.size(); i++)
 	{
-		float left = (w/(float)tabs.size()) * i;
-		float right = (w/(float)tabs.size()) * (i+1);
-		if (overtabs && mousex - parent->px() - xx > left && mousex - parent->px() - xx < right)
-			glColor3f(0.65f, 0.65f, 1.0f);
-		else if ((int)i == selectedtab)
-			glColor3f(0.85f, 0.85f, 1.0f);
-		else
-			glColor4fv(colors);
+		float left = maxOverlapLeft+((w-maxOverlapLeft-maxOverlapRight)/(float)tabs.size()) * i;
+		float right = maxOverlapLeft+((w-maxOverlapLeft-maxOverlapRight)/(float)tabs.size()) * (i+1);
 
+		int t = (i == selectedtab) ? 0 : 1;
 
+		glDisable(GL_CULL_FACE);
 		glBegin(GL_QUADS);
-			glTexCoord2f(            0,	197.0f/512.0f);		glVertex2d(left,h-14);
-			glTexCoord2f(99.0f/512.0f,	197.0f/512.0f);		glVertex2d(right,h-14);
-			glTexCoord2f(99.0f/512.0f,	211.0f/512.0f);		glVertex2d(right,h);
-			glTexCoord2f(            0,	211.0f/512.0f);		glVertex2d(left,h);		
-		glEnd();	
+			glTexCoord2f(skinTabLeft[t]/512.0f,							skinTabTop[t]/512.0f);						glVertex2d(left-skinTabOverlapLeft[t],						hh+skinTabHeight[t]);
+			glTexCoord2f((skinTabLeft[t]+skinTabLeftWidth[t])/512.0f,	skinTabTop[t]/512.0f);						glVertex2d(left-skinTabOverlapLeft[t]+skinTabLeftWidth[t],	hh+skinTabHeight[t]);
+			glTexCoord2f((skinTabLeft[t]+skinTabLeftWidth[t])/512.0f,	(skinTabTop[t]-skinTabHeight[t])/512.0f);	glVertex2d(left-skinTabOverlapLeft[t]+skinTabLeftWidth[t],	hh);
+			glTexCoord2f(skinTabLeft[t]/512.0f,							(skinTabTop[t]-skinTabHeight[t])/512.0f);	glVertex2d(left-skinTabOverlapLeft[t],						hh);		
+
+			glTexCoord2f((skinTabRight[t])/512.0f,						skinTabTop[t]/512.0f);						glVertex2d(right-skinTabRightWidth[t]+skinTabOverlapRight[t],	hh+skinTabHeight[t]);
+			glTexCoord2f((skinTabLeft[t]+skinTabLeftWidth[t])/512.0f,	skinTabTop[t]/512.0f);						glVertex2d(left-skinTabOverlapLeft[t]+skinTabLeftWidth[t],		hh+skinTabHeight[t]);
+			glTexCoord2f((skinTabLeft[t]+skinTabLeftWidth[t])/512.0f,	(skinTabTop[t]-skinTabHeight[t])/512.0f);	glVertex2d(left-skinTabOverlapLeft[t]+skinTabLeftWidth[t],		hh);
+			glTexCoord2f((skinTabRight[t])/512.0f,						(skinTabTop[t]-skinTabHeight[t])/512.0f);	glVertex2d(right-skinTabRightWidth[t]+skinTabOverlapRight[t],	hh);
+
+			glTexCoord2f((skinTabRight[t])/512.0f,						skinTabTop[t]/512.0f);						glVertex2d(right-skinTabRightWidth[t]+skinTabOverlapRight[t],	hh+skinTabHeight[t]);
+			glTexCoord2f((skinTabRight[t]+skinTabRightWidth[t])/512.0f,	skinTabTop[t]/512.0f);						glVertex2d(right+skinTabOverlapRight[t],						hh+skinTabHeight[t]);
+			glTexCoord2f((skinTabRight[t]+skinTabRightWidth[t])/512.0f,	(skinTabTop[t]-skinTabHeight[t])/512.0f);	glVertex2d(right+skinTabOverlapRight[t],						hh);
+			glTexCoord2f((skinTabRight[t])/512.0f,						(skinTabTop[t]-skinTabHeight[t])/512.0f);	glVertex2d(right-skinTabRightWidth[t]+skinTabOverlapRight[t],	hh);
+		glEnd();
 	}	
+
+		float left = maxOverlapLeft+((w-maxOverlapLeft-maxOverlapRight)/(float)tabs.size()) * selectedtab;
+		float right = maxOverlapLeft+((w-maxOverlapLeft-maxOverlapRight)/(float)tabs.size()) * (selectedtab+1);
+
+	int t = 0;
+
+	glDisable(GL_CULL_FACE);
+	glBegin(GL_QUADS);
+		glTexCoord2f(skinTabLeft[t]/512.0f,							skinTabTop[t]/512.0f);						glVertex2d(left-skinTabOverlapLeft[t],						hh+skinTabHeight[t]);
+		glTexCoord2f((skinTabLeft[t]+skinTabLeftWidth[t])/512.0f,	skinTabTop[t]/512.0f);						glVertex2d(left-skinTabOverlapLeft[t]+skinTabLeftWidth[t],	hh+skinTabHeight[t]);
+		glTexCoord2f((skinTabLeft[t]+skinTabLeftWidth[t])/512.0f,	(skinTabTop[t]-skinTabHeight[t])/512.0f);	glVertex2d(left-skinTabOverlapLeft[t]+skinTabLeftWidth[t],	hh);
+		glTexCoord2f(skinTabLeft[t]/512.0f,							(skinTabTop[t]-skinTabHeight[t])/512.0f);	glVertex2d(left-skinTabOverlapLeft[t],						hh);		
+
+		glTexCoord2f((skinTabRight[t])/512.0f,						skinTabTop[t]/512.0f);						glVertex2d(right-skinTabRightWidth[t]+skinTabOverlapRight[t],	hh+skinTabHeight[t]);
+		glTexCoord2f((skinTabLeft[t]+skinTabLeftWidth[t])/512.0f,	skinTabTop[t]/512.0f);						glVertex2d(left-skinTabOverlapLeft[t]+skinTabLeftWidth[t],		hh+skinTabHeight[t]);
+		glTexCoord2f((skinTabLeft[t]+skinTabLeftWidth[t])/512.0f,	(skinTabTop[t]-skinTabHeight[t])/512.0f);	glVertex2d(left-skinTabOverlapLeft[t]+skinTabLeftWidth[t],		hh);
+		glTexCoord2f((skinTabRight[t])/512.0f,						(skinTabTop[t]-skinTabHeight[t])/512.0f);	glVertex2d(right-skinTabRightWidth[t]+skinTabOverlapRight[t],	hh);		
+
+		glTexCoord2f((skinTabRight[t])/512.0f,						skinTabTop[t]/512.0f);						glVertex2d(right-skinTabRightWidth[t]+skinTabOverlapRight[t],	hh+skinTabHeight[t]);
+		glTexCoord2f((skinTabRight[t]+skinTabRightWidth[t])/512.0f,	skinTabTop[t]/512.0f);						glVertex2d(right+skinTabOverlapRight[t],						hh+skinTabHeight[t]);
+		glTexCoord2f((skinTabRight[t]+skinTabRightWidth[t])/512.0f,	(skinTabTop[t]-skinTabHeight[t])/512.0f);	glVertex2d(right+skinTabOverlapRight[t],						hh);
+		glTexCoord2f((skinTabRight[t])/512.0f,						(skinTabTop[t]-skinTabHeight[t])/512.0f);	glVertex2d(right-skinTabRightWidth[t]+skinTabOverlapRight[t],	hh);
+	glEnd();
 	
+
 	glTranslatef(-(float)realx(), -(float)realy2(), 0);
 
 	for(i = 0; i < tabs.size(); i++)

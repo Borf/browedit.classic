@@ -29,6 +29,7 @@ int keymap[SDLK_LAST-SDLK_FIRST];
 #include <GL/glext.h>											// We use a define from this file: GL_BGRA_EXT
 #endif
 
+cGraphics		Graphics;
 cFileSystem fs;
 
 string inputboxresult;

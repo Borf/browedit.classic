@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
 <skin name="Win2k">
 	<texture>data/win2k.tga</texture>
 	<font>data/fonts/tahoma.tga</font>
@@ -69,6 +70,31 @@
 		<right width="5">8</right>
 		<bottom height="5">178</bottom>
 	</checkbox>
+	<tabstrip>
+		<fontcolor>000000</fontcolor>
+		<tabselected>
+			<top>330</top>
+			<height>21</height>
+			<left width="3">0</left>
+			<right width="3">86</right>
+			<overlapleft>2</overlapleft>
+			<overlapright>2</overlapright>
+		</tabselected>
+		<tabunselected>
+			<top>332</top>
+			<height>19</height>
+			<left width="3">100</left>
+			<right width="3">190</right>
+			<overlapleft>0</overlapleft>
+			<overlapright>0</overlapright>
+		</tabunselected>
+
+		<top height="1">351</top>
+		<left width="3">0</left>
+		<right width="3">211</right>
+		<bottom height="3">372</bottom>
+	</tabstrip>
+	
 
 
 </skin>

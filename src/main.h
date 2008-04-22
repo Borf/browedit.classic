@@ -18,7 +18,6 @@ enum eState
 using namespace std;
 
 
-cGraphics		Graphics;
 
 long mousex, mousey;
 float oldmousex, oldmousey;

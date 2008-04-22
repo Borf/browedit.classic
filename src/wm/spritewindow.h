@@ -71,7 +71,7 @@ public:
 	class cTabPanel : public cWindowTabPanel
 	{
 	public:
-		cTabPanel(cWindow* parent) : cWindowTabPanel(parent)
+		cTabPanel(cWindow* parent, TiXmlDocument &skin) : cWindowTabPanel(parent, skin)
 		{
 			alignment = ALIGN_TOPLEFT;
 			tabs.clear();
@@ -80,8 +80,8 @@ public:
 			tabs.push_back("Upper");
 			tabs.push_back("Mid");
 			tabs.push_back("Low");
-			moveto(135, 20);
-			resizeto(parent->pw() - 145,20);
+			moveto(135, 25);
+			resizeto(parent->pw() - 145,parent->ph()-35);
 		}
 		void tabchange(int oldtab)
 		{
@@ -421,12 +421,12 @@ public:
 
 		objects["spritewindow"] = new cWindowSprite(this,skin);
 
-		objects["tabpanel"] = new cTabPanel(this);
+		objects["tabpanel"] = new cTabPanel(this, skin);
 		vector<cWindowTree::cTreeNode*> nodes;
 		o = new cTree(this,nodes, skin);
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(135, 40);
-		o->resizeto(w - 145, h- 50);
+		o->moveto(140, 50);
+		o->resizeto(w - 160, h- 65);
 		objects["tree"] = o;
 		objects["actionbutton"] = new cActionChangeButton(this,skin);
 		objects["ok"] = new cOkButton(this,skin);
