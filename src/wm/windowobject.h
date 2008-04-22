@@ -106,7 +106,9 @@ public:
 
 		if(skin != NULL)
 		{
-			string color = skin->FirstChildElement("fontcolor")->FirstChild()->Value();
+			string color = "FFFFFF";
+			if(skin->FirstChildElement("fontcolor"))
+				color = skin->FirstChildElement("fontcolor")->FirstChild()->Value();
 			fontcolor[0] = hex2dec(color.substr(0,2)) / 256.0f;
 			fontcolor[1] = hex2dec(color.substr(2,2)) / 256.0f;
 			fontcolor[2] = hex2dec(color.substr(4,2)) / 256.0f;

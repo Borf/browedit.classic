@@ -45,15 +45,14 @@ public:
 
 #include "window.h"
 
-class cWindowCloseButton : public cWindowButton
+class cWindowCloseButton : public cWindowObject
 {
 public:
-	cWindowCloseButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent,skin)
+	cWindowCloseButton(cWindow* parent, TiXmlDocument &skin) : cWindowObject(parent, skin.FirstChildElement("skin")->FirstChildElement("closebutton"))
 	{
-		resizeto(16, 14);
-		moveto(4, 4);
+		resizeto(atoi(skin.FirstChildElement("skin")->FirstChildElement("closebutton")->FirstChildElement("width")->FirstChild()->Value()), atoi(skin.FirstChildElement("skin")->FirstChildElement("closebutton")->FirstChildElement("height")->FirstChild()->Value()));
+		moveto(atoi(skin.FirstChildElement("skin")->FirstChildElement("closebutton")->FirstChildElement("offsetx")->FirstChild()->Value()), atoi(skin.FirstChildElement("skin")->FirstChildElement("closebutton")->FirstChildElement("offsety")->FirstChild()->Value()));
 		alignment = ALIGN_TOPRIGHT;
-		text = "x";
 	}
 	void click()
 	{
@@ -61,15 +60,14 @@ public:
 	}
 };
 
-class cWindowRollupButton : public cWindowButton
+class cWindowRollupButton : public cWindowObject
 {
 public:
-	cWindowRollupButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent,skin)
+	cWindowRollupButton(cWindow* parent, TiXmlDocument &skin) : cWindowObject(parent, skin.FirstChildElement("skin")->FirstChildElement("collapsebutton"))
 	{
-		resizeto(16, 14);
-		moveto(20, 4);
+		resizeto(atoi(skin.FirstChildElement("skin")->FirstChildElement("collapsebutton")->FirstChildElement("width")->FirstChild()->Value()), atoi(skin.FirstChildElement("skin")->FirstChildElement("collapsebutton")->FirstChildElement("height")->FirstChild()->Value()));
+		moveto(atoi(skin.FirstChildElement("skin")->FirstChildElement("collapsebutton")->FirstChildElement("offsetx")->FirstChild()->Value()), atoi(skin.FirstChildElement("skin")->FirstChildElement("collapsebutton")->FirstChildElement("offsety")->FirstChild()->Value()));
 		alignment = ALIGN_TOPRIGHT;
-		text = "_";
 	}
 	void click()
 	{

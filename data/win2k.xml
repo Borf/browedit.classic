@@ -95,6 +95,26 @@
 		<bottom height="3">372</bottom>
 	</tabstrip>
 	
+	<closebutton>
+		<top height="4">110</top>
+		<left width="10">0</left>
+		<right width="10">90</right>
+		<bottom height="4">129</bottom>
+		<width>16</width>
+		<height>14</height>
+		<offsetx>4</offsetx>
+		<offsety>6</offsety>
+	</closebutton>
+	<collapsebutton>
+		<top height="4">110</top>
+		<left width="10">0</left>
+		<right width="10">90</right>
+		<bottom height="4">129</bottom>
+		<width>16</width>
+		<height>14</height>
+		<offsetx>20</offsetx>
+		<offsety>6</offsety>
+	</collapsebutton>
 
 
 </skin>
