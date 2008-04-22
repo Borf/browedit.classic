@@ -1,5 +1,5 @@
 language=english
-setting=ROportable
+setting=ROdesktop
 
 [RO]
 rodir=c:\Program Files\gravity\ro\
@@ -57,7 +57,7 @@ font=tahoma
 grf=d:\games\newro\sdata.grf
 //grf=d:\games\newro\data.grf
 undostack=50
-skin=data/win2k.xml
+skin=data/ro.xml
 
 [Arcturus]
 rodir=d:\games\arcturus\

@@ -8,7 +8,7 @@ extern cGraphics Graphics;
 
 void cWindowTabPanel::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {
-	unsigned int i;
+	int i;
 	GLfloat colors[4];
 	glGetFloatv(GL_CURRENT_COLOR, colors);
 	int xx, yy;
@@ -77,7 +77,7 @@ void cWindowTabPanel::draw(int cutoffleft, int cutoffright, int cutofftop, int c
 	int maxOverlapLeft = max(skinTabOverlapLeft[0], skinTabOverlapLeft[1]);
 	int maxOverlapRight = max(skinTabOverlapRight[0], skinTabOverlapRight[1]);
 
-	for(i = 0; i < tabs.size(); i++)
+	for(i = tabs.size()-1; i >= 0 ; i--)
 	{
 		float left = maxOverlapLeft+((w-maxOverlapLeft-maxOverlapRight)/(float)tabs.size()) * i;
 		float right = maxOverlapLeft+((w-maxOverlapLeft-maxOverlapRight)/(float)tabs.size()) * (i+1);
@@ -130,7 +130,7 @@ void cWindowTabPanel::draw(int cutoffleft, int cutoffright, int cutofftop, int c
 	glTranslatef(-(float)realx(), -(float)realy2(), 0);
 
 	for(i = 0; i < tabs.size(); i++)
-		parent->font->print(0,0,0, parent->px() + xx+5 + (w / (float)tabs.size()) * i, parent->py() + yy+h-16, tabs[i].c_str());
+		parent->font->print(0,0,0, maxOverlapLeft+parent->px() + xx+5+skinTabFontOffX + ((w-maxOverlapLeft-maxOverlapRight) / (float)tabs.size()) * i, parent->py() + yy+h-16+skinTabFontOffY, tabs[i].c_str());
 
 	glColor4fv(colors);
 }

@@ -18,6 +18,7 @@ protected:
 	int skinTabRightWidth[2];
 	int skinTabOverlapLeft[2];
 	int skinTabOverlapRight[2];
+	int skinTabFontOffX, skinTabFontOffY;
 
 public:
 	vector<string>	tabs;
@@ -41,6 +42,9 @@ public:
 		tabs.push_back("tab4");
 		tabs.push_back("tab5");
 
+
+		skinTabFontOffX = atoi(skin.FirstChildElement("skin")->FirstChildElement("tabstrip")->FirstChildElement("fontoffx")->FirstChild()->Value());
+		skinTabFontOffY = atoi(skin.FirstChildElement("skin")->FirstChildElement("tabstrip")->FirstChildElement("fontoffy")->FirstChild()->Value());
 
 		TiXmlElement* el = skin.FirstChildElement("skin")->FirstChildElement("tabstrip")->FirstChildElement("tabselected");
 		skinTabTop[0] =		512-atoi(el->FirstChildElement("top")->FirstChild()->Value());
