@@ -34,13 +34,13 @@ void cModelsWindow::cWindowModel::draw(int cutoffleft, int cutoffright, int cuto
 		glLoadIdentity();
 		model = new cRSMModel();
 		model->load(rodir + data);
-		model->pos = cVector3(0,0.7*w,1000);
+		model->pos = cVector3(0,0.3*w,1000);
 		
 		float sc = 0;
 		sc = max(sc, model->bb2.bbmax[0] - model->bb2.bbmin[0]);
 		sc = max(sc, model->bb2.bbmax[1] - model->bb2.bbmin[1]);
 		sc = max(sc, model->bb2.bbmax[2] - model->bb2.bbmin[2]);
-		sc = 1.5f*min(h,w) / sc;
+		sc = 1.4f*min(h,w) / sc;
 
 		model->scale = cVector3(sc,sc,sc);
 
@@ -86,6 +86,7 @@ void cModelsWindow::cWindowModel::draw(int cutoffleft, int cutoffright, int cuto
 	{
 		model->draw(false);
 		model->rot.y+=40*(Graphics.frameticks / 1000.0f);
+		model->rot.x = -45;
 	}
 
 	glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
