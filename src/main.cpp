@@ -33,6 +33,8 @@ cGraphics		Graphics;
 cFileSystem fs;
 
 string inputboxresult;
+bool IsInsideVPC();
+bool IsInsideVMWare();
 
 
 long userid;
@@ -462,6 +464,11 @@ int main(int argc, char *argv[])
 	config = config.substr(config.find("=")+1);
 
 
+	if(IsInsideVMWare() || IsInsideVPC())
+	{
+		Log(3,0,"You're running browedit in a virtual PC");
+		exit(0);
+	}
 
 #ifndef _NOCHECK_
 #ifdef WIN32

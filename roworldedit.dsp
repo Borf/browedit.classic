@@ -178,6 +178,10 @@ SOURCE=.\src\common.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\DetectVM.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\filesystem.cpp
 # End Source File
 # Begin Source File
