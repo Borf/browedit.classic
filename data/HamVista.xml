@@ -1,0 +1,115 @@
+<skin name="HamVista">
+	<texture>data/skins/HamVista.tga</texture>
+	<font>data/fonts/tahoma.tga</font>
+	<window>
+		<title>
+			<fontcolor>000000</fontcolor>
+			<xoff>35</xoff>
+			<yoff>8</yoff>
+		</title>
+		<fontcolor>000000</fontcolor>
+		<top height="28">0</top>
+		<left width="140">0</left>
+		<right width="75">369</right>
+		<bottom height="8">250</bottom>
+	</window>
+	<button>
+		<fontcolor>000000</fontcolor>
+		<top height="5">342</top>
+		<left width="5">19</left>
+		<right width="5">97</right>
+		<bottom height="5">361</bottom>
+	</button>
+	<input>
+		<fontcolor>000000</fontcolor>
+		<top height="3">281</top>
+		<left width="3">47</left>
+		<right width="3">56</right>
+		<bottom height="4">290</bottom>
+	</input>
+	<list>
+		<fontcolor>000000</fontcolor>
+		<top height="3">281</top>
+		<left width="3">47</left>
+		<right width="3">56</right>
+		<bottom height="4">290</bottom>
+		<scroll>
+			<width>16</width>
+			<left>0</left>
+			<background>
+				<left>0</left>
+				<top>297</top>
+				<height>1</height>
+			</background>
+			<buttonup>
+				<left>0</left>
+				<top>281</top>
+				<height>16</height>
+			</buttonup>
+			<buttondown>
+				<left>0</left>
+				<top>337</top>
+				<height>16</height>
+			</buttondown>
+			<top height="5">300</top>
+			<bottom height="5">331</bottom>
+		</scroll>
+	</list>
+	<frame>
+		<fontcolor>000000</fontcolor>
+		<top height="3">281</top>
+		<left width="3">47</left>
+		<right width="3">56</right>
+		<bottom height="4">290</bottom>
+	</frame>
+	<checkbox>
+		<fontcolor>000000</fontcolor>
+		<top height="1">281</top>
+		<left width="1">18</left>
+		<right width="1">30</right>
+		<bottom height="1">293</bottom>
+	</checkbox>
+	<tabstrip>
+		<fontcolor>000000</fontcolor>
+		<tabselected>
+			<top>296</top>
+			<height>21</height>
+			<left width="2">19</left>
+			<right width="2">71</right>
+			<overlapleft>1</overlapleft>
+			<overlapright>0</overlapright>
+		</tabselected>
+		<tabunselected>
+			<top>298</top>
+			<height>19</height>
+			<left width="2">77</left>
+			<right width="2">138</right>
+			<overlapleft>1</overlapleft>
+			<overlapright>0</overlapright>
+		</tabunselected>
+		<top height="1">317</top>
+		<left width="3">19</left>
+		<right width="2">149</right>
+		<bottom height="2">339</bottom>
+	</tabstrip>
+	<closebutton>
+		<top height="10">260</top>
+		<left width="22">104</left>
+		<right width="22">126</right>
+		<bottom height="9">269</bottom>
+		<width>44</width>
+		<height>18</height>
+		<offsetx>5</offsetx>
+		<offsety>0</offsety>
+	</closebutton>
+	<collapsebutton>
+		<top height="10">260</top>
+		<left width="13">75</left>
+		<right width="13">88</right>
+		<bottom height="9">269</bottom>
+		<width>26</width>
+		<height>18</height>
+		<offsetx>49</offsetx>
+		<offsety>0</offsety>
+	</collapsebutton>
+</skin>
