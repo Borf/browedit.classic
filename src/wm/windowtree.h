@@ -68,6 +68,8 @@ public:
 
 
 	int skinBarLeft;
+	float selectColor[3];
+	float selectFontColor[3];
 
 
 	cWindowTree(cWindow* parent, vector<cTreeNode*> n, TiXmlDocument &skin) : cWindowObject(parent, skin.FirstChildElement("skin")->FirstChildElement("list"))
@@ -86,6 +88,16 @@ public:
 		nodes = n;
 
 		TiXmlElement* bSkin = skin.FirstChildElement("skin")->FirstChildElement("list")->FirstChildElement("scroll");
+
+		string scolor = skin.FirstChildElement("skin")->FirstChildElement("list")->FirstChildElement("selectcolor")->FirstChild()->Value();
+		selectColor[0] = hex2dec(scolor.substr(0,2)) / 256.0f;
+		selectColor[1] = hex2dec(scolor.substr(2,2)) / 256.0f;
+		selectColor[2] = hex2dec(scolor.substr(4,2)) / 256.0f;
+
+		scolor = skin.FirstChildElement("skin")->FirstChildElement("list")->FirstChildElement("selectfontcolor")->FirstChild()->Value();
+		selectFontColor[0] = hex2dec(scolor.substr(0,2)) / 256.0f;
+		selectFontColor[1] = hex2dec(scolor.substr(2,2)) / 256.0f;
+		selectFontColor[2] = hex2dec(scolor.substr(4,2)) / 256.0f;
 
 		skinBarWidth =			atoi(bSkin->FirstChildElement("width")->FirstChild()->Value());
 		skinBarLeft =			atoi(bSkin->FirstChildElement("left")->FirstChild()->Value());

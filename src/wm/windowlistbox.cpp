@@ -25,7 +25,7 @@ void cWindowListBox::draw(int cutoffleft, int cutoffright, int cutofftop, int cu
 		i++;
 		yy-=12;
 	}
-	int barheight = max((int)(((float)(h - (skinButtonDownHeight+skinButtonUpHeight)) * (float)((float)i / (float)values.size()))+0.5f), 20);
+	int barheight = max((int)(((float)(h - (skinButtonDownHeight+skinButtonUpHeight)) * (float)((float)i / (float)values.size()))+0.5f), skinTopHeight+skinBottomHeight);
 
 	yy = realy();
 
@@ -85,10 +85,12 @@ void cWindowListBox::draw(int cutoffleft, int cutoffright, int cutofftop, int cu
 ///selection
 		if (selected >= liststart && selected < liststart+i && showselection)
 		{
-			glTexCoord2f((421.0f)/512.0f,		(424.0f)/512.0f);			glVertex2d(xx+4, yy+h-12*(selected-liststart)-12-4);
-			glTexCoord2f((430.0f)/512.0f,		(424.0f)/512.0f);			glVertex2d(xx+ww-4,yy+h-12*(selected-liststart)-12-4);
-			glTexCoord2f((430.0f)/512.0f,		(415.0f)/512.0f);			glVertex2d(xx+ww-4,yy+h-12*(selected-liststart)-4);
-			glTexCoord2f((421.0f)/512.0f,		(415.0f)/512.0f);			glVertex2d(xx+4, yy+h-12*(selected-liststart)-4);
+			glColor4f(selectColor[0],selectColor[1],selectColor[2],colors[3]);
+			glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	skinBottom/512.0f);						glVertex2d(xx+4, yy+h-12*(selected-liststart)-12-4);
+			glTexCoord2f(skinRight/512.0f,					skinBottom/512.0f);						glVertex2d(xx+ww-4,yy+h-12*(selected-liststart)-12-4);
+			glTexCoord2f(skinRight/512.0f,					(skinTop-skinTopHeight)/512.0f);		glVertex2d(xx+ww-4,yy+h-12*(selected-liststart)-4);
+			glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	(skinTop-skinTopHeight)/512.0f);		glVertex2d(xx+4, yy+h-12*(selected-liststart)-4);
+			glColor4fv(colors);
 		}		
 
 
@@ -110,12 +112,11 @@ void cWindowListBox::draw(int cutoffleft, int cutoffright, int cutofftop, int cu
 		glTexCoord2f((skinButtonDownLeft+skinBarWidth)/512.0f,	(skinButtonDownTop)/512.0f);						glVertex2d(xx+ww+skinBarWidth,	yy+skinButtonDownHeight);
 		glTexCoord2f((skinButtonDownLeft)/512.0f,				(skinButtonDownTop)/512.0f);						glVertex2d(xx+ww,				yy+skinButtonDownHeight);
 /// block
-		glTexCoord2f((skinBarLeft+skinBarWidth)/512.0f,	(skinBarTop-skinBarTopHeight)/512.0f);		glVertex2d(xx+ww+skinBarWidth,	yy+h-skinButtonUpHeight-barpos-barheight);
+		glTexCoord2f((skinBarLeft+skinBarWidth)/512.0f,	(skinBarBottom)/512.0f);		glVertex2d(xx+ww+skinBarWidth,	yy+h-skinButtonUpHeight-barpos-barheight);
 		glTexCoord2f((skinBarLeft+skinBarWidth)/512.0f,	(skinBarTop-skinBarTopHeight)/512.0f);		glVertex2d(xx+ww+skinBarWidth,	yy+h-skinButtonUpHeight-barpos);
-		glTexCoord2f((skinBarLeft)/512.0f,				(skinBarBottom)/512.0f);					glVertex2d(xx+ww,				yy+h-skinButtonUpHeight-barpos);
+		glTexCoord2f((skinBarLeft)/512.0f,				(skinBarTop-skinBarTopHeight)/512.0f);					glVertex2d(xx+ww,				yy+h-skinButtonUpHeight-barpos);
 		glTexCoord2f((skinBarLeft)/512.0f,				(skinBarBottom)/512.0f);					glVertex2d(xx+ww,				yy+h-skinButtonUpHeight-barpos-barheight);
-		//top
-	
+//top
 		glTexCoord2f((skinBarLeft)/512.0f,				(skinBarTop-skinBarTopHeight)/512.0f);	glVertex2d(xx+ww,				yy+h-skinButtonUpHeight-barpos-skinBarTopHeight);
 		glTexCoord2f((skinBarLeft+skinBarWidth)/512.0f,	(skinBarTop-skinBarTopHeight)/512.0f);	glVertex2d(xx+ww+skinBarWidth,	yy+h-skinButtonUpHeight-barpos-skinBarTopHeight);
 		glTexCoord2f((skinBarLeft+skinBarWidth)/512.0f,	(skinBarTop)/512.0f);					glVertex2d(xx+ww+skinBarWidth,	yy+h-skinButtonUpHeight-barpos);
@@ -133,7 +134,10 @@ void cWindowListBox::draw(int cutoffleft, int cutoffright, int cutofftop, int cu
 	yy = realy()+h-5-12;
 	while(yy+10 > realy() && i < (int)values.size())
 	{
-		parent->font->print(parent->fontcolor[0],parent->fontcolor[1],parent->fontcolor[2],parent->px()+xx+5,parent->py()+yy,"%s", values[i].c_str());
+		if(i == selected && showselection)
+			parent->font->print(selectFontColor[0],selectFontColor[1],selectFontColor[2],parent->px()+xx+5,parent->py()+yy,"%s", values[i].c_str());
+		else
+			parent->font->print(fontcolor[0],fontcolor[1],fontcolor[2],parent->px()+xx+5,parent->py()+yy,"%s", values[i].c_str());
 		i++;
 		yy-=12;
 	}
@@ -160,6 +164,7 @@ bool cWindowListBox::onkeydown(int key, bool shift)
 		selected++;
 		if (liststart < (int)values.size() - (h/12))
 			liststart++;
+		onChange(selected-1);
 		return true;
 	}
 	else if (key == SDLK_UP)
@@ -169,6 +174,7 @@ bool cWindowListBox::onkeydown(int key, bool shift)
 			selected--;
 			if (liststart > 0)
 				liststart--;
+			onChange(selected+1);
 		}
 		return true;
 	}
@@ -193,11 +199,14 @@ void cWindowListBox::SetInt(int index, int value)
 		properties.push_back(value);
 	else if (index == -2)
 	{
+		int oldselected = selected;
 		selected = (value == -1 ? values.size() - 1 : value);
 		if(selected < liststart)
 			liststart = selected;
 		if( selected > (liststart + ((h - 5 - 12 - 10)/12)))
 			liststart = max(0, selected - ((h - 5 - 12 - 10)/12)-1);
+		if(selected != oldselected)
+			onChange(oldselected);
 	}
 	else if (index == -3)
 	{
@@ -220,6 +229,8 @@ int cWindowListBox::GetInt(int index)
 		return selected;
 	if (index == -2)
 		return properties.size();
+	if (index == -3)
+		return values.size();
 	if (index < 0 || index > (int)properties.size())
 		return 0;
 	return properties[index];
@@ -238,8 +249,10 @@ void cWindowListBox::click()
 	{ // in the box
 		int s = selected;
 		selected = liststart + ((h-yy-3) / 12);
-		if (selected > (int)values.size() || selected < 0)
+		if (selected >= (int)values.size() || selected < 0)
 			selected = s;
+		if(selected != s)
+			onChange(s);
 	}
 	else
 	{
@@ -261,7 +274,7 @@ void cWindowListBox::click()
 				yyy-=12;
 			}
 
-			int barheight = max((int)((float)(h - (skinButtonDownHeight+skinButtonUpHeight)) * (float)((float)i / (float)values.size())), 20);
+			int barheight = max((int)((float)(h - (skinButtonDownHeight+skinButtonUpHeight)) * (float)((float)i / (float)values.size())), skinTopHeight+skinBottomHeight);
 			yyy = realy();
 			int barpos = (values.size() - i);
 			if (barpos != 0)
@@ -354,9 +367,9 @@ void cWindowListBox::scrolldown()
 	}
 
 	liststart+=5;
-	if(h/12 > (int)values.size())
-		liststart = 0;
 	if(liststart >= (int)values.size() - (h/12))
 		liststart = values.size() - (h/12);
+	if(h/12 > (int)values.size())
+		liststart = 0;
 
 }

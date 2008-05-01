@@ -35,6 +35,7 @@ public:
 	virtual ~cWindowInputBox() {}
 	virtual void draw(int,int,int,int);
 	virtual void click();
+	virtual void doubleclick();
 	bool onkeydown(int,bool);
 	bool onchar(char,bool);
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="iso-8859-1" ?>
 <skin name="RO">
-	<texture>data/ro.tga</texture>
+	<texture>data/skins/ro.tga</texture>
 	<font>data/fonts/tahoma.tga</font>
 	<window>
 		<title>
@@ -34,6 +34,8 @@
 		<left width="2">0</left>
 		<right width="2">3</right>
 		<bottom height="2">93</bottom>
+		<selectcolor>6666FF</selectcolor>
+		<selectfontcolor>FFFFFF</selectfontcolor>
 		<scroll>
 			<width>13</width>
 			<left>23</left>

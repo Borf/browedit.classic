@@ -33,7 +33,7 @@ void cWindowTree::draw(int cutoffleft, int cutoffright, int cutofftop, int cutof
 		i++;
 		yy-=12;
 	}
-	int barheight = max((int)(((float)(h - (skinButtonDownHeight+skinButtonUpHeight)) * (float)((float)i / (float)values.size()))+0.5f), 20);
+	int barheight = max((int)(((float)(h - (skinButtonDownHeight+skinButtonUpHeight)) * (float)((float)i / (float)values.size()))+0.5f), skinTopHeight+skinBottomHeight);
 
 	yy = realy();
 
@@ -93,10 +93,12 @@ void cWindowTree::draw(int cutoffleft, int cutoffright, int cutofftop, int cutof
 ///selection
 		if (selected >= liststart && selected < liststart+i && showselection)
 		{
-			glTexCoord2f((421.0f)/512.0f,		(424.0f)/512.0f);			glVertex2d(xx+4, yy+h-12*(selected-liststart)-12-4);
-			glTexCoord2f((430.0f)/512.0f,		(424.0f)/512.0f);			glVertex2d(xx+ww-4,yy+h-12*(selected-liststart)-12-4);
-			glTexCoord2f((430.0f)/512.0f,		(415.0f)/512.0f);			glVertex2d(xx+ww-4,yy+h-12*(selected-liststart)-4);
-			glTexCoord2f((421.0f)/512.0f,		(415.0f)/512.0f);			glVertex2d(xx+4, yy+h-12*(selected-liststart)-4);
+			glColor4f(selectColor[0],selectColor[1],selectColor[2],colors[3]);
+			glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	skinBottom/512.0f);						glVertex2d(xx+4, yy+h-12*(selected-liststart)-12-4);
+			glTexCoord2f(skinRight/512.0f,					skinBottom/512.0f);						glVertex2d(xx+ww-4,yy+h-12*(selected-liststart)-12-4);
+			glTexCoord2f(skinRight/512.0f,					(skinTop-skinTopHeight)/512.0f);		glVertex2d(xx+ww-4,yy+h-12*(selected-liststart)-4);
+			glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	(skinTop-skinTopHeight)/512.0f);		glVertex2d(xx+4, yy+h-12*(selected-liststart)-4);
+			glColor4fv(colors);
 		}		
 
 
@@ -265,7 +267,7 @@ void cWindowTree::click()
 				yyy-=12;
 			}
 
-			int barheight = max((int)((float)(h - (skinButtonDownHeight+skinButtonUpHeight)) * (float)((float)i / (float)values.size())), 20);
+			int barheight = max((int)((float)(h - (skinButtonDownHeight+skinButtonUpHeight)) * (float)((float)i / (float)values.size())), skinTopHeight+skinBottomHeight);
 			yyy = realy();
 			int barpos = (values.size() - i);
 			if (barpos != 0)

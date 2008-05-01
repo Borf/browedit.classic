@@ -79,20 +79,6 @@ void cWindowInputBox::draw(int cutoffleft, int cutoffright, int cutofftop, int c
 
 void cWindowInputBox::click()
 {
-	if (parent->selectedobject != this)
-	{
-		selectionstart = text.length();
-		cursor = 0;
-		while(cursor < startindex)
-			startindex = max(0, cursor-4);
-		while(parent->font->textlen(text.substr(startindex, cursor-startindex)) > w-10)
-			startindex = min(startindex + 4, (int)text.length());
-		if (selectionstart > (int)text.length())
-			selectionstart = cursor;
-
-		
-		return;
-	}
 	int xx = (int)mousex;
 	xx -= realx();
 	xx -= parent->px();
@@ -106,6 +92,18 @@ void cWindowInputBox::click()
 	selectionstart = (cursor = min(max(i-1, 0), (int)text.length()));
 }
 
+
+void cWindowInputBox::doubleclick()
+{
+	selectionstart = text.length();
+	cursor = 0;
+	while(cursor < startindex)
+		startindex = max(0, cursor-4);
+	while(parent->font->textlen(text.substr(startindex, cursor-startindex)) > w-10)
+		startindex = min(startindex + 4, (int)text.length());
+	if (selectionstart > (int)text.length())
+		selectionstart = cursor;
+}
 
 bool cWindowInputBox::onkeydown(int keyid, bool shift)
 {

@@ -32,6 +32,9 @@ protected:
 	int skinBarBackHeight;
 	int skinBarBackLeft;
 
+	float selectColor[3];
+	float selectFontColor[3];
+
 
 	int skinBarLeft;
 
@@ -52,6 +55,17 @@ public:
 		showscroll = true;
 		type = OBJECT_LISTBOX;
 		TiXmlElement* bSkin = skin.FirstChildElement("skin")->FirstChildElement("list")->FirstChildElement("scroll");
+
+		string scolor = skin.FirstChildElement("skin")->FirstChildElement("list")->FirstChildElement("selectcolor")->FirstChild()->Value();
+		selectColor[0] = hex2dec(scolor.substr(0,2)) / 256.0f;
+		selectColor[1] = hex2dec(scolor.substr(2,2)) / 256.0f;
+		selectColor[2] = hex2dec(scolor.substr(4,2)) / 256.0f;
+
+		scolor = skin.FirstChildElement("skin")->FirstChildElement("list")->FirstChildElement("selectfontcolor")->FirstChild()->Value();
+		selectFontColor[0] = hex2dec(scolor.substr(0,2)) / 256.0f;
+		selectFontColor[1] = hex2dec(scolor.substr(2,2)) / 256.0f;
+		selectFontColor[2] = hex2dec(scolor.substr(4,2)) / 256.0f;
+
 
 		skinBarWidth =			atoi(bSkin->FirstChildElement("width")->FirstChild()->Value());
 		skinBarLeft =			atoi(bSkin->FirstChildElement("left")->FirstChild()->Value());
@@ -75,6 +89,7 @@ public:
 	virtual ~cWindowListBox() {}
 	virtual void draw(int,int,int,int);
 	virtual void click();
+	virtual void onChange(int) {};
 	bool onkeydown(int, bool);
 //	void onchar(char);
 

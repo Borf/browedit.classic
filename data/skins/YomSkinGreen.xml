@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="iso-8859-1" ?>
 <skin name="YomSkinGreen">
-	<texture>data/YomSkinGreen.tga</texture>
+	<texture>data/skins/YomSkinGreen.tga</texture>
 	<font>data/fonts/tahoma.tga</font>
 	<window>
 		<title>

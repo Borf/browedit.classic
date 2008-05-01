@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="iso-8859-1" ?>
 <skin name="Win2k">
-	<texture>data/win2k.tga</texture>
+	<texture>data/skins/win2k.tga</texture>
 	<font>data/fonts/tahoma.tga</font>
 	<window>
 		<title>
