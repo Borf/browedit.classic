@@ -294,7 +294,15 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 				if (Graphics.texturestart > 8)
 					Graphics.texturestart--;
 				break;
-
+			case SDLK_i:
+				{
+				int posx = (int)mouse3dx / 5;
+				int posy = (int)mouse3dz / 5;
+				char buf[100];
+				sprintf(buf, "You the cursor is at %i,%i", posx, posy);
+				Graphics.WM.MessageBox(buf);
+				break;
+				}
 
 
 

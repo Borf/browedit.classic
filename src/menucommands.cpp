@@ -1423,6 +1423,101 @@ MENUCOMMAND(gatheight)
 	return true;
 }
 
+MENUCOMMAND(gatcollision2)
+{
+	MenuCommand_gatheight(src);
+	int i, x, y;
+	int ww = Graphics.w();
+	ww -= 256;
+	int hh = Graphics.h()-20;
+
+	glEnable(GL_DEPTH_TEST);
+	glViewport(0,0,ww,hh);						// Reset The Current Viewport
+
+	float camrad = 10;
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);				// Black Background
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
+	glLoadIdentity();									// Reset The Projection Matrix
+	gluPerspective(45.0f,(GLfloat)ww/(GLfloat)hh,10.0f,10000.0f);
+	gluLookAt(  -Graphics.camerapointer.x + Graphics.cameraheight*sin(Graphics.camerarot),
+				camrad+Graphics.cameraheight,
+				-Graphics.camerapointer.y + Graphics.cameraheight*cos(Graphics.camerarot),
+				-Graphics.camerapointer.x,camrad + Graphics.cameraheight * (Graphics.cameraangle/10.0f),-Graphics.camerapointer.y,
+				0,1,0);
+	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
+	glLoadIdentity();									// Reset The Modelview Matrix
+//	glTranslatef(0,0,Graphics.world.height*10);
+//	glScalef(1,1,-1);
+
+	for(i = 0; i < Graphics.world.models.size(); i++)
+		Graphics.world.models[i]->precollides();
+
+	Log(3,0, "Done Model boundingbox calculations");
+
+	bool obstructed;
+
+	for(x = 0; x < Graphics.world.width*2; x++)
+	{
+		for(y = 0; y < Graphics.world.height*2; y++)
+		{
+			Graphics.world.gattiles[y][x].type = 0;
+		}
+	}
+	
+
+	for(x = 0; x < Graphics.world.width; x++)
+		for(y = 0; y < Graphics.world.height; y++)
+		{
+			Graphics.world.cubes[y][x].maxh = -99999;
+			Graphics.world.cubes[y][x].minh = 99999;
+		}
+
+	for(i = 0; i < Graphics.world.models.size(); i++)
+	{
+		Log(3,0,GetMsg("CALCMODEL"), i, Graphics.world.models.size(), (i/(float)Graphics.world.models.size())*100);
+		Graphics.world.models[i]->draw(false,false,true);
+	}
+
+
+	for(x = 0; x < Graphics.world.width*2; x++)
+	{
+		for(y = 0; y < Graphics.world.height*2; y++)
+		{
+			if(Graphics.world.cubes[y/2][x/2].maxh == -99999 || Graphics.world.cubes[y/2][x/2].minh == 99999)
+				continue;
+
+			
+			Graphics.camerapointer.x = -5*x + 2.5;
+//			Graphics.camerapointer.y = -5*(2*Graphics.world.height-y) + 2.5;
+
+
+			cVector3 worldpos = cVector3(	5*x+2.5, 
+											-5000,
+											5*y+2.5);
+			
+			cVector3 highup = worldpos + cVector3(0, 10000, 0);
+			for(unsigned int ii = 0; ii < Graphics.world.models.size(); ii++)
+			{
+				if(Graphics.world.models[ii]->collides(worldpos, highup))
+				{
+					Graphics.world.gattiles[y][x].type = 1;
+					break;
+				}
+			}
+		}
+		mainloop();
+	}
+	for(x = 0; x < Graphics.world.width; x++)
+		for(y = 0; y < Graphics.world.height; y++)
+		{
+			Graphics.world.cubes[y][x].maxh = 0;
+			Graphics.world.cubes[y][x].minh = 0;
+		}
+
+
+	return true;
+}
 
 
 
@@ -1565,7 +1660,7 @@ MENUCOMMAND(dolightmaps2)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
 	glLoadIdentity();									// Reset The Projection Matrix
-	gluPerspective(45.0f,(GLfloat)Graphics.w()/(GLfloat)Graphics.h(),10.0f,10000.0f);
+	gluPerspective(45.0f,(GLfloat)ww/(GLfloat)hh,10.0f,10000.0f);
 	gluLookAt(  -Graphics.camerapointer.x + Graphics.cameraheight*sin(Graphics.camerarot),
 				camrad+Graphics.cameraheight,
 				-Graphics.camerapointer.y + Graphics.cameraheight*cos(Graphics.camerarot),

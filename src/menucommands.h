@@ -40,6 +40,7 @@ MENUCOMMAND(slope);
 MENUCOMMAND(picktexture);
 MENUCOMMAND(quadtree);
 MENUCOMMAND(gatheight);
+MENUCOMMAND(gatcollision2);
 MENUCOMMAND(dolightmaps);
 MENUCOMMAND(dolightmapsall);
 MENUCOMMAND(dolightmapslights);

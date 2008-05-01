@@ -949,6 +949,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,edit,GetMsg("menu/edit/CLEARLIGHTS"),					&MenuCommand_clearlights);
 	ADDMENUITEM(mm,edit,GetMsg("menu/edit/ADDWALLS"),						&MenuCommand_addwalls);
 	ADDMENUITEM(mm,edit,GetMsg("menu/edit/GATCOLLISION"),					&MenuCommand_gatcollision);
+	ADDMENUITEM(mm,edit,GetMsg("menu/edit/GATCOLLISION")+string("2"),		&MenuCommand_gatcollision2);
 	ADDMENUITEM(mm,edit,GetMsg("menu/edit/CLEARLIGHTMAPS"),					&MenuCommand_clearlightmaps);
 	ADDMENUITEM(mm,edit,GetMsg("menu/edit/CLEANLIGHTMAPS"),					&MenuCommand_cleanuplightmaps);
 	ADDMENUITEM(mm,edit,GetMsg("menu/edit/REMOVETEXTURES"),					&MenuCommand_cleantextures);
