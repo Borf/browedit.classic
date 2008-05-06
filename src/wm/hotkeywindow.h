@@ -179,9 +179,21 @@ public:
 		w = 264+16;
 		x = Graphics.w()-w;
 		y = 0;
-		title = "Hotkey";
+		title = "";
 
 		cWindowObject* o;
+
+		TiXmlElement* wSkin = skin.FirstChildElement("skin")->FirstChildElement("miniwindow");
+
+		skinTopHeight = atoi(wSkin->FirstChildElement("top")->Attribute("height"));
+		skinTop =		512 - atoi(wSkin->FirstChildElement("top")->FirstChild()->Value());
+		skinBottomHeight = atoi(wSkin->FirstChildElement("bottom")->Attribute("height"));
+		skinBottom =		512 - atoi(wSkin->FirstChildElement("bottom")->FirstChild()->Value());
+		
+		skinLeftWidth = atoi(wSkin->FirstChildElement("left")->Attribute("width"));
+		skinLeft =		atoi(wSkin->FirstChildElement("left")->FirstChild()->Value());
+		skinRightWidth = atoi(wSkin->FirstChildElement("right")->Attribute("width"));
+		skinRight =		atoi(wSkin->FirstChildElement("right")->FirstChild()->Value());		
 
 		for(int i = 0; i < 8; i++)
 		{
@@ -196,71 +208,6 @@ public:
 
 	}	
 
-	void draw()
-	{
-		glTranslatef(x, y, 0);
-		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, texture->texid());
-		glBegin(GL_QUADS);
-			glTexCoord2f(0,				496.0f/512.0f);		glVertex2d(0,  h-16);
-			glTexCoord2f(3/512.0f,		496.0f/512.0f);		glVertex2d(3, h-16);
-			glTexCoord2f(3/512.0f,		1);					glVertex2d(3, h);
-			glTexCoord2f(0,				1);					glVertex2d(0,  h);
-
-			glTexCoord2f(3/512.0f,		496.0f/512.0f);		glVertex2d(3,  h-16);
-			glTexCoord2f(509/512.0f,	496.0f/512.0f);		glVertex2d(w-3, h-16);
-			glTexCoord2f(509/512.0f,	1);					glVertex2d(w-3, h);
-			glTexCoord2f(3/512.0f,		1);					glVertex2d(3,  h);
-
-			glTexCoord2f(509/512.0f,	496.0f/512.0f);		glVertex2d(w-3,  h-16);
-			glTexCoord2f(1,				496.0f/512.0f);		glVertex2d(w, h-16);
-			glTexCoord2f(1,				1);					glVertex2d(w, h);
-			glTexCoord2f(509/512.0f,	1);					glVertex2d(w-3,  h);
-
-			glTexCoord2f(0,				474.0f/512.0f);		glVertex2d(0,  4);
-			glTexCoord2f(3/512.0f,		474.0f/512.0f);		glVertex2d(3, 4);
-			glTexCoord2f(3/512.0f,		493.0f/512.0f);		glVertex2d(3, h-16);
-			glTexCoord2f(0,				493.0f/512.0f);		glVertex2d(0,  h-16);
-
-			glTexCoord2f(3/512.0f,		474.0f/512.0f);		glVertex2d(3,  4);
-			glTexCoord2f(509/512.0f,	474.0f/512.0f);		glVertex2d(w-3, 4);
-			glTexCoord2f(509/512.0f,	493.0f/512.0f);		glVertex2d(w-3, h-16);
-			glTexCoord2f(3/512.0f,		493.0f/512.0f);		glVertex2d(3,  h-16);
-
-			glTexCoord2f(509/512.0f,	474.0f/512.0f);		glVertex2d(w-3,  4);
-			glTexCoord2f(1,				474.0f/512.0f);		glVertex2d(w, 4);
-			glTexCoord2f(1,				493.0f/512.0f);		glVertex2d(w, h-16);
-			glTexCoord2f(509/512.0f,	493.0f/512.0f);		glVertex2d(w-3,  h-16);
-
-			glTexCoord2f(0,				470.0f/512.0f);		glVertex2d(0,  0);
-			glTexCoord2f(3/512.0f,		470.0f/512.0f);		glVertex2d(3, 0);
-			glTexCoord2f(3/512.0f,		474.0f/512.0f);		glVertex2d(3, 4);
-			glTexCoord2f(0,				474.0f/512.0f);		glVertex2d(0,  4);
-
-			glTexCoord2f(3/512.0f,		470.0f/512.0f);		glVertex2d(3,  0);
-			glTexCoord2f(509/512.0f,	470.0f/512.0f);		glVertex2d(w-3, 0);
-			glTexCoord2f(509/512.0f,	474.0f/512.0f);		glVertex2d(w-3, 4);
-			glTexCoord2f(3/512.0f,		474.0f/512.0f);		glVertex2d(3,  4);
-
-			glTexCoord2f(509/512.0f,	470.0f/512.0f);		glVertex2d(w-3,  0);
-			glTexCoord2f(1,				470.0f/512.0f);		glVertex2d(w, 0);
-			glTexCoord2f(1,				474.0f/512.0f);		glVertex2d(w, 4);
-			glTexCoord2f(509/512.0f,	474.0f/512.0f);		glVertex2d(w-3,  4);
-		glEnd();
-
-		
-		map<string, cWindowObject*, less<string> >::iterator i;
-		for(i = objects.begin(); i != objects.end(); i++)
-		{
-			cWindowObject* o = i->second;
-			if (!rolledup || o->realy2() > h-19)
-			{
-				//if(i->second->realy() > 0)
-					o->draw();
-			}
-		}
-		glTranslatef(-x, -y, 0);
-	}
 };
 
 #endif

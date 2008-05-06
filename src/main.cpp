@@ -32,10 +32,11 @@ int keymap[SDLK_LAST-SDLK_FIRST];
 cGraphics		Graphics;
 cFileSystem fs;
 
+bool IsLegal2 = true;
 string inputboxresult;
 bool IsInsideVPC();
 bool IsInsideVMWare();
-
+bool IsLegal = true;
 
 long userid;
 void MakeUndo();
@@ -648,13 +649,16 @@ int main(int argc, char *argv[])
 		else if (res == okbuf)
 		{
 			ok = true;
+			IsLegal = true;
 		}
 		else
 		{
 			ok = false;
+			IsLegal = false;
 		}
 		if (res == updatebuf)
 		{
+			Log(3,0,"You do not have the latest version, please update");
 			Log(3,0,GetMsg("net/VERSIONERROR")); // you do not have the latest version
 			sleep(10);
 			exit(0);
@@ -675,7 +679,10 @@ int main(int argc, char *argv[])
 	}
 #ifndef _DEBUG
 	if(!ok)
-		exit(0);
+	{
+		IsLegal = false;
+	}
+
 #else
 	if(!ok)
 		Log(2,0,"Error: non-valid licence stuff");
@@ -791,6 +798,7 @@ int main(int argc, char *argv[])
 	}
 	pFile->close();
 
+	IsLegal2 = IsLegal;
 
 	pFile = fs.open("data/korean2english.txt");
 	while(!pFile->eof())
@@ -1051,6 +1059,11 @@ int main(int argc, char *argv[])
 
 	for(i = 0; i < SDLK_LAST-SDLK_FIRST; i++)
 		keys[i] = 0;
+
+
+	if(!IsLegal2)
+		Graphics.WM.MessageBox("This version of browedit is not activated. Please post on the access reset topic to get it activated");
+
 
 	
 	lasttimer = SDL_GetTicks();

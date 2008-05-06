@@ -21,6 +21,13 @@
 		<right width="7">14</right>
 		<bottom height="9">71</bottom>
 	</button>
+	<miniwindow>
+		<fontcolor>000000</fontcolor>
+		<top height="9">60</top>
+		<left width="7">0</left>
+		<right width="7">14</right>
+		<bottom height="9">71</bottom>
+	</miniwindow>
 	<input>
 		<fontcolor>000000</fontcolor>
 		<top height="2">90</top>
