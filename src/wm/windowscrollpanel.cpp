@@ -29,10 +29,10 @@ void cWindowScrollPanel::draw(int cutoffleft, int cutoffright, int cutofftop, in
 	int ww = w - 14;
 
 
-	int ybarheight = (int)max(((float)h/(float)innerheight)*(h-(skinButtonDownHeight+skinButtonUpHeight) - 13), 18.0f);
+	int ybarheight = min(max(((float)h/(float)innerheight)*(h-(skinButtonDownHeight+skinButtonUpHeight) - 13), skinTopHeight+skinBottomHeight), h-skinTopHeight-skinBottomHeight);
 	int ybarpos = (int)(((float)scrollposy / (float)innerheight) * (h-(skinButtonDownHeight+skinButtonUpHeight) - 13));
 
-	int xbarwidth = (int)max(((float)w/(float)innerwidth)*(w-(skinButtonDownHeight+skinButtonUpHeight) - 13),18.0f);
+	int xbarwidth = max(((float)w/(float)innerwidth)*(w-(skinButtonDownHeight+skinButtonUpHeight) - 13),skinTopHeight+skinBottomHeight);
 	int xbarpos = (int)(((float)scrollposx / (float)innerwidth) * (w-16 - 13));
 
 	//ybarpos -= barheigh;
@@ -108,21 +108,35 @@ void cWindowScrollPanel::draw(int cutoffleft, int cutoffright, int cutofftop, in
 		glTexCoord2f((skinButtonDownLeft+skinBarWidth)/512.0f,	(skinButtonDownTop)/512.0f);						glVertex2d(xx+ww+skinBarWidth,	yy+skinButtonDownHeight);
 		glTexCoord2f((skinButtonDownLeft)/512.0f,				(skinButtonDownTop)/512.0f);						glVertex2d(xx+ww,				yy+skinButtonDownHeight);
 /// block
-		glTexCoord2f((skinBarLeft+skinBarWidth)/512.0f,	(skinBarTop-skinBarTopHeight)/512.0f);		glVertex2d(xx+ww+skinBarWidth,	yy+h-skinButtonUpHeight-ybarpos-ybarheight);
-		glTexCoord2f((skinBarLeft+skinBarWidth)/512.0f,	(skinBarTop-skinBarTopHeight)/512.0f);		glVertex2d(xx+ww+skinBarWidth,	yy+h-skinButtonUpHeight-ybarpos);
-		glTexCoord2f((skinBarLeft)/512.0f,				(skinBarBottom)/512.0f);					glVertex2d(xx+ww,				yy+h-skinButtonUpHeight-ybarpos);
-		glTexCoord2f((skinBarLeft)/512.0f,				(skinBarBottom)/512.0f);					glVertex2d(xx+ww,				yy+h-skinButtonUpHeight-ybarpos-ybarheight);
-		//top
+		int center = (skinBarTop-skinBarTopHeight + skinBarBottom)/ 2;
+		int c1 = skinBarTop-skinBarTopHeight-	skinBarCenterHeight/2;
+		int c2 = (skinBarBottom+				skinBarCenterHeight/2);
+
+		glTexCoord2f((skinBarLeft+skinBarWidth)/512.0f,	(skinBarTop-skinBarTopHeight)/512.0f);			glVertex2d(xx+ww+skinBarWidth,	yy+h-skinButtonUpHeight-ybarpos-ybarheight);
+		glTexCoord2f((skinBarLeft+skinBarWidth)/512.0f,	(c1)/512.0f);									glVertex2d(xx+ww+skinBarWidth,	yy+h-skinButtonUpHeight-ybarpos-ybarheight/2-skinBarCenterHeight/2);
+		glTexCoord2f((skinBarLeft)/512.0f,				(c1)/512.0f);									glVertex2d(xx+ww,				yy+h-skinButtonUpHeight-ybarpos-ybarheight/2-skinBarCenterHeight/2);
+		glTexCoord2f((skinBarLeft)/512.0f,				(skinBarTop-skinBarTopHeight)/512.0f);			glVertex2d(xx+ww,				yy+h-skinButtonUpHeight-ybarpos-ybarheight);
 	
-		glTexCoord2f((skinBarLeft)/512.0f,				(skinBarTop-skinBarTopHeight)/512.0f);	glVertex2d(xx+ww,				yy+h-skinButtonUpHeight-ybarpos-skinBarTopHeight);
-		glTexCoord2f((skinBarLeft+skinBarWidth)/512.0f,	(skinBarTop-skinBarTopHeight)/512.0f);	glVertex2d(xx+ww+skinBarWidth,	yy+h-skinButtonUpHeight-ybarpos-skinBarTopHeight);
-		glTexCoord2f((skinBarLeft+skinBarWidth)/512.0f,	(skinBarTop)/512.0f);					glVertex2d(xx+ww+skinBarWidth,	yy+h-skinButtonUpHeight-ybarpos);
-		glTexCoord2f((skinBarLeft)/512.0f,				(skinBarTop)/512.0f);					glVertex2d(xx+ww,				yy+h-skinButtonUpHeight-ybarpos);
+		glTexCoord2f((skinBarLeft+skinBarWidth)/512.0f,	(skinBarBottom)/512.0f);						glVertex2d(xx+ww+skinBarWidth,	yy+h-skinButtonUpHeight-ybarpos);
+		glTexCoord2f((skinBarLeft+skinBarWidth)/512.0f,	(c2)/512.0f);									glVertex2d(xx+ww+skinBarWidth,	yy+h-skinButtonUpHeight-ybarpos-ybarheight/2+skinBarCenterHeight/2);
+		glTexCoord2f((skinBarLeft)/512.0f,				(c2)/512.0f);									glVertex2d(xx+ww,				yy+h-skinButtonUpHeight-ybarpos-ybarheight/2+skinBarCenterHeight/2);
+		glTexCoord2f((skinBarLeft)/512.0f,				(skinBarBottom)/512.0f);						glVertex2d(xx+ww,				yy+h-skinButtonUpHeight-ybarpos);
+
+		glTexCoord2f((skinBarLeft+skinBarWidth)/512.0f,	(c1)/512.0f);									glVertex2d(xx+ww+skinBarWidth,	yy+h-skinButtonUpHeight-ybarpos-ybarheight/2-skinBarCenterHeight/2);
+		glTexCoord2f((skinBarLeft)/512.0f,				(c1)/512.0f);									glVertex2d(xx+ww,				yy+h-skinButtonUpHeight-ybarpos-ybarheight/2-skinBarCenterHeight/2);
+		glTexCoord2f((skinBarLeft)/512.0f,				(c2)/512.0f);									glVertex2d(xx+ww,				yy+h-skinButtonUpHeight-ybarpos-ybarheight/2+skinBarCenterHeight/2);
+		glTexCoord2f((skinBarLeft+skinBarWidth)/512.0f,	(c2)/512.0f);									glVertex2d(xx+ww+skinBarWidth,	yy+h-skinButtonUpHeight-ybarpos-ybarheight/2+skinBarCenterHeight/2);
+//top
+		glTexCoord2f((skinBarLeft)/512.0f,				(skinBarTop-skinBarTopHeight)/512.0f);			glVertex2d(xx+ww,				yy+h-skinButtonUpHeight-ybarpos-skinBarTopHeight);
+		glTexCoord2f((skinBarLeft+skinBarWidth)/512.0f,	(skinBarTop-skinBarTopHeight)/512.0f);			glVertex2d(xx+ww+skinBarWidth,	yy+h-skinButtonUpHeight-ybarpos-skinBarTopHeight);
+		glTexCoord2f((skinBarLeft+skinBarWidth)/512.0f,	(skinBarTop)/512.0f);							glVertex2d(xx+ww+skinBarWidth,	yy+h-skinButtonUpHeight-ybarpos);
+		glTexCoord2f((skinBarLeft)/512.0f,				(skinBarTop)/512.0f);							glVertex2d(xx+ww,				yy+h-skinButtonUpHeight-ybarpos);
 //bottom
 		glTexCoord2f((skinBarLeft)/512.0f,				(skinBarBottom-skinBarBottomHeight)/512.0f);	glVertex2d(xx+ww,				yy+h-skinButtonUpHeight-ybarpos-ybarheight);
 		glTexCoord2f((skinBarLeft+skinBarWidth)/512.0f,	(skinBarBottom-skinBarBottomHeight)/512.0f);	glVertex2d(xx+ww+skinBarWidth,	yy+h-skinButtonUpHeight-ybarpos-ybarheight);
 		glTexCoord2f((skinBarLeft+skinBarWidth)/512.0f,	(skinBarBottom)/512.0f);						glVertex2d(xx+ww+skinBarWidth,	yy+h-skinButtonUpHeight-ybarpos-ybarheight+skinBarBottomHeight);
 		glTexCoord2f((skinBarLeft)/512.0f,				(skinBarBottom)/512.0f);						glVertex2d(xx+ww,				yy+h-skinButtonUpHeight-ybarpos-ybarheight+skinBarBottomHeight);
+
 		}
 
 	if (w < innerwidth)

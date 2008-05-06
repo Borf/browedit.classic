@@ -19,7 +19,7 @@ public:
 	public:
 		cMiniMap(cWindow* parent) : cWindowObject(parent)
 		{
-			moveto(5,5);
+			moveto(0,0);
 			resizeto(Graphics.world.width,Graphics.world.height);
 			alignment = ALIGN_TOPLEFT;
 		}
@@ -80,18 +80,18 @@ public:
 		alwaysontop = true;
 		notransparency = true;
 
-		h = Graphics.world.height+10;
-		w = Graphics.world.width+10;
+		h = Graphics.world.height+skinOffBottom+skinOffTop;
+		w = Graphics.world.width+skinOffLeft+skinOffRight;
 		x = Graphics.w()-w;
 		y = 0;
-		title = "Minimap";
+		title = "";
 
 
 		objects["minimap"] = new cMiniMap(this);
 
 	}	
 
-	void draw()
+/*	void draw()
 	{
 		glTranslatef(x, y, 0);
 		glEnable(GL_TEXTURE_2D);
@@ -155,7 +155,7 @@ public:
 			}
 		}
 		glTranslatef(-x, -y, 0);
-	}
+	}*/
 };
 
 #endif

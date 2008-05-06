@@ -13,6 +13,12 @@
 		<left width="14">0</left>
 		<right width="3">15</right>
 		<bottom height="30">21</bottom>
+		<offsets>
+			<top>20</top>
+			<bottom>10</bottom>
+			<left>10</left>
+			<right>10</right>
+		</offsets>
 	</window>
 	<button>
 		<fontcolor>000000</fontcolor>
@@ -46,6 +52,7 @@
 		<scroll>
 			<width>13</width>
 			<left>23</left>
+			<centerheight>0</centerheight>
 			<background>
 				<left>23</left>
 				<top>21</top>

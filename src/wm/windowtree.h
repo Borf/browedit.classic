@@ -61,6 +61,7 @@ public:
 	int skinBarTop;
 	int skinBarBottomHeight;
 	int skinBarBottom;
+	int skinBarCenterHeight;
 
 	int skinBarBackTop;
 	int skinBarBackHeight;
@@ -116,6 +117,9 @@ public:
 		skinBarBackTop=		512-atoi(bSkin->FirstChildElement("background")->FirstChildElement("top")->FirstChild()->Value());
 		skinBarBackHeight =	atoi(bSkin->FirstChildElement("background")->FirstChildElement("height")->FirstChild()->Value());
 		skinBarBackLeft =	atoi(bSkin->FirstChildElement("background")->FirstChildElement("left")->FirstChild()->Value());
+
+
+		skinBarCenterHeight = atoi(bSkin->FirstChildElement("centerheight")->FirstChild()->Value());
 
 	}
 	virtual ~cWindowTree() {}

@@ -690,7 +690,7 @@ cModelsWindow::cModelsWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWind
 
 	o = new cWindowModelCatSelect(this, nodes, skin);
 	o->alignment = ALIGN_TOPLEFT;
-	o->moveto(20,30);
+	o->moveto(0,0);
 	o->resizeto(400,400);
 	objects["tree"] = o;
 
@@ -722,11 +722,11 @@ cModelsWindow::cModelsWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWind
 void cModelsWindow::resizeto(int ww, int hh)
 {
 	cWindow::resizeto(ww,hh);
-	objects["tree"]->resizeto(200, hh-40);
+	objects["tree"]->resizeto(200, innerh());
 	cWindowScrollPanel* panel = (cWindowScrollPanel*)objects["models"];
-	panel->moveto(220, 30);
-	panel->resizeto(ww-230, hh-40);
-	panel->innerwidth = ww-230;
+	panel->moveto(200, 0);
+	panel->resizeto(innerw()-200, innerh());
+	panel->innerwidth = innerw()-200;
 
 	int x = 0;
 	int y = 0;

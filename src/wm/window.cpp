@@ -18,6 +18,7 @@ extern string			configfile;
 
 void cWindow::draw()
 {
+	glPushMatrix();
 	glTranslatef(x, y, 0);
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, texture->texid());
@@ -71,11 +72,21 @@ void cWindow::draw()
 			glTexCoord2f(skinRight/512.0f,					skinBottom/512.0f);						glVertex2d(w-skinRightWidth,skinBottomHeight);
 		}
 	glEnd();
+
+//	glTranslatef(skinOffLeft, skinOffTop,0);
+
 	map<string, cWindowObject*, less<string> >::iterator i;
 	for(i = objects.begin(); i != objects.end(); i++)
 	{
 		cWindowObject* o = i->second;
-		if ((!rolledup && !checkborders) || (rolledup && o->realy2() > h-190) || (!rolledup && checkborders && o->realy() < h && o->realy() > 0 && o->realx() > 0 && o->realx() < w))
+		if(rolledup)
+		{
+			if(o->realy2() >= h-20)
+				o->draw();
+		}
+		else if (
+			(!rolledup && !checkborders) ||
+			(!rolledup && checkborders && o->realy() < h && o->realy() > 0 && o->realx() > 0 && o->realx() < w))
 		{
 			o->draw();
 		}
@@ -96,7 +107,7 @@ void cWindow::draw()
 	}
 */
 	font->print(titlecolor[0], titlecolor[1], titlecolor[2],x+titlexoff,y+h-(titleyoff+12),title.c_str());
-	glTranslatef(-x, -y, 0);
+	glPopMatrix();
 }
 
 

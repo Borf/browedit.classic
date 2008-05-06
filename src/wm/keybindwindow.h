@@ -279,7 +279,7 @@ public:
 		{
 			text = "Ok";
 			alignment = ALIGN_BOTTOMRIGHT;
-			moveto(10,10);
+			moveto(0,0);
 			resizeto(100,20);
 		}
 		void click()
@@ -361,7 +361,7 @@ public:
 		cCancelButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent,skin)
 		{
 			alignment = ALIGN_BOTTOMRIGHT;
-			moveto(110,10);
+			moveto(110,0);
 			resizeto(100,20);
 			text = "Cancel";
 		}
@@ -430,7 +430,7 @@ public:
 		{
 			text = "Clear";
 			resizeto(50,20);
-			alignment = ALIGN_TOPLEFT;
+			alignment = box->alignment;
 			clearbox = box;
 		}
 		void click()
@@ -442,7 +442,10 @@ public:
 	void addclearbutton(cKeyBindBox* box, TiXmlDocument &skin)
 	{
 		cWindowObject* o = new cClearButton(this, box, skin);
-		o->moveto(box->px()+100, box->py());
+		if(box->alignment == ALIGN_TOPLEFT)
+			o->moveto(box->px()+100, box->py());
+		else
+			o->moveto(box->px()-50, box->py());
 		static int i = 0;
 		char buf[10];
 		sprintf(buf, "%i", i++);
@@ -453,7 +456,7 @@ public:
 	{
 		cKeyBindBox* o = new cKeyBindBox(this,skin);
 		o->moveto(x,y);
-		o->alignment = ALIGN_TOPLEFT;
+		o->alignment = x == 50 ? ALIGN_TOPRIGHT : ALIGN_TOPLEFT;
 		o->resizeto(100,20);
 		o->SetInt(1, defval);
 		objects[name] = o;
@@ -478,103 +481,103 @@ public:
 		o->resizeto(200,20);
 		objects["bla"] = o;*/
 
-		addlabel("lblUp",		20, 30, "Move up");
-		addlabel("lblDown",		20, 50, "Move down");
-		addlabel("lblLeft",		20, 70, "Move left");
-		addlabel("lblRight",	20, 90, "Move right");		
-		addlabel("lblMinus",	20, 110, "Decrease Brush Size");
-		addlabel("lblEquals",	20,	130, "Increase brush Size");
-		addlabel("lbllbracket", 20, 150, "Move right menu up");
-		addlabel("lblrbracket", 20, 170, "Move right menu down");
-		addlabel("lblSpace",	20, 190, "Rotate brush, map gat local");
-		addlabel("lblH",		20, 210, "Horizontal Flip");
-		addlabel("lblV",		20, 230, "Vertical Flip");
-		addlabel("lblG",		20, 250, "Grid");
-		addlabel("lblL",		20, 270, "Toggle lightmaps");
-		addlabel("lblD",		20, 290, "Duplicate");
-		addlabel("lblComma",	20, 310, "Add horizontal wall");
-		addlabel("lblPeriod",	20, 330, "Add vertical wall");
-		addlabel("lblPageup",	20, 350, "Raise things");
-		addlabel("lblPagedown",	20, 370, "Lower things");
-		addlabel("lblHome",		20, 390, "Raise wall things");
-		addlabel("lblEnd",		20, 410, "Lower wall things");
-		addlabel("lblW",		20, 430, "Wall texture align");
-		addlabel("lblC",		20, 450, "Copy");
-		addlabel("lblP",		20, 470,"Paste");
-		addlabel("lblO",		20, 490,"Show Objects");
-		addlabel("lblBackspace",20, 510,"Remove");
-		addlabel("lblF",		20, 530,"Flatten");
-		addlabel("lblIns",		20, 550,"Mode Quadtree detail");
-		addlabel("lblDel",		20, 570,"Less Quadtree detail");
-		addlabel("lblR",		20, 590,"Reset Rotation");
-		addlabel("lblF1",		20, 610,"Texture Edit Mode");
-		addlabel("lblF2",		20, 630,"Global Height Edit Mode");
-		addlabel("lblF3",		20, 650,"Local Height Edit Mode");
-		addlabel("lblF4",		20, 670,"Wall Edit Mode");
+		addlabel("lblUp",		0,   0, "Move up");
+		addlabel("lblDown",		0,  20, "Move down");
+		addlabel("lblLeft",		0,  40, "Move left");
+		addlabel("lblRight",	0,  60, "Move right");		
+		addlabel("lblMinus",	0,  80, "Decrease Brush Size");
+		addlabel("lblEquals",	0, 100, "Increase brush Size");
+		addlabel("lbllbracket", 0, 120, "Move right menu up");
+		addlabel("lblrbracket", 0, 140, "Move right menu down");
+		addlabel("lblSpace",	0, 160, "Rotate brush, map gat local");
+		addlabel("lblH",		0, 180, "Horizontal Flip");
+		addlabel("lblV",		0, 200, "Vertical Flip");
+		addlabel("lblG",		0, 220, "Grid");
+		addlabel("lblL",		0, 240, "Toggle lightmaps");
+		addlabel("lblD",		0, 260, "Duplicate");
+		addlabel("lblComma",	0, 280, "Add horizontal wall");
+		addlabel("lblPeriod",	0, 300, "Add vertical wall");
+		addlabel("lblPageup",	0, 320, "Raise things");
+		addlabel("lblPagedown",	0, 340, "Lower things");
+		addlabel("lblHome",		0, 360, "Raise wall things");
+		addlabel("lblEnd",		0, 380, "Lower wall things");
+		addlabel("lblW",		0, 400, "Wall texture align");
+		addlabel("lblC",		0, 420, "Copy");
+		addlabel("lblP",		0, 440,"Paste");
+		addlabel("lblO",		0, 460,"Show Objects");
+		addlabel("lblBackspace",0, 480,"Remove");
+		addlabel("lblF",		0, 500,"Flatten");
+		addlabel("lblIns",		0, 520,"Mode Quadtree detail");
+		addlabel("lblDel",		0, 540,"Less Quadtree detail");
+		addlabel("lblR",		0, 560,"Reset Rotation");
+		addlabel("lblF1",		0, 580,"Texture Edit Mode");
+		addlabel("lblF2",		0, 600,"Global Height Edit Mode");
+		addlabel("lblF3",		0, 620,"Local Height Edit Mode");
+		addlabel("lblF4",		0, 640,"Wall Edit Mode");
 
-		addlabel("lblF5",		500, 30,"Object Edit Mode");
-		addlabel("lblF6",		500, 50,"GAT Edit Mode");
-		addlabel("lblF7",		500, 70,"Water Edit Mode");
-		addlabel("lblF8",		500, 90,"Effect Edit Mode");
-		addlabel("lblF9",		500,110,"Sound Edit Mode");
-		addlabel("lblF10",		500,130,"Light Edit Mode");
-		addlabel("lblF11",		500,150,"Object Group Edit Mode");
+		addlabel("lblF5",		200,  0,"Object Edit Mode")->alignment = ALIGN_TOPRIGHT;
+		addlabel("lblF6",		200, 20,"GAT Edit Mode")->alignment = ALIGN_TOPRIGHT;
+		addlabel("lblF7",		200, 40,"Water Edit Mode")->alignment = ALIGN_TOPRIGHT;
+		addlabel("lblF8",		200, 60,"Effect Edit Mode")->alignment = ALIGN_TOPRIGHT;
+		addlabel("lblF9",		200, 80,"Sound Edit Mode")->alignment = ALIGN_TOPRIGHT;
+		addlabel("lblF10",		200,100,"Light Edit Mode")->alignment = ALIGN_TOPRIGHT;
+		addlabel("lblF11",		200,120,"Object Group Edit Mode")->alignment = ALIGN_TOPRIGHT;
 
-		addlabel("lblU",		500,170,"Undo");
-		addlabel("lblT",		500,190,"Open Texture Window");
-		addlabel("lblM",		500,210,"Open Model select Window");
-		addlabel("lblReturn",	500,230,"Open object/light/effect properties");
-		addlabel("lblS",		500,250,"Smooth");
-		addlabel("lblEsc",		500,270,"Exit");
+		addlabel("lblU",		200,140,"Undo")->alignment = ALIGN_TOPRIGHT;
+		addlabel("lblT",		200,160,"Open Texture Window")->alignment = ALIGN_TOPRIGHT;
+		addlabel("lblM",		200,180,"Open Model select Window")->alignment = ALIGN_TOPRIGHT;
+		addlabel("lblReturn",	200,200,"Open object/light/effect properties")->alignment = ALIGN_TOPRIGHT;
+		addlabel("lblS",		200,220,"Smooth")->alignment = ALIGN_TOPRIGHT;
+		addlabel("lblEsc",		200,240,"Exit")->alignment = ALIGN_TOPRIGHT;
 
 
-		addbox("Up",250,30,keymap[SDLK_UP],skin);
-		addbox("Down",250,50,keymap[SDLK_DOWN],skin);
-		addbox("Left",250,70,keymap[SDLK_LEFT],skin);
-		addbox("Right",250,90,keymap[SDLK_RIGHT],skin);
-		addbox("Minus",250,110,keymap[SDLK_MINUS],skin);
-		addbox("Equals",250,130,keymap[SDLK_EQUALS],skin);
-		addbox("lbracket",250,150,keymap[SDLK_LEFTBRACKET],skin);
-		addbox("rbracket",250,170,keymap[SDLK_RIGHTBRACKET],skin);
-		addbox("Space",250,190,keymap[SDLK_SPACE],skin);
-		addbox("H",250,210,keymap[SDLK_h],skin);
-		addbox("V",250,230,keymap[SDLK_v],skin);
-		addbox("G",250,250,keymap[SDLK_g],skin);
-		addbox("L",250,270,keymap[SDLK_l],skin);
-		addbox("D",250,290,keymap[SDLK_d],skin);
-		addbox("Comma",250,310,keymap[SDLK_COMMA],skin);
-		addbox("Period",250,330,keymap[SDLK_PERIOD],skin);
-		addbox("Pageup",250,350,keymap[SDLK_PAGEUP],skin);
-		addbox("Pagedown",250,370,keymap[SDLK_PAGEDOWN],skin);
-		addbox("Home",250,390,keymap[SDLK_HOME],skin);
-		addbox("End",250,410,keymap[SDLK_END],skin);
-		addbox("W",250,430,keymap[SDLK_w],skin);
-		addbox("C",250,450,keymap[SDLK_c],skin);
-		addbox("P",250,470,keymap[SDLK_p],skin);
-		addbox("O",250,490,keymap[SDLK_o],skin);
-		addbox("Backspace",250,510,keymap[SDLK_BACKSPACE],skin);
-		addbox("F",250,530,keymap[SDLK_f],skin);
-		addbox("Ins",250,550,keymap[SDLK_INSERT],skin);
-		addbox("Del",250,570,keymap[SDLK_DELETE],skin);
-		addbox("R",250,590,keymap[SDLK_r],skin);
-		addbox("F1",250,610,keymap[SDLK_F1],skin);
-		addbox("F2",250,630,keymap[SDLK_F2],skin);
-		addbox("F3",250,650,keymap[SDLK_F3],skin);
-		addbox("F4",250,670,keymap[SDLK_F4],skin);
+		addbox("Up",			250,  0,keymap[SDLK_UP],skin);
+		addbox("Down",			250, 20,keymap[SDLK_DOWN],skin);
+		addbox("Left",			250, 40,keymap[SDLK_LEFT],skin);
+		addbox("Right",			250, 60,keymap[SDLK_RIGHT],skin);
+		addbox("Minus",			250, 80,keymap[SDLK_MINUS],skin);
+		addbox("Equals",		250,100,keymap[SDLK_EQUALS],skin);
+		addbox("lbracket",		250,120,keymap[SDLK_LEFTBRACKET],skin);
+		addbox("rbracket",		250,140,keymap[SDLK_RIGHTBRACKET],skin);
+		addbox("Space",			250,160,keymap[SDLK_SPACE],skin);
+		addbox("H",				250,180,keymap[SDLK_h],skin);
+		addbox("V",				250,200,keymap[SDLK_v],skin);
+		addbox("G",				250,220,keymap[SDLK_g],skin);
+		addbox("L",				250,240,keymap[SDLK_l],skin);
+		addbox("D",				250,260,keymap[SDLK_d],skin);
+		addbox("Comma",			250,280,keymap[SDLK_COMMA],skin);
+		addbox("Period",		250,300,keymap[SDLK_PERIOD],skin);
+		addbox("Pageup",		250,320,keymap[SDLK_PAGEUP],skin);
+		addbox("Pagedown",		250,340,keymap[SDLK_PAGEDOWN],skin);
+		addbox("Home",			250,360,keymap[SDLK_HOME],skin);
+		addbox("End",			250,380,keymap[SDLK_END],skin);
+		addbox("W",				250,400,keymap[SDLK_w],skin);
+		addbox("C",				250,420,keymap[SDLK_c],skin);
+		addbox("P",				250,440,keymap[SDLK_p],skin);
+		addbox("O",				250,460,keymap[SDLK_o],skin);
+		addbox("Backspace",		250,480,keymap[SDLK_BACKSPACE],skin);
+		addbox("F",				250,500,keymap[SDLK_f],skin);
+		addbox("Ins",			250,520,keymap[SDLK_INSERT],skin);
+		addbox("Del",			250,540,keymap[SDLK_DELETE],skin);
+		addbox("R",				250,560,keymap[SDLK_r],skin);
+		addbox("F1",			250,580,keymap[SDLK_F1],skin);
+		addbox("F2",			250,600,keymap[SDLK_F2],skin);
+		addbox("F3",			250,620,keymap[SDLK_F3],skin);
+		addbox("F4",			250,640,keymap[SDLK_F4],skin);
 
-		addbox("F5",740,30,keymap[SDLK_F5],skin);
-		addbox("F6",740,50,keymap[SDLK_F6],skin);
-		addbox("F7",740,70,keymap[SDLK_F7],skin);
-		addbox("F8",740,90,keymap[SDLK_F8],skin);
-		addbox("F9",740,110,keymap[SDLK_F9],skin);
-		addbox("F10",740,130,keymap[SDLK_F10],skin);
-		addbox("F11",740,150,keymap[SDLK_F11],skin);
-		addbox("U",740,170,keymap[SDLK_u],skin);
-		addbox("T",740,190,keymap[SDLK_t],skin);
-		addbox("M",740,210,keymap[SDLK_m],skin);
-		addbox("Return",740,230,keymap[SDLK_RETURN],skin);
-		addbox("S",740,250,keymap[SDLK_s],skin);
-		addbox("Esc",740,270,keymap[SDLK_ESCAPE],skin);
+		addbox("F5",			50,  0,keymap[SDLK_F5],skin)->alignment = ALIGN_TOPRIGHT;
+		addbox("F6",			50, 20,keymap[SDLK_F6],skin)->alignment = ALIGN_TOPRIGHT;
+		addbox("F7",			50, 40,keymap[SDLK_F7],skin)->alignment = ALIGN_TOPRIGHT;
+		addbox("F8",			50, 60,keymap[SDLK_F8],skin)->alignment = ALIGN_TOPRIGHT;
+		addbox("F9",			50, 80,keymap[SDLK_F9],skin)->alignment = ALIGN_TOPRIGHT;
+		addbox("F10",			50,100,keymap[SDLK_F10],skin)->alignment = ALIGN_TOPRIGHT;
+		addbox("F11",			50,120,keymap[SDLK_F11],skin)->alignment = ALIGN_TOPRIGHT;
+		addbox("U",				50,140,keymap[SDLK_u],skin)->alignment = ALIGN_TOPRIGHT;
+		addbox("T",				50,160,keymap[SDLK_t],skin)->alignment = ALIGN_TOPRIGHT;
+		addbox("M",				50,180,keymap[SDLK_m],skin)->alignment = ALIGN_TOPRIGHT;
+		addbox("Return",		50,200,keymap[SDLK_RETURN],skin)->alignment = ALIGN_TOPRIGHT;
+		addbox("S",				50,220,keymap[SDLK_s],skin)->alignment = ALIGN_TOPRIGHT;
+		addbox("Esc",			50,240,keymap[SDLK_ESCAPE],skin)->alignment = ALIGN_TOPRIGHT;
 
 
 

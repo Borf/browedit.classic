@@ -47,7 +47,7 @@ public:
 		cWindowSprite(cWindow* parent, TiXmlDocument &skin) : cWindowObject(parent, skin.FirstChildElement("skin")->FirstChildElement("frame"))
 		{
 			alignment = ALIGN_TOPLEFT;
-			moveto(10,30);
+			moveto(0,0);
 			resizeto(120,160);
 			sprite = new cSprite();
 		}
@@ -80,8 +80,8 @@ public:
 			tabs.push_back("Upper");
 			tabs.push_back("Mid");
 			tabs.push_back("Low");
-			moveto(135, 25);
-			resizeto(parent->pw() - 145,parent->ph()-35);
+			moveto(120, 0);
+			resizeto(parent->innerw() - 120,parent->innerh());
 		}
 		void tabchange(int oldtab)
 		{
@@ -302,7 +302,7 @@ public:
 		cActionChangeButton(cWindow* p, TiXmlDocument &skin) : cWindowButton(p,skin)
 		{
 			alignment = ALIGN_TOPLEFT;
-			moveto(10, 200);
+			moveto(0, 200);
 			resizeto(120, 20);
 			text = "Action 1";
 		}
@@ -326,7 +326,7 @@ public:
 			text = directions[dir];
 			resizeto(50,20);
 			alignment = ALIGN_TOPLEFT;
-			moveto(45+(int)(35*sin(dir/8.0f*2*PI)), 310+     (dir<5 ? (-20*dir) : -20*(8-dir))     );
+			moveto(35+(int)(35*sin(dir/8.0f*2*PI)), 300+     (dir<5 ? (-20*dir) : -20*(8-dir))     );
 
 		}
 
@@ -342,7 +342,7 @@ public:
 		cOkButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent,skin)
 		{
 			alignment = ALIGN_TOPLEFT;
-			moveto(10, 340);
+			moveto(0, parent->innerh()-20);
 			resizeto(120, 20);
 			text = "Ok";
 		}
@@ -389,7 +389,7 @@ public:
 		cCancelButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent, skin)
 		{
 			alignment = ALIGN_TOPLEFT;
-			moveto(10, 360);
+			moveto(0, parent->innerh()-40);
 			resizeto(120, 20);
 			text = "Cancel";
 		}
@@ -425,8 +425,8 @@ public:
 		vector<cWindowTree::cTreeNode*> nodes;
 		o = new cTree(this,nodes, skin);
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(140, 50);
-		o->resizeto(w - 160, h- 65);
+		o->moveto(125, 30);
+		o->resizeto(innerw() - 130, innerh()- 35);
 		objects["tree"] = o;
 		objects["actionbutton"] = new cActionChangeButton(this,skin);
 		objects["ok"] = new cOkButton(this,skin);

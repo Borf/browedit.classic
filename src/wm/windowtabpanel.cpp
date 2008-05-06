@@ -15,7 +15,6 @@ void cWindowTabPanel::draw(int cutoffleft, int cutoffright, int cutofftop, int c
 	xx = realx();
 	yy = realy2();
 	glEnable(GL_TEXTURE_2D);
-	glColor3f(1,1,1);
 	bool overtabs = false;
 	if (this->inobject() && parent->istopwindow() && ((Graphics.h()-mousey) - parent->py() - yy - h > -14))
 		overtabs = true;

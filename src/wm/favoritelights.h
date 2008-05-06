@@ -85,8 +85,8 @@ public:
 	public:
 		cFavoritesTree(cWindow* parent, vector<cWindowTree::cTreeNode*> nodes, TiXmlDocument &skin) : cWindowTree(parent, nodes,skin)
 		{
-			moveto(5,20);
-			resizeto(200, parent->ph()-30);
+			moveto(0,0);
+			resizeto(200, parent->innerh());
 			alignment = ALIGN_TOPLEFT;
 		}
 
@@ -199,7 +199,7 @@ public:
 		cWindowOkButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent,skin)
 		{
 			alignment = ALIGN_BOTTOM;
-			moveto(100, 20);
+			moveto(100, 0);
 			resizeto(100, 20);
 			text = GetMsg("wm/OK");
 		}
@@ -217,7 +217,7 @@ public:
 		cWindowCancelButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent,skin)
 		{
 			alignment = ALIGN_BOTTOM;
-			moveto(-100, 20);
+			moveto(-100, 0);
 			resizeto(100, 20);
 			text = GetMsg("wm/CANCEL");
 		}
@@ -261,71 +261,71 @@ public:
 
 		objects["list"] = new cFavoritesTree(this, nodes, skin);
 
-		addlabel("lblName", 220, 60, GetMsg("wm/favlight/NAME"));
-		addlabel("lblColor", 220, 80, GetMsg("wm/favlight/COLOR"));
-		addlabel("lblIntensity", 220, 100, GetMsg("wm/favlight/INTENSITY"));
-		addlabel("lblRange", 220, 120, GetMsg("wm/favlight/RANGE"));
-		addlabel("lblMaxlightincrement", 220, 140, GetMsg("wm/favlight/MAXLIGHTINCREMENT"));
-		addlabel("lblLightfalloff", 220, 160, GetMsg("wm/favlight/LIGHTFALLOFF"));
-		addlabel("lblCastsShadow", 220, 180, GetMsg("wm/favlight/CASTSSHADOW"));
-		addlabel("lblHeight", 220, 200, GetMsg("wm/favlight/HEIGHT"));
+		addlabel("lblName",				220, 0, GetMsg("wm/favlight/NAME"));
+		addlabel("lblColor",			220, 20, GetMsg("wm/favlight/COLOR"));
+		addlabel("lblIntensity",		220, 40, GetMsg("wm/favlight/INTENSITY"));
+		addlabel("lblRange",			220, 60, GetMsg("wm/favlight/RANGE"));
+		addlabel("lblMaxlightincrement",220, 80, GetMsg("wm/favlight/MAXLIGHTINCREMENT"));
+		addlabel("lblLightfalloff",		220, 100, GetMsg("wm/favlight/LIGHTFALLOFF"));
+		addlabel("lblCastsShadow",		220, 120, GetMsg("wm/favlight/CASTSSHADOW"));
+		addlabel("lblHeight",			220, 140, GetMsg("wm/favlight/HEIGHT"));
 		
 		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(370,60);
+		o->moveto(370,0);
 		o->resizeto(140,20);
 		objects["name"] = o;
 	
 		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(300,80);
+		o->moveto(300,20);
 		o->resizeto(70,20);
 		objects["colorr"] = o;
 
 		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(370,80);
+		o->moveto(370,20);
 		o->resizeto(70,20);
 		objects["colorg"] = o;
 		
 		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(440,80);
+		o->moveto(440,20);
 		o->resizeto(70,20);
 		objects["colorb"] = o;
 		
 		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(370,100);
+		o->moveto(370,40);
 		o->resizeto(140,20);
 		objects["intensity"] = o;
 
 		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(370,120);
+		o->moveto(370,60);
 		o->resizeto(140,20);
 		objects["range"] = o;
 
 		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(370,140);
+		o->moveto(370,80);
 		o->resizeto(140,20);
 		objects["maxlightincrement"] = o;
 
 		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(370,160);
+		o->moveto(370,100);
 		o->resizeto(140,20);
 		objects["lightfalloff"] = o;
 
 		o = new cWindowCheckBox(this);
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(370,182);
+		o->moveto(370,122);
 		objects["castshadow"] = o;
 
 		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(370,200);
+		o->moveto(370,140);
 		o->resizeto(140,20);
 		objects["height"] = o;
 
@@ -334,7 +334,7 @@ public:
 
 		objects["OkButton"] = new cWindowOkButton(this,skin);
 		objects["CancelButton"] = new cWindowCancelButton(this,skin);
-		objects["CancelButton"]->moveto(0,20);
+		objects["CancelButton"]->moveto(0,0);
 	}	
 };
 

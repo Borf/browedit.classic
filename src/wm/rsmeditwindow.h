@@ -25,7 +25,7 @@ class cRSMEditWindow : public cWindow
 		cWindowOpenButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent,skin)
 		{
 			alignment = ALIGN_TOPLEFT;
-			moveto(5, 20);
+			moveto(0, 0);
 			resizeto(50, 20);
 			text = "Open";
 		}
@@ -71,7 +71,7 @@ class cRSMEditWindow : public cWindow
 		cWindowSaveButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent,skin)
 		{
 			alignment = ALIGN_TOPLEFT;
-			moveto(55, 20);
+			moveto(50, 0);
 			resizeto(50, 20);
 			text = "Save";
 		}
@@ -140,7 +140,7 @@ class cRSMEditWindow : public cWindow
 		cWindowSaveAsButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent,skin)
 		{
 			alignment = ALIGN_TOPLEFT;
-			moveto(105, 20);
+			moveto(100, 0);
 			resizeto(50, 20);
 			text = "Save As";
 		}
@@ -459,8 +459,8 @@ class cRSMEditWindow : public cWindow
 	public:
 		cRGBPicker(cWindow* p) : cWindowRGBPicker(p)
 		{
-			moveto(160,20);
-			resizeto(p->pw()-170,20);
+			moveto(150,0);
+			resizeto(parent->innerw()-150,20);
 			alignment = ALIGN_TOPLEFT;
 		}
 
@@ -503,8 +503,8 @@ public:
 		objects["SaveAsButton"] = new cWindowSaveAsButton(this,skin);
 
 		cWindowObject* o = new cWindowScrollPanel(this, skin);
-		o->moveto(w-138, 50);
-		o->resizeto(140, h-60);
+		o->moveto(innerw()-140, 20);
+		o->resizeto(140, innerh()-20);
 		o->alignment = ALIGN_TOPLEFT;
 		((cWindowScrollPanel*)o)->innerheight = 1000;
 		((cWindowScrollPanel*)o)->innerwidth = 128;
@@ -520,10 +520,10 @@ public:
 	void resizeto(int ww, int hh)
 	{
 		cWindow::resizeto(ww,hh);
-		objects["model"]->resizeto(w-150, h-60);
-		objects["scroll"]->moveto(w-138, 50);
-		objects["scroll"]->resizeto(140, h-60);
-		objects["rgbpicker"]->resizeto(w-170,20);
+		objects["model"]->resizeto(innerw()-140, innerh()-20);
+		objects["scroll"]->moveto(innerw()-140, 20);
+		objects["scroll"]->resizeto(140, innerh()-20);
+		objects["rgbpicker"]->resizeto(innerw()-150,20);
 	}
 
 
@@ -537,8 +537,8 @@ public:
 
 		cWindowModel* o = new cWindowModel(this);
 		o->SetText(1, filename);
-		o->moveto(10,50);
-		o->resizeto(w-140, h-60);
+		o->moveto(0,20);
+		o->resizeto(innerw()-140, innerh()-20);
 		o->alignment = ALIGN_TOPLEFT;
 
 		objects["model"] = o;

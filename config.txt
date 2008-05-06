@@ -57,7 +57,7 @@ font=tahoma
 grf=d:\games\newro\sdata.grf
 //grf=d:\games\newro\data.grf
 undostack=50
-skin=data/skins/ro.xml
+skin=data/skins/HamVista.xml
 
 [Arcturus]
 rodir=d:\games\arcturus\

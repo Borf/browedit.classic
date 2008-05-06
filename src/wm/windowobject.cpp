@@ -10,7 +10,7 @@ void cWindowObject::draw(int cutoffleft, int cutoffright, int cutofftop, int cut
 {
 	int xx, yy;
 	xx = realx();
-	yy = realy();
+	yy = realy2();
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, parent->texture->texid());
 	glBegin(GL_QUADS);
@@ -89,9 +89,9 @@ int cWindowObject::realx()
 	if((alignment & ALIGN_HCENTER) != 0)
 		return (parent->pw()/2)-(w/2)+x;
 	else if ((alignment & ALIGN_HLEFT) != 0)
-		return x;
+		return parent->skinOffLeft+x;
 	else if ((alignment & ALIGN_HRIGHT) != 0)
-		return parent->pw()-x-w;
+		return parent->pw()-x-w-parent->skinOffRight;
 	return 0;
 }
 int cWindowObject::realy()
@@ -99,9 +99,9 @@ int cWindowObject::realy()
 	if((alignment & ALIGN_VCENTER) != 0)
 		return (parent->ph()/2)-(h/2)+y;
 	else if ((alignment & ALIGN_VBOTTOM) != 0)
-		return y;
+		return y+parent->skinOffBottom;
 	else if ((alignment & ALIGN_VTOP) != 0)
-		return parent->ph()-y-h;
+		return parent->ph()-y-h-parent->skinOffTop;
 	return 0;
 }
 int cWindowObject::realy2()
@@ -109,8 +109,8 @@ int cWindowObject::realy2()
 	if((alignment & ALIGN_VCENTER) != 0)
 		return (parent->ph2()/2)-(h/2)+y;
 	else if ((alignment & ALIGN_VBOTTOM) != 0)
-		return y;
+		return y+parent->skinOffBottom;
 	else if ((alignment & ALIGN_VTOP) != 0)
-		return parent->ph2()-y-h;
+		return parent->ph2()-y-h-parent->skinOffTop;
 	return 0;
 }

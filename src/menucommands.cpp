@@ -1455,8 +1455,6 @@ MENUCOMMAND(gatcollision2)
 
 	Log(3,0, "Done Model boundingbox calculations");
 
-	bool obstructed;
-
 	for(x = 0; x < Graphics.world.width*2; x++)
 	{
 		for(y = 0; y < Graphics.world.height*2; y++)

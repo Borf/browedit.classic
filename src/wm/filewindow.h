@@ -41,7 +41,7 @@ public:
 		resizable = false;
 		visible = true;
 
-		h = 300;
+		h = Graphics.h()-20;
 		w = 350;
 		title = GetMsg("wm/file/TITLE");
 		center();

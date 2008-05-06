@@ -93,8 +93,8 @@ public:
 			GLfloat colors[4];
 			glGetFloatv(GL_CURRENT_COLOR, colors);
 			int xx, yy;
-			xx = realx();
-			yy = realy();
+			xx = px();
+			yy = py();
 			if (loaded)
 			{
 				if (highlightmode == 1)

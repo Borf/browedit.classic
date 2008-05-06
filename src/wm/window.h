@@ -89,6 +89,8 @@ protected:
 	int skinRightWidth;
 
 
+
+
 	int titlexoff,titleyoff;
 
 
@@ -96,6 +98,12 @@ protected:
 
 
 public:
+	int skinOffLeft;
+	int skinOffRight;
+	int skinOffTop;
+	int skinOffBottom;
+
+	
 	float fontcolor[3];
 	bool savewindow;
 	string defaultobject;
@@ -147,6 +155,13 @@ public:
 		skinLeft =		atoi(wSkin->FirstChildElement("left")->FirstChild()->Value());
 		skinRightWidth = atoi(wSkin->FirstChildElement("right")->Attribute("width"));
 		skinRight =		atoi(wSkin->FirstChildElement("right")->FirstChild()->Value());
+
+		wSkin = wSkin->FirstChildElement("offsets");
+		skinOffLeft =	atoi(wSkin->FirstChildElement("left")->FirstChild()->Value());
+		skinOffRight =	atoi(wSkin->FirstChildElement("right")->FirstChild()->Value());
+		skinOffTop =	atoi(wSkin->FirstChildElement("top")->FirstChild()->Value());
+		skinOffBottom = atoi(wSkin->FirstChildElement("bottom")->FirstChild()->Value());
+
 	}
 	virtual ~cWindow()
 	{
@@ -166,6 +181,8 @@ public:
 	int  pw()						{ return w; }
 	int  ph()						{ return rolledup ? 16 : h; }
 	int  ph2()						{ return h; }
+	int  innerw()					{ return w-skinOffLeft-skinOffRight; }
+	int  innerh()					{ return h-skinOffTop-skinOffBottom; }
 	bool modality()					{ return modal; }
 	void istopwindow(bool b)		{ topwindow = b; }
 	bool istopwindow()				{ return topwindow; }

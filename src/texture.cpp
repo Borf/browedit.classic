@@ -90,6 +90,11 @@ void cTextureLoaders::load(string filename, cTexture* tex)
 			if(loaders[i]->extensions[ii] == ext)
 			{
 				cFile* pFile = fs.open(filename);
+				if(!pFile)
+				{
+					Log(2,0,"Error loading texture %s!", filename.c_str());
+					return;
+				}
 				loaders[i]->load(pFile->data, pFile->size, tex);
 				if(tex->data == NULL)
 					Log(2,0,"Error loading texture %s!", filename.c_str());

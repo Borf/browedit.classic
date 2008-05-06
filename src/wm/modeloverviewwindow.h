@@ -95,8 +95,8 @@ public:
 	public:
 		cModelOverViewTree(cWindow* parent, vector<cWindowTree::cTreeNode*> nodes, TiXmlDocument &skin) : cWindowTree(parent, nodes, skin)
 		{
-			moveto(5,20);
-			resizeto(400, parent->ph()-30);
+			moveto(0,0);
+			resizeto(parent->innerw(), parent->innerh());
 			alignment = ALIGN_TOPLEFT;
 		}
 
@@ -254,7 +254,7 @@ public:
 	void resizeto(int ww, int hh)
 	{
 		cWindow::resizeto(ww, hh);
-		objects["list"]->resizeto(ww-10, hh-25);
+		objects["list"]->resizeto(innerw(), innerh());
 	}
 };
 

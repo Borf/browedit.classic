@@ -15,7 +15,7 @@ public:
 	cAmbientLightWindowOkButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent,skin)
 	{
 		alignment = ALIGN_BOTTOM;
-		moveto(0, 20);
+		moveto(0, 0);
 		resizeto(100, 20);
 		text = "Ok";
 	}
@@ -50,8 +50,8 @@ public:
 		resizable = false;
 		visible = true;
 
-		h = 200;
-		w = 350;
+		h = 150;
+		w = 310+skinOffLeft+skinOffRight;
 		title = GetMsg("wm/ambient/TITLE");
 		center();
 
@@ -62,70 +62,70 @@ public:
 
 		cWindowObject* o;
 
-		addlabel("lblAmbient", 15,20,GetMsg("wm/ambient/AMBIENT"));
-		addlabel("lblDiffuse", 15,40,GetMsg("wm/ambient/DIFFUSE"));
-		addlabel("lblShadow",15,60,GetMsg("wm/ambient/SHADOW"));
-		addlabel("lblAlpha", 15,80,GetMsg("wm/ambient/ALPHA"));
+		addlabel("lblAmbient", 0,0,GetMsg("wm/ambient/AMBIENT"));
+		addlabel("lblDiffuse", 0,20,GetMsg("wm/ambient/DIFFUSE"));
+		addlabel("lblShadow",0,40,GetMsg("wm/ambient/SHADOW"));
+		addlabel("lblAlpha", 0,60,GetMsg("wm/ambient/ALPHA"));
 
 		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(120,20);
+		o->moveto(100,0);
 		o->resizeto(70,20);
 		objects["ambientr"] = o;
 
 		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(190,20);
+		o->moveto(170,0);
 		o->resizeto(70,20);
 		objects["ambientg"] = o;
 		
 		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(260,20);
+		o->moveto(240,0);
 		o->resizeto(70,20);
 		objects["ambientb"] = o;
 		///////////////////////////////////////////////
 
 		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(120,40);
+		o->moveto(100,20);
 		o->resizeto(70,20);
 		objects["diffuser"] = o;
 
 		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(190,40);
+		o->moveto(170,20);
 		o->resizeto(70,20);
 		objects["diffuseg"] = o;
 
 		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(260,40);
+		o->moveto(240,20);
 		o->resizeto(70,20);
 		objects["diffuseb"] = o;
 		///////////////////////////////////////////////
 		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(120,60);
+		o->moveto(100,40);
 		o->resizeto(70,20);
 		objects["shadowr"] = o;
 
 		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(190,60);
+		o->moveto(170,40);
 		o->resizeto(70,20);
 		objects["shadowg"] = o;
 
 		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(260,60);
+		o->moveto(240,40);
 		o->resizeto(70,20);
 		objects["shadowb"] = o;
 		/////////////////////////////////////////////////
 
 		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(120,80);
+		o->moveto(100,60);
 		o->resizeto(210,20);
 		objects["alpha"] = o;
 
