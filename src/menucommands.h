@@ -46,6 +46,7 @@ MENUCOMMAND(dolightmapsall);
 MENUCOMMAND(dolightmapslights);
 MENUCOMMAND(dolightmapsnoshadow);
 MENUCOMMAND(dolightmaps2);
+MENUCOMMAND(smoothlightmaps);
 MENUCOMMAND(fixcolors);
 MENUCOMMAND(clearobjects);
 MENUCOMMAND(cleareffects);

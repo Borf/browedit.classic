@@ -1691,6 +1691,9 @@ MENUCOMMAND(dolightmaps2)
 
 	Graphics.world.loaded = false;
 
+
+	unsigned long timer = tickcount();
+
 	Log(3,0, "Done Model boundingbox calculations");
 	for(y = 0; y < Graphics.world.height && rendering; y++)
 	{
@@ -1766,7 +1769,11 @@ MENUCOMMAND(dolightmaps2)
 				Graphics.camerapointer.x = -10*x + 5;
 				Graphics.camerapointer.y = -10*(Graphics.world.height-y) + 5;
 			}
-			mainloop();
+			if(tickcount() - timer > 100)
+			{
+				mainloop();
+				timer = tickcount();
+			}
 		}
 	}
 
@@ -1888,9 +1895,62 @@ MENUCOMMAND(dolightmaps2)
 		}
 	}
 */
+	return true;
+}
 
 
+BYTE* getLightMap(int x, int y)
+{
+	cCube* c = &Graphics.world.cubes[y/6][x/6];
+	if(c->tileup != -1)
+	{
+		cTile* t = &Graphics.world.tiles[c->tileup];
+		if(t->lightmap != -1)
+		{
+			cLightmap* l = Graphics.world.lightmaps[t->lightmap];
+			return (BYTE*)l->buf + (8*((y%6)+1) + ((x%6)+1));
+		}
+	}
+	return NULL;
+}
 
+MENUCOMMAND(smoothlightmaps)
+{
+	int x,y;
+	char* buf = new char[Graphics.world.height*6*Graphics.world.width*6];
+	for(x = 0; x < Graphics.world.width*6; x++)
+	{
+		for(y = 0; y < Graphics.world.height*6; y++)
+		{
+			int total = 0;
+			int count = 0;
+			for(int xx = -1; xx < 2; xx++)
+			{
+				for(int yy = -1; yy < 2; yy++)
+				{
+					if(x+xx >= 0 && y+yy >= 0 && x+xx < Graphics.world.width*6 && y+yy < Graphics.world.height*6)
+					{
+						total += *getLightMap(x+xx,y+yy);
+						count++;
+					}
+				}
+			}
+			if(total/count != *getLightMap(x,y))
+				Sleep(0);
+			buf[x+Graphics.world.width*6*y] = min(max(total / count,0),255);
+		}
+	}
+
+	for(x = 0; x < Graphics.world.width*6; x++)
+	{
+		for(y = 0; y < Graphics.world.height*6; y++)
+		{
+			*getLightMap(x,y) = buf[x+Graphics.world.width*6*y];
+		}
+	}
+	for(x = 0; x < Graphics.world.width; x++)
+		for(y = 0; y < Graphics.world.height; y++)
+			Graphics.world.reallightmaps[y][x]->reset();
 
 
 	return true;
