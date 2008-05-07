@@ -2155,38 +2155,6 @@ void cWorld::draw()
 		glColor4f(1,1,1,1);
 
 
-		if (editmode != MODE_EFFECTS && editmode != MODE_LIGHTS && editmode != MODE_SOUNDS)
-		{
-			glColor4f(1,1,1,1);
-			glEnable(GL_TEXTURE_2D);
-			glEnable(GL_BLEND);
-			for(i = 0; i < lights.size(); i++)
-			{
-				cVector3 p = lights[i].pos;
-				glTranslatef(5*lights[i].pos.x,-lights[i].pos.y-5, 5*(2*height-lights[i].pos.z));
-				glColor3f(1,1,1);
-				light2->draw();
-				glColor3f(lights[i].color.x, lights[i].color.y, lights[i].color.z);
-				light->draw();
-				glTranslatef(-5*lights[i].pos.x, lights[i].pos.y+5, -5*(2*height-lights[i].pos.z));
-			}
-			glColor3f(1,1,1);
-			for(i = 0; i < effects.size(); i++)
-			{
-				cVector3 p = effects[i].pos;
-				glTranslatef(5*effects[i].pos.x,-effects[i].pos.y, 5*(2*height-effects[i].pos.z));
-				effect->draw();
-				glTranslatef(-5*effects[i].pos.x, effects[i].pos.y, -5*(2*height-effects[i].pos.z));
-			}
-			for(i = 0; i < sounds.size(); i++)
-			{
-				glTranslatef(5*sounds[i].pos.x, -sounds[i].pos.y, 5*(2*height-sounds[i].pos.z));
-				sound->draw();
-				glTranslatef(-5*sounds[i].pos.x, sounds[i].pos.y, -5*(2*height-sounds[i].pos.z));
-			}
-		}
-
-
 		if(editmode == MODE_OBJECTS && Graphics.showobjects)
 		{
 			glDisable(GL_TEXTURE_2D);
@@ -2397,6 +2365,7 @@ void cWorld::draw()
 		for(i = 0; i < lights.size(); i++)
 		{
 			cVector3 p = lights[i].pos;
+			glTranslatef(5*lights[i].pos.x,lights[i].pos.y+5, 5*(2*height-lights[i].pos.z));
 			glColor3f(1,1,1);
 			light2->draw();
 
@@ -2419,10 +2388,7 @@ void cWorld::draw()
 				static GLUquadric* sph = NULL;
 				if (sph == NULL)
 					sph = gluNewQuadric();
-				glPushMatrix();
-				glTranslatef(5*lights[i].pos.x,lights[i].pos.y, 5*(2*height-lights[i].pos.z));
 				gluSphere(sph, lights[i].range,32,32);
-				glPopMatrix();
 				glDepthMask(GL_TRUE);
 
 				//glEnable(GL_DEPTH_TEST);
@@ -2433,7 +2399,6 @@ void cWorld::draw()
 			}
 			else
 				glColor3f(lights[i].color.x, lights[i].color.y, lights[i].color.z);
-			glTranslatef(5*lights[i].pos.x,lights[i].pos.y+5, 5*(2*height-lights[i].pos.z));
 			light->draw();
 			glTranslatef(-5*lights[i].pos.x,-lights[i].pos.y-5, -5*(2*height-lights[i].pos.z));
 		}
