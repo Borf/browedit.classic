@@ -11,8 +11,8 @@
 		<fontcolor>000000</fontcolor>
 		<top height="28">0</top>
 		<left width="140">0</left>
-		<right width="75">369</right>
-		<bottom height="8">250</bottom>
+		<right width="76">369</right>
+		<bottom height="9">250</bottom>
 		<offsets>
 			<top>28</top>
 			<bottom>7</bottom>
@@ -52,10 +52,10 @@
 		<scroll>
 			<width>16</width>
 			<left>0</left>
-			<centerheight>15</centerheight>
+			<centerheight>10</centerheight>
 			<background>
 				<left>0</left>
-				<top>299</top>
+				<top>298</top>
 				<height>1</height>
 			</background>
 			<buttonup>
@@ -68,8 +68,8 @@
 				<top>340</top>
 				<height>16</height>
 			</buttondown>
-			<top height="5">303</top>
-			<bottom height="5">334</bottom>
+			<top height="5">300</top>
+			<bottom height="6">336</bottom>
 		</scroll>
 	</list>
 	<frame>
