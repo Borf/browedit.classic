@@ -247,6 +247,10 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 						selsizex = selsizey;
 						selsizey = a;
 					}
+					if(clipboardgat.size() != selsizex)
+						break;
+					if(clipboardgat[0].size() != selsizey)
+						break;
 
 					
 					undostack.push(new cUndoTexture(posx-(int)selsizex+1, posy-(int)selsizey+1, posx+1, posy+1));
