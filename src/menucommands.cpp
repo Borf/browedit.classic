@@ -1916,6 +1916,10 @@ BYTE* getLightMap(int x, int y)
 
 MENUCOMMAND(smoothlightmaps)
 {
+	string strFactor = Graphics.WM.InputWindow("Smoothing factor:", "1");
+	if(strFactor == "")
+		return true;
+	float factor = atof(strFactor.c_str());
 	int x,y;
 	char* buf = new char[Graphics.world.height*6*Graphics.world.width*6];
 	for(x = 0; x < Graphics.world.width*6; x++)
@@ -1930,7 +1934,10 @@ MENUCOMMAND(smoothlightmaps)
 				{
 					if(x+xx >= 0 && y+yy >= 0 && x+xx < Graphics.world.width*6 && y+yy < Graphics.world.height*6)
 					{
-						total += *getLightMap(x+xx,y+yy);
+						if(xx == 0 && yy == 0)
+							total += factor * *getLightMap(x+xx,y+yy);
+						else
+							total += *getLightMap(x+xx,y+yy);
 						count++;
 					}
 				}
