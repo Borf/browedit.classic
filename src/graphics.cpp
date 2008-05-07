@@ -376,7 +376,7 @@ int cGraphics::init()
 		return -1;
 	}
 
-//	SDL_WM_SetIcon(SDL_LoadBMP("data/domovsneko.bmp"), NULL);
+	SDL_WM_SetIcon(SDL_LoadBMP("data/icon.bmp"), NULL);
 	char buf[100];
 	sprintf(buf, "Borf's Ragnarok Online World Editor, revision %i", getversion());
 	SDL_WM_SetCaption(buf, "BROWEdit");

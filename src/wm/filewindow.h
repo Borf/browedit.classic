@@ -22,7 +22,7 @@ class cFileWindow : public cWindow
 			callback = pCallback;
 			alignment = ALIGN_BOTTOMRIGHT;
 			resizeto(100,20);
-			moveto(10,10);
+			moveto(0,0);
 			text = "Load";
 		}
 
@@ -52,13 +52,13 @@ public:
 		
 		objects["close"] = new cWindowCloseButton(this,skin);
 
-		addlabel("lblLookIn", 15,20,GetMsg("wm/file/SELECTMAP"));
+//		addlabel("lblLookIn", 15,20,GetMsg("wm/file/SELECTMAP"));
 		
 
 		o = new cWindowListBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(5,40);
-		o->resizeto(w-10, ((h-80)/12)*12-8);
+		o->moveto(0,0);
+		o->resizeto(innerw(), innerh()-20);
 		objects["filebox"] = o;
 		
 		for(unsigned int i = 0; i < fs.locations.size(); i++)
