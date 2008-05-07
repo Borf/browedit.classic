@@ -38,7 +38,7 @@ public:
 	cFileWindow(cTexture* t, cFont* f, void (*pCallback)(string), TiXmlDocument &skin) : cWindow(t,f,skin)
 	{
 		wtype = WT_FILE;
-		resizable = false;
+		resizable = true;
 		visible = true;
 
 		h = Graphics.h()-20;
@@ -74,6 +74,14 @@ public:
 		mergesort<string>(((cWindowListBox*)o)->values, compare<string>);
 
 		objects["OkButton"] = new cOkButton(this, pCallback,skin);
+	}
+
+
+	void resizeto(int ww, int hh)
+	{
+		cWindow::resizeto(ww,hh);
+		objects["filebox"]->resizeto(innerw(), innerh()-20);
+
 	}
 };
 
