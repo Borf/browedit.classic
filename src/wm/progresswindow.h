@@ -24,8 +24,8 @@ class cProgressWindow : public cWindow
 		{
 			cancel = pCancel;
 			text = "Cancel";
-			alignment = ALIGN_TOPLEFT;
-			moveto(5,70);
+			alignment = ALIGN_BOTTOMLEFT;
+			moveto(0,0);
 
 		}
 
@@ -54,8 +54,8 @@ public:
 		
 		o = new cWindowProgressBar(this);
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(5,40);
-		o->resizeto(w-10, 10);
+		o->moveto(0,0);
+		o->resizeto(innerw(), 10);
 		objects["progress"] = o;
 
 		objects["cancel"] = new cCancelButton(this, cancel,skin);

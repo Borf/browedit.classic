@@ -33,6 +33,7 @@ extern double mouse3dxstart, mouse3dystart, mouse3dzstart;
 extern void mainloop();
 extern cWindow*				draggingwindow;
 extern cWindowObject*		draggingobject;
+extern bool IsLegal2;
 
 
 void cWorld::load()
@@ -872,6 +873,12 @@ class cAddQuadtreeConfirm : public cConfirmWindow::cConfirmWindowCaller
 
 void cWorld::save()
 {
+	if(!IsLegal2)
+	{
+		Graphics.WM.MessageBox("This copy of browedit is not activated. Please don't use it");
+		return;
+	}
+
 	srand(tickcount());
 	if (!loaded)
 		return;

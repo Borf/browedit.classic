@@ -1,5 +1,5 @@
 language=english
-setting=ROdesktop
+setting=ROportable
 
 [RO]
 rodir=c:\Program Files\gravity\ro\
@@ -37,7 +37,7 @@ grf=..\..\ro\data.grf
 undostack=50
 bgcolor=128,0,256
 notilecolor=255,255,128
-skin=data/skins/ro.xml
+skin=data/skins/HamVista.xml
 
 [ROdesktop]
 rodir=d:\games\newro\

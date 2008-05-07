@@ -17,7 +17,7 @@ public:
 	cWindowOkButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent, skin)
 	{
 		alignment = ALIGN_BOTTOM;
-		moveto(100, 20);
+		moveto(100, 0);
 		resizeto(100, 20);
 		text = GetMsg("wm/OK");
 	}
@@ -39,7 +39,7 @@ public:
 	cWindowCancelButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent,skin)
 	{
 		alignment = ALIGN_BOTTOM;
-		moveto(-100, 20);
+		moveto(-100, 0);
 		resizeto(100, 20);
 		text = GetMsg("wm/CANCEL");
 	}

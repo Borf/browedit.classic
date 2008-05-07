@@ -1555,6 +1555,22 @@ MENUCOMMAND(dolightmapsnoshadow)
 	
 }
 
+class cWindowPreviewButton : public cWindowButton
+{
+public:
+	cWindowPreviewButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent, skin)
+	{
+		alignment = ALIGN_TOPLEFT;
+		moveto(0,20);
+		resizeto(100,20);
+		text = "Preview";
+	}
+	void click()
+	{
+		Graphics.world.loaded = !Graphics.world.loaded;
+	}
+};
+
 
 MENUCOMMAND(dolightmaps2)
 {
@@ -1568,6 +1584,7 @@ MENUCOMMAND(dolightmaps2)
 	Graphics.WM.addwindow(w);
 	w->objects["progress"]->SetInt(1,0);
 	w->objects["progress"]->SetInt(2,Graphics.world.height * Graphics.world.width);
+	w->objects["toggle"] = new cWindowPreviewButton(w, Graphics.WM.skin);
 
 	mainloop();
 
@@ -1672,21 +1689,18 @@ MENUCOMMAND(dolightmaps2)
 	for(i = 0; i < Graphics.world.models.size(); i++)
 		Graphics.world.models[i]->precollides();
 
+	Graphics.world.loaded = false;
+
 	Log(3,0, "Done Model boundingbox calculations");
 	for(y = 0; y < Graphics.world.height && rendering; y++)
-//	for(y = 40; y < 60; y++)
 	{
 		for(x = 0; x < Graphics.world.width && rendering; x++)
-//		for(x = 40; x < 60; x++)
 		{
 			cCube* c = &Graphics.world.cubes[y][x];
 			if(selectonly && !c->selected)
 				continue;
 //			Log(3,0,GetMsg("PERCENTAGE"), (y*Graphics.world.width+x) / (float)(Graphics.world.height * Graphics.world.width)*100); // %f %%
 			w->objects["progress"]->SetInt(0, y*Graphics.world.width + x);
-			Graphics.camerapointer.x = -10*x + 5;
-			Graphics.camerapointer.y = -10*(Graphics.world.height-y) + 5;
-			mainloop();
 			if(c->tileup == -1)
 				continue;
 
@@ -1696,8 +1710,11 @@ MENUCOMMAND(dolightmaps2)
 			{
 				for(int xx = 1; xx < 7; xx++)
 				{
+					float fx = (xx-1)/6.0f;
+					float fy = (yy-1)/6.0f;
+
 					cVector3 worldpos = cVector3(	10*x+(10/6.0)*(xx-1), 
-													-((c->cell1+c->cell2+c->cell3+c->cell4)/4),
+													-((c->cell1*(1-fx)+c->cell2*(fx)) + (c->cell1*(fy)+c->cell3*(1-fy))-c->cell1),
 													10*y+(10/6.0)*(yy-1));
 					
 					int from = 0;
@@ -1710,20 +1727,22 @@ MENUCOMMAND(dolightmaps2)
 					for(i = from; i < to; i++)
 					{
 						if(buf[yy*8 + xx] == 255)
-							continue;
+							break;
 
 						cLight* l = &Graphics.world.lights[i];
-						cVector3 diff = worldpos - cVector3(l->pos.x*5, l->pos.y, l->pos.z*5);
+						cVector3 lightpos = cVector3(l->pos.x*5, l->pos.y, l->pos.z*5);
+						cVector3 diff = worldpos - lightpos;
 						float length = diff.Magnitude();
 						if(length > l->range)
 							continue;
 
 						bool obstructed = false;
+
 						if(l->givesshadow && !noshadow)
 						{
 							for(unsigned int ii = 0; ii < Graphics.world.models.size() && !obstructed; ii++)
 							{
-								if(Graphics.world.models[ii]->collides(worldpos, cVector3(l->pos.x*5, l->pos.y, l->pos.z*5)))
+								if(Graphics.world.models[ii]->collides(worldpos, lightpos))
 									obstructed = true;
 							}
 						}
@@ -1738,18 +1757,21 @@ MENUCOMMAND(dolightmaps2)
 							buf[64 + 3*(yy*8 + xx)+1] = min(255, buf[64 + 3*(yy*8 + xx)+1] + max(0, (int)(intensity*l->color.y)));
 							buf[64 + 3*(yy*8 + xx)+2] = min(255, buf[64 + 3*(yy*8 + xx)+2] + max(0, (int)(intensity*l->color.z)));
 						}
-						else
-						{
-							Sleep(0);
-						}
 					}
 				}
 			}
 			Graphics.world.reallightmaps[y][x]->reset();
+			if(Graphics.world.loaded)
+			{
+				Graphics.camerapointer.x = -10*x + 5;
+				Graphics.camerapointer.y = -10*(Graphics.world.height-y) + 5;
+			}
+			mainloop();
 		}
 	}
 
 	Graphics.world.fixgridding();
+	Graphics.world.loaded = true;
 
 
 	w->close();
@@ -2349,10 +2371,10 @@ MENUCOMMAND(cleantextures)
 	vector<bool> used;
 	int i;
 	used.resize(Graphics.world.textures.size(), false);
+
+
 	for(i = 0; i < (int)Graphics.world.tiles.size(); i++)
-	{
 		used[Graphics.world.tiles[i].texture] = true;
-	}
 	
 	for(i = (int)used.size()-1; i >= 0; i--)
 	{
@@ -2364,12 +2386,11 @@ MENUCOMMAND(cleantextures)
 					Graphics.world.tiles[i].texture--;
 			}
 			TextureCache.unload(Graphics.world.textures[i]->texture);
-			delete Graphics.world.textures[i]->texture;
 			delete Graphics.world.textures[i];
 			Graphics.world.textures.erase(Graphics.world.textures.begin() + i);
 		}
 	}
-
+	Graphics.texturestart = 0;
 	return true;
 }
 

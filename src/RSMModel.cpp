@@ -844,7 +844,10 @@ bool cRSMModel::collides2(cBoundingbox* box, int mesh, float* transf, bool only,
 	glPushMatrix();
 	bool b = meshes[mesh]->collides(box,transf, meshes.size() == 1, this, start, end);
 	if(b)
+	{
+		glPopMatrix();
 		return true;
+	}
 
 	for(unsigned int i = 0; i < meshes.size(); i++)
 	{
@@ -852,7 +855,10 @@ bool cRSMModel::collides2(cBoundingbox* box, int mesh, float* transf, bool only,
 		{
 			b = collides2((mesh == 0) ? box : NULL, i, meshes[mesh]->trans, only, start, end);
 			if (b)
+			{
+				glPopMatrix();
 				return true;
+			}
 		}
 	}
 	glPopMatrix();
@@ -1009,29 +1015,17 @@ bool cRSMModelMesh::collides(cBoundingbox* box, float* ptransf, bool only, cRSMM
 		triangle[1] = cVector3(v[0], v[1], v[2]);
 		MatrixMultVect(ModelMatrix, vertices[f->v[2]], v);
 		triangle[2] = cVector3(v[0], v[1], v[2]);
-		glPopMatrix();
-
-/*		glBegin(GL_LINE_LOOP);
-			glVertex3f(triangle[0].x, triangle[0].y, triangle[0].z);
-			glVertex3f(triangle[1].x, triangle[1].y, triangle[1].z);
-			glVertex3f(triangle[2].x, triangle[2].y, triangle[2].z);
-		glEnd();*/
-
-//		cVector3 normal = Normal(triangle);
-//		cVector3 camera = cVector3(0,1000,0);
-
-//		if (camera.Dot(normal) < 0)
-//			continue;
 
 		float t = 0;
 
 		if (LineIntersectPolygon(triangle, 3, end, start, t))
 		{
+			glPopMatrix();
 			return true;
 		}
 	}
 
-
+	glPopMatrix();
 	return false; 
 }
 
@@ -1056,7 +1050,7 @@ void cRSMModel::precollides()
 	glRotatef(-rot.z, 0.0, 0.0, 1.0);
 	glRotatef(rot.y, 0.0, 1.0, 0.0);
 
-	glScalef(5*scale.x, -5*scale.y, 5*scale.z);
+	glScalef(scale.x, -scale.y, scale.z);
 
 	glTranslatef(-bb2.bbrange[0], -bb2.bbmin[1], -bb2.bbrange[2]);
 
