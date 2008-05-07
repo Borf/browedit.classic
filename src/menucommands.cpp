@@ -1927,7 +1927,7 @@ MENUCOMMAND(smoothlightmaps)
 		for(y = 0; y < Graphics.world.height*6; y++)
 		{
 			int total = 0;
-			int count = 0;
+			float count = 0;
 			for(int xx = -1; xx < 2; xx++)
 			{
 				for(int yy = -1; yy < 2; yy++)
@@ -1935,10 +1935,15 @@ MENUCOMMAND(smoothlightmaps)
 					if(x+xx >= 0 && y+yy >= 0 && x+xx < Graphics.world.width*6 && y+yy < Graphics.world.height*6)
 					{
 						if(xx == 0 && yy == 0)
+						{
 							total += factor * *getLightMap(x+xx,y+yy);
+							count+=factor;
+						}
 						else
+						{
 							total += *getLightMap(x+xx,y+yy);
-						count++;
+							count++;
+						}
 					}
 				}
 			}
