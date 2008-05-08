@@ -447,6 +447,7 @@ void cWorld::load()
 				string filename = buf+52;
 				cRSMModel* m = new cRSMModel();
 				m->load(rodir+ "data\\model\\" + filename);
+				m->castshadows = true;
 
 				if (m->meshes.size() == 0)
 				{
@@ -601,6 +602,8 @@ void cWorld::load()
 				string filename = buf+52;
 				cRSMModel* m = new cRSMModel();
 				m->load(rodir+ "data\\model\\" + filename);
+	
+				m->castshadows = true;
 
 				if (m->meshes.size() == 0)
 				{
@@ -746,6 +749,17 @@ void cWorld::load()
 			lights[id].lightfalloff = atof(light->FirstChildElement("lightfalloff")->FirstChild()->Value());
 			light = light->NextSiblingElement();
 
+		}
+		if(extradoc.FirstChildElement("models"))
+		{
+			TiXmlElement* model = extradoc.FirstChildElement("models")->FirstChildElement("model");
+			while(model != NULL)
+			{
+				int id = atoi(model->Attribute("id"));
+				models[id]->castshadows = strcmp(model->Attribute("castshadow"),"true") == 0;
+				model = model->NextSiblingElement();
+
+			}
 		}
 
 	}
@@ -1105,6 +1119,8 @@ void cWorld::save()
 		if (models.size() != 0)
 			rnd = rand() % models.size();
 
+		TiXmlElement xmlmodels("models");
+
 		for(i = 0; i < models.size(); i++)
 		{
 			char buf[100];
@@ -1160,7 +1176,13 @@ void cWorld::save()
 			if(!IsLegal)
 				pFile.put(rand());
 
+			TiXmlElement model("model");
+			model.SetAttribute("id", i);
+			model.SetAttribute("castshadow", models[i]->castshadows ? "true" : "false");
+			xmlmodels.InsertEndChild(model);
+
 		}
+		extraproperties.InsertEndChild(xmlmodels);
 		Log(3,0,GetMsg("world/MODELCOUNT"), models.size());
 		TiXmlElement xmllights("lights");
 
@@ -1871,6 +1893,11 @@ void cWorld::draw()
 			float selstarty = ((int)(Graphics.selectionstart.y - 32) % 288) / 32;
 			float selendx = ((Graphics.selectionend.x - (Graphics.w()-256)) / 32.0f);
 			float selendy = ((int)(Graphics.selectionend.y - 32) % 288) / 32;
+
+			selstartx += (Graphics.w()%32)/32.0f;
+			selendx += (Graphics.w()%32)/32.0f;
+
+			
 			glColor4f(1,1,1,0.7f);
 			glEnable(GL_BLEND);
 
@@ -2374,8 +2401,8 @@ void cWorld::draw()
 				glDisable(GL_TEXTURE_2D);
 				glColor3f(1,1,0);
 				glBegin(GL_LINES);
-					glVertex3f(5*lights[i].pos.x,999, 5*(2*height-lights[i].pos.z));
-					glVertex3f(5*lights[i].pos.x,-999, 5*(2*height-lights[i].pos.z));
+					glVertex3f(0,999, 0);
+					glVertex3f(0,-999, 0);
 				glEnd();
 			}
 			if((int)i == Graphics.selectedobject || Graphics.showalllights)
@@ -3369,6 +3396,7 @@ unsigned char rawData[82] =
 			cRSMModel* m = new cRSMModel();
 			m->load(rodir+ "data\\model\\" + filename);
 			m->name = string(buf);
+			m->castshadows = true;
 
 			m->pos.x = *((float*)(buf+212));
 			m->pos.y = *((float*)(buf+216));

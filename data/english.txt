@@ -210,6 +210,7 @@
 			<POSITION>Position:</POSITION>
 			<SCALE>Scale:</SCALE>
 			<ROTATION>Rotation:</ROTATION>
+			<CASTSHADOW>Casts Shadow:</CASTSHADOW>
 		</object>
 		<texture>
 			<TITLE>Texture Select...</TITLE>

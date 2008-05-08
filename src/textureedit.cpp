@@ -35,6 +35,10 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 					float selstarty = ((int)(Graphics.selectionstart.y - 32) % 288) / 32;
 					float selendx = ((Graphics.selectionend.x - (Graphics.w()-256)) / 32.0f);
 					float selendy = ((int)(Graphics.selectionend.y - 32) % 288) / 32;
+
+					selstartx += (Graphics.w()%32)/32.0f;
+					selendx += (Graphics.w()%32)/32.0f;
+
 					glColor4f(1,1,1,0.7f);
 					glEnable(GL_BLEND);
 

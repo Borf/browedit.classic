@@ -104,6 +104,7 @@ cSprite::cActSpr::~cActSpr()
 
 void cSprite::cActSpr::load(string fname)
 {
+	unsigned long ticks = tickcount();
 	filename = fname;
 	int i,ii,x,y;
 	cFile* pFile = fs.open(filename + ".spr");
@@ -152,17 +153,16 @@ void cSprite::cActSpr::load(string fname)
 				}
 				else
 				{
-					for(int iiii = 1; iiii < d; iiii++)
-					{
-						data[iii] = c; iii++;
-						if(iii >= width*height)
-							break;
-					}
+					d--;
+					if(iii+d > width*height)
+						d = width*height-iii-1;
+					memset(data+iii, c, d);
+					iii+=d;
 				}
 			}
 		}
 
-		
+	
 		char* image = new char[SPRITESIZE*SPRITESIZE*4];
 
 		for(y = 0; y < SPRITESIZE; y++)
@@ -200,6 +200,8 @@ void cSprite::cActSpr::load(string fname)
 		frames.push_back(f);
 
 	}
+	Log(3,0,"%ims for spr", tickcount()-ticks);
+	ticks = tickcount();
 
 	pFile->close();
 // done reading sprite
@@ -278,6 +280,7 @@ void cSprite::cActSpr::load(string fname)
 		}
 		actions.push_back(action);
 	}
+	Log(3,0,"%ims for act", tickcount()-ticks);
 
 
 

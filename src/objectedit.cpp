@@ -102,6 +102,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 					model->scale = cVector3(1,1,1);
 					model->rot = cVector3(0,0,0);
 					model->name = "Object" + inttostring(rand()%1000);
+					model->castshadows = true;
 					char buf[100];
 					sprintf(buf, "%s-%i", Graphics.previewmodel->rofilename.c_str(), rand()%100);
 					Graphics.world.models.push_back(model);
@@ -281,6 +282,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 					Graphics.clipboardfile = Graphics.world.models[Graphics.selectedobject]->filename;
 					Graphics.clipboardy = Graphics.world.models[Graphics.selectedobject]->pos.y;
 					Graphics.clipboardname = Graphics.world.models[Graphics.selectedobject]->name;
+					Graphics.clipboardbool = Graphics.world.models[Graphics.selectedobject]->castshadows;
 					currentobject = models->finddata("data\\model\\" + Graphics.world.models[Graphics.selectedobject]->rofilename);
 					if(currentobject != NULL)
 						MenuCommand_model((cMenuItem*)currentobject);
@@ -302,6 +304,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 							model->pos.y = Graphics.clipboardy;
 						model->scale = Graphics.clipboardscale;
 						model->rot = Graphics.clipboardrot;
+						model->castshadows = Graphics.clipboardbool;
 
 						model->name = Graphics.clipboardname;
 
@@ -376,6 +379,8 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 					((cWindowFloatInputBox*)w->objects["scaley"])->floatje = &o->scale.y;
 					((cWindowFloatInputBox*)w->objects["scalez"])->floatje = &o->scale.z;
 					((cWindowStringInputBox*)w->objects["objectname"])->stringetje = &o->name;
+					((cWindowBoolCheckBox*)w->objects["castshadow"])->boolvalue = &o->castshadows;
+					w->objects["castshadow"]->SetInt(0,o->castshadows?1:0);
 					
 					((cObjectWindow*)w)->undo = new cUndoChangeObject(Graphics.selectedobject);
 

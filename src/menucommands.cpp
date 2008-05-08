@@ -1745,8 +1745,9 @@ MENUCOMMAND(dolightmaps2)
 						{
 							for(unsigned int ii = 0; ii < Graphics.world.models.size() && !obstructed; ii++)
 							{
-								if(Graphics.world.models[ii]->collides(worldpos, lightpos))
-									obstructed = true;
+								if(Graphics.world.models[ii]->castshadows)
+									if(Graphics.world.models[ii]->collides(worldpos, lightpos))
+										obstructed = true;
 							}
 						}
 
@@ -1963,6 +1964,7 @@ MENUCOMMAND(smoothlightmaps)
 	for(x = 0; x < Graphics.world.width; x++)
 		for(y = 0; y < Graphics.world.height; y++)
 			Graphics.world.reallightmaps[y][x]->reset();
+	Graphics.world.fixgridding();
 
 
 	return true;

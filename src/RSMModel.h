@@ -122,6 +122,9 @@ public:
 	bool recalcbb;
 	bool selected;
 
+
+	bool castshadows;
+
 	bool animated;
 #ifdef DISPLAYLIST
 	bool displaylisted;
