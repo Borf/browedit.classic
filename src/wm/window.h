@@ -239,7 +239,7 @@ public:
 
 	cWindowObject* addlabel(string, int,int,string);
 	cWindowObject* addinputbox(string, int,int,int,string, TiXmlDocument &skin);
-	cWindowObject* addcheckbox(string, int,int,bool);
+	cWindowObject* addcheckbox(string, int,int,bool, TiXmlDocument &skin);
 
 	void center();
 

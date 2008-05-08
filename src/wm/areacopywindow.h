@@ -67,42 +67,42 @@ public:
 		addlabel("lblAreaCLights", 15,100,GetMsg("wm/areacopy/LIGHTS"));
 		addlabel("lblAreaCEffects", 15,120,GetMsg("wm/areacopy/EFFECTS"));
 	
-	o = new cWindowCheckBox(this);
+	o = new cWindowCheckBox(this,skin);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveto(120,20);
 	o->SetInt(0,1);
 	objects["Models"] = o;
 //	return o;
   
-	o = new cWindowCheckBox(this);
+	o = new cWindowCheckBox(this,skin);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveto(120,40);
 	o->SetInt(0,1);
 	objects["Textures"] = o;
 //	return o;
 
-	o = new cWindowCheckBox(this);
+	o = new cWindowCheckBox(this,skin);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveto(120,60);
 	o->SetInt(0,1);
 	objects["Height"] = o;
 //	return o;
 
-	o = new cWindowCheckBox(this);
+	o = new cWindowCheckBox(this,skin);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveto(120,80);
 	o->SetInt(0,1);
 	objects["Gat"] = o;
 //	return o;
 
-	o = new cWindowCheckBox(this);
+	o = new cWindowCheckBox(this,skin);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveto(120,100);
 	o->SetInt(0,1);
 	objects["Lights"] = o;
 //	return o;
 
-	o = new cWindowCheckBox(this);
+	o = new cWindowCheckBox(this,skin);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveto(120,120);
 	o->SetInt(0,1);

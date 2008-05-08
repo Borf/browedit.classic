@@ -14,47 +14,20 @@ void cWindowCheckBox::draw(int cutoffleft, int cutoffright, int cutofftop, int c
 	glBegin(GL_QUADS);
 
 
-		glTexCoord2f((371.0f)/512.0f,	(337.0f)/512.0f);				glVertex2d(xx+2, yy+2);
-		glTexCoord2f((371.0f)/512.0f,	(337.0f)/512.0f);				glVertex2d(xx+w-2, yy+2);
-		glTexCoord2f((371.0f)/512.0f,	(337.0f)/512.0f);				glVertex2d(xx+w-2, yy+h-2);
-		glTexCoord2f((371.0f)/512.0f,	(337.0f)/512.0f);				glVertex2d(xx+2, yy+h-2);
-
-		glTexCoord2f((258.0f+2.0f)/512.0f,	(340.0f+2.0f)/512.0f);		glVertex2d(xx+w-2, yy+2);
-		glTexCoord2f((258.0f)/512.0f,		(340.0f+2.0f)/512.0f);		glVertex2d(xx+w, yy+2);
-		glTexCoord2f((258.0f)/512.0f,		(469.0f-2.0f)/512.0f);		glVertex2d(xx+w, yy+h-2);
-		glTexCoord2f((258.0f+2.0f)/512.0f,	(469.0f-2.0f)/512.0f);		glVertex2d(xx+w-2, yy+h-2);
-
-		glTexCoord2f((387.0f-2.0f)/512.0f,	(340.0f+2.0f)/512.0f);		glVertex2d(xx, yy+2);
-		glTexCoord2f((387.0f)/512.0f,		(340.0f+2.0f)/512.0f);		glVertex2d(xx+2, yy+2);
-		glTexCoord2f((387.0f)/512.0f,		(469.0f-2.0f)/512.0f);		glVertex2d(xx+2, yy+h-2);
-		glTexCoord2f((387.0f-2.0f)/512.0f,	(469.0f-2.0f)/512.0f);		glVertex2d(xx, yy+h-2);
-
-		glTexCoord2f((258.0f+2.0f)/512.0f,	(340.0f+2.0f)/512.0f);		glVertex2d(xx, yy+h);
-		glTexCoord2f((258.0f+2.0f)/512.0f,	(340.0f)/512.0f);			glVertex2d(xx, yy+h-2);
-		glTexCoord2f((387.0f)/512.0f,		(340.0f)/512.0f);			glVertex2d(xx+w-2, yy+h-2);
-		glTexCoord2f((387.0f)/512.0f,		(340.0f+2.0f)/512.0f);		glVertex2d(xx+w-2, yy+h);
-		
-		glTexCoord2f((258.0f)/512.0f,		(469.0f)/512.0f);			glVertex2d(xx+2, yy+2);
-		glTexCoord2f((258.0f)/512.0f,		(469.0f-2.0f)/512.0f);		glVertex2d(xx+2, yy);
-		glTexCoord2f((387.0f-2.0f)/512.0f,	(469.0f-2.0f)/512.0f);		glVertex2d(xx+w, yy);
-		glTexCoord2f((387.0f-2.0f)/512.0f,	(469.0f)/512.0f);			glVertex2d(xx+w, yy+2);
-
-		glTexCoord2f((258.0f+2.0f)/512.0f,	(340.0f+2.0f)/512.0f);		glVertex2d(xx, yy);
-		glTexCoord2f((258.0f)/512.0f,		(340.0f+2.0f)/512.0f);		glVertex2d(xx+2, yy);
-		glTexCoord2f((258.0f)/512.0f,		(340.0f)/512.0f);			glVertex2d(xx+2, yy+2);
-		glTexCoord2f((258.0f+2.0f)/512.0f,	(340.0f)/512.0f);			glVertex2d(xx, yy+2);
-
-		glTexCoord2f((387.0f)/512.0f,		(469.0f)/512.0f);			glVertex2d(xx+w-2, yy+h-2);
-		glTexCoord2f((387.0f-2.0f)/512.0f,	(469.0f)/512.0f);			glVertex2d(xx+w, yy+h-2);
-		glTexCoord2f((387.0f-2.0f)/512.0f,	(469.0f-2.0f)/512.0f);		glVertex2d(xx+w, yy+h);
-		glTexCoord2f((387.0f)/512.0f,		(469.0f-2.0f)/512.0f);		glVertex2d(xx+w-2, yy+h);
 
 		if (value)
 		{
-			glTexCoord2f((264.0f)/512.0f,	(218.0f)/512.0f);				glVertex2d(xx+3, yy+3);
-			glTexCoord2f((270.0f)/512.0f,	(218.0f)/512.0f);				glVertex2d(xx+w-3, yy+3);
-			glTexCoord2f((270.0f)/512.0f,	(225.0f)/512.0f);				glVertex2d(xx+w-3, yy+h-3);
-			glTexCoord2f((264.0f)/512.0f,	(225.0f)/512.0f);				glVertex2d(xx+3, yy+h-3);
+			glTexCoord2f((skinCheckedLeft)/512.0f,		(skinCheckedTop)/512.0f);				glVertex2d(xx, yy+h);
+			glTexCoord2f((skinCheckedLeft+w)/512.0f,	(skinCheckedTop)/512.0f);				glVertex2d(xx+w, yy+h);
+			glTexCoord2f((skinCheckedLeft+w)/512.0f,	(skinCheckedTop-h)/512.0f);				glVertex2d(xx+w, yy);
+			glTexCoord2f((skinCheckedLeft)/512.0f,		(skinCheckedTop-h)/512.0f);				glVertex2d(xx, yy);
+		}
+		else
+		{
+			glTexCoord2f((skinUncheckedLeft)/512.0f,	(skinUncheckedTop)/512.0f);				glVertex2d(xx, yy+h);
+			glTexCoord2f((skinUncheckedLeft+w)/512.0f,	(skinUncheckedTop)/512.0f);				glVertex2d(xx+w, yy+h);
+			glTexCoord2f((skinUncheckedLeft+w)/512.0f,	(skinUncheckedTop-h)/512.0f);			glVertex2d(xx+w, yy);
+			glTexCoord2f((skinUncheckedLeft)/512.0f,	(skinUncheckedTop-h)/512.0f);			glVertex2d(xx, yy);
 		}
 
 	glEnd();

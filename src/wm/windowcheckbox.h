@@ -8,17 +8,34 @@ using namespace std;
 class cWindowCheckBox : public cWindowObject
 {
 protected:
-	bool value;	
+	bool value;
+	
+	int skinCheckedLeft;
+	int skinCheckedTop;
+	int skinUncheckedLeft;
+	int skinUncheckedTop;
+
+
 public:
-	cWindowCheckBox(cWindow* parent) : cWindowObject(parent)
+	cWindowCheckBox(cWindow* parent, TiXmlDocument &skin) : cWindowObject(parent)
 	{
-		w = 12;
-		h = 12;
 		x = 40;
 		y = 40;
 		alignment = ALIGN_CENTER;
 		value = true;
 		type = OBJECT_CHECKBOX;
+
+		TiXmlElement* bSkin = skin.FirstChildElement("skin")->FirstChildElement("checkbox");
+		
+		w = atoi(bSkin->FirstChildElement("width")->FirstChild()->Value());
+		h = atoi(bSkin->FirstChildElement("height")->FirstChild()->Value());
+
+		skinCheckedLeft = atoi(bSkin->FirstChildElement("checked")->FirstChildElement("left")->FirstChild()->Value());
+		skinCheckedTop = 512-atoi(bSkin->FirstChildElement("checked")->FirstChildElement("top")->FirstChild()->Value());
+		skinUncheckedLeft = atoi(bSkin->FirstChildElement("unchecked")->FirstChildElement("left")->FirstChild()->Value());
+		skinUncheckedTop = 512-atoi(bSkin->FirstChildElement("unchecked")->FirstChildElement("top")->FirstChild()->Value());
+		
+
 	}
 	virtual void draw(int,int,int,int);
 	virtual void click();
@@ -34,7 +51,7 @@ class cWindowBoolCheckBox : public cWindowCheckBox
 {
 public:
 	bool* boolvalue;
-	cWindowBoolCheckBox(cWindow* parent) : cWindowCheckBox(parent)
+	cWindowBoolCheckBox(cWindow* parent, TiXmlDocument &skin) : cWindowCheckBox(parent,skin)
 	{
 		alignment = ALIGN_TOPLEFT;
 		boolvalue = NULL;

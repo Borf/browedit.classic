@@ -457,9 +457,9 @@ cWindowObject* cWindow::addinputbox(string name, int x, int y, int w, string tex
 	return o;
 }
 
-cWindowObject* cWindow::addcheckbox(string name, int x, int y, bool checked)
+cWindowObject* cWindow::addcheckbox(string name, int x, int y, bool checked, TiXmlDocument &skin)
 {
-	cWindowObject* o = new cWindowCheckBox(this);
+	cWindowObject* o = new cWindowCheckBox(this,skin);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveto(x,y);
 	o->SetInt(0, checked ? 1 : 0);

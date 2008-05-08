@@ -79,13 +79,6 @@
 		<right width="3">56</right>
 		<bottom height="4">290</bottom>
 	</frame>
-	<checkbox>
-		<fontcolor>000000</fontcolor>
-		<top height="1">281</top>
-		<left width="1">18</left>
-		<right width="1">30</right>
-		<bottom height="1">293</bottom>
-	</checkbox>
 	<tabstrip>
 		<fontcolor>000000</fontcolor>
 		<fontoffx>3</fontoffx>
@@ -131,4 +124,17 @@
 		<offsetx>42</offsetx>
 		<offsety>-28</offsety>
 	</collapsebutton>
+	<checkbox>
+		<width>13</width>
+		<height>13</height>
+		<unchecked>
+			<left>18</left>
+			<top>281</top>
+		</unchecked>
+		<checked>
+			<left>32</left>
+			<top>281</top>
+		</checked>
+	</checkbox>
+
 </skin>
