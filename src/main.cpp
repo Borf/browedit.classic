@@ -449,6 +449,8 @@ int WinMain(HINSTANCE hInst,HINSTANCE hPrev, LPSTR Cmd,int nShow)
 
 int main(int argc, char *argv[])
 {
+	try
+	{
 	int i;
 	log_open("log_worldeditor.txt","worldedit",2);
 	cFile* pFile = fs.open("config.txt");
@@ -1077,6 +1079,11 @@ int main(int argc, char *argv[])
 	TextureCache.status();
 
 	log_close();
+	}
+	catch (char* e)
+	{
+		fprintf(stderr, "An error occurred: %s", e);
+	}
 	return 0;							// Exit The Program
 }
 

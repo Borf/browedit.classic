@@ -205,6 +205,7 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 					if (posx >= (int)floor(f/2.0f) && posx < 2*Graphics.world.width-(int)ceil(f/2.0f) && posy >= f && posy< 2*Graphics.world.height-f)
 					{
 						clipboard.clear();
+						clipboardgat.clear();
 						for(int y = posy-(int)floor(f/2.0f); y < posy+(int)ceil(f/2.0f); y++)
 						{
 							vector<vector<float> > row;

@@ -351,7 +351,7 @@ int cGraphics::init()
 
 	int flags = 0;
 	const SDL_VideoInfo* info = NULL;
-	if( SDL_Init( SDL_INIT_VIDEO ) < 0 ) {
+	if( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_NOPARACHUTE) < 0 ) {
 		Log( 1,0, GetMsg("graphics/INITFAIL"), SDL_GetError( ) );
 		return 0;
 	}
