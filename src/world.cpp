@@ -2485,7 +2485,10 @@ void cWorld::draw()
 		glDisable(GL_TEXTURE_2D);
 		glBegin(GL_POLYGON);
 			for(double ii = 0; ii < 2*PI; ii+= 2*PI/20.0)
-				glVertex3f(-Graphics.camerapointer.x+cos(ii)*2,camheight+0.1,-Graphics.camerapointer.y+sin(ii)*2);
+				if(Graphics.topcamera)
+					glVertex3f(-Graphics.camerapointer.y+cos(ii)*2 + Graphics.cameraheight/2.0f + 15 ,camheight+0.1,-Graphics.camerapointer.x-Graphics.cameraheight/2.0f+sin(ii)*2-15);
+				else
+					glVertex3f(-Graphics.camerapointer.x+cos(ii)*2,camheight+0.1,-Graphics.camerapointer.y+sin(ii)*2);
 		glEnd();
 	}
 

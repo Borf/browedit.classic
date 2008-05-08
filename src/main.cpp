@@ -1053,8 +1053,8 @@ int main(int argc, char *argv[])
 #endif
 
 #ifdef _DEBUG
-//	if(argc == 1)
-//		Graphics.world.load();
+	if(argc == 1)
+		Graphics.world.load();
 //	Graphics.world.importalpha();
 #endif
 
@@ -1251,8 +1251,21 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 					else
 					{
-						Graphics.cameraheight += (oldmousey - mousey) / 2.0f;
-						Graphics.cameraheight = max(min(Graphics.cameraheight, (float)15000), (float)-5);
+						if(Graphics.topcamera)
+						{
+							Graphics.cameraheight += (oldmousey - mousey) / 2.0f;
+							Graphics.cameraheight = max(min(Graphics.cameraheight, (float)15000), (float)-5);
+							if(Graphics.cameraheight != -5 && Graphics.cameraheight != 15000)
+							{
+								Graphics.camerapointer.x -= (oldmousey - mousey) / 4.0f;
+								Graphics.camerapointer.y += (oldmousey - mousey) / 4.0f;
+							}
+						}
+						else
+						{
+							Graphics.cameraheight += (oldmousey - mousey) / 2.0f;
+							Graphics.cameraheight = max(min(Graphics.cameraheight, (float)15000), (float)-5);
+						}
 						Graphics.camerarot += (oldmousex - mousex) / 100.0f;
 						while(Graphics.camerarot < 0)
 							Graphics.camerarot+=2*(float)PI;
@@ -1327,8 +1340,23 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					w->scrollup();
 				else
 				{
-					Graphics.cameraheight*=1.1f;
-					Graphics.cameraheight = max(min(Graphics.cameraheight, (float)15000), (float)-5);
+					if(Graphics.topcamera)
+					{
+						float diff = Graphics.cameraheight;
+						Graphics.cameraheight*=1.1f;
+						diff -= Graphics.cameraheight;
+						Graphics.cameraheight = max(min(Graphics.cameraheight, (float)15000), (float)-5);
+						if(Graphics.cameraheight != -5 && Graphics.cameraheight != 15000)
+						{
+							Graphics.camerapointer.x += diff/2.0f;
+							Graphics.camerapointer.y -= diff/2.0f;
+ 						}
+					}
+					else
+					{
+						Graphics.cameraheight*=1.1f;
+						Graphics.cameraheight = max(min(Graphics.cameraheight, (float)15000), (float)-5);
+					}
 				}
 				return 1;
 			}
@@ -1340,8 +1368,23 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					w->scrolldown();
 				else
 				{
-					Graphics.cameraheight/=1.1f;
-					Graphics.cameraheight = max(min(Graphics.cameraheight, (float)15000), (float)-5);
+					if(Graphics.topcamera)
+					{
+						float diff = Graphics.cameraheight;
+						Graphics.cameraheight/=1.1f;
+						diff -= Graphics.cameraheight;
+						Graphics.cameraheight = max(min(Graphics.cameraheight, (float)15000), (float)-5);
+						if(Graphics.cameraheight != -5 && Graphics.cameraheight != 15000)
+						{
+							Graphics.camerapointer.x += diff/2.0f;
+							Graphics.camerapointer.y -= diff/2.0f;
+						}
+					}
+					else
+					{
+						Graphics.cameraheight/=1.1f;
+						Graphics.cameraheight = max(min(Graphics.cameraheight, (float)15000), (float)-5);
+					}
 				}
 				return 1;
 			}
