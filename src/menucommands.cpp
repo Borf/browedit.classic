@@ -1739,22 +1739,27 @@ MENUCOMMAND(dolightmaps2)
 						if(length > l->range)
 							continue;
 
-						bool obstructed = false;
+						float obstructed = 1;
 
 						if(l->givesshadow && !noshadow)
 						{
-							for(unsigned int ii = 0; ii < Graphics.world.models.size() && !obstructed; ii++)
+							for(unsigned int ii = 0; ii < Graphics.world.models.size() && obstructed > 0; ii++)
 							{
-								if(Graphics.world.models[ii]->castshadows)
+								if(Graphics.world.models[ii]->lightopacity != 0)
 									if(Graphics.world.models[ii]->collides(worldpos, lightpos))
-										obstructed = true;
+										obstructed -= Graphics.world.models[ii]->lightopacity;
 							}
 						}
 
+						if(obstructed < 0)
+							obstructed = 0;
 
-						if(!obstructed)
+
+						if(obstructed != 0)
 						{
 							float intensity = (int)min((int)(l->maxlightincrement), (int)(pow(1-(length / l->range), l->lightfalloff) * l->todo2));
+							intensity *= obstructed;
+
 							buf[yy*8 + xx] = min(255, buf[yy*8 + xx] + max(0, (int)(intensity)));
 
 							buf[64 + 3*(yy*8 + xx)+0] = min(255, buf[64 + 3*(yy*8 + xx)+0] + max(0, (int)(intensity*l->color.x)));

@@ -447,7 +447,7 @@ void cWorld::load()
 				string filename = buf+52;
 				cRSMModel* m = new cRSMModel();
 				m->load(rodir+ "data\\model\\" + filename);
-				m->castshadows = true;
+				m->lightopacity = 1;
 
 				if (m->meshes.size() == 0)
 				{
@@ -603,7 +603,7 @@ void cWorld::load()
 				cRSMModel* m = new cRSMModel();
 				m->load(rodir+ "data\\model\\" + filename);
 	
-				m->castshadows = true;
+				m->lightopacity = 1;
 
 				if (m->meshes.size() == 0)
 				{
@@ -756,7 +756,7 @@ void cWorld::load()
 			while(model != NULL)
 			{
 				int id = atoi(model->Attribute("id"));
-				models[id]->castshadows = strcmp(model->Attribute("castshadow"),"true") == 0;
+				models[id]->lightopacity = atoi(model->Attribute("lightopacity"));
 				model = model->NextSiblingElement();
 
 			}
@@ -1178,7 +1178,7 @@ void cWorld::save()
 
 			TiXmlElement model("model");
 			model.SetAttribute("id", i);
-			model.SetAttribute("castshadow", models[i]->castshadows ? "true" : "false");
+			model.SetAttribute("lightopacity", models[i]->lightopacity);
 			xmlmodels.InsertEndChild(model);
 
 		}
@@ -3396,7 +3396,7 @@ unsigned char rawData[82] =
 			cRSMModel* m = new cRSMModel();
 			m->load(rodir+ "data\\model\\" + filename);
 			m->name = string(buf);
-			m->castshadows = true;
+			m->lightopacity = 1;
 
 			m->pos.x = *((float*)(buf+212));
 			m->pos.y = *((float*)(buf+216));

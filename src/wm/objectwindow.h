@@ -84,7 +84,7 @@ public:
 		addlabel("lblPos", 15, 60, GetMsg("wm/object/POSITION"));
 		addlabel("lblScale", 15,80, GetMsg("wm/object/SCALE"));
 		addlabel("lblRot", 15,100,GetMsg("wm/object/ROTATION"));
-		addlabel("lblShadow", 15, 120, GetMsg("wm/object/CASTSHADOW"));
+		addlabel("lblShadow", 15, 120, GetMsg("wm/object/LIGHTOPACITY"));
 
 		o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
@@ -155,10 +155,11 @@ public:
 		o->resizeto(70,20);
 		objects["rotz"] = o;
 
-		o = new cWindowBoolCheckBox(this,skin);
+		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,120);
-		objects["castshadow"] = o;
+		o->resizeto(210,20);
+		objects["lightopacity"] = o;
 
 		objects["OkButton"] = new cWindowOkButton(this,skin);
 		objects["CancelButton"] = new cWindowCancelButton(this,skin);

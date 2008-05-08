@@ -123,7 +123,7 @@ public:
 	bool selected;
 
 
-	bool castshadows;
+	float lightopacity;
 
 	bool animated;
 #ifdef DISPLAYLIST

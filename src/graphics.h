@@ -147,7 +147,7 @@ public:
 	string					clipboardfile;
 	string					clipboardname;
 	float					clipboardy;
-	bool					clipboardbool;
+	float					clipboardfloat;
 	GLfloat LightAmbient[4];
 	GLfloat LightDiffuse[4];
 	GLfloat LightPosition[4];

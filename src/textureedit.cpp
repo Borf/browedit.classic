@@ -251,7 +251,7 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 						selsizex = selsizey;
 						selsizey = a;
 					}
-					if(clipboardgat.size() != selsizex)
+					if(clipboardgat.size() != selsizex || selsizex == 0)
 						break;
 					if(clipboardgat[0].size() != selsizey)
 						break;
