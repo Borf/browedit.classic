@@ -1631,10 +1631,10 @@ void cWorld::draw()
 					glColor4f(1,1,1,1);
 				glNormal3f(0,0, cubes[y+1][x].cell1 > c->cell4 ? -1 : 1);
 				glBegin(GL_TRIANGLE_STRIP);
-					glTexCoord2f(t->u1, 1-t->v1); glVertex3f(x*10,-c->cell3,(height-y)*10-10);
-					glTexCoord2f(t->u2, 1-t->v2); glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
-					glTexCoord2f(t->u3, 1-t->v3); glVertex3f(x*10,-cubes[y+1][x].cell1,(height-y)*10-10);
-					glTexCoord2f(t->u4, 1-t->v4); glVertex3f(x*10+10,-cubes[y+1][x].cell2,(height-y)*10-10);
+					glTexCoord2f(t->u1, 1-t->v1); glVertex3f(x*10,	 -c->cell3,				(height-y)*10-10);
+					glTexCoord2f(t->u2, 1-t->v2); glVertex3f(x*10+10,-c->cell4,				(height-y)*10-10);
+					glTexCoord2f(t->u3, 1-t->v3); glVertex3f(x*10,	 -cubes[y+1][x].cell1,	(height-y)*10-10);
+					glTexCoord2f(t->u4, 1-t->v4); glVertex3f(x*10+10,-cubes[y+1][x].cell2,	(height-y)*10-10);
 				glEnd();
 			}
 		}
@@ -1701,10 +1701,10 @@ void cWorld::draw()
 					glBlendFunc(GL_DST_COLOR, GL_ZERO);
 					glBindTexture(GL_TEXTURE_2D, lightmap2);
 					glBegin(GL_TRIANGLE_STRIP);
-						glTexCoord2f(0.125,0.125);					glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
-						glTexCoord2f(0.875,0.125);					glVertex3f(x*10+10,-c->cell2,(height-y)*10);
-						glTexCoord2f(0.125,0.875);					glVertex3f(x*10+10,-(c+1)->cell3,(height-y)*10-10);
-						glTexCoord2f(0.875,0.875);					glVertex3f(x*10+10,-(c+1)->cell1,(height-y)*10);
+						glTexCoord2f(0.125,0.125);					glVertex3f(x*10+10,	-c->cell4,		(height-y)*10-10);
+						glTexCoord2f(0.875,0.125);					glVertex3f(x*10+10,	-c->cell2,		(height-y)*10);
+						glTexCoord2f(0.125,0.875);					glVertex3f(x*10+10,	-(c+1)->cell3,	(height-y)*10-10);
+						glTexCoord2f(0.875,0.875);					glVertex3f(x*10+10,	-(c+1)->cell1,	(height-y)*10);
 					glEnd();
 				}
 				if (c->tileside != -1 && (int)y < height-1 && c->tileside < (int)tiles.size())
@@ -1715,19 +1715,19 @@ void cWorld::draw()
 					glBlendFunc(GL_ONE ,GL_DST_COLOR);				
 					glBindTexture(GL_TEXTURE_2D, lightmap);
 					glBegin(GL_TRIANGLE_STRIP);
-						glTexCoord2f(0.125,0.125);					glVertex3f(x*10,-c->cell3,(height-y)*10-10);
-						glTexCoord2f(0.875,0.125);					glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
-						glTexCoord2f(0.125,0.875);					glVertex3f(x*10,-cubes[y+1][x].cell1,(height-y)*10-10);
-						glTexCoord2f(0.875,0.875);					glVertex3f(x*10+10,-cubes[y+1][x].cell2,(height-y)*10-10);
+						glTexCoord2f(0.125,0.125);					glVertex3f(x*10,	-c->cell3,				(height-y)*10-10);
+						glTexCoord2f(0.875,0.125);					glVertex3f(x*10+10,	-c->cell4,				(height-y)*10-10);
+						glTexCoord2f(0.125,0.875);					glVertex3f(x*10,	-cubes[y+1][x].cell1,	(height-y)*10-10);
+						glTexCoord2f(0.875,0.875);					glVertex3f(x*10+10,	-cubes[y+1][x].cell2,	(height-y)*10-10);
 					glEnd();
 
 					glBlendFunc(GL_DST_COLOR, GL_ZERO);
 					glBindTexture(GL_TEXTURE_2D, lightmap2);
 					glBegin(GL_TRIANGLE_STRIP);
-						glTexCoord2f(0.125,0.125);					glVertex3f(x*10,-c->cell3,(height-y)*10-10);
-						glTexCoord2f(0.875,0.125);					glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
-						glTexCoord2f(0.125,0.875);					glVertex3f(x*10,-cubes[y+1][x].cell1,(height-y)*10-10);
-						glTexCoord2f(0.875,0.875);					glVertex3f(x*10+10,-cubes[y+1][x].cell2,(height-y)*10-10);
+						glTexCoord2f(0.125,0.125);					glVertex3f(x*10,	-c->cell3,				(height-y)*10-10);
+						glTexCoord2f(0.875,0.125);					glVertex3f(x*10+10,	-c->cell4,				(height-y)*10-10);
+						glTexCoord2f(0.125,0.875);					glVertex3f(x*10,	-cubes[y+1][x].cell1,	(height-y)*10-10);
+						glTexCoord2f(0.875,0.875);					glVertex3f(x*10+10,	-cubes[y+1][x].cell2,	(height-y)*10-10);
 					glEnd();
 				}
 

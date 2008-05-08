@@ -1704,72 +1704,241 @@ MENUCOMMAND(dolightmaps2)
 				continue;
 //			Log(3,0,GetMsg("PERCENTAGE"), (y*Graphics.world.width+x) / (float)(Graphics.world.height * Graphics.world.width)*100); // %f %%
 			w->objects["progress"]->SetInt(0, y*Graphics.world.width + x);
-			if(c->tileup == -1)
-				continue;
 
-			BYTE* buf = (BYTE*)Graphics.world.lightmaps[Graphics.world.tiles[c->tileup].lightmap]->buf;
-
-			for(int yy = 1; yy < 7; yy++)
+			
+			if(c->tileup != -1)
 			{
-				for(int xx = 1; xx < 7; xx++)
+				BYTE* buf = (BYTE*)Graphics.world.lightmaps[Graphics.world.tiles[c->tileup].lightmap]->buf;
+
+				for(int yy = 1; yy < 7; yy++)
 				{
-					float fx = (xx-1)/6.0f;
-					float fy = (yy-1)/6.0f;
-
-					cVector3 worldpos = cVector3(	10*x+(10/6.0)*(xx-1), 
-													-((c->cell1*(1-fx)+c->cell2*(fx)) + (c->cell1*(fy)+c->cell3*(1-fy))-c->cell1),
-													10*y+(10/6.0)*(yy-1));
-					
-					int from = 0;
-					unsigned int to = Graphics.world.lights.size();
-					if(lightonly)
+					for(int xx = 1; xx < 7; xx++)
 					{
-						from = Graphics.selectedobject;
-						to = from+1;
-					}
-					for(i = from; i < to; i++)
-					{
-						if(buf[yy*8 + xx] == 255)
-							break;
+						float fx = (xx-1)/6.0f;
+						float fy = (yy-1)/6.0f;
 
-						cLight* l = &Graphics.world.lights[i];
-						cVector3 lightpos = cVector3(l->pos.x*5, l->pos.y, l->pos.z*5);
-						cVector3 diff = worldpos - lightpos;
-						float length = diff.Magnitude();
-						if(length > l->range)
-							continue;
-
-						float obstructed = 1;
-
-						if(l->givesshadow && !noshadow)
+						cVector3 worldpos = cVector3(	10*x+(10/6.0)*(xx-1), 
+														-((c->cell1*(1-fx)+c->cell2*(fx)) + (c->cell1*(fy)+c->cell3*(1-fy))-c->cell1),
+														10*y+(10/6.0)*(yy-1));
+						
+						int from = 0;
+						unsigned int to = Graphics.world.lights.size();
+						if(lightonly)
 						{
-							for(unsigned int ii = 0; ii < Graphics.world.models.size() && obstructed > 0; ii++)
-							{
-								if(Graphics.world.models[ii]->lightopacity != 0)
-									if(Graphics.world.models[ii]->collides(worldpos, lightpos))
-										obstructed -= Graphics.world.models[ii]->lightopacity;
-							}
+							from = Graphics.selectedobject;
+							to = from+1;
 						}
-
-						if(obstructed < 0)
-							obstructed = 0;
-
-
-						if(obstructed != 0)
+						for(i = from; i < to; i++)
 						{
-							float intensity = (int)min((int)(l->maxlightincrement), (int)(pow(1-(length / l->range), l->lightfalloff) * l->todo2));
-							intensity *= obstructed;
+							if(buf[yy*8 + xx] == 255)
+								break;
 
-							buf[yy*8 + xx] = min(255, buf[yy*8 + xx] + max(0, (int)(intensity)));
+							cLight* l = &Graphics.world.lights[i];
+							cVector3 lightpos = cVector3(l->pos.x*5, l->pos.y, l->pos.z*5);
+							cVector3 diff = worldpos - lightpos;
 
-							buf[64 + 3*(yy*8 + xx)+0] = min(255, buf[64 + 3*(yy*8 + xx)+0] + max(0, (int)(intensity*l->color.x)));
-							buf[64 + 3*(yy*8 + xx)+1] = min(255, buf[64 + 3*(yy*8 + xx)+1] + max(0, (int)(intensity*l->color.y)));
-							buf[64 + 3*(yy*8 + xx)+2] = min(255, buf[64 + 3*(yy*8 + xx)+2] + max(0, (int)(intensity*l->color.z)));
+							if(diff.y > 0)
+								continue;
+
+							float length = diff.Magnitude();
+							if(length > l->range)
+								continue;
+
+							float obstructed = 1;
+
+							if(l->givesshadow && !noshadow)
+							{
+								for(unsigned int ii = 0; ii < Graphics.world.models.size() && obstructed > 0; ii++)
+								{
+									if(Graphics.world.models[ii]->lightopacity != 0)
+										if(Graphics.world.models[ii]->collides(worldpos, lightpos))
+											obstructed -= Graphics.world.models[ii]->lightopacity;
+								}
+							}
+
+							if(obstructed < 0)
+								obstructed = 0;
+
+
+							if(obstructed != 0)
+							{
+								float intensity = (int)min((int)(l->maxlightincrement), (int)(pow(1-(length / l->range), l->lightfalloff) * l->todo2));
+								intensity *= obstructed;
+
+								buf[yy*8 + xx] = min(255, buf[yy*8 + xx] + max(0, (int)(intensity)));
+
+								buf[64 + 3*(yy*8 + xx)+0] = min(255, buf[64 + 3*(yy*8 + xx)+0] + max(0, (int)(intensity*l->color.x)));
+								buf[64 + 3*(yy*8 + xx)+1] = min(255, buf[64 + 3*(yy*8 + xx)+1] + max(0, (int)(intensity*l->color.y)));
+								buf[64 + 3*(yy*8 + xx)+2] = min(255, buf[64 + 3*(yy*8 + xx)+2] + max(0, (int)(intensity*l->color.z)));
+							}
 						}
 					}
 				}
+				Graphics.world.reallightmaps[y][x]->reset();
 			}
-			Graphics.world.reallightmaps[y][x]->reset();
+
+			if(c->tileside != -1)
+			{
+				BYTE* buf = (BYTE*)Graphics.world.lightmaps[Graphics.world.tiles[c->tileside].lightmap]->buf;
+				ZeroMemory(buf,256);
+
+				for(int yy = 0; yy < 8; yy++)
+				{
+					for(int xx = 0; xx < 8; xx++)
+					{
+						float fx = (xx-1)/6.0f;
+						float fy = (yy-1)/6.0f;
+
+						cCube* c2 = &Graphics.world.cubes[y+1][x];
+
+						cVector3 worldpos = cVector3(	10*x+(10/6.0)*(xx-1), 
+														-((1-fy)*c->cell3 + (fy)*c2->cell1),
+														10*y+10);
+						
+						int from = 0;
+						unsigned int to = Graphics.world.lights.size();
+						if(lightonly)
+						{
+							from = Graphics.selectedobject;
+							to = from+1;
+						}
+						for(i = from; i < to; i++)
+						{
+							if(buf[yy*8 + xx] == 255)
+								break;
+
+							cLight* l = &Graphics.world.lights[i];
+							cVector3 lightpos = cVector3(l->pos.x*5, l->pos.y, l->pos.z*5);
+							cVector3 diff = worldpos - lightpos;
+
+							if(diff.z < 0 && c->cell3 > c2->cell1)
+								continue;
+							if(diff.z > 0 && c->cell3 < c2->cell1)
+								continue;
+
+							
+							float length = diff.Magnitude();
+							if(length > l->range)
+								continue;
+
+							float obstructed = 1;
+
+							if(l->givesshadow && !noshadow)
+							{
+								for(unsigned int ii = 0; ii < Graphics.world.models.size() && obstructed > 0; ii++)
+								{
+									if(Graphics.world.models[ii]->lightopacity != 0)
+										if(Graphics.world.models[ii]->collides(worldpos, lightpos))
+											obstructed -= Graphics.world.models[ii]->lightopacity;
+								}
+							}
+
+							if(obstructed < 0)
+								obstructed = 0;
+
+
+							if(obstructed != 0)
+							{
+								float intensity = (int)min((int)(l->maxlightincrement), (int)(pow(1-(length / l->range), l->lightfalloff) * l->todo2));
+								intensity *= obstructed;
+
+								buf[yy*8 + xx] = min(255, buf[yy*8 + xx] + max(0, (int)(intensity)));
+
+								buf[64 + 3*(yy*8 + xx)+0] = min(255, buf[64 + 3*(yy*8 + xx)+0] + max(0, (int)(intensity*l->color.x)));
+								buf[64 + 3*(yy*8 + xx)+1] = min(255, buf[64 + 3*(yy*8 + xx)+1] + max(0, (int)(intensity*l->color.y)));
+								buf[64 + 3*(yy*8 + xx)+2] = min(255, buf[64 + 3*(yy*8 + xx)+2] + max(0, (int)(intensity*l->color.z)));
+							}
+						}
+					}
+				}
+				Graphics.world.lightmaps[Graphics.world.tiles[c->tileside].lightmap]->del();
+				Graphics.world.lightmaps[Graphics.world.tiles[c->tileside].lightmap]->del2();
+			}
+
+			if(c->tileaside != -1)
+			{
+				BYTE* buf = (BYTE*)Graphics.world.lightmaps[Graphics.world.tiles[c->tileaside].lightmap]->buf;
+				ZeroMemory(buf,256);
+
+				for(int yy = 0; yy < 8; yy++)
+				{
+					for(int xx = 0; xx < 8; xx++)
+					{
+						float fx = (xx-1)/6.0f;
+						float fy = (yy-1)/6.0f;
+
+						cCube* c2 = &Graphics.world.cubes[y][x+1];
+
+						cVector3 worldpos = cVector3(	10*x+10, 
+														-((1-fy)*c->cell4 + (fy)*c2->cell3),
+														10*y+(10/6.0)*(7-xx));
+						
+						int from = 0;
+						unsigned int to = Graphics.world.lights.size();
+						if(lightonly)
+						{
+							from = Graphics.selectedobject;
+							to = from+1;
+						}
+						for(i = from; i < to; i++)
+						{
+							if(buf[yy*8 + xx] == 255)
+								break;
+
+							cLight* l = &Graphics.world.lights[i];
+							cVector3 lightpos = cVector3(l->pos.x*5, l->pos.y, l->pos.z*5);
+							cVector3 diff = worldpos - lightpos;
+
+							if(diff.x < 0 && c->cell4 > c2->cell3)
+								continue;
+							if(diff.x > 0 && c->cell4 < c2->cell3)
+								continue;
+
+							float length = diff.Magnitude();
+							if(length > l->range)
+								continue;
+
+							float obstructed = 1;
+
+							if(l->givesshadow && !noshadow)
+							{
+								for(unsigned int ii = 0; ii < Graphics.world.models.size() && obstructed > 0; ii++)
+								{
+									if(Graphics.world.models[ii]->lightopacity != 0)
+										if(Graphics.world.models[ii]->collides(worldpos, lightpos))
+											obstructed -= Graphics.world.models[ii]->lightopacity;
+								}
+							}
+
+							if(obstructed < 0)
+								obstructed = 0;
+
+
+							if(obstructed != 0)
+							{
+								float intensity = (int)min((int)(l->maxlightincrement), (int)(pow(1-(length / l->range), l->lightfalloff) * l->todo2));
+								intensity *= obstructed;
+
+								buf[yy*8 + xx] = min(255, buf[yy*8 + xx] + max(0, (int)(intensity)));
+
+								buf[64 + 3*(yy*8 + xx)+0] = min(255, buf[64 + 3*(yy*8 + xx)+0] + max(0, (int)(intensity*l->color.x)));
+								buf[64 + 3*(yy*8 + xx)+1] = min(255, buf[64 + 3*(yy*8 + xx)+1] + max(0, (int)(intensity*l->color.y)));
+								buf[64 + 3*(yy*8 + xx)+2] = min(255, buf[64 + 3*(yy*8 + xx)+2] + max(0, (int)(intensity*l->color.z)));
+							}
+						}
+					}
+				}
+				Graphics.world.lightmaps[Graphics.world.tiles[c->tileaside].lightmap]->del();
+				Graphics.world.lightmaps[Graphics.world.tiles[c->tileaside].lightmap]->del2();
+			}
+
+
+
+
+
+
+
+
 			if(Graphics.world.loaded)
 			{
 				Graphics.camerapointer.x = -10*x + 5;
