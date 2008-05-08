@@ -52,10 +52,10 @@
 		<scroll>
 			<width>16</width>
 			<left>0</left>
-			<centerheight>10</centerheight>
+			<centerheight>15</centerheight>
 			<background>
 				<left>0</left>
-				<top>298</top>
+				<top>294</top>
 				<height>1</height>
 			</background>
 			<buttonup>
@@ -65,11 +65,11 @@
 			</buttonup>
 			<buttondown>
 				<left>0</left>
-				<top>340</top>
+				<top>337</top>
 				<height>16</height>
 			</buttondown>
-			<top height="5">300</top>
-			<bottom height="6">336</bottom>
+			<top height="4">300</top>
+			<bottom height="4">332</bottom>
 		</scroll>
 	</list>
 	<frame>
