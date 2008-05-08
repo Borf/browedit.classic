@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="iso-8859-1" ?>
 <skin name="HamVista">
+	<color>FFFFFFFF</color>
+	<colorblurred>FFFFFFAA</colorblurred>
 	<texture>data/skins/HamVista.tga</texture>
 	<font>data/fonts/tahoma.tga</font>
 	<window>

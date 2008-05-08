@@ -20,7 +20,7 @@ int cWM::draw()
 	CleanWindows();
 	glEnable(GL_TEXTURE_2D);
 	glDisable(GL_ALPHA_TEST);
-	glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
+	glColor4fv(colorblur);
 	glEnable(GL_BLEND);
 	int size = windows.size()-1;
 	int topwindow = 0;
@@ -47,15 +47,15 @@ int cWM::draw()
 		{
 			if (ii == topwindow)
 			{
-				glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+				glColor4fv(color);
 				w->istopwindow(true);
 			}
 			else
 			{
 				if(w->canbetransparent())
-					glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
+					glColor4fv(colorblur);
 				else
-					glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+					glColor4fv(color);
 				w->istopwindow(false);
 			}
 			if(w->isvisible() && w->isenabled())
@@ -73,15 +73,15 @@ int cWM::draw()
 		{
 			if (ii == topwindow)
 			{
-				glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+				glColor4fv(color);
 				w->istopwindow(true);
 			}
 			else
 			{
 				if(w->canbetransparent())
-					glColor4f(1.0f, 1.0f, 1.0f, 0.5f);
+					glColor4fv(colorblur);
 				else
-					glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+					glColor4fv(color);
 				w->istopwindow(false);
 			}
 			if(w->isvisible() && w->isenabled())
@@ -102,6 +102,18 @@ int cWM::init(string sSkin)
 	skin = fs.getxml(sSkin);
 	texture = cTextureLoaders::load(skin.FirstChildElement("skin")->FirstChildElement("texture")->FirstChild()->Value());
 	font.load(skin.FirstChildElement("skin")->FirstChildElement("font")->FirstChild()->Value());
+
+	string c = skin.FirstChildElement("skin")->FirstChildElement("color")->FirstChild()->Value();
+	color[0] = hex2dec(c.substr(0,2))/255.0f;
+	color[1] = hex2dec(c.substr(2,2))/255.0f;
+	color[2] = hex2dec(c.substr(4,2))/255.0f;
+	color[3] = hex2dec(c.substr(6,2))/255.0f;
+
+	c = skin.FirstChildElement("skin")->FirstChildElement("colorblurred")->FirstChild()->Value();
+	colorblur[0] = hex2dec(c.substr(0,2))/255.0f;
+	colorblur[1] = hex2dec(c.substr(2,2))/255.0f;
+	colorblur[2] = hex2dec(c.substr(4,2))/255.0f;
+	colorblur[3] = hex2dec(c.substr(6,2))/255.0f;
 
 	focus = 0;
 	Log(3,0,"Window Manager initialized");

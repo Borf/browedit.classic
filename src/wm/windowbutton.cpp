@@ -14,7 +14,6 @@ void cWindowButton::draw(int cutoffleft, int cutoffright, int cutofftop, int cut
 	GLfloat colors[4];
 	glGetFloatv(GL_CURRENT_COLOR, colors);
 	
-	glColor4f(1,1,1, colors[3]);
 	if (this->inobject())
 		glColor4f(0.75f, 0.75f, 1.0f, colors[3]);
 	if(!enabled)

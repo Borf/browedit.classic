@@ -44,6 +44,8 @@ public:
 	vector<cWindow*>	windows; //vector of windows, 0 = topwindow
 	cTexture*			texture;
 	cFont				font;
+	float				color[4];
+	float				colorblur[4];
 
 	void				addwindow(cWindow*);
 	void				delwindow(cWindow*, bool = true);
