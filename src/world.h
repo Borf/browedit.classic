@@ -153,6 +153,23 @@ public:
 	float unknown7;
 	float unknown8;
 
+	bool operator == (cSound other)
+	{
+		return	name == other.name &&
+				todo1 == other.todo1 &&
+				filename == other.filename &&
+				pos == other.pos &&
+				rotation == other.rotation &&
+				scale == other.scale &&
+				unknown1 == other.unknown1 &&
+				unknown2 == other.unknown2 &&
+				unknown3 == other.unknown3 &&
+				unknown4 == other.unknown4 &&
+				unknown5 == other.unknown5 &&
+				memcmp(unknown6,other.unknown6,6) == 0 &&
+				unknown7 == other.unknown7 &&
+				unknown8 == other.unknown8;
+	}
 
 };
 

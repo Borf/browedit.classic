@@ -1,0 +1,292 @@
+#ifndef __SOUNDSELECTWINDOW_H__
+#define __SOUDNSELECTWINDOW_H__
+
+#include "window.h"
+
+#include <sdl/SDL_mixer.h>
+#include "windowobject.h"
+#include "windowroundbutton.h"
+#include "windowbutton.h"
+#include "windowlistbox.h"
+#include "windowtree.h"
+#include "windowscrollpanel.h"
+#include "windowpicturebox.h"
+#include "rsmeditwindow.h"
+
+#include <filesystem.h>
+extern cFileSystem fs;
+extern string rodir;
+extern cWindow* draggingwindow;
+extern cWindowObject* draggingobject;
+extern vector<pair<string, string> > translations;
+extern void mainloop();
+
+extern vector<string> soundfiles;
+
+class cSoundSelectWindow : public cWindow
+{
+	class cWindowSoundCatSelect : public cWindowTree
+	{
+	public:
+		cWindowSoundCatSelect(cWindow* parent, vector<cWindowTree::cTreeNode*> n, TiXmlDocument &skin) : cWindowTree(parent, n,skin)
+		{
+			
+		}
+
+		void click()
+		{
+			unsigned int i;
+			cWindowTree::click();
+			cWindowDataListBox<string>* box = (cWindowDataListBox<string>*)parent->objects["sounds"];
+			box->values.clear();
+			box->data.clear();
+			box->SetInt(-2,0);
+
+			int a = selected;
+			cWindowTree::cTreeNode* node;
+			for(i = 0; i < nodes.size(); i++)
+			{
+				 node = nodes[i]->getnode(a);
+				 if(node != NULL)
+					 break;
+			}
+
+			vector<pair<string, string> > v;
+			v = *((vector<pair<string, string> >*)parent->userfunc(node));
+
+			for(i = 0; i < v.size(); i++)
+			{
+				pair<string, string> p = v[i];
+				box->values.push_back(p.first);
+				box->data.push_back(p.second);
+				
+			}
+			parent->resizeto(parent->pw(), parent->ph());
+			draggingwindow = NULL;
+			draggingobject = NULL;
+		}
+	};
+
+
+
+	class cWindowPlayButton : public cWindowButton
+	{
+	public:
+		cWindowPlayButton(cWindow* w, TiXmlDocument &skin) : cWindowButton(w,skin)
+		{
+			alignment = ALIGN_BOTTOMRIGHT;
+			moveto(0,0);
+			resizeto(100,20);
+			text = "Play";
+		}
+		void click()
+		{
+			if(text == "Play")
+			{
+				int selected = parent->objects["sounds"]->GetInt(-1);
+				if(selected >= ((cWindowDataListBox<string>*)parent->objects["sounds"])->data.size())
+					return;
+
+				string filename = ((cWindowDataListBox<string>*)parent->objects["sounds"])->data[selected];
+
+				text = "Stop";
+
+				Mix_Chunk *sample;
+
+				cFile* pFile = fs.open(rodir+"data/wav/" + filename);
+				sample=Mix_QuickLoad_WAV((BYTE*)pFile->data);
+				Mix_Volume(-1,MIX_MAX_VOLUME);
+				Mix_PlayChannel(0, sample, 0);
+				while(Mix_Playing(-1) > 0 && text == "Stop")
+				{
+					mainloop();
+				}
+				if(text == "Play")
+					Mix_HaltChannel(-1);
+				Mix_FreeChunk(sample);
+				pFile->close();
+				text = "Play";
+			}
+			else
+			{
+				text = "Play";
+			}
+		}
+	};
+	class cWindowOkButton : public cWindowButton
+	{
+	public:
+		cWindowOkButton(cWindow* w, TiXmlDocument &skin) : cWindowButton(w,skin)
+		{
+			alignment = ALIGN_BOTTOMRIGHT;
+			moveto(100,0);
+			resizeto(100,20);
+			text = "Ok";
+		}
+		void click()
+		{
+			cVector3 newPos = ((cSoundSelectWindow*)parent)->newPos;
+			int selected = parent->objects["sounds"]->GetInt(-1);
+			if(selected >= ((cWindowDataListBox<string>*)parent->objects["sounds"])->data.size())
+				return;
+
+			string filename = ((cWindowDataListBox<string>*)parent->objects["sounds"])->data[selected];
+			cSound s;
+			s.filename = filename;
+			s.name = ((cWindowDataListBox<string>*)parent->objects["sounds"])->values[selected];
+			s.pos = cVector3(newPos.x/5, newPos.y-17, newPos.z/5);
+			s.rotation = cVector3(0,0,0);
+			s.scale = cVector3(1,1,1);
+			Graphics.world.sounds.push_back(s);
+			parent->close();
+
+		}
+	};
+	class cWindowCancelButton : public cWindowButton
+	{
+	public:
+		cWindowCancelButton(cWindow* w, TiXmlDocument &skin) : cWindowButton(w,skin)
+		{
+			alignment = ALIGN_BOTTOMRIGHT;
+			moveto(200,0);
+			resizeto(100,20);
+			text = "Cancel";
+		}
+		void click()
+		{
+			parent->close();
+		}
+	};
+
+public:
+
+	map<cWindowTree::cTreeNode*, vector<pair<string, string> >, less<cWindowTree::cTreeNode*> > items;
+
+	cVector3 newPos;
+
+	cSoundSelectWindow(cTexture* t, cFont* f, TiXmlDocument &skin, cVector3 pNewPos) : cWindow(t,f,skin)
+	{
+		newPos = pNewPos; 
+		wtype = WT_SOUNDSELECT;
+		closetype = HIDE;
+		resizable = true;
+		visible = true;
+		modal = false;
+
+		h = Graphics.h()-50;
+		w = Graphics.w()-50;
+		title = GetMsg("wm/soundselect/TITLE");
+		center();
+
+		cWindowObject* o;
+
+		vector<cWindowTree::cTreeNode*> nodes;
+		map<string, cWindowTree::cTreeNode*, less<string> > lookup;
+
+		string line, pre, filename, cat, name;
+
+		map<string, string, less<string> > translationcache;
+
+		for(unsigned int i = 0; i < soundfiles.size(); i++)
+		{
+			cFile* pFile = fs.open(soundfiles[i]);
+			if(pFile == NULL)
+				continue;
+			while(!pFile->eof())
+			{
+				line = pFile->readline();
+				if (line == "")
+					continue;
+				pre = line.substr(0, line.find("|"));
+				filename = line.substr(line.find("|")+1);
+
+				cat = pre.substr(0, pre.rfind("/"));
+				name = pre.substr(pre.rfind("/")+1);
+
+				if(translationcache.find(cat) != translationcache.end())
+					cat = translationcache[cat];
+				else
+				{
+					string origcat = cat;
+					for(unsigned int ii = 0; ii < translations.size(); ii++)
+						cat = replace(cat, translations[ii].first, translations[ii].second);
+					translationcache[origcat] = cat;
+				}
+
+				if(lookup.find(cat) == lookup.end())
+				{
+					if(cat.find("/") != string::npos)
+					{
+						string p = cat.substr(0, cat.rfind("/"));
+						if(lookup.find(p) == lookup.end())
+						{
+							Log(1,0,"Invalid nesting in soudnfile...");
+						}
+						else
+						{
+							cWindowTree::cTreeNode* n = new cWindowTree::cTreeNode(cat.substr(cat.rfind("/")+1));
+							lookup[cat] = n;
+							lookup[p]->addchild(n);
+						}
+					}
+					else
+					{
+						cWindowTree::cTreeNode* n = new cWindowTree::cTreeNode(cat);
+						lookup[cat] = n;
+						nodes.push_back(n);
+					}
+				}
+				if(filename != "")
+				{
+					if (items.find(lookup[cat]) == items.end())
+					{
+						items[lookup[cat]] = vector<pair<string, string> >();
+						items[lookup[cat]].reserve(100);
+					}
+					items[lookup[cat]].push_back(pair<string,string>(name,filename));
+				}
+			}
+		}
+
+		o = new cWindowSoundCatSelect(this, nodes, skin);
+		o->alignment = ALIGN_TOPLEFT;
+		o->moveto(0,0);
+		o->resizeto(400,400);
+		objects["tree"] = o;
+
+		o = new cWindowDataListBox<string>(this, skin);
+		o->alignment = ALIGN_TOPLEFT;
+		o->moveto(0, 0);
+		o->resizeto(100,100);
+		objects["sounds"] = o;
+
+		objects["play"] = new cWindowPlayButton(this,skin);
+		objects["ok"] = new cSoundSelectWindow::cWindowOkButton(this,skin);
+		objects["cancel"] = new cSoundSelectWindow::cWindowCancelButton(this,skin);
+
+
+		objects["tree"]->click();
+
+//		objects["rollup"] = new cWindowRollupButton(this);
+		objects["close"] = new cWindowCloseButton(this,skin);
+
+		resizeto(w,h);
+	}	
+
+	void resizeto(int ww, int hh)
+	{
+		cWindow::resizeto(ww,hh);
+		objects["tree"]->resizeto(200, innerh());
+		objects["sounds"]->moveto(200, 0);
+		objects["sounds"]->resizeto(innerw()-200, innerh()-20);
+	}
+
+	void* userfunc(void* param)
+	{
+		return &items[(cWindowTree::cTreeNode*)param];
+	}
+
+
+};
+
+#endif

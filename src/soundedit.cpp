@@ -181,6 +181,17 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 
 					break;
 				}
+			case SDLK_BACKSPACE:
+				if (Graphics.selectedobject > -1 && Graphics.selectedobject < (int)Graphics.world.sounds.size())
+				{
+					Graphics.world.sounds.erase(Graphics.world.sounds.begin() + Graphics.selectedobject);
+					Graphics.selectedobject = -1;
+//					cWindow* w = Graphics.WM.getwindow(WT_LIGHTOVERVIEW);
+//					if(w != NULL)
+//						w->userfunc(NULL);
+
+				
+				}
 
 			
 			default:

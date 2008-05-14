@@ -19,6 +19,7 @@ int keymap[SDLK_LAST-SDLK_FIRST];
 #include "menucommands.h"
 #include "wm/modeloverviewwindow.h"
 #include "wm/lightoverviewwindow.h"
+#include "wm/soundoverviewwindow.h"
 #include "wm/minimapwindow.h"
 
 #include "texturecache.h"
@@ -327,6 +328,20 @@ void mainloop()
 		{
 			if(w == NULL)
 				Graphics.WM.addwindow(new cLightOverViewWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin));
+			else
+			{
+				w->userfunc(NULL);
+				w->show();
+			}
+		}
+		else if(w != NULL)
+			w->close();
+
+		w = Graphics.WM.getwindow(WT_SOUNDOVERVIEW);
+		if (editmode == MODE_SOUNDS)
+		{
+			if(w == NULL)
+				Graphics.WM.addwindow(new cSoundOverViewWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin));
 			else
 			{
 				w->userfunc(NULL);

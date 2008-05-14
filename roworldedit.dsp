@@ -421,6 +421,10 @@ SOURCE=.\src\wm\rsmeditwindow.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\src\wm\soundoverviewwindow.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\src\wm\soundselectwindow.h
 # End Source File
 # Begin Source File
