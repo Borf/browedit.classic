@@ -67,6 +67,7 @@ string skinFile;
 unsigned int undosize = 50;
 vector<string> texturefiles;
 vector<string> objectfiles;
+vector<string> soundfiles;
 
 double mouse3dxstart, mouse3dystart, mouse3dzstart;
 long mousestartx, mousestarty;
@@ -778,6 +779,8 @@ int main(int argc, char *argv[])
 					{
 						texturefiles.push_back(value);
 					}
+					else if (option == "sound")
+						soundfiles.push_back(value);
 					else if (option == "undostack")
 						undosize = atoi(value.c_str());
 					else if (option == "bgcolor")
@@ -868,6 +871,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,file,GetMsg("menu/file/EXPORTMAPFILES"),					&MenuCommand_exportmapfiles);
 	ADDMENUITEM(mm,file,GetMsg("menu/file/REBUILDTEXTUREFILE"),			&MenuCommand_rebuildtexturefile);
 	ADDMENUITEM(mm,file,GetMsg("menu/file/REBUILDMODELFILE"),				&MenuCommand_rebuildmodelfile);
+	ADDMENUITEM(mm,file,GetMsg("menu/file/REBUILDSOUNDSFILE"),				&MenuCommand_rebuildsoundsfile);
 	ADDMENUITEM(mm,file,GetMsg("menu/file/EXIT"),							&MenuCommand_exit); // exit
 	
 	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/RANDOM1"),					&MenuCommand_random1); // random1 Hills
@@ -1044,7 +1048,7 @@ int main(int argc, char *argv[])
 
 	Log(3,0,GetMsg("DONEINIT"));
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "data\\lighttest").c_str());
+	strcpy(Graphics.world.filename, string(rodir + "data\\prontera").c_str());
 	if(argc > 1)
 	{
 		strcpy(Graphics.world.filename, string(rodir + "data\\" + argv[1]).c_str());

@@ -1552,7 +1552,7 @@ void cWorld::draw()
 		for(y = 0; y < height; y++)
 		{
 			cCube* c = &cubes[y][x];
-			if(!Graphics.frustum.CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 10))
+			if(!Graphics.frustum.CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 20))
 				continue;
 			if (c->tileup > -1 && c->tileup < (int)tiles.size())
 			{
@@ -1650,7 +1650,7 @@ void cWorld::draw()
 			for(y = 0; (int)y < height; y++)
 			{
 				cCube* c = &cubes[y][x];
-				if(!Graphics.frustum.CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 10))
+				if(!Graphics.frustum.CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 20))
 					continue;
 				if (c->tileup != -1)
 				{
@@ -1921,7 +1921,7 @@ void cWorld::draw()
 			{
 				for(y = posy; y > posy-selsizey; y--)
 				{
-					if(!Graphics.frustum.CubeInFrustum(x*10+5,0,(height-y)*10+5, 10))
+					if(!Graphics.frustum.CubeInFrustum(x*10+5,0,(height-y)*10+5, 20))
 						continue;
 					int xx = posx - x;
 					int yy = posy - y;
@@ -2043,7 +2043,7 @@ void cWorld::draw()
 				for(y = 1; y < height-1; y++)
 				{
 					cCube* c = &cubes[y][x];
-					if(!Graphics.frustum.CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 10))
+					if(!Graphics.frustum.CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 20))
 						continue;
 
 					if (c->tileup != -1)
@@ -2106,7 +2106,7 @@ void cWorld::draw()
 				if (y >= height || y < 0 || x < 0 || x >= width)
 					continue;
 				cCube* c = &cubes[y][x];
-				if(!Graphics.frustum.CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 10))
+				if(!Graphics.frustum.CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 20))
 					continue;
 				glBegin(GL_LINE_LOOP);
 					glVertex3f(x*10,-c->cell1+0.2,(height-y)*10);

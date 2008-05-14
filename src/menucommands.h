@@ -78,6 +78,7 @@ MENUCOMMAND(favlights);
 
 MENUCOMMAND(rebuildtexturefile);
 MENUCOMMAND(rebuildmodelfile);
+MENUCOMMAND(rebuildsoundsfile);
 
 
 

@@ -29,6 +29,7 @@
 			<EXPORTMAPFILES>Export Map Files</EXPORTMAPFILES>
 			<REBUILDTEXTUREFILE>Rebuild texture file</REBUILDTEXTUREFILE>
 			<REBUILDMODELFILE>Rebuild model file</REBUILDMODELFILE>
+			<REBUILDSOUNDSFILE>Rebuild sounds file</REBUILDSOUNDSFILE>
 			<EXIT>Exit</EXIT>
 		</file>
 		<generate>
