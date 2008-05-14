@@ -2,6 +2,7 @@
 #include "graphics.h"
 #include "undo.h"
 #include <wm/soundwindow.h>
+#include <wm/soundselectwindow.h>
 
 extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
@@ -10,7 +11,6 @@ extern cUndoStack undostack;
 extern float oldmousex, oldmousey;
 extern bool lbuttondown;
 extern int movement;
-
 
 int cProcessManagement::soundedit_process_events(SDL_Event &event)
 {
@@ -79,6 +79,15 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 			{
 				if (SDL_GetModState() & KMOD_CTRL)
 				{
+					cWindow* w = Graphics.WM.getwindow(WT_SOUNDSELECT);
+					if(w)
+					{
+						w->show();
+						((cSoundSelectWindow*)w)->newPos = cVector3(mouse3dx, mouse3dy, mouse3dz);
+					}
+					else
+						Graphics.WM.addwindow(new cSoundSelectWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin, cVector3(mouse3dx, mouse3dy, mouse3dz)));
+					
 
 				}
 				else
@@ -144,6 +153,36 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 					Graphics.WM.addwindow(w);
 				}
 				break;
+			case SDLK_SPACE:
+				if (Graphics.selectedobject != -1)
+				{
+					static bool playing = false;
+
+					if(!playing)
+					{
+						playing = true;
+
+						cSound* o = &Graphics.world.sounds[Graphics.selectedobject];
+						Mix_Chunk *sample;
+						cFile* pFile = fs.open(rodir+"data/wav/" + o->filename);
+						sample=Mix_QuickLoad_WAV((BYTE*)pFile->data);
+						Mix_Volume(-1,MIX_MAX_VOLUME);
+						Mix_PlayChannel(0, sample, 0);
+						while(Mix_Playing(-1) > 0 && playing)
+						{
+							mainloop();
+						}
+						if(!playing)
+							Mix_HaltChannel(-1);
+						Mix_FreeChunk(sample);
+						pFile->close();
+					}
+					playing = false;
+
+					break;
+				}
+
+			
 			default:
 				break;
 			}

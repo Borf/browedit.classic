@@ -106,7 +106,14 @@ public:
 	void scrolldown();
 };
 
-
+template <class T> class cWindowDataListBox : public cWindowListBox
+{
+public:
+	vector<T>	data;
+	cWindowDataListBox(cWindow* parent, TiXmlDocument &skin) : cWindowListBox(parent,skin)
+	{
+	}
+};
 
 
 #endif

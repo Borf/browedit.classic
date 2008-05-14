@@ -258,5 +258,8 @@
 			<SCALE>Scale:</SCALE>
 			<ROTATION>Rotation:</ROTATION>
 		</sound>
+		<soundselect>
+			<TITLE>Sound Select...</TITLE>
+		</soundselect>
 	</wm>
 </language>

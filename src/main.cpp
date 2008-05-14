@@ -3,6 +3,7 @@
 TiXmlDocument msgtable;
 #include "common.h"
 int keymap[SDLK_LAST-SDLK_FIRST];
+#include <sdl/SDL_Mixer.h>
 #include "filesystem.h"
 #include <math.h>
 #include "main.h"
@@ -1068,6 +1069,11 @@ int main(int argc, char *argv[])
 		keys[i] = 0;
 
 
+	Mix_OpenAudio(11025,MIX_DEFAULT_FORMAT,2,1024);
+	Mix_AllocateChannels(1);
+	
+	
+	
 	if(!IsLegal2)
 		Graphics.WM.MessageBox("This version of browedit is not activated. Please post on the access reset topic to get it activated");
 
@@ -1077,6 +1083,8 @@ int main(int argc, char *argv[])
 	while( running )
 		mainloop();
 
+
+	Mix_CloseAudio();
 	// Shutdown
 	Graphics.KillGLWindow();						// Kill The Window
 	Graphics.world.unload();
