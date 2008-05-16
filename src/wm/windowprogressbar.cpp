@@ -6,100 +6,57 @@ void cWindowProgressBar::draw(int cutoffleft, int cutoffright, int cutofftop, in
 	GLfloat colors[4];
 	glGetFloatv(GL_CURRENT_COLOR, colors);
 
-	int xx, yy;
-	xx = realx();
-	yy = realy();
 
 	float ratio = ((float)value / (float)max-min);
 	float ww = (float)w*ratio;
 
 	glBindTexture(GL_TEXTURE_2D, parent->texture->texid());
-	glBegin(GL_QUADS);
-		glTexCoord2f((258.0f+2.0f)/512.0f,	(340.0f+2.0f)/512.0f);		glVertex2d(xx+2, yy+2);
-		glTexCoord2f((387.0f-2.0f)/512.0f,	(340.0f+2.0f)/512.0f);		glVertex2d(xx+w-2, yy+2);
-		glTexCoord2f((387.0f-2.0f)/512.0f,	(469.0f-2.0f)/512.0f);		glVertex2d(xx+w-2, yy+h-2);
-		glTexCoord2f((258.0f+2.0f)/512.0f,	(469.0f-2.0f)/512.0f);		glVertex2d(xx+2, yy+h-2);
 
-		glTexCoord2f((258.0f+2.0f)/512.0f,	(340.0f+2.0f)/512.0f);		glVertex2d(xx, yy+2);
-		glTexCoord2f((258.0f)/512.0f,		(340.0f+2.0f)/512.0f);		glVertex2d(xx+2, yy+2);
-		glTexCoord2f((258.0f)/512.0f,		(469.0f-2.0f)/512.0f);		glVertex2d(xx+2, yy+h-2);
-		glTexCoord2f((258.0f+2.0f)/512.0f,	(469.0f-2.0f)/512.0f);		glVertex2d(xx, yy+h-2);
+	drawprogress(w,0);
 
-		glTexCoord2f((387.0f-2.0f)/512.0f,	(340.0f+2.0f)/512.0f);		glVertex2d(xx+w-2, yy+2);
-		glTexCoord2f((387.0f)/512.0f,		(340.0f+2.0f)/512.0f);		glVertex2d(xx+w, yy+2);
-		glTexCoord2f((387.0f)/512.0f,		(469.0f-2.0f)/512.0f);		glVertex2d(xx+w, yy+h-2);
-		glTexCoord2f((387.0f-2.0f)/512.0f,	(469.0f-2.0f)/512.0f);		glVertex2d(xx+w-2, yy+h-2);
-
-		glTexCoord2f((258.0f+2.0f)/512.0f,	(340.0f+2.0f)/512.0f);		glVertex2d(xx+2, yy+2);
-		glTexCoord2f((258.0f+2.0f)/512.0f,	(340.0f)/512.0f);			glVertex2d(xx+2, yy);
-		glTexCoord2f((387.0f)/512.0f,		(340.0f)/512.0f);			glVertex2d(xx+w, yy);
-		glTexCoord2f((387.0f)/512.0f,		(340.0f+2.0f)/512.0f);		glVertex2d(xx+w, yy+2);
-		
-		glTexCoord2f((258.0f)/512.0f,		(469.0f)/512.0f);			glVertex2d(xx, yy+h);
-		glTexCoord2f((258.0f)/512.0f,		(469.0f-2.0f)/512.0f);		glVertex2d(xx, yy+h-2);
-		glTexCoord2f((387.0f-2.0f)/512.0f,	(469.0f-2.0f)/512.0f);		glVertex2d(xx+w-2, yy+h-2);
-		glTexCoord2f((387.0f-2.0f)/512.0f,	(469.0f)/512.0f);			glVertex2d(xx+w-2, yy+h);
-
-		glTexCoord2f((258.0f)/512.0f,		(340.0f)/512.0f);			glVertex2d(xx, yy);
-		glTexCoord2f((258.0f+2.0f)/512.0f,	(340.0f)/512.0f);			glVertex2d(xx+2, yy);
-		glTexCoord2f((258.0f+2.0f)/512.0f,	(340.0f+2.0f)/512.0f);		glVertex2d(xx+2, yy+2);
-		glTexCoord2f((258.0f)/512.0f,		(340.0f+2.0f)/512.0f);		glVertex2d(xx, yy+2);
-
-		glTexCoord2f((387.0f-2.0f)/512.0f,	(469.0f-2.0f)/512.0f);		glVertex2d(xx+w-2, yy+h-2);
-		glTexCoord2f((387.0f)/512.0f,		(469.0f-2.0f)/512.0f);		glVertex2d(xx+w, yy+h-2);
-		glTexCoord2f((387.0f)/512.0f,		(469.0f)/512.0f);			glVertex2d(xx+w, yy+h);
-		glTexCoord2f((387.0f-2.0f)/512.0f,	(469.0f)/512.0f);			glVertex2d(xx+w-2, yy+h);
-
-		if (value > min)
+	if(skinType == NORMAL)
+	{
+		drawprogress(ww,1);
+	}
+	else if(skinType == CONDITIONAL)
+	{
+		int s = 1;
+		for(int i = 1; i < skins.size(); i++)
 		{
-			if (gradcolors)
-				glColor4f(1.0f-ratio,ratio,0, colors[3]);
-			else
-				glColor4f(0.5f,0.5f,1.0f,colors[3]);
-
-
-			glTexCoord2f((258.0f+2.0f)/512.0f,	(340.0f+2.0f)/512.0f);		glVertex2d(xx+2, yy+2);
-			glTexCoord2f((387.0f-2.0f)/512.0f,	(340.0f+2.0f)/512.0f);		glVertex2d(xx+ww-2, yy+2);
-			glTexCoord2f((387.0f-2.0f)/512.0f,	(469.0f-2.0f)/512.0f);		glVertex2d(xx+ww-2, yy+h-2);
-			glTexCoord2f((258.0f+2.0f)/512.0f,	(469.0f-2.0f)/512.0f);		glVertex2d(xx+2, yy+h-2);
-
-			glTexCoord2f((258.0f+2.0f)/512.0f,	(340.0f+2.0f)/512.0f);		glVertex2d(xx, yy+2);
-			glTexCoord2f((258.0f)/512.0f,		(340.0f+2.0f)/512.0f);		glVertex2d(xx+2, yy+2);
-			glTexCoord2f((258.0f)/512.0f,		(469.0f-2.0f)/512.0f);		glVertex2d(xx+2, yy+h-2);
-			glTexCoord2f((258.0f+2.0f)/512.0f,	(469.0f-2.0f)/512.0f);		glVertex2d(xx, yy+h-2);
-
-			glTexCoord2f((387.0f-2.0f)/512.0f,	(340.0f+2.0f)/512.0f);		glVertex2d(xx+ww-2, yy+2);
-			glTexCoord2f((387.0f)/512.0f,		(340.0f+2.0f)/512.0f);		glVertex2d(xx+ww, yy+2);
-			glTexCoord2f((387.0f)/512.0f,		(469.0f-2.0f)/512.0f);		glVertex2d(xx+ww, yy+h-2);
-			glTexCoord2f((387.0f-2.0f)/512.0f,	(469.0f-2.0f)/512.0f);		glVertex2d(xx+ww-2, yy+h-2);
-
-			glTexCoord2f((258.0f+2.0f)/512.0f,	(340.0f+2.0f)/512.0f);		glVertex2d(xx+2, yy+2);
-			glTexCoord2f((258.0f+2.0f)/512.0f,	(340.0f)/512.0f);			glVertex2d(xx+2, yy);
-			glTexCoord2f((387.0f)/512.0f,		(340.0f)/512.0f);			glVertex2d(xx+ww, yy);
-			glTexCoord2f((387.0f)/512.0f,		(340.0f+2.0f)/512.0f);		glVertex2d(xx+ww, yy+2);
-			
-			glTexCoord2f((258.0f)/512.0f,		(469.0f)/512.0f);			glVertex2d(xx, yy+h);
-			glTexCoord2f((258.0f)/512.0f,		(469.0f-2.0f)/512.0f);		glVertex2d(xx, yy+h-2);
-			glTexCoord2f((387.0f-2.0f)/512.0f,	(469.0f-2.0f)/512.0f);		glVertex2d(xx+ww-2, yy+h-2);
-			glTexCoord2f((387.0f-2.0f)/512.0f,	(469.0f)/512.0f);			glVertex2d(xx+ww-2, yy+h);
-
-			glTexCoord2f((258.0f)/512.0f,		(340.0f)/512.0f);			glVertex2d(xx, yy);
-			glTexCoord2f((258.0f+2.0f)/512.0f,	(340.0f)/512.0f);			glVertex2d(xx+2, yy);
-			glTexCoord2f((258.0f+2.0f)/512.0f,	(340.0f+2.0f)/512.0f);		glVertex2d(xx+2, yy+2);
-			glTexCoord2f((258.0f)/512.0f,		(340.0f+2.0f)/512.0f);		glVertex2d(xx, yy+2);
-
-			glTexCoord2f((387.0f-2.0f)/512.0f,	(469.0f-2.0f)/512.0f);		glVertex2d(xx+ww-2, yy+h-2);
-			glTexCoord2f((387.0f)/512.0f,		(469.0f-2.0f)/512.0f);		glVertex2d(xx+ww, yy+h-2);
-			glTexCoord2f((387.0f)/512.0f,		(469.0f)/512.0f);			glVertex2d(xx+ww, yy+h);
-			glTexCoord2f((387.0f-2.0f)/512.0f,	(469.0f)/512.0f);			glVertex2d(xx+ww-2, yy+h);
+			if(ratio*100 < skins[i].condition && ratio*100 > skins[i-1].condition)
+				s = i;
 		}
-
-	glEnd();
+		drawprogress(ww,s);
+	}
 
 	glColor4fv(colors);
 	
 }
 
+
+void cWindowProgressBar::drawprogress(int ww, int i)
+{
+	int xx, yy;
+	xx = realx();
+	yy = realy();
+
+	glBegin(GL_QUADS);
+		glTexCoord2f((skins[i].left)/512.0f,					(skins[i].top-skins[i].height)/512.0f);		glVertex2d(xx,							yy+skins[i].height);
+		glTexCoord2f((skins[i].left+skins[i].leftWidth)/512.0f,	(skins[i].top-skins[i].height)/512.0f);		glVertex2d(xx+skins[i].leftWidth,		yy+skins[i].height);
+		glTexCoord2f((skins[i].left+skins[i].leftWidth)/512.0f,	(skins[i].top)/512.0f);						glVertex2d(xx+skins[i].leftWidth,		yy);
+		glTexCoord2f((skins[i].left)/512.0f,					(skins[i].top)/512.0f);						glVertex2d(xx,							yy);
+
+		glTexCoord2f((skins[i].left+skins[i].leftWidth)/512.0f,	(skins[i].top-skins[i].height)/512.0f);		glVertex2d(xx+skins[i].leftWidth,		yy+skins[i].height);
+		glTexCoord2f((skins[i].left+skins[i].leftWidth)/512.0f,	(skins[i].top)/512.0f);						glVertex2d(xx+skins[i].leftWidth,		yy);
+		glTexCoord2f((skins[i].right)/512.0f,					(skins[i].top)/512.0f);						glVertex2d(xx+ww-skins[i].rightWidth,	yy);
+		glTexCoord2f((skins[i].right)/512.0f,					(skins[i].top-skins[i].height)/512.0f);		glVertex2d(xx+ww-skins[i].rightWidth,	yy+skins[i].height);
+		
+		glTexCoord2f((skins[i].right)/512.0f,						(skins[i].top-skins[i].height)/512.0f);	glVertex2d(xx+ww-skins[i].rightWidth,	yy+skins[i].height);
+		glTexCoord2f((skins[i].right)/512.0f,						(skins[i].top)/512.0f);					glVertex2d(xx+ww-skins[i].rightWidth,	yy);
+		glTexCoord2f((skins[i].right+skins[i].rightWidth)/512.0f,	(skins[i].top)/512.0f);					glVertex2d(xx+ww,						yy);
+		glTexCoord2f((skins[i].right+skins[i].rightWidth)/512.0f,	(skins[i].top-skins[i].height)/512.0f);	glVertex2d(xx+ww,						yy+skins[i].height);
+	glEnd();
+}
 
 void cWindowProgressBar::click()
 {

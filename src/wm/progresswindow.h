@@ -52,7 +52,7 @@ public:
 
 		cWindowObject* o;
 		
-		o = new cWindowProgressBar(this);
+		o = new cWindowProgressBar(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(0,0);
 		o->resizeto(innerw(), 10);

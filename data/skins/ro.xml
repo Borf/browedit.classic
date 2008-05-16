@@ -82,15 +82,15 @@
 		<bottom height="2">93</bottom>
 	</frame>
 	<checkbox>
-		<width>13</width>
-		<height>13</height>
+		<width>10</width>
+		<height>10</height>
 		<unchecked>
-			<left>18</left>
-			<top>281</top>
+			<left>40</left>
+			<top>30</top>
 		</unchecked>
 		<checked>
-			<left>32</left>
-			<top>281</top>
+			<left>51</left>
+			<top>30</top>
 		</checked>
 	</checkbox>
 	<tabstrip>
@@ -141,5 +141,40 @@
 		<offsety>-16</offsety>
 	</collapsebutton>
 
-
+<!--
+	<progress type="normal">
+		<back>
+			<height>9</height>
+			<top>60</top>
+			<left width="4">25</left>
+			<right width="4">45</right>
+		</back>
+		<bar>
+			<height>9</height>
+			<top>70</top>
+			<left width="4">25</left>
+			<right width="4">45</right>
+		</bar>
+	</progress>
+	-->
+	<progress type="conditional">
+		<back>
+			<height>9</height>
+			<top>60</top>
+			<left width="4">25</left>
+			<right width="4">45</right>
+		</back>
+		<bar cond="50">
+			<height>9</height>
+			<top>80</top>
+			<left width="4">25</left>
+			<right width="4">45</right>
+		</bar>
+		<bar cond="100">
+			<height>9</height>
+			<top>70</top>
+			<left width="4">25</left>
+			<right width="4">45</right>
+		</bar>
+	</progress>
 </skin>
