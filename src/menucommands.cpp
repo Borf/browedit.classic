@@ -102,46 +102,6 @@ MENUCOMMAND(opengrf)
 	return true;
 }
 
-MENUCOMMAND(importalpha)
-{
-#ifdef WIN32
-	char curdir[100];
-	getcwd(curdir, 100);
-	SDL_SysWMinfo wmInfo;
-	SDL_VERSION(&wmInfo.version)	;
-	SDL_GetWMInfo(&wmInfo);
-	HWND hWnd = wmInfo.window;
-	OPENFILENAME ofn;
-	ZeroMemory(&ofn, sizeof(ofn));
-	ofn.lStructSize = sizeof(ofn);
-	ofn.hwndOwner = hWnd;
-
-	strcpy(Graphics.world.filename, replace(Graphics.world.filename, "/", "\\").c_str());
-	ofn.lpstrFile = Graphics.world.filename;
-	ofn.nMaxFile = 256;
-	ofn.lpstrFilter = "All\0*.*\0RO ALPHA Maps\0*.rsw\0";
-	ofn.nFilterIndex = 2;
-	ofn.lpstrFileTitle = NULL;
-	ofn.nMaxFileTitle = 0;
-	ofn.lpstrInitialDir = NULL;
-	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_ENABLESIZING;
-	if (GetOpenFileName(&ofn))
-	{
-		while(Graphics.world.filename[strlen(Graphics.world.filename)-1] != '.')
-			Graphics.world.filename[strlen(Graphics.world.filename)-1] = '\0';
-		Graphics.world.filename[strlen(Graphics.world.filename)-1] = '\0';
-
-		chdir(curdir);
-		Graphics.world.importarcturus();
-	}
-#else
-
-
-#endif
-	return true;
-}
-
-
 MENUCOMMAND(save)
 {
 #ifdef WIN32
