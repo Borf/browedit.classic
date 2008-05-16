@@ -135,7 +135,10 @@ void cWM::save()
 void cWM::unload()
 {
 	for(int i = 0; i < (int)windows.size(); i++)
+	{
+		windows[i]->save();
 		delete(windows[i]);
+	}
 	windows.clear();
 	if(texture)	
 		texture->unLoad();

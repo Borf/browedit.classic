@@ -518,33 +518,43 @@ void cWindow::save()
 #ifndef __NOXML__
 	if(saveprops != "")
 	{
-		char* elements[] = {"x","y","h","w" };
+		pair<char*,bool*> elements[] = {
+			pair<char*,bool*>("x", &movable),
+			pair<char*,bool*>("y", &movable),
+			pair<char*,bool*>("w", &resizable),
+			pair<char*,bool*>("h", &resizable) };
 
-		if(config.FirstChildElement("settings")->FirstChildElement(saveprops.c_str()) == NULL)
-			config.FirstChildElement("settings")->InsertEndChild(TiXmlElement(saveprops.c_str()));
+		if(config.FirstChildElement("config")->FirstChildElement("wm") == NULL)
+			config.FirstChildElement("config")->InsertEndChild(TiXmlElement("wm"));
+		if(config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveprops.c_str()) == NULL)
+			config.FirstChildElement("config")->FirstChildElement("wm")->InsertEndChild(TiXmlElement(saveprops.c_str()));
 
 		for(int i = 0; i < 4; i++)
 		{
-			if(config.FirstChildElement("settings")->FirstChildElement(saveprops.c_str())->FirstChildElement(elements[i]) == NULL)
+			if(*elements[i].second && config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveprops.c_str())->FirstChildElement(elements[i].first) == NULL)
 			{
-				config.FirstChildElement("settings")->FirstChildElement(saveprops.c_str())->InsertEndChild(TiXmlElement(elements[i]));
-				config.FirstChildElement("settings")->FirstChildElement(saveprops.c_str())->FirstChildElement(elements[i])->InsertEndChild(TiXmlText(""));
+				config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveprops.c_str())->InsertEndChild(TiXmlElement(elements[i].first));
+				config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveprops.c_str())->FirstChildElement(elements[i].first)->InsertEndChild(TiXmlText(""));
 			}
 		}
 
 		char buf[10];
-		sprintf(buf, "%i", x);
-		config.FirstChildElement("settings")->FirstChildElement(saveprops.c_str())->FirstChildElement("x")->FirstChild()->SetValue(buf);
+		if(movable)
+		{
+			sprintf(buf, "%i", x);
+			config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveprops.c_str())->FirstChildElement("x")->FirstChild()->SetValue(buf);
 
-		sprintf(buf, "%i", y);
-		config.FirstChildElement("settings")->FirstChildElement(saveprops.c_str())->FirstChildElement("y")->FirstChild()->SetValue(buf);
+			sprintf(buf, "%i", y);
+			config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveprops.c_str())->FirstChildElement("y")->FirstChild()->SetValue(buf);
+		}
+		if(resizable)
+		{
+			sprintf(buf, "%i", h);
+			config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveprops.c_str())->FirstChildElement("h")->FirstChild()->SetValue(buf);
 
-		sprintf(buf, "%i", h);
-		config.FirstChildElement("settings")->FirstChildElement(saveprops.c_str())->FirstChildElement("h")->FirstChild()->SetValue(buf);
-
-		sprintf(buf, "%i", w);
-		config.FirstChildElement("settings")->FirstChildElement(saveprops.c_str())->FirstChildElement("w")->FirstChild()->SetValue(buf);
-
+			sprintf(buf, "%i", w);
+			config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveprops.c_str())->FirstChildElement("w")->FirstChild()->SetValue(buf);
+		}
 		config.SaveFile(configfile.c_str());
 
 	}
@@ -555,16 +565,27 @@ void cWindow::initprops(string s)
 {
 #ifndef __NOXML__
 	saveprops = s;
-	if(config.FirstChildElement("settings")->FirstChildElement(s.c_str()))
+	if(!config.FirstChildElement("config"))
+		return;
+	if(!config.FirstChildElement("config")->FirstChildElement("wm"))
+		return;
+
+	if(config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str()))
 	{
-		if(config.FirstChildElement("settings")->FirstChildElement(s.c_str())->FirstChildElement("x"))
-			x = atoi(config.FirstChildElement("settings")->FirstChildElement(s.c_str())->FirstChildElement("x")->FirstChild()->Value());
-		if(config.FirstChildElement("settings")->FirstChildElement(s.c_str())->FirstChildElement("y"))
-			y = atoi(config.FirstChildElement("settings")->FirstChildElement(s.c_str())->FirstChildElement("y")->FirstChild()->Value());
-		if(config.FirstChildElement("settings")->FirstChildElement(s.c_str())->FirstChildElement("h"))
-			h = atoi(config.FirstChildElement("settings")->FirstChildElement(s.c_str())->FirstChildElement("h")->FirstChild()->Value());
-		if(config.FirstChildElement("settings")->FirstChildElement(s.c_str())->FirstChildElement("w"))
-			w = atoi(config.FirstChildElement("settings")->FirstChildElement(s.c_str())->FirstChildElement("w")->FirstChild()->Value());
+		if(movable)
+		{
+			if(config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str())->FirstChildElement("x"))
+				x = atoi(config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str())->FirstChildElement("x")->FirstChild()->Value());
+			if(config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str())->FirstChildElement("y"))
+				y = atoi(config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str())->FirstChildElement("y")->FirstChild()->Value());
+		}
+		if(resizable)
+		{
+			if(config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str())->FirstChildElement("h"))
+				h = atoi(config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str())->FirstChildElement("h")->FirstChild()->Value());
+			if(config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str())->FirstChildElement("w"))
+				w = atoi(config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str())->FirstChildElement("w")->FirstChild()->Value());
+		}
 	}
 #endif
 }

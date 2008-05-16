@@ -648,6 +648,8 @@ cModelsWindow::cModelsWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWind
 	title = GetMsg("wm/model/TITLE");
 	center();
 
+	initprops("modelswindow");
+
 	cWindowObject* o;
 
 	vector<cWindowTree::cTreeNode*> nodes;

@@ -29,8 +29,7 @@ extern string			fontname;
 extern cMenu*			lastmenu;
 extern string			skinFile;
 double mouse3dx, mouse3dy, mouse3dz;
-
-extern string			config;
+extern TiXmlDocument	config;
 
 cMenu* popupmenu = NULL;
 
@@ -415,21 +414,10 @@ int cGraphics::init()
 	}
 
 	
-	Log(3,0,GetMsg("file/LOADING"), "water.txt");
-	cFile* pFile = fs.open("water.txt");
-	while(pFile->readline() != "[" + config + "]" && !pFile->eof());
+	waterdir =		config.FirstChildElement("config")->FirstChildElement("water")->FirstChildElement("directory")->FirstChild()->Value();
+	waterext =		config.FirstChildElement("config")->FirstChildElement("water")->FirstChildElement("extension")->FirstChild()->Value();
+	watercount=atoi(config.FirstChildElement("config")->FirstChildElement("water")->FirstChildElement("count")->FirstChild()->Value());
 
-	if(pFile->eof())
-	{
-		Log(1,0,"No matching water-section found!");
-		exit(0);
-	}
-
-	waterdir = pFile->readline();
-	waterext = pFile->readline();
-	watercount = atoi(pFile->readline().c_str());
-
-	pFile->close();
 	watertextures.resize(watercount);
 	for(i = 0; i < watercount; i++)
 	{

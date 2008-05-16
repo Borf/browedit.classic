@@ -180,6 +180,7 @@ public:
 		x = Graphics.w()-w;
 		y = 0;
 		title = "";
+		initprops("hotbar");
 
 		cWindowObject* o;
 

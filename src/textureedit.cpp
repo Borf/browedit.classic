@@ -152,8 +152,11 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 							}
 
 //									cTile* tt = &Graphics.world.tiles[Graphics.world.cubes[y][x].tileup];
-							Graphics.world.tiles.push_back(t);
-							Graphics.world.cubes[y][x].tileup = Graphics.world.tiles.size()-1;
+							if(y >= 0 && y < Graphics.world.height && x >= 0 && x < Graphics.world.width)
+							{
+								Graphics.world.tiles.push_back(t);
+								Graphics.world.cubes[y][x].tileup = Graphics.world.tiles.size()-1;
+							}
 						}
 					}
 				}

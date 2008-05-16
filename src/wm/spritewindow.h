@@ -414,6 +414,8 @@ public:
 		title = GetMsg("wm/sprite/TITLE");
 		center();
 
+		initprops("sprite");
+
 		defaultobject = "OkButton";
 
 		objects["rollup"] = new cWindowRollupButton(this,skin);
@@ -440,7 +442,7 @@ public:
 		}
 
 		if(!sprites.FirstChild())
-			sprites = fs.getxml("sprites.xml");
+			sprites = fs.getxml("data/sprites.xml");
 
 		((cTabPanel*)objects["tabpanel"])->tabchange(-1);
 

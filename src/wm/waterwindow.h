@@ -46,6 +46,7 @@ public:
 		w = 200+skinOffLeft+skinOffRight;
 		title = GetMsg("wm/water/TITLE");
 		center();
+		initprops("water");
 
 		defaultobject = "OkButton";
 

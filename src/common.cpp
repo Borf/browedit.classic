@@ -490,3 +490,8 @@ int hex2dec(string s, int mult)
 	else
 		return pow(16,mult) * val  + hex2dec(s.substr(0,s.length()-1), mult+1);
 }
+
+cVector3 hex2floats(string c)
+{
+	return cVector3(hex2dec(c.substr(0,2)), hex2dec(c.substr(2,2)), hex2dec(c.substr(4,2)));
+}

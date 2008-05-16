@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="iso-8859-1" ?>
 <skin name="RO">
+	<color>FFFFFFFF</color>
+	<colorblurred>FFFFFFAA</colorblurred>
 	<texture>data/skins/ro.tga</texture>
 	<font>data/fonts/tahoma.tga</font>
 	<window>
@@ -15,9 +17,9 @@
 		<bottom height="30">21</bottom>
 		<offsets>
 			<top>20</top>
-			<bottom>10</bottom>
-			<left>10</left>
-			<right>10</right>
+			<bottom>5</bottom>
+			<left>2</left>
+			<right>2</right>
 		</offsets>
 	</window>
 	<button>
@@ -80,11 +82,16 @@
 		<bottom height="2">93</bottom>
 	</frame>
 	<checkbox>
-		<fontcolor>000000</fontcolor>
-		<top height="5">170</top>
-		<left width="5">0</left>
-		<right width="5">8</right>
-		<bottom height="5">178</bottom>
+		<width>13</width>
+		<height>13</height>
+		<unchecked>
+			<left>18</left>
+			<top>281</top>
+		</unchecked>
+		<checked>
+			<left>32</left>
+			<top>281</top>
+		</checked>
 	</checkbox>
 	<tabstrip>
 		<fontcolor>000000</fontcolor>
@@ -120,8 +127,8 @@
 		<bottom height="0">9</bottom>
 		<width>9</width>
 		<height>9</height>
-		<offsetx>4</offsetx>
-		<offsety>4</offsety>
+		<offsetx>0</offsetx>
+		<offsety>-16</offsety>
 	</closebutton>
 	<collapsebutton>
 		<top height="9">0</top>
@@ -131,7 +138,7 @@
 		<width>9</width>
 		<height>9</height>
 		<offsetx>15</offsetx>
-		<offsety>4</offsety>
+		<offsety>-16</offsety>
 	</collapsebutton>
 
 

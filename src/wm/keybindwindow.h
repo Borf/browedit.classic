@@ -343,7 +343,7 @@ public:
 			keymap[SDLK_ESCAPE] = parent->objects["Esc"]->GetInt(0);;
 
 
-			ofstream pFile("keymap.txt");
+			ofstream pFile("data/keymap.txt");
 			for(int i = 0; i < SDLK_LAST-SDLK_FIRST; i++)
 			{
 				char buf[100];

@@ -151,6 +151,7 @@ public:
 		w = Graphics.w()-50;
 		title = GetMsg("wm/texture/TITLE");
 		center();
+		initprops("textures");
 
 		cWindowObject* o;
 

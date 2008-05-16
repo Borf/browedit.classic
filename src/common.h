@@ -118,6 +118,7 @@ string ltrim(string s);
 string rtrim(string s);
 string inttostring(int);
 int hex2dec(string,int = 0);
+cVector3 hex2floats(string);
 
 long tickcount();
 void RotateShortestAngle(float &i, float angle);

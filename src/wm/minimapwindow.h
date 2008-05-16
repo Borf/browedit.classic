@@ -80,10 +80,12 @@ public:
 		alwaysontop = true;
 		notransparency = true;
 
-		h = Graphics.world.height+skinOffBottom+skinOffTop;
-		w = Graphics.world.width+skinOffLeft+skinOffRight;
+
 		x = Graphics.w()-w;
 		y = 0;
+		initprops("minimap");
+		h = Graphics.world.height+skinOffBottom+skinOffTop;
+		w = Graphics.world.width+skinOffLeft+skinOffRight;
 		title = "";
 
 

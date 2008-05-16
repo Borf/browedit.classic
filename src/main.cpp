@@ -38,6 +38,8 @@ bool IsLegal2 = true;
 string inputboxresult;
 bool IsInsideVPC();
 bool IsInsideVMWare();
+string configfile;
+TiXmlDocument config;
 bool IsLegal = true;
 
 long userid;
@@ -53,7 +55,6 @@ int process_events();
 bool running = true;
 eMode editmode = MODE_TEXTURE;
 float paintspeed = 100;
-string config;
 extern double mouse3dx, mouse3dy, mouse3dz;
 long tilex,tiley;
 long lastmotion;
@@ -475,14 +476,13 @@ int main(int argc, char *argv[])
 	{
 		Log(1,0,"Error opening configfile");
 	}
+	configfile = pFile->readline();
+	pFile->close();
 
-	string language = pFile->readline();
+	config = fs.getxml(configfile);
+	string language = config.FirstChildElement("config")->FirstChildElement("language")->FirstChild()->Value();
 	language = language.substr(language.find("=")+1);
 	msgtable = fs.getxml("data/" + language + ".txt");
-
-	config = pFile->readline();
-	config = config.substr(config.find("=")+1);
-
 
 	if(IsInsideVMWare() || IsInsideVPC())
 	{
@@ -727,97 +727,120 @@ int main(int argc, char *argv[])
 	map<cMenu*, int, less<cMenu*> > levelm;
 	levelm[models] = 0;
 	
-	while(!pFile->eof())
+
+	TiXmlElement* el = config.FirstChildElement("config")->FirstChildElement();
+
+	while(el != NULL)
 	{
-		string line = pFile->readline();
-		if (line == "[" + config + "]")
+		string option = el->Value();
+
+		if(option == "ro")
 		{
-			line = "";
-			while(!pFile->eof() && line[0] != '[')
+			rodir = el->Attribute("directory");
+			TiXmlElement* el2 = el->FirstChildElement("grf");
+			while(el2 != NULL)
 			{
-				line = pFile->readline();
-				if(ltrim(line).substr(0,2) == "//")
-					continue;
-				if(line.find("=") != string::npos)
-				{
-					string option = line.substr(0, line.find("="));
-					string value = line.substr(line.find("=")+1);
+				fs.LoadFile(el2->FirstChild()->Value());
+				el2 = el2->NextSiblingElement("grf");
+			}
 
-					if(option == "rodir")
-						rodir = value;
-					else if(option == "grf")
-						fs.LoadFile(value);
-					else if(option == "resx")
-						Graphics.width = atoi(value.c_str());
-					else if(option == "resy")
-						Graphics.height = atoi(value.c_str());
-					else if(option == "bpp")
-						Graphics.bits = atoi(value.c_str());
-					else if(option == "fullscreen")
-						Graphics.fullscreen = value == "1";
-					else if(option == "font")
-						fontname = value;
-					else if(option == "skin")
-						skinFile = value;
-					else if (option == "model")
-					{
-						objectfiles.push_back(value);
-						cFile* pFile2 = fs.open(value);
-						if (pFile2 != NULL)
-						{
-							Log(3,0,GetMsg("file/LOADING"), value.c_str()); // Loading file
-							while(!pFile2->eof())
-							{
-								string line = pFile2->readline();
-								string pre = line.substr(0, line.find("|"));
-								string filename = line.substr(line.find("|")+1);
+		}
+		if(option == "graphics")
+		{
+			TiXmlElement* el2 = el->FirstChildElement();
+			while(el2 != NULL)
+			{
+					 if(strcmp(el2->Value(),					"resx") == 0)
+					Graphics.width = atoi(el2->FirstChild()->Value());
+				else if(strcmp(el2->Value(),					"resy") == 0)
+					Graphics.height = atoi(el2->FirstChild()->Value());
+				else if(strcmp(el2->Value(),					"fullscreen") == 0)
+					Graphics.fullscreen = strcmp(el2->FirstChild()->Value(),"true") == 0;
+				else if(strcmp(el2->Value(),					"bpp") == 0)
+					Graphics.bits = atoi(el2->FirstChild()->Value());
+				else if(strcmp(el2->Value(),					"font") == 0)
+					fontname = el2->FirstChild()->Value();
+				else if(strcmp(el2->Value(),					"skin") == 0)
+					skinFile = el2->FirstChild()->Value();
+				else if(strcmp(el2->Value(),					"bgcolor") == 0)
+					Graphics.backgroundcolor = hex2floats(el2->Value());
+				else if(strcmp(el2->Value(),					"notilecolor") == 0)
+					Graphics.notilecolor = hex2floats(el2->Value());
 
-								string cat = pre.substr(0, pre.rfind("/"));
-								string menuname = pre.substr(pre.rfind("/")+1);
-
-								if (cat != "" && itemsm.find(cat) == itemsm.end())
-								{
-									additem(itemsm, levelm, cat);
-								}
-								if(filename != "")
-								{
-									ADDMENUITEMDATA2(mm,itemsm[cat],menuname, &MenuCommand_model, filename, pre);
-								}
-								
-							}
-							Log(3,0,GetMsg("file/DONELOADING"), value.c_str()); // Done Loading file
-							pFile2->close();
-						}
-						else
-							Log(1,0,GetMsg("file/COULDNOTOPEN"), value.c_str()); // could not open %s
-					}
-					else if (option == "texture")
-					{
-						texturefiles.push_back(value);
-					}
-					else if (option == "sound")
-						soundfiles.push_back(value);
-					else if (option == "undostack")
-						undosize = atoi(value.c_str());
-					else if (option == "bgcolor")
-					{
-						vector<string> splitted = split(value, ",");
-						Graphics.backgroundcolor = cVector3(atoi(splitted[0].c_str())/255.0,atoi(splitted[1].c_str())/255.0,atoi(splitted[2].c_str())/255.0);
-					}
-					else if (option == "notilecolor")
-					{
-						vector<string> splitted = split(value, ",");
-						Graphics.notilecolor = cVector3(atoi(splitted[0].c_str())/255.0,atoi(splitted[1].c_str())/255.0,atoi(splitted[2].c_str())/255.0);
-					}
-					else
-						Log(2,0,GetMsg("UNKNOWNCONFIG"), option.c_str(), value.c_str()); // unknown config option
-
-				}			
+				el2 = el2->NextSiblingElement();
 
 			}
 		}
-	}
-	pFile->close();
+		if(option == "files")
+		{
+			TiXmlElement* el2;
+			
+			el2 = el->FirstChildElement("models");
+			if(el2)
+			{
+				TiXmlElement* model = el2->FirstChildElement("model");
+				while(model != NULL)
+				{
+					string value = model->FirstChild()->Value();
+					objectfiles.push_back(value);
+					cFile* pFile2 = fs.open(value);
+					if (pFile2 != NULL)
+					{
+						Log(3,0,GetMsg("file/LOADING"), value.c_str()); // Loading file
+						while(!pFile2->eof())
+						{
+							string line = pFile2->readline();
+							string pre = line.substr(0, line.find("|"));
+							string filename = line.substr(line.find("|")+1);
+
+							string cat = pre.substr(0, pre.rfind("/"));
+							string menuname = pre.substr(pre.rfind("/")+1);
+
+							if (cat != "" && itemsm.find(cat) == itemsm.end())
+							{
+								additem(itemsm, levelm, cat);
+							}
+							if(filename != "")
+							{
+								ADDMENUITEMDATA2(mm,itemsm[cat],menuname, &MenuCommand_model, filename, pre);
+							}
+							
+						}
+						Log(3,0,GetMsg("file/DONELOADING"), value.c_str()); // Done Loading file
+						pFile2->close();
+					}
+					else
+						Log(1,0,GetMsg("file/COULDNOTOPEN"), value.c_str()); // could not open %s
+
+					model = model->NextSiblingElement("model");
+				}
+			}
+			el2 = el->FirstChildElement("textures");
+			if(el2)
+			{
+				TiXmlElement* texture = el2->FirstChildElement("texture");
+				while(texture != NULL)
+				{
+					texturefiles.push_back(texture->FirstChild()->Value());
+					texture = texture->NextSiblingElement("texture");
+				}
+			}
+			el2 = el->FirstChildElement("sounds");
+			if(el2)
+			{
+				TiXmlElement* sound = el2->FirstChildElement("sound");
+				while(sound != NULL)
+				{
+					soundfiles.push_back(sound->FirstChild()->Value());
+					sound = sound->NextSiblingElement("sound");
+				}
+			}
+		}
+		else if (option == "undo")
+			undosize = atoi(el->Attribute("size"));
+		el = el->NextSiblingElement();
+	}			
+
 
 	IsLegal2 = IsLegal;
 
@@ -999,12 +1022,12 @@ int main(int argc, char *argv[])
 	lastlclick = 0;
 	lastrclick = 0;
 
-	Log(3,0,GetMsg("file/LOADING"), "keymap.txt");
-	pFile = fs.open("keymap.txt");
+	Log(3,0,GetMsg("file/LOADING"), "data/keymap.txt");
+	pFile = fs.open("data/keymap.txt");
 	if(pFile == NULL)
 	{
 		Log(3,0,"Keymap file not found, writing default");
-		ofstream pFile2("keymap.txt");
+		ofstream pFile2("data/keymap.txt");
 		for(i = 0; i < SDLK_LAST-SDLK_FIRST; i++)
 		{
 			char buf[100];
@@ -1013,7 +1036,7 @@ int main(int argc, char *argv[])
 			
 		}
 		pFile2.close();
-		pFile = fs.open("keymap.txt");
+		pFile = fs.open("data/keymap.txt");
 
 	}
 	for(i = 0; i < SDLK_LAST-SDLK_FIRST; i++)
@@ -1022,13 +1045,13 @@ int main(int argc, char *argv[])
 	}
 
 	pFile->close();
-	Log(3,0,GetMsg("file/DONELOADING"), "keymap.txt");
+	Log(3,0,GetMsg("file/DONELOADING"), "data/keymap.txt");
 
 
-	Log(3,0,GetMsg("file/LOADING"), "effects.txt");
+	Log(3,0,GetMsg("file/LOADING"), "data/effects.txt");
 	vector<cMenu*> effectssubmenu;
 
-	pFile = fs.open("effects.txt");
+	pFile = fs.open("data/effects.txt");
 	i = 0;
 	while(pFile && !pFile->eof())
 	{
@@ -1057,7 +1080,7 @@ int main(int argc, char *argv[])
 	}
 
 	pFile->close();
-	Log(3,0,GetMsg("file/DONELOADING"), "effects.txt");
+	Log(3,0,GetMsg("file/DONELOADING"), "data/effects.txt");
 
 
 
