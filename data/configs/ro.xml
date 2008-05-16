@@ -35,43 +35,14 @@
         <count>8</count>
     </water>
     <gattiles>
+		<tile>0</tile>
         <tile>1</tile>
         <tile>2</tile>
         <tile>3</tile>
         <tile>4</tile>
         <tile>5</tile>
         <tile>6</tile>
-        <tile>7</tile>
-        <tile>8</tile>
     </gattiles>
     <wm>
-        <sprite>
-            <x>237</x>
-            <y>184</y>
-        </sprite>
-        <water>
-            <x>410</x>
-            <y>302</y>
-        </water>
-        <minimap>
-            <x>842151475</x>
-            <y>0</y>
-        </minimap>
-        <textures>
-            <x>25</x>
-            <y>25</y>
-            <w>974</w>
-            <h>718</h>
-        </textures>
-        <modelswindow>
-            <x>25</x>
-            <y>25</y>
-            <w>974</w>
-            <h>718</h>
-        </modelswindow>
-        <hotbar>
-            <x>744</x>
-            <y>0</y>
-        </hotbar>
     </wm>
 </config>

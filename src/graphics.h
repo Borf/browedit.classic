@@ -166,7 +166,7 @@ public:
 	int						quadtreeview;
 	bool					showboundingboxes;
 	int						gattype;
-	cTexture*				gattextures[7];
+	vector<cTexture*>		gattextures;
 	cTexture*				splash;
 	vector<vector<cTexture*> >		watertextures;
 	string					waterdir;
@@ -188,6 +188,7 @@ public:
 
 	cWM						WM;
 	bool					showdot;
+	vector<int>				gattiles;
 
 
 private:

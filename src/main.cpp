@@ -771,6 +771,15 @@ int main(int argc, char *argv[])
 
 			}
 		}
+		if(option == "gattiles")
+		{
+			TiXmlElement* el2 = el->FirstChildElement("tile");
+			while(el2 != NULL)
+			{
+				Graphics.gattiles.push_back(atoi(el2->FirstChild()->Value()));
+				el2 = el2->NextSiblingElement("tile");
+			}
+		}
 		if(option == "files")
 		{
 			TiXmlElement* el2;
@@ -1733,7 +1742,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				break;
 			case SDLK_F6:
 				editmode = MODE_GAT;
-				if (Graphics.texturestart >= 6)
+				if (Graphics.texturestart >= Graphics.gattiles.size()-1)
 					Graphics.texturestart = 0;
 				break;
 			case SDLK_F7:

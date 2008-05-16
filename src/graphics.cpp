@@ -155,7 +155,7 @@ int cGraphics::draw(bool drawwm)
 		{
 			if (editmode == MODE_GAT)
 			{
-				if (i+texturestart > 6)
+				if (i+texturestart > gattextures.size()-1)
 					continue;
 				glBindTexture(GL_TEXTURE_2D, gattextures[i+texturestart]->texid());
 			}
@@ -406,11 +406,11 @@ int cGraphics::init()
 	WM.addwindow(new cHotkeyWindow(WM.texture, &WM.font, Graphics.WM.skin));
 
 	int i;
-	for(i = 0; i < 7; i++)
+	for(i = 0; i < gattiles.size(); i++)
 	{
 		char buf[64];
-		sprintf(buf, "data/gat%i.tga", i);
-		gattextures[i] = TextureCache.load(buf);
+		sprintf(buf, "data/gat%i.tga", gattiles[i]);
+		gattextures.push_back(TextureCache.load(buf));
 	}
 
 	
@@ -544,7 +544,7 @@ void cGraphics::KillGLWindow(void)								// Properly Kill The Window
 	TextureCache.unload(mask);
 	TextureCache.unload(bulb);
 	int i;
-	for(i = 0; i < 7; i++)
+	for(i = 0; i < gattextures.size(); i++)
 		TextureCache.unload(gattextures[i]);
 
 	for(i = 0; i < watercount; i++)

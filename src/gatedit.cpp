@@ -37,7 +37,7 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 							if (y < 0 || y >= Graphics.world.height*2 || x < 0 || x >= Graphics.world.width*2)
 								continue;
 							cGatTile* c = &Graphics.world.gattiles[y][x];
-							c->type = Graphics.texturestart;
+							c->type = Graphics.gattiles[Graphics.texturestart];
 						}
 					}
 				}
@@ -66,7 +66,7 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 							if (y < 0 || y >= Graphics.world.height*2 || x < 0 || x >= Graphics.world.width*2)
 								continue;
 							cGatTile* c = &Graphics.world.gattiles[y][x];
-							c->type = Graphics.texturestart;
+							c->type = Graphics.gattiles[Graphics.texturestart];
 						}
 					}
 				}

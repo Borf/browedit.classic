@@ -35,14 +35,13 @@
         <count>8</count>
     </water>
     <gattiles>
+		<tile>0</tile>
         <tile>1</tile>
         <tile>2</tile>
         <tile>3</tile>
         <tile>4</tile>
         <tile>5</tile>
         <tile>6</tile>
-        <tile>7</tile>
-        <tile>8</tile>
     </gattiles>
     <wm>
         <sprite>
