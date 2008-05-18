@@ -45,12 +45,11 @@ public:
 
 
 
-		o = new cWindowInputBox(this,skin);
+		o = new cWindowStringInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,0);
 		o->resizeto(210,20);
 		o->SetText(0,"");
-		o->SetInt(0,0);
 		objects["objectname"] = o;
 
 		o = new cWindowStringInputBox(this,skin);
@@ -187,9 +186,9 @@ public:
 				if(i->second->type == OBJECT_FLOATINPUTBOX)
 					i->second->onkeydown(SDLK_RETURN, false);
 			}
-/*			cWindow* w = Graphics.WM.getwindow(WT_MODELOVERVIEW);
+			cWindow* w = Graphics.WM.getwindow(WT_SOUNDOVERVIEW);
 			if(w != NULL)
-				w->userfunc(NULL);*/
+				w->userfunc(NULL);
 			undostack.push(undo);
 		}
 

@@ -126,6 +126,9 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 
 					cWindow* w = new cSoundWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin);
 
+					((cWindowStringInputBox*)w->objects["objectname"])->stringetje = &o->name;
+
+
 					((cWindowFloatInputBox*)w->objects["posx"])->floatje = &o->pos.x;
 					((cWindowFloatInputBox*)w->objects["posy"])->floatje = &o->pos.y;
 					((cWindowFloatInputBox*)w->objects["posz"])->floatje = &o->pos.z;
@@ -186,9 +189,9 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 				{
 					Graphics.world.sounds.erase(Graphics.world.sounds.begin() + Graphics.selectedobject);
 					Graphics.selectedobject = -1;
-//					cWindow* w = Graphics.WM.getwindow(WT_LIGHTOVERVIEW);
-//					if(w != NULL)
-//						w->userfunc(NULL);
+					cWindow* w = Graphics.WM.getwindow(WT_SOUNDOVERVIEW);
+					if(w != NULL)
+						w->userfunc(NULL);
 
 				
 				}

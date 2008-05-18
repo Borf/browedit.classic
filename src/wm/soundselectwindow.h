@@ -165,6 +165,11 @@ class cSoundSelectWindow : public cWindow
 			Graphics.world.sounds.push_back(s);
 			parent->close();
 
+			cWindow* w = Graphics.WM.getwindow(WT_SOUNDOVERVIEW);
+			if(w != NULL)
+				w->userfunc(NULL);
+
+
 		}
 	};
 	class cWindowCancelButton : public cWindowButton
