@@ -135,8 +135,33 @@ class cSoundSelectWindow : public cWindow
 			s.filename = filename;
 			s.name = ((cWindowDataListBox<string>*)parent->objects["sounds"])->values[selected];
 			s.pos = cVector3(newPos.x/5, newPos.y-17, newPos.z/5);
-			s.rotation = cVector3(0,0,0);
-			s.scale = cVector3(1,1,1);
+			s.rotation = cVector3(0,-45,0);
+			s.scale = cVector3(0.94f,0.94f,0.94f);
+			s.unknown6[0] = (BYTE)0xc7;
+			s.unknown6[1] = (BYTE)0xc1;
+			s.unknown6[2] = (BYTE)0xb7;
+			s.unknown6[3] = (BYTE)0xd0;
+			s.unknown6[4] = (BYTE)0x4e;
+			s.unknown6[5] = (BYTE)0x2d;
+			s.unknown6[6] = (BYTE)0xe3;
+			s.unknown6[7] = (BYTE)0x43;
+
+			unsigned char rawData[40] =
+			{
+				0x20, 0xD0, 0x6E, 0x0F, 0xF0, 0x75, 0x42, 0x00, 0x14, 0xF1, 0x12, 0x00, 0x74, 0x00, 0x00, 0x00, 
+				0xE1, 0xF1, 0x12, 0x00, 0xE0, 0xA0, 0xE9, 0x07, 0x40, 0xB0, 0xE1, 0x00, 0x20, 0xD0, 0x6E, 0x0F, 
+				0x04, 0x00, 0x00, 0x00, 0xC0, 0xCC, 0xC6, 0xE5, 
+			};
+			s.todo1 = string((char*)rawData,40);
+			s.name = "sound" + inttostring(rand() % 99999);
+			s.repeatdelay = 0.5f;
+			s.unknown2 = 70.0f;
+			s.unknown3 = 1;
+			s.unknown2 = 1;
+			s.unknown5 = 1;
+			s.unknown7 = -435.095f;
+			s.unknown8 = 0;
+
 			Graphics.world.sounds.push_back(s);
 			parent->close();
 

@@ -144,10 +144,10 @@ public:
 	cVector3 rotation;
 	cVector3 scale;
 
-	float unknown1;
+	float repeatdelay;
 	float unknown2;
-	float unknown3;
-	float unknown4;
+	long unknown3;
+	long unknown4;
 	float unknown5;
 	char unknown6[6];
 	float unknown7;
@@ -161,7 +161,7 @@ public:
 				pos == other.pos &&
 				rotation == other.rotation &&
 				scale == other.scale &&
-				unknown1 == other.unknown1 &&
+				repeatdelay == other.repeatdelay &&
 				unknown2 == other.unknown2 &&
 				unknown3 == other.unknown3 &&
 				unknown4 == other.unknown4 &&
@@ -267,6 +267,7 @@ public:
 	int height;
 	int width;
 	int texsize;
+	bool	quicksave;
 	vector<cTextureContainer*> textures;
 	vector<cLightmap*> lightmaps;
 	vector<cTile> tiles;

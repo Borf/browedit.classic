@@ -137,12 +137,12 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 					((cWindowFloatInputBox*)w->objects["scalez"])->floatje = &o->scale.z;
 					((cWindowStringInputBox*)w->objects["objectname"])->stringetje = &o->name;
 					((cWindowStringInputBox*)w->objects["objectfile"])->stringetje = &o->filename;
-					((cWindowFloatInputBox*)w->objects["unknown1"])->floatje = &o->unknown1;
+					((cWindowFloatInputBox*)w->objects["repeatdelay"])->floatje = &o->repeatdelay;
 					((cWindowFloatInputBox*)w->objects["unknown2"])->floatje = &o->unknown2;
-					((cWindowFloatInputBox*)w->objects["unknown3"])->floatje = &o->unknown2;
-					((cWindowFloatInputBox*)w->objects["unknown4"])->floatje = &o->unknown4;
+					((cWindowLongInputBox*)w->objects["unknown3"])->longje = &o->unknown3;
+					((cWindowLongInputBox*)w->objects["unknown4"])->longje = &o->unknown4;
 					((cWindowFloatInputBox*)w->objects["unknown5"])->floatje = &o->unknown5;
-					w->objects["unknown6"]->SetText(0, o->unknown6);
+					w->objects["unknown6"]->SetText(0, string(o->unknown6,8));
 					w->objects["unknown6"]->SetInt(0,0);
 
 					((cWindowFloatInputBox*)w->objects["unknown7"])->floatje = &o->unknown7;

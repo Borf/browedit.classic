@@ -22,6 +22,7 @@
 			<OPEN>Open</OPEN>
 			<OPENGRF>Open from GRF</OPENGRF>
 			<SAVE>Save</SAVE>
+			<QUICKSAVE>Quicksave</QUICKSAVE>
 			<SAVEAS>Save As</SAVEAS>
 			<IMPORTARCTURUS>Import Arcturus maps</IMPORTARCTURUS>
 			<EXPORTLIGHTMAPS>Export Lightmaps</EXPORTLIGHTMAPS>
@@ -257,6 +258,7 @@
 			<POSITION>Position:</POSITION>
 			<SCALE>Scale:</SCALE>
 			<ROTATION>Rotation:</ROTATION>
+			<REPEATDELAY>Repeat delay:</REPEATDELAY>
 		</sound>
 		<soundselect>
 			<TITLE>Sound Select...</TITLE>

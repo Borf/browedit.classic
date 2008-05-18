@@ -1,7 +1,7 @@
 <config>
-    <ro directory="d:\games\newro\">
-        <grf>d:\games\newro\sdata.grf</grf>
-        <grf>d:\games\newro\data.grf</grf>
+    <ro directory="d:\games\new_exRO\">
+        <grf>d:\games\new_exRO\sdata.grf</grf>
+        <grf>d:\games\new_exRO\data.grf</grf>
     </ro>
     <files>
         <models>

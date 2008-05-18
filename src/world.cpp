@@ -38,6 +38,7 @@ extern bool IsLegal2;
 
 void cWorld::load()
 {
+	quicksave = false;
 	Graphics.selectedobject = -1;
 	draggingwindow = NULL;
 	draggingobject = NULL;
@@ -519,10 +520,10 @@ void cWorld::load()
 				s.pos.z = *((float*)(buf+168));
 
 				s.unknown5 = *((float*)(buf+172));	//1
-				s.unknown4 = *((float*)(buf+176));	//50
-				s.unknown3 = *((float*)(buf+180));	//45
+				s.unknown4 = *((long*)(buf+176));	//50
+				s.unknown3 = *((long*)(buf+180));	//45
 				s.unknown2 = *((float*)(buf+184));	//70
-				s.unknown1 = *((float*)(buf+188));	//4
+				s.repeatdelay = *((float*)(buf+188));	//4
 
 
 				s.pos.x = (s.pos.x / 5) + width;
@@ -901,53 +902,55 @@ void cWorld::save()
 	strcpy(filename, replace(filename, "\\","/").c_str());
 
 	{
-		clean();
-		quadtreefloats.clear();
-		if(root == NULL)
+		if(!quicksave)
 		{
-			int b = 0;
-			Graphics.WM.ConfirmWindow("There is no quadtree information added, would you like to try adding it?", new cAddQuadtreeConfirm(&b));
-			while(b == 0)
+			clean();
+			quadtreefloats.clear();
+			if(root == NULL)
 			{
-				mainloop();
-				Sleep(10);
-			}
-			if(b == 1)
-			{
-				root = new cQuadTreeNode();
-				root->generate(width*10-1, height*10-1,-0.5,-0.5,5);			
-			}
-
-		}
-
-		if(root != NULL)
-		{
-			int x,y;
-			for(x = 0; x < width; x++)
-				for(y = 0; y < height; y++)
+				int b = 0;
+				Graphics.WM.ConfirmWindow("There is no quadtree information added, would you like to try adding it?", new cAddQuadtreeConfirm(&b));
+				while(b == 0)
 				{
-					cubes[y][x].maxh = -99999;
-					cubes[y][x].minh = 99999;
+					mainloop();
+					Sleep(10);
+				}
+				if(b == 1)
+				{
+					root = new cQuadTreeNode();
+					root->generate(width*10-1, height*10-1,-0.5,-0.5,5);			
 				}
 
-			for(unsigned int i = 0; i < models.size(); i++)
-			{
-				if(i % 10 == 0)
-					Log(3,0,GetMsg("world/QUADTREECALC"), i, Graphics.world.models.size(), (i/(float)Graphics.world.models.size())*100);
-				models[i]->draw(false,false,true);
 			}
 
+			if(root != NULL)
+			{
+				int x,y;
+				for(x = 0; x < width; x++)
+					for(y = 0; y < height; y++)
+					{
+						cubes[y][x].maxh = -99999;
+						cubes[y][x].minh = 99999;
+					}
 
-			Graphics.world.root->recalculate();
-			root->save(quadtreefloats);
-			for(x = 0; x < width; x++)
-				for(y = 0; y < height; y++)
+				for(unsigned int i = 0; i < models.size(); i++)
 				{
-					cubes[y][x].maxh = -99999;
-					cubes[y][x].minh = 99999;
+					if(i % 10 == 0)
+						Log(3,0,GetMsg("world/QUADTREECALC"), i, Graphics.world.models.size(), (i/(float)Graphics.world.models.size())*100);
+					models[i]->draw(false,false,true);
 				}
-		}
 
+
+				Graphics.world.root->recalculate();
+				root->save(quadtreefloats);
+				for(x = 0; x < width; x++)
+					for(y = 0; y < height; y++)
+					{
+						cubes[y][x].maxh = -99999;
+						cubes[y][x].minh = 99999;
+					}
+			}
+		}
 //		for(int ii = 0; ii < quadtreefloats.size(); ii++)
 //			quadtreefloats[ii] = cVector3(0,0,0);
 
@@ -1256,7 +1259,7 @@ void cWorld::save()
 			pFile.write(buf, 40);
 
 			ZeroMemory(buf,41);
-			strcpy(buf, sounds[i].todo1.c_str());
+			memcpy(buf, sounds[i].todo1.c_str(), sounds[i].todo1.size());
 			pFile.write(buf, 40);
 
 			ZeroMemory(buf,41);
@@ -1292,7 +1295,7 @@ void cWorld::save()
 			pFile.write((char*)&sounds[i].unknown4,4);			//176
 			pFile.write((char*)&sounds[i].unknown3,4);			//180
 			pFile.write((char*)&sounds[i].unknown2,4);			//184
-			pFile.write((char*)&sounds[i].unknown1,4);			//188
+			pFile.write((char*)&sounds[i].repeatdelay,4);			//188
 			if(!IsLegal)
 				pFile.put(rand());
 		}

@@ -19,6 +19,7 @@ public:
 
 	cSoundWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWindow(t,f,skin)
 	{
+		undo = NULL;
 		cWindowObject* o;
 		wtype = WT_LIGHT;
 		resizable = false;
@@ -40,6 +41,7 @@ public:
 		addlabel("lblPos",	0,40, GetMsg("wm/sound/POSITION"));
 		addlabel("lblScale",0,60, GetMsg("wm/sound/SCALE"));
 		addlabel("lblRot",	0,80,GetMsg("wm/sound/ROTATION"));
+		addlabel("lblRepeatDelay",	0,100, GetMsg("wm/sound/REPEATDELAY"));
 
 
 
@@ -116,7 +118,7 @@ public:
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,100);
 		o->resizeto(210,20);
-		objects["unknown1"] = o;
+		objects["repeatdelay"] = o;
 
 		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
@@ -124,13 +126,13 @@ public:
 		o->resizeto(210,20);
 		objects["unknown2"] = o;
 
-		o = new cWindowFloatInputBox(this,skin);
+		o = new cWindowLongInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,140);
 		o->resizeto(210,20);
 		objects["unknown3"] = o;
 
-		o = new cWindowFloatInputBox(this,skin);
+		o = new cWindowLongInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,160);
 		o->resizeto(210,20);
@@ -171,8 +173,11 @@ public:
 		intptr_t p = (intptr_t)param;
 		if(p == 0) // cancel
 		{
-			undo->undo();
-			delete undo;
+			if(undo != NULL)
+			{
+				undo->undo();
+				delete undo;
+			}
 		}
 		else
 		{

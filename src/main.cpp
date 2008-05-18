@@ -912,6 +912,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,file,GetMsg("menu/file/OPEN"),							&MenuCommand_open); //open
 	ADDMENUITEM(mm,file,GetMsg("menu/file/OPENGRF"),						&MenuCommand_opengrf); //open
 	ADDMENUITEM(mm,file,GetMsg("menu/file/SAVE"),							&MenuCommand_save); //save
+	ADDMENUITEM(mm,file,GetMsg("menu/file/QUICKSAVE"),						&MenuCommand_quicksave); //save
 	ADDMENUITEM(mm,file,GetMsg("menu/file/SAVEAS"),							&MenuCommand_saveAs); //save as
 	ADDMENUITEM(mm,file,GetMsg("menu/file/EXPORTLIGHTMAPS"),				&MenuCommand_savelightmaps); // export lightmaps
 	ADDMENUITEM(mm,file,GetMsg("menu/file/IMPORTLIGHTMAPS"),				&MenuCommand_loadlightmaps); // import lightmaps

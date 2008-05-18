@@ -143,6 +143,53 @@ MENUCOMMAND(save)
 
 	return true;
 }
+
+
+MENUCOMMAND(quicksave)
+{
+	Graphics.world.quicksave = true;
+#ifdef WIN32
+	if(Graphics.world.filename[0] == '\0')
+	{
+		char curdir[100];
+		getcwd(curdir, 100);
+		SDL_SysWMinfo wmInfo;
+		SDL_VERSION(&wmInfo.version);
+		SDL_GetWMInfo(&wmInfo);
+		HWND hWnd = wmInfo.window;
+		OPENFILENAME ofn;
+		ZeroMemory(&ofn, sizeof(ofn));
+		ofn.lStructSize = sizeof(ofn);
+		ofn.hwndOwner = hWnd;
+		strcpy(Graphics.world.filename, replace(Graphics.world.filename, "/", "\\").c_str());
+		ofn.lpstrFile = Graphics.world.filename;
+		ofn.nMaxFile = 256;
+		ofn.lpstrFilter = "All\0*.*\0RO maps\0*.rsw\0";
+		ofn.nFilterIndex = 2;
+		ofn.lpstrFileTitle = NULL;
+		ofn.nMaxFileTitle = 0;
+		ofn.lpstrInitialDir = NULL;
+		ofn.Flags = OFN_PATHMUSTEXIST | OFN_ENABLESIZING | OFN_OVERWRITEPROMPT;
+		if (GetSaveFileName(&ofn))
+		{
+			while(Graphics.world.filename[strlen(Graphics.world.filename)-1] != '.')
+				Graphics.world.filename[strlen(Graphics.world.filename)-1] = '\0';
+			Graphics.world.filename[strlen(Graphics.world.filename)-1] = '\0';
+			Graphics.world.save();
+		}
+		chdir(curdir);
+	}
+	else
+		Graphics.world.save();
+#else
+
+#endif
+
+	Graphics.world.quicksave = false;
+
+	return true;
+}
+
 MENUCOMMAND(saveAs)
 {
 #ifdef WIN32
