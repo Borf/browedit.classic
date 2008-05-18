@@ -9,12 +9,51 @@
 #include "windowlabel.h"
 #include "windowinputbox.h"
 #include "objectwindow.h"
+#include "soundselectwindow.h"
 #include "../undo.h"
 extern cUndoStack undostack;
 
 class cSoundWindow : public cWindow
 {
 public:
+	class cWindowSelectFileButton : public cWindowButton
+	{
+	public:
+		cSound*	selectedSound;
+		cWindowSelectFileButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent,skin)
+		{
+			selectedSound = NULL;
+			text = "Select";
+			resizeto(80,20);
+			moveto(230,20);
+			alignment = ALIGN_TOPLEFT;
+		}
+
+		void click()
+		{
+			if(selectedSound == NULL)
+				return;
+			cWindow* w = Graphics.WM.getwindow(WT_SOUNDSELECT);
+			if(w)
+			{
+				Graphics.WM.togglewindow(WT_SOUNDSELECT);
+				((cSoundSelectWindow*)w)->selectedSound = selectedSound;
+			}
+			else
+			{
+				cSoundSelectWindow* w = new cSoundSelectWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin, cVector3());
+				w->selectedSound = selectedSound;
+				Graphics.WM.addwindow(w);
+			}
+
+
+
+		}
+
+
+	};
+
+
 	cUndoItem* undo;
 
 	cSoundWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWindow(t,f,skin)
@@ -55,9 +94,11 @@ public:
 		o = new cWindowStringInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,20);
-		o->resizeto(210,20);
+		o->resizeto(120,20);
 		o->SetText(0,"");
 		objects["objectfile"] = o;
+
+		objects["filebutton"] = new cWindowSelectFileButton(this, skin);
 		
 		o = new cWindowFloatInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;

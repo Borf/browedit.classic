@@ -1,5 +1,5 @@
 #ifndef __SOUNDSELECTWINDOW_H__
-#define __SOUDNSELECTWINDOW_H__
+#define __SOUNDSELECTWINDOW_H__
 
 #include "window.h"
 
@@ -125,50 +125,58 @@ class cSoundSelectWindow : public cWindow
 		}
 		void click()
 		{
-			cVector3 newPos = ((cSoundSelectWindow*)parent)->newPos;
 			int selected = parent->objects["sounds"]->GetInt(-1);
 			if(selected >= ((cWindowDataListBox<string>*)parent->objects["sounds"])->data.size())
 				return;
 
 			string filename = ((cWindowDataListBox<string>*)parent->objects["sounds"])->data[selected];
-			cSound s;
-			s.filename = filename;
-			s.name = ((cWindowDataListBox<string>*)parent->objects["sounds"])->values[selected];
-			s.pos = cVector3(newPos.x/5, newPos.y-17, newPos.z/5);
-			s.rotation = cVector3(0,-45,0);
-			s.scale = cVector3(0.94f,0.94f,0.94f);
-			s.unknown6[0] = (BYTE)0xc7;
-			s.unknown6[1] = (BYTE)0xc1;
-			s.unknown6[2] = (BYTE)0xb7;
-			s.unknown6[3] = (BYTE)0xd0;
-			s.unknown6[4] = (BYTE)0x4e;
-			s.unknown6[5] = (BYTE)0x2d;
-			s.unknown6[6] = (BYTE)0xe3;
-			s.unknown6[7] = (BYTE)0x43;
 
-			unsigned char rawData[40] =
+			cSound* selectedSound = ((cSoundSelectWindow*)parent)->selectedSound;
+			if(selectedSound)
 			{
-				0x20, 0xD0, 0x6E, 0x0F, 0xF0, 0x75, 0x42, 0x00, 0x14, 0xF1, 0x12, 0x00, 0x74, 0x00, 0x00, 0x00, 
-				0xE1, 0xF1, 0x12, 0x00, 0xE0, 0xA0, 0xE9, 0x07, 0x40, 0xB0, 0xE1, 0x00, 0x20, 0xD0, 0x6E, 0x0F, 
-				0x04, 0x00, 0x00, 0x00, 0xC0, 0xCC, 0xC6, 0xE5, 
-			};
-			s.todo1 = string((char*)rawData,40);
-			s.name = "sound" + inttostring(rand() % 99999);
-			s.repeatdelay = 0.5f;
-			s.unknown2 = 70.0f;
-			s.unknown3 = 1;
-			s.unknown2 = 1;
-			s.unknown5 = 1;
-			s.unknown7 = -435.095f;
-			s.unknown8 = 0;
+				selectedSound->filename = filename;
+			}
+			else
+			{
+				cVector3 newPos = ((cSoundSelectWindow*)parent)->newPos;
+				cSound s;
+				s.filename = filename;
+				s.name = ((cWindowDataListBox<string>*)parent->objects["sounds"])->values[selected];
+				s.pos = cVector3(newPos.x/5, newPos.y-17, newPos.z/5);
+				s.rotation = cVector3(0,-45,0);
+				s.scale = cVector3(0.94f,0.94f,0.94f);
+				s.unknown6[0] = (BYTE)0xc7;
+				s.unknown6[1] = (BYTE)0xc1;
+				s.unknown6[2] = (BYTE)0xb7;
+				s.unknown6[3] = (BYTE)0xd0;
+				s.unknown6[4] = (BYTE)0x4e;
+				s.unknown6[5] = (BYTE)0x2d;
+				s.unknown6[6] = (BYTE)0xe3;
+				s.unknown6[7] = (BYTE)0x43;
 
-			Graphics.world.sounds.push_back(s);
+				unsigned char rawData[40] =
+				{
+					0x20, 0xD0, 0x6E, 0x0F, 0xF0, 0x75, 0x42, 0x00, 0x14, 0xF1, 0x12, 0x00, 0x74, 0x00, 0x00, 0x00, 
+					0xE1, 0xF1, 0x12, 0x00, 0xE0, 0xA0, 0xE9, 0x07, 0x40, 0xB0, 0xE1, 0x00, 0x20, 0xD0, 0x6E, 0x0F, 
+					0x04, 0x00, 0x00, 0x00, 0xC0, 0xCC, 0xC6, 0xE5, 
+				};
+				s.todo1 = string((char*)rawData,40);
+				s.name = "sound" + inttostring(rand() % 99999);
+				s.repeatdelay = 0.5f;
+				s.unknown2 = 70.0f;
+				s.unknown3 = 1;
+				s.unknown2 = 1;
+				s.unknown5 = 1;
+				s.unknown7 = -435.095f;
+				s.unknown8 = 0;
+
+				Graphics.world.sounds.push_back(s);
+			}
 			parent->close();
 
 			cWindow* w = Graphics.WM.getwindow(WT_SOUNDOVERVIEW);
 			if(w != NULL)
 				w->userfunc(NULL);
-
 
 		}
 	};
@@ -193,9 +201,11 @@ public:
 	map<cWindowTree::cTreeNode*, vector<pair<string, string> >, less<cWindowTree::cTreeNode*> > items;
 
 	cVector3 newPos;
+	cSound* selectedSound;
 
 	cSoundSelectWindow(cTexture* t, cFont* f, TiXmlDocument &skin, cVector3 pNewPos) : cWindow(t,f,skin)
 	{
+		selectedSound = NULL;
 		newPos = pNewPos; 
 		wtype = WT_SOUNDSELECT;
 		closetype = HIDE;
@@ -250,7 +260,7 @@ public:
 						string p = cat.substr(0, cat.rfind("/"));
 						if(lookup.find(p) == lookup.end())
 						{
-							Log(1,0,"Invalid nesting in soudnfile...");
+							Log(1,0,"Invalid nesting in soundfile...");
 						}
 						else
 						{

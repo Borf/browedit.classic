@@ -84,6 +84,7 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 					{
 						w->show();
 						((cSoundSelectWindow*)w)->newPos = cVector3(mouse3dx, mouse3dy, mouse3dz);
+						((cSoundSelectWindow*)w)->selectedSound = NULL;
 					}
 					else
 						Graphics.WM.addwindow(new cSoundSelectWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin, cVector3(mouse3dx, mouse3dy, mouse3dz)));
@@ -147,6 +148,8 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 					((cWindowFloatInputBox*)w->objects["unknown5"])->floatje = &o->unknown5;
 					w->objects["unknown6"]->SetText(0, string(o->unknown6,8));
 					w->objects["unknown6"]->SetInt(0,0);
+
+					((cSoundWindow::cWindowSelectFileButton*)w->objects["filebutton"])->selectedSound = o;
 
 					((cWindowFloatInputBox*)w->objects["unknown7"])->floatje = &o->unknown7;
 					((cWindowFloatInputBox*)w->objects["unknown8"])->floatje = &o->unknown8;
