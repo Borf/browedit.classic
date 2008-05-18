@@ -1278,9 +1278,15 @@ void cWorld::save()
 		
 			pFile.write(sounds[i].unknown6, 8);					//	152-159 -> 8 bytes of unknown
 
-			pFile.write((char*)&sounds[i].pos.x, 4);			//160
-			pFile.write((char*)&sounds[i].pos.y, 4);			//164
-			pFile.write((char*)&sounds[i].pos.z, 4);			//168
+			float f = (sounds[i].pos.x - width) * 5.0;
+			pFile.write((char*)&f, 4);
+			pFile.write((char*)&sounds[i].pos.y, 4);
+			f = (sounds[i].pos.z - height) * 5.0;
+			pFile.write((char*)&f, 4);
+
+//			pFile.write((char*)&sounds[i].pos.x, 4);			//160
+//			pFile.write((char*)&sounds[i].pos.y, 4);			//164
+//			pFile.write((char*)&sounds[i].pos.z, 4);			//168
 
 			pFile.write((char*)&sounds[i].unknown5,4);			//172
 			pFile.write((char*)&sounds[i].unknown4,4);			//176
