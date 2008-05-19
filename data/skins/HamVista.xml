@@ -138,5 +138,18 @@
 			<top>281</top>
 		</checked>
 	</checkbox>
-
+	<progress type="normal">
+		<back>
+			<height>16</height>
+			<top>20</top>
+			<left width="4">450</left>
+			<right width="4">465</right>
+		</back>
+		<bar>
+			<height>16</height>
+			<top>0</top>
+			<left width="4">450</left>
+			<right width="4">465</right>
+		</bar>
+	</progress>
 </skin>
