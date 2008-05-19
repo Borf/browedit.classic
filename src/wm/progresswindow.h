@@ -43,7 +43,7 @@ public:
 		resizable = false;
 		visible = true;
 
-		h = 100;
+		h = 110;
 		w = 350;
 		title = GetMsg("wm/progress/TITLE");
 		center();
@@ -54,7 +54,7 @@ public:
 		
 		o = new cWindowProgressBar(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveto(0,0);
+		o->moveto(0,7);
 		o->resizeto(innerw(), 10);
 		objects["progress"] = o;
 
