@@ -68,6 +68,19 @@ class cSoundSelectWindow : public cWindow
 	};
 
 
+	class cSoundList : public cWindowDataListBox<string>
+	{
+	public:
+		cSoundList(cWindow* parent, TiXmlDocument &skin) : cWindowDataListBox<string>(parent,skin)
+		{
+		}
+		
+		void doubleclick()
+		{
+			parent->objects["play"]->click();
+		}
+	};
+
 
 	class cWindowPlayButton : public cWindowButton
 	{
@@ -294,7 +307,7 @@ public:
 		o->resizeto(400,400);
 		objects["tree"] = o;
 
-		o = new cWindowDataListBox<string>(this, skin);
+		o = new cSoundList(this, skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(0, 0);
 		o->resizeto(100,100);

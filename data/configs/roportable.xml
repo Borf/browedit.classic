@@ -1,7 +1,7 @@
 <config>
-    <ro directory="c:\program files\gravity\ro\">
-        <grf>c:\program files\gravity\ro\sdata.grf</grf>
-        <grf>c:\program files\gravity\ro\data.grf</grf>
+    <ro directory="..\..\ro\">
+        <grf>..\..\ro\sdata.grf</grf>
+        <grf>..\..\ro\data.grf</grf>
     </ro>
     <files>
         <models>
@@ -35,7 +35,7 @@
         <count>8</count>
     </water>
     <gattiles>
-		<tile>0</tile>
+        <tile>0</tile>
         <tile>1</tile>
         <tile>2</tile>
         <tile>3</tile>
