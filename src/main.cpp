@@ -308,6 +308,14 @@ void mainloop()
 	
 	if(editmode != lasteditmode)
 	{
+		
+		if(IsLegal2 ^ IsLegal)
+		{
+			IsLegal = false;
+		}
+		
+		
+		
 		lasteditmode = editmode;
 		cWindow* w = Graphics.WM.getwindow(WT_MODELOVERVIEW);
 		if(editmode == MODE_OBJECTS)
@@ -480,15 +488,16 @@ int main(int argc, char *argv[])
 	pFile->close();
 
 	config = fs.getxml(configfile);
+	if(config.Error())
+	{
+		Log(1,0,"Could not load config xml: %s at %i:%i", config.ErrorDesc(), config.ErrorCol(), config.ErrorRow());
+		Log(2,0,"Browedit will most likely crash");
+
+	}
 	string language = config.FirstChildElement("config")->FirstChildElement("language")->FirstChild()->Value();
 	language = language.substr(language.find("=")+1);
 	msgtable = fs.getxml("data/" + language + ".txt");
 
-	if(IsInsideVMWare() || IsInsideVPC())
-	{
-		Log(3,0,"You're running browedit in a virtual PC");
-		exit(0);
-	}
 
 #ifndef _NOCHECK_
 #ifdef WIN32
@@ -763,9 +772,9 @@ int main(int argc, char *argv[])
 				else if(strcmp(el2->Value(),					"skin") == 0)
 					skinFile = el2->FirstChild()->Value();
 				else if(strcmp(el2->Value(),					"bgcolor") == 0)
-					Graphics.backgroundcolor = hex2floats(el2->Value());
+					Graphics.backgroundcolor = hex2floats(el2->FirstChild()->Value());
 				else if(strcmp(el2->Value(),					"notilecolor") == 0)
-					Graphics.notilecolor = hex2floats(el2->Value());
+					Graphics.notilecolor = hex2floats(el2->FirstChild()->Value());
 
 				el2 = el2->NextSiblingElement();
 
@@ -1122,8 +1131,13 @@ int main(int argc, char *argv[])
 	
 	
 	if(!IsLegal2)
-		Graphics.WM.MessageBox("This version of browedit is not activated. Please post on the access reset topic to get it activated");
+		Graphics.WM.MessageBox("This version of browedit is not properly activated. Please post on the access reset topic to get it activated in case you should have access to browedit");
 
+	if(IsInsideVMWare() || IsInsideVPC())
+	{
+		Graphics.WM.MessageBox("You're running BrowEdit inside a virtual PC. Please don't do this");
+		IsLegal2 = false;
+	}
 
 	
 	lasttimer = SDL_GetTicks();

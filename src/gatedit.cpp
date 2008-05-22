@@ -171,15 +171,15 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 
 					float f = (int)ceil(Graphics.brushsize);
 
-					if (posx >= (int)floor(f/2.0f) && posx < 2*Graphics.world.width-(int)ceil(f/2.0f) && posy >= (int)floor(f/2.0f) && posy< 2*Graphics.world.height-(int)ceil(f/2.0f))
+					undostack.push(new cUndoGatHeightEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
+					glColor4f(1,0,0,1);
+					glDisable(GL_TEXTURE_2D);
+					glDisable(GL_BLEND);
+					for(int x = posx-(int)floor(f/2.0f); x < posx+(int)ceil(f/2.0f); x++)
 					{
-						undostack.push(new cUndoGatHeightEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
-						glColor4f(1,0,0,1);
-						glDisable(GL_TEXTURE_2D);
-						glDisable(GL_BLEND);
-						for(int x = posx-(int)floor(f/2.0f); x < posx+(int)ceil(f/2.0f); x++)
+						for(int y = posy-(int)floor(f/2.0f); y < posy+(int)ceil(f/2.0f); y++)
 						{
-							for(int y = posy-(int)floor(f/2.0f); y < posy+(int)ceil(f/2.0f); y++)
+							if(x >= 0 && y >= 0 && y < Graphics.world.gattiles.size() && x < Graphics.world.gattiles[0].size())
 							{
 								cGatTile* c = &Graphics.world.gattiles[y][x];
 								if (!Graphics.slope || (x > posx-(int)floor(f/2.0f)) && y > posy-(int)floor(f/2.0f))
@@ -268,9 +268,9 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 
 
 					undostack.push(new cUndoGatHeightEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
-					for(int x = posx-(int)floor(f/2.0f); x < posx+(int)ceil(f/2.0f); x++)
+					for(int x = posx-(int)floor(f/2.0f); x < posx+(int)ceil(f/2.0f)-1; x++)
 					{
-						for(int y = posy-(int)floor(f/2.0f); y < posy+(int)ceil(f/2.0f); y++)
+						for(int y = posy-(int)floor(f/2.0f)+1; y < posy+(int)ceil(f/2.0f); y++)
 						{
 							if (x >= 0 && x < Graphics.world.width*2 && y > 0 && y <= Graphics.world.height*2)
 							{

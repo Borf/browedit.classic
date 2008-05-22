@@ -184,6 +184,7 @@ class cSoundSelectWindow : public cWindow
 				s.unknown8 = 0;
 
 				Graphics.world.sounds.push_back(s);
+				undostack.push(new cUndoNewSound());
 			}
 			parent->close();
 

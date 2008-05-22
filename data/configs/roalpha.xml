@@ -21,6 +21,7 @@
     </graphics>
     <undo size="50" />
     <language>english</language>
+    <splash>data/hamtaro.tga</splash>
     <water>
         <directory>data\texture\ฟ๖ลอ\</directory>
         <extension>.jpg</extension>

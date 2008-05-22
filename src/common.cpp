@@ -493,5 +493,5 @@ int hex2dec(string s, int mult)
 
 cVector3 hex2floats(string c)
 {
-	return cVector3(hex2dec(c.substr(0,2)), hex2dec(c.substr(2,2)), hex2dec(c.substr(4,2)));
+	return cVector3(hex2dec(c.substr(0,2))/256.0f, hex2dec(c.substr(2,2))/256.0f, hex2dec(c.substr(4,2))/256.0f);
 }

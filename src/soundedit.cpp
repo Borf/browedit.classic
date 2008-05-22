@@ -11,6 +11,7 @@ extern cUndoStack undostack;
 extern float oldmousex, oldmousey;
 extern bool lbuttondown;
 extern int movement;
+extern bool doneaction;
 
 int cProcessManagement::soundedit_process_events(SDL_Event &event)
 {
@@ -23,6 +24,11 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 					break;
 				if(Graphics.objectstartdrag)
 				{
+					if(doneaction)
+					{
+						undostack.push(new cUndoChangeSound(Graphics.selectedobject));
+						doneaction = false;
+					}
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 					bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 					if (!ctrl && !alt)
@@ -154,7 +160,7 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 					((cWindowFloatInputBox*)w->objects["unknown7"])->floatje = &o->unknown7;
 					((cWindowFloatInputBox*)w->objects["unknown8"])->floatje = &o->unknown8;
 					
-//					((cObjectWindow*)w)->undo = new cUndoChangeObject(Graphics.selectedobject);
+					((cObjectWindow*)w)->undo = new cUndoChangeSound(Graphics.selectedobject);
 
 					Graphics.WM.addwindow(w);
 				}
@@ -190,12 +196,12 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 			case SDLK_BACKSPACE:
 				if (Graphics.selectedobject > -1 && Graphics.selectedobject < (int)Graphics.world.sounds.size())
 				{
+					undostack.push(new cUndoSoundDelete(Graphics.selectedobject));
 					Graphics.world.sounds.erase(Graphics.world.sounds.begin() + Graphics.selectedobject);
 					Graphics.selectedobject = -1;
 					cWindow* w = Graphics.WM.getwindow(WT_SOUNDOVERVIEW);
 					if(w != NULL)
 						w->userfunc(NULL);
-
 				
 				}
 

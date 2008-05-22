@@ -20,6 +20,7 @@
     </graphics>
     <undo size="50" />
     <language>english</language>
+    <splash>data/hamtaro.tga</splash>
     <water>
         <directory>data\texture\wate\</directory>
         <extension>.bmp</extension>

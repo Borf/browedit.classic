@@ -472,6 +472,23 @@ public:
 };
 
 
+class cUndoChangeEffect : public cUndoItem
+{
+	cEffect effect;
+	int id;
+public:
+	cUndoChangeEffect(int i)
+	{
+		id = i;
+		effect = Graphics.world.effects[i];
+	}
+	void undo()
+	{
+		Graphics.world.effects[id] = effect;
+	}
+};
+
+
 class cUndoLightDelete : public cUndoItem
 {
 	int id;
@@ -499,22 +516,6 @@ public:
 	void undo()
 	{
 		Graphics.world.lights.erase(Graphics.world.lights.begin() + (Graphics.world.lights.size()-1));
-	}
-};
-
-class cUndoChangeEffect : public cUndoItem
-{
-	cEffect effect;
-	int id;
-public:
-	cUndoChangeEffect(int i)
-	{
-		id = i;
-		effect = Graphics.world.effects[i];
-	}
-	void undo()
-	{
-		Graphics.world.effects[id] = effect;
 	}
 };
 
@@ -566,6 +567,83 @@ public:
 		}
 	}
 };
+
+
+
+
+
+
+
+
+class cUndoSoundDelete : public cUndoItem
+{
+	int id;
+	cSound sound;
+public:
+	cUndoSoundDelete(int i)
+	{
+		id = i;
+		sound = Graphics.world.sounds[i];
+	}
+	void undo()
+	{
+		Graphics.world.sounds.insert(Graphics.world.sounds.begin() + id, sound);
+		Graphics.selectedobject = id;
+	}
+};
+
+class cUndoNewSound : public cUndoItem
+{
+public:
+	cUndoNewSound()
+	{
+
+	}
+	void undo()
+	{
+		Graphics.world.sounds.erase(Graphics.world.sounds.begin() + (Graphics.world.sounds.size()-1));
+	}
+};
+
+class cUndoChangeSound : public cUndoItem
+{
+	cSound sound;
+	int id;
+public:
+	cUndoChangeSound(int i)
+	{
+		id = i;
+		sound = Graphics.world.sounds[i];
+	}
+	void undo()
+	{
+		Graphics.world.sounds[id] = sound;
+	}
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

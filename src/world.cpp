@@ -1852,7 +1852,7 @@ void cWorld::draw()
 
 		int s = (int)ceil(Graphics.brushsize);
 
-		if (posx >= floor(brushsize/2.0f) && posx < 2*width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy< 2*height-ceil(brushsize/2.0f))
+		if (posx >= floor(brushsize/2.0f) && posx <= 2*width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy <= 2*height-ceil(brushsize/2.0f))
 		{
 			glColor4f(1,0,0,1);
 			glDisable(GL_TEXTURE_2D);

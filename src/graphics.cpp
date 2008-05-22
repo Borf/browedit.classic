@@ -400,7 +400,7 @@ int cGraphics::init()
 	font->load("data/fonts/"+fontname+".tga");
 	mask = cTextureLoaders::load("data/mask.tga");
 	bulb = cTextureLoaders::load("data/bulb.tga");
-	splash = cTextureLoaders::load("data/hamtaro.tga");
+	splash = cTextureLoaders::load(config.FirstChildElement("config")->FirstChildElement("splash")->FirstChild()->Value());
 	Log(3,0,GetMsg("graphics/INITIALIZINGWM"));
 	WM.init(skinFile);
 	WM.addwindow(new cHotkeyWindow(WM.texture, &WM.font, Graphics.WM.skin));
