@@ -1,6 +1,7 @@
 #include <common.h>
 #include "graphics.h"
 #include "undo.h"
+#include <wm/soundoverviewwindow.h>
 #include <wm/soundwindow.h>
 #include <wm/soundselectwindow.h>
 
@@ -119,6 +120,15 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 						}
 					}
 					Graphics.selectedobject = minobj;
+
+					cWindow* w = Graphics.WM.getwindow(WT_SOUNDOVERVIEW);
+					if(w != NULL)
+					{
+						w->userfunc(NULL);
+						cSoundOverViewWindow::cSoundOverViewTree* tree = (cSoundOverViewWindow::cSoundOverViewTree*)w->objects["list"];
+						tree->getobject(Graphics.world.sounds[Graphics.selectedobject]);
+					}
+				
 				}
 			}
 			break;

@@ -34,7 +34,34 @@ class cFileWindow : public cWindow
 			callback(rodir + filename);
 		}
 	};
+
+
 public:
+	vector<string> mapnames;
+
+	class cWindowFilterBox : public cWindowInputBox
+	{
+	public:
+		cWindowFilterBox(cWindow* parent, TiXmlDocument &skin) : cWindowInputBox(parent,skin)
+		{
+			alignment = ALIGN_BOTTOMLEFT;
+			moveto(0,0);
+			resizeto(parent->innerw()-100,20);
+			text = "";
+		}
+		void onchange()
+		{
+			cWindowListBox* o = (cWindowListBox*)parent->objects["filebox"];
+			o->values.clear();
+			for(unsigned int i = 0; i < ((cFileWindow*)parent)->mapnames.size(); i++)
+			{
+				if(((cFileWindow*)parent)->mapnames[i].find(text) != string::npos)
+					o->SetText(-1, ((cFileWindow*)parent)->mapnames[i]);
+			}
+			
+		}
+	};
+
 	cFileWindow(cTexture* t, cFont* f, void (*pCallback)(string), TiXmlDocument &skin) : cWindow(t,f,skin)
 	{
 		wtype = WT_FILE;
@@ -52,6 +79,7 @@ public:
 		
 		objects["close"] = new cWindowCloseButton(this,skin);
 
+		objects["filter"] = new cWindowFilterBox(this,skin);
 //		addlabel("lblLookIn", 15,20,GetMsg("wm/file/SELECTMAP"));
 		
 
@@ -61,19 +89,25 @@ public:
 		o->resizeto(innerw(), innerh()-20);
 		objects["filebox"] = o;
 		
-		for(unsigned int i = 0; i < fs.locations.size(); i++)
+		mapnames.clear();
+		unsigned int i;
+		for(i = 0; i < fs.locations.size(); i++)
 		{
 			for(map<string, cFile*, less<string> >::iterator it = fs.locations[i]->files.begin(); it != fs.locations[i]->files.end(); it++)
 			{
 				if(it->first.find(".rsw") != string::npos)
-					o->SetText(-1,it->first.substr(rodir.length()));
+					mapnames.push_back(it->first.substr(rodir.length()));
 
 			}
 		}
 
-		mergesort<string>(((cWindowListBox*)o)->values, compare<string>);
+		mergesort<string>(mapnames, compare<string>);
+
+		for(i = 0; i < mapnames.size(); i++)
+			o->SetText(-1, mapnames[i]);
 
 		objects["OkButton"] = new cOkButton(this, pCallback,skin);
+		selectedobject = objects["filter"];
 	}
 
 

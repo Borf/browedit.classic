@@ -64,5 +64,5 @@ cTextureModel::cTextureModel()
 
 cTextureModel::~cTextureModel()
 {
-
+	close();
 }

@@ -438,8 +438,12 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 							yy++;
 						int ymax = yy;
 						yy = y;
-						while(Graphics.world.cubes[yy][x].tileaside != -1 && yy > 0)
+						while(Graphics.world.cubes[yy][x].tileaside != -1 && yy >= 0)
+						{
 							yy--;
+							if(yy == -1)
+								break;
+						}
 						int ymin = yy+1;
 
 					
@@ -537,8 +541,12 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 							xx++;
 						int xmax = xx;
 						xx = x;
-						while(Graphics.world.cubes[y][xx].tileside != -1 && xx > 0)
+						while(Graphics.world.cubes[y][xx].tileside != -1 && xx >= 0)
+						{
 							xx--;
+							if(xx == -1)
+								break;
+						}
 						int xmin = xx+1;
 
 						float vmin = 99999, vmax = -99999;
@@ -652,9 +660,9 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 							   (Graphics.world.cubes[y+1][from].cell3 + 
 							    Graphics.world.cubes[y+1][from].cell4))
 						{
-							if(from == 0)
-								break;
 							from--;
+							if(from == -1)
+								break;
 						}
 
 
@@ -734,9 +742,9 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 							   (Graphics.world.cubes[from][x+1].cell2 + 
 							    Graphics.world.cubes[from][x+1].cell4))
 						{
-							if(from == 0)
-								break;
 							from--;
+							if(from == -1)
+								break;
 						}
 
 

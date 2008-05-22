@@ -440,7 +440,7 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 		Ori[14] = 0;  
 		Ori[15] = 1.0f;
 
-		nstep += 100;
+		nstep += Graphics.frameticks;
 		if (nstep >= frames[frames.size()-1].time)
 			nstep = 0;
 	}

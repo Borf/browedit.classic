@@ -11,7 +11,7 @@
 #include "windowinputbox.h"
 #include "objectwindow.h"
 #include "windowcheckbox.h"
-extern cMenu* popupmenu;
+//extern cMenu* popupmenu;
 #include "../menucommands.h" 
 
 
@@ -55,20 +55,6 @@ public:
 				
 
 			}			
-		}
-		void checkopening(vector<cWindowTree::cTreeNode*> list)
-		{
-			for(unsigned int i = 0; i < list.size(); i++)
-			{
-				if(list[i]->text == text)
-				{
-					this->open = list[i]->open;
-					for(unsigned int ii = 0; ii < children.size(); ii++)
-					{
-						((cSoundOverViewTreeNode*)children[ii])->checkopening(list[i]->children);
-					}
-				}
-			}
 		}
 
 		cSoundOverViewTreeNode* getnode(cSound m)
@@ -155,10 +141,10 @@ public:
 						n->open = true;
 						n = n->parent;
 					}
-					return;
-					
+
+					selected = nn->getselectionnr();
 					vector<string> values;
-					for(i = 0; i < nodes.size(); i++)
+					for(i = 0; i < nodes.size() && i < selected; i++)
 						nodes[i]->getdata(values);
 
 					i = 0;
@@ -169,7 +155,6 @@ public:
 						yyy-=12;
 					}
 
-					selected = nn->getselectionnr();
 					if(selected < liststart || selected > liststart+(int)i)
 						liststart = min((int)values.size()-i+1 , selected-(i/2));
 					if(liststart < 0)
@@ -237,7 +222,6 @@ public:
 		addobjects(windownode, true);
 		windownode->sort();
 
-		((cSoundOverViewTreeNode*)windownode->children[0])->checkopening(((cWindowTree*)objects["list"])->nodes);
 		for(unsigned int i = 0; i < windownode->children.size(); i++)
 		{
 			windownode->children[i]->parent = NULL;

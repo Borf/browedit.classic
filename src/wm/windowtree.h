@@ -48,6 +48,8 @@ public:
 	bool			showselection;
 	bool			showscroll;
 	vector<cTreeNode*>	nodes;
+	vector<string>		values;
+	bool				validCache;
 
 	int skinBarWidth;
 	int skinButtonUpLeft;
@@ -75,6 +77,7 @@ public:
 
 	cWindowTree(cWindow* parent, vector<cTreeNode*> n, TiXmlDocument &skin) : cWindowObject(parent, skin.FirstChildElement("skin")->FirstChildElement("list"))
 	{
+		validCache = false;
 		w = 280;
 		h = 100;
 		x = 5;

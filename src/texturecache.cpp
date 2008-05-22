@@ -42,12 +42,16 @@ void cTextureCache::unload(cTexture* tex)
 
 void cTextureCache::status()
 {
+	int count = 0;
 	for(map<string, cTexture*, less<string> >::iterator i = textures.begin(); i != textures.end(); i++)
 	{
 		if (used[i->second] > 0)
 		{
 			Log(3,0,GetMsg("graphics/texturecache/STILLLOADED"), i->first.c_str(), used[i->second]);
+			count++;
 		}
 	}
+	if(count == 0)
+		Log(3,0,"No textures left");
 
 }

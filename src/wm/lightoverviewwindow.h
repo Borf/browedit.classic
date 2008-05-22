@@ -56,20 +56,6 @@ public:
 
 			}			
 		}
-		void checkopening(vector<cWindowTree::cTreeNode*> list)
-		{
-			for(unsigned int i = 0; i < list.size(); i++)
-			{
-				if(list[i]->text == text)
-				{
-					this->open = list[i]->open;
-					for(unsigned int ii = 0; ii < children.size(); ii++)
-					{
-						((cLightOverViewTreeNode*)children[ii])->checkopening(list[i]->children);
-					}
-				}
-			}
-		}
 
 		cLightOverViewTreeNode* getnode(cLight m)
 		{
@@ -237,7 +223,6 @@ public:
 		addobjects(windownode, true);
 		windownode->sort();
 
-		((cLightOverViewTreeNode*)windownode->children[0])->checkopening(((cWindowTree*)objects["list"])->nodes);
 		for(unsigned int i = 0; i < windownode->children.size(); i++)
 		{
 			windownode->children[i]->parent = NULL;

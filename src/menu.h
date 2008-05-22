@@ -12,6 +12,7 @@ bool cmp(cMenu* a, cMenu* b);
 class cMenu
 {
 	public:
+		float	opacity;
 		string title;
 		bool item;
 		vector<cMenu*> items;
@@ -51,6 +52,7 @@ class cMenu
 			mouseoverproc = NULL;
 			parent = NULL;
 			updatedchildrenpos = false;
+			opacity = 0;
 		}
 		cMenu* inwindow(int, int);
 		void click(int, int);
@@ -62,6 +64,7 @@ class cMenu
 		}
 		void closemenu()
 		{
+			opacity = 0;
 			opened = false;
 			if(mouseoutproc!= NULL)
 				mouseoutproc(this);

@@ -220,11 +220,11 @@ void mainloop()
 				float mmax = -9999999.0f;
 				if (ctrl)
 				{
-					if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-(int)ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= Graphics.world.height-(int)ceil(brushsize/2.0f))
+					for(int x = posx-(int)floor(brushsize/2.0f); x < posx+(int)ceil(brushsize/2.0f); x++)
 					{
-						for(int x = posx-(int)floor(brushsize/2.0f); x < posx+(int)ceil(brushsize/2.0f); x++)
+						for(int y = posy-(int)floor(brushsize/2.0f); y < posy+(int)ceil(brushsize/2.0f); y++)
 						{
-							for(int y = posy-(int)floor(brushsize/2.0f); y < posy+(int)ceil(brushsize/2.0f); y++)
+							if(x >= 0 && y >= 0 && x < Graphics.world.width && y < Graphics.world.height)
 							{
 								cCube* c = &Graphics.world.cubes[y][x];
 								mmin = min(min(min(min(mmin, c->cell1),c->cell2),c->cell3),c->cell4);
@@ -232,14 +232,13 @@ void mainloop()
 							}
 						}
 					}
-					
 				}
 
-				if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-(int)ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= Graphics.world.height-(int)ceil(brushsize/2.0f))
+				for(int x = posx-(int)floor(brushsize/2.0f); x < posx+(int)ceil(brushsize/2.0f); x++)
 				{
-					for(int x = posx-(int)floor(brushsize/2.0f); x < posx+(int)ceil(brushsize/2.0f); x++)
+					for(int y = posy-(int)floor(brushsize/2.0f); y < posy+(int)ceil(brushsize/2.0f); y++)
 					{
-						for(int y = posy-(int)floor(brushsize/2.0f); y < posy+(int)ceil(brushsize/2.0f); y++)
+						if(x >= 0 && y >= 0 && x < Graphics.world.width && y < Graphics.world.height)
 						{
 							cCube* c = &Graphics.world.cubes[y][x];
 							if(lbuttondown && !rbuttondown)

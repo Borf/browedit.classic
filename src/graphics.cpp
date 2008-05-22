@@ -242,7 +242,7 @@ int cGraphics::draw(bool drawwm)
 		
 	glColor3f(1,1,1);
 	glEnable(GL_TEXTURE_2D);
-	glDisable(GL_BLEND);
+	glEnable(GL_BLEND);
 	glDisable(GL_LIGHTING);
 	menu->draw();
 
@@ -398,9 +398,7 @@ int cGraphics::init()
 	glDisable(GL_LIGHTING);
 	font = new cFont();
 	font->load("data/fonts/"+fontname+".tga");
-	mask = cTextureLoaders::load("data/mask.tga");
-	bulb = cTextureLoaders::load("data/bulb.tga");
-	splash = cTextureLoaders::load(config.FirstChildElement("config")->FirstChildElement("splash")->FirstChild()->Value());
+	splash = TextureCache.load(config.FirstChildElement("config")->FirstChildElement("splash")->FirstChild()->Value());
 	Log(3,0,GetMsg("graphics/INITIALIZINGWM"));
 	WM.init(skinFile);
 	WM.addwindow(new cHotkeyWindow(WM.texture, &WM.font, Graphics.WM.skin));
@@ -541,8 +539,8 @@ void cGraphics::KillGLWindow(void)								// Properly Kill The Window
 {
 	SDL_ShowCursor(0);
 	world.unload();
-	TextureCache.unload(mask);
-	TextureCache.unload(bulb);
+
+	TextureCache.unload(splash);
 	int i;
 	for(i = 0; i < gattextures.size(); i++)
 		TextureCache.unload(gattextures[i]);
@@ -609,7 +607,10 @@ void cMenu::draw()
 					glVertex2f(x+items[i]->x+items[i]->w, 	Graphics.h()-y);
 					glVertex2f(x+items[i]->x, 		Graphics.h()-y);
 					if (oneopened && !items[i]->opened)
+					{
+						items[i]->opacity = 0;
 						items[i]->opened = true;
+					}
 				glEnd();
 				glColor4f(0,0,0,1);
 			}
@@ -625,30 +626,43 @@ void cMenu::draw()
 	}
 	else if (drawstyle == 1)
 	{
+		if(maxlen == -1)
+		{
+			for(i = 0; i < (int)items.size(); i++)
+			{
+				if (Graphics.font->textlen(items[i]->title.c_str()) > maxlen-50)
+					maxlen = Graphics.font->textlen(items[i]->title.c_str())+50;
+			}
+		}
+		if(opacity < 0.75f)
+			opacity += (Graphics.frameticks/300.0f);
+		else
+			opacity = 0.75f;
+
+
 		glDisable(GL_TEXTURE_2D);
-		glColor4f(1,1,1,0.75);
+		glColor4f(1,1,1,opacity);
 		glBegin(GL_QUADS);
 			glVertex2f(x, Graphics.h()-y-20*items.size());
 			glVertex2f(x+maxlen, Graphics.h()-y-20*items.size());
 			glVertex2f(x+maxlen, Graphics.h()-y);
 			glVertex2f(x, Graphics.h()-y);
 		glEnd();
-		glColor4f(0,0,0,1);
+		glColor4f(0,0,0,opacity+0.25f);
 		glBegin(GL_LINE_LOOP);
 			glVertex2f(x, Graphics.h()-y-20*items.size());
 			glVertex2f(x+maxlen, Graphics.h()-y-20*items.size());
 			glVertex2f(x+maxlen, Graphics.h()-y);
 			glVertex2f(x, Graphics.h()-y);
 		glEnd();
-		glColor4f(1,1,1,1);
+		glColor4f(1,1,1,opacity+0.25f);
 		glBegin(GL_LINE_LOOP);
 			glVertex2f(x+1, Graphics.h()-y-20*items.size()+1);
 			glVertex2f(x+maxlen-1, Graphics.h()-y-20*items.size()+1);
 			glVertex2f(x+maxlen-1, Graphics.h()-y-1);
 			glVertex2f(x+1, Graphics.h()-y-1);
 		glEnd();
-		
-		glColor4f(0,0,0,0.5);
+		glColor4f(0,0,0,opacity-0.25f);
 		for(i = 0; i < (int)items.size(); i++)
 		{
 			if (Graphics.font->textlen(items[i]->title.c_str()) > maxlen-50)
@@ -657,14 +671,14 @@ void cMenu::draw()
 			if ((mousex > x && mousex < x+maxlen && (mousey) > y+i*20 && (mousey) < y+i*20+20))
 			{
 				glDisable(GL_TEXTURE_2D);
-				glColor4f(0.2f,0.2f,0.9f,1);
+				glColor4f(0.2f,0.2f,0.9f,opacity+0.25f);
 				glBegin(GL_QUADS);
 					glVertex2f(x+3, Graphics.h()-y-20*i-18);
 					glVertex2f(x+maxlen-3, Graphics.h()-y-20*i-18);
 					glVertex2f(x+maxlen-3, Graphics.h()-y-20*i-2);
 					glVertex2f(x+3, Graphics.h()-y-20*i-2);
 				glEnd();
-				glColor4f(0,0,0,1);
+				glColor4f(0,0,0,opacity+0.25f);
 				color = 1;
 			}
 			
@@ -682,7 +696,9 @@ void cMenu::draw()
 		if(w != maxlen && !updatedchildrenpos && parent != NULL)
 		{
 			if(parent->drawstyle != 0)
+			{
 				w = maxlen;
+			}
 			else
 				updatedchildrenpos = true;
 			for(unsigned int ii = 0; ii < items.size(); ii++)
@@ -746,6 +762,7 @@ void cMenu::click(int xx, int yy)
 			
 			if (mousex > x+items[i]->x && mousex < x+items[i]->x+m)
 			{
+				items[i]->opacity = 0;
 				items[i]->opened = !items[i]->opened;
 			}
 		}
@@ -785,12 +802,15 @@ void cMenu::click(int xx, int yy)
 				}
 				else
 				{
+					if(!opened)
+						opacity = 0;
 					opened = true;
 					for(unsigned int ii = 0; ii < items.size(); ii++)
 					{
 						if(i != ii)
 							items[ii]->closemenu();
 					}
+					items[i]->opacity = 0;
 					items[i]->opened = !items[i]->opened;
 					if (!items[i]->opened)
 						items[i]->closemenu();

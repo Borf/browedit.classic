@@ -282,8 +282,6 @@ public:
 	vector<cEffect>		effects;
 	vector<cSprite*>	sprites;
 
-	cTexture*			notile;
-
 	cWorld()
 	{
 		showtextures = false;
@@ -292,7 +290,6 @@ public:
 		light2 = NULL;
 		sound = NULL;
 		effect = NULL;
-		notile = NULL;
 	}
 	~cWorld()
 	{

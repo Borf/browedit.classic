@@ -47,50 +47,53 @@ int cProcessManagement::detailheightedit_process_events(SDL_Event &event)
 
 				undostack.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
 
-				if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-(int)ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= Graphics.world.height-(int)ceil(brushsize/2.0f))
+//				if (posx >= floor(brushsize/2.0f) && posx <= Graphics.world.width-(int)ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= Graphics.world.height-(int)ceil(brushsize/2.0f))
 				{
 					for(int x = posx-(int)floor(brushsize/2.0f); x < posx+(int)ceil(brushsize/2.0f); x++)
 					{
 						for(int y = posy-(int)floor(brushsize/2.0f); y < posy+(int)ceil(brushsize/2.0f); y++)
 						{
-							cCube* c = &Graphics.world.cubes[y][x];
-							if(lbuttondown && !rbuttondown)
+							if(x >= 0 && y >= 0 && x < Graphics.world.width && y < Graphics.world.height)
 							{
-								if (!Graphics.slope || (x > posx-(int)floor(brushsize/2.0f)) && y > posy-(int)floor(brushsize/2.0f))
-									c->cell1-=1;
-								if (!Graphics.slope || (x < posx+(int)ceil(brushsize/2.0f)-1) && y > posy-(int)floor(brushsize/2.0f))
-									c->cell2-=1;
-								if (!Graphics.slope || (x > posx-(int)floor(brushsize/2.0f)) && y < posy+(int)ceil(brushsize/2.0f)-1)
-									c->cell3-=1;
-								if (!Graphics.slope || (x < posx+(int)ceil(brushsize/2.0f)-1) && y < posy+(int)ceil(brushsize/2.0f)-1)
-									c->cell4-=1;
-								if(ctrl)
+								cCube* c = &Graphics.world.cubes[y][x];
+								if(lbuttondown && !rbuttondown)
 								{
-									c->cell1 = max(mmin,c->cell1);
-									c->cell2 = max(mmin,c->cell2);
-									c->cell3 = max(mmin,c->cell3);
-									c->cell4 = max(mmin,c->cell4);
+									if (!Graphics.slope || (x > posx-(int)floor(brushsize/2.0f)) && y > posy-(int)floor(brushsize/2.0f))
+										c->cell1-=1;
+									if (!Graphics.slope || (x < posx+(int)ceil(brushsize/2.0f)-1) && y > posy-(int)floor(brushsize/2.0f))
+										c->cell2-=1;
+									if (!Graphics.slope || (x > posx-(int)floor(brushsize/2.0f)) && y < posy+(int)ceil(brushsize/2.0f)-1)
+										c->cell3-=1;
+									if (!Graphics.slope || (x < posx+(int)ceil(brushsize/2.0f)-1) && y < posy+(int)ceil(brushsize/2.0f)-1)
+										c->cell4-=1;
+									if(ctrl)
+									{
+										c->cell1 = max(mmin,c->cell1);
+										c->cell2 = max(mmin,c->cell2);
+										c->cell3 = max(mmin,c->cell3);
+										c->cell4 = max(mmin,c->cell4);
+									}
 								}
-							}
-							if(lbuttondown && rbuttondown)
-							{
-								if (!Graphics.slope || (x > posx-(int)floor(brushsize/2.0f)) && y > posy-(int)floor(brushsize/2.0f))
-									c->cell1+=1;
-								if (!Graphics.slope || (x < posx+(int)ceil(brushsize/2.0f)-1) && y > posy-(int)floor(brushsize/2.0f))
-									c->cell2+=1;
-								if (!Graphics.slope || (x > posx-(int)floor(brushsize/2.0f)) && y < posy+(int)ceil(brushsize/2.0f)-1)
-									c->cell3+=1;
-								if (!Graphics.slope || (x < posx+(int)ceil(brushsize/2.0f)-1) && y < posy+(int)ceil(brushsize/2.0f)-1)
-									c->cell4+=1;
-								if(ctrl)
+								if(lbuttondown && rbuttondown)
 								{
-									c->cell1 = min(mmax,c->cell1);
-									c->cell2 = min(mmax,c->cell2);
-									c->cell3 = min(mmax,c->cell3);
-									c->cell4 = min(mmax,c->cell4);
+									if (!Graphics.slope || (x > posx-(int)floor(brushsize/2.0f)) && y > posy-(int)floor(brushsize/2.0f))
+										c->cell1+=1;
+									if (!Graphics.slope || (x < posx+(int)ceil(brushsize/2.0f)-1) && y > posy-(int)floor(brushsize/2.0f))
+										c->cell2+=1;
+									if (!Graphics.slope || (x > posx-(int)floor(brushsize/2.0f)) && y < posy+(int)ceil(brushsize/2.0f)-1)
+										c->cell3+=1;
+									if (!Graphics.slope || (x < posx+(int)ceil(brushsize/2.0f)-1) && y < posy+(int)ceil(brushsize/2.0f)-1)
+										c->cell4+=1;
+									if(ctrl)
+									{
+										c->cell1 = min(mmax,c->cell1);
+										c->cell2 = min(mmax,c->cell2);
+										c->cell3 = min(mmax,c->cell3);
+										c->cell4 = min(mmax,c->cell4);
+									}
 								}
+								c->calcnormal();
 							}
-							c->calcnormal();
 						}
 					}
 					lasttimer = SDL_GetTicks()+500;

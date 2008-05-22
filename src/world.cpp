@@ -66,10 +66,6 @@ void cWorld::load()
 		sound = new cTextureModel();
 		sound->open("data/Speaker.tga");
 	}
-	if(notile == NULL)
-	{
-		notile = TextureCache.load("data/notile.tga");
-	}
 
 	for(i = 0; i < textures.size(); i++)
 		TextureCache.unload(textures[i]->texture);
@@ -138,7 +134,7 @@ void cWorld::load()
 
 	int version;
 
-	Log(3,0,GetMsg("world/LOAD"), filename);
+	Log(3,0,GetMsg("world/LOAD"), (string(filename) + ".gnd").c_str());
 	cFile* pFile = fs.open(string(filename) + ".gnd");
 	if(pFile == NULL)
 	{
@@ -174,6 +170,7 @@ void cWorld::load()
 	Graphics.camerapointer = cVector2(-width*5,-height*5);
 
 
+	textures.resize(nTextures);
 	for(i = 0; i < nTextures; i++)
 	{
 		pFile->read(buf, 80);
@@ -182,7 +179,7 @@ void cWorld::load()
 		t->RoFilename = s;
 		t->RoFilename2 = string(buf+40);
 		t->texture = TextureCache.load(rodir + "data\\texture\\" + s);
-		textures.push_back(t);
+		textures[i] = t;
 	}
 
 	if(version > 0)
@@ -194,14 +191,16 @@ void cWorld::load()
 
 
 		unsigned int nLightmaps = *((int*)buf);
+		lightmaps.resize(nLightmaps);
 		for(i = 0; i < nLightmaps; i++)
 		{
 			cLightmap* l = new cLightmap();
 			pFile->read(l->buf, 256);
-			lightmaps.push_back(l);
+			lightmaps[i] = l;
 		}
 		unsigned int nTiles;
 		pFile->read((char*)&nTiles, 4);
+		tiles.resize(nTiles);
 		for(i = 0; i < nTiles; i++)
 		{
 			pFile->read(buf, 40);
@@ -223,13 +222,14 @@ void cWorld::load()
 			if(t.texture < 0 || t.texture > (int)textures.size())
 				t.texture = 0;
 			memcpy(t.color, buf+36, 4);
-			tiles.push_back(t);
+			tiles[i] = t;
 		}
-
+	
+		cubes.resize(height);
 		for(y = 0; y < (unsigned int)height; y++)
 		{
 			vector<cCube> row;
-			row.clear();
+			row.resize(width);
 			for(x = 0; x < (unsigned int)width; x++)
 			{
 				cCube c;
@@ -259,18 +259,20 @@ void cWorld::load()
 					c.tileaside = *((short*)(buf+20));
 				}
 				c.calcnormal();
-				row.push_back(c);
+				row[x] = c;
 			}
-			cubes.push_back(row);
+			cubes[y] = row;
 		}
 	}
 	else
 	{
-		cLightmap* l = new cLightmap;
+		cLightmap* l = new cLightmap();
 		lightmaps.push_back(l);
+		cubes.resize(height);
 		for(y = 0; y < (unsigned int)height; y++)
 		{
 			vector<cCube> row;
+			row.resize(width);
 			for(x = 0; x < (unsigned int)width; x++)
 			{
 				pFile->read(buf, 132);
@@ -350,10 +352,10 @@ void cWorld::load()
 				c.calcnormal();
 				c.maxh = -99999;
 				c.minh = 99999;
-				row.push_back(c);
+				row[x] = c;
 
 			}
-			cubes.push_back(row);
+			cubes[y] = row;
 		}
 		loaded = true;
 
@@ -639,6 +641,7 @@ void cWorld::load()
 
 	}
 	pFile->close(); 
+	Log(3,0,GetMsg("world/LOADDONE"), (string(filename) + ".rsw").c_str());
 	
 	if(quadtreefloats.size() > 0)
 	{
@@ -647,8 +650,8 @@ void cWorld::load()
 //		root->generate(width*10-1, height*10-1,-0.5,-0.5,5);
 	}
 
+	Log(3,0,GetMsg("world/LOAD"), (string(filename) + ".gat").c_str());
 	pFile = fs.open(string(filename) + ".gat");
-
 	pFile->read(buf, 14);
 	
 	for(y = 0; y < (unsigned int)height*2; y++)
@@ -668,8 +671,8 @@ void cWorld::load()
 		}
 		gattiles.push_back(row);
 	}
-
 	pFile->close();
+	Log(3,0,GetMsg("world/LOADDONE"), (string(filename) + ".gat").c_str());
 
 	wnd = Graphics.WM.getwindow(WT_HOTKEY);
 	if (wnd != NULL)
@@ -2718,6 +2721,17 @@ void cWorld::clean()
 
 void cWorld::unload()
 {
+	delete light;
+	delete light2;
+	delete sound;
+	delete effect;
+
+	light = NULL;
+	light2 = NULL;
+	sound = NULL;
+	effect = NULL;
+
+
 	unsigned int x,y,i;
 	for(i = 0; i < textures.size(); i++)
 		TextureCache.unload(textures[i]->texture);

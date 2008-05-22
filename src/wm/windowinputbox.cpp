@@ -202,6 +202,7 @@ bool cWindowInputBox::onchar(char keyid, bool shift)
 		if (!shift)
 			selectionstart = cursor;
 		selectionstart = cursor;
+		onchange();
 		return true;
 	}
 	selectionstart = cursor;

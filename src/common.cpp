@@ -245,7 +245,7 @@ long tickcount()
 	gettimeofday(&tval,NULL);
 	return tval.tv_sec * 1000 + tval.tv_usec/1000;
 #else
-	return GetTickCount();
+	return SDL_GetTicks();
 #endif
 }
 string removecolors(string s)

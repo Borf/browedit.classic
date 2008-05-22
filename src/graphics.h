@@ -125,8 +125,6 @@ public:
 	CFrustum				frustum;
 
 
-	cTexture*				mask;
-	cTexture*				bulb;
 	int						selectedobjectprop;
 
 	int						selectedobject;

@@ -14,10 +14,13 @@ void cWindowTree::draw(int cutoffleft, int cutoffright, int cutofftop, int cutof
 	glEnable(GL_BLEND);
 	unsigned int i;
 
-	vector<string> values;
-	for(i = 0; i < nodes.size(); i++)
-		nodes[i]->getdata(values);
 
+	if(!validCache)
+	{
+		values.clear();
+		for(i = 0; i < nodes.size(); i++)
+			nodes[i]->getdata(values);
+	}
 
 	int xx, yy;
 	xx = realx();
@@ -185,9 +188,12 @@ void cWindowTree::draw(int cutoffleft, int cutoffright, int cutofftop, int cutof
 bool cWindowTree::onkeydown(int key, bool shift)
 {
 	unsigned int i;
-	vector<string> values;
-	for(i = 0; i < nodes.size(); i++)
-		nodes[i]->getdata(values);
+	if(!validCache)
+	{
+		values.clear();
+		for(i = 0; i < nodes.size(); i++)
+			nodes[i]->getdata(values);
+	}
 	if (key == SDLK_DOWN && selected < (int)values.size()-1)
 	{
 		i = 0;
@@ -254,9 +260,12 @@ void cWindowTree::rightclick()
 void cWindowTree::click()
 {
 	unsigned int i;
-	vector<string> values;
-	for(i = 0; i < nodes.size(); i++)
-		nodes[i]->getdata(values);
+	if(!validCache)
+	{
+		values.clear();
+		for(i = 0; i < nodes.size(); i++)
+			nodes[i]->getdata(values);
+	}
 
 	
 	int xx = (int)mousex;
@@ -324,9 +333,12 @@ void cWindowTree::drag()
 	if (mousestartx - realx() - parent->px() > w-14 && mousestartx - realx() - parent->px() < w)
 	{
 		unsigned int i;
-		vector<string> values;
-		for(i = 0; i < nodes.size(); i++)
-			nodes[i]->getdata(values);
+		if(!validCache)
+		{
+			values.clear();
+			for(i = 0; i < nodes.size(); i++)
+				nodes[i]->getdata(values);
+		}
 
 		i = 0;
 		int yyy = realy()+h-5-12;
@@ -369,6 +381,7 @@ void cWindowTree::doubleclick()
 	}
 	if(node != NULL)
 	{
+		validCache = false;
 		node->open = !node->open;
 		Log(3,0,"Selected Node %s", node->text.c_str());
 	}
@@ -459,9 +472,12 @@ void cWindowTree::scrollup()
 void cWindowTree::scrolldown()
 {
 	unsigned int i;
-	vector<string> values;
-	for(i = 0; i < nodes.size(); i++)
-		nodes[i]->getdata(values);
+	if(!validCache)
+	{
+		values.clear();
+		for(i = 0; i < nodes.size(); i++)
+			nodes[i]->getdata(values);
+	}
 
 	int yy = realy()+h-5-12;
 	while(yy+10 > realy() && i < values.size())

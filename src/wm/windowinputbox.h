@@ -41,6 +41,7 @@ public:
 
 	void SetText(int, string);
 	void SetInt(int, int);
+	virtual void onchange() {};
 	int GetInt(int);
 	string GetText(int);
 };
