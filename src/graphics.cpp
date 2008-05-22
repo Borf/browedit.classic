@@ -47,8 +47,8 @@ int cGraphics::draw(bool drawwm)
 	if(topcamera)
 	{
 		LightPosition[0] = mouse3dx;
-		LightPosition[1] = mouse3dz;
-		LightPosition[2] = mouse3dy+500;
+		LightPosition[1] = -mouse3dz;
+		LightPosition[2] = 1000;
 		LightPosition[3] = 1.0f;
 	}
 	else
@@ -525,7 +525,7 @@ int cGraphics::InitGL(void)
 
     glCullFace( GL_BACK );
     glFrontFace( GL_CCW );
-    glEnable( GL_CULL_FACE );
+    glDisable( GL_CULL_FACE );
 
 	glEnable(GL_ALPHA_TEST);
 	glAlphaFunc(GL_GREATER, 0.1f);

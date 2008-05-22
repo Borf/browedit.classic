@@ -6,8 +6,9 @@
 
 extern cFileSystem fs;
 
-cTexture::cTexture(string pFilename, bool pFreedata)
+cTexture::cTexture(string pFilename, bool pClamp, bool pFreedata)
 {
+	clamp = pClamp;
 	filename = pFilename;
 	loaded = false;
 	freedata = pFreedata;
@@ -20,7 +21,7 @@ GLuint cTexture::texid()
 {
 	if(!loaded && filename != "")
 	{
-		cTextureLoaders::load(filename, this);
+		cTextureLoaders::load(filename, this, clamp);
 		loaded = true;
 	}
 	return tid;
@@ -43,9 +44,9 @@ cTextureLoaders& GetTextureLoaders()
 }
 
 //vector<cTextureLoader*> cTextureLoaders::loaders;
-cTexture* cTextureLoaders::load(string filename, bool freedata)
+cTexture* cTextureLoaders::load(string filename, bool clamp, bool freedata)
 {
-	cTexture* t = new cTexture(filename, freedata);
+	cTexture* t = new cTexture(filename, clamp, freedata);
 	return t;
 }
 
@@ -64,15 +65,18 @@ void cTexture::generate()
 	//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 	//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
 
-
-
+	if(clamp)
+	{
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
+	}
 	if(freedata)
 		delete[] data;
 
 }
 
 
-void cTextureLoaders::load(string filename, cTexture* tex)
+void cTextureLoaders::load(string filename, cTexture* tex, bool clamp)
 {
 	if(filename.rfind(".") == string::npos)
 	{

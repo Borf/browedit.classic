@@ -281,7 +281,29 @@ void cWindowTree::click()
 		selected = liststart + ((h-yy-3) / 12);
 		if (selected > (int)values.size() || selected < 0)
 			selected = s;
-		onchange();
+
+		if(s != selected)
+		{
+			onchange();
+		}
+
+		int a = selected;
+		cTreeNode* node = NULL;
+		for(unsigned int i = 0; i < nodes.size(); i++)
+		{
+			 node = nodes[i]->getnode(a);
+			 if(node != NULL)
+				 break;
+		}
+		if(node != NULL)
+		{
+			validCache = false;
+			node->open = !node->open;
+			Log(3,0,"Selected Node %s", node->text.c_str());
+		}
+		else
+			Log(3,0,"Wrong node selected O_o;");
+	
 	}
 	else
 	{
@@ -371,22 +393,6 @@ void cWindowTree::drag()
 
 void cWindowTree::doubleclick()
 {
-	int a = selected;
-	cTreeNode* node = NULL;
-	for(unsigned int i = 0; i < nodes.size(); i++)
-	{
-		 node = nodes[i]->getnode(a);
-		 if(node != NULL)
-			 break;
-	}
-	if(node != NULL)
-	{
-		validCache = false;
-		node->open = !node->open;
-		Log(3,0,"Selected Node %s", node->text.c_str());
-	}
-	else
-		Log(3,0,"Wrong node selected O_o;");
 }
 
 

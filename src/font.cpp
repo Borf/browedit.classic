@@ -304,7 +304,7 @@ int	cFont::textlen(string s)
 
 int cFont::load(string filename)
 {
-	texture = cTextureLoaders::load(filename,false);
+	texture = cTextureLoaders::load(filename,false,false);
 	Log(5,0,"Loading font %s", filename.c_str());
 	float cx, cy;
 	list_base=glGenLists(256);                          // Creating 256 Display Lists

@@ -19,8 +19,10 @@ private:
 	bool				loaded;
 	string				filename;
 	GLuint				tid;
+
+	bool				clamp;
 public:
-	cTexture(string,bool);
+	cTexture(string,bool,bool);
 	void				resizeToLog();
 
 	bool				freedata;
@@ -47,8 +49,8 @@ class cTextureLoaders
 {
 public:
 	vector<cTextureLoader*>	loaders;
-	static cTexture*				load(string, bool = true);
-	static void						load(string, cTexture*);
+	static cTexture*				load(string, bool, bool = true);
+	static void						load(string, cTexture*, bool);
 };
 
 cTextureLoaders& GetTextureLoaders();

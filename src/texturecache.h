@@ -13,7 +13,7 @@ public:
 	map<string, cTexture*, less<string> >	textures;
 	map<cTexture*, int, less<cTexture*> >	used;
 
-	cTexture*	load(string);
+	cTexture*	load(string, bool = false);
 	void		unload(cTexture*);
 
 };

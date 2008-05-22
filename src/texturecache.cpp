@@ -3,11 +3,11 @@
 
 
 
-cTexture* cTextureCache::load(string filename)
+cTexture* cTextureCache::load(string filename, bool clamp)
 {
 	if (textures.find(filename) == textures.end())
 	{
-		cTexture* tex = cTextureLoaders::load(filename);
+		cTexture* tex = cTextureLoaders::load(filename,clamp);
 		textures[filename] = tex;
 		
 		used[tex] = 1;

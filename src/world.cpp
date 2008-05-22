@@ -1553,10 +1553,25 @@ void cWorld::draw()
 		glEnable(GL_LIGHTING);
 
 
-	if(Graphics.showambientlighting)
-		glColor4f(ambientlight.diffuse.x+ambientlight.shadow.x,ambientlight.diffuse.y+ambientlight.shadow.y,ambientlight.diffuse.z+ambientlight.shadow.z,1);
-	else
+//	if(Graphics.showambientlighting)
+//		glColor4f(ambientlight.diffuse.x+ambientlight.shadow.x,ambientlight.diffuse.y+ambientlight.shadow.y,ambientlight.diffuse.z+ambientlight.shadow.z,1);
+//	else
 		glColor4f(1,1,1,1);
+
+
+	Graphics.LightAmbient[0] = ambientlight.shadow.x;
+	Graphics.LightAmbient[1] = ambientlight.shadow.y;
+	Graphics.LightAmbient[2] = ambientlight.shadow.z;
+	Graphics.LightAmbient[3] = 1.0f;
+
+	Graphics.LightDiffuse[0] = ambientlight.diffuse.x;
+	Graphics.LightDiffuse[1] = ambientlight.diffuse.y;
+	Graphics.LightDiffuse[2] = ambientlight.diffuse.z;
+	Graphics.LightDiffuse[3] = 1.0f;
+
+	glLightfv(GL_LIGHT1, GL_AMBIENT, Graphics.LightAmbient);				// Setup The Ambient Light
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, Graphics.LightDiffuse);				// Setup The Diffuse Light
+
 
 
 	for(x = 0; x < width; x++)

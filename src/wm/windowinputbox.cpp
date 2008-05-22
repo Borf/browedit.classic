@@ -155,6 +155,7 @@ bool cWindowInputBox::onkeydown(int keyid, bool shift)
 				cursor--;
 			}
 			selectionstart = cursor;
+			onchange();
 			ret = true;
 		}
 		if (keyid == SDLK_DELETE)//delete
@@ -168,6 +169,7 @@ bool cWindowInputBox::onkeydown(int keyid, bool shift)
 			{
 				text = text.substr(0, cursor) + text.substr(cursor+1);
 			}
+			onchange();
 			ret = true;
 		}
 		while(cursor < startindex)

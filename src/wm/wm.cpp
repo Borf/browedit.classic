@@ -100,7 +100,7 @@ int cWM::draw()
 int cWM::init(string sSkin)
 {
 	skin = fs.getxml(sSkin);
-	texture = cTextureLoaders::load(skin.FirstChildElement("skin")->FirstChildElement("texture")->FirstChild()->Value());
+	texture = TextureCache.load(skin.FirstChildElement("skin")->FirstChildElement("texture")->FirstChild()->Value());
 	font.load(skin.FirstChildElement("skin")->FirstChildElement("font")->FirstChild()->Value());
 
 	string c = skin.FirstChildElement("skin")->FirstChildElement("color")->FirstChild()->Value();
