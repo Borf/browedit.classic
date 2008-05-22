@@ -66,6 +66,7 @@ bool	doneaction = true;
 extern cMenu* popupmenu;
 TiXmlDocument favoritelights;
 string skinFile;
+string firstmap;
 
 unsigned int undosize = 50;
 vector<string> texturefiles;
@@ -855,6 +856,8 @@ int main(int argc, char *argv[])
 		}
 		else if (option == "undo")
 			undosize = atoi(el->Attribute("size"));
+		else if (option == "firstmap")
+			firstmap = el->FirstChild()->Value();
 		el = el->NextSiblingElement();
 	}			
 
@@ -1104,7 +1107,10 @@ int main(int argc, char *argv[])
 
 	Log(3,0,GetMsg("DONEINIT"));
 	Graphics.world.newworld();
-	strcpy(Graphics.world.filename, string(rodir + "data\\prontera").c_str());
+	if(firstmap == "")
+		strcpy(Graphics.world.filename, string(rodir + "data\\prontera").c_str());
+	else
+		strcpy(Graphics.world.filename, string(rodir + "data\\" + firstmap).c_str());
 	if(argc > 1)
 	{
 		strcpy(Graphics.world.filename, string(rodir + "data\\" + argv[1]).c_str());

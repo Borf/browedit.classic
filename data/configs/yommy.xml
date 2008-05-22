@@ -1,7 +1,6 @@
 <config>
-    <ro directory="..\..\ro\">
-        <grf>..\..\ro\sdata.grf</grf>
-        <grf>..\..\ro\data.grf</grf>
+    <ro directory="c:\program files\gravity\ro\">
+        <grf>c:\program files\gravity\ro\sdata.grf</grf>
     </ro>
     <files>
         <models>
@@ -18,18 +17,18 @@
         </sounds>
     </files>
     <graphics>
-        <resx>1024</resx>
-        <resy>768</resy>
+        <resx>800</resx>
+        <resy>600</resy>
         <fullscreen>false</fullscreen>
         <bpp>32</bpp>
         <font>tahoma</font>
-        <skin>data/skins/ro.xml</skin>
+        <skin>data/skins/HamVista.xml</skin>
         <notilecolor>FFFF80</notilecolor>
         <bgcolor>8000FF</bgcolor>
     </graphics>
     <undo size="50" />
     <language>english</language>
-    <firstmap>prontera</firstmap>
+    <firstmap>payon</firstmap>
     <splash>data/hamtaro.tga</splash>
     <water>
         <directory>data\texture\ฟ๖ลอ\</directory>
@@ -46,32 +45,8 @@
         <tile>6</tile>
     </gattiles>
     <wm>
-        <sprite>
-            <x>237</x>
-            <y>184</y>
-        </sprite>
-        <water>
-            <x>410</x>
-            <y>302</y>
-        </water>
-        <minimap>
-            <x>842151475</x>
-            <y>0</y>
-        </minimap>
-        <textures>
-            <x>25</x>
-            <y>25</y>
-            <w>974</w>
-            <h>718</h>
-        </textures>
-        <modelswindow>
-            <x>25</x>
-            <y>25</y>
-            <w>974</w>
-            <h>718</h>
-        </modelswindow>
         <hotbar>
-            <x>744</x>
+            <x>520</x>
             <y>0</y>
         </hotbar>
     </wm>
