@@ -208,10 +208,10 @@ int cGraphics::draw(bool drawwm)
 
 		glColor3f(1,0,0);
 		glBegin(GL_LINE_LOOP);
-			glVertex2f( Graphics.w()%32+selectionstart.x, height-selectionstart.y);
-			glVertex2f( Graphics.w()%32+selectionstart.x, height-selectionend.y);
-			glVertex2f( Graphics.w()%32+selectionend.x, height-selectionend.y);
-			glVertex2f( Graphics.w()%32+selectionend.x, height-selectionstart.y);
+			glVertex2f( selectionstart.x, height-selectionstart.y);
+			glVertex2f( selectionstart.x, height-selectionend.y);
+			glVertex2f( selectionend.x, height-selectionend.y);
+			glVertex2f( selectionend.x, height-selectionstart.y);
 		glEnd();
 
 		glColor3f(1,1,1);
