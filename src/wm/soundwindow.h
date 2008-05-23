@@ -81,6 +81,12 @@ public:
 		addlabel("lblScale",0,60, GetMsg("wm/sound/SCALE"));
 		addlabel("lblRot",	0,80,GetMsg("wm/sound/ROTATION"));
 		addlabel("lblRepeatDelay",	0,100, GetMsg("wm/sound/REPEATDELAY"));
+		addlabel("lblValue1",	0,120, "Value 1");
+		addlabel("lblValue2",	0,140, "Value 2");
+		addlabel("lblValue3",	0,160, "Value 3");
+		addlabel("lblValue4",	0,180, "Value 4");
+		addlabel("lblValue5",	0,220, "Value 5");
+		addlabel("lblValue6",	0,240, "Value 6");
 
 
 
@@ -184,11 +190,11 @@ public:
 		o->resizeto(210,20);
 		objects["unknown5"] = o;
 
-		o = new cWindowInputBox(this,skin);
+	/*	o = new cWindowInputBox(this,skin);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveto(100,200);
 		o->resizeto(210,20);
-		objects["unknown6"] = o;
+		objects["unknown6"] = o;*/
 
 		o = new cWindowFloatInputBox(this, skin);
 		o->alignment = ALIGN_TOPLEFT;

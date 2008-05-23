@@ -1103,23 +1103,25 @@ MENUCOMMAND(random4)
 
 
 
-	for(i = 0; i < 1000; i++)
+	if(randommodels.size() > 0)
 	{
-		cRSMModel* model = new cRSMModel();
-		model->load(rodir +  randommodels[rand() % randommodels.size()]);
+		for(i = 0; i < 1000; i++)
+		{
+			cRSMModel* model = new cRSMModel();
+			model->load(rodir +  randommodels[rand() % randommodels.size()]);
 
-		model->pos = cVector3(rand()%(Graphics.world.width*2), 0, rand()%(Graphics.world.height*2));
-
-		while(Graphics.world.cubes[(int)(model->pos.z/2)][(int)(model->pos.x/2)].tileup > 50)
 			model->pos = cVector3(rand()%(Graphics.world.width*2), 0, rand()%(Graphics.world.height*2));
 
+			while(Graphics.world.cubes[(int)(model->pos.z/2)][(int)(model->pos.x/2)].tileup > 50)
+				model->pos = cVector3(rand()%(Graphics.world.width*2), 0, rand()%(Graphics.world.height*2));
 
-		model->pos.y = Graphics.world.cubes[(int)(model->pos.z/2)][(int)(model->pos.x/2)].cell1;
-		model->scale = cVector3(1,1,1);
-		model->rot = cVector3(0,0,0);
-		Graphics.world.models.push_back(model);
+
+			model->pos.y = Graphics.world.cubes[(int)(model->pos.z/2)][(int)(model->pos.x/2)].cell1;
+			model->scale = cVector3(1,1,1);
+			model->rot = cVector3(0,0,0);
+			Graphics.world.models.push_back(model);
+		}
 	}
-
 
 	return true;
 }

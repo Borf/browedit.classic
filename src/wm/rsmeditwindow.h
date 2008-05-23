@@ -468,9 +468,9 @@ class cRSMEditWindow : public cWindow
 		void click()
 		{
 			cWindowRGBPicker::click();
-			parent->objects["model"]->SetInt(0,(int)r*256);
-			parent->objects["model"]->SetInt(1,(int)g*256);
-			parent->objects["model"]->SetInt(2,(int)b*256);
+			parent->objects["model"]->SetInt(0,(int)(r*256));
+			parent->objects["model"]->SetInt(1,(int)(g*256));
+			parent->objects["model"]->SetInt(2,(int)(b*256));
 		}
 	
 	};
