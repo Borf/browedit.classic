@@ -52,7 +52,7 @@ void cWindowInputBox::draw(int cutoffleft, int cutoffright, int cutofftop, int c
 
 	if (focussed)
 	{
-		glColor3f(0.7f,0.7f,1.0f);
+		glColor3f(0.7f,0.7f,colors[3]);
 		glBegin(GL_QUADS);
 			glVertex2d(xx+xoff, yy+3);
 			glVertex2d(xx+xoff+len, yy+3);
@@ -60,7 +60,7 @@ void cWindowInputBox::draw(int cutoffleft, int cutoffright, int cutofftop, int c
 			glVertex2d(xx+xoff, yy+h-3);
 		glEnd();
 	}
-	glColor3f(0,0,0);
+	glColor4f(0,0,0,colors[3]);
 
 	if (mask == "")
 		parent->font->print(fontcolor[0], fontcolor[1], fontcolor[2], parent->px()+xx+5, parent->py()+yy+2, "%s", t.c_str());

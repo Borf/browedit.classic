@@ -16,7 +16,7 @@ void cWindowLabel::draw(int cutoffleft, int cutoffright, int cutofftop, int cuto
 	yy = realy();
 
 	int iii = -17;
-	glColor3f(0,0,0);
+	glColor4f(0,0,0,colors[3]);
 
 	if (lines.size() == 0)
 	{

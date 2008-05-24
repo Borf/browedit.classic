@@ -16,8 +16,100 @@ extern TiXmlDocument	config;
 extern string			configfile;
 #endif
 
+
+cWindow::cWindow(cTexture* t, cFont* f, TiXmlDocument &skin)
+{
+	notransparency = false;
+	visible = false;
+	rolledup = false;
+	resizable = true;
+	movable = true;
+	resizingx = false;
+	resizingy = false;
+	resizingxy = false;
+	resizingyx = false;
+	checkborders = false;
+	alwaysontop = false;
+	minh = 100;
+	minw = 100;
+	selectedobject = NULL;
+	closetype = CLOSE;
+	modal = false;
+	enabled = true;
+	texture = t;
+	font = f;
+	saveprops = "";
+
+	string color = skin.FirstChildElement("skin")->FirstChildElement("window")->FirstChildElement("fontcolor")->FirstChild()->Value();
+	fontcolor[0] = hex2dec(color.substr(0,2)) / 256.0f;
+	fontcolor[1] = hex2dec(color.substr(2,2)) / 256.0f;
+	fontcolor[2] = hex2dec(color.substr(4,2)) / 256.0f;
+
+	color = skin.FirstChildElement("skin")->FirstChildElement("window")->FirstChildElement("title")->FirstChildElement("fontcolor")->FirstChild()->Value();
+	titlecolor[0] = hex2dec(color.substr(0,2)) / 256.0f;
+	titlecolor[1] = hex2dec(color.substr(2,2)) / 256.0f;
+	titlecolor[2] = hex2dec(color.substr(4,2)) / 256.0f;
+
+	titlexoff = atoi(skin.FirstChildElement("skin")->FirstChildElement("window")->FirstChildElement("title")->FirstChildElement("xoff")->FirstChild()->Value());
+	titleyoff = atoi(skin.FirstChildElement("skin")->FirstChildElement("window")->FirstChildElement("title")->FirstChildElement("yoff")->FirstChild()->Value());
+
+
+	TiXmlElement* wSkin = skin.FirstChildElement("skin")->FirstChildElement("window");
+
+	skinTopHeight = atoi(wSkin->FirstChildElement("top")->Attribute("height"));
+	skinTop =		512 - atoi(wSkin->FirstChildElement("top")->FirstChild()->Value());
+	skinBottomHeight = atoi(wSkin->FirstChildElement("bottom")->Attribute("height"));
+	skinBottom =		512 - atoi(wSkin->FirstChildElement("bottom")->FirstChild()->Value());
+	
+	skinLeftWidth = atoi(wSkin->FirstChildElement("left")->Attribute("width"));
+	skinLeft =		atoi(wSkin->FirstChildElement("left")->FirstChild()->Value());
+	skinRightWidth = atoi(wSkin->FirstChildElement("right")->Attribute("width"));
+	skinRight =		atoi(wSkin->FirstChildElement("right")->FirstChild()->Value());
+
+	wSkin = wSkin->FirstChildElement("offsets");
+	skinOffLeft =	atoi(wSkin->FirstChildElement("left")->FirstChild()->Value());
+	skinOffRight =	atoi(wSkin->FirstChildElement("right")->FirstChild()->Value());
+	skinOffTop =	atoi(wSkin->FirstChildElement("top")->FirstChild()->Value());
+	skinOffBottom = atoi(wSkin->FirstChildElement("bottom")->FirstChild()->Value());
+
+
+	currentColor[0] = Graphics.WM.color[0];
+	currentColor[1] = Graphics.WM.color[1];
+	currentColor[2] = Graphics.WM.color[2];
+	currentColor[3] = 0;
+
+}
+
+
 void cWindow::draw()
 {
+	GLfloat tempColors[4];
+	glGetFloatv(GL_CURRENT_COLOR, tempColors);
+
+
+	if(!enabled || !visible)
+	{
+		tempColors[3] = 0;
+	}
+
+	for(int ii = 0; ii < 4; ii++)
+	{
+		if(currentColor[ii] > tempColors[ii])
+		{
+			currentColor[ii] -= (Graphics.frameticks / 200.0f);
+			if(currentColor[ii] < tempColors[ii])
+				currentColor[ii] = tempColors[ii];
+		}			
+		else if(currentColor[ii] < tempColors[ii])
+		{
+			currentColor[ii] += (Graphics.frameticks / 200.0f);
+			if(currentColor[ii] > tempColors[ii])
+				currentColor[ii] = tempColors[ii];
+		}
+
+	}
+	glColor4fv(currentColor);
+
 	glPushMatrix();
 	glTranslatef(x, y, 0);
 	glEnable(GL_TEXTURE_2D);
@@ -108,6 +200,7 @@ void cWindow::draw()
 */
 	font->print(titlecolor[0], titlecolor[1], titlecolor[2],x+titlexoff,y+h-(titleyoff+12),title.c_str());
 	glPopMatrix();
+	glColor4fv(tempColors);
 }
 
 
@@ -389,8 +482,8 @@ void cWindow::close(bool force)
 		return;
 	}
 
-	Graphics.WM.delwindow(this);
-	hide();
+	save();
+	disable();
 }
 
 
@@ -585,6 +678,18 @@ void cWindow::initprops(string s)
 				h = atoi(config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str())->FirstChildElement("h")->FirstChild()->Value());
 			if(config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str())->FirstChildElement("w"))
 				w = atoi(config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str())->FirstChildElement("w")->FirstChild()->Value());
+		}
+
+		if(movable)
+		{
+			if(x > Graphics.w())
+				x = Graphics.w() - w;
+			if(y > Graphics.h())
+				y = Graphics.h() - h;
+			if(x < 0)
+				x = 0;
+			if(y < 0)
+				y = 0;
 		}
 	}
 #endif

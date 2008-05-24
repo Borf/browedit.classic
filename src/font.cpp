@@ -152,8 +152,10 @@ int cFont::print(float r, float g, float b, float x, float y, const char *fmt, .
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
 
+	GLfloat tempColors[4];
+	glGetFloatv(GL_CURRENT_COLOR, tempColors);
 	if (r != 2 && g != 2 && b != 2)
-		glColor3f(r,g,b);
+		glColor4f(r,g,b,tempColors[3]);
 
 	glLoadIdentity();
 	glTranslated(x,y,0);

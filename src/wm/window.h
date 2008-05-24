@@ -107,64 +107,10 @@ public:
 
 	
 	float fontcolor[3];
+	float currentColor[4];
 	bool savewindow;
 	string defaultobject;
-	cWindow(cTexture* t, cFont* f, TiXmlDocument& skin)
-	{
-		notransparency = false;
-		visible = false;
-		rolledup = false;
-		resizable = true;
-		movable = true;
-		resizingx = false;
-		resizingy = false;
-		resizingxy = false;
-		resizingyx = false;
-		checkborders = false;
-		alwaysontop = false;
-		minh = 100;
-		minw = 100;
-		selectedobject = NULL;
-		closetype = CLOSE;
-		modal = false;
-		enabled = true;
-		texture = t;
-		font = f;
-		saveprops = "";
-
-		string color = skin.FirstChildElement("skin")->FirstChildElement("window")->FirstChildElement("fontcolor")->FirstChild()->Value();
-		fontcolor[0] = hex2dec(color.substr(0,2)) / 256.0f;
-		fontcolor[1] = hex2dec(color.substr(2,2)) / 256.0f;
-		fontcolor[2] = hex2dec(color.substr(4,2)) / 256.0f;
-
-		color = skin.FirstChildElement("skin")->FirstChildElement("window")->FirstChildElement("title")->FirstChildElement("fontcolor")->FirstChild()->Value();
-		titlecolor[0] = hex2dec(color.substr(0,2)) / 256.0f;
-		titlecolor[1] = hex2dec(color.substr(2,2)) / 256.0f;
-		titlecolor[2] = hex2dec(color.substr(4,2)) / 256.0f;
-
-		titlexoff = atoi(skin.FirstChildElement("skin")->FirstChildElement("window")->FirstChildElement("title")->FirstChildElement("xoff")->FirstChild()->Value());
-		titleyoff = atoi(skin.FirstChildElement("skin")->FirstChildElement("window")->FirstChildElement("title")->FirstChildElement("yoff")->FirstChild()->Value());
-
-
-		TiXmlElement* wSkin = skin.FirstChildElement("skin")->FirstChildElement("window");
-
-		skinTopHeight = atoi(wSkin->FirstChildElement("top")->Attribute("height"));
-		skinTop =		512 - atoi(wSkin->FirstChildElement("top")->FirstChild()->Value());
-		skinBottomHeight = atoi(wSkin->FirstChildElement("bottom")->Attribute("height"));
-		skinBottom =		512 - atoi(wSkin->FirstChildElement("bottom")->FirstChild()->Value());
-		
-		skinLeftWidth = atoi(wSkin->FirstChildElement("left")->Attribute("width"));
-		skinLeft =		atoi(wSkin->FirstChildElement("left")->FirstChild()->Value());
-		skinRightWidth = atoi(wSkin->FirstChildElement("right")->Attribute("width"));
-		skinRight =		atoi(wSkin->FirstChildElement("right")->FirstChild()->Value());
-
-		wSkin = wSkin->FirstChildElement("offsets");
-		skinOffLeft =	atoi(wSkin->FirstChildElement("left")->FirstChild()->Value());
-		skinOffRight =	atoi(wSkin->FirstChildElement("right")->FirstChild()->Value());
-		skinOffTop =	atoi(wSkin->FirstChildElement("top")->FirstChild()->Value());
-		skinOffBottom = atoi(wSkin->FirstChildElement("bottom")->FirstChild()->Value());
-
-	}
+	cWindow(cTexture* t, cFont* f, TiXmlDocument& skin);
 	virtual ~cWindow()
 	{
 		for(map<string, cWindowObject*, less<string> >::iterator i = objects.begin(); i != objects.end(); i++)
@@ -192,7 +138,7 @@ public:
 	void init(cTexture* t, cFont* f){ texture = t; font = f; }
 		
 	WINDOW_TYPE windowtype()		{ return wtype; }
-	bool isvisible()				{ return visible; }
+	bool isvisible()				{ return visible || currentColor[3] != 0; }
 	void hide()						{ visible = false; }
 	void show()						{ visible = true; }
 	void togglevis()				{ visible = !visible; }
@@ -206,7 +152,7 @@ public:
 	void startresizingyx()			{ resizingyx = true; }
 	void disable()					{ enabled = false; }
 	void enable()					{ enabled = true; }
-	bool isenabled()				{ return enabled; }
+	bool isenabled()				{ return enabled || currentColor[3] != 0; }
 	bool isalwaysontop()			{ return alwaysontop; }
 	bool resizing()					{ return resizingxy | resizingyx | resizingx | resizingy; }
 	bool canbetransparent()			{ return !notransparency; }

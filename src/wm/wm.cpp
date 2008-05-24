@@ -464,21 +464,13 @@ void cWM::addwindow(cWindow* w)
 }
 
 
-void cWM::delwindow(cWindow* w, bool savewindow)
-{
-	w->savewindow = savewindow;
-	w->disable();
-	w->hide();
-}
-
-
 
 void cWM::CleanWindows()
 {
 	vector<cWindow*>::iterator i;
 	for(i = windows.begin(); i != windows.end(); i++)
 	{
-		if (!(*i)->isenabled())
+		if (!(*i)->isenabled() && (*i)->currentColor[3] == 0)
 		{
 			if(draggingwindow == (*i))
 				draggingwindow = NULL;

@@ -48,7 +48,6 @@ public:
 	float				colorblur[4];
 
 	void				addwindow(cWindow*);
-	void				delwindow(cWindow*, bool = true);
 	void				CleanWindows();
 
 	int					focus;
