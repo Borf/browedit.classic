@@ -50,6 +50,7 @@ public:
 class cWindowFloatInputBox : public cWindowInputBox
 {
 	float lastvalue;
+	bool firstTime;
 public:
 	float* floatje;
 	cWindowFloatInputBox(cWindow* parent, TiXmlDocument &skin) : cWindowInputBox(parent, skin)
@@ -57,11 +58,13 @@ public:
 		type = OBJECT_FLOATINPUTBOX;
 		alignment = ALIGN_TOPLEFT;
 		resizeto(70,20);
+		firstTime = true;
 	}
 	void draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 	{
-		if(*floatje != lastvalue)
+		if(*floatje != lastvalue || firstTime)
 		{
+			firstTime = false;
 			char buf[100];
 			sprintf(buf, "%f", *floatje);
 			while(buf[strlen(buf)-1] == '0')
@@ -98,6 +101,7 @@ public:
 class cWindowStringInputBox : public cWindowInputBox
 {
 	string lastvalue;
+	bool firstTime;
 public:
 	string* stringetje;
 	cWindowStringInputBox(cWindow* parent, TiXmlDocument &skin) : cWindowInputBox(parent,skin)
@@ -105,11 +109,13 @@ public:
 		type = OBJECT_FLOATINPUTBOX;
 		alignment = ALIGN_TOPLEFT;
 		resizeto(70,20);
+		firstTime = true;
 	}
 	void draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 	{
-		if(*stringetje != lastvalue)
+		if(*stringetje != lastvalue || firstTime)
 		{
+			firstTime = false;
 			char buf[255];
 			sprintf(buf, "%s", stringetje->c_str());
 			while(buf[strlen(buf)-1] == '0')
@@ -133,7 +139,6 @@ public:
 		bool ret = cWindowInputBox::onkeydown(keyid, shift);
 		if (keyid == SDLK_RETURN)
 		{
-			Log(3,0,"Use of depricated method, do not use!");
 			*stringetje = text;
 			ret = true;
 		}
