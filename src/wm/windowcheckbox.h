@@ -49,17 +49,22 @@ public:
 
 class cWindowBoolCheckBox : public cWindowCheckBox
 {
+	bool firstTime;
 public:
 	bool* boolvalue;
 	cWindowBoolCheckBox(cWindow* parent, TiXmlDocument &skin) : cWindowCheckBox(parent,skin)
 	{
 		alignment = ALIGN_TOPLEFT;
 		boolvalue = NULL;
+		firstTime = true;
 	}
 	void draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 	{
-		if(boolvalue != NULL)
+		if(boolvalue != NULL || firstTime)
+		{
 			*boolvalue = value;
+			firstTime = false;
+		}
 		cWindowCheckBox::draw(cutoffleft, cutoffright, cutofftop, cutoffbottom);
 	}
 

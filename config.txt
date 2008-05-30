@@ -1,1 +1,1 @@
-data/configs/roportable.xml
+data/configs/rodesktop.xml
