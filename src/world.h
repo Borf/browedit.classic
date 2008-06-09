@@ -329,6 +329,7 @@ public:
 
 	void		fixgridding();
 	void		makelightmapsunique();
+	void		blacklightmaps();
 
 	string useless;
 

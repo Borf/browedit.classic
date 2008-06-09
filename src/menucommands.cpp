@@ -1599,6 +1599,7 @@ MENUCOMMAND(dolightmaps2)
 
 	Log(3,0,"Starting Lightmap Clearing");
 	Graphics.world.makelightmapsunique();
+	Graphics.world.blacklightmaps();
 	Log(3,0,"Done initializing for lightmaps...");
 
 	int ww = Graphics.w();

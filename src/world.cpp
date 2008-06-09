@@ -3509,6 +3509,7 @@ void cWorld::makelightmapsunique()
 		for(y = 0; y < Graphics.world.height; y++)
 		{
 			Graphics.world.reallightmaps[y][x]->reset();
+			Graphics.world.reallightmaps[y][x]->reset();
 			int tile = Graphics.world.cubes[y][x].tileup;
 			if(used.find(tile) != used.end())
 			{
@@ -3541,8 +3542,6 @@ void cWorld::makelightmapsunique()
 		}
 	}
 ////////// all tiles are now unique
-
-
 	used.clear();
 
 	for(x = 0; x < Graphics.world.width; x++)
@@ -3556,10 +3555,10 @@ void cWorld::makelightmapsunique()
 				int lightmap = Graphics.world.tiles[tile].lightmap;
 				if(lightmap != -1)
 				{
-					if(used.find(lightmap) != used.end())
+					if(used.find(lightmap) == used.end())
 					{
 						cLightmap* map = new cLightmap();
-						memcpy(Graphics.world.lightmaps[lightmap]->buf, map->buf, 256);
+						memcpy(map->buf, Graphics.world.lightmaps[lightmap]->buf, 256);
 						lightmap = Graphics.world.lightmaps.size();
 						Graphics.world.tiles[tile].lightmap = lightmap;
 						Graphics.world.lightmaps.push_back(map);
@@ -3574,10 +3573,10 @@ void cWorld::makelightmapsunique()
 				int lightmap = Graphics.world.tiles[tile].lightmap;
 				if(lightmap != -1)
 				{
-					if(used.find(lightmap) != used.end())
+					if(used.find(lightmap) == used.end())
 					{
 						cLightmap* map = new cLightmap();
-						memcpy(Graphics.world.lightmaps[lightmap]->buf, map->buf, 256);
+						memcpy(map->buf, Graphics.world.lightmaps[lightmap]->buf, 256);
 						lightmap = Graphics.world.lightmaps.size();
 						Graphics.world.tiles[tile].lightmap = lightmap;
 						Graphics.world.lightmaps.push_back(map);
@@ -3592,10 +3591,10 @@ void cWorld::makelightmapsunique()
 				int lightmap = Graphics.world.tiles[tile].lightmap;
 				if(lightmap != -1)
 				{
-					if(used.find(lightmap) != used.end())
+					if(used.find(lightmap) == used.end())
 					{
 						cLightmap* map = new cLightmap();
-						memcpy(Graphics.world.lightmaps[lightmap]->buf, map->buf, 256);
+						memcpy(map->buf, Graphics.world.lightmaps[lightmap]->buf, 256);
 						lightmap = Graphics.world.lightmaps.size();
 						Graphics.world.tiles[tile].lightmap = lightmap;
 						Graphics.world.lightmaps.push_back(map);
@@ -3606,5 +3605,30 @@ void cWorld::makelightmapsunique()
 
 		}
 	}
+
+}
+
+
+void cWorld::blacklightmaps()
+{
+	int x,y;
+	for(x = 0; x < Graphics.world.width; x++)
+	{
+		for(y = 0; y < Graphics.world.height; y++)
+		{
+			int tile = Graphics.world.cubes[y][x].tileup;
+			if(tile != -1)
+			{
+				Graphics.world.reallightmaps[y][x]->reset();
+				int lightmap = Graphics.world.tiles[tile].lightmap;
+				if(lightmap != -1)
+				{
+					memset(Graphics.world.lightmaps[lightmap], '\0', 64);
+				}
+			}
+		}
+	}
+
+
 
 }

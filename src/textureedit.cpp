@@ -317,7 +317,13 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 					int posx = (int)mouse3dx / 10;
 					int posy = (int)mouse3dz / 10;
 					if(posx > -1 && posy > -1 && posx < Graphics.world.width && posy < Graphics.world.height)
+					{
 						Log(3,0,"Cube (%i,%i): %f,%f,%f,%f", posx, posy, Graphics.world.cubes[posy][posx].cell1, Graphics.world.cubes[posy][posx].cell2, Graphics.world.cubes[posy][posx].cell3, Graphics.world.cubes[posy][posx].cell4);
+						Log(3,0,"Tileup: %i", Graphics.world.cubes[posy][posx].tileup);
+						if(Graphics.world.cubes[posy][posx].tileup != -1)
+							Log(3,0,"Lightmap: %i", Graphics.world.tiles[Graphics.world.cubes[posy][posx].tileup].lightmap);
+					}
+
 					break;
 				}
 			case SDLK_LEFTBRACKET:
