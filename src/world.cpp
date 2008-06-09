@@ -3043,6 +3043,7 @@ void cWorld::savelightmap()
 {
 	int x,y,xx,yy;
 	char* imgdata = new char[width*height*6*6*3];
+	ZeroMemory(imgdata, width*height*6*6*3);
 	for(x = 0; x < width; x++)
 	{
 		for(y = 0; y < height; y++)
@@ -3064,6 +3065,7 @@ void cWorld::savelightmap()
 	tgaSave((char*)(string(filename) + ".lightmap.tga").c_str(), width*6, height*6, 24, (BYTE*)imgdata);
 	delete[] imgdata;
 	imgdata = new char[width*height*6*6*3];
+	ZeroMemory(imgdata, width*height*6*6*3);
 	for(x = 0; x < width; x++)
 	{
 		for(y = 0; y < height; y++)
@@ -3491,6 +3493,117 @@ void cWorld::fixgridding()
 			
 			}
 				
+		}
+	}
+
+}
+
+
+void cWorld::makelightmapsunique()
+{
+	int x,y;
+
+	map<int, bool, less<int> > used;
+	for(x = 0; x < Graphics.world.width; x++)
+	{
+		for(y = 0; y < Graphics.world.height; y++)
+		{
+			Graphics.world.reallightmaps[y][x]->reset();
+			int tile = Graphics.world.cubes[y][x].tileup;
+			if(used.find(tile) != used.end())
+			{
+				cTile t = Graphics.world.tiles[tile];
+				tile = Graphics.world.tiles.size();
+				Graphics.world.tiles.push_back(t);
+				Graphics.world.cubes[y][x].tileup = tile;
+			}
+			used[tile] = 1;
+//////////////////////////////////
+			tile = Graphics.world.cubes[y][x].tileside;
+			if(used.find(tile) != used.end() && tile != -1)
+			{
+				cTile t = Graphics.world.tiles[tile];
+				tile = Graphics.world.tiles.size();
+				Graphics.world.tiles.push_back(t);
+				Graphics.world.cubes[y][x].tileside = tile;
+			}
+			used[tile] = 1;
+////////////////////////////////
+			tile = Graphics.world.cubes[y][x].tileaside;
+			if(used.find(tile) != used.end() && tile != -1)
+			{
+				cTile t = Graphics.world.tiles[tile];
+				tile = Graphics.world.tiles.size();
+				Graphics.world.tiles.push_back(t);
+				Graphics.world.cubes[y][x].tileaside = tile;
+			}
+			used[tile] = 1;
+		}
+	}
+////////// all tiles are now unique
+
+
+	used.clear();
+
+	for(x = 0; x < Graphics.world.width; x++)
+	{
+		for(y = 0; y < Graphics.world.height; y++)
+		{
+			int tile = Graphics.world.cubes[y][x].tileup;
+			if(tile != -1)
+			{
+				Graphics.world.reallightmaps[y][x]->reset();
+				int lightmap = Graphics.world.tiles[tile].lightmap;
+				if(lightmap != -1)
+				{
+					if(used.find(lightmap) != used.end())
+					{
+						cLightmap* map = new cLightmap();
+						memcpy(Graphics.world.lightmaps[lightmap]->buf, map->buf, 256);
+						lightmap = Graphics.world.lightmaps.size();
+						Graphics.world.tiles[tile].lightmap = lightmap;
+						Graphics.world.lightmaps.push_back(map);
+					}
+					used[lightmap] = 1;
+				}
+			}
+
+			tile = Graphics.world.cubes[y][x].tileside;
+			if(tile != -1)
+			{
+				int lightmap = Graphics.world.tiles[tile].lightmap;
+				if(lightmap != -1)
+				{
+					if(used.find(lightmap) != used.end())
+					{
+						cLightmap* map = new cLightmap();
+						memcpy(Graphics.world.lightmaps[lightmap]->buf, map->buf, 256);
+						lightmap = Graphics.world.lightmaps.size();
+						Graphics.world.tiles[tile].lightmap = lightmap;
+						Graphics.world.lightmaps.push_back(map);
+					}
+					used[lightmap] = 1;
+				}
+			}
+
+			tile = Graphics.world.cubes[y][x].tileaside;
+			if(tile != -1)
+			{
+				int lightmap = Graphics.world.tiles[tile].lightmap;
+				if(lightmap != -1)
+				{
+					if(used.find(lightmap) != used.end())
+					{
+						cLightmap* map = new cLightmap();
+						memcpy(Graphics.world.lightmaps[lightmap]->buf, map->buf, 256);
+						lightmap = Graphics.world.lightmaps.size();
+						Graphics.world.tiles[tile].lightmap = lightmap;
+						Graphics.world.lightmaps.push_back(map);
+					}
+					used[lightmap] = 1;
+				}
+			}
+
 		}
 	}
 

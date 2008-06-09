@@ -328,6 +328,7 @@ public:
 
 
 	void		fixgridding();
+	void		makelightmapsunique();
 
 	string useless;
 
