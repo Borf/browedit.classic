@@ -621,6 +621,7 @@ void cMenu::draw()
 
 			if(items[i]->opened)
 				items[i]->draw();
+			glColor4f(1,1,1,1);
 		}
 		glColor4f(0,0,0,1);
 	}
@@ -662,7 +663,7 @@ void cMenu::draw()
 			glVertex2f(x+maxlen-1, Graphics.h()-y-1);
 			glVertex2f(x+1, Graphics.h()-y-1);
 		glEnd();
-		glColor4f(0,0,0,opacity-0.25f);
+		glColor4f(0,0,0,opacity+0.25f);
 		for(i = 0; i < (int)items.size(); i++)
 		{
 			if (Graphics.font->textlen(items[i]->title.c_str()) > maxlen-50)
