@@ -1750,9 +1750,9 @@ MENUCOMMAND(dolightmaps2)
 							cVector3 lightpos = cVector3(l->pos.x*5, l->pos.y, l->pos.z*5);
 							cVector3 diff = worldpos - lightpos;
 
-							if(diff.z < 0 && c->cell3 > c2->cell1)
+							if(diff.z < 0 && c->cell3 > c2->cell1 && l->givesshadow && !noshadow)
 								continue;
-							if(diff.z > 0 && c->cell3 < c2->cell1)
+							if(diff.z > 0 && c->cell3 < c2->cell1 && l->givesshadow && !noshadow)
 								continue;
 
 							
@@ -1828,9 +1828,9 @@ MENUCOMMAND(dolightmaps2)
 							cVector3 lightpos = cVector3(l->pos.x*5, l->pos.y, l->pos.z*5);
 							cVector3 diff = worldpos - lightpos;
 
-							if(diff.x < 0 && c->cell4 > c2->cell3)
+							if(diff.x < 0 && c->cell4 > c2->cell3 && l->givesshadow && !noshadow)
 								continue;
-							if(diff.x > 0 && c->cell4 < c2->cell3)
+							if(diff.x > 0 && c->cell4 < c2->cell3 && l->givesshadow && !noshadow)
 								continue;
 
 							float length = diff.Magnitude();

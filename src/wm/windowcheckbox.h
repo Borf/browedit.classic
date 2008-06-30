@@ -60,11 +60,12 @@ public:
 	}
 	void draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 	{
-		if(boolvalue != NULL || firstTime)
+		if(boolvalue != NULL && firstTime)
 		{
-			*boolvalue = value;
+			value = *boolvalue;
 			firstTime = false;
 		}
+		*boolvalue = value;
 		cWindowCheckBox::draw(cutoffleft, cutoffright, cutofftop, cutoffbottom);
 	}
 
