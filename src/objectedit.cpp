@@ -307,29 +307,31 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 						model->lightopacity = Graphics.clipboardfloat;
 
 						model->name = Graphics.clipboardname;
-
-						int i = model->name.length()-1;
-						while((atoi(model->name.substr(i).c_str()) != 0 || model->name.substr(i,1) == "0") && i > 0)
-							i--;
-
-						char buf[100];
-						int newid = atoi(model->name.substr(i+1).c_str());
-
-						bool found = true;
-
-						while(found)
+						if(model->name != "")
 						{
-							newid++;
-							found = false;
-							sprintf(buf, "%s%i", model->name.substr(0,i+1).c_str(), newid);
+							int i = model->name.length()-1;
+							while((atoi(model->name.substr(i).c_str()) != 0 || model->name.substr(i,1) == "0") && i > 0)
+								i--;
 
-							for(int ii = 0; ii < Graphics.world.models.size() && !found; ii++)
+							char buf[100];
+							int newid = atoi(model->name.substr(i+1).c_str());
+
+							bool found = true;
+
+							while(found)
 							{
-								if(Graphics.world.models[ii]->name == buf)
-									found = true;
+								newid++;
+								found = false;
+								sprintf(buf, "%s%i", model->name.substr(0,i+1).c_str(), newid);
+
+								for(int ii = 0; ii < Graphics.world.models.size() && !found; ii++)
+								{
+									if(Graphics.world.models[ii]->name == buf)
+										found = true;
+								}
 							}
+							model->name = buf;
 						}
-						model->name = buf;
 
 						Graphics.world.models.push_back(model);
 						Graphics.selectedobject = Graphics.world.models.size()-1;
