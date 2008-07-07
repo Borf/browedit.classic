@@ -653,3 +653,38 @@
 654|Player become Green Slooooowli
 655|Green Flash
 656|NEED UPDATE SAKEEXE
+666|Earthquake
+667|(Nothing)
+668|Dragonfear
+669|Wide Bleeding
+670|Dragon fear (Visual Effect)
+671|The Japan Earth Symbol (Like 'Seven Wind LV 1' but is in the Ground)
+672|The Japan Wind Symbol (Like 'Seven Wind LV 2' but is in the Ground)
+673|(Nothing)
+674|Like Curse Effect
+675|Like Parrying/Kyrie Eleison barrier but Yellow with small Cross in every barrier piece
+676|Slow Casting
+677|Critical Wounds/Bleeding Attack
+678|White 99 Aura Bubbles
+679|Green Aura (Middle)
+680|Green Aura (Bottom)
+681|Dimensional Gorge Map Effect
+682|I Love You Banner
+683|Happy White Day Banner
+684|Happy Valentine Day Banner
+685|Happy Birthday Banner
+686|Merry Christmas Banner
+687|Cast Circle-Like effect 1
+688|Cast Circle-Like effect 2
+689|Endless Tower Map Effect
+690|Burning Flame (Red)
+691|Burning Flame (Green)
+692|Unknown Aura Bubbles (Small ghosts)
+693|Translucent yellow circle
+694|Translucent green circle
+695|Rotating green light
+696|The same of 690 and 691 but Blue/Purple.
+697|(Nothing)
+698|(Nothing)
+699|Fall of powder from the sky and raise of some leaf.
+700|No More Effects From 2008/03/26 Sakexe.
