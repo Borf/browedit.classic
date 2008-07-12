@@ -1384,8 +1384,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					int offset = Graphics.w()%32;
 
-					Graphics.selectionstart.x = floor(mousestartx / 32)*32;
-					Graphics.selectionstart.y = floor(mousestarty / 32)*32;
+					Graphics.selectionstart.x = floor(mousestartx / 32.0)*32;
+					Graphics.selectionstart.y = floor(mousestarty / 32.0)*32;
 					Graphics.selectionend.x = (int)ceil((mousex-offset) / 32.0)*32;
 					Graphics.selectionend.y = (int)ceil((mousey-offset) / 32.0)*32;
 
