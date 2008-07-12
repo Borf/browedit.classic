@@ -3623,7 +3623,8 @@ void cWorld::blacklightmaps()
 				int lightmap = Graphics.world.tiles[tile].lightmap;
 				if(lightmap != -1)
 				{
-					memset(Graphics.world.lightmaps[lightmap], '\0', 64);
+					memset(Graphics.world.lightmaps[lightmap],		'\0', 64);
+					memset(Graphics.world.lightmaps[lightmap]+64,	'\0', 192);
 				}
 			}
 		}

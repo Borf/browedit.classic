@@ -59,6 +59,7 @@ public:
 		showdot = true;
 		showsprites = true;
 		showalllights = false;
+		clearlightmaps = false;
 	}
 
 	int						init();
@@ -159,6 +160,7 @@ public:
 	bool					transparentobjects;
 	bool					showsprites;
 	bool					showalllights;
+	bool					clearlightmaps;
 
 
 	int						quadtreeview;

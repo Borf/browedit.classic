@@ -944,8 +944,8 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,rnd, "Smooth Lightmap",	&MenuCommand_smoothlightmaps); // 
 	ADDMENUITEM(mm,rnd,	GetMsg("menu/generate/CLEARMAP"),					&MenuCommand_clearstuff); // clear map
 	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/DUN99"),						&MenuCommand_99dun); // 99 level dungeon
-	ADDMENUITEM(mm,rnd, "eAthena Script",						&MenuCommand_eascript);
-	ADDMENUITEM(mm,rnd, "NPC stuff",							&MenuCommand_npcscreenies);
+	ADDMENUITEM(mm,rnd, "eAthena Script",									&MenuCommand_eascript);
+	ADDMENUITEM(mm,rnd, "NPC stuff",										&MenuCommand_npcscreenies);
 
 	ADDMENUITEM(grid,view,GetMsg("menu/view/GRID"),							&MenuCommand_grid); //grid
 	grid->ticked = true;
@@ -1024,6 +1024,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,edit,GetMsg("menu/edit/CLEARLIGHTMAPS"),					&MenuCommand_clearlightmaps);
 	ADDMENUITEM(mm,edit,GetMsg("menu/edit/CLEANLIGHTMAPS"),					&MenuCommand_cleanuplightmaps);
 	ADDMENUITEM(mm,edit,GetMsg("menu/edit/REMOVETEXTURES"),					&MenuCommand_cleantextures);
+	ADDMENUITEMDATAP(mm,edit,GetMsg("menu/edit/CLEARLIGHTMAPSONEDIT"),		&MenuCommand_toggle, (void*)&Graphics.clearlightmaps);
 
 	ADDMENUITEM(mm,windows,GetMsg("menu/windows/AMBIENTLIGHTING"),			&MenuCommand_ambientlight);
 	ADDMENUITEM(mm,windows,GetMsg("menu/windows/MODELWINDOW"),				&MenuCommand_modelwindow);

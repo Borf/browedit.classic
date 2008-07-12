@@ -84,22 +84,23 @@
 		</editmode>
 		<edit>
 			<TITLE>Edit</TITLE>
-				<SPEED>Raise/Lowerspeed</SPEED>
-				<SLOPING>Sloping</SLOPING>
-				<SNAPOBJECTS>Snap Objects to floor</SNAPOBJECTS>
-				<FLATTEN>Flatten map</FLATTEN>
-				<FILL>Fill with selected texture</FILL>
-				<FILLAREA>Fill area with selected texture</FILLAREA>
-				<GATHEIGHT>Set GAT height</GATHEIGHT>
-				<RESETCOLORS>Reset colors</RESETCOLORS>
-				<CLEAROBJECTS>Clear Objects</CLEAROBJECTS>
-				<CLEAREFFECTS>Clear Effects</CLEAREFFECTS>
-				<CLEARLIGHTS>Clear Lights</CLEARLIGHTS>
-				<ADDWALLS>Add Walls</ADDWALLS>
-				<GATCOLLISION>Set GAT Collision</GATCOLLISION>
-				<CLEARLIGHTMAPS>Clear Lightmaps</CLEARLIGHTMAPS>
-				<CLEANLIGHTMAPS>Clean Lightmaps</CLEANLIGHTMAPS>
-				<REMOVETEXTURES>Remove unused textures</REMOVETEXTURES>
+			<SPEED>Raise/Lowerspeed</SPEED>
+			<SLOPING>Sloping</SLOPING>
+			<SNAPOBJECTS>Snap Objects to floor</SNAPOBJECTS>
+			<FLATTEN>Flatten map</FLATTEN>
+			<FILL>Fill with selected texture</FILL>
+			<FILLAREA>Fill area with selected texture</FILLAREA>
+			<GATHEIGHT>Set GAT height</GATHEIGHT>
+			<RESETCOLORS>Reset colors</RESETCOLORS>
+			<CLEAROBJECTS>Clear Objects</CLEAROBJECTS>
+			<CLEAREFFECTS>Clear Effects</CLEAREFFECTS>
+			<CLEARLIGHTS>Clear Lights</CLEARLIGHTS>
+			<ADDWALLS>Add Walls</ADDWALLS>
+			<GATCOLLISION>Set GAT Collision</GATCOLLISION>
+			<CLEARLIGHTMAPS>Clear Lightmaps</CLEARLIGHTMAPS>
+			<CLEANLIGHTMAPS>Clean Lightmaps</CLEANLIGHTMAPS>
+			<REMOVETEXTURES>Remove unused textures</REMOVETEXTURES>
+			<CLEARLIGHTMAPSONEDIT>Clear lightmaps when you edit textures</CLEARLIGHTMAPSONEDIT>
 		</edit>
 		<effects>
 			<TITLE>Effects</TITLE>

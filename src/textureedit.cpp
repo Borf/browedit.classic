@@ -77,7 +77,13 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 							t.color[2] = (char)255;
 							t.color[3] = (char)255;
 							t.texture = Graphics.texturestart + (int)(Graphics.selectionstart.y - 32) / 288;
-							t.lightmap = 0;
+							if(Graphics.clearlightmaps)
+								t.lightmap = 0;
+							else
+							{
+								if(Graphics.world.cubes[y][x].tileup != -1)
+									t.lightmap = Graphics.world.tiles[Graphics.world.cubes[y][x].tileup].lightmap;
+							}
 							if (Graphics.texturerot == 0)
 							{
 								t.u1 = (selendx*Graphics.brushsize-xx-1) * (1/(8.0f*Graphics.brushsize));
