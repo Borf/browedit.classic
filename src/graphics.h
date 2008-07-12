@@ -60,6 +60,7 @@ public:
 		showsprites = true;
 		showalllights = false;
 		clearlightmaps = false;
+		gattransparency = 0.3f;
 	}
 
 	int						init();
@@ -161,12 +162,14 @@ public:
 	bool					showsprites;
 	bool					showalllights;
 	bool					clearlightmaps;
+	float					gattransparency;
 
 
 	int						quadtreeview;
 	bool					showboundingboxes;
 	int						gattype;
 	vector<cTexture*>		gattextures;
+	cTexture*				gatborder;
 	cTexture*				splash;
 	vector<vector<cTexture*> >		watertextures;
 	string					waterdir;

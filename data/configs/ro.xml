@@ -26,6 +26,7 @@
         <skin>data/skins/ro.xml</skin>
         <notilecolor>FFFF80</notilecolor>
         <bgcolor>8000FF</bgcolor>
+	<gattransparency>0.3</gattransparency>
     </graphics>
     <undo size="50" />
     <language>english</language>
@@ -37,7 +38,7 @@
         <count>8</count>
     </water>
     <gattiles>
-		<tile>0</tile>
+	<tile>0</tile>
         <tile>1</tile>
         <tile>2</tile>
         <tile>3</tile>

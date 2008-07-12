@@ -410,6 +410,7 @@ int cGraphics::init()
 		sprintf(buf, "data/gat%i.tga", gattiles[i]);
 		gattextures.push_back(TextureCache.load(buf));
 	}
+	gatborder = TextureCache.load("data/gatborder.tga");
 
 	
 	waterdir =		config.FirstChildElement("config")->FirstChildElement("water")->FirstChildElement("directory")->FirstChild()->Value();
@@ -544,6 +545,8 @@ void cGraphics::KillGLWindow(void)								// Properly Kill The Window
 	int i;
 	for(i = 0; i < gattextures.size(); i++)
 		TextureCache.unload(gattextures[i]);
+
+	TextureCache.unload(gatborder);
 
 	for(i = 0; i < watercount; i++)
 	{

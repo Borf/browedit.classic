@@ -774,6 +774,8 @@ int main(int argc, char *argv[])
 					Graphics.backgroundcolor = hex2floats(el2->FirstChild()->Value());
 				else if(strcmp(el2->Value(),					"notilecolor") == 0)
 					Graphics.notilecolor = hex2floats(el2->FirstChild()->Value());
+				else if(strcmp(el2->Value(),					"gattransparency") == 0)
+					Graphics.gattransparency = atof(el2->FirstChild()->Value());
 
 				el2 = el2->NextSiblingElement();
 
