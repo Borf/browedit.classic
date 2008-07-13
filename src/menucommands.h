@@ -75,6 +75,8 @@ MENUCOMMAND(99dun);
 MENUCOMMAND(eascript);
 MENUCOMMAND(npcscreenies);
 MENUCOMMAND(favlights);
+MENUCOMMAND(mapdatabase);
+MENUCOMMAND(saveOnline);
 
 MENUCOMMAND(rebuildtexturefile);
 MENUCOMMAND(rebuildmodelfile);

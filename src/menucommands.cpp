@@ -12,6 +12,7 @@
 #include "wm/lightoverviewwindow.h"
 #include "wm/progresswindow.h"
 #include "wm/filewindow.h"
+#include "wm/mapswindow.h"
 
 extern cGraphics Graphics;
 extern bool running;
@@ -33,8 +34,13 @@ extern TiXmlDocument sprites;
 extern double mouseclickx, mouseclicky, mouseclickz;
 extern string message;
 extern bool showmessage;
+extern long userid;
 
 void mainloop();
+#include <bthread.h>
+extern cBMutex* renderMutex;
+
+#include <curl/curl.h>
 
 
 cMenuItem* selectedeffect = NULL;
@@ -2050,19 +2056,23 @@ MENUCOMMAND(smoothlightmaps)
 					{
 						if(xx == 0 && yy == 0)
 						{
-							total += factor * *getLightMap(x+xx,y+yy);
-							count+=factor;
+							if(getLightMap(x+xx,y+yy) != NULL)
+							{
+								total += factor * *getLightMap(x+xx,y+yy);
+								count+=factor;
+							}
 						}
 						else
 						{
-							total += *getLightMap(x+xx,y+yy);
-							count++;
+							if(getLightMap(x+xx,y+yy) != NULL)
+							{
+								total += *getLightMap(x+xx,y+yy);
+								count++;
+							}
 						}
 					}
 				}
 			}
-			if(total/count != *getLightMap(x,y))
-				Sleep(0);
 			buf[x+Graphics.world.width*6*y] = min(max(total / count,0),255);
 		}
 	}
@@ -2071,7 +2081,8 @@ MENUCOMMAND(smoothlightmaps)
 	{
 		for(y = 0; y < Graphics.world.height*6; y++)
 		{
-			*getLightMap(x,y) = buf[x+Graphics.world.width*6*y];
+			if(getLightMap(x,y) != NULL)
+				*getLightMap(x,y) = buf[x+Graphics.world.width*6*y];
 		}
 	}
 	for(x = 0; x < Graphics.world.width; x++)
@@ -3679,3 +3690,218 @@ MENUCOMMAND(rebuildsoundsfile)
 	return true;
 }
 
+
+MENUCOMMAND(mapdatabase)
+{
+	Graphics.WM.addwindow(new cMapsWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin));
+	return true;
+}
+
+MENUCOMMAND(saveOnline)
+{
+	if(!Graphics.WM.ConfirmWindow("This will save your map. Are you sure you want to save?"))
+		return false;
+	string mapname = Graphics.WM.InputWindow("Please enter the mapname", Graphics.world.filename);
+	string password = Graphics.WM.InputWindow("Please enter your browedit account password", "");
+	map<string, bool, less<string> > textures;
+	map<string, bool, less<string> > models;
+	int i;
+	for(i = 0; i < Graphics.world.textures.size(); i++)
+		textures[Graphics.world.textures[i]->RoFilename] = true;
+	for(i = 0; i < Graphics.world.models.size(); i++)
+	{
+		models[Graphics.world.models[i]->rofilename] = true;
+		for(int ii = 0; ii < Graphics.world.models[i]->textures.size(); ii++)
+		{
+			string filename = Graphics.world.models[i]->textures[ii]->getfilename();
+			filename = filename.substr(rodir.length() + 13);
+			textures[filename] = true;
+		}
+	}
+
+	string resources;
+
+	resources = "mapname=" + mapname;
+	resources+= "&uid=" + inttostring(userid);
+	resources+= "&pass=" + password;
+
+
+	map<string,bool,less<string> >::iterator it;
+	for(it = textures.begin(); it != textures.end(); it++)
+	{
+		resources += "&textures[]=" + it->first;
+	}
+	for(it = models.begin(); it != models.end(); it++)
+	{
+		resources += "&models[]=" + it->first;
+	}
+
+	class cPostFinished : public cDownloadThread::cDownloadThreadFinisher
+	{
+		string mapname;
+		string password;
+	public:
+		cPostFinished(string m, string p)
+		{
+			mapname = m;
+			password = p;
+		}
+
+		void whenDone(cBThread* caller)
+		{
+			if(data)
+			{
+				vector<string> lines = split(data, "\n");
+				renderMutex->lock();
+				cProgressWindow* w = new cProgressWindow(Graphics.WM.texture, &Graphics.WM.font, NULL, Graphics.WM.skin);
+				Graphics.WM.addwindow(w);
+				w->objects["progress"]->SetInt(1,0);
+				w->objects["progress"]->SetInt(2,lines.size());
+				renderMutex->unlock();
+
+				for(int i = 0; i < lines.size(); i++)
+				{
+					renderMutex->lock();
+					w->objects["progress"]->SetInt(0,i);
+					w->objects["lblStatus"]->SetText(0,"Uploading " + lines[i]);
+					renderMutex->unlock();
+					if(lines[i].find("texture:") == 0)
+					{
+						string filename = lines[i].substr(8);
+						cFile* pFile = fs.open(rodir + "data/texture/" + filename);
+						if(pFile)
+						{
+							CURL *curl_handle;
+							curl_global_init(CURL_GLOBAL_ALL);
+							curl_handle = curl_easy_init();
+							struct curl_httppost *post=NULL;
+							struct curl_httppost *last=NULL;
+							curl_formadd(&post, &last,
+								CURLFORM_COPYNAME,			"filedata",
+								CURLFORM_PTRCONTENTS,		pFile->data, 
+								CURLFORM_CONTENTSLENGTH,	pFile->size,							
+								CURLFORM_END);
+							curl_formadd(&post, &last,
+								CURLFORM_COPYNAME, "file",
+								CURLFORM_COPYCONTENTS, filename.c_str(), 
+								CURLFORM_END);
+							curl_formadd(&post, &last,
+								CURLFORM_COPYNAME, "type",
+								CURLFORM_COPYCONTENTS, "texture", 
+								CURLFORM_END);
+							curl_easy_setopt(curl_handle, CURLOPT_HTTPPOST, post);
+							curl_easy_setopt(curl_handle, CURLOPT_URL, "http://browedit.excalibur-nw.com/mapdb/uploadresource.php");
+							curl_easy_perform(curl_handle);
+							curl_easy_cleanup(curl_handle);
+							Log(3,0,"Done uploading");
+						}
+						pFile->close();
+					}
+					else if(lines[i].find("model:") == 0)
+					{
+						string filename = lines[i].substr(6);
+						cFile* pFile = fs.open(rodir + "data/model/" + filename);
+						if(pFile)
+						{
+							CURL *curl_handle;
+							curl_global_init(CURL_GLOBAL_ALL);
+							curl_handle = curl_easy_init();
+							struct curl_httppost *post=NULL;
+							struct curl_httppost *last=NULL;
+							curl_formadd(&post, &last,
+								CURLFORM_COPYNAME,			"filedata",
+								CURLFORM_PTRCONTENTS,		pFile->data, 
+								CURLFORM_CONTENTSLENGTH,	pFile->size,							
+								CURLFORM_END);
+							curl_formadd(&post, &last,
+								CURLFORM_COPYNAME, "file",
+								CURLFORM_COPYCONTENTS, filename.c_str(), 
+								CURLFORM_END);
+							curl_formadd(&post, &last,
+								CURLFORM_COPYNAME, "type",
+								CURLFORM_COPYCONTENTS, "model", 
+								CURLFORM_END);
+							curl_easy_setopt(curl_handle, CURLOPT_HTTPPOST, post);
+							curl_easy_setopt(curl_handle, CURLOPT_URL, "http://browedit.excalibur-nw.com/mapdb/uploadresource.php");
+							curl_easy_perform(curl_handle);
+							curl_easy_cleanup(curl_handle);
+							Log(3,0,"Done uploading");
+						}
+						pFile->close();
+
+					}
+					else if(lines[i].find("error:") == 0)
+					{
+						Graphics.WM.MessageBox("Error: " + lines[i].substr(6));
+						w->close();
+						return;
+					}
+					else if(lines[i].find("confirm:") == 0)
+					{
+						Log(3,0,"This map already exists...overwrite?");
+					}
+					else
+						Log(3,0,"Unknown resource: '%s'", lines[i].c_str());
+				}
+				renderMutex->lock();
+				w->close();
+				renderMutex->unlock();
+			}
+			// we uploaded the resources, now let's break :)
+
+			Graphics.world.save();			
+
+			cFile* rsw = fs.open(string(Graphics.world.filename) + ".rsw");
+			cFile* gat = fs.open(string(Graphics.world.filename) + ".gat");
+			cFile* gnd = fs.open(string(Graphics.world.filename) + ".gnd");
+
+			CURL *curl_handle;
+			curl_global_init(CURL_GLOBAL_ALL);
+			curl_handle = curl_easy_init();
+			struct curl_httppost *post=NULL;
+			struct curl_httppost *last=NULL;
+			curl_formadd(&post, &last,
+				CURLFORM_COPYNAME,			"rsw",
+				CURLFORM_PTRCONTENTS,		rsw->data, 
+				CURLFORM_CONTENTSLENGTH,	rsw->size,
+				CURLFORM_END);
+			curl_formadd(&post, &last,
+				CURLFORM_COPYNAME,			"gnd",
+				CURLFORM_PTRCONTENTS,		gnd->data, 
+				CURLFORM_CONTENTSLENGTH,	gnd->size,
+				CURLFORM_END);
+			curl_formadd(&post, &last,
+				CURLFORM_COPYNAME,			"gat",
+				CURLFORM_PTRCONTENTS,		gat->data, 
+				CURLFORM_CONTENTSLENGTH,	gat->size,
+				CURLFORM_END);
+			curl_formadd(&post, &last,
+				CURLFORM_COPYNAME, "name",
+				CURLFORM_COPYCONTENTS, mapname.c_str(), 
+				CURLFORM_END);
+			curl_formadd(&post, &last,
+				CURLFORM_COPYNAME, "filename",
+				CURLFORM_COPYCONTENTS, Graphics.world.filename, 
+				CURLFORM_END);
+			curl_formadd(&post, &last,
+				CURLFORM_COPYNAME, "uid",
+				CURLFORM_COPYCONTENTS, inttostring(userid).c_str(), 
+				CURLFORM_END);
+			curl_formadd(&post, &last,
+				CURLFORM_COPYNAME, "pass",
+				CURLFORM_COPYCONTENTS, password.c_str(), 
+				CURLFORM_END);
+			curl_easy_setopt(curl_handle, CURLOPT_HTTPPOST, post);
+			curl_easy_setopt(curl_handle, CURLOPT_URL, "http://browedit.excalibur-nw.com/mapdb/savemap.php");
+			Log(3,0,"Sending data...");
+			curl_easy_perform(curl_handle);
+			curl_easy_cleanup(curl_handle);
+			Log(3,0,"Done sending :D");
+
+		}
+	};
+
+	new cDownloadThread("http://browedit.excalibur-nw.com/mapdb/newmap.php", resources, new cPostFinished(mapname, password));
+
+	return true;
+}

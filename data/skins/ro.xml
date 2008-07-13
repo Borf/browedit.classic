@@ -42,6 +42,7 @@
 		<left width="2">0</left>
 		<right width="2">3</right>
 		<bottom height="2">93</bottom>
+		<defaultheight>20</defaultheight>
 	</input>
 	<list>
 		<fontcolor>000000</fontcolor>

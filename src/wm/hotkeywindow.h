@@ -37,6 +37,7 @@ public:
 				glDeleteTextures(1, &tid);
 				loaded = false;
 				delete[] im;
+				return;
 			}
 			char* image = new char[Graphics.w()*Graphics.h()*3];
 			glReadPixels( 0, 0, Graphics.w(), Graphics.h(), GL_RGB, GL_UNSIGNED_BYTE, image );
@@ -76,6 +77,16 @@ public:
 				Graphics.cameraangle = cameraangle;
 				Graphics.topcamera = topcamera;
 			}
+		}
+
+		cWindowObject* inobject()
+		{
+			int xx=(int)mousex-parent->px();
+			int yy=(Graphics.h()-(int)mousey)-parent->py();
+			if (xx > px() && xx < px()+w &&
+				yy > py() && yy < py()+h)
+				return this;
+			return NULL;
 		}
 
 		~cHotkeyButton()

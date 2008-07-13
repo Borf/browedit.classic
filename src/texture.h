@@ -15,13 +15,13 @@ class cTextureLoader;
 
 class cTexture
 {
-private:
-	bool				loaded;
+protected:
 	string				filename;
 	GLuint				tid;
 
 	bool				clamp;
 public:
+	bool				loaded;
 	cTexture(string,bool,bool);
 	void				resizeToLog();
 
@@ -38,10 +38,21 @@ public:
 
 	void				generate();	
 	string				getfilename() { return filename; }
-	GLuint				texid();
+	virtual GLuint		texid();
 	void				unLoad();
 
 
+};
+
+class cTextureFromMemory : public cTexture
+{
+public:
+	char*	mem_data;
+	int		mem_length;
+	string extension;
+
+	cTextureFromMemory(string, char*, int);
+	GLuint texid();
 };
 
 
@@ -51,6 +62,7 @@ public:
 	vector<cTextureLoader*>	loaders;
 	static cTexture*				load(string, bool, bool = true);
 	static void						load(string, cTexture*, bool);
+	static void						loadfrommem(string, char*, int, cTexture*, bool);
 };
 
 cTextureLoaders& GetTextureLoaders();

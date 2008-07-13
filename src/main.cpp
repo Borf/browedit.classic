@@ -21,6 +21,7 @@ int keymap[SDLK_LAST-SDLK_FIRST];
 #include "wm/lightoverviewwindow.h"
 #include "wm/soundoverviewwindow.h"
 #include "wm/minimapwindow.h"
+#include <bmutex.h>
 
 #include "texturecache.h"
 #ifdef WIN32
@@ -41,6 +42,8 @@ bool IsInsideVMWare();
 string configfile;
 TiXmlDocument config;
 bool IsLegal = true;
+
+cBMutex* renderMutex;
 
 long userid;
 void MakeUndo();
@@ -207,6 +210,7 @@ string downloadfile(string url, long &filesize)
 
 void mainloop()
 {
+	renderMutex->lock();
 	if(lasttimer + paintspeed < SDL_GetTicks())
 	{
 		if(editmode == MODE_HEIGHTDETAIL && menu->inwindow((int)mousex, Graphics.h()-(int)mousey) == NULL)
@@ -365,6 +369,7 @@ void mainloop()
 	if (!Graphics.draw())
 		running = false;
 	SDL_GL_SwapBuffers();
+	renderMutex->unlock();
 	Sleep(1);
 }
 
@@ -711,6 +716,7 @@ int main(int argc, char *argv[])
 	}
 
 #else
+	userid = 1;//I am borf
 	if(!ok)
 		Log(2,0,"Error: non-valid licence stuff");
 #endif
@@ -924,12 +930,14 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,file,GetMsg("menu/file/SAVE"),							&MenuCommand_save); //save
 	ADDMENUITEM(mm,file,GetMsg("menu/file/QUICKSAVE"),						&MenuCommand_quicksave); //save
 	ADDMENUITEM(mm,file,GetMsg("menu/file/SAVEAS"),							&MenuCommand_saveAs); //save as
+	ADDMENUITEM(mm,file,GetMsg("menu/file/SAVEONLINE"),						&MenuCommand_saveOnline);
 	ADDMENUITEM(mm,file,GetMsg("menu/file/EXPORTLIGHTMAPS"),				&MenuCommand_savelightmaps); // export lightmaps
 	ADDMENUITEM(mm,file,GetMsg("menu/file/IMPORTLIGHTMAPS"),				&MenuCommand_loadlightmaps); // import lightmaps
 	ADDMENUITEM(mm,file,GetMsg("menu/file/EXPORTMAPFILES"),					&MenuCommand_exportmapfiles);
-	ADDMENUITEM(mm,file,GetMsg("menu/file/REBUILDTEXTUREFILE"),			&MenuCommand_rebuildtexturefile);
+	ADDMENUITEM(mm,file,GetMsg("menu/file/REBUILDTEXTUREFILE"),				&MenuCommand_rebuildtexturefile);
 	ADDMENUITEM(mm,file,GetMsg("menu/file/REBUILDMODELFILE"),				&MenuCommand_rebuildmodelfile);
 	ADDMENUITEM(mm,file,GetMsg("menu/file/REBUILDSOUNDSFILE"),				&MenuCommand_rebuildsoundsfile);
+	ADDMENUITEM(mm,file,GetMsg("menu/file/MAPDATABASE"),					&MenuCommand_mapdatabase); //save as
 	ADDMENUITEM(mm,file,GetMsg("menu/file/EXIT"),							&MenuCommand_exit); // exit
 	
 	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/RANDOM1"),					&MenuCommand_random1); // random1 Hills
@@ -1147,8 +1155,10 @@ int main(int argc, char *argv[])
 
 	
 	lasttimer = SDL_GetTicks();
+	renderMutex = new cBMutex();
 	while( running )
 		mainloop();
+	delete renderMutex;
 
 
 	Mix_CloseAudio();
@@ -1848,6 +1858,11 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						Graphics.camerarot += 10.0f*((float)PI/180.0f);
 					}
 					return true;
+				}
+				break;
+			case SDLK_d:
+				{
+					MenuCommand_mapdatabase(NULL);
 				}
 				break;
 			default:

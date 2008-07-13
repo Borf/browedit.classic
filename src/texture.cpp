@@ -6,6 +6,8 @@
 
 extern cFileSystem fs;
 
+GLint glMaxTexDim;
+
 cTexture::cTexture(string pFilename, bool pClamp, bool pFreedata)
 {
 	clamp = pClamp;
@@ -15,6 +17,25 @@ cTexture::cTexture(string pFilename, bool pClamp, bool pFreedata)
 	data = NULL;
 	datatype = 0;
 	tid = 0;
+}
+
+cTextureFromMemory::cTextureFromMemory(string ext, char* d, int l) : cTexture("",false,true)
+{
+	mem_data = new char[l];
+	memcpy(mem_data, d, l);
+	extension = ext;
+	mem_length = l;
+}
+
+GLuint cTextureFromMemory::texid()
+{
+	if(!loaded)
+	{
+		cTextureLoaders::loadfrommem(extension, mem_data, mem_length, this, clamp);
+		delete[] mem_data;
+		loaded = true;
+	}
+	return tid;
 }
 
 GLuint cTexture::texid()
@@ -115,15 +136,37 @@ void cTextureLoaders::load(string filename, cTexture* tex, bool clamp)
 	Log(1,0,"Unknown texture type: %s at file %s", ext.c_str(), filename.c_str()); 
 }
 
+void cTextureLoaders::loadfrommem(string ext, char* data, int length, cTexture* tex, bool clamp)
+{
+	vector<cTextureLoader*> loaders = GetTextureLoaders().loaders;
 
+	ext = lcase(ext);
+	for(unsigned int i = 0; i < loaders.size(); i++)
+	{
+		for(unsigned int ii = 0; ii < loaders[i]->extensions.size(); ii++)
+		{
+			if(loaders[i]->extensions[ii] == ext)
+			{
+				loaders[i]->load(data, length, tex);
+				if(tex->data == NULL)
+					Log(2,0,"Error loading texture from memory!");
+				else
+				{
+					tex->resizeToLog();
+					tex->generate();
+				}
+				return;
+			}
+		}
+	}
+}
 
 
 void cTexture::resizeToLog()
 {
 	// Resize Image To Closest Power Of Two
-	GLint glMaxTexDim;
-	
-	glGetIntegerv(GL_MAX_TEXTURE_SIZE, &glMaxTexDim);
+	if(glMaxTexDim == 0)
+		glGetIntegerv(GL_MAX_TEXTURE_SIZE, &glMaxTexDim);
 	if (width <= glMaxTexDim) // Is Image Width Less Than Or Equal To Cards Limit
 		width = 1 << (int)floor((log((double)width)/log(2.0f)) + 0.5f); 
 	else  // Otherwise  Set Width To "Max Power Of Two" That The Card Can Handle

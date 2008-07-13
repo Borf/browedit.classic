@@ -31,7 +31,8 @@ class cProgressWindow : public cWindow
 
 		void click()
 		{
-			*cancel = false;
+			if(cancel != NULL)
+				*cancel = false;
 		}
 		
 	};
@@ -57,6 +58,8 @@ public:
 		o->moveto(0,7);
 		o->resizeto(innerw(), 10);
 		objects["progress"] = o;
+
+		addlabel("lblStatus", 0,15,"")->resizeto(innerw(), 20);
 
 		objects["cancel"] = new cCancelButton(this, cancel,skin);
 

@@ -14,12 +14,12 @@ protected:
 	string mask;
 	bool editable;
 	int selectionstart;
-
+	int defaultheight;
 public:
 	cWindowInputBox(cWindow* parent, TiXmlDocument &skin) : cWindowObject(parent, skin.FirstChildElement("skin")->FirstChildElement("input"))
 	{
 		w = 100;
-		h = 25;
+		h = 20;
 		x = 10;
 		y = 10;
 		alignment = ALIGN_CENTER;
@@ -30,6 +30,11 @@ public:
 		selectionstart = cursor;
 		selectable = true;
 		type = OBJECT_INPUTBOX;
+
+		if(skin.FirstChildElement("skin")->FirstChildElement("input")->FirstChildElement("defaultheight"))
+		{
+			h = atoi(skin.FirstChildElement("skin")->FirstChildElement("input")->FirstChildElement("defaultheight")->FirstChild()->Value());
+		}
 	
 	}
 	virtual ~cWindowInputBox() {}

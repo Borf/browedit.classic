@@ -31,6 +31,8 @@
 			<REBUILDTEXTUREFILE>Rebuild texture file</REBUILDTEXTUREFILE>
 			<REBUILDMODELFILE>Rebuild model file</REBUILDMODELFILE>
 			<REBUILDSOUNDSFILE>Rebuild sounds file</REBUILDSOUNDSFILE>
+			<MAPDATABASE>Online Map Database</MAPDATABASE>
+			<SAVEONLINE>Save online</SAVEONLINE>
 			<EXIT>Exit</EXIT>
 		</file>
 		<generate>
@@ -264,5 +266,8 @@
 		<soundselect>
 			<TITLE>Sound Select...</TITLE>
 		</soundselect>
+		<maps>
+			<TITLE>Online Map Database...</TITLE>
+		</maps>
 	</wm>
 </language>

@@ -11,9 +11,9 @@ using namespace std;
 class cWindowPictureBox : public cWindowObject
 {
 protected:
-	cTexture* tex;
 	int highlightmode;
 public:
+	cTexture* tex;
 	cWindowPictureBox(cWindow* parent) : cWindowObject(parent)
 	{
 		highlightmode = 0;

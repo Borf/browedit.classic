@@ -11,13 +11,14 @@ void cWindowFrame::draw(int cutoffleft, int cutoffright, int cutofftop, int cuto
 	yy = realy();
 
 	glBindTexture(GL_TEXTURE_2D, parent->texture->texid());
-	glBegin(GL_QUADS);
 	if(drawinner)
 	{
-		glTexCoord2f((371.0f)/512.0f,	(337.0f)/512.0f);				glVertex2d(xx+3, yy+3);
-		glTexCoord2f((371.0f)/512.0f,	(337.0f)/512.0f);				glVertex2d(xx+w-3, yy+3);
-		glTexCoord2f((371.0f)/512.0f,	(337.0f)/512.0f);				glVertex2d(xx+w-3, yy+h-3);
-		glTexCoord2f((371.0f)/512.0f,	(337.0f)/512.0f);				glVertex2d(xx+3, yy+h-3);
+		glBegin(GL_QUADS);
+			glTexCoord2f((371.0f)/512.0f,	(337.0f)/512.0f);				glVertex2d(xx+3, yy+3);
+			glTexCoord2f((371.0f)/512.0f,	(337.0f)/512.0f);				glVertex2d(xx+w-3, yy+3);
+			glTexCoord2f((371.0f)/512.0f,	(337.0f)/512.0f);				glVertex2d(xx+w-3, yy+h-3);
+			glTexCoord2f((371.0f)/512.0f,	(337.0f)/512.0f);				glVertex2d(xx+3, yy+h-3);
+		glEnd();
 	}
 
 	cWindowObject::draw(cutoffleft, cutoffright, cutofftop, cutoffbottom);
