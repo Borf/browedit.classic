@@ -34,6 +34,17 @@ void cBThread::stop()
 }
 
 
+void cBThread::wait()
+{
+#ifdef WIN32
+	WaitForSingleObject(handle, INFINITE);
+#else
+
+#endif
+
+}
+
+
 
 
 

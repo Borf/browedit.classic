@@ -21,8 +21,7 @@ private:
 public:
 	void start();
 	void stop();
-	
-
+	void wait();
 };
 
 

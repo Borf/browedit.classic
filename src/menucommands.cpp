@@ -3847,61 +3847,69 @@ MENUCOMMAND(saveOnline)
 				w->close();
 				renderMutex->unlock();
 			}
-			// we uploaded the resources, now let's break :)
-
-			Graphics.world.save();			
-
-			cFile* rsw = fs.open(string(Graphics.world.filename) + ".rsw");
-			cFile* gat = fs.open(string(Graphics.world.filename) + ".gat");
-			cFile* gnd = fs.open(string(Graphics.world.filename) + ".gnd");
-
-			CURL *curl_handle;
-			curl_global_init(CURL_GLOBAL_ALL);
-			curl_handle = curl_easy_init();
-			struct curl_httppost *post=NULL;
-			struct curl_httppost *last=NULL;
-			curl_formadd(&post, &last,
-				CURLFORM_COPYNAME,			"rsw",
-				CURLFORM_PTRCONTENTS,		rsw->data, 
-				CURLFORM_CONTENTSLENGTH,	rsw->size,
-				CURLFORM_END);
-			curl_formadd(&post, &last,
-				CURLFORM_COPYNAME,			"gnd",
-				CURLFORM_PTRCONTENTS,		gnd->data, 
-				CURLFORM_CONTENTSLENGTH,	gnd->size,
-				CURLFORM_END);
-			curl_formadd(&post, &last,
-				CURLFORM_COPYNAME,			"gat",
-				CURLFORM_PTRCONTENTS,		gat->data, 
-				CURLFORM_CONTENTSLENGTH,	gat->size,
-				CURLFORM_END);
-			curl_formadd(&post, &last,
-				CURLFORM_COPYNAME, "name",
-				CURLFORM_COPYCONTENTS, mapname.c_str(), 
-				CURLFORM_END);
-			curl_formadd(&post, &last,
-				CURLFORM_COPYNAME, "filename",
-				CURLFORM_COPYCONTENTS, Graphics.world.filename, 
-				CURLFORM_END);
-			curl_formadd(&post, &last,
-				CURLFORM_COPYNAME, "uid",
-				CURLFORM_COPYCONTENTS, inttostring(userid).c_str(), 
-				CURLFORM_END);
-			curl_formadd(&post, &last,
-				CURLFORM_COPYNAME, "pass",
-				CURLFORM_COPYCONTENTS, password.c_str(), 
-				CURLFORM_END);
-			curl_easy_setopt(curl_handle, CURLOPT_HTTPPOST, post);
-			curl_easy_setopt(curl_handle, CURLOPT_URL, "http://browedit.excalibur-nw.com/mapdb/savemap.php");
-			Log(3,0,"Sending data...");
-			curl_easy_perform(curl_handle);
-			curl_easy_cleanup(curl_handle);
-			Log(3,0,"Done sending :D");
+			// we uploaded the resources, now let's get some screenshots:)
+			Log(3,0,"Done checking resources");
 
 		}
 	};
 
-	new cDownloadThread("http://browedit.excalibur-nw.com/mapdb/newmap.php", resources, new cPostFinished(mapname, password));
+	cBThread* thread = new cDownloadThread("http://browedit.excalibur-nw.com/mapdb/newmap.php", resources, new cPostFinished(mapname, password));
+
+	thread->wait();
+	Log(3,0,"Let's go");
+
+
+	Graphics.world.save();			
+
+	Graphics.WM.MessageBox("Please move your viewpoint to show the map on the thumbnail");
+
+
+	cFile* rsw = fs.open(string(Graphics.world.filename) + ".rsw");
+	cFile* gat = fs.open(string(Graphics.world.filename) + ".gat");
+	cFile* gnd = fs.open(string(Graphics.world.filename) + ".gnd");
+
+	CURL *curl_handle;
+	curl_global_init(CURL_GLOBAL_ALL);
+	curl_handle = curl_easy_init();
+	struct curl_httppost *post=NULL;
+	struct curl_httppost *last=NULL;
+	curl_formadd(&post, &last,
+		CURLFORM_COPYNAME,			"rsw",
+		CURLFORM_PTRCONTENTS,		rsw->data, 
+		CURLFORM_CONTENTSLENGTH,	rsw->size,
+		CURLFORM_END);
+	curl_formadd(&post, &last,
+		CURLFORM_COPYNAME,			"gnd",
+		CURLFORM_PTRCONTENTS,		gnd->data, 
+		CURLFORM_CONTENTSLENGTH,	gnd->size,
+		CURLFORM_END);
+	curl_formadd(&post, &last,
+		CURLFORM_COPYNAME,			"gat",
+		CURLFORM_PTRCONTENTS,		gat->data, 
+		CURLFORM_CONTENTSLENGTH,	gat->size,
+		CURLFORM_END);
+	curl_formadd(&post, &last,
+		CURLFORM_COPYNAME, "name",
+		CURLFORM_COPYCONTENTS, mapname.c_str(), 
+		CURLFORM_END);
+	curl_formadd(&post, &last,
+		CURLFORM_COPYNAME, "filename",
+		CURLFORM_COPYCONTENTS, Graphics.world.filename, 
+		CURLFORM_END);
+	curl_formadd(&post, &last,
+		CURLFORM_COPYNAME, "uid",
+		CURLFORM_COPYCONTENTS, inttostring(userid).c_str(), 
+		CURLFORM_END);
+	curl_formadd(&post, &last,
+		CURLFORM_COPYNAME, "pass",
+		CURLFORM_COPYCONTENTS, password.c_str(), 
+		CURLFORM_END);
+	curl_easy_setopt(curl_handle, CURLOPT_HTTPPOST, post);
+	curl_easy_setopt(curl_handle, CURLOPT_URL, "http://browedit.excalibur-nw.com/mapdb/savemap.php");
+	Log(3,0,"Sending data...");
+	curl_easy_perform(curl_handle);
+	curl_easy_cleanup(curl_handle);
+	Log(3,0,"Done sending :D");
 
 	return true;
 }

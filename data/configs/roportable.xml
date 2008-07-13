@@ -18,12 +18,12 @@
         </sounds>
     </files>
     <graphics>
-        <resx>1024</resx>
-        <resy>768</resy>
+        <resx>800</resx>
+        <resy>600</resy>
         <fullscreen>false</fullscreen>
         <bpp>32</bpp>
         <font>tahoma</font>
-        <skin>data/skins/ro.xml</skin>
+        <skin>data/skins/hamvista.xml</skin>
         <notilecolor>FFFF80</notilecolor>
         <bgcolor>8000FF</bgcolor>
     </graphics>
@@ -71,7 +71,7 @@
             <h>718</h>
         </modelswindow>
         <hotbar>
-            <x>744</x>
+            <x>520</x>
             <y>0</y>
         </hotbar>
     </wm>
