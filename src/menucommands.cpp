@@ -3691,11 +3691,26 @@ MENUCOMMAND(rebuildsoundsfile)
 }
 
 
+MENUCOMMAND(clearwalls)
+{
+	for(int y = 0; y < Graphics.world.height; y++)
+	{
+		for(int x = 0; x < Graphics.world.width; x++)
+		{
+			Graphics.world.cubes[y][x].tileaside = -1;
+			Graphics.world.cubes[y][x].tileside = -1;
+		}
+	}
+	return true;
+}
+
+
 MENUCOMMAND(mapdatabase)
 {
 	Graphics.WM.addwindow(new cMapsWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin));
 	return true;
 }
+
 
 MENUCOMMAND(saveOnline)
 {
