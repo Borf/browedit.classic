@@ -9,6 +9,7 @@
 #include "windowframe.h"
 #include "windowscrollpanel.h"
 #include "windowpicturebox.h"
+#include "mapdetailwindow.h"
 
 extern cGraphics Graphics;
 extern void	mainloop();
@@ -118,7 +119,7 @@ cMapsWindow::cMapsWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWindow(t
 			vector<int> screenshots;
 			while(m != NULL)
 			{
-				o = new cWindowFrame(wnd,Graphics.WM.skin);
+				o = new cMapsWindow::cClickableFrame(wnd,Graphics.WM.skin);
 				o->alignment = ALIGN_TOPLEFT;
 				int px = 20+210 * (i%(panel->pw() / 210));
 				int py = 310*(i/(panel->pw() / 210))+10;
@@ -135,6 +136,12 @@ cMapsWindow::cMapsWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWindow(t
 				o->SetText(0,m->FirstChildElement("name")->FirstChild()->Value());
 				panel->objects.push_back(o);
 
+				o = new cWindowLabel(wnd);
+				o->alignment = ALIGN_TOPLEFT;
+				o->moveto(px+10, py+200);
+				o->resizeto(200,12);
+				o->SetText(0,"By " + string(m->FirstChildElement("author")->FirstChild()->Value()));
+				panel->objects.push_back(o);
 			
 				screenshots.push_back(atoi(m->FirstChildElement("id")->FirstChild()->Value()));
 				panel->innerheight = py+310;
@@ -220,4 +227,9 @@ cMapsWindow::~cMapsWindow()
 			delete threads[i];
 			threads[i] = NULL;
 		}
+}
+
+void cMapsWindow::cClickableFrame::click()
+{
+	Graphics.WM.addwindow(new cMapDetailWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin));
 }

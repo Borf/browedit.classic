@@ -112,7 +112,7 @@ public:
 				Graphics.selectioncenter+=Graphics.world.models[i]->pos;
 			}
 		}
-		Graphics.selectioncenter = Graphics.selectioncenter / count;
+		Graphics.selectioncenter = Graphics.selectioncenter / (float)count;
 	}
 };
 

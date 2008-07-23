@@ -29,8 +29,8 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 					bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 					if (!ctrl && !alt)
 					{
-						Graphics.world.effects[Graphics.selectedobject].pos.x = mouse3dx / 5;
-						Graphics.world.effects[Graphics.selectedobject].pos.z = mouse3dz / 5;
+						Graphics.world.effects[Graphics.selectedobject].pos.x = mouse3dx / 5.0f;
+						Graphics.world.effects[Graphics.selectedobject].pos.z = mouse3dz / 5.0f;
 						if (SDL_GetModState() & KMOD_SHIFT)
 						{
 							Graphics.world.effects[Graphics.selectedobject].pos.x = floor(Graphics.world.effects[Graphics.selectedobject].pos.x * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsetx) / (Graphics.gridsize/2.0f) + Graphics.gridoffsetx/(Graphics.gridsize/2.0f);
@@ -115,8 +115,8 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 						cVector3 d = Graphics.world.effects[i].pos;
 						d.x = d.x;
 						
-						d.x -= mouse3dx/5;
-						d.z -= mouse3dz/5;
+						d.x -= mouse3dx/5.0f;
+						d.z -= mouse3dz/5.0f;
 						d.y = 0;
 
 						if(mindist > d.Magnitude())

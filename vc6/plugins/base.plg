@@ -6,14 +6,22 @@
 --------------------Configuration: plugin_base - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating command line "link.exe -lib /nologo /out:"..\..\libs\lib\baseD.lib"  "\C++\roworldedit\vs6\obj\vs6\Debug\plugins\base\base.obj" "
+Creating temporary file "C:\DOCUME~1\Borf\LOCALS~1\Temp\RSP5469.tmp" with contents
+[
+/nologo /MDd /W3 /Gm /GX /ZI /Od /I "..\..\src" /I "..\..\libs\include" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /Fp"../../obj/vs6/Debug/plugins/base/base.pch" /YX /Fo"../../obj/vs6/Debug/plugins/base/" /Fd"../../obj/vs6/Debug/plugins/base/" /FD /GZ /c 
+"D:\work\C++\roworldedit\src\plugins\base\base.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\Borf\LOCALS~1\Temp\RSP5469.tmp" 
+Creating command line "link.exe -lib /nologo /out:"..\..\libs\lib\plugin_baseD.lib"  "\work\C++\roworldedit\obj\vs6\Debug\plugins\base\base.obj" "
 <h3>Output Window</h3>
+Compiling...
+base.cpp
 Creating library...
 
 
 
 <h3>Results</h3>
-baseD.lib - 0 error(s), 0 warning(s)
+plugin_baseD.lib - 0 error(s), 0 warning(s)
 </pre>
 </body>
 </html>

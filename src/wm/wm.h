@@ -56,6 +56,7 @@ public:
 	bool				ConfirmWindow(string);
 	cWindow*			InputWindow(string, cInputWindow::cInputWindowCaller* caller);
 	string				InputWindow(string, string = "");
+	cWindow*			XmlWindow(string);
 
 	void				printdebug();
 	void				defocus();

@@ -96,7 +96,7 @@ public:
 		bool ret = cWindowInputBox::onkeydown(keyid, shift);
 		if (keyid == SDLK_RETURN)
 		{
-			*floatje = atof(text.c_str());
+			*floatje = (float)atof(text.c_str());
 			ret = true;
 		}
 		return ret;

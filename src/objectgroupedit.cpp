@@ -43,8 +43,8 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 					{
 						cVector3 diff = Graphics.world.models[i]->pos - Graphics.selectioncenter;
 
-						Graphics.world.models[i]->pos.x = (mouse3dx/5) + diff.x;
-						Graphics.world.models[i]->pos.z = (mouse3dz/5) + diff.z;
+						Graphics.world.models[i]->pos.x = (mouse3dx/5.0f) + diff.x;
+						Graphics.world.models[i]->pos.z = (mouse3dz/5.0f) + diff.z;
 						if(snaptofloor->ticked)
 							Graphics.world.models[i]->pos.y = -mouse3dy + diff.y;
 						

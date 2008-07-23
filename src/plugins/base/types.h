@@ -8,8 +8,7 @@ class cWorld
 
 };*/
 #include <world.h>
-#include <wm/window.h>
-#include <wm/windowcheckbox.h>
+//#include <wm/wm.h>
 
 
 #endif

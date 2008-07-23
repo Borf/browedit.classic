@@ -4,6 +4,7 @@
 #include <graphics.h>
 #include "messagewindow.h"
 #include "confirmwindow.h"
+#include "xmlwindow.h"
 extern cGraphics Graphics;
 extern cFileSystem fs;
 extern cWindow* draggingwindow;
@@ -534,6 +535,13 @@ cWindow* cWM::InputWindow(string title, cInputWindow::cInputWindowCaller* caller
 	w->objects["text"]->SetText(0, title);
 	w->objects["input"]->SetText(0,"");
 	w->show();
+	addwindow(w);
+	return w;
+}
+
+cWindow* cWM::XmlWindow(string src)
+{
+	cWindow* w = new cXmlWindow(texture, &font, skin, fs.getxml(src));
 	addwindow(w);
 	return w;
 }

@@ -275,7 +275,7 @@ class cRSMEditWindow : public cWindow
 				glLoadIdentity();
 				model = new cRSMModel();
 				model->load(data);
-				model->pos = cVector3(0,0.7*w,1000);
+				model->pos = cVector3(0,0.7f*w,1000);
 				
 				float sc = 0;
 				sc = max(sc, model->bb2.bbmax[0] - model->bb2.bbmin[0]);
@@ -332,18 +332,18 @@ class cRSMEditWindow : public cWindow
 			glDisable(GL_TEXTURE_2D);
 			glLineWidth(2);
 			glBegin(GL_LINE_LOOP);
-				glVertex2f(-w,-h);
-				glVertex2f(w,-h);
-				glVertex2f(w,h);
-				glVertex2f(-w,h);
+				glVertex2d(-w,-h);
+				glVertex2d(w,-h);
+				glVertex2d(w,h);
+				glVertex2d(-w,h);
 			glEnd();
 			glLineWidth(1);
 			glColor4f(backgroundcolor.x, backgroundcolor.y, backgroundcolor.z,1);
 			glBegin(GL_QUADS);
-				glVertex2f(-w+2,-h+2);
-				glVertex2f(w-2,-h+2);
-				glVertex2f(w-2,h-2);
-				glVertex2f(-w+2,h-2);
+				glVertex2d(-w+2,-h+2);
+				glVertex2d(w-2,-h+2);
+				glVertex2d(w-2,h-2);
+				glVertex2d(-w+2,h-2);
 			glEnd();
 			glColor4f(1,1,1,1);
 			glEnable(GL_TEXTURE_2D);

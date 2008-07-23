@@ -3,6 +3,7 @@
 
 #include "window.h"
 #include "windowbutton.h"
+#include "windowframe.h"
 #include <bmutex.h>
 #include <bthread.h>
 #include <gl/gl.h>
@@ -17,8 +18,6 @@ class cMapsWindow : public cWindow
 	};
 
 
-
-	cBMutex* renderMutex;
 public:
 
 	class cWindowTextureBox : public cWindowObject
@@ -31,6 +30,14 @@ public:
 		void draw(int,int,int,int);
 	};
 
+	class cClickableFrame : public cWindowFrame
+	{
+	public:
+		cClickableFrame(cWindow* parent, TiXmlDocument &skin) : cWindowFrame(parent,skin)
+		{
+		}
+		void click();
+	};
 	
 	cMapsWindow(cTexture* t, cFont* f, TiXmlDocument &skin);
 	~cMapsWindow();

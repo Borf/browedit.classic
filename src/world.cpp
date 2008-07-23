@@ -1751,10 +1751,10 @@ void cWorld::draw()
 					glBlendFunc(GL_DST_COLOR, GL_ZERO);
 					glBindTexture(GL_TEXTURE_2D, lightmap2);
 					glBegin(GL_TRIANGLE_STRIP);
-						glTexCoord2f(0.125,0.125);					glVertex3f(x*10,	-c->cell3,				(height-y)*10-10);
-						glTexCoord2f(0.875,0.125);					glVertex3f(x*10+10,	-c->cell4,				(height-y)*10-10);
-						glTexCoord2f(0.125,0.875);					glVertex3f(x*10,	-cubes[y+1][x].cell1,	(height-y)*10-10);
-						glTexCoord2f(0.875,0.875);					glVertex3f(x*10+10,	-cubes[y+1][x].cell2,	(height-y)*10-10);
+						glTexCoord2f(0.125,0.125);					glVertex3f(x*10.0f,		-c->cell3,				(height-y)*10.0f-10);
+						glTexCoord2f(0.875,0.125);					glVertex3f(x*10.0f+10,	-c->cell4,				(height-y)*10.0f-10);
+						glTexCoord2f(0.125,0.875);					glVertex3f(x*10.0f,		-cubes[y+1][x].cell1,	(height-y)*10.0f-10);
+						glTexCoord2f(0.875,0.875);					glVertex3f(x*10.0f+10,	-cubes[y+1][x].cell2,	(height-y)*10.0f-10);
 					glEnd();
 				}
 
@@ -2962,11 +2962,6 @@ void cLightmap::del()
 	generated = false;
 }
 
-cLightmap::~cLightmap()
-{
-	del();
-	del2();
-}
 
 void cLightmap::del2()
 {
@@ -3174,23 +3169,6 @@ void cWorld::loadlightmap()
 }
 
 
-void cCube::calcnormal()
-{
-	cVector3 b1, b2;
-//					glTexCoord2f(t->u1, 1-t->v1);				glVertex3f(x*10,-c->cell1,(height-y)*10);
-//					glTexCoord2f(t->u3, 1-t->v3);				glVertex3f(x*10,-c->cell3,(height-y)*10-10);
-//					glTexCoord2f(t->u2, 1-t->v2);				glVertex3f(x*10+10,-c->cell2,(height-y)*10);
-//					glTexCoord2f(t->u4, 1-t->v4);				glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
-
-	b1 = cVector3(10,-cell1,-10) - cVector3(0,-cell4,0);
-	b2 = cVector3(0,-cell3,-10) - cVector3(0,-cell4,0);
-
-	normal.x = b1.y * b2.z - b1.z * b2.y;
-	normal.y = b1.z * b2.x - b1.x * b2.z;
-	normal.z = b1.x * b2.y - b1.y * b2.x;
-
-	normal = normal.Normalize();
-}
 
 
 

@@ -140,7 +140,7 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 					int posx = (int)mouse3dx / 5;
 					int posy = (int)mouse3dz / 5;
 
-					float f = (int)ceil(Graphics.brushsize);
+					float f = ceil(Graphics.brushsize);
 
 
 					if (posx >= (int)floor(f/2.0f) && posx < 2*Graphics.world.width-(int)ceil(f/2.0f) && posy >= (int)floor(f/2.0f) && posy< 2*Graphics.world.height-(int)ceil(f/2.0f))

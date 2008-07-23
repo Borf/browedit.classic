@@ -290,6 +290,23 @@ void mainloop()
 			}
 		}
 	}
+
+//Todo: move this somewhere else!
+	while(!Graphics.world.plugin_api_deleteobjects.empty())
+	{
+		int i = Graphics.world.plugin_api_deleteobjects.front();
+		delete Graphics.world.models[i];
+		Graphics.world.models.erase(Graphics.world.models.begin() + i);
+		Graphics.world.plugin_api_deleteobjects.pop_front();
+		if(Graphics.world.plugin_api_deleteobjects.empty())
+		{
+			cWindow* w = Graphics.WM.getwindow(WT_MODELOVERVIEW);
+			if(w)
+				w->userfunc(NULL);
+		}
+	}
+
+	
 	process_events( );
 
 	unsigned long currenttime = SDL_GetTicks();
@@ -476,6 +493,11 @@ int WinMain(HINSTANCE hInst,HINSTANCE hPrev, LPSTR Cmd,int nShow)
 	return i;
 }
 #endif
+
+cWindow* XmlWindow(string s)
+{
+	return Graphics.WM.XmlWindow(s);
+}
 
 
 int main(int argc, char *argv[])
@@ -955,7 +977,6 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/CALCULATELIGHTMAPSLIGHT"),	&MenuCommand_dolightmapslights); // Selected light
 	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/CALCULATELIGHTMAPSNOSHADOW"),	&MenuCommand_dolightmapsnoshadow); // 
 	ADDMENUITEM(mm,rnd, "Smooth Lightmap",	&MenuCommand_smoothlightmaps); // 
-	ADDMENUITEM(mm,rnd,	GetMsg("menu/generate/CLEARMAP"),					&MenuCommand_clearstuff); // clear map
 	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/DUN99"),						&MenuCommand_99dun); // 99 level dungeon
 	ADDMENUITEM(mm,rnd, "eAthena Script",									&MenuCommand_eascript);
 	ADDMENUITEM(mm,rnd, "NPC stuff",										&MenuCommand_npcscreenies);
@@ -1023,22 +1044,15 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(snaptofloor,edit,GetMsg("menu/edit/SNAPOBJECTS"),			&MenuCommand_snaptofloor);
 	snaptofloor->ticked = true;
 
-	ADDMENUITEM(mm,edit,GetMsg("menu/edit/FLATTEN"),						&MenuCommand_flatten);
-	ADDMENUITEM(mm,edit,GetMsg("menu/edit/FILL"),							&MenuCommand_fill);
 	ADDMENUITEM(mm,edit,GetMsg("menu/edit/FILLAREA"),						&MenuCommand_fillarea);
 	ADDMENUITEM(mm,edit,GetMsg("menu/edit/GATHEIGHT"),						&MenuCommand_gatheight);
 	ADDMENUITEM(mm,edit,GetMsg("menu/edit/RESETCOLORS"),					&MenuCommand_fixcolors);
-	ADDMENUITEM(mm,edit,GetMsg("menu/edit/CLEAROBJECTS"),					&MenuCommand_clearobjects);
-	ADDMENUITEM(mm,edit,GetMsg("menu/edit/CLEAREFFECTS"),					&MenuCommand_cleareffects);
-	ADDMENUITEM(mm,edit,GetMsg("menu/edit/CLEARLIGHTS"),					&MenuCommand_clearlights);
 	ADDMENUITEM(mm,edit,GetMsg("menu/edit/ADDWALLS"),						&MenuCommand_addwalls);
 	ADDMENUITEM(mm,edit,GetMsg("menu/edit/GATCOLLISION"),					&MenuCommand_gatcollision);
 	ADDMENUITEM(mm,edit,GetMsg("menu/edit/GATCOLLISION")+string("2"),		&MenuCommand_gatcollision2);
-	ADDMENUITEM(mm,edit,GetMsg("menu/edit/CLEARLIGHTMAPS"),					&MenuCommand_clearlightmaps);
 	ADDMENUITEM(mm,edit,GetMsg("menu/edit/CLEANLIGHTMAPS"),					&MenuCommand_cleanuplightmaps);
 	ADDMENUITEM(mm,edit,GetMsg("menu/edit/REMOVETEXTURES"),					&MenuCommand_cleantextures);
 	ADDMENUITEMDATAP(mm,edit,GetMsg("menu/edit/CLEARLIGHTMAPSONEDIT"),		&MenuCommand_toggle, (void*)&Graphics.clearlightmaps);
-	ADDMENUITEM(mm,edit,GetMsg("menu/edit/CLEARWALLS"),						&MenuCommand_clearwalls);
 
 	ADDMENUITEM(mm,windows,GetMsg("menu/windows/AMBIENTLIGHTING"),			&MenuCommand_ambientlight);
 	ADDMENUITEM(mm,windows,GetMsg("menu/windows/MODELWINDOW"),				&MenuCommand_modelwindow);
@@ -1053,6 +1067,8 @@ int main(int argc, char *argv[])
 //	WIN32_FIND_DATA FileData;													// thingy for searching through a directory
 //	HANDLE hSearch;																// thingy for searching through a directory
 //load plugins	
+
+
 	hSearch = FindFirstFile("plugins/*.dll", &FileData);						// look for all files
 	if (hSearch != INVALID_HANDLE_VALUE)										// if there are results...
 	{
@@ -1072,6 +1088,7 @@ int main(int argc, char *argv[])
 					continue;
 				}
 				cPluginBase* plugin = getInstance();
+				plugin->SetFunctions(XmlWindow);
 
 				cMenu* p = menu;
 				string s = plugin->menu;

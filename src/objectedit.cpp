@@ -299,7 +299,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 					{
 						cRSMModel* model = new cRSMModel();
 						model->load(Graphics.clipboardfile);
-						model->pos = cVector3(mouse3dx/5, -mouse3dy, mouse3dz/5);
+						model->pos = cVector3(mouse3dx/5.0f, -mouse3dy, mouse3dz/5.0f);
 						if (SDL_GetModState() & KMOD_SHIFT)
 							model->pos.y = Graphics.clipboardy;
 						model->scale = Graphics.clipboardscale;

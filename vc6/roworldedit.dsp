@@ -71,7 +71,7 @@ PreLink_Cmds=svnver src/version.h
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "..\src" /I "..\libs/include" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /D "GRF_STATIC" /FR /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "..\libs\include\stlport" /I "..\src" /I "..\libs/include" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /D "GRF_STATIC" /FR /FD /GZ /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
@@ -80,7 +80,8 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 libcurl.lib sdl_mixer.lib ws2_32.lib bgd.lib sdl.lib sdlmain.lib zlib.lib opengl32.lib glaux.lib glu32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib SHLWAPI.LIB /nologo /subsystem:console /debug /machine:I386 /nodefaultlib:"MSVCRT" /nodefaultlib:"LIBCMT" /out:"..\roworldeditd.exe" /pdbtype:sept /libpath:"..\libs/lib"
+# ADD LINK32 plugin_baseD.lib libcurl.lib sdl_mixer.lib ws2_32.lib bgd.lib sdl.lib sdlmain.lib zlib.lib opengl32.lib glaux.lib glu32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib SHLWAPI.LIB /nologo /subsystem:console /debug /machine:I386 /nodefaultlib:"MSVCRT" /nodefaultlib:"LIBCMT" /out:"..\roworldeditd.exe" /pdbtype:sept /libpath:"..\libs/lib"
+# SUBTRACT LINK32 /pdb:none
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 PreLink_Cmds=..\svnver ..\src/version.h
@@ -518,6 +519,14 @@ SOURCE=..\src\wm\lightwindow.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\wm\mapdetailwindow.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\wm\mapdetailwindow.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\wm\mapswindow.cpp
 # End Source File
 # Begin Source File
@@ -579,6 +588,14 @@ SOURCE=..\src\wm\texturewindow.h
 # Begin Source File
 
 SOURCE=..\src\wm\waterwindow.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\wm\xmlwindow.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\wm\xmlwindow.h
 # End Source File
 # End Group
 # Begin Group "components"

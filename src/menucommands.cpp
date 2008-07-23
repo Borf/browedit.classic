@@ -1205,25 +1205,6 @@ MENUCOMMAND(mode)
 	return true;
 }
 
-MENUCOMMAND(flatten)
-{
-	undostack.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
-	for(int y = 0; y < Graphics.world.height; y++)
-	{
-		for(int x = 0; x < Graphics.world.width; x++)
-		{
-			Graphics.world.cubes[y][x].tileaside = -1;
-			Graphics.world.cubes[y][x].tileside = -1;
-			Graphics.world.cubes[y][x].cell1 = 0;
-			Graphics.world.cubes[y][x].cell2 = 0;
-			Graphics.world.cubes[y][x].cell3 = 0;
-			Graphics.world.cubes[y][x].cell4 = 0;
-			Graphics.world.cubes[y][x].calcnormal();
-		}
-	}
-	return true;	
-}
-
 MENUCOMMAND(grid)
 {
 	src->ticked = !src->ticked;
@@ -1250,104 +1231,6 @@ MENUCOMMAND(speed)
 		speed->items[i]->ticked = false;
 	src->ticked = true;
 	paintspeed = atof(src->title.c_str());
-	return true;
-}
-
-MENUCOMMAND(fill)
-{
-	int x,y,i;
-	map<int, bool, less<int> > used;
-
-	Graphics.world.tiles.clear();
-	Graphics.world.lightmaps.clear();
-	cLightmap* map = new cLightmap();
-	for(i = 0; i < 256; i++)
-		map->buf[i] = i < 64 ? 255 : 0;
-	Graphics.world.lightmaps.push_back(map);
-	map = new cLightmap();
-	for(i = 0; i < 256; i++)
-		map->buf[i] = i < 64 ? 255 : 0;
-	Graphics.world.lightmaps.push_back(map);
-	for(y = 0; y < 4; y++)
-	{
-		for(x = 0; x < 4; x++)
-		{
-			cTile t;
-			t.lightmap = 1;
-			t.texture = Graphics.texturestart + ((int)Graphics.selectionstart.y - 32) / 288;
-			t.u1 = x/4.0;
-			t.v1 = y/4.0;
-			t.u2 = (x+1)/4.0;
-			t.v2 = (y)/4.0;
-			t.u3 = (x)/4.0;
-			t.v3 = (y+1)/4.0;
-			t.u4 = (x+1)/4.0;
-			t.v4 = (y+1)/4.0;
-			t.color[0] = (char)255;
-			t.color[1] = (char)255;
-			t.color[2] = (char)255;
-			t.color[3] = (char)255;
-			Graphics.world.tiles.push_back(t);
-		}
-	}
-
-
-	for(y = 0; y < Graphics.world.height; y++)
-	{
-		for(x = 0; x < Graphics.world.width; x++)
-		{
-			Graphics.world.cubes[y][x].tileup = (x%4) + 4*(y % 4);
-			Graphics.world.cubes[y][x].tileside = -1;
-			Graphics.world.cubes[y][x].tileaside = -1;
-		}
-	}
-
-
-	for(x = 0; x < Graphics.world.width; x++)
-	{
-		for(y = 0; y < Graphics.world.height; y++)
-		{
-			int tile = Graphics.world.cubes[y][x].tileup;
-			if(used.find(tile) != used.end())
-			{
-				cTile t = Graphics.world.tiles[tile];
-				tile = Graphics.world.tiles.size();
-				Graphics.world.tiles.push_back(t);
-				Graphics.world.cubes[y][x].tileup = tile;
-			}
-			used[tile] = 1;
-///////////////////////////////////////
-			tile = Graphics.world.cubes[y][x].tileside;
-			if (tile != -1)
-			{
-				if(used.find(tile) != used.end())
-				{
-					cTile t = Graphics.world.tiles[tile];
-					tile = Graphics.world.tiles.size();
-					Graphics.world.tiles.push_back(t);
-					Graphics.world.cubes[y][x].tileside = tile;
-				}
-				used[tile] = 1;
-			}
-/////////////////////////////////////
-			tile = Graphics.world.cubes[y][x].tileaside;
-			if (tile!= -1)
-			{
-				if(used.find(tile) != used.end())
-				{
-					cTile t = Graphics.world.tiles[tile];
-					tile = Graphics.world.tiles.size();
-					Graphics.world.tiles.push_back(t);
-					Graphics.world.cubes[y][x].tileaside = tile;
-				}
-				used[tile] = 1;
-			}
-		}
-	}
-
-
-	
-
 	return true;
 }
 
@@ -2132,27 +2015,6 @@ MENUCOMMAND(loadlightmaps)
 }
 
 
-MENUCOMMAND(clearobjects)
-{
-	unsigned int i;
-	vector<cUndoObjectsDelete::cObject> objectsdeleted;
-	for(i = 0; i < Graphics.world.models.size(); i++)
-	{
-		cUndoObjectsDelete::cObject object;
-		object.filename = Graphics.world.models[i]->filename;
-		object.pos = Graphics.world.models[i]->pos;
-		object.rot = Graphics.world.models[i]->rot;
-		object.scale = Graphics.world.models[i]->scale;
-		object.id = i;
-		objectsdeleted.push_back(object);
-	}
-	undostack.push(new cUndoObjectsDelete(objectsdeleted));
-	for(i = 0; i < Graphics.world.models.size(); i++)
-		delete Graphics.world.models[i];
-	Graphics.world.models.clear();
-	return true;
-}
-
 MENUCOMMAND(addwalls)
 {
 	int x,y;
@@ -2233,23 +2095,6 @@ MENUCOMMAND(gatcollision)
 		}
 
 	}
-	return true;
-}
-
-MENUCOMMAND(clearlightmaps)
-{
-	unsigned int i;
-	for(i = 0; i < Graphics.world.lightmaps.size(); i++)
-		delete 	Graphics.world.lightmaps[i];
-	Graphics.world.lightmaps.clear();
-	cLightmap* m = new cLightmap();
-	for(i = 0; i < 256; i++)
-		m->buf[i] = i < 64 ? 255 : 0;
-	Graphics.world.lightmaps.push_back(m);
-
-	for(i = 0; i < Graphics.world.tiles.size(); i++)
-		Graphics.world.tiles[i].lightmap = 0;
-
 	return true;
 }
 
@@ -2367,19 +2212,6 @@ bool mouseouttexture(cMenu* src)
 	return true;
 }
 
-MENUCOMMAND(clearstuff)
-{
-	MenuCommand_flatten(src);
-	MenuCommand_clearobjects(src);
-	MenuCommand_clearlightmaps(src);
-	MenuCommand_fill(src);
-	MenuCommand_fixcolors(src);
-	Graphics.world.effects.clear();
-	Graphics.world.lights.clear();
-	Graphics.world.sounds.clear();
-	return true;
-}
-
 MENUCOMMAND(effect)
 {
 	if (selectedeffect != NULL)
@@ -2466,24 +2298,6 @@ MENUCOMMAND(ambientlight)
 	return true;
 }
 
-
-MENUCOMMAND(cleareffects)
-{
-	unsigned int i;
-	vector<int> objectsdeleted;
-	for(i = 0; i < Graphics.world.effects.size(); i++)
-		objectsdeleted.push_back(i);
-	undostack.push(new cUndoEffectsDelete(objectsdeleted));
-
-	Graphics.world.effects.clear();
-	return true;
-}
-
-MENUCOMMAND(clearlights)
-{
-	Graphics.world.lights.clear();
-	return true;
-}
 
 MENUCOMMAND(texturewindow)
 {
@@ -3692,24 +3506,9 @@ MENUCOMMAND(rebuildsoundsfile)
 }
 
 
-MENUCOMMAND(clearwalls)
-{
-	for(int y = 0; y < Graphics.world.height; y++)
-	{
-		for(int x = 0; x < Graphics.world.width; x++)
-		{
-			Graphics.world.cubes[y][x].tileaside = -1;
-			Graphics.world.cubes[y][x].tileside = -1;
-		}
-	}
-	return true;
-}
-
-
 MENUCOMMAND(plugin)
 {
 	((cPluginBase*)src->pdata)->action(&Graphics.world);
-
 	return true;
 }
 
