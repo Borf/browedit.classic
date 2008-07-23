@@ -71,18 +71,27 @@ class cMenu
 			for(int i = 0; i < (int)items.size(); i++)
 				items[i]->closemenu();
 		}
-		cMenu* find(string s)
+		cMenu* find(string s, bool recurse = true)
 		{
 			int i;
 			if (title == s)
 				return this;
 			else
 			{
-				cMenu* m = NULL;
-				for(i = 0; i < (int)items.size() && m == NULL; i++)
-					m = items[i]->find(s);
-				if (m != NULL)
-					return m;
+				if(recurse)
+				{
+					cMenu* m = NULL;
+					for(i = 0; i < (int)items.size() && m == NULL; i++)
+						m = items[i]->find(s);
+					if (m != NULL)
+						return m;
+				}
+				else
+				{
+					for(i = 0; i < (int)items.size(); i++)
+						if(items[i]->title == s)
+							return items[i];
+				}
 			}
 			return NULL;
 		}

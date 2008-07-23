@@ -76,6 +76,7 @@ MENUCOMMAND(eascript);
 MENUCOMMAND(npcscreenies);
 MENUCOMMAND(favlights);
 MENUCOMMAND(clearwalls);
+MENUCOMMAND(plugin);
 MENUCOMMAND(mapdatabase);
 MENUCOMMAND(saveOnline);
 

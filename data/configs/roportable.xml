@@ -16,6 +16,10 @@
         <sounds>
             <sound>data/rosounds.txt</sound>
         </sounds>
+        <plugins>
+            <directory>plugins</directory>
+            <noload />
+        </plugins>
     </files>
     <graphics>
         <resx>800</resx>
@@ -29,7 +33,8 @@
     </graphics>
     <undo size="50" />
     <language>english</language>
-    <firstmap>prontera</firstmap>
+    <!--    <firstmap>prontera</firstmap>
+-->
     <splash>data/hamtaro.tga</splash>
     <water>
         <directory>data\texture\ฟ๖ลอ\</directory>
@@ -65,10 +70,10 @@
             <h>718</h>
         </textures>
         <modelswindow>
-            <x>25</x>
-            <y>25</y>
-            <w>974</w>
-            <h>718</h>
+            <x>406</x>
+            <y>161</y>
+            <w>593</w>
+            <h>582</h>
         </modelswindow>
         <hotbar>
             <x>520</x>

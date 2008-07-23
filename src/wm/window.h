@@ -15,6 +15,7 @@ extern cWindowObject* draggingobject;
 
 enum WINDOW_TYPE
 {
+	WT_GENERIC,
 	WT_MESSAGE,
 	WT_CONFIRM,
 	WT_OBJECT,

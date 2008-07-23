@@ -13,6 +13,7 @@
 #include "wm/progresswindow.h"
 #include "wm/filewindow.h"
 #include "wm/mapswindow.h"
+#include "plugins/base/base.h"
 
 extern cGraphics Graphics;
 extern bool running;
@@ -3701,6 +3702,14 @@ MENUCOMMAND(clearwalls)
 			Graphics.world.cubes[y][x].tileside = -1;
 		}
 	}
+	return true;
+}
+
+
+MENUCOMMAND(plugin)
+{
+	((cPluginBase*)src->pdata)->action(&Graphics.world);
+
 	return true;
 }
 

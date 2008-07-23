@@ -22,6 +22,7 @@ int keymap[SDLK_LAST-SDLK_FIRST];
 #include "wm/soundoverviewwindow.h"
 #include "wm/minimapwindow.h"
 #include <bmutex.h>
+#include "plugins/base/base.h"
 
 #include "texturecache.h"
 #ifdef WIN32
@@ -724,6 +725,8 @@ int main(int argc, char *argv[])
 	RegCloseKey( hKey );
 #endif //win32
 #endif //_nocheck_
+
+
 	cMenu* mm;
 
 
@@ -1045,6 +1048,65 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,windows,GetMsg("menu/windows/PREFERENCES"),				&MenuCommand_preferences);
 	ADDMENUITEM(mm,windows,GetMsg("menu/windows/RSMEDITOR"),				&MenuCommand_rsmedit);
 	ADDMENUITEM(mm,windows,GetMsg("menu/windows/FAVLIGHTS"),				&MenuCommand_favlights);
+
+
+//	WIN32_FIND_DATA FileData;													// thingy for searching through a directory
+//	HANDLE hSearch;																// thingy for searching through a directory
+//load plugins	
+	hSearch = FindFirstFile("plugins/*.dll", &FileData);						// look for all files
+	if (hSearch != INVALID_HANDLE_VALUE)										// if there are results...
+	{
+		while (true)														// loop through all the files
+		{ 
+			string filename = FileData.cFileName;
+			if(filename != "." && filename != "..")
+			{
+				Log(3,0,"Loading plugin '%s'", FileData.cFileName);
+				HMODULE hlib;
+				hlib = LoadLibraryEx(("plugins/" + filename).c_str(), NULL,0);
+				cPluginBase* (__cdecl* getInstance)(void);
+				getInstance = (cPluginBase*(__cdecl*)(void))GetProcAddress(hlib, "getInstance");
+				if(!getInstance)
+				{
+					Log(2,0,"%s is not a valid plugin", FileData.cFileName);
+					continue;
+				}
+				cPluginBase* plugin = getInstance();
+
+				cMenu* p = menu;
+				string s = plugin->menu;
+				string past = "";
+				
+				while(s.find("/") != string::npos)
+				{
+					cMenu* pp = p->find(GetMsg("menu/" + past + s.substr(0,s.find("/")) + "/TITLE"),false);
+					if(!pp)
+					{
+						if(p == menu) //root
+						{
+							ADDMENU2(pp,p, GetMsg("menu/" + past + s.substr(0,s.find("/")) + "/TITLE"),	posx);
+						}
+						
+					}
+					p = pp;
+					past += s.substr(0, s.find("/")) + "/";
+					s = s.substr(s.find("/")+1);
+				}
+				ADDMENUITEMDATAP(mm,p,GetMsg("menu/" + plugin->menu),	&MenuCommand_plugin, (void*)plugin);
+			}
+
+			if (!FindNextFile(hSearch, &FileData))								// find next file in the resultset
+			{
+				if (GetLastError() == ERROR_NO_MORE_FILES)						// we're finished when there are no more files
+					break;
+				else 
+					break;														// wow, something really weird happened
+			}
+		}
+	}
+ 	FindClose(hSearch);															// Close the search handle. 
+	
+
 
 
 
