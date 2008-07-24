@@ -213,6 +213,13 @@ void handleevent(cWindow* w, string name, string event)
 		for(unsigned int i = 0; i < world->models.size(); i++)
 			world->plugin_api_deleteobjects.push_back(0);
 	}
+	if(w->objects["chkSprites"]->GetInt(0) != 0)
+	{
+		for(unsigned int i = 0; i < world->sprites.size(); i++)
+			world->plugin_api_deletesprites.push_back(0);
+	}
+
+
 	if(w->objects["chkLights"]->GetInt(0) != 0)
 		world->lights.clear();
 	if(w->objects["chkSounds"]->GetInt(0) != 0)

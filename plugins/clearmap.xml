@@ -93,9 +93,19 @@
 		<y>160</y>
 	</label>
 
-	<button name="btnOk" value="Ok">
+	<checkbox name="chkSprites" value="1">
+		<align>topleft</align>
+		<x>20</x>
+		<y>184</y>
+	</checkbox>
+	<label name="lblSprites" value="SPRITES">
 		<x>100</x>
 		<y>180</y>
+	</label>
+
+	<button name="btnOk" value="Ok">
+		<x>100</x>
+		<y>200</y>
 	</button>
 
 </window>

@@ -349,6 +349,7 @@ public:
 	string useless;
 
 	list<int>		plugin_api_deleteobjects;
+	list<int>		plugin_api_deletesprites;
 
 
 };

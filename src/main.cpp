@@ -305,6 +305,13 @@ void mainloop()
 				w->userfunc(NULL);
 		}
 	}
+	while(!Graphics.world.plugin_api_deletesprites.empty())
+	{
+		int i = Graphics.world.plugin_api_deletesprites.front();
+		delete Graphics.world.sprites[i];
+		Graphics.world.sprites.erase(Graphics.world.sprites.begin() + i);
+		Graphics.world.plugin_api_deletesprites.pop_front();
+	}
 
 	
 	process_events( );
