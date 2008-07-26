@@ -5,7 +5,7 @@
 #include "windowbutton.h"
 #include <bmutex.h>
 #include <bthread.h>
-#include <gl/gl.h>
+//#include <gl/gl.h>
 
 class cMapDetailWindow : public cWindow
 {

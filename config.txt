@@ -1,1 +1,1 @@
-data/configs/rodesktop.xml
+data/configs/rolinux.xml

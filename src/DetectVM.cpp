@@ -34,9 +34,11 @@
  (http://chitchat.at.infoseek.co.jp/vmware/vmtools.html)
 
 */
-
+#ifdef WIN32
 #include <windows.h>
+#endif
 
+#ifdef WIN32
 // IsInsideVPC's exception filter
 DWORD __forceinline IsInsideVPC_exceptionFilter(LPEXCEPTION_POINTERS ep)
 {
@@ -46,12 +48,14 @@ DWORD __forceinline IsInsideVPC_exceptionFilter(LPEXCEPTION_POINTERS ep)
   ctx->Eip += 4; // skip past the "call VPC" opcodes
   return EXCEPTION_CONTINUE_EXECUTION; // we can safely resume execution since we skipped faulty instruction
 }
+#endif
 
 // high level language friendly version of IsInsideVPC()
 bool IsInsideVPC()
 {
   bool rc = false;
 
+  #ifdef WIN32
   __try
   {
     _asm push ebx
@@ -72,14 +76,14 @@ bool IsInsideVPC()
   __except(IsInsideVPC_exceptionFilter(GetExceptionInformation()))
   {
   }
-
+  #endif
   return rc;
 }
 
 bool IsInsideVMWare()
 {
   bool rc = true;
-
+  #ifdef WIN32
   __try
   {
     __asm
@@ -107,7 +111,9 @@ bool IsInsideVMWare()
   {
     rc = false;
   }
-
+  #else
+    rc = false;
+  #endif
   return rc;
 }
 

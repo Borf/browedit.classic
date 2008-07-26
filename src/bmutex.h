@@ -2,32 +2,23 @@
 #define __BMUTEX_H__
 
 #include <common.h>
+
+
 class cBMutex
 {
 	
 private:
+#ifdef WIN32
 	CRITICAL_SECTION cs;   // Windows' basic mutex object.
+#endif
 	
 public:
-	void lock()
-	{
-		EnterCriticalSection(&cs);
-	}
-	
-	void unlock() 
-	{
-		LeaveCriticalSection(&cs);
-	}
-	
-	cBMutex() 
-	{
-		InitializeCriticalSection(&cs);
-	}
-	
-	~cBMutex() 
-	{
-		DeleteCriticalSection(&cs);
-	}
+	cBMutex();
+	~cBMutex();
+
+	void lock();
+	void unlock() ;
 	
 };
+
 #endif

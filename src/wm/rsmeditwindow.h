@@ -2,6 +2,8 @@
 #define __RSMEDITWINDOW_H__
 
 #include <SDL/SDL_syswm.h>
+#include <common.h>
+#include <fstream>
 #include "../wm/window.h"
 
 #include "../wm/windowobject.h"

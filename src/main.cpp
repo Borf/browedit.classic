@@ -3,7 +3,7 @@
 TiXmlDocument msgtable;
 #include "common.h"
 int keymap[SDLK_LAST-SDLK_FIRST];
-#include <sdl/SDL_Mixer.h>
+#include <SDL/SDL_mixer.h>
 #include "filesystem.h"
 #include <math.h>
 #include "main.h"
@@ -1075,7 +1075,7 @@ int main(int argc, char *argv[])
 //	HANDLE hSearch;																// thingy for searching through a directory
 //load plugins	
 
-
+#ifdef WIN32
 	hSearch = FindFirstFile("plugins/*.dll", &FileData);						// look for all files
 	if (hSearch != INVALID_HANDLE_VALUE)										// if there are results...
 	{
@@ -1129,7 +1129,7 @@ int main(int argc, char *argv[])
 		}
 	}
  	FindClose(hSearch);															// Close the search handle. 
-	
+#endif
 
 
 

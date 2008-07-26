@@ -13,6 +13,8 @@
 #endif
 #include <memory.h>
 #include "mymath.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 
 const float EPSILON = 0.001f;
@@ -207,7 +209,8 @@ string rtrim(string s)
 string inttostring(int i)
 {
 	char buf[10];
-	itoa(i, buf, 10);
+	//itoa(i, buf, 10);
+	sprintf(buf,"%i",i);
 	return buf;
 }
 

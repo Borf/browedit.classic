@@ -6,7 +6,7 @@
 #include "windowframe.h"
 #include <bmutex.h>
 #include <bthread.h>
-#include <gl/gl.h>
+//#include <gl/gl.h>
 
 class cMapsWindow : public cWindow
 {

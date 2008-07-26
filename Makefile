@@ -1,5 +1,5 @@
 #!make
-LIBS = -lz -lGL -lSDL -lgd -lGLU
+LIBS = -lz -lGL -lSDL -lgd -lGLU -lSDL_mixer -lcurl
 INCLUDES = -Isrc -DGRF_STATIC -D__NOXML__
 CXX = g++
 CC = gcc
@@ -74,7 +74,7 @@ endif
 WINDRES=mingw32-windres
 BINARY_EXT=.exe
 INCLUDES += -Ilibs/include
-LIBS = -L. -lzlib1 -lSDL -lbgd -lopengl32 -lglu32 -lws2_32 -lcomdlg32
+LIBS = -L. -lzlib1 -lSDL -lbgd -lopengl32 -lglu32 -lws2_32 -lcomdlg32 -lcurl -lSDL_mixer
 # ws2_32.lib sdl.lib sdlmain.lib zlib.lib bgd.lib opengl32.lib glu32.lib 
 endif
 

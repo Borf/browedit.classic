@@ -541,7 +541,8 @@ cWindow* cWM::InputWindow(string title, cInputWindow::cInputWindowCaller* caller
 
 cWindow* cWM::XmlWindow(string src)
 {
-	cWindow* w = new cXmlWindow(texture, &font, skin, fs.getxml(src));
+	TiXmlDocument layout = fs.getxml(src);
+	cWindow* w = new cXmlWindow(texture, &font, skin, layout);
 	addwindow(w);
 	return w;
 }
