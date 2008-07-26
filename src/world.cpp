@@ -3147,6 +3147,8 @@ void cWorld::loadlightmap()
 		{
 			for(int y = 0; y < height; y++)
 			{
+				if(cubes[y][x].tileup == -1)
+					continue;
 				cLightmap* l = lightmaps[tiles[cubes[y][x].tileup].lightmap];
 				for(int xx = 0; xx < 6; xx++)
 				{
@@ -3487,7 +3489,7 @@ void cWorld::makelightmapsunique()
 			Graphics.world.reallightmaps[y][x]->reset();
 			Graphics.world.reallightmaps[y][x]->reset();
 			int tile = Graphics.world.cubes[y][x].tileup;
-			if(used.find(tile) != used.end())
+			if(used.find(tile) != used.end() && tile != -1)
 			{
 				cTile t = Graphics.world.tiles[tile];
 				tile = Graphics.world.tiles.size();

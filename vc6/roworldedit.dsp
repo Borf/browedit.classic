@@ -38,12 +38,12 @@ RSC=rc.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "obj/Release"
-# PROP Intermediate_Dir "obj/Release"
+# PROP Output_Dir "../obj/vs6/Release"
+# PROP Intermediate_Dir "../obj/vs6/Release"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /I "src" /I "libs/include" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /D "GRF_STATIC" /D "__NOXML__" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /I "src" /I "libs/include" /I "..\libs\include\stlport" /I "..\src" /I "..\libs/include" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /D "GRF_STATIC" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -51,7 +51,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 SDL_mixer.lib ws2_32.lib sdl.lib sdlmain.lib zlib.lib bgd.lib opengl32.lib glu32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /out:"roworldedit.exe" /libpath:"libs/lib"
+# ADD LINK32 plugin_base.lib libcurl.lib SDL_mixer.lib ws2_32.lib sdl.lib sdlmain.lib zlib.lib bgd.lib opengl32.lib glu32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386 /out:"..\roworldedit.exe" /libpath:"libs/lib" /libpath:"..\libs/lib"
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 PreLink_Cmds=svnver src/version.h
@@ -97,12 +97,12 @@ PreLink_Cmds=..\svnver ..\src/version.h
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "obj/release_nocheck"
-# PROP Intermediate_Dir "obj/release_nocheck"
+# PROP Output_Dir "../obj/vs6/Release_nocheck"
+# PROP Intermediate_Dir "../obj/vs6/Release_nocheck"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /D "GRF_STATIC" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /Zi /O2 /I "src" /I "libs/include" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /D "GRF_STATIC" /D "_NOCHECK_" /D "__NOXML__" /FR /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /Zi /O2 /I "src" /I "libs/include" /I "..\libs\include\stlport" /I "..\src" /I "..\libs/include" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /D "GRF_STATIC" /D "_NOCHECK_" /FR /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -110,7 +110,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 ws2_32.lib sdl.lib sdlmain.lib zlib.lib bgd.lib opengl32.lib glu32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 libcurl.lib SDL_Mixer.lib ws2_32.lib sdl.lib sdlmain.lib zlib.lib bgd.lib opengl32.lib glu32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /out:"roworldedit.exe" /libpath:"libs/lib"
+# ADD LINK32 plugin_base.lib libcurl.lib SDL_Mixer.lib ws2_32.lib sdl.lib sdlmain.lib zlib.lib bgd.lib opengl32.lib glu32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /out:"..\roworldedit.exe" /libpath:"..\..\libs\lib" /libpath:"..\libs/lib"
 
 !ENDIF 
 

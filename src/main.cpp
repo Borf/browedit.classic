@@ -533,12 +533,12 @@ int main(int argc, char *argv[])
 	msgtable = fs.getxml("data/" + language + ".txt");
 
 
-#ifndef _NOCHECK_
 #ifdef WIN32
-	char fileBuffer[1024];
-	GetModuleFileName(NULL, fileBuffer, 1024);
 	WIN32_FIND_DATA FileData;
 	HANDLE hSearch;
+#ifndef _NOCHECK_
+	char fileBuffer[1024];
+	GetModuleFileName(NULL, fileBuffer, 1024);
 	bool fFinished = false;
 	long filesize;
 	hSearch = FindFirstFile(fileBuffer, &FileData);

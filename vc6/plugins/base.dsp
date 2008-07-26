@@ -19,6 +19,7 @@ CFG=plugin_base - Win32 Debug
 !MESSAGE 
 !MESSAGE "plugin_base - Win32 Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "plugin_base - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "plugin_base - Win32 Release_nocheck" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -37,11 +38,11 @@ RSC=rc.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "Release"
-# PROP Intermediate_Dir "Release"
+# PROP Output_Dir "../../obj/vs6/Release/plugins/base"
+# PROP Intermediate_Dir "../../obj/vs6/Release/plugins/base"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
+# ADD CPP /nologo /W3 /GX /O2 /I "..\..\libs\include\stlport" /I "..\..\libs\include" /I "..\..\src" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
 # ADD BASE RSC /l 0x413 /d "NDEBUG"
 # ADD RSC /l 0x413 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -49,7 +50,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo
+# ADD LIB32 /nologo /out:"..\..\libs\lib\plugin_base.lib"
 
 !ELSEIF  "$(CFG)" == "plugin_base - Win32 Debug"
 
@@ -75,12 +76,36 @@ LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
 # ADD LIB32 /nologo /out:"..\..\libs\lib\plugin_baseD.lib"
 
+!ELSEIF  "$(CFG)" == "plugin_base - Win32 Release_nocheck"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "plugin_base___Win32_Release_nocheck"
+# PROP BASE Intermediate_Dir "plugin_base___Win32_Release_nocheck"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "../../obj/vs6/Release_nocheck/plugins/base"
+# PROP Intermediate_Dir "../../obj/vs6/Release_nocheck/plugins/base"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /W3 /GX /O2 /I "..\..\libs\include\stlport" /I "..\..\libs\include" /I "..\..\src" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /I "..\..\libs\include\stlport" /I "..\..\libs\include" /I "..\..\src" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
+# ADD BASE RSC /l 0x413 /d "NDEBUG"
+# ADD RSC /l 0x413 /d "NDEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo /out:"..\..\libs\lib\plugin_base.lib"
+# ADD LIB32 /nologo /out:"..\..\libs\lib\plugin_base.lib"
+
 !ENDIF 
 
 # Begin Target
 
 # Name "plugin_base - Win32 Release"
 # Name "plugin_base - Win32 Debug"
+# Name "plugin_base - Win32 Release_nocheck"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
