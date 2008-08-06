@@ -546,7 +546,7 @@ int main(int argc, char *argv[])
 	{
 		filesize = FileData.nFileSizeLow;
 #ifndef _DEBUG
-		if(filesize > 320000)
+		if(filesize > 360000)
 			return 0;
 #endif
 	}
@@ -969,7 +969,9 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,file,GetMsg("menu/file/REBUILDTEXTUREFILE"),				&MenuCommand_rebuildtexturefile);
 	ADDMENUITEM(mm,file,GetMsg("menu/file/REBUILDMODELFILE"),				&MenuCommand_rebuildmodelfile);
 	ADDMENUITEM(mm,file,GetMsg("menu/file/REBUILDSOUNDSFILE"),				&MenuCommand_rebuildsoundsfile);
+#ifdef _DEBUG
 	ADDMENUITEM(mm,file,GetMsg("menu/file/MAPDATABASE"),					&MenuCommand_mapdatabase); //save as
+#endif
 	ADDMENUITEM(mm,file,GetMsg("menu/file/EXIT"),							&MenuCommand_exit); // exit
 	
 	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/RANDOM1"),					&MenuCommand_random1); // random1 Hills
@@ -1947,11 +1949,13 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					return true;
 				}
 				break;
+#ifdef _DEBUG
 			case SDLK_d:
 				{
 					MenuCommand_mapdatabase(NULL);
 				}
 				break;
+#endif
 			default:
 				break;
 			}

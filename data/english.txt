@@ -170,9 +170,9 @@
 		</confirm>
 		<effect>
 			<TITLE>Effect</TITLE>
-			<POSITION>Position:</POSITION>
+			<POS>Position:</POS>
 			<SCALE>Scale:</SCALE>
-			<ROTATION>Rotation:</ROTATION>
+			<ROT>Rotation:</ROT>
 		</effect>
 		<input>
 			<TITLE>Please Input...</TITLE>
@@ -281,6 +281,7 @@
 			<LIGHTS>Lights</LIGHTS>
 			<SOUNDS>Sounds</SOUNDS>
 			<EFFECTS>Effects</EFFECTS>
+			<SPRITES>Sprites</SPRITES>
 		</clearmap>
 	</wm>
 </language>

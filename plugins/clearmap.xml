@@ -1,7 +1,7 @@
 <window translation="clearmap">
 	<closebutton/>
 	<width>300</width>
-	<height>200</height>
+	<height>220</height>
 
 	<checkbox name="chkTextures" value="1">
 		<align>topleft</align>
