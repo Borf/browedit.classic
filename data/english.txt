@@ -83,6 +83,7 @@
 			<LIGHTSEDIT>Lights Edit</LIGHTSEDIT>
 			<OBJECTGROUPEDIT>Object Group Edit</OBJECTGROUPEDIT>
 			<SPRITEEDIT>Sprite Edit</SPRITEEDIT>
+			<TEXTUREPAINTEDIT>Texture Paint Edit</TEXTUREPAINTEDIT>
 		</editmode>
 		<edit>
 			<TITLE>Edit</TITLE>

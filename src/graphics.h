@@ -11,6 +11,16 @@ using namespace std;
 #include "frustum.h"
 #include "wm/wm.h"
 
+
+	enum eTool
+	{
+		TOOL_SELECTAREA,
+		TOOL_SELECTBRUSH,
+		TOOL_SELECTWAND,
+		TOOL_BRUSH,
+	};
+
+
 class cGraphics
 {
 public:
@@ -61,6 +71,7 @@ public:
 		showalllights = false;
 		clearlightmaps = false;
 		gattransparency = 0.3f;
+		texturetool = TOOL_SELECTAREA;
 	}
 
 	int						init();
@@ -192,6 +203,8 @@ public:
 	cWM						WM;
 	bool					showdot;
 	vector<int>				gattiles;
+
+	eTool		texturetool;
 
 
 private:

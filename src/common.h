@@ -122,6 +122,22 @@ string inttostring(int);
 int hex2dec(string,int = 0);
 cVector3 hex2floats(string);
 
+template <class T> bool inbetween(T val, T start, T end)
+{
+	if(start > end)
+	{
+		T c = start;
+		start = end;
+		end = c;
+	}
+	return val >= start && val < end;
+}
+
+inline int round(float f)
+{
+	return floor(f+0.5f);
+}
+
 long tickcount();
 void RotateShortestAngle(float &i, float angle);
 void RotateShortestAngle(float &i, float angle, float mult);
@@ -214,6 +230,7 @@ enum eMode
 	MODE_LIGHTS,
 	MODE_OBJECTGROUP,
 	MODE_SPRITE,
+	MODE_TEXTUREPAINT,
 };
 
 
@@ -254,6 +271,7 @@ public:
 	int soundedit_process_events(SDL_Event &);
 	int objectgroupedit_process_events(SDL_Event &);
 	int spriteedit_process_events(SDL_Event &);
+	int texturepaintedit_process_events(SDL_Event &);
 };
 
 

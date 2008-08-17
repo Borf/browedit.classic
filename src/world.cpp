@@ -1573,6 +1573,21 @@ void cWorld::draw()
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, Graphics.LightDiffuse);				// Setup The Diffuse Light
 
 
+	bool inverseSelection = false;
+	if(editmode == MODE_TEXTUREPAINT)
+	{
+		for(x = 0; x < width && !inverseSelection; x++)
+		{
+			for(y = 0; y < height && !inverseSelection; y++)
+			{
+				if(cubes[y][x].selected)
+					inverseSelection = true;
+			}
+		}
+	}
+
+	bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
+	bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 
 	for(x = 0; x < width; x++)
 	{
@@ -1591,11 +1606,26 @@ void cWorld::draw()
 
 				int texture = textures[t->texture]->texid();
 
-
-				if ((editmode == MODE_WALLS && Graphics.showgrid && (c->tileaside != -1 || c->tileside != -1) || c->minh != 99999) || (editmode == MODE_HEIGHTGLOBAL && c->selected))
+				if (	(editmode == MODE_WALLS && Graphics.showgrid && (c->tileaside != -1 || c->tileside != -1) || c->minh != 99999)
+					||	(editmode == MODE_HEIGHTGLOBAL && c->selected))
 					glColor3f(1,0,1);
 //				else if (Graphics.showtilecolors)
 //					glColor3f((BYTE)t->color[0] / 256.0f,(BYTE)t->color[1] / 256.0f,(BYTE)t->color[2] / 256.0f);
+				else if(editmode == MODE_TEXTUREPAINT && Graphics.texturetool == TOOL_SELECTAREA)
+				{
+						if(lbuttondown && mousey < Graphics.h() - 20 && inbetween<int>(x, round(mouse3dxstart/10), round(mouse3dx/10)) && inbetween<int>(y, round(mouse3dzstart/10), round(mouse3dz/10)) && alt)
+						glColor4f(0.3f, 0.3f, 0.3f, 1);
+					else if(lbuttondown && mousey < Graphics.h() - 20 && inbetween<int>(x, round(mouse3dxstart/10), round(mouse3dx/10)) && inbetween<int>(y, round(mouse3dzstart/10), round(mouse3dz/10)))
+						glColor4f(0.6f,0.6f,0.6f,1);
+					else if(lbuttondown && mousey < Graphics.h() - 20 && (ctrl || alt) && c->selected)
+						glColor4f(0.4f,0.4f,0.4f,1);
+					else if(inverseSelection && !c->selected)
+						glColor4f(0.2f, 0.2f, 0.2f, 1);
+					else
+						glColor4f(1,1,1,1);
+				}
+				else if(editmode == MODE_TEXTUREPAINT && inverseSelection && !c->selected)
+					glColor4f(0.2f, 0.2f, 0.2f, 1);
 				else if (Graphics.showambientlighting)
 					glColor4f(ambientlight.diffuse.x,ambientlight.diffuse.y,ambientlight.diffuse.z,1);
 				else
@@ -2502,6 +2532,42 @@ void cWorld::draw()
 				glColor4f(1,1,1,1);
 
 			sprites[i]->draw();
+		}
+	}
+	if(editmode == MODE_TEXTUREPAINT)
+	{
+		if(Graphics.texturetool == TOOL_BRUSH && lbuttondown)
+		{
+			int texture = textures[Graphics.texturestart + ((int)Graphics.selectionstart.y - 32) / 288]->texid();
+			glEnable(GL_BLEND);
+			glColor4f(1,1,1,0.8f);
+	
+			float offx = (mouse3dxstart - mouse3dx) / 40.0f;
+			float offy = (mouse3dzstart - mouse3dz) / 40.0f;
+
+			for(x = 0; x < width; x++)
+			{
+				for(y = 0; y < height; y++)
+				{
+					cCube* c = &cubes[y][x];
+					if(!c->selected || !Graphics.frustum.CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 20))
+						continue;
+					if (c->tileup > -1 && c->tileup < (int)tiles.size())
+					{
+						cTile* t = &tiles[c->tileup];
+
+						glBindTexture(GL_TEXTURE_2D, texture);
+						glNormal3f(c->normal.x, c->normal.y, c->normal.z);
+						glBegin(GL_TRIANGLE_STRIP);
+							glTexCoord2f(((x%4))/4.0f + offx,		((y%4))/4.0f+offy);			glVertex3f(x*10,-c->cell1,(height-y)*10);
+							glTexCoord2f(((x%4))/4.0f + offx,		((y%4)+1)/4.0f+offy);		glVertex3f(x*10,-c->cell3,(height-y)*10-10);
+							glTexCoord2f(((x%4)+1)/4.0f + offx,		((y%4))/4.0f+offy);			glVertex3f(x*10+10,-c->cell2,(height-y)*10);
+							glTexCoord2f(((x%4)+1)/4.0f + offx,		((y%4)+1)/4.0f+offy);		glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
+						glEnd();
+					}
+				}
+			}
+
 		}
 	}
 

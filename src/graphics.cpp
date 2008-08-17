@@ -252,34 +252,36 @@ int cGraphics::draw(bool drawwm)
 
 	char buf[100];
 	if(currentobject != NULL)
-		sprintf(buf, "Editmode: %s, File: %s", 	editmode == MODE_TEXTURE ?		GetMsg("menu/editmode/TEXTUREEDIT") : 
-												editmode == MODE_HEIGHTDETAIL ? GetMsg("menu/editmode/DETAILTERRAINEDIT") : 
-												editmode == MODE_HEIGHTGLOBAL ? GetMsg("menu/editmode/GLOBALHEIGHTEDIT") :
-												editmode == MODE_WALLS ?		GetMsg("menu/editmode/WALLEDIT") :
-												editmode == MODE_OBJECTS ?		GetMsg("menu/editmode/OBJECTEDIT") :
-												editmode == MODE_GAT ?			GetMsg("menu/editmode/GATEDIT") :
-												editmode == MODE_WATER ?		GetMsg("menu/editmode/WATEREDIT") :
-												editmode == MODE_EFFECTS ?		GetMsg("menu/editmode/EFFECTSEDIT") :
-												editmode == MODE_SOUNDS ?		GetMsg("menu/editmode/SOUNDSEDIT") :
-												editmode == MODE_LIGHTS ?		GetMsg("menu/editmode/LIGHTSEDIT") :
-												editmode == MODE_OBJECTGROUP ?	GetMsg("menu/editmode/OBJECTGROUPEDIT") : 
-												editmode == MODE_SPRITE ?		GetMsg("menu/editmode/SPRITEEDIT") : 
+		sprintf(buf, "Editmode: %s, File: %s", 	editmode == MODE_TEXTURE ?			GetMsg("menu/editmode/TEXTUREEDIT") : 
+												editmode == MODE_HEIGHTDETAIL ?		GetMsg("menu/editmode/DETAILTERRAINEDIT") : 
+												editmode == MODE_HEIGHTGLOBAL ?		GetMsg("menu/editmode/GLOBALHEIGHTEDIT") :
+												editmode == MODE_WALLS ?			GetMsg("menu/editmode/WALLEDIT") :
+												editmode == MODE_OBJECTS ?			GetMsg("menu/editmode/OBJECTEDIT") :
+												editmode == MODE_GAT ?				GetMsg("menu/editmode/GATEDIT") :
+												editmode == MODE_WATER ?			GetMsg("menu/editmode/WATEREDIT") :
+												editmode == MODE_EFFECTS ?			GetMsg("menu/editmode/EFFECTSEDIT") :
+												editmode == MODE_SOUNDS ?			GetMsg("menu/editmode/SOUNDSEDIT") :
+												editmode == MODE_LIGHTS ?			GetMsg("menu/editmode/LIGHTSEDIT") :
+												editmode == MODE_OBJECTGROUP ?		GetMsg("menu/editmode/OBJECTGROUPEDIT") : 
+												editmode == MODE_SPRITE ?			GetMsg("menu/editmode/SPRITEEDIT") : 
+												editmode == MODE_TEXTUREPAINT ?		GetMsg("menu/editmode/TEXTUREPAINTEDIT") : 
 	
 	"", 
 		((cMenuItem*)currentobject)->data2.c_str());
 	else
-		sprintf(buf, "Editmode: %s",	editmode == MODE_TEXTURE ?		GetMsg("menu/editmode/TEXTUREEDIT") : 
-										editmode == MODE_HEIGHTDETAIL ? GetMsg("menu/editmode/DETAILTERRAINEDIT") : 
-										editmode == MODE_HEIGHTGLOBAL ? GetMsg("menu/editmode/GLOBALHEIGHTEDIT") :
-										editmode == MODE_WALLS ?		GetMsg("menu/editmode/WALLEDIT") :
-										editmode == MODE_OBJECTS ?		GetMsg("menu/editmode/OBJECTEDIT") :
-										editmode == MODE_GAT ?			GetMsg("menu/editmode/GATEDIT") :
-										editmode == MODE_WATER ?		GetMsg("menu/editmode/WATEREDIT") :
-										editmode == MODE_EFFECTS ?		GetMsg("menu/editmode/EFFECTSEDIT") :
-										editmode == MODE_SOUNDS ?		GetMsg("menu/editmode/SOUNDSEDIT") :
-										editmode == MODE_LIGHTS ?		GetMsg("menu/editmode/LIGHTSEDIT") :
-										editmode == MODE_OBJECTGROUP ?	GetMsg("menu/editmode/OBJECTGROUPEDIT") : 
-										editmode == MODE_SPRITE ?		GetMsg("menu/editmode/SPRITEEDIT") : 
+		sprintf(buf, "Editmode: %s",	editmode == MODE_TEXTURE ?			GetMsg("menu/editmode/TEXTUREEDIT") : 
+										editmode == MODE_HEIGHTDETAIL ?		GetMsg("menu/editmode/DETAILTERRAINEDIT") : 
+										editmode == MODE_HEIGHTGLOBAL ?		GetMsg("menu/editmode/GLOBALHEIGHTEDIT") :
+										editmode == MODE_WALLS ?			GetMsg("menu/editmode/WALLEDIT") :
+										editmode == MODE_OBJECTS ?			GetMsg("menu/editmode/OBJECTEDIT") :
+										editmode == MODE_GAT ?				GetMsg("menu/editmode/GATEDIT") :
+										editmode == MODE_WATER ?			GetMsg("menu/editmode/WATEREDIT") :
+										editmode == MODE_EFFECTS ?			GetMsg("menu/editmode/EFFECTSEDIT") :
+										editmode == MODE_SOUNDS ?			GetMsg("menu/editmode/SOUNDSEDIT") :
+										editmode == MODE_LIGHTS ?			GetMsg("menu/editmode/LIGHTSEDIT") :
+										editmode == MODE_OBJECTGROUP ?		GetMsg("menu/editmode/OBJECTGROUPEDIT") : 
+										editmode == MODE_SPRITE ?			GetMsg("menu/editmode/SPRITEEDIT") : 
+										editmode == MODE_TEXTUREPAINT ?		GetMsg("menu/editmode/TEXTUREPAINTEDIT") : 
 	"");
 	float l = font->textlen(buf);
 	font->print(0,0,0,width-l,height-14,buf);

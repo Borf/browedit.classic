@@ -19,7 +19,6 @@ extern cBMutex* renderMutex;
 
 cMapDetailWindow::cMapDetailWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWindow(t,f,skin)
 {
-	cWindowObject* o;
 	wtype = WT_MAPDETAIL;
 	resizable = false;
 	visible = true;

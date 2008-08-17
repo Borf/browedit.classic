@@ -73,5 +73,9 @@
             <x>744</x>
             <y>0</y>
         </hotbar>
+        <texturetools>
+            <x>0</x>
+            <y>649</y>
+        </texturetools>
     </wm>
 </config>

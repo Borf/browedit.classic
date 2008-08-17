@@ -20,6 +20,7 @@ int keymap[SDLK_LAST-SDLK_FIRST];
 #include "wm/modeloverviewwindow.h"
 #include "wm/lightoverviewwindow.h"
 #include "wm/soundoverviewwindow.h"
+#include "wm/texturetoolswindow.h"
 #include "wm/minimapwindow.h"
 #include <bmutex.h>
 #include "plugins/base/base.h"
@@ -387,6 +388,20 @@ void mainloop()
 		}
 		else if(w != NULL)
 			w->close();
+
+		w = Graphics.WM.getwindow(WT_TEXTURETOOLS);
+		if (editmode == MODE_TEXTUREPAINT)
+		{
+			if(w == NULL)
+				Graphics.WM.addwindow(new cTextureToolsWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin));
+			else
+			{
+				w->show();
+			}
+		}
+		else if(w != NULL)
+			w->close();
+		
 
 
 	}
@@ -962,7 +977,9 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,file,GetMsg("menu/file/SAVE"),							&MenuCommand_save); //save
 	ADDMENUITEM(mm,file,GetMsg("menu/file/QUICKSAVE"),						&MenuCommand_quicksave); //save
 	ADDMENUITEM(mm,file,GetMsg("menu/file/SAVEAS"),							&MenuCommand_saveAs); //save as
+#ifdef _DEBUG
 	ADDMENUITEM(mm,file,GetMsg("menu/file/SAVEONLINE"),						&MenuCommand_saveOnline);
+#endif
 	ADDMENUITEM(mm,file,GetMsg("menu/file/EXPORTLIGHTMAPS"),				&MenuCommand_savelightmaps); // export lightmaps
 	ADDMENUITEM(mm,file,GetMsg("menu/file/IMPORTLIGHTMAPS"),				&MenuCommand_loadlightmaps); // import lightmaps
 	ADDMENUITEM(mm,file,GetMsg("menu/file/EXPORTMAPFILES"),					&MenuCommand_exportmapfiles);
@@ -1039,6 +1056,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/LIGHTSEDIT"),					&MenuCommand_mode);
 	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/OBJECTGROUPEDIT"),			&MenuCommand_mode);
 	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/SPRITEEDIT"),					&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/TEXTUREPAINTEDIT"),			&MenuCommand_mode);
 
 
 	ADDMENU(speed,edit, GetMsg("menu/edit/SPEED"),						480, 100);
@@ -1348,6 +1366,7 @@ int process_events()
 			case MODE_LIGHTS:			processManagement.lightedit_process_events(event);			break;
 			case MODE_OBJECTGROUP:		processManagement.objectgroupedit_process_events(event);	break;
 			case MODE_SPRITE:			processManagement.spriteedit_process_events(event);			break;
+			case MODE_TEXTUREPAINT:		processManagement.texturepaintedit_process_events(event);	break;
 			}
 		}
 
@@ -1849,9 +1868,18 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				break;
 			case SDLK_F2:
-				editmode = MODE_HEIGHTGLOBAL;
-				if (Graphics.texturestart >= (int)Graphics.world.textures.size())
-					Graphics.texturestart = 0;
+				if((event.key.keysym.mod&KMOD_SHIFT) == 0)
+				{
+					editmode = MODE_HEIGHTGLOBAL;
+					if (Graphics.texturestart >= (int)Graphics.world.textures.size())
+						Graphics.texturestart = 0;
+				}
+				else
+				{
+					editmode = MODE_TEXTUREPAINT;
+					if (Graphics.texturestart >= (int)Graphics.world.textures.size())
+						Graphics.texturestart = 0;
+				}
 				break;
 			case SDLK_F3:
 				editmode = MODE_HEIGHTDETAIL;

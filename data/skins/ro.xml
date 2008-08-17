@@ -35,6 +35,12 @@
 		<left width="7">0</left>
 		<right width="7">14</right>
 		<bottom height="9">71</bottom>
+		<offsets>
+			<top>7</top>
+			<bottom>5</bottom>
+			<left>2</left>
+			<right>2</right>
+		</offsets>
 	</miniwindow>
 	<input>
 		<fontcolor>000000</fontcolor>
