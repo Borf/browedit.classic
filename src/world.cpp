@@ -2538,36 +2538,58 @@ void cWorld::draw()
 	{
 		if(Graphics.texturetool == TOOL_BRUSH && lbuttondown)
 		{
-			int texture = textures[Graphics.texturestart + ((int)Graphics.selectionstart.y - 32) / 288]->texid();
-			glEnable(GL_BLEND);
-			glColor4f(1,1,1,0.8f);
-	
-			float offx = (mouse3dxstart - mouse3dx) / 40.0f;
-			float offy = (mouse3dzstart - mouse3dz) / 40.0f;
-
-			for(x = 0; x < width; x++)
+			if(inverseSelection)
 			{
-				for(y = 0; y < height; y++)
-				{
-					cCube* c = &cubes[y][x];
-					if(!c->selected || !Graphics.frustum.CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 20))
-						continue;
-					if (c->tileup > -1 && c->tileup < (int)tiles.size())
-					{
-						cTile* t = &tiles[c->tileup];
+				int texture = textures[Graphics.texturestart + ((int)Graphics.selectionstart.y - 32) / 288]->texid();
+				glEnable(GL_BLEND);
+				glColor4f(1,1,1,0.8f);
+		
+				float offx = (mouse3dxstart - mouse3dx) / 40.0f;
+				float offy = (mouse3dzstart - mouse3dz) / 40.0f;
 
-						glBindTexture(GL_TEXTURE_2D, texture);
-						glNormal3f(c->normal.x, c->normal.y, c->normal.z);
-						glBegin(GL_TRIANGLE_STRIP);
-							glTexCoord2f(((x%4))/4.0f + offx,		((y%4))/4.0f+offy);			glVertex3f(x*10,-c->cell1,(height-y)*10);
-							glTexCoord2f(((x%4))/4.0f + offx,		((y%4)+1)/4.0f+offy);		glVertex3f(x*10,-c->cell3,(height-y)*10-10);
-							glTexCoord2f(((x%4)+1)/4.0f + offx,		((y%4))/4.0f+offy);			glVertex3f(x*10+10,-c->cell2,(height-y)*10);
-							glTexCoord2f(((x%4)+1)/4.0f + offx,		((y%4)+1)/4.0f+offy);		glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
-						glEnd();
+				for(x = 0; x < width; x++)
+				{
+					for(y = 0; y < height; y++)
+					{
+						cCube* c = &cubes[y][x];
+						if(!c->selected || !Graphics.frustum.CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 20))
+							continue;
+						if (c->tileup > -1 && c->tileup < (int)tiles.size())
+						{
+							cTile* t = &tiles[c->tileup];
+
+							glBindTexture(GL_TEXTURE_2D, texture);
+							glNormal3f(c->normal.x, c->normal.y, c->normal.z);
+							glBegin(GL_TRIANGLE_STRIP);
+								glTexCoord2f(((x%4))/4.0f + offx,		((y%4))/4.0f+offy);			glVertex3f(x*10,-c->cell1,(height-y)*10);
+								glTexCoord2f(((x%4))/4.0f + offx,		((y%4)+1)/4.0f+offy);		glVertex3f(x*10,-c->cell3,(height-y)*10-10);
+								glTexCoord2f(((x%4)+1)/4.0f + offx,		((y%4))/4.0f+offy);			glVertex3f(x*10+10,-c->cell2,(height-y)*10);
+								glTexCoord2f(((x%4)+1)/4.0f + offx,		((y%4)+1)/4.0f+offy);		glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
+							glEnd();
+						}
 					}
 				}
 			}
+			else
+			{
+				int texture = textures[Graphics.texturestart]->texid();
+				glEnable(GL_BLEND);
+				glEnable(GL_TEXTURE_2D);
+				glColor4f(1,1,1,0.8f);
 
+				int x = (int)mouse3dx / 10;
+				int y = (int)mouse3dz / 10;
+				for(int yy = 0; yy < Graphics.texturebrush.size(); yy++)
+				{
+					for(int xx = 0; xx < Graphics.texturebrush[yy].size(); xx++)
+					{
+						if(Graphics.texturebrush[yy][xx])
+						{
+							
+						}
+					}
+				}	
+			}
 		}
 	}
 

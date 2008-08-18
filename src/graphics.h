@@ -72,6 +72,13 @@ public:
 		clearlightmaps = false;
 		gattransparency = 0.3f;
 		texturetool = TOOL_SELECTAREA;
+		texturebrush.resize(4, vector<bool>(4,true));
+		texturebrush[0][0] = false;
+		texturebrush[3][3] = false;
+		texturebrush[0][3] = false;
+		texturebrush[3][0] = false;
+		texturebrushoffset = cVector2(0,0);
+		texturegridsize = 4;
 	}
 
 	int						init();
@@ -204,8 +211,10 @@ public:
 	bool					showdot;
 	vector<int>				gattiles;
 
-	eTool		texturetool;
-
+	eTool					texturetool;
+	vector<vector<bool> >	texturebrush;
+	cVector2				texturebrushoffset;
+	float					texturegridsize;
 
 private:
 	int						CreateGLWindow();

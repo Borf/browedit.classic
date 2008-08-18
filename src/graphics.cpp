@@ -183,37 +183,82 @@ int cGraphics::draw(bool drawwm)
 			glEnd();
 		}
 		glDisable(GL_TEXTURE_2D);
-		glColor3f(0.5f,0.5f,1);
-		for(i = 0; 288*i+256 < height; i++)
+		if(editmode == MODE_TEXTUREPAINT)
 		{
-			if (editmode == MODE_GAT)
+			glColor4f(0,0,0,0.25f);
+			glEnable(GL_BLEND);
+			int ww = texturebrush[0].size();
+			int hh = texturebrush.size();
+
+			cVector2 off[4] = { cVector2(-1,0), cVector2(1,0), cVector2(0,1), cVector2(0,-1) };
+
+			glBegin(GL_QUADS);
+			for(int yy = 0; yy < texturebrush.size(); yy++)
 			{
-				if (i+texturestart > 6)
-					continue;
+				for(int xx = 0; xx < texturebrush[yy].size(); xx++)
+				{
+					if(texturebrush[yy][xx])
+					{
+/*						for(int i = 0; i < 4; i++)
+						{
+							cVector2 p = off[i] + cVector2(xx,yy);
+							bool draw = true;
+							if(p.x >= 0 && p.x < ww && p.y >= 0 && p.y < hh)
+							{
+								if(texturebrush[p.y][p.x])
+									draw = false;
+							}
+							if(draw)
+							{
+								glVertex2f(width-256,							height-(32+0));
+								glVertex2f(width-256+xx*(256/texturegridsize),	height-(32+yy));
+							}
+						}*/
+						glVertex2f(width-256+(xx)*(256/texturegridsize),		height-(32+(yy)*(256/texturegridsize)));
+						glVertex2f(width-256+(xx+1)*(256/texturegridsize),		height-(32+(yy)*(256/texturegridsize)));
+						glVertex2f(width-256+(xx+1)*(256/texturegridsize),		height-(32+(yy+1)*(256/texturegridsize)));
+						glVertex2f(width-256+(xx)*(256/texturegridsize),		height-(32+(yy+1)*(256/texturegridsize)));
+
+
+					}
+				}
 			}
-			else if (editmode == MODE_WATER)
+			glEnd();
+			glDisable(GL_BLEND);
+		}
+		else
+		{
+			glColor3f(0.5f,0.5f,1);
+			for(i = 0; 288*i+256 < height; i++)
 			{
-				if (i+world.water.type > 5)
-					continue;
+				if (editmode == MODE_GAT)
+				{
+					if (i+texturestart > 6)
+						continue;
+				}
+				else if (editmode == MODE_WATER)
+				{
+					if (i+world.water.type > 5)
+						continue;
+				}
+				glBegin(GL_LINE_LOOP);
+					glTexCoord2f(1,1);		glVertex2f( width, height-(32+288*i));
+					glTexCoord2f(1,0);		glVertex2f( width, height-(32+288*i+256));
+					glTexCoord2f(0,0);		glVertex2f( width-256, height-(32+288*i+256));
+					glTexCoord2f(0,1);		glVertex2f( width-256, height-(32+288*i));
+				glEnd();
 			}
+			glEnd();
+
+
+			glColor3f(1,0,0);
 			glBegin(GL_LINE_LOOP);
-				glTexCoord2f(1,1);		glVertex2f( width, height-(32+288*i));
-				glTexCoord2f(1,0);		glVertex2f( width, height-(32+288*i+256));
-				glTexCoord2f(0,0);		glVertex2f( width-256, height-(32+288*i+256));
-				glTexCoord2f(0,1);		glVertex2f( width-256, height-(32+288*i));
+				glVertex2f( selectionstart.x, height-selectionstart.y);
+				glVertex2f( selectionstart.x, height-selectionend.y);
+				glVertex2f( selectionend.x, height-selectionend.y);
+				glVertex2f( selectionend.x, height-selectionstart.y);
 			glEnd();
 		}
-		glEnd();
-
-
-		glColor3f(1,0,0);
-		glBegin(GL_LINE_LOOP);
-			glVertex2f( selectionstart.x, height-selectionstart.y);
-			glVertex2f( selectionstart.x, height-selectionend.y);
-			glVertex2f( selectionend.x, height-selectionend.y);
-			glVertex2f( selectionend.x, height-selectionstart.y);
-		glEnd();
-
 		glColor3f(1,1,1);
 	}
 	else if (editmode == MODE_OBJECTGROUP)
@@ -304,9 +349,9 @@ int cGraphics::draw(bool drawwm)
 					int len = font->textlen(popup);
 					glBegin(GL_QUADS);
 						glVertex2f(mousex-2, Graphics.h()-mousey-2);
-						glVertex2f(mousex+len+2, Graphics.h()-mousey-2);
-						glVertex2f(mousex+len+2, Graphics.h()-mousey+16);
-						glVertex2f(mousex-2, Graphics.h()-mousey+16);
+						glVertex2f(mousex+len+2, h()-mousey-2);
+						glVertex2f(mousex+len+2, h()-mousey+16);
+						glVertex2f(mousex-2, h()-mousey+16);
 					glEnd();
 					font->print(1,1,1,mousex, Graphics.h()-mousey, "%s", popup.c_str());
 					glEnable(GL_DEPTH_TEST);

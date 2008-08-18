@@ -79,5 +79,11 @@
             <x>520</x>
             <y>0</y>
         </hotbar>
+        <texturetools>
+            <x>0</x>
+            <y>488</y>
+            <w>58</w>
+            <h>92</h>
+        </texturetools>
     </wm>
 </config>

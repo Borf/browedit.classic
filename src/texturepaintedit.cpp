@@ -71,6 +71,16 @@ int cProcessManagement::texturepaintedit_process_events(SDL_Event &event)
 		{
 			switch (event.key.keysym.sym)
 			{
+			case SDLK_LEFTBRACKET:
+				Graphics.texturestart--;
+				if (Graphics.texturestart < 0)
+					Graphics.texturestart = 0;
+				break;
+			case SDLK_RIGHTBRACKET:
+				Graphics.texturestart++;
+				if (Graphics.texturestart >= Graphics.world.textures.size())
+					Graphics.texturestart--;
+				break;
 			default:
 				break;
 			}

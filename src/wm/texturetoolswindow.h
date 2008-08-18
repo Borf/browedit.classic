@@ -27,17 +27,10 @@ class cTextureToolsWindow : public cWindow
 		cWindowToolbarButton(cWindow* parent, TiXmlDocument &totalskin, string image, eTool t) : cWindowPictureBox(parent)
 		{
 			tool = t;
-			activated = false;
+			activated = t == Graphics.texturetool;
 			TiXmlElement* skin = totalskin.FirstChildElement("skin")->FirstChildElement("button");
 			if(skin != NULL)
 			{
-				string color = "FFFFFF";
-				if(skin->FirstChildElement("fontcolor"))
-					color = skin->FirstChildElement("fontcolor")->FirstChild()->Value();
-				fontcolor[0] = hex2dec(color.substr(0,2)) / 256.0f;
-				fontcolor[1] = hex2dec(color.substr(2,2)) / 256.0f;
-				fontcolor[2] = hex2dec(color.substr(4,2)) / 256.0f;
-
 				skinTopHeight = atoi(skin->FirstChildElement("top")->Attribute("height"));
 				skinTop =		512 - atoi(skin->FirstChildElement("top")->FirstChild()->Value());
 				skinBottomHeight = atoi(skin->FirstChildElement("bottom")->Attribute("height"));
@@ -54,7 +47,7 @@ class cTextureToolsWindow : public cWindow
 			alignment = ALIGN_TOPLEFT;
 		}
 
-		void draw(int a,int b,int c,int d)
+		virtual void draw(int a,int b,int c,int d)
 		{
 			GLfloat colors[4];
 			glGetFloatv(GL_CURRENT_COLOR, colors);
@@ -95,6 +88,51 @@ class cTextureToolsWindow : public cWindow
 		}
 	};
 
+	class cWindowBrushShape : public cWindowButton
+	{
+	public:
+		cWindowBrushShape(cWindow* parent, TiXmlDocument &totalskin) : cWindowButton(parent, totalskin)
+		{
+			resizeto(16,16);
+			alignment = ALIGN_TOPLEFT;
+			text = "";
+		}
+		void draw(int a,int b,int c,int d)
+		{
+			GLfloat colors[4];
+			glGetFloatv(GL_CURRENT_COLOR, colors);
+			if(inobject())
+				glColor3f(0.6f, 0.6f, 0.9f);
+			cWindowObject::draw();
+
+//draw brush
+
+			if(inobject())
+			{
+				int xx = realx();
+				int yy = realy();
+
+				glDisable(GL_TEXTURE_2D);
+				glColor4f(0,0,0,colors[3]);
+				glBegin(GL_LINE_LOOP);
+					glVertex2f(xx,	yy);
+					glVertex2f(xx+w,yy);
+					glVertex2f(xx+w,yy+h);
+					glVertex2f(xx,	yy+h);
+				glEnd();
+				glEnable(GL_TEXTURE_2D);
+			}
+
+			glColor4fv(colors);
+		}
+
+		void click()
+		{
+
+		}
+
+	};
+
 
 	class cWindowSelectArea : public cWindowToolbarButton
 	{
@@ -129,18 +167,19 @@ public:
 	cTextureToolsWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWindow(t,f,skin)
 	{
 		wtype = WT_TEXTURETOOLS;
-		resizable = false;
+		resizable = true;
 		visible = true;
 		modal = false;
 
 		h = 100;
-		w = 40;
+		w = 50;
 		x = 0;
 		y = Graphics.h()-32;
+		minw = 20 + (pw()-innerw());
+		minh = 20 + (ph()-innerh());
+
 		title = "";
 		initprops("texturetools");
-
-		cWindowObject* o;
 
 		TiXmlElement* wSkin = skin.FirstChildElement("skin")->FirstChildElement("miniwindow");
 
@@ -164,8 +203,15 @@ public:
 		objects["selectbrush"] = new cWindowSelectBrush(this,skin);
 		objects["selectwand"] = new cWindowSelectWand (this,skin);
 		objects["brush"] = new cWindowBrush(this,skin);
+		objects["aaa_brushshape"] = new cWindowBrushShape(this,skin);
 
-		((cWindowToolbarButton*)objects["selectarea"])->activated = true;
+		cWindowObject* o;
+
+		o = new cWindowFloatInputBox(this, skin);
+		((cWindowFloatInputBox*)o)->floatje = &Graphics.texturegridsize;
+		o->alignment = ALIGN_TOPLEFT;
+		o->resizeto(innerw(), o->ph());
+		objects["aa_gridsize"] = o;
 
 		reorder();
 
@@ -185,6 +231,14 @@ public:
 			i->second->moveto(xx,yy);
 			xx += i->second->pw();
 		}
+		h = yy+lineheight+skinOffBottom+skinOffTop;
+	}
+
+	void resizeto(int ww, int hh)
+	{
+		cWindow::resizeto(floor(ww/18.0f)*18+4,hh);
+		objects["aa_gridsize"]->resizeto(min(innerw(),64), objects["aa_gridsize"]->ph());
+		reorder();
 	}
 
 };
