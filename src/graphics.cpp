@@ -5,29 +5,29 @@
 #include <GL/glu.h>												// Header File For The GLu32 Library
 #include <math.h>
 #include <map>
-#include "wm/hotkeywindow.h"
+#include "windows/hotkeywindow.h"
 #include "menucommands.h"
 
 #include "graphics.h"
 #include "menu.h"
 
-extern long			mousex, mousey;
+extern long			mouseX, mouseY;
 extern eState			state;
 extern cFileSystem		fs;
 extern void				ChangeGrid();
-extern string			message;
+extern std::string			message;
 extern bool				showmessage;
 extern cMenu*			menu;
-extern map<long, string, less<long> >	idtomodel;
+extern std::map<long, std::string, std::less<long> >	idtomodel;
 extern eMode			editmode;
 float f = 0;
 extern bool				lbuttondown;
 extern cMenu*			currentobject;
-extern string			rodir;
+extern std::string			rodir;
 extern long				lastmotion;
-extern string			fontname;
+extern std::string			fontname;
 extern cMenu*			lastmenu;
-extern string			skinFile;
+extern std::string			skinFile;
 double mouse3dx, mouse3dy, mouse3dz;
 extern TiXmlDocument	config;
 
@@ -94,7 +94,7 @@ int cGraphics::draw(bool drawwm)
 	{
 		glEnable(GL_TEXTURE_2D);
 		glColor4f(1,1,1,1);
-		glBindTexture(GL_TEXTURE_2D, texturePreview->texid());
+		glBindTexture(GL_TEXTURE_2D, texturePreview->texId());
 		glBegin(GL_QUADS);
 			glTexCoord2f(1,1);		glVertex2f( 256.0f, height-32.0f);
 			glTexCoord2f(1,0);		glVertex2f( 256.0f, height-(32+256.0f));
@@ -157,14 +157,14 @@ int cGraphics::draw(bool drawwm)
 			{
 				if (i+texturestart > gatTextures.size()-1)
 					continue;
-				glBindTexture(GL_TEXTURE_2D, gatTextures[i+texturestart]->texid());
+				glBindTexture(GL_TEXTURE_2D, gatTextures[i+texturestart]->texId());
 			}
 			else if (editmode == MODE_WATER)
 			{
 				if (i+world.water.type >= Graphics.waterCount)
 					continue;
 				static float frame = 0;
-				glBindTexture(GL_TEXTURE_2D, waterTextures[i+world.water.type][(int)floor(frame)]->texid());
+				glBindTexture(GL_TEXTURE_2D, waterTextures[i+world.water.type][(int)floor(frame)]->texId());
 				frame+=0.25;
 				if (frame >= Graphics.waterTextures[i+world.water.type].size())
 					frame = 0;
@@ -274,7 +274,7 @@ int cGraphics::draw(bool drawwm)
 	{
 		glEnable(GL_TEXTURE_2D);
 		glColor3f(1,1,1);
-		glBindTexture(GL_TEXTURE_2D, splash->texid());
+		glBindTexture(GL_TEXTURE_2D, splash->texId());
 		glBegin(GL_QUADS);
 			glTexCoord2f(0,1);		glVertex2f( 0, height-20);
 			glTexCoord2f(0,0);		glVertex2f( 0, 0);
@@ -337,10 +337,10 @@ int cGraphics::draw(bool drawwm)
 		cWindow* w = WM.inwindow();
 		if (w != NULL)
 		{
-			cWindowObject* o = w->inobject();
+			cWindowObject* o = w->inObject();
 			if (o != NULL)
 			{
-				string popup = o->ppopup();
+				std::string popup = o->getPopup();
 				if (popup != "")
 				{
 					glDisable(GL_TEXTURE_2D);
@@ -348,12 +348,12 @@ int cGraphics::draw(bool drawwm)
 					glColor3f(0.5,0.5,1);
 					int len = font->textlen(popup);
 					glBegin(GL_QUADS);
-						glVertex2f(mousex-2, Graphics.h()-mousey-2);
-						glVertex2f(mousex+len+2, h()-mousey-2);
-						glVertex2f(mousex+len+2, h()-mousey+16);
-						glVertex2f(mousex-2, h()-mousey+16);
+						glVertex2f(mouseX-2, Graphics.h()-mouseY-2);
+						glVertex2f(mouseX+len+2, h()-mouseY-2);
+						glVertex2f(mouseX+len+2, h()-mouseY+16);
+						glVertex2f(mouseX-2, h()-mouseY+16);
 					glEnd();
-					font->print(1,1,1,mousex, Graphics.h()-mousey, "%s", popup.c_str());
+					font->print(1,1,1,mouseX, Graphics.h()-mouseY, "%s", popup.c_str());
 					glEnable(GL_DEPTH_TEST);
 				}
 			}
@@ -647,7 +647,7 @@ void cMenu::draw()
 		glEnd();
 		for(i = 0; i < (int)items.size(); i++)
 		{
-			if (mousex >= x + items[i]->x && mousex < x + items[i]->x + items[i]->w && mousey < 20)
+			if (mouseX >= x + items[i]->x && mouseX < x + items[i]->x + items[i]->w && mouseY < 20)
 			{
 				glDisable(GL_TEXTURE_2D);
 				glColor4f(0.2f,0.2f,0.9f,0.5);
@@ -664,7 +664,7 @@ void cMenu::draw()
 				glEnd();
 				glColor4f(0,0,0,1);
 			}
-			else if (oneopened && items[i]->opened && mousey < 20)
+			else if (oneopened && items[i]->opened && mouseY < 20)
 				items[i]->closemenu();
 
 			Graphics.font->print(0,0,0,x+items[i]->x+3,Graphics.h()-y-18,"%s",items[i]->title.c_str());
@@ -719,7 +719,7 @@ void cMenu::draw()
 			if (Graphics.font->textlen(items[i]->title.c_str()) > maxlen-50)
 				maxlen = Graphics.font->textlen(items[i]->title.c_str())+50;
 			float color = 0;
-			if ((mousex > x && mousex < x+maxlen && (mousey) > y+i*20 && (mousey) < y+i*20+20))
+			if ((mouseX > x && mouseX < x+maxlen && (mouseY) > y+i*20 && (mouseY) < y+i*20+20))
 			{
 				glDisable(GL_TEXTURE_2D);
 				glColor4f(0.2f,0.2f,0.9f,opacity+0.25f);
@@ -811,7 +811,7 @@ void cMenu::click(int xx, int yy)
 			}
 
 			
-			if (mousex > x+items[i]->x && mousex < x+items[i]->x+m)
+			if (mouseX > x+items[i]->x && mouseX < x+items[i]->x+m)
 			{
 				items[i]->opacity = 0;
 				items[i]->opened = !items[i]->opened;
@@ -836,7 +836,7 @@ void cMenu::click(int xx, int yy)
 		for(i = 0; i < items.size(); i++)
 		{
 
-			if (mousex > x && mousex < x+m && (mousey) > y+20*i && (mousey) < y+20*i+20)
+			if (mouseX > x && mouseX < x+m && (mouseY) > y+20*i && (mouseY) < y+20*i+20)
 			{
 				if(items[i]->item)
 				{
@@ -984,7 +984,7 @@ cMenu* cMenu::getLastItem()
 
 
 
-cMenu* cMenu::finddata(string d)
+cMenu* cMenu::finddata(std::string d)
 {
 	if(item)
 	{

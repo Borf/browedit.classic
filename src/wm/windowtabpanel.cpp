@@ -12,15 +12,15 @@ void cWindowTabPanel::draw(int cutoffleft, int cutoffright, int cutofftop, int c
 	GLfloat colors[4];
 	glGetFloatv(GL_CURRENT_COLOR, colors);
 	int xx, yy;
-	xx = realx();
+	xx = realX();
 	yy = realy2();
 	glEnable(GL_TEXTURE_2D);
 	bool overtabs = false;
-	if (this->inobject() && parent->istopwindow() && ((Graphics.h()-mousey) - parent->py() - yy - h > -14))
+	if (this->inObject() && parent->istopwindow() && ((Graphics.h()-mouseY) - parent->getY() - yy - h > -14))
 		overtabs = true;
 
 	glTranslatef((float)xx, (float)yy, 0);
-	glBindTexture(GL_TEXTURE_2D, parent->texture->texid());
+	glBindTexture(GL_TEXTURE_2D, parent->texture->texId());
 
 	int hh = h - max(skinTabHeight[0], skinTabHeight[1]);
 
@@ -126,10 +126,10 @@ void cWindowTabPanel::draw(int cutoffleft, int cutoffright, int cutofftop, int c
 	glEnd();
 	
 
-	glTranslatef(-(float)realx(), -(float)realy2(), 0);
+	glTranslatef(-(float)realX(), -(float)realy2(), 0);
 
 	for(i = 0; i < tabs.size(); i++)
-		parent->font->print(0,0,0, maxOverlapLeft+parent->px() + xx+5+skinTabFontOffX + ((w-maxOverlapLeft-maxOverlapRight) / (float)tabs.size()) * i, parent->py() + yy+h-16+skinTabFontOffY, tabs[i].c_str());
+		parent->font->print(0,0,0, maxOverlapLeft+parent->getX() + xx+5+skinTabFontOffX + ((w-maxOverlapLeft-maxOverlapRight) / (float)tabs.size()) * i, parent->getY() + yy+h-16+skinTabFontOffY, tabs[i].c_str());
 
 	glColor4fv(colors);
 }
@@ -139,14 +139,61 @@ void cWindowTabPanel::click()
 	if(tabs.size() == 0)
 		return;
 	int xx, yy;
-	xx = realx();
+	xx = realX();
 	yy = realy2();
-	if (this->inobject() && parent->istopwindow() && ((Graphics.h()-mousey) - parent->py() - yy - h > -14))
+	if (this->inObject() && parent->istopwindow() && ((Graphics.h()-mouseY) - parent->getY() - yy - h > -14))
 	{
 		int oldtab = selectedtab;
-		selectedtab = ((int)mousex - parent->px() - xx) / (w/tabs.size());
+		selectedtab = ((int)mouseX - parent->getX() - xx) / (w/tabs.size());
 		if (selectedtab != oldtab)
 			tabchange(oldtab);
 	}
+}
+
+cWindowTabPanel::cWindowTabPanel( cWindow* parent, TiXmlDocument &skin ) : cWindowObject(parent, skin.FirstChildElement("skin")->FirstChildElement("tabstrip"))
+{
+	w = 100;
+	h = 25;
+	x = 10;
+	y = 10;
+	alignment = ALIGN_CENTER;
+	cursorType = 0;
+	selectable = true;
+	type = OBJECT_TABPANEL;
+	selectedtab = 0;
+	tabs.push_back("tab1");
+	tabs.push_back("tab2");
+	tabs.push_back("tab3");
+	tabs.push_back("tab4");
+	tabs.push_back("tab5");
+	
+	
+	skinTabFontOffX = atoi(skin.FirstChildElement("skin")->FirstChildElement("tabstrip")->FirstChildElement("fontoffx")->FirstChild()->Value());
+	skinTabFontOffY = atoi(skin.FirstChildElement("skin")->FirstChildElement("tabstrip")->FirstChildElement("fontoffy")->FirstChild()->Value());
+	
+	TiXmlElement* el = skin.FirstChildElement("skin")->FirstChildElement("tabstrip")->FirstChildElement("tabselected");
+	skinTabTop[0] =		512-atoi(el->FirstChildElement("top")->FirstChild()->Value());
+	skinTabHeight[0] =		atoi(el->FirstChildElement("height")->FirstChild()->Value());
+	skinTabLeft[0] =		atoi(el->FirstChildElement("left")->FirstChild()->Value());
+	skinTabLeftWidth[0] =	atoi(el->FirstChildElement("left")->Attribute("width"));
+	skinTabRight[0] =		atoi(el->FirstChildElement("right")->FirstChild()->Value());
+	skinTabRightWidth[0] =	atoi(el->FirstChildElement("right")->Attribute("width"));
+	skinTabOverlapLeft[0] =	atoi(el->FirstChildElement("overlapleft")->FirstChild()->Value());
+	skinTabOverlapRight[0] =atoi(el->FirstChildElement("overlapright")->FirstChild()->Value());
+	
+	el = skin.FirstChildElement("skin")->FirstChildElement("tabstrip")->FirstChildElement("tabunselected");
+	skinTabTop[1] =		512-atoi(el->FirstChildElement("top")->FirstChild()->Value());
+	skinTabHeight[1] =		atoi(el->FirstChildElement("height")->FirstChild()->Value());
+	skinTabLeft[1] =		atoi(el->FirstChildElement("left")->FirstChild()->Value());
+	skinTabLeftWidth[1] =	atoi(el->FirstChildElement("left")->Attribute("width"));
+	skinTabRight[1] =		atoi(el->FirstChildElement("right")->FirstChild()->Value());
+	skinTabRightWidth[1] =	atoi(el->FirstChildElement("right")->Attribute("width"));
+	skinTabOverlapLeft[1] =	atoi(el->FirstChildElement("overlapleft")->FirstChild()->Value());
+	skinTabOverlapRight[1] =atoi(el->FirstChildElement("overlapright")->FirstChild()->Value());
+}
+
+int cWindowTabPanel::getInt( int id )
+{
+	return selectedtab;
 }
 

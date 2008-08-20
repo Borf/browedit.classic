@@ -4,7 +4,7 @@
 #include "common.h"
 #include <GL/gl.h>
 #include <map>
-using namespace std;
+//using namespace std;
 #include "world.h"
 #include "font.h"
 #include "texture.h"
@@ -72,7 +72,7 @@ public:
 		clearLightmaps = false;
 		gatTransparency = 0.3f;
 		textureTool = TOOL_SELECTAREA;
-		textureBrush.resize(4, vector<bool>(4,true));
+		textureBrush.resize(4, std::vector<bool>(4,true));
 		textureBrush[0][0] = false;
 		textureBrush[3][3] = false;
 		textureBrush[0][3] = false;
@@ -131,16 +131,16 @@ public:
 
 	cVector3				selectionstart3d;
 	cVector3				selectionend3d;
-	vector<int>				selectedobjects;
-	string					editstring;
+	std::vector<int>		selectedobjects;
+	std::string				editstring;
 	float*					editval;
 
 	bool					is3dSelected(float, float, float);
-	string					popup(string, string = "");
+	std::string					popup(std::string, std::string = "");
 
-	string					popupReturn;
-	string					defaultPopupText;
-	string					popupCaption;
+	std::string					popupReturn;
+	std::string					defaultPopupText;
+	std::string					popupCaption;
 	cFont*					font;
 	CFrustum				frustum;
 
@@ -162,8 +162,8 @@ public:
 
 	cVector3				clipboardRot;
 	cVector3				clipboardScale;
-	string					clipboardFile;
-	string					clipboardName;
+	std::string					clipboardFile;
+	std::string					clipboardName;
 	float					clipboardY;
 	float					clipboardFloat;
 	GLfloat					lightAmbient[4];
@@ -186,12 +186,12 @@ public:
 	int						quadtreeView;
 	bool					showBoundingBoxes;
 	int						gatType;
-	vector<cTexture*>		gatTextures;
+	std::vector<cTexture*>	gatTextures;
 	cTexture*				gatBorder;
 	cTexture*				splash;
-	vector<vector<cTexture*> >		waterTextures;
-	string					waterDirectory;
-	string					waterExtension;
+	std::vector<std::vector<cTexture*> >		waterTextures;
+	std::string					waterDirectory;
+	std::string					waterExtension;
 	int						waterCount;
 
 	cVector2				wallHeightMin;
@@ -209,10 +209,10 @@ public:
 
 	cWM						WM;
 	bool					showDot;
-	vector<int>				gatTiles;
+	std::vector<int>				gatTiles;
 
 	eTool					textureTool;
-	vector<vector<bool> >	textureBrush;
+	std::vector<std::vector<bool> >	textureBrush;
 	cVector2				textureBrushOffset;
 	float					textureGridSizeX;
 	float					textureGridSizeY;

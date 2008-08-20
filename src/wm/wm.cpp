@@ -2,9 +2,9 @@
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
 #include <graphics.h>
-#include "messagewindow.h"
-#include "confirmwindow.h"
-#include "xmlwindow.h"
+#include <windows/messagewindow.h>
+#include <windows/confirmwindow.h>
+#include <windows/xmlwindow.h>
 extern cGraphics Graphics;
 extern cFileSystem fs;
 extern cWindow* draggingwindow;
@@ -30,7 +30,7 @@ int cWM::draw()
 		cWindow* w = windows[i];
 		if (w->isenabled())
 		{
-			if(w->isvisible() && w->isenabled())
+			if(w->isVisible() && w->isenabled())
 			{
 				topwindow = i;
 				break;
@@ -59,7 +59,7 @@ int cWM::draw()
 					glColor4fv(color);
 				w->istopwindow(false);
 			}
-			if(w->isvisible() && w->isenabled())
+			if(w->isVisible() && w->isenabled())
 				w->draw();
 		}
 		if (windows[ii] != w)
@@ -85,7 +85,7 @@ int cWM::draw()
 					glColor4fv(color);
 				w->istopwindow(false);
 			}
-			if(w->isvisible() && w->isenabled())
+			if(w->isVisible() && w->isenabled())
 				w->draw();
 		}
 		if (windows[ii] != w)
@@ -98,13 +98,13 @@ int cWM::draw()
 }
 
 
-int cWM::init(string sSkin)
+int cWM::init(std::string sSkin)
 {
 	skin = fs.getXml(sSkin);
 	texture = TextureCache.load(skin.FirstChildElement("skin")->FirstChildElement("texture")->FirstChild()->Value());
 	font.load(skin.FirstChildElement("skin")->FirstChildElement("font")->FirstChild()->Value());
 
-	string c = skin.FirstChildElement("skin")->FirstChildElement("color")->FirstChild()->Value();
+	std::string c = skin.FirstChildElement("skin")->FirstChildElement("color")->FirstChild()->Value();
 	color[0] = hex2dec(c.substr(0,2))/255.0f;
 	color[1] = hex2dec(c.substr(2,2))/255.0f;
 	color[2] = hex2dec(c.substr(4,2))/255.0f;
@@ -126,7 +126,7 @@ void cWM::save()
 
 	for(int i = 0; i < (int)windows.size(); i++)
 	{
-		if(windows[i]->savewindow)
+		if(windows[i]->saveWindow)
 			windows[i]->save();
 	}
 
@@ -193,47 +193,47 @@ void cWM::drag(cWindow* w)
 	{
 		if(windows[i]->isenabled() && windows[i] != w)
 		{
-			if ((w->px() <= windows[i]->px() && windows[i]->px() <= w->px()+w->pw()) ||
-				(windows[i]->px() <= w->px() && w->px() <= windows[i]->px()+windows[i]->pw()))
+			if ((w->getX() <= windows[i]->getX() && windows[i]->getX() <= w->getX()+w->getWidth()) ||
+				(windows[i]->getX() <= w->getX() && w->getX() <= windows[i]->getX()+windows[i]->getWidth()))
 			{
-				if (abs(w->py() - (windows[i]->py()+windows[i]->ph())) < SNAPPINGDIST)
+				if (abs(w->getY() - (windows[i]->getY()+windows[i]->getHeight())) < SNAPPINGDIST)
 				{
 					if (w->resizing())
 					{
-						w->resizeto(w->pw(), w->ph()+(w->py()-(windows[i]->py()+windows[i]->ph())));
-						w->moveto(w->px(), windows[i]->py() + windows[i]->ph());
+						w->resizeto(w->getWidth(), w->getHeight()+(w->getY()-(windows[i]->getY()+windows[i]->getHeight())));
+						w->moveto(w->getX(), windows[i]->getY() + windows[i]->getHeight());
 					}
 					else
-						w->moveto(w->px(), windows[i]->py()+windows[i]->ph()-w->ph2()+w->ph());
+						w->moveto(w->getX(), windows[i]->getY()+windows[i]->getHeight()-w->ph2()+w->getHeight());
 				}
-				if (abs((w->py()+w->ph()) - windows[i]->py()) < SNAPPINGDIST)
+				if (abs((w->getY()+w->getHeight()) - windows[i]->getY()) < SNAPPINGDIST)
 				{
 					if (w->resizing())
-						w->resizeto(w->pw(), windows[i]->py()-w->py());
+						w->resizeto(w->getWidth(), windows[i]->getY()-w->getY());
 					else
-						w->moveto(w->px(), windows[i]->py()-w->ph2());
+						w->moveto(w->getX(), windows[i]->getY()-w->ph2());
 				}
 				
 			}
-			if ((w->py() <= windows[i]->py() && windows[i]->py() <= w->py()+w->ph()) ||
-				(windows[i]->py() <= w->py() && w->py() <= windows[i]->py()+windows[i]->ph()))
+			if ((w->getY() <= windows[i]->getY() && windows[i]->getY() <= w->getY()+w->getHeight()) ||
+				(windows[i]->getY() <= w->getY() && w->getY() <= windows[i]->getY()+windows[i]->getHeight()))
 			{
-				if (abs(w->px() - (windows[i]->px()+windows[i]->pw())) < SNAPPINGDIST)
+				if (abs(w->getX() - (windows[i]->getX()+windows[i]->getWidth())) < SNAPPINGDIST)
 				{
 					if (w->resizing())
 					{
-						w->resizeto(w->pw()+(w->px()-(windows[i]->px()+windows[i]->pw())), w->ph());
-						w->moveto(windows[i]->px() + windows[i]->pw(), w->py());
+						w->resizeto(w->getWidth()+(w->getX()-(windows[i]->getX()+windows[i]->getWidth())), w->getHeight());
+						w->moveto(windows[i]->getX() + windows[i]->getWidth(), w->getY());
 					}
 					else
-						w->moveto(windows[i]->px()+windows[i]->pw(), w->py());
+						w->moveto(windows[i]->getX()+windows[i]->getWidth(), w->getY());
 				}
-				if (abs((w->px()+w->pw()) - windows[i]->px()) < SNAPPINGDIST)
+				if (abs((w->getX()+w->getWidth()) - windows[i]->getX()) < SNAPPINGDIST)
 				{
 					if (w->resizing())
-						w->resizeto(windows[i]->px()-w->px(), w->ph());
+						w->resizeto(windows[i]->getX()-w->getX(), w->getHeight());
 					else
-						w->moveto(windows[i]->px()-w->pw(), w->py());
+						w->moveto(windows[i]->getX()-w->getWidth(), w->getY());
 				}
 
 			}
@@ -271,7 +271,7 @@ void cWM::togglewindow(WINDOW_TYPE wt)
 		if (windows[i]->isenabled() && windows[i]->windowtype() == wt)
 		{
 			windows[i]->togglevis();
-			if (windows[i]->isvisible())
+			if (windows[i]->isVisible())
 			{
 				cWindow* w = windows[i];
 				for(int ii = i; ii > -1; ii--)
@@ -300,8 +300,8 @@ int cWM::closewindow(WINDOW_TYPE wt, bool force)
 bool cWM::onchar(char c, bool shift)
 {
 	if (windows.size() > 0)
-		if (windows[0]->isenabled() && windows[0]->isvisible())
-			return windows[0]->onchar(c, shift);
+		if (windows[0]->isenabled() && windows[0]->isVisible())
+			return windows[0]->onChar(c, shift);
 	return false;
 }
 
@@ -368,8 +368,8 @@ bool cWM::onkeydown(int key, bool shift)
 
 	
 	if(windows.size() > 0)
-		if (windows[0]->isenabled() && windows[0]->isvisible())
-			return windows[0]->onkeydown(key, shift);
+		if (windows[0]->isenabled() && windows[0]->isVisible())
+			return windows[0]->onKeyDown(key, shift);
 	return false;
 }
 bool cWM::onkeyup(int key, bool shift)
@@ -378,8 +378,8 @@ bool cWM::onkeyup(int key, bool shift)
 	{
 		bool parsekey = true;
 
-		if (parsekey && windows[0]->isvisible() && windows[0]->isenabled())
-			return windows[0]->onkeyup(key, shift);
+		if (parsekey && windows[0]->isVisible() && windows[0]->isenabled())
+			return windows[0]->onKeyUp(key, shift);
 	}
 	return false;
 }
@@ -433,10 +433,10 @@ void cWM::rightclick()
 }
 
 
-void cWM::MessageBox(string message)
+void cWM::MessageBox(std::string message)
 {
 	cWindow* w = new cMessageWindow(texture, &font,skin);
-	w->objects["text"]->SetText(0, message);
+	w->objects["text"]->setText(0, message);
 	w->show();
 	addwindow(w);
 }
@@ -468,7 +468,7 @@ void cWM::addwindow(cWindow* w)
 
 void cWM::CleanWindows()
 {
-	vector<cWindow*>::iterator i;
+	std::vector<cWindow*>::iterator i;
 	for(i = windows.begin(); i != windows.end(); i++)
 	{
 		if (!(*i)->isenabled() && (*i)->currentColor[3] == 0)
@@ -479,7 +479,7 @@ void cWM::CleanWindows()
 			Log(3,0,"Deleting window %s", (*i)->gettitle().c_str());
 			if ((*i) != NULL)
 			{
-				if( (*i)->savewindow)
+				if( (*i)->saveWindow)
 					(*i)->save();
 			}
 			delete((*i));
@@ -497,15 +497,15 @@ void cWM::printdebug()
 	for(int i = 0; i < (int)windows.size(); i++)
 	{
 		Log(3,0,"Window %i\nTitle: %s\nEnabled: %s\nVisible: %s\npos: (%i,%i)\nsize: (%i,%i)\n",
-			i, windows[i]->gettitle().c_str(), windows[i]->isenabled() ? "yes":"no", windows[i]->isvisible() ? "yes":"no", windows[i]->px(), windows[i]->py(), windows[i]->pw(), windows[i]->ph());
+			i, windows[i]->gettitle().c_str(), windows[i]->isenabled() ? "yes":"no", windows[i]->isVisible() ? "yes":"no", windows[i]->getX(), windows[i]->getY(), windows[i]->getWidth(), windows[i]->getHeight());
 	}
 }
 
 
-void cWM::ConfirmWindow(string title, cConfirmWindow::cConfirmWindowCaller* caller)
+void cWM::ConfirmWindow(std::string title, cConfirmWindow::cConfirmWindowCaller* caller)
 {
 	cWindow* w = new cConfirmWindow(caller, texture, &font,skin);
-	w->objects["text"]->SetText(0, title);
+	w->objects["text"]->setText(0, title);
 	w->show();
 	addwindow(w);
 }
@@ -528,18 +528,18 @@ void cWM::defocus()
 		windows[i]->selectedObject = NULL;
 }
 
-cWindow* cWM::InputWindow(string title, cInputWindow::cInputWindowCaller* caller)
+cWindow* cWM::InputWindow(std::string title, cInputWindow::cInputWindowCaller* caller)
 {
 	cWindow* w = new cInputWindow(caller, texture, &font,skin);
 	w->init(texture, &font);
-	w->objects["text"]->SetText(0, title);
-	w->objects["input"]->SetText(0,"");
+	w->objects["text"]->setText(0, title);
+	w->objects["input"]->setText(0,"");
 	w->show();
 	addwindow(w);
 	return w;
 }
 
-cWindow* cWM::XmlWindow(string src)
+cWindow* cWM::XmlWindow(std::string src)
 {
 	TiXmlDocument layout = fs.getXml(src);
 	cWindow* w = new cXmlWindow(texture, &font, skin, layout);
@@ -548,15 +548,15 @@ cWindow* cWM::XmlWindow(string src)
 }
 
 
-string cWM::InputWindow(string title, string defaulttext)
+std::string cWM::InputWindow(std::string title, std::string defaulttext)
 {
 	class cDefaultInputWindowCaller : public cInputWindow::cInputWindowCaller
 	{
 	public:
 		bool* b;
-		string* dat;
+		std::string* dat;
 
-		cDefaultInputWindowCaller(bool* bb, string* str)
+		cDefaultInputWindowCaller(bool* bb, std::string* str)
 		{
 			b = bb;
 			dat = str;
@@ -574,10 +574,10 @@ string cWM::InputWindow(string title, string defaulttext)
 	};
 
 	bool b = false;
-	string data = "";
+	std::string data = "";
 
 	cWindow* w = InputWindow(title, new cDefaultInputWindowCaller(&b, &data));
-	w->objects["input"]->SetText(0, defaulttext);
+	w->objects["input"]->setText(0, defaulttext);
 	while(!b)
 	{
 		mainloop();
@@ -588,7 +588,7 @@ string cWM::InputWindow(string title, string defaulttext)
 }
 
 
-bool cWM::ConfirmWindow(string title)
+bool cWM::ConfirmWindow(std::string title)
 {
 	class cDefaultConfirmWindowCaller : public cConfirmWindow::cConfirmWindowCaller
 	{

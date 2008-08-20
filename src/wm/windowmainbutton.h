@@ -8,17 +8,13 @@
 class cWindowMainButton : public cWindowButton
 {
 protected:
-	string text;
+	std::string text;
 public:
-	cWindowMainButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent,skin)
-	{
-		cursortype = 1;
-		type = OBJECT_MAINBUTTON;
-	}
+	cWindowMainButton(cWindow* parent, TiXmlDocument &skin);
 	void draw(int,int,int,int);
 	void click();
-	void SetText(int, string);
-	string GetText(int);
+	void setText(int, std::string);
+	std::string getText(int);
 };
 
 

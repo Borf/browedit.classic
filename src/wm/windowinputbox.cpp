@@ -9,14 +9,14 @@ void cWindowInputBox::draw(int cutoffleft, int cutoffright, int cutofftop, int c
 	GLfloat colors[4];
 	glGetFloatv(GL_CURRENT_COLOR, colors);
 	int xx, yy;
-	xx = realx();
-	yy = realy();
+	xx = realX();
+	yy = realY();
 
 	cWindowObject::draw(cutoffleft, cutoffright, cutofftop, cutoffbottom);
 
 	glDisable(GL_TEXTURE_2D);
 
-	string temptext = text;
+	std::string temptext = text;
 	if (mask != "")
 	{
 		char buf[255];
@@ -25,7 +25,7 @@ void cWindowInputBox::draw(int cutoffleft, int cutoffright, int cutofftop, int c
 		text = buf;
 	}
 
-	string t = text;
+	std::string t = text;
 	if (startindex > (int)t.length())
 		startindex = 0;
 	t = t.substr(startindex);
@@ -63,13 +63,13 @@ void cWindowInputBox::draw(int cutoffleft, int cutoffright, int cutofftop, int c
 	glColor4f(0,0,0,colors[3]);
 
 	if (mask == "")
-		parent->font->print(fontcolor[0], fontcolor[1], fontcolor[2], parent->px()+xx+5, parent->py()+yy+2, "%s", t.c_str());
+		parent->font->print(fontcolor[0], fontcolor[1], fontcolor[2], parent->getX()+xx+5, parent->getY()+yy+2, "%s", t.c_str());
 	else
 	{
-		parent->font->print(fontcolor[0], fontcolor[1], fontcolor[2], parent->px()+xx+5, parent->py()+yy+2, t.c_str());
+		parent->font->print(fontcolor[0], fontcolor[1], fontcolor[2], parent->getX()+xx+5, parent->getY()+yy+2, t.c_str());
 	}
 	if (editable && focussed && (SDL_GetTicks() % 1000) > 500)
-		parent->font->print(fontcolor[0], fontcolor[1], fontcolor[2],parent->px()+2+xx+parent->font->textlen(t.substr(0, cursor-startindex)), parent->py()+yy+2, "|");
+		parent->font->print(fontcolor[0], fontcolor[1], fontcolor[2],parent->getX()+2+xx+parent->font->textlen(t.substr(0, cursor-startindex)), parent->getY()+yy+2, "|");
 
 	text = temptext;
 
@@ -79,9 +79,9 @@ void cWindowInputBox::draw(int cutoffleft, int cutoffright, int cutofftop, int c
 
 void cWindowInputBox::click()
 {
-	int xx = (int)mousex;
-	xx -= realx();
-	xx -= parent->px();
+	int xx = (int)mouseX;
+	xx -= realX();
+	xx -= parent->getX();
 	int i = startindex;
 	while(xx > 0 && i <= (int)text.length())
 	{
@@ -93,7 +93,7 @@ void cWindowInputBox::click()
 }
 
 
-void cWindowInputBox::doubleclick()
+void cWindowInputBox::doubleClick()
 {
 	selectionstart = text.length();
 	cursor = 0;
@@ -105,7 +105,7 @@ void cWindowInputBox::doubleclick()
 		selectionstart = cursor;
 }
 
-bool cWindowInputBox::onkeydown(int keyid, bool shift)
+bool cWindowInputBox::onKeyDown(int keyid, bool shift)
 {
 	if (editable)
 	{
@@ -185,7 +185,7 @@ bool cWindowInputBox::onkeydown(int keyid, bool shift)
 	return false;
 }
 
-bool cWindowInputBox::onchar(char keyid, bool shift)
+bool cWindowInputBox::onChar(char keyid, bool shift)
 {
 	if (keyid > 27 && editable)
 	{
@@ -212,7 +212,7 @@ bool cWindowInputBox::onchar(char keyid, bool shift)
 }
 
 
-void cWindowInputBox::SetText(int i, string t)
+void cWindowInputBox::setText(int i, std::string t)
 {
 	if (i == 0)
 		text = t;
@@ -220,7 +220,7 @@ void cWindowInputBox::SetText(int i, string t)
 		mask = t;
 }
 
-void cWindowInputBox::SetInt(int id, int val)
+void cWindowInputBox::setInt(int id, int val)
 {
 	if (id == 0)
 		editable = (val == 1);
@@ -230,12 +230,12 @@ void cWindowInputBox::SetInt(int id, int val)
 		selectionstart = val;
 }
 
-string cWindowInputBox::GetText(int id)
+std::string cWindowInputBox::getText(int id)
 {
 	return text;
 }
 
-int cWindowInputBox::GetInt(int id)
+int cWindowInputBox::getInt(int id)
 {
 	if (id == 0)
 		return editable ? 1 : 0;
@@ -244,4 +244,160 @@ int cWindowInputBox::GetInt(int id)
 	if (id == 2)
 		return selectionstart;
 	return cursor;
+}
+
+cWindowInputBox::cWindowInputBox( cWindow* parent, TiXmlDocument &skin ) : cWindowObject(parent, skin.FirstChildElement("skin")->FirstChildElement("input"))
+{
+	w = 100;
+	h = 20;
+	x = 10;
+	y = 10;
+	alignment = ALIGN_CENTER;
+	text = "Default";
+	startindex = 0;
+	cursor = 0;
+	editable = true;		
+	selectionstart = cursor;
+	selectable = true;
+	type = OBJECT_INPUTBOX;
+	
+	if(skin.FirstChildElement("skin")->FirstChildElement("input")->FirstChildElement("defaultheight"))
+	{
+		h = atoi(skin.FirstChildElement("skin")->FirstChildElement("input")->FirstChildElement("defaultheight")->FirstChild()->Value());
+	}
+}
+
+cWindowFloatInputBox::cWindowFloatInputBox( cWindow* parent, TiXmlDocument &skin ) : cWindowInputBox(parent, skin)
+{
+	type = OBJECT_FLOATINPUTBOX;
+	alignment = ALIGN_TOPLEFT;
+	resizeTo(70,20);
+	firstTime = true;
+}
+
+void cWindowFloatInputBox::draw( int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom )
+{
+	if(*floatje != lastvalue || firstTime)
+	{
+		firstTime = false;
+		char buf[100];
+		sprintf(buf, "%f", *floatje);
+		while(buf[strlen(buf)-1] == '0')
+			buf[strlen(buf)-1] = '\0';
+		if(buf[strlen(buf)-1] == '.')
+			buf[strlen(buf)-1] = '\0';
+		text = buf;
+		lastvalue = *floatje;
+	}
+	cWindowInputBox::draw(cutoffleft, cutoffright, cutofftop, cutoffbottom);
+}
+
+void cWindowFloatInputBox::setInt( int id, int val )
+{
+	cWindowInputBox::setInt(id,val);
+	if (id == 3)
+	{
+		Log(3,0,"Use of depricated method, do not use!");
+		floatje = (float*)val;
+	}
+}
+
+bool cWindowFloatInputBox::onKeyDown( int keyid, bool shift )
+{
+	bool ret = cWindowInputBox::onKeyDown(keyid, shift);
+	if (keyid == SDLK_RETURN)
+	{
+		*floatje = (float)atof(text.c_str());
+		ret = true;
+	}
+	return ret;
+}
+
+cWindowStringInputBox::cWindowStringInputBox( cWindow* parent, TiXmlDocument &skin ) : cWindowInputBox(parent,skin)
+{
+	type = OBJECT_FLOATINPUTBOX;
+	alignment = ALIGN_TOPLEFT;
+	resizeTo(70,20);
+	firstTime = true;
+}
+
+void cWindowStringInputBox::draw( int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom )
+{
+	if(*stringetje != lastvalue || firstTime)
+	{
+		firstTime = false;
+		char buf[255];
+		sprintf(buf, "%s", stringetje->c_str());
+		while(buf[strlen(buf)-1] == '0')
+			buf[strlen(buf)-1] = '\0';
+		if(buf[strlen(buf)-1] == '.')
+			buf[strlen(buf)-1] = '\0';
+		text = buf;
+		lastvalue = *stringetje;
+	}
+	cWindowInputBox::draw(cutoffleft, cutoffright, cutofftop, cutoffbottom);
+}
+
+bool cWindowStringInputBox::onKeyDown( int keyid, bool shift )
+{
+	bool ret = cWindowInputBox::onKeyDown(keyid, shift);
+	if (keyid == SDLK_RETURN)
+	{
+		*stringetje = text;
+		ret = true;
+	}
+	return ret;
+}
+
+void cWindowStringInputBox::setInt( int id, int val )
+{
+	cWindowInputBox::setInt(id,val);
+	if (id == 3)
+		stringetje = (std::string*)val;
+}
+
+void cWindowLongInputBox::draw( int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom )
+{
+	if(*longje != lastvalue || firstdraw)
+	{
+		firstdraw = false;
+		char buf[100];
+		sprintf(buf, "%i", *longje);
+		while(buf[strlen(buf)-1] == '0')
+			buf[strlen(buf)-1] = '\0';
+		if(buf[strlen(buf)-1] == '.')
+			buf[strlen(buf)-1] = '\0';
+		text = buf;
+		lastvalue = *longje;
+	}
+	cWindowInputBox::draw(cutoffleft, cutoffright, cutofftop, cutoffbottom);
+}
+
+cWindowLongInputBox::cWindowLongInputBox( cWindow* parent, TiXmlDocument &skin ) : cWindowInputBox(parent, skin)
+{
+	type = OBJECT_FLOATINPUTBOX;
+	alignment = ALIGN_TOPLEFT;
+	resizeTo(70,20);
+	firstdraw = true;
+}
+
+bool cWindowLongInputBox::onKeyDown( int keyid, bool shift )
+{
+	bool ret = cWindowInputBox::onKeyDown(keyid, shift);
+	if (keyid == SDLK_RETURN)
+	{
+		*longje = atol(text.c_str());
+		ret = true;
+	}
+	return ret;
+}
+
+void cWindowLongInputBox::setInt( int id, int val )
+{
+	cWindowInputBox::setInt(id,val);
+	if (id == 3)
+	{
+		Log(3,0,"Use of depricated method, do not use!");
+		longje = (long*)val;
+	}
 }

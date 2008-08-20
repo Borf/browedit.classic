@@ -26,7 +26,7 @@ public:
 			char* data;
 			int w;
 			int h;
-			GLuint texid();
+			GLuint texId();
 		};
 		std::vector<cFrame*> frames;
 		class cAction

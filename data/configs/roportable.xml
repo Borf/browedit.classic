@@ -52,15 +52,15 @@
     </gattiles>
     <wm>
         <sprite>
-            <x>237</x>
-            <y>184</y>
+            <x>121</x>
+            <y>82</y>
         </sprite>
         <water>
             <x>410</x>
             <y>302</y>
         </water>
         <minimap>
-            <x>842151475</x>
+            <x>628</x>
             <y>0</y>
         </minimap>
         <textures>
@@ -70,8 +70,8 @@
             <h>718</h>
         </textures>
         <modelswindow>
-            <x>406</x>
-            <y>161</y>
+            <x>110</x>
+            <y>0</y>
             <w>593</w>
             <h>582</h>
         </modelswindow>
@@ -81,9 +81,9 @@
         </hotbar>
         <texturetools>
             <x>0</x>
-            <y>488</y>
-            <w>58</w>
-            <h>92</h>
+            <y>389</y>
+            <w>56</w>
+            <h>104</h>
         </texturetools>
     </wm>
 </config>

@@ -2,7 +2,7 @@
 #define __PLUGIN_BASE_H__
 
 #include <string>
-using namespace std;
+//using namespace std;
 class cWorld;
 class cWindow;
 class cTexture;
@@ -14,17 +14,16 @@ class cWindow;
 class cPluginBase
 {
 private:
-	cWindow* (*addxml)(string);
+	cWindow*			(*addxml)(std::string);
 public:
-	string name;
-	string menu;
+	std::string			name;
+	std::string			menu;
 
-	cPluginBase(string,string);
+	cPluginBase(std::string,std::string);
 
-	void SetFunctions(cWindow* (*func)(string));
-	virtual bool	action(cWorld*) = 0;
-
-	cWindow* addWindow(string);
+	void				SetFunctions(cWindow* (*func)(std::string));
+	virtual bool		action(cWorld*) = 0;
+	cWindow*			addWindow(std::string);
 
 };
 

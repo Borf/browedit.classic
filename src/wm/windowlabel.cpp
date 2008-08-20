@@ -12,8 +12,8 @@ void cWindowLabel::draw(int cutoffleft, int cutoffright, int cutofftop, int cuto
 	GLfloat colors[4];
 	glGetFloatv(GL_CURRENT_COLOR, colors);
 	int xx, yy;
-	xx = realx();
-	yy = realy();
+	xx = realX();
+	yy = realY();
 
 	int iii = -17;
 	glColor4f(0,0,0,colors[3]);
@@ -81,13 +81,13 @@ void cWindowLabel::draw(int cutoffleft, int cutoffright, int cutofftop, int cuto
 		lines.push_back(t1);
 */
 
-			string textleft = text;
-			string curline = "";
-			string word = "";
-			string symbol;
+			std::string textleft = text;
+			std::string curline = "";
+			std::string word = "";
+			std::string symbol;
 			while(textleft.size() > 0)
 			{
-				if (textleft.find(" ") != string::npos)
+				if (textleft.find(" ") != std::string::npos)
 				{
 					if(textleft.find("\n") < textleft.find(" "))
 					{
@@ -102,7 +102,7 @@ void cWindowLabel::draw(int cutoffleft, int cutoffright, int cutofftop, int cuto
 						symbol = " ";
 					}
 				}
-				else if (textleft.find("\n") != string::npos)
+				else if (textleft.find("\n") != std::string::npos)
 				{
 					word = textleft.substr(0, textleft.find("\n"));
 					textleft = textleft.substr(textleft.find("\n")+1);
@@ -147,31 +147,43 @@ void cWindowLabel::draw(int cutoffleft, int cutoffright, int cutofftop, int cuto
 
 	for(int i = 0; i < (int)lines.size(); i++)
 	{
-		parent->font->print(parent->fontcolor[0], parent->fontcolor[1], parent->fontcolor[2],parent->px()+xx, h+parent->py()+yy+iii, "%s", lines[i].c_str());
+		parent->font->print(parent->fontColor[0], parent->fontColor[1], parent->fontColor[2],parent->getX()+xx, h+parent->getY()+yy+iii, "%s", lines[i].c_str());
 		iii-=12;
 	}
 
 
-	//parent->font->print(0,0,0, parent->px() + xx+5, parent->py() + yy+3, text.c_str());
+	//parent->font->print(0,0,0, parent->px() + xx+5, parent->getY() + yy+3, text.c_str());
 	glColor4fv(colors);
 	lasttext = text;
 }
 
-void cWindowLabel::SetText(int i, string s)
+void cWindowLabel::setText(int i, std::string s)
 {
 	text = s;
 }
 
-string cWindowLabel::GetText(int i)
+std::string cWindowLabel::getText(int i)
 {
 	return text;
 }
 
 
-int cWindowLabel::GetInt(int i)
+int cWindowLabel::getInt(int i)
 {
 	if (i == 0)
 		return lines.size();
 	
 	return 0;
+}
+
+cWindowLabel::cWindowLabel( cWindow* parent ) : cWindowObject(parent)
+{
+	w = 30;
+	h = 100;
+	x = 10;
+	y = 10;
+	alignment = ALIGN_CENTER;
+	text = "Default text that is very long and will wrap";
+	selectable = false;
+	type = OBJECT_LABEL;
 }

@@ -7,7 +7,7 @@
 #include "texturecache.h"
 #include <fstream>
 #include "menu.h"
-#include "wm/hotkeywindow.h"
+#include "windows/hotkeywindow.h"
 #ifdef _WIN32
 #include <gd/gd.h>
 #else
@@ -22,17 +22,17 @@ extern bool IsLegal;
 extern cGraphics Graphics;
 
 extern double mouse3dx, mouse3dy, mouse3dz;
-extern long mousex, mousey;
+extern long mouseX, mouseY;
 extern cFileSystem fs;
 extern eMode	editmode;
 extern int brushsize;
-extern string rodir;
+extern std::string rodir;
 extern bool lbuttondown;
 extern long userid;
 extern double mouse3dxstart, mouse3dystart, mouse3dzstart;
 extern void mainloop();
 extern cWindow*				draggingwindow;
-extern cWindowObject*		draggingobject;
+extern cWindowObject*		draggingObject;
 extern bool IsLegal2;
 
 
@@ -41,7 +41,7 @@ void cWorld::load()
 	quickSave = false;
 	Graphics.selectedObject = -1;
 	draggingwindow = NULL;
-	draggingobject = NULL;
+	draggingObject = NULL;
 	unsigned int i;
 	unsigned int x,y;
 	if(light == NULL)
@@ -91,8 +91,8 @@ void cWorld::load()
 			sprintf(buf, "obj%i", i);
 			delete wnd->objects[buf];
 			cWindowObject* o = new cHotkeyWindow::cHotkeyButton(wnd);
-			o->moveto(20+32*i, 4);
-			o->resizeto(32,32);
+			o->moveTo(20+32*i, 4);
+			o->resizeTo(32,32);
 			wnd->objects[buf] = o;
 		}
 	}
@@ -134,11 +134,11 @@ void cWorld::load()
 
 	int version;
 
-	Log(3,0,GetMsg("world/LOAD"), (string(fileName) + ".gnd").c_str());
-	cFile* pFile = fs.open(string(fileName) + ".gnd");
+	Log(3,0,GetMsg("world/LOAD"), (std::string(fileName) + ".gnd").c_str());
+	cFile* pFile = fs.open(std::string(fileName) + ".gnd");
 	if(pFile == NULL)
 	{
-		Log(1,0,GetMsg("world/LOADFAIL"), (string(fileName) + ".gnd").c_str());
+		Log(1,0,GetMsg("world/LOADFAIL"), (std::string(fileName) + ".gnd").c_str());
 		return;
 	}
 	char buf[512];
@@ -174,10 +174,10 @@ void cWorld::load()
 	for(i = 0; i < nTextures; i++)
 	{
 		pFile->read(buf, 80);
-		string s = string(buf);
+		std::string s = std::string(buf);
 		cTextureContainer* t = new cTextureContainer();
 		t->RoFilename = s;
-		t->RoFilename2 = string(buf+40);
+		t->RoFilename2 = std::string(buf+40);
 		t->texture = TextureCache.load(rodir + "data\\texture\\" + s);
 		textures[i] = t;
 	}
@@ -228,7 +228,7 @@ void cWorld::load()
 		cubes.resize(height);
 		for(y = 0; y < (unsigned int)height; y++)
 		{
-			vector<cCube> row;
+			std::vector<cCube> row;
 			row.resize(width);
 			for(x = 0; x < (unsigned int)width; x++)
 			{
@@ -271,7 +271,7 @@ void cWorld::load()
 		cubes.resize(height);
 		for(y = 0; y < (unsigned int)height; y++)
 		{
-			vector<cCube> row;
+			std::vector<cCube> row;
 			row.resize(width);
 			for(x = 0; x < (unsigned int)width; x++)
 			{
@@ -366,7 +366,7 @@ void cWorld::load()
 	realLightmaps.clear();
 
 	cRealLightMap* m = NULL;
-	realLightmaps.resize(height+21, vector<cRealLightMap*>(width+21, m));
+	realLightmaps.resize(height+21, std::vector<cRealLightMap*>(width+21, m));
 
 	for(y = 0; y < (unsigned int)height+21; y+=21)
 	{
@@ -398,8 +398,8 @@ void cWorld::load()
 
 	Log(3,0,GetMsg("world/LOADDONE"), "gnd");
 
-	Log(3,0,GetMsg("world/LOAD"), (fileName + string(".rsw")).c_str());
-	pFile = fs.open(string(fileName) + ".rsw");
+	Log(3,0,GetMsg("world/LOAD"), (fileName + std::string(".rsw")).c_str());
+	pFile = fs.open(std::string(fileName) + ".rsw");
 
 
 	pFile->read(buf, 6);
@@ -410,7 +410,7 @@ void cWorld::load()
 		pFile->read(buf, 236);
 
 
-		useless = string(buf+160, 76);
+		useless = std::string(buf+160, 76);
 
 		char* w = (char*)useless.c_str();
 		water.height = *((float*)(w));
@@ -447,7 +447,7 @@ void cWorld::load()
 			case 1:
 				{
 				pFile->read(buf, 248);
-				string filename = buf+52;
+				std::string filename = buf+52;
 				cRSMModel* m = new cRSMModel();
 				m->load(rodir+ "data\\model\\" + filename);
 				m->lightopacity = 1;
@@ -457,7 +457,7 @@ void cWorld::load()
 					Log(2,0,GetMsg("world/MODELFAIL"), filename.c_str());
 				}
 
-				m->name = string(buf);
+				m->name = std::string(buf);
 
 				m->pos.x = *((float*)(buf+212));
 				m->pos.y = *((float*)(buf+216));
@@ -481,7 +481,7 @@ void cWorld::load()
 				{
 				pFile->read(buf, 108);
 				cLight l;
-				l.name = string(buf);
+				l.name = std::string(buf);
 				l.pos.x = *((float*)(buf+40));
 				l.pos.y = *((float*)(buf+44));
 				l.pos.z = *((float*)(buf+48));
@@ -489,7 +489,7 @@ void cWorld::load()
 				l.pos.x = (l.pos.x / 5) + width;
 				l.pos.z = (l.pos.z / 5) + height;
 
-				l.todo = string(buf+52, 40);
+				l.todo = std::string(buf+52, 40);
 				l.color.x = *((float*)(buf+92));
 				l.color.y = *((float*)(buf+96));
 				l.color.z = *((float*)(buf+100));
@@ -501,9 +501,9 @@ void cWorld::load()
 				{
 				pFile->read(buf, 192);
 				cSound s;			
-				s.name = string(buf);
-				s.todo1 = string(buf+40, 40);
-				s.fileName = string(buf+80);
+				s.name = std::string(buf);
+				s.todo1 = std::string(buf+40, 40);
+				s.fileName = std::string(buf+80);
 
 				s.unknown8 = *((float*)(buf+120));	//0
 				s.unknown7 = *((float*)(buf+124));	//-435.095
@@ -537,7 +537,7 @@ void cWorld::load()
 				{
 				pFile->read(buf, 116);
 				cEffect e;
-				e.name = string(buf);
+				e.name = std::string(buf);
 				e.todo1 = *((float*)(buf+40));
 				e.todo2 = *((float*)(buf+44));
 				e.todo3 = *((float*)(buf+48));
@@ -547,7 +547,7 @@ void cWorld::load()
 				e.scale.x = *((float*)(buf+64));
 				e.scale.y = *((float*)(buf+68));
 				e.scale.z = *((float*)(buf+72));
-				e.category = string(buf+76, 4);
+				e.category = std::string(buf+76, 4);
 				e.pos.x = *((float*)(buf+80));
 				e.pos.y = *((float*)(buf+84));
 				e.pos.z = *((float*)(buf+88));
@@ -602,7 +602,7 @@ void cWorld::load()
 			case 1:
 				{
 				pFile->read(buf, 248);
-				string filename = buf+52;
+				std::string filename = buf+52;
 				cRSMModel* m = new cRSMModel();
 				m->load(rodir+ "data\\model\\" + filename);
 	
@@ -641,7 +641,7 @@ void cWorld::load()
 
 	}
 	pFile->close(); 
-	Log(3,0,GetMsg("world/LOADDONE"), (string(fileName) + ".rsw").c_str());
+	Log(3,0,GetMsg("world/LOADDONE"), (std::string(fileName) + ".rsw").c_str());
 	
 	if(quadTreeFloats.size() > 0)
 	{
@@ -650,13 +650,13 @@ void cWorld::load()
 //		root->generate(width*10-1, height*10-1,-0.5,-0.5,5);
 	}
 
-	Log(3,0,GetMsg("world/LOAD"), (string(fileName) + ".gat").c_str());
-	pFile = fs.open(string(fileName) + ".gat");
+	Log(3,0,GetMsg("world/LOAD"), (std::string(fileName) + ".gat").c_str());
+	pFile = fs.open(std::string(fileName) + ".gat");
 	pFile->read(buf, 14);
 	
 	for(y = 0; y < (unsigned int)height*2; y++)
 	{
-		vector<cGatTile> row;
+		std::vector<cGatTile> row;
 		for(x = 0; x < (unsigned int)width*2; x++)
 		{
 			cGatTile g;
@@ -672,12 +672,12 @@ void cWorld::load()
 		gattiles.push_back(row);
 	}
 	pFile->close();
-	Log(3,0,GetMsg("world/LOADDONE"), (string(fileName) + ".gat").c_str());
+	Log(3,0,GetMsg("world/LOADDONE"), (std::string(fileName) + ".gat").c_str());
 
 	wnd = Graphics.WM.getwindow(WT_HOTKEY);
 	if (wnd != NULL)
 	{
-		pFile = fs.open(string(fileName) + ".locations");
+		pFile = fs.open(std::string(fileName) + ".locations");
 		if(pFile != NULL)
 		{
 			while(!pFile->eof())
@@ -710,9 +710,9 @@ void cWorld::load()
 
 	Graphics.world.sprites.clear();
 
-	if(fs.isFile(string(fileName) + ".sprites"))
+	if(fs.isFile(std::string(fileName) + ".sprites"))
 	{
-		TiXmlDocument sprdoc = fs.getXml(string(fileName) + ".sprites");;
+		TiXmlDocument sprdoc = fs.getXml(std::string(fileName) + ".sprites");;
 		TiXmlElement* sprite = sprdoc.FirstChildElement("sprites")->FirstChildElement("sprite");
 		while(sprite != NULL)
 		{
@@ -740,16 +740,16 @@ void cWorld::load()
 		}
 	}
 
-	if(fs.isFile(string(fileName) + ".extra"))
+	if(fs.isFile(std::string(fileName) + ".extra"))
 	{
-		TiXmlDocument extradoc = fs.getXml(string(fileName) + ".extra");
+		TiXmlDocument extradoc = fs.getXml(std::string(fileName) + ".extra");
 		TiXmlElement* light = extradoc.FirstChildElement("lights")->FirstChildElement("light");
 		while(light != NULL)
 		{
 			int id = atoi(light->Attribute("id"));
 			lights[id].range = atof(light->FirstChildElement("range")->FirstChild()->Value());
 			lights[id].maxLightIncrement= atof(light->FirstChildElement("maxlightincrement")->FirstChild()->Value());
-			lights[id].givesShadow = string(light->Attribute("givesshadow")) == "true";
+			lights[id].givesShadow = std::string(light->Attribute("givesshadow")) == "true";
 			lights[id].lightFalloff = atof(light->FirstChildElement("lightfalloff")->FirstChild()->Value());
 			light = light->NextSiblingElement();
 
@@ -774,7 +774,7 @@ void cWorld::load()
 }
 
 
-int cQuadTreeNode::load(vector<cVector3>& data, int index, int level)
+int cQuadTreeNode::load(std::vector<cVector3>& data, int index, int level)
 {
 	child1 = NULL;
 	child2 = NULL;
@@ -957,7 +957,7 @@ void cWorld::save()
 //		for(int ii = 0; ii < quadTreeFloats.size(); ii++)
 //			quadTreeFloats[ii] = cVector3(0,0,0);
 
-		ofstream pFile((string(fileName) + ".gnd").c_str(), ios_base::out | ios_base::binary);
+		std::ofstream pFile((std::string(fileName) + ".gnd").c_str(), std::ios_base::out | std::ios_base::binary);
 		pFile.write("GRGN\1\7", 6);
 		pFile.write((char*)&width, 4);
 		pFile.write((char*)&height, 4);
@@ -1054,7 +1054,7 @@ void cWorld::save()
 		pFile.close();
 	}
 	{
-		string fname2 = fileName;
+		std::string fname2 = fileName;
 		char fname[50];
 		ZeroMemory(fname, 50);
 		strcpy(fname, fname2.substr(fname2.rfind("\\")+1).c_str());
@@ -1072,7 +1072,7 @@ void cWorld::save()
 		
 
 		unsigned int i;
-		ofstream pFile((string(fileName) + ".rsw").c_str(), ios_base::out | ios_base::binary);
+		std::ofstream pFile((std::string(fileName) + ".rsw").c_str(), std::ios_base::out | std::ios_base::binary);
 		pFile.write("GRSW\2\1", 6);
 		for(i = 0; i < 40; i++) // ini file
 			pFile.put('\0');
@@ -1354,7 +1354,7 @@ void cWorld::save()
 		pFile.close();
 	}
 	{
-		ofstream pFile((string(fileName) + ".gat").c_str(), ios_base::out | ios_base::binary);
+		std::ofstream pFile((std::string(fileName) + ".gat").c_str(), std::ios_base::out | std::ios_base::binary);
 		pFile.write("GRAT\1\2", 6);
 		
 		long l = width*2;
@@ -1398,7 +1398,7 @@ void cWorld::save()
 
 		if(loadcount > 0)
 		{
-			ofstream pFile((string(fileName) + ".locations").c_str(), ios_base::out | ios_base::binary);
+			std::ofstream pFile((std::string(fileName) + ".locations").c_str(), std::ios_base::out | std::ios_base::binary);
 			
 			for(i = 0; i < 8; i++)
 			{
@@ -1466,18 +1466,18 @@ void cWorld::save()
 		}
 
 		doc.InsertEndChild(headNode);
-		doc.SaveFile((string(fileName) + ".sprites").c_str());
+		doc.SaveFile((std::string(fileName) + ".sprites").c_str());
 	}
 	else
 	{
 #ifdef WIN32
-		DeleteFile((string(fileName) + ".sprites").c_str());
+		DeleteFile((std::string(fileName) + ".sprites").c_str());
 #else
-		unlink((string(fileName) + ".sprites").c_str());
+		unlink((std::string(fileName) + ".sprites").c_str());
 #endif
 	}
 
-	extraproperties.SaveFile((string(fileName) + ".extra").c_str());
+	extraproperties.SaveFile((std::string(fileName) + ".extra").c_str());
 }
 
 
@@ -1613,11 +1613,11 @@ void cWorld::draw()
 //					glColor3f((BYTE)t->color[0] / 256.0f,(BYTE)t->color[1] / 256.0f,(BYTE)t->color[2] / 256.0f);
 				else if(editmode == MODE_TEXTUREPAINT && Graphics.textureTool == TOOL_SELECTAREA)
 				{
-						if(lbuttondown && mousey < Graphics.h() - 20 && inbetween<int>(x, round(mouse3dxstart/10), round(mouse3dx/10)) && inbetween<int>(y, round(mouse3dzstart/10), round(mouse3dz/10)) && alt)
+						if(lbuttondown && mouseY < Graphics.h() - 20 && inbetween<int>(x, round(mouse3dxstart/10), round(mouse3dx/10)) && inbetween<int>(y, round(mouse3dzstart/10), round(mouse3dz/10)) && alt)
 						glColor4f(0.3f, 0.3f, 0.3f, 1);
-					else if(lbuttondown && mousey < Graphics.h() - 20 && inbetween<int>(x, round(mouse3dxstart/10), round(mouse3dx/10)) && inbetween<int>(y, round(mouse3dzstart/10), round(mouse3dz/10)))
+					else if(lbuttondown && mouseY < Graphics.h() - 20 && inbetween<int>(x, round(mouse3dxstart/10), round(mouse3dx/10)) && inbetween<int>(y, round(mouse3dzstart/10), round(mouse3dz/10)))
 						glColor4f(0.6f,0.6f,0.6f,1);
-					else if(lbuttondown && mousey < Graphics.h() - 20 && (ctrl || alt) && c->selected)
+					else if(lbuttondown && mouseY < Graphics.h() - 20 && (ctrl || alt) && c->selected)
 						glColor4f(0.4f,0.4f,0.4f,1);
 					else if(inverseSelection && !c->selected)
 						glColor4f(0.2f, 0.2f, 0.2f, 1);
@@ -1712,8 +1712,8 @@ void cWorld::draw()
 				if (c->tileUp != -1)
 				{
 //					cTile* t = &tiles[c->tileUp];
-//					int lightmap = lightmaps[t->lightmap]->texid();
-//					int lightmap2 = lightmaps[t->lightmap]->texid2();
+//					int lightmap = lightmaps[t->lightmap]->texId();
+//					int lightmap2 = lightmaps[t->lightmap]->texId2();
 					if(realLightmaps[y][x] == NULL)
 						continue;
 					int lightmap = realLightmaps[y][x]->texId();
@@ -1743,8 +1743,8 @@ void cWorld::draw()
 				if (c->tileOtherSide != -1 && c->tileOtherSide < (int)tiles.size())
 				{
 					cTile* t = &tiles[c->tileOtherSide];
-					int lightmap = lightmaps[t->lightmap]->texid();
-					int lightmap2 = lightmaps[t->lightmap]->texid2();
+					int lightmap = lightmaps[t->lightmap]->texId();
+					int lightmap2 = lightmaps[t->lightmap]->texId2();
 					glBlendFunc(GL_ONE ,GL_DST_COLOR);				
 					glBindTexture(GL_TEXTURE_2D, lightmap);
 					glNormal3f(0,0,1);
@@ -1767,8 +1767,8 @@ void cWorld::draw()
 				if (c->tileSide != -1 && (int)y < height-1 && c->tileSide < (int)tiles.size())
 				{
 					cTile* t = &tiles[c->tileSide];
-					int lightmap = lightmaps[t->lightmap]->texid();
-					int lightmap2 = lightmaps[t->lightmap]->texid2();
+					int lightmap = lightmaps[t->lightmap]->texId();
+					int lightmap2 = lightmaps[t->lightmap]->texId2();
 					glBlendFunc(GL_ONE ,GL_DST_COLOR);				
 					glBindTexture(GL_TEXTURE_2D, lightmap);
 					glBegin(GL_TRIANGLE_STRIP);
@@ -1801,7 +1801,7 @@ void cWorld::draw()
 
 
 	float winZ;
-	glReadPixels( (int)mousex, Graphics.h()-(int)mousey, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ );
+	glReadPixels( (int)mouseX, Graphics.h()-(int)mouseY, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ );
 
 
 	double ModelMatrix[16]; 
@@ -1815,8 +1815,8 @@ void cWorld::draw()
 	double xxx,yyy,zzz;
 	gluUnProject
 	(
-		mousex, 
-		Graphics.h()-mousey, 
+		mouseX, 
+		Graphics.h()-mouseY, 
 		winZ, 
 		ModelMatrix, 
 		ProjMatrix,
@@ -1840,7 +1840,7 @@ void cWorld::draw()
 		glDepthMask(0);
 		static float waterindex = 0;
 
-		glBindTexture(GL_TEXTURE_2D, Graphics.waterTextures[water.type][(int)ceil(waterindex)]->texid());
+		glBindTexture(GL_TEXTURE_2D, Graphics.waterTextures[water.type][(int)ceil(waterindex)]->texId());
 
 		if(Graphics.animateWater)
 			waterindex+=max((float)0,(Graphics.frameticks) / 50.0f);
@@ -1870,7 +1870,7 @@ void cWorld::draw()
 				cGatTile* c = &gattiles[y][x];
 				if(!Graphics.frustum.CubeInFrustum(x*5+2.5,-c->cell1,(2*height-y)*5-2.5, 5))
 					continue;
-				glBindTexture(GL_TEXTURE_2D, Graphics.gatTextures[c->type]->texid());
+				glBindTexture(GL_TEXTURE_2D, Graphics.gatTextures[c->type]->texId());
 				glBegin(GL_TRIANGLE_STRIP);
 					glTexCoord2f(0,0); glVertex3f(x*5,-c->cell1+0.1,(2*height-y)*5);
 					glTexCoord2f(1,0); glVertex3f(x*5+5,-c->cell2+0.1,(2*height-y)*5);
@@ -1881,7 +1881,7 @@ void cWorld::draw()
 				if(Graphics.showgrid)
 				{
 					glColor4f(1,1,1,1);
-					glBindTexture(GL_TEXTURE_2D, Graphics.gatBorder->texid());
+					glBindTexture(GL_TEXTURE_2D, Graphics.gatBorder->texId());
 					glBegin(GL_TRIANGLE_STRIP);
 						glTexCoord2f(0,0); glVertex3f(x*5,-c->cell1+0.1,(2*height-y)*5);
 						glTexCoord2f(1,0); glVertex3f(x*5+5,-c->cell2+0.1,(2*height-y)*5);
@@ -2603,7 +2603,7 @@ void cWorld::draw()
 		glColor4f(1,1,1,0.5);
 		static float waterindex = 0;
 
-		glBindTexture(GL_TEXTURE_2D, Graphics.waterTextures[water.type][(int)ceil(waterindex)]->texid());
+		glBindTexture(GL_TEXTURE_2D, Graphics.waterTextures[water.type][(int)ceil(waterindex)]->texId());
 
 		if(Graphics.animateWater)
 			waterindex+=max((float)0,(Graphics.frameticks) / 50.0f);
@@ -2714,7 +2714,7 @@ void cWorld::clean()
 
 	unsigned int i,ii;
 	int xx,yy;
-	map<int, bool, less<int> > tilesused;
+	std::map<int, bool, std::less<int> > tilesused;
 
 	cCube* c;
 	for(yy = 0; yy < height; yy++)
@@ -2770,7 +2770,7 @@ void cWorld::clean()
 
 	tilesused.clear();
 
-	map<int, bool, less<int> >	lightmapsused;
+	std::map<int, bool, std::less<int> >	lightmapsused;
 	
 
 
@@ -2964,7 +2964,7 @@ void cQuadTreeNode::recalculate()
 
 }
 
-void cQuadTreeNode::save(vector<cVector3>& v)
+void cQuadTreeNode::save(std::vector<cVector3>& v)
 {
 	v.push_back(box1);
 	v.push_back(box2);
@@ -2982,7 +2982,7 @@ void cQuadTreeNode::save(vector<cVector3>& v)
 
 
 
-int cLightmap::texid()
+int cLightmap::texId()
 {
 	if(generated)
 		return tid;
@@ -3012,7 +3012,7 @@ int cLightmap::texid()
 	return tid;
 }
 
-int cLightmap::texid2()
+int cLightmap::texId2()
 {
 	if(generated2)
 		return tid2;
@@ -3143,7 +3143,7 @@ void cWorld::savelightmap()
 			}
 		}
 	}
-	tgaSave((char*)(string(fileName) + ".lightmap.tga").c_str(), width*6, height*6, 24, (BYTE*)imgdata);
+	tgaSave((char*)(std::string(fileName) + ".lightmap.tga").c_str(), width*6, height*6, 24, (BYTE*)imgdata);
 	delete[] imgdata;
 	imgdata = new char[width*height*6*6*3];
 	ZeroMemory(imgdata, width*height*6*6*3);
@@ -3165,7 +3165,7 @@ void cWorld::savelightmap()
 			}
 		}
 	}
-	tgaSave((char*)(string(fileName) + ".lightmap2.tga").c_str(), width*6, height*6, 24, (BYTE*)imgdata);
+	tgaSave((char*)(std::string(fileName) + ".lightmap2.tga").c_str(), width*6, height*6, 24, (BYTE*)imgdata);
 	delete[] imgdata;
 
 /*	imgdata = new char[width*height*12*12*3];
@@ -3207,7 +3207,7 @@ void cWorld::savelightmap()
 void cWorld::loadlightmap()
 {
 	{
-		cFile* pFile = fs.open(string(fileName) + ".lightmap.tga");
+		cFile* pFile = fs.open(std::string(fileName) + ".lightmap.tga");
 		int color;
 		for(int x = 0; x < width; x++)
 		{
@@ -3230,7 +3230,7 @@ void cWorld::loadlightmap()
 		pFile->close();
 	}
 	{
-		cFile* pFile = fs.open(string(fileName) + ".lightmap2.tga");
+		cFile* pFile = fs.open(std::string(fileName) + ".lightmap2.tga");
 		for(int x = 0; x < width; x++)
 		{
 			for(int y = 0; y < height; y++)
@@ -3575,7 +3575,7 @@ void cWorld::makeLightmapsUnique()
 {
 	int x,y;
 
-	map<int, bool, less<int> > used;
+	std::map<int, bool, std::less<int> > used;
 	for(x = 0; x < Graphics.world.width; x++)
 	{
 		for(y = 0; y < Graphics.world.height; y++)

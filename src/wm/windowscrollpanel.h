@@ -4,13 +4,13 @@
 #include "windowobject.h"
 #include <string>
 #include <vector>
-using namespace std;
+//using namespace std;
 
 class cWindowScrollPanel : public cWindowObject
 {
 protected:
 public:
-	vector<cWindowObject*>	objects;
+	std::vector<cWindowObject*>	objects;
 	cWindowObject* draggingobject;
 	int innerheight;
 	int innerwidth;
@@ -38,60 +38,22 @@ public:
 
 
 	int skinBarLeft;
-	cWindowScrollPanel(cWindow* parent, TiXmlDocument &skin) : cWindowObject(parent, skin.FirstChildElement("skin")->FirstChildElement("list"))
-	{
-		w = 100;
-		h = 25;
-		x = 10;
-		y = 10;
-		alignment = ALIGN_CENTER;
-		cursortype = 0;
-		selectable = true;
-		type = OBJECT_BUTTON;
-		innerheight = 1000;
-		innerwidth = 1000;
-
-		scrollposx = 0;
-		scrollposy = 0;
-		draggingobject = NULL;
-	
-		TiXmlElement* bSkin = skin.FirstChildElement("skin")->FirstChildElement("list")->FirstChildElement("scroll");
-
-		skinBarWidth =			atoi(bSkin->FirstChildElement("width")->FirstChild()->Value());
-		skinBarLeft =			atoi(bSkin->FirstChildElement("left")->FirstChild()->Value());
-		skinButtonUpLeft =		atoi(bSkin->FirstChildElement("buttonup")->FirstChildElement("left")->FirstChild()->Value());
-		skinButtonUpTop =		512-atoi(bSkin->FirstChildElement("buttonup")->FirstChildElement("top")->FirstChild()->Value());
-		skinButtonUpHeight =	atoi(bSkin->FirstChildElement("buttonup")->FirstChildElement("height")->FirstChild()->Value());
-		skinButtonDownLeft =	atoi(bSkin->FirstChildElement("buttondown")->FirstChildElement("left")->FirstChild()->Value());
-		skinButtonDownTop =		512-atoi(bSkin->FirstChildElement("buttondown")->FirstChildElement("top")->FirstChild()->Value());
-		skinButtonDownHeight =	atoi(bSkin->FirstChildElement("buttondown")->FirstChildElement("height")->FirstChild()->Value());
-
-		skinBarTopHeight = atoi(bSkin->FirstChildElement("top")->Attribute("height"));
-		skinBarTop =		512 - atoi(bSkin->FirstChildElement("top")->FirstChild()->Value());
-		skinBarBottomHeight = atoi(bSkin->FirstChildElement("bottom")->Attribute("height"));
-		skinBarBottom =		512 - atoi(bSkin->FirstChildElement("bottom")->FirstChild()->Value());
-
-		skinBarBackTop=		512-atoi(bSkin->FirstChildElement("background")->FirstChildElement("top")->FirstChild()->Value());
-		skinBarBackHeight =	atoi(bSkin->FirstChildElement("background")->FirstChildElement("height")->FirstChild()->Value());
-		skinBarBackLeft =	atoi(bSkin->FirstChildElement("background")->FirstChildElement("left")->FirstChild()->Value());
-		skinBarCenterHeight = atoi(bSkin->FirstChildElement("centerheight")->FirstChild()->Value());
-
-	}
+	cWindowScrollPanel(cWindow* parent, TiXmlDocument &skin);
 	~cWindowScrollPanel();
 	void draw(int,int,int,int);
 	void drag();
 	void click();
-	bool onkeyup(int, bool);
-	bool onkeydown(int, bool);
-	bool onchar(char, bool);
-	void doubleclick();
-	void rightclick();
-	cWindowObject* inobject();
+	bool onKeyUp(int, bool);
+	bool onKeyDown(int, bool);
+	bool onChar(char, bool);
+	void doubleClick();
+	void rightClick();
+	cWindowObject* inObject();
 
-	void scrollup();
-	void scrolldown();
+	void scrollUp();
+	void scrollDown();
 
-	string ppopup();
+	std::string getPopup();
 
 };
 

@@ -23,22 +23,22 @@ void cWindowTree::draw(int cutoffleft, int cutoffright, int cutofftop, int cutof
 	}
 
 	int xx, yy;
-	xx = realx();
-	yy = realy();
+	xx = realX();
+	yy = realY();
 
 	int ww = w - 14;
 
 
 	i = 0;
-	yy = realy()+h-5-12;
-	while(yy+10 > realy() && i < values.size())
+	yy = realY()+h-5-12;
+	while(yy+10 > realY() && i < values.size())
 	{
 		i++;
 		yy-=12;
 	}
 	int barheight = max((int)(((float)(h - (skinButtonDownHeight+skinButtonUpHeight)) * (float)((float)i / (float)values.size()))+0.5f), skinTopHeight+skinBottomHeight);
 
-	yy = realy();
+	yy = realY();
 
 
 	int barpos = (values.size() - i);
@@ -46,7 +46,7 @@ void cWindowTree::draw(int cutoffleft, int cutoffright, int cutofftop, int cutof
 		barpos = (int)((float)(h-(skinButtonDownHeight+skinButtonUpHeight)) * ((float)liststart / (float)values.size()));
 
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, parent->texture->texid());
+	glBindTexture(GL_TEXTURE_2D, parent->texture->texId());
 	glBegin(GL_QUADS);
 		glTexCoord2f(skinLeft/512.0f,					(skinTop-skinTopHeight)/512.0f);		glVertex2d(xx+0,				yy+h-skinTopHeight);
 		glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	(skinTop-skinTopHeight)/512.0f);		glVertex2d(xx+skinLeftWidth,	yy+h-skinTopHeight);
@@ -170,10 +170,10 @@ void cWindowTree::draw(int cutoffleft, int cutoffright, int cutofftop, int cutof
 	glDisable(GL_TEXTURE_2D);
 	
 	i = liststart;
-	yy = realy()+h-5-12;
-	while(yy > realy() && i < values.size())
+	yy = realY()+h-5-12;
+	while(yy > realY() && i < values.size())
 	{
-		parent->font->print(0,0,0,parent->px()+xx+5,parent->py()+yy,"%s", values[i].c_str());
+		parent->font->print(0,0,0,parent->getX()+xx+5,parent->getY()+yy,"%s", values[i].c_str());
 		i++;
 		yy-=12;
 	}
@@ -185,7 +185,7 @@ void cWindowTree::draw(int cutoffleft, int cutoffright, int cutofftop, int cutof
 
 
 
-bool cWindowTree::onkeydown(int key, bool shift)
+bool cWindowTree::onKeyDown(int key, bool shift)
 {
 	unsigned int i;
 	if(!validCache)
@@ -197,8 +197,8 @@ bool cWindowTree::onkeydown(int key, bool shift)
 	if (key == SDLK_DOWN && selected < (int)values.size()-1)
 	{
 		i = 0;
-		int yy = realy()+h-5-12;
-		while(yy+10 > realy() && i < values.size())
+		int yy = realY()+h-5-12;
+		while(yy+10 > realY() && i < values.size())
 		{
 			i++;
 			yy-=12;
@@ -223,7 +223,7 @@ bool cWindowTree::onkeydown(int key, bool shift)
 	}
 	else if(key == SDLK_RIGHT || key == SDLK_LEFT)
 	{
-		doubleclick();
+		doubleClick();
 		onchange();
 		return true;
 	}
@@ -231,10 +231,10 @@ bool cWindowTree::onkeydown(int key, bool shift)
 }
 
 
-void cWindowTree::SetText(int index, string text)
+void cWindowTree::setText(int index, std::string text)
 {
 }
-void cWindowTree::SetInt(int index, int value)
+void cWindowTree::setInt(int index, int value)
 {
 	if (index == -3)
 	{
@@ -245,14 +245,14 @@ void cWindowTree::SetInt(int index, int value)
 		showscroll = value != 0;
 	}
 }
-int cWindowTree::GetInt(int index)
+int cWindowTree::getInt(int index)
 {
 	if (index == 1)
 		return (int)&nodes; // TODO: Fix
 	return selected;
 }
 
-void cWindowTree::rightclick()
+void cWindowTree::rightClick()
 {
 	click();
 }
@@ -268,12 +268,12 @@ void cWindowTree::click()
 	}
 
 	
-	int xx = (int)mousex;
-	xx -= realx();
-	xx -= parent->px();
-	int yy = Graphics.h()-(int)mousey;
-	yy -= realy();
-	yy -= parent->py();
+	int xx = (int)mouseX;
+	xx -= realX();
+	xx -= parent->getX();
+	int yy = Graphics.h()-(int)mouseY;
+	yy -= realY();
+	yy -= parent->getY();
 
 	if (xx < w - 14)
 	{ // in the box
@@ -310,24 +310,24 @@ void cWindowTree::click()
 	{
 		if (yy < 8)
 		{ // arrow down
-			onkeydown(SDLK_DOWN, false);
+			onKeyDown(SDLK_DOWN, false);
 		}
 		else if (yy+8 > h)
 		{
-			onkeydown(SDLK_UP, false);
+			onKeyDown(SDLK_UP, false);
 		}
 		else
 		{
 			int i = 0;
-			int yyy = realy()+h-5-12;
-			while(yyy+10 > realy() && i < (int)values.size())
+			int yyy = realY()+h-5-12;
+			while(yyy+10 > realY() && i < (int)values.size())
 			{
 				i++;
 				yyy-=12;
 			}
 
 			int barheight = max((int)((float)(h - (skinButtonDownHeight+skinButtonUpHeight)) * (float)((float)i / (float)values.size())), skinTopHeight+skinBottomHeight);
-			yyy = realy();
+			yyy = realY();
 			int barpos = (values.size() - i);
 			if (barpos != 0)
 				barpos = (int)((float)(h-(skinButtonDownHeight+skinButtonUpHeight)) * ((float)liststart / (float)values.size()));
@@ -346,14 +346,14 @@ void cWindowTree::click()
 
 void cWindowTree::drag()
 {
-	int xx = (int)mousex;
-	xx -= realx();
-	xx -= parent->px();
-	int yy = Graphics.h()-(int)mousey;
-	yy -= realy();
-	yy -= parent->py();
+	int xx = (int)mouseX;
+	xx -= realX();
+	xx -= parent->getX();
+	int yy = Graphics.h()-(int)mouseY;
+	yy -= realY();
+	yy -= parent->getY();
 
-	if (mousestartx - realx() - parent->px() > w-14 && mousestartx - realx() - parent->px() < w)
+	if (mousestartx - realX() - parent->getX() > w-14 && mousestartx - realX() - parent->getX() < w)
 	{
 		unsigned int i;
 		if(!validCache)
@@ -364,14 +364,14 @@ void cWindowTree::drag()
 		}
 
 		i = 0;
-		int yyy = realy()+h-5-12;
-		while(yyy+10 > realy() && i < values.size())
+		int yyy = realY()+h-5-12;
+		while(yyy+10 > realY() && i < values.size())
 		{
 			i++;
 			yyy-=12;
 		}
 
-		yyy = realy();
+		yyy = realY();
 		int barpos = (values.size() - i);
 		if (barpos != 0)
 			barpos = (int)((float)(h-(skinButtonDownHeight+skinButtonUpHeight)) * ((float)liststart / (float)values.size()));
@@ -392,16 +392,16 @@ void cWindowTree::drag()
 	}
 }
 
-void cWindowTree::doubleclick()
+void cWindowTree::doubleClick()
 {
 }
 
 
 
 
-void cWindowTree::cTreeNode::getdata(vector<string> &data, int level)
+void cWindowTree::cTreeNode::getdata(std::vector<std::string> &data, int level)
 {
-	string d;
+	std::string d;
 
 	unsigned int i;
 	for(i = 0; i < (unsigned int)level; i++)
@@ -424,7 +424,7 @@ void cWindowTree::cTreeNode::getdata(vector<string> &data, int level)
 	}
 }
 
-void cWindowTree::cTreeNode::getnodes(vector<cTreeNode*> &data)
+void cWindowTree::cTreeNode::getnodes(std::vector<cTreeNode*> &data)
 {
 	data.push_back(this);
 	if (open)
@@ -453,7 +453,7 @@ cWindowTree::cTreeNode* cWindowTree::cTreeNode::getnode(int &nr)
 	return NULL;
 }
 
-bool cWindowTree::cTreeNode::haschild(string tofind)
+bool cWindowTree::cTreeNode::haschild(std::string tofind)
 {
 	for(unsigned int i = 0; i < children.size(); i++)
 		if (children[i]->text == tofind)
@@ -470,13 +470,13 @@ void cWindowTree::cTreeNode::addchild(cWindowTree::cTreeNode* newnode)
 }
 
 
-void cWindowTree::scrollup()
+void cWindowTree::scrollUp()
 {
 	liststart-=5;
 	if (liststart <= 0)
 		liststart = 0;
 }
-void cWindowTree::scrolldown()
+void cWindowTree::scrollDown()
 {
 	unsigned int i;
 	if(!validCache)
@@ -486,8 +486,8 @@ void cWindowTree::scrolldown()
 			nodes[i]->getdata(values);
 	}
 
-	int yy = realy()+h-5-12;
-	while(yy+10 > realy() && i < values.size())
+	int yy = realY()+h-5-12;
+	while(yy+10 > realY() && i < values.size())
 	{
 		i++;
 		yy-=12;
@@ -501,10 +501,60 @@ void cWindowTree::scrolldown()
 
 }
 
+cWindowTree::cWindowTree( cWindow* parent, std::vector<cTreeNode*> n, TiXmlDocument &skin ) : cWindowObject(parent, skin.FirstChildElement("skin")->FirstChildElement("list"))
+{
+	validCache = false;
+	w = 280;
+	h = 100;
+	x = 5;
+	y = 20;
+	alignment = ALIGN_TOPLEFT;
+	liststart = 0;
+	selected = 0;
+	showselection = true;
+	showscroll = true;
+	type = OBJECT_TREE;
+	
+	nodes = n;
+	
+	TiXmlElement* bSkin = skin.FirstChildElement("skin")->FirstChildElement("list")->FirstChildElement("scroll");
+	
+	std::string scolor = skin.FirstChildElement("skin")->FirstChildElement("list")->FirstChildElement("selectcolor")->FirstChild()->Value();
+	selectColor[0] = hex2dec(scolor.substr(0,2)) / 256.0f;
+	selectColor[1] = hex2dec(scolor.substr(2,2)) / 256.0f;
+	selectColor[2] = hex2dec(scolor.substr(4,2)) / 256.0f;
+	
+	scolor = skin.FirstChildElement("skin")->FirstChildElement("list")->FirstChildElement("selectfontcolor")->FirstChild()->Value();
+	selectFontColor[0] = hex2dec(scolor.substr(0,2)) / 256.0f;
+	selectFontColor[1] = hex2dec(scolor.substr(2,2)) / 256.0f;
+	selectFontColor[2] = hex2dec(scolor.substr(4,2)) / 256.0f;
+	
+	skinBarWidth =			atoi(bSkin->FirstChildElement("width")->FirstChild()->Value());
+	skinBarLeft =			atoi(bSkin->FirstChildElement("left")->FirstChild()->Value());
+	skinButtonUpLeft =		atoi(bSkin->FirstChildElement("buttonup")->FirstChildElement("left")->FirstChild()->Value());
+	skinButtonUpTop =		512-atoi(bSkin->FirstChildElement("buttonup")->FirstChildElement("top")->FirstChild()->Value());
+	skinButtonUpHeight =	atoi(bSkin->FirstChildElement("buttonup")->FirstChildElement("height")->FirstChild()->Value());
+	skinButtonDownLeft =	atoi(bSkin->FirstChildElement("buttondown")->FirstChildElement("left")->FirstChild()->Value());
+	skinButtonDownTop =		512-atoi(bSkin->FirstChildElement("buttondown")->FirstChildElement("top")->FirstChild()->Value());
+	skinButtonDownHeight =	atoi(bSkin->FirstChildElement("buttondown")->FirstChildElement("height")->FirstChild()->Value());
+	
+	skinBarTopHeight = atoi(bSkin->FirstChildElement("top")->Attribute("height"));
+	skinBarTop =		512 - atoi(bSkin->FirstChildElement("top")->FirstChild()->Value());
+	skinBarBottomHeight = atoi(bSkin->FirstChildElement("bottom")->Attribute("height"));
+	skinBarBottom =		512 - atoi(bSkin->FirstChildElement("bottom")->FirstChild()->Value());
+	
+	skinBarBackTop=		512-atoi(bSkin->FirstChildElement("background")->FirstChildElement("top")->FirstChild()->Value());
+	skinBarBackHeight =	atoi(bSkin->FirstChildElement("background")->FirstChildElement("height")->FirstChild()->Value());
+	skinBarBackLeft =	atoi(bSkin->FirstChildElement("background")->FirstChildElement("left")->FirstChild()->Value());
+	
+	
+	skinBarCenterHeight = atoi(bSkin->FirstChildElement("centerheight")->FirstChild()->Value());
+}
 
 
 
-cWindowTree::cTreeNode* cWindowTree::cTreeNode::getnode(string s)
+
+cWindowTree::cTreeNode* cWindowTree::cTreeNode::getnode(std::string s)
 {
 	if(text == s)
 		return this;
@@ -566,4 +616,24 @@ int cWindowTree::cTreeNode::openchildcount()
 			ret++;
 	}
 	return ret;
+}
+
+cWindowTree::cTreeNode::cTreeNode( std::string t, std::vector<cTreeNode*> items )
+{
+	parent = NULL;
+	text = t;
+	children = items;
+	for(unsigned int i = 0; i < children.size(); i++)
+		children[i]->parent = this;
+	open = false;
+}
+
+cWindowTree::cTreeNode::cTreeNode( std::string t )
+{
+	text = t; parent = NULL; open = false;
+}
+
+cWindowTree::cTreeNode::cTreeNode()
+{
+	parent = NULL; open = false;
 }

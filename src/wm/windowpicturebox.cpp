@@ -9,16 +9,16 @@ void cWindowPictureBox::draw(int cutoffleft, int cutoffright, int cutofftop, int
 {
 	if (loaded)
 	{
-		if (tex->texid() != 0)
+		if (tex->texId() != 0)
 		{
 			GLfloat colors[4];
 			glGetFloatv(GL_CURRENT_COLOR, colors);
 			int xx, yy;
-			xx = realx();
-			yy = realy();
+			xx = realX();
+			yy = realY();
 			if (highlightmode == 1)
 			{
-				if (inobject() && parent->istopwindow())
+				if (inObject() && parent->istopwindow())
 					glColor3f(1.0f, 1.0f, 1.0f);
 				else
 					glColor3f(0.2f, 0.2f, 0.2f);
@@ -27,7 +27,7 @@ void cWindowPictureBox::draw(int cutoffleft, int cutoffright, int cutofftop, int
 				glColor3f(1.0f, 1.0f, 1.0f);
 			else if (highlightmode == 3)
 			{
-				if (inobject() && parent->istopwindow())
+				if (inObject() && parent->istopwindow())
 					glColor3f(0.7f, 0.7f, 0.7f);
 				else
 					glColor3f(1.0f, 1.0f, 1.0f);
@@ -39,7 +39,7 @@ void cWindowPictureBox::draw(int cutoffleft, int cutoffright, int cutofftop, int
 
 
 			glEnable(GL_TEXTURE_2D);
-			glBindTexture(GL_TEXTURE_2D, tex->texid());
+			glBindTexture(GL_TEXTURE_2D, tex->texId());
 			glBegin(GL_QUADS);
 /*				glTexCoord2f(0,cutoffbottom / (float)h);		glVertex2d(xx+cutoffleft,		yy+cutoffbottom);
 				glTexCoord2f(1,cutoffbottom / (float)h);		glVertex2d(xx+w-cutoffright,	yy+cutoffbottom);
@@ -62,7 +62,7 @@ void cWindowPictureBox::click()
 }
 
 
-void cWindowPictureBox::SetText(int i, string fil)
+void cWindowPictureBox::setText(int i, std::string fil)
 {
 	if(i == 0)
 	{
@@ -71,12 +71,31 @@ void cWindowPictureBox::SetText(int i, string fil)
 	}
 }
 
-void cWindowPictureBox::SetInt(int i, int v)
+void cWindowPictureBox::setInt(int i, int v)
 {
 	highlightmode = v;
 }
 
-int cWindowPictureBox::GetInt(int i)
+int cWindowPictureBox::getInt(int i)
 {
 	return highlightmode;
+}
+
+cWindowPictureBox::cWindowPictureBox( cWindow* parent ) : cWindowObject(parent)
+{
+	highlightmode = 0;
+	w = 100;
+	h = 100;
+	x = 5;
+	y = 20;
+	tex = NULL;
+	alignment = ALIGN_TOPLEFT;
+	loaded = false;
+	type = OBJECT_PICTUREBOX;
+}
+
+cWindowPictureBox::~cWindowPictureBox()
+{
+	if (tex != NULL || loaded)
+		TextureCache.unload(tex);
 }

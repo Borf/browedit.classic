@@ -7,8 +7,8 @@ extern double mouse3dx, mouse3dy, mouse3dz;
 extern cGraphics Graphics;
 extern cUndoStack undostack;
 extern bool lbuttondown, rbuttondown;
-extern vector<vector<vector<float> > > clipboard;
-vector<vector<int > > clipboardgat;
+extern std::vector<std::vector<std::vector<float> > > clipboard;
+std::vector<std::vector<int > > clipboardgat;
 
 
 int cProcessManagement::gatedit_process_events(SDL_Event &event)
@@ -208,11 +208,11 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 						clipboardgat.clear();
 						for(int y = posy-(int)floor(f/2.0f); y < posy+(int)ceil(f/2.0f); y++)
 						{
-							vector<vector<float> > row;
-							vector<int > row2;
+							std::vector<std::vector<float> > row;
+							std::vector<int > row2;
 							for(int x = posx-(int)floor(f/2.0f); x < posx+(int)ceil(f/2.0f); x++)
 							{
-								vector<float> c;
+								std::vector<float> c;
 								c.push_back(Graphics.world.gattiles[y][x].cell1);
 								c.push_back(Graphics.world.gattiles[y][x].cell2);
 								c.push_back(Graphics.world.gattiles[y][x].cell3);

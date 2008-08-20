@@ -2,7 +2,7 @@
 #include "graphics.h"
 #include "undo.h"
 #include "sprite.h"
-#include "wm/spritewindow.h"
+#include "windows/spritewindow.h"
 
 extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
@@ -11,7 +11,7 @@ extern cUndoStack undostack;
 extern bool lbuttondown, doneaction;
 extern float oldmousey,oldmousex;
 extern int movement;
-extern string rodir;
+extern std::string rodir;
 
 
 int cProcessManagement::spriteedit_process_events(SDL_Event &event)
@@ -44,7 +44,7 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 					}
 					if(ctrl && !alt)
 					{
-						Graphics.world.sprites[Graphics.selectedObject]->pos.y += (mousey-oldmousey);
+						Graphics.world.sprites[Graphics.selectedObject]->pos.y += (mouseY-oldmousey);
 						if (SDL_GetModState() & KMOD_SHIFT)
 						{
 							Graphics.world.sprites[Graphics.selectedObject]->pos.y = floor(Graphics.world.sprites[Graphics.selectedObject]->pos.y * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsetx) / (Graphics.gridsize/2.0f) + Graphics.gridoffsetx/(Graphics.gridsize/2.0f);
@@ -91,11 +91,11 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 				{
 					Log(3,0,"Sprite click");
 					cSprite* sprite = new cSprite();
-					string sexes[] = { "여", "남" };
-					string bodies[] = { "검사","마법사","궁수","성직자","상인","도둑","기사","프리스트","위저드","제철공","헌터","어세신","페코페코_기사","크루세이더","몽크","세이지","로그","연금술사","신페코크루세이더","결혼","슈퍼노비스","건너","닌자","산타","검사","마법사","궁수","성직자","상인","도둑","로드나이트","하이프리","하이위저드","화이트스미스","스나이퍼","어쌔신크로스","로드페코","팔라딘","챔피온","프로페서","스토커","크리에이터","클라운","집시","페코팔라딘","검사","마법사","궁수","성직자","상인","도둑","기사","프리스트","위저드","제철공","헌터","어세신","페코페코_기사","크루세이더","몽크","세이지","로그","연금술사","구페코크루세이더","슈퍼노비스","태권소년","권성","권성융합","소울링커","성직자","기사","세이지","초보자" };
+					std::string sexes[] = { "여", "남" };
+					std::string bodies[] = { "검사","마법사","궁수","성직자","상인","도둑","기사","프리스트","위저드","제철공","헌터","어세신","페코페코_기사","크루세이더","몽크","세이지","로그","연금술사","신페코크루세이더","결혼","슈퍼노비스","건너","닌자","산타","검사","마법사","궁수","성직자","상인","도둑","로드나이트","하이프리","하이위저드","화이트스미스","스나이퍼","어쌔신크로스","로드페코","팔라딘","챔피온","프로페서","스토커","크리에이터","클라운","집시","페코팔라딘","검사","마법사","궁수","성직자","상인","도둑","기사","프리스트","위저드","제철공","헌터","어세신","페코페코_기사","크루세이더","몽크","세이지","로그","연금술사","구페코크루세이더","슈퍼노비스","태권소년","권성","권성융합","소울링커","성직자","기사","세이지","초보자" };
 
 					int sex = rand() % 2;
-					int bodyid = rand() % (sizeof(bodies)/sizeof(string));
+					int bodyid = rand() % (sizeof(bodies)/sizeof(std::string));
 
 					sprite->loadBody(rodir + "data\\sprite\\인간족\\몸통\\" + sexes[sex] + "\\" + bodies[bodyid] + "_" + sexes[sex]);
 					int headid = 1+ rand() % 22;

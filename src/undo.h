@@ -77,10 +77,10 @@ class cUndoChangeObjects : public cUndoItem
 		cVector3 scale;
 		int objectid;
 	};
-	vector<cObject>	objects;
+	std::vector<cObject>	objects;
 public:
 
-	cUndoChangeObjects(vector<int> ob)
+	cUndoChangeObjects(std::vector<int> ob)
 	{
 		type = UNDO_OTHER;
 		for(unsigned int i = 0; i < ob.size(); i++)
@@ -119,7 +119,7 @@ public:
 
 class cUndoTexture : public cUndoItem
 {
-	vector<vector<int> > data;
+	std::vector<std::vector<int> > data;
 	int x, y;
 public:
 	cUndoTexture(int xfrom, int yfrom, int xto, int yto)
@@ -128,7 +128,7 @@ public:
 		y = yfrom;
 		for(int yy = yfrom; yy < yto; yy++)
 		{
-			vector<int> row;
+			std::vector<int> row;
 			for(int xx = xfrom; xx < xto; xx++)
 			{
 				if (yy < 0 || yy >= Graphics.world.height || xx < 0 || xx >= Graphics.world.width)
@@ -155,10 +155,11 @@ public:
 class cUndoHeightEdit : public cUndoItem
 {
 	class cCubeHeight
-	{public:
+	{
+	public:
 		float cell1,cell2,cell3,cell4;
 	};
-	vector<vector<cCubeHeight> > data;
+	std::vector<std::vector<cCubeHeight> > data;
 	int x, y;
 public:
 	cUndoHeightEdit(int xfrom, int yfrom, int xto, int yto)
@@ -167,7 +168,7 @@ public:
 		y = yfrom;
 		for(int yy = yfrom; yy < yto; yy++)
 		{
-			vector<cCubeHeight> row;
+			std::vector<cCubeHeight> row;
 			for(int xx = xfrom; xx < xto; xx++)
 			{
 				cCubeHeight c;
@@ -208,7 +209,7 @@ class cUndoGatHeightEdit : public cUndoItem
 	{public:
 		float cell1,cell2,cell3,cell4;
 	};
-	vector<vector<cCubeHeight> > data;
+	std::vector<std::vector<cCubeHeight> > data;
 	int x, y;
 public:
 	cUndoGatHeightEdit(int xfrom, int yfrom, int xto, int yto)
@@ -217,7 +218,7 @@ public:
 		y = yfrom;
 		for(int yy = yfrom; yy < yto; yy++)
 		{
-			vector<cCubeHeight> row;
+			std::vector<cCubeHeight> row;
 			for(int xx = xfrom; xx < xto; xx++)
 			{
 				cCubeHeight c;
@@ -253,7 +254,7 @@ public:
 
 class cUndoGatTileEdit : public cUndoItem
 {
-	vector<vector<int> > data;
+	std::vector<std::vector<int> > data;
 	int x, y;
 public:
 	cUndoGatTileEdit(int xfrom, int yfrom, int xto, int yto)
@@ -262,7 +263,7 @@ public:
 		y = yfrom;
 		for(int yy = yfrom; yy < yto; yy++)
 		{
-			vector<int> row;
+			std::vector<int> row;
 			for(int xx = xfrom; xx < xto; xx++)
 			{
 				if (yy >= (int)Graphics.world.gattiles.size() || yy < 0 || xx < 0 || xx >= (int)Graphics.world.gattiles[0].size())
@@ -289,9 +290,9 @@ public:
 
 class cUndoTileEdit : public cUndoItem
 {
-	vector<pair<int, cTile> > data;
+	std::vector<std::pair<int, cTile> > data;
 public:
-	cUndoTileEdit(vector<pair<int, cTile> > mydata)
+	cUndoTileEdit(std::vector<std::pair<int, cTile> > mydata)
 	{
 		data = mydata;
 	}
@@ -321,7 +322,7 @@ public:
 
 class cUndoNewObjects : public cUndoItem
 {
-	vector<int> prevselection;
+	std::vector<int> prevselection;
 	unsigned int size;
 public:
 	cUndoNewObjects(int previoussize)
@@ -369,9 +370,9 @@ public:
 class cUndoChangeWalls : public cUndoItem
 {
 	int type;
-	vector<pair<pair<int,int>, int> > vals;
+	std::vector<std::pair<std::pair<int,int>, int> > vals;
 public:
-	cUndoChangeWalls(int t, vector<pair<pair<int,int>, int> > v)
+	cUndoChangeWalls(int t, std::vector<std::pair<std::pair<int,int>, int> > v)
 	{
 		type = t;
 		vals = v;
@@ -407,7 +408,7 @@ public:
 
 class cUndoObjectDelete : public cUndoItem
 {
-	string filename;
+	std::string filename;
 	cVector3 pos;
 	int id;
 	cVector3 scale;
@@ -453,13 +454,13 @@ public:
 
 class cUndoEffectsDelete : public cUndoItem
 {
-	vector<pair<int, cEffect> > effects;
+	std::vector<std::pair<int, cEffect> > effects;
 public:
-	cUndoEffectsDelete(vector<int> e)
+	cUndoEffectsDelete(std::vector<int> e)
 	{
 		for(unsigned int i = 0; i < e.size(); i++)
 		{
-			effects.push_back(pair<int, cEffect>(e[i], Graphics.world.effects[e[i]]));
+			effects.push_back(std::pair<int, cEffect>(e[i], Graphics.world.effects[e[i]]));
 		}
 	}
 	void undo()
@@ -541,15 +542,15 @@ class cUndoObjectsDelete : public cUndoItem
 public:
 	class cObject
 	{public:
-		string filename;
+		std::string filename;
 		cVector3 pos;
 		cVector3 rot;
 		cVector3 scale;
 		int id;
 	};
-	vector<cObject> objects;
+	std::vector<cObject> objects;
 
-	cUndoObjectsDelete(vector<cObject> myobjects)
+	cUndoObjectsDelete(std::vector<cObject> myobjects)
 	{
 		objects = myobjects;
 	}
@@ -650,7 +651,7 @@ public:
 class cUndoStack
 {
 public:
-	list<cUndoItem*> items;
+	std::list<cUndoItem*> items;
 
 	void undo();
 	void push(cUndoItem*);

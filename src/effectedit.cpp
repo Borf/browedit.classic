@@ -2,7 +2,7 @@
 #include "graphics.h"
 #include "undo.h"
 #include "menu.h"
-#include "wm/effectwindow.h"
+#include "windows/effectwindow.h"
 
 extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
@@ -39,7 +39,7 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 					}
 					if(ctrl && !alt)
 					{
-						Graphics.world.effects[Graphics.selectedObject].pos.y += (mousey-oldmousey);
+						Graphics.world.effects[Graphics.selectedObject].pos.y += (mouseY-oldmousey);
 						if (SDL_GetModState() & KMOD_SHIFT)
 						{
 							Graphics.world.effects[Graphics.selectedObject].pos.y = floor(Graphics.world.effects[Graphics.selectedObject].pos.y * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsetx) / (Graphics.gridsize/2.0f) + Graphics.gridoffsetx/(Graphics.gridsize/2.0f);

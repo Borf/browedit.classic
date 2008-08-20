@@ -17,7 +17,7 @@
 #include <cstdarg>
 #include <unistd.h>
 #endif
-using namespace std;
+//using namespace std;
 
 
 
@@ -62,7 +62,7 @@ int cFont::print(float r, float g, float b, float x, float y, const char *fmt, .
 	glPushMatrix();
 
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set the correct blending mode
-	glBindTexture(GL_TEXTURE_2D, texture->texid());
+	glBindTexture(GL_TEXTURE_2D, texture->texId());
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
 
@@ -148,7 +148,7 @@ int cFont::print(float r, float g, float b, float x, float y, const char *fmt, .
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set the correct blending mode
-	glBindTexture(GL_TEXTURE_2D, texture->texid());
+	glBindTexture(GL_TEXTURE_2D, texture->texId());
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
 
@@ -160,13 +160,13 @@ int cFont::print(float r, float g, float b, float x, float y, const char *fmt, .
 	glLoadIdentity();
 	glTranslated(x,y,0);
 
-	string txt = text;
-	string colorcode = "#";
+	std::string txt = text;
+	std::string colorcode = "#";
 	glListBase(list_base);
-	while(txt.find(colorcode) != string::npos)
+	while(txt.find(colorcode) != std::string::npos)
 	{
-		string before = txt.substr(0, txt.find(colorcode));		
-		string color = txt.substr(txt.find(colorcode)+colorcode.length(),6);
+		std::string before = txt.substr(0, txt.find(colorcode));		
+		std::string color = txt.substr(txt.find(colorcode)+colorcode.length(),6);
 
 		if(color.substr(0,colorcode.length()) == colorcode)
 		{
@@ -226,7 +226,7 @@ int cFont::print3d(float r, float g, float b, float a, float x, float y, float z
 	glGetBooleanv(GL_BLEND, &blending);
 
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set the correct blending mode
-	glBindTexture(GL_TEXTURE_2D, texture->texid());
+	glBindTexture(GL_TEXTURE_2D, texture->texId());
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
 
@@ -246,13 +246,13 @@ int cFont::print3d(float r, float g, float b, float a, float x, float y, float z
 	
 	glScalef(scale, scale, scale);
 	
-	string txt = text;
-	string colorcode = "#";
+	std::string txt = text;
+	std::string colorcode = "#";
 	glListBase(list_base);
-	while(txt.find(colorcode) != string::npos)
+	while(txt.find(colorcode) != std::string::npos)
 	{
-		string before = txt.substr(0, txt.find(colorcode));		
-		string color = txt.substr(txt.find(colorcode)+colorcode.length(),6);
+		std::string before = txt.substr(0, txt.find(colorcode));		
+		std::string color = txt.substr(txt.find(colorcode)+colorcode.length(),6);
 
 		if(color.substr(0,colorcode.length()) == colorcode)
 		{
@@ -284,7 +284,7 @@ int cFont::print3d(float r, float g, float b, float a, float x, float y, float z
 
 
 
-int	cFont::textlen(string s)
+int	cFont::textlen(std::string s)
 {
 	int l = 0;
 	for(int i = 0; i < (int)s.length(); i++)
@@ -304,13 +304,13 @@ int	cFont::textlen(string s)
 
 
 
-int cFont::load(string filename)
+int cFont::load(std::string filename)
 {
 	texture = cTextureLoaders::load(filename,false,false);
 	Log(5,0,"Loading font %s", filename.c_str());
 	float cx, cy;
 	list_base=glGenLists(256);                          // Creating 256 Display Lists
-	glBindTexture(GL_TEXTURE_2D, texture->texid());	 // Select Our Font Texture
+	glBindTexture(GL_TEXTURE_2D, texture->texId());	 // Select Our Font Texture
 	for (int loop1=0; loop1<256; loop1++)              // Loop Through All 256 Lists
 	{
 		cx=(float)(loop1%16)/16.0f;                  // X Position Of Current Character

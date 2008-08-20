@@ -5,7 +5,7 @@
 #include "texture.h"
 #include <string>
 #include <vector>
-using namespace std;
+//using namespace std;
 
 class cFont
 {
@@ -19,11 +19,11 @@ public:
 	cFont();
 	~cFont();
 
-	int load(string);
+	int		load(std::string);
 
-	int print(float, float, float, float, float, const char*, ...);
-	int print3d(float, float, float, float, float, float, float, float, const char*, ...);
-	int		textlen(string);
+	int		print(float, float, float, float, float, const char*, ...);
+	int		print3d(float, float, float, float, float, float, float, float, const char*, ...);
+	int		textlen(std::string);
 };
 
 

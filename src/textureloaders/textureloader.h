@@ -9,7 +9,7 @@ class cTextureLoader
 {
 public:
 	virtual ~cTextureLoader() {};
-	vector<string>					extensions;
+	std::vector<std::string>		extensions;
 	virtual	void					load(char*, int,cTexture*) = 0;
 };
 

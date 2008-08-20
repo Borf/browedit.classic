@@ -3,7 +3,7 @@
 
 
 
-cTexture* cTextureCache::load(string filename, bool clamp)
+cTexture* cTextureCache::load(std::string filename, bool clamp)
 {
 	if (textures.find(filename) == textures.end())
 	{
@@ -43,7 +43,7 @@ void cTextureCache::unload(cTexture* tex)
 void cTextureCache::status()
 {
 	int count = 0;
-	for(map<string, cTexture*, less<string> >::iterator i = textures.begin(); i != textures.end(); i++)
+	for(std::map<std::string, cTexture*, std::less<std::string> >::iterator i = textures.begin(); i != textures.end(); i++)
 	{
 		if (used[i->second] > 0)
 		{

@@ -2,12 +2,12 @@
 #include "graphics.h"
 #include "texturecache.h"
 extern cFileSystem fs;
-extern string rodir;
+extern std::string rodir;
 extern cGraphics Graphics;
 extern cVector3 lightpos;
 
 
-void cRSMModel::load(string fname)
+void cRSMModel::load(std::string fname)
 {
 	unsigned int i;
 //	Log(3,0,"Loading %s", fname.c_str());
@@ -37,7 +37,7 @@ void cRSMModel::load(string fname)
 	for(i = 0; i < ntextures; i++)
 	{
 		pFile->read(buffer, 40);
-		string filename = buffer;
+		std::string filename = buffer;
 		cTexture* tex = TextureCache.load(rodir + "data\\texture\\" + filename);
 		textures.push_back(tex);
 	}
@@ -617,7 +617,7 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 		for(i = 0; i < nFaces; i++)
 		{
 			cRSMModelFace* f = &faces[i];
-			glBindTexture(GL_TEXTURE_2D, model->textures[textures[f->texid]]->texid());
+			glBindTexture(GL_TEXTURE_2D, model->textures[textures[f->texid]]->texId());
 			glBegin(GL_TRIANGLES);
 				glTexCoord2f(texcoords[f->t[0]].y, 1-texcoords[f->t[0]].z); glVertex3f(vertices[f->v[0]].x, vertices[f->v[0]].y, vertices[f->v[0]].z);
 				glTexCoord2f(texcoords[f->t[1]].y, 1-texcoords[f->t[1]].z); glVertex3f(vertices[f->v[1]].x, vertices[f->v[1]].y, vertices[f->v[1]].z);

@@ -3,8 +3,8 @@
 #include "undo.h"
 #include "menu.h"
 #include "menucommands.h"
-#include "wm/lightwindow.h"
-#include "wm/lightoverviewwindow.h"
+#include "windows/lightwindow.h"
+#include "windows/lightoverviewwindow.h"
 
 extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
@@ -27,7 +27,7 @@ void addmenustuff(cMenu* m, TiXmlElement* el)
 	{
 		if(strcmp(el->Value(), "light") == 0)
 		{
-			string keys;
+			std::string keys;
 			TiXmlNode* e = el;
 			while(e != NULL)
 			{
@@ -58,7 +58,7 @@ void addmenustuff(cMenu* m, TiXmlElement* el)
 		else
 		{
 			cMenu* mm;
-			ADDMENU(mm,		m, string(el->Value()) + ".....",		m->x + 150,m->y); // File
+			ADDMENU(mm,		m, std::string(el->Value()) + ".....",		m->x + 150,m->y); // File
 			addmenustuff(mm, el->FirstChildElement());
 		}
 
@@ -98,7 +98,7 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 					}
 					if(ctrl && !alt)
 					{
-						Graphics.world.lights[Graphics.selectedObject].pos.y += (mousey-oldmousey);
+						Graphics.world.lights[Graphics.selectedObject].pos.y += (mouseY-oldmousey);
 						if (SDL_GetModState() & KMOD_SHIFT)
 						{
 							Graphics.world.lights[Graphics.selectedObject].pos.y = floor(Graphics.world.lights[Graphics.selectedObject].pos.y * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsetx) / (Graphics.gridsize/2.0f) + Graphics.gridoffsetx/(Graphics.gridsize/2.0f);
@@ -106,7 +106,7 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 					}
 					if(!ctrl && alt)
 					{
-						Graphics.world.lights[Graphics.selectedObject].range += (mousey-oldmousey);
+						Graphics.world.lights[Graphics.selectedObject].range += (mouseY-oldmousey);
 					}
 				}
 			}
@@ -152,7 +152,7 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 					l.color.y = 0;
 					l.color.z = 0;
 					l.pos = cVector3(mouse3dx/5, mouse3dy+10, mouse3dz/5);
-					l.todo = string(buf, 40);
+					l.todo = std::string(buf, 40);
 					l.todo2 = 192;
 					l.maxLightIncrement = 256;
 					l.range = 200;
@@ -205,8 +205,8 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 					popupmenu = new cMenu();
 					popupmenu->parent = NULL;
 					popupmenu->drawstyle = 1;
-					popupmenu->x = (int)mousex;
-					popupmenu->y = (int)mousey;
+					popupmenu->x = (int)mouseX;
+					popupmenu->y = (int)mouseY;
 					popupmenu->w = 150;
 					popupmenu->opened = true;
 					cMenuItem* mm;

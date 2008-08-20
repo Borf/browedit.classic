@@ -3,16 +3,16 @@
 #include <SDL/SDL_syswm.h>
 #include "undo.h"
 #include "filesystem.h"
-#include "wm/waterwindow.h"
-#include "wm/ambientlightwindow.h"
-#include "wm/keybindwindow.h"
-#include "wm/rsmeditwindow.h"
-#include "wm/favoritelights.h"
-#include "wm/modeloverviewwindow.h"
-#include "wm/lightoverviewwindow.h"
-#include "wm/progresswindow.h"
-#include "wm/filewindow.h"
-#include "wm/mapswindow.h"
+#include "windows/waterwindow.h"
+#include "windows/ambientlightwindow.h"
+#include "windows/keybindwindow.h"
+#include "windows/rsmeditwindow.h"
+#include "windows/favoritelights.h"
+#include "windows/modeloverviewwindow.h"
+#include "windows/lightoverviewwindow.h"
+#include "windows/progresswindow.h"
+#include "windows/filewindow.h"
+#include "windows/mapswindow.h"
 #include "plugins/base/base.h"
 
 extern cGraphics Graphics;
@@ -22,9 +22,9 @@ extern eMode editmode;
 extern int brushsize;
 extern double mouse3dx, mouse3dy, mouse3dz;
 int process_events( );
-extern vector<string> objectfiles;
+extern std::vector<std::string> objectfiles;
 extern cFileSystem fs;
-extern string rodir;
+extern std::string rodir;
 extern cMenu* mode;
 extern cMenu* editdetail;
 extern cMenu* speed;
@@ -33,7 +33,7 @@ extern cMenu* currentobject;
 extern float paintspeed;
 extern TiXmlDocument sprites;
 extern double mouseclickx, mouseclicky, mouseclickz;
-extern string message;
+extern std::string message;
 extern bool showmessage;
 extern long userid;
 
@@ -96,7 +96,7 @@ MENUCOMMAND(open)
 
 
 
-void openfunc(string param)
+void openfunc(std::string param)
 {
 	ZeroMemory(Graphics.world.fileName, 128);
 	memcpy(Graphics.world.fileName, param.c_str(), param.length());
@@ -237,7 +237,7 @@ MENUCOMMAND(saveAs)
 
 	}
 #else
-	string input = Graphics.WM.InputWindow("Filename (so not add .rsw): ", Graphics.world.fileName);
+	std::string input = Graphics.WM.InputWindow("Filename (so not add .rsw): ", Graphics.world.fileName);
 	if(input != "")
 	{
 		sprintf(Graphics.world.fileName, "%s", input.c_str());
@@ -512,20 +512,20 @@ MENUCOMMAND(random2)
 
 	}
 
-	vector<string>	randommodels;
+	std::vector<std::string>	randommodels;
 	for(i = 0; i < objectfiles.size(); i++)
 	{
 		cFile* pFile = fs.open(objectfiles[i]);
 		while(!pFile->eof())
 		{
-			string line = pFile->readLine();
+			std::string line = pFile->readLine();
 			if (line == "")
 				continue;
-			string pre = line.substr(0, line.find("|"));
-			string filename = line.substr(line.find("|")+1);
+			std::string pre = line.substr(0, line.find("|"));
+			std::string filename = line.substr(line.find("|")+1);
 
-			string cat = pre.substr(0, pre.rfind("/"));
-			string name = pre.substr(pre.rfind("/")+1);
+			std::string cat = pre.substr(0, pre.rfind("/"));
+			std::string name = pre.substr(pre.rfind("/")+1);
 
 			if(cat == "Random2 Objects")
 				randommodels.push_back(filename);
@@ -673,7 +673,7 @@ public:
 	int y;
 	int w;
 	int h;
-	vector<int> connections;
+	std::vector<int> connections;
 	cIntQuad(int xx, int yy, int ww, int hh)
 	{
 		x = xx;
@@ -752,7 +752,7 @@ MENUCOMMAND(random3)
 	int w,h;
 
 	
-	vector<cIntQuad> islands;
+	std::vector<cIntQuad> islands;
 
 	bool filledenough = false;
 	unsigned int lastsize = 0;
@@ -1088,20 +1088,20 @@ MENUCOMMAND(random4)
 	}
 
 
-	vector<string>	randommodels;
+	std::vector<std::string>	randommodels;
 	for(i = 0; i < objectfiles.size(); i++)
 	{
 		cFile* pFile = fs.open(objectfiles[i]);
 		while(!pFile->eof())
 		{
-			string line = pFile->readLine();
+			std::string line = pFile->readLine();
 			if (line == "")
 				continue;
-			string pre = line.substr(0, line.find("|"));
-			string filename = line.substr(line.find("|")+1);
+			std::string pre = line.substr(0, line.find("|"));
+			std::string filename = line.substr(line.find("|")+1);
 
-			string cat = pre.substr(0, pre.rfind("/"));
-			string name = pre.substr(pre.rfind("/")+1);
+			std::string cat = pre.substr(0, pre.rfind("/"));
+			std::string name = pre.substr(pre.rfind("/")+1);
 
 			if(cat == "randomtrees")
 				randommodels.push_back(filename);
@@ -1137,7 +1137,7 @@ MENUCOMMAND(random4)
 
 MENUCOMMAND(mode)
 {
-	string title = src->title;
+	std::string title = src->title;
 	for(unsigned int i = 0; i < mode->items.size(); i++)
 		mode->items[i]->ticked = false;
 	src->ticked = true;
@@ -1460,8 +1460,8 @@ public:
 	cWindowPreviewButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent, skin)
 	{
 		alignment = ALIGN_TOPLEFT;
-		moveto(0,20);
-		resizeto(100,20);
+		moveTo(0,20);
+		resizeTo(100,20);
 		text = "Preview";
 	}
 	void click()
@@ -1481,8 +1481,8 @@ MENUCOMMAND(dolightmaps2)
 
 	cProgressWindow* w = new cProgressWindow(Graphics.WM.texture, &Graphics.WM.font, &rendering, Graphics.WM.skin);
 	Graphics.WM.addwindow(w);
-	w->objects["progress"]->SetInt(1,0);
-	w->objects["progress"]->SetInt(2,Graphics.world.height * Graphics.world.width);
+	w->objects["progress"]->setInt(1,0);
+	w->objects["progress"]->setInt(2,Graphics.world.height * Graphics.world.width);
 	w->objects["toggle"] = new cWindowPreviewButton(w, Graphics.WM.skin);
 
 	mainloop();
@@ -1532,7 +1532,7 @@ MENUCOMMAND(dolightmaps2)
 			if(selectonly && !c->selected)
 				continue;
 //			Log(3,0,GetMsg("PERCENTAGE"), (y*Graphics.world.width+x) / (float)(Graphics.world.height * Graphics.world.width)*100); // %f %%
-			w->objects["progress"]->SetInt(0, y*Graphics.world.width + x);
+			w->objects["progress"]->setInt(0, y*Graphics.world.width + x);
 
 			
 			if(c->tileUp != -1)
@@ -1920,7 +1920,7 @@ BYTE* getLightMap(int x, int y)
 
 MENUCOMMAND(smoothlightmaps)
 {
-	string strFactor = Graphics.WM.InputWindow("Smoothing factor:", "1");
+	std::string strFactor = Graphics.WM.InputWindow("Smoothing factor:", "1");
 	if(strFactor == "")
 		return true;
 	float factor = atof(strFactor.c_str());
@@ -2102,8 +2102,8 @@ MENUCOMMAND(gatcollision)
 MENUCOMMAND(cleanuplightmaps)
 {
 	unsigned int i;
-	vector<int> newvalue;
-	map<int, bool, less<int> > used;
+	std::vector<int> newvalue;
+	std::map<int, bool, std::less<int> > used;
 	for(i = 0; i < Graphics.world.lightmaps.size(); i++)
 	{
 		for(unsigned int ii = 0; ii < i; ii++)
@@ -2238,11 +2238,11 @@ MENUCOMMAND(water)
 {
 	char buf[100];
 	cWindow* w = new cWaterWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin);
-	sprintf(buf, "%f", Graphics.world.water.amplitude);		w->objects["amplitude"]->SetText(0,buf);
-	sprintf(buf, "%f", Graphics.world.water.height);		w->objects["height"]->SetText(0,buf);
-	sprintf(buf, "%f", Graphics.world.water.phase);			w->objects["phase"]->SetText(0,buf);
-	sprintf(buf, "%f", Graphics.world.water.surfaceCurve);	w->objects["surfacecurve"]->SetText(0,buf);
-	sprintf(buf, "%i", Graphics.world.water.type);			w->objects["type"]->SetText(0,buf);
+	sprintf(buf, "%f", Graphics.world.water.amplitude);		w->objects["amplitude"]->setText(0,buf);
+	sprintf(buf, "%f", Graphics.world.water.height);		w->objects["height"]->setText(0,buf);
+	sprintf(buf, "%f", Graphics.world.water.phase);			w->objects["phase"]->setText(0,buf);
+	sprintf(buf, "%f", Graphics.world.water.surfaceCurve);	w->objects["surfacecurve"]->setText(0,buf);
+	sprintf(buf, "%i", Graphics.world.water.type);			w->objects["type"]->setText(0,buf);
 	Graphics.WM.addwindow(w);
 	return true;
 }
@@ -2250,7 +2250,7 @@ MENUCOMMAND(water)
 MENUCOMMAND(cleantextures)
 {
 	Graphics.world.clean();
-	vector<bool> used;
+	std::vector<bool> used;
 	int i;
 	used.resize(Graphics.world.textures.size(), false);
 
@@ -2280,19 +2280,19 @@ MENUCOMMAND(ambientlight)
 {
 	char buf[100];
 	cWindow* w = new cAmbientLightWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin);
-	sprintf(buf, "%i", Graphics.world.ambientLight.ambientr);		w->objects["ambientr"]->SetText(0,buf);
-	sprintf(buf, "%i", Graphics.world.ambientLight.ambientg);		w->objects["ambientg"]->SetText(0,buf);
-	sprintf(buf, "%i", Graphics.world.ambientLight.ambientb);		w->objects["ambientb"]->SetText(0,buf);
+	sprintf(buf, "%i", Graphics.world.ambientLight.ambientr);		w->objects["ambientr"]->setText(0,buf);
+	sprintf(buf, "%i", Graphics.world.ambientLight.ambientg);		w->objects["ambientg"]->setText(0,buf);
+	sprintf(buf, "%i", Graphics.world.ambientLight.ambientb);		w->objects["ambientb"]->setText(0,buf);
 
-	sprintf(buf, "%f", Graphics.world.ambientLight.diffuse.x);		w->objects["diffuser"]->SetText(0,buf);
-	sprintf(buf, "%f", Graphics.world.ambientLight.diffuse.y);		w->objects["diffuseg"]->SetText(0,buf);
-	sprintf(buf, "%f", Graphics.world.ambientLight.diffuse.z);		w->objects["diffuseb"]->SetText(0,buf);
+	sprintf(buf, "%f", Graphics.world.ambientLight.diffuse.x);		w->objects["diffuser"]->setText(0,buf);
+	sprintf(buf, "%f", Graphics.world.ambientLight.diffuse.y);		w->objects["diffuseg"]->setText(0,buf);
+	sprintf(buf, "%f", Graphics.world.ambientLight.diffuse.z);		w->objects["diffuseb"]->setText(0,buf);
 
-	sprintf(buf, "%f", Graphics.world.ambientLight.shadow.x);		w->objects["shadowr"]->SetText(0,buf);
-	sprintf(buf, "%f", Graphics.world.ambientLight.shadow.y);		w->objects["shadowg"]->SetText(0,buf);
-	sprintf(buf, "%f", Graphics.world.ambientLight.shadow.z);		w->objects["shadowb"]->SetText(0,buf);
+	sprintf(buf, "%f", Graphics.world.ambientLight.shadow.x);		w->objects["shadowr"]->setText(0,buf);
+	sprintf(buf, "%f", Graphics.world.ambientLight.shadow.y);		w->objects["shadowg"]->setText(0,buf);
+	sprintf(buf, "%f", Graphics.world.ambientLight.shadow.z);		w->objects["shadowb"]->setText(0,buf);
 	
-	sprintf(buf, "%f", Graphics.world.ambientLight.alpha);			w->objects["alpha"]->SetText(0,buf);
+	sprintf(buf, "%f", Graphics.world.ambientLight.alpha);			w->objects["alpha"]->setText(0,buf);
 
 	Graphics.WM.addwindow(w);
 	return true;
@@ -2347,7 +2347,7 @@ MENUCOMMAND(preferences)
 MENUCOMMAND(fillarea)
 {
 	int x,y,i;
-	map<int, bool, less<int> > used;
+	std::map<int, bool, std::less<int> > used;
 
 	cLightmap* map = new cLightmap();
 	for(i = 0; i < 256; i++)
@@ -2456,10 +2456,10 @@ MENUCOMMAND(exportmapfiles)
 {
 #ifdef WIN32
 	CreateDirectory(Graphics.world.fileName, NULL);
-	CreateDirectory((Graphics.world.fileName + string("\\texture\\")).c_str(), NULL);
+	CreateDirectory((Graphics.world.fileName + std::string("\\texture\\")).c_str(), NULL);
 
 	int i;
-	ofstream pFile((string(Graphics.world.fileName) + ".txt").c_str());
+	std::ofstream pFile((std::string(Graphics.world.fileName) + ".txt").c_str());
 	for(i = 0; i < Graphics.world.textures.size(); i++)
 	{
 		cFile* pF = fs.open(rodir + "data\\texture\\" + Graphics.world.textures[i]->RoFilename);
@@ -2471,14 +2471,14 @@ MENUCOMMAND(exportmapfiles)
 		pF->close();
 
 
-		CopyFile((rodir + "data\\texture\\" + Graphics.world.textures[i]->RoFilename).c_str(), (string(Graphics.world.fileName) + "\\texture\\" + Graphics.world.textures[i]->RoFilename2).c_str(), false);
+		CopyFile((rodir + "data\\texture\\" + Graphics.world.textures[i]->RoFilename).c_str(), (std::string(Graphics.world.fileName) + "\\texture\\" + Graphics.world.textures[i]->RoFilename2).c_str(), false);
 		pFile.write("texture\\", 8);
 		pFile.write(Graphics.world.textures[i]->RoFilename.c_str(), Graphics.world.textures[i]->RoFilename.length());
 		pFile.put('\r');
 		pFile.put('\n');
 	}
 
-	map<string, bool, less<string> > usedmodels;
+	std::map<std::string, bool, std::less<std::string> > usedmodels;
 
 	for(i = 0; i < Graphics.world.models.size(); i++)
 	{
@@ -2503,7 +2503,7 @@ MENUCOMMAND(exportmapfiles)
 
 		for(int ii = 0; ii < Graphics.world.models[i]->textures.size(); ii++)
 		{
-			string file = Graphics.world.models[i]->textures[ii]->getfilename();
+			std::string file = Graphics.world.models[i]->textures[ii]->getfilename();
 			cFile* pF = fs.open(file);
 			if(pF->location != -1)
 			{
@@ -2522,7 +2522,7 @@ MENUCOMMAND(exportmapfiles)
 
 
 	pFile.close();
-	ShellExecute(NULL,"open",(string(Graphics.world.fileName) + ".txt").c_str(),NULL,"c:\\",SW_SHOW);
+	ShellExecute(NULL,"open",(std::string(Graphics.world.fileName) + ".txt").c_str(),NULL,"c:\\",SW_SHOW);
 #endif
 	return true;
 }
@@ -2597,7 +2597,7 @@ MENUCOMMAND(random5)
 	int w,h;
 
 	
-	vector<cIntQuad> islands;
+	std::vector<cIntQuad> islands;
 
 	bool filledenough = false;
 	unsigned int oldsize = 0;
@@ -2843,10 +2843,10 @@ MENUCOMMAND(99dun)
 }
 
 
-string scriptmap;
+std::string scriptmap;
 char dirmap[] = { 4,3,2,1,0,7,6,5 };
 
-void readscript(string filename)
+void readscript(std::string filename)
 {
 	Log(3,0,"Reading %s", filename.c_str());
 	cFile* pFile = fs.open("C:\\Documents and Settings\\Borf\\Desktop\\eathena\\" + filename);
@@ -2855,12 +2855,12 @@ void readscript(string filename)
 
 	while(!pFile->eof())
 	{
-		string line = pFile->readLine();
+		std::string line = pFile->readLine();
 		if(ltrim(rtrim(line)).substr(0,4) == "npc:")
 			readscript(ltrim(ltrim(rtrim(line)).substr(4)));
 		else if(ltrim(rtrim(line)).substr(0,7) == "import:")
 			readscript(ltrim(ltrim(rtrim(line)).substr(7)));
-		else if(line.find("\tscript\t") != string::npos || line.find("\tduplicate") != string::npos)
+		else if(line.find("\tscript\t") != std::string::npos || line.find("\tduplicate") != std::string::npos)
 		{
 			char mapname[256];
 			char npcname[256];
@@ -2871,7 +2871,7 @@ void readscript(string filename)
 			char buf[256];
 			sprintf(buf, "%s", line.c_str());
 			int ret = sscanf(buf, "%15[^,],%d,%d,%d\tscript\t%250[^\t]%d", mapname,&x,&y,&direction, npcname, &spriteid);
-			if(line.find("\tduplicate") != string::npos)
+			if(line.find("\tduplicate") != std::string::npos)
 			{
 				char crapzor[256];
 				ret = sscanf(buf, "%15[^,],%d,%d,%d\tduplicate(%250[^)])\t%250[^\t]%d", mapname,&x,&y,&direction, crapzor, npcname, &spriteid);
@@ -2886,7 +2886,7 @@ void readscript(string filename)
 				{
 					if(atoi(el->Attribute("id")) == spriteid)
 					{
-						if(string(el->FirstChild()->Value()).find("gr2") == string::npos)
+						if(std::string(el->FirstChild()->Value()).find("gr2") == std::string::npos)
 						{
 							cSprite* s = new cSprite();
 							s->pos.x = x+0.5;
@@ -3037,12 +3037,12 @@ MENUCOMMAND(npcscreenies)
 	WIN32_FIND_DATA FileData;													// thingy for searching through a directory
 	HANDLE hSearch;																// thingy for searching through a directory
 	
-	hSearch = FindFirstFile(string(rodir + "data/*.rsw").c_str(), &FileData);						// look for all files
+	hSearch = FindFirstFile(std::string(rodir + "data/*.rsw").c_str(), &FileData);						// look for all files
 	if (hSearch != INVALID_HANDLE_VALUE)										// if there are results...
 	{
 		while (true)														// loop through all the files
 		{ 
-			string filename = FileData.cFileName;
+			std::string filename = FileData.cFileName;
 			if(filename != "." && filename != "..")
 			{
 				strcpy(Graphics.world.fileName, (rodir + "data\\" + filename.substr(0, filename.rfind("."))).c_str());
@@ -3092,8 +3092,8 @@ MENUCOMMAND(npcscreenies)
 MENUCOMMAND(addfavorite)
 {
 	int i;
-	vector<int> keys;
-	string key = src->data;
+	std::vector<int> keys;
+	std::string key = src->data;
 	while(key != "")
 	{
 		int k = atoi(key.substr(0, key.find("|")).c_str());
@@ -3123,7 +3123,7 @@ MENUCOMMAND(addfavorite)
 	l.color.y = atof(n->FirstChildElement("color")->Attribute("g"));
 	l.color.z = atof(n->FirstChildElement("color")->Attribute("b"));
 	l.pos = cVector3(mouseclickx/5, mouseclicky+atoi(n->FirstChildElement("height")->FirstChild()->Value()), mouseclickz/5);
-	l.todo = string(buf, 40);
+	l.todo = std::string(buf, 40);
 	l.todo2 = atoi(n->FirstChildElement("brightness")->FirstChild()->Value());
 	l.maxLightIncrement = atoi(n->FirstChildElement("maxlight")->FirstChild()->Value());
 	l.range = atoi(n->FirstChildElement("range")->FirstChild()->Value());
@@ -3232,7 +3232,7 @@ MENUCOMMAND(removefavlight)
 			}
 		}
 
-		vector<int> keys = ((cFavoriteLightsWindow::cFavoriteTreeNode*)node)->keys;
+		std::vector<int> keys = ((cFavoriteLightsWindow::cFavoriteTreeNode*)node)->keys;
 		delete node;
 
 		TiXmlNode* n = favoritelights.FirstChild();
@@ -3254,7 +3254,7 @@ MENUCOMMAND(removefavlight)
 		tree->nodes.clear();
 
 // rebuild tree with keys
-		vector<cWindowTree::cTreeNode*> nodes;
+		std::vector<cWindowTree::cTreeNode*> nodes;
 		cFavoriteLightsWindow::cFavoriteTreeNode* windownode = new cFavoriteLightsWindow::cFavoriteTreeNode("root");
 		n = favoritelights.FirstChildElement();
 		cFavoriteLightsWindow::addlights(windownode, n);
@@ -3294,7 +3294,7 @@ MENUCOMMAND(addfavlight)
 			return false;
 		}
 
-		vector<int> keys = ((cFavoriteLightsWindow::cFavoriteTreeNode*)node)->keys;
+		std::vector<int> keys = ((cFavoriteLightsWindow::cFavoriteTreeNode*)node)->keys;
 
 		TiXmlNode* n = favoritelights.FirstChild();
 		for(i = 0; i < keys[keys.size()-1]; i++)
@@ -3307,7 +3307,7 @@ MENUCOMMAND(addfavlight)
 				n = n->NextSibling();
 		}
 
-		string name = Graphics.WM.InputWindow("Light name:");
+		std::string name = Graphics.WM.InputWindow("Light name:");
 		if(name == "")
 			return false;
 
@@ -3330,7 +3330,7 @@ MENUCOMMAND(addfavlight)
 
 		
 // rebuild tree with keys
-		vector<cWindowTree::cTreeNode*> nodes;
+		std::vector<cWindowTree::cTreeNode*> nodes;
 		cFavoriteLightsWindow::cFavoriteTreeNode* windownode = new cFavoriteLightsWindow::cFavoriteTreeNode("root");
 		n = favoritelights.FirstChildElement();
 		cFavoriteLightsWindow::addlights(windownode, n);
@@ -3378,7 +3378,7 @@ MENUCOMMAND(addfavlightcat)
 			return false;
 		}
 
-		vector<int> keys = ((cFavoriteLightsWindow::cFavoriteTreeNode*)node)->keys;
+		std::vector<int> keys = ((cFavoriteLightsWindow::cFavoriteTreeNode*)node)->keys;
 
 		TiXmlNode* n = favoritelights.FirstChild();
 		for(i = 0; i < keys[keys.size()-1]; i++)
@@ -3391,7 +3391,7 @@ MENUCOMMAND(addfavlightcat)
 				n = n->NextSibling();
 		}
 
-		string catname = Graphics.WM.InputWindow("Category name:");
+		std::string catname = Graphics.WM.InputWindow("Category name:");
 		if(catname == "")
 			return false;
 
@@ -3402,7 +3402,7 @@ MENUCOMMAND(addfavlightcat)
 
 		
 // rebuild tree with keys
-		vector<cWindowTree::cTreeNode*> nodes;
+		std::vector<cWindowTree::cTreeNode*> nodes;
 		cFavoriteLightsWindow::cFavoriteTreeNode* windownode = new cFavoriteLightsWindow::cFavoriteTreeNode("root");
 		n = favoritelights.FirstChildElement();
 		cFavoriteLightsWindow::addlights(windownode, n);
@@ -3426,21 +3426,21 @@ MENUCOMMAND(addfavlightcat)
 
 MENUCOMMAND(rebuildtexturefile)
 {
-	string file = Graphics.WM.InputWindow("File to output:", "data/rotextures.txt");
+	std::string file = Graphics.WM.InputWindow("File to output:", "data/rotextures.txt");
 	if(file == "")
 		return false;
-	ofstream pFile(file.c_str(), ios_base::binary | ios_base::out);
+	std::ofstream pFile(file.c_str(), std::ios_base::binary | std::ios_base::out);
 	unsigned int i;
 	for(i = 0; i < fs.locations.size(); i++)
 	{
-		for(map<string, cFile*, less<string> >::iterator it = fs.locations[i]->files.begin(); it != fs.locations[i]->files.end(); it++)
+		for(std::map<std::string, cFile*, std::less<std::string> >::iterator it = fs.locations[i]->files.begin(); it != fs.locations[i]->files.end(); it++)
 		{
 			if(it->first.substr(rodir.length(),13) != "data\\texture\\")
 				continue;
-			string ext = it->first.substr(it->first.length()-4);
+			std::string ext = it->first.substr(it->first.length()-4);
 			if(ext == ".jpg" || ext == ".bmp" || ext == ".tga")
 			{
-				string filename = it->first.substr(rodir.length()+13);
+				std::string filename = it->first.substr(rodir.length()+13);
 				filename = "RO/" + replace(filename, "\\", "/").substr(0, filename.length()-4) + "|" + filename + "\r\n";
 				pFile.write(filename.c_str(), filename.length());
 			}
@@ -3453,22 +3453,22 @@ MENUCOMMAND(rebuildtexturefile)
 
 MENUCOMMAND(rebuildmodelfile)
 {
-	string file = Graphics.WM.InputWindow("File to output:", "data/romodels.txt");
+	std::string file = Graphics.WM.InputWindow("File to output:", "data/romodels.txt");
 	if(file == "")
 		return false;
-	ofstream pFile(file.c_str(), ios_base::binary | ios_base::out);
+	std::ofstream pFile(file.c_str(), std::ios_base::binary | std::ios_base::out);
 	unsigned int i;
 	for(i = 0; i < fs.locations.size(); i++)
 	{
-		for(map<string, cFile*, less<string> >::iterator it = fs.locations[i]->files.begin(); it != fs.locations[i]->files.end(); it++)
+		for(std::map<std::string, cFile*, std::less<std::string> >::iterator it = fs.locations[i]->files.begin(); it != fs.locations[i]->files.end(); it++)
 		{
 			if(it->first.substr(rodir.length(),11) != "data\\model\\")
 				continue;
-			string ext = it->first.substr(it->first.length()-4);
+			std::string ext = it->first.substr(it->first.length()-4);
 			if(ext == ".rsm")
 			{
-				string filename = it->first.substr(rodir.length());
-				string shortname = filename.substr(11);
+				std::string filename = it->first.substr(rodir.length());
+				std::string shortname = filename.substr(11);
 				filename = "RO/" + replace(shortname, "\\", "/").substr(0, shortname.length()-4) + "|" + filename + "\r\n";
 				pFile.write(filename.c_str(), filename.length());
 			}
@@ -3480,22 +3480,22 @@ MENUCOMMAND(rebuildmodelfile)
 
 MENUCOMMAND(rebuildsoundsfile)
 {
-	string file = Graphics.WM.InputWindow("File to output:", "data/rosounds.txt");
+	std::string file = Graphics.WM.InputWindow("File to output:", "data/rosounds.txt");
 	if(file == "")
 		return false;
-	ofstream pFile(file.c_str(), ios_base::binary | ios_base::out);
+	std::ofstream pFile(file.c_str(), std::ios_base::binary | std::ios_base::out);
 	unsigned int i;
 	for(i = 0; i < fs.locations.size(); i++)
 	{
-		for(map<string, cFile*, less<string> >::iterator it = fs.locations[i]->files.begin(); it != fs.locations[i]->files.end(); it++)
+		for(std::map<std::string, cFile*, std::less<std::string> >::iterator it = fs.locations[i]->files.begin(); it != fs.locations[i]->files.end(); it++)
 		{
 			if(it->first.substr(rodir.length(),9) != "data\\wav\\")
 				continue;
-			string ext = it->first.substr(it->first.length()-4);
+			std::string ext = it->first.substr(it->first.length()-4);
 			if(ext == ".wav")
 			{
-				string filename = it->first.substr(rodir.length());
-				string shortname = filename.substr(9);
+				std::string filename = it->first.substr(rodir.length());
+				std::string shortname = filename.substr(9);
 				filename = "RO/" + replace(shortname, "\\", "/").substr(0, shortname.length()-4) + "|" + filename.substr(9) + "\r\n";
 				pFile.write(filename.c_str(), filename.length());
 			}
@@ -3524,10 +3524,10 @@ MENUCOMMAND(saveOnline)
 {
 	if(!Graphics.WM.ConfirmWindow("This will save your map. Are you sure you want to save?"))
 		return false;
-	string mapname = Graphics.WM.InputWindow("Please enter the mapname", Graphics.world.fileName);
-	string password = Graphics.WM.InputWindow("Please enter your browedit account password", "");
-	map<string, bool, less<string> > textures;
-	map<string, bool, less<string> > models;
+	std::string mapname = Graphics.WM.InputWindow("Please enter the mapname", Graphics.world.fileName);
+	std::string password = Graphics.WM.InputWindow("Please enter your browedit account password", "");
+	std::map<std::string, bool, std::less<std::string> > textures;
+	std::map<std::string, bool, std::less<std::string> > models;
 	int i;
 	for(i = 0; i < Graphics.world.textures.size(); i++)
 		textures[Graphics.world.textures[i]->RoFilename] = true;
@@ -3536,20 +3536,20 @@ MENUCOMMAND(saveOnline)
 		models[Graphics.world.models[i]->rofilename] = true;
 		for(int ii = 0; ii < Graphics.world.models[i]->textures.size(); ii++)
 		{
-			string filename = Graphics.world.models[i]->textures[ii]->getfilename();
+			std::string filename = Graphics.world.models[i]->textures[ii]->getfilename();
 			filename = filename.substr(rodir.length() + 13);
 			textures[filename] = true;
 		}
 	}
 
-	string resources;
+	std::string resources;
 
 	resources = "mapname=" + mapname;
 	resources+= "&uid=" + inttostring(userid);
 	resources+= "&pass=" + password;
 
 
-	map<string,bool,less<string> >::iterator it;
+	std::map<std::string,bool,std::less<std::string> >::iterator it;
 	for(it = textures.begin(); it != textures.end(); it++)
 	{
 		resources += "&textures[]=" + it->first;
@@ -3561,10 +3561,10 @@ MENUCOMMAND(saveOnline)
 
 	class cPostFinished : public cDownloadThread::cDownloadThreadFinisher
 	{
-		string mapname;
-		string password;
+		std::string mapname;
+		std::string password;
 	public:
-		cPostFinished(string m, string p)
+		cPostFinished(std::string m, std::string p)
 		{
 			mapname = m;
 			password = p;
@@ -3574,23 +3574,23 @@ MENUCOMMAND(saveOnline)
 		{
 			if(data)
 			{
-				vector<string> lines = split(data, "\n");
+				std::vector<std::string> lines = split(data, "\n");
 				renderMutex->lock();
 				cProgressWindow* w = new cProgressWindow(Graphics.WM.texture, &Graphics.WM.font, NULL, Graphics.WM.skin);
 				Graphics.WM.addwindow(w);
-				w->objects["progress"]->SetInt(1,0);
-				w->objects["progress"]->SetInt(2,lines.size());
+				w->objects["progress"]->setInt(1,0);
+				w->objects["progress"]->setInt(2,lines.size());
 				renderMutex->unlock();
 
 				for(int i = 0; i < lines.size(); i++)
 				{
 					renderMutex->lock();
-					w->objects["progress"]->SetInt(0,i);
-					w->objects["lblStatus"]->SetText(0,"Uploading " + lines[i]);
+					w->objects["progress"]->setInt(0,i);
+					w->objects["lblStatus"]->setText(0,"Uploading " + lines[i]);
 					renderMutex->unlock();
 					if(lines[i].find("texture:") == 0)
 					{
-						string filename = lines[i].substr(8);
+						std::string filename = lines[i].substr(8);
 						cFile* pFile = fs.open(rodir + "data/texture/" + filename);
 						if(pFile)
 						{
@@ -3622,7 +3622,7 @@ MENUCOMMAND(saveOnline)
 					}
 					else if(lines[i].find("model:") == 0)
 					{
-						string filename = lines[i].substr(6);
+						std::string filename = lines[i].substr(6);
 						cFile* pFile = fs.open(rodir + "data/model/" + filename);
 						if(pFile)
 						{
@@ -3687,9 +3687,9 @@ MENUCOMMAND(saveOnline)
 	Graphics.WM.MessageBox("Please move your viewpoint to show the map on the thumbnail");
 
 
-	cFile* rsw = fs.open(string(Graphics.world.fileName) + ".rsw");
-	cFile* gat = fs.open(string(Graphics.world.fileName) + ".gat");
-	cFile* gnd = fs.open(string(Graphics.world.fileName) + ".gnd");
+	cFile* rsw = fs.open(std::string(Graphics.world.fileName) + ".rsw");
+	cFile* gat = fs.open(std::string(Graphics.world.fileName) + ".gat");
+	cFile* gnd = fs.open(std::string(Graphics.world.fileName) + ".gnd");
 
 	CURL *curl_handle;
 	curl_global_init(CURL_GLOBAL_ALL);

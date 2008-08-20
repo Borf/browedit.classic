@@ -7,10 +7,10 @@
 void cWindowFrame::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {
 	int xx, yy;
-	xx = realx();
-	yy = realy();
+	xx = realX();
+	yy = realY();
 
-	glBindTexture(GL_TEXTURE_2D, parent->texture->texid());
+	glBindTexture(GL_TEXTURE_2D, parent->texture->texId());
 	if(drawinner)
 	{
 		glBegin(GL_QUADS);
@@ -26,7 +26,18 @@ void cWindowFrame::draw(int cutoffleft, int cutoffright, int cutofftop, int cuto
 }
 
 
-void cWindowFrame::SetInt(int id, int val)
+void cWindowFrame::setInt(int id, int val)
 {
 	drawinner = val != 0;
+}
+
+cWindowFrame::cWindowFrame( cWindow* parent, TiXmlDocument &skin ) : cWindowObject(parent, skin.FirstChildElement("skin")->FirstChildElement("frame"))
+{
+	w = 100;
+	h = 25;
+	x = 10;
+	y = 10;
+	alignment = ALIGN_CENTER;
+	type = OBJECT_FRAME;
+	drawinner = false;
 }

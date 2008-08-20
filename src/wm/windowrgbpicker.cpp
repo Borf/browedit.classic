@@ -7,18 +7,18 @@
 void cWindowRGBPicker::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {
 	int xx, yy;
-	xx = realx();
-	yy = realy();
+	xx = realX();
+	yy = realY();
 	glEnable(GL_TEXTURE_2D);
 
 	GLfloat colors[4];
 	glGetFloatv(GL_CURRENT_COLOR, colors);
 	
 	glColor4f(1,1,1, colors[3]);
-	if (this->inobject())
+	if (this->inObject())
 		glColor4f(r, g, b, colors[3]);
 
-	glBindTexture(GL_TEXTURE_2D, parent->texture->texid());
+	glBindTexture(GL_TEXTURE_2D, parent->texture->texId());
 	glBegin(GL_QUADS);
 		glTexCoord2f((371.0f)/512.0f,	(337.0f)/512.0f);				glVertex2d(xx+3, yy+3);
 		glTexCoord2f((371.0f)/512.0f,	(337.0f)/512.0f);				glVertex2d(xx+w-3, yy+3);
@@ -90,7 +90,7 @@ void cWindowRGBPicker::draw(int cutoffleft, int cutoffright, int cutofftop, int 
 
 void cWindowRGBPicker::click()
 {
-	float clickx = mousex - (x + 4);
+	float clickx = mouseX - (x + 4);
 	int color = (int)((clickx/(float)(w-8)) * 16777216);
 
 	r = (color&255)/256.0f;
@@ -102,5 +102,18 @@ void cWindowRGBPicker::click()
 void cWindowRGBPicker::drag()
 {
 	click();
+}
+
+cWindowRGBPicker::cWindowRGBPicker( cWindow* parent ) : cWindowObject(parent)
+{
+	w = 100;
+	h = 25;
+	x = 10;
+	y = 10;
+	alignment = ALIGN_CENTER;
+	type = OBJECT_RGBPICKER;
+	r = 0.5f;
+	g = 0.5f;
+	b = 1;
 }
 

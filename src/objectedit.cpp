@@ -2,8 +2,8 @@
 #include "graphics.h"
 #include "undo.h"
 #include "menu.h"
-#include "wm/objectwindow.h"
-#include "wm/modeloverviewwindow.h"
+#include "windows/objectwindow.h"
+#include "windows/modeloverviewwindow.h"
 
 #define MENUCOMMAND(x) bool MenuCommand_ ## x (cMenuItem* src)
 MENUCOMMAND(model);
@@ -50,8 +50,8 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 					}
 					if(ctrl && !alt)
 					{
-						Graphics.world.models[Graphics.selectedObject]->rot.x += mousey - oldmousey;
-						Graphics.world.models[Graphics.selectedObject]->rot.y += mousex - oldmousex;
+						Graphics.world.models[Graphics.selectedObject]->rot.x += mouseY - oldmousey;
+						Graphics.world.models[Graphics.selectedObject]->rot.y += mouseX - oldmousex;
 						if (SDL_GetModState() & KMOD_SHIFT)
 						{
 
@@ -61,9 +61,9 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 					}
 					if(!ctrl && alt)
 					{
- 						Graphics.world.models[Graphics.selectedObject]->scale.x += (mousex - oldmousex)/10.0;
-						Graphics.world.models[Graphics.selectedObject]->scale.y += (mousex - oldmousex)/10.0;
-						Graphics.world.models[Graphics.selectedObject]->scale.z += (mousex - oldmousex)/10.0;
+ 						Graphics.world.models[Graphics.selectedObject]->scale.x += (mouseX - oldmousex)/10.0;
+						Graphics.world.models[Graphics.selectedObject]->scale.y += (mouseX - oldmousex)/10.0;
+						Graphics.world.models[Graphics.selectedObject]->scale.z += (mouseX - oldmousex)/10.0;
 					}
 				}
 			}
@@ -370,7 +370,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 
 					cWindow* w = new cObjectWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin);
 					if (menuitem != NULL)
-						w->objects["objectmenu"]->SetText(0,menuitem->data2);
+						w->objects["objectmenu"]->setText(0,menuitem->data2);
 					((cWindowFloatInputBox*)w->objects["posx"])->floatje = &o->pos.x;
 					((cWindowFloatInputBox*)w->objects["posy"])->floatje = &o->pos.y;
 					((cWindowFloatInputBox*)w->objects["posz"])->floatje = &o->pos.z;

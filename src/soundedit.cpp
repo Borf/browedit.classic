@@ -1,9 +1,9 @@
 #include <common.h>
 #include "graphics.h"
 #include "undo.h"
-#include <wm/soundoverviewwindow.h>
-#include <wm/soundwindow.h>
-#include <wm/soundselectwindow.h>
+#include <windows/soundoverviewwindow.h>
+#include <windows/soundwindow.h>
+#include <windows/soundselectwindow.h>
 
 extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
@@ -44,7 +44,7 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 					}
 					if(ctrl && !alt)
 					{
-						Graphics.world.sounds[Graphics.selectedObject].pos.y += (mousey-oldmousey);
+						Graphics.world.sounds[Graphics.selectedObject].pos.y += (mouseY-oldmousey);
 						if (SDL_GetModState() & KMOD_SHIFT)
 						{
 							Graphics.world.sounds[Graphics.selectedObject].pos.y = floor(Graphics.world.sounds[Graphics.selectedObject].pos.y * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsetx) / (Graphics.gridsize/2.0f) + Graphics.gridoffsetx/(Graphics.gridsize/2.0f);

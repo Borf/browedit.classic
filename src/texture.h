@@ -9,20 +9,20 @@
 
 
 #include <string>
-using namespace std;
+//using namespace std;
 
 class cTextureLoader;
 
 class cTexture
 {
 protected:
-	string				filename;
+	std::string			filename;
 	GLuint				tid;
 
 	bool				clamp;
 public:
 	bool				loaded;
-	cTexture(string,bool,bool);
+	cTexture(std::string,bool,bool);
 	void				resizeToLog();
 
 	bool				freedata;
@@ -37,8 +37,8 @@ public:
 	int					datatype;
 
 	void				generate();	
-	string				getfilename() { return filename; }
-	virtual GLuint		texid();
+	std::string			getfilename() { return filename; }
+	virtual GLuint		texId();
 	void				unLoad();
 
 
@@ -47,22 +47,22 @@ public:
 class cTextureFromMemory : public cTexture
 {
 public:
-	char*	mem_data;
-	int		mem_length;
-	string extension;
+	char*			mem_data;
+	int				mem_length;
+	std::string		extension;
 
-	cTextureFromMemory(string, char*, int);
-	GLuint texid();
+	cTextureFromMemory(std::string, char*, int);
+	GLuint texId();
 };
 
 
 class cTextureLoaders
 {
 public:
-	vector<cTextureLoader*>	loaders;
-	static cTexture*				load(string, bool, bool = true);
-	static void						load(string, cTexture*, bool);
-	static void						loadfrommem(string, char*, int, cTexture*, bool);
+	std::vector<cTextureLoader*>	loaders;
+	static cTexture*				load(std::string, bool, bool = true);
+	static void						load(std::string, cTexture*, bool);
+	static void						loadfrommem(std::string, char*, int, cTexture*, bool);
 };
 
 cTextureLoaders& GetTextureLoaders();

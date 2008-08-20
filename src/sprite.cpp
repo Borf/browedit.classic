@@ -3,7 +3,7 @@
 #include "filesystem.h"
 extern cFileSystem fs;
 extern cGraphics Graphics;
-extern string rodir;
+extern std::string rodir;
 
 #define SPRITESIZE 128
 
@@ -24,7 +24,7 @@ cSprite::cSprite()
 	direction = 0;
 }
 
-GLuint cSprite::cActSpr::cFrame::texid()
+GLuint cSprite::cActSpr::cFrame::texId()
 {
 	if(loaded)
 		return tex;
@@ -51,7 +51,7 @@ cSprite::~cSprite()
 
 }
 
-void cSprite::loadBody(string filename)
+void cSprite::loadBody(std::string filename)
 {
 	if(body != NULL)
 		delete body;
@@ -59,7 +59,7 @@ void cSprite::loadBody(string filename)
 	body->load(filename);
 }
 
-void cSprite::loadHead(string filename)
+void cSprite::loadHead(std::string filename)
 {
 	if(head != NULL)
 		delete head;
@@ -67,7 +67,7 @@ void cSprite::loadHead(string filename)
 	head->load(filename);
 }
 
-void cSprite::addExtra(string filename)
+void cSprite::addExtra(std::string filename)
 {
 	cActSpr* spr = new cActSpr();
 	spr->load(filename);
@@ -75,7 +75,7 @@ void cSprite::addExtra(string filename)
 
 }
 
-void cSprite::setExtra(unsigned int id, string filename)
+void cSprite::setExtra(unsigned int id, std::string filename)
 {
 	while(extras.size() <= id)
 		extras.push_back(NULL);
@@ -351,7 +351,7 @@ void cSprite::draw()
 	int frame = subframe->image;
 	int dir = subframe->direction;
 	
-	glBindTexture(GL_TEXTURE_2D, body->frames[frame]->texid());
+	glBindTexture(GL_TEXTURE_2D, body->frames[frame]->texId());
 	float width = body->frames[frame]->w;
 	float height = body->frames[frame]->h;
 //	float bodyheight = height;
@@ -390,7 +390,7 @@ void cSprite::draw()
 	//frame = 1;
 	dir = subframe->direction;
 	
-	glBindTexture(GL_TEXTURE_2D, head->frames[frame]->texid());
+	glBindTexture(GL_TEXTURE_2D, head->frames[frame]->texId());
 	width = head->frames[frame]->w;
 	height = head->frames[frame]->h;
 
@@ -419,7 +419,7 @@ void cSprite::draw()
 		//frame = 1;
 		dir = subframe->direction;
 		
-		glBindTexture(GL_TEXTURE_2D, extras[i]->frames[frame]->texid());
+		glBindTexture(GL_TEXTURE_2D, extras[i]->frames[frame]->texId());
 		width = extras[i]->frames[frame]->w;
 		height = extras[i]->frames[frame]->h;
 

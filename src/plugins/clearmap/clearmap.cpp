@@ -4,7 +4,7 @@
 #include <windows.h>
 #include "clearmap.h"
 #include "../base/types.h"
-#include <wm/xmlwindow.h>
+#include <windows/xmlwindow.h>
 
 BOOL APIENTRY DllMain( HANDLE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved )
 {
@@ -35,12 +35,12 @@ cClearMapPlugin::cClearMapPlugin() : cPluginBase("Clear Map", "tools/CLEARMAP")
 
 cWorld* world;
 
-void handleevent(cWindow* w, string name, string event)
+void handleevent(cWindow* w, std::string name, std::string event)
 {
-	if(w->objects["chkTextures"]->GetInt(0) != 0)
+	if(w->objects["chkTextures"]->getInt(0) != 0)
 	{
 		int x,y,i;
-		map<int, bool, less<int> > used;
+		std::map<int, bool, std::less<int> > used;
 
 		world->tiles.clear();
 		world->lightmaps.clear();
@@ -131,7 +131,7 @@ void handleevent(cWindow* w, string name, string event)
 	}
 
 
-	if(w->objects["chkHeight"]->GetInt(0) != 0)
+	if(w->objects["chkHeight"]->getInt(0) != 0)
 	{
 		for(int y = 0; y < world->height; y++)
 		{
@@ -148,7 +148,7 @@ void handleevent(cWindow* w, string name, string event)
 		}
 	}
 
-	if(w->objects["chkWalls"]->GetInt(0) != 0)
+	if(w->objects["chkWalls"]->getInt(0) != 0)
 	{
 		for(int y = 0; y < world->height; y++)
 		{
@@ -159,7 +159,7 @@ void handleevent(cWindow* w, string name, string event)
 			}
 		}
 	}
-	if(w->objects["chkGat"]->GetInt(0) != 0)
+	if(w->objects["chkGat"]->getInt(0) != 0)
 	{
 		int x,y;
 		for(y = 0; y < world->height; y++)
@@ -194,7 +194,7 @@ void handleevent(cWindow* w, string name, string event)
 
 		}
 	}
-	if(w->objects["chkLightmaps"]->GetInt(0) != 0)
+	if(w->objects["chkLightmaps"]->getInt(0) != 0)
 	{
 		unsigned int i;
 		for(i = 0; i < world->lightmaps.size(); i++)
@@ -208,23 +208,23 @@ void handleevent(cWindow* w, string name, string event)
 		for(i = 0; i < world->tiles.size(); i++)
 			world->tiles[i].lightmap = 0;
 	}
-	if(w->objects["chkObjects"]->GetInt(0) != 0)
+	if(w->objects["chkObjects"]->getInt(0) != 0)
 	{
 		for(unsigned int i = 0; i < world->models.size(); i++)
 			world->plugin_api_deleteobjects.push_back(0);
 	}
-	if(w->objects["chkSprites"]->GetInt(0) != 0)
+	if(w->objects["chkSprites"]->getInt(0) != 0)
 	{
 		for(unsigned int i = 0; i < world->sprites.size(); i++)
 			world->plugin_api_deletesprites.push_back(0);
 	}
 
 
-	if(w->objects["chkLights"]->GetInt(0) != 0)
+	if(w->objects["chkLights"]->getInt(0) != 0)
 		world->lights.clear();
-	if(w->objects["chkSounds"]->GetInt(0) != 0)
+	if(w->objects["chkSounds"]->getInt(0) != 0)
 		world->sounds.clear();
-	if(w->objects["chkEffects"]->GetInt(0) != 0)
+	if(w->objects["chkEffects"]->getInt(0) != 0)
 		world->effects.clear();
 
 	w->close();

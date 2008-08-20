@@ -4,7 +4,7 @@
 #include "window.h"
 #include <graphics.h>
 extern cGraphics Graphics;
-extern cWindowObject* draggingobject;
+extern cWindowObject* draggingObject;
 
 cWindowScrollPanel::~cWindowScrollPanel()
 {
@@ -20,8 +20,8 @@ void cWindowScrollPanel::draw(int cutoffleft, int cutoffright, int cutofftop, in
 		objects[i]->draw();
 	}*/
 	int xx, yy;
-	xx = realx();
-	yy = realy();
+	xx = realX();
+	yy = realY();
 
 
 	GLfloat colors[4];
@@ -38,7 +38,7 @@ void cWindowScrollPanel::draw(int cutoffleft, int cutoffright, int cutofftop, in
 	//ybarpos -= barheigh;
 
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, parent->texture->texid());
+	glBindTexture(GL_TEXTURE_2D, parent->texture->texId());
 	glColor3f(1.0f, 1.0f, 1.0f);
 
 
@@ -199,8 +199,8 @@ void cWindowScrollPanel::draw(int cutoffleft, int cutoffright, int cutofftop, in
 	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
 	glPushMatrix();
 
-	int xxx = parent->px() + realx();
-	int yyy = parent->py() + realy();
+	int xxx = parent->getX() + realX();
+	int yyy = parent->getY() + realY();
 	glViewport(xxx, yyy+(cutoffbottom)+14, w-14, h-(cutofftop) - (cutoffbottom)-14);
 	glLoadIdentity();
 	glOrtho(0,w-14,-scrollposy+14,-scrollposy+h,-10000,10000);
@@ -210,25 +210,25 @@ void cWindowScrollPanel::draw(int cutoffleft, int cutoffright, int cutofftop, in
 	for(unsigned int i = 0; i < objects.size(); i++)
 	{
 		cWindowObject* o = objects[i];
-		if (//o->px() >= scrollposx && o->px() + o->pw() <= scrollposx + (w-18) &&
-			o->py()+o->ph() >= scrollposy && o->py() <= scrollposy + (h-18))
+		if (//o->getX() >= scrollposx && o->getX() + o->pw() <= scrollposx + (w-18) &&
+			o->getY()+o->getHeight() >= scrollposy && o->getY() <= scrollposy + (h-18))
 		{
-			int oldx = o->px();
-			int oldy = o->py();
+			int oldx = o->getX();
+			int oldy = o->getY();
 
 			if(o->type == OBJECT_LABEL)
-				o->moveto(o->px()+x-parent->px(),o->py()+y+parent->py());
+				o->moveTo(o->getX()+x-parent->getX(),o->getY()+y+parent->getY());
 			else if(o->type == OBJECT_MODEL)
-				o->moveto(o->px()+x-scrollposx, o->py()+y-scrollposy);
+				o->moveTo(o->getX()+x-scrollposx, o->getY()+y-scrollposy);
 			else
-				o->moveto(o->px(),o->py()+y);
+				o->moveTo(o->getX(),o->getY()+y);
 
 			o->draw(0,
 					0,
 					(scrollposy-oldy),
-					(oldy - scrollposy + o->ph()) - h	);
+					(oldy - scrollposy + o->getHeight()) - h	);
 
-			o->moveto(oldx, oldy);
+			o->moveTo(oldx, oldy);
 
 		}
 	}
@@ -246,12 +246,12 @@ void cWindowScrollPanel::draw(int cutoffleft, int cutoffright, int cutofftop, in
 
 void cWindowScrollPanel::click()
 {
-	int xx = (int)mousex;
-	xx -= realx();
-	xx -= parent->px();
-	int yy = (Graphics.h()-(int)mousey);
-	yy -= realy();
-	yy -= parent->py();
+	int xx = (int)mouseX;
+	xx -= realX();
+	xx -= parent->getX();
+	int yy = (Graphics.h()-(int)mouseY);
+	yy -= realY();
+	yy -= parent->getY();
 
 	int ybarheight = (int)max((int)(((float)h/(float)innerheight)*h), 16);
 	int xbarwidth = (int)max((int)(((float)w/(float)innerwidth)*w), 16);
@@ -270,27 +270,27 @@ void cWindowScrollPanel::click()
 			}
 			else
 			{
-				scrollposx = (int)((mousex +(xbarwidth/2)- parent->px() - xbarwidth) / (float)(w-16))*innerwidth;
+				scrollposx = (int)((mouseX +(xbarwidth/2)- parent->getX() - xbarwidth) / (float)(w-16))*innerwidth;
 				scrollposx = (int)min(max(scrollposx, 0), innerwidth-w);
 			}
 		}
 		else
 		{
 // in the box
-			parent->moveto(parent->px()+scrollposx+x, parent->py()+scrollposy-y);
+			parent->moveto(parent->getX()+scrollposx+x, parent->getY()+scrollposy-y);
 			bool found = false;
 			for(unsigned int i = 0; i < objects.size(); i++)
 			{
-				if (objects[i]->inobject())
+				if (objects[i]->inObject())
 				{
 					found = true;
-					parent->moveto(parent->px()-scrollposx-x, parent->py()-scrollposy+y);
+					parent->moveto(parent->getX()-scrollposx-x, parent->getY()-scrollposy+y);
 					objects[i]->click();
 					break;
 				}
 			}
 			if (!found)
-				parent->moveto(parent->px()-scrollposx-x, parent->py()-scrollposy+y);
+				parent->moveto(parent->getX()-scrollposx-x, parent->getY()-scrollposy+y);
 		}
 	}
 	else if (yy < h-8)
@@ -305,7 +305,7 @@ void cWindowScrollPanel::click()
 		}
 		else if (yy > 14)
 		{
-			scrollposy = (int)((h-(((Graphics.h()-mousey)+(ybarheight/2)) -parent->py() - ybarheight)) / (float)(h-16)) * innerheight - h;
+			scrollposy = (int)((h-(((Graphics.h()-mouseY)+(ybarheight/2)) -parent->getY() - ybarheight)) / (float)(h-16)) * innerheight - h;
 			scrollposy = (int)min(max(scrollposy, 0), innerheight-h);
 		}	
 	}
@@ -314,152 +314,191 @@ void cWindowScrollPanel::click()
 
 void cWindowScrollPanel::drag()
 {
-	int xx = (int)mousex;
-	xx -= realx();
-	xx -= parent->px();
-	int yy = (Graphics.h()-(int)mousey);
-	yy -= realy();
-	yy -= parent->py();
+	int xx = (int)mouseX;
+	xx -= realX();
+	xx -= parent->getX();
+	int yy = (Graphics.h()-(int)mouseY);
+	yy -= realY();
+	yy -= parent->getY();
 	int ybarheight = (int)max((int)(((float)h/(float)innerheight)*h), 16);
 	int xbarwidth = (int)max((int)(((float)w/(float)innerwidth)*(w-16 - 13)),18);
 
 
-	if(draggingobject != NULL)
+	if(draggingObject != NULL)
 	{
-		parent->moveto(parent->px()-scrollposx-x, parent->py()-scrollposy-y);
-		draggingobject->drag();
-		parent->moveto(parent->px()+scrollposx+x, parent->py()+scrollposy+y);
+		parent->moveto(parent->getX()-scrollposx-x, parent->getY()-scrollposy-y);
+		draggingObject->drag();
+		parent->moveto(parent->getX()+scrollposx+x, parent->getY()+scrollposy+y);
 		return ;
 	}
 
-	if (mousestartx - realx() - parent->px() > w-14 && mousestartx - realx() - parent->px() < w)
+	if (mousestartx - realX() - parent->getX() > w-14 && mousestartx - realX() - parent->getX() < w)
 	{
-		scrollposy = (int)(((h-(((Graphics.h()-mousey)+(ybarheight/2)) -parent->py() - ybarheight)) / (float)(h-16)) * innerheight - h);
+		scrollposy = (int)(((h-(((Graphics.h()-mouseY)+(ybarheight/2)) -parent->getY() - ybarheight)) / (float)(h-16)) * innerheight - h);
 		scrollposy = (int)min(max(scrollposy, 0), innerheight-h);
 	}
-	else if ((Graphics.h()-mousestarty) - parent->py() - realy() < 14)
+	else if ((Graphics.h()-mousestarty) - parent->getY() - realY() < 14)
 	{
-		scrollposx = (int)((mousex +(xbarwidth/2)- parent->px() - xbarwidth) / (float)(w-16))*innerwidth;
+		scrollposx = (int)((mouseX +(xbarwidth/2)- parent->getX() - xbarwidth) / (float)(w-16))*innerwidth;
 		scrollposx = (int)min(max(scrollposx, 0), innerwidth-w);
 	}
 	else
 	{
-		parent->moveto(parent->px()+scrollposx+x, parent->py()+scrollposy-y);
+		parent->moveto(parent->getX()+scrollposx+x, parent->getY()+scrollposy-y);
 		for(unsigned int i = 0; i < objects.size(); i++)
 		{
-			if (objects[i]->inobject())
+			if (objects[i]->inObject())
 			{
 				objects[i]->drag();
-				draggingobject = objects[i];
-				parent->moveto(parent->px()-scrollposx-x, parent->py()-scrollposy+y);
+				draggingObject = objects[i];
+				parent->moveto(parent->getX()-scrollposx-x, parent->getY()-scrollposy+y);
 				return;
 			}
 		}
-		parent->moveto(parent->px()-scrollposx-x, parent->py()-scrollposy+y);
+		parent->moveto(parent->getX()-scrollposx-x, parent->getY()-scrollposy+y);
 		return;
 	}
 
 }
 
-bool cWindowScrollPanel::onkeyup(int keyid, bool shift)
+bool cWindowScrollPanel::onKeyUp(int keyid, bool shift)
 {
 	for(int i = objects.size()-1; i >= 0; i--)
 	{
-		if (objects[i]->inobject())
-			return objects[i]->onkeyup(keyid, shift);
+		if (objects[i]->inObject())
+			return objects[i]->onKeyUp(keyid, shift);
 	}
 	return false;
 }
 
-bool cWindowScrollPanel::onkeydown(int keyid, bool shift)
+bool cWindowScrollPanel::onKeyDown(int keyid, bool shift)
 {
 	for(int i = objects.size()-1; i >= 0; i--)
 	{
-		if (objects[i]->inobject())
-			return objects[i]->onkeydown(keyid, shift);
+		if (objects[i]->inObject())
+			return objects[i]->onKeyDown(keyid, shift);
 	}
 	return false;
 }
 
-bool cWindowScrollPanel::onchar(char keyid, bool shift)
+bool cWindowScrollPanel::onChar(char keyid, bool shift)
 {
 	for(int i = objects.size()-1; i >= 0; i--)
 	{
-		if (objects[i]->inobject())
-			return objects[i]->onchar(keyid, shift);
+		if (objects[i]->inObject())
+			return objects[i]->onChar(keyid, shift);
 	}
 	return false;
 }
 
-void cWindowScrollPanel::doubleclick()
+void cWindowScrollPanel::doubleClick()
 {
-	parent->moveto(parent->px()+scrollposx+x, parent->py()+scrollposy-y);
+	parent->moveto(parent->getX()+scrollposx+x, parent->getY()+scrollposy-y);
 	for(int i = objects.size()-1; i >= 0; i--)
 	{
-		if (objects[i]->inobject())
+		if (objects[i]->inObject())
 		{
-			parent->moveto(parent->px()-scrollposx-x, parent->py()-scrollposy+y);
-			objects[i]->doubleclick();
+			parent->moveto(parent->getX()-scrollposx-x, parent->getY()-scrollposy+y);
+			objects[i]->doubleClick();
 			return;
 		}
 	}
-	parent->moveto(parent->px()-scrollposx-x, parent->py()-scrollposy+y);
+	parent->moveto(parent->getX()-scrollposx-x, parent->getY()-scrollposy+y);
 	return;
 }
 
-void cWindowScrollPanel::rightclick()
+void cWindowScrollPanel::rightClick()
 {
-	parent->moveto(parent->px()+scrollposx+x, parent->py()+scrollposy-y);
+	parent->moveto(parent->getX()+scrollposx+x, parent->getY()+scrollposy-y);
 	for(int i = objects.size()-1; i >= 0; i--)
 	{
-		if (objects[i]->inobject())
-			objects[i]->rightclick();
+		if (objects[i]->inObject())
+			objects[i]->rightClick();
 	}
-	parent->moveto(parent->px()-scrollposx-x, parent->py()-scrollposy+y);
+	parent->moveto(parent->getX()-scrollposx-x, parent->getY()-scrollposy+y);
 }
 
 
 
-string cWindowScrollPanel::ppopup()
+std::string cWindowScrollPanel::getPopup()
 {
-	parent->moveto(parent->px()+scrollposx+x, parent->py()+scrollposy-y);
+	parent->moveto(parent->getX()+scrollposx+x, parent->getY()+scrollposy-y);
 	for(int i = objects.size()-1; i >= 0; i--)
 	{
-		if (objects[i]->inobject())
+		if (objects[i]->inObject())
 		{
-			parent->moveto(parent->px()-scrollposx-x, parent->py()-scrollposy+y);
-			return objects[i]->ppopup();
+			parent->moveto(parent->getX()-scrollposx-x, parent->getY()-scrollposy+y);
+			return objects[i]->getPopup();
 		}
 	}
-	parent->moveto(parent->px()-scrollposx-x, parent->py()-scrollposy+y);
+	parent->moveto(parent->getX()-scrollposx-x, parent->getY()-scrollposy+y);
 	return "";
 }
 
 
-cWindowObject* cWindowScrollPanel::inobject()
+cWindowObject* cWindowScrollPanel::inObject()
 {
-	parent->moveto(parent->px()+scrollposx+x, parent->py()+scrollposy-y);
+	parent->moveto(parent->getX()+scrollposx+x, parent->getY()+scrollposy-y);
 	for(int i = objects.size()-1; i >= 0; i--)
 	{
-		if (objects[i]->inobject())
+		if (objects[i]->inObject())
 		{
-			parent->moveto(parent->px()-scrollposx-x, parent->py()-scrollposy+y);
+			parent->moveto(parent->getX()-scrollposx-x, parent->getY()-scrollposy+y);
 			return objects[i];
 		}
 	}
-	parent->moveto(parent->px()-scrollposx-x, parent->py()-scrollposy+y);
-	return cWindowObject::inobject();
+	parent->moveto(parent->getX()-scrollposx-x, parent->getY()-scrollposy+y);
+	return cWindowObject::inObject();
 }
 
 
-void cWindowScrollPanel::scrollup()
+void cWindowScrollPanel::scrollUp()
 {
 	scrollposy= scrollposy - h/2;
 	scrollposy = (int)max(min(scrollposy, innerheight-h), 0);
 }
 
-void cWindowScrollPanel::scrolldown()
+void cWindowScrollPanel::scrollDown()
 {
 	scrollposy = scrollposy + h/2;
 	scrollposy = (int)max(min(scrollposy, innerheight-h), 0);
+}
+
+cWindowScrollPanel::cWindowScrollPanel( cWindow* parent, TiXmlDocument &skin ) : cWindowObject(parent, skin.FirstChildElement("skin")->FirstChildElement("list"))
+{
+	w = 100;
+	h = 25;
+	x = 10;
+	y = 10;
+	alignment = ALIGN_CENTER;
+	cursorType = 0;
+	selectable = true;
+	type = OBJECT_BUTTON;
+	innerheight = 1000;
+	innerwidth = 1000;
+	
+	scrollposx = 0;
+	scrollposy = 0;
+	draggingobject = NULL;
+	
+	TiXmlElement* bSkin = skin.FirstChildElement("skin")->FirstChildElement("list")->FirstChildElement("scroll");
+	
+	skinBarWidth =			atoi(bSkin->FirstChildElement("width")->FirstChild()->Value());
+	skinBarLeft =			atoi(bSkin->FirstChildElement("left")->FirstChild()->Value());
+	skinButtonUpLeft =		atoi(bSkin->FirstChildElement("buttonup")->FirstChildElement("left")->FirstChild()->Value());
+	skinButtonUpTop =		512-atoi(bSkin->FirstChildElement("buttonup")->FirstChildElement("top")->FirstChild()->Value());
+	skinButtonUpHeight =	atoi(bSkin->FirstChildElement("buttonup")->FirstChildElement("height")->FirstChild()->Value());
+	skinButtonDownLeft =	atoi(bSkin->FirstChildElement("buttondown")->FirstChildElement("left")->FirstChild()->Value());
+	skinButtonDownTop =		512-atoi(bSkin->FirstChildElement("buttondown")->FirstChildElement("top")->FirstChild()->Value());
+	skinButtonDownHeight =	atoi(bSkin->FirstChildElement("buttondown")->FirstChildElement("height")->FirstChild()->Value());
+	
+	skinBarTopHeight = atoi(bSkin->FirstChildElement("top")->Attribute("height"));
+	skinBarTop =		512 - atoi(bSkin->FirstChildElement("top")->FirstChild()->Value());
+	skinBarBottomHeight = atoi(bSkin->FirstChildElement("bottom")->Attribute("height"));
+	skinBarBottom =		512 - atoi(bSkin->FirstChildElement("bottom")->FirstChild()->Value());
+	
+	skinBarBackTop=		512-atoi(bSkin->FirstChildElement("background")->FirstChildElement("top")->FirstChild()->Value());
+	skinBarBackHeight =	atoi(bSkin->FirstChildElement("background")->FirstChildElement("height")->FirstChild()->Value());
+	skinBarBackLeft =	atoi(bSkin->FirstChildElement("background")->FirstChildElement("left")->FirstChild()->Value());
+	skinBarCenterHeight = atoi(bSkin->FirstChildElement("centerheight")->FirstChild()->Value());
 }

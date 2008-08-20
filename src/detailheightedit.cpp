@@ -10,7 +10,7 @@ extern long tilex,tiley;
 extern int brushsize;
 extern bool lbuttondown, rbuttondown;
 extern long lasttimer;
-extern vector<vector<vector<float> > > clipboard;
+extern std::vector<std::vector<std::vector<float> > > clipboard;
 
 
 
@@ -121,10 +121,10 @@ int cProcessManagement::detailheightedit_process_events(SDL_Event &event)
 						clipboard.clear();
 						for(int y = posy-(int)floor(brushsize/2.0f); y < posy+(int)ceil(brushsize/2.0f); y++)
 						{
-							vector<vector<float> > row;
+							std::vector<std::vector<float> > row;
 							for(int x = posx-(int)floor(brushsize/2.0f); x < posx+(int)ceil(brushsize/2.0f); x++)
 							{
-								vector<float> c;
+								std::vector<float> c;
 								c.push_back(Graphics.world.cubes[y][x].cell1);
 								c.push_back(Graphics.world.cubes[y][x].cell2);
 								c.push_back(Graphics.world.cubes[y][x].cell3);
@@ -149,7 +149,7 @@ int cProcessManagement::detailheightedit_process_events(SDL_Event &event)
 						int yy = 0;
 						for(int y = posy-(int)floor(brushsize/2.0f); y < posy+(int)ceil(brushsize/2.0f); y++)
 						{
-							vector<vector<float> > row;
+							std::vector<std::vector<float> > row;
 							int xx = 0;
 							for(int x = posx-(int)floor(brushsize/2.0f); x < posx+(int)ceil(brushsize/2.0f); x++)
 							{

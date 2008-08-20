@@ -4,32 +4,22 @@
 #include "windowobject.h"
 #include <string>
 #include <vector>
-using namespace std;
+//using namespace std;
 
 class cWindowLabel : public cWindowObject
 {
 protected:
-	string text;
-	string lasttext;
-	vector<string> lines;
+	std::string text;
+	std::string lasttext;
+	std::vector<std::string> lines;
 public:
-	cWindowLabel(cWindow* parent) : cWindowObject(parent)
-	{
-		w = 30;
-		h = 100;
-		x = 10;
-		y = 10;
-		alignment = ALIGN_CENTER;
-		text = "Default text that is very long and will wrap";
-		selectable = false;
-		type = OBJECT_LABEL;
-	}
+	cWindowLabel(cWindow* parent);
 	virtual ~cWindowLabel() {}
 	virtual void draw(int,int,int,int);
-	void SetText(int, string);
-	string GetText(int);
+	void setText(int, std::string);
+	std::string getText(int);
 
-	int GetInt(int);
+	int getInt(int);
 
 };
 

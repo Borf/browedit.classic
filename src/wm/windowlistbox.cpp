@@ -12,22 +12,22 @@ void cWindowListBox::draw(int cutoffleft, int cutoffright, int cutofftop, int cu
 	glGetFloatv(GL_CURRENT_COLOR, colors);
 
 	int xx, yy;
-	xx = realx();
-	yy = realy();
+	xx = realX();
+	yy = realY();
 
 	int ww = w - skinBarWidth;
 
 
 	int i = 0;
-	yy = realy()+h-5-12;
-	while(yy+10 > realy() && i < (int)values.size())
+	yy = realY()+h-5-12;
+	while(yy+10 > realY() && i < (int)values.size())
 	{
 		i++;
 		yy-=12;
 	}
 	int barheight = max((int)(((float)(h - (skinButtonDownHeight+skinButtonUpHeight)) * (float)((float)i / (float)values.size()))+0.5f), skinTopHeight+skinBottomHeight);
 
-	yy = realy();
+	yy = realY();
 
 
 	int barpos = (values.size() - i);
@@ -35,7 +35,7 @@ void cWindowListBox::draw(int cutoffleft, int cutoffright, int cutofftop, int cu
 		barpos = (int)((float)(h-(skinButtonDownHeight+skinButtonUpHeight)) * ((float)liststart / (float)values.size()));
 
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, parent->texture->texid());
+	glBindTexture(GL_TEXTURE_2D, parent->texture->texId());
 	glBegin(GL_QUADS);
 		glTexCoord2f(skinLeft/512.0f,					(skinTop-skinTopHeight)/512.0f);		glVertex2d(xx+0,				yy+h-skinTopHeight);
 		glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	(skinTop-skinTopHeight)/512.0f);		glVertex2d(xx+skinLeftWidth,	yy+h-skinTopHeight);
@@ -155,13 +155,13 @@ void cWindowListBox::draw(int cutoffleft, int cutoffright, int cutofftop, int cu
 	glDisable(GL_TEXTURE_2D);
 	
 	i = liststart;
-	yy = realy()+h-5-12;
-	while(yy+10 > realy() && i < (int)values.size())
+	yy = realY()+h-5-12;
+	while(yy+10 > realY() && i < (int)values.size())
 	{
 		if(i == selected && showselection)
-			parent->font->print(selectFontColor[0],selectFontColor[1],selectFontColor[2],parent->px()+xx+5,parent->py()+yy,"%s", values[i].c_str());
+			parent->font->print(selectFontColor[0],selectFontColor[1],selectFontColor[2],parent->getX()+xx+5,parent->getY()+yy,"%s", values[i].c_str());
 		else
-			parent->font->print(fontcolor[0],fontcolor[1],fontcolor[2],parent->px()+xx+5,parent->py()+yy,"%s", values[i].c_str());
+			parent->font->print(fontcolor[0],fontcolor[1],fontcolor[2],parent->getX()+xx+5,parent->getY()+yy,"%s", values[i].c_str());
 		i++;
 		yy-=12;
 	}
@@ -173,13 +173,13 @@ void cWindowListBox::draw(int cutoffleft, int cutoffright, int cutofftop, int cu
 
 
 
-bool cWindowListBox::onkeydown(int key, bool shift)
+bool cWindowListBox::onKeyDown(int key, bool shift)
 {
 	if (key == SDLK_DOWN && selected < (int)values.size()-1)
 	{
 		int i = 0;
-		int yy = realy()+h-5-12;
-		while(yy+10 > realy() && i < (int)values.size())
+		int yy = realY()+h-5-12;
+		while(yy+10 > realY() && i < (int)values.size())
 		{
 			i++;
 			yy-=12;
@@ -206,7 +206,7 @@ bool cWindowListBox::onkeydown(int key, bool shift)
 }
 
 
-void cWindowListBox::SetText(int index, string text)
+void cWindowListBox::setText(int index, std::string text)
 {
 	if (index == -1)
 		values.push_back(text);
@@ -217,7 +217,7 @@ void cWindowListBox::SetText(int index, string text)
 		values[index] = text;
 	}
 }
-void cWindowListBox::SetInt(int index, int value)
+void cWindowListBox::setInt(int index, int value)
 {
 	if (index == -1)
 		properties.push_back(value);
@@ -247,7 +247,7 @@ void cWindowListBox::SetInt(int index, int value)
 		properties[index] = value;
 	}
 }
-int cWindowListBox::GetInt(int index)
+int cWindowListBox::getInt(int index)
 {
 	if (index == -1)
 		return selected;
@@ -262,12 +262,12 @@ int cWindowListBox::GetInt(int index)
 
 void cWindowListBox::click()
 {
-	int xx = (int)mousex;
-	xx -= realx();
-	xx -= parent->px();
-	int yy = Graphics.h()-(int)mousey;
-	yy -= realy();
-	yy -= parent->py();
+	int xx = (int)mouseX;
+	xx -= realX();
+	xx -= parent->getX();
+	int yy = Graphics.h()-(int)mouseY;
+	yy -= realY();
+	yy -= parent->getY();
 
 	if (xx < w - 14)
 	{ // in the box
@@ -282,24 +282,24 @@ void cWindowListBox::click()
 	{
 		if (yy < 8)
 		{ // arrow down
-			onkeydown(SDLK_DOWN, false);
+			onKeyDown(SDLK_DOWN, false);
 		}
 		else if (yy+8 > h)
 		{
-			onkeydown(SDLK_UP, false);
+			onKeyDown(SDLK_UP, false);
 		}
 		else
 		{
 			int i = 0;
-			int yyy = realy()+h-5-12;
-			while(yyy+10 > realy() && i < (int)values.size())
+			int yyy = realY()+h-5-12;
+			while(yyy+10 > realY() && i < (int)values.size())
 			{
 				i++;
 				yyy-=12;
 			}
 
 			int barheight = max((int)((float)(h - (skinButtonDownHeight+skinButtonUpHeight)) * (float)((float)i / (float)values.size())), skinTopHeight+skinBottomHeight);
-			yyy = realy();
+			yyy = realY();
 			int barpos = (values.size() - i);
 			if (barpos != 0)
 				barpos = (int)((float)(h-(skinButtonDownHeight+skinButtonUpHeight)) * ((float)liststart / (float)values.size()));
@@ -319,24 +319,24 @@ void cWindowListBox::click()
 
 void cWindowListBox::drag()
 {
-	int xx = (int)mousex;
-	xx -= realx();
-	xx -= parent->px();
-	int yy = Graphics.h()-(int)mousey;
-	yy -= realy();
-	yy -= parent->py();
+	int xx = (int)mouseX;
+	xx -= realX();
+	xx -= parent->getX();
+	int yy = Graphics.h()-(int)mouseY;
+	yy -= realY();
+	yy -= parent->getY();
 
-	if (mousestartx - realx() - parent->px() > w-14 && mousestartx - realx() - parent->px() < w)
+	if (mousestartx - realX() - parent->getX() > w-14 && mousestartx - realX() - parent->getX() < w)
 	{
 		int i = 0;
-		int yyy = realy()+h-5-12;
-		while(yyy+10 > realy() && i < (int)values.size())
+		int yyy = realY()+h-5-12;
+		while(yyy+10 > realY() && i < (int)values.size())
 		{
 			i++;
 			yyy-=12;
 		}
 
-		yyy = realy();
+		yyy = realY();
 		int barpos = (values.size() - i);
 		if (barpos != 0)
 			barpos = (int)((float)(h-(skinButtonDownHeight+skinButtonUpHeight)) * ((float)liststart / (float)values.size()));
@@ -357,12 +357,12 @@ void cWindowListBox::drag()
 	}
 }
 
-void cWindowListBox::doubleclick()
+void cWindowListBox::doubleClick()
 {
 //	Log(1,0,"You doubleclicked me!");
 }
 
-string cWindowListBox::GetText(int id)
+std::string cWindowListBox::getText(int id)
 {
 	if(id > -1)
 		return values[id];
@@ -373,18 +373,18 @@ string cWindowListBox::GetText(int id)
 
 
 
-void cWindowListBox::scrollup()
+void cWindowListBox::scrollUp()
 {
 	liststart-=5;
 	if (liststart <= 0)
 		liststart = 0;
 }
-void cWindowListBox::scrolldown()
+void cWindowListBox::scrollDown()
 {
 	unsigned int i = 0;
 
-	int yy = realy()+h-5-12;
-	while(yy+10 > realy() && i < values.size())
+	int yy = realY()+h-5-12;
+	while(yy+10 > realY() && i < values.size())
 	{
 		i++;
 		yy-=12;
@@ -396,4 +396,49 @@ void cWindowListBox::scrolldown()
 	if(h/12 > (int)values.size())
 		liststart = 0;
 
+}
+
+cWindowListBox::cWindowListBox( cWindow* parent, TiXmlDocument &skin ) : cWindowObject(parent,skin.FirstChildElement("skin")->FirstChildElement("list"))
+{
+	w = 280;
+	h = 100;
+	x = 5;
+	y = 20;
+	alignment = ALIGN_TOPLEFT;
+	liststart = 0;
+	selected = 0;
+	showselection = true;
+	showscroll = true;
+	type = OBJECT_LISTBOX;
+	TiXmlElement* bSkin = skin.FirstChildElement("skin")->FirstChildElement("list")->FirstChildElement("scroll");
+	
+	std::string scolor = skin.FirstChildElement("skin")->FirstChildElement("list")->FirstChildElement("selectcolor")->FirstChild()->Value();
+	selectColor[0] = hex2dec(scolor.substr(0,2)) / 256.0f;
+	selectColor[1] = hex2dec(scolor.substr(2,2)) / 256.0f;
+	selectColor[2] = hex2dec(scolor.substr(4,2)) / 256.0f;
+	
+	scolor = skin.FirstChildElement("skin")->FirstChildElement("list")->FirstChildElement("selectfontcolor")->FirstChild()->Value();
+	selectFontColor[0] = hex2dec(scolor.substr(0,2)) / 256.0f;
+	selectFontColor[1] = hex2dec(scolor.substr(2,2)) / 256.0f;
+	selectFontColor[2] = hex2dec(scolor.substr(4,2)) / 256.0f;
+	
+	
+	skinBarWidth =			atoi(bSkin->FirstChildElement("width")->FirstChild()->Value());
+	skinBarLeft =			atoi(bSkin->FirstChildElement("left")->FirstChild()->Value());
+	skinButtonUpLeft =		atoi(bSkin->FirstChildElement("buttonup")->FirstChildElement("left")->FirstChild()->Value());
+	skinButtonUpTop =		512-atoi(bSkin->FirstChildElement("buttonup")->FirstChildElement("top")->FirstChild()->Value());
+	skinButtonUpHeight =	atoi(bSkin->FirstChildElement("buttonup")->FirstChildElement("height")->FirstChild()->Value());
+	skinButtonDownLeft =	atoi(bSkin->FirstChildElement("buttondown")->FirstChildElement("left")->FirstChild()->Value());
+	skinButtonDownTop =		512-atoi(bSkin->FirstChildElement("buttondown")->FirstChildElement("top")->FirstChild()->Value());
+	skinButtonDownHeight =	atoi(bSkin->FirstChildElement("buttondown")->FirstChildElement("height")->FirstChild()->Value());
+	
+	skinBarTopHeight = atoi(bSkin->FirstChildElement("top")->Attribute("height"));
+	skinBarTop =		512 - atoi(bSkin->FirstChildElement("top")->FirstChild()->Value());
+	skinBarBottomHeight = atoi(bSkin->FirstChildElement("bottom")->Attribute("height"));
+	skinBarBottom =		512 - atoi(bSkin->FirstChildElement("bottom")->FirstChild()->Value());
+	
+	skinBarBackTop=		512-atoi(bSkin->FirstChildElement("background")->FirstChildElement("top")->FirstChild()->Value());
+	skinBarBackHeight =	atoi(bSkin->FirstChildElement("background")->FirstChildElement("height")->FirstChild()->Value());
+	skinBarBackLeft =	atoi(bSkin->FirstChildElement("background")->FirstChildElement("left")->FirstChild()->Value());
+	skinBarCenterHeight = atoi(bSkin->FirstChildElement("centerheight")->FirstChild()->Value());
 }

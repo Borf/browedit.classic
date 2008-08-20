@@ -15,7 +15,7 @@ public:
 	cTextureModel();
 	virtual ~cTextureModel();
 
-	int open(string);
+	int open(std::string);
 	int close();
 	int draw(float x = 0.0f, float y = 0.0f, float z = 0.0f, float scale = 1.0f);
 	int setstate(int);

@@ -3,7 +3,7 @@
 
 #include "common.h"
 #include <vector>
-using namespace std;
+//using namespace std;
 
 // This will allow us to create an object to keep track of our frustum
 class CFrustum {
@@ -59,7 +59,7 @@ public:
 private:
 
 	// This is the vector list of all of our lines
-	vector<cVector3> m_vLines;		
+	std::vector<cVector3> m_vLines;		
 };
 
 

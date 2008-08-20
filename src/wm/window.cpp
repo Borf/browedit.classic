@@ -2,7 +2,7 @@
 #include <graphics.h>
 
 extern cGraphics Graphics;
-extern cWindowObject* draggingobject;
+extern cWindowObject* draggingObject;
 
 #include "windowinputbox.h"
 #include "windowlabel.h"
@@ -13,45 +13,45 @@ extern cWindowObject* draggingobject;
 #ifndef __NOXML__
 #include <tinyxml/tinyxml.h>
 extern TiXmlDocument	config;
-extern string			configfile;
+extern std::string			configfile;
 #endif
 
 
 cWindow::cWindow(cTexture* t, cFont* f, TiXmlDocument &skin)
 {
-	notransparency = false;
+	noTransparency = false;
 	visible = false;
-	rolledup = false;
+	rolledUp = false;
 	resizable = true;
 	movable = true;
-	resizingx = false;
-	resizingy = false;
-	resizingxy = false;
-	resizingyx = false;
-	checkborders = false;
-	alwaysontop = false;
-	minh = 100;
-	minw = 100;
+	resizingX = false;
+	resizingY = false;
+	resizingXY = false;
+	resizingYX = false;
+	checkBorders = false;
+	alwaysOnTop = false;
+	minHeight = 100;
+	minWidth = 100;
 	selectedObject = NULL;
-	closetype = CLOSE;
+	closeType = CLOSE;
 	modal = false;
 	enabled = true;
 	texture = t;
 	font = f;
-	saveprops = "";
+	saveProperties = "";
 
-	string color = skin.FirstChildElement("skin")->FirstChildElement("window")->FirstChildElement("fontcolor")->FirstChild()->Value();
-	fontcolor[0] = hex2dec(color.substr(0,2)) / 256.0f;
-	fontcolor[1] = hex2dec(color.substr(2,2)) / 256.0f;
-	fontcolor[2] = hex2dec(color.substr(4,2)) / 256.0f;
+	std::string color = skin.FirstChildElement("skin")->FirstChildElement("window")->FirstChildElement("fontcolor")->FirstChild()->Value();
+	fontColor[0] = hex2dec(color.substr(0,2)) / 256.0f;
+	fontColor[1] = hex2dec(color.substr(2,2)) / 256.0f;
+	fontColor[2] = hex2dec(color.substr(4,2)) / 256.0f;
 
 	color = skin.FirstChildElement("skin")->FirstChildElement("window")->FirstChildElement("title")->FirstChildElement("fontcolor")->FirstChild()->Value();
-	titlecolor[0] = hex2dec(color.substr(0,2)) / 256.0f;
-	titlecolor[1] = hex2dec(color.substr(2,2)) / 256.0f;
-	titlecolor[2] = hex2dec(color.substr(4,2)) / 256.0f;
+	titleColor[0] = hex2dec(color.substr(0,2)) / 256.0f;
+	titleColor[1] = hex2dec(color.substr(2,2)) / 256.0f;
+	titleColor[2] = hex2dec(color.substr(4,2)) / 256.0f;
 
-	titlexoff = atoi(skin.FirstChildElement("skin")->FirstChildElement("window")->FirstChildElement("title")->FirstChildElement("xoff")->FirstChild()->Value());
-	titleyoff = atoi(skin.FirstChildElement("skin")->FirstChildElement("window")->FirstChildElement("title")->FirstChildElement("yoff")->FirstChild()->Value());
+	titleOffX = atoi(skin.FirstChildElement("skin")->FirstChildElement("window")->FirstChildElement("title")->FirstChildElement("xoff")->FirstChild()->Value());
+	titleOffY = atoi(skin.FirstChildElement("skin")->FirstChildElement("window")->FirstChildElement("title")->FirstChildElement("yoff")->FirstChild()->Value());
 
 
 	TiXmlElement* wSkin = skin.FirstChildElement("skin")->FirstChildElement("window");
@@ -113,7 +113,7 @@ void cWindow::draw()
 	glPushMatrix();
 	glTranslatef(x, y, 0);
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, texture->texid());
+	glBindTexture(GL_TEXTURE_2D, texture->texId());
 	glBegin(GL_QUADS);
 		glTexCoord2f(skinLeft/512.0f,					(skinTop-skinTopHeight)/512.0f);		glVertex2d(0,				h-skinTopHeight);
 		glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	(skinTop-skinTopHeight)/512.0f);		glVertex2d(skinLeftWidth,	h-skinTopHeight);
@@ -131,7 +131,7 @@ void cWindow::draw()
 		glTexCoord2f(skinRight/512.0f,					skinTop/512.0f);						glVertex2d(w-skinRightWidth,h);
 
 
-		if (!rolledup)
+		if (!rolledUp)
 		{
 			glTexCoord2f(skinLeft/512.0f,					skinBottom/512.0f);						glVertex2d(0,				skinBottomHeight);
 			glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	skinBottom/512.0f);						glVertex2d(skinLeftWidth,	skinBottomHeight);
@@ -167,18 +167,18 @@ void cWindow::draw()
 
 //	glTranslatef(skinOffLeft, skinOffTop,0);
 
-	map<string, cWindowObject*, less<string> >::iterator i;
+	std::map<std::string, cWindowObject*, std::less<std::string> >::iterator i;
 	for(i = objects.begin(); i != objects.end(); i++)
 	{
 		cWindowObject* o = i->second;
-		if(rolledup)
+		if(rolledUp)
 		{
 			if(o->realy2() >= h-20)
 				o->draw();
 		}
 		else if (
-			(!rolledup && !checkborders) ||
-			(!rolledup && checkborders && o->realy() < h && o->realy() > 0 && o->realx() > 0 && o->realx() < w))
+			(!rolledUp && !checkBorders) ||
+			(!rolledUp && checkBorders && o->realY() < h && o->realY() > 0 && o->realX() > 0 && o->realX() < w))
 		{
 			o->draw();
 		}
@@ -190,15 +190,15 @@ void cWindow::draw()
 		glColor3f(1,0,0);
 		glDisable(GL_TEXTURE_2D);
 		glBegin(GL_LINE_LOOP);
-			glVertex2f(selectedObject->realx(), selectedObject->realy());
-			glVertex2f(selectedObject->realx(), selectedObject->realy()+selectedObject->ph());
-			glVertex2f(selectedObject->realx()+selectedObject->pw(), selectedObject->realy()+selectedObject->ph());
-			glVertex2f(selectedObject->realx()+selectedObject->pw(), selectedObject->realy());
+			glVertex2f(selectedObject->realX(), selectedObject->realY());
+			glVertex2f(selectedObject->realX(), selectedObject->realY()+selectedObject->getHeight());
+			glVertex2f(selectedObject->realX()+selectedObject->pw(), selectedObject->realY()+selectedObject->getHeight());
+			glVertex2f(selectedObject->realX()+selectedObject->pw(), selectedObject->realY());
 		glEnd();
 		glColor3f(1,1,1);
 	}
 */
-	font->print(titlecolor[0], titlecolor[1], titlecolor[2],x+titlexoff,y+h-(titleyoff+12),title.c_str());
+	font->print(titleColor[0], titleColor[1], titleColor[2],x+titleOffX,y+h-(titleOffY+12),title.c_str());
 	glPopMatrix();
 	glColor4fv(tempColors);
 }
@@ -207,8 +207,8 @@ void cWindow::draw()
 bool cWindow::inwindow()
 {
 	if (!visible) return false;
-	if (mousex > x && mousex < x+w &&
-		(Graphics.h()-mousey) > py() && (Graphics.h()-mousey) < py()+ph())
+	if (mouseX > x && mouseX < x+w &&
+		(Graphics.h()-mouseY) > getY() && (Graphics.h()-mouseY) < getY()+getHeight())
 		return true;
 	return false;
 }
@@ -220,51 +220,51 @@ bool cWindow::drag()
 	if (!visible) return false;
 	if (resizable)
 	{
-		if (resizingxy && (mousex-x) > minw)
-			resizeto((int)mousex - x, h);
-		else if (resizingxy)
-			resizeto(minw, h);
+		if (resizingXY && (mouseX-x) > minWidth)
+			resizeto((int)mouseX - x, h);
+		else if (resizingXY)
+			resizeto(minWidth, h);
 
-		if (resizingyx && ((py()+h)-(Graphics.h()-mousey)) > minh)
+		if (resizingYX && ((getY()+h)-(Graphics.h()-mouseY)) > minHeight)
 		{
-			resizeto(w, (py()+h)-(Graphics.h()-(int)mousey));
-			y = (Graphics.h()-(int)mousey);
+			resizeto(w, (getY()+h)-(Graphics.h()-(int)mouseY));
+			y = (Graphics.h()-(int)mouseY);
 		}
-		else if (resizingyx)
+		else if (resizingYX)
 		{
-			y = (y+h) - minh;
-			resizeto(w, minh);
-		}
-
-		if (resizingx && (w+x-(int)mousex) > minh)
-		{
-			resizeto(w + x - (int)mousex, h);
-			x = (int)mousex;
-		}
-		else if (resizingx)
-		{
-			x = x+w-minw;
-			resizeto(minw, h);
+			y = (y+h) - minHeight;
+			resizeto(w, minHeight);
 		}
 
-		if (resizingy && ((Graphics.h()-mousey)-py2() > minh))
+		if (resizingX && (w+x-(int)mouseX) > minHeight)
 		{
-			resizeto(w, (Graphics.h()-(int)mousey) - py2());
+			resizeto(w + x - (int)mouseX, h);
+			x = (int)mouseX;
 		}
-		else if (resizingy)
+		else if (resizingX)
 		{
-			resizeto(w, minh);
+			x = x+w-minWidth;
+			resizeto(minWidth, h);
+		}
+
+		if (resizingY && ((Graphics.h()-mouseY)-py2() > minHeight))
+		{
+			resizeto(w, (Graphics.h()-(int)mouseY) - py2());
+		}
+		else if (resizingY)
+		{
+			resizeto(w, minHeight);
 		}
 	}
 
 	if (movable && !(resizing() && resizable))
 	{
-		x=(int)mousex-(int)dragoffsetx;
-		y=(Graphics.h()-(int)mousey)-(int)dragoffsety;
+		x=(int)mouseX-(int)dragoffsetx;
+		y=(Graphics.h()-(int)mouseY)-(int)dragoffsety;
 		if (abs(x) < SNAPPINGDIST) 
 			x = 0;
-		if (abs(py()) < SNAPPINGDIST)
-			y = -ph2()+ph();
+		if (abs(getY()) < SNAPPINGDIST)
+			y = -ph2()+getHeight();
 		if (abs(Graphics.w()-(x+w)) < SNAPPINGDIST)
 			x=Graphics.w()-w;
 		if (abs(Graphics.h()-(y+ph2())) < SNAPPINGDIST)
@@ -281,7 +281,7 @@ void cWindow::click()
 
 	for(objectlist::reverse_iterator i = objects.rbegin(); i != objects.rend(); i++)
 	{
-		if (i->second->inobject() && i->second->selectable && i->second->isEnabled())
+		if (i->second->inObject() && i->second->selectable && i->second->isEnabled())
 		{
 			i->second->click();
 			selectedObject = i->second;
@@ -300,20 +300,20 @@ int cWindow::getcursor()
 	objectlist::iterator i;
 	for(i = objects.begin(); i != objects.end(); i++)
 	{
-		if (i->second->inobject() && i->second->cursortype != 0)
-			return i->second->cursortype;
+		if (i->second->inObject() && i->second->cursorType != 0)
+			return i->second->cursorType;
 	}
-	if (resizable && !rolledup)
+	if (resizable && !rolledUp)
 	{
 		int hresize = 0;
 		int vresize = 0;
-		if(mousex < x+w && mousex > x+w - DRAGBORDER)
+		if(mouseX < x+w && mouseX > x+w - DRAGBORDER)
 			hresize = 1;
-		if((Graphics.h()-mousey) > y && (Graphics.h()-mousey) < y + DRAGBORDER)
+		if((Graphics.h()-mouseY) > y && (Graphics.h()-mouseY) < y + DRAGBORDER)
 			vresize = 1;
-		if(mousex > x && mousex < x + DRAGBORDER)
+		if(mouseX > x && mouseX < x + DRAGBORDER)
 			hresize = 2;
-		if((Graphics.h()-mousey) < y+h && (Graphics.h()-mousey) > y+h - DRAGBORDER)
+		if((Graphics.h()-mouseY) < y+h && (Graphics.h()-mouseY) > y+h - DRAGBORDER)
 			vresize = 2;
 
 		if (hresize == 0)
@@ -349,28 +349,28 @@ int cWindow::getcursor()
 bool cWindow::onborder()
 {
 	if (!visible) return false;
-	if (resizable && !rolledup)
+	if (resizable && !rolledUp)
 	{
-		if(mousex < x+w && mousex > x+w - DRAGBORDER)
+		if(mouseX < x+w && mouseX > x+w - DRAGBORDER)
 			return true;
-		if((Graphics.h()-mousey) > y && (Graphics.h()-mousey) < y + DRAGBORDER)
+		if((Graphics.h()-mouseY) > y && (Graphics.h()-mouseY) < y + DRAGBORDER)
 			return true;
-		if(mousex > x && mousex < x + DRAGBORDER)
+		if(mouseX > x && mouseX < x + DRAGBORDER)
 			return true;
-		if((Graphics.h()-mousey) < y+h && (Graphics.h()-mousey) > y+h - DRAGBORDER)
+		if((Graphics.h()-mouseY) < y+h && (Graphics.h()-mouseY) > y+h - DRAGBORDER)
 			return true;
 	}
 
 	return false;
 }
 
-cWindowObject* cWindow::inobject()
+cWindowObject* cWindow::inObject()
 {
 	if (!visible) return false;
 	objectlist::iterator i;
 	for(i = objects.begin(); i != objects.end(); i++)
 	{
-		cWindowObject* o = i->second->inobject();
+		cWindowObject* o = i->second->inObject();
 		if (o != NULL && i->second->selectable)
 			return o;
 	}
@@ -384,25 +384,25 @@ void cWindow::center()
 	y = (Graphics.h()/2)-(h/2);
 }
 
-bool cWindow::onchar(char c,bool shift)
+bool cWindow::onChar(char c,bool shift)
 {
 	if (selectedObject != NULL)
-		return selectedObject->onchar(c, shift);
-	else if (objects.find(defaultobject) != objects.end())
-		return objects[defaultobject]->onchar(c, shift);
+		return selectedObject->onChar(c, shift);
+	else if (objects.find(defaultObject) != objects.end())
+		return objects[defaultObject]->onChar(c, shift);
 	return false;
 }
-bool cWindow::onkeydown(int c,bool shift)
+bool cWindow::onKeyDown(int c,bool shift)
 {
 	if (selectedObject != NULL)
-		if(selectedObject->onkeydown(c, shift))
+		if(selectedObject->onKeyDown(c, shift))
 			return true;
 	if (c == SDLK_RETURN)
 	{
-		if (objects.find(defaultobject) != objects.end())
-			return objects[defaultobject]->onkeydown(c, shift);
+		if (objects.find(defaultObject) != objects.end())
+			return objects[defaultObject]->onKeyDown(c, shift);
 		else if (selectedObject != NULL)
-			return selectedObject->onkeydown(c, shift);
+			return selectedObject->onKeyDown(c, shift);
 
 	}
 	else if (c == SDLK_TAB)
@@ -451,32 +451,32 @@ bool cWindow::onkeydown(int c,bool shift)
 			}
 			if (selectedObject->type == OBJECT_INPUTBOX)
 			{
-				selectedObject->SetInt(1, selectedObject->GetText(0).length());
-				selectedObject->SetInt(2, 0);
+				selectedObject->setInt(1, selectedObject->getText(0).length());
+				selectedObject->setInt(2, 0);
 
 			}
 		}
 		return true;
 	}
-	else if (objects.find(defaultobject) != objects.end())
-		return objects[defaultobject]->onkeydown(c,shift);
+	else if (objects.find(defaultObject) != objects.end())
+		return objects[defaultObject]->onKeyDown(c,shift);
 	return false;
 }
-bool cWindow::onkeyup(int c,bool shift)
+bool cWindow::onKeyUp(int c,bool shift)
 {
 	if (selectedObject != NULL)
 	{
-		return selectedObject->onkeyup(c,shift);
+		return selectedObject->onKeyUp(c,shift);
 	}
-	else if (objects.find(defaultobject) != objects.end())
-		return objects[defaultobject]->onkeyup(c,shift);
+	else if (objects.find(defaultObject) != objects.end())
+		return objects[defaultObject]->onKeyUp(c,shift);
 	return false;
 
 }
 
 void cWindow::close(bool force)
 {
-	if (closetype == HIDE && !force)
+	if (closeType == HIDE && !force)
 	{
 		hide();
 		return;
@@ -496,12 +496,12 @@ void cWindow::doubleclick()
 	cWindowObject* o = NULL;
 	for(objectlist::iterator i = objects.begin(); i != objects.end(); i++)
 	{
-		if (i->second->inobject() && i->second->selectable)
+		if (i->second->inObject() && i->second->selectable)
 			o = i->second;
 	}
 	if (o != NULL)
 	{
-		o->doubleclick();
+		o->doubleClick();
 		selectedObject = o;
 	}
 
@@ -515,11 +515,11 @@ void cWindow::rightclick()
 
 	for(objectlist::iterator i = objects.begin(); i != objects.end(); i++)
 	{
-		cWindowObject* o = i->second->inobject();
+		cWindowObject* o = i->second->inObject();
 		if (o != NULL && i->second->selectable)
 		{
 			selectedObject = o;
-			o->rightclick();
+			o->rightClick();
 			break;
 		}
 	}
@@ -527,35 +527,35 @@ void cWindow::rightclick()
 }
 
 
-cWindowObject* cWindow::addlabel(string name, int x, int y, string text)
+cWindowObject* cWindow::addLabel(std::string name, int x, int y, std::string text)
 {
 	cWindowObject* o = new cWindowLabel(this);
 	o->alignment = ALIGN_TOPLEFT;
-	o->moveto(x,y);
-	o->resizeto(Graphics.WM.font.textlen(text), 12);
-	o->SetText(0,text);
+	o->moveTo(x,y);
+	o->resizeTo(Graphics.WM.font.textlen(text), 12);
+	o->setText(0,text);
 	objects[name] = o;
 	return o;
 }
 
 
-cWindowObject* cWindow::addinputbox(string name, int x, int y, int w, string text, TiXmlDocument &skin)
+cWindowObject* cWindow::addInputBox(std::string name, int x, int y, int w, std::string text, TiXmlDocument &skin)
 {
 	cWindowObject* o = new cWindowInputBox(this,skin);
 	o->alignment = ALIGN_TOPLEFT;
-	o->moveto(x,y);
-	o->resizeto(w, 20);
-	o->SetText(0,text);
+	o->moveTo(x,y);
+	o->resizeTo(w, 20);
+	o->setText(0,text);
 	objects[name] = o;
 	return o;
 }
 
-cWindowObject* cWindow::addcheckbox(string name, int x, int y, bool checked, TiXmlDocument &skin)
+cWindowObject* cWindow::addCheckBox(std::string name, int x, int y, bool checked, TiXmlDocument &skin)
 {
 	cWindowObject* o = new cWindowCheckBox(this,skin);
 	o->alignment = ALIGN_TOPLEFT;
-	o->moveto(x,y);
-	o->SetInt(0, checked ? 1 : 0);
+	o->moveTo(x,y);
+	o->setInt(0, checked ? 1 : 0);
 	objects[name] = o;
 	return o;
 }
@@ -563,43 +563,43 @@ cWindowObject* cWindow::addcheckbox(string name, int x, int y, bool checked, TiX
 
 void cWindow::holddragover()
 {
-	cWindowObject* o = inobject();
+	cWindowObject* o = inObject();
 	if(o != NULL)
-		o->holddragover();	
+		o->holdDragOver();	
 }
 
 void cWindow::dragover()
 {
-	cWindowObject* o = inobject();
+	cWindowObject* o = inObject();
 	if(o != NULL)
-		o->dragover();	
+		o->dragOver();	
 }
 
-void cWindow::scrollup()
+void cWindow::scrollUp()
 {
 	if (!visible) return;
 
 	for(objectlist::reverse_iterator i = objects.rbegin(); i != objects.rend(); i++)
 	{
-		cWindowObject* o = i->second->inobject();
+		cWindowObject* o = i->second->inObject();
 		if (o != NULL && i->second->selectable)
 		{
-			i->second->scrollup();
+			i->second->scrollUp();
 			break;
 		}
 	}
 }
 
-void cWindow::scrolldown()
+void cWindow::scrollDown()
 {
 	if (!visible) return;
 
 	for(objectlist::reverse_iterator i = objects.rbegin(); i != objects.rend(); i++)
 	{
-		cWindowObject* o = i->second->inobject();
+		cWindowObject* o = i->second->inObject();
 		if (o != NULL)
 		{
-			i->second->scrolldown();
+			i->second->scrollDown();
 			break;
 		}
 	}
@@ -609,25 +609,25 @@ void cWindow::scrolldown()
 void cWindow::save()
 {
 #ifndef __NOXML__
-	if(saveprops != "")
+	if(saveProperties != "")
 	{
-		pair<char*,bool*> elements[] = {
-			pair<char*,bool*>("x", &movable),
-			pair<char*,bool*>("y", &movable),
-			pair<char*,bool*>("w", &resizable),
-			pair<char*,bool*>("h", &resizable) };
+		std::pair<char*,bool*> elements[] = {
+			std::pair<char*,bool*>("x", &movable),
+			std::pair<char*,bool*>("y", &movable),
+			std::pair<char*,bool*>("w", &resizable),
+			std::pair<char*,bool*>("h", &resizable) };
 
 		if(config.FirstChildElement("config")->FirstChildElement("wm") == NULL)
 			config.FirstChildElement("config")->InsertEndChild(TiXmlElement("wm"));
-		if(config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveprops.c_str()) == NULL)
-			config.FirstChildElement("config")->FirstChildElement("wm")->InsertEndChild(TiXmlElement(saveprops.c_str()));
+		if(config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveProperties.c_str()) == NULL)
+			config.FirstChildElement("config")->FirstChildElement("wm")->InsertEndChild(TiXmlElement(saveProperties.c_str()));
 
 		for(int i = 0; i < 4; i++)
 		{
-			if(*elements[i].second && config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveprops.c_str())->FirstChildElement(elements[i].first) == NULL)
+			if(*elements[i].second && config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveProperties.c_str())->FirstChildElement(elements[i].first) == NULL)
 			{
-				config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveprops.c_str())->InsertEndChild(TiXmlElement(elements[i].first));
-				config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveprops.c_str())->FirstChildElement(elements[i].first)->InsertEndChild(TiXmlText(""));
+				config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveProperties.c_str())->InsertEndChild(TiXmlElement(elements[i].first));
+				config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveProperties.c_str())->FirstChildElement(elements[i].first)->InsertEndChild(TiXmlText(""));
 			}
 		}
 
@@ -635,18 +635,18 @@ void cWindow::save()
 		if(movable)
 		{
 			sprintf(buf, "%i", x);
-			config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveprops.c_str())->FirstChildElement("x")->FirstChild()->SetValue(buf);
+			config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveProperties.c_str())->FirstChildElement("x")->FirstChild()->SetValue(buf);
 
 			sprintf(buf, "%i", y);
-			config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveprops.c_str())->FirstChildElement("y")->FirstChild()->SetValue(buf);
+			config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveProperties.c_str())->FirstChildElement("y")->FirstChild()->SetValue(buf);
 		}
 		if(resizable)
 		{
 			sprintf(buf, "%i", h);
-			config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveprops.c_str())->FirstChildElement("h")->FirstChild()->SetValue(buf);
+			config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveProperties.c_str())->FirstChildElement("h")->FirstChild()->SetValue(buf);
 
 			sprintf(buf, "%i", w);
-			config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveprops.c_str())->FirstChildElement("w")->FirstChild()->SetValue(buf);
+			config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveProperties.c_str())->FirstChildElement("w")->FirstChild()->SetValue(buf);
 		}
 		config.SaveFile(configfile.c_str());
 
@@ -654,10 +654,10 @@ void cWindow::save()
 #endif
 }
 
-void cWindow::initprops(string s)
+void cWindow::initprops(std::string s)
 {
 #ifndef __NOXML__
-	saveprops = s;
+	saveProperties = s;
 	if(!config.FirstChildElement("config"))
 		return;
 	if(!config.FirstChildElement("config")->FirstChildElement("wm"))
@@ -693,4 +693,17 @@ void cWindow::initprops(string s)
 		}
 	}
 #endif
+}
+
+cWindow::~cWindow()
+{
+	for(std::map<std::string, cWindowObject*, std::less<std::string> >::iterator i = objects.begin(); i != objects.end(); i++)
+	{
+		if(draggingObject == i->second)
+			draggingObject = NULL;
+		delete i->second;
+	}
+	
+	objects.clear();
+	// delete objects
 }

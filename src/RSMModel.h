@@ -59,19 +59,19 @@ public:
 	void load(cFile*, cRSMModel*, bool);
 	int todo;
 	float ftodo[10];
-	string name;
-	string parent;
-	vector<int> textures;
+	std::string name;
+	std::string parent;
+	std::vector<int> textures;
 	float trans[22];
 
 	unsigned int nVertices;
-	vector<cVector3> vertices;
+	std::vector<cVector3> vertices;
 	unsigned int nTexCoord;
-	vector<cVector3> texcoords;
+	std::vector<cVector3> texcoords;
 	unsigned int nFaces;
-	vector<cRSMModelFace> faces;
+	std::vector<cRSMModelFace> faces;
 	unsigned int nFrameAnimations;
-	vector<cRSMModelFrame> frames;
+	std::vector<cRSMModelFrame> frames;
 	cBoundingbox bb;
 	cBoundingbox realbb;
 
@@ -99,18 +99,18 @@ public:
 		displaylist = 0;
 #endif
 	}
-	string name;
-	string filename;
-	string rofilename;
+	std::string name;
+	std::string filename;
+	std::string rofilename;
 
 	cVector3 pos;
 	cVector3 scale;
 	cVector3 rot;
 
-	void load(string filename);
-	vector<cRSMModelMesh*>	meshes;
-	vector<int>				fathers;
-	vector<cTexture*> textures;
+	void load(std::string filename);
+	std::vector<cRSMModelMesh*>	meshes;
+	std::vector<int>				fathers;
+	std::vector<cTexture*> textures;
 	bool collides(cVector3, cVector3);
 	bool collides2(cBoundingbox*, int, float*, bool, cVector3, cVector3);
 	void precollides();

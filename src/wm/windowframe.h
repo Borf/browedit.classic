@@ -3,24 +3,15 @@
 
 #include "windowobject.h"
 #include <string>
-using namespace std;
+//using namespace std;
 
 class cWindowFrame : public cWindowObject
 {
 	bool drawinner;
 public:
-	cWindowFrame(cWindow* parent, TiXmlDocument &skin) : cWindowObject(parent, skin.FirstChildElement("skin")->FirstChildElement("frame"))
-	{
-		w = 100;
-		h = 25;
-		x = 10;
-		y = 10;
-		alignment = ALIGN_CENTER;
-		type = OBJECT_FRAME;
-		drawinner = false;
-	}
+	cWindowFrame(cWindow* parent, TiXmlDocument &skin);
 	virtual void draw(int,int,int,int);
-	void SetInt(int,int);
+	void setInt(int,int);
 };
 
 

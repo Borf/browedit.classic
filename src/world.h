@@ -33,8 +33,8 @@ public:
 		generated2 = false;
 	}
 	char buf[256];
-	int texid();
-	int texid2();
+	int texId();
+	int texId2();
 	void del();
 	void del2();
 
@@ -108,18 +108,18 @@ class cTextureContainer
 {
 public:
 	cTexture* texture;
-	string RoFilename;
-	string RoFilename2;
-	GLuint texId() { return texture->texid(); }
+	std::string RoFilename;
+	std::string RoFilename2;
+	GLuint texId() { return texture->texId(); }
 
 };
 
 class cLight
 {
 public:
-	string		name;
+	std::string		name;
 	cVector3	pos;
-	string		todo;
+	std::string		todo;
 	cVector3	color;
 	float		todo2;
 // custom properties
@@ -146,9 +146,9 @@ public:
 class cSound
 {
 public:
-	string name;
-	string todo1;
-	string fileName;
+	std::string name;
+	std::string todo1;
+	std::string fileName;
 	cVector3 pos;
 	cVector3 rotation;
 	cVector3 scale;
@@ -185,16 +185,16 @@ public:
 class cEffect
 {
 public:
-	string readablename;
+	std::string readablename;
 
 
-	string name;
+	std::string name;
 	float todo1;
 	float todo2;
 	float todo3;
 	cVector3 rotation;
 	cVector3 scale;
-	string category;
+	std::string category;
 	cVector3 pos;
 	int	type;
 	float loop;
@@ -208,8 +208,8 @@ public:
 class cQuadTreeNode
 {
 public:
-	int load(vector<cVector3>&, int index, int level);
-	void save(vector<cVector3>&);
+	int load(std::vector<cVector3>&, int index, int level);
+	void save(std::vector<cVector3>&);
 	void generate(float w, float h, float, float,int);
 	void draw(int level);
 
@@ -277,19 +277,18 @@ public:
 	int									width;
 	int									texSize;
 	bool								quickSave;
-	vector<cTextureContainer*>			textures;
-	vector<cLightmap*>					lightmaps;
-	vector<cTile>						tiles;
-	vector<vector<cCube> >				cubes;
-	vector<vector<cGatTile> >			gattiles;
-	vector<vector<cRealLightMap*> >		realLightmaps;
+	std::vector<cTextureContainer*>		textures;
+	std::vector<cLightmap*>				lightmaps;
+	std::vector<cTile>					tiles;
+	std::vector<std::vector<cCube> >	cubes;
+	std::vector<std::vector<cGatTile> >		gattiles;
+	std::vector<std::vector<cRealLightMap*> >		realLightmaps;
 
-	vector<cRSMModel*>					models;
-
-	vector<cLight>						lights;
-	vector<cSound>						sounds;
-	vector<cEffect>						effects;
-	vector<cSprite*>					sprites;
+	std::vector<cRSMModel*>				models;
+	std::vector<cLight>					lights;
+	std::vector<cSound>					sounds;
+	std::vector<cEffect>				effects;
+	std::vector<cSprite*>				sprites;
 
 	cWorld();
 	~cWorld();
@@ -319,7 +318,7 @@ public:
 	cTextureModel*						sound;
 	cTextureModel*						effect;
 	
-	vector<cVector3>					quadTreeFloats;
+	std::vector<cVector3>				quadTreeFloats;
 	cQuadTreeNode* root;
 
 
@@ -327,7 +326,7 @@ public:
 	void								makeLightmapsUnique();
 	void								blackLightmaps();
 
-	string								useless;
+	std::string							useless;
 
 	std::list<int>						plugin_api_deleteobjects;
 	std::list<int>						plugin_api_deletesprites;

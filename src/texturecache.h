@@ -10,10 +10,10 @@ class cTextureCache
 {
 public:
 	void status();
-	map<string, cTexture*, less<string> >	textures;
-	map<cTexture*, int, less<cTexture*> >	used;
+	std::map<std::string, cTexture*, std::less<std::string> >	textures;
+	std::map<cTexture*, int, std::less<cTexture*> >	used;
 
-	cTexture*	load(string, bool = false);
+	cTexture*	load(std::string, bool = false);
 	void		unload(cTexture*);
 
 };

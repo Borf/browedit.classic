@@ -15,11 +15,11 @@ enum eState
 #include "graphics.h"
 
 #include <map>
-using namespace std;
+//using namespace std;
 
 
 
-long mousex, mousey;
+long mouseX, mouseY;
 float oldmousex, oldmousey;
 
 float translatedstartmousex, translatedstartmousey;
@@ -29,14 +29,14 @@ int startmousepos;
 bool dragged;
 bool startvertex;
 bool startobject;
-map<long, string, less<long> >	idtomodel;
+std::map<long, std::string, std::less<long> >	idtomodel;
 
 long lastlclick, lastrclick;
 
 bool			lbuttondown, rbuttondown;
 
 
-string message;
+std::string message;
 eState state = MAIN;
 bool showmessage = false;
 

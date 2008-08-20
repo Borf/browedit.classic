@@ -12,16 +12,16 @@ int keymap[SDLK_LAST-SDLK_FIRST];
 #include <list>
 #include "md5.h"
 #include <time.h>
-#include "wm/lightwindow.h"
-#include "wm/texturewindow.h"
-#include "wm/modelswindow.h"
+#include "windows/lightwindow.h"
+#include "windows/texturewindow.h"
+#include "windows/modelswindow.h"
 #include "undo.h"
 #include "menucommands.h"
-#include "wm/modeloverviewwindow.h"
-#include "wm/lightoverviewwindow.h"
-#include "wm/soundoverviewwindow.h"
-#include "wm/texturetoolswindow.h"
-#include "wm/minimapwindow.h"
+#include "windows/modeloverviewwindow.h"
+#include "windows/lightoverviewwindow.h"
+#include "windows/soundoverviewwindow.h"
+#include "windows/texturetoolswindow.h"
+#include "windows/minimapwindow.h"
 #include <bmutex.h>
 #include "plugins/base/base.h"
 
@@ -38,10 +38,10 @@ cGraphics		Graphics;
 cFileSystem fs;
 
 bool IsLegal2 = true;
-string inputboxresult;
+std::string inputboxresult;
 bool IsInsideVPC();
 bool IsInsideVMWare();
-string configfile;
+std::string configfile;
 TiXmlDocument config;
 bool IsLegal = true;
 
@@ -65,29 +65,29 @@ long tilex,tiley;
 long lastmotion;
 bool doubleclick = false;
 cWindow*				draggingwindow = NULL;
-cWindowObject*			draggingobject = NULL;
-string fontname = "tahoma";
+cWindowObject*			draggingObject = NULL;
+std::string fontname = "tahoma";
 bool	doneaction = true;
 extern cMenu* popupmenu;
 TiXmlDocument favoritelights;
-string skinFile;
+std::string skinFile;
 
 unsigned int undosize = 50;
-vector<string> texturefiles;
-vector<string> objectfiles;
-vector<string> soundfiles;
+std::vector<std::string> texturefiles;
+std::vector<std::string> objectfiles;
+std::vector<std::string> soundfiles;
 
 double mouse3dxstart, mouse3dystart, mouse3dzstart;
 long mousestartx, mousestarty;
 unsigned long keys[SDLK_LAST-SDLK_FIRST];
-vector<pair<string, string> > translations;
+std::vector<std::pair<std::string, std::string> > translations;
 
 bool mouseouttexture(cMenu*);
 bool mouseovertexture(cMenu*);
 
 cUndoStack undostack;
 
-string rodir;
+std::string rodir;
 
 
 int brushsize = 1;
@@ -109,10 +109,10 @@ cMenu* editdetail;
 cMenu* speed;
 cMenu* models;
 
-map<int, cMenu*, less<int> >	effects;
+std::map<int, cMenu*, std::less<int> >	effects;
 cMenu* effectsmenu;
 
-vector<vector<vector<float> > > clipboard;
+std::vector<std::vector<std::vector<float> > > clipboard;
 long lasttimer;
 
 
@@ -127,13 +127,13 @@ unsigned char * getPixelsBGR()
   return pixels;
 }
 
-string downloadfile(string url, long &filesize)
+std::string downloadfile(std::string url, long &filesize)
 {
 //#define DOWNLOADBUFFERSIZE 1
 #define DOWNLOADBUFFERSIZE 2024
-	string server = url;
-	string file = "/";
-	if (url.find("/") != string::npos)
+	std::string server = url;
+	std::string file = "/";
+	if (url.find("/") != std::string::npos)
 	{
 		server = url.substr(0, url.find("/"));
 		file = url.substr(url.find("/"));
@@ -170,7 +170,7 @@ string downloadfile(string url, long &filesize)
 		return 0;
 	}
 
-	string header;
+	std::string header;
 
 
 	header+= "GET "+file+" HTTP/1.0\r\nhost: "+server+"\r\n\r\n";
@@ -179,23 +179,23 @@ string downloadfile(string url, long &filesize)
 
 	char buffer[DOWNLOADBUFFERSIZE+1];
 	buffer[DOWNLOADBUFFERSIZE] = 0;
-	string buf;
+	std::string buf;
 	header = "";
 	filesize = 0;
-	string downloadbuffer = "";
+	std::string downloadbuffer = "";
 	while((rc = recv(s, buffer, DOWNLOADBUFFERSIZE, 0)))
 	{
 		if (rc <= 0)
 			break;
 
-		buf += string(buffer, rc);
+		buf += std::string(buffer, rc);
 
-		if (header == "" && buf.find("\r\n\r\n") != string::npos)
+		if (header == "" && buf.find("\r\n\r\n") != std::string::npos)
 		{
 			header = buf.substr(0, buf.find("\r\n\r\n"));
-			if (header.find("HTTP/1.1 301 Moved Permanently") != string::npos)
+			if (header.find("HTTP/1.1 301 Moved Permanently") != std::string::npos)
 			{
-				string newurl = header.substr(header.find("Location: http://")+17);
+				std::string newurl = header.substr(header.find("Location: http://")+17);
 				newurl = newurl.substr(0, newurl.find("\r\n"));
 				return downloadfile(newurl, filesize);
 			}
@@ -215,7 +215,7 @@ void mainloop()
 	renderMutex->lock();
 	if(lasttimer + paintspeed < SDL_GetTicks())
 	{
-		if(editmode == MODE_HEIGHTDETAIL && menu->inwindow((int)mousex, Graphics.h()-(int)mousey) == NULL)
+		if(editmode == MODE_HEIGHTDETAIL && menu->inwindow((int)mouseX, Graphics.h()-(int)mouseY) == NULL)
 		{
 			if (lbuttondown || rbuttondown)
 			{
@@ -417,11 +417,11 @@ void mainloop()
 
 
 
-void additem(map<string, cMenu*, less<string> > &itemsm, map<cMenu*, int, less<cMenu*> > &levelm, string cat)
+void additem(std::map<std::string, cMenu*, std::less<std::string> > &itemsm, std::map<cMenu*, int, std::less<cMenu*> > &levelm, std::string cat)
 {
 	cMenu* root = models;
-	string catname = cat;
-	if(cat.find("/") != string::npos)
+	std::string catname = cat;
+	if(cat.find("/") != std::string::npos)
 	{
 		if(itemsm.find(cat.substr(0, cat.rfind("/"))) == itemsm.end())
 			additem(itemsm, levelm, cat.substr(0, cat.rfind("/")));
@@ -437,7 +437,7 @@ void additem(map<string, cMenu*, less<string> > &itemsm, map<cMenu*, int, less<c
 
 
 
-bool translationcomp(pair<string, string> a, pair<string, string> b)
+bool translationcomp(std::pair<std::string, std::string> a, std::pair<std::string, std::string> b)
 {
 	return a.first.length() > b.first.length();
 }
@@ -516,7 +516,7 @@ int WinMain(HINSTANCE hInst,HINSTANCE hPrev, LPSTR Cmd,int nShow)
 }
 #endif
 
-cWindow* XmlWindow(string s)
+cWindow* XmlWindow(std::string s)
 {
 	return Graphics.WM.XmlWindow(s);
 }
@@ -543,7 +543,7 @@ int main(int argc, char *argv[])
 		Log(2,0,"Browedit will most likely crash");
 
 	}
-	string language = config.FirstChildElement("config")->FirstChildElement("language")->FirstChild()->Value();
+	std::string language = config.FirstChildElement("config")->FirstChildElement("language")->FirstChild()->Value();
 	language = language.substr(language.find("=")+1);
 	msgtable = fs.getXml("data/" + language + ".txt");
 
@@ -571,7 +571,7 @@ int main(int argc, char *argv[])
 
 	md5_state_t state;
 	md5_byte_t exedigest[16];
-	ifstream File(fileBuffer, ios_base::in | ios_base::binary);
+	std::ifstream File(fileBuffer, std::ios_base::in | std::ios_base::binary);
 	if (File.eof() || File.bad() || !File.good())
 		Log(1,0,"Bad file");
 	char* filedata = new char[filesize];
@@ -581,7 +581,7 @@ int main(int argc, char *argv[])
 	md5_finish(&state, exedigest);	
 	delete[] filedata;
 	
-	File.seekg(-4, ios_base::end);
+	File.seekg(-4, std::ios_base::end);
 	File.read((char*)&userid, 4);
 	File.close();
 
@@ -692,7 +692,7 @@ int main(int argc, char *argv[])
 			(BYTE)exedigest[15],
 			(BYTE)randchar
 			);
-		string res;
+		std::string res;
 #ifndef _DEBUG
 		Log(3,0,"Checking for new version...");
 		res = downloadfile(buf, filesize);
@@ -784,8 +784,8 @@ int main(int argc, char *argv[])
 	models->w = 50; 
 	
 
-	map<string, cMenu*, less<string> > itemsm;
-	map<cMenu*, int, less<cMenu*> > levelm;
+	std::map<std::string, cMenu*, std::less<std::string> > itemsm;
+	std::map<cMenu*, int, std::less<cMenu*> > levelm;
 	levelm[models] = 0;
 	
 
@@ -793,7 +793,7 @@ int main(int argc, char *argv[])
 
 	while(el != NULL)
 	{
-		string option = el->Value();
+		std::string option = el->Value();
 
 		if(option == "ro")
 		{
@@ -853,7 +853,7 @@ int main(int argc, char *argv[])
 				TiXmlElement* model = el2->FirstChildElement("model");
 				while(model != NULL)
 				{
-					string value = model->FirstChild()->Value();
+					std::string value = model->FirstChild()->Value();
 					objectfiles.push_back(value);
 					cFile* pFile2 = fs.open(value);
 					if (pFile2 != NULL)
@@ -861,12 +861,12 @@ int main(int argc, char *argv[])
 						Log(3,0,GetMsg("file/LOADING"), value.c_str()); // Loading file
 						while(!pFile2->eof())
 						{
-							string line = pFile2->readLine();
-							string pre = line.substr(0, line.find("|"));
-							string filename = line.substr(line.find("|")+1);
+							std::string line = pFile2->readLine();
+							std::string pre = line.substr(0, line.find("|"));
+							std::string filename = line.substr(line.find("|")+1);
 
-							string cat = pre.substr(0, pre.rfind("/"));
-							string menuname = pre.substr(pre.rfind("/")+1);
+							std::string cat = pre.substr(0, pre.rfind("/"));
+							std::string menuname = pre.substr(pre.rfind("/")+1);
 
 							if (cat != "" && itemsm.find(cat) == itemsm.end())
 							{
@@ -919,11 +919,11 @@ int main(int argc, char *argv[])
 	pFile = fs.open("data/korean2english.txt");
 	while(!pFile->eof())
 	{
-		string a = pFile->readLine();
-		string b = pFile->readLine();
-		translations.push_back(pair<string, string>(a,b));
+		std::string a = pFile->readLine();
+		std::string b = pFile->readLine();
+		translations.push_back(std::pair<std::string, std::string>(a,b));
 	}
-	mergesort<pair<string, string> >(translations, translationcomp);
+	mergesort<std::pair<std::string, std::string> >(translations, translationcomp);
 	pFile->close();
 
 
@@ -1076,7 +1076,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,edit,GetMsg("menu/edit/RESETCOLORS"),					&MenuCommand_fixcolors);
 	ADDMENUITEM(mm,edit,GetMsg("menu/edit/ADDWALLS"),						&MenuCommand_addwalls);
 	ADDMENUITEM(mm,edit,GetMsg("menu/edit/GATCOLLISION"),					&MenuCommand_gatcollision);
-	ADDMENUITEM(mm,edit,GetMsg("menu/edit/GATCOLLISION")+string("2"),		&MenuCommand_gatcollision2);
+	ADDMENUITEM(mm,edit,GetMsg("menu/edit/GATCOLLISION")+std::string("2"),		&MenuCommand_gatcollision2);
 	ADDMENUITEM(mm,edit,GetMsg("menu/edit/CLEANLIGHTMAPS"),					&MenuCommand_cleanuplightmaps);
 	ADDMENUITEM(mm,edit,GetMsg("menu/edit/REMOVETEXTURES"),					&MenuCommand_cleantextures);
 	ADDMENUITEMDATAP(mm,edit,GetMsg("menu/edit/CLEARLIGHTMAPSONEDIT"),		&MenuCommand_toggle, (void*)&Graphics.clearLightmaps);
@@ -1101,7 +1101,7 @@ int main(int argc, char *argv[])
 	{
 		while (true)														// loop through all the files
 		{ 
-			string filename = FileData.cFileName;
+			std::string filename = FileData.cFileName;
 			if(filename != "." && filename != "..")
 			{
 				Log(3,0,"Loading plugin '%s'", FileData.cFileName);
@@ -1118,10 +1118,10 @@ int main(int argc, char *argv[])
 				plugin->SetFunctions(XmlWindow);
 
 				cMenu* p = menu;
-				string s = plugin->menu;
-				string past = "";
+				std::string s = plugin->menu;
+				std::string past = "";
 				
-				while(s.find("/") != string::npos)
+				while(s.find("/") != std::string::npos)
 				{
 					cMenu* pp = p->find(GetMsg("menu/" + past + s.substr(0,s.find("/")) + "/TITLE"),false);
 					if(!pp)
@@ -1162,7 +1162,7 @@ int main(int argc, char *argv[])
 	if(pFile == NULL)
 	{
 		Log(3,0,"Keymap file not found, writing default");
-		ofstream pFile2("data/keymap.txt");
+		std::ofstream pFile2("data/keymap.txt");
 		for(i = 0; i < SDLK_LAST-SDLK_FIRST; i++)
 		{
 			char buf[100];
@@ -1184,14 +1184,14 @@ int main(int argc, char *argv[])
 
 
 	Log(3,0,GetMsg("file/LOADING"), "data/effects.txt");
-	vector<cMenu*> effectssubmenu;
+	std::vector<cMenu*> effectssubmenu;
 
 	pFile = fs.open("data/effects.txt");
 	i = 0;
 	while(pFile && !pFile->eof())
 	{
-		string line = pFile->readLine();
-		if(line.find("|") != string::npos)
+		std::string line = pFile->readLine();
+		if(line.find("|") != std::string::npos)
 		{
 			if (effectssubmenu.size() <= floor(i/30.0))
 			{
@@ -1202,7 +1202,7 @@ int main(int argc, char *argv[])
 			}
 
 			int id = atoi(line.substr(0,line.find("|")).c_str());
-			string val = line.substr(line.find("|")+1);
+			std::string val = line.substr(line.find("|")+1);
 
 			char buf[255];
 			sprintf(buf, "%i. %s", id, val.c_str());
@@ -1223,13 +1223,13 @@ int main(int argc, char *argv[])
 	Log(3,0,GetMsg("DONEINIT"));
 	Graphics.world.newWorld();
 	if(config.FirstChildElement("config")->FirstChildElement("firstmap"))
-		strcpy(Graphics.world.fileName, string(rodir + "data\\" + config.FirstChildElement("config")->FirstChildElement("firstmap")->FirstChild()->Value()).c_str());
+		strcpy(Graphics.world.fileName, std::string(rodir + "data\\" + config.FirstChildElement("config")->FirstChildElement("firstmap")->FirstChild()->Value()).c_str());
 	else
-		strcpy(Graphics.world.fileName, string(rodir + "data\\prontera").c_str());
+		strcpy(Graphics.world.fileName, std::string(rodir + "data\\prontera").c_str());
 
 	if(argc > 1)
 	{
-		strcpy(Graphics.world.fileName, string(rodir + "data\\" + argv[1]).c_str());
+		strcpy(Graphics.world.fileName, std::string(rodir + "data\\" + argv[1]).c_str());
 		Graphics.world.load();
 	}
 #ifndef WIN32
@@ -1373,8 +1373,8 @@ int process_events()
 		if(event.type == SDL_MOUSEMOTION)
 		{
 			dragged = true;
-			oldmousex = mousex;
-			oldmousey = mousey;
+			oldmousex = mouseX;
+			oldmousey = mouseY;
 		}
 	}
 	return 0;
@@ -1395,12 +1395,12 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 		{
 			dragged = true;
 	
-			if(mousex != event.motion.x || mousey != event.motion.y)
+			if(mouseX != event.motion.x || mouseY != event.motion.y)
 				lastmotion = SDL_GetTicks();
 
-			mousex = event.motion.x;
-			mousey = event.motion.y;
-			cMenu* m = menu->inwindow((int)mousex, Graphics.h()-(int)mousey);
+			mouseX = event.motion.x;
+			mouseY = event.motion.y;
+			cMenu* m = menu->inwindow((int)mouseX, Graphics.h()-(int)mouseY);
 
 
 			if(movement > 4)
@@ -1422,9 +1422,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				else
 				{
-					if (draggingobject != NULL)
+					if (draggingObject != NULL)
 					{
-						draggingobject->drag();
+						draggingObject->drag();
 
 						cWindow* w = Graphics.WM.inwindow();
 						if (w != NULL)
@@ -1445,9 +1445,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if (SDL_GetModState() & KMOD_CTRL)
 					{
-						Graphics.cameraangle += (oldmousey - mousey) / 10.0f;
+						Graphics.cameraangle += (oldmousey - mouseY) / 10.0f;
 						Graphics.cameraangle = max(min(Graphics.cameraangle, (float)20), (float)-10);
-						Graphics.camerarot += (oldmousex - mousex) / 100.0f;
+						Graphics.camerarot += (oldmousex - mouseX) / 100.0f;
 						while(Graphics.camerarot < 0)
 							Graphics.camerarot+=2*(float)PI;
 						while(Graphics.camerarot > 2*PI)
@@ -1457,20 +1457,20 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					{
 						if(Graphics.topCamera)
 						{
-							Graphics.cameraheight += (oldmousey - mousey) / 2.0f;
+							Graphics.cameraheight += (oldmousey - mouseY) / 2.0f;
 							Graphics.cameraheight = max(min(Graphics.cameraheight, (float)15000), (float)-5);
 							if(Graphics.cameraheight != -5 && Graphics.cameraheight != 15000)
 							{
-								Graphics.camerapointer.x -= (oldmousey - mousey) / 4.0f;
-								Graphics.camerapointer.y += (oldmousey - mousey) / 4.0f;
+								Graphics.camerapointer.x -= (oldmousey - mouseY) / 4.0f;
+								Graphics.camerapointer.y += (oldmousey - mouseY) / 4.0f;
 							}
 						}
 						else
 						{
-							Graphics.cameraheight += (oldmousey - mousey) / 2.0f;
+							Graphics.cameraheight += (oldmousey - mouseY) / 2.0f;
 							Graphics.cameraheight = max(min(Graphics.cameraheight, (float)15000), (float)-5);
 						}
-						Graphics.camerarot += (oldmousex - mousex) / 100.0f;
+						Graphics.camerarot += (oldmousex - mouseX) / 100.0f;
 						while(Graphics.camerarot < 0)
 							Graphics.camerarot+=2*(float)PI;
 						while(Graphics.camerarot > 2*PI)
@@ -1487,14 +1487,14 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if(!Graphics.topCamera)
 					{
-						cVector2 v = cVector2((oldmousex - mousex),  (oldmousey - mousey));
+						cVector2 v = cVector2((oldmousex - mouseX),  (oldmousey - mouseY));
 						v.rotate(-Graphics.camerarot / PI * 180.0f);
 						Graphics.camerapointer = Graphics.camerapointer - v;
 					}
 					else
 					{
-						Graphics.camerapointer.x -= (oldmousey - mousey);
-						Graphics.camerapointer.y -= (oldmousex - mousex);
+						Graphics.camerapointer.x -= (oldmousey - mouseY);
+						Graphics.camerapointer.y -= (oldmousex - mouseX);
 
 					}
 				}
@@ -1507,8 +1507,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 					Graphics.selectionstart.x = floor(mousestartx / 32.0)*32;
 					Graphics.selectionstart.y = floor(mousestarty / 32.0)*32;
-					Graphics.selectionend.x = (int)ceil((mousex-offset) / 32.0)*32;
-					Graphics.selectionend.y = (int)ceil((mousey-offset) / 32.0)*32;
+					Graphics.selectionend.x = (int)ceil((mouseX-offset) / 32.0)*32;
+					Graphics.selectionend.y = (int)ceil((mouseY-offset) / 32.0)*32;
 
 					Graphics.selectionstart.x += Graphics.w()%32;
 					Graphics.selectionend.x += Graphics.w()%32;
@@ -1533,8 +1533,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 		case SDL_MOUSEBUTTONDOWN:
 			{
 			movement = 0;
-			mousestartx = mousex = event.motion.x;
-			mousestarty = mousey = event.motion.y;
+			mousestartx = mouseX = event.motion.x;
+			mousestarty = mouseY = event.motion.y;
 
 			mouse3dxstart = mouse3dx;
 			mouse3dystart = mouse3dy;
@@ -1547,7 +1547,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			{ // scroll up
 				cWindow* w = Graphics.WM.inwindow();
 				if(w != NULL)
-					w->scrollup();
+					w->scrollUp();
 				else
 				{
 					if(Graphics.topCamera)
@@ -1575,7 +1575,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			{ // scroll down
 				cWindow* w = Graphics.WM.inwindow();
 				if(w != NULL)
-					w->scrolldown();
+					w->scrollDown();
 				else
 				{
 					if(Graphics.topCamera)
@@ -1606,12 +1606,12 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				doubleclick = true;
 
 		
-			cMenu* m = menu->inwindow((int)mousex, Graphics.h()-(int)mousey);
+			cMenu* m = menu->inwindow((int)mouseX, Graphics.h()-(int)mouseY);
 		
 			cMenu* pm = NULL;
 			if(popupmenu != NULL)
 			{
-				pm = popupmenu->inwindow((int)mousex, Graphics.h()-(int)mousey);
+				pm = popupmenu->inwindow((int)mouseX, Graphics.h()-(int)mouseY);
 				return 1;
 			}
 
@@ -1621,33 +1621,33 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			}
 			if (!dragged && !doubleclick && m == NULL && pm == NULL && event.button.button == SDL_BUTTON_LEFT)
 			{
-				draggingobject = NULL;
+				draggingObject = NULL;
 				draggingwindow = NULL;
 				if (Graphics.WM.inwindow() != NULL)
 				{
 					cWindow* w = Graphics.WM.inwindow();
-					if (!w->inobject())
+					if (!w->inObject())
 					{ // drag this window
-						dragoffsetx = mousex - w->px();
-						dragoffsety = (Graphics.h()-mousey) - w->py2();
+						dragoffsetx = mouseX - w->getX();
+						dragoffsety = (Graphics.h()-mouseY) - w->py2();
 						Graphics.WM.click(false);
 						draggingwindow = Graphics.WM.inwindow();
-						if(mousestartx < draggingwindow->px()+draggingwindow->pw() && mousestartx > draggingwindow->px()+draggingwindow->pw() - DRAGBORDER)
+						if(mousestartx < draggingwindow->getX()+draggingwindow->getWidth() && mousestartx > draggingwindow->getX()+draggingwindow->getWidth() - DRAGBORDER)
 							draggingwindow->startresisingxy();
-						if((Graphics.h()-mousestarty) > draggingwindow->py() && (Graphics.h()-mousestarty) < draggingwindow->py() + DRAGBORDER)
+						if((Graphics.h()-mousestarty) > draggingwindow->getY() && (Graphics.h()-mousestarty) < draggingwindow->getY() + DRAGBORDER)
 							draggingwindow->startresizingyx();
-						if(mousestartx > draggingwindow->px() && mousestartx < draggingwindow->px() + DRAGBORDER)
+						if(mousestartx > draggingwindow->getX() && mousestartx < draggingwindow->getX() + DRAGBORDER)
 							draggingwindow->startresisingx();
-						if((Graphics.h()-mousestarty) < draggingwindow->py()+draggingwindow->ph() && (Graphics.h()-mousestarty) > draggingwindow->py()+draggingwindow->ph() - DRAGBORDER)
+						if((Graphics.h()-mousestarty) < draggingwindow->getY()+draggingwindow->getHeight() && (Graphics.h()-mousestarty) > draggingwindow->getY()+draggingwindow->getHeight() - DRAGBORDER)
 							draggingwindow->startresizingy();
 						return 1;
 					}
 					else
 					{ // drag this component
 						Graphics.WM.click(false);
-						draggingobject = w->inobject();
-						dragoffsetx = mousex - w->px() - w->inobject()->realx();
-						dragoffsety = (Graphics.h()-mousey) - w->py() - w->inobject()->realy();
+						draggingObject = w->inObject();
+						dragoffsetx = mouseX - w->getX() - w->inObject()->realX();
+						dragoffsety = (Graphics.h()-mouseY) - w->getY() - w->inObject()->realY();
 					}
 					return 1;
 				}
@@ -1673,14 +1673,14 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			
 			if(event.button.button == SDL_BUTTON_LEFT)
 			{
-				cMenu* m = menu->inwindow((int)mousex, Graphics.h()-(int)mousey);
+				cMenu* m = menu->inwindow((int)mouseX, Graphics.h()-(int)mouseY);
 				cMenu* pm = NULL;
 				if(popupmenu != NULL)
-					pm = popupmenu->inwindow((int)mousex, Graphics.h()-(int)mousey);
+					pm = popupmenu->inwindow((int)mouseX, Graphics.h()-(int)mouseY);
 				doneaction = true;
 				lbuttondown = false;
-				mousex = event.motion.x;
-				mousey = event.motion.y;
+				mouseX = event.motion.x;
+				mouseY = event.motion.y;
 				cWindow* w = Graphics.WM.inwindow();
 				if (draggingwindow != NULL && m == NULL)
 				{
@@ -1689,13 +1689,13 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				draggingwindow = NULL;
 				if (movement <= 1 && m == NULL && popupmenu == NULL)
 					Graphics.WM.click(true);
-				if (draggingobject != NULL && m == NULL)
+				if (draggingObject != NULL && m == NULL)
 				{
 					if(Graphics.WM.inwindow() != NULL)
 						Graphics.WM.inwindow()->dragover();
-					if(draggingobject != NULL)
-						draggingobject->parent->stopdrag();
-					draggingobject = NULL;
+					if(draggingObject != NULL)
+						draggingObject->parent->stopdrag();
+					draggingObject = NULL;
 				}
 
 				lbuttondown = false;
@@ -1723,12 +1723,12 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				if (m != NULL && m->opened)
 				{
-					m->click((int)mousex, Graphics.h()-(int)mousey);
+					m->click((int)mouseX, Graphics.h()-(int)mouseY);
 					return 1;
 				}
 				else if (pm != NULL && pm->opened)
 				{
-					pm->click((int)mousex, Graphics.h()-(int)mousey);
+					pm->click((int)mouseX, Graphics.h()-(int)mouseY);
 					if(!pm->opened)
 					{
 						delete popupmenu;
@@ -1744,10 +1744,10 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			}
 			else // right button
 			{
-				cMenu* m = menu->inwindow((int)mousex, Graphics.h()-(int)mousey);
+				cMenu* m = menu->inwindow((int)mouseX, Graphics.h()-(int)mouseY);
 				cMenu* pm = NULL;
 				if(popupmenu != NULL)
-					pm = popupmenu->inwindow((int)mousex, Graphics.h()-(int)mousey);
+					pm = popupmenu->inwindow((int)mouseX, Graphics.h()-(int)mouseY);
 				menu->unmouseover();
 				if(pm != NULL)
 					pm->unmouseover();
@@ -1787,8 +1787,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				lastrclick = SDL_GetTicks();
 				rbuttondown = false;
-				mousex = event.motion.x;
-				mousey = event.motion.y;
+				mouseX = event.motion.x;
+				mouseY = event.motion.y;
 
 				if(movement < 3 && (editmode == MODE_OBJECTS || editmode == MODE_EFFECTS))
 				{
@@ -2018,7 +2018,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					while (!fFinished)														// loop through all the files
 					{ 
-						if (string(FileData.cFileName) != "." && string(FileData.cFileName) != ".." && string(FileData.cFileName) != "CVS")	// if this is a real folder, not . or .. or CVS
+						if (std::string(FileData.cFileName) != "." && std::string(FileData.cFileName) != ".." && std::string(FileData.cFileName) != "CVS")	// if this is a real folder, not . or .. or CVS
 							nFiles++;
 						if (!FindNextFile(hSearch, &FileData))								// find next file in the resultset
 						{

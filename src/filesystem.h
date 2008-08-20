@@ -10,7 +10,7 @@
 #include "grflib/grf.h"
 #include "tinyxml/tinyxml.h"
 
-using namespace std;
+//using namespace std;
 
 enum STARTPOS
 {
@@ -50,9 +50,9 @@ class cGRFFile
 {
 public:
 	~cGRFFile();
-	Grf* grf;
-	map<string, cFile*, less<string> > files;
-	long	nroffiles;
+	Grf*													grf;
+	std::map<std::string, cFile*, std::less<std::string> >	files;
+	long													nroffiles;
 };
 
 class cFileSystem
@@ -64,7 +64,7 @@ public:
 	cFile*							open(std::string);
 	std::vector<cGRFFile*>			locations;
 	TiXmlDocument					getXml(std::string);
-	bool							isFile(string);
+	bool							isFile(std::string);
 
 };
 

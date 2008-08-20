@@ -2,7 +2,7 @@
 #define __WINDOWLINE_H__
 
 #include "windowobject.h"
-using namespace std;
+//using namespace std;
 
 class cWindowLine : public cWindowObject
 {
@@ -26,13 +26,13 @@ public:
 		glColor3i(r,g,b);
 		glDisable(GL_TEXTURE_2D);
 		glBegin(GL_LINES);
-			glVertex2f(x, parent->ph() - y);
-			glVertex2f(w, parent->ph() - h);
+			glVertex2f(x, parent->getHeight() - y);
+			glVertex2f(w, parent->getHeight() - h);
 		glEnd();
 		glEnable(GL_TEXTURE_2D);
 		glColor4fv(colors);
 	}
-	void SetInt(int index, intptr_t val)
+	void setInt(int index, intptr_t val)
 	{
 		if (index == 0)
 			x = val;
@@ -50,12 +50,12 @@ public:
 			b = val;
 	}
 
-	cWindowObject* inobject()
+	cWindowObject* inObject()
 	{
-		int xx=mousex-parent->px();
-		int yy=mousey-parent->py();
-		if (xx > realx() && xx < w &&
-			yy > realy() && yy < h)
+		int xx=mouseX-parent->getX();
+		int yy=mouseY-parent->getY();
+		if (xx > realX() && xx < w &&
+			yy > realY() && yy < h)
 			return this;
 		return NULL;
 	}

@@ -8,7 +8,7 @@ extern cFileSystem fs;
 
 GLint glMaxTexDim;
 
-cTexture::cTexture(string pFilename, bool pClamp, bool pFreedata)
+cTexture::cTexture(std::string pFilename, bool pClamp, bool pFreedata)
 {
 	clamp = pClamp;
 	filename = pFilename;
@@ -19,7 +19,7 @@ cTexture::cTexture(string pFilename, bool pClamp, bool pFreedata)
 	tid = 0;
 }
 
-cTextureFromMemory::cTextureFromMemory(string ext, char* d, int l) : cTexture("",false,true)
+cTextureFromMemory::cTextureFromMemory(std::string ext, char* d, int l) : cTexture("",false,true)
 {
 	mem_data = new char[l];
 	memcpy(mem_data, d, l);
@@ -27,7 +27,7 @@ cTextureFromMemory::cTextureFromMemory(string ext, char* d, int l) : cTexture(""
 	mem_length = l;
 }
 
-GLuint cTextureFromMemory::texid()
+GLuint cTextureFromMemory::texId()
 {
 	if(!loaded)
 	{
@@ -38,7 +38,7 @@ GLuint cTextureFromMemory::texid()
 	return tid;
 }
 
-GLuint cTexture::texid()
+GLuint cTexture::texId()
 {
 	if(!loaded && filename != "")
 	{
@@ -65,7 +65,7 @@ cTextureLoaders& GetTextureLoaders()
 }
 
 //vector<cTextureLoader*> cTextureLoaders::loaders;
-cTexture* cTextureLoaders::load(string filename, bool clamp, bool freedata)
+cTexture* cTextureLoaders::load(std::string filename, bool clamp, bool freedata)
 {
 	cTexture* t = new cTexture(filename, clamp, freedata);
 	return t;
@@ -97,17 +97,17 @@ void cTexture::generate()
 }
 
 
-void cTextureLoaders::load(string filename, cTexture* tex, bool clamp)
+void cTextureLoaders::load(std::string filename, cTexture* tex, bool clamp)
 {
-	if(filename.rfind(".") == string::npos)
+	if(filename.rfind(".") == std::string::npos)
 	{
 		Log(1,0,"Error loading texture %s, not able to determine filetype!", filename.c_str());
 		return;
 	}
 
-	vector<cTextureLoader*> loaders = GetTextureLoaders().loaders;
+	std::vector<cTextureLoader*> loaders = GetTextureLoaders().loaders;
 
-	string ext = lcase(filename.substr(filename.rfind(".")));
+	std::string ext = lcase(filename.substr(filename.rfind(".")));
 	for(unsigned int i = 0; i < loaders.size(); i++)
 	{
 		for(unsigned int ii = 0; ii < loaders[i]->extensions.size(); ii++)
@@ -136,9 +136,9 @@ void cTextureLoaders::load(string filename, cTexture* tex, bool clamp)
 	Log(1,0,"Unknown texture type: %s at file %s", ext.c_str(), filename.c_str()); 
 }
 
-void cTextureLoaders::loadfrommem(string ext, char* data, int length, cTexture* tex, bool clamp)
+void cTextureLoaders::loadfrommem(std::string ext, char* data, int length, cTexture* tex, bool clamp)
 {
-	vector<cTextureLoader*> loaders = GetTextureLoaders().loaders;
+	std::vector<cTextureLoader*> loaders = GetTextureLoaders().loaders;
 
 	ext = lcase(ext);
 	for(unsigned int i = 0; i < loaders.size(); i++)

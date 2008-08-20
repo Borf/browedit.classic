@@ -3,7 +3,7 @@
 #include "graphics.h"
 extern cGraphics Graphics;
 
-int cTextureModel::open(string filename)
+int cTextureModel::open(std::string filename)
 {
 	tex = TextureCache.load(filename);
 	return 0;
@@ -19,7 +19,7 @@ int cTextureModel::draw(float x, float y, float z, float scale)
 {
 
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set the correct blending mode
-	glBindTexture(GL_TEXTURE_2D, tex->texid());
+	glBindTexture(GL_TEXTURE_2D, tex->texId());
 
 	glPushMatrix();
 	float modelview[16];

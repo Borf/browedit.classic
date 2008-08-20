@@ -6,7 +6,7 @@
 #include <vector>
 #include <texture.h>
 #include <texturecache.h>
-using namespace std;
+//using namespace std;
 
 class cWindowPictureBox : public cWindowObject
 {
@@ -14,29 +14,14 @@ protected:
 	int highlightmode;
 public:
 	cTexture* tex;
-	cWindowPictureBox(cWindow* parent) : cWindowObject(parent)
-	{
-		highlightmode = 0;
-		w = 100;
-		h = 100;
-		x = 5;
-		y = 20;
-		tex = NULL;
-		alignment = ALIGN_TOPLEFT;
-		loaded = false;
-		type = OBJECT_PICTUREBOX;
-	}
-	~cWindowPictureBox() 
-	{
-		if (tex != NULL || loaded)
-			TextureCache.unload(tex);
-	}
+	cWindowPictureBox(cWindow* parent);
+	~cWindowPictureBox();
 	virtual void draw(int,int,int,int);
 	virtual void click();
 
-	virtual void SetText(int, string);
-	void SetInt(int, int);
-	int GetInt(int);
+	virtual void setText(int, std::string);
+	void setInt(int, int);
+	int getInt(int);
 	bool loaded;
 };
 

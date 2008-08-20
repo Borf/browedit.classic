@@ -3,25 +3,14 @@
 
 #include "windowobject.h"
 #include <string>
-using namespace std;
+//using namespace std;
 
 class cWindowRGBPicker : public cWindowObject
 {
 protected:
 	float r,g,b;
 public:
-	cWindowRGBPicker(cWindow* parent) : cWindowObject(parent)
-	{
-		w = 100;
-		h = 25;
-		x = 10;
-		y = 10;
-		alignment = ALIGN_CENTER;
-		type = OBJECT_RGBPICKER;
-		r = 0.5f;
-		g = 0.5f;
-		b = 1;
-	}
+	cWindowRGBPicker(cWindow* parent);
 	virtual ~cWindowRGBPicker() {}
 	virtual void draw(int,int,int,int);
 	virtual void click();

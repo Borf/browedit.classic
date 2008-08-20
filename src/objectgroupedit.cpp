@@ -23,7 +23,7 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 				unsigned int i;
 				if(doneaction)
 				{
-					vector<int> objectsselected;
+					std::vector<int> objectsselected;
 					for(i = 0; i < Graphics.world.models.size(); i++)
 						if(Graphics.world.models[i]->selected)
 							objectsselected.push_back(i);
@@ -54,13 +54,13 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 						cVector2 diff = cVector2(Graphics.world.models[i]->pos.x - Graphics.selectionCenter.x, Graphics.world.models[i]->pos.z - Graphics.selectionCenter.z);
 						if(!shift)
 						{
-							Graphics.world.models[i]->rot.y -= (mousex - oldmousex)/10.0f;
-							diff.rotate((mousex-oldmousex)/10.0f);
+							Graphics.world.models[i]->rot.y -= (mouseX - oldmousex)/10.0f;
+							diff.rotate((mouseX-oldmousex)/10.0f);
 						}
 						else
 						{
-							diff.rotate((mousex-oldmousex)*9);
-							Graphics.world.models[i]->rot.y -= (mousex - oldmousex)*9;
+							diff.rotate((mouseX-oldmousex)*9);
+							Graphics.world.models[i]->rot.y -= (mouseX - oldmousex)*9;
 						}
 
 						Graphics.world.models[i]->pos.x = Graphics.selectionCenter.x + diff.x;
@@ -70,11 +70,11 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 					if(alt && !ctrl)
 					{
 						cVector2 diff = cVector2(Graphics.world.models[i]->pos.x - Graphics.selectionCenter.x, Graphics.world.models[i]->pos.z - Graphics.selectionCenter.z);
-						diff = diff * (1 + ((mousex - oldmousex) / 10.0f));
+						diff = diff * (1 + ((mouseX - oldmousex) / 10.0f));
 						Graphics.world.models[i]->pos.x = Graphics.selectionCenter.x + diff.x;
 						Graphics.world.models[i]->pos.z = Graphics.selectionCenter.z + diff.y;
 
-						Graphics.world.models[i]->scale = Graphics.world.models[i]->scale * (1+((mousex - oldmousex) / 10.0f));
+						Graphics.world.models[i]->scale = Graphics.world.models[i]->scale * (1+((mouseX - oldmousex) / 10.0f));
 					}
 				}
 				if(!ctrl && !alt)
@@ -196,7 +196,7 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 			case SDLK_r:
 				{
 
-					string cat = Graphics.WM.InputWindow("Input Category");
+					std::string cat = Graphics.WM.InputWindow("Input Category");
 
 					if(cat == "")
 						break;
@@ -262,7 +262,7 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 				break;
 			case SDLK_BACKSPACE:
 				{
-					vector<cUndoObjectsDelete::cObject> objectsdeleted;
+					std::vector<cUndoObjectsDelete::cObject> objectsdeleted;
 					int idoff = 0;
 					for(unsigned int i = 0; i < Graphics.world.models.size(); i++)
 					{

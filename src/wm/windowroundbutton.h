@@ -7,14 +7,10 @@
 class cWindowRoundButton : public cWindowObject
 {
 public:
-	cWindowRoundButton(cWindow* parent) : cWindowObject(parent)
-	{
-		cursortype = 1;
-		type = OBJECT_ROUNDBUTTON;
-	}
+	cWindowRoundButton(cWindow* parent);
 	void draw(int,int,int,int);
 	void click();
-	cWindowObject* inobject();
+	cWindowObject* inObject();
 };
 
 #endif

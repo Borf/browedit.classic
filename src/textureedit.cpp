@@ -6,9 +6,9 @@ extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
 extern cGraphics Graphics;
 extern cUndoStack undostack;
-extern vector<vector<int > > clipboardgat;
+extern std::vector<std::vector<int > > clipboardgat;
 
-vector<vector<cTile> > clipboardtexture;
+std::vector<std::vector<cTile> > clipboardtexture;
 
 int cProcessManagement::textureedit_process_events(SDL_Event &event)
 {
@@ -190,7 +190,7 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 				Graphics.flipv = !Graphics.flipv;
 				break;
 			case SDLK_c:
-				if(mousex < Graphics.w()-256)
+				if(mouseX < Graphics.w()-256)
 				{
 					float selsizex = (fabs(Graphics.selectionstart.x - Graphics.selectionend.x) / 32);
 					float selsizey = (fabs(Graphics.selectionstart.y - Graphics.selectionend.y) / 32);
@@ -213,8 +213,8 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 
 					for(int x = posx; x > posx-selsizex; x--)
 					{
-						vector<cTile> row;
-						vector<int> row2;
+						std::vector<cTile> row;
+						std::vector<int> row2;
 						for(int y = posy; y > posy-selsizey; y--)
 						{
 							if(x >= 0 && x < Graphics.world.width && y >= 0 && y < Graphics.world.height)
@@ -243,7 +243,7 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 				}
 				break; 
 			case SDLK_p:
-				if(mousex < Graphics.w()-256)
+				if(mouseX < Graphics.w()-256)
 				{
 					float selsizex = (fabs(Graphics.selectionstart.x - Graphics.selectionend.x) / 32);
 					float selsizey = (fabs(Graphics.selectionstart.y - Graphics.selectionend.y) / 32);

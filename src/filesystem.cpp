@@ -8,9 +8,9 @@
 
 extern cFileSystem fs;
 
-extern string rodir;
+extern std::string rodir;
 
-int cFileSystem::loadPackedFile(string grffilename)
+int cFileSystem::loadPackedFile(std::string grffilename)
 {
 	cGRFFile* grffile = new cGRFFile();
 	locations.push_back(grffile);
@@ -26,7 +26,7 @@ int cFileSystem::loadPackedFile(string grffilename)
 	
 	for(unsigned int i =0 ; i < grffile->grf->nfiles; i++)
 	{
-		string filename = replace(lcase(rodir + grffile->grf->files[i].name),"/","\\");
+		std::string filename = replace(lcase(rodir + grffile->grf->files[i].name),"/","\\");
 		grffile->files[filename] = new cFile();
 		grffile->files[filename]->fileName = grffile->grf->files[i].name;
 		grffile->files[filename]->location = thislocation;
@@ -41,7 +41,7 @@ int cFileSystem::loadPackedFile(string grffilename)
 
 
 
-cFile* cFileSystem::open(string filename)
+cFile* cFileSystem::open(std::string filename)
 {
 	#ifndef WIN32
 	filename = replace(filename, "\\", "/");
@@ -77,10 +77,10 @@ cFile* cFileSystem::open(string filename)
 ///////////////////////////////////////////////////////////////////////////////////////////
 int cFile::open()
 {
-	ifstream pFile;
+	std::ifstream pFile;
 	if (location == -1)
 	{
-		pFile.open(fileName.c_str(), ios_base::in | ios_base::binary);
+		pFile.open(fileName.c_str(), std::ios_base::in | std::ios_base::binary);
 		if(pFile.bad())
 		{
 			Log(1,0,GetMsg("fs/FILEERROR"), fileName.c_str());
@@ -197,11 +197,11 @@ int cFile::readLine(char* buf, int maxlen)
 	}
 	return i;
 }
-string cFile::readLine()
+std::string cFile::readLine()
 {
 	if(eof())
 		return "";
-	string s = "";
+	std::string s = "";
 	while(data[index] != '\r' && data[index] != '\n' && !eof())
 	{
 		s+=data[index];
@@ -236,7 +236,7 @@ cFile::cFile()
 }
 
 
-TiXmlDocument cFileSystem::getXml(string filename)
+TiXmlDocument cFileSystem::getXml(std::string filename)
 {
 	TiXmlDocument ret;
 	ret.SetCondenseWhiteSpace(false);
@@ -246,7 +246,7 @@ TiXmlDocument cFileSystem::getXml(string filename)
 		Log(1,0,"Couldn't open %s", filename.c_str());
 		return ret;
 	}
-	string xmldata;
+	std::string xmldata;
 	while(!pFile->eof())
 		xmldata += pFile->readLine() + "\n";
 	pFile->close();
@@ -262,7 +262,7 @@ TiXmlDocument cFileSystem::getXml(string filename)
 
 
 
-bool cFileSystem::isFile(string filename)
+bool cFileSystem::isFile(std::string filename)
 {
 	#ifndef WIN32
 	filename = replace(filename, "\\", "/");
@@ -294,7 +294,7 @@ cFileSystem::~cFileSystem()
 
 cGRFFile::~cGRFFile()
 {
-	for(map<string, cFile*, less<string> >::iterator i = files.begin(); i != files.end(); i++)
+	for(std::map<std::string, cFile*, std::less<std::string> >::iterator i = files.begin(); i != files.end(); i++)
 		delete i->second;
 	files.clear();
 
