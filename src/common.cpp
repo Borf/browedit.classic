@@ -47,7 +47,7 @@ float DistLineToPoint(cVector2 LineStart, cVector2 LineEnd, cVector2 point)
 
 
 FILE* pFile = NULL;
-string logfilename;
+std::string logfilename;
 int loglines = 0;
 char logname[32];
 
@@ -141,29 +141,20 @@ void Log(int lvl, int options, const char* fmt, ...)
 }
 
 
-vector<string> split(string tosplit, string seperator)
-
+std::vector<std::string> split(std::string tosplit, std::string seperator)
 {
-
-	vector<string> res;
-
-	while(tosplit.find(seperator) != string::npos)
-
+	std::vector<std::string> res;
+	while(tosplit.find(seperator) != std::string::npos)
 	{
-
 		res.push_back(tosplit.substr(0, tosplit.find(seperator)));
-
 		tosplit = tosplit.substr(tosplit.find(seperator)+seperator.length());
-
 	}
-
 	res.push_back(tosplit);
-
 	return res;
 
 }
 
-string lcase(string s)
+std::string lcase(std::string s)
 {
 	int i;
 	int siz = s.size();
@@ -172,7 +163,7 @@ string lcase(string s)
 	return s;
 }
 
-string ucase(string s)
+std::string ucase(std::string s)
 {
 	int i;
 	int siz = s.size();
@@ -181,10 +172,10 @@ string ucase(string s)
 	return s;
 }
 
-string replace(string s, string a, string b)
+std::string replace(std::string s, std::string a, std::string b)
 {
-	string s2;
-	while(s.find(a) != string::npos)
+	std::string s2;
+	while(s.find(a) != std::string::npos)
 	{
 		s2 = s2 + s.substr(0, s.find(a)) + b;
 		s = s.substr(s.find(a) + a.length(), s.length() - s.find(a) - a.length());
@@ -192,13 +183,13 @@ string replace(string s, string a, string b)
 	s2 = s2 + s;
 	return s2;
 }
-string ltrim(string s)
+std::string ltrim(std::string s)
 {
 	while((s[0] == '\t' || s[0] == ' ') && s.length() > 0)
 		s = s.substr(1);
 	return s;
 }
-string rtrim(string s)
+std::string rtrim(std::string s)
 {
 	while((s[s.length()-1] == '\t' || s[s.length()-1] == ' ') && s.length() > 0)
 		s = s.substr(0, s.length()-1);
@@ -206,7 +197,7 @@ string rtrim(string s)
 }
 
 
-string inttostring(int i)
+std::string inttostring(int i)
 {
 	char buf[10];
 	//itoa(i, buf, 10);
@@ -251,9 +242,9 @@ long tickcount()
 	return SDL_GetTicks();
 #endif
 }
-string removecolors(string s)
+std::string removecolors(std::string s)
 {
-	string::iterator i;
+	std::string::iterator i;
 	int index = 0;
 	for(i = s.begin(); i != s.end(); i++)
 	{
@@ -266,7 +257,7 @@ string removecolors(string s)
 	}
 	return s;
 }
-string getLongTimeString()
+std::string getLongTimeString()
 {
 	char buf[12];
 	time_t _tt = time(NULL);
@@ -453,14 +444,14 @@ HWND GetConsoleHwnd()
 
 
 
-const char* GetMsg(string s)
+const char* GetMsg(std::string s)
 {
-	string olds = s;
+	std::string olds = s;
 	TiXmlNode* n = msgtable.FirstChildElement("language");
 
-	while(s.find("/") != string::npos)
+	while(s.find("/") != std::string::npos)
 	{
-		string a = s.substr(0, s.find("/"));
+		std::string a = s.substr(0, s.find("/"));
 		n = n->FirstChildElement(a.c_str());
 		if(n == NULL)
 		{
@@ -484,9 +475,9 @@ const char* GetMsg(string s)
 }
 
 
-int hex2dec(string s, int mult)
+int hex2dec(std::string s, int mult)
 {
-	static string lookup = "0123456789ABCDEF";
+	static std::string lookup = "0123456789ABCDEF";
 	int val = lookup.find(s[s.length()-1]);
 	if(s.length() == 1)
 		return pow(16.0,mult) * val;
@@ -494,7 +485,7 @@ int hex2dec(string s, int mult)
 		return pow(16.0,mult) * val  + hex2dec(s.substr(0,s.length()-1), mult+1);
 }
 
-cVector3 hex2floats(string c)
+cVector3 hex2floats(std::string c)
 {
 	return cVector3(hex2dec(c.substr(0,2))/256.0f, hex2dec(c.substr(2,2))/256.0f, hex2dec(c.substr(4,2))/256.0f);
 }

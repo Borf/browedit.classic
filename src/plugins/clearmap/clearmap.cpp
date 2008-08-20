@@ -80,9 +80,9 @@ void handleevent(cWindow* w, string name, string event)
 		{
 			for(x = 0; x < world->width; x++)
 			{
-				world->cubes[y][x].tileup = (x%4) + 4*(y % 4);
-				world->cubes[y][x].tileside = -1;
-				world->cubes[y][x].tileaside = -1;
+				world->cubes[y][x].tileUp = (x%4) + 4*(y % 4);
+				world->cubes[y][x].tileSide = -1;
+				world->cubes[y][x].tileOtherSide = -1;
 			}
 		}
 
@@ -91,17 +91,17 @@ void handleevent(cWindow* w, string name, string event)
 		{
 			for(y = 0; y < world->height; y++)
 			{
-				int tile = world->cubes[y][x].tileup;
+				int tile = world->cubes[y][x].tileUp;
 				if(used.find(tile) != used.end())
 				{
 					cTile t = world->tiles[tile];
 					tile = world->tiles.size();
 					world->tiles.push_back(t);
-					world->cubes[y][x].tileup = tile;
+					world->cubes[y][x].tileUp = tile;
 				}
 				used[tile] = 1;
 	///////////////////////////////////////
-				tile = world->cubes[y][x].tileside;
+				tile = world->cubes[y][x].tileSide;
 				if (tile != -1)
 				{
 					if(used.find(tile) != used.end())
@@ -109,12 +109,12 @@ void handleevent(cWindow* w, string name, string event)
 						cTile t = world->tiles[tile];
 						tile = world->tiles.size();
 						world->tiles.push_back(t);
-						world->cubes[y][x].tileside = tile;
+						world->cubes[y][x].tileSide = tile;
 					}
 					used[tile] = 1;
 				}
 	/////////////////////////////////////
-				tile = world->cubes[y][x].tileaside;
+				tile = world->cubes[y][x].tileOtherSide;
 				if (tile!= -1)
 				{
 					if(used.find(tile) != used.end())
@@ -122,7 +122,7 @@ void handleevent(cWindow* w, string name, string event)
 						cTile t = world->tiles[tile];
 						tile = world->tiles.size();
 						world->tiles.push_back(t);
-						world->cubes[y][x].tileaside = tile;
+						world->cubes[y][x].tileOtherSide = tile;
 					}
 					used[tile] = 1;
 				}
@@ -137,13 +137,13 @@ void handleevent(cWindow* w, string name, string event)
 		{
 			for(int x = 0; x < world->width; x++)
 			{
-				world->cubes[y][x].tileaside = -1;
-				world->cubes[y][x].tileside = -1;
+				world->cubes[y][x].tileOtherSide = -1;
+				world->cubes[y][x].tileSide = -1;
 				world->cubes[y][x].cell1 = 0;
 				world->cubes[y][x].cell2 = 0;
 				world->cubes[y][x].cell3 = 0;
 				world->cubes[y][x].cell4 = 0;
-				world->cubes[y][x].calcnormal();
+				world->cubes[y][x].calcNormal();
 			}
 		}
 	}
@@ -154,8 +154,8 @@ void handleevent(cWindow* w, string name, string event)
 		{
 			for(int x = 0; x < world->width; x++)
 			{
-				world->cubes[y][x].tileaside = -1;
-				world->cubes[y][x].tileside = -1;
+				world->cubes[y][x].tileOtherSide = -1;
+				world->cubes[y][x].tileSide = -1;
 			}
 		}
 	}

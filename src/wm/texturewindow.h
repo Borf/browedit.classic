@@ -169,7 +169,7 @@ public:
 				continue;
 			while(!pFile->eof())
 			{
-				line = pFile->readline();
+				line = pFile->readLine();
 				if (line == "")
 					continue;
 				pre = line.substr(0, line.find("|"));

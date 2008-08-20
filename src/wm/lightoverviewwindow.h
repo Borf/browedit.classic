@@ -122,7 +122,7 @@ public:
 				for(i = 0; i < Graphics.world.lights.size(); i++)
 				{
 					if(Graphics.world.lights[i] == ((cLightOverViewTreeNode*)node)->light)
-						Graphics.selectedobject = i;
+						Graphics.selectedObject = i;
 				}
 			}
 		}

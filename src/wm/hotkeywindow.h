@@ -64,7 +64,7 @@ public:
 			camerarot = Graphics.camerarot;
 			cameraheight = Graphics.cameraheight;
 			cameraangle = Graphics.cameraangle;
-			topcamera = Graphics.topcamera;
+			topcamera = Graphics.topCamera;
 		}
 
 		void click()
@@ -75,7 +75,7 @@ public:
 				Graphics.camerarot = camerarot;
 				Graphics.cameraheight = cameraheight;
 				Graphics.cameraangle = cameraangle;
-				Graphics.topcamera = topcamera;
+				Graphics.topCamera = topcamera;
 			}
 		}
 

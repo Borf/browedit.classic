@@ -10,7 +10,7 @@ extern cFileSystem fs;
 
 extern string rodir;
 
-int cFileSystem::LoadFile(string grffilename)
+int cFileSystem::loadPackedFile(string grffilename)
 {
 	cGRFFile* grffile = new cGRFFile();
 	locations.push_back(grffile);
@@ -28,7 +28,7 @@ int cFileSystem::LoadFile(string grffilename)
 	{
 		string filename = replace(lcase(rodir + grffile->grf->files[i].name),"/","\\");
 		grffile->files[filename] = new cFile();
-		grffile->files[filename]->filename = grffile->grf->files[i].name;
+		grffile->files[filename]->fileName = grffile->grf->files[i].name;
 		grffile->files[filename]->location = thislocation;
 	}
 
@@ -52,7 +52,7 @@ cFile* cFileSystem::open(string filename)
 	{
 		cFile* fil = new cFile;
 		fil->location = -1;
-		fil->filename = filename;
+		fil->fileName = filename;
 
 		fseek(f, 0, SEEK_END);
 		fil->size = ftell(f);
@@ -80,12 +80,12 @@ int cFile::open()
 	ifstream pFile;
 	if (location == -1)
 	{
-		pFile.open(filename.c_str(), ios_base::in | ios_base::binary);
+		pFile.open(fileName.c_str(), ios_base::in | ios_base::binary);
 		if(pFile.bad())
 		{
-			Log(1,0,GetMsg("fs/FILEERROR"), filename.c_str());
+			Log(1,0,GetMsg("fs/FILEERROR"), fileName.c_str());
 			#ifdef WIN32
-//			MessageBox(NULL, ("Error: could not open file: " + filename).c_str(), "File not found", MB_OK);
+//			MessageBox(NULL, ("Error: could not open file: " + fileName).c_str(), "File not found", MB_OK);
 			#endif
 		}
 		index = 0;
@@ -104,7 +104,7 @@ int cFile::open()
 		cGRFFile* grffile = fs.locations[location];
 		GrfError error;
 		unsigned int size2 = 0;
-		char* dat = (char*)grf_get(grffile->grf, filename.c_str(), &size2, &error);
+		char* dat = (char*)grf_get(grffile->grf, fileName.c_str(), &size2, &error);
 		size = size2;
 		if(!dat)
 		{
@@ -173,7 +173,7 @@ void cFile::seek(int o, enum STARTPOS p)
 	}
 }
 
-int cFile::readline(char* buf, int maxlen)
+int cFile::readLine(char* buf, int maxlen)
 {
 	int i = 0;
 	while(data[index] != '\r' && data[index] != '\n' && !eof() && i < maxlen)
@@ -197,7 +197,7 @@ int cFile::readline(char* buf, int maxlen)
 	}
 	return i;
 }
-string cFile::readline()
+string cFile::readLine()
 {
 	if(eof())
 		return "";
@@ -226,8 +226,17 @@ string cFile::readline()
 	return s;
 }
 
+cFile::cFile()
+{
+	offset = -1;
+	size = -1;
+	crc = 0;
+	location = -1;
+	version = -1;
+}
 
-TiXmlDocument cFileSystem::getxml(string filename)
+
+TiXmlDocument cFileSystem::getXml(string filename)
 {
 	TiXmlDocument ret;
 	ret.SetCondenseWhiteSpace(false);
@@ -239,7 +248,7 @@ TiXmlDocument cFileSystem::getxml(string filename)
 	}
 	string xmldata;
 	while(!pFile->eof())
-		xmldata += pFile->readline() + "\n";
+		xmldata += pFile->readLine() + "\n";
 	pFile->close();
 
 	ret.Parse( xmldata.c_str() );
@@ -253,7 +262,7 @@ TiXmlDocument cFileSystem::getxml(string filename)
 
 
 
-bool cFileSystem::isfile(string filename)
+bool cFileSystem::isFile(string filename)
 {
 	#ifndef WIN32
 	filename = replace(filename, "\\", "/");

@@ -85,7 +85,7 @@ public:
 		o->moveto(15,60);
 		o->resizeto(w-30, 20);
 		objects["input"] = o;
-		selectedobject = o;
+		selectedObject = o;
 
 		objects["rollup"] = new cWindowRollupButton(this,skin);
 		objects["close"] = new cWindowCloseButton(this,skin);;

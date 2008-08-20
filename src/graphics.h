@@ -30,7 +30,7 @@ public:
 		height=768;
 		bits=32;
 		fullscreen=false;
-		selectedobjectprop = 0;
+		selectedObjectProp = 0;
 		showgrid = true;
 		brushsize = 1;
 		texturestart = 0;
@@ -38,54 +38,55 @@ public:
 		texturerot = 0;
 		fliph = false;
 		flipv = false;
-		showobjects = false;
-		selectedobject = -1;
-		objectstartdrag = false;
+		showObjects = false;
+		selectedObject = -1;
+		objectStartDrag = false;
 		slope = false;
-		quadtreeview = -1;
-		showboundingboxes = false;
-		gattype = 0;
-		showlightmaps = false;
-		showtilecolors = true;
-		showwater = true;
-		showoglighting = true;
+		quadtreeView = -1;
+		showBoundingBoxes = false;
+		gatType = 0;
+		showLightmaps = false;
+		showTileColors = true;
+		showWater = true;
+		showOglLighting = true;
 		lasttick = 0;
-		wallheightmin = cVector2(-1,-1);
-		wallheightmax = cVector2(-1,-1);
-		texturepreview = NULL;
+		wallHeightMin = cVector2(-1,-1);
+		wallHeightMax = cVector2(-1,-1);
+		texturePreview = NULL;
 		gridsize = 1;
 		gridoffsetx = 0;
 		gridoffsety = 0;
-		topcamera = false;
+		topCamera = false;
 		showambientlighting = true;
 		groupeditmode = false;
-		animatewater = true;
+		animateWater = true;
 
-		shownotiles = true;
-		selectioncenter = cVector3(-1,-1,-1);
+		showNoTiles = true;
+		selectionCenter = cVector3(-1,-1,-1);
 		showgat = false;
-		backgroundcolor = cVector3(0,0,0);
-		notilecolor = cVector3(1,1,1);
-		showdot = true;
-		showsprites = true;
-		showalllights = false;
-		clearlightmaps = false;
-		gattransparency = 0.3f;
-		texturetool = TOOL_SELECTAREA;
-		texturebrush.resize(4, vector<bool>(4,true));
-		texturebrush[0][0] = false;
-		texturebrush[3][3] = false;
-		texturebrush[0][3] = false;
-		texturebrush[3][0] = false;
-		texturebrushoffset = cVector2(0,0);
-		texturegridsize = 4;
+		backgroundColor = cVector3(0,0,0);
+		noTileColor = cVector3(1,1,1);
+		showDot = true;
+		showSprites = true;
+		showAllLights = false;
+		clearLightmaps = false;
+		gatTransparency = 0.3f;
+		textureTool = TOOL_SELECTAREA;
+		textureBrush.resize(4, vector<bool>(4,true));
+		textureBrush[0][0] = false;
+		textureBrush[3][3] = false;
+		textureBrush[0][3] = false;
+		textureBrush[3][0] = false;
+		textureBrushOffset = cVector2(0,0);
+		textureGridSizeX = 4;
+		textureGridSizeY = 4;
 	}
 
 	int						init();
 	int						draw(bool = true);
-	int						ReSizeGLScene(int, int);
+	int						resizeGLScene(int, int);
 
-	void					KillGLWindow(void);
+	void					killGLWindow(void);
 
 	int&					h()
 	{
@@ -135,96 +136,90 @@ public:
 	float*					editval;
 
 	bool					is3dSelected(float, float, float);
-
 	string					popup(string, string = "");
 
-	string					popupreturn;
-	string					defaultpopuptext;
-	string					popupcaption;
+	string					popupReturn;
+	string					defaultPopupText;
+	string					popupCaption;
 	cFont*					font;
 	CFrustum				frustum;
 
 
-	int						selectedobjectprop;
+	int						selectedObjectProp;
 
-	int						selectedobject;
-	bool					objectstartdrag;
-	bool					showoglighting;
-	bool					topcamera;
+	int						selectedObject;
+	bool					objectStartDrag;
+	bool					showOglLighting;
+	bool					topCamera;
 
 	bool					slope;
-	bool					shownotiles;
+	bool					showNoTiles;
 
 
-	cRSMModel*				previewmodel;
-	int						previewcolor;
+	cRSMModel*				previewModel;
+	int						previewColor;
 
 
-	cVector3				clipboardrot;
-	cVector3				clipboardscale;
-	string					clipboardfile;
-	string					clipboardname;
-	float					clipboardy;
-	float					clipboardfloat;
-	GLfloat LightAmbient[4];
-	GLfloat LightDiffuse[4];
-	GLfloat LightPosition[4];
+	cVector3				clipboardRot;
+	cVector3				clipboardScale;
+	string					clipboardFile;
+	string					clipboardName;
+	float					clipboardY;
+	float					clipboardFloat;
+	GLfloat					lightAmbient[4];
+	GLfloat					lightDiffuse[4];
+	GLfloat					lightPosition[4];
 
 
-	bool					showobjects;
-	bool					showlightmaps;
-	bool					showtilecolors;
-	bool					showwater;
-	bool					animatewater;
-	bool					transparentobjects;
-	bool					showsprites;
-	bool					showalllights;
-	bool					clearlightmaps;
-	float					gattransparency;
+	bool					showObjects;
+	bool					showLightmaps;
+	bool					showTileColors;
+	bool					showWater;
+	bool					animateWater;
+	bool					transparentObjects;
+	bool					showSprites;
+	bool					showAllLights;
+	bool					clearLightmaps;
+	float					gatTransparency;
 
 
-	int						quadtreeview;
-	bool					showboundingboxes;
-	int						gattype;
-	vector<cTexture*>		gattextures;
-	cTexture*				gatborder;
+	int						quadtreeView;
+	bool					showBoundingBoxes;
+	int						gatType;
+	vector<cTexture*>		gatTextures;
+	cTexture*				gatBorder;
 	cTexture*				splash;
-	vector<vector<cTexture*> >		watertextures;
-	string					waterdir;
-	string					waterext;
-	int						watercount;
+	vector<vector<cTexture*> >		waterTextures;
+	string					waterDirectory;
+	string					waterExtension;
+	int						waterCount;
 
-	cVector2				wallheightmin;
-	cVector2				wallheightmax;
+	cVector2				wallHeightMin;
+	cVector2				wallHeightMax;
 
-	cTexture*				texturepreview;
+	cTexture*				texturePreview;
 	int						height;
 	int						width;
 	int						bits;
 	bool					fullscreen;
 
-	cVector3				selectioncenter;
-	cVector3				backgroundcolor;
-	cVector3				notilecolor;
+	cVector3				selectionCenter;
+	cVector3				backgroundColor;
+	cVector3				noTileColor;
 
 	cWM						WM;
-	bool					showdot;
-	vector<int>				gattiles;
+	bool					showDot;
+	vector<int>				gatTiles;
 
-	eTool					texturetool;
-	vector<vector<bool> >	texturebrush;
-	cVector2				texturebrushoffset;
-	float					texturegridsize;
+	eTool					textureTool;
+	vector<vector<bool> >	textureBrush;
+	cVector2				textureBrushOffset;
+	float					textureGridSizeX;
+	float					textureGridSizeY;
 
 private:
-	int						CreateGLWindow();
-	int						InitGL(void);
-
-////////////////////
-	void					drawvertexview();
-	void					drawfloorview();
-	void					drawwallview();
-	void					drawsideview();
+	int						createGLWindow();
+	int						initGL(void);
 };
 
 

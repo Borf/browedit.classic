@@ -27,7 +27,7 @@ class cTextureToolsWindow : public cWindow
 		cWindowToolbarButton(cWindow* parent, TiXmlDocument &totalskin, string image, eTool t) : cWindowPictureBox(parent)
 		{
 			tool = t;
-			activated = t == Graphics.texturetool;
+			activated = t == Graphics.textureTool;
 			TiXmlElement* skin = totalskin.FirstChildElement("skin")->FirstChildElement("button");
 			if(skin != NULL)
 			{
@@ -43,7 +43,7 @@ class cTextureToolsWindow : public cWindow
 			}
 
 			SetText(0, image);
-			resizeto(16,16);
+			resizeto(20,20);
 			alignment = ALIGN_TOPLEFT;
 		}
 
@@ -51,18 +51,29 @@ class cTextureToolsWindow : public cWindow
 		{
 			GLfloat colors[4];
 			glGetFloatv(GL_CURRENT_COLOR, colors);
+			glEnable(GL_BLEND);
+			glEnable(GL_TEXTURE_2D);
+			if(activated)
+				glColor4f(0.7f, 0.7f, 0.9f, colors[3]);
 			if(inobject())
 				glColor3f(0.6f, 0.6f, 0.9f);
-			if(activated)
-				glColor3f(0.7f, 0.7f, 0.9f);
 			cWindowObject::draw();
+			x+=2;
+			y+=2;
+			w=16;
+			h=16;
 			cWindowPictureBox::draw(a,b,c,d);
+			x-=2;
+			y-=2;
+			h=20;
+			w=20;
 
-			if(inobject() || activated)
+			if(activated)
 			{
 				int xx = realx();
 				int yy = realy();
 
+				glEnable(GL_BLEND);
 				glDisable(GL_TEXTURE_2D);
 				glColor4f(0,0,0,colors[3]);
 				glBegin(GL_LINE_LOOP);
@@ -84,7 +95,7 @@ class cTextureToolsWindow : public cWindow
 					((cWindowToolbarButton*)i->second)->activated = false;
 			}
 			activated = true;
-			Graphics.texturetool = tool;
+			Graphics.textureTool = tool;
 		}
 	};
 
@@ -93,12 +104,13 @@ class cTextureToolsWindow : public cWindow
 	public:
 		cWindowBrushShape(cWindow* parent, TiXmlDocument &totalskin) : cWindowButton(parent, totalskin)
 		{
-			resizeto(16,16);
+			resizeto(20,20);
 			alignment = ALIGN_TOPLEFT;
 			text = "";
 		}
 		void draw(int a,int b,int c,int d)
 		{
+			return;
 			GLfloat colors[4];
 			glGetFloatv(GL_CURRENT_COLOR, colors);
 			if(inobject())
@@ -175,8 +187,8 @@ public:
 		w = 50;
 		x = 0;
 		y = Graphics.h()-32;
-		minw = 20 + (pw()-innerw());
-		minh = 20 + (ph()-innerh());
+		minw = 20 + skinOffLeft+skinOffRight;
+		minh = 20 + skinOffTop+skinOffBottom;
 
 		title = "";
 		initprops("texturetools");
@@ -208,10 +220,16 @@ public:
 		cWindowObject* o;
 
 		o = new cWindowFloatInputBox(this, skin);
-		((cWindowFloatInputBox*)o)->floatje = &Graphics.texturegridsize;
+		((cWindowFloatInputBox*)o)->floatje = &Graphics.textureGridSizeX;
 		o->alignment = ALIGN_TOPLEFT;
 		o->resizeto(innerw(), o->ph());
-		objects["aa_gridsize"] = o;
+		objects["aa_gridsizex"] = o;
+
+		o = new cWindowFloatInputBox(this, skin);
+		((cWindowFloatInputBox*)o)->floatje = &Graphics.textureGridSizeY;
+		o->alignment = ALIGN_TOPLEFT;
+		o->resizeto(innerw(), o->ph());
+		objects["aa_gridsizex"] = o;
 
 		reorder();
 
@@ -221,7 +239,7 @@ public:
 		int xx = 0,	 yy = 0, lineheight = 0;
 		for(map<string, cWindowObject*, less<string> >::iterator i = objects.begin(); i != objects.end(); i++)
 		{
-			if(xx+i->second->pw() >= innerw())
+			if(xx+i->second->pw() > innerw())
 			{
 				xx = 0;
 				yy += lineheight;
@@ -236,8 +254,8 @@ public:
 
 	void resizeto(int ww, int hh)
 	{
-		cWindow::resizeto(floor(ww/18.0f)*18+4,hh);
-		objects["aa_gridsize"]->resizeto(min(innerw(),64), objects["aa_gridsize"]->ph());
+		cWindow::resizeto(floor(ww/20.0f)*20+skinOffLeft+skinOffRight,hh);
+		objects["aa_gridsize"]->resizeto(min(innerw(),40), objects["aa_gridsize"]->ph());
 		reorder();
 	}
 

@@ -21,7 +21,7 @@ int cProcessManagement::texturepaintedit_process_events(SDL_Event &event)
 			{
 				if(mousex < Graphics.w()-256)
 				{
-					if(Graphics.texturetool == TOOL_SELECTAREA)
+					if(Graphics.textureTool == TOOL_SELECTAREA)
 					{
 						if (mouse3dxstart > mouse3dx)
 						{

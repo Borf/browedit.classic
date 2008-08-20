@@ -41,7 +41,7 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 
 					if (!ctrl && !alt)
 					{
-						cVector3 diff = Graphics.world.models[i]->pos - Graphics.selectioncenter;
+						cVector3 diff = Graphics.world.models[i]->pos - Graphics.selectionCenter;
 
 						Graphics.world.models[i]->pos.x = (mouse3dx/5.0f) + diff.x;
 						Graphics.world.models[i]->pos.z = (mouse3dz/5.0f) + diff.z;
@@ -51,7 +51,7 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 					}
 					if(ctrl && !alt)
 					{
-						cVector2 diff = cVector2(Graphics.world.models[i]->pos.x - Graphics.selectioncenter.x, Graphics.world.models[i]->pos.z - Graphics.selectioncenter.z);
+						cVector2 diff = cVector2(Graphics.world.models[i]->pos.x - Graphics.selectionCenter.x, Graphics.world.models[i]->pos.z - Graphics.selectionCenter.z);
 						if(!shift)
 						{
 							Graphics.world.models[i]->rot.y -= (mousex - oldmousex)/10.0f;
@@ -63,16 +63,16 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 							Graphics.world.models[i]->rot.y -= (mousex - oldmousex)*9;
 						}
 
-						Graphics.world.models[i]->pos.x = Graphics.selectioncenter.x + diff.x;
-						Graphics.world.models[i]->pos.z = Graphics.selectioncenter.z + diff.y;
+						Graphics.world.models[i]->pos.x = Graphics.selectionCenter.x + diff.x;
+						Graphics.world.models[i]->pos.z = Graphics.selectionCenter.z + diff.y;
 
 					}
 					if(alt && !ctrl)
 					{
-						cVector2 diff = cVector2(Graphics.world.models[i]->pos.x - Graphics.selectioncenter.x, Graphics.world.models[i]->pos.z - Graphics.selectioncenter.z);
+						cVector2 diff = cVector2(Graphics.world.models[i]->pos.x - Graphics.selectionCenter.x, Graphics.world.models[i]->pos.z - Graphics.selectionCenter.z);
 						diff = diff * (1 + ((mousex - oldmousex) / 10.0f));
-						Graphics.world.models[i]->pos.x = Graphics.selectioncenter.x + diff.x;
-						Graphics.world.models[i]->pos.z = Graphics.selectioncenter.z + diff.y;
+						Graphics.world.models[i]->pos.x = Graphics.selectionCenter.x + diff.x;
+						Graphics.world.models[i]->pos.z = Graphics.selectionCenter.z + diff.y;
 
 						Graphics.world.models[i]->scale = Graphics.world.models[i]->scale * (1+((mousex - oldmousex) / 10.0f));
 					}
@@ -80,16 +80,16 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 				if(!ctrl && !alt)
 				{
 					int count = 0;
-					Graphics.selectioncenter = cVector3(0,0,0);
+					Graphics.selectionCenter = cVector3(0,0,0);
 					for(unsigned int i = 0; i < Graphics.world.models.size(); i++)
 					{
 						if (Graphics.world.models[i]->selected)
 						{
 							count++;
-							Graphics.selectioncenter+=Graphics.world.models[i]->pos;
+							Graphics.selectionCenter+=Graphics.world.models[i]->pos;
 						}
 					}
-					Graphics.selectioncenter = Graphics.selectioncenter / count;
+					Graphics.selectionCenter = Graphics.selectionCenter / count;
 				}
 			}
 			break;
@@ -143,32 +143,32 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 				{
 					Graphics.groupeditmode = !Graphics.groupeditmode;
 					int count = 0;
-					Graphics.selectioncenter = cVector3(0,0,0);
+					Graphics.selectionCenter = cVector3(0,0,0);
 					for(unsigned int i = 0; i < Graphics.world.models.size(); i++)
 					{
 						if (Graphics.world.models[i]->selected)
 						{
 							count++;
-							Graphics.selectioncenter+=Graphics.world.models[i]->pos;
+							Graphics.selectionCenter+=Graphics.world.models[i]->pos;
 						}
 					}
-					Graphics.selectioncenter = Graphics.selectioncenter / count;
+					Graphics.selectionCenter = Graphics.selectionCenter / count;
 				}
 				break;
 			case SDLK_RIGHTBRACKET:
 				{
 					Graphics.groupeditmode = !Graphics.groupeditmode;
 					int count = 0;
-					Graphics.selectioncenter = cVector3(0,0,0);
+					Graphics.selectionCenter = cVector3(0,0,0);
 					for(unsigned int i = 0; i < Graphics.world.models.size(); i++)
 					{
 						if (Graphics.world.models[i]->selected)
 						{
 							count++;
-							Graphics.selectioncenter+=Graphics.world.models[i]->pos;
+							Graphics.selectionCenter+=Graphics.world.models[i]->pos;
 						}
 					}
-					Graphics.selectioncenter = Graphics.selectioncenter / count;
+					Graphics.selectionCenter = Graphics.selectionCenter / count;
 				}
 				break;
 			case SDLK_d:
@@ -281,7 +281,7 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 							idoff--;
 						}
 					}
-					Graphics.selectedobject = -1;
+					Graphics.selectedObject = -1;
 					if (objectsdeleted.size() > 0)
 						undostack.push(new cUndoObjectsDelete(objectsdeleted));
 					cWindow* w = Graphics.WM.getwindow(WT_MODELOVERVIEW);

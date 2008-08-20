@@ -38,27 +38,27 @@ int cGraphics::draw(bool drawwm)
 	frameticks = SDL_GetTicks() - lasttick;
 	lasttick += frameticks;
 
-	glClearColor(Graphics.backgroundcolor.x, Graphics.backgroundcolor.y, Graphics.backgroundcolor.z, 1.0f);				// Black Background
+	glClearColor(Graphics.backgroundColor.x, Graphics.backgroundColor.y, Graphics.backgroundColor.z, 1.0f);				// Black Background
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set the correct blending mode
 
-	if(topcamera)
+	if(topCamera)
 	{
-		LightPosition[0] = mouse3dx;
-		LightPosition[1] = -mouse3dz;
-		LightPosition[2] = 1000;
-		LightPosition[3] = 1.0f;
+		lightPosition[0] = mouse3dx;
+		lightPosition[1] = -mouse3dz;
+		lightPosition[2] = 1000;
+		lightPosition[3] = 1.0f;
 	}
 	else
 	{
-		LightPosition[0] = -camerapointer.x + cameraheight*sin(camerarot);
-		LightPosition[1] = 10+cameraheight+cameraangle;
-		LightPosition[2] = -camerapointer.y + cameraheight*cos(camerarot);
-		LightPosition[3] = 1.0f;
+		lightPosition[0] = -camerapointer.x + cameraheight*sin(camerarot);
+		lightPosition[1] = 10+cameraheight+cameraangle;
+		lightPosition[2] = -camerapointer.y + cameraheight*cos(camerarot);
+		lightPosition[3] = 1.0f;
 	}
-	glLightfv(GL_LIGHT1, GL_POSITION, LightPosition);			// Position The Light
+	glLightfv(GL_LIGHT1, GL_POSITION, lightPosition);			// Position The Light
 
 	glEnable(GL_LIGHTING);
 
@@ -90,11 +90,11 @@ int cGraphics::draw(bool drawwm)
 		font->print(0,0,0,(width / 2) - (font->textlen(message)/2.0f),height/2.0f,"%s", message.c_str());
 	}
 
-	if(texturepreview != NULL)
+	if(texturePreview != NULL)
 	{
 		glEnable(GL_TEXTURE_2D);
 		glColor4f(1,1,1,1);
-		glBindTexture(GL_TEXTURE_2D, texturepreview->texid());
+		glBindTexture(GL_TEXTURE_2D, texturePreview->texid());
 		glBegin(GL_QUADS);
 			glTexCoord2f(1,1);		glVertex2f( 256.0f, height-32.0f);
 			glTexCoord2f(1,0);		glVertex2f( 256.0f, height-(32+256.0f));
@@ -105,14 +105,14 @@ int cGraphics::draw(bool drawwm)
 
 	}
 
-	if (previewmodel != NULL)
+	if (previewModel != NULL)
 	{
 		glDisable(GL_DEPTH_TEST);
-		if (previewcolor != 0)
+		if (previewColor != 0)
 		{
 			glDisable(GL_TEXTURE_2D);
 			glEnable(GL_BLEND);
-			glColor4f(1,1,1,previewcolor > 20 ? 1 : previewcolor / 20.0f);
+			glColor4f(1,1,1,previewColor > 20 ? 1 : previewColor / 20.0f);
 			glBegin(GL_QUADS);
 				glVertex3f( 0,0,-1000);
 				glVertex3f( 400,0,-1000);
@@ -121,11 +121,11 @@ int cGraphics::draw(bool drawwm)
 			glEnd();
 
 			glEnable(GL_TEXTURE_2D);
-			glColor4f(1,1,1,previewcolor > 10 ? 1 : previewcolor / 20.0f);
-			previewmodel->pos = cVector3(40,-100,0);
-			previewmodel->draw(false);
-			if (previewcolor > -1)
-				previewcolor--;
+			glColor4f(1,1,1,previewColor > 10 ? 1 : previewColor / 20.0f);
+			previewModel->pos = cVector3(40,-100,0);
+			previewModel->draw(false);
+			if (previewColor > -1)
+				previewColor--;
 		}
 	/*	glColor4f(1,1,1,1);
 		if (editmode == MODE_OBJECTS)
@@ -140,9 +140,9 @@ int cGraphics::draw(bool drawwm)
 			glEnd();
 
 			glEnable(GL_TEXTURE_2D);
-			previewmodel->pos = cVector3((w()/5)-25,-h()+32+250,0);
-			previewmodel->draw(false);
-			previewmodel->rot.y+=40*(frameticks / 1000.0f);
+			previewModel->pos = cVector3((w()/5)-25,-h()+32+250,0);
+			previewModel->draw(false);
+			previewModel->rot.y+=40*(frameticks / 1000.0f);
 		}
 		glEnable(GL_DEPTH_TEST);*/
 	}
@@ -155,25 +155,25 @@ int cGraphics::draw(bool drawwm)
 		{
 			if (editmode == MODE_GAT)
 			{
-				if (i+texturestart > gattextures.size()-1)
+				if (i+texturestart > gatTextures.size()-1)
 					continue;
-				glBindTexture(GL_TEXTURE_2D, gattextures[i+texturestart]->texid());
+				glBindTexture(GL_TEXTURE_2D, gatTextures[i+texturestart]->texid());
 			}
 			else if (editmode == MODE_WATER)
 			{
-				if (i+world.water.type >= Graphics.watercount)
+				if (i+world.water.type >= Graphics.waterCount)
 					continue;
 				static float frame = 0;
-				glBindTexture(GL_TEXTURE_2D, watertextures[i+world.water.type][(int)floor(frame)]->texid());
+				glBindTexture(GL_TEXTURE_2D, waterTextures[i+world.water.type][(int)floor(frame)]->texid());
 				frame+=0.25;
-				if (frame >= Graphics.watertextures[i+world.water.type].size())
+				if (frame >= Graphics.waterTextures[i+world.water.type].size())
 					frame = 0;
 			}
 			else
 			{
 				if (i+texturestart >= (int)world.textures.size())
 					continue;
-				glBindTexture(GL_TEXTURE_2D, world.textures[i+texturestart]->texid());
+				glBindTexture(GL_TEXTURE_2D, world.textures[i+texturestart]->texId());
 			}
 			glBegin(GL_QUADS);
 				glTexCoord2f(1,1);		glVertex2f( width, height-(32+288*i));
@@ -187,17 +187,17 @@ int cGraphics::draw(bool drawwm)
 		{
 			glColor4f(0,0,0,0.25f);
 			glEnable(GL_BLEND);
-			int ww = texturebrush[0].size();
-			int hh = texturebrush.size();
+			int ww = textureBrush[0].size();
+			int hh = textureBrush.size();
 
 			cVector2 off[4] = { cVector2(-1,0), cVector2(1,0), cVector2(0,1), cVector2(0,-1) };
 
 			glBegin(GL_QUADS);
-			for(int yy = 0; yy < texturebrush.size(); yy++)
+			for(int yy = 0; yy < textureBrush.size(); yy++)
 			{
-				for(int xx = 0; xx < texturebrush[yy].size(); xx++)
+				for(int xx = 0; xx < textureBrush[yy].size(); xx++)
 				{
-					if(texturebrush[yy][xx])
+					if(textureBrush[yy][xx])
 					{
 /*						for(int i = 0; i < 4; i++)
 						{
@@ -205,7 +205,7 @@ int cGraphics::draw(bool drawwm)
 							bool draw = true;
 							if(p.x >= 0 && p.x < ww && p.y >= 0 && p.y < hh)
 							{
-								if(texturebrush[p.y][p.x])
+								if(textureBrush[p.y][p.x])
 									draw = false;
 							}
 							if(draw)
@@ -214,10 +214,10 @@ int cGraphics::draw(bool drawwm)
 								glVertex2f(width-256+xx*(256/texturegridsize),	height-(32+yy));
 							}
 						}*/
-						glVertex2f(width-256+(xx)*(256/texturegridsize),		height-(32+(yy)*(256/texturegridsize)));
-						glVertex2f(width-256+(xx+1)*(256/texturegridsize),		height-(32+(yy)*(256/texturegridsize)));
-						glVertex2f(width-256+(xx+1)*(256/texturegridsize),		height-(32+(yy+1)*(256/texturegridsize)));
-						glVertex2f(width-256+(xx)*(256/texturegridsize),		height-(32+(yy+1)*(256/texturegridsize)));
+						glVertex2f(width-256+(xx)*(256/textureGridSizeX),		height-(32+(yy)*(256/textureGridSizeY)));
+						glVertex2f(width-256+(xx+1)*(256/textureGridSizeX),		height-(32+(yy)*(256/textureGridSizeY)));
+						glVertex2f(width-256+(xx+1)*(256/textureGridSizeX),		height-(32+(yy+1)*(256/textureGridSizeY)));
+						glVertex2f(width-256+(xx)*(256/textureGridSizeX),		height-(32+(yy+1)*(256/textureGridSizeY)));
 
 
 					}
@@ -433,9 +433,9 @@ int cGraphics::init()
 	SDL_WM_SetCaption(buf, "BROWEdit");
 
 	//SDL_ShowCursor(0);
-	if (InitGL() == 0)							// Initialize Our Newly Created GL Window
+	if (initGL() == 0)							// Initialize Our Newly Created GL Window
 	{
-		KillGLWindow();								// Reset The Display
+		killGLWindow();								// Reset The Display
 		Log(1,0,GetMsg("graphics/OPENGLFAIL"));
 		return 0;						// Return FALSE
 	}
@@ -451,58 +451,58 @@ int cGraphics::init()
 	WM.addwindow(new cHotkeyWindow(WM.texture, &WM.font, Graphics.WM.skin));
 
 	int i;
-	for(i = 0; i < gattiles.size(); i++)
+	for(i = 0; i < gatTiles.size(); i++)
 	{
 		char buf[64];
-		sprintf(buf, "data/gat%i.tga", gattiles[i]);
-		gattextures.push_back(TextureCache.load(buf));
+		sprintf(buf, "data/gat%i.tga", gatTiles[i]);
+		gatTextures.push_back(TextureCache.load(buf));
 	}
-	gatborder = TextureCache.load("data/gatborder.tga");
+	gatBorder = TextureCache.load("data/gatBorder.tga");
 
 	
-	waterdir =		config.FirstChildElement("config")->FirstChildElement("water")->FirstChildElement("directory")->FirstChild()->Value();
-	waterext =		config.FirstChildElement("config")->FirstChildElement("water")->FirstChildElement("extension")->FirstChild()->Value();
-	watercount=atoi(config.FirstChildElement("config")->FirstChildElement("water")->FirstChildElement("count")->FirstChild()->Value());
+	waterDirectory =		config.FirstChildElement("config")->FirstChildElement("water")->FirstChildElement("directory")->FirstChild()->Value();
+	waterExtension =		config.FirstChildElement("config")->FirstChildElement("water")->FirstChildElement("extension")->FirstChild()->Value();
+	waterCount=atoi(config.FirstChildElement("config")->FirstChildElement("water")->FirstChildElement("count")->FirstChild()->Value());
 
-	watertextures.resize(watercount);
-	for(i = 0; i < watercount; i++)
+	waterTextures.resize(waterCount);
+	for(i = 0; i < waterCount; i++)
 	{
 		for(int ii = 0; ii < 32; ii++)
 		{
 			char buf[100];
-			sprintf(buf, "%s%swater%i%02i%s", rodir.c_str(), waterdir.c_str(), i, ii, waterext.c_str());
-			watertextures[i].push_back(TextureCache.load(buf));
+			sprintf(buf, "%s%swater%i%02i%s", rodir.c_str(), waterDirectory.c_str(), i, ii, waterExtension.c_str());
+			waterTextures[i].push_back(TextureCache.load(buf));
 		}
 	}
-	if(watercount == 0)
+	if(waterCount == 0)
 	{
-		watertextures.resize(1);
-		watertextures[i].push_back(TextureCache.load(rodir + waterdir + "water" + waterext));
+		waterTextures.resize(1);
+		waterTextures[i].push_back(TextureCache.load(rodir + waterDirectory + "water" + waterExtension));
 	}
 
 	Log(3,0,GetMsg("file/DONELOADING"), "water.txt");
 
-	previewmodel = NULL;
+	previewModel = NULL;
 
-	LightAmbient[0] = 0.1f;
-	LightAmbient[1] = 0.1f;
-	LightAmbient[2] = 0.1f;
-	LightAmbient[3] = 2.0f;
+	lightAmbient[0] = 0.1f;
+	lightAmbient[1] = 0.1f;
+	lightAmbient[2] = 0.1f;
+	lightAmbient[3] = 2.0f;
 
-	LightDiffuse[0] = 0.9f;
-	LightDiffuse[1] = 0.9f;
-	LightDiffuse[2] = 0.9f;
-	LightDiffuse[3] = 2.0f;
+	lightDiffuse[0] = 0.9f;
+	lightDiffuse[1] = 0.9f;
+	lightDiffuse[2] = 0.9f;
+	lightDiffuse[3] = 2.0f;
 
-	LightPosition[0] = 0.0f;
-	LightPosition[1] = 0.0f;
-	LightPosition[2] = 0.0f;
-	LightPosition[3] = 0.0f;
+	lightPosition[0] = 0.0f;
+	lightPosition[1] = 0.0f;
+	lightPosition[2] = 0.0f;
+	lightPosition[3] = 0.0f;
 
 
-	glLightfv(GL_LIGHT1, GL_AMBIENT, LightAmbient);				// Setup The Ambient Light
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, LightDiffuse);				// Setup The Diffuse Light
-	glLightfv(GL_LIGHT1, GL_POSITION,LightPosition);			// Position The Light
+	glLightfv(GL_LIGHT1, GL_AMBIENT, lightAmbient);				// Setup The Ambient Light
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, lightDiffuse);				// Setup The Diffuse Light
+	glLightfv(GL_LIGHT1, GL_POSITION,lightPosition);			// Position The Light
 	glEnable(GL_LIGHT1);										// Enable Light One
 	glEnable(GL_LIGHTING);
 	glEnable(GL_COLOR_MATERIAL);
@@ -545,7 +545,7 @@ int cGraphics::init()
 
 
 
-int cGraphics::ReSizeGLScene(GLsizei w, GLsizei h)	// Resize And Initialize The GL Window
+int cGraphics::resizeGLScene(GLsizei w, GLsizei h)	// Resize And Initialize The GL Window
 {
 	if (h==0)										// Prevent A Divide By Zero By
 	{
@@ -560,7 +560,7 @@ int cGraphics::ReSizeGLScene(GLsizei w, GLsizei h)	// Resize And Initialize The 
 
 
 
-int cGraphics::InitGL(void)
+int cGraphics::initGL(void)
 {
 
 	glEnable(GL_TEXTURE_2D);							// Enable Texture Mapping
@@ -583,23 +583,23 @@ int cGraphics::InitGL(void)
 }
 
 
-void cGraphics::KillGLWindow(void)								// Properly Kill The Window
+void cGraphics::killGLWindow(void)								// Properly Kill The Window
 {
 	SDL_ShowCursor(0);
 	world.unload();
 
 	TextureCache.unload(splash);
 	int i;
-	for(i = 0; i < gattextures.size(); i++)
-		TextureCache.unload(gattextures[i]);
+	for(i = 0; i < gatTextures.size(); i++)
+		TextureCache.unload(gatTextures[i]);
 
-	TextureCache.unload(gatborder);
+	TextureCache.unload(gatBorder);
 
-	for(i = 0; i < watercount; i++)
+	for(i = 0; i < waterCount; i++)
 	{
-		for(unsigned int ii = 0; ii < watertextures[i].size(); ii++)
+		for(unsigned int ii = 0; ii < waterTextures[i].size(); ii++)
 		{
-			TextureCache.unload(watertextures[i][ii]);
+			TextureCache.unload(waterTextures[i][ii]);
 		}
 	}
 
@@ -744,14 +744,14 @@ void cMenu::draw()
 			if(items[i]->opened)
 				items[i]->draw();
 		}
-		if(w != maxlen && !updatedchildrenpos && parent != NULL)
+		if(w != maxlen && !updatedChildrenPos && parent != NULL)
 		{
 			if(parent->drawstyle != 0)
 			{
 				w = maxlen;
 			}
 			else
-				updatedchildrenpos = true;
+				updatedChildrenPos = true;
 			for(unsigned int ii = 0; ii < items.size(); ii++)
 			{
 				items[ii]->x = x+maxlen;
@@ -921,7 +921,7 @@ bool cmp(cMenu* a, cMenu* b)
 }
 
 
-cMenu* cMenu::getnext(cMenu* curitem)
+cMenu* cMenu::getNext(cMenu* curitem)
 {
 	for(unsigned int i = 0; i < items.size(); i++)
 	{
@@ -932,16 +932,16 @@ cMenu* cMenu::getnext(cMenu* curitem)
 				if (items[i+1]->item)
 					return items[i+1];
 				else
-					return items[i+1]->getfirstitem();
+					return items[i+1]->getFirstItem();
 			}
 		}
 	}
 	
-	return parent->getnext(this);
+	return parent->getNext(this);
 
 }
 
-cMenu* cMenu::getprev(cMenu* curitem)
+cMenu* cMenu::getPrev(cMenu* curitem)
 {
 	for(unsigned int i = 0; i < items.size(); i++)
 	{
@@ -952,33 +952,33 @@ cMenu* cMenu::getprev(cMenu* curitem)
 				if (items[i-1]->item)
 					return items[i-1];
 				else
-					return items[i-1]->getlastitem();
+					return items[i-1]->getLastItem();
 			}
 		}
 	}
 	
-	return parent->getprev(this);
+	return parent->getPrev(this);
 }
 
 
-cMenu* cMenu::getfirstitem()
+cMenu* cMenu::getFirstItem()
 {
 	if(items.size() == 0 || item)
 		return this;
 	if(items[0]->item)
 		return items[0];
 	else
-		return items[0]->getfirstitem();
+		return items[0]->getFirstItem();
 }
 
-cMenu* cMenu::getlastitem()
+cMenu* cMenu::getLastItem()
 {
 	if(items.size() == 0 || item)
 		return this;
 	if(items[items.size()-1]->item)
 		return items[items.size()-1];
 	else
-		return items[items.size()-1]->getlastitem();
+		return items[items.size()-1]->getLastItem();
 
 }
 

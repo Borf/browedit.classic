@@ -103,16 +103,16 @@ public:
 			Graphics.world.models[objects[i].objectid]->scale = objects[i].scale;
 		}
 		int count = 0;
-		Graphics.selectioncenter = cVector3(0,0,0);
+		Graphics.selectionCenter = cVector3(0,0,0);
 		for(i = 0; i < Graphics.world.models.size(); i++)
 		{
 			if (Graphics.world.models[i]->selected)
 			{
 				count++;
-				Graphics.selectioncenter+=Graphics.world.models[i]->pos;
+				Graphics.selectionCenter+=Graphics.world.models[i]->pos;
 			}
 		}
-		Graphics.selectioncenter = Graphics.selectioncenter / (float)count;
+		Graphics.selectionCenter = Graphics.selectionCenter / (float)count;
 	}
 };
 
@@ -134,7 +134,7 @@ public:
 				if (yy < 0 || yy >= Graphics.world.height || xx < 0 || xx >= Graphics.world.width)
 					row.push_back(0);
 				else
-					row.push_back(Graphics.world.cubes[yy][xx].tileup);
+					row.push_back(Graphics.world.cubes[yy][xx].tileUp);
 			}
 			data.push_back(row);
 		}
@@ -146,7 +146,7 @@ public:
 			for(int xx = 0; xx < (int)data[yy].size(); xx++)
 			{
 				if (!(yy+y < 0 || yy+y >= Graphics.world.height || xx+x < 0 || xx+x >= Graphics.world.width))
-					Graphics.world.cubes[y+yy][x+xx].tileup = data[yy][xx];
+					Graphics.world.cubes[y+yy][x+xx].tileUp = data[yy][xx];
 			}
 		}
 	}
@@ -195,7 +195,7 @@ public:
 					Graphics.world.cubes[y+yy][x+xx].cell2 = data[yy][xx].cell2;
 					Graphics.world.cubes[y+yy][x+xx].cell3 = data[yy][xx].cell3;
 					Graphics.world.cubes[y+yy][x+xx].cell4 = data[yy][xx].cell4;
-					Graphics.world.cubes[y+yy][x+xx].calcnormal();
+					Graphics.world.cubes[y+yy][x+xx].calcNormal();
 				}
 			}
 		}
@@ -360,9 +360,9 @@ public:
 	void undo()
 	{
 		if (type == 0)
-			Graphics.world.cubes[y][x].tileside = val;
+			Graphics.world.cubes[y][x].tileSide = val;
 		else
-			Graphics.world.cubes[y][x].tileaside = val;
+			Graphics.world.cubes[y][x].tileOtherSide = val;
 	}
 };
 
@@ -381,12 +381,12 @@ public:
 		if (type == 0)
 		{
 			for(unsigned int i = 0; i < vals.size(); i++)
-				Graphics.world.cubes[vals[i].first.second][vals[i].first.first].tileside = vals[i].second;
+				Graphics.world.cubes[vals[i].first.second][vals[i].first.first].tileSide = vals[i].second;
 		}
 		else
 		{
 			for(unsigned int i = 0; i < vals.size(); i++)
-				Graphics.world.cubes[vals[i].first.second][vals[i].first.first].tileaside = vals[i].second;
+				Graphics.world.cubes[vals[i].first.second][vals[i].first.first].tileOtherSide = vals[i].second;
 		}
 	}
 };
@@ -429,7 +429,7 @@ public:
 		model->rot = rot;
 		model->scale = scale;
 		Graphics.world.models.insert(Graphics.world.models.begin() + id, model);
-		Graphics.selectedobject = id;
+		Graphics.selectedObject = id;
 //		Graphics.world.models.push_back(model);
 	}
 };
@@ -447,7 +447,7 @@ public:
 	void undo()
 	{
 		Graphics.world.effects.insert(Graphics.world.effects.begin() + id, effect);
-		Graphics.selectedobject = id;
+		Graphics.selectedObject = id;
 	}
 };
 
@@ -502,7 +502,7 @@ public:
 	void undo()
 	{
 		Graphics.world.lights.insert(Graphics.world.lights.begin() + id, light);
-		Graphics.selectedobject = id;
+		Graphics.selectedObject = id;
 	}
 };
 
@@ -588,7 +588,7 @@ public:
 	void undo()
 	{
 		Graphics.world.sounds.insert(Graphics.world.sounds.begin() + id, sound);
-		Graphics.selectedobject = id;
+		Graphics.selectedObject = id;
 	}
 };
 

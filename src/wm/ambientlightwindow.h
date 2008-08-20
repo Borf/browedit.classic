@@ -22,19 +22,19 @@ public:
 	virtual ~cAmbientLightWindowOkButton() {}
 	void click()
 	{
-		Graphics.world.ambientlight.ambientr = atoi(parent->objects["ambientr"]->GetText(0).c_str());
-		Graphics.world.ambientlight.ambientg = atoi(parent->objects["ambientg"]->GetText(0).c_str());
-		Graphics.world.ambientlight.ambientb = atoi(parent->objects["ambientb"]->GetText(0).c_str());
+		Graphics.world.ambientLight.ambientr = atoi(parent->objects["ambientr"]->GetText(0).c_str());
+		Graphics.world.ambientLight.ambientg = atoi(parent->objects["ambientg"]->GetText(0).c_str());
+		Graphics.world.ambientLight.ambientb = atoi(parent->objects["ambientb"]->GetText(0).c_str());
 
-		Graphics.world.ambientlight.diffuse.x = atof(parent->objects["diffuser"]->GetText(0).c_str());
-		Graphics.world.ambientlight.diffuse.y = atof(parent->objects["diffuseg"]->GetText(0).c_str());
-		Graphics.world.ambientlight.diffuse.z = atof(parent->objects["diffuseb"]->GetText(0).c_str());
+		Graphics.world.ambientLight.diffuse.x = atof(parent->objects["diffuser"]->GetText(0).c_str());
+		Graphics.world.ambientLight.diffuse.y = atof(parent->objects["diffuseg"]->GetText(0).c_str());
+		Graphics.world.ambientLight.diffuse.z = atof(parent->objects["diffuseb"]->GetText(0).c_str());
 
-		Graphics.world.ambientlight.shadow.x = atof(parent->objects["shadowr"]->GetText(0).c_str());
-		Graphics.world.ambientlight.shadow.y = atof(parent->objects["shadowg"]->GetText(0).c_str());
-		Graphics.world.ambientlight.shadow.z = atof(parent->objects["shadowb"]->GetText(0).c_str());
+		Graphics.world.ambientLight.shadow.x = atof(parent->objects["shadowr"]->GetText(0).c_str());
+		Graphics.world.ambientLight.shadow.y = atof(parent->objects["shadowg"]->GetText(0).c_str());
+		Graphics.world.ambientLight.shadow.z = atof(parent->objects["shadowb"]->GetText(0).c_str());
 
-		Graphics.world.ambientlight.alpha = atof(parent->objects["alpha"]->GetText(0).c_str());
+		Graphics.world.ambientLight.alpha = atof(parent->objects["alpha"]->GetText(0).c_str());
 
 		parent->close();
 	}

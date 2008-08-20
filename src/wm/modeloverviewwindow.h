@@ -124,7 +124,7 @@ public:
 				for(i = 0; i < Graphics.world.models.size(); i++)
 				{
 					if(Graphics.world.models[i] == ((cModelOverViewTreeNode*)node)->model)
-						Graphics.selectedobject = i;
+						Graphics.selectedObject = i;
 				}
 			}
 		}

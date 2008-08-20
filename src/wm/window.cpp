@@ -32,7 +32,7 @@ cWindow::cWindow(cTexture* t, cFont* f, TiXmlDocument &skin)
 	alwaysontop = false;
 	minh = 100;
 	minw = 100;
-	selectedobject = NULL;
+	selectedObject = NULL;
 	closetype = CLOSE;
 	modal = false;
 	enabled = true;
@@ -184,16 +184,16 @@ void cWindow::draw()
 		}
 	}
 /*
-	if(selectedobject != NULL)
+	if(selectedObject != NULL)
 	{
 		glLineWidth(1.0f);
 		glColor3f(1,0,0);
 		glDisable(GL_TEXTURE_2D);
 		glBegin(GL_LINE_LOOP);
-			glVertex2f(selectedobject->realx(), selectedobject->realy());
-			glVertex2f(selectedobject->realx(), selectedobject->realy()+selectedobject->ph());
-			glVertex2f(selectedobject->realx()+selectedobject->pw(), selectedobject->realy()+selectedobject->ph());
-			glVertex2f(selectedobject->realx()+selectedobject->pw(), selectedobject->realy());
+			glVertex2f(selectedObject->realx(), selectedObject->realy());
+			glVertex2f(selectedObject->realx(), selectedObject->realy()+selectedObject->ph());
+			glVertex2f(selectedObject->realx()+selectedObject->pw(), selectedObject->realy()+selectedObject->ph());
+			glVertex2f(selectedObject->realx()+selectedObject->pw(), selectedObject->realy());
 		glEnd();
 		glColor3f(1,1,1);
 	}
@@ -284,7 +284,7 @@ void cWindow::click()
 		if (i->second->inobject() && i->second->selectable && i->second->isEnabled())
 		{
 			i->second->click();
-			selectedobject = i->second;
+			selectedObject = i->second;
 			break;
 		}
 	}
@@ -386,23 +386,23 @@ void cWindow::center()
 
 bool cWindow::onchar(char c,bool shift)
 {
-	if (selectedobject != NULL)
-		return selectedobject->onchar(c, shift);
+	if (selectedObject != NULL)
+		return selectedObject->onchar(c, shift);
 	else if (objects.find(defaultobject) != objects.end())
 		return objects[defaultobject]->onchar(c, shift);
 	return false;
 }
 bool cWindow::onkeydown(int c,bool shift)
 {
-	if (selectedobject != NULL)
-		if(selectedobject->onkeydown(c, shift))
+	if (selectedObject != NULL)
+		if(selectedObject->onkeydown(c, shift))
 			return true;
 	if (c == SDLK_RETURN)
 	{
 		if (objects.find(defaultobject) != objects.end())
 			return objects[defaultobject]->onkeydown(c, shift);
-		else if (selectedobject != NULL)
-			return selectedobject->onkeydown(c, shift);
+		else if (selectedObject != NULL)
+			return selectedObject->onkeydown(c, shift);
 
 	}
 	else if (c == SDLK_TAB)
@@ -421,17 +421,17 @@ bool cWindow::onkeydown(int c,bool shift)
 				do
 				{
 					for(i = objects.begin(); i != objects.end(); i++)
-						if (i->second == selectedobject)
+						if (i->second == selectedObject)
 							ii = i;
 					ii++;
 					if (ii == objects.end())
 						ii = objects.begin();
-					selectedobject = ii->second;
-				} while (!selectedobject->selectable);
+					selectedObject = ii->second;
+				} while (!selectedObject->selectable);
 			}
 			else
 			{
-				cWindowObject* oldselection = selectedobject;
+				cWindowObject* oldselection = selectedObject;
 				do
 				{
 					objectlist::iterator last;
@@ -439,20 +439,20 @@ bool cWindow::onkeydown(int c,bool shift)
 					{
 						if (i != objects.end())
 							last = i;
-						if (i->second == selectedobject)
+						if (i->second == selectedObject)
 							ii = i;
 					}
 					if (ii == objects.begin())
 						ii = last;
 					else
 						ii--;
-					selectedobject = ii->second;
-				} while (!selectedobject->selectable && oldselection != selectedobject);
+					selectedObject = ii->second;
+				} while (!selectedObject->selectable && oldselection != selectedObject);
 			}
-			if (selectedobject->type == OBJECT_INPUTBOX)
+			if (selectedObject->type == OBJECT_INPUTBOX)
 			{
-				selectedobject->SetInt(1, selectedobject->GetText(0).length());
-				selectedobject->SetInt(2, 0);
+				selectedObject->SetInt(1, selectedObject->GetText(0).length());
+				selectedObject->SetInt(2, 0);
 
 			}
 		}
@@ -464,9 +464,9 @@ bool cWindow::onkeydown(int c,bool shift)
 }
 bool cWindow::onkeyup(int c,bool shift)
 {
-	if (selectedobject != NULL)
+	if (selectedObject != NULL)
 	{
-		return selectedobject->onkeyup(c,shift);
+		return selectedObject->onkeyup(c,shift);
 	}
 	else if (objects.find(defaultobject) != objects.end())
 		return objects[defaultobject]->onkeyup(c,shift);
@@ -502,7 +502,7 @@ void cWindow::doubleclick()
 	if (o != NULL)
 	{
 		o->doubleclick();
-		selectedobject = o;
+		selectedObject = o;
 	}
 
 }
@@ -518,7 +518,7 @@ void cWindow::rightclick()
 		cWindowObject* o = i->second->inobject();
 		if (o != NULL && i->second->selectable)
 		{
-			selectedobject = o;
+			selectedObject = o;
 			o->rightclick();
 			break;
 		}

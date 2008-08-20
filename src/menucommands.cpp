@@ -68,8 +68,8 @@ MENUCOMMAND(open)
 	ofn.lStructSize = sizeof(ofn);
 	ofn.hwndOwner = hWnd;
 
-	strcpy(Graphics.world.filename, replace(Graphics.world.filename, "/", "\\").c_str());
-	ofn.lpstrFile = Graphics.world.filename;
+	strcpy(Graphics.world.fileName, replace(Graphics.world.fileName, "/", "\\").c_str());
+	ofn.lpstrFile = Graphics.world.fileName;
 	ofn.nMaxFile = 256;
 	ofn.lpstrFilter = "All\0*.*\0RO Maps\0*.rsw\0";
 	ofn.nFilterIndex = 2;
@@ -79,9 +79,9 @@ MENUCOMMAND(open)
 	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_ENABLESIZING;
 	if (GetOpenFileName(&ofn))
 	{
-		while(Graphics.world.filename[strlen(Graphics.world.filename)-1] != '.')
-			Graphics.world.filename[strlen(Graphics.world.filename)-1] = '\0';
-		Graphics.world.filename[strlen(Graphics.world.filename)-1] = '\0';
+		while(Graphics.world.fileName[strlen(Graphics.world.fileName)-1] != '.')
+			Graphics.world.fileName[strlen(Graphics.world.fileName)-1] = '\0';
+		Graphics.world.fileName[strlen(Graphics.world.fileName)-1] = '\0';
 
 		chdir(curdir);
 		Graphics.world.load();
@@ -98,8 +98,8 @@ MENUCOMMAND(open)
 
 void openfunc(string param)
 {
-	ZeroMemory(Graphics.world.filename, 128);
-	memcpy(Graphics.world.filename, param.c_str(), param.length());
+	ZeroMemory(Graphics.world.fileName, 128);
+	memcpy(Graphics.world.fileName, param.c_str(), param.length());
 	Graphics.world.load();
 }
 
@@ -112,7 +112,7 @@ MENUCOMMAND(opengrf)
 MENUCOMMAND(save)
 {
 #ifdef WIN32
-	if(Graphics.world.filename[0] == '\0')
+	if(Graphics.world.fileName[0] == '\0')
 	{
 		char curdir[100];
 		getcwd(curdir, 100);
@@ -124,8 +124,8 @@ MENUCOMMAND(save)
 		ZeroMemory(&ofn, sizeof(ofn));
 		ofn.lStructSize = sizeof(ofn);
 		ofn.hwndOwner = hWnd;
-		strcpy(Graphics.world.filename, replace(Graphics.world.filename, "/", "\\").c_str());
-		ofn.lpstrFile = Graphics.world.filename;
+		strcpy(Graphics.world.fileName, replace(Graphics.world.fileName, "/", "\\").c_str());
+		ofn.lpstrFile = Graphics.world.fileName;
 		ofn.nMaxFile = 256;
 		ofn.lpstrFilter = "All\0*.*\0RO maps\0*.rsw\0";
 		ofn.nFilterIndex = 2;
@@ -135,9 +135,9 @@ MENUCOMMAND(save)
 		ofn.Flags = OFN_PATHMUSTEXIST | OFN_ENABLESIZING | OFN_OVERWRITEPROMPT;
 		if (GetSaveFileName(&ofn))
 		{
-			while(Graphics.world.filename[strlen(Graphics.world.filename)-1] != '.')
-				Graphics.world.filename[strlen(Graphics.world.filename)-1] = '\0';
-			Graphics.world.filename[strlen(Graphics.world.filename)-1] = '\0';
+			while(Graphics.world.fileName[strlen(Graphics.world.fileName)-1] != '.')
+				Graphics.world.fileName[strlen(Graphics.world.fileName)-1] = '\0';
+			Graphics.world.fileName[strlen(Graphics.world.fileName)-1] = '\0';
 			Graphics.world.save();
 		}
 		chdir(curdir);
@@ -154,9 +154,9 @@ MENUCOMMAND(save)
 
 MENUCOMMAND(quicksave)
 {
-	Graphics.world.quicksave = true;
+	Graphics.world.quickSave = true;
 #ifdef WIN32
-	if(Graphics.world.filename[0] == '\0')
+	if(Graphics.world.fileName[0] == '\0')
 	{
 		char curdir[100];
 		getcwd(curdir, 100);
@@ -168,8 +168,8 @@ MENUCOMMAND(quicksave)
 		ZeroMemory(&ofn, sizeof(ofn));
 		ofn.lStructSize = sizeof(ofn);
 		ofn.hwndOwner = hWnd;
-		strcpy(Graphics.world.filename, replace(Graphics.world.filename, "/", "\\").c_str());
-		ofn.lpstrFile = Graphics.world.filename;
+		strcpy(Graphics.world.fileName, replace(Graphics.world.fileName, "/", "\\").c_str());
+		ofn.lpstrFile = Graphics.world.fileName;
 		ofn.nMaxFile = 256;
 		ofn.lpstrFilter = "All\0*.*\0RO maps\0*.rsw\0";
 		ofn.nFilterIndex = 2;
@@ -179,9 +179,9 @@ MENUCOMMAND(quicksave)
 		ofn.Flags = OFN_PATHMUSTEXIST | OFN_ENABLESIZING | OFN_OVERWRITEPROMPT;
 		if (GetSaveFileName(&ofn))
 		{
-			while(Graphics.world.filename[strlen(Graphics.world.filename)-1] != '.')
-				Graphics.world.filename[strlen(Graphics.world.filename)-1] = '\0';
-			Graphics.world.filename[strlen(Graphics.world.filename)-1] = '\0';
+			while(Graphics.world.fileName[strlen(Graphics.world.fileName)-1] != '.')
+				Graphics.world.fileName[strlen(Graphics.world.fileName)-1] = '\0';
+			Graphics.world.fileName[strlen(Graphics.world.fileName)-1] = '\0';
 			Graphics.world.save();
 		}
 		chdir(curdir);
@@ -192,7 +192,7 @@ MENUCOMMAND(quicksave)
 
 #endif
 
-	Graphics.world.quicksave = false;
+	Graphics.world.quickSave = false;
 
 	return true;
 }
@@ -210,8 +210,8 @@ MENUCOMMAND(saveAs)
 	ZeroMemory(&ofn, sizeof(ofn));
 	ofn.lStructSize = sizeof(ofn);
 	ofn.hwndOwner = hWnd;
-	strcpy(Graphics.world.filename, replace(Graphics.world.filename, "/", "\\").c_str());
-	ofn.lpstrFile = Graphics.world.filename;
+	strcpy(Graphics.world.fileName, replace(Graphics.world.fileName, "/", "\\").c_str());
+	ofn.lpstrFile = Graphics.world.fileName;
 	ofn.nMaxFile = 256;
 	ofn.lpstrFilter = "All\0*.*\0RO maps\0*.rsw\0";
 	ofn.nFilterIndex = 2;
@@ -221,26 +221,26 @@ MENUCOMMAND(saveAs)
 	ofn.Flags = OFN_PATHMUSTEXIST | OFN_ENABLESIZING | OFN_OVERWRITEPROMPT;
 	if (!GetSaveFileName(&ofn))
 	{
-		Graphics.world.filename[0] = '\0';
+		Graphics.world.fileName[0] = '\0';
 		chdir(curdir);
 	}
 	else
 	{
-		if (strcmp(Graphics.world.filename+strlen(Graphics.world.filename)-4, ".rsw") == 0)
+		if (strcmp(Graphics.world.fileName+strlen(Graphics.world.fileName)-4, ".rsw") == 0)
 		{ 
-			while(Graphics.world.filename[strlen(Graphics.world.filename)-1] != '.')
-				Graphics.world.filename[strlen(Graphics.world.filename)-1] = '\0';
-			Graphics.world.filename[strlen(Graphics.world.filename)-1] = '\0';
+			while(Graphics.world.fileName[strlen(Graphics.world.fileName)-1] != '.')
+				Graphics.world.fileName[strlen(Graphics.world.fileName)-1] = '\0';
+			Graphics.world.fileName[strlen(Graphics.world.fileName)-1] = '\0';
 		}
 		chdir(curdir);
 		Graphics.world.save();
 
 	}
 #else
-	string input = Graphics.WM.InputWindow("Filename (so not add .rsw): ", Graphics.world.filename);
+	string input = Graphics.WM.InputWindow("Filename (so not add .rsw): ", Graphics.world.fileName);
 	if(input != "")
 	{
-		sprintf(Graphics.world.filename, "%s", input.c_str());
+		sprintf(Graphics.world.fileName, "%s", input.c_str());
 		Graphics.world.save();
 		
 	}
@@ -300,15 +300,15 @@ MENUCOMMAND(random1)
 	{
 		for(x = 0; x < Graphics.world.width; x++)
 		{
-			Graphics.world.cubes[y][x].tileaside = -1;
-			Graphics.world.cubes[y][x].tileside = -1;
+			Graphics.world.cubes[y][x].tileOtherSide = -1;
+			Graphics.world.cubes[y][x].tileSide = -1;
 		}
 	}
 	for(y = 0; y < Graphics.world.height; y++)
 	{
 		for(x = 0; x < Graphics.world.width; x++)
 		{
-		//	Graphics.world.cubes[2*y][2*x].tileup = 1;
+		//	Graphics.world.cubes[2*y][2*x].tileUp = 1;
 
 			Graphics.world.cubes[y][x].cell1 = height/2-rand()%height;
 			Graphics.world.cubes[y][x].cell2 = height/2-rand()%height;
@@ -402,9 +402,9 @@ MENUCOMMAND(random2)
 	{
 		for(x = 0; x < Graphics.world.width; x++)
 		{
-			Graphics.world.cubes[(int)y][(int)x].tileaside = -1;
-			Graphics.world.cubes[(int)y][(int)x].tileside = -1;
-			Graphics.world.cubes[(int)y][(int)x].tileup = 0;
+			Graphics.world.cubes[(int)y][(int)x].tileOtherSide = -1;
+			Graphics.world.cubes[(int)y][(int)x].tileSide = -1;
+			Graphics.world.cubes[(int)y][(int)x].tileUp = 0;
 		}
 	}
 	Graphics.draw();
@@ -518,7 +518,7 @@ MENUCOMMAND(random2)
 		cFile* pFile = fs.open(objectfiles[i]);
 		while(!pFile->eof())
 		{
-			string line = pFile->readline();
+			string line = pFile->readLine();
 			if (line == "")
 				continue;
 			string pre = line.substr(0, line.find("|"));
@@ -601,9 +601,9 @@ MENUCOMMAND(random2)
 		for(x = 0; x < Graphics.world.width; x++)
 		{
 			if((Graphics.world.cubes[(int)y][(int)x].cell1 <= -8 || Graphics.world.cubes[(int)y][(int)x].cell2 <= -8 || Graphics.world.cubes[(int)y][(int)x].cell3  <= -8|| Graphics.world.cubes[(int)y][(int)x].cell4 <= -8) && Graphics.world.cubes[(int)y][(int)x].cell1 > -63)
-				Graphics.world.cubes[(int)y][(int)x].tileup= 50 + ((int)x%5) + 5*((int)y%5);
+				Graphics.world.cubes[(int)y][(int)x].tileUp= 50 + ((int)x%5) + 5*((int)y%5);
 			else if(Graphics.world.cubes[(int)y][(int)x].cell1 >= -63)
-				Graphics.world.cubes[(int)y][(int)x].tileup= 25 + ((int)x%5) + 5*((int)y%5);
+				Graphics.world.cubes[(int)y][(int)x].tileUp= 25 + ((int)x%5) + 5*((int)y%5);
 		}
 	}
 
@@ -634,8 +634,8 @@ MENUCOMMAND(random2)
 	for(x = 0; x < Graphics.world.width; x++)
 		for(y = 0; y < Graphics.world.height; y++)
 		{
-			Graphics.world.cubes[(int)y][(int)x].maxh = -99999;
-			Graphics.world.cubes[(int)y][(int)x].minh = 99999;
+			Graphics.world.cubes[(int)y][(int)x].maxHeight = -99999;
+			Graphics.world.cubes[(int)y][(int)x].minHeight = 99999;
 		}
 
 	for(i = 0; i < Graphics.world.models.size(); i++)
@@ -646,7 +646,7 @@ MENUCOMMAND(random2)
 	{
 		for(x = 0; x < Graphics.world.width; x++)
 		{
-			if(Graphics.world.cubes[(int)y][(int)x].maxh != -99999)
+			if(Graphics.world.cubes[(int)y][(int)x].maxHeight != -99999)
 			{
 				Graphics.world.gattiles[2*(int)y][2*(int)x].type = '\1';
 				Graphics.world.gattiles[2*(int)y][2*(int)x+1].type = '\1';
@@ -723,9 +723,9 @@ MENUCOMMAND(random3)
 	{
 		for(x = 0; x < Graphics.world.width; x++)
 		{
-			Graphics.world.cubes[(int)y][(int)x].tileaside = -1;
-			Graphics.world.cubes[(int)y][(int)x].tileside = -1;
-			Graphics.world.cubes[(int)y][(int)x].tileup = 75 + ((int)x%5) + 5*((int)y%5);
+			Graphics.world.cubes[(int)y][(int)x].tileOtherSide = -1;
+			Graphics.world.cubes[(int)y][(int)x].tileSide = -1;
+			Graphics.world.cubes[(int)y][(int)x].tileUp = 75 + ((int)x%5) + 5*((int)y%5);
 		}
 	}
 
@@ -833,7 +833,7 @@ MENUCOMMAND(random3)
 						Graphics.world.cubes[yy][xx].cell2 = 0;//rand()%25;
 						Graphics.world.cubes[yy][xx].cell3 = 0;//rand()%25;
 						Graphics.world.cubes[yy][xx].cell4 = 0;//rand()%25;
-						Graphics.world.cubes[yy][xx].tileup = 50 + (xx%5) + 5*(yy%5);
+						Graphics.world.cubes[yy][xx].tileUp = 50 + (xx%5) + 5*(yy%5);
 					}
 				}
 				if(island != -1)
@@ -946,8 +946,8 @@ MENUCOMMAND(random3)
 	for(x = 0; x < Graphics.world.width; x++)
 		for(y = 0; y < Graphics.world.height; y++)
 		{
-			Graphics.world.cubes[(int)y][(int)x].maxh = -99999;
-			Graphics.world.cubes[(int)y][(int)x].minh = 99999;
+			Graphics.world.cubes[(int)y][(int)x].maxHeight = -99999;
+			Graphics.world.cubes[(int)y][(int)x].minHeight = 99999;
 		}
 
 	for(i = 0; i < Graphics.world.models.size(); i++)
@@ -958,7 +958,7 @@ MENUCOMMAND(random3)
 	{
 		for(x = 0; x < Graphics.world.width; x++)
 		{
-			if(Graphics.world.cubes[(int)y][(int)x].maxh != -99999)
+			if(Graphics.world.cubes[(int)y][(int)x].maxHeight != -99999)
 			{
 				Graphics.world.gattiles[2*(int)y][2*(int)x].type = '\0';
 				Graphics.world.gattiles[2*(int)y][2*(int)x+1].type = '\0';
@@ -1020,9 +1020,9 @@ MENUCOMMAND(random4)
 	{
 		for(x = 0; x < Graphics.world.width; x++)
 		{
-			Graphics.world.cubes[y][x].tileaside = -1;
-			Graphics.world.cubes[y][x].tileside = -1;
-			Graphics.world.cubes[y][x].tileup = 25 + ((int)x%5) + 5*((int)y%5);
+			Graphics.world.cubes[y][x].tileOtherSide = -1;
+			Graphics.world.cubes[y][x].tileSide = -1;
+			Graphics.world.cubes[y][x].tileUp = 25 + ((int)x%5) + 5*((int)y%5);
 		}
 	}
 
@@ -1083,7 +1083,7 @@ MENUCOMMAND(random4)
 				fabs(Graphics.world.cubes[y][x].cell2 - Graphics.world.cubes[y][x].cell3) > 5 ||
 				fabs(Graphics.world.cubes[y][x].cell2 - Graphics.world.cubes[y][x].cell4) > 5 ||
 				fabs(Graphics.world.cubes[y][x].cell3 - Graphics.world.cubes[y][x].cell4) > 5)
-				Graphics.world.cubes[y][x].tileup = 50 + ((int)x%5) + 5*((int)y%5);
+				Graphics.world.cubes[y][x].tileUp = 50 + ((int)x%5) + 5*((int)y%5);
 		}
 	}
 
@@ -1094,7 +1094,7 @@ MENUCOMMAND(random4)
 		cFile* pFile = fs.open(objectfiles[i]);
 		while(!pFile->eof())
 		{
-			string line = pFile->readline();
+			string line = pFile->readLine();
 			if (line == "")
 				continue;
 			string pre = line.substr(0, line.find("|"));
@@ -1119,7 +1119,7 @@ MENUCOMMAND(random4)
 
 			model->pos = cVector3(rand()%(Graphics.world.width*2), 0, rand()%(Graphics.world.height*2));
 
-			while(Graphics.world.cubes[(int)(model->pos.z/2)][(int)(model->pos.x/2)].tileup > 50)
+			while(Graphics.world.cubes[(int)(model->pos.z/2)][(int)(model->pos.x/2)].tileUp > 50)
 				model->pos = cVector3(rand()%(Graphics.world.width*2), 0, rand()%(Graphics.world.height*2));
 
 
@@ -1184,7 +1184,7 @@ MENUCOMMAND(mode)
 	else if (title == GetMsg("menu/editmode/EFFECTSEDIT"))
 	{
 		editmode = MODE_EFFECTS;
-		Graphics.selectedobject = -1;
+		Graphics.selectedObject = -1;
 	}
 	else if (title == GetMsg("menu/editmode/SOUNDSEDIT"))
 	{
@@ -1237,23 +1237,23 @@ MENUCOMMAND(speed)
 MENUCOMMAND(showobjects)
 {
 	src->ticked = !src->ticked;
-	Graphics.showobjects = src->ticked;
+	Graphics.showObjects = src->ticked;
 	return true;
 }
 
 
 MENUCOMMAND(model)
 {
-	delete Graphics.previewmodel;
-	Graphics.previewmodel = new cRSMModel();
-	Graphics.previewmodel->load(rodir + src->data);
-	Graphics.previewmodel->rot = cVector3(0,0,0);
-	Graphics.previewmodel->scale = cVector3(4,4,4);
+	delete Graphics.previewModel;
+	Graphics.previewModel = new cRSMModel();
+	Graphics.previewModel->load(rodir + src->data);
+	Graphics.previewModel->rot = cVector3(0,0,0);
+	Graphics.previewModel->scale = cVector3(4,4,4);
 
-	Graphics.previewmodel->pos = cVector3(40,-40,-40);
+	Graphics.previewModel->pos = cVector3(40,-40,-40);
 
 	if (editmode != MODE_OBJECTS)
-		Graphics.previewcolor = 200;
+		Graphics.previewColor = 200;
 	currentobject = src;
 	return true;
 }
@@ -1272,8 +1272,8 @@ MENUCOMMAND(quadtree)
 	for(x = 0; x < Graphics.world.width; x++)
 		for(y = 0; y < Graphics.world.height; y++)
 		{
-			Graphics.world.cubes[y][x].maxh = -99999;
-			Graphics.world.cubes[y][x].minh = 99999;
+			Graphics.world.cubes[y][x].maxHeight = -99999;
+			Graphics.world.cubes[y][x].minHeight = 99999;
 		}
 
 	for(unsigned int i = 0; i < Graphics.world.models.size(); i++)
@@ -1366,8 +1366,8 @@ MENUCOMMAND(gatcollision2)
 	for(x = 0; x < Graphics.world.width; x++)
 		for(y = 0; y < Graphics.world.height; y++)
 		{
-			Graphics.world.cubes[y][x].maxh = -99999;
-			Graphics.world.cubes[y][x].minh = 99999;
+			Graphics.world.cubes[y][x].maxHeight = -99999;
+			Graphics.world.cubes[y][x].minHeight = 99999;
 		}
 
 	for(i = 0; i < Graphics.world.models.size(); i++)
@@ -1381,7 +1381,7 @@ MENUCOMMAND(gatcollision2)
 	{
 		for(y = 0; y < Graphics.world.height*2; y++)
 		{
-			if(Graphics.world.cubes[y/2][x/2].maxh == -99999 || Graphics.world.cubes[y/2][x/2].minh == 99999)
+			if(Graphics.world.cubes[y/2][x/2].maxHeight == -99999 || Graphics.world.cubes[y/2][x/2].minHeight == 99999)
 				continue;
 
 			
@@ -1408,8 +1408,8 @@ MENUCOMMAND(gatcollision2)
 	for(x = 0; x < Graphics.world.width; x++)
 		for(y = 0; y < Graphics.world.height; y++)
 		{
-			Graphics.world.cubes[y][x].maxh = 0;
-			Graphics.world.cubes[y][x].minh = 0;
+			Graphics.world.cubes[y][x].maxHeight = 0;
+			Graphics.world.cubes[y][x].minHeight = 0;
 		}
 
 
@@ -1488,8 +1488,8 @@ MENUCOMMAND(dolightmaps2)
 	mainloop();
 
 	Log(3,0,"Starting Lightmap Clearing");
-	Graphics.world.makelightmapsunique();
-	Graphics.world.blacklightmaps();
+	Graphics.world.makeLightmapsUnique();
+	Graphics.world.blackLightmaps();
 	Log(3,0,"Done initializing for lightmaps...");
 
 	int ww = Graphics.w();
@@ -1535,9 +1535,9 @@ MENUCOMMAND(dolightmaps2)
 			w->objects["progress"]->SetInt(0, y*Graphics.world.width + x);
 
 			
-			if(c->tileup != -1)
+			if(c->tileUp != -1)
 			{
-				BYTE* buf = (BYTE*)Graphics.world.lightmaps[Graphics.world.tiles[c->tileup].lightmap]->buf;
+				BYTE* buf = (BYTE*)Graphics.world.lightmaps[Graphics.world.tiles[c->tileUp].lightmap]->buf;
 
 				for(int yy = 1; yy < 7; yy++)
 				{
@@ -1554,7 +1554,7 @@ MENUCOMMAND(dolightmaps2)
 						unsigned int to = Graphics.world.lights.size();
 						if(lightonly)
 						{
-							from = Graphics.selectedobject;
+							from = Graphics.selectedObject;
 							to = from+1;
 						}
 						for(i = from; i < to; i++)
@@ -1575,7 +1575,7 @@ MENUCOMMAND(dolightmaps2)
 
 							float obstructed = 1;
 
-							if(l->givesshadow && !noshadow)
+							if(l->givesShadow && !noshadow)
 							{
 								for(unsigned int ii = 0; ii < Graphics.world.models.size() && obstructed > 0; ii++)
 								{
@@ -1591,7 +1591,7 @@ MENUCOMMAND(dolightmaps2)
 
 							if(obstructed != 0)
 							{
-								float intensity = (int)min((int)(l->maxlightincrement), (int)(pow(1-(length / l->range), l->lightfalloff) * l->todo2));
+								float intensity = (int)min((int)(l->maxLightIncrement), (int)(pow(1-(length / l->range), l->lightFalloff) * l->todo2));
 								intensity *= obstructed;
 
 								buf[yy*8 + xx] = min(255, buf[yy*8 + xx] + max(0, (int)(intensity)));
@@ -1603,12 +1603,12 @@ MENUCOMMAND(dolightmaps2)
 						}
 					}
 				}
-				Graphics.world.reallightmaps[y][x]->reset();
+				Graphics.world.realLightmaps[y][x]->reset();
 			}
 
-			if(c->tileside != -1)
+			if(c->tileSide != -1)
 			{
-				BYTE* buf = (BYTE*)Graphics.world.lightmaps[Graphics.world.tiles[c->tileside].lightmap]->buf;
+				BYTE* buf = (BYTE*)Graphics.world.lightmaps[Graphics.world.tiles[c->tileSide].lightmap]->buf;
 				ZeroMemory(buf,256);
 
 				for(int yy = 0; yy < 8; yy++)
@@ -1628,7 +1628,7 @@ MENUCOMMAND(dolightmaps2)
 						unsigned int to = Graphics.world.lights.size();
 						if(lightonly)
 						{
-							from = Graphics.selectedobject;
+							from = Graphics.selectedObject;
 							to = from+1;
 						}
 						for(i = from; i < to; i++)
@@ -1640,9 +1640,9 @@ MENUCOMMAND(dolightmaps2)
 							cVector3 lightpos = cVector3(l->pos.x*5, l->pos.y, l->pos.z*5);
 							cVector3 diff = worldpos - lightpos;
 
-							if(diff.z < 0 && c->cell3 > c2->cell1 && l->givesshadow && !noshadow)
+							if(diff.z < 0 && c->cell3 > c2->cell1 && l->givesShadow && !noshadow)
 								continue;
-							if(diff.z > 0 && c->cell3 < c2->cell1 && l->givesshadow && !noshadow)
+							if(diff.z > 0 && c->cell3 < c2->cell1 && l->givesShadow && !noshadow)
 								continue;
 
 							
@@ -1652,7 +1652,7 @@ MENUCOMMAND(dolightmaps2)
 
 							float obstructed = 1;
 
-							if(l->givesshadow && !noshadow)
+							if(l->givesShadow && !noshadow)
 							{
 								for(unsigned int ii = 0; ii < Graphics.world.models.size() && obstructed > 0; ii++)
 								{
@@ -1668,7 +1668,7 @@ MENUCOMMAND(dolightmaps2)
 
 							if(obstructed != 0)
 							{
-								float intensity = (int)min((int)(l->maxlightincrement), (int)(pow(1-(length / l->range), l->lightfalloff) * l->todo2));
+								float intensity = (int)min((int)(l->maxLightIncrement), (int)(pow(1-(length / l->range), l->lightFalloff) * l->todo2));
 								intensity *= obstructed;
 
 								buf[yy*8 + xx] = min(255, buf[yy*8 + xx] + max(0, (int)(intensity)));
@@ -1680,13 +1680,13 @@ MENUCOMMAND(dolightmaps2)
 						}
 					}
 				}
-				Graphics.world.lightmaps[Graphics.world.tiles[c->tileside].lightmap]->del();
-				Graphics.world.lightmaps[Graphics.world.tiles[c->tileside].lightmap]->del2();
+				Graphics.world.lightmaps[Graphics.world.tiles[c->tileSide].lightmap]->del();
+				Graphics.world.lightmaps[Graphics.world.tiles[c->tileSide].lightmap]->del2();
 			}
 
-			if(c->tileaside != -1)
+			if(c->tileOtherSide != -1)
 			{
-				BYTE* buf = (BYTE*)Graphics.world.lightmaps[Graphics.world.tiles[c->tileaside].lightmap]->buf;
+				BYTE* buf = (BYTE*)Graphics.world.lightmaps[Graphics.world.tiles[c->tileOtherSide].lightmap]->buf;
 				ZeroMemory(buf,256);
 
 				for(int yy = 0; yy < 8; yy++)
@@ -1706,7 +1706,7 @@ MENUCOMMAND(dolightmaps2)
 						unsigned int to = Graphics.world.lights.size();
 						if(lightonly)
 						{
-							from = Graphics.selectedobject;
+							from = Graphics.selectedObject;
 							to = from+1;
 						}
 						for(i = from; i < to; i++)
@@ -1718,9 +1718,9 @@ MENUCOMMAND(dolightmaps2)
 							cVector3 lightpos = cVector3(l->pos.x*5, l->pos.y, l->pos.z*5);
 							cVector3 diff = worldpos - lightpos;
 
-							if(diff.x < 0 && c->cell4 > c2->cell3 && l->givesshadow && !noshadow)
+							if(diff.x < 0 && c->cell4 > c2->cell3 && l->givesShadow && !noshadow)
 								continue;
-							if(diff.x > 0 && c->cell4 < c2->cell3 && l->givesshadow && !noshadow)
+							if(diff.x > 0 && c->cell4 < c2->cell3 && l->givesShadow && !noshadow)
 								continue;
 
 							float length = diff.Magnitude();
@@ -1729,7 +1729,7 @@ MENUCOMMAND(dolightmaps2)
 
 							float obstructed = 1;
 
-							if(l->givesshadow && !noshadow)
+							if(l->givesShadow && !noshadow)
 							{
 								for(unsigned int ii = 0; ii < Graphics.world.models.size() && obstructed > 0; ii++)
 								{
@@ -1745,7 +1745,7 @@ MENUCOMMAND(dolightmaps2)
 
 							if(obstructed != 0)
 							{
-								float intensity = (int)min((int)(l->maxlightincrement), (int)(pow(1-(length / l->range), l->lightfalloff) * l->todo2));
+								float intensity = (int)min((int)(l->maxLightIncrement), (int)(pow(1-(length / l->range), l->lightFalloff) * l->todo2));
 								intensity *= obstructed;
 
 								buf[yy*8 + xx] = min(255, buf[yy*8 + xx] + max(0, (int)(intensity)));
@@ -1757,8 +1757,8 @@ MENUCOMMAND(dolightmaps2)
 						}
 					}
 				}
-				Graphics.world.lightmaps[Graphics.world.tiles[c->tileaside].lightmap]->del();
-				Graphics.world.lightmaps[Graphics.world.tiles[c->tileaside].lightmap]->del2();
+				Graphics.world.lightmaps[Graphics.world.tiles[c->tileOtherSide].lightmap]->del();
+				Graphics.world.lightmaps[Graphics.world.tiles[c->tileOtherSide].lightmap]->del2();
 			}
 
 
@@ -1781,7 +1781,7 @@ MENUCOMMAND(dolightmaps2)
 		}
 	}
 
-	Graphics.world.fixgridding();
+	Graphics.world.fixGridding();
 	Graphics.world.loaded = true;
 
 
@@ -1803,7 +1803,7 @@ MENUCOMMAND(dolightmaps2)
 		Log(3,0,"%f%%", (x/(float)Graphics.world.width)*100.0f);
 		for(y = 0; y < Graphics.world.height; y++)
 		{
-			int tile = Graphics.world.cubes[y][x].tileup;
+			int tile = Graphics.world.cubes[y][x].tileUp;
 			if (tile != -1)
 			{
 				float cellheight = -Graphics.world.cubes[y][x].cell1;
@@ -1844,7 +1844,7 @@ MENUCOMMAND(dolightmaps2)
 										*lightmappos = 127;//((BYTE)l->buf[xx + (8*yy)+1+8]) / 1.6;
 								}
 
-								if (c->tileaside != -1)
+								if (c->tileOtherSide != -1)
 								{
 									triangle[2] = cVector3(xxx*10+10,-c->cell4,yyy*10);
 									triangle[1] = cVector3(xxx*10+10,-(c+1)->cell1,yyy*10);
@@ -1865,7 +1865,7 @@ MENUCOMMAND(dolightmaps2)
 											*lightmappos = 127;//((BYTE)l->buf[xx + (8*yy)+1+8]) / 1.6;
 									}
 								}
-								if (c->tileside != -1 && y < Graphics.world.width - 1)
+								if (c->tileSide != -1 && y < Graphics.world.width - 1)
 								{
 
 									triangle[0] = cVector3(xxx*10,-c->cell3,yyy*10+10);
@@ -1906,9 +1906,9 @@ MENUCOMMAND(dolightmaps2)
 BYTE* getLightMap(int x, int y)
 {
 	cCube* c = &Graphics.world.cubes[y/6][x/6];
-	if(c->tileup != -1)
+	if(c->tileUp != -1)
 	{
-		cTile* t = &Graphics.world.tiles[c->tileup];
+		cTile* t = &Graphics.world.tiles[c->tileUp];
 		if(t->lightmap != -1)
 		{
 			cLightmap* l = Graphics.world.lightmaps[t->lightmap];
@@ -1971,8 +1971,8 @@ MENUCOMMAND(smoothlightmaps)
 	}
 	for(x = 0; x < Graphics.world.width; x++)
 		for(y = 0; y < Graphics.world.height; y++)
-			Graphics.world.reallightmaps[y][x]->reset();
-	Graphics.world.fixgridding();
+			Graphics.world.realLightmaps[y][x]->reset();
+	Graphics.world.fixGridding();
 
 
 	return true;
@@ -1984,7 +1984,7 @@ MENUCOMMAND(fixcolors)
 	for(x = 0; x < Graphics.world.width; x++)
 		for(y = 0; y < Graphics.world.height; y++)
 		{
-			int tile = Graphics.world.cubes[y][x].tileup;
+			int tile = Graphics.world.cubes[y][x].tileUp;
 			if(tile != -1)
 			{
 				Graphics.world.tiles[tile].color[0] = '\255';
@@ -2007,9 +2007,9 @@ MENUCOMMAND(savelightmaps)
 MENUCOMMAND(loadlightmaps)
 {
 
-	Graphics.world.makelightmapsunique();
+	Graphics.world.makeLightmapsUnique();
 	Graphics.world.loadlightmap();
-	Graphics.world.fixgridding();
+	Graphics.world.fixGridding();
 
 	return true;
 }
@@ -2023,7 +2023,7 @@ MENUCOMMAND(addwalls)
 		for(y = 0; y < Graphics.world.height-1; y++)
 		{
 			cCube* c = &Graphics.world.cubes[y][x];
-			if (c->tileaside == -1)
+			if (c->tileOtherSide == -1)
 			{
 				if (c->cell4 != (c+1)->cell1 && c->cell2 != (c+1)->cell3)
 				{
@@ -2046,10 +2046,10 @@ MENUCOMMAND(addwalls)
 					t.u4 = 1;
 					t.v4 = 1;
 					Graphics.world.tiles.push_back(t);
-					Graphics.world.cubes[y][x].tileaside = Graphics.world.tiles.size()-1;
+					Graphics.world.cubes[y][x].tileOtherSide = Graphics.world.tiles.size()-1;
 				}
 			}
-			if (c->tileside == -1)
+			if (c->tileSide == -1)
 			{
 				if (c->cell4 != Graphics.world.cubes[y+1][x].cell1 && c->cell3 != Graphics.world.cubes[y+1][x].cell2)
 				{
@@ -2072,7 +2072,7 @@ MENUCOMMAND(addwalls)
 					t.u4 = 1;
 					t.v4 = 1;
 					Graphics.world.tiles.push_back(t);
-					Graphics.world.cubes[y][x].tileside = Graphics.world.tiles.size()-1;
+					Graphics.world.cubes[y][x].tileSide = Graphics.world.tiles.size()-1;
 				}
 			}
 		}
@@ -2157,21 +2157,21 @@ MENUCOMMAND(tempfunc)
 		for(x = 0; x < Graphics.world.width; x++)
 		{
 			cCube* c = &Graphics.world.cubes[y][x];
-			if(Graphics.world.lightmaps[Graphics.world.tiles[c->tileup].lightmap]->buf[10] == 0)
+			if(Graphics.world.lightmaps[Graphics.world.tiles[c->tileUp].lightmap]->buf[10] == 0)
 			{
 				c->cell1 = -20;
 				c->cell2 = -20;
 				c->cell3 = -20;
 				c->cell4 = -20;
 
-				c->tileup = Graphics.world.tiles.size()-2;
-				c->tileside = -1;
-				c->tileaside = -1;
+				c->tileUp = Graphics.world.tiles.size()-2;
+				c->tileSide = -1;
+				c->tileOtherSide = -1;
 			}
 			else
 			{
-				c->tileside = -1;
-				c->tileaside = -1;
+				c->tileSide = -1;
+				c->tileOtherSide = -1;
 			}
 
 		}
@@ -2190,24 +2190,24 @@ MENUCOMMAND(snaptofloor)
 
 bool mouseovertexture(cMenu* src)
 {
-	if (Graphics.texturepreview == NULL || Graphics.texturepreview->getfilename() != rodir + "data\\texture\\" + ((cMenuItem*)src)->data)
+	if (Graphics.texturePreview == NULL || Graphics.texturePreview->getfilename() != rodir + "data\\texture\\" + ((cMenuItem*)src)->data)
 	{
-		Graphics.texturepreview = TextureCache.load(rodir + "data\\texture\\" + ((cMenuItem*)src)->data);
+		Graphics.texturePreview = TextureCache.load(rodir + "data\\texture\\" + ((cMenuItem*)src)->data);
 		return false;
 	}
 	else
 	{
-		TextureCache.unload(Graphics.texturepreview);
-		Graphics.texturepreview = NULL;
+		TextureCache.unload(Graphics.texturePreview);
+		Graphics.texturePreview = NULL;
 		return true;
 	}
 }
 bool mouseouttexture(cMenu* src)
 {
-	if (Graphics.texturepreview != NULL)
+	if (Graphics.texturePreview != NULL)
 	{
-		TextureCache.unload(Graphics.texturepreview);
-		Graphics.texturepreview = NULL;
+		TextureCache.unload(Graphics.texturePreview);
+		Graphics.texturePreview = NULL;
 	}
 	return true;
 }
@@ -2217,10 +2217,10 @@ MENUCOMMAND(effect)
 	if (selectedeffect != NULL)
 		selectedeffect->ticked = false;
 	src->ticked = true;
-	if (Graphics.selectedobject != -1)
+	if (Graphics.selectedObject != -1)
 	{
-		Graphics.world.effects[Graphics.selectedobject].type = atoi(src->data.c_str());
-		Graphics.world.effects[Graphics.selectedobject].readablename = src->title;
+		Graphics.world.effects[Graphics.selectedObject].type = atoi(src->data.c_str());
+		Graphics.world.effects[Graphics.selectedObject].readablename = src->title;
 	}
 	selectedeffect = src;
 	return true;
@@ -2241,7 +2241,7 @@ MENUCOMMAND(water)
 	sprintf(buf, "%f", Graphics.world.water.amplitude);		w->objects["amplitude"]->SetText(0,buf);
 	sprintf(buf, "%f", Graphics.world.water.height);		w->objects["height"]->SetText(0,buf);
 	sprintf(buf, "%f", Graphics.world.water.phase);			w->objects["phase"]->SetText(0,buf);
-	sprintf(buf, "%f", Graphics.world.water.surfacecurve);	w->objects["surfacecurve"]->SetText(0,buf);
+	sprintf(buf, "%f", Graphics.world.water.surfaceCurve);	w->objects["surfacecurve"]->SetText(0,buf);
 	sprintf(buf, "%i", Graphics.world.water.type);			w->objects["type"]->SetText(0,buf);
 	Graphics.WM.addwindow(w);
 	return true;
@@ -2280,19 +2280,19 @@ MENUCOMMAND(ambientlight)
 {
 	char buf[100];
 	cWindow* w = new cAmbientLightWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin);
-	sprintf(buf, "%i", Graphics.world.ambientlight.ambientr);		w->objects["ambientr"]->SetText(0,buf);
-	sprintf(buf, "%i", Graphics.world.ambientlight.ambientg);		w->objects["ambientg"]->SetText(0,buf);
-	sprintf(buf, "%i", Graphics.world.ambientlight.ambientb);		w->objects["ambientb"]->SetText(0,buf);
+	sprintf(buf, "%i", Graphics.world.ambientLight.ambientr);		w->objects["ambientr"]->SetText(0,buf);
+	sprintf(buf, "%i", Graphics.world.ambientLight.ambientg);		w->objects["ambientg"]->SetText(0,buf);
+	sprintf(buf, "%i", Graphics.world.ambientLight.ambientb);		w->objects["ambientb"]->SetText(0,buf);
 
-	sprintf(buf, "%f", Graphics.world.ambientlight.diffuse.x);		w->objects["diffuser"]->SetText(0,buf);
-	sprintf(buf, "%f", Graphics.world.ambientlight.diffuse.y);		w->objects["diffuseg"]->SetText(0,buf);
-	sprintf(buf, "%f", Graphics.world.ambientlight.diffuse.z);		w->objects["diffuseb"]->SetText(0,buf);
+	sprintf(buf, "%f", Graphics.world.ambientLight.diffuse.x);		w->objects["diffuser"]->SetText(0,buf);
+	sprintf(buf, "%f", Graphics.world.ambientLight.diffuse.y);		w->objects["diffuseg"]->SetText(0,buf);
+	sprintf(buf, "%f", Graphics.world.ambientLight.diffuse.z);		w->objects["diffuseb"]->SetText(0,buf);
 
-	sprintf(buf, "%f", Graphics.world.ambientlight.shadow.x);		w->objects["shadowr"]->SetText(0,buf);
-	sprintf(buf, "%f", Graphics.world.ambientlight.shadow.y);		w->objects["shadowg"]->SetText(0,buf);
-	sprintf(buf, "%f", Graphics.world.ambientlight.shadow.z);		w->objects["shadowb"]->SetText(0,buf);
+	sprintf(buf, "%f", Graphics.world.ambientLight.shadow.x);		w->objects["shadowr"]->SetText(0,buf);
+	sprintf(buf, "%f", Graphics.world.ambientLight.shadow.y);		w->objects["shadowg"]->SetText(0,buf);
+	sprintf(buf, "%f", Graphics.world.ambientLight.shadow.z);		w->objects["shadowb"]->SetText(0,buf);
 	
-	sprintf(buf, "%f", Graphics.world.ambientlight.alpha);			w->objects["alpha"]->SetText(0,buf);
+	sprintf(buf, "%f", Graphics.world.ambientLight.alpha);			w->objects["alpha"]->SetText(0,buf);
 
 	Graphics.WM.addwindow(w);
 	return true;
@@ -2383,7 +2383,7 @@ MENUCOMMAND(fillarea)
 				t.color[2] = (char)255;
 				t.color[3] = (char)255;
 				Graphics.world.tiles.push_back(t);
-				Graphics.world.cubes[y][x].tileup = Graphics.world.tiles.size()-1;;
+				Graphics.world.cubes[y][x].tileUp = Graphics.world.tiles.size()-1;;
 			}
 		}
 	}
@@ -2393,17 +2393,17 @@ MENUCOMMAND(fillarea)
 	{
 		for(y = 0; y < Graphics.world.height; y++)
 		{
-			int tile = Graphics.world.cubes[y][x].tileup;
+			int tile = Graphics.world.cubes[y][x].tileUp;
 			if(used.find(tile) != used.end())
 			{
 				cTile t = Graphics.world.tiles[tile];
 				tile = Graphics.world.tiles.size();
 				Graphics.world.tiles.push_back(t);
-				Graphics.world.cubes[y][x].tileup = tile;
+				Graphics.world.cubes[y][x].tileUp = tile;
 			}
 			used[tile] = 1;
 ///////////////////////////////////////
-			tile = Graphics.world.cubes[y][x].tileside;
+			tile = Graphics.world.cubes[y][x].tileSide;
 			if (tile != -1)
 			{
 				if(used.find(tile) != used.end())
@@ -2411,12 +2411,12 @@ MENUCOMMAND(fillarea)
 					cTile t = Graphics.world.tiles[tile];
 					tile = Graphics.world.tiles.size();
 					Graphics.world.tiles.push_back(t);
-					Graphics.world.cubes[y][x].tileside = tile;
+					Graphics.world.cubes[y][x].tileSide = tile;
 				}
 				used[tile] = 1;
 			}
 /////////////////////////////////////
-			tile = Graphics.world.cubes[y][x].tileaside;
+			tile = Graphics.world.cubes[y][x].tileOtherSide;
 			if (tile!= -1)
 			{
 				if(used.find(tile) != used.end())
@@ -2424,7 +2424,7 @@ MENUCOMMAND(fillarea)
 					cTile t = Graphics.world.tiles[tile];
 					tile = Graphics.world.tiles.size();
 					Graphics.world.tiles.push_back(t);
-					Graphics.world.cubes[y][x].tileaside = tile;
+					Graphics.world.cubes[y][x].tileOtherSide = tile;
 				}
 				used[tile] = 1;
 			}
@@ -2455,11 +2455,11 @@ MENUCOMMAND(favlights)
 MENUCOMMAND(exportmapfiles)
 {
 #ifdef WIN32
-	CreateDirectory(Graphics.world.filename, NULL);
-	CreateDirectory((Graphics.world.filename + string("\\texture\\")).c_str(), NULL);
+	CreateDirectory(Graphics.world.fileName, NULL);
+	CreateDirectory((Graphics.world.fileName + string("\\texture\\")).c_str(), NULL);
 
 	int i;
-	ofstream pFile((string(Graphics.world.filename) + ".txt").c_str());
+	ofstream pFile((string(Graphics.world.fileName) + ".txt").c_str());
 	for(i = 0; i < Graphics.world.textures.size(); i++)
 	{
 		cFile* pF = fs.open(rodir + "data\\texture\\" + Graphics.world.textures[i]->RoFilename);
@@ -2471,7 +2471,7 @@ MENUCOMMAND(exportmapfiles)
 		pF->close();
 
 
-		CopyFile((rodir + "data\\texture\\" + Graphics.world.textures[i]->RoFilename).c_str(), (string(Graphics.world.filename) + "\\texture\\" + Graphics.world.textures[i]->RoFilename2).c_str(), false);
+		CopyFile((rodir + "data\\texture\\" + Graphics.world.textures[i]->RoFilename).c_str(), (string(Graphics.world.fileName) + "\\texture\\" + Graphics.world.textures[i]->RoFilename2).c_str(), false);
 		pFile.write("texture\\", 8);
 		pFile.write(Graphics.world.textures[i]->RoFilename.c_str(), Graphics.world.textures[i]->RoFilename.length());
 		pFile.put('\r');
@@ -2522,7 +2522,7 @@ MENUCOMMAND(exportmapfiles)
 
 
 	pFile.close();
-	ShellExecute(NULL,"open",(string(Graphics.world.filename) + ".txt").c_str(),NULL,"c:\\",SW_SHOW);
+	ShellExecute(NULL,"open",(string(Graphics.world.fileName) + ".txt").c_str(),NULL,"c:\\",SW_SHOW);
 #endif
 	return true;
 }
@@ -2570,9 +2570,9 @@ MENUCOMMAND(random5)
 	{
 		for(x = 0; x < Graphics.world.width; x++)
 		{
-			Graphics.world.cubes[(int)y][(int)x].tileaside = -1;
-			Graphics.world.cubes[(int)y][(int)x].tileside = -1;
-			Graphics.world.cubes[(int)y][(int)x].tileup = 0 + ((int)x%5) + 5*((int)y%5);
+			Graphics.world.cubes[(int)y][(int)x].tileOtherSide = -1;
+			Graphics.world.cubes[(int)y][(int)x].tileSide = -1;
+			Graphics.world.cubes[(int)y][(int)x].tileUp = 0 + ((int)x%5) + 5*((int)y%5);
 		}
 	}
 
@@ -2678,7 +2678,7 @@ MENUCOMMAND(random5)
 						Graphics.world.cubes[yy][xx].cell2 = 0;//rand()%25;
 						Graphics.world.cubes[yy][xx].cell3 = 0;//rand()%25;
 						Graphics.world.cubes[yy][xx].cell4 = 0;//rand()%25;
-						Graphics.world.cubes[yy][xx].tileup = 25 + (xx%5) + 5*(yy%5);
+						Graphics.world.cubes[yy][xx].tileUp = 25 + (xx%5) + 5*(yy%5);
 					}
 				}
 				if(island != -1)
@@ -2755,7 +2755,7 @@ MENUCOMMAND(random5)
 						Graphics.world.cubes[yy+yyy][xx+xxx].cell2 = 0;//rand()%25;
 						Graphics.world.cubes[yy+yyy][xx+xxx].cell3 = 0;//rand()%25;
 						Graphics.world.cubes[yy+yyy][xx+xxx].cell4 = 0;//rand()%25;
-						Graphics.world.cubes[yy+yyy][xx+xxx].tileup = 25 + ((xx+xxx)%5) + 5*((yy+yyy)%5);
+						Graphics.world.cubes[yy+yyy][xx+xxx].tileUp = 25 + ((xx+xxx)%5) + 5*((yy+yyy)%5);
 						if(xx > x)
 							xx--;
 						if(xx < x)
@@ -2769,7 +2769,7 @@ MENUCOMMAND(random5)
 						Graphics.world.cubes[yy+yyy][xx+xxx].cell2 = 0;//rand()%25;
 						Graphics.world.cubes[yy+yyy][xx+xxx].cell3 = 0;//rand()%25;
 						Graphics.world.cubes[yy+yyy][xx+xxx].cell4 = 0;//rand()%25;
-						Graphics.world.cubes[yy+yyy][xx+xxx].tileup = 25 + ((xx+xxx)%5) + 5*((yy+yyy)%5);
+						Graphics.world.cubes[yy+yyy][xx+xxx].tileUp = 25 + ((xx+xxx)%5) + 5*((yy+yyy)%5);
 					}
 				}
 			}
@@ -2793,7 +2793,7 @@ MENUCOMMAND(random5)
 		{
 			if((Graphics.world.cubes[y][x].cell1 <= -8 || Graphics.world.cubes[y][x].cell2 <= -8 || Graphics.world.cubes[y][x].cell3  <= -8|| Graphics.world.cubes[y][x].cell4 <= -8) && Graphics.world.cubes[y][x].cell1 > -63)
 			{
-				Graphics.world.cubes[y][x].tileup= 50 + ((int)x%5) + 5*((int)y%5);
+				Graphics.world.cubes[y][x].tileUp= 50 + ((int)x%5) + 5*((int)y%5);
 			}
 		}
 	}
@@ -2818,23 +2818,23 @@ MENUCOMMAND(99dun)
 
 		if(mode == 0)
 		{
-			sprintf(Graphics.world.filename, "%sdata\\random_pay", rodir.c_str());
+			sprintf(Graphics.world.fileName, "%sdata\\random_pay", rodir.c_str());
 			Graphics.world.load();
 			MenuCommand_random2(src);
 		}
 		else if (mode == 1)
 		{
-			sprintf(Graphics.world.filename, "%sdata\\random_cul", rodir.c_str());
+			sprintf(Graphics.world.fileName, "%sdata\\random_cul", rodir.c_str());
 			Graphics.world.load();
 			MenuCommand_random3(src);
 		}
 		else if (mode == 2)
 		{
-			sprintf(Graphics.world.filename, "%sdata\\random_ama", rodir.c_str());
+			sprintf(Graphics.world.fileName, "%sdata\\random_ama", rodir.c_str());
 			Graphics.world.load();
 			MenuCommand_random5(src);
 		}
-		sprintf(Graphics.world.filename, "%sdata\\ulti_dun%02i", rodir.c_str(), i);
+		sprintf(Graphics.world.fileName, "%sdata\\ulti_dun%02i", rodir.c_str(), i);
 		Graphics.world.save();
 	}
 
@@ -2855,7 +2855,7 @@ void readscript(string filename)
 
 	while(!pFile->eof())
 	{
-		string line = pFile->readline();
+		string line = pFile->readLine();
 		if(ltrim(rtrim(line)).substr(0,4) == "npc:")
 			readscript(ltrim(ltrim(rtrim(line)).substr(4)));
 		else if(ltrim(rtrim(line)).substr(0,7) == "import:")
@@ -2903,7 +2903,7 @@ void readscript(string filename)
 								direction = 0;
 							s->action = 0;
 							s->direction = dirmap[(8-direction)%8];
-							s->loadbody(rodir + "data\\sprite\\npc\\" + el->FirstChild()->Value());
+							s->loadBody(rodir + "data\\sprite\\npc\\" + el->FirstChild()->Value());
 							Graphics.world.sprites.push_back(s);
 						}
 						break;
@@ -2926,10 +2926,10 @@ MENUCOMMAND(eascript)
 		delete Graphics.world.sprites[i];
 
 	Graphics.world.sprites.clear();
-	scriptmap = Graphics.world.filename;
+	scriptmap = Graphics.world.fileName;
 	scriptmap = scriptmap.substr(scriptmap.rfind("\\")+1);
 	if(!sprites.FirstChild())
-		sprites = fs.getxml("sprites.xml");
+		sprites = fs.getXml("sprites.xml");
 
 
 	readscript("npc\\scripts_main.conf");
@@ -2950,7 +2950,7 @@ extern unsigned char * getPixelsBGR();
 
 void checknpcs()
 {
-	scriptmap = Graphics.world.filename;
+	scriptmap = Graphics.world.fileName;
 	scriptmap = scriptmap.substr(scriptmap.rfind("\\")+1);
 
 	unsigned int i,ii;
@@ -3045,10 +3045,10 @@ MENUCOMMAND(npcscreenies)
 			string filename = FileData.cFileName;
 			if(filename != "." && filename != "..")
 			{
-				strcpy(Graphics.world.filename, (rodir + "data\\" + filename.substr(0, filename.rfind("."))).c_str());
+				strcpy(Graphics.world.fileName, (rodir + "data\\" + filename.substr(0, filename.rfind("."))).c_str());
 				Graphics.world.load();
 				if(!sprites.FirstChild())
-					sprites = fs.getxml("sprites.xml");
+					sprites = fs.getXml("sprites.xml");
 
 
 				readscript("npc\\scripts_main.conf");
@@ -3125,11 +3125,11 @@ MENUCOMMAND(addfavorite)
 	l.pos = cVector3(mouseclickx/5, mouseclicky+atoi(n->FirstChildElement("height")->FirstChild()->Value()), mouseclickz/5);
 	l.todo = string(buf, 40);
 	l.todo2 = atoi(n->FirstChildElement("brightness")->FirstChild()->Value());
-	l.maxlightincrement = atoi(n->FirstChildElement("maxlight")->FirstChild()->Value());
+	l.maxLightIncrement = atoi(n->FirstChildElement("maxlight")->FirstChild()->Value());
 	l.range = atoi(n->FirstChildElement("range")->FirstChild()->Value());
-	l.lightfalloff = atof(n->FirstChildElement("lightfalloff")->FirstChild()->Value());
+	l.lightFalloff = atof(n->FirstChildElement("lightFalloff")->FirstChild()->Value());
 
-	Graphics.selectedobject = Graphics.world.lights.size();
+	Graphics.selectedObject = Graphics.world.lights.size();
 	Graphics.world.lights.push_back(l);
 	undostack.push(new cUndoNewLight());
 
@@ -3139,7 +3139,7 @@ MENUCOMMAND(addfavorite)
 		w->userfunc(NULL);
 		cLightOverViewWindow::cLightOverViewTree* tree = (cLightOverViewWindow::cLightOverViewTree*)w->objects["list"];
 		Log(3,0,"Calling getobject for %i", tree);
-		tree->getobject(Graphics.world.lights[Graphics.selectedobject]);
+		tree->getobject(Graphics.world.lights[Graphics.selectedObject]);
 	}
 
 	return true;
@@ -3148,19 +3148,19 @@ MENUCOMMAND(addfavorite)
 
 MENUCOMMAND(deselectlight)
 {
-	Graphics.selectedobject = -1;
+	Graphics.selectedObject = -1;
 	return true;
 }
 
 
 MENUCOMMAND(light_disableshadow)
 {
-	Graphics.world.lights[Graphics.selectedobject].givesshadow = !Graphics.world.lights[Graphics.selectedobject].givesshadow;
+	Graphics.world.lights[Graphics.selectedObject].givesShadow = !Graphics.world.lights[Graphics.selectedObject].givesShadow;
 	return true;
 }
 MENUCOMMAND(light_snaptofloor)
 {
-	Graphics.world.lights[Graphics.selectedobject].pos.y = Graphics.world.cubes[(int)Graphics.world.lights[Graphics.selectedobject].pos.z/2][(int)Graphics.world.lights[Graphics.selectedobject].pos.x/2].cell1;
+	Graphics.world.lights[Graphics.selectedObject].pos.y = Graphics.world.cubes[(int)Graphics.world.lights[Graphics.selectedObject].pos.z/2][(int)Graphics.world.lights[Graphics.selectedObject].pos.x/2].cell1;
 	return true;
 }
 MENUCOMMAND(light_setheight)
@@ -3170,7 +3170,7 @@ MENUCOMMAND(light_setheight)
 
 
 	MenuCommand_light_snaptofloor(src);
-	Graphics.world.lights[Graphics.selectedobject].pos.y += atoi(Graphics.WM.InputWindow("Height:").c_str());
+	Graphics.world.lights[Graphics.selectedObject].pos.y += atoi(Graphics.WM.InputWindow("Height:").c_str());
 
 
 	return true;
@@ -3321,8 +3321,8 @@ MENUCOMMAND(addfavlight)
 		light.InsertEndChild(TiXmlElement("range"))->InsertEndChild(TiXmlText("100"));
 		light.InsertEndChild(TiXmlElement("brightness"))->InsertEndChild(TiXmlText("127"));
 		light.InsertEndChild(TiXmlElement("maxlight"))->InsertEndChild(TiXmlText("256"));
-		light.InsertEndChild(TiXmlElement("givesshadow"))->InsertEndChild(TiXmlText("1"));
-		light.InsertEndChild(TiXmlElement("lightfalloff"))->InsertEndChild(TiXmlText("1"));
+		light.InsertEndChild(TiXmlElement("givesShadow"))->InsertEndChild(TiXmlText("1"));
+		light.InsertEndChild(TiXmlElement("lightFalloff"))->InsertEndChild(TiXmlText("1"));
 		light.InsertEndChild(TiXmlElement("height"))->InsertEndChild(TiXmlText("10"));
 
 		n->InsertEndChild(light);
@@ -3524,7 +3524,7 @@ MENUCOMMAND(saveOnline)
 {
 	if(!Graphics.WM.ConfirmWindow("This will save your map. Are you sure you want to save?"))
 		return false;
-	string mapname = Graphics.WM.InputWindow("Please enter the mapname", Graphics.world.filename);
+	string mapname = Graphics.WM.InputWindow("Please enter the mapname", Graphics.world.fileName);
 	string password = Graphics.WM.InputWindow("Please enter your browedit account password", "");
 	map<string, bool, less<string> > textures;
 	map<string, bool, less<string> > models;
@@ -3687,9 +3687,9 @@ MENUCOMMAND(saveOnline)
 	Graphics.WM.MessageBox("Please move your viewpoint to show the map on the thumbnail");
 
 
-	cFile* rsw = fs.open(string(Graphics.world.filename) + ".rsw");
-	cFile* gat = fs.open(string(Graphics.world.filename) + ".gat");
-	cFile* gnd = fs.open(string(Graphics.world.filename) + ".gnd");
+	cFile* rsw = fs.open(string(Graphics.world.fileName) + ".rsw");
+	cFile* gat = fs.open(string(Graphics.world.fileName) + ".gat");
+	cFile* gnd = fs.open(string(Graphics.world.fileName) + ".gnd");
 
 	CURL *curl_handle;
 	curl_global_init(CURL_GLOBAL_ALL);
@@ -3717,7 +3717,7 @@ MENUCOMMAND(saveOnline)
 		CURLFORM_END);
 	curl_formadd(&post, &last,
 		CURLFORM_COPYNAME, "filename",
-		CURLFORM_COPYCONTENTS, Graphics.world.filename, 
+		CURLFORM_COPYCONTENTS, Graphics.world.fileName, 
 		CURLFORM_END);
 	curl_formadd(&post, &last,
 		CURLFORM_COPYNAME, "uid",

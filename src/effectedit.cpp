@@ -23,26 +23,26 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 			{
 				if (Graphics.world.effects.size() == 0)
 					break;
-				if(Graphics.objectstartdrag)
+				if(Graphics.objectStartDrag)
 				{
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 					bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 					if (!ctrl && !alt)
 					{
-						Graphics.world.effects[Graphics.selectedobject].pos.x = mouse3dx / 5.0f;
-						Graphics.world.effects[Graphics.selectedobject].pos.z = mouse3dz / 5.0f;
+						Graphics.world.effects[Graphics.selectedObject].pos.x = mouse3dx / 5.0f;
+						Graphics.world.effects[Graphics.selectedObject].pos.z = mouse3dz / 5.0f;
 						if (SDL_GetModState() & KMOD_SHIFT)
 						{
-							Graphics.world.effects[Graphics.selectedobject].pos.x = floor(Graphics.world.effects[Graphics.selectedobject].pos.x * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsetx) / (Graphics.gridsize/2.0f) + Graphics.gridoffsetx/(Graphics.gridsize/2.0f);
-							Graphics.world.effects[Graphics.selectedobject].pos.z = floor(Graphics.world.effects[Graphics.selectedobject].pos.z * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsety) / (Graphics.gridsize/2.0f) + Graphics.gridoffsety/(Graphics.gridsize/2.0f);
+							Graphics.world.effects[Graphics.selectedObject].pos.x = floor(Graphics.world.effects[Graphics.selectedObject].pos.x * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsetx) / (Graphics.gridsize/2.0f) + Graphics.gridoffsetx/(Graphics.gridsize/2.0f);
+							Graphics.world.effects[Graphics.selectedObject].pos.z = floor(Graphics.world.effects[Graphics.selectedObject].pos.z * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsety) / (Graphics.gridsize/2.0f) + Graphics.gridoffsety/(Graphics.gridsize/2.0f);
 						}
 					}
 					if(ctrl && !alt)
 					{
-						Graphics.world.effects[Graphics.selectedobject].pos.y += (mousey-oldmousey);
+						Graphics.world.effects[Graphics.selectedObject].pos.y += (mousey-oldmousey);
 						if (SDL_GetModState() & KMOD_SHIFT)
 						{
-							Graphics.world.effects[Graphics.selectedobject].pos.y = floor(Graphics.world.effects[Graphics.selectedobject].pos.y * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsetx) / (Graphics.gridsize/2.0f) + Graphics.gridoffsetx/(Graphics.gridsize/2.0f);
+							Graphics.world.effects[Graphics.selectedObject].pos.y = floor(Graphics.world.effects[Graphics.selectedObject].pos.y * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsetx) / (Graphics.gridsize/2.0f) + Graphics.gridoffsetx/(Graphics.gridsize/2.0f);
 						}
 					}
 					if(!ctrl && alt)
@@ -73,7 +73,7 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 						minobj = i;
 					}
 				}
-				Graphics.objectstartdrag = Graphics.selectedobject == minobj;
+				Graphics.objectStartDrag = Graphics.selectedObject == minobj;
 			}
 			break;
 		case SDL_MOUSEBUTTONUP:
@@ -125,9 +125,9 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 							minobj = i;
 						}
 					}
-					Graphics.selectedobject = minobj;
+					Graphics.selectedObject = minobj;
 					char buf[100];
-					sprintf(buf, "%i", Graphics.world.effects[Graphics.selectedobject].type);
+					sprintf(buf, "%i", Graphics.world.effects[Graphics.selectedObject].type);
 				}
 			}
 			break;
@@ -136,31 +136,31 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 			switch (event.key.keysym.sym)
 			{
 			case SDLK_PAGEDOWN:
-				if (Graphics.selectedobject != -1)
+				if (Graphics.selectedObject != -1)
 				{
-					undostack.push(new cUndoChangeEffect(Graphics.selectedobject));
-					Graphics.world.effects[Graphics.selectedobject].loop--;
+					undostack.push(new cUndoChangeEffect(Graphics.selectedObject));
+					Graphics.world.effects[Graphics.selectedObject].loop--;
 				}
 				break;
 			case SDLK_PAGEUP:
-				if (Graphics.selectedobject != -1)
+				if (Graphics.selectedObject != -1)
 				{
-					undostack.push(new cUndoChangeEffect(Graphics.selectedobject));
-					Graphics.world.effects[Graphics.selectedobject].loop++;
+					undostack.push(new cUndoChangeEffect(Graphics.selectedObject));
+					Graphics.world.effects[Graphics.selectedObject].loop++;
 				}
 				break;
 			case SDLK_BACKSPACE:
-				if (Graphics.selectedobject > -1 && Graphics.selectedobject < (int)Graphics.world.effects.size())
+				if (Graphics.selectedObject > -1 && Graphics.selectedObject < (int)Graphics.world.effects.size())
 				{
-					undostack.push(new cUndoEffectDelete(Graphics.selectedobject));
-					Graphics.world.effects.erase(Graphics.world.effects.begin() + Graphics.selectedobject);
-					Graphics.selectedobject = -1;
+					undostack.push(new cUndoEffectDelete(Graphics.selectedObject));
+					Graphics.world.effects.erase(Graphics.world.effects.begin() + Graphics.selectedObject);
+					Graphics.selectedObject = -1;
 				}
 				break;
 			case SDLK_RETURN:
-				if (Graphics.selectedobject != -1)
+				if (Graphics.selectedObject != -1)
 				{
-					cEffect* o = &Graphics.world.effects[Graphics.selectedobject];
+					cEffect* o = &Graphics.world.effects[Graphics.selectedObject];
 
 					cWindow* w = new cEffectWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin);
 					((cWindowFloatInputBox*)w->objects["posx"])->floatje = &o->pos.x;
@@ -175,7 +175,7 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 					((cWindowFloatInputBox*)w->objects["looptime"])->floatje = &o->loop;
 
 					((cWindowStringInputBox*)w->objects["objectname"])->stringetje = &o->readablename;
-					((cEffectWindow*)w)->undo = new cUndoChangeEffect(Graphics.selectedobject);
+					((cEffectWindow*)w)->undo = new cUndoChangeEffect(Graphics.selectedObject);
 					Graphics.WM.addwindow(w);
 				}
 				break;

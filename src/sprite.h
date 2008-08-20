@@ -28,7 +28,7 @@ public:
 			int h;
 			GLuint texid();
 		};
-		vector<cFrame*> frames;
+		std::vector<cFrame*> frames;
 		class cAction
 		{
 		public:
@@ -38,61 +38,55 @@ public:
 				class cSubFrame
 				{
 				public:
-					long offsetx;
-					long offsety;
+					long offsetX;
+					long offsetY;
 					long image;
 					long direction;
 					long color;
-					float scalex;
-					float scaley;
+					float scaleX;
+					float scaleY;
 					long  rotation;
-					long dontjump;
-					long sizex;
-					long sizey;
+					long dontJump;
+					long sizeX;
+					long sizeY;
 				};
 				~cFrame();
-				vector<cSubFrame*> subframes;
-				int subframecount;
-				int   framecount;
-				long  extrainfo;
-				float extrarotation;
-				long  extrax;
-				long  extray;
+				std::vector<cSubFrame*> subframes;
+				int						subFrameCount;
+				int						frameCount;
+				long					extraInfo;
+				float					extraRotation;
+				long					extraX;
+				long					extraY;
 			};
 
 			~cAction();
-			vector<cFrame*> frames;
-			int framecount;
+			std::vector<cFrame*>	frames;
+			int						frameCount;
 		};
 
-		vector<cAction*> actions;
-
-
-		string filename;
-		void load(string);
-		bool loaded;
+		std::vector<cAction*>	actions;
+		std::string				fileName;
+		void					load(std::string);
+		bool					loaded;
 	};
 	
 	cSprite();
 	~cSprite();
 
-	cVector3			pos;
-	cActSpr*			body;
-	cActSpr*			head;
-	float				scale;
-	vector<cActSpr*>	extras;
+	cVector3				pos;
+	cActSpr*				body;
+	cActSpr*				head;
+	float					scale;
+	std::vector<cActSpr*>	extras;
+	int						action;
+	int						direction;
 
-	void loadbody(string);
-	void loadhead(string);
-	void setextra(unsigned int, string);
-	void addextra(string);
-
-	void draw();
-
-
-
-	int action;
-	int direction;
+	void					loadBody(std::string);
+	void					loadHead(std::string);
+	void					setExtra(unsigned int, std::string);
+	void					addExtra(std::string);
+	void					draw();
 	
 };
 

@@ -7,7 +7,7 @@
 using namespace std;
 
 
-#define focussed parent->selectedobject == this
+#define focussed parent->selectedObject == this
 
 enum OBJECT_ALIGNMENT
 {

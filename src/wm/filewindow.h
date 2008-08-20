@@ -107,7 +107,7 @@ public:
 			o->SetText(-1, mapnames[i]);
 
 		objects["OkButton"] = new cOkButton(this, pCallback,skin);
-		selectedobject = objects["filter"];
+		selectedObject = objects["filter"];
 	}
 
 

@@ -255,7 +255,7 @@ void cRSMModel::draw(bool checkfrust, bool dodraw, bool setheight, bool dolightm
 			glTranslatef(-bb2.bbrange[0], bb2.bbmin[1], -bb2.bbrange[2]);
 	}
 
-	if(dodraw && Graphics.showboundingboxes)
+	if(dodraw && Graphics.showBoundingBoxes)
 	{
 		cVector3 v1 = cVector3(bb2.bbmin[0], bb2.bbmin[1], bb2.bbmin[2]);
 		cVector3 v2 = cVector3(bb2.bbmax[0], bb2.bbmax[1], bb2.bbmax[2]);
@@ -548,8 +548,8 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 						Graphics.world.cubes[y1][x1].maxh = max(Graphics.world.cubes[y1][x1].maxh, -h);
 						Graphics.world.cubes[y1][x2].minh = min(Graphics.world.cubes[y1][x2].minh, -h);
 						Graphics.world.cubes[y1][x2].maxh = max(Graphics.world.cubes[y1][x2].maxh, -h);*/
-						Graphics.world.cubes[y2][x2].minh = min(Graphics.world.cubes[y2][x2].minh, -h);
-						Graphics.world.cubes[y2][x2].maxh = max(Graphics.world.cubes[y2][x2].maxh, -h);
+						Graphics.world.cubes[y2][x2].minHeight = min(Graphics.world.cubes[y2][x2].minHeight, -h);
+						Graphics.world.cubes[y2][x2].maxHeight = max(Graphics.world.cubes[y2][x2].maxHeight, -h);
 						/*Graphics.world.cubes[y2][x1].minh = min(Graphics.world.cubes[y2][x1].minh, -h);
 						Graphics.world.cubes[y2][x1].maxh = max(Graphics.world.cubes[y2][x1].maxh, -h);*/
 					}
@@ -590,7 +590,7 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 								cVector3 v = cVector3(10*x+10*(xx/6.0),-Graphics.world.cubes[y][x].cell1, 10*y+10*(yy/6.0));
 								if (LineIntersectPolygon(triangle, 3, lightpos, v, t))
 								{
-									int tile = Graphics.world.cubes[y][x].tileup;
+									int tile = Graphics.world.cubes[y][x].tileUp;
 									cLightmap* l = Graphics.world.lightmaps[Graphics.world.tiles[tile].lightmap];
 									
 									l->buf[xx + (8*yy)+1+8] =(char) (((BYTE)l->buf[xx + (8*yy)+1+8]) / 1.3);

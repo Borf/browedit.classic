@@ -147,13 +147,13 @@ class cSoundSelectWindow : public cWindow
 			cSound* selectedSound = ((cSoundSelectWindow*)parent)->selectedSound;
 			if(selectedSound)
 			{
-				selectedSound->filename = filename;
+				selectedSound->fileName = filename;
 			}
 			else
 			{
 				cVector3 newPos = ((cSoundSelectWindow*)parent)->newPos;
 				cSound s;
-				s.filename = filename;
+				s.fileName = filename;
 				s.name = ((cWindowDataListBox<string>*)parent->objects["sounds"])->values[selected];
 				s.pos = cVector3(newPos.x/5, newPos.y-17, newPos.z/5);
 				s.rotation = cVector3(0,-45,0);
@@ -175,7 +175,7 @@ class cSoundSelectWindow : public cWindow
 				};
 				s.todo1 = string((char*)rawData,40);
 				s.name = "sound" + inttostring(rand() % 99999);
-				s.repeatdelay = 0.5f;
+				s.repeatDelay = 0.5f;
 				s.unknown2 = 70.0f;
 				s.unknown3 = 1;
 				s.unknown2 = 1;
@@ -248,7 +248,7 @@ public:
 				continue;
 			while(!pFile->eof())
 			{
-				line = pFile->readline();
+				line = pFile->readLine();
 				if (line == "")
 					continue;
 				pre = line.substr(0, line.find("|"));

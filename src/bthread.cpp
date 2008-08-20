@@ -55,14 +55,14 @@ void cBThread::wait()
 //downloadthread
 #include <curl/curl.h>
 
-cDownloadThread::cDownloadThread(string u, cDownloadThread::cDownloadThreadFinisher* f) : cBThread()
+cDownloadThread::cDownloadThread(std::string u, cDownloadThread::cDownloadThreadFinisher* f) : cBThread()
 {
 	finisher = f;
 	url = u;
 	start();
 }
 
-cDownloadThread::cDownloadThread(string u, string p, cDownloadThread::cDownloadThreadFinisher* f) : cBThread()
+cDownloadThread::cDownloadThread(std::string u, std::string p, cDownloadThread::cDownloadThreadFinisher* f) : cBThread()
 {
 	finisher = f;
 	url = u;

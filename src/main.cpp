@@ -283,7 +283,7 @@ void mainloop()
 									c->cell4 = min(mmax,c->cell4);
 								}
 							}
-							c->calcnormal();
+							c->calcNormal();
 						}
 					}
 				}
@@ -533,10 +533,10 @@ int main(int argc, char *argv[])
 	{
 		Log(1,0,"Error opening configfile");
 	}
-	configfile = pFile->readline();
+	configfile = pFile->readLine();
 	pFile->close();
 
-	config = fs.getxml(configfile);
+	config = fs.getXml(configfile);
 	if(config.Error())
 	{
 		Log(1,0,"Could not load config xml: %s at %i:%i", config.ErrorDesc(), config.ErrorCol(), config.ErrorRow());
@@ -545,7 +545,7 @@ int main(int argc, char *argv[])
 	}
 	string language = config.FirstChildElement("config")->FirstChildElement("language")->FirstChild()->Value();
 	language = language.substr(language.find("=")+1);
-	msgtable = fs.getxml("data/" + language + ".txt");
+	msgtable = fs.getXml("data/" + language + ".txt");
 
 
 #ifdef WIN32
@@ -801,7 +801,7 @@ int main(int argc, char *argv[])
 			TiXmlElement* el2 = el->FirstChildElement("grf");
 			while(el2 != NULL)
 			{
-				fs.LoadFile(el2->FirstChild()->Value());
+				fs.loadPackedFile(el2->FirstChild()->Value());
 				el2 = el2->NextSiblingElement("grf");
 			}
 
@@ -824,22 +824,22 @@ int main(int argc, char *argv[])
 				else if(strcmp(el2->Value(),					"skin") == 0)
 					skinFile = el2->FirstChild()->Value();
 				else if(strcmp(el2->Value(),					"bgcolor") == 0)
-					Graphics.backgroundcolor = hex2floats(el2->FirstChild()->Value());
-				else if(strcmp(el2->Value(),					"notilecolor") == 0)
-					Graphics.notilecolor = hex2floats(el2->FirstChild()->Value());
-				else if(strcmp(el2->Value(),					"gattransparency") == 0)
-					Graphics.gattransparency = atof(el2->FirstChild()->Value());
+					Graphics.backgroundColor = hex2floats(el2->FirstChild()->Value());
+				else if(strcmp(el2->Value(),					"noTileColor") == 0)
+					Graphics.noTileColor = hex2floats(el2->FirstChild()->Value());
+				else if(strcmp(el2->Value(),					"gatTransparency") == 0)
+					Graphics.gatTransparency = atof(el2->FirstChild()->Value());
 
 				el2 = el2->NextSiblingElement();
 
 			}
 		}
-		if(option == "gattiles")
+		if(option == "gatTiles")
 		{
 			TiXmlElement* el2 = el->FirstChildElement("tile");
 			while(el2 != NULL)
 			{
-				Graphics.gattiles.push_back(atoi(el2->FirstChild()->Value()));
+				Graphics.gatTiles.push_back(atoi(el2->FirstChild()->Value()));
 				el2 = el2->NextSiblingElement("tile");
 			}
 		}
@@ -861,7 +861,7 @@ int main(int argc, char *argv[])
 						Log(3,0,GetMsg("file/LOADING"), value.c_str()); // Loading file
 						while(!pFile2->eof())
 						{
-							string line = pFile2->readline();
+							string line = pFile2->readLine();
 							string pre = line.substr(0, line.find("|"));
 							string filename = line.substr(line.find("|")+1);
 
@@ -919,8 +919,8 @@ int main(int argc, char *argv[])
 	pFile = fs.open("data/korean2english.txt");
 	while(!pFile->eof())
 	{
-		string a = pFile->readline();
-		string b = pFile->readline();
+		string a = pFile->readLine();
+		string b = pFile->readLine();
 		translations.push_back(pair<string, string>(a,b));
 	}
 	mergesort<pair<string, string> >(translations, translationcomp);
@@ -932,7 +932,7 @@ int main(int argc, char *argv[])
 
 	models->sort();
 	
-	favoritelights = fs.getxml("data/lights.txt");
+	favoritelights = fs.getXml("data/lights.txt");
 
 	if (!Graphics.init())
 		return 1;
@@ -1010,28 +1010,28 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(grid,view,GetMsg("menu/view/GRID"),							&MenuCommand_grid); //grid
 	grid->ticked = true;
 	ADDMENUITEM(showobjects,view,GetMsg("menu/view/OBJECTS"),				&MenuCommand_showobjects);
-	ADDMENUITEMDATAP(transparentobjects,view,GetMsg("menu/view/TRANSPARENTOBJECTS"),	&MenuCommand_toggle, (void*)&Graphics.transparentobjects);
-	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/BOUNDINGBOXES"),				&MenuCommand_toggle, (void*)&Graphics.showboundingboxes);
-	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/LIGHTMAPS"),					&MenuCommand_toggle, (void*)&Graphics.showlightmaps);
-	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/OGLLIGHTING"),				&MenuCommand_toggle, (void*)&Graphics.showoglighting);
+	ADDMENUITEMDATAP(transparentobjects,view,GetMsg("menu/view/TRANSPARENTOBJECTS"),	&MenuCommand_toggle, (void*)&Graphics.transparentObjects);
+	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/BOUNDINGBOXES"),				&MenuCommand_toggle, (void*)&Graphics.showBoundingBoxes);
+	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/LIGHTMAPS"),					&MenuCommand_toggle, (void*)&Graphics.showLightmaps);
+	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/OGLLIGHTING"),				&MenuCommand_toggle, (void*)&Graphics.showOglLighting);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/TILECOLORS"),				&MenuCommand_toggle, (void*)&Graphics.showtilecolors);
+	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/TILECOLORS"),				&MenuCommand_toggle, (void*)&Graphics.showTileColors);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/SHOWWATER"),					&MenuCommand_toggle, (void*)&Graphics.showwater);
+	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/SHOWWATER"),					&MenuCommand_toggle, (void*)&Graphics.showWater);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/TOPCAMERA"),					&MenuCommand_toggle, (void*)&Graphics.topcamera);
-	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/INVISIBLETILES"),			&MenuCommand_toggle, (void*)&Graphics.shownotiles);
+	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/TOPCAMERA"),					&MenuCommand_toggle, (void*)&Graphics.topCamera);
+	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/INVISIBLETILES"),			&MenuCommand_toggle, (void*)&Graphics.showNoTiles);
 	mm->ticked = true;
 	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/SHOWAMBIENTLIGHTING"),		&MenuCommand_toggle, (void*)&Graphics.showambientlighting);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/WATERANIMATION"),			&MenuCommand_toggle, (void*)&Graphics.animatewater);
+	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/WATERANIMATION"),			&MenuCommand_toggle, (void*)&Graphics.animateWater);
 	mm->ticked = true;
 	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/GATTILES"),					&MenuCommand_toggle, (void*)&Graphics.showgat);
-	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/SHOWDOT"),					&MenuCommand_toggle, (void*)&Graphics.showdot);
+	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/SHOWDOT"),					&MenuCommand_toggle, (void*)&Graphics.showDot);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/SHOWSPRITES"),				&MenuCommand_toggle, (void*)&Graphics.showsprites);
+	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/SHOWSPRITES"),				&MenuCommand_toggle, (void*)&Graphics.showSprites);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,"Show all light spheres",						&MenuCommand_toggle, (void*)&Graphics.showalllights);
+	ADDMENUITEMDATAP(mm,view,"Show all light spheres",						&MenuCommand_toggle, (void*)&Graphics.showAllLights);
 
 
 	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/TEXTUREEDIT"),				&MenuCommand_mode);
@@ -1079,7 +1079,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,edit,GetMsg("menu/edit/GATCOLLISION")+string("2"),		&MenuCommand_gatcollision2);
 	ADDMENUITEM(mm,edit,GetMsg("menu/edit/CLEANLIGHTMAPS"),					&MenuCommand_cleanuplightmaps);
 	ADDMENUITEM(mm,edit,GetMsg("menu/edit/REMOVETEXTURES"),					&MenuCommand_cleantextures);
-	ADDMENUITEMDATAP(mm,edit,GetMsg("menu/edit/CLEARLIGHTMAPSONEDIT"),		&MenuCommand_toggle, (void*)&Graphics.clearlightmaps);
+	ADDMENUITEMDATAP(mm,edit,GetMsg("menu/edit/CLEARLIGHTMAPSONEDIT"),		&MenuCommand_toggle, (void*)&Graphics.clearLightmaps);
 
 	ADDMENUITEM(mm,windows,GetMsg("menu/windows/AMBIENTLIGHTING"),			&MenuCommand_ambientlight);
 	ADDMENUITEM(mm,windows,GetMsg("menu/windows/MODELWINDOW"),				&MenuCommand_modelwindow);
@@ -1176,7 +1176,7 @@ int main(int argc, char *argv[])
 	}
 	for(i = 0; i < SDLK_LAST-SDLK_FIRST; i++)
 	{
-		keymap[i] = atoi(pFile->readline().c_str());
+		keymap[i] = atoi(pFile->readLine().c_str());
 	}
 
 	pFile->close();
@@ -1190,7 +1190,7 @@ int main(int argc, char *argv[])
 	i = 0;
 	while(pFile && !pFile->eof())
 	{
-		string line = pFile->readline();
+		string line = pFile->readLine();
 		if(line.find("|") != string::npos)
 		{
 			if (effectssubmenu.size() <= floor(i/30.0))
@@ -1221,15 +1221,15 @@ int main(int argc, char *argv[])
 
 
 	Log(3,0,GetMsg("DONEINIT"));
-	Graphics.world.newworld();
+	Graphics.world.newWorld();
 	if(config.FirstChildElement("config")->FirstChildElement("firstmap"))
-		strcpy(Graphics.world.filename, string(rodir + "data\\" + config.FirstChildElement("config")->FirstChildElement("firstmap")->FirstChild()->Value()).c_str());
+		strcpy(Graphics.world.fileName, string(rodir + "data\\" + config.FirstChildElement("config")->FirstChildElement("firstmap")->FirstChild()->Value()).c_str());
 	else
-		strcpy(Graphics.world.filename, string(rodir + "data\\prontera").c_str());
+		strcpy(Graphics.world.fileName, string(rodir + "data\\prontera").c_str());
 
 	if(argc > 1)
 	{
-		strcpy(Graphics.world.filename, string(rodir + "data\\" + argv[1]).c_str());
+		strcpy(Graphics.world.fileName, string(rodir + "data\\" + argv[1]).c_str());
 		Graphics.world.load();
 	}
 #ifndef WIN32
@@ -1270,7 +1270,7 @@ int main(int argc, char *argv[])
 
 	Mix_CloseAudio();
 	// Shutdown
-	Graphics.KillGLWindow();						// Kill The Window
+	Graphics.killGLWindow();						// Kill The Window
 	Graphics.world.unload();
 	TextureCache.status();
 
@@ -1455,7 +1455,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 					else
 					{
-						if(Graphics.topcamera)
+						if(Graphics.topCamera)
 						{
 							Graphics.cameraheight += (oldmousey - mousey) / 2.0f;
 							Graphics.cameraheight = max(min(Graphics.cameraheight, (float)15000), (float)-5);
@@ -1485,7 +1485,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				else
 				{
-					if(!Graphics.topcamera)
+					if(!Graphics.topCamera)
 					{
 						cVector2 v = cVector2((oldmousex - mousex),  (oldmousey - mousey));
 						v.rotate(-Graphics.camerarot / PI * 180.0f);
@@ -1550,7 +1550,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					w->scrollup();
 				else
 				{
-					if(Graphics.topcamera)
+					if(Graphics.topCamera)
 					{
 						float diff = Graphics.cameraheight;
 						Graphics.cameraheight*=1.1f;
@@ -1578,7 +1578,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					w->scrolldown();
 				else
 				{
-					if(Graphics.topcamera)
+					if(Graphics.topCamera)
 					{
 						float diff = Graphics.cameraheight;
 						Graphics.cameraheight/=1.1f;
@@ -1792,7 +1792,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 				if(movement < 3 && (editmode == MODE_OBJECTS || editmode == MODE_EFFECTS))
 				{
-					Graphics.selectedobject = -1;
+					Graphics.selectedObject = -1;
 					return 1;
 				}
 			}
@@ -1817,8 +1817,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			switch (event.key.keysym.sym)
 			{
 			case SDLK_SPACE:
-				if (Graphics.previewcolor > 20)
-					Graphics.previewcolor = 20;
+				if (Graphics.previewColor > 20)
+					Graphics.previewColor = 20;
 				break;
 			case SDLK_g:
 				MenuCommand_grid((cMenuItem*)grid);
@@ -1843,16 +1843,16 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			}
 			case SDLK_INSERT:
 				{
-					Graphics.quadtreeview++;
-					if (Graphics.quadtreeview > 5)
-						Graphics.quadtreeview = 5;
+					Graphics.quadtreeView++;
+					if (Graphics.quadtreeView > 5)
+						Graphics.quadtreeView = 5;
 				}
 				break;
 			case SDLK_DELETE:
 				{
-					Graphics.quadtreeview--;
-					if (Graphics.quadtreeview < -1)
-						Graphics.quadtreeview = -1;
+					Graphics.quadtreeView--;
+					if (Graphics.quadtreeView < -1)
+						Graphics.quadtreeView = -1;
 				}
 				break;
 			case SDLK_F1:
@@ -1896,7 +1896,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				break;
 			case SDLK_F6:
 				editmode = MODE_GAT;
-				if (Graphics.texturestart >= Graphics.gattiles.size()-1)
+				if (Graphics.texturestart >= Graphics.gatTiles.size()-1)
 					Graphics.texturestart = 0;
 				break;
 			case SDLK_F7:
@@ -1905,7 +1905,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				break;
 			case SDLK_F8:
 				editmode = MODE_EFFECTS;
-				Graphics.selectedobject = -1;
+				Graphics.selectedObject = -1;
 				break;
 			case SDLK_F9:
 				editmode = MODE_SOUNDS;

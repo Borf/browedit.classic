@@ -47,13 +47,9 @@ public:
 class cRealLightMap
 {
 public:
-	cRealLightMap()
-	{
-		generated = false;
-		generated2 = false;
-	}
-	int texid();
-	int texid2();
+	cRealLightMap();
+	int texId();
+	int texId2();
 
 	bool generated;
 	bool generated2;
@@ -68,19 +64,17 @@ public:
 class cTile
 {
 public:
-float	u1,
-		u2,
-		u3,
-		u4,
-		v1,
-		v2,
-		v3,
-		v4;
-int texture;
-int lightmap;
-char color[4];
-
-
+	float	u1,
+			u2,
+			u3,
+			u4,
+			v1,
+			v2,
+			v3,
+			v4;
+	int texture;
+	int lightmap;
+	char color[4];
 	bool used;
 };
 
@@ -92,15 +86,15 @@ public:
 			cell2,
 			cell3,
 			cell4;
-	int tileup,
-		tileside,
-		tileaside;
+	int tileUp,
+		tileSide,
+		tileOtherSide;
 
-	float maxh;
-	float minh;
+	float maxHeight;
+	float minHeight;
 	bool selected;
 
-	void calcnormal()
+	void calcNormal()
 	{
 		cVector3 b1, b2;
 		b1 = cVector3(10,-cell1,-10) - cVector3(0,-cell4,0);
@@ -116,24 +110,24 @@ public:
 	cTexture* texture;
 	string RoFilename;
 	string RoFilename2;
-	GLuint texid() { return texture->texid(); }
+	GLuint texId() { return texture->texid(); }
 
 };
 
 class cLight
 {
 public:
-	string name;
-	cVector3 pos;
-	string todo;
-	cVector3 color;
-	float todo2;
+	string		name;
+	cVector3	pos;
+	string		todo;
+	cVector3	color;
+	float		todo2;
 // custom properties
 
-	float range;
-	float maxlightincrement;
-	bool  givesshadow;
-	float lightfalloff;
+	float		range;
+	float		maxLightIncrement;
+	bool		givesShadow;
+	float		lightFalloff;
 	bool operator == (cLight other)
 	{
 		return	name == other.name &&
@@ -142,9 +136,9 @@ public:
 				color == other.color &&
 				todo2 == other.todo2 &&
 				range == other.range &&
-				maxlightincrement == other.maxlightincrement &&
-				givesshadow == other.givesshadow &&
-				lightfalloff == other.lightfalloff;
+				maxLightIncrement == other.maxLightIncrement &&
+				givesShadow == other.givesShadow &&
+				lightFalloff == other.lightFalloff;
 	}
 };
 
@@ -154,29 +148,29 @@ class cSound
 public:
 	string name;
 	string todo1;
-	string filename;
+	string fileName;
 	cVector3 pos;
 	cVector3 rotation;
 	cVector3 scale;
 
-	float repeatdelay;
+	float repeatDelay;
 	float unknown2;
-	long unknown3;
-	long unknown4;
-	float unknown5;
-	char unknown6[6];
-	float unknown7;
-	float unknown8;
+	long	unknown3;
+	long	unknown4;
+	float	unknown5;
+	char	unknown6[6];
+	float	unknown7;
+	float	unknown8;
 
 	bool operator == (cSound other)
 	{
 		return	name == other.name &&
 				todo1 == other.todo1 &&
-				filename == other.filename &&
+				fileName == other.fileName &&
 				pos == other.pos &&
 				rotation == other.rotation &&
 				scale == other.scale &&
-				repeatdelay == other.repeatdelay &&
+				repeatDelay == other.repeatDelay &&
 				unknown2 == other.unknown2 &&
 				unknown3 == other.unknown3 &&
 				unknown4 == other.unknown4 &&
@@ -253,7 +247,7 @@ public:
 	int		type;
 	float	amplitude;
 	float	phase;
-	float	surfacecurve;
+	float	surfaceCurve;
 //	int		texcycle; // unknown
 };
 
@@ -272,84 +266,71 @@ class cWorld
 {
 
 public:
-	cAmbientLight ambientlight;
-	cWater water;
-	bool loaded;
+	cAmbientLight						ambientLight;
+	cWater								water;
+	bool								loaded;
 
-	char filename[128];
-	bool showtextures;
+	char								fileName[128];
+	bool								showTextures;
 
-	int height;
-	int width;
-	int texsize;
-	bool	quicksave;
-	vector<cTextureContainer*> textures;
-	vector<cLightmap*> lightmaps;
-	vector<cTile> tiles;
-	vector<vector<cCube> > cubes;
-	vector<vector<cGatTile> > gattiles;
-	vector<vector<cRealLightMap*> > reallightmaps;
+	int									height;
+	int									width;
+	int									texSize;
+	bool								quickSave;
+	vector<cTextureContainer*>			textures;
+	vector<cLightmap*>					lightmaps;
+	vector<cTile>						tiles;
+	vector<vector<cCube> >				cubes;
+	vector<vector<cGatTile> >			gattiles;
+	vector<vector<cRealLightMap*> >		realLightmaps;
 
-	vector<cRSMModel*>	models;
+	vector<cRSMModel*>					models;
 
-	vector<cLight>		lights;
-	vector<cSound>		sounds;
-	vector<cEffect>		effects;
-	vector<cSprite*>	sprites;
+	vector<cLight>						lights;
+	vector<cSound>						sounds;
+	vector<cEffect>						effects;
+	vector<cSprite*>					sprites;
 
-	cWorld()
-	{
-		showtextures = false;
-		loaded = false;
-		light = NULL;
-		light2 = NULL;
-		sound = NULL;
-		effect = NULL;
-	}
-	~cWorld()
-	{
-		unload();
-	}
-	void draw();
-	void load();
-	void save();
-	void exportheight();
-
-	void unload();
-
-	void newworld();
+	cWorld();
+	~cWorld();
+	void								draw();
+	void								load();
+	void								save();
+	void								exportheight();
+	void								unload();
+	void								newWorld();
 
 
-	void clean();
+	void								clean();
 
-	void savelightmap();
-	void loadlightmap();
+	void								savelightmap();
+	void								loadlightmap();
 
 
-	long size;
-	float tilescale;
+	long								size;
+	float								tileScale;
 
-	int lightmapWidth;
-	int lightmapHeight;
-	int gridSizeCell;
+	int									lightmapWidth;
+	int									lightmapHeight;
+	int									gridSizeCell;
 
-	cTextureModel* light;
-	cTextureModel* light2;
-	cTextureModel* sound;
-	cTextureModel* effect;
+	cTextureModel*						light;
+	cTextureModel*						light2;
+	cTextureModel*						sound;
+	cTextureModel*						effect;
 	
-	vector<cVector3> quadtreefloats;
+	vector<cVector3>					quadTreeFloats;
 	cQuadTreeNode* root;
 
 
-	void		fixgridding();
-	void		makelightmapsunique();
-	void		blacklightmaps();
+	void								fixGridding();
+	void								makeLightmapsUnique();
+	void								blackLightmaps();
 
-	string useless;
+	string								useless;
 
-	list<int>		plugin_api_deleteobjects;
-	list<int>		plugin_api_deletesprites;
+	std::list<int>						plugin_api_deleteobjects;
+	std::list<int>						plugin_api_deletesprites;
 
 
 };

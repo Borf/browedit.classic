@@ -23,10 +23,10 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 					break;
 				if (x < 0 || x > Graphics.world.width-1)
 					break;
-				if (Graphics.wallheightmin == cVector2(x,y))
-					Graphics.wallheightmin = cVector2(-1,-1);
+				if (Graphics.wallHeightMin == cVector2(x,y))
+					Graphics.wallHeightMin = cVector2(-1,-1);
 				else
-					Graphics.wallheightmin = cVector2(x,y);
+					Graphics.wallHeightMin = cVector2(x,y);
 			}
 			else if(event.button.button == SDL_BUTTON_RIGHT && movement < 3)
 			{
@@ -36,10 +36,10 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 					break;
 				if (x < 0 || x > Graphics.world.width-1)
 					break;
-				if (Graphics.wallheightmax == cVector2(x,y))
-					Graphics.wallheightmax = cVector2(-1,-1);
+				if (Graphics.wallHeightMax == cVector2(x,y))
+					Graphics.wallHeightMax = cVector2(-1,-1);
 				else
-					Graphics.wallheightmax = cVector2(x,y);
+					Graphics.wallHeightMax = cVector2(x,y);
 
 			}
 			break;
@@ -64,22 +64,22 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 
 					if(SDL_GetModState() & KMOD_ALT)
 					{
-						if(Graphics.world.cubes[y][x].tileaside == -1)
+						if(Graphics.world.cubes[y][x].tileOtherSide == -1)
 							break;
 
 						int yy = y;
-						while(Graphics.world.cubes[yy][x].tileaside != -1)
+						while(Graphics.world.cubes[yy][x].tileOtherSide != -1)
 							yy++;
 						int ymax = yy;
 						yy = y;
-						while(Graphics.world.cubes[yy][x].tileaside != -1)
+						while(Graphics.world.cubes[yy][x].tileOtherSide != -1)
 							yy--;
 						int ymin = yy+1;
 
 						for(yy = ymin; yy < ymax; yy++)
 						{
-							cTile* t = &Graphics.world.tiles[Graphics.world.cubes[yy][x].tileaside];
-							tilesedited.push_back(pair<int, cTile>(Graphics.world.cubes[yy][x].tileaside, *t));
+							cTile* t = &Graphics.world.tiles[Graphics.world.cubes[yy][x].tileOtherSide];
+							tilesedited.push_back(pair<int, cTile>(Graphics.world.cubes[yy][x].tileOtherSide, *t));
 							float f;
 							f = t->u1;
 							t->u1 = t->u2;
@@ -92,22 +92,22 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 					}
 					else
 					{
-						if(Graphics.world.cubes[y][x].tileside == -1)
+						if(Graphics.world.cubes[y][x].tileSide == -1)
 							break;
 
 						int xx = x;
-						while(Graphics.world.cubes[y][xx].tileside != -1)
+						while(Graphics.world.cubes[y][xx].tileSide != -1)
 							xx++;
 						int xmax = xx;
 						xx = x;
-						while(Graphics.world.cubes[y][xx].tileside != -1)
+						while(Graphics.world.cubes[y][xx].tileSide != -1)
 							xx--;
 						int xmin = xx+1;
 
 						for(xx = xmin; xx < xmax; xx++)
 						{
-							cTile* t = &Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside];
-							tilesedited.push_back(pair<int, cTile>(Graphics.world.cubes[y][xx].tileside, *t));
+							cTile* t = &Graphics.world.tiles[Graphics.world.cubes[y][xx].tileSide];
+							tilesedited.push_back(pair<int, cTile>(Graphics.world.cubes[y][xx].tileSide, *t));
 							float f;
 							f = t->u1;
 							t->u1 = t->u2;
@@ -134,7 +134,7 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 
 					if(SDL_GetModState() & KMOD_ALT)
 					{
-						if(Graphics.world.cubes[y][x].tileaside == -1)
+						if(Graphics.world.cubes[y][x].tileOtherSide == -1)
 							break;
 
 						int yy = y;
@@ -145,11 +145,11 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 						if (SDL_GetModState() & KMOD_SHIFT)
 						{
 							yy = y;
-							while(Graphics.world.cubes[yy][x].tileaside != -1)
+							while(Graphics.world.cubes[yy][x].tileOtherSide != -1)
 								yy++;
 							ymax = yy;
 							yy = y;
-							while(Graphics.world.cubes[yy][x].tileaside != -1)
+							while(Graphics.world.cubes[yy][x].tileOtherSide != -1)
 								yy--;
 							ymin = yy+1;
 							ydiff = 4;
@@ -157,8 +157,8 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 
 						for(yy = ymin; yy < ymax; yy++)
 						{
-							cTile* t = &Graphics.world.tiles[Graphics.world.cubes[yy][x].tileaside];
-							tilesedited.push_back(pair<int, cTile>(Graphics.world.cubes[yy][x].tileaside, *t));
+							cTile* t = &Graphics.world.tiles[Graphics.world.cubes[yy][x].tileOtherSide];
+							tilesedited.push_back(pair<int, cTile>(Graphics.world.cubes[yy][x].tileOtherSide, *t));
 							float f;
 							f = t->v1;
 							t->v1 = t->v3;
@@ -171,7 +171,7 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 					}
 					else
 					{
-						if(Graphics.world.cubes[y][x].tileside == -1)
+						if(Graphics.world.cubes[y][x].tileSide == -1)
 							break;
 
 						int xx = x;
@@ -181,11 +181,11 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 						if (SDL_GetModState() & KMOD_SHIFT)
 						{
 							xx = x;
-							while(Graphics.world.cubes[y][xx].tileside != -1)
+							while(Graphics.world.cubes[y][xx].tileSide != -1)
 								xx++;
 							xmax = xx;
 							xx = x;
-							while(Graphics.world.cubes[y][xx].tileside != -1)
+							while(Graphics.world.cubes[y][xx].tileSide != -1)
 								xx--;
 							xmin = xx+1;
 							xdiff = 4;
@@ -193,8 +193,8 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 
 						for(xx = xmin; xx < xmax; xx++)
 						{
-							cTile* t = &Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside];
-							tilesedited.push_back(pair<int, cTile>(Graphics.world.cubes[y][xx].tileside, *t));
+							cTile* t = &Graphics.world.tiles[Graphics.world.cubes[y][xx].tileSide];
+							tilesedited.push_back(pair<int, cTile>(Graphics.world.cubes[y][xx].tileSide, *t));
 							float f;
 							f = t->v1;
 							t->v1 = t->v3;
@@ -220,7 +220,7 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 						int xmax;
 						if (SDL_GetModState() & KMOD_CTRL)
 						{
-							while(Graphics.world.cubes[y][xx].tileside != -1)
+							while(Graphics.world.cubes[y][xx].tileSide != -1)
 								xx++;
 							xmax = xx;
 						}
@@ -230,7 +230,7 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 						int xmin;
 						if (SDL_GetModState() & KMOD_CTRL)
 						{
-							while(Graphics.world.cubes[y][xx].tileside != -1)
+							while(Graphics.world.cubes[y][xx].tileSide != -1)
 								xx--;
 							xmin = xx+1;
 						}
@@ -240,16 +240,16 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 
 						for(xx = xmin; xx < xmax; xx++)
 						{
-							tileschanged.push_back(pair<int, cTile>(Graphics.world.cubes[y][xx].tileside, Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside]));
-							Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside].v3+=0.03125;
-							Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside].v4+=0.03125;
+							tileschanged.push_back(pair<int, cTile>(Graphics.world.cubes[y][xx].tileSide, Graphics.world.tiles[Graphics.world.cubes[y][xx].tileSide]));
+							Graphics.world.tiles[Graphics.world.cubes[y][xx].tileSide].v3+=0.03125;
+							Graphics.world.tiles[Graphics.world.cubes[y][xx].tileSide].v4+=0.03125;
 						}
 					}
 					else
 					{
-							tileschanged.push_back(pair<int, cTile>(Graphics.world.cubes[y][x].tileside, Graphics.world.tiles[Graphics.world.cubes[y][x].tileside]));
-							Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u1+=0.03125;
-							Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u3+=0.03125;
+							tileschanged.push_back(pair<int, cTile>(Graphics.world.cubes[y][x].tileSide, Graphics.world.tiles[Graphics.world.cubes[y][x].tileSide]));
+							Graphics.world.tiles[Graphics.world.cubes[y][x].tileSide].u1+=0.03125;
+							Graphics.world.tiles[Graphics.world.cubes[y][x].tileSide].u3+=0.03125;
 					}
 					if(tileschanged.size() > 0)
 						undostack.push(new cUndoTileEdit(tileschanged));
@@ -266,7 +266,7 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 						int xmax;
 						if (SDL_GetModState() & KMOD_CTRL)
 						{
-							while(Graphics.world.cubes[y][xx].tileside != -1)
+							while(Graphics.world.cubes[y][xx].tileSide != -1)
 								xx++;
 							xmax = xx;
 						}
@@ -276,7 +276,7 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 						int xmin;
 						if (SDL_GetModState() & KMOD_CTRL)
 						{
-							while(Graphics.world.cubes[y][xx].tileside != -1)
+							while(Graphics.world.cubes[y][xx].tileSide != -1)
 								xx--;
 							xmin = xx+1;
 						}
@@ -286,16 +286,16 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 
 						for(xx = xmin; xx < xmax; xx++)
 						{
-							tileschanged.push_back(pair<int, cTile>(Graphics.world.cubes[y][xx].tileside, Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside]));
-							Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside].v3-=0.03125;
-							Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside].v4-=0.03125;
+							tileschanged.push_back(pair<int, cTile>(Graphics.world.cubes[y][xx].tileSide, Graphics.world.tiles[Graphics.world.cubes[y][xx].tileSide]));
+							Graphics.world.tiles[Graphics.world.cubes[y][xx].tileSide].v3-=0.03125;
+							Graphics.world.tiles[Graphics.world.cubes[y][xx].tileSide].v4-=0.03125;
 						}
 					}
 					else
 					{
-						tileschanged.push_back(pair<int, cTile>(Graphics.world.cubes[y][x].tileside, Graphics.world.tiles[Graphics.world.cubes[y][x].tileside]));
-						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u1-=0.03125;
-						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u3-=0.03125;
+						tileschanged.push_back(pair<int, cTile>(Graphics.world.cubes[y][x].tileSide, Graphics.world.tiles[Graphics.world.cubes[y][x].tileSide]));
+						Graphics.world.tiles[Graphics.world.cubes[y][x].tileSide].u1-=0.03125;
+						Graphics.world.tiles[Graphics.world.cubes[y][x].tileSide].u3-=0.03125;
 					}
 					if(tileschanged.size() > 0)
 						undostack.push(new cUndoTileEdit(tileschanged));
@@ -312,7 +312,7 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 						int xmax;
 						if (SDL_GetModState() & KMOD_CTRL)
 						{
-							while(Graphics.world.cubes[y][xx].tileside != -1)
+							while(Graphics.world.cubes[y][xx].tileSide != -1)
 								xx++;
 							xmax = xx;
 						}
@@ -322,7 +322,7 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 						int xmin;
 						if (SDL_GetModState() & KMOD_CTRL)
 						{
-							while(Graphics.world.cubes[y][xx].tileside != -1)
+							while(Graphics.world.cubes[y][xx].tileSide != -1)
 								xx--;
 							xmin = xx+1;
 						}
@@ -336,9 +336,9 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 							if (xx < 0 || xx > Graphics.world.width)
 								continue;
 
-							tileschanged.push_back(pair<int, cTile>(Graphics.world.cubes[y][xx].tileside, Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside]));
-							Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside].v1+=0.03125;
-							Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside].v2+=0.03125;
+							tileschanged.push_back(pair<int, cTile>(Graphics.world.cubes[y][xx].tileSide, Graphics.world.tiles[Graphics.world.cubes[y][xx].tileSide]));
+							Graphics.world.tiles[Graphics.world.cubes[y][xx].tileSide].v1+=0.03125;
+							Graphics.world.tiles[Graphics.world.cubes[y][xx].tileSide].v2+=0.03125;
 						}
 					}
 					else
@@ -347,9 +347,9 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 							break;
 						if (x < 0 || x > Graphics.world.width-1)
 							break;
-						tileschanged.push_back(pair<int, cTile>(Graphics.world.cubes[y][x].tileside, Graphics.world.tiles[Graphics.world.cubes[y][x].tileside]));
-						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u2+=0.03125;
-						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u4+=0.03125;
+						tileschanged.push_back(pair<int, cTile>(Graphics.world.cubes[y][x].tileSide, Graphics.world.tiles[Graphics.world.cubes[y][x].tileSide]));
+						Graphics.world.tiles[Graphics.world.cubes[y][x].tileSide].u2+=0.03125;
+						Graphics.world.tiles[Graphics.world.cubes[y][x].tileSide].u4+=0.03125;
 					}
 					if(tileschanged.size() > 0)
 						undostack.push(new cUndoTileEdit(tileschanged));
@@ -366,7 +366,7 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 						int xmax;
 						if (SDL_GetModState() & KMOD_CTRL)
 						{
-							while(Graphics.world.cubes[y][xx].tileside != -1)
+							while(Graphics.world.cubes[y][xx].tileSide != -1)
 								xx++;
 							xmax = xx;
 						}
@@ -376,7 +376,7 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 						int xmin;
 						if (SDL_GetModState() & KMOD_CTRL)
 						{
-							while(Graphics.world.cubes[y][xx].tileside != -1)
+							while(Graphics.world.cubes[y][xx].tileSide != -1)
 								xx--;
 							xmin = xx+1;
 						}
@@ -385,9 +385,9 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 						 
 						for(xx = xmin; xx < xmax; xx++)
 						{
-							tileschanged.push_back(pair<int, cTile>(Graphics.world.cubes[y][xx].tileside, Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside]));
-							Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside].v1-=0.03125;
-							Graphics.world.tiles[Graphics.world.cubes[y][xx].tileside].v2-=0.03125;
+							tileschanged.push_back(pair<int, cTile>(Graphics.world.cubes[y][xx].tileSide, Graphics.world.tiles[Graphics.world.cubes[y][xx].tileSide]));
+							Graphics.world.tiles[Graphics.world.cubes[y][xx].tileSide].v1-=0.03125;
+							Graphics.world.tiles[Graphics.world.cubes[y][xx].tileSide].v2-=0.03125;
 						}
 					}
 					else
@@ -396,11 +396,11 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 							break;
 						if (x < 0 || x > Graphics.world.width)
 							break;
-						tileschanged.push_back(pair<int, cTile>(Graphics.world.cubes[y][x].tileside, Graphics.world.tiles[Graphics.world.cubes[y][x].tileside]));
-						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u2+=0.03125;
-						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u4+=0.03125;
-						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u2-=0.03125;
-						Graphics.world.tiles[Graphics.world.cubes[y][x].tileside].u4-=0.03125;
+						tileschanged.push_back(pair<int, cTile>(Graphics.world.cubes[y][x].tileSide, Graphics.world.tiles[Graphics.world.cubes[y][x].tileSide]));
+						Graphics.world.tiles[Graphics.world.cubes[y][x].tileSide].u2+=0.03125;
+						Graphics.world.tiles[Graphics.world.cubes[y][x].tileSide].u4+=0.03125;
+						Graphics.world.tiles[Graphics.world.cubes[y][x].tileSide].u2-=0.03125;
+						Graphics.world.tiles[Graphics.world.cubes[y][x].tileSide].u4-=0.03125;
 					}
 					if(tileschanged.size() > 0)
 						undostack.push(new cUndoTileEdit(tileschanged));
@@ -430,15 +430,15 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 					vector<pair<pair<int,int>, int> > wallschanged;
 					if(SDL_GetModState() & KMOD_ALT)
 					{
-						if(Graphics.world.cubes[y][x].tileaside == -1)
+						if(Graphics.world.cubes[y][x].tileOtherSide == -1)
 							break;
 
 						int yy = y;
-						while(Graphics.world.cubes[yy][x].tileaside != -1 && yy < Graphics.world.height-1)
+						while(Graphics.world.cubes[yy][x].tileOtherSide != -1 && yy < Graphics.world.height-1)
 							yy++;
 						int ymax = yy;
 						yy = y;
-						while(Graphics.world.cubes[yy][x].tileaside != -1 && yy >= 0)
+						while(Graphics.world.cubes[yy][x].tileOtherSide != -1 && yy >= 0)
 						{
 							yy--;
 							if(yy == -1)
@@ -459,19 +459,19 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 							vmin = min(vmin, Graphics.world.cubes[yy][x+1].cell1/32.0f);
 							vmax = max(vmax, Graphics.world.cubes[yy][x+1].cell1/32.0f);
 						}
-						if (!(Graphics.wallheightmin == cVector2(-1,-1)))
+						if (!(Graphics.wallHeightMin == cVector2(-1,-1)))
 						{
-							vmin = min(vmin, Graphics.world.cubes[(int)Graphics.wallheightmin.y][(int)Graphics.wallheightmin.x].cell4/32.0f);
-							vmin = min(vmin, Graphics.world.cubes[(int)Graphics.wallheightmin.y][(int)Graphics.wallheightmin.x].cell2/32.0f);
-							vmin = min(vmin, Graphics.world.cubes[(int)Graphics.wallheightmin.y][(int)Graphics.wallheightmin.x].cell3/32.0f);
-							vmin = min(vmin, Graphics.world.cubes[(int)Graphics.wallheightmin.y][(int)Graphics.wallheightmin.x].cell1/32.0f);
+							vmin = min(vmin, Graphics.world.cubes[(int)Graphics.wallHeightMin.y][(int)Graphics.wallHeightMin.x].cell4/32.0f);
+							vmin = min(vmin, Graphics.world.cubes[(int)Graphics.wallHeightMin.y][(int)Graphics.wallHeightMin.x].cell2/32.0f);
+							vmin = min(vmin, Graphics.world.cubes[(int)Graphics.wallHeightMin.y][(int)Graphics.wallHeightMin.x].cell3/32.0f);
+							vmin = min(vmin, Graphics.world.cubes[(int)Graphics.wallHeightMin.y][(int)Graphics.wallHeightMin.x].cell1/32.0f);
 						}
-						if (!(Graphics.wallheightmax == cVector2(-1,-1)))
+						if (!(Graphics.wallHeightMax == cVector2(-1,-1)))
 						{
-							vmax = max(vmax, Graphics.world.cubes[(int)Graphics.wallheightmax.y][(int)Graphics.wallheightmax.x].cell4/32.0f);
-							vmax = max(vmax, Graphics.world.cubes[(int)Graphics.wallheightmax.y][(int)Graphics.wallheightmax.x].cell2/32.0f);
-							vmax = max(vmax, Graphics.world.cubes[(int)Graphics.wallheightmax.y][(int)Graphics.wallheightmax.x].cell3/32.0f);
-							vmax = max(vmax, Graphics.world.cubes[(int)Graphics.wallheightmax.y][(int)Graphics.wallheightmax.x].cell1/32.0f);
+							vmax = max(vmax, Graphics.world.cubes[(int)Graphics.wallHeightMax.y][(int)Graphics.wallHeightMax.x].cell4/32.0f);
+							vmax = max(vmax, Graphics.world.cubes[(int)Graphics.wallHeightMax.y][(int)Graphics.wallHeightMax.x].cell2/32.0f);
+							vmax = max(vmax, Graphics.world.cubes[(int)Graphics.wallHeightMax.y][(int)Graphics.wallHeightMax.x].cell3/32.0f);
+							vmax = max(vmax, Graphics.world.cubes[(int)Graphics.wallHeightMax.y][(int)Graphics.wallHeightMax.x].cell1/32.0f);
 						}
 
 
@@ -525,23 +525,23 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 								t.u4 = selstartx + (index/(float)(ymax-ymin)) * (selendx-selstartx);
 							}
 							Graphics.world.tiles.push_back(t);
-							wallschanged.push_back(pair<pair<int,int>,int>(pair<int,int>(x,yy),Graphics.world.cubes[yy][x].tileaside));
-							Graphics.world.cubes[yy][x].tileaside = Graphics.world.tiles.size()-1;
+							wallschanged.push_back(pair<pair<int,int>,int>(pair<int,int>(x,yy),Graphics.world.cubes[yy][x].tileOtherSide));
+							Graphics.world.cubes[yy][x].tileOtherSide = Graphics.world.tiles.size()-1;
 						}
 						if(wallschanged.size() > 0)
 							undostack.push(new cUndoChangeWalls(1, wallschanged));
 					}
 					else
 					{
-						if(Graphics.world.cubes[y][x].tileside == -1)
+						if(Graphics.world.cubes[y][x].tileSide == -1)
 							break;
 
 						int xx = x;
-						while(Graphics.world.cubes[y][xx].tileside != -1 && xx < Graphics.world.width)
+						while(Graphics.world.cubes[y][xx].tileSide != -1 && xx < Graphics.world.width)
 							xx++;
 						int xmax = xx;
 						xx = x;
-						while(Graphics.world.cubes[y][xx].tileside != -1 && xx >= 0)
+						while(Graphics.world.cubes[y][xx].tileSide != -1 && xx >= 0)
 						{
 							xx--;
 							if(xx == -1)
@@ -561,19 +561,19 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 							vmin = min(vmin, Graphics.world.cubes[y+1][xx].cell2/32.0f);
 							vmax = max(vmax, Graphics.world.cubes[y+1][xx].cell2/32.0f);
 						}
-						if (!(Graphics.wallheightmin == cVector2(-1,-1)))
+						if (!(Graphics.wallHeightMin == cVector2(-1,-1)))
 						{
-							vmin = min(vmin, Graphics.world.cubes[(int)Graphics.wallheightmin.y][(int)Graphics.wallheightmin.x].cell4/32.0f);
-							vmin = min(vmin, Graphics.world.cubes[(int)Graphics.wallheightmin.y][(int)Graphics.wallheightmin.x].cell2/32.0f);
-							vmin = min(vmin, Graphics.world.cubes[(int)Graphics.wallheightmin.y][(int)Graphics.wallheightmin.x].cell3/32.0f);
-							vmin = min(vmin, Graphics.world.cubes[(int)Graphics.wallheightmin.y][(int)Graphics.wallheightmin.x].cell1/32.0f);
+							vmin = min(vmin, Graphics.world.cubes[(int)Graphics.wallHeightMin.y][(int)Graphics.wallHeightMin.x].cell4/32.0f);
+							vmin = min(vmin, Graphics.world.cubes[(int)Graphics.wallHeightMin.y][(int)Graphics.wallHeightMin.x].cell2/32.0f);
+							vmin = min(vmin, Graphics.world.cubes[(int)Graphics.wallHeightMin.y][(int)Graphics.wallHeightMin.x].cell3/32.0f);
+							vmin = min(vmin, Graphics.world.cubes[(int)Graphics.wallHeightMin.y][(int)Graphics.wallHeightMin.x].cell1/32.0f);
 						}
-						if (!(Graphics.wallheightmax == cVector2(-1,-1)))
+						if (!(Graphics.wallHeightMax == cVector2(-1,-1)))
 						{
-							vmax = max(vmax, Graphics.world.cubes[(int)Graphics.wallheightmax.y][(int)Graphics.wallheightmax.x].cell4/32.0f);
-							vmax = max(vmax, Graphics.world.cubes[(int)Graphics.wallheightmax.y][(int)Graphics.wallheightmax.x].cell2/32.0f);
-							vmax = max(vmax, Graphics.world.cubes[(int)Graphics.wallheightmax.y][(int)Graphics.wallheightmax.x].cell3/32.0f);
-							vmax = max(vmax, Graphics.world.cubes[(int)Graphics.wallheightmax.y][(int)Graphics.wallheightmax.x].cell1/32.0f);
+							vmax = max(vmax, Graphics.world.cubes[(int)Graphics.wallHeightMax.y][(int)Graphics.wallHeightMax.x].cell4/32.0f);
+							vmax = max(vmax, Graphics.world.cubes[(int)Graphics.wallHeightMax.y][(int)Graphics.wallHeightMax.x].cell2/32.0f);
+							vmax = max(vmax, Graphics.world.cubes[(int)Graphics.wallHeightMax.y][(int)Graphics.wallHeightMax.x].cell3/32.0f);
+							vmax = max(vmax, Graphics.world.cubes[(int)Graphics.wallHeightMax.y][(int)Graphics.wallHeightMax.x].cell1/32.0f);
 						}
 
 
@@ -631,8 +631,8 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 							}
 
 							Graphics.world.tiles.push_back(t);
-							wallschanged.push_back(pair<pair<int,int>,int>(pair<int,int>(xx,y),Graphics.world.cubes[y][xx].tileside));
-							Graphics.world.cubes[y][xx].tileside = Graphics.world.tiles.size()-1;
+							wallschanged.push_back(pair<pair<int,int>,int>(pair<int,int>(xx,y),Graphics.world.cubes[y][xx].tileSide));
+							Graphics.world.cubes[y][xx].tileSide = Graphics.world.tiles.size()-1;
 						}
 						if(wallschanged.size() > 0)
 							undostack.push(new cUndoChangeWalls(0, wallschanged));
@@ -648,7 +648,7 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 					if (x < 0 || x > (int)Graphics.world.cubes[0].size()-1)
 						break;
 
-					undostack.push(new cUndoChangeWall(0,x,y, Graphics.world.cubes[y][x].tileside));
+					undostack.push(new cUndoChangeWall(0,x,y, Graphics.world.cubes[y][x].tileSide));
 
 					int from = x;
 					int to = x+1;
@@ -681,13 +681,13 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 					}
 
 
-					bool set = Graphics.world.cubes[y][x].tileside != -1;
+					bool set = Graphics.world.cubes[y][x].tileSide != -1;
 
 					for(int xx = from; xx < to; xx++)
 					{
 						if(set)
 						{
-							Graphics.world.cubes[y][xx].tileside = -1;
+							Graphics.world.cubes[y][xx].tileSide = -1;
 						}
 						else
 						{
@@ -716,7 +716,7 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 							t.u4 = selendx;
 							t.v4 = selendy;
 							Graphics.world.tiles.push_back(t);
-							Graphics.world.cubes[y][xx].tileside = Graphics.world.tiles.size()-1;
+							Graphics.world.cubes[y][xx].tileSide = Graphics.world.tiles.size()-1;
 						}
 					}
 				}
@@ -730,7 +730,7 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 					if (x <= 0 || x > (int)Graphics.world.cubes[y].size()-2)
 						break;
 
-					undostack.push(new cUndoChangeWall(1,x,y, Graphics.world.cubes[y][x].tileaside));
+					undostack.push(new cUndoChangeWall(1,x,y, Graphics.world.cubes[y][x].tileOtherSide));
 
 					int from = y;
 					int to = y+1;
@@ -763,12 +763,12 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 					}
 
 
-					bool set = Graphics.world.cubes[y][x].tileaside != -1;
+					bool set = Graphics.world.cubes[y][x].tileOtherSide != -1;
 
 					for(int yy = from; yy < to; yy++)
 					{
 						if(set)
-							Graphics.world.cubes[yy][x].tileaside = -1;
+							Graphics.world.cubes[yy][x].tileOtherSide = -1;
 						else
 						{
 							cTile t;
@@ -796,7 +796,7 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 							t.u4 = selendx;
 							t.v4 = selendy;
 							Graphics.world.tiles.push_back(t);
-							Graphics.world.cubes[yy][x].tileaside = Graphics.world.tiles.size()-1;
+							Graphics.world.cubes[yy][x].tileOtherSide = Graphics.world.tiles.size()-1;
 						}
 					}
 				}

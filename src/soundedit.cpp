@@ -23,31 +23,31 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 			{
 				if (Graphics.world.sounds.size() == 0)
 					break;
-				if(Graphics.objectstartdrag)
+				if(Graphics.objectStartDrag)
 				{
 					if(doneaction)
 					{
-						undostack.push(new cUndoChangeSound(Graphics.selectedobject));
+						undostack.push(new cUndoChangeSound(Graphics.selectedObject));
 						doneaction = false;
 					}
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 					bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 					if (!ctrl && !alt)
 					{
-						Graphics.world.sounds[Graphics.selectedobject].pos.x = mouse3dx / 5;
-						Graphics.world.sounds[Graphics.selectedobject].pos.z = mouse3dz / 5;
+						Graphics.world.sounds[Graphics.selectedObject].pos.x = mouse3dx / 5;
+						Graphics.world.sounds[Graphics.selectedObject].pos.z = mouse3dz / 5;
 						if (SDL_GetModState() & KMOD_SHIFT)
 						{
-							Graphics.world.sounds[Graphics.selectedobject].pos.x = floor(Graphics.world.sounds[Graphics.selectedobject].pos.x * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsetx) / (Graphics.gridsize/2.0f) + Graphics.gridoffsetx/(Graphics.gridsize/2.0f);
-							Graphics.world.sounds[Graphics.selectedobject].pos.z = floor(Graphics.world.sounds[Graphics.selectedobject].pos.z * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsety) / (Graphics.gridsize/2.0f) + Graphics.gridoffsety/(Graphics.gridsize/2.0f);
+							Graphics.world.sounds[Graphics.selectedObject].pos.x = floor(Graphics.world.sounds[Graphics.selectedObject].pos.x * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsetx) / (Graphics.gridsize/2.0f) + Graphics.gridoffsetx/(Graphics.gridsize/2.0f);
+							Graphics.world.sounds[Graphics.selectedObject].pos.z = floor(Graphics.world.sounds[Graphics.selectedObject].pos.z * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsety) / (Graphics.gridsize/2.0f) + Graphics.gridoffsety/(Graphics.gridsize/2.0f);
 						}
 					}
 					if(ctrl && !alt)
 					{
-						Graphics.world.sounds[Graphics.selectedobject].pos.y += (mousey-oldmousey);
+						Graphics.world.sounds[Graphics.selectedObject].pos.y += (mousey-oldmousey);
 						if (SDL_GetModState() & KMOD_SHIFT)
 						{
-							Graphics.world.sounds[Graphics.selectedobject].pos.y = floor(Graphics.world.sounds[Graphics.selectedobject].pos.y * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsetx) / (Graphics.gridsize/2.0f) + Graphics.gridoffsetx/(Graphics.gridsize/2.0f);
+							Graphics.world.sounds[Graphics.selectedObject].pos.y = floor(Graphics.world.sounds[Graphics.selectedObject].pos.y * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsetx) / (Graphics.gridsize/2.0f) + Graphics.gridoffsetx/(Graphics.gridsize/2.0f);
 						}
 					}
 					if(!ctrl && alt)
@@ -78,7 +78,7 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 						minobj = i;
 					}
 				}
-				Graphics.objectstartdrag = Graphics.selectedobject == minobj;
+				Graphics.objectStartDrag = Graphics.selectedObject == minobj;
 			}
 			break;
 		case SDL_MOUSEBUTTONUP:
@@ -119,14 +119,14 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 							minobj = i;
 						}
 					}
-					Graphics.selectedobject = minobj;
+					Graphics.selectedObject = minobj;
 
 					cWindow* w = Graphics.WM.getwindow(WT_SOUNDOVERVIEW);
 					if(w != NULL)
 					{
 						w->userfunc(NULL);
 						cSoundOverViewWindow::cSoundOverViewTree* tree = (cSoundOverViewWindow::cSoundOverViewTree*)w->objects["list"];
-						tree->getobject(Graphics.world.sounds[Graphics.selectedobject]);
+						tree->getobject(Graphics.world.sounds[Graphics.selectedObject]);
 					}
 				
 				}
@@ -137,9 +137,9 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 			switch (event.key.keysym.sym)
 			{
 			case SDLK_RETURN:
-				if (Graphics.selectedobject != -1)
+				if (Graphics.selectedObject != -1)
 				{
-					cSound* o = &Graphics.world.sounds[Graphics.selectedobject];
+					cSound* o = &Graphics.world.sounds[Graphics.selectedObject];
 
 					cWindow* w = new cSoundWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin);
 
@@ -156,8 +156,8 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 					((cWindowFloatInputBox*)w->objects["scaley"])->floatje = &o->scale.y;
 					((cWindowFloatInputBox*)w->objects["scalez"])->floatje = &o->scale.z;
 					((cWindowStringInputBox*)w->objects["objectname"])->stringetje = &o->name;
-					((cWindowStringInputBox*)w->objects["objectfile"])->stringetje = &o->filename;
-					((cWindowFloatInputBox*)w->objects["repeatdelay"])->floatje = &o->repeatdelay;
+					((cWindowStringInputBox*)w->objects["objectfile"])->stringetje = &o->fileName;
+					((cWindowFloatInputBox*)w->objects["repeatDelay"])->floatje = &o->repeatDelay;
 					((cWindowFloatInputBox*)w->objects["unknown2"])->floatje = &o->unknown2;
 					((cWindowLongInputBox*)w->objects["unknown3"])->longje = &o->unknown3;
 					((cWindowLongInputBox*)w->objects["unknown4"])->longje = &o->unknown4;
@@ -170,13 +170,13 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 					((cWindowFloatInputBox*)w->objects["unknown7"])->floatje = &o->unknown7;
 					((cWindowFloatInputBox*)w->objects["unknown8"])->floatje = &o->unknown8;
 					
-					((cObjectWindow*)w)->undo = new cUndoChangeSound(Graphics.selectedobject);
+					((cObjectWindow*)w)->undo = new cUndoChangeSound(Graphics.selectedObject);
 
 					Graphics.WM.addwindow(w);
 				}
 				break;
 			case SDLK_SPACE:
-				if (Graphics.selectedobject != -1)
+				if (Graphics.selectedObject != -1)
 				{
 					static bool playing = false;
 
@@ -184,9 +184,9 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 					{
 						playing = true;
 
-						cSound* o = &Graphics.world.sounds[Graphics.selectedobject];
+						cSound* o = &Graphics.world.sounds[Graphics.selectedObject];
 						Mix_Chunk *sample;
-						cFile* pFile = fs.open(rodir+"data/wav/" + o->filename);
+						cFile* pFile = fs.open(rodir+"data/wav/" + o->fileName);
 						sample=Mix_QuickLoad_WAV((BYTE*)pFile->data);
 						Mix_Volume(-1,MIX_MAX_VOLUME);
 						Mix_PlayChannel(0, sample, 0);
@@ -204,11 +204,11 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 					break;
 				}
 			case SDLK_BACKSPACE:
-				if (Graphics.selectedobject > -1 && Graphics.selectedobject < (int)Graphics.world.sounds.size())
+				if (Graphics.selectedObject > -1 && Graphics.selectedObject < (int)Graphics.world.sounds.size())
 				{
-					undostack.push(new cUndoSoundDelete(Graphics.selectedobject));
-					Graphics.world.sounds.erase(Graphics.world.sounds.begin() + Graphics.selectedobject);
-					Graphics.selectedobject = -1;
+					undostack.push(new cUndoSoundDelete(Graphics.selectedObject));
+					Graphics.world.sounds.erase(Graphics.world.sounds.begin() + Graphics.selectedObject);
+					Graphics.selectedObject = -1;
 					cWindow* w = Graphics.WM.getwindow(WT_SOUNDOVERVIEW);
 					if(w != NULL)
 						w->userfunc(NULL);

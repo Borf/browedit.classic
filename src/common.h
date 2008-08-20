@@ -80,7 +80,7 @@ typedef int32_t intptr_t;
 
 #ifndef _MAIN_CPP_
 	#include <vector>
-	using namespace std;
+	//using namespace std;
 	extern TiXmlDocument msgtable;
 	extern int keymap[SDLK_LAST-SDLK_FIRST];
 #endif
@@ -105,22 +105,22 @@ float min(float x, float y);
 #endif
 
 #include <string>
-using namespace std;
+//using namespace std;
 
 // prototypes
 void Log(int lvl, int options, const char* fmt, ...);
 void log_open(const char*, const char*, int);
 void log_close();
 
-vector<string> split(string, string);
-string lcase(string s);
-string ucase(string s);
-string replace(string s, string a, string b);
-string ltrim(string s);
-string rtrim(string s);
-string inttostring(int);
-int hex2dec(string,int = 0);
-cVector3 hex2floats(string);
+std::vector<std::string> split(std::string, std::string);
+std::string lcase(std::string s);
+std::string ucase(std::string s);
+std::string replace(std::string s, std::string a, std::string b);
+std::string ltrim(std::string s);
+std::string rtrim(std::string s);
+std::string inttostring(int);
+int hex2dec(std::string,int = 0);
+cVector3 hex2floats(std::string);
 
 template <class T> bool inbetween(T val, T start, T end)
 {
@@ -142,18 +142,18 @@ long tickcount();
 void RotateShortestAngle(float &i, float angle);
 void RotateShortestAngle(float &i, float angle, float mult);
 long quad(long);
-string getLongTimeString();
-string removecolors(string s);
+std::string getLongTimeString();
+std::string removecolors(std::string s);
 void drawlogo();
 void changetoserverdir();
-template <class T> void mergesort(vector<T> &tosort, bool compare(T,T))
+template <class T> void mergesort(std::vector<T> &tosort, bool compare(T,T))
 {
 	if (tosort.size() <= 1)
 		return;
 
-	vector<T>	ret;
-	vector<T>	left;
-	vector<T>	right;
+	std::vector<T>	ret;
+	std::vector<T>	left;
+	std::vector<T>	right;
 
 	unsigned int pivot = (unsigned int)tosort.size()/2;
 
@@ -206,7 +206,7 @@ template <class T> bool compare(T a,T b)
 	return a < b;
 }
 
-template <class T> int linsearch(T needle, vector<T> &haystack)
+template <class T> int linsearch(T needle, std::vector<T> &haystack)
 {
 	for(int i = 0; i < haystack.size(); i++)
 		if(haystack[i] == needle)
@@ -249,7 +249,7 @@ bool LineIntersectPolygon( cVector3 *,int,cVector3 &,cVector3 &, float &);
 #endif*/
 
 
-const char* GetMsg(string s);
+const char* GetMsg(std::string s);
 
 /**
  * Container for process handlers

@@ -26,13 +26,13 @@ public:
 	class cSpriteInfo
 	{
 	public:
-		string filename;
+		string fileName;
 		cSpriteInfo()
 		{
 		}
 		cSpriteInfo(string f)
 		{
-			filename = f;
+			fileName = f;
 		}
 	};
 
@@ -109,19 +109,19 @@ public:
 			string name = "";
 			if(selectedtab == 0 && ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->body != NULL)
 			{
-				name = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->body->filename;
+				name = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->body->fileName;
 				name = name.substr(rodir.length() + 12);
 			}
 			if(selectedtab == 1 && ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->head != NULL)
 			{
-				name = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->head->filename;
+				name = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->head->fileName;
 				name = name.substr(rodir.length() + 12);
 			}
 			if(selectedtab == 2 && ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras.size() > 0)
 			{
 				if(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[0] != NULL)
 				{
-					name = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[0]->filename;
+					name = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[0]->fileName;
 					name = name.substr(name.rfind("\\")+1);
 					name = name.substr(name.find("_"));
 				}
@@ -130,7 +130,7 @@ public:
 			{
 				if(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[1] != NULL)
 				{
-					name = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[1]->filename;
+					name = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[1]->fileName;
 					name = name.substr(name.rfind("\\")+1);
 					name = name.substr(name.find("_"));
 				}
@@ -139,7 +139,7 @@ public:
 			{
 				if(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[2] != NULL)
 				{
-					name = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[2]->filename;
+					name = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[2]->fileName;
 					name = name.substr(name.rfind("\\")+1);
 					name = name.substr(name.find("_"));
 				}
@@ -149,8 +149,8 @@ public:
 			cWindowTree::cTreeNode* node = NULL;
 			for(map<cWindowTree::cTreeNode*, cSpriteInfo, less<cWindowTree::cTreeNode*> >::iterator it = ((cSpriteWindow*)parent)->lookupmap.begin(); it != ((cSpriteWindow*)parent)->lookupmap.end(); it++)
 			{
-				string f = it->second.filename;
-				if(it->second.filename == name)
+				string f = it->second.fileName;
+				if(it->second.fileName == name)
 				{
 					node = it->first;
 				}
@@ -277,17 +277,17 @@ public:
 				else
 				{
 					cSpriteWindow::cSpriteInfo* info = &((cSpriteWindow*)parent)->lookupmap[node];
-				//	Graphics.WM.MessageBox("Selected: " + info->filename);
+				//	Graphics.WM.MessageBox("Selected: " + info->fileName);
 					if(selectedtab == 0)
-						((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->loadbody(rodir + "data\\sprite\\" + info->filename);
+						((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->loadBody(rodir + "data\\sprite\\" + info->fileName);
 					if(selectedtab == 1)
-						((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->loadhead(rodir + "data\\sprite\\" + info->filename);
+						((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->loadHead(rodir + "data\\sprite\\" + info->fileName);
 					if(selectedtab == 2)
-						((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->setextra(0, rodir + "data\\sprite\\악세사리\\" + (((cSpriteWindow*)parent)->male ? "남\\남" : "여\\여")+ info->filename);
+						((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->setExtra(0, rodir + "data\\sprite\\악세사리\\" + (((cSpriteWindow*)parent)->male ? "남\\남" : "여\\여")+ info->fileName);
 					if(selectedtab == 3)
-						((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->setextra(1, rodir + "data\\sprite\\악세사리\\" + (((cSpriteWindow*)parent)->male ? "남\\남" : "여\\여")+ info->filename);
+						((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->setExtra(1, rodir + "data\\sprite\\악세사리\\" + (((cSpriteWindow*)parent)->male ? "남\\남" : "여\\여")+ info->fileName);
 					if(selectedtab == 4)
-						((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->setextra(2, rodir + "data\\sprite\\악세사리\\" + (((cSpriteWindow*)parent)->male ? "남\\남" : "여\\여")+ info->filename);
+						((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->setExtra(2, rodir + "data\\sprite\\악세사리\\" + (((cSpriteWindow*)parent)->male ? "남\\남" : "여\\여")+ info->fileName);
 				}
 			}
 			
@@ -348,36 +348,36 @@ public:
 		}
 		void click()
 		{
-			if((int)Graphics.world.sprites.size() > Graphics.selectedobject && Graphics.selectedobject != -1)
+			if((int)Graphics.world.sprites.size() > Graphics.selectedObject && Graphics.selectedObject != -1)
 			{
 
 				if(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->head != NULL)
-					Graphics.world.sprites[Graphics.selectedobject]->loadhead(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->head->filename);
+					Graphics.world.sprites[Graphics.selectedObject]->loadHead(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->head->fileName);
 				else
 				{
-					delete Graphics.world.sprites[Graphics.selectedobject]->head;
-					Graphics.world.sprites[Graphics.selectedobject]->head = NULL;
+					delete Graphics.world.sprites[Graphics.selectedObject]->head;
+					Graphics.world.sprites[Graphics.selectedObject]->head = NULL;
 				}
-				Graphics.world.sprites[Graphics.selectedobject]->loadbody(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->body->filename);
+				Graphics.world.sprites[Graphics.selectedObject]->loadBody(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->body->fileName);
 
 				for(unsigned int i = 0; i < ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras.size(); i++)
 				{
 					if(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[i] != NULL)
 					{
-						Graphics.world.sprites[Graphics.selectedobject]->setextra(i, ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[i]->filename);
+						Graphics.world.sprites[Graphics.selectedObject]->setExtra(i, ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[i]->fileName);
 					}
 					else
 					{
-						if(Graphics.world.sprites[Graphics.selectedobject]->extras.size() > i)
-							if(Graphics.world.sprites[Graphics.selectedobject]->extras[i] != NULL)
+						if(Graphics.world.sprites[Graphics.selectedObject]->extras.size() > i)
+							if(Graphics.world.sprites[Graphics.selectedObject]->extras[i] != NULL)
 							{
-								delete Graphics.world.sprites[Graphics.selectedobject]->extras[i];
-								Graphics.world.sprites[Graphics.selectedobject]->extras[i] = NULL;
+								delete Graphics.world.sprites[Graphics.selectedObject]->extras[i];
+								Graphics.world.sprites[Graphics.selectedObject]->extras[i] = NULL;
 							}
 					}
 				}
-				Graphics.world.sprites[Graphics.selectedobject]->action = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->action;
-				Graphics.world.sprites[Graphics.selectedobject]->direction = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->direction;
+				Graphics.world.sprites[Graphics.selectedObject]->action = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->action;
+				Graphics.world.sprites[Graphics.selectedObject]->direction = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->direction;
 			}
 			
 			parent->close();
@@ -442,7 +442,7 @@ public:
 		}
 
 		if(!sprites.FirstChild())
-			sprites = fs.getxml("data/sprites.xml");
+			sprites = fs.getXml("data/sprites.xml");
 
 		((cTabPanel*)objects["tabpanel"])->tabchange(-1);
 

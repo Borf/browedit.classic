@@ -201,7 +201,7 @@ public:
 	cTexture* texture;
 	cFont* font;
 	objectlist objects;
-	cWindowObject*	selectedobject;
+	cWindowObject*	selectedObject;
 };
 
 extern long mousestartx, mousestarty, dragoffsetx, dragoffsety;

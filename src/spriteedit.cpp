@@ -23,31 +23,31 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 			{
 				if (Graphics.world.sprites.size() == 0)
 					break;
-				if(Graphics.objectstartdrag)
+				if(Graphics.objectStartDrag)
 				{
 					if(doneaction)
 					{
-						//undostack.push(new cUndoChangeSprite(Graphics.selectedobject));
+						//undostack.push(new cUndoChangeSprite(Graphics.selectedObject));
 						doneaction = false;
 					}
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 					bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 					if (!ctrl && !alt)
 					{
-						Graphics.world.sprites[Graphics.selectedobject]->pos.x = mouse3dx / 5;
-						Graphics.world.sprites[Graphics.selectedobject]->pos.z = mouse3dz / 5;
+						Graphics.world.sprites[Graphics.selectedObject]->pos.x = mouse3dx / 5;
+						Graphics.world.sprites[Graphics.selectedObject]->pos.z = mouse3dz / 5;
 						if (SDL_GetModState() & KMOD_SHIFT)
 						{
-							Graphics.world.sprites[Graphics.selectedobject]->pos.x = floor(Graphics.world.sprites[Graphics.selectedobject]->pos.x * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsetx) / (Graphics.gridsize/2.0f) + Graphics.gridoffsetx/(Graphics.gridsize/2.0f);
-							Graphics.world.sprites[Graphics.selectedobject]->pos.z = floor(Graphics.world.sprites[Graphics.selectedobject]->pos.z * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsety) / (Graphics.gridsize/2.0f) + Graphics.gridoffsety/(Graphics.gridsize/2.0f);
+							Graphics.world.sprites[Graphics.selectedObject]->pos.x = floor(Graphics.world.sprites[Graphics.selectedObject]->pos.x * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsetx) / (Graphics.gridsize/2.0f) + Graphics.gridoffsetx/(Graphics.gridsize/2.0f);
+							Graphics.world.sprites[Graphics.selectedObject]->pos.z = floor(Graphics.world.sprites[Graphics.selectedObject]->pos.z * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsety) / (Graphics.gridsize/2.0f) + Graphics.gridoffsety/(Graphics.gridsize/2.0f);
 						}
 					}
 					if(ctrl && !alt)
 					{
-						Graphics.world.sprites[Graphics.selectedobject]->pos.y += (mousey-oldmousey);
+						Graphics.world.sprites[Graphics.selectedObject]->pos.y += (mousey-oldmousey);
 						if (SDL_GetModState() & KMOD_SHIFT)
 						{
-							Graphics.world.sprites[Graphics.selectedobject]->pos.y = floor(Graphics.world.sprites[Graphics.selectedobject]->pos.y * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsetx) / (Graphics.gridsize/2.0f) + Graphics.gridoffsetx/(Graphics.gridsize/2.0f);
+							Graphics.world.sprites[Graphics.selectedObject]->pos.y = floor(Graphics.world.sprites[Graphics.selectedObject]->pos.y * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsetx) / (Graphics.gridsize/2.0f) + Graphics.gridoffsetx/(Graphics.gridsize/2.0f);
 						}
 					}
 					if(!ctrl && alt)
@@ -79,7 +79,7 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 						minobj = i;
 					}
 				}
-				Graphics.objectstartdrag = Graphics.selectedobject == minobj;
+				Graphics.objectStartDrag = Graphics.selectedObject == minobj;
 			}
 			break;
 		}
@@ -97,11 +97,11 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 					int sex = rand() % 2;
 					int bodyid = rand() % (sizeof(bodies)/sizeof(string));
 
-					sprite->loadbody(rodir + "data\\sprite\\인간족\\몸통\\" + sexes[sex] + "\\" + bodies[bodyid] + "_" + sexes[sex]);
+					sprite->loadBody(rodir + "data\\sprite\\인간족\\몸통\\" + sexes[sex] + "\\" + bodies[bodyid] + "_" + sexes[sex]);
 					int headid = 1+ rand() % 22;
 					char buf[20];
 					sprintf(buf, "%i", headid);
-					sprite->loadhead(rodir + "data\\sprite\\인간족\\머리통\\" + sexes[sex] + "\\" + buf + "_" + sexes[sex]);
+					sprite->loadHead(rodir + "data\\sprite\\인간족\\머리통\\" + sexes[sex] + "\\" + buf + "_" + sexes[sex]);
 					
 					sprite->pos = cVector3(mouse3dx/5, mouse3dy, mouse3dz/5);
 					Graphics.world.sprites.push_back(sprite);
@@ -130,12 +130,12 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 							minobj = i;
 						}
 					}
-					Graphics.selectedobject = minobj;
+					Graphics.selectedObject = minobj;
 				}
 			}
 			else if(event.button.button == SDL_BUTTON_RIGHT && movement < 3)
 			{
-				Graphics.selectedobject = -1;
+				Graphics.selectedObject = -1;
 			}
 			break;
 		case SDL_KEYDOWN:
@@ -143,36 +143,36 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 			switch (event.key.keysym.sym)
 			{
 			case SDLK_BACKSPACE:
-				if (Graphics.selectedobject > -1 && Graphics.selectedobject < (int)Graphics.world.sprites.size())
+				if (Graphics.selectedObject > -1 && Graphics.selectedObject < (int)Graphics.world.sprites.size())
 				{
-					//undostack.push(new cUndoSpriteDelete(Graphics.selectedobject));
-					delete Graphics.world.sprites[Graphics.selectedobject];
-					Graphics.world.sprites.erase(Graphics.world.sprites.begin() + Graphics.selectedobject);
-					Graphics.selectedobject = -1;
+					//undostack.push(new cUndoSpriteDelete(Graphics.selectedObject));
+					delete Graphics.world.sprites[Graphics.selectedObject];
+					Graphics.world.sprites.erase(Graphics.world.sprites.begin() + Graphics.selectedObject);
+					Graphics.selectedObject = -1;
 				}
 				break;
 			case SDLK_RETURN:
-				if (Graphics.selectedobject != -1 && Graphics.WM.getwindow(WT_SPRITE) == NULL)
+				if (Graphics.selectedObject != -1 && Graphics.WM.getwindow(WT_SPRITE) == NULL)
 				{
-					if(Graphics.selectedobject >= (int)Graphics.world.sprites.size())
+					if(Graphics.selectedObject >= (int)Graphics.world.sprites.size())
 						break;
 
 					cWindow* w = new cSpriteWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin);
 
-					if(Graphics.world.sprites[Graphics.selectedobject]->head)
-						((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->loadhead(Graphics.world.sprites[Graphics.selectedobject]->head->filename);
-					((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->loadbody(Graphics.world.sprites[Graphics.selectedobject]->body->filename);
+					if(Graphics.world.sprites[Graphics.selectedObject]->head)
+						((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->loadHead(Graphics.world.sprites[Graphics.selectedObject]->head->fileName);
+					((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->loadBody(Graphics.world.sprites[Graphics.selectedObject]->body->fileName);
 
-					for(unsigned int i = 0; i < Graphics.world.sprites[Graphics.selectedobject]->extras.size(); i++)
+					for(unsigned int i = 0; i < Graphics.world.sprites[Graphics.selectedObject]->extras.size(); i++)
 					{
-						if(Graphics.world.sprites[Graphics.selectedobject]->extras[i] != NULL)
+						if(Graphics.world.sprites[Graphics.selectedObject]->extras[i] != NULL)
 						{
-							((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->setextra(i, Graphics.world.sprites[Graphics.selectedobject]->extras[i]->filename);
+							((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->setExtra(i, Graphics.world.sprites[Graphics.selectedObject]->extras[i]->fileName);
 						}
 					}
-					((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->action = Graphics.world.sprites[Graphics.selectedobject]->action-1;
+					((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->action = Graphics.world.sprites[Graphics.selectedObject]->action-1;
 					w->objects["actionbutton"]->click();
-					((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->direction = Graphics.world.sprites[Graphics.selectedobject]->direction;
+					((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->direction = Graphics.world.sprites[Graphics.selectedObject]->direction;
 
 					((cWindowTabPanel*)w->objects["tabpanel"])->tabchange(-1);
 
@@ -186,7 +186,7 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 					w->objects["colorg"]->SetInt(3,(int)&l->color.y);
 					w->objects["colorb"]->SetInt(3,(int)&l->color.z);
 					w->objects["intensity"]->SetInt(3,(int)&l->todo2);
-					//((cEffectWindow*)w)->undo = new cUndoChangeEffect(Graphics.selectedobject);
+					//((cEffectWindow*)w)->undo = new cUndoChangeEffect(Graphics.selectedObject);
 					Graphics.WM.addwindow(w);*/
 				}
 				break;

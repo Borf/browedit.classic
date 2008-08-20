@@ -77,12 +77,12 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 							t.color[2] = (char)255;
 							t.color[3] = (char)255;
 							t.texture = Graphics.texturestart + (int)(Graphics.selectionstart.y - 32) / 288;
-							if(Graphics.clearlightmaps)
+							if(Graphics.clearLightmaps)
 								t.lightmap = 0;
 							else
 							{
-								if(Graphics.world.cubes[y][x].tileup != -1)
-									t.lightmap = Graphics.world.tiles[Graphics.world.cubes[y][x].tileup].lightmap;
+								if(Graphics.world.cubes[y][x].tileUp != -1)
+									t.lightmap = Graphics.world.tiles[Graphics.world.cubes[y][x].tileUp].lightmap;
 							}
 							if (Graphics.texturerot == 0)
 							{
@@ -157,11 +157,11 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 								t.v4 = ((selendy+selstarty)/8.0)-t.v4;
 							}
 
-//									cTile* tt = &Graphics.world.tiles[Graphics.world.cubes[y][x].tileup];
+//									cTile* tt = &Graphics.world.tiles[Graphics.world.cubes[y][x].tileUp];
 							if(y >= 0 && y < Graphics.world.height && x >= 0 && x < Graphics.world.width)
 							{
 								Graphics.world.tiles.push_back(t);
-								Graphics.world.cubes[y][x].tileup = Graphics.world.tiles.size()-1;
+								Graphics.world.cubes[y][x].tileUp = Graphics.world.tiles.size()-1;
 							}
 						}
 					}
@@ -219,9 +219,9 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 						{
 							if(x >= 0 && x < Graphics.world.width && y >= 0 && y < Graphics.world.height)
 							{
-								if(Graphics.world.cubes[y][x].tileup != -1)
+								if(Graphics.world.cubes[y][x].tileUp != -1)
 								{
-									row.push_back(Graphics.world.tiles[Graphics.world.cubes[y][x].tileup]);
+									row.push_back(Graphics.world.tiles[Graphics.world.cubes[y][x].tileUp]);
 									row2.push_back(1);
 								}
 								else
@@ -276,12 +276,12 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 							int yy = posy - y;
 							if(clipboardgat[xx][yy] == 2)
 							{
-								Graphics.world.cubes[y][x].tileup = -1;
+								Graphics.world.cubes[y][x].tileUp = -1;
 							}
 							if(clipboardgat[xx][yy] == 1)
 							{
 								Graphics.world.tiles.push_back(clipboardtexture[xx][yy]);
-								Graphics.world.cubes[y][x].tileup = Graphics.world.tiles.size()-1;
+								Graphics.world.cubes[y][x].tileUp = Graphics.world.tiles.size()-1;
 							}
 						}
 					}						
@@ -313,7 +313,7 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 								continue;
 							if (x < 0 || x >= Graphics.world.width)
 								continue;
-							Graphics.world.cubes[y][x].tileup = -1;
+							Graphics.world.cubes[y][x].tileUp = -1;
 						}
 					}
 					break;
@@ -325,9 +325,9 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 					if(posx > -1 && posy > -1 && posx < Graphics.world.width && posy < Graphics.world.height)
 					{
 						Log(3,0,"Cube (%i,%i): %f,%f,%f,%f", posx, posy, Graphics.world.cubes[posy][posx].cell1, Graphics.world.cubes[posy][posx].cell2, Graphics.world.cubes[posy][posx].cell3, Graphics.world.cubes[posy][posx].cell4);
-						Log(3,0,"Tileup: %i", Graphics.world.cubes[posy][posx].tileup);
-						if(Graphics.world.cubes[posy][posx].tileup != -1)
-							Log(3,0,"Lightmap: %i", Graphics.world.tiles[Graphics.world.cubes[posy][posx].tileup].lightmap);
+						Log(3,0,"tileUp: %i", Graphics.world.cubes[posy][posx].tileUp);
+						if(Graphics.world.cubes[posy][posx].tileUp != -1)
+							Log(3,0,"Lightmap: %i", Graphics.world.tiles[Graphics.world.cubes[posy][posx].tileUp].lightmap);
 					}
 
 					break;

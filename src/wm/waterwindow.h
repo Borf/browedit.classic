@@ -26,7 +26,7 @@ public:
 		Graphics.world.water.amplitude = atof(parent->objects["amplitude"]->GetText(0).c_str());
 		Graphics.world.water.height = atof(parent->objects["height"]->GetText(0).c_str());
 		Graphics.world.water.phase = atof(parent->objects["phase"]->GetText(0).c_str());
-		Graphics.world.water.surfacecurve = atof(parent->objects["surfacecurve"]->GetText(0).c_str());
+		Graphics.world.water.surfaceCurve = atof(parent->objects["surfacecurve"]->GetText(0).c_str());
 		Graphics.world.water.type = atoi(parent->objects["type"]->GetText(0).c_str());
 		parent->close();
 	}

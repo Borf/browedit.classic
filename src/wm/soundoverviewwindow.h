@@ -122,7 +122,7 @@ public:
 				for(i = 0; i < Graphics.world.sounds.size(); i++)
 				{
 					if(Graphics.world.sounds[i] == ((cSoundOverViewTreeNode*)node)->sound)
-						Graphics.selectedobject = i;
+						Graphics.selectedObject = i;
 				}
 			}
 		}

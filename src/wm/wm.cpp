@@ -100,7 +100,7 @@ int cWM::draw()
 
 int cWM::init(string sSkin)
 {
-	skin = fs.getxml(sSkin);
+	skin = fs.getXml(sSkin);
 	texture = TextureCache.load(skin.FirstChildElement("skin")->FirstChildElement("texture")->FirstChild()->Value());
 	font.load(skin.FirstChildElement("skin")->FirstChildElement("font")->FirstChild()->Value());
 
@@ -525,7 +525,7 @@ void confirmitemdrop(cWindow* caller, bool okclicked)
 void cWM::defocus()
 {
 	for(unsigned int i = 0; i < windows.size(); i++)
-		windows[i]->selectedobject = NULL;
+		windows[i]->selectedObject = NULL;
 }
 
 cWindow* cWM::InputWindow(string title, cInputWindow::cInputWindowCaller* caller)
@@ -541,7 +541,7 @@ cWindow* cWM::InputWindow(string title, cInputWindow::cInputWindowCaller* caller
 
 cWindow* cWM::XmlWindow(string src)
 {
-	TiXmlDocument layout = fs.getxml(src);
+	TiXmlDocument layout = fs.getXml(src);
 	cWindow* w = new cXmlWindow(texture, &font, skin, layout);
 	addwindow(w);
 	return w;

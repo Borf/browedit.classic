@@ -104,23 +104,23 @@ void cModelsWindow::cWindowModel::draw(int cutoffleft, int cutoffright, int cuto
 
 void cModelsWindow::cWindowModel::click()
 {
-	if(Graphics.previewmodel != NULL)
+	if(Graphics.previewModel != NULL)
 	{
-		if(Graphics.previewmodel->filename == model->filename)
+		if(Graphics.previewModel->filename == model->filename)
 		{
 			if (editmode == MODE_OBJECTS)
-				Graphics.previewcolor = 0;
+				Graphics.previewColor = 0;
 			parent->close();
 			return;
 		}
-		delete Graphics.previewmodel;
+		delete Graphics.previewModel;
 	}
-	Graphics.previewmodel = new cRSMModel();
-	Graphics.previewmodel->load(rodir + data);
-	Graphics.previewmodel->rot = cVector3(0,0,0);
-	Graphics.previewmodel->scale = cVector3(4,4,4);
-	Graphics.previewmodel->pos = cVector3(40,-40,-40);
-	Graphics.previewcolor = 200;
+	Graphics.previewModel = new cRSMModel();
+	Graphics.previewModel->load(rodir + data);
+	Graphics.previewModel->rot = cVector3(0,0,0);
+	Graphics.previewModel->scale = cVector3(4,4,4);
+	Graphics.previewModel->pos = cVector3(40,-40,-40);
+	Graphics.previewColor = 200;
 
 }
 
@@ -200,7 +200,7 @@ class cConfirmDeleteModel : public cConfirmWindow::cConfirmWindowCaller
 				ofstream pFile2((objectfiles[i] + ".tmp").c_str());
 				while(!pFile->eof())
 				{
-					string line = pFile->readline();
+					string line = pFile->readLine();
 					string pre = line.substr(0, line.find("|"));
 					string filename = line.substr(line.find("|")+1);
 					string directory = pre.substr(0, pre.rfind("/"));
@@ -227,7 +227,7 @@ class cConfirmDeleteModel : public cConfirmWindow::cConfirmWindowCaller
 #endif
 			}
 
-			model->parent->selectedobject = NULL;
+			model->parent->selectedObject = NULL;
 			for(i = 0; i < ((cModelsWindow*)model->parent)->items[node].size(); i++)
 			{
 				string a = ((cModelsWindow*)model->parent)->items[node][i].second;
@@ -392,7 +392,7 @@ bool cModelsWindow::cWindowModelCatSelect::onkeydown(int key, bool shift)
 				ofstream pFile2((objectfiles[i] + ".tmp").c_str());
 				while(!pFile->eof())
 				{
-					string line = pFile->readline();
+					string line = pFile->readLine();
 					if(line.substr(0, cat.length()) != cat)
 					{
 						line += "\n";
@@ -503,7 +503,7 @@ void cModelsWindow::cWindowModelCatSelect::dragover()
 			ofstream pFile2((objectfiles[i] + ".tmp").c_str());
 			while(!pFile->eof())
 			{
-				string line = pFile->readline();
+				string line = pFile->readLine();
 				string pre = line.substr(0, line.find("|"));
 				string filename = line.substr(line.find("|")+1);
 				string directory = pre.substr(0, pre.rfind("/"));
@@ -660,7 +660,7 @@ cModelsWindow::cModelsWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWind
 		cFile* pFile = fs.open(objectfiles[i]);
 		while(!pFile->eof())
 		{
-			string line = pFile->readline();
+			string line = pFile->readLine();
 			if (line == "")
 				continue;
 			string pre = line.substr(0, line.find("|"));

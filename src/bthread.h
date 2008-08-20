@@ -40,11 +40,11 @@ public:
 		~cDownloadThreadFinisher();
 		virtual void whenDone(cBThread*) = 0;
 	};
-	cDownloadThread(string, cDownloadThreadFinisher*);
-	cDownloadThread(string, string, cDownloadThreadFinisher*);
+	cDownloadThread(std::string, cDownloadThreadFinisher*);
+	cDownloadThread(std::string, std::string, cDownloadThreadFinisher*);
 private:
-	string						url;
-	string						post;
+	std::string					url;
+	std::string					post;
 	cDownloadThreadFinisher*	finisher;
 	void						worker();
 

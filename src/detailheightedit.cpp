@@ -92,7 +92,7 @@ int cProcessManagement::detailheightedit_process_events(SDL_Event &event)
 										c->cell4 = min(mmax,c->cell4);
 									}
 								}
-								c->calcnormal();
+								c->calcNormal();
 							}
 						}
 					}
@@ -159,7 +159,7 @@ int cProcessManagement::detailheightedit_process_events(SDL_Event &event)
 								Graphics.world.cubes[y][x].cell2 = clipboard[yy][xx][1];
 								Graphics.world.cubes[y][x].cell3 = clipboard[yy][xx][2];
 								Graphics.world.cubes[y][x].cell4 = clipboard[yy][xx][3];
-								Graphics.world.cubes[y][x].calcnormal();
+								Graphics.world.cubes[y][x].calcNormal();
 								xx++;
 							}
 							yy++;
@@ -185,10 +185,10 @@ int cProcessManagement::detailheightedit_process_events(SDL_Event &event)
 								Graphics.world.cubes[y-1][x+1].cell3 = to;
 								Graphics.world.cubes[y-1][x].cell4 = to;
 
-								Graphics.world.cubes[y][x].calcnormal();
-								Graphics.world.cubes[y][x+1].calcnormal();
-								Graphics.world.cubes[y-1][x+1].calcnormal();
-								Graphics.world.cubes[y-1][x].calcnormal();
+								Graphics.world.cubes[y][x].calcNormal();
+								Graphics.world.cubes[y][x+1].calcNormal();
+								Graphics.world.cubes[y-1][x+1].calcNormal();
+								Graphics.world.cubes[y-1][x].calcNormal();
 							}
 						}
 					}
@@ -297,15 +297,15 @@ int cProcessManagement::detailheightedit_process_events(SDL_Event &event)
 
 
 								if(x >= 0 && y < Graphics.world.height)
-									Graphics.world.cubes[y][x].calcnormal();
+									Graphics.world.cubes[y][x].calcNormal();
 								if(x < Graphics.world.width-1 && y < Graphics.world.height)
-									Graphics.world.cubes[y][x+1].calcnormal();
+									Graphics.world.cubes[y][x+1].calcNormal();
 								if(y > 0)
 								{
 									if(x < Graphics.world.width-1)
-										Graphics.world.cubes[y-1][x+1].calcnormal();
+										Graphics.world.cubes[y-1][x+1].calcNormal();
 									if(x >= 0)
-										Graphics.world.cubes[y-1][x].calcnormal();
+										Graphics.world.cubes[y-1][x].calcNormal();
 								}
 							}
 						}

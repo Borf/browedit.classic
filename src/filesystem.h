@@ -20,36 +20,29 @@ enum STARTPOS
 class cFile
 {
 public:
-	cFile()
-	{
-		offset = -1;
-		size = -1;
-		crc = 0;
-		location = -1;
-		version = -1;
-	};
+	cFile();
 
-	string filename;
+	std::string		fileName;
 
-	long	size;
-	long	offset;
-	int		crc;
-	int		version;
+	long			size;
+	long			offset;
+	int				crc;
+	int				version;
 
-	char*	data;
+	char*			data;
 
-	int		open();
-	int		close();
-	bool	eof();
-	void	seek(int, STARTPOS);
+	int				open();
+	int				close();
+	bool			eof();
+	void			seek(int, STARTPOS);
 
-	char	get();
-	int		getword();
-	int		read(char*, int);
-	int		readline(char*, int);
-	string	readline();
-	char	location;
-	long	index; // offset in this file
+	char			get();
+	int				getword();
+	int				read(char*, int);
+	int				readLine(char*, int);
+	std::string		readLine();
+	char			location;
+	long			index; // offset in this file
 
 };
 
@@ -67,11 +60,11 @@ class cFileSystem
 private:
 public:
 	~cFileSystem();
-	int LoadFile(string);
-	cFile*	open(string);
-	vector<cGRFFile*>	locations;
-	TiXmlDocument getxml(string);
-	bool	isfile(string);
+	int								loadPackedFile(std::string);
+	cFile*							open(std::string);
+	std::vector<cGRFFile*>			locations;
+	TiXmlDocument					getXml(std::string);
+	bool							isFile(string);
 
 };
 

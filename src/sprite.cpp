@@ -51,7 +51,7 @@ cSprite::~cSprite()
 
 }
 
-void cSprite::loadbody(string filename)
+void cSprite::loadBody(string filename)
 {
 	if(body != NULL)
 		delete body;
@@ -59,7 +59,7 @@ void cSprite::loadbody(string filename)
 	body->load(filename);
 }
 
-void cSprite::loadhead(string filename)
+void cSprite::loadHead(string filename)
 {
 	if(head != NULL)
 		delete head;
@@ -67,7 +67,7 @@ void cSprite::loadhead(string filename)
 	head->load(filename);
 }
 
-void cSprite::addextra(string filename)
+void cSprite::addExtra(string filename)
 {
 	cActSpr* spr = new cActSpr();
 	spr->load(filename);
@@ -75,7 +75,7 @@ void cSprite::addextra(string filename)
 
 }
 
-void cSprite::setextra(unsigned int id, string filename)
+void cSprite::setExtra(unsigned int id, string filename)
 {
 	while(extras.size() <= id)
 		extras.push_back(NULL);
@@ -102,26 +102,26 @@ cSprite::cActSpr::~cActSpr()
 		delete actions[i];
 }
 
-void cSprite::cActSpr::load(string fname)
+void cSprite::cActSpr::load(std::string fname)
 {
 	unsigned long ticks = tickcount();
-	filename = fname;
+	fileName = fname;
 	int i,ii,x,y;
-	cFile* pFile = fs.open(filename + ".spr");
+	cFile* pFile = fs.open(fileName + ".spr");
 	if(pFile == NULL)
 	{
-		Log(1,0,"Error opening %s.spr", filename.c_str());
+		Log(1,0,"Error opening %s.spr", fileName.c_str());
 		return;
 	}
 	pFile->get(); pFile->get();
 	BYTE version1 = pFile->get();
 	pFile->get();//	BYTE version2 = pFile->get();
-	BYTE framecount = pFile->get();
+	BYTE frameCount = pFile->get();
 	pFile->get();
-	pFile->get(); //BYTE framecount32 = pFile->get();
+	pFile->get(); //BYTE frameCount32 = pFile->get();
 	pFile->get();
 
-	for(i = 0; i < framecount; i++)
+	for(i = 0; i < frameCount; i++)
 	{
 		int width = pFile->getword();
 		int height = pFile->getword();
@@ -205,10 +205,10 @@ void cSprite::cActSpr::load(string fname)
 
 	pFile->close();
 // done reading sprite
-	pFile = fs.open(filename + ".act");
+	pFile = fs.open(fileName + ".act");
 	if(pFile == NULL)
 	{
-		Log(1,0,"Error opening %s.act", filename.c_str());
+		Log(1,0,"Error opening %s.act", fileName.c_str());
 		return;
 	}
 	pFile->get(); pFile->get();
@@ -223,37 +223,37 @@ void cSprite::cActSpr::load(string fname)
 	{
 		cAction* action = new cAction();
 		
-		pFile->read((char*)&action->framecount,4);
-		for(ii = 0; ii < action->framecount && !pFile->eof(); ii++)
+		pFile->read((char*)&action->frameCount,4);
+		for(ii = 0; ii < action->frameCount && !pFile->eof(); ii++)
 		{
 			pFile->read(buf, 32);
 			cAction::cFrame* frame = new cAction::cFrame();
 			
-			pFile->read((char*)&frame->subframecount, 4);
-			for(int iii = 0; iii < frame->subframecount && !pFile->eof(); iii++)
+			pFile->read((char*)&frame->subFrameCount, 4);
+			for(int iii = 0; iii < frame->subFrameCount && !pFile->eof(); iii++)
 			{
 				cAction::cFrame::cSubFrame* subframe = new cAction::cFrame::cSubFrame();
-				pFile->read((char*)&subframe->offsetx,4);
-				pFile->read((char*)&subframe->offsety,4);
+				pFile->read((char*)&subframe->offsetX,4);
+				pFile->read((char*)&subframe->offsetY,4);
 				pFile->read((char*)&subframe->image,4);
 				pFile->read((char*)&subframe->direction,4);
 				pFile->read((char*)&subframe->color,4);
 				if(version1 >= 2)
-					pFile->read((char*)&subframe->scalex,4);
+					pFile->read((char*)&subframe->scaleX,4);
 				if(version1 >= 4)
-					pFile->read((char*)&subframe->scaley,4);
+					pFile->read((char*)&subframe->scaleY,4);
 				else
-					subframe->scaley = subframe->scalex;
+					subframe->scaleY = subframe->scaleX;
 				if(version1 >= 2)
 				{
 					pFile->read(buf, 4);
-					pFile->read((char*)&subframe->dontjump,4);
-					if(subframe->dontjump != 0)
+					pFile->read((char*)&subframe->dontJump,4);
+					if(subframe->dontJump != 0)
 						pFile->read(buf, 12);
 					if(version1 >= 5)
 					{
-						pFile->read((char*)&subframe->sizex,4);
-						pFile->read((char*)&subframe->sizey,4);
+						pFile->read((char*)&subframe->sizeX,4);
+						pFile->read((char*)&subframe->sizeY,4);
 					}
 				}
 
@@ -261,19 +261,19 @@ void cSprite::cActSpr::load(string fname)
 			}
 
 			pFile->read(buf,4);
-			pFile->read((char*)&frame->extrainfo,4);
-			if(frame->extrainfo != 0)
+			pFile->read((char*)&frame->extraInfo,4);
+			if(frame->extraInfo != 0)
 			{
-				pFile->read((char*)&frame->extrarotation,4);
-				pFile->read((char*)&frame->extrax,4);
-				pFile->read((char*)&frame->extray,4);
+				pFile->read((char*)&frame->extraRotation,4);
+				pFile->read((char*)&frame->extraX,4);
+				pFile->read((char*)&frame->extraY,4);
 				pFile->read(buf,4);
 
 			}
 			else
 			{
-				frame->extrax = 0;
-				frame->extray = 0;
+				frame->extraX = 0;
+				frame->extraY = 0;
 			}
 			action->frames.push_back(frame);
 
@@ -286,7 +286,7 @@ void cSprite::cActSpr::load(string fname)
 
 	pFile->close();
 
-	Log(3,0,"Done loading sprite %s", filename.c_str());
+	Log(3,0,"Done loading sprite %s", fileName.c_str());
 	loaded = true;
 
 }
@@ -329,12 +329,12 @@ void cSprite::draw()
 	if(scale != 1)
 		id = (8*action+((int)(8+direction-((Graphics.camerarot/(PI/180.0f)-22.5)/45))%8)) % body->actions.size();
 
-	if(body->actions[id]->framecount <= 0)
+	if(body->actions[id]->frameCount <= 0)
 	{
 		glPopMatrix();
 		return;
 	}
-	if(body->actions[id]->frames[0]->subframecount == 0)
+	if(body->actions[id]->frames[0]->subFrameCount == 0)
 	{
 		glPopMatrix();
 		return;
@@ -346,7 +346,7 @@ void cSprite::draw()
 
 
 	
-	cActSpr::cAction::cFrame* bodyframe = body->actions[id]->frames[(tickcount()/100) % ((body->actions[id]->framecount != 3 || (action != 0 && action != 2)) ? body->actions[id]->framecount : 1)];
+	cActSpr::cAction::cFrame* bodyframe = body->actions[id]->frames[(tickcount()/100) % ((body->actions[id]->frameCount != 3 || (action != 0 && action != 2)) ? body->actions[id]->frameCount : 1)];
 	cActSpr::cAction::cFrame::cSubFrame* subframe = bodyframe->subframes[0];
 	int frame = subframe->image;
 	int dir = subframe->direction;
@@ -358,14 +358,14 @@ void cSprite::draw()
 
 	width/=2;
 	height/=2;
-	glTranslatef(-subframe->offsetx, -subframe->offsety, 0);
+	glTranslatef(-subframe->offsetY, -subframe->offsetY, 0);
 	glBegin(GL_QUADS);
 		glTexCoord2f(dir,0);		glVertex3f(width,height,0);
 		glTexCoord2f(1-dir,0);		glVertex3f(-width,height,0);
 		glTexCoord2f(1-dir,1);		glVertex3f(-width,-height,0);
 		glTexCoord2f(dir,1);		glVertex3f(width,-height,0);
 	glEnd();
-	glTranslatef(subframe->offsetx, subframe->offsety, 0);
+	glTranslatef(subframe->offsetY, subframe->offsetY, 0);
 
 
 
@@ -398,7 +398,7 @@ void cSprite::draw()
 	height/=2;
 
 	glPushMatrix();
-	glTranslatef(-(subframe->offsetx + bodyframe->extrax - myframe->extrax), -(subframe->offsety + bodyframe->extray - myframe->extray), 0);
+	glTranslatef(-(subframe->offsetY + bodyframe->extraX - myframe->extraX), -(subframe->offsetY + bodyframe->extraY - myframe->extraY), 0);
 	glBegin(GL_QUADS);
 		glTexCoord2f(dir,0);		glVertex3f(width,height,0);
 		glTexCoord2f(1-dir,0);	glVertex3f(-width,height,0);
@@ -427,7 +427,7 @@ void cSprite::draw()
 		height/=2;
 
 		glPushMatrix();
-		glTranslatef(-(subframe->offsetx + bodyframe->extrax - myframe->extrax), -(subframe->offsety + bodyframe->extray - myframe->extray), 0);
+		glTranslatef(-(subframe->offsetY + bodyframe->extraX - myframe->extraX), -(subframe->offsetY + bodyframe->extraY - myframe->extraY), 0);
 		glBegin(GL_QUADS);
 			glTexCoord2f(dir,0);		glVertex3f(width,height,1);
 			glTexCoord2f(1-dir,0);	glVertex3f(-width,height,1);

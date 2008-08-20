@@ -224,7 +224,7 @@ public:
 		virtual ~cWindowCancelButton() {}
 		void click()
 		{
-			favoritelights = fs.getxml("data/lights.txt");
+			favoritelights = fs.getXml("data/lights.txt");
 			parent->close();
 		}
 	};

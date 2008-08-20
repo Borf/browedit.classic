@@ -35,11 +35,11 @@ public:
 			{
 				for(int x = 0; x < Graphics.world.width; x++)
 				{
-					if(Graphics.world.cubes[y][x].tileup == -1)
+					if(Graphics.world.cubes[y][x].tileUp == -1)
 						continue;
 
-					cTile* t = &Graphics.world.tiles[Graphics.world.cubes[y][x].tileup];
-					glBindTexture(GL_TEXTURE_2D, Graphics.world.textures[t->texture]->texid());
+					cTile* t = &Graphics.world.tiles[Graphics.world.cubes[y][x].tileUp];
+					glBindTexture(GL_TEXTURE_2D, Graphics.world.textures[t->texture]->texId());
 					glBegin(GL_TRIANGLE_STRIP);
 						glTexCoord2f(t->u1, 1-t->v1);				glVertex2f(xx+x,yy+y);
 						glTexCoord2f(t->u3, 1-t->v3);				glVertex2f(xx+x,yy+y+1);
