@@ -2980,7 +2980,7 @@ MENUCOMMAND(addfavorite)
 		w->userfunc(NULL);
 		cLightOverViewWindow::cLightOverViewTree* tree = (cLightOverViewWindow::cLightOverViewTree*)w->objects["list"];
 		Log(3,0,"Calling getobject for %i", tree);
-		tree->getobject(Graphics.world.lights[Graphics.selectedObject]);
+		tree->getObject(Graphics.world.lights[Graphics.selectedObject]);
 	}
 
 	return true;
@@ -3129,7 +3129,7 @@ MENUCOMMAND(addfavlight)
 		if(node == NULL)
 			return false;
 
-		if(!((cFavoriteLightsWindow::cFavoriteTreeNode*)node)->iscat)
+		if(!((cFavoriteLightsWindow::cFavoriteTreeNode*)node)->isCat)
 		{
 			Graphics.WM.MessageBox("You can't add a light to another light, you can only add lights to categories");
 			return false;
@@ -3213,7 +3213,7 @@ MENUCOMMAND(addfavlightcat)
 		if(node == NULL)
 			return false;
 
-		if(!((cFavoriteLightsWindow::cFavoriteTreeNode*)node)->iscat)
+		if(!((cFavoriteLightsWindow::cFavoriteTreeNode*)node)->isCat)
 		{
 			Graphics.WM.MessageBox("You can't add a category to a light, you can only add lights to categories");
 			return false;

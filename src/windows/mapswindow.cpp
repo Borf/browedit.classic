@@ -233,3 +233,8 @@ void cMapsWindow::cClickableFrame::click()
 {
 	Graphics.WM.addwindow(new cMapDetailWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin));
 }
+
+cMapsWindow::cClickableFrame::cClickableFrame( cWindow* parent, TiXmlDocument &skin ) : cWindowFrame(parent,skin)
+{
+	
+}

@@ -45,7 +45,7 @@ public:
 
 	std::map<cWindowTree::cTreeNode*, std::vector<std::pair<std::string, std::string> >, std::less<cWindowTree::cTreeNode*> > items;
 	cModelsWindow(cTexture*, cFont*, TiXmlDocument &);
-	void resizeto(int ww, int hh);
+	void resizeTo(int ww, int hh);
 	void stopdrag();
 	void* userfunc(void* param);
 };

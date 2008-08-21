@@ -5,6 +5,7 @@
 #include "menucommands.h"
 #include "windows/lightwindow.h"
 #include "windows/lightoverviewwindow.h"
+#include <wm/windowcheckbox.h>
 
 extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
@@ -190,7 +191,7 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 				{
 					w->userfunc(NULL);
 					cLightOverViewWindow::cLightOverViewTree* tree = (cLightOverViewWindow::cLightOverViewTree*)w->objects["list"];
-					tree->getobject(Graphics.world.lights[Graphics.selectedObject]);
+					tree->getObject(Graphics.world.lights[Graphics.selectedObject]);
 				}
 
 			}

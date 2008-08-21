@@ -207,7 +207,7 @@ bool cWindowTree::onKeyDown(int key, bool shift)
 		selected++;
 		if (liststart < (int)values.size() - (h/12))
 			liststart++;
-		onchange();
+		onChange();
 		return true;
 	}
 	else if (key == SDLK_UP)
@@ -218,13 +218,13 @@ bool cWindowTree::onKeyDown(int key, bool shift)
 			if (liststart > 0)
 				liststart--;
 		}
-		onchange();
+		onChange();
 		return true;
 	}
 	else if(key == SDLK_RIGHT || key == SDLK_LEFT)
 	{
 		doubleClick();
-		onchange();
+		onChange();
 		return true;
 	}
 	return false;
@@ -285,7 +285,7 @@ void cWindowTree::click()
 		{
 			if(s != selected)
 			{
-				onchange();
+				onChange();
 			}
 
 			int a = selected;

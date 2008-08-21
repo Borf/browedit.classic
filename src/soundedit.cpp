@@ -1,9 +1,11 @@
 #include <common.h>
 #include "graphics.h"
 #include "undo.h"
+#include <sdl/SDL_mixer.h>
 #include <windows/soundoverviewwindow.h>
 #include <windows/soundwindow.h>
 #include <windows/soundselectwindow.h>
+#include <windows/objectwindow.h>
 
 extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
@@ -13,6 +15,9 @@ extern float oldmousex, oldmousey;
 extern bool lbuttondown;
 extern int movement;
 extern bool doneaction;
+extern cFileSystem fs;
+extern std::string rodir;
+extern void mainloop();
 
 int cProcessManagement::soundedit_process_events(SDL_Event &event)
 {
@@ -126,7 +131,7 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 					{
 						w->userfunc(NULL);
 						cSoundOverViewWindow::cSoundOverViewTree* tree = (cSoundOverViewWindow::cSoundOverViewTree*)w->objects["list"];
-						tree->getobject(Graphics.world.sounds[Graphics.selectedObject]);
+						tree->getObject(Graphics.world.sounds[Graphics.selectedObject]);
 					}
 				
 				}

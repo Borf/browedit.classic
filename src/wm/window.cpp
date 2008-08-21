@@ -221,39 +221,39 @@ bool cWindow::drag()
 	if (resizable)
 	{
 		if (resizingXY && (mouseX-x) > minWidth)
-			resizeto((int)mouseX - x, h);
+			resizeTo((int)mouseX - x, h);
 		else if (resizingXY)
-			resizeto(minWidth, h);
+			resizeTo(minWidth, h);
 
 		if (resizingYX && ((getY()+h)-(Graphics.h()-mouseY)) > minHeight)
 		{
-			resizeto(w, (getY()+h)-(Graphics.h()-(int)mouseY));
+			resizeTo(w, (getY()+h)-(Graphics.h()-(int)mouseY));
 			y = (Graphics.h()-(int)mouseY);
 		}
 		else if (resizingYX)
 		{
 			y = (y+h) - minHeight;
-			resizeto(w, minHeight);
+			resizeTo(w, minHeight);
 		}
 
 		if (resizingX && (w+x-(int)mouseX) > minHeight)
 		{
-			resizeto(w + x - (int)mouseX, h);
+			resizeTo(w + x - (int)mouseX, h);
 			x = (int)mouseX;
 		}
 		else if (resizingX)
 		{
 			x = x+w-minWidth;
-			resizeto(minWidth, h);
+			resizeTo(minWidth, h);
 		}
 
 		if (resizingY && ((Graphics.h()-mouseY)-py2() > minHeight))
 		{
-			resizeto(w, (Graphics.h()-(int)mouseY) - py2());
+			resizeTo(w, (Graphics.h()-(int)mouseY) - py2());
 		}
 		else if (resizingY)
 		{
-			resizeto(w, minHeight);
+			resizeTo(w, minHeight);
 		}
 	}
 

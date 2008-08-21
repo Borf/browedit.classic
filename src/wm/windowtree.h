@@ -72,7 +72,7 @@ public:
 	virtual void draw(int,int,int,int);
 	virtual void click();
 	virtual void rightClick();
-	virtual void onchange() {};
+	virtual void onChange() {};
 	bool onKeyDown(int, bool);
 //	void onchar(char);
 

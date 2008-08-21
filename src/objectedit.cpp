@@ -137,7 +137,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 					if(Graphics.selectedObject >= 0 && Graphics.selectedObject < (int)Graphics.world.models.size()-1)
 					{
 						cModelOverViewWindow::cModelOverViewTree* tree = (cModelOverViewWindow::cModelOverViewTree*)w->objects["list"];
-						tree->getobject(Graphics.world.models[Graphics.selectedObject]);
+						tree->getObject(Graphics.world.models[Graphics.selectedObject]);
 					}
 				}
 			}

@@ -153,7 +153,7 @@ public:
 	bool canbetransparent()			{ return !noTransparency; }
 	bool onborder();
 	void moveto(int xx, int yy)		{ x = xx; y = yy; }
-	virtual void resizeto(int ww, int hh)	{ w = ww; h = hh; }
+	virtual void resizeTo(int ww, int hh)	{ w = ww; h = hh; }
 	void initprops(std::string);
 
 	void SetTitle(std::string t)			{ title = t; }

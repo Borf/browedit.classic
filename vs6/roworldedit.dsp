@@ -481,21 +481,12 @@ SOURCE=..\src\textureloaders\tgatextureloader.h
 # Begin Group "windows"
 
 # PROP Default_Filter ""
-# Begin Source File
+# Begin Group "headers"
 
-SOURCE=..\src\windows\ambientlightwindow.cpp
-# End Source File
+# PROP Default_Filter ""
 # Begin Source File
 
 SOURCE=..\src\windows\ambientlightwindow.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\windows\areacopywindow.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\windows\brushselectwindow.h
 # End Source File
 # Begin Source File
 
@@ -535,15 +526,7 @@ SOURCE=..\src\windows\lightwindow.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\windows\mapdetailwindow.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\windows\mapdetailwindow.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\windows\mapswindow.cpp
 # End Source File
 # Begin Source File
 
@@ -560,10 +543,6 @@ SOURCE=..\src\windows\minimapwindow.h
 # Begin Source File
 
 SOURCE=..\src\windows\modeloverviewwindow.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\windows\modelswindow.cpp
 # End Source File
 # Begin Source File
 
@@ -591,15 +570,7 @@ SOURCE=..\src\windows\soundselectwindow.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\windows\soundwindow.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\windows\soundwindow.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\windows\spritewindow.cpp
 # End Source File
 # Begin Source File
 
@@ -611,10 +582,6 @@ SOURCE=..\src\windows\texturetoolswindow.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\windows\texturewindow.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\windows\texturewindow.h
 # End Source File
 # Begin Source File
@@ -623,11 +590,124 @@ SOURCE=..\src\windows\waterwindow.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\windows\xmlwindow.cpp
+SOURCE=..\src\windows\xmlwindow.h
+# End Source File
+# End Group
+# Begin Source File
+
+SOURCE=..\src\windows\ambientlightwindow.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\windows\xmlwindow.h
+SOURCE=..\src\windows\areacopywindow.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\windows\brushselectwindow.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\windows\confirmwindow.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\windows\effectwindow.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\windows\favoritelights.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\windows\filewindow.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\windows\hotkeywindow.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\windows\inputwindow.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\windows\keybindwindow.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\windows\lightoverviewwindow.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\windows\lightwindow.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\windows\mapdetailwindow.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\windows\mapswindow.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\windows\messagewindow.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\windows\minimapwindow.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\windows\modeloverviewwindow.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\windows\modelswindow.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\windows\objectwindow.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\windows\progresswindow.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\windows\rsmeditwindow.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\windows\soundoverviewwindow.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\windows\soundselectwindow.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\windows\soundwindow.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\windows\spritewindow.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\windows\texturetoolswindow.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\windows\texturewindow.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\windows\waterwindow.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\windows\xmlwindow.cpp
 # End Source File
 # End Group
 # Begin Group "components"

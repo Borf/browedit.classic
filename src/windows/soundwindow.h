@@ -3,8 +3,8 @@
 
 #include <wm/window.h>
 #include <wm/windowbutton.h>
-#include <world.h>
-#include <undo.h>
+class cUndoItem;
+class cSound;
 
 class cSoundWindow : public cWindow
 {

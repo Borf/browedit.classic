@@ -607,7 +607,7 @@ void cModelsWindow::cWindowModelCatSelect::refreshmodels()
 		o->setPopup(p.first);
 		box->objects.push_back(o);
 	}
-	parent->resizeto(parent->getWidth(), parent->getHeight());
+	parent->resizeTo(parent->getWidth(), parent->getHeight());
 	draggingwindow = NULL;
 	draggingObject = NULL;
 }
@@ -699,7 +699,7 @@ cModelsWindow::cModelsWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWind
 /*		o = new cWindowListBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveto(20,20);
-	o->resizeto(100,100);
+	o->resizeTo(100,100);
 	objects["textures"] = o;*/
 
 	o = new cWindowScrollPanel(this, skin);
@@ -718,12 +718,12 @@ cModelsWindow::cModelsWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWind
 //	objects["rollup"] = new cWindowRollupButton(this);
 	objects["close"] = new cWindowCloseButton(this,skin);
 
-	resizeto(w,h);
+	resizeTo(w,h);
 }	
 
-void cModelsWindow::resizeto(int ww, int hh)
+void cModelsWindow::resizeTo(int ww, int hh)
 {
-	cWindow::resizeto(ww,hh);
+	cWindow::resizeTo(ww,hh);
 	objects["tree"]->resizeTo(200, innerHeight());
 	cWindowScrollPanel* panel = (cWindowScrollPanel*)objects["models"];
 	panel->moveTo(200, 0);

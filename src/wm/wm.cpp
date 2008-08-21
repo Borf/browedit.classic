@@ -200,7 +200,7 @@ void cWM::drag(cWindow* w)
 				{
 					if (w->resizing())
 					{
-						w->resizeto(w->getWidth(), w->getHeight()+(w->getY()-(windows[i]->getY()+windows[i]->getHeight())));
+						w->resizeTo(w->getWidth(), w->getHeight()+(w->getY()-(windows[i]->getY()+windows[i]->getHeight())));
 						w->moveto(w->getX(), windows[i]->getY() + windows[i]->getHeight());
 					}
 					else
@@ -209,7 +209,7 @@ void cWM::drag(cWindow* w)
 				if (abs((w->getY()+w->getHeight()) - windows[i]->getY()) < SNAPPINGDIST)
 				{
 					if (w->resizing())
-						w->resizeto(w->getWidth(), windows[i]->getY()-w->getY());
+						w->resizeTo(w->getWidth(), windows[i]->getY()-w->getY());
 					else
 						w->moveto(w->getX(), windows[i]->getY()-w->ph2());
 				}
@@ -222,7 +222,7 @@ void cWM::drag(cWindow* w)
 				{
 					if (w->resizing())
 					{
-						w->resizeto(w->getWidth()+(w->getX()-(windows[i]->getX()+windows[i]->getWidth())), w->getHeight());
+						w->resizeTo(w->getWidth()+(w->getX()-(windows[i]->getX()+windows[i]->getWidth())), w->getHeight());
 						w->moveto(windows[i]->getX() + windows[i]->getWidth(), w->getY());
 					}
 					else
@@ -231,7 +231,7 @@ void cWM::drag(cWindow* w)
 				if (abs((w->getX()+w->getWidth()) - windows[i]->getX()) < SNAPPINGDIST)
 				{
 					if (w->resizing())
-						w->resizeto(windows[i]->getX()-w->getX(), w->getHeight());
+						w->resizeTo(windows[i]->getX()-w->getX(), w->getHeight());
 					else
 						w->moveto(windows[i]->getX()-w->getWidth(), w->getY());
 				}

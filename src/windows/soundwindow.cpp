@@ -6,6 +6,7 @@
 #include <wm/windowinputbox.h>
 #include "objectwindow.h"
 #include "soundselectwindow.h"
+#include <undo.h>
 extern cUndoStack undostack;
 
 

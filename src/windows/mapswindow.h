@@ -33,9 +33,7 @@ public:
 	class cClickableFrame : public cWindowFrame
 	{
 	public:
-		cClickableFrame(cWindow* parent, TiXmlDocument &skin) : cWindowFrame(parent,skin)
-		{
-		}
+		cClickableFrame(cWindow* parent, TiXmlDocument &skin);
 		void click();
 	};
 	

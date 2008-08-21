@@ -26,7 +26,7 @@ public:
 
 	void setText(int, std::string);
 	void setInt(int, int);
-	virtual void onchange() {};
+	virtual void onChange() {};
 	int getInt(int);
 	std::string getText(int);
 };
