@@ -193,7 +193,7 @@ cTextureToolsWindow::cTextureToolsWindow( cTexture* t, cFont* f, TiXmlDocument &
 	((cWindowFloatInputBox*)o)->floatje = &Graphics.textureGridSizeY;
 	o->alignment = ALIGN_TOPLEFT;
 	o->resizeTo(innerWidth(), o->getHeight());
-	objects["aa_gridsizex"] = o;
+	objects["aa_gridsizey"] = o;
 	
 	reOrder();
 }
@@ -219,6 +219,7 @@ void cTextureToolsWindow::reOrder()
 void cTextureToolsWindow::resizeTo( int ww, int hh )
 {
 	cWindow::resizeTo(floor(ww/20.0f)*20+skinOffLeft+skinOffRight,hh);
-	objects["aa_gridsize"]->resizeTo(min(innerWidth(),40), objects["aa_gridsize"]->getHeight());
+	objects["aa_gridsizex"]->resizeTo(min(innerWidth(),40), objects["aa_gridsizex"]->getHeight());
+	objects["aa_gridsizey"]->resizeTo(min(innerWidth(),40), objects["aa_gridsizey"]->getHeight());
 	reOrder();
 }

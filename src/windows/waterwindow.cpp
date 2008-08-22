@@ -1,4 +1,6 @@
 #include "waterwindow.h"
+#include <graphics.h>
+extern cGraphics Graphics;
 
 
 cWaterWindowOkButton::cWaterWindowOkButton( cWindow* parent, TiXmlDocument &skin ) : cWindowButton(parent,skin)

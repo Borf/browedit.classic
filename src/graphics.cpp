@@ -184,7 +184,6 @@ int cGraphics::draw(bool drawwm)
 		glDisable(GL_TEXTURE_2D);
 		if(editmode == MODE_TEXTUREPAINT)
 		{
-			glColor4f(0,0,0,0.25f);
 			glEnable(GL_BLEND);
 			int ww = textureBrush[0].size();
 			int hh = textureBrush.size();
@@ -192,6 +191,13 @@ int cGraphics::draw(bool drawwm)
 			cVector2 off[4] = { cVector2(-1,0), cVector2(1,0), cVector2(0,1), cVector2(0,-1) };
 
 			glBegin(GL_QUADS);
+			glColor4f(1,0,0,0.5f);
+			glVertex2f(width-256+(0)*(256/textureGridSizeX),		height-(32+(0)*(256/textureGridSizeY)));
+			glVertex2f(width-256+(0+0.25f)*(256/textureGridSizeX),		height-(32+(0)*(256/textureGridSizeY)));
+			glVertex2f(width-256+(0+0.25f)*(256/textureGridSizeX),		height-(32+(0+0.25f)*(256/textureGridSizeY)));
+			glVertex2f(width-256+(0)*(256/textureGridSizeX),		height-(32+(0+0.25f)*(256/textureGridSizeY)));
+
+			glColor4f(0,0,0,0.25f);
 			for(int yy = 0; yy < textureBrush.size(); yy++)
 			{
 				for(int xx = 0; xx < textureBrush[yy].size(); xx++)
