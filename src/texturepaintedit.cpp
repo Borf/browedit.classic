@@ -81,6 +81,29 @@ int cProcessManagement::texturepaintedit_process_events(SDL_Event &event)
 				if (Graphics.texturestart >= Graphics.world.textures.size())
 					Graphics.texturestart--;
 				break;
+			case SDLK_SPACE:
+				Graphics.textureRot = (Graphics.textureRot+1)%4;
+				break;
+			case SDLK_LEFT:
+				Graphics.textureBrushOffset.x--;
+				if(Graphics.textureBrushOffset.x < -Graphics.textureGridSizeX)
+					Graphics.textureBrushOffset.x = -Graphics.textureGridSizeX;
+				break;
+			case SDLK_RIGHT:
+				Graphics.textureBrushOffset.x++;
+				if(Graphics.textureBrushOffset.x > Graphics.textureGridSizeX)
+					Graphics.textureBrushOffset.x = Graphics.textureGridSizeX;
+				break;
+			case SDLK_UP:
+				Graphics.textureBrushOffset.y--;
+				if(Graphics.textureBrushOffset.y < -Graphics.textureGridSizeY)
+					Graphics.textureBrushOffset.y = -Graphics.textureGridSizeY;
+				break;
+			case SDLK_DOWN:
+				Graphics.textureBrushOffset.y++;
+				if(Graphics.textureBrushOffset.y > Graphics.textureGridSizeY)
+					Graphics.textureBrushOffset.y = Graphics.textureGridSizeY;
+				break;
 			default:
 				break;
 			}

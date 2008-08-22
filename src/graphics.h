@@ -24,63 +24,7 @@
 class cGraphics
 {
 public:
-	cGraphics()
-	{
-		width=1024;
-		height=768;
-		bits=32;
-		fullscreen=false;
-		selectedObjectProp = 0;
-		showgrid = true;
-		brushsize = 1;
-		texturestart = 0;
-
-		texturerot = 0;
-		fliph = false;
-		flipv = false;
-		showObjects = false;
-		selectedObject = -1;
-		objectStartDrag = false;
-		slope = false;
-		quadtreeView = -1;
-		showBoundingBoxes = false;
-		gatType = 0;
-		showLightmaps = false;
-		showTileColors = true;
-		showWater = true;
-		showOglLighting = true;
-		lasttick = 0;
-		wallHeightMin = cVector2(-1,-1);
-		wallHeightMax = cVector2(-1,-1);
-		texturePreview = NULL;
-		gridsize = 1;
-		gridoffsetx = 0;
-		gridoffsety = 0;
-		topCamera = false;
-		showambientlighting = true;
-		groupeditmode = false;
-		animateWater = true;
-
-		showNoTiles = true;
-		selectionCenter = cVector3(-1,-1,-1);
-		showgat = false;
-		backgroundColor = cVector3(0,0,0);
-		noTileColor = cVector3(1,1,1);
-		showDot = true;
-		showSprites = true;
-		showAllLights = false;
-		clearLightmaps = false;
-		gatTransparency = 0.3f;
-		textureTool = TOOL_SELECTAREA;
-		textureBrush.resize(4, std::vector<bool>(4,true));
-		textureBrush[0][0] = false;
-		textureBrush[3][3] = false;
-		textureBrush[0][3] = false;
-		textureBrush[3][0] = false;
-		textureBrushOffset = cVector2(0,0);
-		textureGridSizeX = 4;
-		textureGridSizeY = 4;
-	}
+	cGraphics();
 
 	int						init();
 	int						draw(bool = true);
@@ -118,7 +62,7 @@ public:
 	cVector2				selectionend;
 	float					brushsize;
 	int						texturestart;
-	int						texturerot;
+	int						textureRot;
 	bool					fliph;
 	bool					flipv;
 
@@ -136,11 +80,11 @@ public:
 	float*					editval;
 
 	bool					is3dSelected(float, float, float);
-	std::string					popup(std::string, std::string = "");
+	std::string				popup(std::string, std::string = "");
 
-	std::string					popupReturn;
-	std::string					defaultPopupText;
-	std::string					popupCaption;
+	std::string				popupReturn;
+	std::string				defaultPopupText;
+	std::string				popupCaption;
 	cFont*					font;
 	CFrustum				frustum;
 
@@ -162,8 +106,8 @@ public:
 
 	cVector3				clipboardRot;
 	cVector3				clipboardScale;
-	std::string					clipboardFile;
-	std::string					clipboardName;
+	std::string				clipboardFile;
+	std::string				clipboardName;
 	float					clipboardY;
 	float					clipboardFloat;
 	GLfloat					lightAmbient[4];

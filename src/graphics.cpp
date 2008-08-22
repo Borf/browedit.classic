@@ -192,10 +192,11 @@ int cGraphics::draw(bool drawwm)
 
 			glBegin(GL_QUADS);
 			glColor4f(1,0,0,0.5f);
-			glVertex2f(width-256+(0)*(256/textureGridSizeX),		height-(32+(0)*(256/textureGridSizeY)));
-			glVertex2f(width-256+(0+0.25f)*(256/textureGridSizeX),		height-(32+(0)*(256/textureGridSizeY)));
-			glVertex2f(width-256+(0+0.25f)*(256/textureGridSizeX),		height-(32+(0+0.25f)*(256/textureGridSizeY)));
-			glVertex2f(width-256+(0)*(256/textureGridSizeX),		height-(32+(0+0.25f)*(256/textureGridSizeY)));
+
+			glVertex2f(width-256+(0+textureBrushOffset.x)*(256/textureGridSizeX),		height-(32+(0+textureBrushOffset.y)*(256/textureGridSizeY)));
+			glVertex2f(width-256+(0+0.25f+textureBrushOffset.x)*(256/textureGridSizeX),	height-(32+(0+textureBrushOffset.y)*(256/textureGridSizeY)));
+			glVertex2f(width-256+(0+0.25f+textureBrushOffset.x)*(256/textureGridSizeX),	height-(32+(0+0.25f+textureBrushOffset.y)*(256/textureGridSizeY)));
+			glVertex2f(width-256+(0+textureBrushOffset.x)*(256/textureGridSizeX),		height-(32+(0+0.25f+textureBrushOffset.y)*(256/textureGridSizeY)));
 
 			glColor4f(0,0,0,0.25f);
 			for(int yy = 0; yy < textureBrush.size(); yy++)
@@ -219,10 +220,15 @@ int cGraphics::draw(bool drawwm)
 								glVertex2f(width-256+xx*(256/texturegridsize),	height-(32+yy));
 							}
 						}*/
-						glVertex2f(width-256+(xx)*(256/textureGridSizeX),		height-(32+(yy)*(256/textureGridSizeY)));
-						glVertex2f(width-256+(xx+1)*(256/textureGridSizeX),		height-(32+(yy)*(256/textureGridSizeY)));
-						glVertex2f(width-256+(xx+1)*(256/textureGridSizeX),		height-(32+(yy+1)*(256/textureGridSizeY)));
-						glVertex2f(width-256+(xx)*(256/textureGridSizeX),		height-(32+(yy+1)*(256/textureGridSizeY)));
+						if(xx+textureBrushOffset.x >= textureGridSizeX || xx+textureBrushOffset.x < 0)
+							continue;
+						if(yy+textureBrushOffset.y >= textureGridSizeY || yy+textureBrushOffset.y < 0)
+							continue;
+
+						glVertex2f(width-256+(xx+textureBrushOffset.x)*(256/textureGridSizeX),		height-(32+(yy+textureBrushOffset.y)*(256/textureGridSizeY)));
+						glVertex2f(width-256+(xx+1+textureBrushOffset.x)*(256/textureGridSizeX),	height-(32+(yy+textureBrushOffset.y)*(256/textureGridSizeY)));
+						glVertex2f(width-256+(xx+1+textureBrushOffset.x)*(256/textureGridSizeX),	height-(32+(yy+1+textureBrushOffset.y)*(256/textureGridSizeY)));
+						glVertex2f(width-256+(xx+textureBrushOffset.x)*(256/textureGridSizeX),		height-(32+(yy+1+textureBrushOffset.y)*(256/textureGridSizeY)));
 
 
 					}
@@ -654,6 +660,65 @@ bool cGraphics::is3dSelected(float x, float y, float z)
 	}
 
 	return true;
+}
+
+cGraphics::cGraphics()
+{
+	width=1024;
+	height=768;
+	bits=32;
+	fullscreen=false;
+	selectedObjectProp = 0;
+	showgrid = true;
+	brushsize = 1;
+	texturestart = 0;
+	
+	textureRot = 0;
+	fliph = false;
+	flipv = false;
+	showObjects = false;
+	selectedObject = -1;
+	objectStartDrag = false;
+	slope = false;
+	quadtreeView = -1;
+	showBoundingBoxes = false;
+	gatType = 0;
+	showLightmaps = false;
+	showTileColors = true;
+	showWater = true;
+	showOglLighting = true;
+	lasttick = 0;
+	wallHeightMin = cVector2(-1,-1);
+	wallHeightMax = cVector2(-1,-1);
+	texturePreview = NULL;
+	gridsize = 1;
+	gridoffsetx = 0;
+	gridoffsety = 0;
+	topCamera = false;
+	showambientlighting = true;
+	groupeditmode = false;
+	animateWater = true;
+	
+	showNoTiles = true;
+	selectionCenter = cVector3(-1,-1,-1);
+	showgat = false;
+	backgroundColor = cVector3(0,0,0);
+	noTileColor = cVector3(1,1,1);
+	showDot = true;
+	showSprites = true;
+	showAllLights = false;
+	clearLightmaps = false;
+	gatTransparency = 0.3f;
+	textureTool = TOOL_SELECTAREA;
+	textureBrush.resize(4, std::vector<bool>(4,true));
+	textureBrush[0][0] = false;
+	textureBrush[3][3] = false;
+	textureBrush[0][3] = false;
+	textureBrush[3][0] = false;
+	textureBrush[1][1] = false;
+	textureBrushOffset = cVector2(0,0);
+	textureGridSizeX = 4;
+	textureGridSizeY = 4;
 }
 
 
