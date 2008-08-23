@@ -1,3 +1,4 @@
+
 #include "main.h"
 #include "world.h"
 #include "graphics.h"
@@ -2642,24 +2643,35 @@ void cWorld::draw()
 				{
 					for(int xx = 0; xx < Graphics.textureGridSizeX; xx++)
 					{
-						if( Graphics.textureBrush.size() <= yy ||
-							Graphics.textureBrush[0].size() <= xx)
+						int xxx,yyy;
+						if(Graphics.textureRot == 0)	{ yyy = yy;										xxx = xx;		}
+						if(Graphics.textureRot == 1)	{ yyy = xx;										xxx = Graphics.textureBrush[0].size()-1-yy;		}
+						if(Graphics.textureRot == 2)	{ yyy = Graphics.textureBrush.size()-1-yy;		xxx = Graphics.textureBrush[0].size()-1-xx;		}
+						if(Graphics.textureRot == 3)	{ yyy = Graphics.textureBrush.size()-1-xx;		xxx = yy;		}
+
+						if( Graphics.textureBrush.size() <= yyy ||
+							Graphics.textureBrush[0].size() <= xxx)
 							continue;
-						if(Graphics.textureBrush[yy][xx])
+
+						if(Graphics.textureBrush[yyy][xxx])
 						{
 							if(y-yy >= 0 && y-yy < height && x+xx >= 0 && x+xx < width)
 							{
 								cCube* c = &cubes[y-yy][x+xx];
 								glNormal3f(c->normal.x, c->normal.y, c->normal.z);
 								glBegin(GL_TRIANGLE_STRIP);
-									glTexCoord2f((xx) * 1/ Graphics.textureGridSizeX, 1-(yy+1) / Graphics.textureGridSizeY);		glVertex3f((x+xx)*10,-c->cell1,(height-(y-yy))*10);
-									glTexCoord2f((xx) * 1/ Graphics.textureGridSizeX, 1-(yy) / Graphics.textureGridSizeY);			glVertex3f((x+xx)*10,-c->cell3,(height-(y-yy))*10-10);
-									glTexCoord2f((xx+1) * 1/ Graphics.textureGridSizeX, 1-(yy+1) / Graphics.textureGridSizeY);		glVertex3f((x+xx)*10+10,-c->cell2,(height-(y-yy))*10);
-									glTexCoord2f((xx+1) * 1/ Graphics.textureGridSizeX, 1-(yy) / Graphics.textureGridSizeY);		glVertex3f((x+xx)*10+10,-c->cell4,(height-(y-yy))*10-10);
+									glTexCoord2f((xx+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX, 1-(yy+1+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY);		glVertex3f((x+xx)*10,-c->cell1,(height-(y-yy))*10);
+									glTexCoord2f((xx+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX, 1-(yy+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY);			glVertex3f((x+xx)*10,-c->cell3,(height-(y-yy))*10-10);
+									glTexCoord2f((xx+1+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX, 1-(yy+1+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY);		glVertex3f((x+xx)*10+10,-c->cell2,(height-(y-yy))*10);
+									glTexCoord2f((xx+1+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX, 1-(yy+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY);		glVertex3f((x+xx)*10+10,-c->cell4,(height-(y-yy))*10-10);
 								glEnd();
 							}
 						}
-						if(yy == 0 && xx == 0)
+						if( (Graphics.textureRot == 0 && yy == 0 && xx == 0) ||
+							(Graphics.textureRot == 1 && yy == Graphics.textureBrush[0].size()-1 && xx == 0) ||
+							(Graphics.textureRot == 2 && yy == Graphics.textureBrush.size()-1 && xx == Graphics.textureBrush[0].size()-1) ||
+							(Graphics.textureRot == 3 && yy == 0 && xx == Graphics.textureBrush.size()-1)
+							)
 						{
 							cCube tempCube;
 							cCube* c;
@@ -2677,10 +2689,10 @@ void cWorld::draw()
 							glDisable(GL_TEXTURE_2D);
 							glColor4f(1,0,0,0.5f);
 							glBegin(GL_TRIANGLE_STRIP);
-							glVertex3f((x+xx)*10,-c->cell1+0.01f,(height-(y-yy))*10-5);
-							glVertex3f((x+xx)*10,-c->cell3+0.01f,(height-(y-yy))*10-10);
-							glVertex3f((x+xx)*10+5,-c->cell2+0.01f,(height-(y-yy))*10-5);
-							glVertex3f((x+xx)*10+5,-c->cell4+0.01f,(height-(y-yy))*10-10);
+							glVertex3f((x+xx)*10+(xx == 0 ? 0 : 5),-c->cell1+0.01f,(height-(y-yy))*10-(yy == 0 ? 5 : 0));
+							glVertex3f((x+xx)*10+(xx == 0 ? 0 : 5),-c->cell3+0.01f,(height-(y-yy))*10-(yy == 0 ? 10 :5));
+							glVertex3f((x+xx)*10+(xx == 0 ? 5 : 10),-c->cell2+0.01f,(height-(y-yy))*10-(yy == 0 ? 5 : 0));
+							glVertex3f((x+xx)*10+(xx == 0 ? 5 : 10),-c->cell4+0.01f,(height-(y-yy))*10-(yy == 0 ? 10 : 5));
 							glEnd();
 							glColor4f(1,1,1,0.8f);
 							glEnable(GL_TEXTURE_2D);
