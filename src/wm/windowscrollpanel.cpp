@@ -216,9 +216,9 @@ void cWindowScrollPanel::draw(int cutoffleft, int cutoffright, int cutofftop, in
 			int oldx = o->getX();
 			int oldy = o->getY();
 
-			if(o->type == OBJECT_LABEL)
+			/*if(o->type == OBJECT_LABEL)
 				o->moveTo(o->getX()+x-parent->getX(),o->getY()+y+parent->getY());
-			else if(o->type == OBJECT_MODEL)
+			else */if(o->type == OBJECT_MODEL)
 				o->moveTo(o->getX()+x-scrollposx, o->getY()+y-scrollposy);
 			else
 				o->moveTo(o->getX(),o->getY()+y);

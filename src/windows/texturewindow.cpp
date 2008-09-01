@@ -96,10 +96,12 @@ void cTextureWindow::cWindowTextureCatSelect::click()
 	std::vector<std::pair<std::string, std::string> > v;
 	v = *((std::vector<std::pair<std::string, std::string> >*)parent->userfunc(node));
 	
+	cWindowObject* o;
 	for(i = 0; i < v.size(); i++)
 	{
 		std::pair<std::string, std::string> p = v[i];
-		cWindowObject* o = new cWindowTexture(parent);
+		
+		o = new cWindowTexture(parent);
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveTo(i*130, 32);
 		o->resizeTo(128,128);
@@ -107,6 +109,20 @@ void cTextureWindow::cWindowTextureCatSelect::click()
 		o->setText(1,p.second);
 		o->setPopup(p.first);
 		box->objects.push_back(o);
+
+
+		o = new cWindowLabel(parent);
+		o->alignment = ALIGN_TOPLEFT;
+		o->moveTo(i*130, 32);
+		o->setText(0,"#000000" + p.first);
+		box->objects.push_back(o);
+
+		o = new cWindowLabel(parent);
+		o->alignment = ALIGN_TOPLEFT;
+		o->moveTo(i*130, 32);
+		o->setText(0,"#FFFFFF" + p.first);
+		box->objects.push_back(o);
+
 	}
 	parent->resizeTo(parent->getWidth(), parent->getHeight());
 	draggingwindow = NULL;
@@ -233,10 +249,15 @@ void cTextureWindow::resizeTo( int ww, int hh )
 	
 	int x = 0;
 	int y = 0;
-	for(unsigned int i = 0; i < panel->objects.size(); i++)
+	for(unsigned int i = 0; i < panel->objects.size(); i+=3)
 	{
 		panel->objects[i]->moveTo(x,y);
 		panel->objects[i]->resizeTo(iconSize,iconSize);
+		panel->objects[i+1]->moveTo(x-20,y+24);
+		panel->objects[i+1]->resizeTo(iconSize,12);
+		panel->objects[i+2]->moveTo(x-19,y+25);
+		panel->objects[i+2]->resizeTo(iconSize,12);
+
 		x+=iconSize+2;
 		if(x+iconSize+2 > panel->innerwidth-18)
 		{

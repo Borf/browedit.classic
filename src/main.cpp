@@ -531,7 +531,14 @@ int main(int argc, char *argv[])
 	cFile* pFile = fs.open("config.txt");
 	if (pFile == NULL)
 	{
-		Log(1,0,"Error opening configfile");
+		Log(2,0,"Error opening configfile, trying one directory up");
+		chdir("..");
+		pFile = fs.open("config.txt");
+		if(pFile == NULL)
+		{
+			Log(1,0,"Could not find configfile one directory up, stopping");
+			return 0;
+		}
 	}
 	configfile = pFile->readLine();
 	pFile->close();

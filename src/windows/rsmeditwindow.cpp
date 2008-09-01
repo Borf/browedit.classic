@@ -272,6 +272,19 @@ void cRSMEditWindow::cWindowModel::draw( int cutoffleft, int cutoffright, int cu
 			o->moveTo(0, 130*i);
 			scroll->objects.push_back(o);
 			scroll->innerheight = 130*i+130;
+
+			o = new cWindowLabel(parent);
+			o->setText(0, "#000000" + model->textures[i]->getfilename().substr(rodir.length() + 13));
+			o->moveTo(-20,130*i+25);
+			o->alignment = ALIGN_TOPLEFT;
+			scroll->objects.push_back(o);
+
+			o = new cWindowLabel(parent);
+			o->setText(0, "#FFFFFF" + model->textures[i]->getfilename().substr(rodir.length() + 13));
+			o->moveTo(-19,130*i+26);
+			o->alignment = ALIGN_TOPLEFT;
+			scroll->objects.push_back(o);
+		
 		}
 		scroll->scrollposy = 0;
 		scroll->scrollposx = 0;
