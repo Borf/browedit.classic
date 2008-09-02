@@ -606,6 +606,17 @@ void cModelsWindow::cWindowModelCatSelect::refreshmodels()
 		o->setText(1,p.second);
 		o->setPopup(p.first);
 		box->objects.push_back(o);
+
+
+		o = new cWindowLabel(parent);
+		o->alignment = ALIGN_TOPLEFT;
+		o->setText(0,"#000000" + p.first);
+		box->objects.push_back(o);
+
+		o = new cWindowLabel(parent);
+		o->alignment = ALIGN_TOPLEFT;
+		o->setText(0,"#FF0000" + p.first);
+		box->objects.push_back(o);
 	}
 	parent->resizeTo(parent->getWidth(), parent->getHeight());
 	draggingwindow = NULL;
@@ -732,9 +743,11 @@ void cModelsWindow::resizeTo(int ww, int hh)
 
 	int x = 0;
 	int y = 0;
-	for(unsigned int i = 0; i < panel->objects.size(); i++)
+	for(unsigned int i = 0; i < panel->objects.size(); i+=3)
 	{
 		panel->objects[i]->moveTo(x,y);
+		panel->objects[i+1]->moveTo(x+5,y+96);
+		panel->objects[i+2]->moveTo(x+4,y+95);
 		x+=130;
 		if(x+130 > panel->innerwidth-18)
 		{
@@ -744,13 +757,13 @@ void cModelsWindow::resizeTo(int ww, int hh)
 	}
 	panel->scrollposx = 0;
 	panel->scrollposy = 0;
-	panel->innerheight = y+130;
+	panel->innerheight = y+140;
 }
 void cModelsWindow::stopdrag()
 {
 	objects["zdragger"]->moveTo(-4000,-4000);
 	objects["zdragger"]->setInt(0,0);
-	((cWindowScrollPanel*)objects["models"])->draggingobject = NULL;
+	((cWindowScrollPanel*)objects["models"])->draggingObject = NULL;
 	draggingObject = NULL;
 
 }	

@@ -11,7 +11,7 @@ class cWindowScrollPanel : public cWindowObject
 protected:
 public:
 	std::vector<cWindowObject*>	objects;
-	cWindowObject* draggingobject;
+	cWindowObject* draggingObject;
 	int innerheight;
 	int innerwidth;
 

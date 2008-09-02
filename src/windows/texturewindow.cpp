@@ -113,14 +113,12 @@ void cTextureWindow::cWindowTextureCatSelect::click()
 
 		o = new cWindowLabel(parent);
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveTo(i*130, 32);
 		o->setText(0,"#000000" + p.first);
 		box->objects.push_back(o);
 
 		o = new cWindowLabel(parent);
 		o->alignment = ALIGN_TOPLEFT;
-		o->moveTo(i*130, 32);
-		o->setText(0,"#FFFFFF" + p.first);
+		o->setText(0,"#FF0000" + p.first);
 		box->objects.push_back(o);
 
 	}
@@ -253,9 +251,9 @@ void cTextureWindow::resizeTo( int ww, int hh )
 	{
 		panel->objects[i]->moveTo(x,y);
 		panel->objects[i]->resizeTo(iconSize,iconSize);
-		panel->objects[i+1]->moveTo(x-20,y+24);
+		panel->objects[i+1]->moveTo(x+5,y+iconSize-36);
 		panel->objects[i+1]->resizeTo(iconSize,12);
-		panel->objects[i+2]->moveTo(x-19,y+25);
+		panel->objects[i+2]->moveTo(x+4,y+iconSize-37);
 		panel->objects[i+2]->resizeTo(iconSize,12);
 
 		x+=iconSize+2;

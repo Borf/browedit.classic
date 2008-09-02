@@ -181,7 +181,7 @@ int cFont::print(float r, float g, float b, float x, float y, const char *fmt, .
 
 		glCallLists(before.length(),GL_UNSIGNED_BYTE, before.c_str());
 		if(color != "")
-			glColor3ub(hex2dec(color.substr(0,2)),hex2dec(color.substr(2,2)),hex2dec(color.substr(4,2)));
+			glColor4ub(hex2dec(color.substr(0,2)),hex2dec(color.substr(2,2)),hex2dec(color.substr(4,2)), tempColors[3]*255);
 	}
 	glCallLists(txt.length(),GL_UNSIGNED_BYTE, txt.c_str());
 

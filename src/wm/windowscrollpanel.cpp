@@ -216,9 +216,9 @@ void cWindowScrollPanel::draw(int cutoffleft, int cutoffright, int cutofftop, in
 			int oldx = o->getX();
 			int oldy = o->getY();
 
-			/*if(o->type == OBJECT_LABEL)
-				o->moveTo(o->getX()+x-parent->getX(),o->getY()+y+parent->getY());
-			else */if(o->type == OBJECT_MODEL)
+			if(o->type == OBJECT_LABEL)
+				o->moveTo(-parent->getX() + o->getX() - parent->skinOffLeft, o->parent->getY() + o->getY() + parent->skinOffTop);
+			else if(o->type == OBJECT_MODEL)
 				o->moveTo(o->getX()+x-scrollposx, o->getY()+y-scrollposy);
 			else
 				o->moveTo(o->getX(),o->getY()+y);
@@ -479,7 +479,7 @@ cWindowScrollPanel::cWindowScrollPanel( cWindow* parent, TiXmlDocument &skin ) :
 	
 	scrollposx = 0;
 	scrollposy = 0;
-	draggingobject = NULL;
+	draggingObject = NULL;
 	
 	TiXmlElement* bSkin = skin.FirstChildElement("skin")->FirstChildElement("list")->FirstChildElement("scroll");
 	

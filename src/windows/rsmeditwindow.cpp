@@ -275,13 +275,13 @@ void cRSMEditWindow::cWindowModel::draw( int cutoffleft, int cutoffright, int cu
 
 			o = new cWindowLabel(parent);
 			o->setText(0, "#000000" + model->textures[i]->getfilename().substr(rodir.length() + 13));
-			o->moveTo(-20,130*i+25);
+			o->moveTo(5,130*i+111);
 			o->alignment = ALIGN_TOPLEFT;
 			scroll->objects.push_back(o);
 
 			o = new cWindowLabel(parent);
-			o->setText(0, "#FFFFFF" + model->textures[i]->getfilename().substr(rodir.length() + 13));
-			o->moveTo(-19,130*i+26);
+			o->setText(0, "#FF0000" + model->textures[i]->getfilename().substr(rodir.length() + 13));
+			o->moveTo(4,130*i+110);
 			o->alignment = ALIGN_TOPLEFT;
 			scroll->objects.push_back(o);
 		
