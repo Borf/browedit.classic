@@ -578,6 +578,10 @@ SOURCE=..\src\windows\spritewindow.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\windows\texturebrushwindow.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\windows\texturetoolswindow.h
 # End Source File
 # Begin Source File
@@ -600,10 +604,6 @@ SOURCE=..\src\windows\ambientlightwindow.cpp
 # Begin Source File
 
 SOURCE=..\src\windows\areacopywindow.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\windows\brushselectwindow.h
 # End Source File
 # Begin Source File
 
@@ -692,6 +692,10 @@ SOURCE=..\src\windows\soundwindow.cpp
 # Begin Source File
 
 SOURCE=..\src\windows\spritewindow.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\windows\texturebrushwindow.cpp
 # End Source File
 # Begin Source File
 

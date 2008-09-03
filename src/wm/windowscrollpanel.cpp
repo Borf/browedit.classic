@@ -39,7 +39,7 @@ void cWindowScrollPanel::draw(int cutoffleft, int cutoffright, int cutofftop, in
 
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, parent->texture->texId());
-	glColor3f(1.0f, 1.0f, 1.0f);
+	glColor4f(1.0f, 1.0f, 1.0f, colors[3]);
 
 
 

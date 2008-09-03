@@ -25,6 +25,10 @@ cModelsWindow::cWindowModel::cWindowModel(cWindow* parent) : cWindowObject(paren
 }
 void cModelsWindow::cWindowModel::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {
+	GLfloat colors[4];
+	glGetFloatv(GL_CURRENT_COLOR, colors);
+
+	
 	if(cutoffbottom < 0)
 		cutoffbottom = 0;
 	glEnable(GL_DEPTH_TEST);
@@ -69,7 +73,7 @@ void cModelsWindow::cWindowModel::draw(int cutoffleft, int cutoffright, int cuto
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
-	glColor4f(0,0,0,1);
+	glColor4f(0,0,0,colors[3]);
 	glDisable(GL_TEXTURE_2D);
 	glLineWidth(2);
 	glBegin(GL_LINE_LOOP);
@@ -80,7 +84,7 @@ void cModelsWindow::cWindowModel::draw(int cutoffleft, int cutoffright, int cuto
 	glEnd();
 	glLineWidth(1);
 	glEnable(GL_TEXTURE_2D);
-	glColor4f(1,1,1,1);
+	glColor4f(1,1,1,colors[3]);
 
 	if (model != NULL)
 	{
@@ -95,8 +99,6 @@ void cModelsWindow::cWindowModel::draw(int cutoffleft, int cutoffright, int cuto
 	glMatrixMode(GL_PROJECTION);
 	glPopMatrix();
 	glMatrixMode(GL_MODELVIEW);
-	GLfloat colors[4];
-	glGetFloatv(GL_CURRENT_COLOR, colors);
 	glDisable(GL_DEPTH_TEST);
 
 }

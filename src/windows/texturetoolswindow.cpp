@@ -1,4 +1,5 @@
 #include "texturetoolswindow.h"
+#include "texturebrushwindow.h"
 
 #include <graphics.h>
 extern cGraphics Graphics;
@@ -124,7 +125,7 @@ void cTextureToolsWindow::cWindowBrushShape::draw( int a,int b,int c,int d )
 
 void cTextureToolsWindow::cWindowBrushShape::click()
 {
-	
+	Graphics.WM.addwindow(new cTextureBrushWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin));
 }
 
 cTextureToolsWindow::cWindowSelectArea::cWindowSelectArea( cWindow* parent, TiXmlDocument &totalskin ) : cWindowToolbarButton(parent, totalskin, "data/buttons/selectarea.tga",TOOL_SELECTAREA)

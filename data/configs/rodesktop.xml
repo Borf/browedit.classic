@@ -79,5 +79,11 @@
             <w>50</w>
             <h>112</h>
         </texturetools>
+        <texturebrush>
+            <x>50</x>
+            <y>50</y>
+            <w>924</w>
+            <h>668</h>
+        </texturebrush>
     </wm>
 </config>
