@@ -87,7 +87,6 @@ cTextureToolsWindow::cWindowBrushShape::cWindowBrushShape( cWindow* parent, TiXm
 
 void cTextureToolsWindow::cWindowBrushShape::draw( int a,int b,int c,int d )
 {
-	return;
 	GLfloat colors[4];
 	glGetFloatv(GL_CURRENT_COLOR, colors);
 	if(inObject())
@@ -95,23 +94,31 @@ void cTextureToolsWindow::cWindowBrushShape::draw( int a,int b,int c,int d )
 	cWindowObject::draw();
 	
 	//draw brush
-	
-	if(inObject())
+
+
+	float sx = (getWidth()-8)  / (float)max(Graphics.textureBrush[0].size(), Graphics.textureBrush.size());
+	float sy = (getHeight()-8) / (float)max(Graphics.textureBrush[0].size(), Graphics.textureBrush.size());
+
+	int xx = realX();
+	int yy = realY();
+	glDisable(GL_TEXTURE_2D);
+	glColor4f(0,0,0,colors[3]);
+	glBegin(GL_QUADS);
+	for(int yyy = 0; yyy < Graphics.textureBrush.size(); yyy++)
 	{
-		int xx = realX();
-		int yy = realY();
-		
-		glDisable(GL_TEXTURE_2D);
-		glColor4f(0,0,0,colors[3]);
-		glBegin(GL_LINE_LOOP);
-		glVertex2f(xx,	yy);
-		glVertex2f(xx+w,yy);
-		glVertex2f(xx+w,yy+h);
-		glVertex2f(xx,	yy+h);
-		glEnd();
-		glEnable(GL_TEXTURE_2D);
+		for(int xxx = 0; xxx < Graphics.textureBrush[yyy].size(); xxx++)
+		{
+			if(Graphics.textureBrush[Graphics.textureBrush.size()-1-yyy][xxx])
+			{
+				glVertex2f(xx + 4 + xxx*sx,		yy + 4 + yyy*sy);
+				glVertex2f(xx + 4 + xxx*sx+sx,	yy + 4 + yyy*sy);
+				glVertex2f(xx + 4 + xxx*sx+sx,	yy + 4 + yyy*sy+sy);
+				glVertex2f(xx + 4 + xxx*sx,		yy + 4 + yyy*sy+sy);
+			}
+		}
 	}
-	
+	glEnd();
+	glEnable(GL_TEXTURE_2D);
 	glColor4fv(colors);
 }
 

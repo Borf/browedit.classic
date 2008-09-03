@@ -76,6 +76,8 @@
         <texturetools>
             <x>0</x>
             <y>649</y>
+            <w>50</w>
+            <h>112</h>
         </texturetools>
     </wm>
 </config>

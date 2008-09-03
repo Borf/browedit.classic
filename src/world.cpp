@@ -2644,10 +2644,13 @@ void cWorld::draw()
 					for(int xx = 0; xx < Graphics.textureGridSizeX; xx++)
 					{
 						int xxx,yyy;
-						if(Graphics.textureRot == 0)	{ yyy = yy;										xxx = xx;		}
-						if(Graphics.textureRot == 1)	{ yyy = xx;										xxx = Graphics.textureBrush[0].size()-1-yy;		}
-						if(Graphics.textureRot == 2)	{ yyy = Graphics.textureBrush.size()-1-yy;		xxx = Graphics.textureBrush[0].size()-1-xx;		}
-						if(Graphics.textureRot == 3)	{ yyy = Graphics.textureBrush.size()-1-xx;		xxx = yy;		}
+						int xi = 1;
+						int yi = 1;
+
+						if		(Graphics.textureRot == 0)	{ yyy = yy;										xxx = xx;										}
+						else if (Graphics.textureRot == 1)	{ yyy = xx;										xxx = Graphics.textureBrush[0].size()-1-yy;		}
+						else if (Graphics.textureRot == 2)	{ yyy = Graphics.textureBrush.size()-1-yy;		xxx = Graphics.textureBrush[0].size()-1-xx;		}
+						else if	(Graphics.textureRot == 3)	{ yyy = Graphics.textureBrush.size()-1-xx;		xxx = yy;										}
 
 						if( Graphics.textureBrush.size() <= yyy ||
 							Graphics.textureBrush[0].size() <= xxx)
@@ -2660,10 +2663,34 @@ void cWorld::draw()
 								cCube* c = &cubes[y-yy][x+xx];
 								glNormal3f(c->normal.x, c->normal.y, c->normal.z);
 								glBegin(GL_TRIANGLE_STRIP);
-									glTexCoord2f((xx+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX, 1-(yy+1+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY);		glVertex3f((x+xx)*10,-c->cell1,(height-(y-yy))*10);
-									glTexCoord2f((xx+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX, 1-(yy+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY);			glVertex3f((x+xx)*10,-c->cell3,(height-(y-yy))*10-10);
-									glTexCoord2f((xx+1+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX, 1-(yy+1+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY);		glVertex3f((x+xx)*10+10,-c->cell2,(height-(y-yy))*10);
-									glTexCoord2f((xx+1+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX, 1-(yy+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY);		glVertex3f((x+xx)*10+10,-c->cell4,(height-(y-yy))*10-10);
+									if(Graphics.textureRot == 0)
+									{
+										glTexCoord2f((xxx+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX,		1-(yyy+1+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY);		glVertex3f((x+xx)*10,-c->cell1,(height-(y-yy))*10);
+										glTexCoord2f((xxx+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX,		1-(yyy+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY);			glVertex3f((x+xx)*10,-c->cell3,(height-(y-yy))*10-10);
+										glTexCoord2f((xxx+1+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX,		1-(yyy+1+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY);		glVertex3f((x+xx)*10+10,-c->cell2,(height-(y-yy))*10);
+										glTexCoord2f((xxx+1+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX,		1-(yyy+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY);			glVertex3f((x+xx)*10+10,-c->cell4,(height-(y-yy))*10-10);
+									}
+									else if (Graphics.textureRot == 1)
+									{
+										glTexCoord2f((xxx+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX,		1-(yyy+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY);		glVertex3f((x+xx)*10,-c->cell1,(height-(y-yy))*10);
+										glTexCoord2f((xxx+1+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX,		1-(yyy+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY);			glVertex3f((x+xx)*10,-c->cell3,(height-(y-yy))*10-10);
+										glTexCoord2f((xxx+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX,		1-(yyy+1+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY);		glVertex3f((x+xx)*10+10,-c->cell2,(height-(y-yy))*10);
+										glTexCoord2f((xxx+1+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX,		1-(yyy+1+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY);			glVertex3f((x+xx)*10+10,-c->cell4,(height-(y-yy))*10-10);
+									}
+									else if (Graphics.textureRot == 2)
+									{
+										glTexCoord2f((xxx+1+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX,		1-(yyy+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY);		glVertex3f((x+xx)*10,-c->cell1,(height-(y-yy))*10);
+										glTexCoord2f((xxx+1+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX,		1-(yyy+1+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY);			glVertex3f((x+xx)*10,-c->cell3,(height-(y-yy))*10-10);
+										glTexCoord2f((xxx+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX,		1-(yyy+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY);		glVertex3f((x+xx)*10+10,-c->cell2,(height-(y-yy))*10);
+										glTexCoord2f((xxx+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX,		1-(yyy+1+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY);			glVertex3f((x+xx)*10+10,-c->cell4,(height-(y-yy))*10-10);
+									}
+									else if (Graphics.textureRot == 3)
+									{
+										glTexCoord2f((xxx+1+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX,		1-(yyy+1+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY);		glVertex3f((x+xx)*10,-c->cell1,(height-(y-yy))*10);
+										glTexCoord2f((xxx+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX,		1-(yyy+1+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY);			glVertex3f((x+xx)*10,-c->cell3,(height-(y-yy))*10-10);
+										glTexCoord2f((xxx+1+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX,		1-(yyy+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY);		glVertex3f((x+xx)*10+10,-c->cell2,(height-(y-yy))*10);
+										glTexCoord2f((xxx+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX,		1-(yyy+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY);			glVertex3f((x+xx)*10+10,-c->cell4,(height-(y-yy))*10-10);
+									}
 								glEnd();
 							}
 						}
@@ -2697,7 +2724,6 @@ void cWorld::draw()
 							glColor4f(1,1,1,0.8f);
 							glEnable(GL_TEXTURE_2D);
 						}
-
 					}
 				}	
 			}

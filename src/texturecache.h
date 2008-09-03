@@ -13,7 +13,7 @@ public:
 	std::map<std::string, cTexture*, std::less<std::string> >	textures;
 	std::map<cTexture*, int, std::less<cTexture*> >	used;
 
-	cTexture*	load(std::string, bool = false);
+	cTexture*	load(std::string, bool = true);
 	void		unload(cTexture*);
 
 };
