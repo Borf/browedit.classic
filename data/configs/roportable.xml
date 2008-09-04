@@ -1,7 +1,7 @@
 <config>
-    <ro directory="..\..\ro\">
-        <grf>..\..\ro\sdata.grf</grf>
-        <grf>..\..\ro\data.grf</grf>
+    <ro directory="..\..\games\ro\">
+        <grf>..\..\games\ro\sdata.grf</grf>
+        <grf>..\..\games\ro\data.grf</grf>
     </ro>
     <files>
         <models>
@@ -85,5 +85,11 @@
             <w>56</w>
             <h>124</h>
         </texturetools>
+        <texturebrush>
+            <x>1</x>
+            <y>1</y>
+            <w>797</w>
+            <h>581</h>
+        </texturebrush>
     </wm>
 </config>

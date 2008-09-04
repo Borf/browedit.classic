@@ -2,6 +2,16 @@
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "roworldedit", "roworldedit.vcproj", "{42B28052-ACD9-46C3-B6C1-19B0C6F9C554}"
+	ProjectSection(ProjectDependencies) = postProject
+		{80BDA90B-0A0F-45B2-AEAC-E4998BBD74AB} = {80BDA90B-0A0F-45B2-AEAC-E4998BBD74AB}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "plugin_base", "plugins\base.vcproj", "{766DE6ED-86ED-4412-932C-658B875664FD}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "plugin_clearmap", "plugins\clearmap.vcproj", "{80BDA90B-0A0F-45B2-AEAC-E4998BBD74AB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{766DE6ED-86ED-4412-932C-658B875664FD} = {766DE6ED-86ED-4412-932C-658B875664FD}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,6 +23,14 @@ Global
 		{42B28052-ACD9-46C3-B6C1-19B0C6F9C554}.Debug|Win32.Build.0 = Debug|Win32
 		{42B28052-ACD9-46C3-B6C1-19B0C6F9C554}.Release|Win32.ActiveCfg = Release|Win32
 		{42B28052-ACD9-46C3-B6C1-19B0C6F9C554}.Release|Win32.Build.0 = Release|Win32
+		{766DE6ED-86ED-4412-932C-658B875664FD}.Debug|Win32.ActiveCfg = Debug|Win32
+		{766DE6ED-86ED-4412-932C-658B875664FD}.Debug|Win32.Build.0 = Debug|Win32
+		{766DE6ED-86ED-4412-932C-658B875664FD}.Release|Win32.ActiveCfg = Release|Win32
+		{766DE6ED-86ED-4412-932C-658B875664FD}.Release|Win32.Build.0 = Release|Win32
+		{80BDA90B-0A0F-45B2-AEAC-E4998BBD74AB}.Debug|Win32.ActiveCfg = Debug|Win32
+		{80BDA90B-0A0F-45B2-AEAC-E4998BBD74AB}.Debug|Win32.Build.0 = Debug|Win32
+		{80BDA90B-0A0F-45B2-AEAC-E4998BBD74AB}.Release|Win32.ActiveCfg = Release|Win32
+		{80BDA90B-0A0F-45B2-AEAC-E4998BBD74AB}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

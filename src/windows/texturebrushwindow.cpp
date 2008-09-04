@@ -61,10 +61,194 @@ void cTextureBrushWindow::cWindowBrushButton::draw(int,int,int,int)
 	glEnd();
 	glEnable(GL_TEXTURE_2D);
 	glColor4fv(colors);
+}
 
+void cTextureBrushWindow::cWindowBrushButton::click()
+{
+	int oldWidth =  ((cTextureBrushWindow*)parent)->brushWidth;
+	int oldHeight = ((cTextureBrushWindow*)parent)->brushHeight;
+
+	int x,y;
+	for(y = 0; y < oldHeight; y++)
+	{
+		for(x = 0; x < oldWidth; x++)
+		{
+			char buf[16];
+			sprintf(buf, "tile%i,%i", x,y);
+			delete parent->objects[buf];
+			parent->objects.erase(parent->objects.find(buf));
+		}
+	}
+
+	for(y = 0; y < brush.size(); y++)
+	{
+		for(x = 0; x < brush[y].size(); x++)
+		{
+			cWindowBrushTile* tile = new cWindowBrushTile(parent,Graphics.WM.skin);
+			tile->moveTo(64*x,64*y);
+			tile->resizeTo(64,64);
+			tile->on = brush[y][x];
+			char buf[16];
+			sprintf(buf, "tile%i,%i", x,y);
+			parent->objects[buf] = tile;
+		}
+	}
+
+	((cTextureBrushWindow*)parent)->brushWidth  = brush[0].size();;
+	((cTextureBrushWindow*)parent)->brushHeight = brush.size();
+
+	parent->resizeTo(parent->getWidth(), parent->getHeight());
+}
+
+
+cTextureBrushWindow::cWindowBrushTile::cWindowBrushTile( cWindow* parent, TiXmlDocument &skin ) : cWindowObject(parent,skin.FirstChildElement("skin")->FirstChildElement("button"))
+{
+	alignment = ALIGN_TOPLEFT;
+	resizeTo(128,128);
+	on = false;	
+}
+
+void cTextureBrushWindow::cWindowBrushTile::draw( int,int,int,int )
+{
+	GLfloat colors[4];
+	glGetFloatv(GL_CURRENT_COLOR, colors);
+	
+	cWindowObject::draw();
+		
+	if(on)
+	{
+		int xx = realX();
+		int yy = realY();
+		glDisable(GL_TEXTURE_2D);
+		glColor4f(0,0,0,colors[3]);
+		glBegin(GL_QUADS);
+			glVertex2f(xx + 1,			yy + 1);
+			glVertex2f(xx + 1 + w-2,	yy + 1);
+			glVertex2f(xx + 1 + w-2,	yy + 1 + h-2);
+			glVertex2f(xx + 1,			yy + 1 + h-2);
+		glEnd();
+		glEnable(GL_TEXTURE_2D);
+	}	
+	glColor4fv(colors);
+}
+
+void cTextureBrushWindow::cWindowBrushTile::click()
+{
+	on = !on;
+}
+
+
+
+cTextureBrushWindow::cWindowBrushChangeButton::cWindowBrushChangeButton( cWindow* parent, TiXmlDocument &skin ) : cWindowButton(parent,skin)
+{
+	alignment = ALIGN_TOPLEFT;
+	text = "Change";
+	resizeTo(140,h);
+}
+
+void cTextureBrushWindow::cWindowBrushChangeButton::click()
+{
+	int width = atoi(parent->objects["inpWidth"]->getText(0).c_str());
+	int height = atoi(parent->objects["inpHeight"]->getText(0).c_str());
+
+	int oldWidth =  ((cTextureBrushWindow*)parent)->brushWidth;
+	int oldHeight = ((cTextureBrushWindow*)parent)->brushHeight;
+
+	if(oldWidth < width)
+	{
+		for(int x = oldWidth; x < width; x++)
+		{
+			for(int y = 0; y < oldHeight; y++)
+			{
+				cWindowBrushTile* tile = new cWindowBrushTile(parent,Graphics.WM.skin);
+				tile->moveTo(64*x,64*y);
+				tile->resizeTo(64,64);
+				char buf[16];
+				sprintf(buf, "tile%i,%i", x,y);
+				parent->objects[buf] = tile;
+
+			}
+		}
+	}
+	else if(oldWidth > width)
+	{
+		for(int x = width; x < oldWidth; x++)
+		{
+			for(int y = 0; y < oldHeight; y++)
+			{
+				char buf[16];
+				sprintf(buf, "tile%i,%i", x,y);
+				delete parent->objects[buf];
+				parent->objects.erase(parent->objects.find(buf));
+				
+			}
+		}
+	}
+
+	if(oldHeight < height)
+	{
+		for(int y = oldHeight; y < height; y++)
+		{
+			for(int x = 0; x < width; x++)
+			{
+				cWindowBrushTile* tile = new cWindowBrushTile(parent,Graphics.WM.skin);
+				tile->moveTo(64*x,64*y);
+				tile->resizeTo(64,64);
+				char buf[16];
+				sprintf(buf, "tile%i,%i", x,y);
+				parent->objects[buf] = tile;
+			}
+		}
+	}
+	else if (oldHeight > height)
+	{
+		for(int y = height; y < oldHeight; y++)
+		{
+			for(int x = 0; x < width; x++)
+			{
+				char buf[16];
+				sprintf(buf, "tile%i,%i", x,y);
+				delete parent->objects[buf];
+				parent->objects.erase(parent->objects.find(buf));
+			}
+		}
+	}
+	((cTextureBrushWindow*)parent)->brushWidth = width;
+	((cTextureBrushWindow*)parent)->brushHeight = height;
+
+	parent->resizeTo(parent->getWidth(), parent->getHeight());
 
 }
 
+
+
+cTextureBrushWindow::cWindowBrushOkButton::cWindowBrushOkButton( cWindow* parent, TiXmlDocument &skin ) : cWindowButton(parent,skin)
+{
+	alignment = ALIGN_TOPLEFT;
+	text = "Ok";
+	resizeTo(140,h);	
+}
+
+void cTextureBrushWindow::cWindowBrushOkButton::click()
+{
+	Graphics.textureBrush.clear();
+
+	int width =  ((cTextureBrushWindow*)parent)->brushWidth;
+	int height = ((cTextureBrushWindow*)parent)->brushHeight;
+
+	Graphics.textureBrush = std::vector<std::vector<bool> >(height, std::vector<bool>(width, false) );
+
+	for(int y = 0; y < height; y++)
+	{
+		for(int x = 0; x < width; x++)
+		{
+			char buf[16];
+			sprintf(buf, "tile%i,%i", x,y);
+			Graphics.textureBrush[y][x] = ((cWindowBrushTile*)parent->objects[buf])->on;
+		}
+	}
+	parent->close();
+}
 
 cTextureBrushWindow::cTextureBrushWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWindow(t,f,skin)
 {
@@ -98,15 +282,47 @@ cTextureBrushWindow::cTextureBrushWindow(cTexture* t, cFont* f, TiXmlDocument &s
 		
 
 	TiXmlDocument brushes = fs.getXml("data/brushes.xml");
-	TiXmlElement* brush = brushes.FirstChildElement("brushes")->FirstChildElement("brush");
-	while(brush != NULL)
+	TiXmlElement* brushEl = brushes.FirstChildElement("brushes")->FirstChildElement("brush");
+	while(brushEl != NULL)
 	{
-		o = new cWindowBrushButton(this,skin, atoi(brush->Attribute("width")), atoi(brush->Attribute("height")), brush->FirstChild()->Value());
-		o->setPopup(brush->Attribute("name"));
+		o = new cWindowBrushButton(this,skin, atoi(brushEl->Attribute("width")), atoi(brushEl->Attribute("height")), brushEl->FirstChild()->Value());
+		o->setPopup(brushEl->Attribute("name"));
 		scroll->objects.push_back(o);
-		brush = brush->NextSiblingElement("brush");
+		brushEl = brushEl->NextSiblingElement("brush");
 	}
 
+
+	cWindowBrushTile* tile;
+	
+	brushWidth = Graphics.textureBrush[0].size();
+	brushHeight = Graphics.textureBrush.size();
+	
+	for(int y = 0; y < Graphics.textureBrush.size(); y++)
+	{
+		for(int x = 0; x < Graphics.textureBrush[y].size(); x++)
+		{
+			tile = new cWindowBrushTile(this,skin);
+			tile->moveTo(64*x,64*y);
+			tile->resizeTo(64,64);
+			tile->on = Graphics.textureBrush[y][x];
+			char buf[16];
+			sprintf(buf, "tile%i,%i", x,y);
+			objects[buf] = tile;
+		}
+	}
+
+	char buf[10];
+
+	addLabel("lblWidth", 0,0,"Width");
+	sprintf(buf, "%i", brushWidth);
+	addInputBox("inpWidth", 140,140,140,buf,skin);
+
+	addLabel("lblHeight", 0,50,"Height");
+	sprintf(buf, "%i", brushHeight);
+	addInputBox("inpHeight", 140,140,140,buf,skin);
+
+	objects["btnChange"] = new cWindowBrushChangeButton(this,skin);
+	objects["btnOk"] = new cWindowBrushOkButton(this,skin);
 
 	resizeTo(w,h);
 }
@@ -133,4 +349,26 @@ void cTextureBrushWindow::resizeTo(int xx, int yy)
 		}
 	}
 
+	int tileSize = min((innerWidth()-150) / brushWidth, 300 / brushHeight);
+
+	for(y = 0; y < brushHeight; y++)
+	{
+		for(x = 0; x < brushWidth; x++)
+		{
+			char buf[16];
+			sprintf(buf, "tile%i,%i", x,y);
+			objects[buf]->resizeTo(tileSize, tileSize);
+			objects[buf]->moveTo(x*tileSize, y*tileSize);
+		}
+	}
+	objects["lblWidth"]->moveTo(innerWidth()-140, 0);
+	objects["inpWidth"]->moveTo(innerWidth()-140, 15);
+
+	objects["lblHeight"]->moveTo(innerWidth()-140, 30);
+	objects["inpHeight"]->moveTo(innerWidth()-140, 45);
+
+	objects["btnChange"]->moveTo(innerWidth()-140,70);
+	objects["btnOk"]->moveTo(innerWidth()-140,100);
 }
+
+

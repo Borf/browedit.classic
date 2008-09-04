@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9.00"
+	Version="9,00"
 	Name="roworldedit"
 	ProjectGUID="{42B28052-ACD9-46C3-B6C1-19B0C6F9C554}"
 	RootNamespace="roworldedit"
@@ -18,8 +18,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
-			IntermediateDirectory="$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)$/../obj/vs9/$(ConfigurationName)/"
+			IntermediateDirectory="$(SolutionDir)$/../obj/vs9/$(ConfigurationName)/"
 			ConfigurationType="1"
 			CharacterSet="0"
 			>
@@ -49,7 +49,7 @@
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
+				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="4"
 			/>
 			<Tool
@@ -63,10 +63,12 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="sdl_mixer.lib bgd.lib sdl.lib sdlmain.lib zlib.lib ws2_32.lib opengl32.lib glu32.lib "
+				AdditionalDependencies="plugin_based.lib libcurl.lib sdl_mixer.lib bgd.lib sdl.lib sdlmain.lib zlib.lib ws2_32.lib opengl32.lib glu32.lib"
+				OutputFile="..\roworldeditd.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\libs/lib"
 				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(SolutionDir)$/../$(ProjectName).pdb"
 				SubSystem="1"
 				TargetMachine="1"
 			/>
@@ -176,6 +178,14 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath="..\src\bmutex.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\bthread.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\common.cpp"
 				>
 			</File>
@@ -205,6 +215,10 @@
 			</File>
 			<File
 				RelativePath="..\src\md5.c"
+				>
+			</File>
+			<File
+				RelativePath="..\src\menu.cpp"
 				>
 			</File>
 			<File
@@ -287,6 +301,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\texturepaintedit.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\src\walledit.cpp"
 					>
 				</File>
@@ -301,6 +319,14 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath="..\src\bmutex.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\bthread.h"
+				>
+			</File>
 			<File
 				RelativePath="..\src\common.h"
 				>
@@ -431,105 +457,233 @@
 				Name="windows"
 				>
 				<File
-					RelativePath="..\src\wm\ambientlightwindow.h"
+					RelativePath="..\src\windows\ambientlightwindow.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\wm\areacopywindow.h"
+					RelativePath="..\src\windows\confirmwindow.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\wm\confirmwindow.h"
+					RelativePath="..\src\windows\effectwindow.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\wm\effectwindow.h"
+					RelativePath="..\src\windows\favoritelights.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\wm\favoritelights.h"
+					RelativePath="..\src\windows\filewindow.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\wm\filewindow.h"
+					RelativePath="..\src\windows\hotkeywindow.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\wm\hotkeywindow.h"
+					RelativePath="..\src\windows\inputwindow.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\wm\inputwindow.h"
+					RelativePath="..\src\windows\keybindwindow.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\wm\keybindwindow.h"
+					RelativePath="..\src\windows\lightoverviewwindow.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\wm\lightoverviewwindow.h"
+					RelativePath="..\src\windows\lightwindow.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\wm\lightwindow.h"
+					RelativePath="..\src\windows\mapdetailwindow.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\wm\messagewindow.h"
+					RelativePath="..\src\windows\mapswindow.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\wm\minimapwindow.h"
+					RelativePath="..\src\windows\messagewindow.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\wm\modeloverviewwindow.h"
+					RelativePath="..\src\windows\minimapwindow.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\wm\modelswindow.cpp"
+					RelativePath="..\src\windows\modeloverviewwindow.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\wm\modelswindow.h"
+					RelativePath="..\src\windows\modelswindow.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\wm\objectwindow.h"
+					RelativePath="..\src\windows\objectwindow.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\wm\progresswindow.h"
+					RelativePath="..\src\windows\progresswindow.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\wm\rsmeditwindow.h"
+					RelativePath="..\src\windows\rsmeditwindow.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\wm\soundoverviewwindow.h"
+					RelativePath="..\src\windows\soundoverviewwindow.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\wm\soundselectwindow.h"
+					RelativePath="..\src\windows\soundselectwindow.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\wm\soundwindow.h"
+					RelativePath="..\src\windows\soundwindow.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\wm\spritewindow.h"
+					RelativePath="..\src\windows\spritewindow.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\wm\texturewindow.h"
+					RelativePath="..\src\windows\texturetoolswindow.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\src\wm\waterwindow.h"
+					RelativePath="..\src\windows\texturewindow.cpp"
 					>
 				</File>
+				<File
+					RelativePath="..\src\windows\waterwindow.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\windows\xmlwindow.cpp"
+					>
+				</File>
+				<Filter
+					Name="headers"
+					>
+					<File
+						RelativePath="..\src\windows\ambientlightwindow.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\windows\areacopywindow.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\windows\brushselectwindow.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\windows\confirmwindow.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\windows\effectwindow.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\windows\favoritelights.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\windows\filewindow.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\windows\hotkeywindow.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\windows\inputwindow.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\windows\keybindwindow.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\windows\lightoverviewwindow.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\windows\lightwindow.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\windows\mapdetailwindow.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\windows\mapswindow.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\windows\messagewindow.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\windows\minimapwindow.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\windows\modeloverviewwindow.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\windows\modelswindow.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\windows\objectwindow.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\windows\progresswindow.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\windows\rsmeditwindow.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\windows\soundoverviewwindow.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\windows\soundselectwindow.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\windows\soundwindow.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\windows\spritewindow.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\windows\texturetoolswindow.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\windows\texturewindow.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\windows\waterwindow.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\windows\xmlwindow.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="components"
