@@ -1,4 +1,5 @@
 #include "xmlwindow.h"
+#include <common.h>
 #include <wm/windowbutton.h>
 #include <wm/windowcheckbox.h>
 #include <wm/windowlabel.h>
@@ -56,7 +57,7 @@ cXmlWindow::cXmlWindow(cTexture* t, cFont* f, TiXmlDocument& skin, TiXmlDocument
 
 void cXmlWindow::event(cWindowObject* o, std::string type)
 {
-	for(std::map<std::string, cWindowObject*, std::less<std::string> >::iterator i = objects.begin(); i != objects.end(); i++)
+	for(objectlist::iterator i = objects.begin(); i != objects.end(); i++)
 	{
 		if(i->second == o)
 			eventhandler(this, i->first, type);

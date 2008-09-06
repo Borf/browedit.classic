@@ -1,10 +1,12 @@
 #ifndef __SOUNDSELECTWINDOW_H__
 #define __SOUNDSELECTWINDOW_H__
 
+#include <common.h>
 #include <wm/window.h>
 #include <wm/windowtree.h>
 #include <wm/windowlistbox.h>
 #include <wm/windowbutton.h>
+
 
 class cSound;
 

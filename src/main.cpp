@@ -1,8 +1,12 @@
 #define _MAIN_CPP_
 #include "tinyxml/tinyxml.h"
 TiXmlDocument msgtable;
-#include "common.h"
+#include <common.h>
+#include <font.h>
 int keymap[SDLK_LAST-SDLK_FIRST];
+#include <utility>
+#include <winsock.h>
+#include <common.h>
 #include <SDL/SDL_mixer.h>
 #include "filesystem.h"
 #include <math.h>
@@ -350,7 +354,7 @@ void mainloop()
 		if(editmode == MODE_OBJECTS)
 		{
 			if(w == NULL)
-				Graphics.WM.addwindow(new cModelOverViewWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin));
+				Graphics.WM.addwindow(new cModelOverViewWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin));
 			else
 			{
 				w->userfunc(NULL);
@@ -365,7 +369,7 @@ void mainloop()
 		if (editmode == MODE_LIGHTS)
 		{
 			if(w == NULL)
-				Graphics.WM.addwindow(new cLightOverViewWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin));
+				Graphics.WM.addwindow(new cLightOverViewWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin));
 			else
 			{
 				w->userfunc(NULL);
@@ -379,7 +383,7 @@ void mainloop()
 		if (editmode == MODE_SOUNDS)
 		{
 			if(w == NULL)
-				Graphics.WM.addwindow(new cSoundOverViewWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin));
+				Graphics.WM.addwindow(new cSoundOverViewWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin));
 			else
 			{
 				w->userfunc(NULL);
@@ -393,7 +397,7 @@ void mainloop()
 		if (editmode == MODE_TEXTUREPAINT)
 		{
 			if(w == NULL)
-				Graphics.WM.addwindow(new cTextureToolsWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin));
+				Graphics.WM.addwindow(new cTextureToolsWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin));
 			else
 			{
 				w->show();
@@ -667,7 +671,7 @@ int main(int argc, char *argv[])
 		if (WSAStartup(MAKEWORD(2, 2), &WinsockData) != 0)
 		{
 
-			msgbox("Winsock Startup failed!", "Fatal Error");
+			Graphics.WM.ShowMessage("Winsock Startup failed!");
 			return 0;
 		}
 		BYTE randchar = rand()%255;
@@ -930,7 +934,9 @@ int main(int argc, char *argv[])
 		std::string b = pFile->readLine();
 		translations.push_back(std::pair<std::string, std::string>(a,b));
 	}
-	mergesort<std::pair<std::string, std::string> >(translations, translationcomp);
+//	mergesort<std::pair<std::string, std::string> >(translations, translationcomp);
+//	std::sort(translations.begin(), translations::end());
+	///TODO
 	pFile->close();
 
 
@@ -1259,11 +1265,11 @@ int main(int argc, char *argv[])
 	
 	
 	if(!IsLegal2)
-		Graphics.WM.MessageBox("This version of browedit is not properly activated. Please post on the access reset topic to get it activated in case you should have access to browedit");
+		Graphics.WM.ShowMessage("This version of browedit is not properly activated. Please post on the access reset topic to get it activated in case you should have access to browedit");
 
 	if(IsInsideVMWare() || IsInsideVPC())
 	{
-		Graphics.WM.MessageBox("You're running BrowEdit inside a virtual PC. Please don't do this");
+		Graphics.WM.ShowMessage("You're running BrowEdit inside a virtual PC. Please don't do this");
 		IsLegal2 = false;
 	}
 
@@ -1954,7 +1960,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					cWindow* w = Graphics.WM.getwindow(WT_TEXTURE);
 					if (w == NULL)
-						Graphics.WM.addwindow(new cTextureWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin));
+						Graphics.WM.addwindow(new cTextureWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin));
 					else
 						Graphics.WM.togglewindow(WT_TEXTURE);
 					break;
@@ -1964,7 +1970,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					cWindow* w = Graphics.WM.getwindow(WT_MODELS);
 					if (w == NULL)
-						Graphics.WM.addwindow(new cModelsWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin)	);
+						Graphics.WM.addwindow(new cModelsWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin)	);
 					else
 						Graphics.WM.togglewindow(WT_MODELS);
 				}
@@ -2000,7 +2006,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			{
 				cWindow* w = Graphics.WM.getwindow(WT_MINIMAP);
 				if (w == NULL)
-					Graphics.WM.addwindow(new cMiniMapWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin)	);
+					Graphics.WM.addwindow(new cMiniMapWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin)	);
 				else
 					Graphics.WM.togglewindow(WT_MINIMAP);
 			}

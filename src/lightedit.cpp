@@ -254,7 +254,7 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 					{
 						cLight* l = &Graphics.world.lights[Graphics.selectedObject];
 
-						cWindow* w = new cLightWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin);
+						cWindow* w = new cLightWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin);
 						((cWindowStringInputBox*)w->objects["name"])->stringetje = &l->name;
 						((cWindowFloatInputBox*)w->objects["posx"])->floatje = &l->pos.x;
 						((cWindowFloatInputBox*)w->objects["posy"])->floatje = &l->pos.y;

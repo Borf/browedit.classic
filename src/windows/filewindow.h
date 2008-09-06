@@ -7,6 +7,7 @@
 #include <wm/windowbutton.h>
 #include <wm/windowinputbox.h>
 
+#include <vector>
 
 class cFileWindow : public cWindow
 {

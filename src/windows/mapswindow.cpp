@@ -105,7 +105,7 @@ cMapsWindow::cMapsWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWindow(t
 			list.Parse(data);
 			if(list.Error())
 			{
-				Graphics.WM.MessageBox("Could not parse list!");
+				Graphics.WM.ShowMessage("Could not parse list!");
 				return;
 			}
 
@@ -178,7 +178,7 @@ cMapsWindow::cSearchButton::cSearchButton(cWindow* parent, TiXmlDocument &skin) 
 
 void cMapsWindow::cSearchButton::click()
 {
-	Graphics.WM.MessageBox("You clicked!");
+	Graphics.WM.ShowMessage("You clicked!");
 
 }
 
@@ -231,7 +231,7 @@ cMapsWindow::~cMapsWindow()
 
 void cMapsWindow::cClickableFrame::click()
 {
-	Graphics.WM.addwindow(new cMapDetailWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin));
+	Graphics.WM.addwindow(new cMapDetailWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin));
 }
 
 cMapsWindow::cClickableFrame::cClickableFrame( cWindow* parent, TiXmlDocument &skin ) : cWindowFrame(parent,skin)

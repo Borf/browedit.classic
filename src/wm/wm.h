@@ -1,10 +1,8 @@
 #ifndef __WM_H__
 #define __WM_H__
 
-#include <common.h>
-#include <font.h>
-#include <texture.h>
-#include <list>
+class cFont;
+class cTexture;
 
 #include <map>
 //using namespace std;
@@ -43,7 +41,7 @@ public:
 //properties
 	std::vector<cWindow*>	windows; //vector of windows, 0 = topwindow
 	cTexture*				texture;
-	cFont					font;
+	cFont*					font;
 	float					color[4];
 	float					colorblur[4];
 
@@ -51,7 +49,7 @@ public:
 	void					CleanWindows();
 
 	int						focus;
-	void					MessageBox(std::string);
+	void					ShowMessage(std::string);
 	void					ConfirmWindow(std::string, cConfirmWindow::cConfirmWindowCaller* caller);
 	bool					ConfirmWindow(std::string);
 	cWindow*				InputWindow(std::string, cInputWindow::cInputWindowCaller* caller);

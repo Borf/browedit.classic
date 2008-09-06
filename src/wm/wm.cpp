@@ -1,4 +1,8 @@
 #include "wm.h"
+
+#include <common.h>
+#include <font.h>
+#include <texture.h>
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
 #include <graphics.h>
@@ -102,7 +106,8 @@ int cWM::init(std::string sSkin)
 {
 	skin = fs.getXml(sSkin);
 	texture = TextureCache.load(skin.FirstChildElement("skin")->FirstChildElement("texture")->FirstChild()->Value());
-	font.load(skin.FirstChildElement("skin")->FirstChildElement("font")->FirstChild()->Value());
+	font = new cFont();
+	font->load(skin.FirstChildElement("skin")->FirstChildElement("font")->FirstChild()->Value());
 
 	std::string c = skin.FirstChildElement("skin")->FirstChildElement("color")->FirstChild()->Value();
 	color[0] = hex2dec(c.substr(0,2))/255.0f;
@@ -433,9 +438,9 @@ void cWM::rightclick()
 }
 
 
-void cWM::MessageBox(std::string message)
+void cWM::ShowMessage(std::string message)
 {
-	cWindow* w = new cMessageWindow(texture, &font,skin);
+	cWindow* w = new cMessageWindow(texture, font,skin);
 	w->objects["text"]->setText(0, message);
 	w->show();
 	addwindow(w);
@@ -504,7 +509,7 @@ void cWM::printdebug()
 
 void cWM::ConfirmWindow(std::string title, cConfirmWindow::cConfirmWindowCaller* caller)
 {
-	cWindow* w = new cConfirmWindow(caller, texture, &font,skin);
+	cWindow* w = new cConfirmWindow(caller, texture, font,skin);
 	w->objects["text"]->setText(0, title);
 	w->show();
 	addwindow(w);
@@ -530,8 +535,8 @@ void cWM::defocus()
 
 cWindow* cWM::InputWindow(std::string title, cInputWindow::cInputWindowCaller* caller)
 {
-	cWindow* w = new cInputWindow(caller, texture, &font,skin);
-	w->init(texture, &font);
+	cWindow* w = new cInputWindow(caller, texture, font,skin);
+	w->init(texture, font);
 	w->objects["text"]->setText(0, title);
 	w->objects["input"]->setText(0,"");
 	w->show();
@@ -542,7 +547,7 @@ cWindow* cWM::InputWindow(std::string title, cInputWindow::cInputWindowCaller* c
 cWindow* cWM::XmlWindow(std::string src)
 {
 	TiXmlDocument layout = fs.getXml(src);
-	cWindow* w = new cXmlWindow(texture, &font, skin, layout);
+	cWindow* w = new cXmlWindow(texture, font, skin, layout);
 	addwindow(w);
 	return w;
 }

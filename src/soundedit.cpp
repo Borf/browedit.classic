@@ -99,7 +99,7 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 						((cSoundSelectWindow*)w)->selectedSound = NULL;
 					}
 					else
-						Graphics.WM.addwindow(new cSoundSelectWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin, cVector3(mouse3dx, mouse3dy, mouse3dz)));
+						Graphics.WM.addwindow(new cSoundSelectWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin, cVector3(mouse3dx, mouse3dy, mouse3dz)));
 					
 
 				}
@@ -146,7 +146,7 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 				{
 					cSound* o = &Graphics.world.sounds[Graphics.selectedObject];
 
-					cWindow* w = new cSoundWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin);
+					cWindow* w = new cSoundWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin);
 
 					((cWindowStringInputBox*)w->objects["objectname"])->stringetje = &o->name;
 

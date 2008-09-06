@@ -1,7 +1,6 @@
 #ifndef __WINDOWOBJECT_H__
 #define __WINDOWOBJECT_H__
 
-#include <common.h>
 #include <string>
 #include <tinyxml/tinyxml.h>
 //using namespace std;

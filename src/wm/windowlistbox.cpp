@@ -2,6 +2,12 @@
 #include "window.h"
 #include <graphics.h>
 extern cGraphics Graphics;
+
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
+#include <font.h>
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
 

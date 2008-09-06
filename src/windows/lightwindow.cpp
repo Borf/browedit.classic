@@ -112,13 +112,13 @@ cLightWindow::cLightWindow( cTexture* t, cFont* f, TiXmlDocument &skin ) : cWind
 
 void* cLightWindow::userfunc( void* param )
 {
-	intptr_t p = (intptr_t)param;
+	int p = (int)param;
 	if(p == 0) // cancel
 	{
 	}
 	else
 	{
-		for(std::map<std::string, cWindowObject*, std::less<std::string> >::iterator i = objects.begin(); i !=  objects.end(); i++)
+		for(objectlist::iterator i = objects.begin(); i !=  objects.end(); i++)
 		{
 			if(i->second->type == OBJECT_FLOATINPUTBOX)
 				i->second->onKeyDown(SDLK_RETURN, false);

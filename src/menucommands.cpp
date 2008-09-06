@@ -1,3 +1,6 @@
+#include <common.h>
+#include <commdlg.h>
+#include <shellapi.h>
 #include "menucommands.h"
 #include "graphics.h"
 #include <SDL/SDL_syswm.h>
@@ -48,7 +51,7 @@ cMenuItem* selectedeffect = NULL;
 
 MENUCOMMAND(new)
 {
-	Graphics.WM.MessageBox("This feature isn't working yet...");
+	Graphics.WM.ShowMessage("This feature isn't working yet...");
 	return true;
 }
 
@@ -105,7 +108,7 @@ void openfunc(std::string param)
 
 MENUCOMMAND(opengrf)
 {
-	Graphics.WM.addwindow(new cFileWindow(Graphics.WM.texture, &Graphics.WM.font, openfunc,Graphics.WM.skin));
+	Graphics.WM.addwindow(new cFileWindow(Graphics.WM.texture, Graphics.WM.font, openfunc,Graphics.WM.skin));
 	return true;
 }
 
@@ -290,7 +293,7 @@ MENUCOMMAND(random1)
 	int smooth  = atoi(Graphics.WM.InputWindow("Smoothing level (use 5-10 for decent results)").c_str());
 	if(height == 0)
 	{
-		Graphics.WM.MessageBox("You must enter a height bigger then 0");
+		Graphics.WM.ShowMessage("You must enter a height bigger then 0");
 		return true;
 	}
 
@@ -1481,7 +1484,7 @@ MENUCOMMAND(dolightmaps2)
 	bool rendering = true;
 
 
-	cProgressWindow* w = new cProgressWindow(Graphics.WM.texture, &Graphics.WM.font, &rendering, Graphics.WM.skin);
+	cProgressWindow* w = new cProgressWindow(Graphics.WM.texture, Graphics.WM.font, &rendering, Graphics.WM.skin);
 	Graphics.WM.addwindow(w);
 	w->objects["progress"]->setInt(1,0);
 	w->objects["progress"]->setInt(2,Graphics.world.height * Graphics.world.width);
@@ -2078,7 +2081,7 @@ MENUCOMMAND(toggle)
 MENUCOMMAND(water)
 {
 	char buf[100];
-	cWindow* w = new cWaterWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin);
+	cWindow* w = new cWaterWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin);
 	sprintf(buf, "%f", Graphics.world.water.amplitude);		w->objects["amplitude"]->setText(0,buf);
 	sprintf(buf, "%f", Graphics.world.water.height);		w->objects["height"]->setText(0,buf);
 	sprintf(buf, "%f", Graphics.world.water.phase);			w->objects["phase"]->setText(0,buf);
@@ -2120,7 +2123,7 @@ MENUCOMMAND(cleantextures)
 MENUCOMMAND(ambientlight)
 {
 	char buf[100];
-	cWindow* w = new cAmbientLightWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin);
+	cWindow* w = new cAmbientLightWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin);
 	sprintf(buf, "%i", Graphics.world.ambientLight.ambientr);		w->objects["ambientr"]->setText(0,buf);
 	sprintf(buf, "%i", Graphics.world.ambientLight.ambientg);		w->objects["ambientg"]->setText(0,buf);
 	sprintf(buf, "%i", Graphics.world.ambientLight.ambientb);		w->objects["ambientb"]->setText(0,buf);
@@ -2179,7 +2182,7 @@ MENUCOMMAND(properties)
 
 MENUCOMMAND(preferences)
 {
-	Graphics.WM.addwindow(new cKeyBindWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin));
+	Graphics.WM.addwindow(new cKeyBindWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin));
 	return true;
 }
 
@@ -2282,13 +2285,13 @@ MENUCOMMAND(fillarea)
 
 MENUCOMMAND(rsmedit)
 {
-	Graphics.WM.addwindow(new cRSMEditWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin));
+	Graphics.WM.addwindow(new cRSMEditWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin));
 	return true;
 }
 
 MENUCOMMAND(favlights)
 {
-	Graphics.WM.addwindow(new cFavoriteLightsWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin));
+	Graphics.WM.addwindow(new cFavoriteLightsWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin));
 	return true;
 }
 
@@ -3131,7 +3134,7 @@ MENUCOMMAND(addfavlight)
 
 		if(!((cFavoriteLightsWindow::cFavoriteTreeNode*)node)->isCat)
 		{
-			Graphics.WM.MessageBox("You can't add a light to another light, you can only add lights to categories");
+			Graphics.WM.ShowMessage("You can't add a light to another light, you can only add lights to categories");
 			return false;
 		}
 
@@ -3215,7 +3218,7 @@ MENUCOMMAND(addfavlightcat)
 
 		if(!((cFavoriteLightsWindow::cFavoriteTreeNode*)node)->isCat)
 		{
-			Graphics.WM.MessageBox("You can't add a category to a light, you can only add lights to categories");
+			Graphics.WM.ShowMessage("You can't add a category to a light, you can only add lights to categories");
 			return false;
 		}
 
@@ -3356,7 +3359,7 @@ MENUCOMMAND(plugin)
 
 MENUCOMMAND(mapdatabase)
 {
-	Graphics.WM.addwindow(new cMapsWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin));
+	Graphics.WM.addwindow(new cMapsWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin));
 	return true;
 }
 
@@ -3417,7 +3420,7 @@ MENUCOMMAND(saveOnline)
 			{
 				std::vector<std::string> lines = split(data, "\n");
 				renderMutex->lock();
-				cProgressWindow* w = new cProgressWindow(Graphics.WM.texture, &Graphics.WM.font, NULL, Graphics.WM.skin);
+				cProgressWindow* w = new cProgressWindow(Graphics.WM.texture, Graphics.WM.font, NULL, Graphics.WM.skin);
 				Graphics.WM.addwindow(w);
 				w->objects["progress"]->setInt(1,0);
 				w->objects["progress"]->setInt(2,lines.size());
@@ -3496,7 +3499,7 @@ MENUCOMMAND(saveOnline)
 					}
 					else if(lines[i].find("error:") == 0)
 					{
-						Graphics.WM.MessageBox("Error: " + lines[i].substr(6));
+						Graphics.WM.ShowMessage("Error: " + lines[i].substr(6));
 						w->close();
 						return;
 					}
@@ -3525,7 +3528,7 @@ MENUCOMMAND(saveOnline)
 
 	Graphics.world.save();			
 
-	Graphics.WM.MessageBox("Please move your viewpoint to show the map on the thumbnail");
+	Graphics.WM.ShowMessage("Please move your viewpoint to show the map on the thumbnail");
 
 
 	cFile* rsw = fs.open(std::string(Graphics.world.fileName) + ".rsw");

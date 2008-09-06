@@ -2,6 +2,7 @@
 #define __MINIMAPWINDOW_H__
 
 #include <wm/window.h>
+#include <wm/windowobject.h>
 
 class cMiniMapWindow : public cWindow
 {

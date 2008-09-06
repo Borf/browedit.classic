@@ -1,7 +1,13 @@
 #include "windowtabpanel.h"
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
+#include <common.h>
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
+#include <font.h>
 #include "window.h"
 #include <graphics.h>
 extern cGraphics Graphics;

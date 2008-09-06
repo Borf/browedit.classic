@@ -38,7 +38,7 @@ public:
 		void setText(int i, std::string s);
 		std::string getText(int i);
 		void drag();
-		void setInt(int i, intptr_t id);
+		void setInt(int i, int id);
 		~cWindowModel();
 	};
 

@@ -227,7 +227,7 @@ void cSpriteWindow::cTree::onChange()
 	if(node->children.size() == 0)
 	{
 		
-		intptr_t selectedtab = parent->objects["tabpanel"]->getInt(0);
+		int selectedtab = parent->objects["tabpanel"]->getInt(0);
 		if(((cSpriteWindow*)parent)->lookupMap.find(node) == ((cSpriteWindow*)parent)->lookupMap.end())
 		{
 			if(selectedtab == 1)

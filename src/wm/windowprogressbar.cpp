@@ -1,6 +1,12 @@
 #include "windowprogressbar.h"
 #include "window.h"
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
+#include <gl/gl.h>
+
 void cWindowProgressBar::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {
 	GLfloat colors[4];

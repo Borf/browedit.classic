@@ -1,3 +1,4 @@
+#pragma warning( disable : 4503 )
 #include "modelswindow.h"
 
 #include <filesystem.h>
@@ -145,7 +146,7 @@ void cModelsWindow::cWindowModel::drag()
 	parent->objects["zdragger"]->setText(1, data);
 }
 
-void cModelsWindow::cWindowModel::setInt(int i, intptr_t id)
+void cModelsWindow::cWindowModel::setInt(int i, int id)
 {
 	data = "";
 	if (model != NULL)

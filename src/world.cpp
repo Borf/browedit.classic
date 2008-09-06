@@ -9,6 +9,8 @@
 #include <fstream>
 #include "menu.h"
 #include "windows/hotkeywindow.h"
+#include "font.h"
+
 #ifdef _WIN32
 #include <gd/gd.h>
 #else
@@ -894,7 +896,7 @@ void cWorld::save()
 {
 	if(!IsLegal2)
 	{
-		Graphics.WM.MessageBox("This copy of browedit is not activated. Please don't use it");
+		Graphics.WM.ShowMessage("This copy of browedit is not activated. Please don't use it");
 		return;
 	}
 
@@ -1066,7 +1068,7 @@ void cWorld::save()
 		
 		if(strlen(fname) > 16)
 		{
-			Graphics.WM.MessageBox("Please use a shorter name");
+			Graphics.WM.ShowMessage("Please use a shorter name");
 			Log(2,0,"Error: |%s| is too long", fname);
 			return;
 		}

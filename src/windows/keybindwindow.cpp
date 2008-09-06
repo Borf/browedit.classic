@@ -1,5 +1,6 @@
 #include "keybindwindow.h"
 #include <fstream>
+#include <common.h>
 
 std::string keytostring(SDLKey key)
 {
@@ -385,12 +386,12 @@ void cKeyBindWindow::cKeyBindBox::draw( int cutoffleft, int cutoffright, int cut
 	cWindowInputBox::draw(cutoffleft, cutoffright, cutofftop, cutoffbottom);
 }
 
-void cKeyBindWindow::cKeyBindBox::setInt( int id, intptr_t val )
+void cKeyBindWindow::cKeyBindBox::setInt( int id, int val )
 {
 	key = (SDLKey)val;
 }
 
-intptr_t cKeyBindWindow::cKeyBindBox::getInt( int id )
+int cKeyBindWindow::cKeyBindBox::getInt( int id )
 {
 	return key;
 }

@@ -15,6 +15,8 @@
 #include "mymath.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "tinyxml/tinyxml.h"
+extern TiXmlDocument msgtable;
 
 
 const float EPSILON = 0.001f;
@@ -206,6 +208,12 @@ std::string inttostring(int i)
 }
 
 
+int round(float f)
+{
+	return floor(f+0.5f);
+}
+
+
 // rotates i to angle over the shortest angle
 void RotateShortestAngle(float &i, float angle)	
 {
@@ -354,6 +362,11 @@ float min(float x, float y)
 
 
 
+struct tPlane
+{
+	cVector3 Normal;
+	float D;
+};
 
 bool LinePlaneIntersection(tPlane &Plane, 
 			   cVector3 &StartLine,
@@ -389,6 +402,7 @@ cVector3 Normal(cVector3* vertices)
 	return normal;
 	
 }
+
 
 bool LineIntersectPolygon( cVector3 *Vertices, 
 			   int NumVertices,

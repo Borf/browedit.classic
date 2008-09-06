@@ -384,7 +384,7 @@ std::string cRSMEditWindow::cWindowModel::getText( int i )
 	return data;
 }
 
-void cRSMEditWindow::cWindowModel::setInt( int i, intptr_t id )
+void cRSMEditWindow::cWindowModel::setInt( int i, int id )
 {
 	if(i == 0)
 		backgroundcolor.x = id/256.0f;

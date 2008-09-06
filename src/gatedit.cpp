@@ -303,7 +303,7 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 				sprintf(buf, "Your cursor is at %i,%i", posx, posy);
 				if(Graphics.WM.getwindow(WT_MESSAGE))
 					Graphics.WM.getwindow(WT_MESSAGE)->close();
-				Graphics.WM.MessageBox(buf);
+				Graphics.WM.ShowMessage(buf);
 				break;
 				}
 

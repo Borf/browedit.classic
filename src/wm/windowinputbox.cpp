@@ -1,8 +1,17 @@
 #include "windowinputbox.h"
 #include "window.h"
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
+#include <sdl/SDL.h>
+
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
+
+#include <font.h>
+#include <common.h>
 
 void cWindowInputBox::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {

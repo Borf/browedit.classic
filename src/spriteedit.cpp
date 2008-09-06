@@ -157,7 +157,7 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 					if(Graphics.selectedObject >= (int)Graphics.world.sprites.size())
 						break;
 
-					cWindow* w = new cSpriteWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin);
+					cWindow* w = new cSpriteWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin);
 
 					if(Graphics.world.sprites[Graphics.selectedObject]->head)
 						((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->loadHead(Graphics.world.sprites[Graphics.selectedObject]->head->fileName);

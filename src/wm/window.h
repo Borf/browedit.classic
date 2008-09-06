@@ -1,13 +1,15 @@
 #ifndef __WINDOW_H__
 #define __WINDOW_H__
-#include <common.h>
 
+#pragma warning( disable : 4786 )
 #include <map>
-//using namespace std;
+#include <string>
 
-#include <texture.h>
-#include <font.h>
-#include "windowobject.h"
+class cTexture;
+class cFont;
+class cWindowObject;
+
+#include <tinyxml/tinyxml.h>
 
 typedef std::map<std::string, cWindowObject*, std::less<std::string> > objectlist;
 

@@ -2,9 +2,15 @@
 #include "window.h"
 #include <graphics.h>
 extern cGraphics Graphics;
+
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
 
+#include <font.h>
 
 void cWindowTree::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {
@@ -575,7 +581,8 @@ bool treeComp(cWindowTree::cTreeNode* a, cWindowTree::cTreeNode* b)
 
 void cWindowTree::cTreeNode::sort()
 {
-	mergesort<cTreeNode*>(children, treeComp);
+//	mergesort<cTreeNode*>(children, treeComp);
+	//TODO
 	for(unsigned int i = 0; i < children.size(); i++)
 		children[i]->sort();
 }

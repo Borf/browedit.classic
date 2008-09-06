@@ -1,3 +1,4 @@
+#include <common.h>
 #include "soundwindow.h"
 
 #include <wm/windowroundbutton.h>
@@ -31,7 +32,7 @@ void cSoundWindow::cWindowSelectFileButton::click()
 	}
 	else
 	{
-		cSoundSelectWindow* w = new cSoundSelectWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin, cVector3());
+		cSoundSelectWindow* w = new cSoundSelectWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin, cVector3());
 		w->selectedSound = selectedSound;
 		Graphics.WM.addwindow(w);
 	}
@@ -197,7 +198,7 @@ cSoundWindow::cSoundWindow( cTexture* t, cFont* f, TiXmlDocument &skin ) : cWind
 
 void* cSoundWindow::userfunc( void* param )
 {
-	intptr_t p = (intptr_t)param;
+	int p = (int)param;
 	if(p == 0) // cancel
 	{
 		if(undo != NULL)
@@ -209,7 +210,7 @@ void* cSoundWindow::userfunc( void* param )
 	else
 	{
 		
-		for(std::map<std::string, cWindowObject*, std::less<std::string> >::iterator i = objects.begin(); i !=  objects.end(); i++)
+		for(objectlist::iterator i = objects.begin(); i !=  objects.end(); i++)
 		{
 			if(i->second->type == OBJECT_FLOATINPUTBOX)
 				i->second->onKeyDown(SDLK_RETURN, false);

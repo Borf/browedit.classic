@@ -162,7 +162,7 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 				{
 					cEffect* o = &Graphics.world.effects[Graphics.selectedObject];
 
-					cWindow* w = new cEffectWindow(Graphics.WM.texture, &Graphics.WM.font, Graphics.WM.skin);
+					cWindow* w = new cEffectWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin);
 					((cWindowFloatInputBox*)w->objects["posx"])->floatje = &o->pos.x;
 					((cWindowFloatInputBox*)w->objects["posy"])->floatje = &o->pos.y;
 					((cWindowFloatInputBox*)w->objects["posz"])->floatje = &o->pos.z;

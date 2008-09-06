@@ -49,7 +49,7 @@ class cRSMEditWindow : public cWindow
 		void drag();
 		void setText(int i, std::string s);
 		std::string getText(int i);
-		void setInt(int i, intptr_t id);
+		void setInt(int i, int id);
 		~cWindowModel();
 		void scrollUp();
 		void scrollDown();

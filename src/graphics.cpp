@@ -1,6 +1,14 @@
 #define __GRAPHICS_CPP__
+#include "graphics.h"
+
 #include "main.h"
 #include "common.h"
+#include "world.h"
+#include "font.h"
+#include "texture.h"
+#include "frustum.h"
+#include "wm/wm.h"
+
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
 #include <math.h>
@@ -8,7 +16,6 @@
 #include "windows/hotkeywindow.h"
 #include "menucommands.h"
 
-#include "graphics.h"
 #include "menu.h"
 
 extern long			mouseX, mouseY;
@@ -459,7 +466,7 @@ int cGraphics::init()
 	splash = TextureCache.load(config.FirstChildElement("config")->FirstChildElement("splash")->FirstChild()->Value());
 	Log(3,0,GetMsg("graphics/INITIALIZINGWM"));
 	WM.init(skinFile);
-	WM.addwindow(new cHotkeyWindow(WM.texture, &WM.font, WM.skin));
+	WM.addwindow(new cHotkeyWindow(WM.texture, WM.font, WM.skin));
 
 	int i;
 	for(i = 0; i < gatTiles.size(); i++)

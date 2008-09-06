@@ -82,7 +82,8 @@ cFileWindow::cFileWindow( cTexture* t, cFont* f, void (*pCallback)(std::string),
 		}
 	}
 	
-	mergesort<std::string>(mapnames, compare<std::string>);
+//	mergesort<std::string>(mapnames, compare<std::string>);
+	//TODO
 	
 	for(i = 0; i < mapnames.size(); i++)
 		o->setText(-1, mapnames[i]);

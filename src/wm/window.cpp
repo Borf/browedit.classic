@@ -1,9 +1,16 @@
+#include <common.h>
+#include <texture.h>
+#include <font.h>
+#include "windowobject.h"
 #include "window.h"
+
+
 #include <graphics.h>
 
 extern cGraphics Graphics;
 extern cWindowObject* draggingObject;
 
+#include <font.h>
 #include "windowinputbox.h"
 #include "windowlabel.h"
 #include "windowcheckbox.h"
@@ -167,7 +174,7 @@ void cWindow::draw()
 
 //	glTranslatef(skinOffLeft, skinOffTop,0);
 
-	std::map<std::string, cWindowObject*, std::less<std::string> >::iterator i;
+	objectlist::iterator i;
 	for(i = objects.begin(); i != objects.end(); i++)
 	{
 		cWindowObject* o = i->second;
@@ -532,7 +539,7 @@ cWindowObject* cWindow::addLabel(std::string name, int x, int y, std::string tex
 	cWindowObject* o = new cWindowLabel(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(x,y);
-	o->resizeTo(Graphics.WM.font.textlen(text), 12);
+	o->resizeTo(Graphics.WM.font->textlen(text), 12);
 	o->setText(0,text);
 	objects[name] = o;
 	return o;
@@ -697,7 +704,7 @@ void cWindow::initprops(std::string s)
 
 cWindow::~cWindow()
 {
-	for(std::map<std::string, cWindowObject*, std::less<std::string> >::iterator i = objects.begin(); i != objects.end(); i++)
+	for(objectlist::iterator i = objects.begin(); i != objects.end(); i++)
 	{
 		if(draggingObject == i->second)
 			draggingObject = NULL;

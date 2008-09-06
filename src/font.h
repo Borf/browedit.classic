@@ -1,11 +1,13 @@
 #ifndef __FONT_H__
 #define __FONT_H__
 
-#include "common.h"
-#include "texture.h"
+#ifdef WIN32
+	#include <windows.h>
+#endif
 #include <string>
-#include <vector>
-//using namespace std;
+#include <gl/gl.h>
+
+class cTexture;
 
 class cFont
 {

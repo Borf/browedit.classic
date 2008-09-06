@@ -4,7 +4,6 @@
 #define GL_GLEXT_PROTOTYPES	
 #include <SDL/SDL.h>
 #include "svnver.h"
-#include "tinyxml/tinyxml.h"
 
 /* Some definitions common to C99, ported to ANSI C if not available
  * This include some handy types like uintptr_t (integer with size of a pointer)
@@ -54,7 +53,7 @@ typedef int32_t intptr_t;
 	#define DIR_SEPERATOR "\\"
 	#define newline "\r\n"
 	#define usleep(x) Sleep((x) / 1000);
-	#define msgbox(x, y) MessageBox(NULL, x, y, MB_OK);
+	#define msgbox(x, y) ShowMessage(NULL, x, y, MB_OK);
 	#include <direct.h>
 
 	HWND GetConsoleHwnd();
@@ -81,7 +80,6 @@ typedef int32_t intptr_t;
 #ifndef _MAIN_CPP_
 	#include <vector>
 	//using namespace std;
-	extern TiXmlDocument msgtable;
 	extern int keymap[SDLK_LAST-SDLK_FIRST];
 #endif
 
@@ -122,22 +120,12 @@ std::string inttostring(int);
 int hex2dec(std::string,int = 0);
 cVector3 hex2floats(std::string);
 
-template <class T> bool inbetween(T val, T start, T end)
+template <class T> inline bool inbetween(T val, T start, T end)
 {
-	if(start > end)
-	{
-		T c = start;
-		start = end;
-		end = c;
-	}
-	return val >= start && val < end;
+	return (start < end) ? (val >= start && val < end) : (val >= end && val < start);
 }
 
-inline int round(float f)
-{
-	return floor(f+0.5f);
-}
-
+int round(float f);
 long tickcount();
 void RotateShortestAngle(float &i, float angle);
 void RotateShortestAngle(float &i, float angle, float mult);
@@ -146,7 +134,7 @@ std::string getLongTimeString();
 std::string removecolors(std::string s);
 void drawlogo();
 void changetoserverdir();
-template <class T> void mergesort(std::vector<T> &tosort, bool compare(T,T))
+/*template <class T> void mergesort(std::vector<T> &tosort, bool compare(T,T))
 {
 	if (tosort.size() <= 1)
 		return;
@@ -204,7 +192,7 @@ template <class T> void mergesort(std::vector<T> &tosort, bool compare(T,T))
 template <class T> bool compare(T a,T b)
 {
 	return a < b;
-}
+}*/
 
 template <class T> int linsearch(T needle, std::vector<T> &haystack)
 {
@@ -235,11 +223,6 @@ enum eMode
 
 
 
-struct tPlane
-{
-	cVector3 Normal;
-	float D;
-};
 
 bool LineIntersectPolygon( cVector3 *,int,cVector3 &,cVector3 &, float &);
 

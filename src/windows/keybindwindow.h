@@ -4,6 +4,7 @@
 #include <wm/window.h>
 #include <wm/windowinputbox.h>
 #include <wm/windowbutton.h>
+#include <sdl/SDL.h>
 
 
 std::string keytostring(SDLKey key);
@@ -36,8 +37,8 @@ public:
 		bool onKeyUp(int keyid);
 		bool onChar(char ch);
 		void draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom);
-		void setInt(int id, intptr_t val);
-		intptr_t getInt(int id);
+		void setInt(int id, int val);
+		int getInt(int id);
 	};
 
 

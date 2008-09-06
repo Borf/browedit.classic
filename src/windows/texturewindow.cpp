@@ -1,3 +1,4 @@
+#include <common.h>
 #include "texturewindow.h"
 
 #include <wm/windowbutton.h>

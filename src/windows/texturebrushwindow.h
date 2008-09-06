@@ -3,6 +3,7 @@
 
 #include <wm/window.h>
 #include <wm/windowbutton.h>
+#include <vector>
 
 class cTextureBrushWindow : public cWindow
 {

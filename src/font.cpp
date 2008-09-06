@@ -3,6 +3,10 @@
 
 #include "font.h"
 
+#include <common.h>
+#include "texture.h"
+#include <vector>
+
 
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library

@@ -1,24 +1,27 @@
 #ifndef __GRAPHICS_H__
 #define __GRAPHICS_H__
 
-#include "common.h"
+#ifdef WIN32
+#include <windows.h>
+#endif
+
 #include <GL/gl.h>
 #include <map>
-//using namespace std;
+
 #include "world.h"
-#include "font.h"
-#include "texture.h"
+#include <wm/wm.h>
 #include "frustum.h"
-#include "wm/wm.h"
+
+class cFont;
 
 
-	enum eTool
-	{
-		TOOL_SELECTAREA,
-		TOOL_SELECTBRUSH,
-		TOOL_SELECTWAND,
-		TOOL_BRUSH,
-	};
+enum eTool
+{
+	TOOL_SELECTAREA,
+	TOOL_SELECTBRUSH,
+	TOOL_SELECTWAND,
+	TOOL_BRUSH,
+};
 
 
 class cGraphics
