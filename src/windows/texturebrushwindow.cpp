@@ -250,6 +250,56 @@ void cTextureBrushWindow::cWindowBrushOkButton::click()
 	parent->close();
 }
 
+
+
+
+
+cTextureBrushWindow::cWindowBrushSaveButton::cWindowBrushSaveButton( cWindow* parent, TiXmlDocument &skin ) : cWindowButton(parent,skin)
+{
+	alignment = ALIGN_TOPLEFT;
+	resizeTo(140,h);
+	text = "Save";
+}
+
+void cTextureBrushWindow::cWindowBrushSaveButton::click()
+{
+	std::string name = Graphics.WM.InputWindow("Please enter a new name");
+	if(name == "")
+		return;
+
+	TiXmlDocument brushes = fs.getXml("data/brushes.xml");
+
+	TiXmlElement newBrush("brush");
+	newBrush.SetAttribute("name", name.c_str());
+	newBrush.SetAttribute("width", ((cTextureBrushWindow*)parent)->brushWidth);
+	newBrush.SetAttribute("height", ((cTextureBrushWindow*)parent)->brushHeight);
+
+	std::string data = "";
+	for(int y = 0; y < ((cTextureBrushWindow*)parent)->brushHeight; y++)
+	{
+		for(int x = 0; x < ((cTextureBrushWindow*)parent)->brushWidth; x++)
+		{
+			char buf[16];
+			sprintf(buf, "tile%i,%i", x,y);
+			data += ((cWindowBrushTile*)parent->objects[buf])->on ? "@" : ".";
+		}
+	}
+	newBrush.InsertEndChild(TiXmlText(data.c_str()));
+	brushes.FirstChildElement("brushes")->InsertEndChild(newBrush);
+
+	brushes.SaveFile("data/brushes.xml");
+	cWindowScrollPanel* panel = (cWindowScrollPanel*)parent->objects["presets"];
+	cWindowObject* o = new cWindowBrushButton(parent,Graphics.WM.skin, ((cTextureBrushWindow*)parent)->brushWidth, ((cTextureBrushWindow*)parent)->brushHeight, data);
+	o->setPopup(name);
+	panel->objects.push_back(o);
+	panel->resizeTo(panel->getWidth(), panel->getHeight());
+}
+
+
+
+
+///////////////////////////////////////////////////////////////end componends
+
 cTextureBrushWindow::cTextureBrushWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWindow(t,f,skin)
 {
 	windowType = WT_TEXTUREBRUSH;
@@ -323,7 +373,8 @@ cTextureBrushWindow::cTextureBrushWindow(cTexture* t, cFont* f, TiXmlDocument &s
 
 	objects["btnChange"] = new cWindowBrushChangeButton(this,skin);
 	objects["btnOk"] = new cWindowBrushOkButton(this,skin);
-
+	objects["btnSave"] = new cWindowBrushSaveButton(this,skin);
+	
 	resizeTo(w,h);
 }
 
@@ -369,6 +420,5 @@ void cTextureBrushWindow::resizeTo(int xx, int yy)
 
 	objects["btnChange"]->moveTo(innerWidth()-140,70);
 	objects["btnOk"]->moveTo(innerWidth()-140,100);
+	objects["btnSave"]->moveTo(innerWidth()-140,150);
 }
-
-

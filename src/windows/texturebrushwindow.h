@@ -39,6 +39,13 @@ class cTextureBrushWindow : public cWindow
 		void click();
 	};
 
+	class cWindowBrushSaveButton : public cWindowButton
+	{
+	public:
+		cWindowBrushSaveButton(cWindow* parent, TiXmlDocument &skin);
+		void click();
+	};
+
 
 	public:
 		int brushWidth;

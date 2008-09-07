@@ -23,7 +23,7 @@
         <fullscreen>false</fullscreen>
         <bpp>32</bpp>
         <font>tahoma</font>
-        <skin>data/skins/ro.xml</skin>
+        <skin>data/skins/hamvista.xml</skin>
         <notilecolor>FFFF80</notilecolor>
         <bgcolor>8000FF</bgcolor>
     </graphics>
@@ -54,5 +54,33 @@
             <x>744</x>
             <y>0</y>
         </hotbar>
+        <sprite>
+            <x>237</x>
+            <y>184</y>
+        </sprite>
+        <textures>
+            <x>25</x>
+            <y>25</y>
+            <w>974</w>
+            <h>718</h>
+        </textures>
+        <modelswindow>
+            <x>25</x>
+            <y>25</y>
+            <w>974</w>
+            <h>718</h>
+        </modelswindow>
+        <texturetools>
+            <x>0</x>
+            <y>586</y>
+            <w>56</w>
+            <h>124</h>
+        </texturetools>
+        <texturebrush>
+            <x>56</x>
+            <y>53</y>
+            <w>905</w>
+            <h>665</h>
+        </texturebrush>
     </wm>
 </config>
