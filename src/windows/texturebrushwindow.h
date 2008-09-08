@@ -46,6 +46,13 @@ class cTextureBrushWindow : public cWindow
 		void click();
 	};
 
+	class cWindowBrushRotateButton : public cWindowButton
+	{
+	public:
+		cWindowBrushRotateButton(cWindow* parent, TiXmlDocument &skin);
+		void click();
+	};
+
 
 	public:
 		int brushWidth;

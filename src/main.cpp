@@ -845,7 +845,7 @@ int main(int argc, char *argv[])
 
 			}
 		}
-		if(option == "gatTiles")
+		if(option == "gattiles")
 		{
 			TiXmlElement* el2 = el->FirstChildElement("tile");
 			while(el2 != NULL)
