@@ -6,22 +6,32 @@
 #include <windows.h>
 #endif
 
+#include "bmutex.h"
 
 class cBThread
 {
 private:
 #ifdef WIN32
-	DWORD threadid;
-	HANDLE handle;
+	DWORD dwThreadID;
+	HANDLE hSignal;
+	HANDLE hHandle;
 	static DWORD WINAPI fakeworker(void*);
 #else
 #endif
 
-	virtual void worker() = 0;
+	virtual void		worker() = 0;
+	int					lastsignal;
+	cBMutex*			signalMutex;
 public:
-	void start();
-	void stop();
-	void wait();
+						cBThread();
+						~cBThread();
+	void				start();
+	void				stop();
+	void				wait();
+
+	void				signal(int=0);
+	void				waitForSignal();
+	int					getSignal();
 };
 
 

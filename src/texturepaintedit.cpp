@@ -201,6 +201,17 @@ int cProcessManagement::texturepaintedit_process_events(SDL_Event &event)
 				if(Graphics.textureBrushOffset.y > Graphics.textureGridSizeY)
 					Graphics.textureBrushOffset.y = Graphics.textureGridSizeY;
 				break;
+			case SDLK_h:
+				Graphics.fliph = !Graphics.fliph;
+				break;
+			case SDLK_v:
+				Graphics.flipv = !Graphics.flipv;
+				break;
+			case SDLK_MINUS:
+				Graphics.textureBrushSize = max(Graphics.textureBrushSize-1,1);
+				break;
+			case SDLK_EQUALS:
+				Graphics.textureBrushSize = min(Graphics.textureBrushSize+1, 16);
 			default:
 				break;
 			}

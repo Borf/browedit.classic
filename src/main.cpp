@@ -528,6 +528,13 @@ cWindow* XmlWindow(std::string s)
 
 int main(int argc, char *argv[])
 {
+#if 0
+	char* debugtest;
+	if(debugtest == (char*)0xcccccccc)
+		return 0;
+#endif
+
+
 	try
 	{
 	int i;
@@ -1238,7 +1245,7 @@ int main(int argc, char *argv[])
 	if(config.FirstChildElement("config")->FirstChildElement("firstmap"))
 		strcpy(Graphics.world.fileName, std::string(rodir + "data\\" + config.FirstChildElement("config")->FirstChildElement("firstmap")->FirstChild()->Value()).c_str());
 	else
-		strcpy(Graphics.world.fileName, std::string(rodir + "data\\prontera").c_str());
+		strcpy(Graphics.world.fileName, std::string(rodir + "data\\lighttest").c_str());
 
 	if(argc > 1)
 	{

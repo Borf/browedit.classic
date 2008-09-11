@@ -164,6 +164,8 @@ public:
 	float					textureGridSizeX;
 	float					textureGridSizeY;
 
+	int						textureBrushSize;
+
 private:
 	int						createGLWindow();
 	int						initGL(void);

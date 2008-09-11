@@ -272,6 +272,8 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 					{
 						for(int y = posy; y > posy-selsizey; y--)
 						{
+							if(x < 0 || y < 0)
+								continue;
 							int xx = posx - x;
 							int yy = posy - y;
 							if(clipboardgat[xx][yy] == 2)

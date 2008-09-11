@@ -10,11 +10,32 @@ DWORD WINAPI cBThread::fakeworker(void* param)
 #endif
 
 
+cBThread::cBThread()
+{
+#ifdef WIN32
+	hSignal = CreateEvent(NULL,FALSE,FALSE,NULL);
+	signalMutex = new cBMutex();
+#else
+
+#endif
+}
+
+cBThread::~cBThread()
+{
+#ifdef WIN32
+	CloseHandle(hSignal);
+	delete signalMutex;
+#else
+	
+#endif
+}
+
+
 
 void cBThread::start()
 {
 #ifdef WIN32
-	handle = CreateThread(NULL,0,this->fakeworker,this,0,&threadid);
+	hHandle = CreateThread(NULL,0,this->fakeworker,this,0,&dwThreadID);
 #else
 
 #endif
@@ -25,8 +46,8 @@ void cBThread::start()
 void cBThread::stop()
 {
 #ifdef WIN32
-	TerminateThread(handle,0);
-	CloseHandle(handle);
+	TerminateThread(hHandle,0);
+	CloseHandle(hHandle);
 #else
 
 #endif
@@ -37,7 +58,7 @@ void cBThread::stop()
 void cBThread::wait()
 {
 #ifdef WIN32
-	WaitForSingleObject(handle, INFINITE);
+	WaitForSingleObject(hHandle, INFINITE);
 #else
 
 #endif
@@ -46,8 +67,31 @@ void cBThread::wait()
 
 
 
+void cBThread::signal(int signal)
+{
+#ifdef WIN32
+	signalMutex->lock();
+	lastsignal = signal;
+	SetEvent(hSignal);
+#endif
+}
+
+int cBThread::getSignal()
+{
+	int i = lastsignal;
+	signalMutex->unlock();
+	return i;
+}
 
 
+void cBThread::waitForSignal()
+{
+#ifdef WIN32
+	WaitForSingleObject(hSignal,INFINITE);
+#else
+
+#endif
+}
 
 
 

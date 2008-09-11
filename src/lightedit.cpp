@@ -264,8 +264,8 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 						((cWindowFloatInputBox*)w->objects["colorb"])->floatje = &l->color.z;
 						((cWindowFloatInputBox*)w->objects["intensity"])->floatje = &l->todo2;
 						((cWindowFloatInputBox*)w->objects["range"])->floatje = &l->range;
-						((cWindowFloatInputBox*)w->objects["maxLightIncrement"])->floatje = &l->maxLightIncrement;
-						((cWindowFloatInputBox*)w->objects["lightFalloff"])->floatje = &l->lightFalloff;
+						((cWindowFloatInputBox*)w->objects["maxlightincrement"])->floatje = &l->maxLightIncrement;
+						((cWindowFloatInputBox*)w->objects["lightfalloff"])->floatje = &l->lightFalloff;
 						((cWindowBoolCheckBox*)w->objects["castshadow"])->boolvalue = &l->givesShadow;
 
 						//((cEffectWindow*)w)->undo = new cUndoChangeEffect(Graphics.selectedObject);

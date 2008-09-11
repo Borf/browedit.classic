@@ -8,4 +8,5 @@
     <brush name="brick 4x1" height="4" width="1">@@@@</brush>
     <brush name="cross" height="3" width="3">.@.@@@.@.</brush>
     <brush name="L" width="4" height="2">@@@@@...</brush>
+    <brush name="Square" width="4" height="4">@@@@@@@@@@@@@@@@</brush>
 </brushes>

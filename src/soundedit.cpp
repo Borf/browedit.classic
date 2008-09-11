@@ -183,6 +183,8 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 			case SDLK_SPACE:
 				if (Graphics.selectedObject != -1)
 				{
+					if(Graphics.world.sounds.size() >= Graphics.selectedObject)
+						break;
 					static bool playing = false;
 
 					if(!playing)

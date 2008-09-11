@@ -726,6 +726,7 @@ cGraphics::cGraphics()
 	textureBrushOffset = cVector2(0,0);
 	textureGridSizeX = 4;
 	textureGridSizeY = 4;
+	textureBrushSize = 1;
 }
 
 

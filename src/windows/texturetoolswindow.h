@@ -4,6 +4,7 @@
 #include <wm/window.h>
 #include <wm/windowpicturebox.h>
 #include <wm/windowbutton.h>
+#include <wm/windowinputbox.h>
 enum eTool;
 
 class cTextureToolsWindow : public cWindow
@@ -25,6 +26,13 @@ class cTextureToolsWindow : public cWindow
 		cWindowBrushShape(cWindow* parent, TiXmlDocument &totalskin);
 		void draw(int a,int b,int c,int d);
 		void click();
+	};
+
+	class cWindowLimitedFloatInputBox : public cWindowFloatInputBox
+	{
+	public:
+		cWindowLimitedFloatInputBox(cWindow* parent, TiXmlDocument &skin) : cWindowFloatInputBox(parent,skin) {}
+		bool onChar(char,bool);
 	};
 
 

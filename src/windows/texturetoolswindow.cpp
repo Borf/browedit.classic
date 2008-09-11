@@ -191,13 +191,13 @@ cTextureToolsWindow::cTextureToolsWindow( cTexture* t, cFont* f, TiXmlDocument &
 	
 	cWindowObject* o;
 	
-	o = new cWindowFloatInputBox(this, skin);
+	o = new cWindowLimitedFloatInputBox(this, skin);
 	((cWindowFloatInputBox*)o)->floatje = &Graphics.textureGridSizeX;
 	o->alignment = ALIGN_TOPLEFT;
 	o->resizeTo(innerWidth(), o->getHeight());
 	objects["aa_gridsizex"] = o;
 	
-	o = new cWindowFloatInputBox(this, skin);
+	o = new cWindowLimitedFloatInputBox(this, skin);
 	((cWindowFloatInputBox*)o)->floatje = &Graphics.textureGridSizeY;
 	o->alignment = ALIGN_TOPLEFT;
 	o->resizeTo(innerWidth(), o->getHeight());
@@ -230,4 +230,11 @@ void cTextureToolsWindow::resizeTo( int ww, int hh )
 	objects["aa_gridsizex"]->resizeTo(min(innerWidth(),40), objects["aa_gridsizex"]->getHeight());
 	objects["aa_gridsizey"]->resizeTo(min(innerWidth(),40), objects["aa_gridsizey"]->getHeight());
 	reOrder();
+}
+
+bool cTextureToolsWindow::cWindowLimitedFloatInputBox::onChar(char c,bool shift)
+{
+	if(!(c >= '0' && c <= '9' && c != '.'))
+		return false;
+	return cWindowFloatInputBox::onChar(c,shift);
 }
