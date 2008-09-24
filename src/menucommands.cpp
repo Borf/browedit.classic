@@ -39,6 +39,7 @@ extern double mouseclickx, mouseclicky, mouseclickz;
 extern std::string message;
 extern bool showmessage;
 extern long userid;
+extern bool boundingBoxCollisions;
 
 void mainloop();
 #include <bthread.h>
@@ -1473,7 +1474,7 @@ public:
 	}
 };
 
-inline void setLightIntensity(BYTE* buf, int yy, int xx, cVector3 worldpos );
+inline void setLightIntensity(BYTE* buf, int yy, int xx, cVector3 worldpos, std::vector<std::map<int, bool, std::less<int> > >* = NULL );
 
 
 
@@ -1491,45 +1492,6 @@ public:
 	}
 	void worker()
 	{
-		SDL_SysWMinfo wmInfo;
-		SDL_GetWMInfo(&wmInfo);
-		HWND hWnd = wmInfo.window;		
-
-		HDC hdc = GetDC(hWnd);
-		HGLRC  hglrc = wglCreateContext (hdc); 
-		wglMakeCurrent (hdc, hglrc);
-
-		int ww = Graphics.w();
-		ww -= 256;
-		int hh = Graphics.h()-20;
-
-
-		glEnable(GL_DEPTH_TEST);
-		glViewport(0,0,ww,hh);						// Reset The Current Viewport
-		
-		float camrad = 10;
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);				// Black Background
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-		glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
-		glLoadIdentity();									// Reset The Projection Matrix
-		gluPerspective(45.0f,(GLfloat)ww/(GLfloat)hh,10.0f,10000.0f);
-		gluLookAt(  -Graphics.camerapointer.x + Graphics.cameraheight*sin(Graphics.camerarot),
-			camrad+Graphics.cameraheight,
-			-Graphics.camerapointer.y + Graphics.cameraheight*cos(Graphics.camerarot),
-			-Graphics.camerapointer.x,camrad + Graphics.cameraheight * (Graphics.cameraangle/10.0f),-Graphics.camerapointer.y,
-			0,1,0);
-		glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
-		glLoadIdentity();									// Reset The Modelview Matrix
-		//	glTranslatef(0,0,Graphics.world.height*10);
-		//	glScalef(1,1,-1);
-		
-		int i;
-		for(i = 0; i < Graphics.world.models.size(); i++)
-			Graphics.world.models[i]->precollides();		
-		
-		
-		
-		
 		parent->signal(index);
 		int mySignal;
 		while(mySignal != -1)
@@ -1554,6 +1516,7 @@ public:
 			
 			if(c->tileUp != -1)
 			{
+				Graphics.world.tiles[c->tileUp].lightsWithShadow.resize(Graphics.world.lights.size());
 				BYTE* buf = (BYTE*)Graphics.world.lightmaps[Graphics.world.tiles[c->tileUp].lightmap]->buf;
 				ZeroMemory(buf,255);
 				for(int yy = 1; yy < 7; yy++)
@@ -1565,7 +1528,7 @@ public:
 						cVector3 worldpos = cVector3(	10*x+(10/6.0)*(xx-1), 
 							-((c->cell1*(1-fx)+c->cell2*(fx)) + (c->cell1*(fy)+c->cell3*(1-fy))-c->cell1),
 							10*y+(10/6.0)*(yy-1));
-						setLightIntensity(buf, yy, xx, worldpos);
+						setLightIntensity(buf, yy, xx, worldpos, &Graphics.world.tiles[c->tileUp].lightsWithShadow);
 					}
 				}
 				Graphics.world.realLightmaps[y][x]->reset();
@@ -1573,6 +1536,7 @@ public:
 			
 			if(c->tileSide != -1)
 			{
+				Graphics.world.tiles[c->tileSide].lightsWithShadow.resize(Graphics.world.lights.size());
 				BYTE* buf = (BYTE*)Graphics.world.lightmaps[Graphics.world.tiles[c->tileSide].lightmap]->buf;
 				ZeroMemory(buf,256);				
 				for(int yy = 0; yy < 8; yy++)
@@ -1588,7 +1552,7 @@ public:
 							-((1-fy)*c->cell3 + (fy)*c2->cell1),
 							10*y+10);
 						
-						setLightIntensity(buf, yy, xx, worldpos);
+						setLightIntensity(buf, yy, xx, worldpos, &Graphics.world.tiles[c->tileSide].lightsWithShadow);
 					}
 				}
 				Graphics.world.lightmaps[Graphics.world.tiles[c->tileSide].lightmap]->del();
@@ -1597,6 +1561,7 @@ public:
 			
 			if(c->tileOtherSide != -1)
 			{
+				Graphics.world.tiles[c->tileOtherSide].lightsWithShadow.resize(Graphics.world.lights.size());
 				BYTE* buf = (BYTE*)Graphics.world.lightmaps[Graphics.world.tiles[c->tileOtherSide].lightmap]->buf;
 				ZeroMemory(buf,256);
 				
@@ -1612,7 +1577,7 @@ public:
 						cVector3 worldpos = cVector3(	10*x+10, 
 							-((1-fy)*c->cell4 + (fy)*c2->cell3),
 							10*y+(10/6.0)*(7-xx));
-						setLightIntensity(buf, yy, xx, worldpos);
+						setLightIntensity(buf, yy, xx, worldpos, &Graphics.world.tiles[c->tileOtherSide].lightsWithShadow);
 						
 					}
 				}
@@ -1721,7 +1686,7 @@ MENUCOMMAND(dolightmaps2)
 	unsigned long timer = tickcount();
 
 
-#if 1
+#if 0
 	int x,y;
 	for(y = 0; y < Graphics.world.height && rendering; y++)
 	{
@@ -1819,9 +1784,118 @@ MENUCOMMAND(dolightmaps2)
 		}
 	}
 #else //threading! :D
+	boundingBoxCollisions = true;
 	cBThread* t = new cLightmapMonitor();
 	t->start();
 	t->wait();
+	boundingBoxCollisions = false;
+
+	//if(Graphics.WM.ConfirmWindow("Done first step of lightmap calculation, do you want to continue?"))
+	{
+
+		
+		int x,y;
+		for(y = 0; y < Graphics.world.height && rendering; y++)
+		{
+			for(x = 0; x < Graphics.world.width && rendering; x++)
+			{
+				cCube* c = &Graphics.world.cubes[y][x];
+				if(selectonly && !c->selected)
+					continue;
+				w->objects["progress"]->setInt(0, y*Graphics.world.width + x);
+				
+				if(c->tileUp != -1)
+				{
+					if(Graphics.world.tiles[c->tileUp].lightsWithShadow.size() > 0)
+					{
+						BYTE* buf = (BYTE*)Graphics.world.lightmaps[Graphics.world.tiles[c->tileUp].lightmap]->buf;
+						ZeroMemory(buf,255);
+						for(int yy = 1; yy < 7; yy++)
+						{
+							for(int xx = 1; xx < 7; xx++)
+							{
+								float fx = (xx-1)/6.0f;
+								float fy = (yy-1)/6.0f;
+								cVector3 worldpos = cVector3(	10*x+(10/6.0)*(xx-1), 
+									-((c->cell1*(1-fx)+c->cell2*(fx)) + (c->cell1*(fy)+c->cell3*(1-fy))-c->cell1),
+									10*y+(10/6.0)*(yy-1));
+								setLightIntensity(buf, yy, xx, worldpos);
+							}
+						}
+						Graphics.world.realLightmaps[y][x]->reset();
+					}
+				}
+				
+				if(c->tileSide != -1)
+				{
+					BYTE* buf = (BYTE*)Graphics.world.lightmaps[Graphics.world.tiles[c->tileSide].lightmap]->buf;
+					ZeroMemory(buf,256);				
+					for(int yy = 0; yy < 8; yy++)
+					{
+						for(int xx = 0; xx < 8; xx++)
+						{
+							float fx = (xx-1)/6.0f;
+							float fy = (yy-1)/6.0f;
+							
+							cCube* c2 = &Graphics.world.cubes[y+1][x];
+							
+							cVector3 worldpos = cVector3(	10*x+(10/6.0)*(xx-1), 
+								-((1-fy)*c->cell3 + (fy)*c2->cell1),
+								10*y+10);
+							
+							setLightIntensity(buf, yy, xx, worldpos);
+						}
+					}
+					Graphics.world.lightmaps[Graphics.world.tiles[c->tileSide].lightmap]->del();
+					Graphics.world.lightmaps[Graphics.world.tiles[c->tileSide].lightmap]->del2();
+				}
+				
+				if(c->tileOtherSide != -1)
+				{
+					BYTE* buf = (BYTE*)Graphics.world.lightmaps[Graphics.world.tiles[c->tileOtherSide].lightmap]->buf;
+					ZeroMemory(buf,256);
+					
+					for(int yy = 0; yy < 8; yy++)
+					{
+						for(int xx = 0; xx < 8; xx++)
+						{
+							float fx = (xx-1)/6.0f;
+							float fy = (yy-1)/6.0f;
+							
+							cCube* c2 = &Graphics.world.cubes[y][x+1];
+							
+							cVector3 worldpos = cVector3(	10*x+10, 
+								-((1-fy)*c->cell4 + (fy)*c2->cell3),
+								10*y+(10/6.0)*(7-xx));
+							setLightIntensity(buf, yy, xx, worldpos);
+							
+						}
+					}
+					Graphics.world.lightmaps[Graphics.world.tiles[c->tileOtherSide].lightmap]->del();
+					Graphics.world.lightmaps[Graphics.world.tiles[c->tileOtherSide].lightmap]->del2();
+				}		
+				
+				
+				
+				
+				
+				
+				
+				if(Graphics.world.loaded)
+				{
+					Graphics.camerapointer.x = -10*x + 5;
+					Graphics.camerapointer.y = -10*(Graphics.world.height-y) + 5;
+				}
+				if(tickcount() - timer > 100)
+				{
+					mainloop();
+					timer = tickcount();
+				}
+			}
+		}
+
+	}
+
 #endif
 
 
@@ -3781,7 +3855,7 @@ MENUCOMMAND(saveOnline)
 	return true;
 }
 
-inline void setLightIntensity( BYTE* buf, int yy, int xx, cVector3 worldpos )
+inline void setLightIntensity( BYTE* buf, int yy, int xx, cVector3 worldpos, std::vector<std::map<int, bool, std::less<int> > >* lights )
 {
 	int from = 0;
 	unsigned int to = Graphics.world.lights.size();
@@ -3814,7 +3888,13 @@ inline void setLightIntensity( BYTE* buf, int yy, int xx, cVector3 worldpos )
 			{
 				if(Graphics.world.models[ii]->lightopacity > 0)
 					if(Graphics.world.models[ii]->collides(worldpos, lightpos))
+					{
 						obstructed -= Graphics.world.models[ii]->lightopacity;
+						if(boundingBoxCollisions && lights)
+						{
+							(*lights)[i][ii] = true;
+						}
+					}
 			}
 		}
 		

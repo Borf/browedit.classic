@@ -6,6 +6,7 @@ extern std::string rodir;
 extern cGraphics Graphics;
 extern cVector3 lightpos;
 
+bool boundingBoxCollisions = false;
 
 void cRSMModel::load(std::string fname)
 {
@@ -819,7 +820,9 @@ bool cRSMModel::collides(cVector3 start, cVector3 end)
 	if(!collide)
 		return false;
 
-	//return true;
+
+	if(boundingBoxCollisions)
+		return true;
 
 	glPushMatrix();
 	glTranslatef(5*pos.x, -pos.y, 5*pos.z);

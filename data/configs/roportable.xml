@@ -22,8 +22,8 @@
         </plugins>
     </files>
     <graphics>
-        <resx>800</resx>
-        <resy>600</resy>
+        <resx>1024</resx>
+        <resy>700</resy>
         <fullscreen>false</fullscreen>
         <bpp>32</bpp>
         <font>tahoma</font>
@@ -70,10 +70,10 @@
             <h>718</h>
         </textures>
         <modelswindow>
-            <x>110</x>
-            <y>0</y>
-            <w>593</w>
-            <h>582</h>
+            <x>14</x>
+            <y>20</y>
+            <w>923</w>
+            <h>650</h>
         </modelswindow>
         <hotbar>
             <x>520</x>

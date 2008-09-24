@@ -358,14 +358,14 @@ void cSprite::draw()
 
 	width/=2;
 	height/=2;
-	glTranslatef(-subframe->offsetY, -subframe->offsetY, 0);
+	glTranslatef(-subframe->offsetX, -subframe->offsetY, 0);
 	glBegin(GL_QUADS);
 		glTexCoord2f(dir,0);		glVertex3f(width,height,0);
 		glTexCoord2f(1-dir,0);		glVertex3f(-width,height,0);
 		glTexCoord2f(1-dir,1);		glVertex3f(-width,-height,0);
 		glTexCoord2f(dir,1);		glVertex3f(width,-height,0);
 	glEnd();
-	glTranslatef(subframe->offsetY, subframe->offsetY, 0);
+	glTranslatef(subframe->offsetX, subframe->offsetY, 0);
 
 
 
