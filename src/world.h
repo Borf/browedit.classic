@@ -76,7 +76,7 @@ public:
 	int lightmap;
 	char color[4];
 	bool used;
-	std::vector<std::map<int, bool, std::less<int> > > lightsWithShadow;
+	std::vector<std::vector<int> > lightsWithShadow;
 };
 
 

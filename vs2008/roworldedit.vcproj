@@ -51,6 +51,7 @@
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="4"
+				DisableSpecificWarnings="4258"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -549,6 +550,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\src\windows\texturebrushwindow.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\src\windows\texturetoolswindow.cpp"
 					>
 				</File>
@@ -665,6 +670,10 @@
 					</File>
 					<File
 						RelativePath="..\src\windows\spritewindow.h"
+						>
+					</File>
+					<File
+						RelativePath="..\src\windows\texturebrushwindow.h"
 						>
 					</File>
 					<File

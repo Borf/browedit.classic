@@ -489,7 +489,7 @@ int cGraphics::init()
 		{
 			char buf[100];
 			sprintf(buf, "%s%swater%i%02i%s", rodir.c_str(), waterDirectory.c_str(), i, ii, waterExtension.c_str());
-			waterTextures[i].push_back(TextureCache.load(buf));
+			waterTextures[i].push_back(TextureCache.load(buf, false));
 		}
 	}
 	if(waterCount == 0)

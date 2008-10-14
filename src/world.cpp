@@ -41,6 +41,7 @@ extern bool IsLegal2;
 
 void cWorld::load()
 {
+	unload();
 	quickSave = false;
 	Graphics.selectedObject = -1;
 	draggingwindow = NULL;

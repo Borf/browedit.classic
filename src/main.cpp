@@ -999,6 +999,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,file,GetMsg("menu/file/SAVEAS"),							&MenuCommand_saveAs); //save as
 #ifdef _DEBUG
 	ADDMENUITEM(mm,file,GetMsg("menu/file/SAVEONLINE"),						&MenuCommand_saveOnline);
+	ADDMENUITEM(mm,file,"Make Minimaps",									&MenuCommand_makeMinimaps);
 #endif
 	ADDMENUITEM(mm,file,GetMsg("menu/file/EXPORTLIGHTMAPS"),				&MenuCommand_savelightmaps); // export lightmaps
 	ADDMENUITEM(mm,file,GetMsg("menu/file/IMPORTLIGHTMAPS"),				&MenuCommand_loadlightmaps); // import lightmaps
@@ -1245,7 +1246,7 @@ int main(int argc, char *argv[])
 	if(config.FirstChildElement("config")->FirstChildElement("firstmap"))
 		strcpy(Graphics.world.fileName, std::string(rodir + "data\\" + config.FirstChildElement("config")->FirstChildElement("firstmap")->FirstChild()->Value()).c_str());
 	else
-		strcpy(Graphics.world.fileName, std::string(rodir + "data\\lighttest").c_str());
+		strcpy(Graphics.world.fileName, std::string(rodir + "data\\prontera").c_str());
 
 	if(argc > 1)
 	{

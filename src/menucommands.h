@@ -71,6 +71,7 @@ MENUCOMMAND(favlights);
 MENUCOMMAND(plugin);
 MENUCOMMAND(mapdatabase);
 MENUCOMMAND(saveOnline);
+MENUCOMMAND(makeMinimaps);
 
 MENUCOMMAND(rebuildtexturefile);
 MENUCOMMAND(rebuildmodelfile);

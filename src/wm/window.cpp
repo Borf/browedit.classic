@@ -430,7 +430,8 @@ bool cWindow::onKeyDown(int c,bool shift)
 					for(i = objects.begin(); i != objects.end(); i++)
 						if (i->second == selectedObject)
 							ii = i;
-					ii++;
+					if(ii != objects.end())
+						ii++;
 					if (ii == objects.end())
 						ii = objects.begin();
 					selectedObject = ii->second;

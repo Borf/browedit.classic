@@ -1474,7 +1474,7 @@ public:
 	}
 };
 
-inline void setLightIntensity(BYTE* buf, int yy, int xx, cVector3 worldpos, std::vector<std::map<int, bool, std::less<int> > >* = NULL );
+inline void setLightIntensity(BYTE* buf, int yy, int xx, cVector3 worldpos, std::vector<std::vector<int> >* = NULL );
 
 
 
@@ -1493,7 +1493,7 @@ public:
 	void worker()
 	{
 		parent->signal(index);
-		int mySignal;
+		int mySignal = 0;
 		while(mySignal != -1)
 		{
 			waitForSignal();
@@ -1792,108 +1792,7 @@ MENUCOMMAND(dolightmaps2)
 
 	//if(Graphics.WM.ConfirmWindow("Done first step of lightmap calculation, do you want to continue?"))
 	{
-
 		
-		int x,y;
-		for(y = 0; y < Graphics.world.height && rendering; y++)
-		{
-			for(x = 0; x < Graphics.world.width && rendering; x++)
-			{
-				cCube* c = &Graphics.world.cubes[y][x];
-				if(selectonly && !c->selected)
-					continue;
-				w->objects["progress"]->setInt(0, y*Graphics.world.width + x);
-				
-				if(c->tileUp != -1)
-				{
-					if(Graphics.world.tiles[c->tileUp].lightsWithShadow.size() > 0)
-					{
-						BYTE* buf = (BYTE*)Graphics.world.lightmaps[Graphics.world.tiles[c->tileUp].lightmap]->buf;
-						ZeroMemory(buf,255);
-						for(int yy = 1; yy < 7; yy++)
-						{
-							for(int xx = 1; xx < 7; xx++)
-							{
-								float fx = (xx-1)/6.0f;
-								float fy = (yy-1)/6.0f;
-								cVector3 worldpos = cVector3(	10*x+(10/6.0)*(xx-1), 
-									-((c->cell1*(1-fx)+c->cell2*(fx)) + (c->cell1*(fy)+c->cell3*(1-fy))-c->cell1),
-									10*y+(10/6.0)*(yy-1));
-								setLightIntensity(buf, yy, xx, worldpos);
-							}
-						}
-						Graphics.world.realLightmaps[y][x]->reset();
-					}
-				}
-				
-				if(c->tileSide != -1)
-				{
-					BYTE* buf = (BYTE*)Graphics.world.lightmaps[Graphics.world.tiles[c->tileSide].lightmap]->buf;
-					ZeroMemory(buf,256);				
-					for(int yy = 0; yy < 8; yy++)
-					{
-						for(int xx = 0; xx < 8; xx++)
-						{
-							float fx = (xx-1)/6.0f;
-							float fy = (yy-1)/6.0f;
-							
-							cCube* c2 = &Graphics.world.cubes[y+1][x];
-							
-							cVector3 worldpos = cVector3(	10*x+(10/6.0)*(xx-1), 
-								-((1-fy)*c->cell3 + (fy)*c2->cell1),
-								10*y+10);
-							
-							setLightIntensity(buf, yy, xx, worldpos);
-						}
-					}
-					Graphics.world.lightmaps[Graphics.world.tiles[c->tileSide].lightmap]->del();
-					Graphics.world.lightmaps[Graphics.world.tiles[c->tileSide].lightmap]->del2();
-				}
-				
-				if(c->tileOtherSide != -1)
-				{
-					BYTE* buf = (BYTE*)Graphics.world.lightmaps[Graphics.world.tiles[c->tileOtherSide].lightmap]->buf;
-					ZeroMemory(buf,256);
-					
-					for(int yy = 0; yy < 8; yy++)
-					{
-						for(int xx = 0; xx < 8; xx++)
-						{
-							float fx = (xx-1)/6.0f;
-							float fy = (yy-1)/6.0f;
-							
-							cCube* c2 = &Graphics.world.cubes[y][x+1];
-							
-							cVector3 worldpos = cVector3(	10*x+10, 
-								-((1-fy)*c->cell4 + (fy)*c2->cell3),
-								10*y+(10/6.0)*(7-xx));
-							setLightIntensity(buf, yy, xx, worldpos);
-							
-						}
-					}
-					Graphics.world.lightmaps[Graphics.world.tiles[c->tileOtherSide].lightmap]->del();
-					Graphics.world.lightmaps[Graphics.world.tiles[c->tileOtherSide].lightmap]->del2();
-				}		
-				
-				
-				
-				
-				
-				
-				
-				if(Graphics.world.loaded)
-				{
-					Graphics.camerapointer.x = -10*x + 5;
-					Graphics.camerapointer.y = -10*(Graphics.world.height-y) + 5;
-				}
-				if(tickcount() - timer > 100)
-				{
-					mainloop();
-					timer = tickcount();
-				}
-			}
-		}
-
 	}
 
 #endif
@@ -3855,7 +3754,7 @@ MENUCOMMAND(saveOnline)
 	return true;
 }
 
-inline void setLightIntensity( BYTE* buf, int yy, int xx, cVector3 worldpos, std::vector<std::map<int, bool, std::less<int> > >* lights )
+inline void setLightIntensity( BYTE* buf, int yy, int xx, cVector3 worldpos, std::vector<std::vector<int> >* lights )
 {
 	int from = 0;
 	unsigned int to = Graphics.world.lights.size();
@@ -3892,7 +3791,7 @@ inline void setLightIntensity( BYTE* buf, int yy, int xx, cVector3 worldpos, std
 						obstructed -= Graphics.world.models[ii]->lightopacity;
 						if(boundingBoxCollisions && lights)
 						{
-							(*lights)[i][ii] = true;
+							(*lights)[i].push_back(ii);
 						}
 					}
 			}
@@ -3914,4 +3813,126 @@ inline void setLightIntensity( BYTE* buf, int yy, int xx, cVector3 worldpos, std
 			buf[64 + 3*(yy*8 + xx)+2] = min(255, buf[64 + 3*(yy*8 + xx)+2] + max(0, (int)(intensity*l->color.z)));
 		}
 	}
+}
+
+
+MENUCOMMAND(makeMinimaps)
+{
+	std::vector<std::string> mapnames;
+	mapnames.clear();
+	unsigned int i;
+	for(i = 0; i < fs.locations.size(); i++)
+	{
+		for(std::map<std::string, cFile*, std::less<std::string> >::iterator it = fs.locations[i]->files.begin(); it != fs.locations[i]->files.end(); it++)
+		{
+			if(it->first.find(".rsw") != std::string::npos)
+			{
+				std::string mapname = it->first.substr(rodir.length());
+				bool found = false;
+				for(int ii = 0; ii < mapnames.size() && !found; ii++)
+					if(mapnames[ii] == mapname)
+						found = true;
+
+				if(!found)
+					mapnames.push_back(mapname);
+			}
+
+		}
+	}
+
+	for(i = 0; i < mapnames.size(); i++)
+	{
+		sprintf(Graphics.world.fileName, "%s%s", rodir.c_str(), mapnames[i].substr(0, mapnames[i].length()-4).c_str());
+		FILE* pFile = fopen(Graphics.world.fileName,"rb");
+		if(pFile)
+		{
+			fclose(pFile);
+			continue;
+		}
+
+
+		Graphics.world.load();
+
+		Graphics.topCamera = true;
+		//	Graphics.camerapointer = cVector2(-Graphics.world.width*5, Graphics.world.height*5);
+		Graphics.camerapointer = cVector2(-Graphics.world.height*10,0);
+		Graphics.cameraheight = max(Graphics.world.height, Graphics.world.width)*15;
+		Graphics.showDot = false;
+		Graphics.showgrid = false;
+		Graphics.showLightmaps = true;
+		Graphics.showObjects = true;
+		Graphics.showNoTiles = false;
+		Graphics.showOglLighting = false;
+		if (!Graphics.draw(false))
+			running = false;
+		SDL_GL_SwapBuffers();
+		if (!Graphics.draw(false))
+			running = false;
+		SDL_GL_SwapBuffers();
+		if (!Graphics.draw(false))
+			running = false;
+		SDL_GL_SwapBuffers();
+
+
+
+		unsigned char *pixels;
+		pixels = getPixelsBGR();
+
+		FILE * shot;
+		char buf[100];
+		sprintf(buf, "%s.minimap.tga", Graphics.world.fileName);
+		if((shot=fopen(buf, "wb"))!=NULL)
+		{
+			int screenStats[4];
+			glGetIntegerv(GL_VIEWPORT, screenStats);
+			unsigned char TGAheader[12]={0,0,2,0,0,0,0,0,0,0,0,0};
+
+			int xfrom = 0;
+			int yfrom = 0;
+			int xto = Graphics.w()-256;
+			int yto = screenStats[3]-19;
+
+			int ii;
+			for(ii = 22; ii < screenStats[3]; ii++)
+			{
+				if(	pixels[3*(10+(Graphics.h()-ii)*screenStats[2])+0] == (int)(Graphics.backgroundColor[2]*255) &&
+					pixels[3*(10+(Graphics.h()-ii)*screenStats[2])+1] == (int)(Graphics.backgroundColor[1]*255) &&
+					pixels[3*(10+(Graphics.h()-ii)*screenStats[2])+2] == (int)(Graphics.backgroundColor[0]*255))
+						yto = Graphics.h()-ii;
+				else
+					break;
+			}
+
+			for(ii = Graphics.w()-257; ii > 0; ii--)
+			{
+				if(	pixels[3*(ii+5*screenStats[2])+0] == (int)(Graphics.backgroundColor[2]*255) &&
+					pixels[3*(ii+5*screenStats[2])+1] == (int)(Graphics.backgroundColor[1]*255) &&
+					pixels[3*(ii+5*screenStats[2])+2] == (int)(Graphics.backgroundColor[0]*255))
+					xto = ii;
+				else
+					break;
+			}
+
+
+			int w= xto - xfrom;
+			int h= yto - yfrom;
+
+
+			unsigned char Header[6]={((int)(w%256)),((int)(w/256)),((int)(h%256)),((int)(h/256)),24,0};
+			fwrite(TGAheader, sizeof(unsigned char), 12, shot);
+			fwrite(Header, sizeof(unsigned char), 6, shot);
+
+			for(int y = yfrom; y < yto; y++)
+			{
+				for(int x = xfrom; x < xto; x++)
+				{
+					fwrite(pixels+3*(x+y*screenStats[2]), sizeof(unsigned char), 3, shot);
+				}
+			}
+			fclose(shot);
+		}
+		delete [] pixels;
+	}
+
+	return true;
 }

@@ -390,6 +390,8 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 				break;
 			}
 		}
+		if(current < 0)
+			current = 0;
 
 		next = current + 1;
 		if (next == frames.size())

@@ -279,7 +279,7 @@ void cWM::togglewindow(WINDOW_TYPE wt)
 			if (windows[i]->isVisible())
 			{
 				cWindow* w = windows[i];
-				for(int ii = i; ii > -1; ii--)
+				for(int ii = i; ii > 0; ii--)
 					windows[ii] = windows[ii-1];
 				windows[0] = w;
 				break;
