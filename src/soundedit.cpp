@@ -1,7 +1,7 @@
 #include <common.h>
 #include "graphics.h"
 #include "undo.h"
-#include <sdl/SDL_mixer.h>
+#include <SDL/SDL_mixer.h>
 #include <windows/soundoverviewwindow.h>
 #include <windows/soundwindow.h>
 #include <windows/soundselectwindow.h>

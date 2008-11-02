@@ -27,7 +27,7 @@
         <fullscreen>false</fullscreen>
         <bpp>32</bpp>
         <font>tahoma</font>
-        <skin>data/skins/hamvista.xml</skin>
+        <skin>data/skins/HamVista.xml</skin>
         <notilecolor>FFFF80</notilecolor>
         <bgcolor>8000FF</bgcolor>
     </graphics>

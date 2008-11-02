@@ -5,7 +5,7 @@
 #include <windows.h>
 #endif
 
-#include <gl/gl.h>
+#include <GL/gl.h>
 
 void cWindowProgressBar::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {

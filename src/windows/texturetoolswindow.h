@@ -5,7 +5,8 @@
 #include <wm/windowpicturebox.h>
 #include <wm/windowbutton.h>
 #include <wm/windowinputbox.h>
-enum eTool;
+//enum eTool;
+#include <graphics.h>
 
 class cTextureToolsWindow : public cWindow
 {

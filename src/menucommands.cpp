@@ -1,6 +1,9 @@
 #include <common.h>
+#ifdef WIN32
 #include <commdlg.h>
 #include <shellapi.h>
+#endif
+#include <fstream>
 #include "menucommands.h"
 #include "graphics.h"
 #include <SDL/SDL_syswm.h>

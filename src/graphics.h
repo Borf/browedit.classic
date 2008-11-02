@@ -139,7 +139,7 @@ public:
 	std::vector<std::vector<cTexture*> >		waterTextures;
 	std::string					waterDirectory;
 	std::string					waterExtension;
-	int						waterCount;
+	unsigned int					waterCount;
 
 	cVector2				wallHeightMin;
 	cVector2				wallHeightMax;

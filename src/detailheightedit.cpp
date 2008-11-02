@@ -58,13 +58,13 @@ int cProcessManagement::detailheightedit_process_events(SDL_Event &event)
 								cCube* c = &Graphics.world.cubes[y][x];
 								if(lbuttondown && !rbuttondown)
 								{
-									if (!Graphics.slope || (x > posx-(int)floor(brushsize/2.0f)) && y > posy-(int)floor(brushsize/2.0f))
+									if (!Graphics.slope || ((x > posx-(int)floor(brushsize/2.0f)) && y > posy-(int)floor(brushsize/2.0f)))
 										c->cell1-=1;
-									if (!Graphics.slope || (x < posx+(int)ceil(brushsize/2.0f)-1) && y > posy-(int)floor(brushsize/2.0f))
+									if (!Graphics.slope || ((x < posx+(int)ceil(brushsize/2.0f)-1) && y > posy-(int)floor(brushsize/2.0f)))
 										c->cell2-=1;
-									if (!Graphics.slope || (x > posx-(int)floor(brushsize/2.0f)) && y < posy+(int)ceil(brushsize/2.0f)-1)
+									if (!Graphics.slope || ((x > posx-(int)floor(brushsize/2.0f)) && y < posy+(int)ceil(brushsize/2.0f)-1))
 										c->cell3-=1;
-									if (!Graphics.slope || (x < posx+(int)ceil(brushsize/2.0f)-1) && y < posy+(int)ceil(brushsize/2.0f)-1)
+									if (!Graphics.slope || ((x < posx+(int)ceil(brushsize/2.0f)-1) && y < posy+(int)ceil(brushsize/2.0f)-1))
 										c->cell4-=1;
 									if(ctrl)
 									{
@@ -76,13 +76,13 @@ int cProcessManagement::detailheightedit_process_events(SDL_Event &event)
 								}
 								if(lbuttondown && rbuttondown)
 								{
-									if (!Graphics.slope || (x > posx-(int)floor(brushsize/2.0f)) && y > posy-(int)floor(brushsize/2.0f))
+									if (!Graphics.slope || ((x > posx-(int)floor(brushsize/2.0f)) && y > posy-(int)floor(brushsize/2.0f)))
 										c->cell1+=1;
-									if (!Graphics.slope || (x < posx+(int)ceil(brushsize/2.0f)-1) && y > posy-(int)floor(brushsize/2.0f))
+									if (!Graphics.slope || ((x < posx+(int)ceil(brushsize/2.0f)-1) && y > posy-(int)floor(brushsize/2.0f)))
 										c->cell2+=1;
-									if (!Graphics.slope || (x > posx-(int)floor(brushsize/2.0f)) && y < posy+(int)ceil(brushsize/2.0f)-1)
+									if (!Graphics.slope || ((x > posx-(int)floor(brushsize/2.0f)) && y < posy+(int)ceil(brushsize/2.0f)-1))
 										c->cell3+=1;
-									if (!Graphics.slope || (x < posx+(int)ceil(brushsize/2.0f)-1) && y < posy+(int)ceil(brushsize/2.0f)-1)
+									if (!Graphics.slope || ((x < posx+(int)ceil(brushsize/2.0f)-1) && y < posy+(int)ceil(brushsize/2.0f)-1))
 										c->cell4+=1;
 									if(ctrl)
 									{

@@ -5,8 +5,9 @@ TiXmlDocument msgtable;
 #include <font.h>
 int keymap[SDLK_LAST-SDLK_FIRST];
 #include <utility>
+#ifdef WIN32
 #include <winsock.h>
-#include <common.h>
+#endif
 #include <SDL/SDL_mixer.h>
 #include "filesystem.h"
 #include <math.h>
@@ -253,7 +254,7 @@ void mainloop()
 							cCube* c = &Graphics.world.cubes[y][x];
 							if(lbuttondown && !rbuttondown)
 							{
-								if (!Graphics.slope || (x > posx-(int)floor(brushsize/2.0f)) && y > posy-(int)floor(brushsize/2.0f))
+\								if (!Graphics.slope || (x > posx-(int)floor(brushsize/2.0f)) && y > posy-(int)floor(brushsize/2.0f))
 									c->cell1-=1;
 								if (!Graphics.slope || (x < posx+(int)ceil(brushsize/2.0f)-1) && y > posy-(int)floor(brushsize/2.0f))
 									c->cell2-=1;

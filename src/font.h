@@ -5,7 +5,7 @@
 	#include <windows.h>
 #endif
 #include <string>
-#include <gl/gl.h>
+#include <GL/gl.h>
 
 class cTexture;
 

@@ -151,13 +151,13 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 							for(int y = posy-(int)floor(f/2.0f); y < posy+(int)ceil(f/2.0f); y++)
 							{
 								cGatTile* c = &Graphics.world.gattiles[y][x];
-								if (!Graphics.slope || (x > posx-(int)floor(f/2.0f)) && y > posy-(int)floor(f/2.0f))
+								if (!Graphics.slope || ((x > posx-(int)floor(f/2.0f)) && y > posy-(int)floor(f/2.0f)))
 									c->cell1+=1;
-								if (!Graphics.slope || (x < posx+(int)ceil(f/2.0f)-1) && y > posy-(int)floor(f/2.0f))
+								if (!Graphics.slope || ((x < posx+(int)ceil(f/2.0f)-1) && y > posy-(int)floor(f/2.0f)))
 									c->cell2+=1;
-								if (!Graphics.slope || (x > posx-(int)floor(f/2.0f)) && y < posy+(int)ceil(f/2.0f)-1)
+								if (!Graphics.slope || ((x > posx-(int)floor(f/2.0f)) && y < posy+(int)ceil(f/2.0f)-1))
 									c->cell3+=1;
-								if (!Graphics.slope || (x < posx+(int)ceil(f/2.0f)-1) && y < posy+(int)ceil(f/2.0f)-1)
+								if (!Graphics.slope || ((x < posx+(int)ceil(f/2.0f)-1) && y < posy+(int)ceil(f/2.0f)-1))
 									c->cell4+=1;
 							}
 						}
@@ -179,16 +179,16 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 					{
 						for(int y = posy-(int)floor(f/2.0f); y < posy+(int)ceil(f/2.0f); y++)
 						{
-							if(x >= 0 && y >= 0 && y < Graphics.world.gattiles.size() && x < Graphics.world.gattiles[0].size())
+							if(x >= 0 && y >= 0 && y < (int)Graphics.world.gattiles.size() && x < (int)Graphics.world.gattiles[0].size())
 							{
 								cGatTile* c = &Graphics.world.gattiles[y][x];
-								if (!Graphics.slope || (x > posx-(int)floor(f/2.0f)) && y > posy-(int)floor(f/2.0f))
+								if (!Graphics.slope || ((x > posx-(int)floor(f/2.0f)) && y > posy-(int)floor(f/2.0f)))
 									c->cell1-=1;
-								if (!Graphics.slope || (x < posx+(int)ceil(f/2.0f)-1) && y > posy-(int)floor(f/2.0f))
+								if (!Graphics.slope || ((x < posx+(int)ceil(f/2.0f)-1) && y > posy-(int)floor(f/2.0f)))
 									c->cell2-=1;
-								if (!Graphics.slope || (x > posx-(int)floor(f/2.0f)) && y < posy+(int)ceil(f/2.0f)-1)
+								if (!Graphics.slope || ((x > posx-(int)floor(f/2.0f)) && y < posy+(int)ceil(f/2.0f)-1))
 									c->cell3-=1;
-								if (!Graphics.slope || (x < posx+(int)ceil(f/2.0f)-1) && y < posy+(int)ceil(f/2.0f)-1)
+								if (!Graphics.slope || ((x < posx+(int)ceil(f/2.0f)-1) && y < posy+(int)ceil(f/2.0f)-1))
 									c->cell4-=1;
 							}
 						}

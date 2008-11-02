@@ -1,7 +1,9 @@
 #ifndef __WINDOW_H__
 #define __WINDOW_H__
 
+#ifdef WIN32
 #pragma warning( disable : 4786 )
+#endif
 #include <map>
 #include <string>
 

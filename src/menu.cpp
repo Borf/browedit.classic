@@ -1,5 +1,5 @@
 #include "menu.h"
-#include <gl/gl.h>
+#include <GL/gl.h>
 
 #include "graphics.h"
 #include "font.h"

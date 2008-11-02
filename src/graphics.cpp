@@ -161,13 +161,13 @@ int cGraphics::draw(bool drawwm)
 		{
 			if (editmode == MODE_GAT)
 			{
-				if (i+texturestart > gatTextures.size()-1)
+				if ((unsigned int)i+texturestart > gatTextures.size()-1)
 					continue;
 				glBindTexture(GL_TEXTURE_2D, gatTextures[i+texturestart]->texId());
 			}
 			else if (editmode == MODE_WATER)
 			{
-				if (i+world.water.type >= waterCount)
+				if (i+world.water.type >= (int)waterCount)
 					continue;
 				static float frame = 0;
 				glBindTexture(GL_TEXTURE_2D, waterTextures[i+world.water.type][(int)floor(frame)]->texId());
@@ -192,10 +192,9 @@ int cGraphics::draw(bool drawwm)
 		if(editmode == MODE_TEXTUREPAINT)
 		{
 			glEnable(GL_BLEND);
-			int ww = textureBrush[0].size();
-			int hh = textureBrush.size();
-
-			cVector2 off[4] = { cVector2(-1,0), cVector2(1,0), cVector2(0,1), cVector2(0,-1) };
+//			int ww = textureBrush[0].size();
+//			int hh = textureBrush.size();
+//			cVector2 off[4] = { cVector2(-1,0), cVector2(1,0), cVector2(0,1), cVector2(0,-1) };
 
 			glBegin(GL_QUADS);
 			glColor4f(1,0,0,0.5f);
@@ -206,9 +205,9 @@ int cGraphics::draw(bool drawwm)
 			glVertex2f(width-256+(0+textureBrushOffset.x)*(256/textureGridSizeX),		height-(32+(0+0.25f+textureBrushOffset.y)*(256/textureGridSizeY)));
 
 			glColor4f(0,0,0,0.25f);
-			for(int yy = 0; yy < textureBrush.size(); yy++)
+			for(unsigned int yy = 0; yy < textureBrush.size(); yy++)
 			{
-				for(int xx = 0; xx < textureBrush[yy].size(); xx++)
+				for(unsigned int xx = 0; xx < textureBrush[yy].size(); xx++)
 				{
 					if(textureBrush[yy][xx])
 					{
@@ -468,7 +467,7 @@ int cGraphics::init()
 	WM.init(skinFile);
 	WM.addwindow(new cHotkeyWindow(WM.texture, WM.font, WM.skin));
 
-	int i;
+	unsigned int i;
 	for(i = 0; i < gatTiles.size(); i++)
 	{
 		char buf[64];
@@ -607,7 +606,7 @@ void cGraphics::killGLWindow(void)								// Properly Kill The Window
 	world.unload();
 
 	TextureCache.unload(splash);
-	int i;
+	unsigned int i;
 	for(i = 0; i < gatTextures.size(); i++)
 		TextureCache.unload(gatTextures[i]);
 

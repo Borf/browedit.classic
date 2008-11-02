@@ -4,7 +4,7 @@
 #include <wm/window.h>
 #include <wm/windowinputbox.h>
 #include <wm/windowbutton.h>
-#include <sdl/SDL.h>
+#include <SDL/SDL.h>
 
 
 std::string keytostring(SDLKey key);
