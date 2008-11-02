@@ -69,7 +69,7 @@ cModelOverViewWindow::cModelOverViewTreeNode* cModelOverViewWindow::cModelOverVi
 	return NULL;
 }
 
-cModelOverViewWindow::cModelOverViewTree::cModelOverViewTree( cWindow* parent, std::vector<cWindowTree::cTreeNode*> nodes, TiXmlDocument &skin ) : cWindowTree(parent, nodes, skin)
+cModelOverViewWindow::cModelOverViewTree::cModelOverViewTree( cWindow* parent, std::vector<cWindowTree::cTreeNode*> nodes, TiXmlDocument* skin ) : cWindowTree(parent, nodes, skin)
 {
 	moveTo(0,0);
 	resizeTo(parent->innerWidth(), parent->innerHeight());
@@ -174,7 +174,7 @@ void cModelOverViewWindow::addObjects( cModelOverViewTreeNode* parent, bool root
 	}
 }
 
-cModelOverViewWindow::cModelOverViewWindow( cTexture* t, cFont* f, TiXmlDocument &skin ) : cWindow(t,f,skin)
+cModelOverViewWindow::cModelOverViewWindow( ) : cWindow()
 {
 	windowType = WT_MODELOVERVIEW;
 	visible = true;
@@ -191,11 +191,11 @@ cModelOverViewWindow::cModelOverViewWindow( cTexture* t, cFont* f, TiXmlDocument
 	x = Graphics.w() - w;
 	
 	//		cWindowObject* o;
-	objects["close"] = new cWindowCloseButton(this,skin);
+	objects["close"] = new cWindowCloseButton(this);
 	
 	
 	std::vector<cWindowTree::cTreeNode*> nodes;
-	objects["list"] = new cModelOverViewTree(this, nodes, skin);
+	objects["list"] = new cModelOverViewTree(this, nodes);
 	
 	
 	resizeTo(w,h);

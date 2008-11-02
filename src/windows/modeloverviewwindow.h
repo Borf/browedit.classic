@@ -29,7 +29,7 @@ public:
 	class cModelOverViewTree : public cWindowTree
 	{
 	public:
-		cModelOverViewTree(cWindow* parent, std::vector<cWindowTree::cTreeNode*> nodes, TiXmlDocument &skin);
+		cModelOverViewTree(cWindow* parent, std::vector<cWindowTree::cTreeNode*> nodes, TiXmlDocument* skin = NULL);
 		void rightClick();
 		void onChange();
 		void getObject(cRSMModel* m);
@@ -38,7 +38,7 @@ public:
 
 
 	static void addObjects(cModelOverViewTreeNode* parent, bool root);
-	cModelOverViewWindow(cTexture* t, cFont* f, TiXmlDocument &skin);
+	cModelOverViewWindow();
 	void* userfunc(void* p);
 	void resizeTo(int ww, int hh);
 };

@@ -9,13 +9,13 @@ class cMessageWindow : public cWindow
 	class cWindowOkButton : public cWindowButton
 	{
 	public:
-		cWindowOkButton(cWindow* parent, TiXmlDocument &skin);
+		cWindowOkButton(cWindow* parent, TiXmlDocument* skin = NULL);
 		virtual ~cWindowOkButton() {}
 		void click();
 	};
 
 public:
-	cMessageWindow(cTexture* t, cFont* f, TiXmlDocument &skin);	
+	cMessageWindow();	
 };
 
 #endif

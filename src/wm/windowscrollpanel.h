@@ -38,7 +38,7 @@ public:
 
 
 	int skinBarLeft;
-	cWindowScrollPanel(cWindow* parent, TiXmlDocument &skin);
+	cWindowScrollPanel(cWindow* parent, TiXmlDocument* skin = NULL);
 	~cWindowScrollPanel();
 	void draw(int,int,int,int);
 	void drag();

@@ -67,7 +67,7 @@ public:
 	float selectFontColor[3];
 
 
-	cWindowTree(cWindow* parent, std::vector<cTreeNode*> n, TiXmlDocument &skin);
+	cWindowTree(cWindow* parent, std::vector<cTreeNode*> n, TiXmlDocument* skin = NULL);
 	virtual ~cWindowTree() {}
 	virtual void draw(int,int,int,int);
 	virtual void click();

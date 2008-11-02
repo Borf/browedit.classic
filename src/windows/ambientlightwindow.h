@@ -9,13 +9,13 @@ class cAmbientLightWindow : public cWindow
 	class cAmbientLightWindowOkButton : public cWindowButton
 	{
 	public:
-		cAmbientLightWindowOkButton(cWindow* parent, TiXmlDocument &skin);
+		cAmbientLightWindowOkButton(cWindow* parent);
 		virtual ~cAmbientLightWindowOkButton() {}
 		void click();
 	};
 
 public:
-	cAmbientLightWindow(cTexture* t, cFont* f, TiXmlDocument &skin);	
+	cAmbientLightWindow();	
 };
 
 #endif

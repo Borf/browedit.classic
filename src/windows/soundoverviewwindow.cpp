@@ -62,7 +62,7 @@ cSoundOverViewWindow::cSoundOverViewTreeNode* cSoundOverViewWindow::cSoundOverVi
 	return NULL;
 }
 
-cSoundOverViewWindow::cSoundOverViewTree::cSoundOverViewTree( cWindow* parent, std::vector<cWindowTree::cTreeNode*> nodes, TiXmlDocument &skin ) : cWindowTree(parent, nodes, skin)
+cSoundOverViewWindow::cSoundOverViewTree::cSoundOverViewTree( cWindow* parent, std::vector<cWindowTree::cTreeNode*> nodes, TiXmlDocument* skin ) : cWindowTree(parent, nodes, skin)
 {
 	moveTo(0,0);
 	resizeTo(parent->innerWidth(), parent->innerHeight());
@@ -151,7 +151,7 @@ void cSoundOverViewWindow::addObjects( cSoundOverViewTreeNode* parent, bool root
 	}
 }
 
-cSoundOverViewWindow::cSoundOverViewWindow( cTexture* t, cFont* f, TiXmlDocument &skin ) : cWindow(t,f,skin)
+cSoundOverViewWindow::cSoundOverViewWindow( ) : cWindow()
 {
 	windowType = WT_SOUNDOVERVIEW;
 	visible = true;
@@ -168,11 +168,11 @@ cSoundOverViewWindow::cSoundOverViewWindow( cTexture* t, cFont* f, TiXmlDocument
 	x = Graphics.w() - w;
 	
 	//		cWindowObject* o;
-	objects["close"] = new cWindowCloseButton(this,skin);
+	objects["close"] = new cWindowCloseButton(this);
 	
 	
 	std::vector<cWindowTree::cTreeNode*> nodes;
-	objects["list"] = new cSoundOverViewTree(this, nodes,skin);
+	objects["list"] = new cSoundOverViewTree(this, nodes);
 	
 	
 	resizeTo(w,h);

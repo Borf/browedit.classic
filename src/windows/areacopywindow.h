@@ -9,7 +9,6 @@
 #include <wm/windowlabel.h>
 #include <wm/windowinputbox.h>
 #include <wm/windowcheckbox.h>
-extern cFileSystem fs;
 
 
 
@@ -20,7 +19,7 @@ private:
 	{
 
 	public:
-		cAreaCopyWindowOkButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent,skin)
+		cAreaCopyWindowOkButton(cWindow* parent, TiXmlDocument* skin = NULL) : cWindowButton(parent,skin)
 		{
 			alignment = ALIGN_BOTTOM;
 			moveTo(0, 20);
@@ -41,7 +40,7 @@ private:
 		}
 	};
 public:
-	cAreaCopyWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWindow(t,f,skin)
+	cAreaCopyWindow() : cWindow()
 	{
 		windowType = WT_AREACOPY;
 		resizable = false;
@@ -56,8 +55,8 @@ public:
 
 		cWindowObject* o;
 		
-		objects["rollup"] = new cWindowRollupButton(this,skin);
-		objects["close"] = new cWindowCloseButton(this,skin);
+		objects["rollup"] = new cWindowRollupButton(this);
+		objects["close"] = new cWindowCloseButton(this);
 
 
 		addLabel("lblAreaCModel", 15,20,GetMsg("wm/areacopy/MODELS"));
@@ -67,49 +66,49 @@ public:
 		addLabel("lblAreaCLights", 15,100,GetMsg("wm/areacopy/LIGHTS"));
 		addLabel("lblAreaCEffects", 15,120,GetMsg("wm/areacopy/EFFECTS"));
 	
-	o = new cWindowCheckBox(this,skin);
+	o = new cWindowCheckBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(120,20);
 	o->setInt(0,1);
 	objects["Models"] = o;
 //	return o;
   
-	o = new cWindowCheckBox(this,skin);
+	o = new cWindowCheckBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(120,40);
 	o->setInt(0,1);
 	objects["Textures"] = o;
 //	return o;
 
-	o = new cWindowCheckBox(this,skin);
+	o = new cWindowCheckBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(120,60);
 	o->setInt(0,1);
 	objects["Height"] = o;
 //	return o;
 
-	o = new cWindowCheckBox(this,skin);
+	o = new cWindowCheckBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(120,80);
 	o->setInt(0,1);
 	objects["Gat"] = o;
 //	return o;
 
-	o = new cWindowCheckBox(this,skin);
+	o = new cWindowCheckBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(120,100);
 	o->setInt(0,1);
 	objects["Lights"] = o;
 //	return o;
 
-	o = new cWindowCheckBox(this,skin);
+	o = new cWindowCheckBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(120,120);
 	o->setInt(0,1);
 	objects["Effects"] = o;
 //	return o;
 
-		objects["OkButton"] = new cAreaCopyWindowOkButton(this,skin);
+		objects["OkButton"] = new cAreaCopyWindowOkButton(this);
 	}	
 };
 

@@ -26,7 +26,6 @@ extern cGraphics Graphics;
 
 extern double mouse3dx, mouse3dy, mouse3dz;
 extern long mouseX, mouseY;
-extern cFileSystem fs;
 extern eMode	editmode;
 extern int brushsize;
 extern std::string rodir;
@@ -86,7 +85,7 @@ void cWorld::load()
 	}
 	realLightmaps.clear();
 
-	cWindow* wnd = Graphics.WM.getwindow(WT_HOTKEY);
+	cWindow* wnd = cWM::getwindow(WT_HOTKEY);
 	if (wnd != NULL)
 	{
 		for(i = 0; i < 8; i++)
@@ -139,7 +138,7 @@ void cWorld::load()
 	int version;
 
 	Log(3,0,GetMsg("world/LOAD"), (std::string(fileName) + ".gnd").c_str());
-	cFile* pFile = fs.open(std::string(fileName) + ".gnd");
+	cFile* pFile = cFileSystem::open(std::string(fileName) + ".gnd");
 	if(pFile == NULL)
 	{
 		Log(1,0,GetMsg("world/LOADFAIL"), (std::string(fileName) + ".gnd").c_str());
@@ -403,7 +402,7 @@ void cWorld::load()
 	Log(3,0,GetMsg("world/LOADDONE"), "gnd");
 
 	Log(3,0,GetMsg("world/LOAD"), (fileName + std::string(".rsw")).c_str());
-	pFile = fs.open(std::string(fileName) + ".rsw");
+	pFile = cFileSystem::open(std::string(fileName) + ".rsw");
 
 
 	pFile->read(buf, 6);
@@ -655,7 +654,7 @@ void cWorld::load()
 	}
 
 	Log(3,0,GetMsg("world/LOAD"), (std::string(fileName) + ".gat").c_str());
-	pFile = fs.open(std::string(fileName) + ".gat");
+	pFile = cFileSystem::open(std::string(fileName) + ".gat");
 	pFile->read(buf, 14);
 	
 	for(y = 0; y < (unsigned int)height*2; y++)
@@ -678,10 +677,10 @@ void cWorld::load()
 	pFile->close();
 	Log(3,0,GetMsg("world/LOADDONE"), (std::string(fileName) + ".gat").c_str());
 
-	wnd = Graphics.WM.getwindow(WT_HOTKEY);
+	wnd = cWM::getwindow(WT_HOTKEY);
 	if (wnd != NULL)
 	{
-		pFile = fs.open(std::string(fileName) + ".locations");
+		pFile = cFileSystem::open(std::string(fileName) + ".locations");
 		if(pFile != NULL)
 		{
 			while(!pFile->eof())
@@ -714,9 +713,9 @@ void cWorld::load()
 
 	Graphics.world.sprites.clear();
 
-	if(fs.isFile(std::string(fileName) + ".sprites"))
+	if(cFileSystem::isFile(std::string(fileName) + ".sprites"))
 	{
-		TiXmlDocument sprdoc = fs.getXml(std::string(fileName) + ".sprites");;
+		TiXmlDocument sprdoc = cFileSystem::getXml(std::string(fileName) + ".sprites");;
 		TiXmlElement* sprite = sprdoc.FirstChildElement("sprites")->FirstChildElement("sprite");
 		while(sprite != NULL)
 		{
@@ -744,9 +743,9 @@ void cWorld::load()
 		}
 	}
 
-	if(fs.isFile(std::string(fileName) + ".extra"))
+	if(cFileSystem::isFile(std::string(fileName) + ".extra"))
 	{
-		TiXmlDocument extradoc = fs.getXml(std::string(fileName) + ".extra");
+		TiXmlDocument extradoc = cFileSystem::getXml(std::string(fileName) + ".extra");
 		TiXmlElement* light = extradoc.FirstChildElement("lights")->FirstChildElement("light");
 		while(light != NULL)
 		{
@@ -866,7 +865,7 @@ void cQuadTreeNode::draw(int level)
 
 void cWorld::exportheight()
 {
-	/*cFile* pFile = fs.open(filename);
+	/*cFile* pFile = cFileSystem::open(filename);
 	//jpegmap[x+y*(tilespertex)] = gdImageCreateFromJpegPtr(pFile->size, pFile->data);
 	pFile->close();*/
 
@@ -897,7 +896,7 @@ void cWorld::save()
 {
 	if(!IsLegal2)
 	{
-		Graphics.WM.ShowMessage("This copy of browedit is not activated. Please don't use it");
+		cWM::ShowMessage("This copy of browedit is not activated. Please don't use it");
 		return;
 	}
 
@@ -916,7 +915,7 @@ void cWorld::save()
 			if(root == NULL)
 			{
 				int b = 0;
-				Graphics.WM.ConfirmWindow("There is no quadtree information added, would you like to try adding it?", new cAddQuadtreeConfirm(&b));
+				cWM::ConfirmWindow("There is no quadtree information added, would you like to try adding it?", new cAddQuadtreeConfirm(&b));
 				while(b == 0)
 				{
 					mainloop();
@@ -1069,7 +1068,7 @@ void cWorld::save()
 		
 		if(strlen(fname) > 16)
 		{
-			Graphics.WM.ShowMessage("Please use a shorter name");
+			cWM::ShowMessage("Please use a shorter name");
 			Log(2,0,"Error: |%s| is too long", fname);
 			return;
 		}
@@ -1388,7 +1387,7 @@ void cWorld::save()
 	}
 	{
 		int i;
-		cWindow* w = Graphics.WM.getwindow(WT_HOTKEY);
+		cWindow* w = cWM::getwindow(WT_HOTKEY);
 		int loadcount = 0;
 		for(i = 0; i < 8; i++)
 		{
@@ -1652,10 +1651,10 @@ void cWorld::draw()
 				glDisable(GL_TEXTURE_2D);
 				glNormal3f(c->normal.x, c->normal.y, c->normal.z);
 				glBegin(GL_TRIANGLE_STRIP);
-					glVertex3f(x*10,-c->cell1,(height-y)*10);
-					glVertex3f(x*10,-c->cell3,(height-y)*10-10);
-					glVertex3f(x*10+10,-c->cell2,(height-y)*10);
-					glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
+					glVertex3f(x*10,-c->cell1+0.01f,(height-y)*10);
+					glVertex3f(x*10,-c->cell3+0.01f,(height-y)*10-10);
+					glVertex3f(x*10+10,-c->cell2+0.01f,(height-y)*10);
+					glVertex3f(x*10+10,-c->cell4+0.01f,(height-y)*10-10);
 				glEnd();
 				glEnable(GL_TEXTURE_2D);
 				glColor3f(1,1,1);
@@ -1847,7 +1846,7 @@ void cWorld::draw()
 		glBindTexture(GL_TEXTURE_2D, Graphics.waterTextures[water.type][(int)ceil(waterindex)]->texId());
 
 		if(Graphics.animateWater)
-			waterindex+=max((float)0,(Graphics.frameticks) / 50.0f);
+			waterindex+=max((float)0,(cGraphicsBase::getFrameTicks()) / 50.0f);
 		if (waterindex > Graphics.waterTextures[water.type].size()-1)
 			waterindex = 0;
 		glBegin(GL_QUADS);
@@ -2778,7 +2777,7 @@ void cWorld::draw()
 		glBindTexture(GL_TEXTURE_2D, Graphics.waterTextures[water.type][(int)ceil(waterindex)]->texId());
 
 		if(Graphics.animateWater)
-			waterindex+=max((float)0,(Graphics.frameticks) / 50.0f);
+			waterindex+=max((float)0,(cGraphicsBase::getFrameTicks()) / 50.0f);
 		if (waterindex > Graphics.waterTextures[water.type].size()-1)
 			waterindex = 0;
 		glBegin(GL_QUADS);
@@ -3379,7 +3378,7 @@ void cWorld::savelightmap()
 void cWorld::loadlightmap()
 {
 	{
-		cFile* pFile = fs.open(std::string(fileName) + ".lightmap.tga");
+		cFile* pFile = cFileSystem::open(std::string(fileName) + ".lightmap.tga");
 		int color;
 		for(int x = 0; x < width; x++)
 		{
@@ -3402,7 +3401,7 @@ void cWorld::loadlightmap()
 		pFile->close();
 	}
 	{
-		cFile* pFile = fs.open(std::string(fileName) + ".lightmap2.tga");
+		cFile* pFile = cFileSystem::open(std::string(fileName) + ".lightmap2.tga");
 		for(int x = 0; x < width; x++)
 		{
 			for(int y = 0; y < height; y++)

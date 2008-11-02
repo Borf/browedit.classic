@@ -29,7 +29,6 @@ extern int brushsize;
 extern double mouse3dx, mouse3dy, mouse3dz;
 int process_events( );
 extern std::vector<std::string> objectfiles;
-extern cFileSystem fs;
 extern std::string rodir;
 extern cMenu* mode;
 extern cMenu* editdetail;
@@ -55,7 +54,7 @@ cMenuItem* selectedeffect = NULL;
 
 MENUCOMMAND(new)
 {
-	Graphics.WM.ShowMessage("This feature isn't working yet...");
+	cWM::ShowMessage("This feature isn't working yet...");
 	return true;
 }
 
@@ -112,7 +111,7 @@ void openfunc(std::string param)
 
 MENUCOMMAND(opengrf)
 {
-	Graphics.WM.addwindow(new cFileWindow(Graphics.WM.texture, Graphics.WM.font, openfunc,Graphics.WM.skin));
+	cWM::addwindow(new cFileWindow(openfunc));
 	return true;
 }
 
@@ -244,7 +243,7 @@ MENUCOMMAND(saveAs)
 
 	}
 #else
-	std::string input = Graphics.WM.InputWindow("Filename (so not add .rsw): ", Graphics.world.fileName);
+	std::string input = cWM::InputWindow("Filename (so not add .rsw): ", Graphics.world.fileName);
 	if(input != "")
 	{
 		sprintf(Graphics.world.fileName, "%s", input.c_str());
@@ -293,11 +292,11 @@ int ClassifyPoint(cVector3 point, cVector3 pO, cVector3 pN)
 
 MENUCOMMAND(random1)
 {
-	int height = atoi(Graphics.WM.InputWindow("Height:").c_str());
-	int smooth  = atoi(Graphics.WM.InputWindow("Smoothing level (use 5-10 for decent results)").c_str());
+	int height = atoi(cWM::InputWindow("Height:").c_str());
+	int smooth  = atoi(cWM::InputWindow("Smoothing level (use 5-10 for decent results)").c_str());
 	if(height == 0)
 	{
-		Graphics.WM.ShowMessage("You must enter a height bigger then 0");
+		cWM::ShowMessage("You must enter a height bigger then 0");
 		return true;
 	}
 
@@ -372,7 +371,7 @@ MENUCOMMAND(random1)
 MENUCOMMAND(random2)
 {
 	unsigned int i;
-	unsigned int smooth  = 3;//atoi(Graphics.WM.InputWindow("Smoothing level (use 5-10 for decent results)").c_str());
+	unsigned int smooth  = 3;//atoi(cWM::InputWindow("Smoothing level (use 5-10 for decent results)").c_str());
 
 	undostack.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
 	float x,y;
@@ -522,7 +521,7 @@ MENUCOMMAND(random2)
 	std::vector<std::string>	randommodels;
 	for(i = 0; i < objectfiles.size(); i++)
 	{
-		cFile* pFile = fs.open(objectfiles[i]);
+		cFile* pFile = cFileSystem::open(objectfiles[i]);
 		while(!pFile->eof())
 		{
 			std::string line = pFile->readLine();
@@ -1098,7 +1097,7 @@ MENUCOMMAND(random4)
 	std::vector<std::string>	randommodels;
 	for(i = 0; i < objectfiles.size(); i++)
 	{
-		cFile* pFile = fs.open(objectfiles[i]);
+		cFile* pFile = cFileSystem::open(objectfiles[i]);
 		while(!pFile->eof())
 		{
 			std::string line = pFile->readLine();
@@ -1464,7 +1463,7 @@ MENUCOMMAND(dolightmapsnoshadow)
 class cWindowPreviewButton : public cWindowButton
 {
 public:
-	cWindowPreviewButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent, skin)
+	cWindowPreviewButton(cWindow* parent, TiXmlDocument* skin = NULL) : cWindowButton(parent, skin)
 	{
 		alignment = ALIGN_TOPLEFT;
 		moveTo(0,20);
@@ -1644,11 +1643,11 @@ MENUCOMMAND(dolightmaps2)
 	bool rendering = true;
 
 
-	cProgressWindow* w = new cProgressWindow(Graphics.WM.texture, Graphics.WM.font, &rendering, Graphics.WM.skin);
-	Graphics.WM.addwindow(w);
+	cProgressWindow* w = new cProgressWindow(&rendering);
+	cWM::addwindow(w);
 	w->objects["progress"]->setInt(1,0);
 	w->objects["progress"]->setInt(2,Graphics.world.height * Graphics.world.width);
-	w->objects["toggle"] = new cWindowPreviewButton(w, Graphics.WM.skin);
+	w->objects["toggle"] = new cWindowPreviewButton(w);
 
 	mainloop();
 
@@ -1793,7 +1792,7 @@ MENUCOMMAND(dolightmaps2)
 	t->wait();
 	boundingBoxCollisions = false;
 
-	//if(Graphics.WM.ConfirmWindow("Done first step of lightmap calculation, do you want to continue?"))
+	//if(cWM::ConfirmWindow("Done first step of lightmap calculation, do you want to continue?"))
 	{
 		
 	}
@@ -1940,7 +1939,7 @@ BYTE* getLightMap(int x, int y)
 
 MENUCOMMAND(smoothlightmaps)
 {
-	std::string strFactor = Graphics.WM.InputWindow("Smoothing factor:", "1");
+	std::string strFactor = cWM::InputWindow("Smoothing factor:", "1");
 	if(strFactor == "")
 		return true;
 	float factor = atof(strFactor.c_str());
@@ -2257,13 +2256,13 @@ MENUCOMMAND(toggle)
 MENUCOMMAND(water)
 {
 	char buf[100];
-	cWindow* w = new cWaterWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin);
+	cWindow* w = new cWaterWindow();
 	sprintf(buf, "%f", Graphics.world.water.amplitude);		w->objects["amplitude"]->setText(0,buf);
 	sprintf(buf, "%f", Graphics.world.water.height);		w->objects["height"]->setText(0,buf);
 	sprintf(buf, "%f", Graphics.world.water.phase);			w->objects["phase"]->setText(0,buf);
 	sprintf(buf, "%f", Graphics.world.water.surfaceCurve);	w->objects["surfacecurve"]->setText(0,buf);
 	sprintf(buf, "%i", Graphics.world.water.type);			w->objects["type"]->setText(0,buf);
-	Graphics.WM.addwindow(w);
+	cWM::addwindow(w);
 	return true;
 }
 
@@ -2299,7 +2298,7 @@ MENUCOMMAND(cleantextures)
 MENUCOMMAND(ambientlight)
 {
 	char buf[100];
-	cWindow* w = new cAmbientLightWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin);
+	cWindow* w = new cAmbientLightWindow();
 	sprintf(buf, "%i", Graphics.world.ambientLight.ambientr);		w->objects["ambientr"]->setText(0,buf);
 	sprintf(buf, "%i", Graphics.world.ambientLight.ambientg);		w->objects["ambientg"]->setText(0,buf);
 	sprintf(buf, "%i", Graphics.world.ambientLight.ambientb);		w->objects["ambientb"]->setText(0,buf);
@@ -2314,7 +2313,7 @@ MENUCOMMAND(ambientlight)
 	
 	sprintf(buf, "%f", Graphics.world.ambientLight.alpha);			w->objects["alpha"]->setText(0,buf);
 
-	Graphics.WM.addwindow(w);
+	cWM::addwindow(w);
 	return true;
 }
 
@@ -2358,7 +2357,7 @@ MENUCOMMAND(properties)
 
 MENUCOMMAND(preferences)
 {
-	Graphics.WM.addwindow(new cKeyBindWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin));
+	cWM::addwindow(new cKeyBindWindow());
 	return true;
 }
 
@@ -2461,13 +2460,13 @@ MENUCOMMAND(fillarea)
 
 MENUCOMMAND(rsmedit)
 {
-	Graphics.WM.addwindow(new cRSMEditWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin));
+	cWM::addwindow(new cRSMEditWindow());
 	return true;
 }
 
 MENUCOMMAND(favlights)
 {
-	Graphics.WM.addwindow(new cFavoriteLightsWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin));
+	cWM::addwindow(new cFavoriteLightsWindow());
 	return true;
 }
 
@@ -2482,7 +2481,7 @@ MENUCOMMAND(exportmapfiles)
 	std::ofstream pFile((std::string(Graphics.world.fileName) + ".txt").c_str());
 	for(i = 0; i < Graphics.world.textures.size(); i++)
 	{
-		cFile* pF = fs.open(rodir + "data\\texture\\" + Graphics.world.textures[i]->RoFilename);
+		cFile* pF = cFileSystem::open(rodir + "data\\texture\\" + Graphics.world.textures[i]->RoFilename);
 		if(pF->location != -1)
 		{
 			pF->close();
@@ -2505,7 +2504,7 @@ MENUCOMMAND(exportmapfiles)
 		if(usedmodels.find(Graphics.world.models[i]->rofilename) != usedmodels.end())
 			continue;
 
-		cFile* pF = fs.open(Graphics.world.models[i]->filename);
+		cFile* pF = cFileSystem::open(Graphics.world.models[i]->filename);
 		if(pF->location != -1)
 		{
 			pF->close();
@@ -2524,7 +2523,7 @@ MENUCOMMAND(exportmapfiles)
 		for(int ii = 0; ii < Graphics.world.models[i]->textures.size(); ii++)
 		{
 			std::string file = Graphics.world.models[i]->textures[ii]->getfilename();
-			cFile* pF = fs.open(file);
+			cFile* pF = cFileSystem::open(file);
 			if(pF->location != -1)
 			{
 				pF->close();
@@ -2830,7 +2829,7 @@ MENUCOMMAND(random5)
 
 MENUCOMMAND(99dun)
 {
-	srand(atoi(Graphics.WM.InputWindow("Random Seed: ").c_str()));
+	srand(atoi(cWM::InputWindow("Random Seed: ").c_str()));
 
 	for(int i = 0; i < 10; i++)
 	{
@@ -2869,7 +2868,7 @@ char dirmap[] = { 4,3,2,1,0,7,6,5 };
 void readscript(std::string filename)
 {
 	Log(3,0,"Reading %s", filename.c_str());
-	cFile* pFile = fs.open("C:\\Documents and Settings\\Borf\\Desktop\\eathena\\" + filename);
+	cFile* pFile = cFileSystem::open("C:\\Documents and Settings\\Borf\\Desktop\\eathena\\" + filename);
 	if(pFile == NULL)
 		return;
 
@@ -2949,7 +2948,7 @@ MENUCOMMAND(eascript)
 	scriptmap = Graphics.world.fileName;
 	scriptmap = scriptmap.substr(scriptmap.rfind("\\")+1);
 	if(!sprites.FirstChild())
-		sprites = fs.getXml("sprites.xml");
+		sprites = cFileSystem::getXml("sprites.xml");
 
 
 	readscript("npc\\scripts_main.conf");
@@ -3068,7 +3067,7 @@ MENUCOMMAND(npcscreenies)
 				strcpy(Graphics.world.fileName, (rodir + "data\\" + filename.substr(0, filename.rfind("."))).c_str());
 				Graphics.world.load();
 				if(!sprites.FirstChild())
-					sprites = fs.getXml("sprites.xml");
+					sprites = cFileSystem::getXml("sprites.xml");
 
 
 				readscript("npc\\scripts_main.conf");
@@ -3153,7 +3152,7 @@ MENUCOMMAND(addfavorite)
 	Graphics.world.lights.push_back(l);
 	undostack.push(new cUndoNewLight());
 
-	cWindow* w = Graphics.WM.getwindow(WT_LIGHTOVERVIEW);
+	cWindow* w = cWM::getwindow(WT_LIGHTOVERVIEW);
 	if(w != NULL)
 	{
 		w->userfunc(NULL);
@@ -3190,7 +3189,7 @@ MENUCOMMAND(light_setheight)
 
 
 	MenuCommand_light_snaptofloor(src);
-	Graphics.world.lights[Graphics.selectedObject].pos.y += atoi(Graphics.WM.InputWindow("Height:").c_str());
+	Graphics.world.lights[Graphics.selectedObject].pos.y += atoi(cWM::InputWindow("Height:").c_str());
 
 
 	return true;
@@ -3213,7 +3212,7 @@ MENUCOMMAND(light_setheight)
 
 MENUCOMMAND(removefavlight)
 {
-	cFavoriteLightsWindow* w = (cFavoriteLightsWindow*)Graphics.WM.getwindow(WT_FAVLIGHTS);
+	cFavoriteLightsWindow* w = (cFavoriteLightsWindow*)cWM::getwindow(WT_FAVLIGHTS);
 	if(w != NULL)
 	{
 		cFavoriteLightsWindow::cFavoritesTree* tree = (cFavoriteLightsWindow::cFavoritesTree*)w->objects["list"];
@@ -3292,7 +3291,7 @@ MENUCOMMAND(addfavlight)
 {
 	delete popupmenu;
 	popupmenu = NULL;
-	cFavoriteLightsWindow* w = (cFavoriteLightsWindow*)Graphics.WM.getwindow(WT_FAVLIGHTS);
+	cFavoriteLightsWindow* w = (cFavoriteLightsWindow*)cWM::getwindow(WT_FAVLIGHTS);
 	if(w != NULL)
 	{
 		cFavoriteLightsWindow::cFavoritesTree* tree = (cFavoriteLightsWindow::cFavoritesTree*)w->objects["list"];
@@ -3310,7 +3309,7 @@ MENUCOMMAND(addfavlight)
 
 		if(!((cFavoriteLightsWindow::cFavoriteTreeNode*)node)->isCat)
 		{
-			Graphics.WM.ShowMessage("You can't add a light to another light, you can only add lights to categories");
+			cWM::ShowMessage("You can't add a light to another light, you can only add lights to categories");
 			return false;
 		}
 
@@ -3327,7 +3326,7 @@ MENUCOMMAND(addfavlight)
 				n = n->NextSibling();
 		}
 
-		std::string name = Graphics.WM.InputWindow("Light name:");
+		std::string name = cWM::InputWindow("Light name:");
 		if(name == "")
 			return false;
 
@@ -3376,7 +3375,7 @@ MENUCOMMAND(addfavlightcat)
 {
 	delete popupmenu;
 	popupmenu = NULL;
-	cFavoriteLightsWindow* w = (cFavoriteLightsWindow*)Graphics.WM.getwindow(WT_FAVLIGHTS);
+	cFavoriteLightsWindow* w = (cFavoriteLightsWindow*)cWM::getwindow(WT_FAVLIGHTS);
 	if(w != NULL)
 	{
 		cFavoriteLightsWindow::cFavoritesTree* tree = (cFavoriteLightsWindow::cFavoritesTree*)w->objects["list"];
@@ -3394,7 +3393,7 @@ MENUCOMMAND(addfavlightcat)
 
 		if(!((cFavoriteLightsWindow::cFavoriteTreeNode*)node)->isCat)
 		{
-			Graphics.WM.ShowMessage("You can't add a category to a light, you can only add lights to categories");
+			cWM::ShowMessage("You can't add a category to a light, you can only add lights to categories");
 			return false;
 		}
 
@@ -3411,7 +3410,7 @@ MENUCOMMAND(addfavlightcat)
 				n = n->NextSibling();
 		}
 
-		std::string catname = Graphics.WM.InputWindow("Category name:");
+		std::string catname = cWM::InputWindow("Category name:");
 		if(catname == "")
 			return false;
 
@@ -3446,14 +3445,14 @@ MENUCOMMAND(addfavlightcat)
 
 MENUCOMMAND(rebuildtexturefile)
 {
-	std::string file = Graphics.WM.InputWindow("File to output:", "data/rotextures.txt");
+	std::string file = cWM::InputWindow("File to output:", "data/rotextures.txt");
 	if(file == "")
 		return false;
 	std::ofstream pFile(file.c_str(), std::ios_base::binary | std::ios_base::out);
 	unsigned int i;
-	for(i = 0; i < fs.locations.size(); i++)
+	for(i = 0; i < cFileSystem::locations.size(); i++)
 	{
-		for(std::map<std::string, cFile*, std::less<std::string> >::iterator it = fs.locations[i]->files.begin(); it != fs.locations[i]->files.end(); it++)
+		for(std::map<std::string, cFile*, std::less<std::string> >::iterator it = cFileSystem::locations[i]->files.begin(); it != cFileSystem::locations[i]->files.end(); it++)
 		{
 			if(it->first.substr(rodir.length(),13) != "data\\texture\\")
 				continue;
@@ -3473,14 +3472,14 @@ MENUCOMMAND(rebuildtexturefile)
 
 MENUCOMMAND(rebuildmodelfile)
 {
-	std::string file = Graphics.WM.InputWindow("File to output:", "data/romodels.txt");
+	std::string file = cWM::InputWindow("File to output:", "data/romodels.txt");
 	if(file == "")
 		return false;
 	std::ofstream pFile(file.c_str(), std::ios_base::binary | std::ios_base::out);
 	unsigned int i;
-	for(i = 0; i < fs.locations.size(); i++)
+	for(i = 0; i < cFileSystem::locations.size(); i++)
 	{
-		for(std::map<std::string, cFile*, std::less<std::string> >::iterator it = fs.locations[i]->files.begin(); it != fs.locations[i]->files.end(); it++)
+		for(std::map<std::string, cFile*, std::less<std::string> >::iterator it = cFileSystem::locations[i]->files.begin(); it != cFileSystem::locations[i]->files.end(); it++)
 		{
 			if(it->first.substr(rodir.length(),11) != "data\\model\\")
 				continue;
@@ -3500,14 +3499,14 @@ MENUCOMMAND(rebuildmodelfile)
 
 MENUCOMMAND(rebuildsoundsfile)
 {
-	std::string file = Graphics.WM.InputWindow("File to output:", "data/rosounds.txt");
+	std::string file = cWM::InputWindow("File to output:", "data/rosounds.txt");
 	if(file == "")
 		return false;
 	std::ofstream pFile(file.c_str(), std::ios_base::binary | std::ios_base::out);
 	unsigned int i;
-	for(i = 0; i < fs.locations.size(); i++)
+	for(i = 0; i < cFileSystem::locations.size(); i++)
 	{
-		for(std::map<std::string, cFile*, std::less<std::string> >::iterator it = fs.locations[i]->files.begin(); it != fs.locations[i]->files.end(); it++)
+		for(std::map<std::string, cFile*, std::less<std::string> >::iterator it = cFileSystem::locations[i]->files.begin(); it != cFileSystem::locations[i]->files.end(); it++)
 		{
 			if(it->first.substr(rodir.length(),9) != "data\\wav\\")
 				continue;
@@ -3535,17 +3534,17 @@ MENUCOMMAND(plugin)
 
 MENUCOMMAND(mapdatabase)
 {
-	Graphics.WM.addwindow(new cMapsWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin));
+	cWM::addwindow(new cMapsWindow());
 	return true;
 }
 
 
 MENUCOMMAND(saveOnline)
 {
-	if(!Graphics.WM.ConfirmWindow("This will save your map. Are you sure you want to save?"))
+	if(!cWM::ConfirmWindow("This will save your map. Are you sure you want to save?"))
 		return false;
-	std::string mapname = Graphics.WM.InputWindow("Please enter the mapname", Graphics.world.fileName);
-	std::string password = Graphics.WM.InputWindow("Please enter your browedit account password", "");
+	std::string mapname = cWM::InputWindow("Please enter the mapname", Graphics.world.fileName);
+	std::string password = cWM::InputWindow("Please enter your browedit account password", "");
 	std::map<std::string, bool, std::less<std::string> > textures;
 	std::map<std::string, bool, std::less<std::string> > models;
 	int i;
@@ -3596,8 +3595,8 @@ MENUCOMMAND(saveOnline)
 			{
 				std::vector<std::string> lines = split(data, "\n");
 				renderMutex->lock();
-				cProgressWindow* w = new cProgressWindow(Graphics.WM.texture, Graphics.WM.font, NULL, Graphics.WM.skin);
-				Graphics.WM.addwindow(w);
+				cProgressWindow* w = new cProgressWindow(NULL);
+				cWM::addwindow(w);
 				w->objects["progress"]->setInt(1,0);
 				w->objects["progress"]->setInt(2,lines.size());
 				renderMutex->unlock();
@@ -3611,7 +3610,7 @@ MENUCOMMAND(saveOnline)
 					if(lines[i].find("texture:") == 0)
 					{
 						std::string filename = lines[i].substr(8);
-						cFile* pFile = fs.open(rodir + "data/texture/" + filename);
+						cFile* pFile = cFileSystem::open(rodir + "data/texture/" + filename);
 						if(pFile)
 						{
 							CURL *curl_handle;
@@ -3643,7 +3642,7 @@ MENUCOMMAND(saveOnline)
 					else if(lines[i].find("model:") == 0)
 					{
 						std::string filename = lines[i].substr(6);
-						cFile* pFile = fs.open(rodir + "data/model/" + filename);
+						cFile* pFile = cFileSystem::open(rodir + "data/model/" + filename);
 						if(pFile)
 						{
 							CURL *curl_handle;
@@ -3675,7 +3674,7 @@ MENUCOMMAND(saveOnline)
 					}
 					else if(lines[i].find("error:") == 0)
 					{
-						Graphics.WM.ShowMessage("Error: " + lines[i].substr(6));
+						cWM::ShowMessage("Error: " + lines[i].substr(6));
 						w->close();
 						return;
 					}
@@ -3704,12 +3703,12 @@ MENUCOMMAND(saveOnline)
 
 	Graphics.world.save();			
 
-	Graphics.WM.ShowMessage("Please move your viewpoint to show the map on the thumbnail");
+	cWM::ShowMessage("Please move your viewpoint to show the map on the thumbnail");
 
 
-	cFile* rsw = fs.open(std::string(Graphics.world.fileName) + ".rsw");
-	cFile* gat = fs.open(std::string(Graphics.world.fileName) + ".gat");
-	cFile* gnd = fs.open(std::string(Graphics.world.fileName) + ".gnd");
+	cFile* rsw = cFileSystem::open(std::string(Graphics.world.fileName) + ".rsw");
+	cFile* gat = cFileSystem::open(std::string(Graphics.world.fileName) + ".gat");
+	cFile* gnd = cFileSystem::open(std::string(Graphics.world.fileName) + ".gnd");
 
 	CURL *curl_handle;
 	curl_global_init(CURL_GLOBAL_ALL);
@@ -3821,12 +3820,14 @@ inline void setLightIntensity( BYTE* buf, int yy, int xx, cVector3 worldpos, std
 
 MENUCOMMAND(makeMinimaps)
 {
+#define MULTIMINIMAP
+#ifdef MULTIMINIMAP
 	std::vector<std::string> mapnames;
 	mapnames.clear();
 	unsigned int i;
-	for(i = 0; i < fs.locations.size(); i++)
+	for(i = 0; i < cFileSystem::locations.size(); i++)
 	{
-		for(std::map<std::string, cFile*, std::less<std::string> >::iterator it = fs.locations[i]->files.begin(); it != fs.locations[i]->files.end(); it++)
+		for(std::map<std::string, cFile*, std::less<std::string> >::iterator it = cFileSystem::locations[i]->files.begin(); it != cFileSystem::locations[i]->files.end(); it++)
 		{
 			if(it->first.find(".rsw") != std::string::npos)
 			{
@@ -3843,78 +3844,122 @@ MENUCOMMAND(makeMinimaps)
 		}
 	}
 
+	int mapcount = 0;
 	for(i = 0; i < mapnames.size(); i++)
 	{
 		sprintf(Graphics.world.fileName, "%s%s", rodir.c_str(), mapnames[i].substr(0, mapnames[i].length()-4).c_str());
-		FILE* pFile = fopen(Graphics.world.fileName,"rb");
+		FILE* pFile = fopen((std::string(Graphics.world.fileName) + ".minimap.tga").c_str(),"rb");
 		if(pFile)
 		{
 			fclose(pFile);
 			continue;
 		}
+		mapcount++;
+		if(mapcount > 50)
+			break;
 
 
 		Graphics.world.load();
+#endif
 
 		Graphics.topCamera = true;
-		//	Graphics.camerapointer = cVector2(-Graphics.world.width*5, Graphics.world.height*5);
 		Graphics.camerapointer = cVector2(-Graphics.world.height*10,0);
-		Graphics.cameraheight = max(Graphics.world.height, Graphics.world.width)*15;
 		Graphics.showDot = false;
 		Graphics.showgrid = false;
+		Graphics.showLightmaps = false;
+		Graphics.showObjects = false;
+		Graphics.showNoTiles = true;
+		Graphics.noTileColor = cVector3(0,0,0);
+
+		unsigned char *pixels = NULL;
+
+		int screenStats[4];
+		glGetIntegerv(GL_VIEWPORT, screenStats);
+		unsigned char TGAheader[12]={0,0,2,0,0,0,0,0,0,0,0,0};
+
+		int xfrom = 0;
+		int yfrom = 0;
+		int xto = Graphics.w()-256;
+		int yto = screenStats[3]-22;
+
+		int mindist = 0;
+		float minheight = 0;
+
+		Graphics.cameraheight = max(Graphics.world.height, Graphics.world.width)*15;
+		for(int iii = 0; iii < 20; iii++)
+		{
+			if (!Graphics.draw(false))
+				running = false;
+			SDL_GL_SwapBuffers();
+			if (!Graphics.draw(false))
+				running = false;
+			SDL_GL_SwapBuffers();
+			
+			if(pixels)
+				delete[] pixels;
+			pixels = getPixelsBGR();
+
+			xto = Graphics.w()-256;
+			yto = screenStats[3]-22;
+			
+			int ii;
+			for(ii = 22; ii < screenStats[3]; ii++)
+			{
+				if(	pixels[3*(10+(Graphics.h()-ii)*screenStats[2])+0] == round(Graphics.backgroundColor[2]*255) &&
+					pixels[3*(10+(Graphics.h()-ii)*screenStats[2])+1] == round(Graphics.backgroundColor[1]*255) &&
+					pixels[3*(10+(Graphics.h()-ii)*screenStats[2])+2] == round(Graphics.backgroundColor[0]*255))
+					yto = Graphics.h()-ii;
+				else
+					break;
+			}
+			if(yto == Graphics.h() - 22)
+			{
+				Graphics.cameraheight+=25;
+			}
+			else if(yto == Graphics.h() - 23)
+			{
+				break;
+			}
+			else if(iii != 19)
+			{
+				if(yto > mindist)
+				{
+					mindist = yto;
+					minheight = Graphics.cameraheight;
+				}
+				//Graphics.cameraheight/= 1.25;
+				Graphics.cameraheight -= ((Graphics.h() - yto) - 22);
+			}
+		}
+
+
 		Graphics.showLightmaps = true;
 		Graphics.showObjects = true;
-		Graphics.showNoTiles = false;
-		Graphics.showOglLighting = false;
-		if (!Graphics.draw(false))
-			running = false;
-		SDL_GL_SwapBuffers();
-		if (!Graphics.draw(false))
-			running = false;
-		SDL_GL_SwapBuffers();
+		yto = mindist;
+		Graphics.cameraheight = minheight;
 		if (!Graphics.draw(false))
 			running = false;
 		SDL_GL_SwapBuffers();
 
-
-
-		unsigned char *pixels;
+		if(pixels)
+			delete[] pixels;
 		pixels = getPixelsBGR();
+
+		for(int ii = Graphics.w()-257; ii > 0; ii--)
+		{
+			if(	pixels[3*(ii+5*screenStats[2])+0] == round(Graphics.backgroundColor[2]*255) &&
+				pixels[3*(ii+5*screenStats[2])+1] == round(Graphics.backgroundColor[1]*255) &&
+				pixels[3*(ii+5*screenStats[2])+2] == round(Graphics.backgroundColor[0]*255))
+				xto = ii;
+			else
+				break;
+		}
 
 		FILE * shot;
 		char buf[100];
 		sprintf(buf, "%s.minimap.tga", Graphics.world.fileName);
 		if((shot=fopen(buf, "wb"))!=NULL)
 		{
-			int screenStats[4];
-			glGetIntegerv(GL_VIEWPORT, screenStats);
-			unsigned char TGAheader[12]={0,0,2,0,0,0,0,0,0,0,0,0};
-
-			int xfrom = 0;
-			int yfrom = 0;
-			int xto = Graphics.w()-256;
-			int yto = screenStats[3]-19;
-
-			int ii;
-			for(ii = 22; ii < screenStats[3]; ii++)
-			{
-				if(	pixels[3*(10+(Graphics.h()-ii)*screenStats[2])+0] == (int)(Graphics.backgroundColor[2]*255) &&
-					pixels[3*(10+(Graphics.h()-ii)*screenStats[2])+1] == (int)(Graphics.backgroundColor[1]*255) &&
-					pixels[3*(10+(Graphics.h()-ii)*screenStats[2])+2] == (int)(Graphics.backgroundColor[0]*255))
-						yto = Graphics.h()-ii;
-				else
-					break;
-			}
-
-			for(ii = Graphics.w()-257; ii > 0; ii--)
-			{
-				if(	pixels[3*(ii+5*screenStats[2])+0] == (int)(Graphics.backgroundColor[2]*255) &&
-					pixels[3*(ii+5*screenStats[2])+1] == (int)(Graphics.backgroundColor[1]*255) &&
-					pixels[3*(ii+5*screenStats[2])+2] == (int)(Graphics.backgroundColor[0]*255))
-					xto = ii;
-				else
-					break;
-			}
 
 
 			int w= xto - xfrom;
@@ -3935,7 +3980,9 @@ MENUCOMMAND(makeMinimaps)
 			fclose(shot);
 		}
 		delete [] pixels;
+#ifdef MULTIMINIMAP
 	}
+#endif
 
 	return true;
 }

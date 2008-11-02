@@ -42,7 +42,7 @@ protected:
 	std::vector<cProgressSkin> skins;
 
 public:
-	cWindowProgressBar(cWindow* parent, TiXmlDocument &skin);
+	cWindowProgressBar(cWindow* parent, TiXmlDocument* skin = NULL);
 
 	void drawprogress(int,int);
 	virtual ~cWindowProgressBar() {}

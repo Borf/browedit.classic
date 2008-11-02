@@ -15,7 +15,6 @@ extern float oldmousex, oldmousey;
 extern bool lbuttondown;
 extern int movement;
 extern bool doneaction;
-extern cFileSystem fs;
 extern std::string rodir;
 extern void mainloop();
 
@@ -91,7 +90,7 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 			{
 				if (SDL_GetModState() & KMOD_CTRL)
 				{
-					cWindow* w = Graphics.WM.getwindow(WT_SOUNDSELECT);
+					cWindow* w = cWM::getwindow(WT_SOUNDSELECT);
 					if(w)
 					{
 						w->show();
@@ -99,7 +98,7 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 						((cSoundSelectWindow*)w)->selectedSound = NULL;
 					}
 					else
-						Graphics.WM.addwindow(new cSoundSelectWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin, cVector3(mouse3dx, mouse3dy, mouse3dz)));
+						cWM::addwindow(new cSoundSelectWindow(cVector3(mouse3dx, mouse3dy, mouse3dz)));
 					
 
 				}
@@ -126,7 +125,7 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 					}
 					Graphics.selectedObject = minobj;
 
-					cWindow* w = Graphics.WM.getwindow(WT_SOUNDOVERVIEW);
+					cWindow* w = cWM::getwindow(WT_SOUNDOVERVIEW);
 					if(w != NULL)
 					{
 						w->userfunc(NULL);
@@ -146,7 +145,7 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 				{
 					cSound* o = &Graphics.world.sounds[Graphics.selectedObject];
 
-					cWindow* w = new cSoundWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin);
+					cWindow* w = new cSoundWindow();
 
 					((cWindowStringInputBox*)w->objects["objectname"])->stringetje = &o->name;
 
@@ -177,7 +176,7 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 					
 					((cObjectWindow*)w)->undo = new cUndoChangeSound(Graphics.selectedObject);
 
-					Graphics.WM.addwindow(w);
+					cWM::addwindow(w);
 				}
 				break;
 			case SDLK_SPACE:
@@ -193,7 +192,7 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 
 						cSound* o = &Graphics.world.sounds[Graphics.selectedObject];
 						Mix_Chunk *sample;
-						cFile* pFile = fs.open(rodir+"data/wav/" + o->fileName);
+						cFile* pFile = cFileSystem::open(rodir+"data/wav/" + o->fileName);
 						sample=Mix_QuickLoad_WAV((BYTE*)pFile->data);
 						Mix_Volume(-1,MIX_MAX_VOLUME);
 						Mix_PlayChannel(0, sample, 0);
@@ -216,7 +215,7 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 					undostack.push(new cUndoSoundDelete(Graphics.selectedObject));
 					Graphics.world.sounds.erase(Graphics.world.sounds.begin() + Graphics.selectedObject);
 					Graphics.selectedObject = -1;
-					cWindow* w = Graphics.WM.getwindow(WT_SOUNDOVERVIEW);
+					cWindow* w = cWM::getwindow(WT_SOUNDOVERVIEW);
 					if(w != NULL)
 						w->userfunc(NULL);
 				

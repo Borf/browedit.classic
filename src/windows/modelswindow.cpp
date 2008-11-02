@@ -8,7 +8,6 @@
 #include <fstream>
 
 extern cGraphics Graphics;
-extern cFileSystem fs;
 extern std::string rodir;
 extern cWindow* draggingwindow;
 extern cWindowObject* draggingObject;
@@ -90,7 +89,7 @@ void cModelsWindow::cWindowModel::draw(int cutoffleft, int cutoffright, int cuto
 	if (model != NULL)
 	{
 		model->draw(false);
-		model->rot.y+=40*(Graphics.frameticks / 1000.0f);
+		model->rot.y+=40*(cGraphicsBase::getFrameTicks() / 1000.0f);
 		model->rot.x = -45;
 	}
 
@@ -199,7 +198,7 @@ class cConfirmDeleteModel : public cConfirmWindow::cConfirmWindowCaller
 
 			for(i = 0; i < objectfiles.size(); i++)
 			{
-				cFile* pFile = fs.open(objectfiles[i]);
+				cFile* pFile = cFileSystem::open(objectfiles[i]);
 				std::ofstream pFile2((objectfiles[i] + ".tmp").c_str());
 				while(!pFile->eof())
 				{
@@ -270,7 +269,7 @@ void cModelsWindow::cWindowModel::rightClick()
 	ADDMENUITEM(mm,popupmenu,"Remove model from list",		&MenuCommand_new);
 	ADDMENUITEM(mm,popupmenu,"Rename Model",				&MenuCommand_new);
 
-	//Graphics.WM.ConfirmWindow(GetMsg("wm/model/DELETECONFIRM"), new cConfirmDeleteModel(this));
+	//cWM::ConfirmWindow(GetMsg("wm/model/DELETECONFIRM"), new cConfirmDeleteModel(this));
 }
 
 void cModelsWindow::cWindowModelCatSelect::rightClick()
@@ -301,7 +300,7 @@ void cModelsWindow::cWindowModelCatSelect::rightClick()
 		
 		
 		
-		std::string newnode = Graphics.WM.InputWindow(GetMsg("wm/models/NODENAME"));
+		std::string newnode = cWM::InputWindow(GetMsg("wm/models/NODENAME"));
 		if(newnode == "")
 			return;
 		cTreeNode* n = new cTreeNode(newnode);
@@ -328,7 +327,7 @@ void cModelsWindow::cWindowModelCatSelect::rightClick()
 	}
 	else if (node == NULL)
 	{
-		std::string newnode = Graphics.WM.InputWindow(GetMsg("wm/models/NODENAME"));
+		std::string newnode = cWM::InputWindow(GetMsg("wm/models/NODENAME"));
 		if(newnode == "")
 			return;
 		cTreeNode* n = new cTreeNode(newnode);
@@ -391,7 +390,7 @@ bool cModelsWindow::cWindowModelCatSelect::onKeyDown(int key, bool shift)
 
 			for(i = 0; i < objectfiles.size(); i++)
 			{
-				cFile* pFile = fs.open(objectfiles[i]);
+				cFile* pFile = cFileSystem::open(objectfiles[i]);
 				std::ofstream pFile2((objectfiles[i] + ".tmp").c_str());
 				while(!pFile->eof())
 				{
@@ -424,7 +423,7 @@ bool cModelsWindow::cWindowModelCatSelect::onKeyDown(int key, bool shift)
 	return false;
 }
 
-cModelsWindow::cWindowModelCatSelect::cWindowModelCatSelect(cWindow* parent, std::vector<cWindowTree::cTreeNode*> n, TiXmlDocument &skin) : cWindowTree(parent, n,skin)
+cModelsWindow::cWindowModelCatSelect::cWindowModelCatSelect(cWindow* parent, std::vector<cWindowTree::cTreeNode*> n, TiXmlDocument* skin) : cWindowTree(parent, n,skin)
 {
 	originalselection = -1;
 }
@@ -502,7 +501,7 @@ void cModelsWindow::cWindowModelCatSelect::dragOver()
 
 		for(i = 0; i < objectfiles.size(); i++)
 		{
-			cFile* pFile = fs.open(objectfiles[i]);
+			cFile* pFile = cFileSystem::open(objectfiles[i]);
 			std::ofstream pFile2((objectfiles[i] + ".tmp").c_str());
 			while(!pFile->eof())
 			{
@@ -649,7 +648,7 @@ void addnode(std::vector<cWindowTree::cTreeNode*> &nodes, std::map<std::string, 
 
 }
 
-cModelsWindow::cModelsWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWindow(t,f,skin)
+cModelsWindow::cModelsWindow() : cWindow()
 {
 	windowType = WT_MODELS;
 	closeType = HIDE;
@@ -671,7 +670,7 @@ cModelsWindow::cModelsWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWind
 
 	for(unsigned int i = 0; i < objectfiles.size(); i++)
 	{
-		cFile* pFile = fs.open(objectfiles[i]);
+		cFile* pFile = cFileSystem::open(objectfiles[i]);
 		while(!pFile->eof())
 		{
 			std::string line = pFile->readLine();
@@ -704,7 +703,7 @@ cModelsWindow::cModelsWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWind
 		}
 	}
 
-	o = new cWindowModelCatSelect(this, nodes, skin);
+	o = new cWindowModelCatSelect(this, nodes);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(0,0);
 	o->resizeTo(400,400);
@@ -716,7 +715,7 @@ cModelsWindow::cModelsWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWind
 	o->resizeTo(100,100);
 	objects["textures"] = o;*/
 
-	o = new cWindowScrollPanel(this, skin);
+	o = new cWindowScrollPanel(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(20, 30);
 	o->resizeTo(100,100);
@@ -730,7 +729,7 @@ cModelsWindow::cModelsWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWind
 	objects["zdragger"] = o;
 
 //	objects["rollup"] = new cWindowRollupButton(this);
-	objects["close"] = new cWindowCloseButton(this,skin);
+	objects["close"] = new cWindowCloseButton(this);
 
 	resizeTo(w,h);
 }	

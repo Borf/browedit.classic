@@ -1,7 +1,7 @@
 #include "windowlistbox.h"
 #include "window.h"
 #include <graphics.h>
-extern cGraphics Graphics;
+extern cGraphicsBase Graphics;
 
 #ifdef _WIN32
 #include <windows.h>
@@ -404,8 +404,10 @@ void cWindowListBox::scrollDown()
 
 }
 
-cWindowListBox::cWindowListBox( cWindow* parent, TiXmlDocument &skin ) : cWindowObject(parent,skin.FirstChildElement("skin")->FirstChildElement("list"))
+cWindowListBox::cWindowListBox( cWindow* parent, TiXmlDocument *skin ) : cWindowObject(parent,skin->FirstChildElement("skin")->FirstChildElement("list"))
 {
+	if(!skin)
+		skin = &cWM::skin;
 	w = 280;
 	h = 100;
 	x = 5;
@@ -416,14 +418,14 @@ cWindowListBox::cWindowListBox( cWindow* parent, TiXmlDocument &skin ) : cWindow
 	showselection = true;
 	showscroll = true;
 	type = OBJECT_LISTBOX;
-	TiXmlElement* bSkin = skin.FirstChildElement("skin")->FirstChildElement("list")->FirstChildElement("scroll");
+	TiXmlElement* bSkin = skin->FirstChildElement("skin")->FirstChildElement("list")->FirstChildElement("scroll");
 	
-	std::string scolor = skin.FirstChildElement("skin")->FirstChildElement("list")->FirstChildElement("selectcolor")->FirstChild()->Value();
+	std::string scolor = skin->FirstChildElement("skin")->FirstChildElement("list")->FirstChildElement("selectcolor")->FirstChild()->Value();
 	selectColor[0] = hex2dec(scolor.substr(0,2)) / 256.0f;
 	selectColor[1] = hex2dec(scolor.substr(2,2)) / 256.0f;
 	selectColor[2] = hex2dec(scolor.substr(4,2)) / 256.0f;
 	
-	scolor = skin.FirstChildElement("skin")->FirstChildElement("list")->FirstChildElement("selectfontcolor")->FirstChild()->Value();
+	scolor = skin->FirstChildElement("skin")->FirstChildElement("list")->FirstChildElement("selectfontcolor")->FirstChild()->Value();
 	selectFontColor[0] = hex2dec(scolor.substr(0,2)) / 256.0f;
 	selectFontColor[1] = hex2dec(scolor.substr(2,2)) / 256.0f;
 	selectFontColor[2] = hex2dec(scolor.substr(4,2)) / 256.0f;

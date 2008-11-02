@@ -18,7 +18,7 @@ extern void	mainloop();
 #include <bthread.h>
 extern cBMutex* renderMutex;
 
-cMapsWindow::cMapsWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWindow(t,f,skin)
+cMapsWindow::cMapsWindow() : cWindow()
 {
 	cWindowObject* o;
 	windowType = WT_MAPDATABASE;
@@ -30,25 +30,25 @@ cMapsWindow::cMapsWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWindow(t
 	title = GetMsg("wm/maps/TITLE");
 	center();
 
-	objects["rollup"] = new cWindowRollupButton(this,skin);
-	objects["close"] = new cWindowCloseButton(this,skin);
+	objects["rollup"] = new cWindowRollupButton(this);
+	objects["close"] = new cWindowCloseButton(this);
 
-	o = new cWindowFrame(this,skin);
+	o = new cWindowFrame(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(0,0);
 	o->resizeTo(innerWidth(), 40);
 	objects["aatopframe"] = o;
 
-	objects["searchbutton"] = new cSearchButton(this,skin);
+	objects["searchbutton"] = new cSearchButton(this);
 	
-	o = new cWindowInputBox(this,skin);
+	o = new cWindowInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(10,10);
 	o->resizeTo(innerWidth()-130, o->getHeight());
 	o->setText(0,"");
 	objects["searchq"] = o;
 
-	o = new cWindowScrollPanel(this,skin);
+	o = new cWindowScrollPanel(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(0,40);
 	o->resizeTo(innerWidth(), innerHeight()-40);
@@ -105,7 +105,7 @@ cMapsWindow::cMapsWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWindow(t
 			list.Parse(data);
 			if(list.Error())
 			{
-				Graphics.WM.ShowMessage("Could not parse list!");
+				cWM::ShowMessage("Could not parse list!");
 				return;
 			}
 
@@ -119,7 +119,7 @@ cMapsWindow::cMapsWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWindow(t
 			std::vector<int> screenshots;
 			while(m != NULL)
 			{
-				o = new cMapsWindow::cClickableFrame(wnd,Graphics.WM.skin);
+				o = new cMapsWindow::cClickableFrame(wnd);
 				o->alignment = ALIGN_TOPLEFT;
 				int px = 20+210 * (i%(panel->getWidth() / 210));
 				int py = 310*(i/(panel->getWidth() / 210))+10;
@@ -168,7 +168,7 @@ cMapsWindow::cMapsWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWindow(t
 
 
 
-cMapsWindow::cSearchButton::cSearchButton(cWindow* parent, TiXmlDocument &skin) : cWindowButton(parent,skin)
+cMapsWindow::cSearchButton::cSearchButton(cWindow* parent, TiXmlDocument* skin) : cWindowButton(parent, skin)
 {
 	alignment = ALIGN_TOPRIGHT;
 	moveTo(10,10);
@@ -178,7 +178,7 @@ cMapsWindow::cSearchButton::cSearchButton(cWindow* parent, TiXmlDocument &skin) 
 
 void cMapsWindow::cSearchButton::click()
 {
-	Graphics.WM.ShowMessage("You clicked!");
+	cWM::ShowMessage("You clicked!");
 
 }
 
@@ -231,10 +231,10 @@ cMapsWindow::~cMapsWindow()
 
 void cMapsWindow::cClickableFrame::click()
 {
-	Graphics.WM.addwindow(new cMapDetailWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin));
+	cWM::addwindow(new cMapDetailWindow());
 }
 
-cMapsWindow::cClickableFrame::cClickableFrame( cWindow* parent, TiXmlDocument &skin ) : cWindowFrame(parent,skin)
+cMapsWindow::cClickableFrame::cClickableFrame( cWindow* parent, TiXmlDocument* skin ) : cWindowFrame(parent, skin)
 {
 	
 }

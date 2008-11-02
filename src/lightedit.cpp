@@ -186,7 +186,7 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 					}
 					Graphics.selectedObject = minobj;
 				}
-				cWindow* w = Graphics.WM.getwindow(WT_LIGHTOVERVIEW);
+				cWindow* w = cWM::getwindow(WT_LIGHTOVERVIEW);
 				if(w != NULL)
 				{
 					w->userfunc(NULL);
@@ -240,7 +240,7 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 					undostack.push(new cUndoLightDelete(Graphics.selectedObject));
 					Graphics.world.lights.erase(Graphics.world.lights.begin() + Graphics.selectedObject);
 					Graphics.selectedObject = -1;
-					cWindow* w = Graphics.WM.getwindow(WT_LIGHTOVERVIEW);
+					cWindow* w = cWM::getwindow(WT_LIGHTOVERVIEW);
 					if(w != NULL)
 						w->userfunc(NULL);
 
@@ -254,7 +254,7 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 					{
 						cLight* l = &Graphics.world.lights[Graphics.selectedObject];
 
-						cWindow* w = new cLightWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin);
+						cWindow* w = new cLightWindow();
 						((cWindowStringInputBox*)w->objects["name"])->stringetje = &l->name;
 						((cWindowFloatInputBox*)w->objects["posx"])->floatje = &l->pos.x;
 						((cWindowFloatInputBox*)w->objects["posy"])->floatje = &l->pos.y;
@@ -269,7 +269,7 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 						((cWindowBoolCheckBox*)w->objects["castshadow"])->boolvalue = &l->givesShadow;
 
 						//((cEffectWindow*)w)->undo = new cUndoChangeEffect(Graphics.selectedObject);
-						Graphics.WM.addwindow(w);
+						cWM::addwindow(w);
 					}
 				}
 				break;

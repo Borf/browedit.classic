@@ -121,7 +121,7 @@ public:
 	bool							saveWindow;
 	std::string						defaultObject;
 
-	cWindow(cTexture* t, cFont* f, TiXmlDocument& skin);
+	cWindow(cTexture* t = NULL, cFont* f = NULL, TiXmlDocument* skin = NULL);
 	virtual ~cWindow();
 	int  getX()						{ return x; }
 	int  getY()						{ return rolledUp ? y+h-16 : y; }
@@ -186,8 +186,8 @@ public:
 	virtual bool onChar(char,bool);
 
 	cWindowObject* addLabel(std::string, int,int,std::string);
-	cWindowObject* addInputBox(std::string, int,int,int,std::string, TiXmlDocument &skin);
-	cWindowObject* addCheckBox(std::string, int,int,bool, TiXmlDocument &skin);
+	cWindowObject* addInputBox(std::string, int,int,int,std::string, TiXmlDocument* = NULL);
+	cWindowObject* addCheckBox(std::string, int,int,bool, TiXmlDocument* = NULL);
 
 	void center();
 

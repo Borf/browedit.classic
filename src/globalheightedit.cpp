@@ -127,9 +127,9 @@ int cProcessManagement::globalheightedit_process_events(SDL_Event &event)
 				}
 				break;
 			case SDLK_c:
-				if(Graphics.WM.getwindow(WT_AREACOPY) != NULL)
+				if(cWM::getwindow(WT_AREACOPY) != NULL)
 					return 0;
-				Graphics.WM.addwindow(new cAreaCopyWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin) );
+				cWM::addwindow(new cAreaCopyWindow() );
 				break;
 
 			default:

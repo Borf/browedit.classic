@@ -17,7 +17,7 @@ protected:
 
 
 public:
-	cWindowCheckBox(cWindow* parent, TiXmlDocument &skin);
+	cWindowCheckBox(cWindow* parent, TiXmlDocument* skin = NULL);
 	virtual void draw(int,int,int,int);
 	virtual void click();
 	bool onChar(char, bool);
@@ -33,7 +33,7 @@ class cWindowBoolCheckBox : public cWindowCheckBox
 	bool firstTime;
 public:
 	bool* boolvalue;
-	cWindowBoolCheckBox(cWindow* parent, TiXmlDocument &skin);
+	cWindowBoolCheckBox(cWindow* parent, TiXmlDocument* skin = NULL);
 	void draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom);
 	void setInt(int id, int val);
 };

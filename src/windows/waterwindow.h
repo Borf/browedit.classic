@@ -8,7 +8,7 @@
 class cWaterWindowOkButton : public cWindowButton
 {
 public:
-	cWaterWindowOkButton(cWindow* parent, TiXmlDocument &skin);
+	cWaterWindowOkButton(cWindow* parent, TiXmlDocument* skin = NULL);
 	virtual ~cWaterWindowOkButton();
 	void click();
 };
@@ -17,7 +17,7 @@ public:
 class cWaterWindow : public cWindow
 {
 public:
-	cWaterWindow(cTexture* t, cFont* f, TiXmlDocument &skin);	
+	cWaterWindow();	
 };
 
 #endif

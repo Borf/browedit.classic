@@ -4,7 +4,7 @@
 #include <wm/windowcheckbox.h>
 #include <wm/windowlabel.h>
 
-cXmlWindow::cXmlWindow(cTexture* t, cFont* f, TiXmlDocument& skin, TiXmlDocument &layout) : cWindow(t,f,skin)	
+cXmlWindow::cXmlWindow(TiXmlDocument &layout) : cWindow()	
 {
 	windowType = WT_XML;
 	resizable = false;
@@ -18,14 +18,14 @@ cXmlWindow::cXmlWindow(cTexture* t, cFont* f, TiXmlDocument& skin, TiXmlDocument
 	while(el != NULL)
 	{
 		if(strcmp(el->Value(), "closebutton") == 0)
-			objects["closebutton"] = new cWindowCloseButton(this, skin);
+			objects["closebutton"] = new cWindowCloseButton(this);
 		else if(strcmp(el->Value(), "width") == 0)
 			w = skinOffLeft + skinOffRight + atoi(el->FirstChild()->Value());
 		else if(strcmp(el->Value(), "height") == 0)
 			h = skinOffTop + skinOffBottom + atoi(el->FirstChild()->Value());
 		else if(strcmp(el->Value(), "checkbox") == 0)
 		{
-			cWindowObject* o = new cWindowCheckBox(this,skin);
+			cWindowObject* o = new cWindowCheckBox(this);
 			o->moveTo(atoi(el->FirstChildElement("x")->FirstChild()->Value()), atoi(el->FirstChildElement("y")->FirstChild()->Value()));
 			o->alignment = ALIGN_TOPLEFT;
 			o->setInt(0, atoi(el->Attribute("value")));
@@ -37,7 +37,7 @@ cXmlWindow::cXmlWindow(cTexture* t, cFont* f, TiXmlDocument& skin, TiXmlDocument
 		}
 		else if(strcmp(el->Value(), "button") == 0)
 		{
-			cWindowObject* o = new cXmlButton(this,skin);
+			cWindowObject* o = new cXmlButton(this);
 			o->moveTo(atoi(el->FirstChildElement("x")->FirstChild()->Value()), atoi(el->FirstChildElement("y")->FirstChild()->Value()));
 			o->alignment = ALIGN_TOPLEFT;
 			o->setText(0, el->Attribute("value"));
@@ -64,7 +64,7 @@ void cXmlWindow::event(cWindowObject* o, std::string type)
 	}
 }
 
-cXmlWindow::cXmlButton::cXmlButton(cWindow* p, TiXmlDocument &skin) : cWindowButton(p, skin)
+cXmlWindow::cXmlButton::cXmlButton(cWindow* p, TiXmlDocument* skin) : cWindowButton(p, skin)
 {
 	
 }

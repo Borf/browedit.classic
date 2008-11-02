@@ -1,15 +1,12 @@
 #ifndef __FILESYSTEM_H__
 #define __FILESYSTEM_H__
 
-#include "common.h"
-
-
 #include <string>
 #include <vector>
 #include <map>
 #include "grflib/grf.h"
 #include "tinyxml/tinyxml.h"
-
+#pragma warning(disable : 4786)
 //using namespace std;
 
 enum STARTPOS
@@ -60,12 +57,13 @@ class cFileSystem
 private:
 public:
 	~cFileSystem();
-	int								loadPackedFile(std::string);
-	cFile*							open(std::string);
-	std::vector<cGRFFile*>			locations;
-	TiXmlDocument					getXml(std::string);
-	bool							isFile(std::string);
+	static int						loadPackedFile(std::string);
+	static cFile*					open(std::string);
+	static TiXmlDocument			getXml(std::string);
+	static bool						isFile(std::string);
 
+
+	static std::vector<cGRFFile*>	locations;
 };
 
 #endif

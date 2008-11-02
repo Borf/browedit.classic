@@ -1,14 +1,17 @@
 #include "common.h"
+#include "filesystem.h"
 #ifdef WIN32
     #include <windows.h>
 #endif
 #include <fstream>
-#include "filesystem.h"
 #include <zlib.h>
-
-extern cFileSystem fs;
-
 extern std::string rodir;
+
+
+
+
+
+std::vector<cGRFFile*>	cFileSystem::locations;
 
 int cFileSystem::loadPackedFile(std::string grffilename)
 {
@@ -101,7 +104,7 @@ int cFile::open()
 	}
 	else
 	{
-		cGRFFile* grffile = fs.locations[location];
+		cGRFFile* grffile = cFileSystem::locations[location];
 		GrfError error;
 		unsigned int size2 = 0;
 		char* dat = (char*)grf_get(grffile->grf, fileName.c_str(), &size2, &error);

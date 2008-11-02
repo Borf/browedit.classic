@@ -1,6 +1,6 @@
 #include "inputwindow.h"
 
-cInputWindow::cWindowOkButton::cWindowOkButton( cWindow* parent, TiXmlDocument &skin ) : cWindowButton(parent, skin)
+cInputWindow::cWindowOkButton::cWindowOkButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent, skin)
 {
 	alignment = ALIGN_BOTTOMLEFT;
 	moveTo(20, 20);
@@ -13,7 +13,7 @@ void cInputWindow::cWindowOkButton::click()
 	parent->userfunc((void*)1);
 }
 
-cInputWindow::cWindowCancelButton::cWindowCancelButton( cWindow* parent, TiXmlDocument &skin ) : cWindowButton(parent, skin)
+cInputWindow::cWindowCancelButton::cWindowCancelButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent, skin)
 {
 	alignment = ALIGN_BOTTOMRIGHT;
 	moveTo(20, 20);
@@ -26,7 +26,7 @@ void cInputWindow::cWindowCancelButton::click()
 	parent->userfunc((void*)0);
 }
 
-cInputWindow::cInputWindow( cInputWindowCaller* c, cTexture* t, cFont* f, TiXmlDocument &skin ) : cWindow(t,f,skin)
+cInputWindow::cInputWindow( cInputWindowCaller* c) : cWindow()
 {
 	caller = c;
 	
@@ -44,17 +44,17 @@ cInputWindow::cInputWindow( cInputWindowCaller* c, cTexture* t, cFont* f, TiXmlD
 	
 	addLabel("text", 15,40,"UserId")->resizeTo(w-30, 12);
 	
-	cWindowObject* o = new cWindowInputBox(this,skin);
+	cWindowObject* o = new cWindowInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(15,60);
 	o->resizeTo(w-30, 20);
 	objects["input"] = o;
 	selectedObject = o;
 	
-	objects["rollup"] = new cWindowRollupButton(this,skin);
-	objects["close"] = new cWindowCloseButton(this,skin);;
-	objects["OkButton"] = new cWindowOkButton(this,skin);
-	objects["CancelButton"] = new cWindowCancelButton(this,skin);
+	objects["rollup"] = new cWindowRollupButton(this);
+	objects["close"] = new cWindowCloseButton(this);;
+	objects["OkButton"] = new cWindowOkButton(this);
+	objects["CancelButton"] = new cWindowCancelButton(this);
 }
 
 void* cInputWindow::userfunc( void* param )

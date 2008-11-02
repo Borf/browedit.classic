@@ -1,7 +1,6 @@
 #include "RSMModel.h"
 #include "graphics.h"
 #include "texturecache.h"
-extern cFileSystem fs;
 extern std::string rodir;
 extern cGraphics Graphics;
 extern cVector3 lightpos;
@@ -15,7 +14,7 @@ void cRSMModel::load(std::string fname)
 	recalcbb = true;
 	filename = fname;
 	rofilename = filename.substr(filename.find("model\\") + 6);
-	cFile* pFile = fs.open(filename);
+	cFile* pFile = cFileSystem::open(filename);
 	if (pFile == NULL)
 		return;
 
@@ -39,7 +38,7 @@ void cRSMModel::load(std::string fname)
 	{
 		pFile->read(buffer, 40);
 		std::string filename = buffer;
-		cTexture* tex = TextureCache.load(rodir + "data\\texture\\" + filename);
+		cTexture* tex = TextureCache.load(rodir + "data\\texture\\" + filename, TEX_NEARESTFILTER);
 		textures.push_back(tex);
 	}
 
@@ -443,7 +442,7 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 		Ori[14] = 0;  
 		Ori[15] = 1.0f;
 
-		nstep += Graphics.frameticks;
+		nstep += cGraphicsBase::getFrameTicks();
 		if (nstep >= frames[frames.size()-1].time)
 			nstep = 0;
 	}

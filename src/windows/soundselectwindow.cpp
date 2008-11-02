@@ -5,7 +5,6 @@
 #include <filesystem.h>
 #include <undo.h>
 
-extern cFileSystem fs;
 extern std::string rodir;
 extern cWindow* draggingwindow;
 extern cWindowObject* draggingObject;
@@ -14,7 +13,7 @@ extern void mainloop();
 extern cUndoStack undostack;
 extern std::vector<std::string> soundfiles;
 
-cSoundSelectWindow::cWindowSoundCatSelect::cWindowSoundCatSelect( cWindow* parent, std::vector<cWindowTree::cTreeNode*> n, TiXmlDocument &skin ) : cWindowTree(parent, n,skin)
+cSoundSelectWindow::cWindowSoundCatSelect::cWindowSoundCatSelect( cWindow* parent, std::vector<cWindowTree::cTreeNode*> n, TiXmlDocument* skin ) : cWindowTree(parent, n,skin)
 {
 	
 }
@@ -52,7 +51,7 @@ void cSoundSelectWindow::cWindowSoundCatSelect::click()
 	draggingObject = NULL;
 }
 
-cSoundSelectWindow::cSoundList::cSoundList( cWindow* parent, TiXmlDocument &skin ) : cWindowDataListBox<std::string>(parent,skin)
+cSoundSelectWindow::cSoundList::cSoundList( cWindow* parent, TiXmlDocument* skin ) : cWindowDataListBox<std::string>(parent,skin)
 {
 	
 }
@@ -62,7 +61,7 @@ void cSoundSelectWindow::cSoundList::doubleClick()
 	parent->objects["play"]->click();
 }
 
-cSoundSelectWindow::cWindowPlayButton::cWindowPlayButton( cWindow* w, TiXmlDocument &skin ) : cWindowButton(w,skin)
+cSoundSelectWindow::cWindowPlayButton::cWindowPlayButton( cWindow* w, TiXmlDocument* skin ) : cWindowButton(w,skin)
 {
 	alignment = ALIGN_BOTTOMRIGHT;
 	moveTo(0,0);
@@ -84,7 +83,7 @@ void cSoundSelectWindow::cWindowPlayButton::click()
 		
 		Mix_Chunk *sample;
 		
-		cFile* pFile = fs.open(rodir+"data/wav/" + filename);
+		cFile* pFile = cFileSystem::open(rodir+"data/wav/" + filename);
 		sample=Mix_QuickLoad_WAV((BYTE*)pFile->data);
 		Mix_Volume(-1,MIX_MAX_VOLUME);
 		Mix_PlayChannel(0, sample, 0);
@@ -104,7 +103,7 @@ void cSoundSelectWindow::cWindowPlayButton::click()
 	}
 }
 
-cSoundSelectWindow::cWindowOkButton::cWindowOkButton( cWindow* w, TiXmlDocument &skin ) : cWindowButton(w,skin)
+cSoundSelectWindow::cWindowOkButton::cWindowOkButton( cWindow* w, TiXmlDocument* skin ) : cWindowButton(w,skin)
 {
 	alignment = ALIGN_BOTTOMRIGHT;
 	moveTo(100,0);
@@ -164,12 +163,12 @@ void cSoundSelectWindow::cWindowOkButton::click()
 	}
 	parent->close();
 	
-	cWindow* w = Graphics.WM.getwindow(WT_SOUNDOVERVIEW);
+	cWindow* w = cWM::getwindow(WT_SOUNDOVERVIEW);
 	if(w != NULL)
 		w->userfunc(NULL);
 }
 
-cSoundSelectWindow::cWindowCancelButton::cWindowCancelButton( cWindow* w, TiXmlDocument &skin ) : cWindowButton(w,skin)
+cSoundSelectWindow::cWindowCancelButton::cWindowCancelButton( cWindow* w, TiXmlDocument* skin ) : cWindowButton(w,skin)
 {
 	alignment = ALIGN_BOTTOMRIGHT;
 	moveTo(200,0);
@@ -182,7 +181,7 @@ void cSoundSelectWindow::cWindowCancelButton::click()
 	parent->close();
 }
 
-cSoundSelectWindow::cSoundSelectWindow( cTexture* t, cFont* f, TiXmlDocument &skin, cVector3 pNewPos ) : cWindow(t,f,skin)
+cSoundSelectWindow::cSoundSelectWindow(cVector3 pNewPos ) : cWindow()
 {
 	selectedSound = NULL;
 	newPos = pNewPos; 
@@ -208,7 +207,7 @@ cSoundSelectWindow::cSoundSelectWindow( cTexture* t, cFont* f, TiXmlDocument &sk
 	
 	for(unsigned int i = 0; i < soundfiles.size(); i++)
 	{
-		cFile* pFile = fs.open(soundfiles[i]);
+		cFile* pFile = cFileSystem::open(soundfiles[i]);
 		if(pFile == NULL)
 			continue;
 		while(!pFile->eof())
@@ -267,27 +266,27 @@ cSoundSelectWindow::cSoundSelectWindow( cTexture* t, cFont* f, TiXmlDocument &sk
 		}
 	}
 	
-	o = new cWindowSoundCatSelect(this, nodes, skin);
+	o = new cWindowSoundCatSelect(this, nodes);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(0,0);
 	o->resizeTo(400,400);
 	objects["tree"] = o;
 	
-	o = new cSoundList(this, skin);
+	o = new cSoundList(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(0, 0);
 	o->resizeTo(100,100);
 	objects["sounds"] = o;
 	
-	objects["play"] = new cWindowPlayButton(this,skin);
-	objects["ok"] = new cSoundSelectWindow::cWindowOkButton(this,skin);
-	objects["cancel"] = new cSoundSelectWindow::cWindowCancelButton(this,skin);
+	objects["play"] = new cWindowPlayButton(this);
+	objects["ok"] = new cSoundSelectWindow::cWindowOkButton(this);
+	objects["cancel"] = new cSoundSelectWindow::cWindowCancelButton(this);
 	
 	
 	objects["tree"]->click();
 	
 	//		objects["rollup"] = new cWindowRollupButton(this);
-	objects["close"] = new cWindowCloseButton(this,skin);
+	objects["close"] = new cWindowCloseButton(this);
 	
 	resizeTo(w,h);
 }

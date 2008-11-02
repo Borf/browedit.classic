@@ -11,7 +11,7 @@
 extern cUndoStack undostack;
 
 
-cSoundWindow::cWindowSelectFileButton::cWindowSelectFileButton( cWindow* parent, TiXmlDocument &skin ) : cWindowButton(parent,skin)
+cSoundWindow::cWindowSelectFileButton::cWindowSelectFileButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent,skin)
 {
 	selectedSound = NULL;
 	text = "Select";
@@ -24,21 +24,21 @@ void cSoundWindow::cWindowSelectFileButton::click()
 {
 	if(selectedSound == NULL)
 		return;
-	cWindow* w = Graphics.WM.getwindow(WT_SOUNDSELECT);
+	cWindow* w = cWM::getwindow(WT_SOUNDSELECT);
 	if(w)
 	{
-		Graphics.WM.togglewindow(WT_SOUNDSELECT);
+		cWM::togglewindow(WT_SOUNDSELECT);
 		((cSoundSelectWindow*)w)->selectedSound = selectedSound;
 	}
 	else
 	{
-		cSoundSelectWindow* w = new cSoundSelectWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin, cVector3());
+		cSoundSelectWindow* w = new cSoundSelectWindow(cVector3());
 		w->selectedSound = selectedSound;
-		Graphics.WM.addwindow(w);
+		cWM::addwindow(w);
 	}
 }
 
-cSoundWindow::cSoundWindow( cTexture* t, cFont* f, TiXmlDocument &skin ) : cWindow(t,f,skin)
+cSoundWindow::cSoundWindow( ) : cWindow()
 {
 	undo = NULL;
 	cWindowObject* o;
@@ -53,8 +53,8 @@ cSoundWindow::cSoundWindow( cTexture* t, cFont* f, TiXmlDocument &skin ) : cWind
 	
 	defaultObject = "OkButton";
 	
-	objects["rollup"] = new cWindowRollupButton(this,skin);
-	objects["close"] = new cWindowCloseButton(this,skin);
+	objects["rollup"] = new cWindowRollupButton(this);
+	objects["close"] = new cWindowCloseButton(this);
 	
 	
 	addLabel("lblName", 0,0,GetMsg("wm/sound/NAME"));
@@ -72,119 +72,119 @@ cSoundWindow::cSoundWindow( cTexture* t, cFont* f, TiXmlDocument &skin ) : cWind
 	
 	
 	
-	o = new cWindowStringInputBox(this,skin);
+	o = new cWindowStringInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(100,0);
 	o->resizeTo(210,20);
 	o->setText(0,"");
 	objects["objectname"] = o;
 	
-	o = new cWindowStringInputBox(this,skin);
+	o = new cWindowStringInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(100,20);
 	o->resizeTo(120,20);
 	o->setText(0,"");
 	objects["objectfile"] = o;
 	
-	objects["filebutton"] = new cWindowSelectFileButton(this, skin);
+	objects["filebutton"] = new cWindowSelectFileButton(this);
 	
-	o = new cWindowFloatInputBox(this,skin);
+	o = new cWindowFloatInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(100,40);
 	o->resizeTo(70,20);
 	objects["posx"] = o;
 	
-	o = new cWindowFloatInputBox(this,skin);
+	o = new cWindowFloatInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(170,40);
 	o->resizeTo(70,20);
 	objects["posy"] = o;
 	
-	o = new cWindowFloatInputBox(this,skin);
+	o = new cWindowFloatInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(240,40);
 	o->resizeTo(70,20);
 	objects["posz"] = o;
 	
-	o = new cWindowFloatInputBox(this,skin);
+	o = new cWindowFloatInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(100,60);
 	o->resizeTo(70,20);
 	objects["scalex"] = o;
 	
-	o = new cWindowFloatInputBox(this,skin);
+	o = new cWindowFloatInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(170,60);
 	o->resizeTo(70,20);
 	objects["scaley"] = o;
 	
-	o = new cWindowFloatInputBox(this,skin);
+	o = new cWindowFloatInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(240,60);
 	o->resizeTo(70,20);
 	objects["scalez"] = o;
 	
-	o = new cWindowFloatInputBox(this,skin);
+	o = new cWindowFloatInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(100,80);
 	o->resizeTo(70,20);
 	objects["rotx"] = o;
 	
-	o = new cWindowFloatInputBox(this,skin);
+	o = new cWindowFloatInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(170,80);
 	o->resizeTo(70,20);
 	objects["roty"] = o;
 	
-	o = new cWindowFloatInputBox(this,skin);
+	o = new cWindowFloatInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(240,80);
 	o->resizeTo(70,20);
 	objects["rotz"] = o;
 	////////////////
-	o = new cWindowFloatInputBox(this,skin);
+	o = new cWindowFloatInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(100,100);
 	o->resizeTo(210,20);
 	objects["repeatdelay"] = o;
 	
-	o = new cWindowFloatInputBox(this,skin);
+	o = new cWindowFloatInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(100,120);
 	o->resizeTo(210,20);
 	objects["unknown2"] = o;
 	
-	o = new cWindowLongInputBox(this,skin);
+	o = new cWindowLongInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(100,140);
 	o->resizeTo(210,20);
 	objects["unknown3"] = o;
 	
-	o = new cWindowLongInputBox(this,skin);
+	o = new cWindowLongInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(100,160);
 	o->resizeTo(210,20);
 	objects["unknown4"] = o;
 	
-	o = new cWindowFloatInputBox(this,skin);
+	o = new cWindowFloatInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(100,180);
 	o->resizeTo(210,20);
 	objects["unknown5"] = o;
 	
-	/*	o = new cWindowInputBox(this,skin);
+	/*	o = new cWindowInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveto(100,200);
 	o->resizeto(210,20);
 	objects["unknown6"] = o;*/
 	
-	o = new cWindowFloatInputBox(this, skin);
+	o = new cWindowFloatInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(100,220);
 	o->resizeTo(210,20);
 	objects["unknown7"] = o;
 	
-	o = new cWindowFloatInputBox(this,skin);
+	o = new cWindowFloatInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(100,240);
 	o->resizeTo(210,20);
@@ -192,8 +192,8 @@ cSoundWindow::cSoundWindow( cTexture* t, cFont* f, TiXmlDocument &skin ) : cWind
 	
 	
 	
-	objects["OkButton"] = new cWindowOkButton(this,skin);
-	objects["CancelButton"] = new cWindowCancelButton(this,skin);
+	objects["OkButton"] = new cWindowOkButton(this);
+	objects["CancelButton"] = new cWindowCancelButton(this);
 }
 
 void* cSoundWindow::userfunc( void* param )
@@ -215,7 +215,7 @@ void* cSoundWindow::userfunc( void* param )
 			if(i->second->type == OBJECT_FLOATINPUTBOX)
 				i->second->onKeyDown(SDLK_RETURN, false);
 		}
-		cWindow* w = Graphics.WM.getwindow(WT_SOUNDOVERVIEW);
+		cWindow* w = cWM::getwindow(WT_SOUNDOVERVIEW);
 		if(w != NULL)
 			w->userfunc(NULL);
 		undostack.push(undo);

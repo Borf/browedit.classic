@@ -310,7 +310,7 @@ int	cFont::textlen(std::string s)
 
 int cFont::load(std::string filename)
 {
-	texture = cTextureLoaders::load(filename,false,false);
+	texture = cTextureLoaders::load(filename,TEX_NOFREEDATA);
 	Log(5,0,"Loading font %s", filename.c_str());
 	float cx, cy;
 	list_base=glGenLists(256);                          // Creating 256 Display Lists

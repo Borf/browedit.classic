@@ -24,14 +24,14 @@ public:
 	class cLightOverViewTree : public cWindowTree
 	{
 	public:
-		cLightOverViewTree(cWindow* parent, std::vector<cWindowTree::cTreeNode*> nodes, TiXmlDocument &skin);
+		cLightOverViewTree(cWindow* parent, std::vector<cWindowTree::cTreeNode*> nodes, TiXmlDocument* skin = NULL);
 		void rightClick();
 		void onChange();
 		void getObject(cLight m);
 	};
 
 
-	cLightOverViewWindow(cTexture* t, cFont* f, TiXmlDocument &skin);
+	cLightOverViewWindow();
 
 	static void addobjects(cLightOverViewTreeNode* parent, bool root);
 	void* userfunc(void* p);

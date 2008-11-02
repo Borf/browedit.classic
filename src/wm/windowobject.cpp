@@ -10,7 +10,7 @@
 #include <GL/glu.h>												// Header File For The GLu32 Library
 #include <graphics.h>
 
-extern cGraphics Graphics;
+extern cGraphicsBase Graphics;
 void cWindowObject::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {
 	int xx, yy;
@@ -134,7 +134,7 @@ cWindowObject::cWindowObject()
 	enabled = true;
 }
 
-cWindowObject::cWindowObject( cWindow* p, TiXmlElement* skin /*= NULL*/ )
+cWindowObject::cWindowObject( cWindow* p, TiXmlElement* skin)
 {
 	parent = p;
 	x = 10;

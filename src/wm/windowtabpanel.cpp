@@ -10,7 +10,7 @@
 #include <font.h>
 #include "window.h"
 #include <graphics.h>
-extern cGraphics Graphics;
+extern cGraphicsBase Graphics;
 
 void cWindowTabPanel::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {
@@ -156,8 +156,10 @@ void cWindowTabPanel::click()
 	}
 }
 
-cWindowTabPanel::cWindowTabPanel( cWindow* parent, TiXmlDocument &skin ) : cWindowObject(parent, skin.FirstChildElement("skin")->FirstChildElement("tabstrip"))
+cWindowTabPanel::cWindowTabPanel( cWindow* parent, TiXmlDocument* skin ) : cWindowObject(parent, skin->FirstChildElement("skin")->FirstChildElement("tabstrip"))
 {
+	if(!skin)
+		skin = &cWM::skin;
 	w = 100;
 	h = 25;
 	x = 10;
@@ -174,10 +176,10 @@ cWindowTabPanel::cWindowTabPanel( cWindow* parent, TiXmlDocument &skin ) : cWind
 	tabs.push_back("tab5");
 	
 	
-	skinTabFontOffX = atoi(skin.FirstChildElement("skin")->FirstChildElement("tabstrip")->FirstChildElement("fontoffx")->FirstChild()->Value());
-	skinTabFontOffY = atoi(skin.FirstChildElement("skin")->FirstChildElement("tabstrip")->FirstChildElement("fontoffy")->FirstChild()->Value());
+	skinTabFontOffX = atoi(skin->FirstChildElement("skin")->FirstChildElement("tabstrip")->FirstChildElement("fontoffx")->FirstChild()->Value());
+	skinTabFontOffY = atoi(skin->FirstChildElement("skin")->FirstChildElement("tabstrip")->FirstChildElement("fontoffy")->FirstChild()->Value());
 	
-	TiXmlElement* el = skin.FirstChildElement("skin")->FirstChildElement("tabstrip")->FirstChildElement("tabselected");
+	TiXmlElement* el = skin->FirstChildElement("skin")->FirstChildElement("tabstrip")->FirstChildElement("tabselected");
 	skinTabTop[0] =		512-atoi(el->FirstChildElement("top")->FirstChild()->Value());
 	skinTabHeight[0] =		atoi(el->FirstChildElement("height")->FirstChild()->Value());
 	skinTabLeft[0] =		atoi(el->FirstChildElement("left")->FirstChild()->Value());
@@ -187,7 +189,7 @@ cWindowTabPanel::cWindowTabPanel( cWindow* parent, TiXmlDocument &skin ) : cWind
 	skinTabOverlapLeft[0] =	atoi(el->FirstChildElement("overlapleft")->FirstChild()->Value());
 	skinTabOverlapRight[0] =atoi(el->FirstChildElement("overlapright")->FirstChild()->Value());
 	
-	el = skin.FirstChildElement("skin")->FirstChildElement("tabstrip")->FirstChildElement("tabunselected");
+	el = skin->FirstChildElement("skin")->FirstChildElement("tabstrip")->FirstChildElement("tabunselected");
 	skinTabTop[1] =		512-atoi(el->FirstChildElement("top")->FirstChild()->Value());
 	skinTabHeight[1] =		atoi(el->FirstChildElement("height")->FirstChild()->Value());
 	skinTabLeft[1] =		atoi(el->FirstChildElement("left")->FirstChild()->Value());

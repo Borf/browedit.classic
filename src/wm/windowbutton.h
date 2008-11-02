@@ -13,7 +13,7 @@ protected:
 
 
 public:
-	cWindowButton(cWindow* parent, TiXmlDocument &skin);
+	cWindowButton(cWindow* parent, TiXmlDocument* skin = NULL);
 	virtual ~cWindowButton() {}
 	virtual void draw(int,int,int,int);
 	virtual void click() = 0;
@@ -30,7 +30,7 @@ public:
 class cWindowCloseButton : public cWindowObject
 {
 public:
-	cWindowCloseButton(cWindow* parent, TiXmlDocument &skin);
+	cWindowCloseButton(cWindow* parent, TiXmlDocument* skin = NULL);
 	void click()
 	{
 		parent->close();
@@ -40,7 +40,7 @@ public:
 class cWindowRollupButton : public cWindowObject
 {
 public:
-	cWindowRollupButton(cWindow* parent, TiXmlDocument &skin);
+	cWindowRollupButton(cWindow* parent, TiXmlDocument* skin = NULL);
 	void click();
 };
 

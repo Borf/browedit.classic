@@ -3,11 +3,10 @@
 #include <filesystem.h>
 #include <wm/windowlistbox.h>
 
-extern cFileSystem fs;
-extern cGraphics Graphics;
+extern cGraphicsBase Graphics;
 extern std::string rodir;
 
-cFileWindow::cOkButton::cOkButton( cWindow* parent, void (*pCallback)(std::string), TiXmlDocument &skin ) : cWindowButton(parent,skin)
+cFileWindow::cOkButton::cOkButton( cWindow* parent, void (*pCallback)(std::string), TiXmlDocument* skin ) : cWindowButton(parent,skin)
 {
 	callback = pCallback;
 	alignment = ALIGN_BOTTOMRIGHT;
@@ -24,7 +23,7 @@ void cFileWindow::cOkButton::click()
 	callback(rodir + filename);
 }
 
-cFileWindow::cWindowFilterBox::cWindowFilterBox( cWindow* parent, TiXmlDocument &skin ) : cWindowInputBox(parent,skin)
+cFileWindow::cWindowFilterBox::cWindowFilterBox( cWindow* parent, TiXmlDocument* skin ) : cWindowInputBox(parent,skin)
 {
 	alignment = ALIGN_BOTTOMLEFT;
 	moveTo(0,0);
@@ -43,7 +42,7 @@ void cFileWindow::cWindowFilterBox::onChange()
 	}
 }
 
-cFileWindow::cFileWindow( cTexture* t, cFont* f, void (*pCallback)(std::string), TiXmlDocument &skin ) : cWindow(t,f,skin)
+cFileWindow::cFileWindow(void (*pCallback)(std::string)) : cWindow()
 {
 	windowType = WT_FILE;
 	resizable = true;
@@ -58,13 +57,13 @@ cFileWindow::cFileWindow( cTexture* t, cFont* f, void (*pCallback)(std::string),
 	
 	cWindowObject* o;
 	
-	objects["close"] = new cWindowCloseButton(this,skin);
+	objects["close"] = new cWindowCloseButton(this);
 	
-	objects["filter"] = new cWindowFilterBox(this,skin);
+	objects["filter"] = new cWindowFilterBox(this);
 	//		addlabel("lblLookIn", 15,20,GetMsg("wm/file/SELECTMAP"));
 	
 	
-	o = new cWindowListBox(this,skin);
+	o = new cWindowListBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(0,0);
 	o->resizeTo(innerWidth(), innerHeight()-20);
@@ -72,9 +71,9 @@ cFileWindow::cFileWindow( cTexture* t, cFont* f, void (*pCallback)(std::string),
 	
 	mapnames.clear();
 	unsigned int i;
-	for(i = 0; i < fs.locations.size(); i++)
+	for(i = 0; i < cFileSystem::locations.size(); i++)
 	{
-		for(std::map<std::string, cFile*, std::less<std::string> >::iterator it = fs.locations[i]->files.begin(); it != fs.locations[i]->files.end(); it++)
+		for(std::map<std::string, cFile*, std::less<std::string> >::iterator it = cFileSystem::locations[i]->files.begin(); it != cFileSystem::locations[i]->files.end(); it++)
 		{
 			if(it->first.find(".rsw") != std::string::npos)
 				mapnames.push_back(it->first.substr(rodir.length()));
@@ -88,7 +87,7 @@ cFileWindow::cFileWindow( cTexture* t, cFont* f, void (*pCallback)(std::string),
 	for(i = 0; i < mapnames.size(); i++)
 		o->setText(-1, mapnames[i]);
 	
-	objects["OkButton"] = new cOkButton(this, pCallback,skin);
+	objects["OkButton"] = new cOkButton(this, pCallback);
 	selectedObject = objects["filter"];
 }
 

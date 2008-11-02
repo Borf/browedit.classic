@@ -13,7 +13,7 @@ class cMapsWindow : public cWindow
 	class cSearchButton : public cWindowButton
 	{
 	public:
-		cSearchButton(cWindow*, TiXmlDocument &);
+		cSearchButton(cWindow*, TiXmlDocument* = NULL);
 		void click();
 	};
 
@@ -33,11 +33,11 @@ public:
 	class cClickableFrame : public cWindowFrame
 	{
 	public:
-		cClickableFrame(cWindow* parent, TiXmlDocument &skin);
+		cClickableFrame(cWindow* parent, TiXmlDocument* skin = NULL);
 		void click();
 	};
 	
-	cMapsWindow(cTexture* t, cFont* f, TiXmlDocument &skin);
+	cMapsWindow();
 	~cMapsWindow();
 
 	std::vector<cDownloadThread*>	threads;

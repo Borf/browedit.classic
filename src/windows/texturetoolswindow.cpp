@@ -4,11 +4,13 @@
 #include <graphics.h>
 extern cGraphics Graphics;
 
-cTextureToolsWindow::cWindowToolbarButton::cWindowToolbarButton( cWindow* parent, TiXmlDocument &totalskin, std::string image, eTool t ) : cWindowPictureBox(parent)
+cTextureToolsWindow::cWindowToolbarButton::cWindowToolbarButton( cWindow* parent, std::string image, eTool t, TiXmlDocument* totalskin ) : cWindowPictureBox(parent)
 {
 	tool = t;
 	activated = t == Graphics.textureTool;
-	TiXmlElement* skin = totalskin.FirstChildElement("skin")->FirstChildElement("button");
+	if(!totalskin)
+		totalskin = &cWM::skin;
+	TiXmlElement* skin = totalskin->FirstChildElement("skin")->FirstChildElement("button");
 	if(skin != NULL)
 	{
 		skinTopHeight = atoi(skin->FirstChildElement("top")->Attribute("height"));
@@ -79,7 +81,7 @@ void cTextureToolsWindow::cWindowToolbarButton::click()
 	Graphics.textureTool = tool;
 }
 
-cTextureToolsWindow::cWindowBrushShape::cWindowBrushShape( cWindow* parent, TiXmlDocument &totalskin ) : cWindowButton(parent, totalskin)
+cTextureToolsWindow::cWindowBrushShape::cWindowBrushShape( cWindow* parent, TiXmlDocument* totalskin ) : cWindowButton(parent, totalskin)
 {
 	resizeTo(20,20);
 	alignment = ALIGN_TOPLEFT;
@@ -125,30 +127,30 @@ void cTextureToolsWindow::cWindowBrushShape::draw( int a,int b,int c,int d )
 
 void cTextureToolsWindow::cWindowBrushShape::click()
 {
-	Graphics.WM.addwindow(new cTextureBrushWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin));
+	cWM::addwindow(new cTextureBrushWindow());
 }
 
-cTextureToolsWindow::cWindowSelectArea::cWindowSelectArea( cWindow* parent, TiXmlDocument &totalskin ) : cWindowToolbarButton(parent, totalskin, "data/buttons/selectarea.tga",TOOL_SELECTAREA)
+cTextureToolsWindow::cWindowSelectArea::cWindowSelectArea( cWindow* parent, TiXmlDocument* totalskin ) : cWindowToolbarButton(parent, "data/buttons/selectarea.tga",TOOL_SELECTAREA, totalskin)
 {
 	
 }
 
-cTextureToolsWindow::cWindowSelectBrush::cWindowSelectBrush( cWindow* parent, TiXmlDocument &totalskin ) : cWindowToolbarButton(parent, totalskin, "data/buttons/selectbrush.tga",TOOL_SELECTBRUSH)
+cTextureToolsWindow::cWindowSelectBrush::cWindowSelectBrush( cWindow* parent, TiXmlDocument* totalskin ) : cWindowToolbarButton(parent, "data/buttons/selectbrush.tga",TOOL_SELECTBRUSH, totalskin)
 {
 	
 }
 
-cTextureToolsWindow::cWindowSelectWand::cWindowSelectWand( cWindow* parent, TiXmlDocument &totalskin ) : cWindowToolbarButton(parent, totalskin, "data/buttons/selectwand.tga",TOOL_SELECTWAND)
+cTextureToolsWindow::cWindowSelectWand::cWindowSelectWand( cWindow* parent, TiXmlDocument* totalskin ) : cWindowToolbarButton(parent, "data/buttons/selectwand.tga",TOOL_SELECTWAND, totalskin)
 {
 	
 }
 
-cTextureToolsWindow::cWindowBrush::cWindowBrush( cWindow* parent, TiXmlDocument &totalskin ) : cWindowToolbarButton(parent, totalskin, "data/buttons/brush.tga",TOOL_BRUSH)
+cTextureToolsWindow::cWindowBrush::cWindowBrush( cWindow* parent, TiXmlDocument* totalskin ) : cWindowToolbarButton(parent, "data/buttons/brush.tga",TOOL_BRUSH, totalskin)
 {
 	
 }
 
-cTextureToolsWindow::cTextureToolsWindow( cTexture* t, cFont* f, TiXmlDocument &skin ) : cWindow(t,f,skin)
+cTextureToolsWindow::cTextureToolsWindow( ) : cWindow()
 {
 	windowType = WT_TEXTURETOOLS;
 	resizable = true;
@@ -165,7 +167,7 @@ cTextureToolsWindow::cTextureToolsWindow( cTexture* t, cFont* f, TiXmlDocument &
 	title = "";
 	initprops("texturetools");
 	
-	TiXmlElement* wSkin = skin.FirstChildElement("skin")->FirstChildElement("miniwindow");
+	TiXmlElement* wSkin = cWM::skin.FirstChildElement("skin")->FirstChildElement("miniwindow");
 	
 	skinTopHeight = atoi(wSkin->FirstChildElement("top")->Attribute("height"));
 	skinTop =		512 - atoi(wSkin->FirstChildElement("top")->FirstChild()->Value());
@@ -183,21 +185,21 @@ cTextureToolsWindow::cTextureToolsWindow( cTexture* t, cFont* f, TiXmlDocument &
 	skinOffTop =	atoi(wSkin->FirstChildElement("top")->FirstChild()->Value());
 	skinOffBottom = atoi(wSkin->FirstChildElement("bottom")->FirstChild()->Value());
 	
-	objects["selectarea"] = new cWindowSelectArea(this,skin);
-	objects["selectbrush"] = new cWindowSelectBrush(this,skin);
-	objects["selectwand"] = new cWindowSelectWand (this,skin);
-	objects["brush"] = new cWindowBrush(this,skin);
-	objects["aaa_brushshape"] = new cWindowBrushShape(this,skin);
+	objects["selectarea"] = new cWindowSelectArea(this);
+	objects["selectbrush"] = new cWindowSelectBrush(this);
+	objects["selectwand"] = new cWindowSelectWand (this);
+	objects["brush"] = new cWindowBrush(this);
+	objects["aaa_brushshape"] = new cWindowBrushShape(this);
 	
 	cWindowObject* o;
 	
-	o = new cWindowLimitedFloatInputBox(this, skin);
+	o = new cWindowLimitedFloatInputBox(this);
 	((cWindowFloatInputBox*)o)->floatje = &Graphics.textureGridSizeX;
 	o->alignment = ALIGN_TOPLEFT;
 	o->resizeTo(innerWidth(), o->getHeight());
 	objects["aa_gridsizex"] = o;
 	
-	o = new cWindowLimitedFloatInputBox(this, skin);
+	o = new cWindowLimitedFloatInputBox(this);
 	((cWindowFloatInputBox*)o)->floatje = &Graphics.textureGridSizeY;
 	o->alignment = ALIGN_TOPLEFT;
 	o->resizeTo(innerWidth(), o->getHeight());

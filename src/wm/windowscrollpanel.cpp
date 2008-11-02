@@ -8,7 +8,7 @@
 #include <GL/glu.h>												// Header File For The GLu32 Library
 #include "window.h"
 #include <graphics.h>
-extern cGraphics Graphics;
+extern cGraphicsBase Graphics;
 extern cWindowObject* draggingObject;
 
 cWindowScrollPanel::~cWindowScrollPanel()
@@ -469,7 +469,7 @@ void cWindowScrollPanel::scrollDown()
 	scrollposy = (int)max(min(scrollposy, innerheight-h), 0);
 }
 
-cWindowScrollPanel::cWindowScrollPanel( cWindow* parent, TiXmlDocument &skin ) : cWindowObject(parent, skin.FirstChildElement("skin")->FirstChildElement("list"))
+cWindowScrollPanel::cWindowScrollPanel( cWindow* parent, TiXmlDocument* skin ) : cWindowObject(parent, skin->FirstChildElement("skin")->FirstChildElement("list"))
 {
 	w = 100;
 	h = 25;
@@ -486,7 +486,7 @@ cWindowScrollPanel::cWindowScrollPanel( cWindow* parent, TiXmlDocument &skin ) :
 	scrollposy = 0;
 	draggingObject = NULL;
 	
-	TiXmlElement* bSkin = skin.FirstChildElement("skin")->FirstChildElement("list")->FirstChildElement("scroll");
+	TiXmlElement* bSkin = skin->FirstChildElement("skin")->FirstChildElement("list")->FirstChildElement("scroll");
 	
 	skinBarWidth =			atoi(bSkin->FirstChildElement("width")->FirstChild()->Value());
 	skinBarLeft =			atoi(bSkin->FirstChildElement("left")->FirstChild()->Value());

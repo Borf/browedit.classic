@@ -11,10 +11,9 @@
 
 
 extern cGraphics Graphics;
-extern cFileSystem fs;
 extern std::string rodir;
 
-cRSMEditWindow::cWindowOpenButton::cWindowOpenButton( cWindow* parent, TiXmlDocument &skin ) : cWindowButton(parent,skin)
+cRSMEditWindow::cWindowOpenButton::cWindowOpenButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent,skin)
 {
 	alignment = ALIGN_TOPLEFT;
 	moveTo(0, 0);
@@ -58,7 +57,7 @@ void cRSMEditWindow::cWindowOpenButton::click()
 #endif
 }
 
-cRSMEditWindow::cWindowSaveButton::cWindowSaveButton( cWindow* parent, TiXmlDocument &skin ) : cWindowButton(parent,skin)
+cRSMEditWindow::cWindowSaveButton::cWindowSaveButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent,skin)
 {
 	alignment = ALIGN_TOPLEFT;
 	moveTo(50, 0);
@@ -68,11 +67,11 @@ cRSMEditWindow::cWindowSaveButton::cWindowSaveButton( cWindow* parent, TiXmlDocu
 
 void cRSMEditWindow::cWindowSaveButton::click()
 {
-	if(!Graphics.WM.ConfirmWindow("Are you sure you want to overwrite this file?"))
+	if(!cWM::ConfirmWindow("Are you sure you want to overwrite this file?"))
 		return;
 	int i;
 	unsigned int ii;
-	cFile* pFile = fs.open(((cRSMEditWindow*)parent)->filename);
+	cFile* pFile = cFileSystem::open(((cRSMEditWindow*)parent)->filename);
 	
 	char buffer[100];
 	char header[100];
@@ -121,7 +120,7 @@ void cRSMEditWindow::cWindowSaveButton::click()
 	pFile2.close();
 }
 
-cRSMEditWindow::cWindowSaveAsButton::cWindowSaveAsButton( cWindow* parent, TiXmlDocument &skin ) : cWindowButton(parent,skin)
+cRSMEditWindow::cWindowSaveAsButton::cWindowSaveAsButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent,skin)
 {
 	alignment = ALIGN_TOPLEFT;
 	moveTo(100, 0);
@@ -133,7 +132,7 @@ void cRSMEditWindow::cWindowSaveAsButton::click()
 {
 	std::string oldfilename = ((cRSMEditWindow*)parent)->filename;
 	int i;
-	cFile* pFile = fs.open(((cRSMEditWindow*)parent)->filename);
+	cFile* pFile = cFileSystem::open(((cRSMEditWindow*)parent)->filename);
 	
 	char buffer[100];
 	char header[100];
@@ -335,8 +334,8 @@ void cRSMEditWindow::cWindowModel::draw( int cutoffleft, int cutoffright, int cu
 				if (model != NULL)
 				{
 					model->draw(false);
-					if(rotate < tickcount())
-						model->rot.y+=40*(Graphics.frameticks / 1000.0f);
+					if(rotate < cGraphicsBase::getFrameTicks())
+						model->rot.y+=40*(cGraphicsBase::getFrameTicks() / 1000.0f);
 					model->rot.x = roty;
 				}
 				
@@ -445,7 +444,7 @@ void cRSMEditWindow::cRGBPicker::click()
 	parent->objects["model"]->setInt(2,(int)(b*256));
 }
 
-cRSMEditWindow::cRSMEditWindow( cTexture* t, cFont* f, TiXmlDocument &skin ) : cWindow(t,f,skin)
+cRSMEditWindow::cRSMEditWindow( ) : cWindow()
 {
 	strcpy(filename, std::string(rodir + "data\\model\\프론테라\\분수대.rsm").c_str());
 	windowType = WT_RSMEDIT;
@@ -459,13 +458,13 @@ cRSMEditWindow::cRSMEditWindow( cTexture* t, cFont* f, TiXmlDocument &skin ) : c
 	
 	defaultObject = "OkButton";
 	
-	objects["close"] = new cWindowCloseButton(this,skin);
+	objects["close"] = new cWindowCloseButton(this);
 	
-	objects["OpenButton"] = new cWindowOpenButton(this,skin);
-	objects["SaveButton"] = new cWindowSaveButton(this,skin);
-	objects["SaveAsButton"] = new cWindowSaveAsButton(this,skin);
+	objects["OpenButton"] = new cWindowOpenButton(this);
+	objects["SaveButton"] = new cWindowSaveButton(this);
+	objects["SaveAsButton"] = new cWindowSaveAsButton(this);
 	
-	cWindowObject* o = new cWindowScrollPanel(this, skin);
+	cWindowObject* o = new cWindowScrollPanel(this);
 	o->moveTo(innerWidth()-140, 20);
 	o->resizeTo(140, innerHeight()-20);
 	o->alignment = ALIGN_TOPLEFT;

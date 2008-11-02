@@ -16,7 +16,7 @@ public:
 		void click();
 		void drag();
 	};
-	cMiniMapWindow(cTexture* t, cFont* f, TiXmlDocument &skin);	
+	cMiniMapWindow();	
 };
 
 #endif

@@ -5,7 +5,6 @@
 #include <graphics.h>
 
 extern std::string rodir;
-extern cFileSystem fs;
 extern cGraphics Graphics;
 TiXmlDocument sprites;
 
@@ -21,7 +20,7 @@ cSpriteWindow::cSpriteInfo::cSpriteInfo( std::string f )
 	fileName = f;
 }
 
-cSpriteWindow::cWindowSprite::cWindowSprite( cWindow* parent, TiXmlDocument &skin ) : cWindowObject(parent, skin.FirstChildElement("skin")->FirstChildElement("frame"))
+cSpriteWindow::cWindowSprite::cWindowSprite( cWindow* parent, TiXmlDocument* skin ) : cWindowObject(parent, skin->FirstChildElement("skin")->FirstChildElement("frame"))
 {
 	alignment = ALIGN_TOPLEFT;
 	moveTo(0,0);
@@ -44,7 +43,7 @@ void cSpriteWindow::cWindowSprite::draw( int,int,int,int )
 	sprite->draw();
 }
 
-cSpriteWindow::cTabPanel::cTabPanel( cWindow* parent, TiXmlDocument &skin ) : cWindowTabPanel(parent, skin)
+cSpriteWindow::cTabPanel::cTabPanel( cWindow* parent, TiXmlDocument* skin ) : cWindowTabPanel(parent, skin)
 {
 	alignment = ALIGN_TOPLEFT;
 	tabs.clear();
@@ -205,7 +204,7 @@ void cSpriteWindow::cTabPanel::tabchange( int oldtab )
 }
 
 
-cSpriteWindow::cTree::cTree( cWindow* parent, std::vector<cTreeNode*> n, TiXmlDocument &skin ) : cWindowTree(parent, n,skin)
+cSpriteWindow::cTree::cTree( cWindow* parent, std::vector<cTreeNode*> n, TiXmlDocument* skin ) : cWindowTree(parent, n,skin)
 {
 	
 }
@@ -262,7 +261,7 @@ void cSpriteWindow::cTree::onChange()
 
 
 
-cSpriteWindow::cActionChangeButton::cActionChangeButton( cWindow* p, TiXmlDocument &skin ) : cWindowButton(p,skin)
+cSpriteWindow::cActionChangeButton::cActionChangeButton( cWindow* p, TiXmlDocument* skin ) : cWindowButton(p,skin)
 {
 	alignment = ALIGN_TOPLEFT;
 	moveTo(0, 200);
@@ -279,7 +278,7 @@ void cSpriteWindow::cActionChangeButton::click()
 }
 
 
-cSpriteWindow::cDirectionButton::cDirectionButton( cWindow* p, int dir, TiXmlDocument &skin ) : cWindowButton(p,skin)
+cSpriteWindow::cDirectionButton::cDirectionButton( cWindow* p, int dir, TiXmlDocument* skin ) : cWindowButton(p,skin)
 {
 	direction = dir;
 	const char* directions[] = { "S", "SE","E","NE","N","NW","W","SW" };
@@ -294,7 +293,7 @@ void cSpriteWindow::cDirectionButton::click()
 	((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->direction = direction;
 }
 
-cSpriteWindow::cOkButton::cOkButton( cWindow* parent, TiXmlDocument &skin ) : cWindowButton(parent,skin)
+cSpriteWindow::cOkButton::cOkButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent,skin)
 {
 	alignment = ALIGN_TOPLEFT;
 	moveTo(0, parent->innerHeight()-20);
@@ -339,7 +338,7 @@ void cSpriteWindow::cOkButton::click()
 	parent->close();
 }
 
-cSpriteWindow::cCancelButton::cCancelButton( cWindow* parent, TiXmlDocument &skin ) : cWindowButton(parent, skin)
+cSpriteWindow::cCancelButton::cCancelButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent, skin)
 {
 	alignment = ALIGN_TOPLEFT;
 	moveTo(0, parent->innerHeight()-40);
@@ -352,7 +351,7 @@ void cSpriteWindow::cCancelButton::click()
 	parent->close();
 }
 
-cSpriteWindow::cSpriteWindow( cTexture* t, cFont* f, TiXmlDocument &skin ) : cWindow(t,f,skin)
+cSpriteWindow::cSpriteWindow() : cWindow()
 {
 	male = true;
 	cWindowObject* o;
@@ -370,31 +369,31 @@ cSpriteWindow::cSpriteWindow( cTexture* t, cFont* f, TiXmlDocument &skin ) : cWi
 	
 	defaultObject = "OkButton";
 	
-	objects["rollup"] = new cWindowRollupButton(this,skin);
-	objects["close"] = new cWindowCloseButton(this,skin);
+	objects["rollup"] = new cWindowRollupButton(this);
+	objects["close"] = new cWindowCloseButton(this);
 	
-	objects["spritewindow"] = new cWindowSprite(this,skin);
+	objects["spritewindow"] = new cWindowSprite(this);
 	
-	objects["tabpanel"] = new cTabPanel(this, skin);
+	objects["tabpanel"] = new cTabPanel(this);
 	std::vector<cWindowTree::cTreeNode*> nodes;
-	o = new cTree(this,nodes, skin);
+	o = new cTree(this,nodes);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(125, 30);
 	o->resizeTo(innerWidth() - 130, innerHeight()- 35);
 	objects["tree"] = o;
-	objects["actionbutton"] = new cActionChangeButton(this,skin);
-	objects["ok"] = new cOkButton(this,skin);
-	objects["cancel"] = new cCancelButton(this,skin);
+	objects["actionbutton"] = new cActionChangeButton(this);
+	objects["ok"] = new cOkButton(this);
+	objects["cancel"] = new cCancelButton(this);
 	
 	for(int i = 0; i < 8; i++)
 	{
 		char buf[10];
 		sprintf(buf, "dir%i", i);
-		objects[buf] = new cDirectionButton(this, i,skin);
+		objects[buf] = new cDirectionButton(this, i);
 	}
 	
 	if(!sprites.FirstChild())
-		sprites = fs.getXml("data/sprites.xml");
+		sprites = cFileSystem::getXml("data/sprites.xml");
 	
 	((cTabPanel*)objects["tabpanel"])->tabchange(-1);
 }

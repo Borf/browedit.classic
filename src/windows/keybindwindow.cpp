@@ -266,7 +266,7 @@ std::string keytostring(SDLKey key)
 }
 
 
-cKeyBindWindow::cWindowOkButton::cWindowOkButton( cWindow* parent, TiXmlDocument &skin ) : cWindowButton(parent,skin)
+cKeyBindWindow::cWindowOkButton::cWindowOkButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent)
 {
 	text = "Ok";
 	alignment = ALIGN_BOTTOMRIGHT;
@@ -346,7 +346,7 @@ void cKeyBindWindow::cWindowOkButton::click()
 	parent->close();
 }
 
-cKeyBindWindow::cCancelButton::cCancelButton( cWindow* parent, TiXmlDocument &skin ) : cWindowButton(parent,skin)
+cKeyBindWindow::cCancelButton::cCancelButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent)
 {
 	alignment = ALIGN_BOTTOMRIGHT;
 	moveTo(110,0);
@@ -359,7 +359,7 @@ void cKeyBindWindow::cCancelButton::click()
 	parent->close();
 }
 
-cKeyBindWindow::cKeyBindBox::cKeyBindBox( cWindow* parent, TiXmlDocument &skin ) : cWindowInputBox(parent,skin)
+cKeyBindWindow::cKeyBindBox::cKeyBindBox( cWindow* parent, TiXmlDocument* skin ) : cWindowInputBox(parent)
 {
 	key = SDLK_UNKNOWN;
 }
@@ -396,7 +396,7 @@ int cKeyBindWindow::cKeyBindBox::getInt( int id )
 	return key;
 }
 
-cKeyBindWindow::cClearButton::cClearButton( cWindow* parent, cKeyBindBox* box, TiXmlDocument &skin ) : cWindowButton(parent,skin)
+cKeyBindWindow::cClearButton::cClearButton( cWindow* parent, cKeyBindBox* box, TiXmlDocument* skin ) : cWindowButton(parent)
 {
 	text = "Clear";
 	resizeTo(50,20);
@@ -409,7 +409,7 @@ void cKeyBindWindow::cClearButton::click()
 	clearbox->setInt(0,0);
 }
 
-void cKeyBindWindow::addclearbutton( cKeyBindBox* box, TiXmlDocument &skin )
+void cKeyBindWindow::addclearbutton( cKeyBindBox* box, TiXmlDocument* skin )
 {
 	cWindowObject* o = new cClearButton(this, box, skin);
 	if(box->alignment == ALIGN_TOPLEFT)
@@ -422,19 +422,19 @@ void cKeyBindWindow::addclearbutton( cKeyBindBox* box, TiXmlDocument &skin )
 	objects[buf] = o;
 }
 
-cKeyBindWindow::cKeyBindBox* cKeyBindWindow::addbox( std::string name, int x, int y, int defval, TiXmlDocument &skin )
+cKeyBindWindow::cKeyBindBox* cKeyBindWindow::addbox( std::string name, int x, int y, int defval, TiXmlDocument* skin )
 {
-	cKeyBindBox* o = new cKeyBindBox(this,skin);
+	cKeyBindBox* o = new cKeyBindBox(this);
 	o->moveTo(x,y);
 	o->alignment = x == 50 ? ALIGN_TOPRIGHT : ALIGN_TOPLEFT;
 	o->resizeTo(100,20);
 	o->setInt(1, defval);
 	objects[name] = o;
-	addclearbutton(o,skin);
+	addclearbutton(o, skin);
 	return o;
 }
 
-cKeyBindWindow::cKeyBindWindow( cTexture* t, cFont* f, TiXmlDocument &skin ) : cWindow(t,f,skin)
+cKeyBindWindow::cKeyBindWindow( ) : cWindow()
 {
 	windowType = WT_KEYBIND;
 	resizable = false;
@@ -500,60 +500,60 @@ cKeyBindWindow::cKeyBindWindow( cTexture* t, cFont* f, TiXmlDocument &skin ) : c
 	addLabel("lblEsc",		160,440,"Exit")->alignment = ALIGN_TOPRIGHT;
 	
 	
-	addbox("Up",			160,  0,keymap[SDLK_UP],skin);
-	addbox("Down",			160, 20,keymap[SDLK_DOWN],skin);
-	addbox("Left",			160, 40,keymap[SDLK_LEFT],skin);
-	addbox("Right",			160, 60,keymap[SDLK_RIGHT],skin);
-	addbox("Minus",			160, 80,keymap[SDLK_MINUS],skin);
-	addbox("Equals",		160,100,keymap[SDLK_EQUALS],skin);
-	addbox("lbracket",		160,120,keymap[SDLK_LEFTBRACKET],skin);
-	addbox("rbracket",		160,140,keymap[SDLK_RIGHTBRACKET],skin);
-	addbox("Space",			160,160,keymap[SDLK_SPACE],skin);
-	addbox("H",				160,180,keymap[SDLK_h],skin);
-	addbox("V",				160,200,keymap[SDLK_v],skin);
-	addbox("G",				160,220,keymap[SDLK_g],skin);
-	addbox("L",				160,240,keymap[SDLK_l],skin);
-	addbox("D",				160,260,keymap[SDLK_d],skin);
-	addbox("Comma",			160,280,keymap[SDLK_COMMA],skin);
-	addbox("Period",		160,300,keymap[SDLK_PERIOD],skin);
-	addbox("Pageup",		160,320,keymap[SDLK_PAGEUP],skin);
-	addbox("Pagedown",		160,340,keymap[SDLK_PAGEDOWN],skin);
-	addbox("Home",			160,360,keymap[SDLK_HOME],skin);
-	addbox("End",			160,380,keymap[SDLK_END],skin);
-	addbox("W",				160,400,keymap[SDLK_w],skin);
-	addbox("C",				160,420,keymap[SDLK_c],skin);
-	addbox("P",				160,440,keymap[SDLK_p],skin);
+	addbox("Up",			160,  0,keymap[SDLK_UP]);
+	addbox("Down",			160, 20,keymap[SDLK_DOWN]);
+	addbox("Left",			160, 40,keymap[SDLK_LEFT]);
+	addbox("Right",			160, 60,keymap[SDLK_RIGHT]);
+	addbox("Minus",			160, 80,keymap[SDLK_MINUS]);
+	addbox("Equals",		160,100,keymap[SDLK_EQUALS]);
+	addbox("lbracket",		160,120,keymap[SDLK_LEFTBRACKET]);
+	addbox("rbracket",		160,140,keymap[SDLK_RIGHTBRACKET]);
+	addbox("Space",			160,160,keymap[SDLK_SPACE]);
+	addbox("H",				160,180,keymap[SDLK_h]);
+	addbox("V",				160,200,keymap[SDLK_v]);
+	addbox("G",				160,220,keymap[SDLK_g]);
+	addbox("L",				160,240,keymap[SDLK_l]);
+	addbox("D",				160,260,keymap[SDLK_d]);
+	addbox("Comma",			160,280,keymap[SDLK_COMMA]);
+	addbox("Period",		160,300,keymap[SDLK_PERIOD]);
+	addbox("Pageup",		160,320,keymap[SDLK_PAGEUP]);
+	addbox("Pagedown",		160,340,keymap[SDLK_PAGEDOWN]);
+	addbox("Home",			160,360,keymap[SDLK_HOME]);
+	addbox("End",			160,380,keymap[SDLK_END]);
+	addbox("W",				160,400,keymap[SDLK_w]);
+	addbox("C",				160,420,keymap[SDLK_c]);
+	addbox("P",				160,440,keymap[SDLK_p]);
 	
 	
-	addbox("O",				50,  0,keymap[SDLK_o],skin)->alignment = ALIGN_TOPRIGHT;
-	addbox("Backspace",		50, 20,keymap[SDLK_BACKSPACE],skin)->alignment = ALIGN_TOPRIGHT;
-	addbox("F",				50, 40,keymap[SDLK_f],skin)->alignment = ALIGN_TOPRIGHT;
-	addbox("Ins",			50, 60,keymap[SDLK_INSERT],skin)->alignment = ALIGN_TOPRIGHT;
-	addbox("Del",			50, 80,keymap[SDLK_DELETE],skin)->alignment = ALIGN_TOPRIGHT;
-	addbox("R",				50,100,keymap[SDLK_r],skin)->alignment = ALIGN_TOPRIGHT;
-	addbox("F1",			50,120,keymap[SDLK_F1],skin)->alignment = ALIGN_TOPRIGHT;
-	addbox("F2",			50,140,keymap[SDLK_F2],skin)->alignment = ALIGN_TOPRIGHT;
-	addbox("F3",			50,160,keymap[SDLK_F3],skin)->alignment = ALIGN_TOPRIGHT;
-	addbox("F4",			50,180,keymap[SDLK_F4],skin)->alignment = ALIGN_TOPRIGHT;
-	addbox("F5",			50,200,keymap[SDLK_F5],skin)->alignment = ALIGN_TOPRIGHT;
-	addbox("F6",			50,220,keymap[SDLK_F6],skin)->alignment = ALIGN_TOPRIGHT;
-	addbox("F7",			50,240,keymap[SDLK_F7],skin)->alignment = ALIGN_TOPRIGHT;
-	addbox("F8",			50,260,keymap[SDLK_F8],skin)->alignment = ALIGN_TOPRIGHT;
-	addbox("F9",			50,280,keymap[SDLK_F9],skin)->alignment = ALIGN_TOPRIGHT;
-	addbox("F10",			50,300,keymap[SDLK_F10],skin)->alignment = ALIGN_TOPRIGHT;
-	addbox("F11",			50,320,keymap[SDLK_F11],skin)->alignment = ALIGN_TOPRIGHT;
-	addbox("U",				50,340,keymap[SDLK_u],skin)->alignment = ALIGN_TOPRIGHT;
-	addbox("T",				50,360,keymap[SDLK_t],skin)->alignment = ALIGN_TOPRIGHT;
-	addbox("M",				50,380,keymap[SDLK_m],skin)->alignment = ALIGN_TOPRIGHT;
-	addbox("Return",		50,400,keymap[SDLK_RETURN],skin)->alignment = ALIGN_TOPRIGHT;
-	addbox("S",				50,420,keymap[SDLK_s],skin)->alignment = ALIGN_TOPRIGHT;
-	addbox("Esc",			50,440,keymap[SDLK_ESCAPE],skin)->alignment = ALIGN_TOPRIGHT;
+	addbox("O",				50,  0,keymap[SDLK_o])->alignment = ALIGN_TOPRIGHT;
+	addbox("Backspace",		50, 20,keymap[SDLK_BACKSPACE])->alignment = ALIGN_TOPRIGHT;
+	addbox("F",				50, 40,keymap[SDLK_f])->alignment = ALIGN_TOPRIGHT;
+	addbox("Ins",			50, 60,keymap[SDLK_INSERT])->alignment = ALIGN_TOPRIGHT;
+	addbox("Del",			50, 80,keymap[SDLK_DELETE])->alignment = ALIGN_TOPRIGHT;
+	addbox("R",				50,100,keymap[SDLK_r])->alignment = ALIGN_TOPRIGHT;
+	addbox("F1",			50,120,keymap[SDLK_F1])->alignment = ALIGN_TOPRIGHT;
+	addbox("F2",			50,140,keymap[SDLK_F2])->alignment = ALIGN_TOPRIGHT;
+	addbox("F3",			50,160,keymap[SDLK_F3])->alignment = ALIGN_TOPRIGHT;
+	addbox("F4",			50,180,keymap[SDLK_F4])->alignment = ALIGN_TOPRIGHT;
+	addbox("F5",			50,200,keymap[SDLK_F5])->alignment = ALIGN_TOPRIGHT;
+	addbox("F6",			50,220,keymap[SDLK_F6])->alignment = ALIGN_TOPRIGHT;
+	addbox("F7",			50,240,keymap[SDLK_F7])->alignment = ALIGN_TOPRIGHT;
+	addbox("F8",			50,260,keymap[SDLK_F8])->alignment = ALIGN_TOPRIGHT;
+	addbox("F9",			50,280,keymap[SDLK_F9])->alignment = ALIGN_TOPRIGHT;
+	addbox("F10",			50,300,keymap[SDLK_F10])->alignment = ALIGN_TOPRIGHT;
+	addbox("F11",			50,320,keymap[SDLK_F11])->alignment = ALIGN_TOPRIGHT;
+	addbox("U",				50,340,keymap[SDLK_u])->alignment = ALIGN_TOPRIGHT;
+	addbox("T",				50,360,keymap[SDLK_t])->alignment = ALIGN_TOPRIGHT;
+	addbox("M",				50,380,keymap[SDLK_m])->alignment = ALIGN_TOPRIGHT;
+	addbox("Return",		50,400,keymap[SDLK_RETURN])->alignment = ALIGN_TOPRIGHT;
+	addbox("S",				50,420,keymap[SDLK_s])->alignment = ALIGN_TOPRIGHT;
+	addbox("Esc",			50,440,keymap[SDLK_ESCAPE])->alignment = ALIGN_TOPRIGHT;
 	
 	
 	
-	objects["closebutton"] = new cWindowCloseButton(this,skin);
-	objects["rollupbutton"] = new cWindowRollupButton(this,skin);
+	objects["closebutton"] = new cWindowCloseButton(this);
+	objects["rollupbutton"] = new cWindowRollupButton(this);
 	
-	objects["okbutton"] = new cWindowOkButton(this,skin);
-	objects["cancelbutton"] = new cCancelButton(this,skin);
+	objects["okbutton"] = new cWindowOkButton(this);
+	objects["cancelbutton"] = new cCancelButton(this);
 }

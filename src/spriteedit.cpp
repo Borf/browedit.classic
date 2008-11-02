@@ -152,12 +152,12 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 				}
 				break;
 			case SDLK_RETURN:
-				if (Graphics.selectedObject != -1 && Graphics.WM.getwindow(WT_SPRITE) == NULL)
+				if (Graphics.selectedObject != -1 && cWM::getwindow(WT_SPRITE) == NULL)
 				{
 					if(Graphics.selectedObject >= (int)Graphics.world.sprites.size())
 						break;
 
-					cWindow* w = new cSpriteWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin);
+					cWindow* w = new cSpriteWindow();
 
 					if(Graphics.world.sprites[Graphics.selectedObject]->head)
 						((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->loadHead(Graphics.world.sprites[Graphics.selectedObject]->head->fileName);
@@ -176,9 +176,9 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 
 					((cWindowTabPanel*)w->objects["tabpanel"])->tabchange(-1);
 
-					Graphics.WM.addwindow(w);
+					cWM::addwindow(w);
 
-/*					cWindow* w = new cLightWindow(&Graphics.WM.texture, &Graphics.WM.font);
+/*					cWindow* w = new cLightWindow(&cWM::texture, &cWM::font);
 					w->objects["posx"]->SetInt(3,(int)&l->pos.x);
 					w->objects["posy"]->SetInt(3,(int)&l->pos.y);
 					w->objects["posz"]->SetInt(3,(int)&l->pos.z);
@@ -187,7 +187,7 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 					w->objects["colorb"]->SetInt(3,(int)&l->color.z);
 					w->objects["intensity"]->SetInt(3,(int)&l->todo2);
 					//((cEffectWindow*)w)->undo = new cUndoChangeEffect(Graphics.selectedObject);
-					Graphics.WM.addwindow(w);*/
+					cWM::addwindow(w);*/
 				}
 				break;
 			default:

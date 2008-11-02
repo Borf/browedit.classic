@@ -20,7 +20,6 @@
 
 extern long			mouseX, mouseY;
 extern eState			state;
-extern cFileSystem		fs;
 extern void				ChangeGrid();
 extern std::string			message;
 extern bool				showmessage;
@@ -309,7 +308,7 @@ int cGraphics::draw(bool drawwm)
 	menu->draw();
 
 	if(drawwm)
-		WM.draw();
+		cWM::draw();
 
 
 	char buf[100];
@@ -351,7 +350,7 @@ int cGraphics::draw(bool drawwm)
 
 	if (SDL_GetTicks() - lastmotion > 500)
 	{
-		cWindow* w = WM.inwindow();
+		cWindow* w = cWM::inwindow();
 		if (w != NULL)
 		{
 			cWindowObject* o = w->inObject();
@@ -402,38 +401,36 @@ glDisable(GL_DEPTH_TEST);
 }
 
 
-int cGraphics::init()
+int cGraphicsBase::init(int pWidth, int pHeight, int pBpp, bool pFullscreen)
 {
+	width = pWidth;
+	height = pHeight;
+	bits = pBpp;
+	fullscreen = pFullscreen;
+
 	Log(3,0,GetMsg("graphics/INIT"));	
-	cameraheight = 123;
-	camerarot = 0.0f;
-	//camerapointer = cVector2(980,980);
-	camerapointer = cVector2(-774,-963.5);
-	cameraangle = 0;
-
-
 	int flags = 0;
 	const SDL_VideoInfo* info = NULL;
 	if( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_NOPARACHUTE | SDL_INIT_AUDIO ) < 0 ) {
 		Log( 1,0, GetMsg("graphics/INITFAIL"), SDL_GetError( ) );
-		return 0;
+		return -1;
 	}
 	SDL_EnableUNICODE(1);
 	info = SDL_GetVideoInfo( );
-
+	
 	if( !info ) {
 		Log(1,0,GetMsg("graphics/QUERYFAIL"), SDL_GetError( ) );
 		return -1;
 	}
-
+	
 	int bpp = info->vfmt->BitsPerPixel;
-
+	
 	SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 5 );
 	SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 5 );
 	SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 5 );
 	SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
 	SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
-
+	
 	flags = SDL_OPENGL;// | SDL_FULLSCREEN;
 	if(fullscreen)
 	{
@@ -443,19 +440,29 @@ int cGraphics::init()
 		Log( 1,0, GetMsg("graphics/VIDEOMODEFAIL"), SDL_GetError( ) );
 		return -1;
 	}
-
+	
 	SDL_WM_SetIcon(SDL_LoadBMP("data/icon.bmp"), NULL);
 	char buf[100];
 	sprintf(buf, "Borf's Ragnarok Online World Editor, revision %i", getversion());
 	SDL_WM_SetCaption(buf, "BROWEdit");
-
+	
 	//SDL_ShowCursor(0);
 	if (initGL() == 0)							// Initialize Our Newly Created GL Window
 	{
 		killGLWindow();								// Reset The Display
 		Log(1,0,GetMsg("graphics/OPENGLFAIL"));
-		return 0;						// Return FALSE
+		return -1;
 	}
+	return 0;
+
+}
+
+
+
+
+int cGraphics::init(int pWidth, int pHeight, int pBpp, bool pFullscreen)
+{
+	cGraphicsBase::init(pWidth, pHeight, pBpp, pFullscreen);
 
 	Log(3,0,GetMsg("graphics/OPENINGTEXTURES"));
 
@@ -464,8 +471,8 @@ int cGraphics::init()
 	font->load("data/fonts/"+fontname+".tga");
 	splash = TextureCache.load(config.FirstChildElement("config")->FirstChildElement("splash")->FirstChild()->Value());
 	Log(3,0,GetMsg("graphics/INITIALIZINGWM"));
-	WM.init(skinFile);
-	WM.addwindow(new cHotkeyWindow(WM.texture, WM.font, WM.skin));
+	cWM::init(skinFile);
+	cWM::addwindow(new cHotkeyWindow());
 
 	unsigned int i;
 	for(i = 0; i < gatTiles.size(); i++)
@@ -488,7 +495,7 @@ int cGraphics::init()
 		{
 			char buf[100];
 			sprintf(buf, "%s%swater%i%02i%s", rodir.c_str(), waterDirectory.c_str(), i, ii, waterExtension.c_str());
-			waterTextures[i].push_back(TextureCache.load(buf, false));
+			waterTextures[i].push_back(TextureCache.load(buf, TEX_NOCLAMP));
 		}
 	}
 	if(waterCount == 0)
@@ -562,7 +569,7 @@ int cGraphics::init()
 
 
 
-int cGraphics::resizeGLScene(GLsizei w, GLsizei h)	// Resize And Initialize The GL Window
+int cGraphicsBase::resizeGLScene(GLsizei w, GLsizei h)	// Resize And Initialize The GL Window
 {
 	if (h==0)										// Prevent A Divide By Zero By
 	{
@@ -577,7 +584,7 @@ int cGraphics::resizeGLScene(GLsizei w, GLsizei h)	// Resize And Initialize The 
 
 
 
-int cGraphics::initGL(void)
+int cGraphicsBase::initGL(void)
 {
 
 	glEnable(GL_TEXTURE_2D);							// Enable Texture Mapping
@@ -599,19 +606,18 @@ int cGraphics::initGL(void)
 	return 1;										// Initialization Went OK
 }
 
-
-void cGraphics::killGLWindow(void)								// Properly Kill The Window
+void cGraphics::closeAndCleanup()
 {
-	SDL_ShowCursor(0);
+	cGraphicsBase::killGLWindow();
 	world.unload();
-
+	
 	TextureCache.unload(splash);
 	unsigned int i;
 	for(i = 0; i < gatTextures.size(); i++)
 		TextureCache.unload(gatTextures[i]);
-
+	
 	TextureCache.unload(gatBorder);
-
+	
 	for(i = 0; i < waterCount; i++)
 	{
 		for(unsigned int ii = 0; ii < waterTextures[i].size(); ii++)
@@ -619,113 +625,164 @@ void cGraphics::killGLWindow(void)								// Properly Kill The Window
 			TextureCache.unload(waterTextures[i][ii]);
 		}
 	}
-
-	WM.unload();
-
-	return;
 }
 
 
+void cGraphicsBase::killGLWindow(void)								// Properly Kill The Window
+{
+	SDL_ShowCursor(0);
+}
 
-extern cGraphics 		Graphics;
 
 bool cGraphics::is3dSelected(float x, float y, float z)
 {
-	if(Graphics.selectionstart3d.x < Graphics.selectionend3d.x)
+	if(selectionstart3d.x < selectionend3d.x)
 	{
-		if(x < Graphics.selectionstart3d.x || x > Graphics.selectionend3d.x)
+		if(x < selectionstart3d.x || x > selectionend3d.x)
 			return false;
 	}
 	else
 	{
-		if(x > Graphics.selectionstart3d.x || x < Graphics.selectionend3d.x)
+		if(x > selectionstart3d.x || x < selectionend3d.x)
 			return false;
 	}
 
 
-/*	if(Graphics.selectionstart3d.y < Graphics.selectionend3d.y)
+/*	if(selectionstart3d.y < selectionend3d.y)
 	{
-		if(y < Graphics.selectionstart3d.y || y > Graphics.selectionend3d.y)
+		if(y < selectionstart3d.y || y > selectionend3d.y)
 			return false;
 	}
 	else
 	{
-		if(y > Graphics.selectionstart3d.y || y < Graphics.selectionend3d.y)
+		if(y > selectionstart3d.y || y < selectionend3d.y)
 			return false;
 	}*/
 
-	if(Graphics.selectionstart3d.z < Graphics.selectionend3d.z)
+	if(selectionstart3d.z < selectionend3d.z)
 	{
-		if(z < Graphics.selectionstart3d.z || z > Graphics.selectionend3d.z)
+		if(z < selectionstart3d.z || z > selectionend3d.z)
 			return false;
 	}
 	else
 	{
-		if(z > Graphics.selectionstart3d.z || z < Graphics.selectionend3d.z)
+		if(z > selectionstart3d.z || z < selectionend3d.z)
 			return false;
 	}
 
 	return true;
 }
 
+
+int cGraphics::selectedObjectProp = 0;
+bool cGraphics::showgrid = true;
+float cGraphics::brushsize = 1.0f;
+int cGraphics::texturestart = 0;
+
+int cGraphics::textureRot = 0;
+bool cGraphics::fliph = false;
+bool cGraphics::flipv = false;
+bool cGraphics::showObjects = false;
+int cGraphics::selectedObject = -1;
+bool cGraphics::objectStartDrag = false;
+bool cGraphics::slope = false;
+int cGraphics::quadtreeView = -1;
+bool cGraphics::showBoundingBoxes = false;
+int cGraphics::gatType = 0;
+bool cGraphics::showLightmaps = false;
+bool cGraphics::showTileColors = true;
+bool cGraphics::showWater = true;
+bool cGraphics::showOglLighting = true;
+cVector2 cGraphics::wallHeightMin(-1,-1);
+cVector2 cGraphics::wallHeightMax(-1,-1);
+cTexture* cGraphics::texturePreview = NULL;
+float cGraphics::gridsize = 1;
+float  cGraphics::gridoffsetx = 0;
+float  cGraphics::gridoffsety = 0;
+bool cGraphics::topCamera = false;
+bool cGraphics::showambientlighting = true;
+bool cGraphics::groupeditmode = false;
+bool cGraphics::animateWater = true;
+
+bool cGraphics::showNoTiles = true;
+cVector3 cGraphics::selectionCenter = cVector3(-1,-1,-1);
+bool cGraphics::showgat = false;
+cVector3 cGraphics::backgroundColor = cVector3(0,0,0);
+cVector3 cGraphics::noTileColor = cVector3(1,1,1);
+bool cGraphics::showDot = true;
+bool cGraphics::showSprites = true;
+bool cGraphics::showAllLights = false;
+bool cGraphics::clearLightmaps = false;
+float cGraphics::gatTransparency = 0.3f;
+eTool cGraphics::textureTool = TOOL_BRUSH;
+std::vector<std::vector<bool> > cGraphics::textureBrush;/*resize(2, std::vector<bool>(4,false));
+cBrowGraphics::textureBrush[0][0] = true;
+cBrowGraphics::textureBrush[0][1] = true;
+cBrowGraphics::textureBrush[0][2] = true;
+cBrowGraphics::textureBrush[0][3] = true;
+cBrowGraphics::textureBrush[1][0] = true;*/
+cVector2 cGraphics::textureBrushOffset = cVector2(0,0);
+float cGraphics::textureGridSizeX = 4;
+float cGraphics::textureGridSizeY = 4;
+int cGraphics::textureBrushSize = 1;
+
+std::vector<int> cGraphics::gatTiles;
+float cGraphics::clipboardFloat;
+std::string cGraphics::clipboardName;
+float cGraphics::clipboardY;
+cVector3 cGraphics::clipboardScale;
+cVector3 cGraphics::clipboardRot;
+std::string cGraphics::clipboardFile;
+cRSMModel* cGraphics::previewModel;
+cVector2 cGraphics::selectionend;
+cVector2 cGraphics::selectionstart;
+unsigned int cGraphics::waterCount;
+cTexture* cGraphics::splash = NULL;
+std::vector<std::vector<cTexture*> > cGraphics::waterTextures;
+std::vector<cTexture*> cGraphics::gatTextures;
+int cGraphics::previewColor;
+cFont* cGraphics::font;
+float cGraphics::cameraangle = 0;
+float cGraphics::cameraheight = 123;
+float cGraphics::camerarot = 0.0f;
+cVector2 cGraphics::camerapointer = cVector2(-774,-963.5);
+float cGraphics::lightPosition[4];
+float cGraphics::lightDiffuse[4];
+float cGraphics::lightAmbient[4];
+std::string cGraphics::waterExtension;
+std::string cGraphics::waterDirectory;
+cTexture* cGraphics::gatBorder;
+bool cGraphics::transparentObjects;
+cVector3 cGraphics::selectionstart3d;
+cVector3 cGraphics::selectionend3d;
+
+
+cWorld cGraphics::world;
+
+
+
 cGraphics::cGraphics()
 {
-	width=1024;
-	height=768;
-	bits=32;
-	fullscreen=false;
-	selectedObjectProp = 0;
-	showgrid = true;
-	brushsize = 1;
-	texturestart = 0;
-	
-	textureRot = 0;
-	fliph = false;
-	flipv = false;
-	showObjects = false;
-	selectedObject = -1;
-	objectStartDrag = false;
-	slope = false;
-	quadtreeView = -1;
-	showBoundingBoxes = false;
-	gatType = 0;
-	showLightmaps = false;
-	showTileColors = true;
-	showWater = true;
-	showOglLighting = true;
-	lasttick = 0;
-	wallHeightMin = cVector2(-1,-1);
-	wallHeightMax = cVector2(-1,-1);
-	texturePreview = NULL;
-	gridsize = 1;
-	gridoffsetx = 0;
-	gridoffsety = 0;
-	topCamera = false;
-	showambientlighting = true;
-	groupeditmode = false;
-	animateWater = true;
-	
-	showNoTiles = true;
-	selectionCenter = cVector3(-1,-1,-1);
-	showgat = false;
-	backgroundColor = cVector3(0,0,0);
-	noTileColor = cVector3(1,1,1);
-	showDot = true;
-	showSprites = true;
-	showAllLights = false;
-	clearLightmaps = false;
-	gatTransparency = 0.3f;
-	textureTool = TOOL_BRUSH;
-	textureBrush.resize(2, std::vector<bool>(4,false));
-	textureBrush[0][0] = true;
-	textureBrush[0][1] = true;
-	textureBrush[0][2] = true;
-	textureBrush[0][3] = true;
-	textureBrush[1][0] = true;
-	textureBrushOffset = cVector2(0,0);
-	textureGridSizeX = 4;
-	textureGridSizeY = 4;
-	textureBrushSize = 1;
+	cGraphicsBase::cGraphicsBase();
 }
 
+
+int					cGraphicsBase::width =		1024;
+int					cGraphicsBase::height =		768;
+int					cGraphicsBase::bits =		32;
+bool				cGraphicsBase::fullscreen =	false;
+long 				cGraphicsBase::lasttick =	0;
+long				cGraphicsBase::frameticks =	0;
+
+CFrustum cGraphicsBase::frustum;
+
+
+cGraphicsBase::cGraphicsBase()
+{
+}
+
+long cGraphicsBase::getFrameTicks()
+{
+	return frameticks;	
+}
 

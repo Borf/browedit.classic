@@ -3,7 +3,7 @@
 extern cGraphics Graphics;
 
 
-cWaterWindowOkButton::cWaterWindowOkButton( cWindow* parent, TiXmlDocument &skin ) : cWindowButton(parent,skin)
+cWaterWindowOkButton::cWaterWindowOkButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent,skin)
 {
 	alignment = ALIGN_BOTTOM;
 	moveTo(0, 0);
@@ -26,7 +26,7 @@ void cWaterWindowOkButton::click()
 	parent->close();
 }
 
-cWaterWindow::cWaterWindow( cTexture* t, cFont* f, TiXmlDocument &skin ) : cWindow(t,f,skin)
+cWaterWindow::cWaterWindow() : cWindow()
 {
 	windowType = WT_WATER;
 	resizable = false;
@@ -42,8 +42,8 @@ cWaterWindow::cWaterWindow( cTexture* t, cFont* f, TiXmlDocument &skin ) : cWind
 	
 	cWindowObject* o;
 	
-	objects["rollup"] = new cWindowRollupButton(this,skin);
-	objects["close"] = new cWindowCloseButton(this,skin);
+	objects["rollup"] = new cWindowRollupButton(this);
+	objects["close"] = new cWindowCloseButton(this);
 	
 	addLabel("lblAmplitude",	0,0,GetMsg("wm/water/AMPLITUDE"));
 	addLabel("lblHeight",		0,20,GetMsg("wm/water/HEIGHT"));
@@ -53,41 +53,41 @@ cWaterWindow::cWaterWindow( cTexture* t, cFont* f, TiXmlDocument &skin ) : cWind
 	addLabel("lblType",			0,100,GetMsg("wm/water/TYPE"));
 	
 	
-	o = new cWindowInputBox(this,skin);
+	o = new cWindowInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(100,0);
 	o->resizeTo(100,20);
 	objects["amplitude"] = o;
 	
-	o = new cWindowInputBox(this,skin);
+	o = new cWindowInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(100,20);
 	o->resizeTo(100,20);
 	objects["height"] = o;
 	
-	o = new cWindowInputBox(this,skin);
+	o = new cWindowInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(100,40);
 	o->resizeTo(100,20);
 	objects["phase"] = o;
 	
-	o = new cWindowInputBox(this,skin);
+	o = new cWindowInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(100,60);
 	o->resizeTo(100,20);
 	objects["surfacecurve"] = o;
 	
-	o = new cWindowInputBox(this,skin);
+	o = new cWindowInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(100,80);
 	o->resizeTo(100,20);
 	objects["texcycle"] = o;
 	
-	o = new cWindowInputBox(this,skin);
+	o = new cWindowInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(100,100);
 	o->resizeTo(100,20);
 	objects["type"] = o;
 	
-	objects["OkButton"] = new cWaterWindowOkButton(this,skin);
+	objects["OkButton"] = new cWaterWindowOkButton(this);
 }

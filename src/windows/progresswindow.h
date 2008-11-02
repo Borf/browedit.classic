@@ -12,11 +12,11 @@ class cProgressWindow : public cWindow
 	private:
 		bool* cancel;
 	public:
-		cCancelButton(cWindow* parent, bool* pCancel, TiXmlDocument &skin);
+		cCancelButton(cWindow* parent, bool* pCancel, TiXmlDocument* skin = NULL);
 		void click();
 	};
 public:
-	cProgressWindow(cTexture* t, cFont* f, bool* cancel, TiXmlDocument &skin);
+	cProgressWindow(bool* cancel);
 };
 
 #endif

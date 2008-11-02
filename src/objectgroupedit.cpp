@@ -196,7 +196,7 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 			case SDLK_r:
 				{
 
-					std::string cat = Graphics.WM.InputWindow("Input Category");
+					std::string cat = cWM::InputWindow("Input Category");
 
 					if(cat == "")
 						break;
@@ -212,7 +212,7 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 							ii++;
 						}
 					}
-					cWindow* w = Graphics.WM.getwindow(WT_MODELOVERVIEW);
+					cWindow* w = cWM::getwindow(WT_MODELOVERVIEW);
 					if(w != NULL)
 						w->userfunc(NULL);
 
@@ -284,7 +284,7 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 					Graphics.selectedObject = -1;
 					if (objectsdeleted.size() > 0)
 						undostack.push(new cUndoObjectsDelete(objectsdeleted));
-					cWindow* w = Graphics.WM.getwindow(WT_MODELOVERVIEW);
+					cWindow* w = cWM::getwindow(WT_MODELOVERVIEW);
 					if(w != NULL)
 						w->userfunc(NULL);
 				}

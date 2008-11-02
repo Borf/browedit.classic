@@ -9,11 +9,24 @@
 #include <windows/messagewindow.h>
 #include <windows/confirmwindow.h>
 #include <windows/xmlwindow.h>
-extern cGraphics Graphics;
-extern cFileSystem fs;
+extern cGraphicsBase Graphics;
 extern cWindow* draggingwindow;
 
 extern void mainloop();
+
+
+
+
+std::vector<cWindow*>	cWM::windows; //vector of windows, 0 = topwindow
+cTexture*				cWM::texture;
+cFont*					cWM::font;
+TiXmlDocument			cWM::skin;
+float					cWM::color[4];
+float					cWM::colorblur[4];
+int						cWM::focus;
+
+
+
 
 int cWM::draw()
 {
@@ -104,7 +117,7 @@ int cWM::draw()
 
 int cWM::init(std::string sSkin)
 {
-	skin = fs.getXml(sSkin);
+	skin = cFileSystem::getXml(sSkin);
 	texture = TextureCache.load(skin.FirstChildElement("skin")->FirstChildElement("texture")->FirstChild()->Value());
 	font = new cFont();
 	font->load(skin.FirstChildElement("skin")->FirstChildElement("font")->FirstChild()->Value());
@@ -440,7 +453,7 @@ void cWM::rightclick()
 
 void cWM::ShowMessage(std::string message)
 {
-	cWindow* w = new cMessageWindow(texture, font,skin);
+	cWindow* w = new cMessageWindow();
 	w->objects["text"]->setText(0, message);
 	w->show();
 	addwindow(w);
@@ -509,7 +522,7 @@ void cWM::printdebug()
 
 void cWM::ConfirmWindow(std::string title, cConfirmWindow::cConfirmWindowCaller* caller)
 {
-	cWindow* w = new cConfirmWindow(caller, texture, font,skin);
+	cWindow* w = new cConfirmWindow(caller);
 	w->objects["text"]->setText(0, title);
 	w->show();
 	addwindow(w);
@@ -535,7 +548,7 @@ void cWM::defocus()
 
 cWindow* cWM::InputWindow(std::string title, cInputWindow::cInputWindowCaller* caller)
 {
-	cWindow* w = new cInputWindow(caller, texture, font,skin);
+	cWindow* w = new cInputWindow(caller);
 	w->init(texture, font);
 	w->objects["text"]->setText(0, title);
 	w->objects["input"]->setText(0,"");
@@ -546,8 +559,8 @@ cWindow* cWM::InputWindow(std::string title, cInputWindow::cInputWindowCaller* c
 
 cWindow* cWM::XmlWindow(std::string src)
 {
-	TiXmlDocument layout = fs.getXml(src);
-	cWindow* w = new cXmlWindow(texture, font, skin, layout);
+	TiXmlDocument layout = cFileSystem::getXml(src);
+	cWindow* w = new cXmlWindow(layout);
 	addwindow(w);
 	return w;
 }

@@ -16,7 +16,7 @@ protected:
 	int selectionstart;
 	int defaultheight;
 public:
-	cWindowInputBox(cWindow* parent, TiXmlDocument &skin);
+	cWindowInputBox(cWindow* parent, TiXmlDocument* skin = NULL);
 	virtual ~cWindowInputBox() {}
 	virtual void draw(int,int,int,int);
 	virtual void click();
@@ -38,7 +38,7 @@ class cWindowFloatInputBox : public cWindowInputBox
 	bool firstTime;
 public:
 	float* floatje;
-	cWindowFloatInputBox(cWindow* parent, TiXmlDocument &skin);
+	cWindowFloatInputBox(cWindow* parent, TiXmlDocument* skin = NULL);
 	void draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom);
 	void setInt(int id, int val);
 	bool onKeyDown(int keyid, bool shift);
@@ -50,7 +50,7 @@ class cWindowStringInputBox : public cWindowInputBox
 	bool firstTime;
 public:
 	std::string* stringetje;
-	cWindowStringInputBox(cWindow* parent, TiXmlDocument &skin);
+	cWindowStringInputBox(cWindow* parent, TiXmlDocument* skin = NULL);
 	void draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom);
 	void setInt(int id, int val);
 	bool onKeyDown(int keyid, bool shift);
@@ -67,7 +67,7 @@ class cWindowLongInputBox : public cWindowInputBox
 	bool firstdraw;
 public:
 	long* longje;
-	cWindowLongInputBox(cWindow* parent, TiXmlDocument &skin);
+	cWindowLongInputBox(cWindow* parent, TiXmlDocument* skin = NULL);
 	void draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom);
 	void setInt(int id, int val);
 	bool onKeyDown(int keyid, bool shift);

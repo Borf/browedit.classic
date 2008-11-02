@@ -56,7 +56,7 @@ std::string cWindowMainButton::getText(int id)
 	return text;
 }
 
-cWindowMainButton::cWindowMainButton( cWindow* parent, TiXmlDocument &skin ) : cWindowButton(parent,skin)
+cWindowMainButton::cWindowMainButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent,skin)
 {
 	cursorType = 1;
 	type = OBJECT_MAINBUTTON;

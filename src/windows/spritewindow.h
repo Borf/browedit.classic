@@ -27,14 +27,14 @@ public:
 	{
 	public:
 		cSprite* sprite;
-		cWindowSprite(cWindow* parent, TiXmlDocument &skin);
+		cWindowSprite(cWindow* parent, TiXmlDocument* skin = NULL);
 		void draw(int,int,int,int);
 	};
 
 	class cTabPanel : public cWindowTabPanel
 	{
 	public:
-		cTabPanel(cWindow* parent, TiXmlDocument &skin);
+		cTabPanel(cWindow* parent, TiXmlDocument* skin = NULL);
 		void tabchange(int oldtab);
 		void addxml(cWindowTree* tree, TiXmlNode* n, cWindowTree::cTreeNode* treenode, std::string dir = "");
 	};
@@ -43,7 +43,7 @@ public:
 	class cTree : public cWindowTree
 	{
 	public:
-		cTree(cWindow* parent, std::vector<cTreeNode*> n, TiXmlDocument &skin);
+		cTree(cWindow* parent, std::vector<cTreeNode*> n, TiXmlDocument* skin = NULL);
 		void onChange();
 	};
 
@@ -51,7 +51,7 @@ public:
 	class cActionChangeButton : public cWindowButton
 	{
 	public:
-		cActionChangeButton(cWindow* p, TiXmlDocument &skin);
+		cActionChangeButton(cWindow* p, TiXmlDocument* skin = NULL);
 		void click();
 	};
 
@@ -59,20 +59,20 @@ public:
 	{
 		int direction;
 	public:
-		cDirectionButton(cWindow* p, int dir, TiXmlDocument &skin);
+		cDirectionButton(cWindow* p, int dir, TiXmlDocument* skin = NULL);
 		void click();
 	};
 
 	class cOkButton : public cWindowButton
 	{
 	public:
-		cOkButton(cWindow* parent, TiXmlDocument &skin);
+		cOkButton(cWindow* parent, TiXmlDocument* skin = NULL);
 		void click();
 	};
 	class cCancelButton : public cWindowButton
 	{
 	public:
-		cCancelButton(cWindow* parent, TiXmlDocument &skin);
+		cCancelButton(cWindow* parent, TiXmlDocument* skin = NULL);
 		void click();
 	};
 
@@ -80,7 +80,7 @@ public:
 	std::map<cWindowTree::cTreeNode*, cSpriteInfo, std::less<cWindowTree::cTreeNode*> >	lookupMap;
 	bool male;
 
-	cSpriteWindow(cTexture* t, cFont* f, TiXmlDocument &skin);
+	cSpriteWindow();
 
 
 };

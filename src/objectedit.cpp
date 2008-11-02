@@ -130,7 +130,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 					}
 					Graphics.selectedObject = minobj;
 				}
-				cWindow* w = Graphics.WM.getwindow(WT_MODELOVERVIEW);
+				cWindow* w = cWM::getwindow(WT_MODELOVERVIEW);
 				if(w != NULL)
 				{
 					w->userfunc(NULL);
@@ -346,7 +346,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 					delete Graphics.world.models[Graphics.selectedObject];
 					Graphics.world.models.erase(Graphics.world.models.begin() + Graphics.selectedObject);
 					Graphics.selectedObject = -1;
-					cWindow* w = Graphics.WM.getwindow(WT_MODELOVERVIEW);
+					cWindow* w = cWM::getwindow(WT_MODELOVERVIEW);
 					if(w != NULL)
 						w->userfunc(NULL);
 				}
@@ -368,7 +368,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 					cRSMModel* o = Graphics.world.models[Graphics.selectedObject];
 					cMenuItem* menuitem = (cMenuItem*)models->finddata("data\\model\\" + o->rofilename);
 
-					cWindow* w = new cObjectWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin);
+					cWindow* w = new cObjectWindow();
 					if (menuitem != NULL)
 						w->objects["objectmenu"]->setText(0,menuitem->data2);
 					((cWindowFloatInputBox*)w->objects["posx"])->floatje = &o->pos.x;
@@ -385,7 +385,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 					
 					((cObjectWindow*)w)->undo = new cUndoChangeObject(Graphics.selectedObject);
 
-					Graphics.WM.addwindow(w);
+					cWM::addwindow(w);
 				}
 				break;
 			case SDLK_r:

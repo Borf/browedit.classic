@@ -1,7 +1,7 @@
 #include "progresswindow.h"
 #include <wm/windowprogressbar.h>
 
-cProgressWindow::cCancelButton::cCancelButton( cWindow* parent, bool* pCancel, TiXmlDocument &skin ) : cWindowButton(parent,skin)
+cProgressWindow::cCancelButton::cCancelButton( cWindow* parent, bool* pCancel, TiXmlDocument* skin ) : cWindowButton(parent,skin)
 {
 	cancel = pCancel;
 	text = "Cancel";
@@ -15,7 +15,7 @@ void cProgressWindow::cCancelButton::click()
 		*cancel = false;
 }
 
-cProgressWindow::cProgressWindow( cTexture* t, cFont* f, bool* cancel, TiXmlDocument &skin ) : cWindow(t,f,skin)
+cProgressWindow::cProgressWindow( bool* cancel ) : cWindow()
 {
 	windowType = WT_PROGRESS;
 	resizable = false;
@@ -30,7 +30,7 @@ cProgressWindow::cProgressWindow( cTexture* t, cFont* f, bool* cancel, TiXmlDocu
 	
 	cWindowObject* o;
 	
-	o = new cWindowProgressBar(this,skin);
+	o = new cWindowProgressBar(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(0,7);
 	o->resizeTo(innerWidth(), 10);
@@ -38,7 +38,7 @@ cProgressWindow::cProgressWindow( cTexture* t, cFont* f, bool* cancel, TiXmlDocu
 	
 	addLabel("lblStatus", 0,15,"")->resizeTo(innerWidth(), 20);
 	
-	objects["cancel"] = new cCancelButton(this, cancel,skin);
+	objects["cancel"] = new cCancelButton(this, cancel);
 	
 	
 	//objects["ClButton"] = new cOkButton(this, pCallback);

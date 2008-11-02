@@ -16,7 +16,7 @@ class cTextureToolsWindow : public cWindow
 		bool activated;
 		eTool tool;
 
-		cWindowToolbarButton(cWindow* parent, TiXmlDocument &totalskin, std::string image, eTool t);
+		cWindowToolbarButton(cWindow* parent, std::string image, eTool t, TiXmlDocument* totalskin = NULL);
 		virtual void draw(int a,int b,int c,int d);
 		virtual void click();
 	};
@@ -24,7 +24,7 @@ class cTextureToolsWindow : public cWindow
 	class cWindowBrushShape : public cWindowButton
 	{
 	public:
-		cWindowBrushShape(cWindow* parent, TiXmlDocument &totalskin);
+		cWindowBrushShape(cWindow* parent, TiXmlDocument* totalskin = NULL);
 		void draw(int a,int b,int c,int d);
 		void click();
 	};
@@ -32,7 +32,7 @@ class cTextureToolsWindow : public cWindow
 	class cWindowLimitedFloatInputBox : public cWindowFloatInputBox
 	{
 	public:
-		cWindowLimitedFloatInputBox(cWindow* parent, TiXmlDocument &skin) : cWindowFloatInputBox(parent,skin) {}
+		cWindowLimitedFloatInputBox(cWindow* parent, TiXmlDocument* skin = NULL) : cWindowFloatInputBox(parent,skin) {}
 		bool onChar(char,bool);
 	};
 
@@ -40,26 +40,26 @@ class cTextureToolsWindow : public cWindow
 	class cWindowSelectArea : public cWindowToolbarButton
 	{
 	public:
-		cWindowSelectArea(cWindow* parent, TiXmlDocument &totalskin);
+		cWindowSelectArea(cWindow* parent, TiXmlDocument* totalskin = NULL);
 	};
 	class cWindowSelectBrush : public cWindowToolbarButton
 	{
 	public:
-		cWindowSelectBrush(cWindow* parent, TiXmlDocument &totalskin);
+		cWindowSelectBrush(cWindow* parent, TiXmlDocument* totalskin = NULL);
 	};
 	class cWindowSelectWand : public cWindowToolbarButton
 	{
 	public:
-		cWindowSelectWand(cWindow* parent, TiXmlDocument &totalskin);
+		cWindowSelectWand(cWindow* parent, TiXmlDocument* totalskin = NULL);
 	};
 	class cWindowBrush : public cWindowToolbarButton
 	{
 	public:
-		cWindowBrush(cWindow* parent, TiXmlDocument &totalskin);
+		cWindowBrush(cWindow* parent, TiXmlDocument* totalskin = NULL);
 	};
 
 public:
-	cTextureToolsWindow(cTexture* t, cFont* f, TiXmlDocument &skin);
+	cTextureToolsWindow();
 	void reOrder();
 	void resizeTo(int ww, int hh);
 

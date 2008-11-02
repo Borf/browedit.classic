@@ -40,7 +40,7 @@ public:
 	class cFavoritesTree : public cWindowTree
 	{
 	public:
-		cFavoritesTree(cWindow* parent, std::vector<cWindowTree::cTreeNode*> nodes, TiXmlDocument &skin);
+		cFavoritesTree(cWindow* parent, std::vector<cWindowTree::cTreeNode*> nodes, TiXmlDocument* skin = NULL);
 
 		void rightClick();
 		void onChange();
@@ -50,20 +50,20 @@ public:
 	class cWindowOkButton : public cWindowButton
 	{
 	public:
-		cWindowOkButton(cWindow* parent, TiXmlDocument &skin);
+		cWindowOkButton(cWindow* parent, TiXmlDocument* skin = NULL);
 		void click();
 	};
 	class cWindowCancelButton : public cWindowButton
 	{
 	public:
-		cWindowCancelButton(cWindow* parent, TiXmlDocument &skin);
+		cWindowCancelButton(cWindow* parent, TiXmlDocument* skin = NULL);
 		virtual ~cWindowCancelButton();
 		void click();
 	};
 
 
 	std::vector<int> currentkey;
-	cFavoriteLightsWindow(cTexture* t, cFont* f, TiXmlDocument &skin);	
+	cFavoriteLightsWindow();	
 };
 
 #endif

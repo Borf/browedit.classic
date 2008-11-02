@@ -7,7 +7,7 @@
 
 #include <graphics.h>
 
-extern cGraphics Graphics;
+extern cGraphicsBase Graphics;
 extern cWindowObject* draggingObject;
 
 #include <font.h>
@@ -24,8 +24,15 @@ extern std::string			configfile;
 #endif
 
 
-cWindow::cWindow(cTexture* t, cFont* f, TiXmlDocument &skin)
+cWindow::cWindow(cTexture* t, cFont* f, TiXmlDocument* skin)
 {
+	if(!t)
+		t = cWM::texture;
+	if(!f)
+		f = cWM::font;
+	if(!skin)
+		skin = &cWM::skin;
+
 	noTransparency = false;
 	visible = false;
 	rolledUp = false;
@@ -47,21 +54,21 @@ cWindow::cWindow(cTexture* t, cFont* f, TiXmlDocument &skin)
 	font = f;
 	saveProperties = "";
 
-	std::string color = skin.FirstChildElement("skin")->FirstChildElement("window")->FirstChildElement("fontcolor")->FirstChild()->Value();
+	std::string color = skin->FirstChildElement("skin")->FirstChildElement("window")->FirstChildElement("fontcolor")->FirstChild()->Value();
 	fontColor[0] = hex2dec(color.substr(0,2)) / 256.0f;
 	fontColor[1] = hex2dec(color.substr(2,2)) / 256.0f;
 	fontColor[2] = hex2dec(color.substr(4,2)) / 256.0f;
 
-	color = skin.FirstChildElement("skin")->FirstChildElement("window")->FirstChildElement("title")->FirstChildElement("fontcolor")->FirstChild()->Value();
+	color = skin->FirstChildElement("skin")->FirstChildElement("window")->FirstChildElement("title")->FirstChildElement("fontcolor")->FirstChild()->Value();
 	titleColor[0] = hex2dec(color.substr(0,2)) / 256.0f;
 	titleColor[1] = hex2dec(color.substr(2,2)) / 256.0f;
 	titleColor[2] = hex2dec(color.substr(4,2)) / 256.0f;
 
-	titleOffX = atoi(skin.FirstChildElement("skin")->FirstChildElement("window")->FirstChildElement("title")->FirstChildElement("xoff")->FirstChild()->Value());
-	titleOffY = atoi(skin.FirstChildElement("skin")->FirstChildElement("window")->FirstChildElement("title")->FirstChildElement("yoff")->FirstChild()->Value());
+	titleOffX = atoi(skin->FirstChildElement("skin")->FirstChildElement("window")->FirstChildElement("title")->FirstChildElement("xoff")->FirstChild()->Value());
+	titleOffY = atoi(skin->FirstChildElement("skin")->FirstChildElement("window")->FirstChildElement("title")->FirstChildElement("yoff")->FirstChild()->Value());
 
 
-	TiXmlElement* wSkin = skin.FirstChildElement("skin")->FirstChildElement("window");
+	TiXmlElement* wSkin = skin->FirstChildElement("skin")->FirstChildElement("window");
 
 	skinTopHeight = atoi(wSkin->FirstChildElement("top")->Attribute("height"));
 	skinTop =		512 - atoi(wSkin->FirstChildElement("top")->FirstChild()->Value());
@@ -80,9 +87,9 @@ cWindow::cWindow(cTexture* t, cFont* f, TiXmlDocument &skin)
 	skinOffBottom = atoi(wSkin->FirstChildElement("bottom")->FirstChild()->Value());
 
 
-	currentColor[0] = Graphics.WM.color[0];
-	currentColor[1] = Graphics.WM.color[1];
-	currentColor[2] = Graphics.WM.color[2];
+	currentColor[0] = cWM::color[0];
+	currentColor[1] = cWM::color[1];
+	currentColor[2] = cWM::color[2];
 	currentColor[3] = 0;
 
 }
@@ -103,13 +110,13 @@ void cWindow::draw()
 	{
 		if(currentColor[ii] > tempColors[ii])
 		{
-			currentColor[ii] -= (Graphics.frameticks / 200.0f);
+			currentColor[ii] -= (cGraphicsBase::getFrameTicks() / 200.0f);
 			if(currentColor[ii] < tempColors[ii])
 				currentColor[ii] = tempColors[ii];
 		}			
 		else if(currentColor[ii] < tempColors[ii])
 		{
-			currentColor[ii] += (Graphics.frameticks / 200.0f);
+			currentColor[ii] += (cGraphicsBase::getFrameTicks() / 200.0f);
 			if(currentColor[ii] > tempColors[ii])
 				currentColor[ii] = tempColors[ii];
 		}
@@ -540,14 +547,14 @@ cWindowObject* cWindow::addLabel(std::string name, int x, int y, std::string tex
 	cWindowObject* o = new cWindowLabel(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(x,y);
-	o->resizeTo(Graphics.WM.font->textlen(text), 12);
+	o->resizeTo(cWM::font->textlen(text), 12);
 	o->setText(0,text);
 	objects[name] = o;
 	return o;
 }
 
 
-cWindowObject* cWindow::addInputBox(std::string name, int x, int y, int w, std::string text, TiXmlDocument &skin)
+cWindowObject* cWindow::addInputBox(std::string name, int x, int y, int w, std::string text, TiXmlDocument* skin)
 {
 	cWindowObject* o = new cWindowInputBox(this,skin);
 	o->alignment = ALIGN_TOPLEFT;
@@ -558,7 +565,7 @@ cWindowObject* cWindow::addInputBox(std::string name, int x, int y, int w, std::
 	return o;
 }
 
-cWindowObject* cWindow::addCheckBox(std::string name, int x, int y, bool checked, TiXmlDocument &skin)
+cWindowObject* cWindow::addCheckBox(std::string name, int x, int y, bool checked, TiXmlDocument* skin)
 {
 	cWindowObject* o = new cWindowCheckBox(this,skin);
 	o->alignment = ALIGN_TOPLEFT;

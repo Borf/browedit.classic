@@ -55,7 +55,7 @@ void cMiniMapWindow::cMiniMap::drag()
 	click();
 }
 
-cMiniMapWindow::cMiniMapWindow( cTexture* t, cFont* f, TiXmlDocument &skin ) : cWindow(t,f,skin)
+cMiniMapWindow::cMiniMapWindow( ) : cWindow()
 {
 	windowType = WT_MINIMAP;
 	resizable = false;

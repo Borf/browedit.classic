@@ -13,7 +13,7 @@
 class cEffectWindow : public cWindow
 {
 public:
-	cEffectWindow(cTexture* t, cFont* f, TiXmlDocument &skin);
+	cEffectWindow();
 	cUndoItem* undo;
 	void* userfunc(void* param);
 };

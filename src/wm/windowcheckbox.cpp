@@ -5,6 +5,7 @@
 #include <windows.h>
 #endif
 
+#include <wm/wm.h>
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
 #include <texture.h>
@@ -71,7 +72,7 @@ std::string cWindowCheckBox::getText(int id)
 	return value ? "1" : "0";
 }
 
-cWindowCheckBox::cWindowCheckBox( cWindow* parent, TiXmlDocument &skin ) : cWindowObject(parent)
+cWindowCheckBox::cWindowCheckBox( cWindow* parent, TiXmlDocument* skin ) : cWindowObject(parent)
 {
 	x = 40;
 	y = 40;
@@ -79,7 +80,9 @@ cWindowCheckBox::cWindowCheckBox( cWindow* parent, TiXmlDocument &skin ) : cWind
 	value = true;
 	type = OBJECT_CHECKBOX;
 	
-	TiXmlElement* bSkin = skin.FirstChildElement("skin")->FirstChildElement("checkbox");
+	if(!skin)
+		skin = &cWM::skin;
+	TiXmlElement* bSkin = skin->FirstChildElement("skin")->FirstChildElement("checkbox");
 	
 	w = atoi(bSkin->FirstChildElement("width")->FirstChild()->Value());
 	h = atoi(bSkin->FirstChildElement("height")->FirstChild()->Value());
@@ -90,7 +93,7 @@ cWindowCheckBox::cWindowCheckBox( cWindow* parent, TiXmlDocument &skin ) : cWind
 	skinUncheckedTop = 512-atoi(bSkin->FirstChildElement("unchecked")->FirstChildElement("top")->FirstChild()->Value());
 }
 
-cWindowBoolCheckBox::cWindowBoolCheckBox( cWindow* parent, TiXmlDocument &skin ) : cWindowCheckBox(parent,skin)
+cWindowBoolCheckBox::cWindowBoolCheckBox( cWindow* parent, TiXmlDocument* skin ) : cWindowCheckBox(parent,skin)
 {
 	alignment = ALIGN_TOPLEFT;
 	boolvalue = NULL;

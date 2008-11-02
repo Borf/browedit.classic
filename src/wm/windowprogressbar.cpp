@@ -5,6 +5,7 @@
 #include <windows.h>
 #endif
 
+#include <wm/wm.h>
 #include <GL/gl.h>
 
 void cWindowProgressBar::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
@@ -94,8 +95,10 @@ std::string cWindowProgressBar::getPopup()
 	return buf;
 }
 
-cWindowProgressBar::cWindowProgressBar( cWindow* parent, TiXmlDocument &skin ) : cWindowObject(parent)
+cWindowProgressBar::cWindowProgressBar( cWindow* parent, TiXmlDocument* skin) : cWindowObject(parent)
 {
+	if(!skin)
+		skin = &cWM::skin;
 	w = 100;
 	h = 10;
 	x = 5;
@@ -107,7 +110,7 @@ cWindowProgressBar::cWindowProgressBar( cWindow* parent, TiXmlDocument &skin ) :
 	value = 33;
 	
 	
-	TiXmlElement* p = skin.FirstChildElement("skin")->FirstChildElement("progress");
+	TiXmlElement* p = skin->FirstChildElement("skin")->FirstChildElement("progress");
 	skinType = (strcmp(p->Attribute("type"), "normal") == 0 ? NORMAL : (strcmp(p->Attribute("type"), "conditional") == 0 ? CONDITIONAL : NORMAL));
 	
 	

@@ -5,10 +5,9 @@
 #include <filesystem.h>
 
 extern cGraphics Graphics;
-extern cFileSystem fs;
 
 
-cTextureBrushWindow::cWindowBrushButton::cWindowBrushButton(cWindow* parent, TiXmlDocument &skin, int brushWidth, int brushHeight, std::string brushData) : cWindowObject(parent,skin.FirstChildElement("skin")->FirstChildElement("button"))
+cTextureBrushWindow::cWindowBrushButton::cWindowBrushButton(cWindow* parent, int brushWidth, int brushHeight, std::string brushData, TiXmlDocument* skin) : cWindowObject(parent,skin->FirstChildElement("skin")->FirstChildElement("button"))
 {
 	alignment = ALIGN_TOPLEFT;
 	resizeTo(128,128);
@@ -84,7 +83,7 @@ void cTextureBrushWindow::cWindowBrushButton::click()
 	{
 		for(x = 0; x < brush[y].size(); x++)
 		{
-			cWindowBrushTile* tile = new cWindowBrushTile(parent,Graphics.WM.skin);
+			cWindowBrushTile* tile = new cWindowBrushTile(parent);
 			tile->moveTo(64*x,64*y);
 			tile->resizeTo(64,64);
 			tile->on = brush[y][x];
@@ -104,7 +103,7 @@ void cTextureBrushWindow::cWindowBrushButton::click()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-cTextureBrushWindow::cWindowBrushTile::cWindowBrushTile( cWindow* parent, TiXmlDocument &skin ) : cWindowObject(parent,skin.FirstChildElement("skin")->FirstChildElement("button"))
+cTextureBrushWindow::cWindowBrushTile::cWindowBrushTile( cWindow* parent, TiXmlDocument* skin ) : cWindowObject(parent,skin->FirstChildElement("skin")->FirstChildElement("button"))
 {
 	alignment = ALIGN_TOPLEFT;
 	resizeTo(128,128);
@@ -143,7 +142,7 @@ void cTextureBrushWindow::cWindowBrushTile::click()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-cTextureBrushWindow::cWindowBrushChangeButton::cWindowBrushChangeButton( cWindow* parent, TiXmlDocument &skin ) : cWindowButton(parent,skin)
+cTextureBrushWindow::cWindowBrushChangeButton::cWindowBrushChangeButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent,skin)
 {
 	alignment = ALIGN_TOPLEFT;
 	text = "Change";
@@ -164,7 +163,7 @@ void cTextureBrushWindow::cWindowBrushChangeButton::click()
 		{
 			for(int y = 0; y < oldHeight; y++)
 			{
-				cWindowBrushTile* tile = new cWindowBrushTile(parent,Graphics.WM.skin);
+				cWindowBrushTile* tile = new cWindowBrushTile(parent);
 				tile->moveTo(64*x,64*y);
 				tile->resizeTo(64,64);
 				char buf[16];
@@ -195,7 +194,7 @@ void cTextureBrushWindow::cWindowBrushChangeButton::click()
 		{
 			for(int x = 0; x < width; x++)
 			{
-				cWindowBrushTile* tile = new cWindowBrushTile(parent,Graphics.WM.skin);
+				cWindowBrushTile* tile = new cWindowBrushTile(parent);
 				tile->moveTo(64*x,64*y);
 				tile->resizeTo(64,64);
 				char buf[16];
@@ -227,7 +226,7 @@ void cTextureBrushWindow::cWindowBrushChangeButton::click()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-cTextureBrushWindow::cWindowBrushOkButton::cWindowBrushOkButton( cWindow* parent, TiXmlDocument &skin ) : cWindowButton(parent,skin)
+cTextureBrushWindow::cWindowBrushOkButton::cWindowBrushOkButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent,skin)
 {
 	alignment = ALIGN_TOPLEFT;
 	text = "Ok";
@@ -260,7 +259,7 @@ void cTextureBrushWindow::cWindowBrushOkButton::click()
 
 
 
-cTextureBrushWindow::cWindowBrushSaveButton::cWindowBrushSaveButton( cWindow* parent, TiXmlDocument &skin ) : cWindowButton(parent,skin)
+cTextureBrushWindow::cWindowBrushSaveButton::cWindowBrushSaveButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent,skin)
 {
 	alignment = ALIGN_TOPLEFT;
 	resizeTo(140,h);
@@ -269,11 +268,11 @@ cTextureBrushWindow::cWindowBrushSaveButton::cWindowBrushSaveButton( cWindow* pa
 
 void cTextureBrushWindow::cWindowBrushSaveButton::click()
 {
-	std::string name = Graphics.WM.InputWindow("Please enter a new name");
+	std::string name = cWM::InputWindow("Please enter a new name");
 	if(name == "")
 		return;
 
-	TiXmlDocument brushes = fs.getXml("data/brushes.xml");
+	TiXmlDocument brushes = cFileSystem::getXml("data/brushes.xml");
 
 	TiXmlElement newBrush("brush");
 	newBrush.SetAttribute("name", name.c_str());
@@ -295,7 +294,7 @@ void cTextureBrushWindow::cWindowBrushSaveButton::click()
 
 	brushes.SaveFile("data/brushes.xml");
 	cWindowScrollPanel* panel = (cWindowScrollPanel*)parent->objects["presets"];
-	cWindowObject* o = new cWindowBrushButton(parent,Graphics.WM.skin, ((cTextureBrushWindow*)parent)->brushWidth, ((cTextureBrushWindow*)parent)->brushHeight, data);
+	cWindowObject* o = new cWindowBrushButton(parent,((cTextureBrushWindow*)parent)->brushWidth, ((cTextureBrushWindow*)parent)->brushHeight, data);
 	o->setPopup(name);
 	panel->objects.push_back(o);
 	panel->resizeTo(panel->getWidth(), panel->getHeight());
@@ -306,7 +305,7 @@ void cTextureBrushWindow::cWindowBrushSaveButton::click()
 
 
 
-cTextureBrushWindow::cWindowBrushRotateButton::cWindowBrushRotateButton( cWindow* parent, TiXmlDocument &skin ) : cWindowButton(parent,skin)
+cTextureBrushWindow::cWindowBrushRotateButton::cWindowBrushRotateButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent,skin)
 {
 	alignment = ALIGN_TOPLEFT;
 	text = "Rotate";
@@ -338,7 +337,7 @@ void cTextureBrushWindow::cWindowBrushRotateButton::click()
 	{
 		for(x = 0; x < newWidth; x++)
 		{
-			cWindowBrushTile* tile = new cWindowBrushTile(parent,Graphics.WM.skin);
+			cWindowBrushTile* tile = new cWindowBrushTile(parent);
 			tile->on = brush[y][x];
 			char buf[16];
 			sprintf(buf, "tile%i,%i", x,y);
@@ -350,7 +349,7 @@ void cTextureBrushWindow::cWindowBrushRotateButton::click()
 
 ///////////////////////////////////////////////////////////////end componends
 
-cTextureBrushWindow::cTextureBrushWindow(cTexture* t, cFont* f, TiXmlDocument &skin) : cWindow(t,f,skin)
+cTextureBrushWindow::cTextureBrushWindow() : cWindow()
 {
 	windowType = WT_TEXTUREBRUSH;
 	resizable = true;
@@ -366,12 +365,12 @@ cTextureBrushWindow::cTextureBrushWindow(cTexture* t, cFont* f, TiXmlDocument &s
 	title = "Texture Brushes";
 	initprops("texturebrush");
 
-	objects["closebutton"] = new cWindowCloseButton(this, skin);
+	objects["closebutton"] = new cWindowCloseButton(this);
 
 	cWindowObject* o;
 
 
-	cWindowScrollPanel* scroll = new cWindowScrollPanel(this, skin);
+	cWindowScrollPanel* scroll = new cWindowScrollPanel(this);
 	scroll->alignment = ALIGN_TOPLEFT;
 	scroll->moveTo(0,300);
 	scroll->innerheight = 1000;
@@ -381,11 +380,11 @@ cTextureBrushWindow::cTextureBrushWindow(cTexture* t, cFont* f, TiXmlDocument &s
 	objects["presets"] = scroll;
 		
 
-	TiXmlDocument brushes = fs.getXml("data/brushes.xml");
+	TiXmlDocument brushes = cFileSystem::getXml("data/brushes.xml");
 	TiXmlElement* brushEl = brushes.FirstChildElement("brushes")->FirstChildElement("brush");
 	while(brushEl != NULL)
 	{
-		o = new cWindowBrushButton(this,skin, atoi(brushEl->Attribute("width")), atoi(brushEl->Attribute("height")), brushEl->FirstChild()->Value());
+		o = new cWindowBrushButton(this,atoi(brushEl->Attribute("width")), atoi(brushEl->Attribute("height")), brushEl->FirstChild()->Value());
 		o->setPopup(brushEl->Attribute("name"));
 		scroll->objects.push_back(o);
 		brushEl = brushEl->NextSiblingElement("brush");
@@ -401,7 +400,7 @@ cTextureBrushWindow::cTextureBrushWindow(cTexture* t, cFont* f, TiXmlDocument &s
 	{
 		for(int x = 0; x < Graphics.textureBrush[y].size(); x++)
 		{
-			tile = new cWindowBrushTile(this,skin);
+			tile = new cWindowBrushTile(this);
 			tile->moveTo(64*x,64*y);
 			tile->resizeTo(64,64);
 			tile->on = Graphics.textureBrush[y][x];
@@ -415,16 +414,16 @@ cTextureBrushWindow::cTextureBrushWindow(cTexture* t, cFont* f, TiXmlDocument &s
 
 	addLabel("lblWidth", 0,0,"Width");
 	sprintf(buf, "%i", brushWidth);
-	addInputBox("inpWidth", 140,140,140,buf,skin);
+	addInputBox("inpWidth", 140,140,140,buf);
 
 	addLabel("lblHeight", 0,50,"Height");
 	sprintf(buf, "%i", brushHeight);
-	addInputBox("inpHeight", 140,140,140,buf,skin);
+	addInputBox("inpHeight", 140,140,140,buf);
 
-	objects["btnChange"] = new cWindowBrushChangeButton(this,skin);
-	objects["btnOk"] = new cWindowBrushOkButton(this,skin);
-	objects["btnSave"] = new cWindowBrushSaveButton(this,skin);
-	objects["btnRotate"] = new cWindowBrushRotateButton(this,skin);
+	objects["btnChange"] = new cWindowBrushChangeButton(this);
+	objects["btnOk"] = new cWindowBrushOkButton(this);
+	objects["btnSave"] = new cWindowBrushSaveButton(this);
+	objects["btnRotate"] = new cWindowBrushRotateButton(this);
 	
 	resizeTo(w,h);
 }

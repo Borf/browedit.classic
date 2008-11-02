@@ -8,7 +8,7 @@ class cUndoItem;
 class cWindowOkButton : public cWindowButton
 {
 public:
-	cWindowOkButton(cWindow* parent, TiXmlDocument &skin);
+	cWindowOkButton(cWindow* parent, TiXmlDocument* = NULL);
 	virtual ~cWindowOkButton();
 	void click();
 };
@@ -17,7 +17,7 @@ public:
 class cWindowCancelButton : public cWindowButton
 {
 public:
-	cWindowCancelButton(cWindow* parent, TiXmlDocument &skin);
+	cWindowCancelButton(cWindow* parent, TiXmlDocument* = NULL);
 	virtual ~cWindowCancelButton();
 	void click();
 };
@@ -26,7 +26,7 @@ class cObjectWindow : public cWindow
 {
 public:
 	cUndoItem* undo;
-	cObjectWindow(cTexture* t, cFont* f, TiXmlDocument &skin);	
+	cObjectWindow();
 	void* userfunc(void* param);
 };
 

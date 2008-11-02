@@ -40,7 +40,6 @@ int keymap[SDLK_LAST-SDLK_FIRST];
 #endif
 
 cGraphics		Graphics;
-cFileSystem fs;
 
 bool IsLegal2 = true;
 std::string inputboxresult;
@@ -128,6 +127,7 @@ unsigned char * getPixelsBGR()
   glGetIntegerv(GL_VIEWPORT, screenStats);
   unsigned char *pixels;
   pixels = new unsigned char[screenStats[2]*screenStats[3]*3];
+//  glReadBuffer( GL_BACK );
   glReadPixels(0, 0, screenStats[2], screenStats[3], GL_BGR_EXT, GL_UNSIGNED_BYTE, pixels);
   return pixels;
 }
@@ -254,7 +254,7 @@ void mainloop()
 							cCube* c = &Graphics.world.cubes[y][x];
 							if(lbuttondown && !rbuttondown)
 							{
-\								if (!Graphics.slope || (x > posx-(int)floor(brushsize/2.0f)) && y > posy-(int)floor(brushsize/2.0f))
+								if (!Graphics.slope || (x > posx-(int)floor(brushsize/2.0f)) && y > posy-(int)floor(brushsize/2.0f))
 									c->cell1-=1;
 								if (!Graphics.slope || (x < posx+(int)ceil(brushsize/2.0f)-1) && y > posy-(int)floor(brushsize/2.0f))
 									c->cell2-=1;
@@ -306,7 +306,7 @@ void mainloop()
 		Graphics.world.plugin_api_deleteobjects.pop_front();
 		if(Graphics.world.plugin_api_deleteobjects.empty())
 		{
-			cWindow* w = Graphics.WM.getwindow(WT_MODELOVERVIEW);
+			cWindow* w = cWM::getwindow(WT_MODELOVERVIEW);
 			if(w)
 				w->userfunc(NULL);
 		}
@@ -351,11 +351,11 @@ void mainloop()
 		
 		
 		lasteditmode = editmode;
-		cWindow* w = Graphics.WM.getwindow(WT_MODELOVERVIEW);
+		cWindow* w = cWM::getwindow(WT_MODELOVERVIEW);
 		if(editmode == MODE_OBJECTS)
 		{
 			if(w == NULL)
-				Graphics.WM.addwindow(new cModelOverViewWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin));
+				cWM::addwindow(new cModelOverViewWindow());
 			else
 			{
 				w->userfunc(NULL);
@@ -366,11 +366,11 @@ void mainloop()
 			w->close();
 
 
-		w = Graphics.WM.getwindow(WT_LIGHTOVERVIEW);
+		w = cWM::getwindow(WT_LIGHTOVERVIEW);
 		if (editmode == MODE_LIGHTS)
 		{
 			if(w == NULL)
-				Graphics.WM.addwindow(new cLightOverViewWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin));
+				cWM::addwindow(new cLightOverViewWindow());
 			else
 			{
 				w->userfunc(NULL);
@@ -380,11 +380,11 @@ void mainloop()
 		else if(w != NULL)
 			w->close();
 
-		w = Graphics.WM.getwindow(WT_SOUNDOVERVIEW);
+		w = cWM::getwindow(WT_SOUNDOVERVIEW);
 		if (editmode == MODE_SOUNDS)
 		{
 			if(w == NULL)
-				Graphics.WM.addwindow(new cSoundOverViewWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin));
+				cWM::addwindow(new cSoundOverViewWindow());
 			else
 			{
 				w->userfunc(NULL);
@@ -394,11 +394,11 @@ void mainloop()
 		else if(w != NULL)
 			w->close();
 
-		w = Graphics.WM.getwindow(WT_TEXTURETOOLS);
+		w = cWM::getwindow(WT_TEXTURETOOLS);
 		if (editmode == MODE_TEXTUREPAINT)
 		{
 			if(w == NULL)
-				Graphics.WM.addwindow(new cTextureToolsWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin));
+				cWM::addwindow(new cTextureToolsWindow());
 			else
 			{
 				w->show();
@@ -523,7 +523,7 @@ int WinMain(HINSTANCE hInst,HINSTANCE hPrev, LPSTR Cmd,int nShow)
 
 cWindow* XmlWindow(std::string s)
 {
-	return Graphics.WM.XmlWindow(s);
+	return cWM::XmlWindow(s);
 }
 
 
@@ -540,12 +540,12 @@ int main(int argc, char *argv[])
 	{
 	int i;
 	log_open("log_worldeditor.txt","worldedit",2);
-	cFile* pFile = fs.open("config.txt");
+	cFile* pFile = cFileSystem::open("config.txt");
 	if (pFile == NULL)
 	{
 		Log(2,0,"Error opening configfile, trying one directory up");
 		chdir("..");
-		pFile = fs.open("config.txt");
+		pFile = cFileSystem::open("config.txt");
 		if(pFile == NULL)
 		{
 			Log(1,0,"Could not find configfile one directory up, stopping");
@@ -555,7 +555,7 @@ int main(int argc, char *argv[])
 	configfile = pFile->readLine();
 	pFile->close();
 
-	config = fs.getXml(configfile);
+	config = cFileSystem::getXml(configfile);
 	if(config.Error())
 	{
 		Log(1,0,"Could not load config xml: %s at %i:%i", config.ErrorDesc(), config.ErrorCol(), config.ErrorRow());
@@ -564,7 +564,7 @@ int main(int argc, char *argv[])
 	}
 	std::string language = config.FirstChildElement("config")->FirstChildElement("language")->FirstChild()->Value();
 	language = language.substr(language.find("=")+1);
-	msgtable = fs.getXml("data/" + language + ".txt");
+	msgtable = cFileSystem::getXml("data/" + language + ".txt");
 
 
 #ifdef WIN32
@@ -679,7 +679,7 @@ int main(int argc, char *argv[])
 		if (WSAStartup(MAKEWORD(2, 2), &WinsockData) != 0)
 		{
 
-			Graphics.WM.ShowMessage("Winsock Startup failed!");
+			cWM::ShowMessage("Winsock Startup failed!");
 			return 0;
 		}
 		BYTE randchar = rand()%255;
@@ -810,6 +810,10 @@ int main(int argc, char *argv[])
 
 	TiXmlElement* el = config.FirstChildElement("config")->FirstChildElement();
 
+
+	int windowWidth = 1024,windowHeight = 768, windowBpp = 32;
+	bool windowFullscreen = true;
+
 	while(el != NULL)
 	{
 		std::string option = el->Value();
@@ -820,7 +824,7 @@ int main(int argc, char *argv[])
 			TiXmlElement* el2 = el->FirstChildElement("grf");
 			while(el2 != NULL)
 			{
-				fs.loadPackedFile(el2->FirstChild()->Value());
+				cFileSystem::loadPackedFile(el2->FirstChild()->Value());
 				el2 = el2->NextSiblingElement("grf");
 			}
 
@@ -831,13 +835,13 @@ int main(int argc, char *argv[])
 			while(el2 != NULL)
 			{
 					 if(strcmp(el2->Value(),					"resx") == 0)
-					Graphics.width = atoi(el2->FirstChild()->Value());
+					windowWidth = atoi(el2->FirstChild()->Value());
 				else if(strcmp(el2->Value(),					"resy") == 0)
-					Graphics.height = atoi(el2->FirstChild()->Value());
+					windowHeight = atoi(el2->FirstChild()->Value());
 				else if(strcmp(el2->Value(),					"fullscreen") == 0)
-					Graphics.fullscreen = strcmp(el2->FirstChild()->Value(),"true") == 0;
+					windowFullscreen = strcmp(el2->FirstChild()->Value(),"true") == 0;
 				else if(strcmp(el2->Value(),					"bpp") == 0)
-					Graphics.bits = atoi(el2->FirstChild()->Value());
+					windowBpp = atoi(el2->FirstChild()->Value());
 				else if(strcmp(el2->Value(),					"font") == 0)
 					fontname = el2->FirstChild()->Value();
 				else if(strcmp(el2->Value(),					"skin") == 0)
@@ -874,7 +878,7 @@ int main(int argc, char *argv[])
 				{
 					std::string value = model->FirstChild()->Value();
 					objectfiles.push_back(value);
-					cFile* pFile2 = fs.open(value);
+					cFile* pFile2 = cFileSystem::open(value);
 					if (pFile2 != NULL)
 					{
 						Log(3,0,GetMsg("file/LOADING"), value.c_str()); // Loading file
@@ -935,7 +939,7 @@ int main(int argc, char *argv[])
 
 	IsLegal2 = IsLegal;
 
-	pFile = fs.open("data/korean2english.txt");
+	pFile = cFileSystem::open("data/korean2english.txt");
 	while(!pFile->eof())
 	{
 		std::string a = pFile->readLine();
@@ -953,9 +957,9 @@ int main(int argc, char *argv[])
 
 	models->sort();
 	
-	favoritelights = fs.getXml("data/lights.txt");
+	favoritelights = cFileSystem::getXml("data/lights.txt");
 
-	if (!Graphics.init())
+	if (!Graphics.init(windowWidth, windowHeight, windowBpp, windowFullscreen))
 		return 1;
 #ifdef WIN32
 	if(GetSystemMetrics(80) > 1)
@@ -1180,7 +1184,7 @@ int main(int argc, char *argv[])
 	lastrclick = 0;
 
 	Log(3,0,GetMsg("file/LOADING"), "data/keymap.txt");
-	pFile = fs.open("data/keymap.txt");
+	pFile = cFileSystem::open("data/keymap.txt");
 	if(pFile == NULL)
 	{
 		Log(3,0,"Keymap file not found, writing default");
@@ -1193,7 +1197,7 @@ int main(int argc, char *argv[])
 			
 		}
 		pFile2.close();
-		pFile = fs.open("data/keymap.txt");
+		pFile = cFileSystem::open("data/keymap.txt");
 
 	}
 	for(i = 0; i < SDLK_LAST-SDLK_FIRST; i++)
@@ -1208,7 +1212,7 @@ int main(int argc, char *argv[])
 	Log(3,0,GetMsg("file/LOADING"), "data/effects.txt");
 	std::vector<cMenu*> effectssubmenu;
 
-	pFile = fs.open("data/effects.txt");
+	pFile = cFileSystem::open("data/effects.txt");
 	i = 0;
 	while(pFile && !pFile->eof())
 	{
@@ -1274,11 +1278,11 @@ int main(int argc, char *argv[])
 	
 	
 	if(!IsLegal2)
-		Graphics.WM.ShowMessage("This version of browedit is not properly activated. Please post on the access reset topic to get it activated in case you should have access to browedit");
+		cWM::ShowMessage("This version of browedit is not properly activated. Please post on the access reset topic to get it activated in case you should have access to browedit");
 
 	if(IsInsideVMWare() || IsInsideVPC())
 	{
-		Graphics.WM.ShowMessage("You're running BrowEdit inside a virtual PC. Please don't do this");
+		cWM::ShowMessage("You're running BrowEdit inside a virtual PC. Please don't do this");
 		IsLegal2 = false;
 	}
 
@@ -1292,7 +1296,7 @@ int main(int argc, char *argv[])
 
 	Mix_CloseAudio();
 	// Shutdown
-	Graphics.killGLWindow();						// Kill The Window
+	cGraphics::closeAndCleanup();				// Kill The Window
 	Graphics.world.unload();
 	TextureCache.status();
 
@@ -1319,12 +1323,12 @@ int process_events()
 		switch(event.type)
 		{
 		case SDL_QUIT:
-			if(Graphics.WM.ConfirmWindow("Are you sure you want to quit?"))
+			if(cWM::ConfirmWindow("Are you sure you want to quit?"))
 				running = false;
 			break;
 		case SDL_KEYUP:
 			keys[event.key.keysym.sym-SDLK_FIRST] = 0;
-			if (Graphics.WM.onkeyup(event.key.keysym.sym, (event.key.keysym.mod&KMOD_SHIFT) != 0))
+			if (cWM::onkeyup(event.key.keysym.sym, (event.key.keysym.mod&KMOD_SHIFT) != 0))
 				return 0;
 #ifdef _DEBUG
 			if(keymap[event.key.keysym.sym] == SDLK_ESCAPE)
@@ -1350,12 +1354,12 @@ int process_events()
 		case SDL_KEYDOWN:
 			if(keys[event.key.keysym.sym-SDLK_FIRST] == 0)
 				keys[event.key.keysym.sym-SDLK_FIRST] = SDL_GetTicks() + 400;
-			if(Graphics.WM.onkeydown(event.key.keysym.sym, (event.key.keysym.mod&KMOD_SHIFT) != 0))
+			if(cWM::onkeydown(event.key.keysym.sym, (event.key.keysym.mod&KMOD_SHIFT) != 0))
 				return 0;
 			if (strlen(SDL_GetKeyName(event.key.keysym.sym)) == 1 || event.key.keysym.sym == SDLK_SPACE)
 			{
 				if (event.key.keysym.unicode > 0 && event.key.keysym.unicode < 128)
-					if (Graphics.WM.onchar((char)event.key.keysym.unicode, (event.key.keysym.mod&KMOD_SHIFT) != 0))
+					if (cWM::onchar((char)event.key.keysym.unicode, (event.key.keysym.mod&KMOD_SHIFT) != 0))
 						return 0;
 			}
 			break;
@@ -1440,7 +1444,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				if (draggingwindow != NULL)
 				{
 					draggingwindow->drag();
-					Graphics.WM.drag(draggingwindow);
+					cWM::drag(draggingwindow);
 				}
 				else
 				{
@@ -1448,7 +1452,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					{
 						draggingObject->drag();
 
-						cWindow* w = Graphics.WM.inwindow();
+						cWindow* w = cWM::inwindow();
 						if (w != NULL)
 							w->holddragover();
 						else if (w == NULL && lastdragoverwindow != NULL)
@@ -1567,7 +1571,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 			if(event.button.button == 4)
 			{ // scroll up
-				cWindow* w = Graphics.WM.inwindow();
+				cWindow* w = cWM::inwindow();
 				if(w != NULL)
 					w->scrollUp();
 				else
@@ -1595,7 +1599,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 			if(event.button.button == 5)
 			{ // scroll down
-				cWindow* w = Graphics.WM.inwindow();
+				cWindow* w = cWM::inwindow();
 				if(w != NULL)
 					w->scrollDown();
 				else
@@ -1645,15 +1649,15 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			{
 				draggingObject = NULL;
 				draggingwindow = NULL;
-				if (Graphics.WM.inwindow() != NULL)
+				if (cWM::inwindow() != NULL)
 				{
-					cWindow* w = Graphics.WM.inwindow();
+					cWindow* w = cWM::inwindow();
 					if (!w->inObject())
 					{ // drag this window
 						dragoffsetx = mouseX - w->getX();
 						dragoffsety = (Graphics.h()-mouseY) - w->py2();
-						Graphics.WM.click(false);
-						draggingwindow = Graphics.WM.inwindow();
+						cWM::click(false);
+						draggingwindow = cWM::inwindow();
 						if(mousestartx < draggingwindow->getX()+draggingwindow->getWidth() && mousestartx > draggingwindow->getX()+draggingwindow->getWidth() - DRAGBORDER)
 							draggingwindow->startresisingxy();
 						if((Graphics.h()-mousestarty) > draggingwindow->getY() && (Graphics.h()-mousestarty) < draggingwindow->getY() + DRAGBORDER)
@@ -1666,7 +1670,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 					else
 					{ // drag this component
-						Graphics.WM.click(false);
+						cWM::click(false);
 						draggingObject = w->inObject();
 						dragoffsetx = mouseX - w->getX() - w->inObject()->realX();
 						dragoffsety = (Graphics.h()-mouseY) - w->getY() - w->inObject()->realY();
@@ -1675,7 +1679,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				else
 				{
-					Graphics.WM.defocus();
+					cWM::defocus();
 				}
 			}			
 			
@@ -1703,18 +1707,18 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				lbuttondown = false;
 				mouseX = event.motion.x;
 				mouseY = event.motion.y;
-				cWindow* w = Graphics.WM.inwindow();
+				cWindow* w = cWM::inwindow();
 				if (draggingwindow != NULL && m == NULL)
 				{
 					draggingwindow->stopresizing();
 				}
 				draggingwindow = NULL;
 				if (movement <= 1 && m == NULL && popupmenu == NULL)
-					Graphics.WM.click(true);
+					cWM::click(true);
 				if (draggingObject != NULL && m == NULL)
 				{
-					if(Graphics.WM.inwindow() != NULL)
-						Graphics.WM.inwindow()->dragover();
+					if(cWM::inwindow() != NULL)
+						cWM::inwindow()->dragover();
 					if(draggingObject != NULL)
 						draggingObject->parent->stopdrag();
 					draggingObject = NULL;
@@ -1726,7 +1730,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					doubleclick = true;
 					lastlclick = SDL_GetTicks();
 					if(m == NULL)
-						Graphics.WM.doubleclick();
+						cWM::doubleclick();
 				}
 				else
 					lastlclick = SDL_GetTicks();
@@ -1789,9 +1793,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				doubleclick = false;
 				if (movement < 2)
 				{
-					if(Graphics.WM.inwindow() != NULL)
+					if(cWM::inwindow() != NULL)
 					{
-						Graphics.WM.rightclick();
+						cWM::rightclick();
 						return 1;
 					}
 				}
@@ -1967,21 +1971,21 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					break;
 			case SDLK_t:
 				{
-					cWindow* w = Graphics.WM.getwindow(WT_TEXTURE);
+					cWindow* w = cWM::getwindow(WT_TEXTURE);
 					if (w == NULL)
-						Graphics.WM.addwindow(new cTextureWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin));
+						cWM::addwindow(new cTextureWindow());
 					else
-						Graphics.WM.togglewindow(WT_TEXTURE);
+						cWM::togglewindow(WT_TEXTURE);
 					break;
 				}
 				break;
 			case SDLK_m:
 				{
-					cWindow* w = Graphics.WM.getwindow(WT_MODELS);
+					cWindow* w = cWM::getwindow(WT_MODELS);
 					if (w == NULL)
-						Graphics.WM.addwindow(new cModelsWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin)	);
+						cWM::addwindow(new cModelsWindow());
 					else
-						Graphics.WM.togglewindow(WT_MODELS);
+						cWM::togglewindow(WT_MODELS);
 				}
 				break;
 			case SDLK_KP0:
@@ -2013,11 +2017,11 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 		case SDL_KEYUP:
 			if(event.key.keysym.sym == SDLK_TAB && event.key.keysym.mod& KMOD_CTRL)
 			{
-				cWindow* w = Graphics.WM.getwindow(WT_MINIMAP);
+				cWindow* w = cWM::getwindow(WT_MINIMAP);
 				if (w == NULL)
-					Graphics.WM.addwindow(new cMiniMapWindow(Graphics.WM.texture, Graphics.WM.font, Graphics.WM.skin)	);
+					cWM::addwindow(new cMiniMapWindow()	);
 				else
-					Graphics.WM.togglewindow(WT_MINIMAP);
+					cWM::togglewindow(WT_MINIMAP);
 			}
 
 			if(event.key.keysym.sym == SDLK_PRINT || event.key.keysym.sym == SDLK_SYSREQ)

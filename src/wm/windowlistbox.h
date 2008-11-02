@@ -43,7 +43,7 @@ protected:
 public:
 	std::vector<std::string>	values;
 	std::vector<int>			properties;
-	cWindowListBox(cWindow* parent, TiXmlDocument &skin);
+	cWindowListBox(cWindow* parent, TiXmlDocument* skin = NULL);
 	virtual ~cWindowListBox() {}
 	virtual void draw(int,int,int,int);
 	virtual void click();
@@ -66,7 +66,7 @@ template <class T> class cWindowDataListBox : public cWindowListBox
 {
 public:
 	std::vector<T>	data;
-	cWindowDataListBox(cWindow* parent, TiXmlDocument &skin) : cWindowListBox(parent,skin)
+	cWindowDataListBox(cWindow* parent, TiXmlDocument* skin = NULL) : cWindowListBox(parent,skin)
 	{
 	}
 };

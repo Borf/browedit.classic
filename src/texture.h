@@ -11,6 +11,15 @@
 #include <string>
 //using namespace std;
 
+
+enum eTextureOptions
+{
+	TEX_NORMAL			= 0,
+	TEX_NOCLAMP			= 1,
+	TEX_NEARESTFILTER	= 2,
+	TEX_NOFREEDATA		= 4,
+};
+
 class cTextureLoader;
 
 class cTexture
@@ -18,14 +27,13 @@ class cTexture
 protected:
 	std::string			filename;
 	GLuint				tid;
+	eTextureOptions		options;
 
-	bool				clamp;
 public:
 	bool				loaded;
-	cTexture(std::string,bool,bool);
+	cTexture(std::string,eTextureOptions);
 	void				resizeToLog();
 
-	bool				freedata;
 	int					width;
 	int					height;
 
@@ -60,9 +68,9 @@ class cTextureLoaders
 {
 public:
 	std::vector<cTextureLoader*>	loaders;
-	static cTexture*				load(std::string, bool, bool = true);
-	static void						load(std::string, cTexture*, bool);
-	static void						loadfrommem(std::string, char*, int, cTexture*, bool);
+	static cTexture*				load(std::string, eTextureOptions);
+	static void						load(std::string, cTexture*, eTextureOptions);
+	static void						loadfrommem(std::string, char*, int, cTexture*, eTextureOptions);
 };
 
 cTextureLoaders& GetTextureLoaders();

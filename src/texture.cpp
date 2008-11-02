@@ -8,18 +8,17 @@ extern cFileSystem fs;
 
 GLint glMaxTexDim;
 
-cTexture::cTexture(std::string pFilename, bool pClamp, bool pFreedata)
+cTexture::cTexture(std::string pFilename, eTextureOptions pOptions)
 {
-	clamp = pClamp;
+	options = pOptions;
 	filename = pFilename;
 	loaded = false;
-	freedata = pFreedata;
 	data = NULL;
 	datatype = 0;
 	tid = 0;
 }
 
-cTextureFromMemory::cTextureFromMemory(std::string ext, char* d, int l) : cTexture("",false,true)
+cTextureFromMemory::cTextureFromMemory(std::string ext, char* d, int l) : cTexture("",TEX_NOFREEDATA)
 {
 	mem_data = new char[l];
 	memcpy(mem_data, d, l);
@@ -31,7 +30,7 @@ GLuint cTextureFromMemory::texId()
 {
 	if(!loaded)
 	{
-		cTextureLoaders::loadfrommem(extension, mem_data, mem_length, this, clamp);
+		cTextureLoaders::loadfrommem(extension, mem_data, mem_length, this, options);
 		delete[] mem_data;
 		loaded = true;
 	}
@@ -42,7 +41,7 @@ GLuint cTexture::texId()
 {
 	if(!loaded && filename != "")
 	{
-		cTextureLoaders::load(filename, this, clamp);
+		cTextureLoaders::load(filename, this, options);
 		loaded = true;
 	}
 	return tid;
@@ -51,7 +50,7 @@ GLuint cTexture::texId()
 
 void cTexture::unLoad()
 {
-	if (!freedata)
+	if (options & TEX_NOFREEDATA)
 		delete[] data;
 	if(tid != 0)
 		glDeleteTextures(1, &tid);
@@ -65,9 +64,9 @@ cTextureLoaders& GetTextureLoaders()
 }
 
 //vector<cTextureLoader*> cTextureLoaders::loaders;
-cTexture* cTextureLoaders::load(std::string filename, bool clamp, bool freedata)
+cTexture* cTextureLoaders::load(std::string filename, eTextureOptions options)
 {
-	cTexture* t = new cTexture(filename, clamp, freedata);
+	cTexture* t = new cTexture(filename, options);
 	return t;
 }
 
@@ -81,23 +80,32 @@ void cTexture::generate()
 
 	glTexImage2D(GL_TEXTURE_2D,0,bpp/8,width,height,0,datatype,GL_UNSIGNED_BYTE,data);
 
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-	//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-	//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+	if(!(options & TEX_NEARESTFILTER))
+	{
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+	}
+	else
+	{
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+	}
 
-	if(clamp)
+	if(options & TEX_NOCLAMP)
+	{
+	}
+	else
 	{
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP);
 	}
-	if(freedata)
+	if(!(options & TEX_NOFREEDATA))
 		delete[] data;
 
 }
 
 
-void cTextureLoaders::load(std::string filename, cTexture* tex, bool clamp)
+void cTextureLoaders::load(std::string filename, cTexture* tex, eTextureOptions options)
 {
 	if(filename.rfind(".") == std::string::npos)
 	{
@@ -136,7 +144,7 @@ void cTextureLoaders::load(std::string filename, cTexture* tex, bool clamp)
 	Log(1,0,"Unknown texture type: %s at file %s", ext.c_str(), filename.c_str()); 
 }
 
-void cTextureLoaders::loadfrommem(std::string ext, char* data, int length, cTexture* tex, bool clamp)
+void cTextureLoaders::loadfrommem(std::string ext, char* data, int length, cTexture* tex, eTextureOptions options)
 {
 	std::vector<cTextureLoader*> loaders = GetTextureLoaders().loaders;
 

@@ -10,7 +10,6 @@
 #include <graphics.h>
 
 extern cGraphics Graphics;
-extern cFileSystem fs;
 extern std::string rodir;
 extern cWindow* draggingwindow;
 extern cWindowObject* draggingObject;
@@ -24,7 +23,7 @@ cTextureWindow::cWindowTexture::cWindowTexture( cWindow* parent ) : cWindowPictu
 
 void cTextureWindow::cWindowTexture::click()
 {
-	cWindow* w = Graphics.WM.getwindow(WT_RSMEDIT);
+	cWindow* w = cWM::getwindow(WT_RSMEDIT);
 	if(w != NULL)
 	{
 		((cRSMEditWindow*)w)->changetexture("data\\texture\\" + data);
@@ -72,7 +71,7 @@ void cTextureWindow::cWindowTexture::setText( int i, std::string s )
 	}
 }
 
-cTextureWindow::cWindowTextureCatSelect::cWindowTextureCatSelect( cWindow* parent, std::vector<cWindowTree::cTreeNode*> n, TiXmlDocument &skin ) : cWindowTree(parent, n,skin)
+cTextureWindow::cWindowTextureCatSelect::cWindowTextureCatSelect( cWindow* parent, std::vector<cWindowTree::cTreeNode*> n, TiXmlDocument* skin ) : cWindowTree(parent, n,skin)
 {
 	
 }
@@ -128,7 +127,7 @@ void cTextureWindow::cWindowTextureCatSelect::click()
 	draggingObject = NULL;
 }
 
-cTextureWindow::cTextureWindow( cTexture* t, cFont* f, TiXmlDocument &skin ) : cWindow(t,f,skin)
+cTextureWindow::cTextureWindow( ) : cWindow()
 {
 	iconSize = 128;
 	windowType = WT_TEXTURE;
@@ -154,7 +153,7 @@ cTextureWindow::cTextureWindow( cTexture* t, cFont* f, TiXmlDocument &skin ) : c
 	
 	for(unsigned int i = 0; i < texturefiles.size(); i++)
 	{
-		cFile* pFile = fs.open(texturefiles[i]);
+		cFile* pFile = cFileSystem::open(texturefiles[i]);
 		if(pFile == NULL)
 			continue;
 		while(!pFile->eof())
@@ -213,7 +212,7 @@ cTextureWindow::cTextureWindow( cTexture* t, cFont* f, TiXmlDocument &skin ) : c
 		}
 	}
 	
-	o = new cWindowTextureCatSelect(this, nodes, skin);
+	o = new cWindowTextureCatSelect(this, nodes);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(0,0);
 	o->resizeTo(400,400);
@@ -225,14 +224,14 @@ cTextureWindow::cTextureWindow( cTexture* t, cFont* f, TiXmlDocument &skin ) : c
 	o->resizeTo(100,100);
 	objects["textures"] = o;*/
 	
-	o = new cWindowScrollPanel(this, skin);
+	o = new cWindowScrollPanel(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(0, 0);
 	o->resizeTo(100,100);
 	objects["textures"] = o;
 	
 	//		objects["rollup"] = new cWindowRollupButton(this);
-	objects["close"] = new cWindowCloseButton(this,skin);
+	objects["close"] = new cWindowCloseButton(this);
 	
 	resizeTo(w,h);
 }

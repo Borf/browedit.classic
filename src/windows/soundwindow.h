@@ -13,11 +13,11 @@ public:
 	{
 	public:
 		cSound*	selectedSound;
-		cWindowSelectFileButton(cWindow* parent, TiXmlDocument &skin);
+		cWindowSelectFileButton(cWindow* parent, TiXmlDocument* = NULL);
 		void click();
 	};
 	cUndoItem* undo;
-	cSoundWindow(cTexture* t, cFont* f, TiXmlDocument &skin);	
+	cSoundWindow();	
 	void* userfunc(void* param);
 };
 

@@ -9,7 +9,7 @@ class cWindowFrame : public cWindowObject
 {
 	bool drawinner;
 public:
-	cWindowFrame(cWindow* parent, TiXmlDocument &skin);
+	cWindowFrame(cWindow* parent, TiXmlDocument* skin = NULL);
 	virtual void draw(int,int,int,int);
 	void setInt(int,int);
 };

@@ -24,151 +24,156 @@ enum eTool
 };
 
 
-class cGraphics
+class cGraphicsBase
 {
 public:
-	cGraphics();
+	cGraphicsBase();
+	static int				init(int,int,int,bool);
+	static int				resizeGLScene(int, int);
+	static void				killGLWindow(void);
+	static int&				h()	{		return				height;	}
+	static int&				w()	{		return				width;	}
+	static long				getFrameTicks();
 
-	int						init();
-	int						draw(bool = true);
-	int						resizeGLScene(int, int);
-
-	void					killGLWindow(void);
-
-	int&					h()
-	{
-		return				height;
-	}
-
-	int&					w()
-	{
-		return				width;
-	}
-
-	cWorld					world;
-
-	float					cameraheight;
-	float					cameraangle;
-	float					camerarot;
-	cVector2				camerapointer;
-
-	bool					showgat;
-
-	bool					showgrid;
-	float					gridsize;
-	float					gridoffsetx;
-	float					gridoffsety;
-
-	cVector2				selectedTile;
-
-	cVector2				selectionstart;
-	cVector2				selectionend;
-	float					brushsize;
-	int						texturestart;
-	int						textureRot;
-	bool					fliph;
-	bool					flipv;
-
-	long					lasttick;
-	long					frameticks;
-	bool					showambientlighting;
-
-	bool					groupeditmode;
+	static CFrustum			frustum;
 
 
-	cVector3				selectionstart3d;
-	cVector3				selectionend3d;
-	std::vector<int>		selectedobjects;
-	std::string				editstring;
-	float*					editval;
+protected:
+	static int				createGLWindow();
+	static int				initGL(void);
 
-	bool					is3dSelected(float, float, float);
-	std::string				popup(std::string, std::string = "");
+	static int				height;
+	static int				width;
+	static int				bits;
+	static bool				fullscreen;
 
-	std::string				popupReturn;
-	std::string				defaultPopupText;
-	std::string				popupCaption;
-	cFont*					font;
-	CFrustum				frustum;
+	static long				lasttick;
+	static long				frameticks;
 
 
-	int						selectedObjectProp;
-
-	int						selectedObject;
-	bool					objectStartDrag;
-	bool					showOglLighting;
-	bool					topCamera;
-
-	bool					slope;
-	bool					showNoTiles;
+};
 
 
-	cRSMModel*				previewModel;
-	int						previewColor;
+
+class cGraphics : public cGraphicsBase
+{
+public:
+									cGraphics();
+	static int						init(int,int,int,bool);
+	static int						draw(bool = true);
+	static void						closeAndCleanup();
+	static cWorld					world;
 
 
-	cVector3				clipboardRot;
-	cVector3				clipboardScale;
-	std::string				clipboardFile;
-	std::string				clipboardName;
-	float					clipboardY;
-	float					clipboardFloat;
-	GLfloat					lightAmbient[4];
-	GLfloat					lightDiffuse[4];
-	GLfloat					lightPosition[4];
+
+	static float					cameraheight;
+	static float					cameraangle;
+	static float					camerarot;
+	static cVector2					camerapointer;
+
+	static bool						showgat;
+		
+	static bool						showgrid;
+	static float					gridsize;
+	static float					gridoffsetx;
+	static float					gridoffsety;
+		
+	static cVector2					selectedTile;
+
+	static cVector2					selectionstart;
+	static cVector2					selectionend;
+	static float					brushsize;
+	static int						texturestart;
+	static int						textureRot;
+	static bool						fliph;
+	static bool						flipv;
+
+	static bool						showambientlighting;
+	static bool						groupeditmode;
 
 
-	bool					showObjects;
-	bool					showLightmaps;
-	bool					showTileColors;
-	bool					showWater;
-	bool					animateWater;
-	bool					transparentObjects;
-	bool					showSprites;
-	bool					showAllLights;
-	bool					clearLightmaps;
-	float					gatTransparency;
+	static cVector3					selectionstart3d;
+	static cVector3					selectionend3d;
+	static std::vector<int>			selectedobjects;
+	static std::string				editstring;
+	static float*					editval;
+
+	static bool						is3dSelected(float, float, float);
+	static std::string				popup(std::string, std::string = "");
+
+	static std::string				popupReturn;
+	static std::string				defaultPopupText;
+	static std::string				popupCaption;
+	static cFont*					font;
 
 
-	int						quadtreeView;
-	bool					showBoundingBoxes;
-	int						gatType;
-	std::vector<cTexture*>	gatTextures;
-	cTexture*				gatBorder;
-	cTexture*				splash;
-	std::vector<std::vector<cTexture*> >		waterTextures;
-	std::string					waterDirectory;
-	std::string					waterExtension;
-	unsigned int					waterCount;
+	static int						selectedObjectProp;
 
-	cVector2				wallHeightMin;
-	cVector2				wallHeightMax;
+	static int						selectedObject;
+	static bool						objectStartDrag;
+	static bool						showOglLighting;
+	static bool						topCamera;
 
-	cTexture*				texturePreview;
-	int						height;
-	int						width;
-	int						bits;
-	bool					fullscreen;
+	static bool						slope;
+	static bool						showNoTiles;
 
-	cVector3				selectionCenter;
-	cVector3				backgroundColor;
-	cVector3				noTileColor;
+	static cRSMModel*				previewModel;
+	static int						previewColor;
 
-	cWM						WM;
-	bool					showDot;
-	std::vector<int>				gatTiles;
 
-	eTool					textureTool;
-	std::vector<std::vector<bool> >	textureBrush;
-	cVector2				textureBrushOffset;
-	float					textureGridSizeX;
-	float					textureGridSizeY;
+	static cVector3					clipboardRot;
+	static cVector3					clipboardScale;
+	static std::string				clipboardFile;
+	static std::string				clipboardName;
+	static float					clipboardY;
+	static float					clipboardFloat;
+	static GLfloat					lightAmbient[4];
+	static GLfloat					lightDiffuse[4];
+	static GLfloat					lightPosition[4];
 
-	int						textureBrushSize;
 
-private:
-	int						createGLWindow();
-	int						initGL(void);
+	static bool						showObjects;
+	static bool						showLightmaps;
+	static bool						showTileColors;
+	static bool						showWater;
+	static bool						animateWater;
+	static bool						transparentObjects;
+	static bool						showSprites;
+	static bool						showAllLights;
+	static bool						clearLightmaps;
+	static float					gatTransparency;
+
+
+	static int						quadtreeView;
+	static bool						showBoundingBoxes;
+	static int						gatType;
+	static std::vector<cTexture*>	gatTextures;
+	static cTexture*				gatBorder;
+	static cTexture*				splash;
+	static std::vector<std::vector<cTexture*> >		waterTextures;
+	static std::string								waterDirectory;
+	static std::string								waterExtension;
+	static unsigned int								waterCount;
+
+	static cVector2									wallHeightMin;
+	static cVector2									wallHeightMax;
+
+	static cTexture*								texturePreview;
+
+	static cVector3									selectionCenter;
+	static cVector3									backgroundColor;
+	static cVector3									noTileColor;
+
+	static bool										showDot;
+	static std::vector<int>							gatTiles;
+
+	static eTool									textureTool;
+	static std::vector<std::vector<bool> >			textureBrush;
+	static cVector2									textureBrushOffset;
+	static float									textureGridSizeX;
+	static float									textureGridSizeY;
+
+	static int										textureBrushSize;
 };
 
 

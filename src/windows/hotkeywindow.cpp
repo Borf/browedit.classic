@@ -156,7 +156,7 @@ void* cHotkeyWindow::cHotkeyButton::userfunc( void* param )
 	return NULL;
 }
 
-cHotkeyWindow::cHotkeyWindow( cTexture* t, cFont* f, TiXmlDocument &skin ) : cWindow(t,f,skin)
+cHotkeyWindow::cHotkeyWindow() : cWindow()
 {
 	windowType = WT_HOTKEY;
 	resizable = false;
@@ -172,7 +172,7 @@ cHotkeyWindow::cHotkeyWindow( cTexture* t, cFont* f, TiXmlDocument &skin ) : cWi
 	
 	cWindowObject* o;
 	
-	TiXmlElement* wSkin = skin.FirstChildElement("skin")->FirstChildElement("miniwindow");
+	TiXmlElement* wSkin = cWM::skin.FirstChildElement("skin")->FirstChildElement("miniwindow");
 	
 	skinTopHeight = atoi(wSkin->FirstChildElement("top")->Attribute("height"));
 	skinTop =		512 - atoi(wSkin->FirstChildElement("top")->FirstChild()->Value());

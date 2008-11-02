@@ -25,7 +25,7 @@ public:
 	int selectedtab;
 
 
-	cWindowTabPanel(cWindow* parent, TiXmlDocument &skin);
+	cWindowTabPanel(cWindow* parent, TiXmlDocument* skin = NULL);
 	void draw(int,int,int,int);
 	void click();
 

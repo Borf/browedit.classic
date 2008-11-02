@@ -12,10 +12,10 @@ public:
 	class cXmlButton : public cWindowButton
 	{
 	public:
-		cXmlButton(cWindow*, TiXmlDocument&);
+		cXmlButton(cWindow*, TiXmlDocument* = NULL);
 		void click();
 	};
-	cXmlWindow(cTexture*, cFont*, TiXmlDocument&, TiXmlDocument&);
+	cXmlWindow(TiXmlDocument&);
 
 	void event(cWindowObject*, std::string);
 

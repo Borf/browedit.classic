@@ -24,7 +24,7 @@ class cTextureWindow : public cWindow
 	class cWindowTextureCatSelect : public cWindowTree
 	{
 	public:
-		cWindowTextureCatSelect(cWindow* parent, std::vector<cWindowTree::cTreeNode*> n, TiXmlDocument &skin);
+		cWindowTextureCatSelect(cWindow* parent, std::vector<cWindowTree::cTreeNode*> n, TiXmlDocument* skin = NULL);
 		void click();
 	};
 
@@ -34,7 +34,7 @@ public:
 
 	std::map<cWindowTree::cTreeNode*, std::vector<std::pair<std::string, std::string> >, std::less<cWindowTree::cTreeNode*> > items;
 	int iconSize;
-	cTextureWindow(cTexture* t, cFont* f, TiXmlDocument &skin);	
+	cTextureWindow();	
 	void resizeTo(int ww, int hh);
 	void* userfunc(void* param);
 	bool onKeyDown(int keyid, bool shift);

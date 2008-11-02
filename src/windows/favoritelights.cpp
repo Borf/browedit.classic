@@ -1,7 +1,6 @@
 #include "favoritelights.h"
 
 #include <filesystem.h>
-extern cFileSystem fs;
 
 cFavoriteLightsWindow::cFavoriteTreeNode::cFavoriteTreeNode( std::string t, std::vector<cWindowTree::cTreeNode*> items ) : cWindowTree::cTreeNode(t, items)
 {
@@ -64,7 +63,7 @@ void cFavoriteLightsWindow::addlights( cFavoriteTreeNode* parent, TiXmlNode* n )
 	}
 }
 
-cFavoriteLightsWindow::cFavoriteLightsWindow( cTexture* t, cFont* f, TiXmlDocument &skin ) : cWindow(t,f,skin)
+cFavoriteLightsWindow::cFavoriteLightsWindow() : cWindow()
 {
 	windowType = WT_FAVLIGHTS;
 	resizable = false;
@@ -78,8 +77,8 @@ cFavoriteLightsWindow::cFavoriteLightsWindow( cTexture* t, cFont* f, TiXmlDocume
 	defaultObject = "OkButton";
 	
 	cWindowObject* o;
-	objects["rollup"] = new cWindowRollupButton(this,skin);
-	objects["close"] = new cWindowCloseButton(this,skin);
+	objects["rollup"] = new cWindowRollupButton(this);
+	objects["close"] = new cWindowCloseButton(this);
 	
 	
 	std::vector<cWindowTree::cTreeNode*> nodes;
@@ -92,7 +91,7 @@ cFavoriteLightsWindow::cFavoriteLightsWindow( cTexture* t, cFont* f, TiXmlDocume
 	root->parent = NULL;
 	nodes.push_back(root);
 	
-	objects["list"] = new cFavoritesTree(this, nodes, skin);
+	objects["list"] = new cFavoritesTree(this, nodes);
 	
 	addLabel("lblName",				220, 0, GetMsg("wm/favlight/NAME"));
 	addLabel("lblColor",			220, 20, GetMsg("wm/favlight/COLOR"));
@@ -103,60 +102,60 @@ cFavoriteLightsWindow::cFavoriteLightsWindow( cTexture* t, cFont* f, TiXmlDocume
 	addLabel("lblCastsShadow",		220, 120, GetMsg("wm/favlight/CASTSSHADOW"));
 	addLabel("lblHeight",			220, 140, GetMsg("wm/favlight/HEIGHT"));
 	
-	o = new cWindowInputBox(this,skin);
+	o = new cWindowInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(370,0);
 	o->resizeTo(140,20);
 	objects["name"] = o;
 	
-	o = new cWindowInputBox(this,skin);
+	o = new cWindowInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(300,20);
 	o->resizeTo(70,20);
 	objects["colorr"] = o;
 	
-	o = new cWindowInputBox(this,skin);
+	o = new cWindowInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(370,20);
 	o->resizeTo(70,20);
 	objects["colorg"] = o;
 	
-	o = new cWindowInputBox(this,skin);
+	o = new cWindowInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(440,20);
 	o->resizeTo(70,20);
 	objects["colorb"] = o;
 	
-	o = new cWindowInputBox(this,skin);
+	o = new cWindowInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(370,40);
 	o->resizeTo(140,20);
 	objects["intensity"] = o;
 	
-	o = new cWindowInputBox(this,skin);
+	o = new cWindowInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(370,60);
 	o->resizeTo(140,20);
 	objects["range"] = o;
 	
-	o = new cWindowInputBox(this,skin);
+	o = new cWindowInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(370,80);
 	o->resizeTo(140,20);
 	objects["maxlightincrement"] = o;
 	
-	o = new cWindowInputBox(this,skin);
+	o = new cWindowInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(370,100);
 	o->resizeTo(140,20);
 	objects["lightfalloff"] = o;
 	
-	o = new cWindowCheckBox(this,skin);
+	o = new cWindowCheckBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(370,122);
 	objects["castshadow"] = o;
 	
-	o = new cWindowInputBox(this,skin);
+	o = new cWindowInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(370,140);
 	o->resizeTo(140,20);
@@ -165,11 +164,11 @@ cFavoriteLightsWindow::cFavoriteLightsWindow( cTexture* t, cFont* f, TiXmlDocume
 	
 	((cWindowTree*)objects["list"])->onChange();
 	
-	objects["OkButton"] = new cWindowOkButton(this,skin);
-	objects["CancelButton"] = new cWindowCancelButton(this,skin);
+	objects["OkButton"] = new cWindowOkButton(this);
+	objects["CancelButton"] = new cWindowCancelButton(this);
 	objects["CancelButton"]->moveTo(0,0);
 }
-cFavoriteLightsWindow::cFavoritesTree::cFavoritesTree( cWindow* parent, std::vector<cWindowTree::cTreeNode*> nodes, TiXmlDocument &skin ) : cWindowTree(parent, nodes,skin)
+cFavoriteLightsWindow::cFavoritesTree::cFavoritesTree( cWindow* parent, std::vector<cWindowTree::cTreeNode*> nodes, TiXmlDocument* skin) : cWindowTree(parent, nodes,skin)
 {
 	moveTo(0,0);
 	resizeTo(200, parent->innerHeight());
@@ -277,7 +276,7 @@ void cFavoriteLightsWindow::cFavoritesTree::onChange()
 	parent->objects["height"]->setText(0, n->FirstChildElement("height")->FirstChild()->Value());
 }
 
-cFavoriteLightsWindow::cWindowOkButton::cWindowOkButton( cWindow* parent, TiXmlDocument &skin ) : cWindowButton(parent,skin)
+cFavoriteLightsWindow::cWindowOkButton::cWindowOkButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent,skin)
 {
 	alignment = ALIGN_BOTTOM;
 	moveTo(100, 0);
@@ -292,7 +291,7 @@ void cFavoriteLightsWindow::cWindowOkButton::click()
 	parent->close();
 }
 
-cFavoriteLightsWindow::cWindowCancelButton::cWindowCancelButton( cWindow* parent, TiXmlDocument &skin ) : cWindowButton(parent,skin)
+cFavoriteLightsWindow::cWindowCancelButton::cWindowCancelButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent,skin)
 {
 	alignment = ALIGN_BOTTOM;
 	moveTo(-100, 0);
@@ -302,7 +301,7 @@ cFavoriteLightsWindow::cWindowCancelButton::cWindowCancelButton( cWindow* parent
 
 void cFavoriteLightsWindow::cWindowCancelButton::click()
 {
-	favoritelights = fs.getXml("data/lights.txt");
+	favoritelights = cFileSystem::getXml("data/lights.txt");
 	parent->close();
 }
 

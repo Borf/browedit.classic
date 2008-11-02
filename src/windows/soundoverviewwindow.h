@@ -24,7 +24,7 @@ public:
 	class cSoundOverViewTree : public cWindowTree
 	{
 	public:
-		cSoundOverViewTree(cWindow* parent, std::vector<cWindowTree::cTreeNode*> nodes, TiXmlDocument &skin);
+		cSoundOverViewTree(cWindow* parent, std::vector<cWindowTree::cTreeNode*> nodes, TiXmlDocument* skin = NULL);
 		void onChange();
 		void getObject(cSound m);
 	};
@@ -32,7 +32,7 @@ public:
 
 
 	static void addObjects(cSoundOverViewTreeNode* parent, bool root);
-	cSoundOverViewWindow(cTexture* t, cFont* f, TiXmlDocument &skin);
+	cSoundOverViewWindow();
 	void* userfunc(void* p);
 	void resizeTo(int ww, int hh);
 };

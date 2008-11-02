@@ -1,7 +1,6 @@
 #include "sprite.h"
 #include "graphics.h"
 #include "filesystem.h"
-extern cFileSystem fs;
 extern cGraphics Graphics;
 extern std::string rodir;
 
@@ -107,7 +106,7 @@ void cSprite::cActSpr::load(std::string fname)
 	unsigned long ticks = tickcount();
 	fileName = fname;
 	int i,ii,x,y;
-	cFile* pFile = fs.open(fileName + ".spr");
+	cFile* pFile = cFileSystem::open(fileName + ".spr");
 	if(pFile == NULL)
 	{
 		Log(1,0,"Error opening %s.spr", fileName.c_str());
@@ -205,7 +204,7 @@ void cSprite::cActSpr::load(std::string fname)
 
 	pFile->close();
 // done reading sprite
-	pFile = fs.open(fileName + ".act");
+	pFile = cFileSystem::open(fileName + ".act");
 	if(pFile == NULL)
 	{
 		Log(1,0,"Error opening %s.act", fileName.c_str());

@@ -9,6 +9,7 @@
 
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
+#include <wm/wm.h>
 
 void cWindowButton::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {
@@ -46,7 +47,7 @@ bool cWindowButton::onKeyDown(int c, bool shift)
 	return false;
 }
 
-cWindowButton::cWindowButton( cWindow* parent, TiXmlDocument &skin ) : cWindowObject(parent, skin.FirstChildElement("skin")->FirstChildElement("button"))
+cWindowButton::cWindowButton( cWindow* parent, TiXmlDocument* skin) : cWindowObject(parent, skin->FirstChildElement("skin")->FirstChildElement("button"))
 {
 	w = 100;
 	h = 25;
@@ -65,17 +66,21 @@ void cWindowButton::setText( int id, std::string txt )
 	text = txt;
 }
 
-cWindowCloseButton::cWindowCloseButton( cWindow* parent, TiXmlDocument &skin ) : cWindowObject(parent, skin.FirstChildElement("skin")->FirstChildElement("closebutton"))
+cWindowCloseButton::cWindowCloseButton( cWindow* parent, TiXmlDocument* skin ) : cWindowObject(parent, skin->FirstChildElement("skin")->FirstChildElement("closebutton"))
 {
-	resizeTo(atoi(skin.FirstChildElement("skin")->FirstChildElement("closebutton")->FirstChildElement("width")->FirstChild()->Value()), atoi(skin.FirstChildElement("skin")->FirstChildElement("closebutton")->FirstChildElement("height")->FirstChild()->Value()));
-	moveTo(atoi(skin.FirstChildElement("skin")->FirstChildElement("closebutton")->FirstChildElement("offsetx")->FirstChild()->Value()), atoi(skin.FirstChildElement("skin")->FirstChildElement("closebutton")->FirstChildElement("offsety")->FirstChild()->Value()));
+	if(!skin)
+		skin = &cWM::skin;
+	resizeTo(atoi(skin->FirstChildElement("skin")->FirstChildElement("closebutton")->FirstChildElement("width")->FirstChild()->Value()), atoi(skin->FirstChildElement("skin")->FirstChildElement("closebutton")->FirstChildElement("height")->FirstChild()->Value()));
+	moveTo(atoi(skin->FirstChildElement("skin")->FirstChildElement("closebutton")->FirstChildElement("offsetx")->FirstChild()->Value()), atoi(skin->FirstChildElement("skin")->FirstChildElement("closebutton")->FirstChildElement("offsety")->FirstChild()->Value()));
 	alignment = ALIGN_TOPRIGHT;
 }
 
-cWindowRollupButton::cWindowRollupButton( cWindow* parent, TiXmlDocument &skin ) : cWindowObject(parent, skin.FirstChildElement("skin")->FirstChildElement("collapsebutton"))
+cWindowRollupButton::cWindowRollupButton( cWindow* parent, TiXmlDocument* skin ) : cWindowObject(parent, skin->FirstChildElement("skin")->FirstChildElement("collapsebutton"))
 {
-	resizeTo(atoi(skin.FirstChildElement("skin")->FirstChildElement("collapsebutton")->FirstChildElement("width")->FirstChild()->Value()), atoi(skin.FirstChildElement("skin")->FirstChildElement("collapsebutton")->FirstChildElement("height")->FirstChild()->Value()));
-	moveTo(atoi(skin.FirstChildElement("skin")->FirstChildElement("collapsebutton")->FirstChildElement("offsetx")->FirstChild()->Value()), atoi(skin.FirstChildElement("skin")->FirstChildElement("collapsebutton")->FirstChildElement("offsety")->FirstChild()->Value()));
+	if(!skin)
+		skin = &cWM::skin;
+	resizeTo(atoi(skin->FirstChildElement("skin")->FirstChildElement("collapsebutton")->FirstChildElement("width")->FirstChild()->Value()), atoi(skin->FirstChildElement("skin")->FirstChildElement("collapsebutton")->FirstChildElement("height")->FirstChild()->Value()));
+	moveTo(atoi(skin->FirstChildElement("skin")->FirstChildElement("collapsebutton")->FirstChildElement("offsetx")->FirstChild()->Value()), atoi(skin->FirstChildElement("skin")->FirstChildElement("collapsebutton")->FirstChildElement("offsety")->FirstChild()->Value()));
 	alignment = ALIGN_TOPRIGHT;
 }
 

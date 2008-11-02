@@ -21,7 +21,7 @@ public:
 	};
 
 	
-	cMapDetailWindow(cTexture* t, cFont* f, TiXmlDocument &skin);
+	cMapDetailWindow();
 	~cMapDetailWindow();
 };
 

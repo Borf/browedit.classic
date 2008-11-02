@@ -12,7 +12,6 @@ enum eState
 
 #include <SDL/SDL.h>
 #include "common.h"
-#include "graphics.h"
 
 #include <map>
 //using namespace std;

@@ -157,7 +157,7 @@ void cMenu::draw()
 			}
 		}
 		if(opacity < 0.75f)
-			opacity += (Graphics.frameticks/300.0f);
+			opacity += (cGraphicsBase::getFrameTicks()/300.0f);
 		else
 			opacity = 0.75f;
 

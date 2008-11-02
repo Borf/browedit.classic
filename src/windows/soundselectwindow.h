@@ -15,31 +15,31 @@ class cSoundSelectWindow : public cWindow
 	class cWindowSoundCatSelect : public cWindowTree
 	{
 	public:
-		cWindowSoundCatSelect(cWindow* parent, std::vector<cWindowTree::cTreeNode*> n, TiXmlDocument &skin);
+		cWindowSoundCatSelect(cWindow* parent, std::vector<cWindowTree::cTreeNode*> n, TiXmlDocument* skin = NULL);
 		void click();
 	};
 	class cSoundList : public cWindowDataListBox<std::string>
 	{
 	public:
-		cSoundList(cWindow* parent, TiXmlDocument &skin);
+		cSoundList(cWindow* parent, TiXmlDocument* skin = NULL);
 		void doubleClick();
 	};
 	class cWindowPlayButton : public cWindowButton
 	{
 	public:
-		cWindowPlayButton(cWindow* w, TiXmlDocument &skin);
+		cWindowPlayButton(cWindow* w, TiXmlDocument* skin = NULL);
 		void click();
 	};
 	class cWindowOkButton : public cWindowButton
 	{
 	public:
-		cWindowOkButton(cWindow* w, TiXmlDocument &skin);
+		cWindowOkButton(cWindow* w, TiXmlDocument* skin = NULL);
 		void click();
 	};
 	class cWindowCancelButton : public cWindowButton
 	{
 	public:
-		cWindowCancelButton(cWindow* w, TiXmlDocument &skin);
+		cWindowCancelButton(cWindow* w, TiXmlDocument* skin = NULL);
 		void click();
 	};
 
@@ -49,7 +49,7 @@ public:
 	cVector3 newPos;
 	cSound* selectedSound;
 
-	cSoundSelectWindow(cTexture* t, cFont* f, TiXmlDocument &skin, cVector3 pNewPos);	
+	cSoundSelectWindow(cVector3 pNewPos);	
 	void resizeTo(int ww, int hh);
 	void* userfunc(void* param);
 

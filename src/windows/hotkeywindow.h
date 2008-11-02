@@ -31,7 +31,7 @@ public:
 
 
 
-	cHotkeyWindow(cTexture* t, cFont* f, TiXmlDocument &skin);	
+	cHotkeyWindow();	
 
 };
 

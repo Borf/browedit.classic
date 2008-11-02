@@ -7,7 +7,7 @@
 class cLightWindow : public cWindow
 {
 public:
-	cLightWindow(cTexture* t, cFont* f, TiXmlDocument &skin);	
+	cLightWindow();	
 	void* userfunc(void* param);
 };
 

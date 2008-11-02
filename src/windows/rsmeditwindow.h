@@ -16,19 +16,19 @@ class cRSMEditWindow : public cWindow
 	class cWindowOpenButton : public cWindowButton
 	{
 	public:
-		cWindowOpenButton(cWindow* parent, TiXmlDocument &skin);
+		cWindowOpenButton(cWindow* parent, TiXmlDocument* skin = NULL);
 		void click();
 	};
 	class cWindowSaveButton : public cWindowButton
 	{
 	public:
-		cWindowSaveButton(cWindow* parent, TiXmlDocument &skin);
+		cWindowSaveButton(cWindow* parent, TiXmlDocument* skin = NULL);
 		void click();
 	};
 	class cWindowSaveAsButton : public cWindowButton
 	{
 	public:
-		cWindowSaveAsButton(cWindow* parent, TiXmlDocument &skin);
+		cWindowSaveAsButton(cWindow* parent, TiXmlDocument* skin = NULL);
 		void click();
 	};
 
@@ -77,7 +77,7 @@ public:
 	char filename[255];
 	int selected;
 
-	cRSMEditWindow(cTexture* t, cFont* f, TiXmlDocument &skin);	
+	cRSMEditWindow();	
 	void resizeTo(int ww, int hh);
 	void open();
 	void stopdrag();

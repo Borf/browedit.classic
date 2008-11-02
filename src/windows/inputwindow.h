@@ -13,7 +13,7 @@ class cInputWindow : public cWindow
 	class cWindowOkButton : public cWindowButton
 	{
 	public:
-		cWindowOkButton(cWindow* parent, TiXmlDocument &skin);
+		cWindowOkButton(cWindow* parent, TiXmlDocument* skin = NULL);
 		virtual ~cWindowOkButton() {}
 		void click();
 	};
@@ -21,7 +21,7 @@ class cInputWindow : public cWindow
 	class cWindowCancelButton : public cWindowButton
 	{
 	public:
-		cWindowCancelButton(cWindow* parent, TiXmlDocument &skin);
+		cWindowCancelButton(cWindow* parent, TiXmlDocument* skin = NULL);
 		virtual ~cWindowCancelButton() {}
 		void click();
 	};
@@ -39,7 +39,7 @@ public:
 	};
 
 	cInputWindowCaller* caller;
-	cInputWindow(cInputWindowCaller* c, cTexture* t, cFont* f, TiXmlDocument &skin);	
+	cInputWindow(cInputWindowCaller* c);	
 	void* userfunc(void* param);
 };
 
