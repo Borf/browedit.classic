@@ -2,7 +2,6 @@
 
 #include <wm/windowbutton.h>
 #include <graphics.h>
-extern cGraphics Graphics;
 
 
 cSoundOverViewWindow::cSoundOverViewTreeNode::cSoundOverViewTreeNode() : cWindowTree::cTreeNode()
@@ -86,13 +85,13 @@ void cSoundOverViewWindow::cSoundOverViewTree::onChange()
 	
 	if(!((cSoundOverViewTreeNode*)node)->isCat)
 	{
-		Graphics.camerapointer.x = -5*((cSoundOverViewTreeNode*)node)->sound.pos.x;
-		Graphics.camerapointer.y = cGraphics::world->height*-10+5*((cSoundOverViewTreeNode*)node)->sound.pos.z;
+		cGraphics::worldContainer->camera.pointer.x = -5*((cSoundOverViewTreeNode*)node)->sound.pos.x;
+		cGraphics::worldContainer->camera.pointer.y = cGraphics::world->height*-10+5*((cSoundOverViewTreeNode*)node)->sound.pos.z;
 
 		for(i = 0; i < cGraphics::world->sounds.size(); i++)
 		{
 			if(cGraphics::world->sounds[i] == ((cSoundOverViewTreeNode*)node)->sound)
-				Graphics.selectedObject = i;
+				cGraphics::selectedObject = i;
 		}
 	}
 }
@@ -162,11 +161,11 @@ cSoundOverViewWindow::cSoundOverViewWindow( ) : cWindow()
 	
 	resizable = false;
 	movable = false;
-	h = Graphics.h();
+	h = cGraphics::h();
 	w = 256;
 	title = GetMsg("wm/overview/TITLE");
 	y = 0;
-	x = Graphics.w() - w;
+	x = cGraphics::w() - w;
 	
 	//		cWindowObject* o;
 	objects["close"] = new cWindowCloseButton(this);

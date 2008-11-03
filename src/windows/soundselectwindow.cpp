@@ -191,8 +191,8 @@ cSoundSelectWindow::cSoundSelectWindow(cVector3 pNewPos ) : cWindow()
 	visible = true;
 	modal = false;
 	
-	h = Graphics.h()-50;
-	w = Graphics.w()-50;
+	h = cGraphics::h()-50;
+	w = cGraphics::w()-50;
 	title = GetMsg("wm/soundselect/TITLE");
 	center();
 	

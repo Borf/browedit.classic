@@ -3,7 +3,6 @@
 #include "texturecache.h"
 #include <frustum.h>
 extern std::string rodir;
-extern cGraphics Graphics;
 extern cVector3 lightpos;
 
 bool boundingBoxCollisions = false;
@@ -227,7 +226,7 @@ void cRSMModel::draw(bool checkfrust, bool dodraw, bool setheight, bool dolightm
 	if (checkfrust)
 	{
 		if(!cFrustum::CubeInFrustum(5*pos.x, -pos.y, 5*(cGraphics::world->height*2-pos.z), max(max(bb.bbmax[0],bb.bbmax[1]), bb.bbmax[2])))
-//		if(!Graphics.frustum.PointInFrustum(5*pos.x, -pos.y, 5*(cGraphics::world->height*2-pos.z)))
+//		if(!cGraphics::frustum.PointInFrustum(5*pos.x, -pos.y, 5*(cGraphics::world->height*2-pos.z)))
 		{
 			return;
 		}
@@ -256,7 +255,7 @@ void cRSMModel::draw(bool checkfrust, bool dodraw, bool setheight, bool dolightm
 			glTranslatef(-bb2.bbrange[0], bb2.bbmin[1], -bb2.bbrange[2]);
 	}
 
-	if(dodraw && Graphics.showBoundingBoxes)
+	if(dodraw && cGraphics::showBoundingBoxes)
 	{
 		cVector3 v1 = cVector3(bb2.bbmin[0], bb2.bbmin[1], bb2.bbmin[2]);
 		cVector3 v2 = cVector3(bb2.bbmax[0], bb2.bbmax[1], bb2.bbmax[2]);

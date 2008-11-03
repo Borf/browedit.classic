@@ -11,7 +11,6 @@
 #include <wm/windowpicturebox.h>
 #include "mapdetailwindow.h"
 
-extern cGraphics Graphics;
 extern void	mainloop();
 
 
@@ -25,8 +24,8 @@ cMapsWindow::cMapsWindow() : cWindow()
 	resizable = false;
 	visible = true;
 
-	h = Graphics.h()-20;
-	w = Graphics.w()-20;
+	h = cGraphics::h()-20;
+	w = cGraphics::w()-20;
 	title = GetMsg("wm/maps/TITLE");
 	center();
 

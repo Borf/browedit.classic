@@ -49,7 +49,7 @@ int cGraphics::draw(bool drawwm)
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set the correct blending mode
 
-	if(topCamera)
+	if(worldContainer->camera.topCamera)
 	{
 		lightPosition[0] = mouse3dx;
 		lightPosition[1] = -mouse3dz;
@@ -58,9 +58,9 @@ int cGraphics::draw(bool drawwm)
 	}
 	else
 	{
-		lightPosition[0] = -camerapointer.x + cameraheight*sin(camerarot);
-		lightPosition[1] = 10+cameraheight+cameraangle;
-		lightPosition[2] = -camerapointer.y + cameraheight*cos(camerarot);
+		lightPosition[0] = -worldContainer->camera.pointer.x + worldContainer->camera.height*sin(worldContainer->camera.rot);
+		lightPosition[1] = 10+worldContainer->camera.height+worldContainer->camera.angle;
+		lightPosition[2] = -worldContainer->camera.pointer.y + worldContainer->camera.height*cos(worldContainer->camera.rot);
 		lightPosition[3] = 1.0f;
 	}
 	glLightfv(GL_LIGHT1, GL_POSITION, lightPosition);			// Position The Light
@@ -699,7 +699,6 @@ cTexture* cGraphics::texturePreview = NULL;
 float cGraphics::gridsize = 1;
 float  cGraphics::gridoffsetx = 0;
 float  cGraphics::gridoffsety = 0;
-bool cGraphics::topCamera = false;
 bool cGraphics::showambientlighting = true;
 bool cGraphics::groupeditmode = false;
 bool cGraphics::animateWater = true;
@@ -742,10 +741,6 @@ std::vector<std::vector<cTexture*> > cGraphics::waterTextures;
 std::vector<cTexture*> cGraphics::gatTextures;
 int cGraphics::previewColor;
 cFont* cGraphics::font;
-float cGraphics::cameraangle = 0;
-float cGraphics::cameraheight = 123;
-float cGraphics::camerarot = 0.0f;
-cVector2 cGraphics::camerapointer = cVector2(-774,-963.5);
 float cGraphics::lightPosition[4];
 float cGraphics::lightDiffuse[4];
 float cGraphics::lightAmbient[4];
@@ -757,7 +752,13 @@ cVector3 cGraphics::selectionstart3d;
 cVector3 cGraphics::selectionend3d;
 
 
-cWorld* cGraphics::world;
+
+
+
+cWorld*							cGraphics::world = NULL;
+cWorldContainer*				cGraphics::worldContainer = NULL;
+std::vector<cWorldContainer*>	cGraphics::worlds;
+
 
 
 
@@ -766,6 +767,34 @@ cGraphics::cGraphics()
 	cGraphicsBase::cGraphicsBase();
 }
 
+
+
+void cGraphics::newWorld()
+{
+	world = new cWorld();
+	worldContainer = new cWorldContainer(world);
+	worlds.insert(worlds.begin(), worldContainer);
+	updateMenu();
+}
+
+
+extern cMenu* openMaps;
+
+void cGraphics::updateMenu()
+{
+	unsigned int i;
+	for(i = 0; i < openMaps->items.size(); i++)
+		delete openMaps->items[i];
+	openMaps->items.clear();
+
+	for(i = 0; i < worlds.size(); i++)
+	{
+		cMenuItem* mm;
+		ADDMENUITEM(mm,openMaps,worlds[i]->world->fileName,	&MenuCommand_switchMap);
+		mm->data3 = i;
+	}
+
+}
 
 int					cGraphicsBase::width =		1024;
 int					cGraphicsBase::height =		768;
@@ -784,3 +813,12 @@ long cGraphicsBase::getFrameTicks()
 	return frameticks;	
 }
 
+
+cWorldContainer::cCamera::cCamera()
+{
+	angle = 0;
+	height = 123;
+	rot = 0.0f;
+	pointer = cVector2(-774,-963.5);
+	topCamera = false;
+}

@@ -4,7 +4,6 @@
 #include <graphics.h>
 #include <filesystem.h>
 
-extern cGraphics Graphics;
 
 
 cTextureBrushWindow::cWindowBrushButton::cWindowBrushButton(cWindow* parent, int brushWidth, int brushHeight, std::string brushData, TiXmlDocument* skin) : cWindowObject(parent,skin->FirstChildElement("skin")->FirstChildElement("button"))
@@ -235,12 +234,12 @@ cTextureBrushWindow::cWindowBrushOkButton::cWindowBrushOkButton( cWindow* parent
 
 void cTextureBrushWindow::cWindowBrushOkButton::onClick()
 {
-	Graphics.textureBrush.clear();
+	cGraphics::textureBrush.clear();
 
 	int width =  ((cTextureBrushWindow*)parent)->brushWidth;
 	int height = ((cTextureBrushWindow*)parent)->brushHeight;
 
-	Graphics.textureBrush = std::vector<std::vector<bool> >(height, std::vector<bool>(width, false) );
+	cGraphics::textureBrush = std::vector<std::vector<bool> >(height, std::vector<bool>(width, false) );
 
 	for(int y = 0; y < height; y++)
 	{
@@ -248,7 +247,7 @@ void cTextureBrushWindow::cWindowBrushOkButton::onClick()
 		{
 			char buf[16];
 			sprintf(buf, "tile%i,%i", x,y);
-			Graphics.textureBrush[y][x] = ((cWindowBrushTile*)parent->objects[buf])->on;
+			cGraphics::textureBrush[y][x] = ((cWindowBrushTile*)parent->objects[buf])->on;
 		}
 	}
 	parent->close();
@@ -356,8 +355,8 @@ cTextureBrushWindow::cTextureBrushWindow() : cWindow()
 	visible = true;
 	modal = false;
 	
-	h = Graphics.h()-100;
-	w = Graphics.w()-100;
+	h = cGraphics::h()-100;
+	w = cGraphics::w()-100;
 	center();
 	minWidth = 300;
 	minHeight = 400;
@@ -393,17 +392,17 @@ cTextureBrushWindow::cTextureBrushWindow() : cWindow()
 
 	cWindowBrushTile* tile;
 	
-	brushWidth = Graphics.textureBrush[0].size();
-	brushHeight = Graphics.textureBrush.size();
+	brushWidth = cGraphics::textureBrush[0].size();
+	brushHeight = cGraphics::textureBrush.size();
 	
-	for(int y = 0; y < Graphics.textureBrush.size(); y++)
+	for(int y = 0; y < cGraphics::textureBrush.size(); y++)
 	{
-		for(int x = 0; x < Graphics.textureBrush[y].size(); x++)
+		for(int x = 0; x < cGraphics::textureBrush[y].size(); x++)
 		{
 			tile = new cWindowBrushTile(this);
 			tile->moveTo(64*x,64*y);
 			tile->resizeTo(64,64);
-			tile->on = Graphics.textureBrush[y][x];
+			tile->on = cGraphics::textureBrush[y][x];
 			char buf[16];
 			sprintf(buf, "tile%i,%i", x,y);
 			objects[buf] = tile;

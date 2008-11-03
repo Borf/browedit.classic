@@ -2,7 +2,6 @@
 
 #include <graphics.h>
 
-extern cGraphics Graphics;
 
 cMiniMapWindow::cMiniMap::cMiniMap( cWindow* parent ) : cWindowObject(parent)
 {
@@ -46,8 +45,8 @@ void cMiniMapWindow::cMiniMap::onClick()
 	xx = realX()+parent->getX();
 	yy = realY()+parent->getY();
 	
-	Graphics.camerapointer.x = -10*(mouseX - xx);
-	Graphics.camerapointer.y = -10*( cGraphics::world->height - ((Graphics.h() -mouseY) - yy));
+	cGraphics::worldContainer->camera.pointer.x = -10*(mouseX - xx);
+	cGraphics::worldContainer->camera.pointer.y = -10*( cGraphics::world->height - ((cGraphics::h() -mouseY) - yy));
 }
 
 void cMiniMapWindow::cMiniMap::drag()
@@ -67,7 +66,7 @@ cMiniMapWindow::cMiniMapWindow( ) : cWindow()
 	
 	h = cGraphics::world->height+skinOffBottom+skinOffTop;
 	w = cGraphics::world->width+skinOffLeft+skinOffRight;
-	x = Graphics.w()-w;
+	x = cGraphics::w()-w;
 	y = 0;
 	initProps("minimap");
 	h = cGraphics::world->height+skinOffBottom+skinOffTop;

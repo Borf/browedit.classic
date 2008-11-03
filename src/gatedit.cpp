@@ -5,7 +5,6 @@
 
 extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
-extern cGraphics Graphics;
 extern cUndoStack undostack;
 extern bool lbuttondown, rbuttondown;
 extern std::vector<std::vector<std::vector<float> > > clipboard;
@@ -22,7 +21,7 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 				int posx = (int)mouse3dx / 5;
 				int posy = (int)mouse3dz / 5;
 
-				int f = (int)ceil(Graphics.brushsize);
+				int f = (int)ceil(cGraphics::brushsize);
 
 			//	if (posx >= floor(f/2.0f) && posx < 2*cGraphics::world->width-(int)ceil(f/2.0f) && posy >= floor(f/2.0f) && posy< 2*cGraphics::world->height-(int)ceil(f/2.0f))
 				{
@@ -38,7 +37,7 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 							if (y < 0 || y >= cGraphics::world->height*2 || x < 0 || x >= cGraphics::world->width*2)
 								continue;
 							cGatTile* c = &cGraphics::world->gattiles[y][x];
-							c->type = Graphics.gatTiles[Graphics.texturestart];
+							c->type = cGraphics::gatTiles[cGraphics::texturestart];
 						}
 					}
 				}
@@ -51,7 +50,7 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 				int posx = (int)mouse3dx / 5;
 				int posy = (int)mouse3dz / 5;
 
-				int f = (int)ceil(Graphics.brushsize);
+				int f = (int)ceil(cGraphics::brushsize);
 
 			//	if (posx >= floor(f/2.0f) && posx < 2*cGraphics::world->width-(int)ceil(f/2.0f) && posy >= floor(f/2.0f) && posy< 2*cGraphics::world->height-(int)ceil(f/2.0f))
 				{
@@ -67,7 +66,7 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 							if (y < 0 || y >= cGraphics::world->height*2 || x < 0 || x >= cGraphics::world->width*2)
 								continue;
 							cGatTile* c = &cGraphics::world->gattiles[y][x];
-							c->type = Graphics.gatTiles[Graphics.texturestart];
+							c->type = cGraphics::gatTiles[cGraphics::texturestart];
 						}
 					}
 				}
@@ -79,18 +78,18 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 			switch (event.key.keysym.sym)
 			{
 			case SDLK_EQUALS:
-				Graphics.brushsize*=2;
+				cGraphics::brushsize*=2;
 				break;
 			case SDLK_MINUS:
-				if (Graphics.brushsize > 1)
-					Graphics.brushsize/=2;
+				if (cGraphics::brushsize > 1)
+					cGraphics::brushsize/=2;
 				break;
 			case SDLK_SPACE:
 				{
 					int posx = (int)mouse3dx / 5;
 					int posy = (int)mouse3dz / 5;
 
-					float f = (int)ceil(Graphics.brushsize);
+					float f = (int)ceil(cGraphics::brushsize);
 
 
 					if (posx >= (int)floor(f/2.0f) && posx < 2*cGraphics::world->width-(int)ceil(f/2.0f) && posy >= (int)floor(f/2.0f) && posy< 2*cGraphics::world->height-(int)ceil(f/2.0f))
@@ -141,7 +140,7 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 					int posx = (int)mouse3dx / 5;
 					int posy = (int)mouse3dz / 5;
 
-					float f = ceil(Graphics.brushsize);
+					float f = ceil(cGraphics::brushsize);
 
 
 					if (posx >= (int)floor(f/2.0f) && posx < 2*cGraphics::world->width-(int)ceil(f/2.0f) && posy >= (int)floor(f/2.0f) && posy< 2*cGraphics::world->height-(int)ceil(f/2.0f))
@@ -152,13 +151,13 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 							for(int y = posy-(int)floor(f/2.0f); y < posy+(int)ceil(f/2.0f); y++)
 							{
 								cGatTile* c = &cGraphics::world->gattiles[y][x];
-								if (!Graphics.slope || ((x > posx-(int)floor(f/2.0f)) && y > posy-(int)floor(f/2.0f)))
+								if (!cGraphics::slope || ((x > posx-(int)floor(f/2.0f)) && y > posy-(int)floor(f/2.0f)))
 									c->cell1+=1;
-								if (!Graphics.slope || ((x < posx+(int)ceil(f/2.0f)-1) && y > posy-(int)floor(f/2.0f)))
+								if (!cGraphics::slope || ((x < posx+(int)ceil(f/2.0f)-1) && y > posy-(int)floor(f/2.0f)))
 									c->cell2+=1;
-								if (!Graphics.slope || ((x > posx-(int)floor(f/2.0f)) && y < posy+(int)ceil(f/2.0f)-1))
+								if (!cGraphics::slope || ((x > posx-(int)floor(f/2.0f)) && y < posy+(int)ceil(f/2.0f)-1))
 									c->cell3+=1;
-								if (!Graphics.slope || ((x < posx+(int)ceil(f/2.0f)-1) && y < posy+(int)ceil(f/2.0f)-1))
+								if (!cGraphics::slope || ((x < posx+(int)ceil(f/2.0f)-1) && y < posy+(int)ceil(f/2.0f)-1))
 									c->cell4+=1;
 							}
 						}
@@ -170,7 +169,7 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 					int posx = (int)mouse3dx / 5;
 					int posy = (int)mouse3dz / 5;
 
-					float f = (int)ceil(Graphics.brushsize);
+					float f = (int)ceil(cGraphics::brushsize);
 
 					undostack.push(new cUndoGatHeightEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
 					glColor4f(1,0,0,1);
@@ -183,13 +182,13 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 							if(x >= 0 && y >= 0 && y < (int)cGraphics::world->gattiles.size() && x < (int)cGraphics::world->gattiles[0].size())
 							{
 								cGatTile* c = &cGraphics::world->gattiles[y][x];
-								if (!Graphics.slope || ((x > posx-(int)floor(f/2.0f)) && y > posy-(int)floor(f/2.0f)))
+								if (!cGraphics::slope || ((x > posx-(int)floor(f/2.0f)) && y > posy-(int)floor(f/2.0f)))
 									c->cell1-=1;
-								if (!Graphics.slope || ((x < posx+(int)ceil(f/2.0f)-1) && y > posy-(int)floor(f/2.0f)))
+								if (!cGraphics::slope || ((x < posx+(int)ceil(f/2.0f)-1) && y > posy-(int)floor(f/2.0f)))
 									c->cell2-=1;
-								if (!Graphics.slope || ((x > posx-(int)floor(f/2.0f)) && y < posy+(int)ceil(f/2.0f)-1))
+								if (!cGraphics::slope || ((x > posx-(int)floor(f/2.0f)) && y < posy+(int)ceil(f/2.0f)-1))
 									c->cell3-=1;
-								if (!Graphics.slope || ((x < posx+(int)ceil(f/2.0f)-1) && y < posy+(int)ceil(f/2.0f)-1))
+								if (!cGraphics::slope || ((x < posx+(int)ceil(f/2.0f)-1) && y < posy+(int)ceil(f/2.0f)-1))
 									c->cell4-=1;
 							}
 						}
@@ -201,7 +200,7 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 					int posx = (int)mouse3dx / 5;
 					int posy = (int)mouse3dz / 5;
 
-					int f = (int)ceil(Graphics.brushsize);
+					int f = (int)ceil(cGraphics::brushsize);
 
 					if (posx >= (int)floor(f/2.0f) && posx < 2*cGraphics::world->width-(int)ceil(f/2.0f) && posy >= f && posy< 2*cGraphics::world->height-f)
 					{
@@ -232,7 +231,7 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 					int posx = (int)mouse3dx / 5;
 					int posy = (int)mouse3dz / 5;
 
-					int f = (int)ceil(Graphics.brushsize);
+					int f = (int)ceil(cGraphics::brushsize);
 
 					if ((int)clipboard.size() != f)
 						break;
@@ -265,7 +264,7 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 					int posx = (int)mouse3dx / 5;
 					int posy = (int)mouse3dz / 5;
 
-					float f = (int)ceil(Graphics.brushsize);
+					float f = (int)ceil(cGraphics::brushsize);
 
 
 					undostack.push(new cUndoGatHeightEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
@@ -287,14 +286,14 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 				}
 				break;
 			case SDLK_LEFTBRACKET:
-				Graphics.texturestart--;
-				if (Graphics.texturestart < 0)
-					Graphics.texturestart = 0;
+				cGraphics::texturestart--;
+				if (cGraphics::texturestart < 0)
+					cGraphics::texturestart = 0;
 				break;
 			case SDLK_RIGHTBRACKET:
-				Graphics.texturestart++;
-				if (Graphics.texturestart > 8)
-					Graphics.texturestart--;
+				cGraphics::texturestart++;
+				if (cGraphics::texturestart > 8)
+					cGraphics::texturestart--;
 				break;
 			case SDLK_i:
 				{

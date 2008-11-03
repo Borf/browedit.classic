@@ -103,6 +103,7 @@ cMenu* transparentobjects;
 cMenu* currentobject;
 cMenu* snaptofloor;
 cMenu* lastmenu = NULL;
+cMenu* openMaps;
 
 int cursorsize = 1;
 
@@ -218,7 +219,7 @@ void mainloop()
 	renderMutex->lock();
 	if(lasttimer + paintspeed < SDL_GetTicks())
 	{
-		if(editmode == MODE_HEIGHTDETAIL && menu->inWindow((int)mouseX, Graphics.h()-(int)mouseY) == NULL)
+		if(editmode == MODE_HEIGHTDETAIL && menu->inWindow((int)mouseX, cGraphics::h()-(int)mouseY) == NULL)
 		{
 			if (lbuttondown || rbuttondown)
 			{
@@ -252,13 +253,13 @@ void mainloop()
 							cCube* c = &cGraphics::world->cubes[y][x];
 							if(lbuttondown && !rbuttondown)
 							{
-								if (!Graphics.slope || (x > posx-(int)floor(brushsize/2.0f)) && y > posy-(int)floor(brushsize/2.0f))
+								if (!cGraphics::slope || (x > posx-(int)floor(brushsize/2.0f)) && y > posy-(int)floor(brushsize/2.0f))
 									c->cell1-=1;
-								if (!Graphics.slope || (x < posx+(int)ceil(brushsize/2.0f)-1) && y > posy-(int)floor(brushsize/2.0f))
+								if (!cGraphics::slope || (x < posx+(int)ceil(brushsize/2.0f)-1) && y > posy-(int)floor(brushsize/2.0f))
 									c->cell2-=1;
-								if (!Graphics.slope || (x > posx-(int)floor(brushsize/2.0f)) && y < posy+(int)ceil(brushsize/2.0f)-1)
+								if (!cGraphics::slope || (x > posx-(int)floor(brushsize/2.0f)) && y < posy+(int)ceil(brushsize/2.0f)-1)
 									c->cell3-=1;
-								if (!Graphics.slope || (x < posx+(int)ceil(brushsize/2.0f)-1) && y < posy+(int)ceil(brushsize/2.0f)-1)
+								if (!cGraphics::slope || (x < posx+(int)ceil(brushsize/2.0f)-1) && y < posy+(int)ceil(brushsize/2.0f)-1)
 									c->cell4-=1;
 								if(ctrl)
 								{
@@ -270,13 +271,13 @@ void mainloop()
 							}
 							if(lbuttondown && rbuttondown)
 							{
-								if (!Graphics.slope || (x > posx-(int)floor(brushsize/2.0f)) && y > posy-(int)floor(brushsize/2.0f))
+								if (!cGraphics::slope || (x > posx-(int)floor(brushsize/2.0f)) && y > posy-(int)floor(brushsize/2.0f))
 									c->cell1+=1;
-								if (!Graphics.slope || (x < posx+(int)ceil(brushsize/2.0f)-1) && y > posy-(int)floor(brushsize/2.0f))
+								if (!cGraphics::slope || (x < posx+(int)ceil(brushsize/2.0f)-1) && y > posy-(int)floor(brushsize/2.0f))
 									c->cell2+=1;
-								if (!Graphics.slope || (x > posx-(int)floor(brushsize/2.0f)) && y < posy+(int)ceil(brushsize/2.0f)-1)
+								if (!cGraphics::slope || (x > posx-(int)floor(brushsize/2.0f)) && y < posy+(int)ceil(brushsize/2.0f)-1)
 									c->cell3+=1;
-								if (!Graphics.slope || (x < posx+(int)ceil(brushsize/2.0f)-1) && y < posy+(int)ceil(brushsize/2.0f)-1)
+								if (!cGraphics::slope || (x < posx+(int)ceil(brushsize/2.0f)-1) && y < posy+(int)ceil(brushsize/2.0f)-1)
 									c->cell4+=1;
 								if(ctrl)
 								{
@@ -409,7 +410,7 @@ void mainloop()
 
 	}
 
-	if (!Graphics.draw())
+	if (!cGraphics::draw())
 		running = false;
 	SDL_GL_SwapBuffers();
 	renderMutex->unlock();
@@ -845,11 +846,11 @@ int main(int argc, char *argv[])
 				else if(strcmp(el2->Value(),					"skin") == 0)
 					skinFile = el2->FirstChild()->Value();
 				else if(strcmp(el2->Value(),					"bgcolor") == 0)
-					Graphics.backgroundColor = hex2floats(el2->FirstChild()->Value());
+					cGraphics::backgroundColor = hex2floats(el2->FirstChild()->Value());
 				else if(strcmp(el2->Value(),					"noTileColor") == 0)
-					Graphics.noTileColor = hex2floats(el2->FirstChild()->Value());
+					cGraphics::noTileColor = hex2floats(el2->FirstChild()->Value());
 				else if(strcmp(el2->Value(),					"gatTransparency") == 0)
-					Graphics.gatTransparency = atof(el2->FirstChild()->Value());
+					cGraphics::gatTransparency = atof(el2->FirstChild()->Value());
 
 				el2 = el2->NextSiblingElement();
 
@@ -860,7 +861,7 @@ int main(int argc, char *argv[])
 			TiXmlElement* el2 = el->FirstChildElement("tile");
 			while(el2 != NULL)
 			{
-				Graphics.gatTiles.push_back(atoi(el2->FirstChild()->Value()));
+				cGraphics::gatTiles.push_back(atoi(el2->FirstChild()->Value()));
 				el2 = el2->NextSiblingElement("tile");
 			}
 		}
@@ -957,7 +958,7 @@ int main(int argc, char *argv[])
 	
 	favoritelights = cFileSystem::getXml("data/lights.txt");
 
-	if (!Graphics.init(windowWidth, windowHeight, windowBpp, windowFullscreen))
+	if (!cGraphics::init(windowWidth, windowHeight, windowBpp, windowFullscreen))
 		return 1;
 #ifdef WIN32
 	if(GetSystemMetrics(80) > 1)
@@ -977,7 +978,7 @@ int main(int argc, char *argv[])
 	menu->opened = true;
 	menu->x = 0;
 	menu->y = 0;
-	menu->w = Graphics.w();
+	menu->w = cGraphics::w();
 	
 	int posx = 0;
 	ADDMENU2(file,		menu, GetMsg("menu/file/TITLE"),		posx); // File
@@ -989,10 +990,11 @@ int main(int argc, char *argv[])
 //	models->parent = menu;
 //	menu->items.push_back(models);
 //	models->x = posx;
-//	models->w = Graphics.font->textlen(models->title)+10;
+//	models->w = cGraphics::font->textlen(models->title)+10;
 //	posx+=models->w;
 	ADDMENU2(effectsmenu,menu, GetMsg("menu/effects/TITLE"),	posx); // effects
 	ADDMENU2(windows,	menu, GetMsg("menu/windows/TITLE"),	posx); // windows
+	ADDMENU2(openMaps,	menu,	"Open Maps", posx); // open maps
 
 	ADDMENUITEM(mm,file,GetMsg("menu/file/NEW"),							&MenuCommand_new); //new
 	ADDMENUITEM(mm,file,GetMsg("menu/file/OPEN"),							&MenuCommand_open); //open
@@ -1034,28 +1036,28 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(grid,view,GetMsg("menu/view/GRID"),							&MenuCommand_grid); //grid
 	grid->ticked = true;
 	ADDMENUITEM(showobjects,view,GetMsg("menu/view/OBJECTS"),				&MenuCommand_showobjects);
-	ADDMENUITEMDATAP(transparentobjects,view,GetMsg("menu/view/TRANSPARENTOBJECTS"),	&MenuCommand_toggle, (void*)&Graphics.transparentObjects);
-	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/BOUNDINGBOXES"),				&MenuCommand_toggle, (void*)&Graphics.showBoundingBoxes);
-	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/LIGHTMAPS"),					&MenuCommand_toggle, (void*)&Graphics.showLightmaps);
-	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/OGLLIGHTING"),				&MenuCommand_toggle, (void*)&Graphics.showOglLighting);
+	ADDMENUITEMDATAP(transparentobjects,view,GetMsg("menu/view/TRANSPARENTOBJECTS"),	&MenuCommand_toggle, (void*)&cGraphics::transparentObjects);
+	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/BOUNDINGBOXES"),				&MenuCommand_toggle, (void*)&cGraphics::showBoundingBoxes);
+	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/LIGHTMAPS"),					&MenuCommand_toggle, (void*)&cGraphics::showLightmaps);
+	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/OGLLIGHTING"),				&MenuCommand_toggle, (void*)&cGraphics::showOglLighting);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/TILECOLORS"),				&MenuCommand_toggle, (void*)&Graphics.showTileColors);
+	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/TILECOLORS"),				&MenuCommand_toggle, (void*)&cGraphics::showTileColors);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/SHOWWATER"),					&MenuCommand_toggle, (void*)&Graphics.showWater);
+	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/SHOWWATER"),					&MenuCommand_toggle, (void*)&cGraphics::showWater);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/TOPCAMERA"),					&MenuCommand_toggle, (void*)&Graphics.topCamera);
-	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/INVISIBLETILES"),			&MenuCommand_toggle, (void*)&Graphics.showNoTiles);
+	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/TOPCAMERA"),					&MenuCommand_toggle, (void*)&cGraphics::worldContainer->camera.topCamera);
+	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/INVISIBLETILES"),			&MenuCommand_toggle, (void*)&cGraphics::showNoTiles);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/SHOWAMBIENTLIGHTING"),		&MenuCommand_toggle, (void*)&Graphics.showambientlighting);
+	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/SHOWAMBIENTLIGHTING"),		&MenuCommand_toggle, (void*)&cGraphics::showambientlighting);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/WATERANIMATION"),			&MenuCommand_toggle, (void*)&Graphics.animateWater);
+	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/WATERANIMATION"),			&MenuCommand_toggle, (void*)&cGraphics::animateWater);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/GATTILES"),					&MenuCommand_toggle, (void*)&Graphics.showgat);
-	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/SHOWDOT"),					&MenuCommand_toggle, (void*)&Graphics.showDot);
+	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/GATTILES"),					&MenuCommand_toggle, (void*)&cGraphics::showgat);
+	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/SHOWDOT"),					&MenuCommand_toggle, (void*)&cGraphics::showDot);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/SHOWSPRITES"),				&MenuCommand_toggle, (void*)&Graphics.showSprites);
+	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/SHOWSPRITES"),				&MenuCommand_toggle, (void*)&cGraphics::showSprites);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,"Show all light spheres",						&MenuCommand_toggle, (void*)&Graphics.showAllLights);
+	ADDMENUITEMDATAP(mm,view,"Show all light spheres",						&MenuCommand_toggle, (void*)&cGraphics::showAllLights);
 
 
 	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/TEXTUREEDIT"),				&MenuCommand_mode);
@@ -1103,7 +1105,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,edit,GetMsg("menu/edit/GATCOLLISION")+std::string("2"),		&MenuCommand_gatcollision2);
 	ADDMENUITEM(mm,edit,GetMsg("menu/edit/CLEANLIGHTMAPS"),					&MenuCommand_cleanuplightmaps);
 	ADDMENUITEM(mm,edit,GetMsg("menu/edit/REMOVETEXTURES"),					&MenuCommand_cleantextures);
-	ADDMENUITEMDATAP(mm,edit,GetMsg("menu/edit/CLEARLIGHTMAPSONEDIT"),		&MenuCommand_toggle, (void*)&Graphics.clearLightmaps);
+	ADDMENUITEMDATAP(mm,edit,GetMsg("menu/edit/CLEARLIGHTMAPSONEDIT"),		&MenuCommand_toggle, (void*)&cGraphics::clearLightmaps);
 
 	ADDMENUITEM(mm,windows,GetMsg("menu/windows/AMBIENTLIGHTING"),			&MenuCommand_ambientlight);
 	ADDMENUITEM(mm,windows,GetMsg("menu/windows/MODELWINDOW"),				&MenuCommand_modelwindow);
@@ -1243,6 +1245,8 @@ int main(int argc, char *argv[])
 
 
 
+	cGraphics::newWorld();
+
 
 	Log(3,0,GetMsg("DONEINIT"));
 	cGraphics::world->newWorld();
@@ -1265,6 +1269,7 @@ int main(int argc, char *argv[])
 		cGraphics::world->load();
 //	cGraphics::world->importalpha();
 #endif
+	cGraphics::updateMenu();
 
 	for(i = 0; i < SDLK_LAST-SDLK_FIRST; i++)
 		keys[i] = 0;
@@ -1424,7 +1429,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 			mouseX = event.motion.x;
 			mouseY = event.motion.y;
-			cMenu* m = menu->inWindow((int)mouseX, Graphics.h()-(int)mouseY);
+			cMenu* m = menu->inWindow((int)mouseX, cGraphics::h()-(int)mouseY);
 
 
 			if(movement > 4)
@@ -1460,7 +1465,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 			}
 
-			if(menu->inWindow((int)mousestartx, Graphics.h()-(int)mousestarty) != NULL)
+			if(menu->inWindow((int)mousestartx, cGraphics::h()-(int)mousestarty) != NULL)
 				return 1;
 
 			if (rbuttondown && !lbuttondown)
@@ -1469,85 +1474,85 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if (SDL_GetModState() & KMOD_CTRL)
 					{
-						Graphics.cameraangle += (oldmousey - mouseY) / 10.0f;
-						Graphics.cameraangle = max(min(Graphics.cameraangle, (float)20), (float)-10);
-						Graphics.camerarot += (oldmousex - mouseX) / 100.0f;
-						while(Graphics.camerarot < 0)
-							Graphics.camerarot+=2*(float)PI;
-						while(Graphics.camerarot > 2*PI)
-							Graphics.camerarot-=2*(float)PI;
+						cGraphics::worldContainer->camera.angle += (oldmousey - mouseY) / 10.0f;
+						cGraphics::worldContainer->camera.angle = max(min(cGraphics::worldContainer->camera.angle, (float)20), (float)-10);
+						cGraphics::worldContainer->camera.rot += (oldmousex - mouseX) / 100.0f;
+						while(cGraphics::worldContainer->camera.rot < 0)
+							cGraphics::worldContainer->camera.rot+=2*(float)PI;
+						while(cGraphics::worldContainer->camera.rot > 2*PI)
+							cGraphics::worldContainer->camera.rot-=2*(float)PI;
 					}
 					else
 					{
-						if(Graphics.topCamera)
+						if(cGraphics::worldContainer->camera.topCamera)
 						{
-							Graphics.cameraheight += (oldmousey - mouseY) / 2.0f;
-							Graphics.cameraheight = max(min(Graphics.cameraheight, (float)15000), (float)-5);
-							if(Graphics.cameraheight != -5 && Graphics.cameraheight != 15000)
+							cGraphics::worldContainer->camera.height += (oldmousey - mouseY) / 2.0f;
+							cGraphics::worldContainer->camera.height = max(min(cGraphics::worldContainer->camera.height, (float)15000), (float)-5);
+							if(cGraphics::worldContainer->camera.height != -5 && cGraphics::worldContainer->camera.height != 15000)
 							{
-								Graphics.camerapointer.x -= (oldmousey - mouseY) / 4.0f;
-								Graphics.camerapointer.y += (oldmousey - mouseY) / 4.0f;
+								cGraphics::worldContainer->camera.pointer.x -= (oldmousey - mouseY) / 4.0f;
+								cGraphics::worldContainer->camera.pointer.y += (oldmousey - mouseY) / 4.0f;
 							}
 						}
 						else
 						{
-							Graphics.cameraheight += (oldmousey - mouseY) / 2.0f;
-							Graphics.cameraheight = max(min(Graphics.cameraheight, (float)15000), (float)-5);
+							cGraphics::worldContainer->camera.height += (oldmousey - mouseY) / 2.0f;
+							cGraphics::worldContainer->camera.height = max(min(cGraphics::worldContainer->camera.height, (float)15000), (float)-5);
 						}
-						Graphics.camerarot += (oldmousex - mouseX) / 100.0f;
-						while(Graphics.camerarot < 0)
-							Graphics.camerarot+=2*(float)PI;
-						while(Graphics.camerarot > 2*PI)
-							Graphics.camerarot-=2*(float)PI;
+						cGraphics::worldContainer->camera.rot += (oldmousex - mouseX) / 100.0f;
+						while(cGraphics::worldContainer->camera.rot < 0)
+							cGraphics::worldContainer->camera.rot+=2*(float)PI;
+						while(cGraphics::worldContainer->camera.rot > 2*PI)
+							cGraphics::worldContainer->camera.rot-=2*(float)PI;
 					}
 				}
 				else if (SDL_GetModState() & KMOD_CTRL)
 				{
-					if (!(Graphics.selectionstart3d == Graphics.selectionend3d))
+					if (!(cGraphics::selectionstart3d == cGraphics::selectionend3d))
 					{
 					}
 				}
 				else
 				{
-					if(!Graphics.topCamera)
+					if(!cGraphics::worldContainer->camera.topCamera)
 					{
 						cVector2 v = cVector2((oldmousex - mouseX),  (oldmousey - mouseY));
-						v.rotate(-Graphics.camerarot / PI * 180.0f);
-						Graphics.camerapointer = Graphics.camerapointer - v;
+						v.rotate(-cGraphics::worldContainer->camera.rot / PI * 180.0f);
+						cGraphics::worldContainer->camera.pointer = cGraphics::worldContainer->camera.pointer - v;
 					}
 					else
 					{
-						Graphics.camerapointer.x -= (oldmousey - mouseY);
-						Graphics.camerapointer.y -= (oldmousex - mouseX);
+						cGraphics::worldContainer->camera.pointer.x -= (oldmousey - mouseY);
+						cGraphics::worldContainer->camera.pointer.y -= (oldmousex - mouseX);
 
 					}
 				}
 			}
 			else if (lbuttondown && !rbuttondown)
 			{
-				if(mousestartx > Graphics.w()-256)
+				if(mousestartx > cGraphics::w()-256)
 				{
-					int offset = Graphics.w()%32;
+					int offset = cGraphics::w()%32;
 
-					Graphics.selectionstart.x = floor(mousestartx / 32.0)*32;
-					Graphics.selectionstart.y = floor(mousestarty / 32.0)*32;
-					Graphics.selectionend.x = (int)ceil((mouseX-offset) / 32.0)*32;
-					Graphics.selectionend.y = (int)ceil((mouseY-offset) / 32.0)*32;
+					cGraphics::selectionstart.x = floor(mousestartx / 32.0)*32;
+					cGraphics::selectionstart.y = floor(mousestarty / 32.0)*32;
+					cGraphics::selectionend.x = (int)ceil((mouseX-offset) / 32.0)*32;
+					cGraphics::selectionend.y = (int)ceil((mouseY-offset) / 32.0)*32;
 
-					Graphics.selectionstart.x += Graphics.w()%32;
-					Graphics.selectionend.x += Graphics.w()%32;
+					cGraphics::selectionstart.x += cGraphics::w()%32;
+					cGraphics::selectionend.x += cGraphics::w()%32;
 
-					if(Graphics.selectionstart.x > Graphics.selectionend.x)
+					if(cGraphics::selectionstart.x > cGraphics::selectionend.x)
 					{
-						float f = Graphics.selectionstart.x;
-						Graphics.selectionstart.x = Graphics.selectionend.x;
-						Graphics.selectionend.x = f;
+						float f = cGraphics::selectionstart.x;
+						cGraphics::selectionstart.x = cGraphics::selectionend.x;
+						cGraphics::selectionend.x = f;
 					}
-					if(Graphics.selectionstart.y > Graphics.selectionend.y)
+					if(cGraphics::selectionstart.y > cGraphics::selectionend.y)
 					{
-						float f = Graphics.selectionstart.y;
-						Graphics.selectionstart.y = Graphics.selectionend.y;
-						Graphics.selectionend.y = f;
+						float f = cGraphics::selectionstart.y;
+						cGraphics::selectionstart.y = cGraphics::selectionend.y;
+						cGraphics::selectionend.y = f;
 					}
 					return 1;
 				}
@@ -1574,22 +1579,22 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					w->onScrollUp();
 				else
 				{
-					if(Graphics.topCamera)
+					if(cGraphics::worldContainer->camera.topCamera)
 					{
-						float diff = Graphics.cameraheight;
-						Graphics.cameraheight*=1.1f;
-						diff -= Graphics.cameraheight;
-						Graphics.cameraheight = max(min(Graphics.cameraheight, (float)15000), (float)-5);
-						if(Graphics.cameraheight != -5 && Graphics.cameraheight != 15000)
+						float diff = cGraphics::worldContainer->camera.height;
+						cGraphics::worldContainer->camera.height*=1.1f;
+						diff -= cGraphics::worldContainer->camera.height;
+						cGraphics::worldContainer->camera.height = max(min(cGraphics::worldContainer->camera.height, (float)15000), (float)-5);
+						if(cGraphics::worldContainer->camera.height != -5 && cGraphics::worldContainer->camera.height != 15000)
 						{
-							Graphics.camerapointer.x += diff/2.0f;
-							Graphics.camerapointer.y -= diff/2.0f;
+							cGraphics::worldContainer->camera.pointer.x += diff/2.0f;
+							cGraphics::worldContainer->camera.pointer.y -= diff/2.0f;
  						}
 					}
 					else
 					{
-						Graphics.cameraheight*=1.1f;
-						Graphics.cameraheight = max(min(Graphics.cameraheight, (float)15000), (float)-5);
+						cGraphics::worldContainer->camera.height*=1.1f;
+						cGraphics::worldContainer->camera.height = max(min(cGraphics::worldContainer->camera.height, (float)15000), (float)-5);
 					}
 				}
 				return 1;
@@ -1602,22 +1607,22 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					w->onScrollDown();
 				else
 				{
-					if(Graphics.topCamera)
+					if(cGraphics::worldContainer->camera.topCamera)
 					{
-						float diff = Graphics.cameraheight;
-						Graphics.cameraheight/=1.1f;
-						diff -= Graphics.cameraheight;
-						Graphics.cameraheight = max(min(Graphics.cameraheight, (float)15000), (float)-5);
-						if(Graphics.cameraheight != -5 && Graphics.cameraheight != 15000)
+						float diff = cGraphics::worldContainer->camera.height;
+						cGraphics::worldContainer->camera.height/=1.1f;
+						diff -= cGraphics::worldContainer->camera.height;
+						cGraphics::worldContainer->camera.height = max(min(cGraphics::worldContainer->camera.height, (float)15000), (float)-5);
+						if(cGraphics::worldContainer->camera.height != -5 && cGraphics::worldContainer->camera.height != 15000)
 						{
-							Graphics.camerapointer.x += diff/2.0f;
-							Graphics.camerapointer.y -= diff/2.0f;
+							cGraphics::worldContainer->camera.pointer.x += diff/2.0f;
+							cGraphics::worldContainer->camera.pointer.y -= diff/2.0f;
 						}
 					}
 					else
 					{
-						Graphics.cameraheight/=1.1f;
-						Graphics.cameraheight = max(min(Graphics.cameraheight, (float)15000), (float)-5);
+						cGraphics::worldContainer->camera.height/=1.1f;
+						cGraphics::worldContainer->camera.height = max(min(cGraphics::worldContainer->camera.height, (float)15000), (float)-5);
 					}
 				}
 				return 1;
@@ -1630,12 +1635,12 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				doubleclick = true;
 
 		
-			cMenu* m = menu->inWindow((int)mouseX, Graphics.h()-(int)mouseY);
+			cMenu* m = menu->inWindow((int)mouseX, cGraphics::h()-(int)mouseY);
 		
 			cMenu* pm = NULL;
 			if(popupmenu != NULL)
 			{
-				pm = popupmenu->inWindow((int)mouseX, Graphics.h()-(int)mouseY);
+				pm = popupmenu->inWindow((int)mouseX, cGraphics::h()-(int)mouseY);
 				return 1;
 			}
 
@@ -1653,16 +1658,16 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					if (!w->inObject())
 					{ // drag this window
 						dragoffsetx = mouseX - w->getX();
-						dragoffsety = (Graphics.h()-mouseY) - w->py2();
+						dragoffsety = (cGraphics::h()-mouseY) - w->py2();
 						cWM::click(false);
 						draggingwindow = cWM::inWindow();
 						if(mousestartx < draggingwindow->getX()+draggingwindow->getWidth() && mousestartx > draggingwindow->getX()+draggingwindow->getWidth() - DRAGBORDER)
 							draggingwindow->startresisingxy();
-						if((Graphics.h()-mousestarty) > draggingwindow->getY() && (Graphics.h()-mousestarty) < draggingwindow->getY() + DRAGBORDER)
+						if((cGraphics::h()-mousestarty) > draggingwindow->getY() && (cGraphics::h()-mousestarty) < draggingwindow->getY() + DRAGBORDER)
 							draggingwindow->startresizingyx();
 						if(mousestartx > draggingwindow->getX() && mousestartx < draggingwindow->getX() + DRAGBORDER)
 							draggingwindow->startresisingx();
-						if((Graphics.h()-mousestarty) < draggingwindow->getY()+draggingwindow->getHeight() && (Graphics.h()-mousestarty) > draggingwindow->getY()+draggingwindow->getHeight() - DRAGBORDER)
+						if((cGraphics::h()-mousestarty) < draggingwindow->getY()+draggingwindow->getHeight() && (cGraphics::h()-mousestarty) > draggingwindow->getY()+draggingwindow->getHeight() - DRAGBORDER)
 							draggingwindow->startresizingy();
 						return 1;
 					}
@@ -1671,7 +1676,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						cWM::click(false);
 						draggingObject = w->inObject();
 						dragoffsetx = mouseX - w->getX() - w->inObject()->realX();
-						dragoffsety = (Graphics.h()-mouseY) - w->getY() - w->inObject()->realY();
+						dragoffsety = (cGraphics::h()-mouseY) - w->getY() - w->inObject()->realY();
 					}
 					return 1;
 				}
@@ -1697,10 +1702,10 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			
 			if(event.button.button == SDL_BUTTON_LEFT)
 			{
-				cMenu* m = menu->inWindow((int)mouseX, Graphics.h()-(int)mouseY);
+				cMenu* m = menu->inWindow((int)mouseX, cGraphics::h()-(int)mouseY);
 				cMenu* pm = NULL;
 				if(popupmenu != NULL)
-					pm = popupmenu->inWindow((int)mouseX, Graphics.h()-(int)mouseY);
+					pm = popupmenu->inWindow((int)mouseX, cGraphics::h()-(int)mouseY);
 				doneaction = true;
 				lbuttondown = false;
 				mouseX = event.motion.x;
@@ -1747,12 +1752,12 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				if (m != NULL && m->opened)
 				{
-					m->click((int)mouseX, Graphics.h()-(int)mouseY);
+					m->click((int)mouseX, cGraphics::h()-(int)mouseY);
 					return 1;
 				}
 				else if (pm != NULL && pm->opened)
 				{
-					pm->click((int)mouseX, Graphics.h()-(int)mouseY);
+					pm->click((int)mouseX, cGraphics::h()-(int)mouseY);
 					if(!pm->opened)
 					{
 						delete popupmenu;
@@ -1768,10 +1773,10 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			}
 			else // right button
 			{
-				cMenu* m = menu->inWindow((int)mouseX, Graphics.h()-(int)mouseY);
+				cMenu* m = menu->inWindow((int)mouseX, cGraphics::h()-(int)mouseY);
 				cMenu* pm = NULL;
 				if(popupmenu != NULL)
-					pm = popupmenu->inWindow((int)mouseX, Graphics.h()-(int)mouseY);
+					pm = popupmenu->inWindow((int)mouseX, cGraphics::h()-(int)mouseY);
 				menu->unMouseOver();
 				if(pm != NULL)
 					pm->unMouseOver();
@@ -1807,7 +1812,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					lastrclick = SDL_GetTicks();
 				if(doubleclick && movement < 3)
 				{
-					Graphics.camerarot = 0;
+					cGraphics::worldContainer->camera.rot = 0;
 				}
 				lastrclick = SDL_GetTicks();
 				rbuttondown = false;
@@ -1816,7 +1821,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 				if(movement < 3 && (editmode == MODE_OBJECTS || editmode == MODE_EFFECTS))
 				{
-					Graphics.selectedObject = -1;
+					cGraphics::selectedObject = -1;
 					return 1;
 				}
 			}
@@ -1841,8 +1846,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			switch (event.key.keysym.sym)
 			{
 			case SDLK_SPACE:
-				if (Graphics.previewColor > 20)
-					Graphics.previewColor = 20;
+				if (cGraphics::previewColor > 20)
+					cGraphics::previewColor = 20;
 				break;
 			case SDLK_g:
 				MenuCommand_grid((cMenuItem*)grid);
@@ -1867,24 +1872,24 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			}
 			case SDLK_INSERT:
 				{
-					Graphics.quadtreeView++;
-					if (Graphics.quadtreeView > 5)
-						Graphics.quadtreeView = 5;
+					cGraphics::quadtreeView++;
+					if (cGraphics::quadtreeView > 5)
+						cGraphics::quadtreeView = 5;
 				}
 				break;
 			case SDLK_DELETE:
 				{
-					Graphics.quadtreeView--;
-					if (Graphics.quadtreeView < -1)
-						Graphics.quadtreeView = -1;
+					cGraphics::quadtreeView--;
+					if (cGraphics::quadtreeView < -1)
+						cGraphics::quadtreeView = -1;
 				}
 				break;
 			case SDLK_F1:
 				if((event.key.keysym.mod&KMOD_SHIFT) == 0)
 				{
 					editmode = MODE_TEXTURE;
-					if (Graphics.texturestart >= (int)cGraphics::world->textures.size())
-						Graphics.texturestart = 0;
+					if (cGraphics::texturestart >= (int)cGraphics::world->textures.size())
+						cGraphics::texturestart = 0;
 				}
 				else
 				{
@@ -1895,41 +1900,41 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				if((event.key.keysym.mod&KMOD_SHIFT) == 0)
 				{
 					editmode = MODE_HEIGHTGLOBAL;
-					if (Graphics.texturestart >= (int)cGraphics::world->textures.size())
-						Graphics.texturestart = 0;
+					if (cGraphics::texturestart >= (int)cGraphics::world->textures.size())
+						cGraphics::texturestart = 0;
 				}
 				else
 				{
 					editmode = MODE_TEXTUREPAINT;
-					if (Graphics.texturestart >= (int)cGraphics::world->textures.size())
-						Graphics.texturestart = 0;
+					if (cGraphics::texturestart >= (int)cGraphics::world->textures.size())
+						cGraphics::texturestart = 0;
 				}
 				break;
 			case SDLK_F3:
 				editmode = MODE_HEIGHTDETAIL;
-				if (Graphics.texturestart >= (int)cGraphics::world->textures.size())
-					Graphics.texturestart = 0;
+				if (cGraphics::texturestart >= (int)cGraphics::world->textures.size())
+					cGraphics::texturestart = 0;
 				break;
 			case SDLK_F4:
 				editmode = MODE_WALLS;
 				break;
 			case SDLK_F5:
 				editmode = MODE_OBJECTS;
-				if (Graphics.texturestart >= (int)cGraphics::world->textures.size())
-					Graphics.texturestart = 0;
+				if (cGraphics::texturestart >= (int)cGraphics::world->textures.size())
+					cGraphics::texturestart = 0;
 				break;
 			case SDLK_F6:
 				editmode = MODE_GAT;
-				if (Graphics.texturestart >= Graphics.gatTiles.size()-1)
-					Graphics.texturestart = 0;
+				if (cGraphics::texturestart >= cGraphics::gatTiles.size()-1)
+					cGraphics::texturestart = 0;
 				break;
 			case SDLK_F7:
 				editmode = MODE_WATER;
-				Graphics.texturestart = cGraphics::world->water.type;
+				cGraphics::texturestart = cGraphics::world->water.type;
 				break;
 			case SDLK_F8:
 				editmode = MODE_EFFECTS;
-				Graphics.selectedObject = -1;
+				cGraphics::selectedObject = -1;
 				break;
 			case SDLK_F9:
 				editmode = MODE_SOUNDS;
@@ -1950,19 +1955,19 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			case SDLK_8:
 			case SDLK_9:
 				if(SDL_GetModState() & KMOD_SHIFT)
-					Graphics.gridoffsetx = (event.key.keysym.sym - SDLK_0) / 10.0f;
+					cGraphics::gridoffsetx = (event.key.keysym.sym - SDLK_0) / 10.0f;
 				else if(SDL_GetModState() & KMOD_CTRL)
-					Graphics.gridoffsety = (event.key.keysym.sym - SDLK_0) / 10.0f;
+					cGraphics::gridoffsety = (event.key.keysym.sym - SDLK_0) / 10.0f;
 				else
-					Graphics.gridsize = (event.key.keysym.sym - SDLK_0) / 4.0f;
+					cGraphics::gridsize = (event.key.keysym.sym - SDLK_0) / 4.0f;
 				break;
 			case SDLK_0:
 				if(SDL_GetModState() & KMOD_SHIFT)
-					Graphics.gridoffsetx = 0;
+					cGraphics::gridoffsetx = 0;
 				else if(SDL_GetModState() & KMOD_CTRL)
-					Graphics.gridoffsety = 0;
+					cGraphics::gridoffsety = 0;
 				else
-					Graphics.gridsize = 16 / 4.0f;
+					cGraphics::gridsize = 16 / 4.0f;
 				break;
 			case SDLK_u:
 					undostack.undo();
@@ -1996,7 +2001,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						ev.key.keysym.mod = (SDLMod)(KMOD_SHIFT | KMOD_CTRL);
 						SDL_PushEvent(&ev);
 						process_events();
-						Graphics.camerarot += 10.0f*((float)PI/180.0f);
+						cGraphics::worldContainer->camera.rot += 10.0f*((float)PI/180.0f);
 					}
 					return true;
 				}
@@ -2026,7 +2031,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			{
 				if((event.key.keysym.mod&KMOD_SHIFT) != 0)
 				{
-				if (!Graphics.draw(false))
+				if (!cGraphics::draw(false))
 					running = false;
 				SDL_GL_SwapBuffers();
 
@@ -2077,7 +2082,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					if((event.key.keysym.mod&KMOD_CTRL) != 0)
 					{
 						yfrom = 19;
-						xto = Graphics.w() - 256;
+						xto = cGraphics::w() - 256;
 					}
 
 					int w= xto - xfrom;

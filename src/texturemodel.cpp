@@ -1,7 +1,6 @@
 #include "texturemodel.h"
 #include "texturecache.h"
 #include "graphics.h"
-extern cGraphics Graphics;
 
 int cTextureModel::open(std::string filename)
 {

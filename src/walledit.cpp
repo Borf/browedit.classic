@@ -4,7 +4,6 @@
 
 extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
-extern cGraphics Graphics;
 extern cUndoStack undostack;
 extern int movement;
 
@@ -23,10 +22,10 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 					break;
 				if (x < 0 || x > cGraphics::world->width-1)
 					break;
-				if (Graphics.wallHeightMin == cVector2(x,y))
-					Graphics.wallHeightMin = cVector2(-1,-1);
+				if (cGraphics::wallHeightMin == cVector2(x,y))
+					cGraphics::wallHeightMin = cVector2(-1,-1);
 				else
-					Graphics.wallHeightMin = cVector2(x,y);
+					cGraphics::wallHeightMin = cVector2(x,y);
 			}
 			else if(event.button.button == SDL_BUTTON_RIGHT && movement < 3)
 			{
@@ -36,10 +35,10 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 					break;
 				if (x < 0 || x > cGraphics::world->width-1)
 					break;
-				if (Graphics.wallHeightMax == cVector2(x,y))
-					Graphics.wallHeightMax = cVector2(-1,-1);
+				if (cGraphics::wallHeightMax == cVector2(x,y))
+					cGraphics::wallHeightMax = cVector2(-1,-1);
 				else
-					Graphics.wallHeightMax = cVector2(x,y);
+					cGraphics::wallHeightMax = cVector2(x,y);
 
 			}
 			break;
@@ -420,10 +419,10 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 					if (x < 0 || x > cGraphics::world->width - 1)
 						break;
 
-					float selstartx = (((Graphics.selectionstart.x - (Graphics.w()-256)) / 32.0f)) / 8.0f;
-					float selstarty = (((int)(Graphics.selectionstart.y - 32) % 288) / 32) / 8.0f;
-					float selendx = (((Graphics.selectionend.x - (Graphics.w()-256)) / 32.0f)) / 8.0f;
-					float selendy = (((int)(Graphics.selectionend.y - 32) % 288) / 32) / 8.0f;
+					float selstartx = (((cGraphics::selectionstart.x - (cGraphics::w()-256)) / 32.0f)) / 8.0f;
+					float selstarty = (((int)(cGraphics::selectionstart.y - 32) % 288) / 32) / 8.0f;
+					float selendx = (((cGraphics::selectionend.x - (cGraphics::w()-256)) / 32.0f)) / 8.0f;
+					float selendy = (((int)(cGraphics::selectionend.y - 32) % 288) / 32) / 8.0f;
 					float selheight = selendy - selstarty;
 					float selwidth = selendx - selstartx;
 
@@ -459,19 +458,19 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 							vmin = min(vmin, cGraphics::world->cubes[yy][x+1].cell1/32.0f);
 							vmax = max(vmax, cGraphics::world->cubes[yy][x+1].cell1/32.0f);
 						}
-						if (!(Graphics.wallHeightMin == cVector2(-1,-1)))
+						if (!(cGraphics::wallHeightMin == cVector2(-1,-1)))
 						{
-							vmin = min(vmin, cGraphics::world->cubes[(int)Graphics.wallHeightMin.y][(int)Graphics.wallHeightMin.x].cell4/32.0f);
-							vmin = min(vmin, cGraphics::world->cubes[(int)Graphics.wallHeightMin.y][(int)Graphics.wallHeightMin.x].cell2/32.0f);
-							vmin = min(vmin, cGraphics::world->cubes[(int)Graphics.wallHeightMin.y][(int)Graphics.wallHeightMin.x].cell3/32.0f);
-							vmin = min(vmin, cGraphics::world->cubes[(int)Graphics.wallHeightMin.y][(int)Graphics.wallHeightMin.x].cell1/32.0f);
+							vmin = min(vmin, cGraphics::world->cubes[(int)cGraphics::wallHeightMin.y][(int)cGraphics::wallHeightMin.x].cell4/32.0f);
+							vmin = min(vmin, cGraphics::world->cubes[(int)cGraphics::wallHeightMin.y][(int)cGraphics::wallHeightMin.x].cell2/32.0f);
+							vmin = min(vmin, cGraphics::world->cubes[(int)cGraphics::wallHeightMin.y][(int)cGraphics::wallHeightMin.x].cell3/32.0f);
+							vmin = min(vmin, cGraphics::world->cubes[(int)cGraphics::wallHeightMin.y][(int)cGraphics::wallHeightMin.x].cell1/32.0f);
 						}
-						if (!(Graphics.wallHeightMax == cVector2(-1,-1)))
+						if (!(cGraphics::wallHeightMax == cVector2(-1,-1)))
 						{
-							vmax = max(vmax, cGraphics::world->cubes[(int)Graphics.wallHeightMax.y][(int)Graphics.wallHeightMax.x].cell4/32.0f);
-							vmax = max(vmax, cGraphics::world->cubes[(int)Graphics.wallHeightMax.y][(int)Graphics.wallHeightMax.x].cell2/32.0f);
-							vmax = max(vmax, cGraphics::world->cubes[(int)Graphics.wallHeightMax.y][(int)Graphics.wallHeightMax.x].cell3/32.0f);
-							vmax = max(vmax, cGraphics::world->cubes[(int)Graphics.wallHeightMax.y][(int)Graphics.wallHeightMax.x].cell1/32.0f);
+							vmax = max(vmax, cGraphics::world->cubes[(int)cGraphics::wallHeightMax.y][(int)cGraphics::wallHeightMax.x].cell4/32.0f);
+							vmax = max(vmax, cGraphics::world->cubes[(int)cGraphics::wallHeightMax.y][(int)cGraphics::wallHeightMax.x].cell2/32.0f);
+							vmax = max(vmax, cGraphics::world->cubes[(int)cGraphics::wallHeightMax.y][(int)cGraphics::wallHeightMax.x].cell3/32.0f);
+							vmax = max(vmax, cGraphics::world->cubes[(int)cGraphics::wallHeightMax.y][(int)cGraphics::wallHeightMax.x].cell1/32.0f);
 						}
 
 
@@ -483,13 +482,13 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 							t.color[1] = (char)255;
 							t.color[2] = (char)255;
 							t.color[3] = (char)255;
-							t.texture = Graphics.texturestart + ((int)Graphics.selectionstart.y - 32) / 288;
+							t.texture = cGraphics::texturestart + ((int)cGraphics::selectionstart.y - 32) / 288;
 							t.lightmap = 0;
 							if(wrap)
 							{
 
-								int gridsize = (int)(Graphics.gridsize * 4);
-								int gridoff = (int)(Graphics.gridoffsetx * gridsize);
+								int gridsize = (int)(cGraphics::gridsize * 4);
+								int gridoff = (int)(cGraphics::gridoffsetx * gridsize);
 								t.u1 = selstartx + ((yy+gridoff)%gridsize+1) *  ((float)selwidth/gridsize);
 								t.u2 = selstartx + ((yy+gridoff)%gridsize) *  ((float)selwidth/gridsize);
 								t.u3 = selstartx + ((yy+gridoff)%gridsize+1) *  ((float)selwidth/gridsize);
@@ -561,19 +560,19 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 							vmin = min(vmin, cGraphics::world->cubes[y+1][xx].cell2/32.0f);
 							vmax = max(vmax, cGraphics::world->cubes[y+1][xx].cell2/32.0f);
 						}
-						if (!(Graphics.wallHeightMin == cVector2(-1,-1)))
+						if (!(cGraphics::wallHeightMin == cVector2(-1,-1)))
 						{
-							vmin = min(vmin, cGraphics::world->cubes[(int)Graphics.wallHeightMin.y][(int)Graphics.wallHeightMin.x].cell4/32.0f);
-							vmin = min(vmin, cGraphics::world->cubes[(int)Graphics.wallHeightMin.y][(int)Graphics.wallHeightMin.x].cell2/32.0f);
-							vmin = min(vmin, cGraphics::world->cubes[(int)Graphics.wallHeightMin.y][(int)Graphics.wallHeightMin.x].cell3/32.0f);
-							vmin = min(vmin, cGraphics::world->cubes[(int)Graphics.wallHeightMin.y][(int)Graphics.wallHeightMin.x].cell1/32.0f);
+							vmin = min(vmin, cGraphics::world->cubes[(int)cGraphics::wallHeightMin.y][(int)cGraphics::wallHeightMin.x].cell4/32.0f);
+							vmin = min(vmin, cGraphics::world->cubes[(int)cGraphics::wallHeightMin.y][(int)cGraphics::wallHeightMin.x].cell2/32.0f);
+							vmin = min(vmin, cGraphics::world->cubes[(int)cGraphics::wallHeightMin.y][(int)cGraphics::wallHeightMin.x].cell3/32.0f);
+							vmin = min(vmin, cGraphics::world->cubes[(int)cGraphics::wallHeightMin.y][(int)cGraphics::wallHeightMin.x].cell1/32.0f);
 						}
-						if (!(Graphics.wallHeightMax == cVector2(-1,-1)))
+						if (!(cGraphics::wallHeightMax == cVector2(-1,-1)))
 						{
-							vmax = max(vmax, cGraphics::world->cubes[(int)Graphics.wallHeightMax.y][(int)Graphics.wallHeightMax.x].cell4/32.0f);
-							vmax = max(vmax, cGraphics::world->cubes[(int)Graphics.wallHeightMax.y][(int)Graphics.wallHeightMax.x].cell2/32.0f);
-							vmax = max(vmax, cGraphics::world->cubes[(int)Graphics.wallHeightMax.y][(int)Graphics.wallHeightMax.x].cell3/32.0f);
-							vmax = max(vmax, cGraphics::world->cubes[(int)Graphics.wallHeightMax.y][(int)Graphics.wallHeightMax.x].cell1/32.0f);
+							vmax = max(vmax, cGraphics::world->cubes[(int)cGraphics::wallHeightMax.y][(int)cGraphics::wallHeightMax.x].cell4/32.0f);
+							vmax = max(vmax, cGraphics::world->cubes[(int)cGraphics::wallHeightMax.y][(int)cGraphics::wallHeightMax.x].cell2/32.0f);
+							vmax = max(vmax, cGraphics::world->cubes[(int)cGraphics::wallHeightMax.y][(int)cGraphics::wallHeightMax.x].cell3/32.0f);
+							vmax = max(vmax, cGraphics::world->cubes[(int)cGraphics::wallHeightMax.y][(int)cGraphics::wallHeightMax.x].cell1/32.0f);
 						}
 
 
@@ -584,14 +583,14 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 							t.color[1] = (char)255;
 							t.color[2] = (char)255;
 							t.color[3] = (char)255;
-							t.texture = Graphics.texturestart + ((int)Graphics.selectionstart.y - 32) / 288;
+							t.texture = cGraphics::texturestart + ((int)cGraphics::selectionstart.y - 32) / 288;
 							t.lightmap = 0;
 
 
 							if (wrap)
 							{
-								int gridsize = (int)(Graphics.gridsize * 4);
-								int gridoff = (int)(Graphics.gridoffsetx * gridsize);
+								int gridsize = (int)(cGraphics::gridsize * 4);
+								int gridoff = (int)(cGraphics::gridoffsetx * gridsize);
 
 								t.u1 = selstartx + ((xx+gridoff)%gridsize) *  ((float)selwidth/gridsize);
 								t.u2 = selstartx + ((xx+gridoff)%gridsize+1) *  ((float)selwidth/gridsize);
@@ -696,12 +695,12 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 							t.color[1] = (char)255;
 							t.color[2] = (char)255;
 							t.color[3] = (char)255;
-							t.texture = Graphics.texturestart + ((int)Graphics.selectionstart.y - 32) / 288;
+							t.texture = cGraphics::texturestart + ((int)cGraphics::selectionstart.y - 32) / 288;
 							t.lightmap = 0;
-							float selstartx = (((Graphics.selectionstart.x - (Graphics.w()-256)) / 32.0f)) / 8.0f;
-							float selstarty = (((int)(Graphics.selectionstart.y - 32) % 288) / 32) / 8.0f;
-							float selendx = (((Graphics.selectionend.x - (Graphics.w()-256)) / 32.0f)) / 8.0f;
-							float selendy = (((int)(Graphics.selectionend.y - 32) % 288) / 32) / 8.0f;
+							float selstartx = (((cGraphics::selectionstart.x - (cGraphics::w()-256)) / 32.0f)) / 8.0f;
+							float selstarty = (((int)(cGraphics::selectionstart.y - 32) % 288) / 32) / 8.0f;
+							float selendx = (((cGraphics::selectionend.x - (cGraphics::w()-256)) / 32.0f)) / 8.0f;
+							float selendy = (((int)(cGraphics::selectionend.y - 32) % 288) / 32) / 8.0f;
 
 							
 							t.u1 = selstartx;
@@ -776,12 +775,12 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 							t.color[1] = (char)255;
 							t.color[2] = (char)255;
 							t.color[3] = (char)255;
-							t.texture = Graphics.texturestart + (int)(Graphics.selectionstart.y - 32) / 288;
+							t.texture = cGraphics::texturestart + (int)(cGraphics::selectionstart.y - 32) / 288;
 							t.lightmap = 0;
-							float selstartx = (((Graphics.selectionstart.x - (Graphics.w()-256)) / 32.0f)) / 8.0f;
-							float selstarty = (((int)(Graphics.selectionstart.y - 32) % 288) / 32) / 8.0f;
-							float selendx = (((Graphics.selectionend.x - (Graphics.w()-256)) / 32.0f)) / 8.0f;
-							float selendy = (((int)(Graphics.selectionend.y - 32) % 288) / 32) / 8.0f;
+							float selstartx = (((cGraphics::selectionstart.x - (cGraphics::w()-256)) / 32.0f)) / 8.0f;
+							float selstarty = (((int)(cGraphics::selectionstart.y - 32) % 288) / 32) / 8.0f;
+							float selendx = (((cGraphics::selectionend.x - (cGraphics::w()-256)) / 32.0f)) / 8.0f;
+							float selendy = (((int)(cGraphics::selectionend.y - 32) % 288) / 32) / 8.0f;
 
 							
 							t.u1 = selstartx;
@@ -802,14 +801,14 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 				}
 				break;
 			case SDLK_LEFTBRACKET:
-				Graphics.texturestart--;
-				if (Graphics.texturestart < 0)
-					Graphics.texturestart = 0;
+				cGraphics::texturestart--;
+				if (cGraphics::texturestart < 0)
+					cGraphics::texturestart = 0;
 				break;
 			case SDLK_RIGHTBRACKET:
-				Graphics.texturestart++;
-				if (Graphics.texturestart > ((int)cGraphics::world->textures.size()) - (Graphics.h() / 288))
-					Graphics.texturestart--;
+				cGraphics::texturestart++;
+				if (cGraphics::texturestart > ((int)cGraphics::world->textures.size()) - (cGraphics::h() / 288))
+					cGraphics::texturestart--;
 				break;
 
 			default:

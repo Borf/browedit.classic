@@ -7,7 +7,6 @@
 extern long mouseX;
 extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
-extern cGraphics Graphics;
 extern cUndoStack undostack;
 extern bool lbuttondown, rbuttondown,doneaction;
 extern cMenu* snaptofloor;
@@ -20,7 +19,7 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 	switch(event.type)
 	{
 		case SDL_MOUSEMOTION:
-			if (lbuttondown && !rbuttondown && Graphics.groupeditmode)
+			if (lbuttondown && !rbuttondown && cGraphics::groupeditmode)
 			{
 				unsigned int i;
 				if(doneaction)
@@ -43,7 +42,7 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 
 					if (!ctrl && !alt)
 					{
-						cVector3 diff = cGraphics::world->models[i]->pos - Graphics.selectionCenter;
+						cVector3 diff = cGraphics::world->models[i]->pos - cGraphics::selectionCenter;
 
 						cGraphics::world->models[i]->pos.x = (mouse3dx/5.0f) + diff.x;
 						cGraphics::world->models[i]->pos.z = (mouse3dz/5.0f) + diff.z;
@@ -53,7 +52,7 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 					}
 					if(ctrl && !alt)
 					{
-						cVector2 diff = cVector2(cGraphics::world->models[i]->pos.x - Graphics.selectionCenter.x, cGraphics::world->models[i]->pos.z - Graphics.selectionCenter.z);
+						cVector2 diff = cVector2(cGraphics::world->models[i]->pos.x - cGraphics::selectionCenter.x, cGraphics::world->models[i]->pos.z - cGraphics::selectionCenter.z);
 						if(!shift)
 						{
 							cGraphics::world->models[i]->rot.y -= (mouseX - oldmousex)/10.0f;
@@ -65,16 +64,16 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 							cGraphics::world->models[i]->rot.y -= (mouseX - oldmousex)*9;
 						}
 
-						cGraphics::world->models[i]->pos.x = Graphics.selectionCenter.x + diff.x;
-						cGraphics::world->models[i]->pos.z = Graphics.selectionCenter.z + diff.y;
+						cGraphics::world->models[i]->pos.x = cGraphics::selectionCenter.x + diff.x;
+						cGraphics::world->models[i]->pos.z = cGraphics::selectionCenter.z + diff.y;
 
 					}
 					if(alt && !ctrl)
 					{
-						cVector2 diff = cVector2(cGraphics::world->models[i]->pos.x - Graphics.selectionCenter.x, cGraphics::world->models[i]->pos.z - Graphics.selectionCenter.z);
+						cVector2 diff = cVector2(cGraphics::world->models[i]->pos.x - cGraphics::selectionCenter.x, cGraphics::world->models[i]->pos.z - cGraphics::selectionCenter.z);
 						diff = diff * (1 + ((mouseX - oldmousex) / 10.0f));
-						cGraphics::world->models[i]->pos.x = Graphics.selectionCenter.x + diff.x;
-						cGraphics::world->models[i]->pos.z = Graphics.selectionCenter.z + diff.y;
+						cGraphics::world->models[i]->pos.x = cGraphics::selectionCenter.x + diff.x;
+						cGraphics::world->models[i]->pos.z = cGraphics::selectionCenter.z + diff.y;
 
 						cGraphics::world->models[i]->scale = cGraphics::world->models[i]->scale * (1+((mouseX - oldmousex) / 10.0f));
 					}
@@ -82,21 +81,21 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 				if(!ctrl && !alt)
 				{
 					int count = 0;
-					Graphics.selectionCenter = cVector3(0,0,0);
+					cGraphics::selectionCenter = cVector3(0,0,0);
 					for(unsigned int i = 0; i < cGraphics::world->models.size(); i++)
 					{
 						if (cGraphics::world->models[i]->selected)
 						{
 							count++;
-							Graphics.selectionCenter+=cGraphics::world->models[i]->pos;
+							cGraphics::selectionCenter+=cGraphics::world->models[i]->pos;
 						}
 					}
-					Graphics.selectionCenter = Graphics.selectionCenter / count;
+					cGraphics::selectionCenter = cGraphics::selectionCenter / count;
 				}
 			}
 			break;
 		case SDL_MOUSEBUTTONUP:
-			if (event.button.button == SDL_BUTTON_LEFT && !Graphics.groupeditmode)
+			if (event.button.button == SDL_BUTTON_LEFT && !cGraphics::groupeditmode)
 			{
 				if (mouse3dxstart > mouse3dx)
 				{
@@ -143,34 +142,34 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 			{
 			case SDLK_LEFTBRACKET:
 				{
-					Graphics.groupeditmode = !Graphics.groupeditmode;
+					cGraphics::groupeditmode = !cGraphics::groupeditmode;
 					int count = 0;
-					Graphics.selectionCenter = cVector3(0,0,0);
+					cGraphics::selectionCenter = cVector3(0,0,0);
 					for(unsigned int i = 0; i < cGraphics::world->models.size(); i++)
 					{
 						if (cGraphics::world->models[i]->selected)
 						{
 							count++;
-							Graphics.selectionCenter+=cGraphics::world->models[i]->pos;
+							cGraphics::selectionCenter+=cGraphics::world->models[i]->pos;
 						}
 					}
-					Graphics.selectionCenter = Graphics.selectionCenter / count;
+					cGraphics::selectionCenter = cGraphics::selectionCenter / count;
 				}
 				break;
 			case SDLK_RIGHTBRACKET:
 				{
-					Graphics.groupeditmode = !Graphics.groupeditmode;
+					cGraphics::groupeditmode = !cGraphics::groupeditmode;
 					int count = 0;
-					Graphics.selectionCenter = cVector3(0,0,0);
+					cGraphics::selectionCenter = cVector3(0,0,0);
 					for(unsigned int i = 0; i < cGraphics::world->models.size(); i++)
 					{
 						if (cGraphics::world->models[i]->selected)
 						{
 							count++;
-							Graphics.selectionCenter+=cGraphics::world->models[i]->pos;
+							cGraphics::selectionCenter+=cGraphics::world->models[i]->pos;
 						}
 					}
-					Graphics.selectionCenter = Graphics.selectionCenter / count;
+					cGraphics::selectionCenter = cGraphics::selectionCenter / count;
 				}
 				break;
 			case SDLK_d:
@@ -283,7 +282,7 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 							idoff--;
 						}
 					}
-					Graphics.selectedObject = -1;
+					cGraphics::selectedObject = -1;
 					if (objectsdeleted.size() > 0)
 						undostack.push(new cUndoObjectsDelete(objectsdeleted));
 					cWindow* w = cWM::getWindow(WT_MODELOVERVIEW);

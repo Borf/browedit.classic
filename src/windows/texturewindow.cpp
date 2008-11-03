@@ -10,7 +10,6 @@
 #include <filesystem.h>
 #include <graphics.h>
 
-extern cGraphics Graphics;
 extern std::string rodir;
 extern cWindow* draggingwindow;
 extern cWindowObject* draggingObject;
@@ -34,7 +33,7 @@ void cTextureWindow::cWindowTexture::onClick()
 	{
 		if(SDL_GetModState() & KMOD_SHIFT)
 		{
-			int id = Graphics.texturestart + (int)(Graphics.selectionstart.y - 32) / 288;
+			int id = cGraphics::texturestart + (int)(cGraphics::selectionstart.y - 32) / 288;
 			cTextureCache::unload(cGraphics::world->textures[id]->texture);
 			delete cGraphics::world->textures[id];
 			
@@ -58,7 +57,7 @@ void cTextureWindow::cWindowTexture::onClick()
 			t->RoFilename2 = std::string(buf,40);
 			t->texture = cTextureCache::load(rodir + "data\\texture\\" + data);
 			cGraphics::world->textures.push_back(t);
-			Graphics.texturestart = cGraphics::world->textures.size() - 2;
+			cGraphics::texturestart = cGraphics::world->textures.size() - 2;
 		}
 	}
 }
@@ -137,8 +136,8 @@ cTextureWindow::cTextureWindow( ) : cWindow()
 	visible = true;
 	modal = false;
 	
-	h = Graphics.h()-50;
-	w = Graphics.w()-50;
+	h = cGraphics::h()-50;
+	w = cGraphics::w()-50;
 	title = GetMsg("wm/texture/TITLE");
 	center();
 	initProps("textures");

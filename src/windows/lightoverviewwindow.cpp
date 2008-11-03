@@ -4,7 +4,6 @@
 #include <menucommands.h>
 #include <graphics.h>
 #include <wm/windowbutton.h>
-extern cGraphics Graphics;
 
 extern cMenu* popupmenu;
 
@@ -106,13 +105,13 @@ void cLightOverViewWindow::cLightOverViewTree::onChange()
 	
 	if(!((cLightOverViewTreeNode*)node)->isCat)
 	{
-		Graphics.camerapointer.x = -5*((cLightOverViewTreeNode*)node)->light.pos.x;
-		Graphics.camerapointer.y = cGraphics::world->height*-10+5*((cLightOverViewTreeNode*)node)->light.pos.z;
+		cGraphics::worldContainer->camera.pointer.x = -5*((cLightOverViewTreeNode*)node)->light.pos.x;
+		cGraphics::worldContainer->camera.pointer.y = cGraphics::world->height*-10+5*((cLightOverViewTreeNode*)node)->light.pos.z;
 		
 		for(i = 0; i < cGraphics::world->lights.size(); i++)
 		{
 			if(cGraphics::world->lights[i] == ((cLightOverViewTreeNode*)node)->light)
-				Graphics.selectedObject = i;
+				cGraphics::selectedObject = i;
 		}
 	}
 }
@@ -183,11 +182,11 @@ cLightOverViewWindow::cLightOverViewWindow() : cWindow()
 	
 	resizable = false;
 	movable = false;
-	h = Graphics.h();
+	h = cGraphics::h();
 	w = 256;
 	title = GetMsg("wm/overview/TITLE");
 	y = 0;
-	x = Graphics.w() - w;
+	x = cGraphics::w() - w;
 	
 	//		cWindowObject* o;
 	objects["close"] = new cWindowCloseButton(this);

@@ -5,8 +5,6 @@
 #include <wm/windowinputbox.h>
 
 
-extern cGraphics Graphics;
-
 cAmbientLightWindow::cAmbientLightWindowOkButton::cAmbientLightWindowOkButton( cWindow* parent) : cWindowButton(parent)
 {
 	alignment = ALIGN_BOTTOM;

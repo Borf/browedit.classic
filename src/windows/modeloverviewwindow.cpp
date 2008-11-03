@@ -6,7 +6,6 @@
 #include <graphics.h>
 #include <wm/windowbutton.h>
 
-extern cGraphics Graphics;
 extern cMenu* popupmenu;
 
 
@@ -109,13 +108,13 @@ void cModelOverViewWindow::cModelOverViewTree::onChange()
 	
 	if(!((cModelOverViewTreeNode*)node)->isCat)
 	{
-		Graphics.camerapointer.x = -5*((cModelOverViewTreeNode*)node)->model->pos.x;
-		Graphics.camerapointer.y = cGraphics::world->height*-10+5*((cModelOverViewTreeNode*)node)->model->pos.z;
+		cGraphics::worldContainer->camera.pointer.x = -5*((cModelOverViewTreeNode*)node)->model->pos.x;
+		cGraphics::worldContainer->camera.pointer.y = cGraphics::world->height*-10+5*((cModelOverViewTreeNode*)node)->model->pos.z;
 	
 		for(i = 0; i < cGraphics::world->models.size(); i++)
 		{
 			if(cGraphics::world->models[i] == ((cModelOverViewTreeNode*)node)->model)
-				Graphics.selectedObject = i;
+				cGraphics::selectedObject = i;
 		}
 	}
 }
@@ -185,11 +184,11 @@ cModelOverViewWindow::cModelOverViewWindow( ) : cWindow()
 	
 	resizable = false;
 	movable = false;
-	h = Graphics.h();
+	h = cGraphics::h();
 	w = 256;
 	title = GetMsg("wm/overview/TITLE");
 	y = 0;
-	x = Graphics.w() - w;
+	x = cGraphics::w() - w;
 	
 	//		cWindowObject* o;
 	objects["close"] = new cWindowCloseButton(this);

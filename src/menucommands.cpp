@@ -21,7 +21,6 @@
 #include "windows/mapswindow.h"
 #include "plugins/base/base.h"
 
-extern cGraphics Graphics;
 extern bool running;
 extern cUndoStack undostack;
 extern eMode editmode;
@@ -85,12 +84,15 @@ MENUCOMMAND(open)
 	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_ENABLESIZING;
 	if (GetOpenFileName(&ofn))
 	{
+
+		cGraphics::newWorld();
+
 		while(cGraphics::world->fileName[strlen(cGraphics::world->fileName)-1] != '.')
 			cGraphics::world->fileName[strlen(cGraphics::world->fileName)-1] = '\0';
 		cGraphics::world->fileName[strlen(cGraphics::world->fileName)-1] = '\0';
-
 		chdir(curdir);
 		cGraphics::world->load();
+		cGraphics::updateMenu();
 	}
 #else
 
@@ -104,9 +106,11 @@ MENUCOMMAND(open)
 
 void openfunc(std::string param)
 {
+	cGraphics::newWorld();
 	ZeroMemory(cGraphics::world->fileName, 128);
 	memcpy(cGraphics::world->fileName, param.c_str(), param.length());
 	cGraphics::world->load();
+	cGraphics::updateMenu();
 }
 
 MENUCOMMAND(opengrf)
@@ -402,7 +406,7 @@ MENUCOMMAND(random2)
 			}
 		}
 	}
-	Graphics.draw();
+	cGraphics::draw();
 	SDL_GL_SwapBuffers();
 	for(y = 0; y < cGraphics::world->height; y++)
 	{
@@ -413,7 +417,7 @@ MENUCOMMAND(random2)
 			cGraphics::world->cubes[(int)y][(int)x].tileUp = 0;
 		}
 	}
-	Graphics.draw();
+	cGraphics::draw();
 	SDL_GL_SwapBuffers();
 
 
@@ -442,7 +446,7 @@ MENUCOMMAND(random2)
 	bool filledenough = false;
 	while(!filledenough) //(cGraphics::world->height+cGraphics::world->width) / 25
 	{
-		Graphics.draw();
+		cGraphics::draw();
 		SDL_GL_SwapBuffers();
 		reali++;
 		a += (rand()%180)-90;
@@ -588,7 +592,7 @@ MENUCOMMAND(random2)
 	brushsize = cGraphics::world->width+cGraphics::world->height;
 	
 	process_events();
-	Graphics.draw();
+	cGraphics::draw();
 	SDL_GL_SwapBuffers();
 
 	brushsize = b;
@@ -748,7 +752,7 @@ MENUCOMMAND(random3)
 	}
 
 	
-	Graphics.draw();
+	cGraphics::draw();
 	SDL_GL_SwapBuffers();
 
 	
@@ -766,7 +770,7 @@ MENUCOMMAND(random3)
 	{
 		if(lastsize != islands.size())
 		{
-			Graphics.draw();
+			cGraphics::draw();
 			SDL_GL_SwapBuffers();
 			lastsize = islands.size();
 		}
@@ -873,7 +877,7 @@ MENUCOMMAND(random3)
 	{
 		for(unsigned int ii = 0; ii < islands[i].connections.size(); ii++)
 		{
-			Graphics.draw();
+			cGraphics::draw();
 			SDL_GL_SwapBuffers();
 			x = islands[islands[i].connections[ii]].x;
 			y = islands[islands[i].connections[ii]].y;
@@ -921,8 +925,8 @@ MENUCOMMAND(random3)
 		}
 	}
 
-	Graphics.selectionstart.y = 320;
-	Graphics.texturestart = 0;
+	cGraphics::selectionstart.y = 320;
+	cGraphics::texturestart = 0;
 	MenuCommand_addwalls(src);
 
 
@@ -1151,20 +1155,20 @@ MENUCOMMAND(mode)
 	if(title == GetMsg("menu/editmode/GLOBALHEIGHTEDIT"))
 	{
 		editmode = MODE_HEIGHTGLOBAL;
-		if (Graphics.texturestart >= (int)cGraphics::world->textures.size())
-			Graphics.texturestart = 0;
+		if (cGraphics::texturestart >= (int)cGraphics::world->textures.size())
+			cGraphics::texturestart = 0;
 	}
 	else if (title == GetMsg("menu/editmode/DETAILTERRAINEDIT"))
 	{
 		editmode = MODE_HEIGHTDETAIL;
-		if (Graphics.texturestart >= (int)cGraphics::world->textures.size())
-			Graphics.texturestart = 0;
+		if (cGraphics::texturestart >= (int)cGraphics::world->textures.size())
+			cGraphics::texturestart = 0;
 	}
 	else if (title == GetMsg("menu/editmode/TEXTUREEDIT"))
 	{
 		editmode = MODE_TEXTURE;
-		if (Graphics.texturestart >= (int)cGraphics::world->textures.size())
-			Graphics.texturestart = 0;
+		if (cGraphics::texturestart >= (int)cGraphics::world->textures.size())
+			cGraphics::texturestart = 0;
 	}
 	else if (title == GetMsg("menu/editmode/WALLEDIT"))
 	{
@@ -1173,24 +1177,24 @@ MENUCOMMAND(mode)
 	else if (title == GetMsg("menu/editmode/OBJECTEDIT"))
 	{
 		editmode = MODE_OBJECTS;
-		if (Graphics.texturestart >= (int)cGraphics::world->textures.size())
-			Graphics.texturestart = 0;
+		if (cGraphics::texturestart >= (int)cGraphics::world->textures.size())
+			cGraphics::texturestart = 0;
 	}
 	else if (title == GetMsg("menu/editmode/GATEDIT"))
 	{
 		editmode = MODE_GAT;
-		if (Graphics.texturestart >= 6)
-			Graphics.texturestart = 0;
+		if (cGraphics::texturestart >= 6)
+			cGraphics::texturestart = 0;
 	}
 	else if (title == GetMsg("menu/editmode/WATEREDIT"))
 	{
 		editmode = MODE_WATER;
-		Graphics.texturestart = cGraphics::world->water.type;
+		cGraphics::texturestart = cGraphics::world->water.type;
 	}
 	else if (title == GetMsg("menu/editmode/EFFECTSEDIT"))
 	{
 		editmode = MODE_EFFECTS;
-		Graphics.selectedObject = -1;
+		cGraphics::selectedObject = -1;
 	}
 	else if (title == GetMsg("menu/editmode/SOUNDSEDIT"))
 	{
@@ -1214,7 +1218,7 @@ MENUCOMMAND(mode)
 MENUCOMMAND(grid)
 {
 	src->ticked = !src->ticked;
-	Graphics.showgrid = src->ticked;
+	cGraphics::showgrid = src->ticked;
 	return true;
 }
 
@@ -1243,23 +1247,23 @@ MENUCOMMAND(speed)
 MENUCOMMAND(showobjects)
 {
 	src->ticked = !src->ticked;
-	Graphics.showObjects = src->ticked;
+	cGraphics::showObjects = src->ticked;
 	return true;
 }
 
 
 MENUCOMMAND(model)
 {
-	delete Graphics.previewModel;
-	Graphics.previewModel = new cRSMModel();
-	Graphics.previewModel->load(rodir + src->data);
-	Graphics.previewModel->rot = cVector3(0,0,0);
-	Graphics.previewModel->scale = cVector3(4,4,4);
+	delete cGraphics::previewModel;
+	cGraphics::previewModel = new cRSMModel();
+	cGraphics::previewModel->load(rodir + src->data);
+	cGraphics::previewModel->rot = cVector3(0,0,0);
+	cGraphics::previewModel->scale = cVector3(4,4,4);
 
-	Graphics.previewModel->pos = cVector3(40,-40,-40);
+	cGraphics::previewModel->pos = cVector3(40,-40,-40);
 
 	if (editmode != MODE_OBJECTS)
-		Graphics.previewColor = 200;
+		cGraphics::previewColor = 200;
 	currentobject = src;
 	return true;
 }
@@ -1268,7 +1272,7 @@ MENUCOMMAND(model)
 MENUCOMMAND(slope)
 {
 	src->ticked = !src->ticked;
-	Graphics.slope = src->ticked;
+	cGraphics::slope = src->ticked;
 	return true;
 }
 
@@ -1332,9 +1336,9 @@ MENUCOMMAND(gatcollision2)
 {
 	MenuCommand_gatheight(src);
 	int i, x, y;
-	int ww = Graphics.w();
+	int ww = cGraphics::w();
 	ww -= 256;
-	int hh = Graphics.h()-20;
+	int hh = cGraphics::h()-20;
 
 	glEnable(GL_DEPTH_TEST);
 	glViewport(0,0,ww,hh);						// Reset The Current Viewport
@@ -1345,10 +1349,10 @@ MENUCOMMAND(gatcollision2)
 	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
 	glLoadIdentity();									// Reset The Projection Matrix
 	gluPerspective(45.0f,(GLfloat)ww/(GLfloat)hh,10.0f,10000.0f);
-	gluLookAt(  -Graphics.camerapointer.x + Graphics.cameraheight*sin(Graphics.camerarot),
-				camrad+Graphics.cameraheight,
-				-Graphics.camerapointer.y + Graphics.cameraheight*cos(Graphics.camerarot),
-				-Graphics.camerapointer.x,camrad + Graphics.cameraheight * (Graphics.cameraangle/10.0f),-Graphics.camerapointer.y,
+	gluLookAt(  -cGraphics::worldContainer->camera.pointer.x + cGraphics::worldContainer->camera.height*sin(cGraphics::worldContainer->camera.rot),
+				camrad+cGraphics::worldContainer->camera.height,
+				-cGraphics::worldContainer->camera.pointer.y + cGraphics::worldContainer->camera.height*cos(cGraphics::worldContainer->camera.rot),
+				-cGraphics::worldContainer->camera.pointer.x,camrad + cGraphics::worldContainer->camera.height * (cGraphics::worldContainer->camera.angle/10.0f),-cGraphics::worldContainer->camera.pointer.y,
 				0,1,0);
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 	glLoadIdentity();									// Reset The Modelview Matrix
@@ -1391,8 +1395,8 @@ MENUCOMMAND(gatcollision2)
 				continue;
 
 			
-			Graphics.camerapointer.x = -5*x + 2.5;
-//			Graphics.camerapointer.y = -5*(2*cGraphics::world->height-y) + 2.5;
+			cGraphics::worldContainer->camera.pointer.x = -5*x + 2.5;
+//			cGraphics::worldContainer->camera.pointer.y = -5*(2*cGraphics::world->height-y) + 2.5;
 
 
 			cVector3 worldpos = cVector3(	5*x+2.5, 
@@ -1656,9 +1660,9 @@ MENUCOMMAND(dolightmaps2)
 	//cGraphics::world->blackLightmaps();
 	Log(3,0,"Done initializing for lightmaps...");
 
-	int ww = Graphics.w();
+	int ww = cGraphics::w();
 	ww -= 256;
-	int hh = Graphics.h()-20;
+	int hh = cGraphics::h()-20;
 
 	glEnable(GL_DEPTH_TEST);
 	glViewport(0,0,ww,hh);						// Reset The Current Viewport
@@ -1669,10 +1673,10 @@ MENUCOMMAND(dolightmaps2)
 	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
 	glLoadIdentity();									// Reset The Projection Matrix
 	gluPerspective(45.0f,(GLfloat)ww/(GLfloat)hh,10.0f,10000.0f);
-	gluLookAt(  -Graphics.camerapointer.x + Graphics.cameraheight*sin(Graphics.camerarot),
-				camrad+Graphics.cameraheight,
-				-Graphics.camerapointer.y + Graphics.cameraheight*cos(Graphics.camerarot),
-				-Graphics.camerapointer.x,camrad + Graphics.cameraheight * (Graphics.cameraangle/10.0f),-Graphics.camerapointer.y,
+	gluLookAt(  -cGraphics::worldContainer->camera.pointer.x + cGraphics::worldContainer->camera.height*sin(cGraphics::worldContainer->camera.rot),
+				camrad+cGraphics::worldContainer->camera.height,
+				-cGraphics::worldContainer->camera.pointer.y + cGraphics::worldContainer->camera.height*cos(cGraphics::worldContainer->camera.rot),
+				-cGraphics::worldContainer->camera.pointer.x,camrad + cGraphics::worldContainer->camera.height * (cGraphics::worldContainer->camera.angle/10.0f),-cGraphics::worldContainer->camera.pointer.y,
 				0,1,0);
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 	glLoadIdentity();									// Reset The Modelview Matrix
@@ -1775,8 +1779,8 @@ MENUCOMMAND(dolightmaps2)
 			
 			if(cGraphics::world->loaded)
 			{
-				Graphics.camerapointer.x = -10*x + 5;
-				Graphics.camerapointer.y = -10*(cGraphics::world->height-y) + 5;
+				cGraphics::worldContainer->camera.pointer.x = -10*x + 5;
+				cGraphics::worldContainer->camera.pointer.y = -10*(cGraphics::world->height-y) + 5;
 			}
 			if(tickcount() - timer > 100)
 			{
@@ -2051,7 +2055,7 @@ MENUCOMMAND(addwalls)
 					t.color[1] = (char)255;
 					t.color[2] = (char)255;
 					t.color[3] = (char)255;
-					t.texture = Graphics.texturestart + ((int)Graphics.selectionstart.y - 32) / 288;
+					t.texture = cGraphics::texturestart + ((int)cGraphics::selectionstart.y - 32) / 288;
 					t.lightmap = 0;
 					t.u1 = 0;
 					t.v1 = 0;
@@ -2077,7 +2081,7 @@ MENUCOMMAND(addwalls)
 					t.color[1] = (char)255;
 					t.color[2] = (char)255;
 					t.color[3] = (char)255;
-					t.texture = Graphics.texturestart + ((int)Graphics.selectionstart.y - 32) / 288;
+					t.texture = cGraphics::texturestart + ((int)cGraphics::selectionstart.y - 32) / 288;
 					t.lightmap = 0;
 					t.u1 = 0;
 					t.v1 = 0;
@@ -2155,7 +2159,7 @@ MENUCOMMAND(tempfunc)
 	t.color[1] = (char)255;
 	t.color[2] = (char)255;
 	t.color[3] = (char)255;
-	t.texture = Graphics.texturestart + ((int)Graphics.selectionstart.y - 32) / 288;
+	t.texture = cGraphics::texturestart + ((int)cGraphics::selectionstart.y - 32) / 288;
 	t.lightmap = 0;
 	t.u1 = 0;
 	t.v1 = 0;
@@ -2209,24 +2213,24 @@ MENUCOMMAND(snaptofloor)
 
 bool mouseovertexture(cMenu* src)
 {
-	if (Graphics.texturePreview == NULL || Graphics.texturePreview->getfilename() != rodir + "data\\texture\\" + ((cMenuItem*)src)->data)
+	if (cGraphics::texturePreview == NULL || cGraphics::texturePreview->getfilename() != rodir + "data\\texture\\" + ((cMenuItem*)src)->data)
 	{
-		Graphics.texturePreview = cTextureCache::load(rodir + "data\\texture\\" + ((cMenuItem*)src)->data);
+		cGraphics::texturePreview = cTextureCache::load(rodir + "data\\texture\\" + ((cMenuItem*)src)->data);
 		return false;
 	}
 	else
 	{
-		cTextureCache::unload(Graphics.texturePreview);
-		Graphics.texturePreview = NULL;
+		cTextureCache::unload(cGraphics::texturePreview);
+		cGraphics::texturePreview = NULL;
 		return true;
 	}
 }
 bool mouseouttexture(cMenu* src)
 {
-	if (Graphics.texturePreview != NULL)
+	if (cGraphics::texturePreview != NULL)
 	{
-		cTextureCache::unload(Graphics.texturePreview);
-		Graphics.texturePreview = NULL;
+		cTextureCache::unload(cGraphics::texturePreview);
+		cGraphics::texturePreview = NULL;
 	}
 	return true;
 }
@@ -2236,10 +2240,10 @@ MENUCOMMAND(effect)
 	if (selectedeffect != NULL)
 		selectedeffect->ticked = false;
 	src->ticked = true;
-	if (Graphics.selectedObject != -1)
+	if (cGraphics::selectedObject != -1)
 	{
-		cGraphics::world->effects[Graphics.selectedObject].type = atoi(src->data.c_str());
-		cGraphics::world->effects[Graphics.selectedObject].readablename = src->title;
+		cGraphics::world->effects[cGraphics::selectedObject].type = atoi(src->data.c_str());
+		cGraphics::world->effects[cGraphics::selectedObject].readablename = src->title;
 	}
 	selectedeffect = src;
 	return true;
@@ -2291,7 +2295,7 @@ MENUCOMMAND(cleantextures)
 			cGraphics::world->textures.erase(cGraphics::world->textures.begin() + i);
 		}
 	}
-	Graphics.texturestart = 0;
+	cGraphics::texturestart = 0;
 	return true;
 }
 
@@ -2388,7 +2392,7 @@ MENUCOMMAND(fillarea)
 				int yy = y % 4;
 				cTile t;
 				t.lightmap = cGraphics::world->textures.size()-1;
-				t.texture = Graphics.texturestart + ((int)Graphics.selectionstart.y - 32) / 288;
+				t.texture = cGraphics::texturestart + ((int)cGraphics::selectionstart.y - 32) / 288;
 				t.u1 = xx/4.0;
 				t.v1 = yy/4.0;
 				t.u2 = (xx+1)/4.0;
@@ -2624,7 +2628,7 @@ MENUCOMMAND(random5)
 	{
 		if(oldsize != islands.size())
 		{
-			Graphics.draw();
+			cGraphics::draw();
 			SDL_GL_SwapBuffers();
 			oldsize = islands.size();
 		}
@@ -2725,7 +2729,7 @@ MENUCOMMAND(random5)
 
 	for(i = 0; i < islands.size(); i++)
 	{
-		Graphics.draw();
+		cGraphics::draw();
 		SDL_GL_SwapBuffers();
 		for(unsigned int ii = 0; ii < islands[i].connections.size(); ii++)
 		{
@@ -2795,8 +2799,8 @@ MENUCOMMAND(random5)
 		}
 	}
 
-	Graphics.selectionstart.y = 320;
-	Graphics.texturestart = 1;
+	cGraphics::selectionstart.y = 320;
+	cGraphics::texturestart = 1;
 	MenuCommand_addwalls(src);
 
 
@@ -2975,9 +2979,9 @@ void checknpcs()
 	unsigned int i,ii;
 	for(i = 0; i < cGraphics::world->sprites.size(); i++)
 	{
-		Graphics.camerapointer.x = -5*cGraphics::world->sprites[i]->pos.x;
-		Graphics.camerapointer.y = -10*cGraphics::world->height+5*cGraphics::world->sprites[i]->pos.z;
-		Graphics.camerarot = 0;
+		cGraphics::worldContainer->camera.pointer.x = -5*cGraphics::world->sprites[i]->pos.x;
+		cGraphics::worldContainer->camera.pointer.y = -10*cGraphics::world->height+5*cGraphics::world->sprites[i]->pos.z;
+		cGraphics::worldContainer->camera.rot = 0;
 
 
 
@@ -2997,11 +3001,11 @@ void checknpcs()
 
 		for(ii = 0; ii < 16; ii++)
 		{
-			Graphics.draw(false);
+			cGraphics::draw(false);
 			SDL_GL_SwapBuffers();
-			Graphics.camerarot += 22.5f*((float)PI/180.0f);
-			while(Graphics.camerarot > 360)
-				Graphics.camerarot-=360;
+			cGraphics::worldContainer->camera.rot += 22.5f*((float)PI/180.0f);
+			while(cGraphics::worldContainer->camera.rot > 360)
+				cGraphics::worldContainer->camera.rot-=360;
 
 
 			unsigned char *pixels;
@@ -3148,7 +3152,7 @@ MENUCOMMAND(addfavorite)
 	l.range = atoi(n->FirstChildElement("range")->FirstChild()->Value());
 	l.lightFalloff = atof(n->FirstChildElement("lightFalloff")->FirstChild()->Value());
 
-	Graphics.selectedObject = cGraphics::world->lights.size();
+	cGraphics::selectedObject = cGraphics::world->lights.size();
 	cGraphics::world->lights.push_back(l);
 	undostack.push(new cUndoNewLight());
 
@@ -3158,7 +3162,7 @@ MENUCOMMAND(addfavorite)
 		w->userfunc(NULL);
 		cLightOverViewWindow::cLightOverViewTree* tree = (cLightOverViewWindow::cLightOverViewTree*)w->objects["list"];
 		Log(3,0,"Calling getobject for %i", tree);
-		tree->getObject(cGraphics::world->lights[Graphics.selectedObject]);
+		tree->getObject(cGraphics::world->lights[cGraphics::selectedObject]);
 	}
 
 	return true;
@@ -3167,19 +3171,19 @@ MENUCOMMAND(addfavorite)
 
 MENUCOMMAND(deselectlight)
 {
-	Graphics.selectedObject = -1;
+	cGraphics::selectedObject = -1;
 	return true;
 }
 
 
 MENUCOMMAND(light_disableshadow)
 {
-	cGraphics::world->lights[Graphics.selectedObject].givesShadow = !cGraphics::world->lights[Graphics.selectedObject].givesShadow;
+	cGraphics::world->lights[cGraphics::selectedObject].givesShadow = !cGraphics::world->lights[cGraphics::selectedObject].givesShadow;
 	return true;
 }
 MENUCOMMAND(light_snaptofloor)
 {
-	cGraphics::world->lights[Graphics.selectedObject].pos.y = cGraphics::world->cubes[(int)cGraphics::world->lights[Graphics.selectedObject].pos.z/2][(int)cGraphics::world->lights[Graphics.selectedObject].pos.x/2].cell1;
+	cGraphics::world->lights[cGraphics::selectedObject].pos.y = cGraphics::world->cubes[(int)cGraphics::world->lights[cGraphics::selectedObject].pos.z/2][(int)cGraphics::world->lights[cGraphics::selectedObject].pos.x/2].cell1;
 	return true;
 }
 MENUCOMMAND(light_setheight)
@@ -3189,7 +3193,7 @@ MENUCOMMAND(light_setheight)
 
 
 	MenuCommand_light_snaptofloor(src);
-	cGraphics::world->lights[Graphics.selectedObject].pos.y += atoi(cWM::inputWindow("Height:").c_str());
+	cGraphics::world->lights[cGraphics::selectedObject].pos.y += atoi(cWM::inputWindow("Height:").c_str());
 
 
 	return true;
@@ -3762,7 +3766,7 @@ inline void setLightIntensity( BYTE* buf, int yy, int xx, cVector3 worldpos, std
 	unsigned int to = cGraphics::world->lights.size();
 	if(lightonly)
 	{
-		from = Graphics.selectedObject;
+		from = cGraphics::selectedObject;
 		to = from+1;
 	}
 	for(unsigned int i = from; i < to; i++)
@@ -3862,14 +3866,14 @@ MENUCOMMAND(makeMinimaps)
 		cGraphics::world->load();
 #endif
 
-		Graphics.topCamera = true;
-		Graphics.camerapointer = cVector2(-cGraphics::world->height*10,0);
-		Graphics.showDot = false;
-		Graphics.showgrid = false;
-		Graphics.showLightmaps = false;
-		Graphics.showObjects = false;
-		Graphics.showNoTiles = true;
-		Graphics.noTileColor = cVector3(0,0,0);
+		cGraphics::worldContainer->camera.topCamera = true;
+		cGraphics::worldContainer->camera.pointer = cVector2(-cGraphics::world->height*10,0);
+		cGraphics::showDot = false;
+		cGraphics::showgrid = false;
+		cGraphics::showLightmaps = false;
+		cGraphics::showObjects = false;
+		cGraphics::showNoTiles = true;
+		cGraphics::noTileColor = cVector3(0,0,0);
 
 		unsigned char *pixels = NULL;
 
@@ -3879,19 +3883,19 @@ MENUCOMMAND(makeMinimaps)
 
 		int xfrom = 0;
 		int yfrom = 0;
-		int xto = Graphics.w()-256;
+		int xto = cGraphics::w()-256;
 		int yto = screenStats[3]-22;
 
 		int mindist = 0;
 		float minheight = 0;
 
-		Graphics.cameraheight = max(cGraphics::world->height, cGraphics::world->width)*15;
+		cGraphics::worldContainer->camera.height = max(cGraphics::world->height, cGraphics::world->width)*15;
 		for(int iii = 0; iii < 20; iii++)
 		{
-			if (!Graphics.draw(false))
+			if (!cGraphics::draw(false))
 				running = false;
 			SDL_GL_SwapBuffers();
-			if (!Graphics.draw(false))
+			if (!cGraphics::draw(false))
 				running = false;
 			SDL_GL_SwapBuffers();
 			
@@ -3899,24 +3903,24 @@ MENUCOMMAND(makeMinimaps)
 				delete[] pixels;
 			pixels = getPixelsBGR();
 
-			xto = Graphics.w()-256;
+			xto = cGraphics::w()-256;
 			yto = screenStats[3]-22;
 			
 			int ii;
 			for(ii = 22; ii < screenStats[3]; ii++)
 			{
-				if(	pixels[3*(10+(Graphics.h()-ii)*screenStats[2])+0] == round(Graphics.backgroundColor[2]*255) &&
-					pixels[3*(10+(Graphics.h()-ii)*screenStats[2])+1] == round(Graphics.backgroundColor[1]*255) &&
-					pixels[3*(10+(Graphics.h()-ii)*screenStats[2])+2] == round(Graphics.backgroundColor[0]*255))
-					yto = Graphics.h()-ii;
+				if(	pixels[3*(10+(cGraphics::h()-ii)*screenStats[2])+0] == round(cGraphics::backgroundColor[2]*255) &&
+					pixels[3*(10+(cGraphics::h()-ii)*screenStats[2])+1] == round(cGraphics::backgroundColor[1]*255) &&
+					pixels[3*(10+(cGraphics::h()-ii)*screenStats[2])+2] == round(cGraphics::backgroundColor[0]*255))
+					yto = cGraphics::h()-ii;
 				else
 					break;
 			}
-			if(yto == Graphics.h() - 22)
+			if(yto == cGraphics::h() - 22)
 			{
-				Graphics.cameraheight+=25;
+				cGraphics::worldContainer->camera.height+=25;
 			}
-			else if(yto == Graphics.h() - 23)
+			else if(yto == cGraphics::h() - 23)
 			{
 				break;
 			}
@@ -3925,19 +3929,19 @@ MENUCOMMAND(makeMinimaps)
 				if(yto > mindist)
 				{
 					mindist = yto;
-					minheight = Graphics.cameraheight;
+					minheight = cGraphics::worldContainer->camera.height;
 				}
-				//Graphics.cameraheight/= 1.25;
-				Graphics.cameraheight -= ((Graphics.h() - yto) - 22);
+				//cGraphics::worldContainer->camera.height/= 1.25;
+				cGraphics::worldContainer->camera.height -= ((cGraphics::h() - yto) - 22);
 			}
 		}
 
 
-		Graphics.showLightmaps = true;
-		Graphics.showObjects = true;
+		cGraphics::showLightmaps = true;
+		cGraphics::showObjects = true;
 		yto = mindist;
-		Graphics.cameraheight = minheight;
-		if (!Graphics.draw(false))
+		cGraphics::worldContainer->camera.height = minheight;
+		if (!cGraphics::draw(false))
 			running = false;
 		SDL_GL_SwapBuffers();
 
@@ -3945,11 +3949,11 @@ MENUCOMMAND(makeMinimaps)
 			delete[] pixels;
 		pixels = getPixelsBGR();
 
-		for(int ii = Graphics.w()-257; ii > 0; ii--)
+		for(int ii = cGraphics::w()-257; ii > 0; ii--)
 		{
-			if(	pixels[3*(ii+5*screenStats[2])+0] == round(Graphics.backgroundColor[2]*255) &&
-				pixels[3*(ii+5*screenStats[2])+1] == round(Graphics.backgroundColor[1]*255) &&
-				pixels[3*(ii+5*screenStats[2])+2] == round(Graphics.backgroundColor[0]*255))
+			if(	pixels[3*(ii+5*screenStats[2])+0] == round(cGraphics::backgroundColor[2]*255) &&
+				pixels[3*(ii+5*screenStats[2])+1] == round(cGraphics::backgroundColor[1]*255) &&
+				pixels[3*(ii+5*screenStats[2])+2] == round(cGraphics::backgroundColor[0]*255))
 				xto = ii;
 			else
 				break;
@@ -3984,5 +3988,24 @@ MENUCOMMAND(makeMinimaps)
 	}
 #endif
 
+	return true;
+}
+
+
+
+MENUCOMMAND(switchMap)
+{
+	int newMap = ((cMenuItem*)src)->data3;
+	
+	cGraphics::worldContainer = cGraphics::worlds[newMap];
+	cGraphics::world = cGraphics::worldContainer->world;
+
+	for(int i = newMap; i > 0; i--)
+	{
+		cGraphics::worlds[i] = cGraphics::worlds[i-1];
+	}
+	cGraphics::worlds[0] = cGraphics::worldContainer;
+
+	cGraphics::updateMenu();
 	return true;
 }

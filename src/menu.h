@@ -57,6 +57,7 @@ public:
 	std::string		data;
 	std::string		data2;
 	void*			pdata;
+	int				data3;
 	cMenuItem();
 
 };

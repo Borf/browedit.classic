@@ -1,7 +1,6 @@
 #include "sprite.h"
 #include "graphics.h"
 #include "filesystem.h"
-extern cGraphics Graphics;
 extern std::string rodir;
 
 #define SPRITESIZE 128
@@ -320,13 +319,13 @@ void cSprite::draw()
 
 	int id = (8*action+direction) % body->actions.size();
 
-	while(Graphics.camerarot > 360)
-		Graphics.camerarot-=360;
-	while(Graphics.camerarot < 0)
-		Graphics.camerarot+=360;
+	while(cGraphics::worldContainer->camera.rot > 360)
+		cGraphics::worldContainer->camera.rot-=360;
+	while(cGraphics::worldContainer->camera.rot < 0)
+		cGraphics::worldContainer->camera.rot+=360;
 
 	if(scale != 1)
-		id = (8*action+((int)(8+direction-((Graphics.camerarot/(PI/180.0f)-22.5)/45))%8)) % body->actions.size();
+		id = (8*action+((int)(8+direction-((cGraphics::worldContainer->camera.rot/(PI/180.0f)-22.5)/45))%8)) % body->actions.size();
 
 	if(body->actions[id]->frameCount <= 0)
 	{

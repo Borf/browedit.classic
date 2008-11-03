@@ -9,7 +9,6 @@
 #include <wm/windowlabel.h>
 #include <fstream>
 
-extern cGraphics Graphics;
 extern std::string rodir;
 extern cWindow* draggingwindow;
 extern cWindowObject* draggingObject;
@@ -108,23 +107,23 @@ void cModelsWindow::cWindowModel::draw(int cutoffleft, int cutoffright, int cuto
 
 void cModelsWindow::cWindowModel::onClick()
 {
-	if(Graphics.previewModel != NULL)
+	if(cGraphics::previewModel != NULL)
 	{
-		if(Graphics.previewModel->filename == model->filename)
+		if(cGraphics::previewModel->filename == model->filename)
 		{
 			if (editmode == MODE_OBJECTS)
-				Graphics.previewColor = 0;
+				cGraphics::previewColor = 0;
 			parent->close();
 			return;
 		}
-		delete Graphics.previewModel;
+		delete cGraphics::previewModel;
 	}
-	Graphics.previewModel = new cRSMModel();
-	Graphics.previewModel->load(rodir + data);
-	Graphics.previewModel->rot = cVector3(0,0,0);
-	Graphics.previewModel->scale = cVector3(4,4,4);
-	Graphics.previewModel->pos = cVector3(40,-40,-40);
-	Graphics.previewColor = 200;
+	cGraphics::previewModel = new cRSMModel();
+	cGraphics::previewModel->load(rodir + data);
+	cGraphics::previewModel->rot = cVector3(0,0,0);
+	cGraphics::previewModel->scale = cVector3(4,4,4);
+	cGraphics::previewModel->pos = cVector3(40,-40,-40);
+	cGraphics::previewColor = 200;
 
 }
 
@@ -143,7 +142,7 @@ std::string cModelsWindow::cWindowModel::getText(int i)
 
 void cModelsWindow::cWindowModel::drag()
 {
-	parent->objects["zdragger"]->moveTo((int)mouseX-parent->getX(),(int)mouseY-(Graphics.h()-parent->getHeight()-parent->getY()));
+	parent->objects["zdragger"]->moveTo((int)mouseX-parent->getX(),(int)mouseY-(cGraphics::h()-parent->getHeight()-parent->getY()));
 	parent->objects["zdragger"]->setText(1, data);
 }
 
@@ -448,7 +447,7 @@ void cModelsWindow::cWindowModelCatSelect::onHoldDragOver()
 	int xx = (int)mouseX;
 	xx -= realX();
 	xx -= parent->getX();
-	int yy = Graphics.h()-(int)mouseY;
+	int yy = cGraphics::h()-(int)mouseY;
 	yy -= realY();
 	yy -= parent->getY();
 
@@ -658,8 +657,8 @@ cModelsWindow::cModelsWindow() : cWindow()
 	visible = true;
 	modal = false;
 
-	h = Graphics.h()-50;
-	w = Graphics.w()-50;
+	h = cGraphics::h()-50;
+	w = cGraphics::w()-50;
 	title = GetMsg("wm/model/TITLE");
 	center();
 

@@ -50,6 +50,46 @@ protected:
 
 
 
+class cWorldContainer
+{
+public:
+	class cCamera
+	{
+	public:
+		cCamera();
+		float					height;
+		float					angle;
+		float					rot;
+		cVector2				pointer;
+		bool					topCamera;
+	};
+	class cClipBoard
+	{
+	public:
+		enum eClipBoardType
+		{
+			CLIP_TEXTURE,
+			CLIP_HEIGHT,
+			CLIP_OBJECT,
+			CLIP_GAT,
+		};
+		eClipBoardType type;
+	};
+
+	cWorldContainer(cWorld* w)
+	{
+		world = w;
+	}
+
+
+	cWorld*				world;
+	cClipBoard*			clipboard;
+	cCamera				camera;
+
+	
+};
+
+
 class cGraphics : public cGraphicsBase
 {
 public:
@@ -57,14 +97,16 @@ public:
 	static int						init(int,int,int,bool);
 	static int						draw(bool = true);
 	static void						closeAndCleanup();
-	static cWorld*					world;
+
+	static cWorld*							world;
+	static cWorldContainer*					worldContainer;
+	static std::vector<cWorldContainer*>	worlds;
+	static int								currentWorld;
+
+	static void								newWorld();
+	static void								updateMenu();
 
 
-
-	static float					cameraheight;
-	static float					cameraangle;
-	static float					camerarot;
-	static cVector2					camerapointer;
 
 	static bool						showgat;
 		
@@ -107,7 +149,6 @@ public:
 	static int						selectedObject;
 	static bool						objectStartDrag;
 	static bool						showOglLighting;
-	static bool						topCamera;
 
 	static bool						slope;
 	static bool						showNoTiles;

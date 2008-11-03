@@ -5,7 +5,6 @@
 #include <list>
 #include "graphics.h"
 
-extern cGraphics Graphics;
 
 enum eUndoItem
 {
@@ -103,16 +102,16 @@ public:
 			cGraphics::world->models[objects[i].objectid]->scale = objects[i].scale;
 		}
 		int count = 0;
-		Graphics.selectionCenter = cVector3(0,0,0);
+		cGraphics::selectionCenter = cVector3(0,0,0);
 		for(i = 0; i < cGraphics::world->models.size(); i++)
 		{
 			if (cGraphics::world->models[i]->selected)
 			{
 				count++;
-				Graphics.selectionCenter+=cGraphics::world->models[i]->pos;
+				cGraphics::selectionCenter+=cGraphics::world->models[i]->pos;
 			}
 		}
-		Graphics.selectionCenter = Graphics.selectionCenter / (float)count;
+		cGraphics::selectionCenter = cGraphics::selectionCenter / (float)count;
 	}
 };
 
@@ -430,7 +429,7 @@ public:
 		model->rot = rot;
 		model->scale = scale;
 		cGraphics::world->models.insert(cGraphics::world->models.begin() + id, model);
-		Graphics.selectedObject = id;
+		cGraphics::selectedObject = id;
 //		cGraphics::world->models.push_back(model);
 	}
 };
@@ -448,7 +447,7 @@ public:
 	void undo()
 	{
 		cGraphics::world->effects.insert(cGraphics::world->effects.begin() + id, effect);
-		Graphics.selectedObject = id;
+		cGraphics::selectedObject = id;
 	}
 };
 
@@ -503,7 +502,7 @@ public:
 	void undo()
 	{
 		cGraphics::world->lights.insert(cGraphics::world->lights.begin() + id, light);
-		Graphics.selectedObject = id;
+		cGraphics::selectedObject = id;
 	}
 };
 
@@ -589,7 +588,7 @@ public:
 	void undo()
 	{
 		cGraphics::world->sounds.insert(cGraphics::world->sounds.begin() + id, sound);
-		Graphics.selectedObject = id;
+		cGraphics::selectedObject = id;
 	}
 };
 

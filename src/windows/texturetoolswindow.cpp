@@ -2,12 +2,11 @@
 #include "texturebrushwindow.h"
 
 #include <graphics.h>
-extern cGraphics Graphics;
 
 cTextureToolsWindow::cWindowToolbarButton::cWindowToolbarButton( cWindow* parent, std::string image, eTool t, TiXmlDocument* totalskin ) : cWindowPictureBox(parent)
 {
 	tool = t;
-	activated = t == Graphics.textureTool;
+	activated = t == cGraphics::textureTool;
 	if(!totalskin)
 		totalskin = &cWM::skin;
 	TiXmlElement* skin = totalskin->FirstChildElement("skin")->FirstChildElement("button");
@@ -78,7 +77,7 @@ void cTextureToolsWindow::cWindowToolbarButton::onClick()
 			((cWindowToolbarButton*)i->second)->activated = false;
 	}
 	activated = true;
-	Graphics.textureTool = tool;
+	cGraphics::textureTool = tool;
 }
 
 cTextureToolsWindow::cWindowBrushShape::cWindowBrushShape( cWindow* parent, TiXmlDocument* totalskin ) : cWindowButton(parent, totalskin)
@@ -99,19 +98,19 @@ void cTextureToolsWindow::cWindowBrushShape::draw( int a,int b,int c,int d )
 	//draw brush
 
 
-	float sx = (getWidth()-8)  / (float)max(Graphics.textureBrush[0].size(), Graphics.textureBrush.size());
-	float sy = (getHeight()-8) / (float)max(Graphics.textureBrush[0].size(), Graphics.textureBrush.size());
+	float sx = (getWidth()-8)  / (float)max(cGraphics::textureBrush[0].size(), cGraphics::textureBrush.size());
+	float sy = (getHeight()-8) / (float)max(cGraphics::textureBrush[0].size(), cGraphics::textureBrush.size());
 
 	int xx = realX();
 	int yy = realY();
 	glDisable(GL_TEXTURE_2D);
 	glColor4f(0,0,0,colors[3]);
 	glBegin(GL_QUADS);
-	for(int yyy = 0; yyy < Graphics.textureBrush.size(); yyy++)
+	for(int yyy = 0; yyy < cGraphics::textureBrush.size(); yyy++)
 	{
-		for(int xxx = 0; xxx < Graphics.textureBrush[yyy].size(); xxx++)
+		for(int xxx = 0; xxx < cGraphics::textureBrush[yyy].size(); xxx++)
 		{
-			if(Graphics.textureBrush[Graphics.textureBrush.size()-1-yyy][xxx])
+			if(cGraphics::textureBrush[cGraphics::textureBrush.size()-1-yyy][xxx])
 			{
 				glVertex2f(xx + 4 + xxx*sx,		yy + 4 + yyy*sy);
 				glVertex2f(xx + 4 + xxx*sx+sx,	yy + 4 + yyy*sy);
@@ -160,7 +159,7 @@ cTextureToolsWindow::cTextureToolsWindow( ) : cWindow()
 	h = 100;
 	w = 50;
 	x = 0;
-	y = Graphics.h()-32;
+	y = cGraphics::h()-32;
 	minWidth = 20 + skinOffLeft+skinOffRight;
 	minHeight = 20 + skinOffTop+skinOffBottom;
 	
@@ -194,13 +193,13 @@ cTextureToolsWindow::cTextureToolsWindow( ) : cWindow()
 	cWindowObject* o;
 	
 	o = new cWindowLimitedFloatInputBox(this);
-	((cWindowFloatInputBox*)o)->floatje = &Graphics.textureGridSizeX;
+	((cWindowFloatInputBox*)o)->floatje = &cGraphics::textureGridSizeX;
 	o->alignment = ALIGN_TOPLEFT;
 	o->resizeTo(innerWidth(), o->getHeight());
 	objects["aa_gridsizex"] = o;
 	
 	o = new cWindowLimitedFloatInputBox(this);
-	((cWindowFloatInputBox*)o)->floatje = &Graphics.textureGridSizeY;
+	((cWindowFloatInputBox*)o)->floatje = &cGraphics::textureGridSizeY;
 	o->alignment = ALIGN_TOPLEFT;
 	o->resizeTo(innerWidth(), o->getHeight());
 	objects["aa_gridsizey"] = o;

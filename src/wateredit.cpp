@@ -4,7 +4,6 @@
 
 extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
-extern cGraphics Graphics;
 extern cUndoStack undostack;
 
 
@@ -26,7 +25,7 @@ int cProcessManagement::wateredit_process_events(SDL_Event &event)
 				cGraphics::world->water.type = max(0, cGraphics::world->water.type - 1);
 				break;
 			case SDLK_RIGHTBRACKET:
-				cGraphics::world->water.type = min(Graphics.waterCount-1, cGraphics::world->water.type + 1);
+				cGraphics::world->water.type = min(cGraphics::waterCount-1, cGraphics::world->water.type + 1);
 				break;
 			case SDLK_PAGEDOWN:
 				undostack.push(new cUndoChangeWater(cGraphics::world->water));

@@ -90,6 +90,8 @@ typedef int32_t intptr_t;
 #define SNAPPINGDIST 10
 #define DRAGBORDER   6
 
+#define MAX_MAPS 10
+
 
 #define BOLD 1				// options for logging
 #define DEBUG_LEVEL 5

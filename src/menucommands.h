@@ -72,6 +72,7 @@ MENUCOMMAND(plugin);
 MENUCOMMAND(mapdatabase);
 MENUCOMMAND(saveOnline);
 MENUCOMMAND(makeMinimaps);
+MENUCOMMAND(switchMap);
 
 MENUCOMMAND(rebuildtexturefile);
 MENUCOMMAND(rebuildmodelfile);

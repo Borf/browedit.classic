@@ -6,7 +6,6 @@
 
 extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
-extern cGraphics Graphics;
 extern cUndoStack undostack;
 extern bool lbuttondown, doneaction;
 extern float oldmousey,oldmousex;
@@ -23,31 +22,31 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 			{
 				if (cGraphics::world->sprites.size() == 0)
 					break;
-				if(Graphics.objectStartDrag)
+				if(cGraphics::objectStartDrag)
 				{
 					if(doneaction)
 					{
-						//undostack.push(new cUndoChangeSprite(Graphics.selectedObject));
+						//undostack.push(new cUndoChangeSprite(cGraphics::selectedObject));
 						doneaction = false;
 					}
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 					bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 					if (!ctrl && !alt)
 					{
-						cGraphics::world->sprites[Graphics.selectedObject]->pos.x = mouse3dx / 5;
-						cGraphics::world->sprites[Graphics.selectedObject]->pos.z = mouse3dz / 5;
+						cGraphics::world->sprites[cGraphics::selectedObject]->pos.x = mouse3dx / 5;
+						cGraphics::world->sprites[cGraphics::selectedObject]->pos.z = mouse3dz / 5;
 						if (SDL_GetModState() & KMOD_SHIFT)
 						{
-							cGraphics::world->sprites[Graphics.selectedObject]->pos.x = floor(cGraphics::world->sprites[Graphics.selectedObject]->pos.x * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsetx) / (Graphics.gridsize/2.0f) + Graphics.gridoffsetx/(Graphics.gridsize/2.0f);
-							cGraphics::world->sprites[Graphics.selectedObject]->pos.z = floor(cGraphics::world->sprites[Graphics.selectedObject]->pos.z * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsety) / (Graphics.gridsize/2.0f) + Graphics.gridoffsety/(Graphics.gridsize/2.0f);
+							cGraphics::world->sprites[cGraphics::selectedObject]->pos.x = floor(cGraphics::world->sprites[cGraphics::selectedObject]->pos.x * (cGraphics::gridsize/2.0f) + 0.5-cGraphics::gridoffsetx) / (cGraphics::gridsize/2.0f) + cGraphics::gridoffsetx/(cGraphics::gridsize/2.0f);
+							cGraphics::world->sprites[cGraphics::selectedObject]->pos.z = floor(cGraphics::world->sprites[cGraphics::selectedObject]->pos.z * (cGraphics::gridsize/2.0f) + 0.5-cGraphics::gridoffsety) / (cGraphics::gridsize/2.0f) + cGraphics::gridoffsety/(cGraphics::gridsize/2.0f);
 						}
 					}
 					if(ctrl && !alt)
 					{
-						cGraphics::world->sprites[Graphics.selectedObject]->pos.y += (mouseY-oldmousey);
+						cGraphics::world->sprites[cGraphics::selectedObject]->pos.y += (mouseY-oldmousey);
 						if (SDL_GetModState() & KMOD_SHIFT)
 						{
-							cGraphics::world->sprites[Graphics.selectedObject]->pos.y = floor(cGraphics::world->sprites[Graphics.selectedObject]->pos.y * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsetx) / (Graphics.gridsize/2.0f) + Graphics.gridoffsetx/(Graphics.gridsize/2.0f);
+							cGraphics::world->sprites[cGraphics::selectedObject]->pos.y = floor(cGraphics::world->sprites[cGraphics::selectedObject]->pos.y * (cGraphics::gridsize/2.0f) + 0.5-cGraphics::gridoffsetx) / (cGraphics::gridsize/2.0f) + cGraphics::gridoffsetx/(cGraphics::gridsize/2.0f);
 						}
 					}
 					if(!ctrl && alt)
@@ -79,7 +78,7 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 						minobj = i;
 					}
 				}
-				Graphics.objectStartDrag = Graphics.selectedObject == minobj;
+				cGraphics::objectStartDrag = cGraphics::selectedObject == minobj;
 			}
 			break;
 		}
@@ -130,12 +129,12 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 							minobj = i;
 						}
 					}
-					Graphics.selectedObject = minobj;
+					cGraphics::selectedObject = minobj;
 				}
 			}
 			else if(event.button.button == SDL_BUTTON_RIGHT && movement < 3)
 			{
-				Graphics.selectedObject = -1;
+				cGraphics::selectedObject = -1;
 			}
 			break;
 		case SDL_KEYDOWN:
@@ -143,36 +142,36 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 			switch (event.key.keysym.sym)
 			{
 			case SDLK_BACKSPACE:
-				if (Graphics.selectedObject > -1 && Graphics.selectedObject < (int)cGraphics::world->sprites.size())
+				if (cGraphics::selectedObject > -1 && cGraphics::selectedObject < (int)cGraphics::world->sprites.size())
 				{
-					//undostack.push(new cUndoSpriteDelete(Graphics.selectedObject));
-					delete cGraphics::world->sprites[Graphics.selectedObject];
-					cGraphics::world->sprites.erase(cGraphics::world->sprites.begin() + Graphics.selectedObject);
-					Graphics.selectedObject = -1;
+					//undostack.push(new cUndoSpriteDelete(cGraphics::selectedObject));
+					delete cGraphics::world->sprites[cGraphics::selectedObject];
+					cGraphics::world->sprites.erase(cGraphics::world->sprites.begin() + cGraphics::selectedObject);
+					cGraphics::selectedObject = -1;
 				}
 				break;
 			case SDLK_RETURN:
-				if (Graphics.selectedObject != -1 && cWM::getWindow(WT_SPRITE) == NULL)
+				if (cGraphics::selectedObject != -1 && cWM::getWindow(WT_SPRITE) == NULL)
 				{
-					if(Graphics.selectedObject >= (int)cGraphics::world->sprites.size())
+					if(cGraphics::selectedObject >= (int)cGraphics::world->sprites.size())
 						break;
 
 					cWindow* w = new cSpriteWindow();
 
-					if(cGraphics::world->sprites[Graphics.selectedObject]->head)
-						((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->loadHead(cGraphics::world->sprites[Graphics.selectedObject]->head->fileName);
-					((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->loadBody(cGraphics::world->sprites[Graphics.selectedObject]->body->fileName);
+					if(cGraphics::world->sprites[cGraphics::selectedObject]->head)
+						((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->loadHead(cGraphics::world->sprites[cGraphics::selectedObject]->head->fileName);
+					((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->loadBody(cGraphics::world->sprites[cGraphics::selectedObject]->body->fileName);
 
-					for(unsigned int i = 0; i < cGraphics::world->sprites[Graphics.selectedObject]->extras.size(); i++)
+					for(unsigned int i = 0; i < cGraphics::world->sprites[cGraphics::selectedObject]->extras.size(); i++)
 					{
-						if(cGraphics::world->sprites[Graphics.selectedObject]->extras[i] != NULL)
+						if(cGraphics::world->sprites[cGraphics::selectedObject]->extras[i] != NULL)
 						{
-							((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->setExtra(i, cGraphics::world->sprites[Graphics.selectedObject]->extras[i]->fileName);
+							((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->setExtra(i, cGraphics::world->sprites[cGraphics::selectedObject]->extras[i]->fileName);
 						}
 					}
-					((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->action = cGraphics::world->sprites[Graphics.selectedObject]->action-1;
+					((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->action = cGraphics::world->sprites[cGraphics::selectedObject]->action-1;
 					w->objects["actionbutton"]->onClick();
-					((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->direction = cGraphics::world->sprites[Graphics.selectedObject]->direction;
+					((cSpriteWindow::cWindowSprite*)w->objects["spritewindow"])->sprite->direction = cGraphics::world->sprites[cGraphics::selectedObject]->direction;
 
 					((cWindowTabPanel*)w->objects["tabpanel"])->tabchange(-1);
 
@@ -186,7 +185,7 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 					w->objects["colorg"]->SetInt(3,(int)&l->color.y);
 					w->objects["colorb"]->SetInt(3,(int)&l->color.z);
 					w->objects["intensity"]->SetInt(3,(int)&l->todo2);
-					//((cEffectWindow*)w)->undo = new cUndoChangeEffect(Graphics.selectedObject);
+					//((cEffectWindow*)w)->undo = new cUndoChangeEffect(cGraphics::selectedObject);
 					cWM::addWindow(w);*/
 				}
 				break;

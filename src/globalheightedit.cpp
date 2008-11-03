@@ -4,7 +4,6 @@
 
 extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
-extern cGraphics Graphics;
 extern cUndoStack undostack;
 extern double mouse3dxstart, mouse3dystart, mouse3dzstart;
 #include "windows/areacopywindow.h"
@@ -19,7 +18,7 @@ int cProcessManagement::globalheightedit_process_events(SDL_Event &event)
 		case SDL_MOUSEBUTTONUP:
 			if(event.button.button == SDL_BUTTON_LEFT)
 			{
-				if(mouseX < Graphics.w()-256)
+				if(mouseX < cGraphics::w()-256)
 				{
 					if (mouse3dxstart > mouse3dx)
 					{

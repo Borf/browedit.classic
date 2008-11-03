@@ -5,7 +5,6 @@
 extern long mouseX;
 extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
-extern cGraphics Graphics;
 extern cUndoStack undostack;
 extern std::vector<std::vector<int > > clipboardgat;
 
@@ -21,29 +20,29 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 		{
 			if(event.button.button == SDL_BUTTON_LEFT)
 			{
-				if(mousestartx < Graphics.w()-256)
+				if(mousestartx < cGraphics::w()-256)
 				{
-					float selsizex = (fabs(Graphics.selectionstart.x - Graphics.selectionend.x) / 32);
-					float selsizey = (fabs(Graphics.selectionstart.y - Graphics.selectionend.y) / 32);
+					float selsizex = (fabs(cGraphics::selectionstart.x - cGraphics::selectionend.x) / 32);
+					float selsizey = (fabs(cGraphics::selectionstart.y - cGraphics::selectionend.y) / 32);
 
-					selsizex = floor(selsizex*Graphics.brushsize);
-					selsizey = floor(selsizey*Graphics.brushsize);
+					selsizex = floor(selsizex*cGraphics::brushsize);
+					selsizey = floor(selsizey*cGraphics::brushsize);
 
 					int posx = (int)mouse3dx / 10;
 					int posy = (int)mouse3dz / 10;
 
-					float selstartx = ((Graphics.selectionstart.x - (Graphics.w()-256)) / 32.0f);
-					float selstarty = ((int)(Graphics.selectionstart.y - 32) % 288) / 32;
-					float selendx = ((Graphics.selectionend.x - (Graphics.w()-256)) / 32.0f);
-					float selendy = ((int)(Graphics.selectionend.y - 32) % 288) / 32;
+					float selstartx = ((cGraphics::selectionstart.x - (cGraphics::w()-256)) / 32.0f);
+					float selstarty = ((int)(cGraphics::selectionstart.y - 32) % 288) / 32;
+					float selendx = ((cGraphics::selectionend.x - (cGraphics::w()-256)) / 32.0f);
+					float selendy = ((int)(cGraphics::selectionend.y - 32) % 288) / 32;
 
-					selstartx += (Graphics.w()%32)/32.0f;
-					selendx += (Graphics.w()%32)/32.0f;
+					selstartx += (cGraphics::w()%32)/32.0f;
+					selendx += (cGraphics::w()%32)/32.0f;
 
 					glColor4f(1,1,1,0.7f);
 					glEnable(GL_BLEND);
 
-					if (Graphics.textureRot % 2 == 1)
+					if (cGraphics::textureRot % 2 == 1)
 					{
 						float a = selsizex;
 						selsizex = selsizey;
@@ -77,80 +76,80 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 							t.color[1] = (char)255;
 							t.color[2] = (char)255;
 							t.color[3] = (char)255;
-							t.texture = Graphics.texturestart + (int)(Graphics.selectionstart.y - 32) / 288;
-							if(Graphics.clearLightmaps)
+							t.texture = cGraphics::texturestart + (int)(cGraphics::selectionstart.y - 32) / 288;
+							if(cGraphics::clearLightmaps)
 								t.lightmap = 0;
 							else
 							{
 								if(cGraphics::world->cubes[y][x].tileUp != -1)
 									t.lightmap = cGraphics::world->tiles[cGraphics::world->cubes[y][x].tileUp].lightmap;
 							}
-							if (Graphics.textureRot == 0)
+							if (cGraphics::textureRot == 0)
 							{
-								t.u1 = (selendx*Graphics.brushsize-xx-1) * (1/(8.0f*Graphics.brushsize));
-								t.v1 = ((selendy*Graphics.brushsize-yy-1) * (1/(8.0f*Graphics.brushsize)));
+								t.u1 = (selendx*cGraphics::brushsize-xx-1) * (1/(8.0f*cGraphics::brushsize));
+								t.v1 = ((selendy*cGraphics::brushsize-yy-1) * (1/(8.0f*cGraphics::brushsize)));
 
-								t.u2 = (selendx*Graphics.brushsize-xx) * (1/(8.0f*Graphics.brushsize));
-								t.v2 = ((selendy*Graphics.brushsize-yy-1) * (1/(8.0f*Graphics.brushsize)));
+								t.u2 = (selendx*cGraphics::brushsize-xx) * (1/(8.0f*cGraphics::brushsize));
+								t.v2 = ((selendy*cGraphics::brushsize-yy-1) * (1/(8.0f*cGraphics::brushsize)));
 								
-								t.u3 = (selendx*Graphics.brushsize-xx-1) * (1/(8.0f*Graphics.brushsize));
-								t.v3 = ((selendy*Graphics.brushsize-yy) * (1/(8.0f*Graphics.brushsize)));
+								t.u3 = (selendx*cGraphics::brushsize-xx-1) * (1/(8.0f*cGraphics::brushsize));
+								t.v3 = ((selendy*cGraphics::brushsize-yy) * (1/(8.0f*cGraphics::brushsize)));
 								
-								t.u4 = (selendx*Graphics.brushsize-xx) * (1/(8.0f*Graphics.brushsize));
-								t.v4 = ((selendy*Graphics.brushsize-yy) * (1/(8.0f*Graphics.brushsize)));
+								t.u4 = (selendx*cGraphics::brushsize-xx) * (1/(8.0f*cGraphics::brushsize));
+								t.v4 = ((selendy*cGraphics::brushsize-yy) * (1/(8.0f*cGraphics::brushsize)));
 							}
-							if (Graphics.textureRot == 1)
+							if (cGraphics::textureRot == 1)
 							{
-								t.v1 = (selendx*Graphics.brushsize-xx-1) * (1/(8.0f*Graphics.brushsize));
-								t.u1 = ((selstarty*Graphics.brushsize+yy+1) * (1/(8.0f*Graphics.brushsize)));
+								t.v1 = (selendx*cGraphics::brushsize-xx-1) * (1/(8.0f*cGraphics::brushsize));
+								t.u1 = ((selstarty*cGraphics::brushsize+yy+1) * (1/(8.0f*cGraphics::brushsize)));
 
-								t.v2 = (selendx*Graphics.brushsize-xx) * (1/(8.0f*Graphics.brushsize));
-								t.u2 = ((selstarty*Graphics.brushsize+yy+1) * (1/(8.0f*Graphics.brushsize)));
+								t.v2 = (selendx*cGraphics::brushsize-xx) * (1/(8.0f*cGraphics::brushsize));
+								t.u2 = ((selstarty*cGraphics::brushsize+yy+1) * (1/(8.0f*cGraphics::brushsize)));
 								
-								t.v3 = (selendx*Graphics.brushsize-xx-1) * (1/(8.0f*Graphics.brushsize));
-								t.u3 = ((selstarty*Graphics.brushsize+yy) * (1/(8.0f*Graphics.brushsize)));
+								t.v3 = (selendx*cGraphics::brushsize-xx-1) * (1/(8.0f*cGraphics::brushsize));
+								t.u3 = ((selstarty*cGraphics::brushsize+yy) * (1/(8.0f*cGraphics::brushsize)));
 								
-								t.v4 = (selendx*Graphics.brushsize-xx) * (1/(8.0f*Graphics.brushsize));
-								t.u4 = ((selstarty*Graphics.brushsize+yy) * (1/(8.0f*Graphics.brushsize)));
+								t.v4 = (selendx*cGraphics::brushsize-xx) * (1/(8.0f*cGraphics::brushsize));
+								t.u4 = ((selstarty*cGraphics::brushsize+yy) * (1/(8.0f*cGraphics::brushsize)));
 							}
-							if(Graphics.textureRot == 2)
+							if(cGraphics::textureRot == 2)
 							{
-								t.u1 = (selstartx*Graphics.brushsize+xx+1) * (1/(8.0f*Graphics.brushsize));
-								t.v1 = ((selstarty*Graphics.brushsize+yy+1) * (1/(8.0f*Graphics.brushsize)));
+								t.u1 = (selstartx*cGraphics::brushsize+xx+1) * (1/(8.0f*cGraphics::brushsize));
+								t.v1 = ((selstarty*cGraphics::brushsize+yy+1) * (1/(8.0f*cGraphics::brushsize)));
 
-								t.u2 = (selstartx*Graphics.brushsize+xx) * (1/(8.0f*Graphics.brushsize));
-								t.v2 = ((selstarty*Graphics.brushsize+yy+1) * (1/(8.0f*Graphics.brushsize)));
+								t.u2 = (selstartx*cGraphics::brushsize+xx) * (1/(8.0f*cGraphics::brushsize));
+								t.v2 = ((selstarty*cGraphics::brushsize+yy+1) * (1/(8.0f*cGraphics::brushsize)));
 								
-								t.u3 = (selstartx*Graphics.brushsize+xx+1) * (1/(8.0f*Graphics.brushsize));
-								t.v3 = ((selstarty*Graphics.brushsize+yy) * (1/(8.0f*Graphics.brushsize)));
+								t.u3 = (selstartx*cGraphics::brushsize+xx+1) * (1/(8.0f*cGraphics::brushsize));
+								t.v3 = ((selstarty*cGraphics::brushsize+yy) * (1/(8.0f*cGraphics::brushsize)));
 								
-								t.u4 = (selstartx*Graphics.brushsize+xx) * (1/(8.0f*Graphics.brushsize));
-								t.v4 = ((selstarty*Graphics.brushsize+yy) * (1/(8.0f*Graphics.brushsize)));
+								t.u4 = (selstartx*cGraphics::brushsize+xx) * (1/(8.0f*cGraphics::brushsize));
+								t.v4 = ((selstarty*cGraphics::brushsize+yy) * (1/(8.0f*cGraphics::brushsize)));
 							}
-							if (Graphics.textureRot == 3)
+							if (cGraphics::textureRot == 3)
 							{
-								t.v1 = (selstartx*Graphics.brushsize+xx+1) * (1/(8.0f*Graphics.brushsize));
-								t.u1 = ((selendy*Graphics.brushsize-yy-1) * (1/(8.0f*Graphics.brushsize)));
+								t.v1 = (selstartx*cGraphics::brushsize+xx+1) * (1/(8.0f*cGraphics::brushsize));
+								t.u1 = ((selendy*cGraphics::brushsize-yy-1) * (1/(8.0f*cGraphics::brushsize)));
 
-								t.v2 = (selstartx*Graphics.brushsize+xx) * (1/(8.0f*Graphics.brushsize));
-								t.u2 = ((selendy*Graphics.brushsize-yy-1) * (1/(8.0f*Graphics.brushsize)));
+								t.v2 = (selstartx*cGraphics::brushsize+xx) * (1/(8.0f*cGraphics::brushsize));
+								t.u2 = ((selendy*cGraphics::brushsize-yy-1) * (1/(8.0f*cGraphics::brushsize)));
 								
-								t.v3 = (selstartx*Graphics.brushsize+xx+1) * (1/(8.0f*Graphics.brushsize));
-								t.u3 = ((selendy*Graphics.brushsize-yy) * (1/(8.0f*Graphics.brushsize)));
+								t.v3 = (selstartx*cGraphics::brushsize+xx+1) * (1/(8.0f*cGraphics::brushsize));
+								t.u3 = ((selendy*cGraphics::brushsize-yy) * (1/(8.0f*cGraphics::brushsize)));
 								
-								t.v4 = (selstartx*Graphics.brushsize+xx) * (1/(8.0f*Graphics.brushsize));
-								t.u4 = ((selendy*Graphics.brushsize-yy) * (1/(8.0f*Graphics.brushsize)));
+								t.v4 = (selstartx*cGraphics::brushsize+xx) * (1/(8.0f*cGraphics::brushsize));
+								t.u4 = ((selendy*cGraphics::brushsize-yy) * (1/(8.0f*cGraphics::brushsize)));
 							}
 							
 
-							if(Graphics.fliph)
+							if(cGraphics::fliph)
 							{
 								t.u1 = ((selendx+selstartx)/8.0)-t.u1;
 								t.u2 = ((selendx+selstartx)/8.0)-t.u2;
 								t.u3 = ((selendx+selstartx)/8.0)-t.u3;
 								t.u4 = ((selendx+selstartx)/8.0)-t.u4;
 							}
-							if(Graphics.flipv)
+							if(cGraphics::flipv)
 							{
 								t.v1 = ((selendy+selstarty)/8.0)-t.v1;
 								t.v2 = ((selendy+selstarty)/8.0)-t.v2;
@@ -175,31 +174,31 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 			switch (event.key.keysym.sym)
 			{
 			case SDLK_MINUS:
-				if (Graphics.brushsize > 0.125)
-					Graphics.brushsize/=2.0f;
+				if (cGraphics::brushsize > 0.125)
+					cGraphics::brushsize/=2.0f;
 				break;
 			case SDLK_EQUALS:
-				Graphics.brushsize*=2;
+				cGraphics::brushsize*=2;
 				break;
 			case SDLK_SPACE:
-				Graphics.textureRot = (Graphics.textureRot + 1) % 4;
+				cGraphics::textureRot = (cGraphics::textureRot + 1) % 4;
 				break;
 			case SDLK_h:
-				Graphics.fliph = !Graphics.fliph;
+				cGraphics::fliph = !cGraphics::fliph;
 				break;
 			case SDLK_v:
-				Graphics.flipv = !Graphics.flipv;
+				cGraphics::flipv = !cGraphics::flipv;
 				break;
 			case SDLK_c:
-				if(mouseX < Graphics.w()-256)
+				if(mouseX < cGraphics::w()-256)
 				{
-					float selsizex = (fabs(Graphics.selectionstart.x - Graphics.selectionend.x) / 32);
-					float selsizey = (fabs(Graphics.selectionstart.y - Graphics.selectionend.y) / 32);
+					float selsizex = (fabs(cGraphics::selectionstart.x - cGraphics::selectionend.x) / 32);
+					float selsizey = (fabs(cGraphics::selectionstart.y - cGraphics::selectionend.y) / 32);
 
-					selsizex = floor(selsizex*Graphics.brushsize);
-					selsizey = floor(selsizey*Graphics.brushsize);
+					selsizex = floor(selsizex*cGraphics::brushsize);
+					selsizey = floor(selsizey*cGraphics::brushsize);
 
-					if (Graphics.textureRot % 2 == 1)
+					if (cGraphics::textureRot % 2 == 1)
 					{
 						float a = selsizex;
 						selsizex = selsizey;
@@ -244,18 +243,18 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 				}
 				break; 
 			case SDLK_p:
-				if(mouseX < Graphics.w()-256)
+				if(mouseX < cGraphics::w()-256)
 				{
-					float selsizex = (fabs(Graphics.selectionstart.x - Graphics.selectionend.x) / 32);
-					float selsizey = (fabs(Graphics.selectionstart.y - Graphics.selectionend.y) / 32);
+					float selsizex = (fabs(cGraphics::selectionstart.x - cGraphics::selectionend.x) / 32);
+					float selsizey = (fabs(cGraphics::selectionstart.y - cGraphics::selectionend.y) / 32);
 
-					selsizex = floor(selsizex*Graphics.brushsize);
-					selsizey = floor(selsizey*Graphics.brushsize);
+					selsizex = floor(selsizex*cGraphics::brushsize);
+					selsizey = floor(selsizey*cGraphics::brushsize);
 
 					int posx = (int)mouse3dx / 10;
 					int posy = (int)mouse3dz / 10;
 
-					if (Graphics.textureRot % 2 == 1)
+					if (cGraphics::textureRot % 2 == 1)
 					{
 						float a = selsizex;
 						selsizex = selsizey;
@@ -294,12 +293,12 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 				{
 					int posx = (int)mouse3dx / 10;
 					int posy = (int)mouse3dz / 10;
-					float selsizex = (fabs(Graphics.selectionstart.x - Graphics.selectionend.x) / 32);
-					float selsizey = (fabs((int)Graphics.selectionstart.y - Graphics.selectionend.y) / 32);
-					selsizex = (int)floor(selsizex*Graphics.brushsize);
-					selsizey = (int)floor(selsizey*Graphics.brushsize);
+					float selsizex = (fabs(cGraphics::selectionstart.x - cGraphics::selectionend.x) / 32);
+					float selsizey = (fabs((int)cGraphics::selectionstart.y - cGraphics::selectionend.y) / 32);
+					selsizex = (int)floor(selsizex*cGraphics::brushsize);
+					selsizey = (int)floor(selsizey*cGraphics::brushsize);
 
-					if (Graphics.textureRot % 2 == 1)
+					if (cGraphics::textureRot % 2 == 1)
 					{
 						float a = selsizex;
 						selsizex = selsizey;
@@ -336,14 +335,14 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 					break;
 				}
 			case SDLK_LEFTBRACKET:
-				Graphics.texturestart--;
-				if (Graphics.texturestart < 0)
-					Graphics.texturestart = 0;
+				cGraphics::texturestart--;
+				if (cGraphics::texturestart < 0)
+					cGraphics::texturestart = 0;
 				break;
 			case SDLK_RIGHTBRACKET:
-				Graphics.texturestart++;
-				if (Graphics.texturestart > ((int)cGraphics::world->textures.size()) - (Graphics.h() / 288))
-					Graphics.texturestart--;
+				cGraphics::texturestart++;
+				if (cGraphics::texturestart > ((int)cGraphics::world->textures.size()) - (cGraphics::h() / 288))
+					cGraphics::texturestart--;
 				break;
 			default:
 				break;

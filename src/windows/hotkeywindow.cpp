@@ -1,7 +1,6 @@
 #include "hotkeywindow.h"
 
 #include <graphics.h>
-extern cGraphics Graphics;
 
 
 cHotkeyWindow::cHotkeyButton::cHotkeyButton( cWindow* parent ) : cWindowPictureBox(parent)
@@ -19,50 +18,50 @@ void cHotkeyWindow::cHotkeyButton::onRightClick()
 		delete[] im;
 		return;
 	}
-	char* image = new char[Graphics.w()*Graphics.h()*3];
-	glReadPixels( 0, 0, Graphics.w(), Graphics.h(), GL_RGB, GL_UNSIGNED_BYTE, image );
+	char* image = new char[cGraphics::w()*cGraphics::h()*3];
+	glReadPixels( 0, 0, cGraphics::w(), cGraphics::h(), GL_RGB, GL_UNSIGNED_BYTE, image );
 	
 	im = new char[256*256*3];
 	
-	float factorx = Graphics.w() / 256.0f;
-	float factory = Graphics.h() / 256.0f;
+	float factorx = cGraphics::w() / 256.0f;
+	float factory = cGraphics::h() / 256.0f;
 	
 	for(int x = 0; x < 256; x++)
 	{
 		for(int y = 0; y < 256; y++)
 		{
-			im[3*(x+y*256)] = image[3*(int)(floor(x*factorx)+floor(y*factory)*Graphics.w())];
-			im[3*(x+y*256)+1] = image[3*(int)(floor(x*factorx)+floor(y*factory)*Graphics.w())+1];
-			im[3*(x+y*256)+2] = image[3*(int)(floor(x*factorx)+floor(y*factory)*Graphics.w())+2];
+			im[3*(x+y*256)] = image[3*(int)(floor(x*factorx)+floor(y*factory)*cGraphics::w())];
+			im[3*(x+y*256)+1] = image[3*(int)(floor(x*factorx)+floor(y*factory)*cGraphics::w())+1];
+			im[3*(x+y*256)+2] = image[3*(int)(floor(x*factorx)+floor(y*factory)*cGraphics::w())+2];
 		}
 	}
 	delete[] image;
 	userfunc(NULL);
 	loaded = true;
 	
-	camerapointer = Graphics.camerapointer;
-	camerarot = Graphics.camerarot;
-	cameraheight = Graphics.cameraheight;
-	cameraangle = Graphics.cameraangle;
-	topcamera = Graphics.topCamera;
+	camerapointer = cGraphics::worldContainer->camera.pointer;
+	camerarot = cGraphics::worldContainer->camera.rot;
+	cameraheight = cGraphics::worldContainer->camera.height;
+	cameraangle = cGraphics::worldContainer->camera.angle;
+	topcamera = cGraphics::worldContainer->camera.topCamera;
 }
 
 void cHotkeyWindow::cHotkeyButton::onClick()
 {
 	if(loaded)
 	{
-		Graphics.camerapointer = camerapointer;
-		Graphics.camerarot = camerarot;
-		Graphics.cameraheight = cameraheight;
-		Graphics.cameraangle = cameraangle;
-		Graphics.topCamera = topcamera;
+		cGraphics::worldContainer->camera.pointer = camerapointer;
+		cGraphics::worldContainer->camera.rot = camerarot;
+		cGraphics::worldContainer->camera.height = cameraheight;
+		cGraphics::worldContainer->camera.angle = cameraangle;
+		cGraphics::worldContainer->camera.topCamera = topcamera;
 	}
 }
 
 cWindowObject* cHotkeyWindow::cHotkeyButton::inObject()
 {
 	int xx=(int)mouseX-parent->getX();
-	int yy=(Graphics.h()-(int)mouseY)-parent->getY();
+	int yy=(cGraphics::h()-(int)mouseY)-parent->getY();
 	if (xx > getX() && xx < getX()+w &&
 		yy > getY() && yy < getY()+h)
 		return this;
@@ -121,16 +120,16 @@ void cHotkeyWindow::cHotkeyButton::draw( int cutoffleft, int cutoffright, int cu
 		{
 			int xxx = xx;
 			int yyy = yy+16;
-			if(xxx+parent->getX()+256 > Graphics.w())
-				xxx = Graphics.w() - 256 - parent->getX();
-			if(yyy+parent->getY()+256*(Graphics.h()/(float)Graphics.w()) > Graphics.h())
-				yyy = Graphics.h() - 256 - parent->getY();
+			if(xxx+parent->getX()+256 > cGraphics::w())
+				xxx = cGraphics::w() - 256 - parent->getX();
+			if(yyy+parent->getY()+256*(cGraphics::h()/(float)cGraphics::w()) > cGraphics::h())
+				yyy = cGraphics::h() - 256 - parent->getY();
 			
 			glBegin(GL_QUADS);
 			glTexCoord2f(0,0);		glVertex3d(xxx, yyy,100);
 			glTexCoord2f(1,0);		glVertex3d(xxx+256, yyy,100);
-			glTexCoord2f(1,1);		glVertex3d(xxx+256, yyy+256*(Graphics.h()/(float)Graphics.w()),100);
-			glTexCoord2f(0,1);		glVertex3d(xxx, yyy+256*(Graphics.h()/(float)Graphics.w()),100);
+			glTexCoord2f(1,1);		glVertex3d(xxx+256, yyy+256*(cGraphics::h()/(float)cGraphics::w()),100);
+			glTexCoord2f(0,1);		glVertex3d(xxx, yyy+256*(cGraphics::h()/(float)cGraphics::w()),100);
 			glEnd();
 		}
 		
@@ -165,7 +164,7 @@ cHotkeyWindow::cHotkeyWindow() : cWindow()
 	
 	h = 40;
 	w = 264+16;
-	x = Graphics.w()-w;
+	x = cGraphics::w()-w;
 	y = 0;
 	title = "";
 	initProps("hotbar");

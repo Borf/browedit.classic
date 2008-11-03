@@ -4,7 +4,6 @@
 
 extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
-extern cGraphics Graphics;
 extern cUndoStack undostack;
 extern double mouse3dxstart, mouse3dystart, mouse3dzstart;
 #include "windows/areacopywindow.h"
@@ -19,9 +18,9 @@ int cProcessManagement::texturepaintedit_process_events(SDL_Event &event)
 		case SDL_MOUSEBUTTONUP:
 			if(event.button.button == SDL_BUTTON_LEFT)
 			{
-				if(mouseX < Graphics.w()-256)
+				if(mouseX < cGraphics::w()-256)
 				{
-					if(Graphics.textureTool == TOOL_SELECTAREA)
+					if(cGraphics::textureTool == TOOL_SELECTAREA)
 					{
 						if (mouse3dxstart > mouse3dx)
 						{
@@ -60,30 +59,30 @@ int cProcessManagement::texturepaintedit_process_events(SDL_Event &event)
 							}
 						}
 					}
-					else if (Graphics.textureTool == TOOL_BRUSH)
+					else if (cGraphics::textureTool == TOOL_BRUSH)
 					{
-						int texture = Graphics.texturestart;
+						int texture = cGraphics::texturestart;
 
 						int x = (int)mouse3dx / 10;
 						int y = (int)mouse3dz / 10;
-						for(int yy = 0; yy < Graphics.textureGridSizeY; yy++)
+						for(int yy = 0; yy < cGraphics::textureGridSizeY; yy++)
 						{
-							for(int xx = 0; xx < Graphics.textureGridSizeX; xx++)
+							for(int xx = 0; xx < cGraphics::textureGridSizeX; xx++)
 							{
 								int xxx,yyy;
 								int xi = 1;
 								int yi = 1;
 								
-								if		(Graphics.textureRot == 0)	{ yyy = yy;										xxx = xx;										}
-								else if (Graphics.textureRot == 1)	{ yyy = xx;										xxx = Graphics.textureBrush[0].size()-1-yy;		}
-								else if (Graphics.textureRot == 2)	{ yyy = Graphics.textureBrush.size()-1-yy;		xxx = Graphics.textureBrush[0].size()-1-xx;		}
-								else if	(Graphics.textureRot == 3)	{ yyy = Graphics.textureBrush.size()-1-xx;		xxx = yy;										}
+								if		(cGraphics::textureRot == 0)	{ yyy = yy;										xxx = xx;										}
+								else if (cGraphics::textureRot == 1)	{ yyy = xx;										xxx = cGraphics::textureBrush[0].size()-1-yy;		}
+								else if (cGraphics::textureRot == 2)	{ yyy = cGraphics::textureBrush.size()-1-yy;		xxx = cGraphics::textureBrush[0].size()-1-xx;		}
+								else if	(cGraphics::textureRot == 3)	{ yyy = cGraphics::textureBrush.size()-1-xx;		xxx = yy;										}
 								
-								if( Graphics.textureBrush.size() <= yyy ||
-									Graphics.textureBrush[0].size() <= xxx)
+								if( cGraphics::textureBrush.size() <= yyy ||
+									cGraphics::textureBrush[0].size() <= xxx)
 									continue;
 								
-								if(Graphics.textureBrush[yyy][xxx])
+								if(cGraphics::textureBrush[yyy][xxx])
 								{
 									if(y-yy >= 0 && y-yy < cGraphics::world->height && x+xx >= 0 && x+xx < cGraphics::world->width)
 									{
@@ -93,49 +92,49 @@ int cProcessManagement::texturepaintedit_process_events(SDL_Event &event)
 										t.lightmap = -1;
 										t.texture = texture;
 //todo: make this code nicer and less repetiditiditive
-										if(Graphics.textureRot == 0)
+										if(cGraphics::textureRot == 0)
 										{
-											t.u1 = (xxx+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX;
-											t.v1 = (yyy+1+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY;
-											t.u3 = (xxx+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX;
-											t.v3 = (yyy+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY;
-											t.u2 = (xxx+1+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX;
-											t.v2 = (yyy+1+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY;
-											t.u4 = (xxx+1+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX;
-											t.v4 = (yyy+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY;
+											t.u1 = (xxx+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX;
+											t.v1 = (yyy+1+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY;
+											t.u3 = (xxx+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX;
+											t.v3 = (yyy+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY;
+											t.u2 = (xxx+1+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX;
+											t.v2 = (yyy+1+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY;
+											t.u4 = (xxx+1+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX;
+											t.v4 = (yyy+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY;
 										}
-										else if (Graphics.textureRot == 1)
+										else if (cGraphics::textureRot == 1)
 										{
-											t.u1 = (xxx+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX;
-											t.v1 = (yyy+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY;
-											t.u3 = (xxx+1+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX;
-											t.v3 = (yyy+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY;
-											t.u2 = (xxx+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX;
-											t.v2 = (yyy+1+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY;
-											t.u4 = (xxx+1+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX;
-											t.v4 = (yyy+1+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY;
+											t.u1 = (xxx+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX;
+											t.v1 = (yyy+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY;
+											t.u3 = (xxx+1+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX;
+											t.v3 = (yyy+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY;
+											t.u2 = (xxx+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX;
+											t.v2 = (yyy+1+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY;
+											t.u4 = (xxx+1+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX;
+											t.v4 = (yyy+1+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY;
 										}
-										else if (Graphics.textureRot == 2)
+										else if (cGraphics::textureRot == 2)
 										{
-											t.u1 = (xxx+1+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX;
-											t.v1 = (yyy+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY;
-											t.u3 = (xxx+1+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX;
-											t.v3 = (yyy+1+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY;
-											t.u2 = (xxx+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX;
-											t.v2 = (yyy+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY;
-											t.u4 = (xxx+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX;
-											t.v4 = (yyy+1+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY;
+											t.u1 = (xxx+1+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX;
+											t.v1 = (yyy+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY;
+											t.u3 = (xxx+1+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX;
+											t.v3 = (yyy+1+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY;
+											t.u2 = (xxx+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX;
+											t.v2 = (yyy+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY;
+											t.u4 = (xxx+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX;
+											t.v4 = (yyy+1+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY;
 										}
-										else if (Graphics.textureRot == 3)
+										else if (cGraphics::textureRot == 3)
 										{
-											t.u1 = (xxx+1+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX;
-											t.v1 = (yyy+1+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY;
-											t.u3 = (xxx+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX;
-											t.v3 = (yyy+1+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY;
-											t.u2 = (xxx+1+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX;
-											t.v2 = (yyy+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY;
-											t.u4 = (xxx+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX;
-											t.v4 = (yyy+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY;
+											t.u1 = (xxx+1+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX;
+											t.v1 = (yyy+1+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY;
+											t.u3 = (xxx+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX;
+											t.v3 = (yyy+1+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY;
+											t.u2 = (xxx+1+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX;
+											t.v2 = (yyy+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY;
+											t.u4 = (xxx+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX;
+											t.v4 = (yyy+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY;
 										}
 										c->tileUp = cGraphics::world->tiles.size();
 										cGraphics::world->tiles.push_back(t);
@@ -156,62 +155,62 @@ int cProcessManagement::texturepaintedit_process_events(SDL_Event &event)
 			switch (event.key.keysym.sym)
 			{
 			case SDLK_LEFTBRACKET:
-				Graphics.texturestart--;
-				if (Graphics.texturestart < 0)
-					Graphics.texturestart = 0;
+				cGraphics::texturestart--;
+				if (cGraphics::texturestart < 0)
+					cGraphics::texturestart = 0;
 				break;
 			case SDLK_RIGHTBRACKET:
-				Graphics.texturestart++;
-				if (Graphics.texturestart >= cGraphics::world->textures.size())
-					Graphics.texturestart--;
+				cGraphics::texturestart++;
+				if (cGraphics::texturestart >= cGraphics::world->textures.size())
+					cGraphics::texturestart--;
 				break;
 			case SDLK_SPACE:
 				if(event.key.keysym.mod & KMOD_CTRL)
 				{
-					std::vector<std::vector<bool> > newBrush(Graphics.textureBrush[0].size(), std::vector<bool> (Graphics.textureBrush.size()));
-					for(int y = 0; y < Graphics.textureBrush.size(); y++)
+					std::vector<std::vector<bool> > newBrush(cGraphics::textureBrush[0].size(), std::vector<bool> (cGraphics::textureBrush.size()));
+					for(int y = 0; y < cGraphics::textureBrush.size(); y++)
 					{
-						for(int x = 0; x < Graphics.textureBrush[y].size(); x++)
+						for(int x = 0; x < cGraphics::textureBrush[y].size(); x++)
 						{
-							newBrush[Graphics.textureBrush[0].size()-1-x][y] = Graphics.textureBrush[y][x];
+							newBrush[cGraphics::textureBrush[0].size()-1-x][y] = cGraphics::textureBrush[y][x];
 						}						
 					}
-					Graphics.textureBrush = newBrush;
+					cGraphics::textureBrush = newBrush;
 				}
 				else
-				Graphics.textureRot = (Graphics.textureRot+1)%4;
+				cGraphics::textureRot = (cGraphics::textureRot+1)%4;
 				break;
 			case SDLK_LEFT:
-				Graphics.textureBrushOffset.x--;
-				if(Graphics.textureBrushOffset.x < -Graphics.textureGridSizeX)
-					Graphics.textureBrushOffset.x = -Graphics.textureGridSizeX;
+				cGraphics::textureBrushOffset.x--;
+				if(cGraphics::textureBrushOffset.x < -cGraphics::textureGridSizeX)
+					cGraphics::textureBrushOffset.x = -cGraphics::textureGridSizeX;
 				break;
 			case SDLK_RIGHT:
-				Graphics.textureBrushOffset.x++;
-				if(Graphics.textureBrushOffset.x > Graphics.textureGridSizeX)
-					Graphics.textureBrushOffset.x = Graphics.textureGridSizeX;
+				cGraphics::textureBrushOffset.x++;
+				if(cGraphics::textureBrushOffset.x > cGraphics::textureGridSizeX)
+					cGraphics::textureBrushOffset.x = cGraphics::textureGridSizeX;
 				break;
 			case SDLK_UP:
-				Graphics.textureBrushOffset.y--;
-				if(Graphics.textureBrushOffset.y < -Graphics.textureGridSizeY)
-					Graphics.textureBrushOffset.y = -Graphics.textureGridSizeY;
+				cGraphics::textureBrushOffset.y--;
+				if(cGraphics::textureBrushOffset.y < -cGraphics::textureGridSizeY)
+					cGraphics::textureBrushOffset.y = -cGraphics::textureGridSizeY;
 				break;
 			case SDLK_DOWN:
-				Graphics.textureBrushOffset.y++;
-				if(Graphics.textureBrushOffset.y > Graphics.textureGridSizeY)
-					Graphics.textureBrushOffset.y = Graphics.textureGridSizeY;
+				cGraphics::textureBrushOffset.y++;
+				if(cGraphics::textureBrushOffset.y > cGraphics::textureGridSizeY)
+					cGraphics::textureBrushOffset.y = cGraphics::textureGridSizeY;
 				break;
 			case SDLK_h:
-				Graphics.fliph = !Graphics.fliph;
+				cGraphics::fliph = !cGraphics::fliph;
 				break;
 			case SDLK_v:
-				Graphics.flipv = !Graphics.flipv;
+				cGraphics::flipv = !cGraphics::flipv;
 				break;
 			case SDLK_MINUS:
-				Graphics.textureBrushSize = max(Graphics.textureBrushSize-1,1);
+				cGraphics::textureBrushSize = max(cGraphics::textureBrushSize-1,1);
 				break;
 			case SDLK_EQUALS:
-				Graphics.textureBrushSize = min(Graphics.textureBrushSize+1, 16);
+				cGraphics::textureBrushSize = min(cGraphics::textureBrushSize+1, 16);
 			default:
 				break;
 			}
