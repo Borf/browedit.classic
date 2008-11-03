@@ -42,10 +42,10 @@ int cProcessManagement::texturepaintedit_process_events(SDL_Event &event)
 						int x,y;
 						if(!ctrl && !alt)
 						{
-							for(x = 0; x < Graphics.world.width; x++)
+							for(x = 0; x < cGraphics::world->width; x++)
 							{
-								for(y = 0; y < Graphics.world.height; y++)
-									Graphics.world.cubes[y][x].selected = false;
+								for(y = 0; y < cGraphics::world->height; y++)
+									cGraphics::world->cubes[y][x].selected = false;
 							}
 						}
 
@@ -53,9 +53,9 @@ int cProcessManagement::texturepaintedit_process_events(SDL_Event &event)
 						{
 							for(y = (int)round(mouse3dzstart/10); y < (int)round(mouse3dz/10); y++)
 							{
-								if (x >= 0 && x < Graphics.world.width && y >= 0 && y < Graphics.world.height)
+								if (x >= 0 && x < cGraphics::world->width && y >= 0 && y < cGraphics::world->height)
 								{
-									Graphics.world.cubes[y][x].selected = !alt;
+									cGraphics::world->cubes[y][x].selected = !alt;
 								}
 							}
 						}
@@ -85,9 +85,9 @@ int cProcessManagement::texturepaintedit_process_events(SDL_Event &event)
 								
 								if(Graphics.textureBrush[yyy][xxx])
 								{
-									if(y-yy >= 0 && y-yy < Graphics.world.height && x+xx >= 0 && x+xx < Graphics.world.width)
+									if(y-yy >= 0 && y-yy < cGraphics::world->height && x+xx >= 0 && x+xx < cGraphics::world->width)
 									{
-										cCube* c = &Graphics.world.cubes[y-yy][x+xx];
+										cCube* c = &cGraphics::world->cubes[y-yy][x+xx];
 										cTile t;
 										memset(t.color,255,3);
 										t.lightmap = -1;
@@ -137,8 +137,8 @@ int cProcessManagement::texturepaintedit_process_events(SDL_Event &event)
 											t.u4 = (xxx+Graphics.textureBrushOffset.x) * 1/ Graphics.textureGridSizeX;
 											t.v4 = (yyy+Graphics.textureBrushOffset.y) / Graphics.textureGridSizeY;
 										}
-										c->tileUp = Graphics.world.tiles.size();
-										Graphics.world.tiles.push_back(t);
+										c->tileUp = cGraphics::world->tiles.size();
+										cGraphics::world->tiles.push_back(t);
 									}
 								}
 							}
@@ -162,7 +162,7 @@ int cProcessManagement::texturepaintedit_process_events(SDL_Event &event)
 				break;
 			case SDLK_RIGHTBRACKET:
 				Graphics.texturestart++;
-				if (Graphics.texturestart >= Graphics.world.textures.size())
+				if (Graphics.texturestart >= cGraphics::world->textures.size())
 					Graphics.texturestart--;
 				break;
 			case SDLK_SPACE:

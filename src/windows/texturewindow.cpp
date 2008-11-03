@@ -4,6 +4,7 @@
 #include <wm/windowbutton.h>
 #include <wm/windowlistbox.h>
 #include <wm/windowscrollpanel.h>
+#include <wm/windowlabel.h>
 #include "rsmeditwindow.h"
 
 #include <filesystem.h>
@@ -21,9 +22,9 @@ cTextureWindow::cWindowTexture::cWindowTexture( cWindow* parent ) : cWindowPictu
 	
 }
 
-void cTextureWindow::cWindowTexture::click()
+void cTextureWindow::cWindowTexture::onClick()
 {
-	cWindow* w = cWM::getwindow(WT_RSMEDIT);
+	cWindow* w = cWM::getWindow(WT_RSMEDIT);
 	if(w != NULL)
 	{
 		((cRSMEditWindow*)w)->changetexture("data\\texture\\" + data);
@@ -34,8 +35,8 @@ void cTextureWindow::cWindowTexture::click()
 		if(SDL_GetModState() & KMOD_SHIFT)
 		{
 			int id = Graphics.texturestart + (int)(Graphics.selectionstart.y - 32) / 288;
-			TextureCache.unload(Graphics.world.textures[id]->texture);
-			delete Graphics.world.textures[id];
+			cTextureCache::unload(cGraphics::world->textures[id]->texture);
+			delete cGraphics::world->textures[id];
 			
 			cTextureContainer* t = new cTextureContainer();
 			t->RoFilename = data;
@@ -43,8 +44,8 @@ void cTextureWindow::cWindowTexture::click()
 			ZeroMemory(buf, 40);
 			sprintf(buf, "%i%i", rand(), rand());
 			t->RoFilename2 = std::string(buf,40);
-			t->texture = TextureCache.load(rodir + "data\\texture\\" + data);
-			Graphics.world.textures[id] = t;
+			t->texture = cTextureCache::load(rodir + "data\\texture\\" + data);
+			cGraphics::world->textures[id] = t;
 			
 		}
 		else
@@ -55,9 +56,9 @@ void cTextureWindow::cWindowTexture::click()
 			ZeroMemory(buf, 40);
 			sprintf(buf, "%i%i", rand(), rand());
 			t->RoFilename2 = std::string(buf,40);
-			t->texture = TextureCache.load(rodir + "data\\texture\\" + data);
-			Graphics.world.textures.push_back(t);
-			Graphics.texturestart = Graphics.world.textures.size() - 2;
+			t->texture = cTextureCache::load(rodir + "data\\texture\\" + data);
+			cGraphics::world->textures.push_back(t);
+			Graphics.texturestart = cGraphics::world->textures.size() - 2;
 		}
 	}
 }
@@ -76,10 +77,10 @@ cTextureWindow::cWindowTextureCatSelect::cWindowTextureCatSelect( cWindow* paren
 	
 }
 
-void cTextureWindow::cWindowTextureCatSelect::click()
+void cTextureWindow::cWindowTextureCatSelect::onClick()
 {
 	unsigned int i;
-	cWindowTree::click();
+	cWindowTree::onClick();
 	cWindowScrollPanel* box = (cWindowScrollPanel*)parent->objects["textures"];
 	for(i = 0; i < box->objects.size(); i++)
 		delete box->objects[i];
@@ -140,7 +141,7 @@ cTextureWindow::cTextureWindow( ) : cWindow()
 	w = Graphics.w()-50;
 	title = GetMsg("wm/texture/TITLE");
 	center();
-	initprops("textures");
+	initProps("textures");
 	
 	cWindowObject* o;
 	

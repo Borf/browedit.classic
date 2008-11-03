@@ -96,8 +96,6 @@ std::string rodir;
 
 int brushsize = 1;
 
-cTextureCache TextureCache;
-
 cMenu*	menu;
 cMenu* grid;
 cMenu* showobjects;
@@ -220,7 +218,7 @@ void mainloop()
 	renderMutex->lock();
 	if(lasttimer + paintspeed < SDL_GetTicks())
 	{
-		if(editmode == MODE_HEIGHTDETAIL && menu->inwindow((int)mouseX, Graphics.h()-(int)mouseY) == NULL)
+		if(editmode == MODE_HEIGHTDETAIL && menu->inWindow((int)mouseX, Graphics.h()-(int)mouseY) == NULL)
 		{
 			if (lbuttondown || rbuttondown)
 			{
@@ -235,9 +233,9 @@ void mainloop()
 					{
 						for(int y = posy-(int)floor(brushsize/2.0f); y < posy+(int)ceil(brushsize/2.0f); y++)
 						{
-							if(x >= 0 && y >= 0 && x < Graphics.world.width && y < Graphics.world.height)
+							if(x >= 0 && y >= 0 && x < cGraphics::world->width && y < cGraphics::world->height)
 							{
-								cCube* c = &Graphics.world.cubes[y][x];
+								cCube* c = &cGraphics::world->cubes[y][x];
 								mmin = min(min(min(min(mmin, c->cell1),c->cell2),c->cell3),c->cell4);
 								mmax = max(max(max(max(mmax, c->cell1),c->cell2),c->cell3),c->cell4);
 							}
@@ -249,9 +247,9 @@ void mainloop()
 				{
 					for(int y = posy-(int)floor(brushsize/2.0f); y < posy+(int)ceil(brushsize/2.0f); y++)
 					{
-						if(x >= 0 && y >= 0 && x < Graphics.world.width && y < Graphics.world.height)
+						if(x >= 0 && y >= 0 && x < cGraphics::world->width && y < cGraphics::world->height)
 						{
-							cCube* c = &Graphics.world.cubes[y][x];
+							cCube* c = &cGraphics::world->cubes[y][x];
 							if(lbuttondown && !rbuttondown)
 							{
 								if (!Graphics.slope || (x > posx-(int)floor(brushsize/2.0f)) && y > posy-(int)floor(brushsize/2.0f))
@@ -298,25 +296,25 @@ void mainloop()
 	}
 
 //Todo: move this somewhere else!
-	while(!Graphics.world.plugin_api_deleteobjects.empty())
+	while(!cGraphics::world->plugin_api_deleteobjects.empty())
 	{
-		int i = Graphics.world.plugin_api_deleteobjects.front();
-		delete Graphics.world.models[i];
-		Graphics.world.models.erase(Graphics.world.models.begin() + i);
-		Graphics.world.plugin_api_deleteobjects.pop_front();
-		if(Graphics.world.plugin_api_deleteobjects.empty())
+		int i = cGraphics::world->plugin_api_deleteobjects.front();
+		delete cGraphics::world->models[i];
+		cGraphics::world->models.erase(cGraphics::world->models.begin() + i);
+		cGraphics::world->plugin_api_deleteobjects.pop_front();
+		if(cGraphics::world->plugin_api_deleteobjects.empty())
 		{
-			cWindow* w = cWM::getwindow(WT_MODELOVERVIEW);
+			cWindow* w = cWM::getWindow(WT_MODELOVERVIEW);
 			if(w)
 				w->userfunc(NULL);
 		}
 	}
-	while(!Graphics.world.plugin_api_deletesprites.empty())
+	while(!cGraphics::world->plugin_api_deletesprites.empty())
 	{
-		int i = Graphics.world.plugin_api_deletesprites.front();
-		delete Graphics.world.sprites[i];
-		Graphics.world.sprites.erase(Graphics.world.sprites.begin() + i);
-		Graphics.world.plugin_api_deletesprites.pop_front();
+		int i = cGraphics::world->plugin_api_deletesprites.front();
+		delete cGraphics::world->sprites[i];
+		cGraphics::world->sprites.erase(cGraphics::world->sprites.begin() + i);
+		cGraphics::world->plugin_api_deletesprites.pop_front();
 	}
 
 	
@@ -351,11 +349,11 @@ void mainloop()
 		
 		
 		lasteditmode = editmode;
-		cWindow* w = cWM::getwindow(WT_MODELOVERVIEW);
+		cWindow* w = cWM::getWindow(WT_MODELOVERVIEW);
 		if(editmode == MODE_OBJECTS)
 		{
 			if(w == NULL)
-				cWM::addwindow(new cModelOverViewWindow());
+				cWM::addWindow(new cModelOverViewWindow());
 			else
 			{
 				w->userfunc(NULL);
@@ -366,11 +364,11 @@ void mainloop()
 			w->close();
 
 
-		w = cWM::getwindow(WT_LIGHTOVERVIEW);
+		w = cWM::getWindow(WT_LIGHTOVERVIEW);
 		if (editmode == MODE_LIGHTS)
 		{
 			if(w == NULL)
-				cWM::addwindow(new cLightOverViewWindow());
+				cWM::addWindow(new cLightOverViewWindow());
 			else
 			{
 				w->userfunc(NULL);
@@ -380,11 +378,11 @@ void mainloop()
 		else if(w != NULL)
 			w->close();
 
-		w = cWM::getwindow(WT_SOUNDOVERVIEW);
+		w = cWM::getWindow(WT_SOUNDOVERVIEW);
 		if (editmode == MODE_SOUNDS)
 		{
 			if(w == NULL)
-				cWM::addwindow(new cSoundOverViewWindow());
+				cWM::addWindow(new cSoundOverViewWindow());
 			else
 			{
 				w->userfunc(NULL);
@@ -394,11 +392,11 @@ void mainloop()
 		else if(w != NULL)
 			w->close();
 
-		w = cWM::getwindow(WT_TEXTURETOOLS);
+		w = cWM::getWindow(WT_TEXTURETOOLS);
 		if (editmode == MODE_TEXTUREPAINT)
 		{
 			if(w == NULL)
-				cWM::addwindow(new cTextureToolsWindow());
+				cWM::addWindow(new cTextureToolsWindow());
 			else
 			{
 				w->show();
@@ -523,7 +521,7 @@ int WinMain(HINSTANCE hInst,HINSTANCE hPrev, LPSTR Cmd,int nShow)
 
 cWindow* XmlWindow(std::string s)
 {
-	return cWM::XmlWindow(s);
+	return cWM::xmlWindow(s);
 }
 
 
@@ -679,7 +677,7 @@ int main(int argc, char *argv[])
 		if (WSAStartup(MAKEWORD(2, 2), &WinsockData) != 0)
 		{
 
-			cWM::ShowMessage("Winsock Startup failed!");
+			cWM::showMessage("Winsock Startup failed!");
 			return 0;
 		}
 		BYTE randchar = rand()%255;
@@ -797,7 +795,7 @@ int main(int argc, char *argv[])
 //	models->parent = NULL;
 //	models->title = msgtable[MENU_MODELS]; 
 	models->item = false; 
-	models->drawstyle = 1; 
+	models->drawStyle = 1; 
 	models->y = 20; 
 	models->x = 0; 
 	models->w = 50; 
@@ -975,7 +973,7 @@ int main(int argc, char *argv[])
 	menu = new cMenu();
 	menu->title = "root";
 	menu->item = false;
-	menu->drawstyle = 0;
+	menu->drawStyle = 0;
 	menu->opened = true;
 	menu->x = 0;
 	menu->y = 0;
@@ -1247,25 +1245,25 @@ int main(int argc, char *argv[])
 
 
 	Log(3,0,GetMsg("DONEINIT"));
-	Graphics.world.newWorld();
+	cGraphics::world->newWorld();
 	if(config.FirstChildElement("config")->FirstChildElement("firstmap"))
-		strcpy(Graphics.world.fileName, std::string(rodir + "data\\" + config.FirstChildElement("config")->FirstChildElement("firstmap")->FirstChild()->Value()).c_str());
+		strcpy(cGraphics::world->fileName, std::string(rodir + "data\\" + config.FirstChildElement("config")->FirstChildElement("firstmap")->FirstChild()->Value()).c_str());
 	else
-		strcpy(Graphics.world.fileName, std::string(rodir + "data\\prontera").c_str());
+		strcpy(cGraphics::world->fileName, std::string(rodir + "data\\prontera").c_str());
 
 	if(argc > 1)
 	{
-		strcpy(Graphics.world.fileName, std::string(rodir + "data\\" + argv[1]).c_str());
-		Graphics.world.load();
+		strcpy(cGraphics::world->fileName, std::string(rodir + "data\\" + argv[1]).c_str());
+		cGraphics::world->load();
 	}
 #ifndef WIN32
-//	Graphics.world.load();
+//	cGraphics::world->load();
 #endif
 
 #ifdef _DEBUG
 	if(argc == 1)
-		Graphics.world.load();
-//	Graphics.world.importalpha();
+		cGraphics::world->load();
+//	cGraphics::world->importalpha();
 #endif
 
 	for(i = 0; i < SDLK_LAST-SDLK_FIRST; i++)
@@ -1278,11 +1276,11 @@ int main(int argc, char *argv[])
 	
 	
 	if(!IsLegal2)
-		cWM::ShowMessage("This version of browedit is not properly activated. Please post on the access reset topic to get it activated in case you should have access to browedit");
+		cWM::showMessage("This version of browedit is not properly activated. Please post on the access reset topic to get it activated in case you should have access to browedit");
 
 	if(IsInsideVMWare() || IsInsideVPC())
 	{
-		cWM::ShowMessage("You're running BrowEdit inside a virtual PC. Please don't do this");
+		cWM::showMessage("You're running BrowEdit inside a virtual PC. Please don't do this");
 		IsLegal2 = false;
 	}
 
@@ -1297,8 +1295,8 @@ int main(int argc, char *argv[])
 	Mix_CloseAudio();
 	// Shutdown
 	cGraphics::closeAndCleanup();				// Kill The Window
-	Graphics.world.unload();
-	TextureCache.status();
+	cGraphics::world->unload();
+	cTextureCache::status();
 
 	log_close();
 	}
@@ -1323,12 +1321,12 @@ int process_events()
 		switch(event.type)
 		{
 		case SDL_QUIT:
-			if(cWM::ConfirmWindow("Are you sure you want to quit?"))
+			if(cWM::confirmWindow("Are you sure you want to quit?"))
 				running = false;
 			break;
 		case SDL_KEYUP:
 			keys[event.key.keysym.sym-SDLK_FIRST] = 0;
-			if (cWM::onkeyup(event.key.keysym.sym, (event.key.keysym.mod&KMOD_SHIFT) != 0))
+			if (cWM::onKeyUp(event.key.keysym.sym, (event.key.keysym.mod&KMOD_SHIFT) != 0))
 				return 0;
 #ifdef _DEBUG
 			if(keymap[event.key.keysym.sym] == SDLK_ESCAPE)
@@ -1354,12 +1352,12 @@ int process_events()
 		case SDL_KEYDOWN:
 			if(keys[event.key.keysym.sym-SDLK_FIRST] == 0)
 				keys[event.key.keysym.sym-SDLK_FIRST] = SDL_GetTicks() + 400;
-			if(cWM::onkeydown(event.key.keysym.sym, (event.key.keysym.mod&KMOD_SHIFT) != 0))
+			if(cWM::onKeyDown(event.key.keysym.sym, (event.key.keysym.mod&KMOD_SHIFT) != 0))
 				return 0;
 			if (strlen(SDL_GetKeyName(event.key.keysym.sym)) == 1 || event.key.keysym.sym == SDLK_SPACE)
 			{
 				if (event.key.keysym.unicode > 0 && event.key.keysym.unicode < 128)
-					if (cWM::onchar((char)event.key.keysym.unicode, (event.key.keysym.mod&KMOD_SHIFT) != 0))
+					if (cWM::onChar((char)event.key.keysym.unicode, (event.key.keysym.mod&KMOD_SHIFT) != 0))
 						return 0;
 			}
 			break;
@@ -1426,7 +1424,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 			mouseX = event.motion.x;
 			mouseY = event.motion.y;
-			cMenu* m = menu->inwindow((int)mouseX, Graphics.h()-(int)mouseY);
+			cMenu* m = menu->inWindow((int)mouseX, Graphics.h()-(int)mouseY);
 
 
 			if(movement > 4)
@@ -1452,17 +1450,17 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					{
 						draggingObject->drag();
 
-						cWindow* w = cWM::inwindow();
+						cWindow* w = cWM::inWindow();
 						if (w != NULL)
-							w->holddragover();
+							w->onHoldDragOver();
 						else if (w == NULL && lastdragoverwindow != NULL)
-							lastdragoverwindow->holddragover();
+							lastdragoverwindow->onHoldDragOver();
 						lastdragoverwindow = w;
 					}
 				}
 			}
 
-			if(menu->inwindow((int)mousestartx, Graphics.h()-(int)mousestarty) != NULL)
+			if(menu->inWindow((int)mousestartx, Graphics.h()-(int)mousestarty) != NULL)
 				return 1;
 
 			if (rbuttondown && !lbuttondown)
@@ -1571,9 +1569,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 			if(event.button.button == 4)
 			{ // scroll up
-				cWindow* w = cWM::inwindow();
+				cWindow* w = cWM::inWindow();
 				if(w != NULL)
-					w->scrollUp();
+					w->onScrollUp();
 				else
 				{
 					if(Graphics.topCamera)
@@ -1599,9 +1597,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 			if(event.button.button == 5)
 			{ // scroll down
-				cWindow* w = cWM::inwindow();
+				cWindow* w = cWM::inWindow();
 				if(w != NULL)
-					w->scrollDown();
+					w->onScrollDown();
 				else
 				{
 					if(Graphics.topCamera)
@@ -1632,12 +1630,12 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				doubleclick = true;
 
 		
-			cMenu* m = menu->inwindow((int)mouseX, Graphics.h()-(int)mouseY);
+			cMenu* m = menu->inWindow((int)mouseX, Graphics.h()-(int)mouseY);
 		
 			cMenu* pm = NULL;
 			if(popupmenu != NULL)
 			{
-				pm = popupmenu->inwindow((int)mouseX, Graphics.h()-(int)mouseY);
+				pm = popupmenu->inWindow((int)mouseX, Graphics.h()-(int)mouseY);
 				return 1;
 			}
 
@@ -1649,15 +1647,15 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			{
 				draggingObject = NULL;
 				draggingwindow = NULL;
-				if (cWM::inwindow() != NULL)
+				if (cWM::inWindow() != NULL)
 				{
-					cWindow* w = cWM::inwindow();
+					cWindow* w = cWM::inWindow();
 					if (!w->inObject())
 					{ // drag this window
 						dragoffsetx = mouseX - w->getX();
 						dragoffsety = (Graphics.h()-mouseY) - w->py2();
 						cWM::click(false);
-						draggingwindow = cWM::inwindow();
+						draggingwindow = cWM::inWindow();
 						if(mousestartx < draggingwindow->getX()+draggingwindow->getWidth() && mousestartx > draggingwindow->getX()+draggingwindow->getWidth() - DRAGBORDER)
 							draggingwindow->startresisingxy();
 						if((Graphics.h()-mousestarty) > draggingwindow->getY() && (Graphics.h()-mousestarty) < draggingwindow->getY() + DRAGBORDER)
@@ -1699,15 +1697,15 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			
 			if(event.button.button == SDL_BUTTON_LEFT)
 			{
-				cMenu* m = menu->inwindow((int)mouseX, Graphics.h()-(int)mouseY);
+				cMenu* m = menu->inWindow((int)mouseX, Graphics.h()-(int)mouseY);
 				cMenu* pm = NULL;
 				if(popupmenu != NULL)
-					pm = popupmenu->inwindow((int)mouseX, Graphics.h()-(int)mouseY);
+					pm = popupmenu->inWindow((int)mouseX, Graphics.h()-(int)mouseY);
 				doneaction = true;
 				lbuttondown = false;
 				mouseX = event.motion.x;
 				mouseY = event.motion.y;
-				cWindow* w = cWM::inwindow();
+				cWindow* w = cWM::inWindow();
 				if (draggingwindow != NULL && m == NULL)
 				{
 					draggingwindow->stopresizing();
@@ -1717,10 +1715,10 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					cWM::click(true);
 				if (draggingObject != NULL && m == NULL)
 				{
-					if(cWM::inwindow() != NULL)
-						cWM::inwindow()->dragover();
+					if(cWM::inWindow() != NULL)
+						cWM::inWindow()->onDragOver();
 					if(draggingObject != NULL)
-						draggingObject->parent->stopdrag();
+						draggingObject->parent->onStopDrag();
 					draggingObject = NULL;
 				}
 
@@ -1730,13 +1728,13 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					doubleclick = true;
 					lastlclick = SDL_GetTicks();
 					if(m == NULL)
-						cWM::doubleclick();
+						cWM::onDoubleClick();
 				}
 				else
 					lastlclick = SDL_GetTicks();
-				menu->unmouseover();
+				menu->unMouseOver();
 				if(pm != NULL)
-					pm->unmouseover();
+					pm->unMouseOver();
 				if(pm == NULL && popupmenu != NULL)
 				{
 					delete popupmenu;
@@ -1744,7 +1742,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				if (m == NULL)
 				{
-					menu->closemenu();
+					menu->closeMenu();
 					menu->opened = true;
 				}
 				if (m != NULL && m->opened)
@@ -1770,16 +1768,16 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			}
 			else // right button
 			{
-				cMenu* m = menu->inwindow((int)mouseX, Graphics.h()-(int)mouseY);
+				cMenu* m = menu->inWindow((int)mouseX, Graphics.h()-(int)mouseY);
 				cMenu* pm = NULL;
 				if(popupmenu != NULL)
-					pm = popupmenu->inwindow((int)mouseX, Graphics.h()-(int)mouseY);
-				menu->unmouseover();
+					pm = popupmenu->inWindow((int)mouseX, Graphics.h()-(int)mouseY);
+				menu->unMouseOver();
 				if(pm != NULL)
-					pm->unmouseover();
+					pm->unMouseOver();
 				if (m == NULL)
 				{
-					menu->closemenu();
+					menu->closeMenu();
 					menu->opened = true;
 				}
 				if(pm == NULL && popupmenu != NULL)
@@ -1793,9 +1791,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				doubleclick = false;
 				if (movement < 2)
 				{
-					if(cWM::inwindow() != NULL)
+					if(cWM::inWindow() != NULL)
 					{
-						cWM::rightclick();
+						cWM::onRightClick();
 						return 1;
 					}
 				}
@@ -1885,7 +1883,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				if((event.key.keysym.mod&KMOD_SHIFT) == 0)
 				{
 					editmode = MODE_TEXTURE;
-					if (Graphics.texturestart >= (int)Graphics.world.textures.size())
+					if (Graphics.texturestart >= (int)cGraphics::world->textures.size())
 						Graphics.texturestart = 0;
 				}
 				else
@@ -1897,19 +1895,19 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				if((event.key.keysym.mod&KMOD_SHIFT) == 0)
 				{
 					editmode = MODE_HEIGHTGLOBAL;
-					if (Graphics.texturestart >= (int)Graphics.world.textures.size())
+					if (Graphics.texturestart >= (int)cGraphics::world->textures.size())
 						Graphics.texturestart = 0;
 				}
 				else
 				{
 					editmode = MODE_TEXTUREPAINT;
-					if (Graphics.texturestart >= (int)Graphics.world.textures.size())
+					if (Graphics.texturestart >= (int)cGraphics::world->textures.size())
 						Graphics.texturestart = 0;
 				}
 				break;
 			case SDLK_F3:
 				editmode = MODE_HEIGHTDETAIL;
-				if (Graphics.texturestart >= (int)Graphics.world.textures.size())
+				if (Graphics.texturestart >= (int)cGraphics::world->textures.size())
 					Graphics.texturestart = 0;
 				break;
 			case SDLK_F4:
@@ -1917,7 +1915,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				break;
 			case SDLK_F5:
 				editmode = MODE_OBJECTS;
-				if (Graphics.texturestart >= (int)Graphics.world.textures.size())
+				if (Graphics.texturestart >= (int)cGraphics::world->textures.size())
 					Graphics.texturestart = 0;
 				break;
 			case SDLK_F6:
@@ -1927,7 +1925,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				break;
 			case SDLK_F7:
 				editmode = MODE_WATER;
-				Graphics.texturestart = Graphics.world.water.type;
+				Graphics.texturestart = cGraphics::world->water.type;
 				break;
 			case SDLK_F8:
 				editmode = MODE_EFFECTS;
@@ -1971,21 +1969,21 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					break;
 			case SDLK_t:
 				{
-					cWindow* w = cWM::getwindow(WT_TEXTURE);
+					cWindow* w = cWM::getWindow(WT_TEXTURE);
 					if (w == NULL)
-						cWM::addwindow(new cTextureWindow());
+						cWM::addWindow(new cTextureWindow());
 					else
-						cWM::togglewindow(WT_TEXTURE);
+						cWM::toggleWindow(WT_TEXTURE);
 					break;
 				}
 				break;
 			case SDLK_m:
 				{
-					cWindow* w = cWM::getwindow(WT_MODELS);
+					cWindow* w = cWM::getWindow(WT_MODELS);
 					if (w == NULL)
-						cWM::addwindow(new cModelsWindow());
+						cWM::addWindow(new cModelsWindow());
 					else
-						cWM::togglewindow(WT_MODELS);
+						cWM::toggleWindow(WT_MODELS);
 				}
 				break;
 			case SDLK_KP0:
@@ -2017,11 +2015,11 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 		case SDL_KEYUP:
 			if(event.key.keysym.sym == SDLK_TAB && event.key.keysym.mod& KMOD_CTRL)
 			{
-				cWindow* w = cWM::getwindow(WT_MINIMAP);
+				cWindow* w = cWM::getWindow(WT_MINIMAP);
 				if (w == NULL)
-					cWM::addwindow(new cMiniMapWindow()	);
+					cWM::addWindow(new cMiniMapWindow()	);
 				else
-					cWM::togglewindow(WT_MINIMAP);
+					cWM::toggleWindow(WT_MINIMAP);
 			}
 
 			if(event.key.keysym.sym == SDLK_PRINT || event.key.keysym.sym == SDLK_SYSREQ)

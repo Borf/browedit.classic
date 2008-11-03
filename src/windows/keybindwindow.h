@@ -16,15 +16,15 @@ public:
 	class cWindowOkButton : public cWindowButton
 	{
 	public:
-		cWindowOkButton(cWindow* parent, TiXmlDocument* skin = NULL);
-		void click();
+		cWindowOkButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		void onClick();
 	};
 
 	class cCancelButton : public cWindowButton
 	{
 	public:
-		cCancelButton(cWindow* parent, TiXmlDocument* skin = NULL);
-		void click();
+		cCancelButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		void onClick();
 	};
 
 
@@ -32,7 +32,7 @@ public:
 	{
 		SDLKey key;
 	public:
-		cKeyBindBox(cWindow* parent, TiXmlDocument* skin = NULL);
+		cKeyBindBox(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
 		bool onKeyDown(int keyid);
 		bool onKeyUp(int keyid);
 		bool onChar(char ch);
@@ -46,12 +46,12 @@ public:
 	{
 		cKeyBindBox* clearbox;
 	public:
-		cClearButton(cWindow* parent, cKeyBindBox* box, TiXmlDocument* skin = NULL);
-		void click();
+		cClearButton(cWindow* parent, cKeyBindBox* box, TiXmlDocument* skin = &cWM::skin);
+		void onClick();
 	};
 
 	void addclearbutton(cKeyBindBox* box, TiXmlDocument* skin);
-	cKeyBindBox* addbox(std::string name, int x, int y, int defval, TiXmlDocument* skin = NULL);
+	cKeyBindBox* addbox(std::string name, int x, int y, int defval, TiXmlDocument* skin = &cWM::skin);
 	cKeyBindWindow();
 
 };

@@ -15,32 +15,32 @@ class cSoundSelectWindow : public cWindow
 	class cWindowSoundCatSelect : public cWindowTree
 	{
 	public:
-		cWindowSoundCatSelect(cWindow* parent, std::vector<cWindowTree::cTreeNode*> n, TiXmlDocument* skin = NULL);
-		void click();
+		cWindowSoundCatSelect(cWindow* parent, std::vector<cWindowTree::cTreeNode*> n, TiXmlDocument* skin = &cWM::skin);
+		void onClick();
 	};
 	class cSoundList : public cWindowDataListBox<std::string>
 	{
 	public:
-		cSoundList(cWindow* parent, TiXmlDocument* skin = NULL);
-		void doubleClick();
+		cSoundList(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		void onDoubleClick();
 	};
 	class cWindowPlayButton : public cWindowButton
 	{
 	public:
-		cWindowPlayButton(cWindow* w, TiXmlDocument* skin = NULL);
-		void click();
+		cWindowPlayButton(cWindow* w, TiXmlDocument* skin = &cWM::skin);
+		void onClick();
 	};
 	class cWindowOkButton : public cWindowButton
 	{
 	public:
-		cWindowOkButton(cWindow* w, TiXmlDocument* skin = NULL);
-		void click();
+		cWindowOkButton(cWindow* w, TiXmlDocument* skin = &cWM::skin);
+		void onClick();
 	};
 	class cWindowCancelButton : public cWindowButton
 	{
 	public:
-		cWindowCancelButton(cWindow* w, TiXmlDocument* skin = NULL);
-		void click();
+		cWindowCancelButton(cWindow* w, TiXmlDocument* skin = &cWM::skin);
+		void onClick();
 	};
 
 public:

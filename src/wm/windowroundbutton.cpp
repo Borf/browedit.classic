@@ -30,7 +30,7 @@ void cWindowRoundButton::draw(int cutoffleft, int cutoffright, int cutofftop, in
 }
 
 
-void cWindowRoundButton::click()
+void cWindowRoundButton::onClick()
 {
 	Log(1,0,"You clicked the button!");
 }

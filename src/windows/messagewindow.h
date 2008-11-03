@@ -9,9 +9,9 @@ class cMessageWindow : public cWindow
 	class cWindowOkButton : public cWindowButton
 	{
 	public:
-		cWindowOkButton(cWindow* parent, TiXmlDocument* skin = NULL);
+		cWindowOkButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
 		virtual ~cWindowOkButton() {}
-		void click();
+		void onClick();
 	};
 
 public:

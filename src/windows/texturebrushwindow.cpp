@@ -62,7 +62,7 @@ void cTextureBrushWindow::cWindowBrushButton::draw(int,int,int,int)
 	glColor4fv(colors);
 }
 
-void cTextureBrushWindow::cWindowBrushButton::click()
+void cTextureBrushWindow::cWindowBrushButton::onClick()
 {
 	int oldWidth =  ((cTextureBrushWindow*)parent)->brushWidth;
 	int oldHeight = ((cTextureBrushWindow*)parent)->brushHeight;
@@ -134,7 +134,7 @@ void cTextureBrushWindow::cWindowBrushTile::draw( int,int,int,int )
 	glColor4fv(colors);
 }
 
-void cTextureBrushWindow::cWindowBrushTile::click()
+void cTextureBrushWindow::cWindowBrushTile::onClick()
 {
 	on = !on;
 }
@@ -149,7 +149,7 @@ cTextureBrushWindow::cWindowBrushChangeButton::cWindowBrushChangeButton( cWindow
 	resizeTo(140,h);
 }
 
-void cTextureBrushWindow::cWindowBrushChangeButton::click()
+void cTextureBrushWindow::cWindowBrushChangeButton::onClick()
 {
 	int width = atoi(parent->objects["inpWidth"]->getText(0).c_str());
 	int height = atoi(parent->objects["inpHeight"]->getText(0).c_str());
@@ -233,7 +233,7 @@ cTextureBrushWindow::cWindowBrushOkButton::cWindowBrushOkButton( cWindow* parent
 	resizeTo(140,h);	
 }
 
-void cTextureBrushWindow::cWindowBrushOkButton::click()
+void cTextureBrushWindow::cWindowBrushOkButton::onClick()
 {
 	Graphics.textureBrush.clear();
 
@@ -266,9 +266,9 @@ cTextureBrushWindow::cWindowBrushSaveButton::cWindowBrushSaveButton( cWindow* pa
 	text = "Save";
 }
 
-void cTextureBrushWindow::cWindowBrushSaveButton::click()
+void cTextureBrushWindow::cWindowBrushSaveButton::onClick()
 {
-	std::string name = cWM::InputWindow("Please enter a new name");
+	std::string name = cWM::inputWindow("Please enter a new name");
 	if(name == "")
 		return;
 
@@ -312,7 +312,7 @@ cTextureBrushWindow::cWindowBrushRotateButton::cWindowBrushRotateButton( cWindow
 	resizeTo(140,h);
 }
 
-void cTextureBrushWindow::cWindowBrushRotateButton::click()
+void cTextureBrushWindow::cWindowBrushRotateButton::onClick()
 {
 	int newHeight = ((cTextureBrushWindow*)parent)->brushWidth;
 	int newWidth = ((cTextureBrushWindow*)parent)->brushHeight;
@@ -363,7 +363,7 @@ cTextureBrushWindow::cTextureBrushWindow() : cWindow()
 	minHeight = 400;
 	
 	title = "Texture Brushes";
-	initprops("texturebrush");
+	initProps("texturebrush");
 
 	objects["closebutton"] = new cWindowCloseButton(this);
 

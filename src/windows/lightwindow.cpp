@@ -123,7 +123,7 @@ void* cLightWindow::userfunc( void* param )
 			if(i->second->type == OBJECT_FLOATINPUTBOX)
 				i->second->onKeyDown(SDLK_RETURN, false);
 		}
-		cWindow* w = cWM::getwindow(WT_LIGHTOVERVIEW);
+		cWindow* w = cWM::getWindow(WT_LIGHTOVERVIEW);
 		if(w != NULL)
 			w->userfunc(NULL);
 	}

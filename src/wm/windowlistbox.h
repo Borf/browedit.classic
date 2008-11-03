@@ -2,8 +2,8 @@
 #define __WINDOWLISTBOX_H__
 
 #include "windowobject.h"
+#include <wm/wm.h>
 #include <string>
-#include <tinyxml/tinyxml.h>
 #include <vector>
 //using namespace std;
 
@@ -43,10 +43,10 @@ protected:
 public:
 	std::vector<std::string>	values;
 	std::vector<int>			properties;
-	cWindowListBox(cWindow* parent, TiXmlDocument* skin = NULL);
+	cWindowListBox(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
 	virtual ~cWindowListBox() {}
 	virtual void draw(int,int,int,int);
-	virtual void click();
+	virtual void onClick();
 	virtual void onChange(int) {};
 	bool onKeyDown(int, bool);
 //	void onchar(char);
@@ -54,19 +54,19 @@ public:
 	void setText(int, std::string);
 
 	void drag();
-	void doubleClick();
+	void onDoubleClick();
 	void setInt(int, int);
 	int getInt(int);
 	std::string getText(int);
-	void scrollUp();
-	void scrollDown();
+	void onScrollUp();
+	void onScrollDown();
 };
 
 template <class T> class cWindowDataListBox : public cWindowListBox
 {
 public:
 	std::vector<T>	data;
-	cWindowDataListBox(cWindow* parent, TiXmlDocument* skin = NULL) : cWindowListBox(parent,skin)
+	cWindowDataListBox(cWindow* parent, TiXmlDocument* skin = &cWM::skin) : cWindowListBox(parent,skin)
 	{
 	}
 };

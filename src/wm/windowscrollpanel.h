@@ -1,6 +1,7 @@
 #ifndef __WINDOWSCROLLPANEL_H__
 #define __WINDOWSCROLLPANEL_H__
 
+#include <wm/wm.h>
 #include "windowobject.h"
 #include <string>
 #include <vector>
@@ -38,20 +39,20 @@ public:
 
 
 	int skinBarLeft;
-	cWindowScrollPanel(cWindow* parent, TiXmlDocument* skin = NULL);
+	cWindowScrollPanel(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
 	~cWindowScrollPanel();
 	void draw(int,int,int,int);
 	void drag();
-	void click();
+	void onClick();
 	bool onKeyUp(int, bool);
 	bool onKeyDown(int, bool);
 	bool onChar(char, bool);
-	void doubleClick();
-	void rightClick();
+	void onDoubleClick();
+	void onRightClick();
 	cWindowObject* inObject();
 
-	void scrollUp();
-	void scrollDown();
+	void onScrollUp();
+	void onScrollDown();
 
 	std::string getPopup();
 

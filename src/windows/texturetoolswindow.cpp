@@ -70,7 +70,7 @@ void cTextureToolsWindow::cWindowToolbarButton::draw( int a,int b,int c,int d )
 	glColor4fv(colors);
 }
 
-void cTextureToolsWindow::cWindowToolbarButton::click()
+void cTextureToolsWindow::cWindowToolbarButton::onClick()
 {
 	for(std::map<std::string, cWindowObject*, std::less<std::string> >::iterator i = parent->objects.begin(); i != parent->objects.end(); i++)
 	{
@@ -125,9 +125,9 @@ void cTextureToolsWindow::cWindowBrushShape::draw( int a,int b,int c,int d )
 	glColor4fv(colors);
 }
 
-void cTextureToolsWindow::cWindowBrushShape::click()
+void cTextureToolsWindow::cWindowBrushShape::onClick()
 {
-	cWM::addwindow(new cTextureBrushWindow());
+	cWM::addWindow(new cTextureBrushWindow());
 }
 
 cTextureToolsWindow::cWindowSelectArea::cWindowSelectArea( cWindow* parent, TiXmlDocument* totalskin ) : cWindowToolbarButton(parent, "data/buttons/selectarea.tga",TOOL_SELECTAREA, totalskin)
@@ -165,7 +165,7 @@ cTextureToolsWindow::cTextureToolsWindow( ) : cWindow()
 	minHeight = 20 + skinOffTop+skinOffBottom;
 	
 	title = "";
-	initprops("texturetools");
+	initProps("texturetools");
 	
 	TiXmlElement* wSkin = cWM::skin.FirstChildElement("skin")->FirstChildElement("miniwindow");
 	

@@ -7,36 +7,36 @@
 #include <wm/windowlabel.h>
 
 
+class cConfirmWindowCaller
+{
+public:
+	virtual ~cConfirmWindowCaller() { };
+	cConfirmWindowCaller() {};
+	virtual void Ok() = 0;
+	virtual void Cancel() {};
+};
+
 
 class cConfirmWindow : public cWindow
 {
 	class cWindowOkButton : public cWindowButton
 	{
 	public:
-		cWindowOkButton(cWindow* parent, TiXmlDocument* skin = NULL);
+		cWindowOkButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
 		virtual ~cWindowOkButton() {}
-		void click();
+		void onClick();
 	};
 
 	class cWindowCancelButton : public cWindowButton
 	{
 	public:
-		cWindowCancelButton(cWindow* parent, TiXmlDocument* skin = NULL);
+		cWindowCancelButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
 		virtual ~cWindowCancelButton() {}
-		void click();
+		void onClick();
 	};
 
 public:
-	class cConfirmWindowCaller
-	{
-	public:
-		virtual ~cConfirmWindowCaller() { };
-		cConfirmWindowCaller() {};
-		virtual void Ok() = 0;
-		virtual void Cancel() {};
-	};
 
-	
 	cConfirmWindowCaller* caller;
 	cConfirmWindow(cConfirmWindowCaller* c);	
 	void* userfunc(void* param);

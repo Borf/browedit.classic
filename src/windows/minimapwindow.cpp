@@ -7,7 +7,7 @@ extern cGraphics Graphics;
 cMiniMapWindow::cMiniMap::cMiniMap( cWindow* parent ) : cWindowObject(parent)
 {
 	moveTo(0,0);
-	resizeTo(Graphics.world.width,Graphics.world.height);
+	resizeTo(cGraphics::world->width,cGraphics::world->height);
 	alignment = ALIGN_TOPLEFT;
 }
 
@@ -19,15 +19,15 @@ void cMiniMapWindow::cMiniMap::draw( int cutoffleft, int cutoffright, int cutoff
 	
 	glEnable(GL_TEXTURE_2D);
 	
-	for(int y = 0; y < Graphics.world.height; y++)
+	for(int y = 0; y < cGraphics::world->height; y++)
 	{
-		for(int x = 0; x < Graphics.world.width; x++)
+		for(int x = 0; x < cGraphics::world->width; x++)
 		{
-			if(Graphics.world.cubes[y][x].tileUp == -1)
+			if(cGraphics::world->cubes[y][x].tileUp == -1)
 				continue;
 			
-			cTile* t = &Graphics.world.tiles[Graphics.world.cubes[y][x].tileUp];
-			glBindTexture(GL_TEXTURE_2D, Graphics.world.textures[t->texture]->texId());
+			cTile* t = &cGraphics::world->tiles[cGraphics::world->cubes[y][x].tileUp];
+			glBindTexture(GL_TEXTURE_2D, cGraphics::world->textures[t->texture]->texId());
 			glBegin(GL_TRIANGLE_STRIP);
 			glTexCoord2f(t->u1, 1-t->v1);				glVertex2f(xx+x,yy+y);
 			glTexCoord2f(t->u3, 1-t->v3);				glVertex2f(xx+x,yy+y+1);
@@ -38,7 +38,7 @@ void cMiniMapWindow::cMiniMap::draw( int cutoffleft, int cutoffright, int cutoff
 	}
 }
 
-void cMiniMapWindow::cMiniMap::click()
+void cMiniMapWindow::cMiniMap::onClick()
 {
 	if(!inObject())
 		return;
@@ -47,12 +47,12 @@ void cMiniMapWindow::cMiniMap::click()
 	yy = realY()+parent->getY();
 	
 	Graphics.camerapointer.x = -10*(mouseX - xx);
-	Graphics.camerapointer.y = -10*( Graphics.world.height - ((Graphics.h() -mouseY) - yy));
+	Graphics.camerapointer.y = -10*( cGraphics::world->height - ((Graphics.h() -mouseY) - yy));
 }
 
 void cMiniMapWindow::cMiniMap::drag()
 {
-	click();
+	onClick();
 }
 
 cMiniMapWindow::cMiniMapWindow( ) : cWindow()
@@ -65,13 +65,13 @@ cMiniMapWindow::cMiniMapWindow( ) : cWindow()
 	noTransparency = true;
 	
 	
-	h = Graphics.world.height+skinOffBottom+skinOffTop;
-	w = Graphics.world.width+skinOffLeft+skinOffRight;
+	h = cGraphics::world->height+skinOffBottom+skinOffTop;
+	w = cGraphics::world->width+skinOffLeft+skinOffRight;
 	x = Graphics.w()-w;
 	y = 0;
-	initprops("minimap");
-	h = Graphics.world.height+skinOffBottom+skinOffTop;
-	w = Graphics.world.width+skinOffLeft+skinOffRight;
+	initProps("minimap");
+	h = cGraphics::world->height+skinOffBottom+skinOffTop;
+	w = cGraphics::world->width+skinOffLeft+skinOffRight;
 	title = "";
 	
 	

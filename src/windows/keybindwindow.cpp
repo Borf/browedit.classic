@@ -274,7 +274,7 @@ cKeyBindWindow::cWindowOkButton::cWindowOkButton( cWindow* parent, TiXmlDocument
 	resizeTo(100,20);
 }
 
-void cKeyBindWindow::cWindowOkButton::click()
+void cKeyBindWindow::cWindowOkButton::onClick()
 {
 	keymap[SDLK_UP] = parent->objects["Up"]->getInt(0);
 	keymap[SDLK_DOWN] = parent->objects["Down"]->getInt(0);
@@ -354,7 +354,7 @@ cKeyBindWindow::cCancelButton::cCancelButton( cWindow* parent, TiXmlDocument* sk
 	text = "Cancel";
 }
 
-void cKeyBindWindow::cCancelButton::click()
+void cKeyBindWindow::cCancelButton::onClick()
 {
 	parent->close();
 }
@@ -404,7 +404,7 @@ cKeyBindWindow::cClearButton::cClearButton( cWindow* parent, cKeyBindBox* box, T
 	clearbox = box;
 }
 
-void cKeyBindWindow::cClearButton::click()
+void cKeyBindWindow::cClearButton::onClick()
 {
 	clearbox->setInt(0,0);
 }

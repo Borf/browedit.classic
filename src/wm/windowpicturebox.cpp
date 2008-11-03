@@ -60,7 +60,7 @@ void cWindowPictureBox::draw(int cutoffleft, int cutoffright, int cutofftop, int
 }
 
 
-void cWindowPictureBox::click()
+void cWindowPictureBox::onClick()
 {
 //	MessageBox(NULL, "You clicked the PictureBox!", "", MB_OK);
 }
@@ -71,7 +71,7 @@ void cWindowPictureBox::setText(int i, std::string fil)
 	if(i == 0)
 	{
 		loaded = true;
-		tex = TextureCache.load(fil);
+		tex = cTextureCache::load(fil);
 	}
 }
 
@@ -101,5 +101,5 @@ cWindowPictureBox::cWindowPictureBox( cWindow* parent ) : cWindowObject(parent)
 cWindowPictureBox::~cWindowPictureBox()
 {
 	if (tex != NULL || loaded)
-		TextureCache.unload(tex);
+		cTextureCache::unload(tex);
 }

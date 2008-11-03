@@ -40,7 +40,7 @@ void cWindowMainButton::draw(int cutoffleft, int cutoffright, int cutofftop, int
 }
 
 
-void cWindowMainButton::click()
+void cWindowMainButton::onClick()
 {
 	Log(1,0, "You clicked the button!");
 }

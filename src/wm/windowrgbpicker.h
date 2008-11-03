@@ -13,7 +13,7 @@ public:
 	cWindowRGBPicker(cWindow* parent);
 	virtual ~cWindowRGBPicker() {}
 	virtual void draw(int,int,int,int);
-	virtual void click();
+	virtual void onClick();
 	virtual void drag();
 
 

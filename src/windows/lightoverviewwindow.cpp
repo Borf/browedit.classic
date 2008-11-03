@@ -3,6 +3,7 @@
 #include <menu.h>
 #include <menucommands.h>
 #include <graphics.h>
+#include <wm/windowbutton.h>
 extern cGraphics Graphics;
 
 extern cMenu* popupmenu;
@@ -73,12 +74,12 @@ cLightOverViewWindow::cLightOverViewTree::cLightOverViewTree( cWindow* parent, s
 	alignment = ALIGN_TOPLEFT;
 }
 
-void cLightOverViewWindow::cLightOverViewTree::rightClick()
+void cLightOverViewWindow::cLightOverViewTree::onRightClick()
 {
-	cWindowTree::rightClick();
+	cWindowTree::onRightClick();
 	popupmenu = new cMenu();
 	popupmenu->parent = NULL;
-	popupmenu->drawstyle = 1;
+	popupmenu->drawStyle = 1;
 	popupmenu->x = (int)mouseX;
 	popupmenu->y = (int)mouseY;
 	popupmenu->w = 150;
@@ -106,11 +107,11 @@ void cLightOverViewWindow::cLightOverViewTree::onChange()
 	if(!((cLightOverViewTreeNode*)node)->isCat)
 	{
 		Graphics.camerapointer.x = -5*((cLightOverViewTreeNode*)node)->light.pos.x;
-		Graphics.camerapointer.y = Graphics.world.height*-10+5*((cLightOverViewTreeNode*)node)->light.pos.z;
+		Graphics.camerapointer.y = cGraphics::world->height*-10+5*((cLightOverViewTreeNode*)node)->light.pos.z;
 		
-		for(i = 0; i < Graphics.world.lights.size(); i++)
+		for(i = 0; i < cGraphics::world->lights.size(); i++)
 		{
-			if(Graphics.world.lights[i] == ((cLightOverViewTreeNode*)node)->light)
+			if(cGraphics::world->lights[i] == ((cLightOverViewTreeNode*)node)->light)
 				Graphics.selectedObject = i;
 		}
 	}
@@ -163,11 +164,11 @@ void cLightOverViewWindow::addobjects( cLightOverViewTreeNode* parent, bool root
 		windowtreenode->isCat = true;
 		parent->addchild(windowtreenode);
 		
-		for(unsigned int i = 0; i < Graphics.world.lights.size(); i++)
+		for(unsigned int i = 0; i < cGraphics::world->lights.size(); i++)
 		{
-			cLightOverViewTreeNode* node = windowtreenode->addNodeTree(Graphics.world.lights[i].name);
+			cLightOverViewTreeNode* node = windowtreenode->addNodeTree(cGraphics::world->lights[i].name);
 			node->isCat = false;
-			node->light = Graphics.world.lights[i];
+			node->light = cGraphics::world->lights[i];
 		}
 	}
 }

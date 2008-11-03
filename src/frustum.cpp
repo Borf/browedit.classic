@@ -14,6 +14,9 @@
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
 
+float cFrustum::m_Frustum[6][4];
+
+
 // This is the index in our selection buffer that has the closet object ID clicked
 #define FIRST_OBJECT_ID  3								
 
@@ -69,7 +72,7 @@ void NormalizePlane(float frustum[6][4], int side)
 /////
 ///////////////////////////////// CALCULATE FRUSTUM \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 
-void CFrustum::CalculateFrustum()
+void cFrustum::CalculateFrustum()
 {    
 	float   proj[16];								// This will hold our projection matrix
 	float   modl[16];								// This will hold our modelview matrix
@@ -179,7 +182,7 @@ void CFrustum::CalculateFrustum()
 /////
 ///////////////////////////////// POINT IN FRUSTUM \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 
-bool CFrustum::PointInFrustum( float x, float y, float z )
+bool cFrustum::PointInFrustum( float x, float y, float z )
 {
 	// Go through all the sides of the frustum
 	for(int i = 0; i < 6; i++ )
@@ -203,7 +206,7 @@ bool CFrustum::PointInFrustum( float x, float y, float z )
 /////
 ///////////////////////////////// SPHERE IN FRUSTUM \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 
-bool CFrustum::SphereInFrustum( float x, float y, float z, float radius )
+bool cFrustum::SphereInFrustum( float x, float y, float z, float radius )
 {
 	// Go through all the sides of the frustum
 	for(int i = 0; i < 6; i++ )	
@@ -227,7 +230,7 @@ bool CFrustum::SphereInFrustum( float x, float y, float z, float radius )
 /////
 ///////////////////////////////// CUBE IN FRUSTUM \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 
-bool CFrustum::CubeInFrustum( float x, float y, float z, float size )
+bool cFrustum::CubeInFrustum( float x, float y, float z, float size )
 {
 	// Basically, what is going on is, that we are given the center of the cube,
 	// and half the length.  Think of it like a radius.  Then we checking each point
@@ -272,7 +275,7 @@ bool CFrustum::CubeInFrustum( float x, float y, float z, float size )
 /////
 ///////////////////////////////// BOX IN FRUSTUM \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 
-bool CFrustum::BoxInFrustum( float x, float y, float z, float x2, float y2, float z2)
+bool cFrustum::BoxInFrustum( float x, float y, float z, float x2, float y2, float z2)
 {
 	// Go through all of the corners of the box and check then again each plane
 	// in the frustum.  If all of them are behind one of the planes, then it most

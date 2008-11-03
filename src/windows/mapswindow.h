@@ -14,7 +14,7 @@ class cMapsWindow : public cWindow
 	{
 	public:
 		cSearchButton(cWindow*, TiXmlDocument* = NULL);
-		void click();
+		void onClick();
 	};
 
 
@@ -33,8 +33,8 @@ public:
 	class cClickableFrame : public cWindowFrame
 	{
 	public:
-		cClickableFrame(cWindow* parent, TiXmlDocument* skin = NULL);
-		void click();
+		cClickableFrame(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		void onClick();
 	};
 	
 	cMapsWindow();

@@ -110,93 +110,95 @@ protected:
 
 
 public:
-	int skinOffLeft;
-	int skinOffRight;
-	int skinOffTop;
-	int skinOffBottom;
+			int				skinOffLeft;
+			int				skinOffRight;
+			int				skinOffTop;
+			int				skinOffBottom;
+
+			
+			float			fontColor[3];
+			float			currentColor[4];
+			bool			saveWindow;
+			std::string		defaultObject;
+
+							cWindow(cTexture* t = NULL, cFont* f = NULL, TiXmlDocument* skin = NULL);
+			virtual			~cWindow();
+			int				getX()						{ return x; }
+			int				getY()						{ return rolledUp ? y+h-16 : y; }
+			int				py2()						{ return y; }
+			int				getWidth()					{ return w; }
+			int				getHeight()				{ return rolledUp ? 16 : h; }
+			int				ph2()						{ return h; }
+			int				innerWidth()				{ return w-skinOffLeft-skinOffRight; }
+			int				innerHeight()				{ return h-skinOffTop-skinOffBottom; }
+			bool			modality()					{ return modal; }
+			void			istopwindow(bool b)		{ topWindow = b; }
+			bool			istopwindow()				{ return topWindow; }
+
+			void			init(cTexture* t, cFont* f)	{ texture = t; font = f; }
+				
+			WINDOW_TYPE		windowtype()				{ return windowType; }
+			bool 			isVisible()					{ return visible || currentColor[3] != 0; }
+			void 			hide()						{ visible = false; }
+			void 			show()						{ visible = true; }
+			void 			togglevis()					{ visible = !visible; }
+			void 			rollup()					{ rolledUp  = true; }
+			void 			rollback()					{ rolledUp  = false; }
+			void 			toggleroll()				{ rolledUp  = !rolledUp; }
+			void 			stopresizing()				{ resizingXY = (resizingYX = (resizingY = (resizingX = false))); }
+			void 			startresisingx()			{ resizingX = true; }
+			void 			startresisingxy()			{ resizingXY = true; }
+			void 			startresizingy()			{ resizingY = true; }
+			void 			startresizingyx()			{ resizingYX = true; }
+			void 			disable()					{ enabled = false; }
+			void 			enable()					{ enabled = true; }
+			bool 			isEnabled()					{ return enabled || currentColor[3] != 0; }
+			bool 			isAlwaysOnTop()				{ return alwaysOnTop; }
+			bool 			isResizing()				{ return resizingXY | resizingYX | resizingX | resizingY; }
+			bool			canBeResized()				{ return !noTransparency; }
+			bool			onBorder();
+			void			moveTo(int xx, int yy)		{ x = xx; y = yy; }
+	virtual void			resizeTo(int ww, int hh)	{ w = ww; h = hh; }
+			void			initProps(std::string);
+
+			void			SetTitle(std::string t)	{ title = t; }
+			std::string		getTitle()			{ return title; }
+
+			int				getCursor();
+	virtual void			close(bool force = false);
+
+	virtual	bool			inWindow();
+			cWindowObject*	inObject();
+			bool			drag();
+	virtual void			draw();
+	virtual void			save();
+
 
 	
-	float							fontColor[3];
-	float							currentColor[4];
-	bool							saveWindow;
-	std::string						defaultObject;
+	virtual void			onClick();
+	virtual void			onDoubleClick();
+	virtual void			onRightClick();
+	virtual void			onStopDrag() {}
+	virtual void			onDragOver();
+	virtual void			onHoldDragOver();
+	virtual void 			onScrollUp();
+	virtual void 			onScrollDown();
+	virtual bool 			onKeyUp(int,bool);
+	virtual bool 			onKeyDown(int,bool);
+	virtual bool 			onChar(char,bool);
 
-	cWindow(cTexture* t = NULL, cFont* f = NULL, TiXmlDocument* skin = NULL);
-	virtual ~cWindow();
-	int  getX()						{ return x; }
-	int  getY()						{ return rolledUp ? y+h-16 : y; }
-	int  py2()						{ return y; }
-	int  getWidth()					{ return w; }
-	int  getHeight()				{ return rolledUp ? 16 : h; }
-	int  ph2()						{ return h; }
-	int  innerWidth()				{ return w-skinOffLeft-skinOffRight; }
-	int  innerHeight()				{ return h-skinOffTop-skinOffBottom; }
-	bool modality()					{ return modal; }
-	void istopwindow(bool b)		{ topWindow = b; }
-	bool istopwindow()				{ return topWindow; }
+			cWindowObject*	addLabel(std::string, int,int,std::string);
+			cWindowObject*	addInputBox(std::string, int,int,int,std::string, TiXmlDocument* = NULL);
+			cWindowObject*	addCheckBox(std::string, int,int,bool, TiXmlDocument* = NULL);
 
-	void init(cTexture* t, cFont* f){ texture = t; font = f; }
-		
-	WINDOW_TYPE windowtype()		{ return windowType; }
-	bool isVisible()				{ return visible || currentColor[3] != 0; }
-	void hide()						{ visible = false; }
-	void show()						{ visible = true; }
-	void togglevis()				{ visible = !visible; }
-	void rollup()					{ rolledUp  = true; }
-	void rollback()					{ rolledUp  = false; }
-	void toggleroll()				{ rolledUp  = !rolledUp; }
-	void stopresizing()				{ resizingXY = (resizingYX = (resizingY = (resizingX = false))); }
-	void startresisingx()			{ resizingX = true; }
-	void startresisingxy()			{ resizingXY = true; }
-	void startresizingy()			{ resizingY = true; }
-	void startresizingyx()			{ resizingYX = true; }
-	void disable()					{ enabled = false; }
-	void enable()					{ enabled = true; }
-	bool isenabled()				{ return enabled || currentColor[3] != 0; }
-	bool isalwaysontop()			{ return alwaysOnTop; }
-	bool resizing()					{ return resizingXY | resizingYX | resizingX | resizingY; }
-	bool canbetransparent()			{ return !noTransparency; }
-	bool onborder();
-	void moveto(int xx, int yy)		{ x = xx; y = yy; }
-	virtual void resizeTo(int ww, int hh)	{ w = ww; h = hh; }
-	void initprops(std::string);
+			void			center();
 
-	void SetTitle(std::string t)			{ title = t; }
-	std::string gettitle()				{ return title; }
+	virtual void*			userfunc(void*) { return NULL; };
 
-	int getcursor();
-	virtual void close(bool force = false);
-
-	virtual bool inwindow();
-	cWindowObject* inObject();
-	bool drag();
-	virtual void click();
-	virtual void draw();
-	virtual void save();
-	virtual void doubleclick();
-	virtual void rightclick();
-	virtual void stopdrag() {}
-	virtual void dragover();
-	virtual void holddragover();
-	virtual void scrollUp();
-	virtual void scrollDown();
-
-	virtual bool onKeyUp(int,bool);
-	virtual bool onKeyDown(int,bool);
-	virtual bool onChar(char,bool);
-
-	cWindowObject* addLabel(std::string, int,int,std::string);
-	cWindowObject* addInputBox(std::string, int,int,int,std::string, TiXmlDocument* = NULL);
-	cWindowObject* addCheckBox(std::string, int,int,bool, TiXmlDocument* = NULL);
-
-	void center();
-
-	virtual void* userfunc(void*) { return NULL; };
-
-	cTexture* texture;
-	cFont* font;
-	objectlist objects;
-	cWindowObject*	selectedObject;
+	cTexture*				texture;
+	cFont*					font;
+	objectlist				objects;
+	cWindowObject*			selectedObject;
 };
 
 extern long mousestartx, mousestarty, dragoffsetx, dragoffsety;

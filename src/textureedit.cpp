@@ -2,6 +2,7 @@
 #include "graphics.h"
 #include "undo.h"
 
+extern long mouseX;
 extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
 extern cGraphics Graphics;
@@ -81,8 +82,8 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 								t.lightmap = 0;
 							else
 							{
-								if(Graphics.world.cubes[y][x].tileUp != -1)
-									t.lightmap = Graphics.world.tiles[Graphics.world.cubes[y][x].tileUp].lightmap;
+								if(cGraphics::world->cubes[y][x].tileUp != -1)
+									t.lightmap = cGraphics::world->tiles[cGraphics::world->cubes[y][x].tileUp].lightmap;
 							}
 							if (Graphics.textureRot == 0)
 							{
@@ -157,11 +158,11 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 								t.v4 = ((selendy+selstarty)/8.0)-t.v4;
 							}
 
-//									cTile* tt = &Graphics.world.tiles[Graphics.world.cubes[y][x].tileUp];
-							if(y >= 0 && y < Graphics.world.height && x >= 0 && x < Graphics.world.width)
+//									cTile* tt = &cGraphics::world->tiles[cGraphics::world->cubes[y][x].tileUp];
+							if(y >= 0 && y < cGraphics::world->height && x >= 0 && x < cGraphics::world->width)
 							{
-								Graphics.world.tiles.push_back(t);
-								Graphics.world.cubes[y][x].tileUp = Graphics.world.tiles.size()-1;
+								cGraphics::world->tiles.push_back(t);
+								cGraphics::world->cubes[y][x].tileUp = cGraphics::world->tiles.size()-1;
 							}
 						}
 					}
@@ -217,11 +218,11 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 						std::vector<int> row2;
 						for(int y = posy; y > posy-selsizey; y--)
 						{
-							if(x >= 0 && x < Graphics.world.width && y >= 0 && y < Graphics.world.height)
+							if(x >= 0 && x < cGraphics::world->width && y >= 0 && y < cGraphics::world->height)
 							{
-								if(Graphics.world.cubes[y][x].tileUp != -1)
+								if(cGraphics::world->cubes[y][x].tileUp != -1)
 								{
-									row.push_back(Graphics.world.tiles[Graphics.world.cubes[y][x].tileUp]);
+									row.push_back(cGraphics::world->tiles[cGraphics::world->cubes[y][x].tileUp]);
 									row2.push_back(1);
 								}
 								else
@@ -278,12 +279,12 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 							int yy = posy - y;
 							if(clipboardgat[xx][yy] == 2)
 							{
-								Graphics.world.cubes[y][x].tileUp = -1;
+								cGraphics::world->cubes[y][x].tileUp = -1;
 							}
 							if(clipboardgat[xx][yy] == 1)
 							{
-								Graphics.world.tiles.push_back(clipboardtexture[xx][yy]);
-								Graphics.world.cubes[y][x].tileUp = Graphics.world.tiles.size()-1;
+								cGraphics::world->tiles.push_back(clipboardtexture[xx][yy]);
+								cGraphics::world->cubes[y][x].tileUp = cGraphics::world->tiles.size()-1;
 							}
 						}
 					}						
@@ -311,11 +312,11 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 					{
 						for(int y = posy; y > posy-selsizey; y--)
 						{
-							if (y < 0 || y >= Graphics.world.height)
+							if (y < 0 || y >= cGraphics::world->height)
 								continue;
-							if (x < 0 || x >= Graphics.world.width)
+							if (x < 0 || x >= cGraphics::world->width)
 								continue;
-							Graphics.world.cubes[y][x].tileUp = -1;
+							cGraphics::world->cubes[y][x].tileUp = -1;
 						}
 					}
 					break;
@@ -324,12 +325,12 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 				{
 					int posx = (int)mouse3dx / 10;
 					int posy = (int)mouse3dz / 10;
-					if(posx > -1 && posy > -1 && posx < Graphics.world.width && posy < Graphics.world.height)
+					if(posx > -1 && posy > -1 && posx < cGraphics::world->width && posy < cGraphics::world->height)
 					{
-						Log(3,0,"Cube (%i,%i): %f,%f,%f,%f", posx, posy, Graphics.world.cubes[posy][posx].cell1, Graphics.world.cubes[posy][posx].cell2, Graphics.world.cubes[posy][posx].cell3, Graphics.world.cubes[posy][posx].cell4);
-						Log(3,0,"tileUp: %i", Graphics.world.cubes[posy][posx].tileUp);
-						if(Graphics.world.cubes[posy][posx].tileUp != -1)
-							Log(3,0,"Lightmap: %i", Graphics.world.tiles[Graphics.world.cubes[posy][posx].tileUp].lightmap);
+						Log(3,0,"Cube (%i,%i): %f,%f,%f,%f", posx, posy, cGraphics::world->cubes[posy][posx].cell1, cGraphics::world->cubes[posy][posx].cell2, cGraphics::world->cubes[posy][posx].cell3, cGraphics::world->cubes[posy][posx].cell4);
+						Log(3,0,"tileUp: %i", cGraphics::world->cubes[posy][posx].tileUp);
+						if(cGraphics::world->cubes[posy][posx].tileUp != -1)
+							Log(3,0,"Lightmap: %i", cGraphics::world->tiles[cGraphics::world->cubes[posy][posx].tileUp].lightmap);
 					}
 
 					break;
@@ -341,7 +342,7 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 				break;
 			case SDLK_RIGHTBRACKET:
 				Graphics.texturestart++;
-				if (Graphics.texturestart > ((int)Graphics.world.textures.size()) - (Graphics.h() / 288))
+				if (Graphics.texturestart > ((int)cGraphics::world->textures.size()) - (Graphics.h() / 288))
 					Graphics.texturestart--;
 				break;
 			default:

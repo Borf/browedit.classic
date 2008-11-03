@@ -266,7 +266,7 @@ int cWindowListBox::getInt(int index)
 	return properties[index];
 }
 
-void cWindowListBox::click()
+void cWindowListBox::onClick()
 {
 	int xx = (int)mouseX;
 	xx -= realX();
@@ -363,7 +363,7 @@ void cWindowListBox::drag()
 	}
 }
 
-void cWindowListBox::doubleClick()
+void cWindowListBox::onDoubleClick()
 {
 //	Log(1,0,"You doubleclicked me!");
 }
@@ -379,13 +379,13 @@ std::string cWindowListBox::getText(int id)
 
 
 
-void cWindowListBox::scrollUp()
+void cWindowListBox::onScrollUp()
 {
 	liststart-=5;
 	if (liststart <= 0)
 		liststart = 0;
 }
-void cWindowListBox::scrollDown()
+void cWindowListBox::onScrollDown()
 {
 	unsigned int i = 0;
 

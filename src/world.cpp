@@ -1,4 +1,3 @@
-
 #include "main.h"
 #include "world.h"
 #include "graphics.h"
@@ -9,7 +8,9 @@
 #include <fstream>
 #include "menu.h"
 #include "windows/hotkeywindow.h"
+#include <windows/confirmwindow.h>
 #include "font.h"
+#include <frustum.h>
 
 #ifdef _WIN32
 #include <gd/gd.h>
@@ -71,7 +72,7 @@ void cWorld::load()
 	}
 
 	for(i = 0; i < textures.size(); i++)
-		TextureCache.unload(textures[i]->texture);
+		cTextureCache::unload(textures[i]->texture);
 	textures.clear();
 
 	for(y = 0; y < realLightmaps.size(); y+=21)
@@ -85,7 +86,7 @@ void cWorld::load()
 	}
 	realLightmaps.clear();
 
-	cWindow* wnd = cWM::getwindow(WT_HOTKEY);
+	cWindow* wnd = cWM::getWindow(WT_HOTKEY);
 	if (wnd != NULL)
 	{
 		for(i = 0; i < 8; i++)
@@ -181,7 +182,7 @@ void cWorld::load()
 		cTextureContainer* t = new cTextureContainer();
 		t->RoFilename = s;
 		t->RoFilename2 = std::string(buf+40);
-		t->texture = TextureCache.load(rodir + "data\\texture\\" + s);
+		t->texture = cTextureCache::load(rodir + "data\\texture\\" + s);
 		textures[i] = t;
 	}
 
@@ -565,7 +566,7 @@ void cWorld::load()
 
 				char buf[100];
 				sprintf(buf, "%i", e.type);
-				cMenu* m = effectsmenu->finddata(buf);
+				cMenu* m = effectsmenu->findData(buf);
 				if (m != NULL)
 					e.readablename = m->title;
 				effects.push_back(e);
@@ -677,7 +678,7 @@ void cWorld::load()
 	pFile->close();
 	Log(3,0,GetMsg("world/LOADDONE"), (std::string(fileName) + ".gat").c_str());
 
-	wnd = cWM::getwindow(WT_HOTKEY);
+	wnd = cWM::getWindow(WT_HOTKEY);
 	if (wnd != NULL)
 	{
 		pFile = cFileSystem::open(std::string(fileName) + ".locations");
@@ -708,10 +709,10 @@ void cWorld::load()
 		}
 	}
 
-	for(i = 0; i < Graphics.world.sprites.size(); i++)
-		delete Graphics.world.sprites[i];
+	for(i = 0; i < sprites.size(); i++)
+		delete sprites[i];
 
-	Graphics.world.sprites.clear();
+	sprites.clear();
 
 	if(cFileSystem::isFile(std::string(fileName) + ".sprites"))
 	{
@@ -812,13 +813,13 @@ void cQuadTreeNode::draw(int level)
 		cVector3 v = box1;
 		cVector3 v2 = box2;
 
-		v.x += Graphics.world.width*5;
+		v.x += cGraphics::world->width*5;
 		v.y = -v.y;
-		v.z = Graphics.world.height*5 - v.z;
+		v.z = cGraphics::world->height*5 - v.z;
 
-		v2.x += Graphics.world.width*5;
+		v2.x += cGraphics::world->width*5;
 		v2.y = -v2.y;
-		v2.z = Graphics.world.height*5 - v2.z;
+		v2.z = cGraphics::world->height*5 - v2.z;
 
 		glBegin(GL_LINE_LOOP);
 			glVertex3f(v.x, v.y, v.z);
@@ -872,7 +873,7 @@ void cWorld::exportheight()
 }
 
 
-class cAddQuadtreeConfirm : public cConfirmWindow::cConfirmWindowCaller
+class cAddQuadtreeConfirm : public cConfirmWindowCaller
 {
 	private:
 		int* b;
@@ -896,7 +897,7 @@ void cWorld::save()
 {
 	if(!IsLegal2)
 	{
-		cWM::ShowMessage("This copy of browedit is not activated. Please don't use it");
+		cWM::showMessage("This copy of browedit is not activated. Please don't use it");
 		return;
 	}
 
@@ -915,7 +916,7 @@ void cWorld::save()
 			if(root == NULL)
 			{
 				int b = 0;
-				cWM::ConfirmWindow("There is no quadtree information added, would you like to try adding it?", new cAddQuadtreeConfirm(&b));
+				cWM::confirmWindow("There is no quadtree information added, would you like to try adding it?", new cAddQuadtreeConfirm(&b));
 				while(b == 0)
 				{
 					mainloop();
@@ -942,12 +943,12 @@ void cWorld::save()
 				for(unsigned int i = 0; i < models.size(); i++)
 				{
 					if(i % 10 == 0)
-						Log(3,0,GetMsg("world/QUADTREECALC"), i, Graphics.world.models.size(), (i/(float)Graphics.world.models.size())*100);
+						Log(3,0,GetMsg("world/QUADTREECALC"), i, models.size(), (i/(float)models.size())*100);
 					models[i]->draw(false,false,true);
 				}
 
 
-				Graphics.world.root->recalculate();
+				root->recalculate();
 				root->save(quadTreeFloats);
 				for(x = 0; x < width; x++)
 					for(y = 0; y < height; y++)
@@ -1068,7 +1069,7 @@ void cWorld::save()
 		
 		if(strlen(fname) > 16)
 		{
-			cWM::ShowMessage("Please use a shorter name");
+			cWM::showMessage("Please use a shorter name");
 			Log(2,0,"Error: |%s| is too long", fname);
 			return;
 		}
@@ -1387,7 +1388,7 @@ void cWorld::save()
 	}
 	{
 		int i;
-		cWindow* w = cWM::getwindow(WT_HOTKEY);
+		cWindow* w = cWM::getWindow(WT_HOTKEY);
 		int loadcount = 0;
 		for(i = 0; i < 8; i++)
 		{
@@ -1515,7 +1516,7 @@ void cWorld::draw()
 	float camheight = 0;
 	if(-Graphics.camerapointer.x > 0 && -Graphics.camerapointer.x < width*10 && -Graphics.camerapointer.y > 0 && -Graphics.camerapointer.y < height*10)
 	{
-		camheight = -Graphics.world.cubes[height+(int)Graphics.camerapointer.y/10-1][-(int)Graphics.camerapointer.x/10].cell1;
+		camheight = -cubes[height+(int)Graphics.camerapointer.y/10-1][-(int)Graphics.camerapointer.x/10].cell1;
 	}
 
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
@@ -1539,7 +1540,7 @@ void cWorld::draw()
 	glDisable(GL_BLEND);
 
 	//glTranslatef(Graphics.camerapointer.x, 0, Graphics.camerapointer.y);
-	Graphics.frustum.CalculateFrustum();
+	cFrustum::CalculateFrustum();
 
 
 /*	float selsizex = (fabs(Graphics.selectionstart.x - Graphics.selectionend.x) / 32);
@@ -1597,7 +1598,7 @@ void cWorld::draw()
 		for(y = 0; y < height; y++)
 		{
 			cCube* c = &cubes[y][x];
-			if(!Graphics.frustum.CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 20))
+			if(!cFrustum::CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 20))
 				continue;
 			if (c->tileUp > -1 && c->tileUp < (int)tiles.size())
 			{
@@ -1710,7 +1711,7 @@ void cWorld::draw()
 			for(y = 0; (int)y < height; y++)
 			{
 				cCube* c = &cubes[y][x];
-				if(!Graphics.frustum.CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 20))
+				if(!cFrustum::CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 20))
 					continue;
 				if (c->tileUp != -1)
 				{
@@ -1866,12 +1867,12 @@ void cWorld::draw()
 		glColor4f(1,1,1, Graphics.gatTransparency);
 		for(y = 0; y < (int)gattiles.size(); y++)
 		{
-			if(!Graphics.frustum.BoxInFrustum(0,-1000,(2*height-y)*5, gattiles[y].size()*5,1000,(2*height-y)*5-5))
+			if(!cFrustum::BoxInFrustum(0,-1000,(2*height-y)*5, gattiles[y].size()*5,1000,(2*height-y)*5-5))
 				continue;
 			for(x = 0; x < (int)gattiles[y].size(); x++)
 			{
 				cGatTile* c = &gattiles[y][x];
-				if(!Graphics.frustum.CubeInFrustum(x*5+2.5,-c->cell1,(2*height-y)*5-2.5, 5))
+				if(!cFrustum::CubeInFrustum(x*5+2.5,-c->cell1,(2*height-y)*5-2.5, 5))
 					continue;
 				glBindTexture(GL_TEXTURE_2D, Graphics.gatTextures[c->type]->texId());
 				glBegin(GL_TRIANGLE_STRIP);
@@ -1979,7 +1980,7 @@ void cWorld::draw()
 			{
 				for(y = posy; y > posy-selsizey; y--)
 				{
-					if(!Graphics.frustum.CubeInFrustum(x*10+5,0,(height-y)*10+5, 20))
+					if(!cFrustum::CubeInFrustum(x*10+5,0,(height-y)*10+5, 20))
 						continue;
 					int xx = posx - x;
 					int yy = posy - y;
@@ -1989,7 +1990,7 @@ void cWorld::draw()
 						continue;
 					cTile t;
 					t.texture = Graphics.texturestart + ((int)Graphics.selectionstart.y - 32) / 288;
-					if(t.texture >= (int)Graphics.world.textures.size())
+					if(t.texture >= (int)textures.size())
 						break;
 					if (Graphics.textureRot == 0)
 					{
@@ -2101,7 +2102,7 @@ void cWorld::draw()
 				for(y = 1; y < height-1; y++)
 				{
 					cCube* c = &cubes[y][x];
-					if(!Graphics.frustum.CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 20))
+					if(!cFrustum::CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 20))
 						continue;
 
 					if (c->tileUp != -1)
@@ -2164,7 +2165,7 @@ void cWorld::draw()
 				if (y >= height || y < 0 || x < 0 || x >= width)
 					continue;
 				cCube* c = &cubes[y][x];
-				if(!Graphics.frustum.CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 20))
+				if(!cFrustum::CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 20))
 					continue;
 				glBegin(GL_LINE_LOOP);
 					glVertex3f(x*10,-c->cell1+0.2,(height-y)*10);
@@ -2300,12 +2301,12 @@ void cWorld::draw()
 		glTranslatef(s*Graphics.gridoffsetx,0,s*Graphics.gridoffsety);
 		for(int x = 0; x < width*Graphics.gridsize; x++)
 		{
-			if(!Graphics.frustum.BoxInFrustum(x*s,-1000,0, x*s+s,1000,height*Graphics.gridsize*s))
+			if(!cFrustum::BoxInFrustum(x*s,-1000,0, x*s+s,1000,height*Graphics.gridsize*s))
 				continue;
 			for(int y = 0; y < height*Graphics.gridsize; y++)
 			{
 				cCube* c = &cubes[(int)(y/Graphics.gridsize)][(int)(x/Graphics.gridsize)];
-				if(!Graphics.frustum.PointInFrustum(x*s,-c->cell1,(height*Graphics.gridsize-y)*s))
+				if(!cFrustum::PointInFrustum(x*s,-c->cell1,(height*Graphics.gridsize-y)*s))
 					continue;
 
 				glBegin(GL_LINE_LOOP);
@@ -2549,7 +2550,7 @@ void cWorld::draw()
 				for(y = 1; y < height-1; y++)
 				{
 					cCube* c = &cubes[y][x];
-					if(!Graphics.frustum.CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 20))
+					if(!cFrustum::CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 20))
 						continue;
 					
 					if (c->tileUp != -1)
@@ -2613,7 +2614,7 @@ void cWorld::draw()
 					for(y = 0; y < height; y++)
 					{
 						cCube* c = &cubes[y][x];
-						if(!c->selected || !Graphics.frustum.CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 20))
+						if(!c->selected || !cFrustum::CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 20))
 							continue;
 						if (c->tileUp > -1 && c->tileUp < (int)tiles.size())
 						{
@@ -3006,7 +3007,7 @@ void cWorld::unload()
 
 	unsigned int x,y,i;
 	for(i = 0; i < textures.size(); i++)
-		TextureCache.unload(textures[i]->texture);
+		cTextureCache::unload(textures[i]->texture);
 	textures.clear();
 
 	for(y = 0; y < realLightmaps.size(); y+=21)
@@ -3086,15 +3087,15 @@ void cQuadTreeNode::recalculate()
 		{
 			for(float y = box2.z; y < box1.z; y+= (box1.z - box2.z)/10.0)
 			{
-				int xx = (int)x + Graphics.world.width*5;
-				int yy = Graphics.world.height*5 - (int)y;
+				int xx = (int)x + cGraphics::world->width*5;
+				int yy = cGraphics::world->height*5 - (int)y;
 
 				int tilex = xx / 10;
 				int tiley = yy / 10;
 
-				if(tiley > -1 && tiley < Graphics.world.height && tilex > -1 && tilex < Graphics.world.width)
+				if(tiley > -1 && tiley < cGraphics::world->height && tilex > -1 && tilex < cGraphics::world->width)
 				{
-					cCube* c = &Graphics.world.cubes[Graphics.world.height - tiley-1][tilex];
+					cCube* c = &cGraphics::world->cubes[cGraphics::world->height - tiley-1][tilex];
 					box1.y = max(box1.y, c->cell1);
 					box2.y = min(box2.y, c->cell1);
 
@@ -3476,13 +3477,13 @@ int cRealLightMap::texId()
 	int xx, yy;
 
 	char* buf = new char[128*128*3];
-	for(xx = 0; xx < min(21, Graphics.world.width-x); xx++)
+	for(xx = 0; xx < min(21, cGraphics::world->width-x); xx++)
 	{
-		for(yy = 0; yy < min(21, Graphics.world.height-y); yy++)
+		for(yy = 0; yy < min(21, cGraphics::world->height-y); yy++)
 		{
-			if(Graphics.world.cubes[y+yy][x+xx].tileUp == -1)
+			if(cGraphics::world->cubes[y+yy][x+xx].tileUp == -1)
 				continue;
-			char* b = Graphics.world.lightmaps[Graphics.world.tiles[Graphics.world.cubes[y+yy][x+xx].tileUp].lightmap]->buf;
+			char* b = cGraphics::world->lightmaps[cGraphics::world->tiles[cGraphics::world->cubes[y+yy][x+xx].tileUp].lightmap]->buf;
 			for(int xxx = 0; xxx < 6; xxx++)
 			{
 				for(int yyy = 0; yyy < 6; yyy++)
@@ -3496,7 +3497,7 @@ int cRealLightMap::texId()
 	}
 
 
-	for(xx = 0; xx < min(21, Graphics.world.width-x); xx++)
+	for(xx = 0; xx < min(21, cGraphics::world->width-x); xx++)
 	{
 		for(int xxx = 0; xxx < 6; xxx++)
 		{
@@ -3508,7 +3509,7 @@ int cRealLightMap::texId()
 		}
 	}
 
-	for(yy = 0; yy < min(21, Graphics.world.height-y); yy++)
+	for(yy = 0; yy < min(21, cGraphics::world->height-y); yy++)
 	{
 		for(int yyy = 0; yyy < 6; yyy++)
 		{
@@ -3550,13 +3551,13 @@ int cRealLightMap::texId2()
 
 	char* buf = new char[128*128];
 	ZeroMemory(buf, 128*128);
-	for(xx = 0; xx < min(21, Graphics.world.width-x); xx++)
+	for(xx = 0; xx < min(21, cGraphics::world->width-x); xx++)
 	{
-		for(yy = 0; yy < min(21, Graphics.world.height-y); yy++)
+		for(yy = 0; yy < min(21, cGraphics::world->height-y); yy++)
 		{
-			if(Graphics.world.cubes[y+yy][x+xx].tileUp == -1)
+			if(cGraphics::world->cubes[y+yy][x+xx].tileUp == -1)
 				continue;
-			char* b = Graphics.world.lightmaps[Graphics.world.tiles[Graphics.world.cubes[y+yy][x+xx].tileUp].lightmap]->buf;
+			char* b = cGraphics::world->lightmaps[cGraphics::world->tiles[cGraphics::world->cubes[y+yy][x+xx].tileUp].lightmap]->buf;
 			for(int xxx = 0; xxx < 6; xxx++)
 			{
 				for(int yyy = 0; yyy < 6; yyy++)
@@ -3567,7 +3568,7 @@ int cRealLightMap::texId2()
 		}
 	}
 
-	for(xx = 0; xx < min(21, Graphics.world.width-x); xx++)
+	for(xx = 0; xx < min(21, cGraphics::world->width-x); xx++)
 	{
 		for(int xxx = 0; xxx < 6; xxx++)
 		{
@@ -3576,7 +3577,7 @@ int cRealLightMap::texId2()
 		}
 	}
 
-	for(yy = 0; yy < min(21, Graphics.world.height-y); yy++)
+	for(yy = 0; yy < min(21, cGraphics::world->height-y); yy++)
 	{
 		for(int yyy = 0; yyy < 6; yyy++)
 		{
@@ -3661,38 +3662,38 @@ void cWorld::fixGridding()
 	cLightmap* maptop;
 	cLightmap* mapright;
 	cLightmap* mapbottom;
-	for(int x = 1; x < Graphics.world.width-1; x++)
+	for(int x = 1; x < width-1; x++)
 	{
-		for(int y = 1; y < Graphics.world.height-1; y++)
+		for(int y = 1; y < height-1; y++)
 		{
-			int tile = Graphics.world.cubes[y][x].tileUp;
-			int tileleft = Graphics.world.cubes[y][x-1].tileUp;
-			int tiletop = Graphics.world.cubes[y-1][x].tileUp;
-			int tileright = Graphics.world.cubes[y][x+1].tileUp;
-			int tilebottom = Graphics.world.cubes[y+1][x].tileUp;
+			int tile = cubes[y][x].tileUp;
+			int tileleft = cubes[y][x-1].tileUp;
+			int tiletop = cubes[y-1][x].tileUp;
+			int tileright = cubes[y][x+1].tileUp;
+			int tilebottom = cubes[y+1][x].tileUp;
 			if (tile != -1)
 			{
 				if(tile != -1)
-					lightmap = Graphics.world.tiles[tile].lightmap;
+					lightmap = tiles[tile].lightmap;
 				if(tileleft != -1)
-					lightmapleft = Graphics.world.tiles[tileleft].lightmap;
+					lightmapleft = tiles[tileleft].lightmap;
 				if(tiletop != -1)
-					lightmaptop = Graphics.world.tiles[tiletop].lightmap;
+					lightmaptop = tiles[tiletop].lightmap;
 				if(tileright != -1)
-					lightmapright = Graphics.world.tiles[tileright].lightmap;
+					lightmapright = tiles[tileright].lightmap;
 				if(tilebottom != -1)
-					lightmapbottom = Graphics.world.tiles[tilebottom].lightmap;
+					lightmapbottom = tiles[tilebottom].lightmap;
 
 				if(tile != -1)
-					map = Graphics.world.lightmaps[lightmap];
+					map = lightmaps[lightmap];
 				if(tileleft != -1)
-					mapleft = Graphics.world.lightmaps[lightmapleft];
+					mapleft = lightmaps[lightmapleft];
 				if(tiletop != -1)
-					maptop = Graphics.world.lightmaps[lightmaptop];
+					maptop = lightmaps[lightmaptop];
 				if(tileright != -1)
-					mapright = Graphics.world.lightmaps[lightmapright];
+					mapright = lightmaps[lightmapright];
 				if(tilebottom != -1)
-					mapbottom = Graphics.world.lightmaps[lightmapbottom];
+					mapbottom = lightmaps[lightmapbottom];
 
 				for(i = 0; i < 8; i++)
 				{
@@ -3747,39 +3748,39 @@ void cWorld::makeLightmapsUnique()
 	int x,y;
 
 	std::map<int, bool, std::less<int> > used;
-	for(x = 0; x < Graphics.world.width; x++)
+	for(x = 0; x < width; x++)
 	{
-		for(y = 0; y < Graphics.world.height; y++)
+		for(y = 0; y < height; y++)
 		{
-			Graphics.world.realLightmaps[y][x]->reset();
-			Graphics.world.realLightmaps[y][x]->reset();
-			int tile = Graphics.world.cubes[y][x].tileUp;
+			realLightmaps[y][x]->reset();
+			realLightmaps[y][x]->reset();
+			int tile = cubes[y][x].tileUp;
 			if(used.find(tile) != used.end() && tile != -1)
 			{
-				cTile t = Graphics.world.tiles[tile];
-				tile = Graphics.world.tiles.size();
-				Graphics.world.tiles.push_back(t);
-				Graphics.world.cubes[y][x].tileUp = tile;
+				cTile t = tiles[tile];
+				tile = tiles.size();
+				tiles.push_back(t);
+				cubes[y][x].tileUp = tile;
 			}
 			used[tile] = 1;
 //////////////////////////////////
-			tile = Graphics.world.cubes[y][x].tileSide;
+			tile = cubes[y][x].tileSide;
 			if(used.find(tile) != used.end() && tile != -1)
 			{
-				cTile t = Graphics.world.tiles[tile];
-				tile = Graphics.world.tiles.size();
-				Graphics.world.tiles.push_back(t);
-				Graphics.world.cubes[y][x].tileSide = tile;
+				cTile t = tiles[tile];
+				tile = tiles.size();
+				tiles.push_back(t);
+				cubes[y][x].tileSide = tile;
 			}
 			used[tile] = 1;
 ////////////////////////////////
-			tile = Graphics.world.cubes[y][x].tileOtherSide;
+			tile = cubes[y][x].tileOtherSide;
 			if(used.find(tile) != used.end() && tile != -1)
 			{
-				cTile t = Graphics.world.tiles[tile];
-				tile = Graphics.world.tiles.size();
-				Graphics.world.tiles.push_back(t);
-				Graphics.world.cubes[y][x].tileOtherSide = tile;
+				cTile t = tiles[tile];
+				tile = tiles.size();
+				tiles.push_back(t);
+				cubes[y][x].tileOtherSide = tile;
 			}
 			used[tile] = 1;
 		}
@@ -3787,60 +3788,60 @@ void cWorld::makeLightmapsUnique()
 ////////// all tiles are now unique
 	used.clear();
 
-	for(x = 0; x < Graphics.world.width; x++)
+	for(x = 0; x < width; x++)
 	{
-		for(y = 0; y < Graphics.world.height; y++)
+		for(y = 0; y < height; y++)
 		{
-			int tile = Graphics.world.cubes[y][x].tileUp;
+			int tile = cubes[y][x].tileUp;
 			if(tile != -1)
 			{
-				Graphics.world.realLightmaps[y][x]->reset();
-				int lightmap = Graphics.world.tiles[tile].lightmap;
+				realLightmaps[y][x]->reset();
+				int lightmap = tiles[tile].lightmap;
 				if(lightmap != -1)
 				{
 					if(used.find(lightmap) == used.end())
 					{
 						cLightmap* map = new cLightmap();
-						memcpy(map->buf, Graphics.world.lightmaps[lightmap]->buf, 256);
-						lightmap = Graphics.world.lightmaps.size();
-						Graphics.world.tiles[tile].lightmap = lightmap;
-						Graphics.world.lightmaps.push_back(map);
+						memcpy(map->buf, lightmaps[lightmap]->buf, 256);
+						lightmap = lightmaps.size();
+						tiles[tile].lightmap = lightmap;
+						lightmaps.push_back(map);
 					}
 					used[lightmap] = 1;
 				}
 			}
 
-			tile = Graphics.world.cubes[y][x].tileSide;
+			tile = cubes[y][x].tileSide;
 			if(tile != -1)
 			{
-				int lightmap = Graphics.world.tiles[tile].lightmap;
+				int lightmap = tiles[tile].lightmap;
 				if(lightmap != -1)
 				{
 					if(used.find(lightmap) == used.end())
 					{
 						cLightmap* map = new cLightmap();
-						memcpy(map->buf, Graphics.world.lightmaps[lightmap]->buf, 256);
-						lightmap = Graphics.world.lightmaps.size();
-						Graphics.world.tiles[tile].lightmap = lightmap;
-						Graphics.world.lightmaps.push_back(map);
+						memcpy(map->buf, lightmaps[lightmap]->buf, 256);
+						lightmap = lightmaps.size();
+						tiles[tile].lightmap = lightmap;
+						lightmaps.push_back(map);
 					}
 					used[lightmap] = 1;
 				}
 			}
 
-			tile = Graphics.world.cubes[y][x].tileOtherSide;
+			tile = cubes[y][x].tileOtherSide;
 			if(tile != -1)
 			{
-				int lightmap = Graphics.world.tiles[tile].lightmap;
+				int lightmap = tiles[tile].lightmap;
 				if(lightmap != -1)
 				{
 					if(used.find(lightmap) == used.end())
 					{
 						cLightmap* map = new cLightmap();
-						memcpy(map->buf, Graphics.world.lightmaps[lightmap]->buf, 256);
-						lightmap = Graphics.world.lightmaps.size();
-						Graphics.world.tiles[tile].lightmap = lightmap;
-						Graphics.world.lightmaps.push_back(map);
+						memcpy(map->buf, lightmaps[lightmap]->buf, 256);
+						lightmap = lightmaps.size();
+						tiles[tile].lightmap = lightmap;
+						lightmaps.push_back(map);
 					}
 					used[lightmap] = 1;
 				}
@@ -3855,18 +3856,18 @@ void cWorld::makeLightmapsUnique()
 void cWorld::blackLightmaps()
 {
 	int x,y;
-	for(x = 0; x < Graphics.world.width; x++)
+	for(x = 0; x < width; x++)
 	{
-		for(y = 0; y < Graphics.world.height; y++)
+		for(y = 0; y < height; y++)
 		{
-			int tile = Graphics.world.cubes[y][x].tileUp;
+			int tile = cubes[y][x].tileUp;
 			if(tile != -1)
 			{
-				Graphics.world.realLightmaps[y][x]->reset();
-				int lightmap = Graphics.world.tiles[tile].lightmap;
+				realLightmaps[y][x]->reset();
+				int lightmap = tiles[tile].lightmap;
 				if(lightmap != -1)
 				{
-					memset(Graphics.world.lightmaps[lightmap]->buf,		'\0', 256);
+					memset(lightmaps[lightmap]->buf,		'\0', 256);
 				}
 			}
 		}

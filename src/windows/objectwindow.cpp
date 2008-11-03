@@ -1,5 +1,5 @@
 #include "objectwindow.h"
-
+#include <wm/windowinputbox.h>
 #include <undo.h>
 extern cUndoStack undostack;
 
@@ -12,7 +12,7 @@ cWindowOkButton::cWindowOkButton( cWindow* parent, TiXmlDocument* skin ) : cWind
 	text = GetMsg("wm/OK");
 }
 
-void cWindowOkButton::click()
+void cWindowOkButton::onClick()
 {
 	if (parent->windowtype() == WT_OBJECT || parent->windowtype() == WT_LIGHT || parent->windowtype() == WT_SOUND)
 	{
@@ -39,7 +39,7 @@ cWindowCancelButton::~cWindowCancelButton()
 	
 }
 
-void cWindowCancelButton::click()
+void cWindowCancelButton::onClick()
 {
 	if (parent->windowtype() == WT_OBJECT || parent->windowtype() == WT_EFFECT || parent->windowtype() == WT_LIGHT)
 	{
@@ -167,7 +167,7 @@ void* cObjectWindow::userfunc( void* param )
 			if(i->second->type == OBJECT_FLOATINPUTBOX)
 				i->second->onKeyDown(SDLK_RETURN, false);
 		}
-		cWindow* w = cWM::getwindow(WT_MODELOVERVIEW);
+		cWindow* w = cWM::getWindow(WT_MODELOVERVIEW);
 		if(w != NULL)
 			w->userfunc(NULL);
 		undostack.push(undo);

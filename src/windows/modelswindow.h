@@ -18,12 +18,12 @@ public:
 	{
 	public:
 		int originalselection;
-		cWindowModelCatSelect(cWindow* parent, std::vector<cWindowTree::cTreeNode*> n, TiXmlDocument* skin = NULL);
-		void click();
-		void holdDragOver();
-		void dragOver();
+		cWindowModelCatSelect(cWindow* parent, std::vector<cWindowTree::cTreeNode*> n, TiXmlDocument* skin = &cWM::skin);
+		void onClick();
+		void onHoldDragOver();
+		void onDragOver();
 		void refreshmodels();
-		void rightClick();
+		void onRightClick();
 		bool onKeyDown(int,bool);
 	};
 	class cWindowModel : public cWindowObject
@@ -33,8 +33,8 @@ public:
 	public:
 		cWindowModel(cWindow* parent);
 		void draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom);
-		void click();
-		void rightClick();
+		void onClick();
+		void onRightClick();
 		void setText(int i, std::string s);
 		std::string getText(int i);
 		void drag();
@@ -46,7 +46,7 @@ public:
 	std::map<cWindowTree::cTreeNode*, std::vector<std::pair<std::string, std::string> >, std::less<cWindowTree::cTreeNode*> > items;
 	cModelsWindow();
 	void resizeTo(int ww, int hh);
-	void stopdrag();
+	void onStopDrag();
 	void* userfunc(void* param);
 };
 

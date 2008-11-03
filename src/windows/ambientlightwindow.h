@@ -11,7 +11,7 @@ class cAmbientLightWindow : public cWindow
 	public:
 		cAmbientLightWindowOkButton(cWindow* parent);
 		virtual ~cAmbientLightWindowOkButton() {}
-		void click();
+		void onClick();
 	};
 
 public:

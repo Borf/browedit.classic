@@ -3,6 +3,7 @@
 
 #include "windowobject.h"
 #include <string>
+#include <wm/wm.h>
 //using namespace std;
 
 class cWindowInputBox : public cWindowObject
@@ -16,11 +17,11 @@ protected:
 	int selectionstart;
 	int defaultheight;
 public:
-	cWindowInputBox(cWindow* parent, TiXmlDocument* skin = NULL);
+	cWindowInputBox(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
 	virtual ~cWindowInputBox() {}
 	virtual void draw(int,int,int,int);
-	virtual void click();
-	virtual void doubleClick();
+	virtual void onClick();
+	virtual void onDoubleClick();
 	bool onKeyDown(int,bool);
 	bool onChar(char,bool);
 
@@ -38,7 +39,7 @@ class cWindowFloatInputBox : public cWindowInputBox
 	bool firstTime;
 public:
 	float* floatje;
-	cWindowFloatInputBox(cWindow* parent, TiXmlDocument* skin = NULL);
+	cWindowFloatInputBox(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
 	void draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom);
 	void setInt(int id, int val);
 	bool onKeyDown(int keyid, bool shift);
@@ -50,7 +51,7 @@ class cWindowStringInputBox : public cWindowInputBox
 	bool firstTime;
 public:
 	std::string* stringetje;
-	cWindowStringInputBox(cWindow* parent, TiXmlDocument* skin = NULL);
+	cWindowStringInputBox(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
 	void draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom);
 	void setInt(int id, int val);
 	bool onKeyDown(int keyid, bool shift);
@@ -67,7 +68,7 @@ class cWindowLongInputBox : public cWindowInputBox
 	bool firstdraw;
 public:
 	long* longje;
-	cWindowLongInputBox(cWindow* parent, TiXmlDocument* skin = NULL);
+	cWindowLongInputBox(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
 	void draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom);
 	void setInt(int id, int val);
 	bool onKeyDown(int keyid, bool shift);

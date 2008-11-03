@@ -32,7 +32,7 @@ void cWindowButton::draw(int cutoffleft, int cutoffright, int cutofftop, int cut
 }
 
 
-void cWindowButton::click()
+void cWindowButton::onClick()
 {
 	Log(1,0, "You clicked the button!");
 }
@@ -41,13 +41,13 @@ bool cWindowButton::onKeyDown(int c, bool shift)
 {
 	if (c == SDLK_RETURN)
 	{
-		click();
+		onClick();
 		return true;
 	}
 	return false;
 }
 
-cWindowButton::cWindowButton( cWindow* parent, TiXmlDocument* skin) : cWindowObject(parent, skin->FirstChildElement("skin")->FirstChildElement("button"))
+cWindowButton::cWindowButton( cWindow* parent, TiXmlDocument* skin) : cWindowObject(parent, skin ? skin->FirstChildElement("skin")->FirstChildElement("button") : cWM::skin.FirstChildElement("skin")->FirstChildElement("button"))
 {
 	w = 100;
 	h = 25;
@@ -66,7 +66,7 @@ void cWindowButton::setText( int id, std::string txt )
 	text = txt;
 }
 
-cWindowCloseButton::cWindowCloseButton( cWindow* parent, TiXmlDocument* skin ) : cWindowObject(parent, skin->FirstChildElement("skin")->FirstChildElement("closebutton"))
+cWindowCloseButton::cWindowCloseButton( cWindow* parent, TiXmlDocument* skin ) : cWindowObject(parent, skin ? skin->FirstChildElement("skin")->FirstChildElement("closebutton") : cWM::skin.FirstChildElement("skin")->FirstChildElement("closebutton"))
 {
 	if(!skin)
 		skin = &cWM::skin;
@@ -75,7 +75,12 @@ cWindowCloseButton::cWindowCloseButton( cWindow* parent, TiXmlDocument* skin ) :
 	alignment = ALIGN_TOPRIGHT;
 }
 
-cWindowRollupButton::cWindowRollupButton( cWindow* parent, TiXmlDocument* skin ) : cWindowObject(parent, skin->FirstChildElement("skin")->FirstChildElement("collapsebutton"))
+void cWindowCloseButton::onClick()
+{
+	parent->close();
+}
+
+cWindowRollupButton::cWindowRollupButton( cWindow* parent, TiXmlDocument* skin ) : cWindowObject(parent, skin ? skin->FirstChildElement("skin")->FirstChildElement("collapsebutton") : cWM::skin.FirstChildElement("skin")->FirstChildElement("collapsebutton"))
 {
 	if(!skin)
 		skin = &cWM::skin;
@@ -84,7 +89,7 @@ cWindowRollupButton::cWindowRollupButton( cWindow* parent, TiXmlDocument* skin )
 	alignment = ALIGN_TOPRIGHT;
 }
 
-void cWindowRollupButton::click()
+void cWindowRollupButton::onClick()
 {
 	parent->toggleroll();
 }

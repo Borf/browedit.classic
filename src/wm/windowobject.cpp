@@ -83,7 +83,7 @@ cWindowObject* cWindowObject::inObject()
 
 
 
-void cWindowObject::click()
+void cWindowObject::onClick()
 {
 
 }

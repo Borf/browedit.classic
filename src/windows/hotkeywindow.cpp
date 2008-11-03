@@ -10,7 +10,7 @@ cHotkeyWindow::cHotkeyButton::cHotkeyButton( cWindow* parent ) : cWindowPictureB
 	im = NULL;
 }
 
-void cHotkeyWindow::cHotkeyButton::rightClick()
+void cHotkeyWindow::cHotkeyButton::onRightClick()
 {
 	if (loaded)
 	{
@@ -47,7 +47,7 @@ void cHotkeyWindow::cHotkeyButton::rightClick()
 	topcamera = Graphics.topCamera;
 }
 
-void cHotkeyWindow::cHotkeyButton::click()
+void cHotkeyWindow::cHotkeyButton::onClick()
 {
 	if(loaded)
 	{
@@ -168,7 +168,7 @@ cHotkeyWindow::cHotkeyWindow() : cWindow()
 	x = Graphics.w()-w;
 	y = 0;
 	title = "";
-	initprops("hotbar");
+	initProps("hotbar");
 	
 	cWindowObject* o;
 	

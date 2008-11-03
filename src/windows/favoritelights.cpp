@@ -175,12 +175,12 @@ cFavoriteLightsWindow::cFavoritesTree::cFavoritesTree( cWindow* parent, std::vec
 	alignment = ALIGN_TOPLEFT;
 }
 
-void cFavoriteLightsWindow::cFavoritesTree::rightClick()
+void cFavoriteLightsWindow::cFavoritesTree::onRightClick()
 {
-	cWindowTree::rightClick();
+	cWindowTree::onRightClick();
 	popupmenu = new cMenu();
 	popupmenu->parent = NULL;
-	popupmenu->drawstyle = 1;
+	popupmenu->drawStyle = 1;
 	popupmenu->x = (int)mouseX;
 	popupmenu->y = (int)mouseY;
 	popupmenu->w = 150;
@@ -284,7 +284,7 @@ cFavoriteLightsWindow::cWindowOkButton::cWindowOkButton( cWindow* parent, TiXmlD
 	text = GetMsg("wm/OK");
 }
 
-void cFavoriteLightsWindow::cWindowOkButton::click()
+void cFavoriteLightsWindow::cWindowOkButton::onClick()
 {
 	((cWindowTree*)parent->objects["list"])->onChange();
 	favoritelights.SaveFile("data/lights.txt");
@@ -299,7 +299,7 @@ cFavoriteLightsWindow::cWindowCancelButton::cWindowCancelButton( cWindow* parent
 	text = GetMsg("wm/CANCEL");
 }
 
-void cFavoriteLightsWindow::cWindowCancelButton::click()
+void cFavoriteLightsWindow::cWindowCancelButton::onClick()
 {
 	favoritelights = cFileSystem::getXml("data/lights.txt");
 	parent->close();

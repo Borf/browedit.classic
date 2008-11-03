@@ -9,7 +9,7 @@ cMessageWindow::cWindowOkButton::cWindowOkButton( cWindow* parent, TiXmlDocument
 	text = "Ok";
 }
 
-void cMessageWindow::cWindowOkButton::click()
+void cMessageWindow::cWindowOkButton::onClick()
 {
 	parent->close();
 }

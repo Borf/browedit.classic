@@ -69,7 +69,7 @@ cXmlWindow::cXmlButton::cXmlButton(cWindow* p, TiXmlDocument* skin) : cWindowBut
 	
 }
 
-void cXmlWindow::cXmlButton::click()
+void cXmlWindow::cXmlButton::onClick()
 {
 	((cXmlWindow*)parent)->event(this, "click");
 }

@@ -9,7 +9,7 @@ class cWindowRoundButton : public cWindowObject
 public:
 	cWindowRoundButton(cWindow* parent);
 	void draw(int,int,int,int);
-	void click();
+	void onClick();
 	cWindowObject* inObject();
 };
 

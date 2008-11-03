@@ -105,7 +105,7 @@ cMapsWindow::cMapsWindow() : cWindow()
 			list.Parse(data);
 			if(list.Error())
 			{
-				cWM::ShowMessage("Could not parse list!");
+				cWM::showMessage("Could not parse list!");
 				return;
 			}
 
@@ -176,9 +176,9 @@ cMapsWindow::cSearchButton::cSearchButton(cWindow* parent, TiXmlDocument* skin) 
 	text = "Search";
 }
 
-void cMapsWindow::cSearchButton::click()
+void cMapsWindow::cSearchButton::onClick()
 {
-	cWM::ShowMessage("You clicked!");
+	cWM::showMessage("You clicked!");
 
 }
 
@@ -229,9 +229,9 @@ cMapsWindow::~cMapsWindow()
 		}
 }
 
-void cMapsWindow::cClickableFrame::click()
+void cMapsWindow::cClickableFrame::onClick()
 {
-	cWM::addwindow(new cMapDetailWindow());
+	cWM::addWindow(new cMapDetailWindow());
 }
 
 cMapsWindow::cClickableFrame::cClickableFrame( cWindow* parent, TiXmlDocument* skin ) : cWindowFrame(parent, skin)

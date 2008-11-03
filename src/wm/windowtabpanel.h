@@ -1,10 +1,10 @@
 #ifndef __WINDOWTABPANEL_H__
 #define __WINDOWTABPANEL_H__
 
+#include <wm/wm.h>
 #include "windowobject.h"
 #include <string>
 #include <vector>
-//using namespace std;
 
 class cWindowTabPanel : public cWindowObject
 {
@@ -25,9 +25,9 @@ public:
 	int selectedtab;
 
 
-	cWindowTabPanel(cWindow* parent, TiXmlDocument* skin = NULL);
+	cWindowTabPanel(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
 	void draw(int,int,int,int);
-	void click();
+	void onClick();
 
 	int getInt(int id);
 

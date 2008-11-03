@@ -10,7 +10,6 @@
 
 #include "world.h"
 #include <wm/wm.h>
-#include "frustum.h"
 
 class cFont;
 
@@ -34,10 +33,6 @@ public:
 	static int&				h()	{		return				height;	}
 	static int&				w()	{		return				width;	}
 	static long				getFrameTicks();
-
-	static CFrustum			frustum;
-
-
 protected:
 	static int				createGLWindow();
 	static int				initGL(void);
@@ -62,7 +57,7 @@ public:
 	static int						init(int,int,int,bool);
 	static int						draw(bool = true);
 	static void						closeAndCleanup();
-	static cWorld					world;
+	static cWorld*					world;
 
 
 

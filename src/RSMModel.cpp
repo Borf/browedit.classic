@@ -1,6 +1,7 @@
 #include "RSMModel.h"
 #include "graphics.h"
 #include "texturecache.h"
+#include <frustum.h>
 extern std::string rodir;
 extern cGraphics Graphics;
 extern cVector3 lightpos;
@@ -38,7 +39,7 @@ void cRSMModel::load(std::string fname)
 	{
 		pFile->read(buffer, 40);
 		std::string filename = buffer;
-		cTexture* tex = TextureCache.load(rodir + "data\\texture\\" + filename, TEX_NEARESTFILTER);
+		cTexture* tex = cTextureCache::load(rodir + "data\\texture\\" + filename, TEX_NEARESTFILTER);
 		textures.push_back(tex);
 	}
 
@@ -225,8 +226,8 @@ void cRSMModel::draw(bool checkfrust, bool dodraw, bool setheight, bool dolightm
 {
 	if (checkfrust)
 	{
-		if(!Graphics.frustum.CubeInFrustum(5*pos.x, -pos.y, 5*(Graphics.world.height*2-pos.z), max(max(bb.bbmax[0],bb.bbmax[1]), bb.bbmax[2])))
-//		if(!Graphics.frustum.PointInFrustum(5*pos.x, -pos.y, 5*(Graphics.world.height*2-pos.z)))
+		if(!cFrustum::CubeInFrustum(5*pos.x, -pos.y, 5*(cGraphics::world->height*2-pos.z), max(max(bb.bbmax[0],bb.bbmax[1]), bb.bbmax[2])))
+//		if(!Graphics.frustum.PointInFrustum(5*pos.x, -pos.y, 5*(cGraphics::world->height*2-pos.z)))
 		{
 			return;
 		}
@@ -539,21 +540,21 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 						int x2 = (int)floor((v1.x+xinc.x*xi+yinc.x*yi)/10.0);
 
 					//	if (y1 < 0 || y2 < 0 || x1 < 0 || x2 < 0 ||
-					//		y1 >= Graphics.world.height || y2 >= Graphics.world.height || x1 >= Graphics.world.width || y2 >= Graphics.world.width)
+					//		y1 >= cGraphics::world->height || y2 >= cGraphics::world->height || x1 >= cGraphics::world->width || y2 >= cGraphics::world->width)
 					//		continue;
 
-						if (y2 < 0 || y2 >= Graphics.world.height || x2 < 0 || x2 >= Graphics.world.width)
+						if (y2 < 0 || y2 >= cGraphics::world->height || x2 < 0 || x2 >= cGraphics::world->width)
 							continue;
 
 						float h = (v1.y+xinc.y*xi+yinc.y*yi);
-						/*Graphics.world.cubes[y1][x1].minh = min(Graphics.world.cubes[y1][x1].minh, -h);
-						Graphics.world.cubes[y1][x1].maxh = max(Graphics.world.cubes[y1][x1].maxh, -h);
-						Graphics.world.cubes[y1][x2].minh = min(Graphics.world.cubes[y1][x2].minh, -h);
-						Graphics.world.cubes[y1][x2].maxh = max(Graphics.world.cubes[y1][x2].maxh, -h);*/
-						Graphics.world.cubes[y2][x2].minHeight = min(Graphics.world.cubes[y2][x2].minHeight, -h);
-						Graphics.world.cubes[y2][x2].maxHeight = max(Graphics.world.cubes[y2][x2].maxHeight, -h);
-						/*Graphics.world.cubes[y2][x1].minh = min(Graphics.world.cubes[y2][x1].minh, -h);
-						Graphics.world.cubes[y2][x1].maxh = max(Graphics.world.cubes[y2][x1].maxh, -h);*/
+						/*cGraphics::world->cubes[y1][x1].minh = min(cGraphics::world->cubes[y1][x1].minh, -h);
+						cGraphics::world->cubes[y1][x1].maxh = max(cGraphics::world->cubes[y1][x1].maxh, -h);
+						cGraphics::world->cubes[y1][x2].minh = min(cGraphics::world->cubes[y1][x2].minh, -h);
+						cGraphics::world->cubes[y1][x2].maxh = max(cGraphics::world->cubes[y1][x2].maxh, -h);*/
+						cGraphics::world->cubes[y2][x2].minHeight = min(cGraphics::world->cubes[y2][x2].minHeight, -h);
+						cGraphics::world->cubes[y2][x2].maxHeight = max(cGraphics::world->cubes[y2][x2].maxHeight, -h);
+						/*cGraphics::world->cubes[y2][x1].minh = min(cGraphics::world->cubes[y2][x1].minh, -h);
+						cGraphics::world->cubes[y2][x1].maxh = max(cGraphics::world->cubes[y2][x1].maxh, -h);*/
 					}
 				}
 			}
@@ -578,8 +579,8 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 				printf(".");
 				float t = 0;
 
-				int x2 = (int)min((int)Graphics.world.width, (int)(model->pos.x/2+mmax*2));
-				int y2 = (int)min((int)Graphics.world.height, (int)(model->pos.z/2+ mmax*2));
+				int x2 = (int)min((int)cGraphics::world->width, (int)(model->pos.x/2+mmax*2));
+				int y2 = (int)min((int)cGraphics::world->height, (int)(model->pos.z/2+ mmax*2));
 
 				for(int x = (int)max(0, (int)(model->pos.x/2 + mmin*2)); x < x2; x++)
 				{
@@ -589,11 +590,11 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 						{
 							for(int yy = 0; yy < 6; yy++)
 							{
-								cVector3 v = cVector3(10*x+10*(xx/6.0),-Graphics.world.cubes[y][x].cell1, 10*y+10*(yy/6.0));
+								cVector3 v = cVector3(10*x+10*(xx/6.0),-cGraphics::world->cubes[y][x].cell1, 10*y+10*(yy/6.0));
 								if (LineIntersectPolygon(triangle, 3, lightpos, v, t))
 								{
-									int tile = Graphics.world.cubes[y][x].tileUp;
-									cLightmap* l = Graphics.world.lightmaps[Graphics.world.tiles[tile].lightmap];
+									int tile = cGraphics::world->cubes[y][x].tileUp;
+									cLightmap* l = cGraphics::world->lightmaps[cGraphics::world->tiles[tile].lightmap];
 									
 									l->buf[xx + (8*yy)+1+8] =(char) (((BYTE)l->buf[xx + (8*yy)+1+8]) / 1.3);
 								}
@@ -673,7 +674,7 @@ cRSMModel::~cRSMModel()
 	}
 	for(i = 0; i < textures.size(); i++)
 	{
-		TextureCache.unload(textures[i]);
+		cTextureCache::unload(textures[i]);
 	}
 }
 
@@ -1047,7 +1048,7 @@ void cRSMModel::precollides()
 		return;
 	glPushMatrix();
 	glLoadIdentity();
-	//glTranslatef(0,0,Graphics.world.height*10);
+	//glTranslatef(0,0,cGraphics::world->height*10);
 	//glScalef(1,1,-1);
 	glTranslatef(5*pos.x, pos.y, 5*pos.z);
 	glRotatef(-rot.x, 1.0, 0.0, 0.0);

@@ -16,20 +16,20 @@ class cRSMEditWindow : public cWindow
 	class cWindowOpenButton : public cWindowButton
 	{
 	public:
-		cWindowOpenButton(cWindow* parent, TiXmlDocument* skin = NULL);
-		void click();
+		cWindowOpenButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		void onClick();
 	};
 	class cWindowSaveButton : public cWindowButton
 	{
 	public:
-		cWindowSaveButton(cWindow* parent, TiXmlDocument* skin = NULL);
-		void click();
+		cWindowSaveButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		void onClick();
 	};
 	class cWindowSaveAsButton : public cWindowButton
 	{
 	public:
-		cWindowSaveAsButton(cWindow* parent, TiXmlDocument* skin = NULL);
-		void click();
+		cWindowSaveAsButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		void onClick();
 	};
 
 	class cWindowModel : public cWindowObject
@@ -51,8 +51,8 @@ class cRSMEditWindow : public cWindow
 		std::string getText(int i);
 		void setInt(int i, int id);
 		~cWindowModel();
-		void scrollUp();
-		void scrollDown();
+		void onScrollUp();
+		void onScrollDown();
 	};
 
 	class cWindowModelTexture : public cWindowPictureBox
@@ -60,7 +60,7 @@ class cRSMEditWindow : public cWindow
 	public:
 		int i;
 		cWindowModelTexture(cWindow* parent, int ii);
-		void click();
+		void onClick();
 
 	};
 
@@ -69,7 +69,7 @@ class cRSMEditWindow : public cWindow
 	{
 	public:
 		cRGBPicker(cWindow* p);
-		void click();	
+		void onClick();	
 	};
 
 public:
@@ -80,7 +80,7 @@ public:
 	cRSMEditWindow();	
 	void resizeTo(int ww, int hh);
 	void open();
-	void stopdrag();
+	void onStopDrag();
 	void changetexture(std::string newtexture);
 };
 

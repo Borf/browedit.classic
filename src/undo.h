@@ -55,15 +55,15 @@ public:
 	{
 		type = UNDO_OTHER;
 		objectid = id;
-		pos = Graphics.world.models[id]->pos;
-		rot = Graphics.world.models[id]->rot;
-		scale = Graphics.world.models[id]->scale;
+		pos = cGraphics::world->models[id]->pos;
+		rot = cGraphics::world->models[id]->rot;
+		scale = cGraphics::world->models[id]->scale;
 	}
 	void undo()
 	{
-		Graphics.world.models[objectid]->pos = pos;
-		Graphics.world.models[objectid]->rot = rot;
-		Graphics.world.models[objectid]->scale = scale;
+		cGraphics::world->models[objectid]->pos = pos;
+		cGraphics::world->models[objectid]->rot = rot;
+		cGraphics::world->models[objectid]->scale = scale;
 	}
 };
 
@@ -86,9 +86,9 @@ public:
 		for(unsigned int i = 0; i < ob.size(); i++)
 		{
 			cObject o;
-			o.pos = Graphics.world.models[ob[i]]->pos;
-			o.rot = Graphics.world.models[ob[i]]->rot;
-			o.scale = Graphics.world.models[ob[i]]->scale;
+			o.pos = cGraphics::world->models[ob[i]]->pos;
+			o.rot = cGraphics::world->models[ob[i]]->rot;
+			o.scale = cGraphics::world->models[ob[i]]->scale;
 			o.objectid = ob[i];
 			objects.push_back(o);
 		}
@@ -98,18 +98,18 @@ public:
 		unsigned int i;
 		for(i = 0; i < objects.size(); i++)
 		{
-			Graphics.world.models[objects[i].objectid]->pos = objects[i].pos;
-			Graphics.world.models[objects[i].objectid]->rot = objects[i].rot;
-			Graphics.world.models[objects[i].objectid]->scale = objects[i].scale;
+			cGraphics::world->models[objects[i].objectid]->pos = objects[i].pos;
+			cGraphics::world->models[objects[i].objectid]->rot = objects[i].rot;
+			cGraphics::world->models[objects[i].objectid]->scale = objects[i].scale;
 		}
 		int count = 0;
 		Graphics.selectionCenter = cVector3(0,0,0);
-		for(i = 0; i < Graphics.world.models.size(); i++)
+		for(i = 0; i < cGraphics::world->models.size(); i++)
 		{
-			if (Graphics.world.models[i]->selected)
+			if (cGraphics::world->models[i]->selected)
 			{
 				count++;
-				Graphics.selectionCenter+=Graphics.world.models[i]->pos;
+				Graphics.selectionCenter+=cGraphics::world->models[i]->pos;
 			}
 		}
 		Graphics.selectionCenter = Graphics.selectionCenter / (float)count;
@@ -131,10 +131,10 @@ public:
 			std::vector<int> row;
 			for(int xx = xfrom; xx < xto; xx++)
 			{
-				if (yy < 0 || yy >= Graphics.world.height || xx < 0 || xx >= Graphics.world.width)
+				if (yy < 0 || yy >= cGraphics::world->height || xx < 0 || xx >= cGraphics::world->width)
 					row.push_back(0);
 				else
-					row.push_back(Graphics.world.cubes[yy][xx].tileUp);
+					row.push_back(cGraphics::world->cubes[yy][xx].tileUp);
 			}
 			data.push_back(row);
 		}
@@ -145,8 +145,8 @@ public:
 		{
 			for(int xx = 0; xx < (int)data[yy].size(); xx++)
 			{
-				if (!(yy+y < 0 || yy+y >= Graphics.world.height || xx+x < 0 || xx+x >= Graphics.world.width))
-					Graphics.world.cubes[y+yy][x+xx].tileUp = data[yy][xx];
+				if (!(yy+y < 0 || yy+y >= cGraphics::world->height || xx+x < 0 || xx+x >= cGraphics::world->width))
+					cGraphics::world->cubes[y+yy][x+xx].tileUp = data[yy][xx];
 			}
 		}
 	}
@@ -172,12 +172,12 @@ public:
 			for(int xx = xfrom; xx < xto; xx++)
 			{
 				cCubeHeight c;
-				if (!(yy < 0 || yy >= Graphics.world.height || xx < 0 || xx >= Graphics.world.width))
+				if (!(yy < 0 || yy >= cGraphics::world->height || xx < 0 || xx >= cGraphics::world->width))
 				{
-					c.cell1 = Graphics.world.cubes[yy][xx].cell1;
-					c.cell2 = Graphics.world.cubes[yy][xx].cell2;
-					c.cell3 = Graphics.world.cubes[yy][xx].cell3;
-					c.cell4 = Graphics.world.cubes[yy][xx].cell4;
+					c.cell1 = cGraphics::world->cubes[yy][xx].cell1;
+					c.cell2 = cGraphics::world->cubes[yy][xx].cell2;
+					c.cell3 = cGraphics::world->cubes[yy][xx].cell3;
+					c.cell4 = cGraphics::world->cubes[yy][xx].cell4;
 				}
 				row.push_back(c);
 			}
@@ -190,13 +190,13 @@ public:
 		{
 			for(int xx = 0; xx < (int)data[yy].size(); xx++)
 			{
-				if (!(yy+y < 0 || yy+y >= Graphics.world.height || xx+x < 0 || xx+x >= Graphics.world.width))
+				if (!(yy+y < 0 || yy+y >= cGraphics::world->height || xx+x < 0 || xx+x >= cGraphics::world->width))
 				{
-					Graphics.world.cubes[y+yy][x+xx].cell1 = data[yy][xx].cell1;
-					Graphics.world.cubes[y+yy][x+xx].cell2 = data[yy][xx].cell2;
-					Graphics.world.cubes[y+yy][x+xx].cell3 = data[yy][xx].cell3;
-					Graphics.world.cubes[y+yy][x+xx].cell4 = data[yy][xx].cell4;
-					Graphics.world.cubes[y+yy][x+xx].calcNormal();
+					cGraphics::world->cubes[y+yy][x+xx].cell1 = data[yy][xx].cell1;
+					cGraphics::world->cubes[y+yy][x+xx].cell2 = data[yy][xx].cell2;
+					cGraphics::world->cubes[y+yy][x+xx].cell3 = data[yy][xx].cell3;
+					cGraphics::world->cubes[y+yy][x+xx].cell4 = data[yy][xx].cell4;
+					cGraphics::world->cubes[y+yy][x+xx].calcNormal();
 				}
 			}
 		}
@@ -222,12 +222,12 @@ public:
 			for(int xx = xfrom; xx < xto; xx++)
 			{
 				cCubeHeight c;
-				if (!(yy < 0 || yy >= (int)Graphics.world.gattiles.size() || xx < 0 || xx >= (int)Graphics.world.gattiles[0].size()))
+				if (!(yy < 0 || yy >= (int)cGraphics::world->gattiles.size() || xx < 0 || xx >= (int)cGraphics::world->gattiles[0].size()))
 				{
-					c.cell1 = Graphics.world.gattiles[yy][xx].cell1;
-					c.cell2 = Graphics.world.gattiles[yy][xx].cell2;
-					c.cell3 = Graphics.world.gattiles[yy][xx].cell3;
-					c.cell4 = Graphics.world.gattiles[yy][xx].cell4;
+					c.cell1 = cGraphics::world->gattiles[yy][xx].cell1;
+					c.cell2 = cGraphics::world->gattiles[yy][xx].cell2;
+					c.cell3 = cGraphics::world->gattiles[yy][xx].cell3;
+					c.cell4 = cGraphics::world->gattiles[yy][xx].cell4;
 				}
 				row.push_back(c);
 			}
@@ -240,12 +240,12 @@ public:
 		{
 			for(unsigned int xx = 0; xx < data[yy].size(); xx++)
 			{
-				if (!(y+yy < 0 || y+yy >= Graphics.world.gattiles.size() || x+xx < 0 || x+xx >= Graphics.world.gattiles[0].size()))
+				if (!(y+yy < 0 || y+yy >= cGraphics::world->gattiles.size() || x+xx < 0 || x+xx >= cGraphics::world->gattiles[0].size()))
 				{
-					Graphics.world.gattiles[y+yy][x+xx].cell1 = data[yy][xx].cell1;
-					Graphics.world.gattiles[y+yy][x+xx].cell2 = data[yy][xx].cell2;
-					Graphics.world.gattiles[y+yy][x+xx].cell3 = data[yy][xx].cell3;
-					Graphics.world.gattiles[y+yy][x+xx].cell4 = data[yy][xx].cell4;
+					cGraphics::world->gattiles[y+yy][x+xx].cell1 = data[yy][xx].cell1;
+					cGraphics::world->gattiles[y+yy][x+xx].cell2 = data[yy][xx].cell2;
+					cGraphics::world->gattiles[y+yy][x+xx].cell3 = data[yy][xx].cell3;
+					cGraphics::world->gattiles[y+yy][x+xx].cell4 = data[yy][xx].cell4;
 				}
 			}
 		}
@@ -266,10 +266,10 @@ public:
 			std::vector<int> row;
 			for(int xx = xfrom; xx < xto; xx++)
 			{
-				if (yy >= (int)Graphics.world.gattiles.size() || yy < 0 || xx < 0 || xx >= (int)Graphics.world.gattiles[0].size())
+				if (yy >= (int)cGraphics::world->gattiles.size() || yy < 0 || xx < 0 || xx >= (int)cGraphics::world->gattiles[0].size())
 					row.push_back(0);
 				else
-					row.push_back(Graphics.world.gattiles[yy][xx].type);
+					row.push_back(cGraphics::world->gattiles[yy][xx].type);
 			}
 			data.push_back(row);
 		}
@@ -280,8 +280,8 @@ public:
 		{
 			for(unsigned int xx = 0; xx < data[yy].size(); xx++)
 			{
-				if (!(yy+y >= Graphics.world.gattiles.size() || yy+y < 0 || xx+x < 0 || xx+x > Graphics.world.gattiles[0].size()))
-					Graphics.world.gattiles[y+yy][x+xx].type = data[yy][xx];
+				if (!(yy+y >= cGraphics::world->gattiles.size() || yy+y < 0 || xx+x < 0 || xx+x > cGraphics::world->gattiles[0].size()))
+					cGraphics::world->gattiles[y+yy][x+xx].type = data[yy][xx];
 			}
 		}
 	}
@@ -300,7 +300,7 @@ public:
 	{
 		for(unsigned int i = 0; i < data.size(); i++)
 		{
-			Graphics.world.tiles[data[i].first] = data[i].second;
+			cGraphics::world->tiles[data[i].first] = data[i].second;
 		}
 	}
 };
@@ -315,8 +315,8 @@ public:
 	}
 	void undo()
 	{
-		delete Graphics.world.models.back();
-		Graphics.world.models.erase(Graphics.world.models.begin() + (Graphics.world.models.size()-1));
+		delete cGraphics::world->models.back();
+		cGraphics::world->models.erase(cGraphics::world->models.begin() + (cGraphics::world->models.size()-1));
 	}
 };
 
@@ -328,21 +328,21 @@ public:
 	cUndoNewObjects(int previoussize)
 	{
 		size = previoussize;
-		for(unsigned int i = 0; i < Graphics.world.models.size(); i++)
+		for(unsigned int i = 0; i < cGraphics::world->models.size(); i++)
 		{
-			if (Graphics.world.models[i]->selected)
+			if (cGraphics::world->models[i]->selected)
 				prevselection.push_back(i);
 		}
 	}
 	void undo()
 	{
-		while(Graphics.world.models.size() > size)
+		while(cGraphics::world->models.size() > size)
 		{
-			delete Graphics.world.models.back();
-			Graphics.world.models.erase(Graphics.world.models.begin() + (Graphics.world.models.size()-1));
+			delete cGraphics::world->models.back();
+			cGraphics::world->models.erase(cGraphics::world->models.begin() + (cGraphics::world->models.size()-1));
 		}
 		for(unsigned int i = 0; i < prevselection.size(); i++)
-			Graphics.world.models[prevselection[i]]->selected = true;
+			cGraphics::world->models[prevselection[i]]->selected = true;
 	}
 };
 
@@ -361,9 +361,9 @@ public:
 	void undo()
 	{
 		if (type == 0)
-			Graphics.world.cubes[y][x].tileSide = val;
+			cGraphics::world->cubes[y][x].tileSide = val;
 		else
-			Graphics.world.cubes[y][x].tileOtherSide = val;
+			cGraphics::world->cubes[y][x].tileOtherSide = val;
 	}
 };
 
@@ -382,12 +382,12 @@ public:
 		if (type == 0)
 		{
 			for(unsigned int i = 0; i < vals.size(); i++)
-				Graphics.world.cubes[vals[i].first.second][vals[i].first.first].tileSide = vals[i].second;
+				cGraphics::world->cubes[vals[i].first.second][vals[i].first.first].tileSide = vals[i].second;
 		}
 		else
 		{
 			for(unsigned int i = 0; i < vals.size(); i++)
-				Graphics.world.cubes[vals[i].first.second][vals[i].first.first].tileOtherSide = vals[i].second;
+				cGraphics::world->cubes[vals[i].first.second][vals[i].first.first].tileOtherSide = vals[i].second;
 		}
 	}
 };
@@ -402,7 +402,7 @@ public:
 	}
 	void undo()
 	{
-		Graphics.world.water = water;
+		cGraphics::world->water = water;
 	}
 };
 
@@ -417,10 +417,10 @@ public:
 	cUndoObjectDelete(int i)
 	{
 		id = i;
-		pos = Graphics.world.models[i]->pos;
-		scale = Graphics.world.models[i]->scale;
-		rot = Graphics.world.models[i]->rot;
-		filename = Graphics.world.models[i]->filename;
+		pos = cGraphics::world->models[i]->pos;
+		scale = cGraphics::world->models[i]->scale;
+		rot = cGraphics::world->models[i]->rot;
+		filename = cGraphics::world->models[i]->filename;
 	}
 	void undo()
 	{
@@ -429,9 +429,9 @@ public:
 		model->pos = pos;
 		model->rot = rot;
 		model->scale = scale;
-		Graphics.world.models.insert(Graphics.world.models.begin() + id, model);
+		cGraphics::world->models.insert(cGraphics::world->models.begin() + id, model);
 		Graphics.selectedObject = id;
-//		Graphics.world.models.push_back(model);
+//		cGraphics::world->models.push_back(model);
 	}
 };
 
@@ -443,11 +443,11 @@ public:
 	cUndoEffectDelete(int i)
 	{
 		id = i;
-		effect = Graphics.world.effects[i];
+		effect = cGraphics::world->effects[i];
 	}
 	void undo()
 	{
-		Graphics.world.effects.insert(Graphics.world.effects.begin() + id, effect);
+		cGraphics::world->effects.insert(cGraphics::world->effects.begin() + id, effect);
 		Graphics.selectedObject = id;
 	}
 };
@@ -460,14 +460,14 @@ public:
 	{
 		for(unsigned int i = 0; i < e.size(); i++)
 		{
-			effects.push_back(std::pair<int, cEffect>(e[i], Graphics.world.effects[e[i]]));
+			effects.push_back(std::pair<int, cEffect>(e[i], cGraphics::world->effects[e[i]]));
 		}
 	}
 	void undo()
 	{
 		for(unsigned int i = 0; i < effects.size(); i++)
 		{
-			Graphics.world.effects.insert(Graphics.world.effects.begin() + effects[i].first, effects[i].second);
+			cGraphics::world->effects.insert(cGraphics::world->effects.begin() + effects[i].first, effects[i].second);
 		}
 	}
 };
@@ -481,11 +481,11 @@ public:
 	cUndoChangeEffect(int i)
 	{
 		id = i;
-		effect = Graphics.world.effects[i];
+		effect = cGraphics::world->effects[i];
 	}
 	void undo()
 	{
-		Graphics.world.effects[id] = effect;
+		cGraphics::world->effects[id] = effect;
 	}
 };
 
@@ -498,11 +498,11 @@ public:
 	cUndoLightDelete(int i)
 	{
 		id = i;
-		light = Graphics.world.lights[i];
+		light = cGraphics::world->lights[i];
 	}
 	void undo()
 	{
-		Graphics.world.lights.insert(Graphics.world.lights.begin() + id, light);
+		cGraphics::world->lights.insert(cGraphics::world->lights.begin() + id, light);
 		Graphics.selectedObject = id;
 	}
 };
@@ -516,7 +516,7 @@ public:
 	}
 	void undo()
 	{
-		Graphics.world.lights.erase(Graphics.world.lights.begin() + (Graphics.world.lights.size()-1));
+		cGraphics::world->lights.erase(cGraphics::world->lights.begin() + (cGraphics::world->lights.size()-1));
 	}
 };
 
@@ -528,11 +528,11 @@ public:
 	cUndoChangeLight(int i)
 	{
 		id = i;
-		light = Graphics.world.lights[i];
+		light = cGraphics::world->lights[i];
 	}
 	void undo()
 	{
-		Graphics.world.lights[id] = light;
+		cGraphics::world->lights[id] = light;
 	}
 };
 
@@ -564,7 +564,7 @@ public:
 			model->rot = objects[i].rot;
 			model->scale = objects[i].scale;
 			model->selected = true;
-			Graphics.world.models.insert(Graphics.world.models.begin() + objects[i].id, model);
+			cGraphics::world->models.insert(cGraphics::world->models.begin() + objects[i].id, model);
 		}
 	}
 };
@@ -584,11 +584,11 @@ public:
 	cUndoSoundDelete(int i)
 	{
 		id = i;
-		sound = Graphics.world.sounds[i];
+		sound = cGraphics::world->sounds[i];
 	}
 	void undo()
 	{
-		Graphics.world.sounds.insert(Graphics.world.sounds.begin() + id, sound);
+		cGraphics::world->sounds.insert(cGraphics::world->sounds.begin() + id, sound);
 		Graphics.selectedObject = id;
 	}
 };
@@ -602,7 +602,7 @@ public:
 	}
 	void undo()
 	{
-		Graphics.world.sounds.erase(Graphics.world.sounds.begin() + (Graphics.world.sounds.size()-1));
+		cGraphics::world->sounds.erase(cGraphics::world->sounds.begin() + (cGraphics::world->sounds.size()-1));
 	}
 };
 
@@ -614,11 +614,11 @@ public:
 	cUndoChangeSound(int i)
 	{
 		id = i;
-		sound = Graphics.world.sounds[i];
+		sound = cGraphics::world->sounds[i];
 	}
 	void undo()
 	{
-		Graphics.world.sounds[id] = sound;
+		cGraphics::world->sounds[id] = sound;
 	}
 };
 

@@ -1,4 +1,5 @@
 #include <common.h>
+#include <wm/window.h>
 #include "graphics.h"
 #include "undo.h"
 
@@ -23,7 +24,7 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 
 				int f = (int)ceil(Graphics.brushsize);
 
-			//	if (posx >= floor(f/2.0f) && posx < 2*Graphics.world.width-(int)ceil(f/2.0f) && posy >= floor(f/2.0f) && posy< 2*Graphics.world.height-(int)ceil(f/2.0f))
+			//	if (posx >= floor(f/2.0f) && posx < 2*cGraphics::world->width-(int)ceil(f/2.0f) && posy >= floor(f/2.0f) && posy< 2*cGraphics::world->height-(int)ceil(f/2.0f))
 				{
 					undostack.push(new cUndoGatTileEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
 
@@ -34,9 +35,9 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 					{
 						for(int y = posy-(int)floor(f/2.0f); y < posy+(int)ceil(f/2.0f); y++)
 						{
-							if (y < 0 || y >= Graphics.world.height*2 || x < 0 || x >= Graphics.world.width*2)
+							if (y < 0 || y >= cGraphics::world->height*2 || x < 0 || x >= cGraphics::world->width*2)
 								continue;
-							cGatTile* c = &Graphics.world.gattiles[y][x];
+							cGatTile* c = &cGraphics::world->gattiles[y][x];
 							c->type = Graphics.gatTiles[Graphics.texturestart];
 						}
 					}
@@ -52,7 +53,7 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 
 				int f = (int)ceil(Graphics.brushsize);
 
-			//	if (posx >= floor(f/2.0f) && posx < 2*Graphics.world.width-(int)ceil(f/2.0f) && posy >= floor(f/2.0f) && posy< 2*Graphics.world.height-(int)ceil(f/2.0f))
+			//	if (posx >= floor(f/2.0f) && posx < 2*cGraphics::world->width-(int)ceil(f/2.0f) && posy >= floor(f/2.0f) && posy< 2*cGraphics::world->height-(int)ceil(f/2.0f))
 				{
 					undostack.push(new cUndoGatTileEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
 
@@ -63,9 +64,9 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 					{
 						for(int y = posy-(int)floor(f/2.0f); y < posy+(int)ceil(f/2.0f); y++)
 						{
-							if (y < 0 || y >= Graphics.world.height*2 || x < 0 || x >= Graphics.world.width*2)
+							if (y < 0 || y >= cGraphics::world->height*2 || x < 0 || x >= cGraphics::world->width*2)
 								continue;
-							cGatTile* c = &Graphics.world.gattiles[y][x];
+							cGatTile* c = &cGraphics::world->gattiles[y][x];
 							c->type = Graphics.gatTiles[Graphics.texturestart];
 						}
 					}
@@ -92,42 +93,42 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 					float f = (int)ceil(Graphics.brushsize);
 
 
-					if (posx >= (int)floor(f/2.0f) && posx < 2*Graphics.world.width-(int)ceil(f/2.0f) && posy >= (int)floor(f/2.0f) && posy< 2*Graphics.world.height-(int)ceil(f/2.0f))
+					if (posx >= (int)floor(f/2.0f) && posx < 2*cGraphics::world->width-(int)ceil(f/2.0f) && posy >= (int)floor(f/2.0f) && posy< 2*cGraphics::world->height-(int)ceil(f/2.0f))
 					{
 						undostack.push(new cUndoGatHeightEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
 						for(int x = posx-(int)floor(f/2.0f); x < posx+(int)ceil(f/2.0f); x++)
 						{
 							for(int y = posy-(int)floor(f/2.0f); y < posy+(int)ceil(f/2.0f); y++)
 							{
-								cCube* c = &Graphics.world.cubes[y/2][x/2];
+								cCube* c = &cGraphics::world->cubes[y/2][x/2];
 
 								if (y%2 == 0 && x%2 == 0)
 								{
-									Graphics.world.gattiles[y][x].cell1 = (c->cell1+c->cell1) / 2.0f;
-									Graphics.world.gattiles[y][x].cell2 = (c->cell1+c->cell2) / 2.0f;
-									Graphics.world.gattiles[y][x].cell3 = (c->cell1+c->cell3) / 2.0f;
-									Graphics.world.gattiles[y][x].cell4 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
+									cGraphics::world->gattiles[y][x].cell1 = (c->cell1+c->cell1) / 2.0f;
+									cGraphics::world->gattiles[y][x].cell2 = (c->cell1+c->cell2) / 2.0f;
+									cGraphics::world->gattiles[y][x].cell3 = (c->cell1+c->cell3) / 2.0f;
+									cGraphics::world->gattiles[y][x].cell4 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
 								}
 								if (y%2 == 0 && x%2 == 1)
 								{
-									Graphics.world.gattiles[y][x].cell1 = (c->cell1+c->cell2) / 2.0f;
-									Graphics.world.gattiles[y][x].cell2 = (c->cell2+c->cell2) / 2.0f;
-									Graphics.world.gattiles[y][x].cell3 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
-									Graphics.world.gattiles[y][x].cell4 = (c->cell4+c->cell2) / 2.0f;
+									cGraphics::world->gattiles[y][x].cell1 = (c->cell1+c->cell2) / 2.0f;
+									cGraphics::world->gattiles[y][x].cell2 = (c->cell2+c->cell2) / 2.0f;
+									cGraphics::world->gattiles[y][x].cell3 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
+									cGraphics::world->gattiles[y][x].cell4 = (c->cell4+c->cell2) / 2.0f;
 								}
 								if (y%2 == 1 && x%2 == 1)
 								{
-									Graphics.world.gattiles[y][x].cell1 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
-									Graphics.world.gattiles[y][x].cell2 = (c->cell4 + c->cell2) / 2.0f;
-									Graphics.world.gattiles[y][x].cell3 = (c->cell4 + c->cell3) / 2.0f;
-									Graphics.world.gattiles[y][x].cell4 = (c->cell4 + c->cell4) / 2.0f;
+									cGraphics::world->gattiles[y][x].cell1 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
+									cGraphics::world->gattiles[y][x].cell2 = (c->cell4 + c->cell2) / 2.0f;
+									cGraphics::world->gattiles[y][x].cell3 = (c->cell4 + c->cell3) / 2.0f;
+									cGraphics::world->gattiles[y][x].cell4 = (c->cell4 + c->cell4) / 2.0f;
 								}
 								if (y%2 == 1 && x%2 == 0)
 								{
-									Graphics.world.gattiles[y][x].cell1 = (c->cell3 + c->cell1) / 2.0f;
-									Graphics.world.gattiles[y][x].cell2 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
-									Graphics.world.gattiles[y][x].cell3 = (c->cell3 + c->cell3) / 2.0f;
-									Graphics.world.gattiles[y][x].cell4 = (c->cell3 + c->cell4) / 2.0f;
+									cGraphics::world->gattiles[y][x].cell1 = (c->cell3 + c->cell1) / 2.0f;
+									cGraphics::world->gattiles[y][x].cell2 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
+									cGraphics::world->gattiles[y][x].cell3 = (c->cell3 + c->cell3) / 2.0f;
+									cGraphics::world->gattiles[y][x].cell4 = (c->cell3 + c->cell4) / 2.0f;
 								}
 							
 							}
@@ -143,14 +144,14 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 					float f = ceil(Graphics.brushsize);
 
 
-					if (posx >= (int)floor(f/2.0f) && posx < 2*Graphics.world.width-(int)ceil(f/2.0f) && posy >= (int)floor(f/2.0f) && posy< 2*Graphics.world.height-(int)ceil(f/2.0f))
+					if (posx >= (int)floor(f/2.0f) && posx < 2*cGraphics::world->width-(int)ceil(f/2.0f) && posy >= (int)floor(f/2.0f) && posy< 2*cGraphics::world->height-(int)ceil(f/2.0f))
 					{
 						undostack.push(new cUndoGatHeightEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
 						for(int x = posx-(int)floor(f/2.0f); x < posx+(int)ceil(f/2.0f); x++)
 						{
 							for(int y = posy-(int)floor(f/2.0f); y < posy+(int)ceil(f/2.0f); y++)
 							{
-								cGatTile* c = &Graphics.world.gattiles[y][x];
+								cGatTile* c = &cGraphics::world->gattiles[y][x];
 								if (!Graphics.slope || ((x > posx-(int)floor(f/2.0f)) && y > posy-(int)floor(f/2.0f)))
 									c->cell1+=1;
 								if (!Graphics.slope || ((x < posx+(int)ceil(f/2.0f)-1) && y > posy-(int)floor(f/2.0f)))
@@ -179,9 +180,9 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 					{
 						for(int y = posy-(int)floor(f/2.0f); y < posy+(int)ceil(f/2.0f); y++)
 						{
-							if(x >= 0 && y >= 0 && y < (int)Graphics.world.gattiles.size() && x < (int)Graphics.world.gattiles[0].size())
+							if(x >= 0 && y >= 0 && y < (int)cGraphics::world->gattiles.size() && x < (int)cGraphics::world->gattiles[0].size())
 							{
-								cGatTile* c = &Graphics.world.gattiles[y][x];
+								cGatTile* c = &cGraphics::world->gattiles[y][x];
 								if (!Graphics.slope || ((x > posx-(int)floor(f/2.0f)) && y > posy-(int)floor(f/2.0f)))
 									c->cell1-=1;
 								if (!Graphics.slope || ((x < posx+(int)ceil(f/2.0f)-1) && y > posy-(int)floor(f/2.0f)))
@@ -202,7 +203,7 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 
 					int f = (int)ceil(Graphics.brushsize);
 
-					if (posx >= (int)floor(f/2.0f) && posx < 2*Graphics.world.width-(int)ceil(f/2.0f) && posy >= f && posy< 2*Graphics.world.height-f)
+					if (posx >= (int)floor(f/2.0f) && posx < 2*cGraphics::world->width-(int)ceil(f/2.0f) && posy >= f && posy< 2*cGraphics::world->height-f)
 					{
 						clipboard.clear();
 						clipboardgat.clear();
@@ -213,12 +214,12 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 							for(int x = posx-(int)floor(f/2.0f); x < posx+(int)ceil(f/2.0f); x++)
 							{
 								std::vector<float> c;
-								c.push_back(Graphics.world.gattiles[y][x].cell1);
-								c.push_back(Graphics.world.gattiles[y][x].cell2);
-								c.push_back(Graphics.world.gattiles[y][x].cell3);
-								c.push_back(Graphics.world.gattiles[y][x].cell4);
+								c.push_back(cGraphics::world->gattiles[y][x].cell1);
+								c.push_back(cGraphics::world->gattiles[y][x].cell2);
+								c.push_back(cGraphics::world->gattiles[y][x].cell3);
+								c.push_back(cGraphics::world->gattiles[y][x].cell4);
 								row.push_back(c);
-								row2.push_back(Graphics.world.gattiles[y][x].type);
+								row2.push_back(cGraphics::world->gattiles[y][x].type);
 							}
 							clipboard.push_back(row);
 							clipboardgat.push_back(row2);
@@ -239,7 +240,7 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 					undostack.push(new cUndoGatHeightEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
 					undostack.push(new cUndoGatTileEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
 
-					if (posx >= (int)floor(f/2.0f) && posx < 2*Graphics.world.width-(int)ceil(f/2.0f) && posy >= f && posy< 2*Graphics.world.height-f)
+					if (posx >= (int)floor(f/2.0f) && posx < 2*cGraphics::world->width-(int)ceil(f/2.0f) && posy >= f && posy< 2*cGraphics::world->height-f)
 					{
 						int yy = 0;
 						for(int y = posy-(int)floor(f/2.0f); y < posy+(int)ceil(f/2.0f); y++)
@@ -247,11 +248,11 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 							int xx = 0;
 							for(int x = posx-(int)floor(f/2.0f); x < posx+(int)ceil(f/2.0f); x++)
 							{
-								Graphics.world.gattiles[y][x].cell1 = clipboard[yy][xx][0];
-								Graphics.world.gattiles[y][x].cell2 = clipboard[yy][xx][1];
-								Graphics.world.gattiles[y][x].cell3 = clipboard[yy][xx][2];
-								Graphics.world.gattiles[y][x].cell4 = clipboard[yy][xx][3];
-								Graphics.world.gattiles[y][x].type = clipboardgat[yy][xx];
+								cGraphics::world->gattiles[y][x].cell1 = clipboard[yy][xx][0];
+								cGraphics::world->gattiles[y][x].cell2 = clipboard[yy][xx][1];
+								cGraphics::world->gattiles[y][x].cell3 = clipboard[yy][xx][2];
+								cGraphics::world->gattiles[y][x].cell4 = clipboard[yy][xx][3];
+								cGraphics::world->gattiles[y][x].type = clipboardgat[yy][xx];
 								xx++;
 							}
 							yy++;
@@ -272,13 +273,13 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 					{
 						for(int y = posy-(int)floor(f/2.0f)+1; y < posy+(int)ceil(f/2.0f); y++)
 						{
-							if (x >= 0 && x < Graphics.world.width*2 && y > 0 && y <= Graphics.world.height*2)
+							if (x >= 0 && x < cGraphics::world->width*2 && y > 0 && y <= cGraphics::world->height*2)
 							{
-								float to = Graphics.world.gattiles[y][x].cell2;
-								Graphics.world.gattiles[y][x].cell2 = to;
-								Graphics.world.gattiles[y][x+1].cell1 = to;
-								Graphics.world.gattiles[y-1][x+1].cell3 = to;
-								Graphics.world.gattiles[y-1][x].cell4 = to;
+								float to = cGraphics::world->gattiles[y][x].cell2;
+								cGraphics::world->gattiles[y][x].cell2 = to;
+								cGraphics::world->gattiles[y][x+1].cell1 = to;
+								cGraphics::world->gattiles[y-1][x+1].cell3 = to;
+								cGraphics::world->gattiles[y-1][x].cell4 = to;
 							}
 						}
 					}
@@ -301,9 +302,9 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 				int posy = (int)mouse3dz / 5;
 				char buf[100];
 				sprintf(buf, "Your cursor is at %i,%i", posx, posy);
-				if(cWM::getwindow(WT_MESSAGE))
-					cWM::getwindow(WT_MESSAGE)->close();
-				cWM::ShowMessage(buf);
+				if(cWM::getWindow(WT_MESSAGE))
+					cWM::getWindow(WT_MESSAGE)->close();
+				cWM::showMessage(buf);
 				break;
 				}
 

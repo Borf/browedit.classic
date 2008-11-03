@@ -269,7 +269,7 @@ cSpriteWindow::cActionChangeButton::cActionChangeButton( cWindow* p, TiXmlDocume
 	text = "Action 1";
 }
 
-void cSpriteWindow::cActionChangeButton::click()
+void cSpriteWindow::cActionChangeButton::onClick()
 {
 	((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->action = (((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->action + 1) % 12;
 	char buf[32];
@@ -288,7 +288,7 @@ cSpriteWindow::cDirectionButton::cDirectionButton( cWindow* p, int dir, TiXmlDoc
 	moveTo(35+(int)(35*sin(dir/8.0f*2*PI)), 300+     (dir<5 ? (-20*dir) : -20*(8-dir))     );
 }
 
-void cSpriteWindow::cDirectionButton::click()
+void cSpriteWindow::cDirectionButton::onClick()
 {
 	((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->direction = direction;
 }
@@ -301,38 +301,38 @@ cSpriteWindow::cOkButton::cOkButton( cWindow* parent, TiXmlDocument* skin ) : cW
 	text = "Ok";
 }
 
-void cSpriteWindow::cOkButton::click()
+void cSpriteWindow::cOkButton::onClick()
 {
-	if((int)Graphics.world.sprites.size() > Graphics.selectedObject && Graphics.selectedObject != -1)
+	if((int)cGraphics::world->sprites.size() > Graphics.selectedObject && Graphics.selectedObject != -1)
 	{
 		
 		if(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->head != NULL)
-			Graphics.world.sprites[Graphics.selectedObject]->loadHead(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->head->fileName);
+			cGraphics::world->sprites[Graphics.selectedObject]->loadHead(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->head->fileName);
 		else
 		{
-			delete Graphics.world.sprites[Graphics.selectedObject]->head;
-			Graphics.world.sprites[Graphics.selectedObject]->head = NULL;
+			delete cGraphics::world->sprites[Graphics.selectedObject]->head;
+			cGraphics::world->sprites[Graphics.selectedObject]->head = NULL;
 		}
-		Graphics.world.sprites[Graphics.selectedObject]->loadBody(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->body->fileName);
+		cGraphics::world->sprites[Graphics.selectedObject]->loadBody(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->body->fileName);
 		
 		for(unsigned int i = 0; i < ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras.size(); i++)
 		{
 			if(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[i] != NULL)
 			{
-				Graphics.world.sprites[Graphics.selectedObject]->setExtra(i, ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[i]->fileName);
+				cGraphics::world->sprites[Graphics.selectedObject]->setExtra(i, ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[i]->fileName);
 			}
 			else
 			{
-				if(Graphics.world.sprites[Graphics.selectedObject]->extras.size() > i)
-					if(Graphics.world.sprites[Graphics.selectedObject]->extras[i] != NULL)
+				if(cGraphics::world->sprites[Graphics.selectedObject]->extras.size() > i)
+					if(cGraphics::world->sprites[Graphics.selectedObject]->extras[i] != NULL)
 					{
-						delete Graphics.world.sprites[Graphics.selectedObject]->extras[i];
-						Graphics.world.sprites[Graphics.selectedObject]->extras[i] = NULL;
+						delete cGraphics::world->sprites[Graphics.selectedObject]->extras[i];
+						cGraphics::world->sprites[Graphics.selectedObject]->extras[i] = NULL;
 					}
 			}
 		}
-		Graphics.world.sprites[Graphics.selectedObject]->action = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->action;
-		Graphics.world.sprites[Graphics.selectedObject]->direction = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->direction;
+		cGraphics::world->sprites[Graphics.selectedObject]->action = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->action;
+		cGraphics::world->sprites[Graphics.selectedObject]->direction = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->direction;
 	}
 	
 	parent->close();
@@ -346,7 +346,7 @@ cSpriteWindow::cCancelButton::cCancelButton( cWindow* parent, TiXmlDocument* ski
 	text = "Cancel";
 }
 
-void cSpriteWindow::cCancelButton::click()
+void cSpriteWindow::cCancelButton::onClick()
 {
 	parent->close();
 }
@@ -365,7 +365,7 @@ cSpriteWindow::cSpriteWindow() : cWindow()
 	title = GetMsg("wm/sprite/TITLE");
 	center();
 	
-	initprops("sprite");
+	initProps("sprite");
 	
 	defaultObject = "OkButton";
 	

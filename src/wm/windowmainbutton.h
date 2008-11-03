@@ -12,7 +12,7 @@ protected:
 public:
 	cWindowMainButton(cWindow* parent, TiXmlDocument* skin);
 	void draw(int,int,int,int);
-	void click();
+	void onClick();
 	void setText(int, std::string);
 	std::string getText(int);
 };

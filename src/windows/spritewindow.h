@@ -27,14 +27,14 @@ public:
 	{
 	public:
 		cSprite* sprite;
-		cWindowSprite(cWindow* parent, TiXmlDocument* skin = NULL);
+		cWindowSprite(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
 		void draw(int,int,int,int);
 	};
 
 	class cTabPanel : public cWindowTabPanel
 	{
 	public:
-		cTabPanel(cWindow* parent, TiXmlDocument* skin = NULL);
+		cTabPanel(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
 		void tabchange(int oldtab);
 		void addxml(cWindowTree* tree, TiXmlNode* n, cWindowTree::cTreeNode* treenode, std::string dir = "");
 	};
@@ -43,7 +43,7 @@ public:
 	class cTree : public cWindowTree
 	{
 	public:
-		cTree(cWindow* parent, std::vector<cTreeNode*> n, TiXmlDocument* skin = NULL);
+		cTree(cWindow* parent, std::vector<cTreeNode*> n, TiXmlDocument* skin = &cWM::skin);
 		void onChange();
 	};
 
@@ -51,29 +51,29 @@ public:
 	class cActionChangeButton : public cWindowButton
 	{
 	public:
-		cActionChangeButton(cWindow* p, TiXmlDocument* skin = NULL);
-		void click();
+		cActionChangeButton(cWindow* p, TiXmlDocument* skin = &cWM::skin);
+		void onClick();
 	};
 
 	class cDirectionButton : public cWindowButton
 	{
 		int direction;
 	public:
-		cDirectionButton(cWindow* p, int dir, TiXmlDocument* skin = NULL);
-		void click();
+		cDirectionButton(cWindow* p, int dir, TiXmlDocument* skin = &cWM::skin);
+		void onClick();
 	};
 
 	class cOkButton : public cWindowButton
 	{
 	public:
-		cOkButton(cWindow* parent, TiXmlDocument* skin = NULL);
-		void click();
+		cOkButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		void onClick();
 	};
 	class cCancelButton : public cWindowButton
 	{
 	public:
-		cCancelButton(cWindow* parent, TiXmlDocument* skin = NULL);
-		void click();
+		cCancelButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		void onClick();
 	};
 
 

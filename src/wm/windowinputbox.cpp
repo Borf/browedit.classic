@@ -86,7 +86,7 @@ void cWindowInputBox::draw(int cutoffleft, int cutoffright, int cutofftop, int c
 }
 
 
-void cWindowInputBox::click()
+void cWindowInputBox::onClick()
 {
 	int xx = (int)mouseX;
 	xx -= realX();
@@ -102,7 +102,7 @@ void cWindowInputBox::click()
 }
 
 
-void cWindowInputBox::doubleClick()
+void cWindowInputBox::onDoubleClick()
 {
 	selectionstart = text.length();
 	cursor = 0;

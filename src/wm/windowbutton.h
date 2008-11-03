@@ -4,6 +4,7 @@
 #include "windowobject.h"
 #include <string>
 #include <tinyxml/tinyxml.h>
+#include <wm/wm.h>
 //using namespace std;
 
 class cWindowButton : public cWindowObject
@@ -13,10 +14,10 @@ protected:
 
 
 public:
-	cWindowButton(cWindow* parent, TiXmlDocument* skin = NULL);
+	cWindowButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
 	virtual ~cWindowButton() {}
 	virtual void draw(int,int,int,int);
-	virtual void click() = 0;
+	virtual void onClick() = 0;
 	virtual bool onKeyDown(int, bool);
 
 	void setText(int id, std::string txt);
@@ -24,24 +25,18 @@ public:
 
 };
 
-
-#include "window.h"
-
 class cWindowCloseButton : public cWindowObject
 {
 public:
-	cWindowCloseButton(cWindow* parent, TiXmlDocument* skin = NULL);
-	void click()
-	{
-		parent->close();
-	}
+	cWindowCloseButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+	void onClick();
 };
 
 class cWindowRollupButton : public cWindowObject
 {
 public:
-	cWindowRollupButton(cWindow* parent, TiXmlDocument* skin = NULL);
-	void click();
+	cWindowRollupButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+	void onClick();
 };
 
 

@@ -297,7 +297,7 @@ void cSprite::draw()
 		return;
 	unsigned int i;
 	glPushMatrix();
-	glTranslatef(5*pos.x, pos.y, Graphics.world.height*10-5*pos.z);
+	glTranslatef(5*pos.x, pos.y, cGraphics::world->height*10-5*pos.z);
 
 	
 	float modelview[16];

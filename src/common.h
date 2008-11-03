@@ -53,7 +53,7 @@ typedef int32_t intptr_t;
 	#define DIR_SEPERATOR "\\"
 	#define newline "\r\n"
 	#define usleep(x) Sleep((x) / 1000);
-	#define msgbox(x, y) ShowMessage(NULL, x, y, MB_OK);
+	#define msgbox(x, y) showMessage(NULL, x, y, MB_OK);
 	#include <direct.h>
 
 	HWND GetConsoleHwnd();

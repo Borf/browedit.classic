@@ -15,7 +15,7 @@ cFileWindow::cOkButton::cOkButton( cWindow* parent, void (*pCallback)(std::strin
 	text = "Load";
 }
 
-void cFileWindow::cOkButton::click()
+void cFileWindow::cOkButton::onClick()
 {
 	std::string filename = parent->objects["filebox"]->getText(-1);
 	filename = filename.substr(0, filename.length()-4);

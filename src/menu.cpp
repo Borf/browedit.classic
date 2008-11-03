@@ -7,6 +7,9 @@
 extern cGraphics Graphics;
 extern cMenu*			lastmenu;
 extern cMenu*			menu;
+extern long				mouseX;
+extern long				mouseY;
+
 
 
 cMenu::cMenu()
@@ -14,7 +17,7 @@ cMenu::cMenu()
 	ticked = false;
 	opened = false;
 	w = 100;
-	mouseover = false;
+	mouseOver = false;
 	maxlen = -1;
 	mouseoutproc = NULL;
 	mouseoverproc = NULL;
@@ -23,21 +26,21 @@ cMenu::cMenu()
 	opacity = 0;
 }
 
-void cMenu::unmouseover()
+void cMenu::unMouseOver()
 {
-	mouseover = false;
+	mouseOver = false;
 	for(int i = 0; i < (int)items.size(); i++)
-		items[i]->unmouseover();
+		items[i]->unMouseOver();
 }
 
-void cMenu::closemenu()
+void cMenu::closeMenu()
 {
 	opacity = 0;
 	opened = false;
 	if(mouseoutproc!= NULL)
 		mouseoutproc(this);
 	for(int i = 0; i < (int)items.size(); i++)
-		items[i]->closemenu();
+		items[i]->closeMenu();
 }
 
 cMenu* cMenu::find(std::string s, bool recurse)
@@ -75,7 +78,7 @@ void cMenu::sort()
 
 unsigned int cMenu::h()
 {
-	return (unsigned int) ((drawstyle==0) ? 20 : 20*items.size());
+	return (unsigned int) ((drawStyle==0) ? 20 : 20*items.size());
 }
 cMenuItem::cMenuItem()
 {
@@ -86,7 +89,7 @@ cMenuItem::cMenuItem()
 void cMenu::draw()
 {
 	int i;
-	if(drawstyle == 0)
+	if(drawStyle == 0)
 	{
 		bool oneopened = false;
 		for(i = 0; i < (int)items.size(); i++)
@@ -136,7 +139,7 @@ void cMenu::draw()
 				glColor4f(0,0,0,1);
 			}
 			else if (oneopened && items[i]->opened && mouseY < 20)
-				items[i]->closemenu();
+				items[i]->closeMenu();
 
 			Graphics.font->print(0,0,0,x+items[i]->x+3,Graphics.h()-y-18,"%s",items[i]->title.c_str());
 
@@ -146,7 +149,7 @@ void cMenu::draw()
 		}
 		glColor4f(0,0,0,1);
 	}
-	else if (drawstyle == 1)
+	else if (drawStyle == 1)
 	{
 		if(maxlen == -1)
 		{
@@ -217,7 +220,7 @@ void cMenu::draw()
 		}
 		if(w != maxlen && !updatedChildrenPos && parent != NULL)
 		{
-			if(parent->drawstyle != 0)
+			if(parent->drawStyle != 0)
 			{
 				w = maxlen;
 			}
@@ -235,10 +238,10 @@ void cMenu::draw()
 }
 
 
-cMenu* cMenu::inwindow(int xx, int yy)
+cMenu* cMenu::inWindow(int xx, int yy)
 {
 	int i,m = w;
-	if (parent != NULL && parent->drawstyle == 0)
+	if (parent != NULL && parent->drawStyle == 0)
 	{
 		for(i = 0; i < (int)items.size(); i++)
 		{
@@ -248,17 +251,17 @@ cMenu* cMenu::inwindow(int xx, int yy)
 		}
 	}
 		
-	mouseover = false;
+	mouseOver = false;
 	if (xx > x && xx < x+m && Graphics.h()-yy > y && Graphics.h()-yy < y+(int)h() && opened)
 	{
-		mouseover = true;
+		mouseOver = true;
 		return this;
 	}
 	if (opened)
 	{
 		for(i = 0; i < (int)items.size(); i++)
 		{
-			cMenu* m = items[i]->inwindow(xx, yy);
+			cMenu* m = items[i]->inWindow(xx, yy);
 			if (m != NULL)
 				return m;
 		}
@@ -270,7 +273,7 @@ void cMenu::click(int xx, int yy)
 {
 	unsigned int i,ii;
 	int m;
-	if (drawstyle == 0)
+	if (drawStyle == 0)
 	{
 		for(i = 0; i < items.size(); i++)
 		{
@@ -294,7 +297,7 @@ void cMenu::click(int xx, int yy)
 		m = w;
 		if(parent != NULL)
 		{
-			if (parent->drawstyle == 0)
+			if (parent->drawStyle == 0)
 			{
 				for(i = 0; i < items.size(); i++)
 				{
@@ -317,8 +320,8 @@ void cMenu::click(int xx, int yy)
 							return;
 					}
 					lastmenu = this;
-					menu->closemenu();
-					closemenu();
+					menu->closeMenu();
+					closeMenu();
 					((cMenuItem*)items[i])->proc((cMenuItem*)items[i]);
 					return;
 				}
@@ -330,12 +333,12 @@ void cMenu::click(int xx, int yy)
 					for(unsigned int ii = 0; ii < items.size(); ii++)
 					{
 						if(i != ii)
-							items[ii]->closemenu();
+							items[ii]->closeMenu();
 					}
 					items[i]->opacity = 0;
 					items[i]->opened = !items[i]->opened;
 					if (!items[i]->opened)
-						items[i]->closemenu();
+						items[i]->closeMenu();
 				}
 			}
 		}
@@ -416,7 +419,7 @@ cMenu* cMenu::getLastItem()
 
 
 
-cMenu* cMenu::finddata(std::string d)
+cMenu* cMenu::findData(std::string d)
 {
 	if(item)
 	{
@@ -425,7 +428,7 @@ cMenu* cMenu::finddata(std::string d)
 	}
 	for(unsigned int i = 0; i < items.size(); i++)
 	{
-		cMenu* m = items[i]->finddata(d);
+		cMenu* m = items[i]->findData(d);
 		if (m != NULL)
 			return m;
 	}

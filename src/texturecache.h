@@ -9,15 +9,13 @@
 class cTextureCache
 {
 public:
-	void status();
-	std::map<std::string, cTexture*, std::less<std::string> >	textures;
-	std::map<cTexture*, int, std::less<cTexture*> >	used;
-
-	cTexture*	load(std::string, eTextureOptions = TEX_NORMAL);
-	void		unload(cTexture*);
+	static void status();
+	static cTexture*													load(std::string, eTextureOptions = TEX_NORMAL);
+	static void															unload(cTexture*);
+private:
+	static std::map<std::string, cTexture*, std::less<std::string> >	textures;
+	static std::map<cTexture*, int, std::less<cTexture*> >				used;
 
 };
-
-extern cTextureCache TextureCache;
 
 #endif

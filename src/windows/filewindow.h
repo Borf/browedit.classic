@@ -16,14 +16,14 @@ class cFileWindow : public cWindow
 	{
 	public:
 		void (*callback)(std::string);
-		cOkButton(cWindow* parent, void (*pCallback)(std::string), TiXmlDocument* skin = NULL);
-		void click();
+		cOkButton(cWindow* parent, void (*pCallback)(std::string), TiXmlDocument* skin = &cWM::skin);
+		void onClick();
 	};
 public:
 	class cWindowFilterBox : public cWindowInputBox
 	{
 	public:
-		cWindowFilterBox(cWindow* parent, TiXmlDocument* skin = NULL);
+		cWindowFilterBox(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
 		void onChange();
 	};
 

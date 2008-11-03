@@ -16,12 +16,12 @@ class cMenu
 		std::string			title;
 		bool				item;
 		std::vector<cMenu*>	items;
-		int					drawstyle;
+		int					drawStyle;
 		int					x, y, w;
 		bool				ticked;
 		bool				opened;
 			
-		bool				mouseover;
+		bool				mouseOver;
 		int					maxlen;
 
 		cMenu*				parent;
@@ -39,14 +39,14 @@ class cMenu
 		cMenu();
 		unsigned int		h();
 		void				draw();
-		cMenu*				inwindow(int, int);
+		cMenu*				inWindow(int, int);
 		void				click(int, int);
-		void				unmouseover();
-		void				closemenu();
+		void				unMouseOver();
+		void				closeMenu();
 		cMenu* find(std::string s, bool recurse = true);
 
 		void				sort();
-		cMenu*				finddata(std::string d);
+		cMenu*				findData(std::string d);
 
 };
 

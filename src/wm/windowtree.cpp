@@ -229,7 +229,7 @@ bool cWindowTree::onKeyDown(int key, bool shift)
 	}
 	else if(key == SDLK_RIGHT || key == SDLK_LEFT)
 	{
-		doubleClick();
+		onDoubleClick();
 		onChange();
 		return true;
 	}
@@ -258,12 +258,12 @@ int cWindowTree::getInt(int index)
 	return selected;
 }
 
-void cWindowTree::rightClick()
+void cWindowTree::onRightClick()
 {
-	click();
+	onClick();
 }
 
-void cWindowTree::click()
+void cWindowTree::onClick()
 {
 	unsigned int i;
 	if(!validCache)
@@ -398,7 +398,7 @@ void cWindowTree::drag()
 	}
 }
 
-void cWindowTree::doubleClick()
+void cWindowTree::onDoubleClick()
 {
 }
 
@@ -476,13 +476,13 @@ void cWindowTree::cTreeNode::addchild(cWindowTree::cTreeNode* newnode)
 }
 
 
-void cWindowTree::scrollUp()
+void cWindowTree::onScrollUp()
 {
 	liststart-=5;
 	if (liststart <= 0)
 		liststart = 0;
 }
-void cWindowTree::scrollDown()
+void cWindowTree::onScrollDown()
 {
 	unsigned int i;
 	if(!validCache)

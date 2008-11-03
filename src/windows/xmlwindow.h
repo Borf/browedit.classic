@@ -13,7 +13,7 @@ public:
 	{
 	public:
 		cXmlButton(cWindow*, TiXmlDocument* = NULL);
-		void click();
+		void onClick();
 	};
 	cXmlWindow(TiXmlDocument&);
 

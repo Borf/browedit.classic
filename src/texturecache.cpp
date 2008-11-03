@@ -1,6 +1,8 @@
 #include "common.h"
 #include "texturecache.h"
 
+std::map<std::string, cTexture*, std::less<std::string> >	cTextureCache::textures;
+std::map<cTexture*, int, std::less<cTexture*> >				cTextureCache::used;
 
 
 cTexture* cTextureCache::load(std::string filename, eTextureOptions options)

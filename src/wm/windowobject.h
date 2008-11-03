@@ -98,7 +98,6 @@ public:
 	bool selectable;
 	
 	virtual void draw(int = 0, int = 0, int = 0, int = 0);
-	virtual void click();
 	virtual void drag() {}
 
 	int cursorType;
@@ -110,21 +109,22 @@ public:
 	int realY();
 	int realy2();
 	
+	virtual void onClick();
 	virtual bool onKeyUp(int,bool) { return false; }
 	virtual bool onKeyDown(int,bool) { return false; }
 	virtual bool onChar(char,bool) { return false; }
-	virtual void doubleClick() {}
-	virtual void rightClick() {}
+	virtual void onDoubleClick() {}
+	virtual void onRightClick() {}
+	virtual void onScrollUp() {}
+	virtual void onScrollDown() {}
+	virtual void onHoldDragOver() {}
+	virtual void onDragOver() {}
+	
 
 	virtual void setText(int, std::string) {}
 	virtual void setInt(int, int) {}
 	virtual std::string getText(int) { return "NULL"; }
-	virtual int getInt(int) { return -1; }
-	virtual void holdDragOver() {}
-	virtual void dragOver() {}
-
-	virtual void scrollUp() {}
-	virtual void scrollDown() {}
+	virtual int			getInt(int) { return -1; }
 
 	cWindow* parent;
 };

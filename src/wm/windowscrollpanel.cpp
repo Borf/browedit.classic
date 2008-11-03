@@ -249,7 +249,7 @@ void cWindowScrollPanel::draw(int cutoffleft, int cutoffright, int cutofftop, in
 
 
 
-void cWindowScrollPanel::click()
+void cWindowScrollPanel::onClick()
 {
 	int xx = (int)mouseX;
 	xx -= realX();
@@ -282,20 +282,20 @@ void cWindowScrollPanel::click()
 		else
 		{
 // in the box
-			parent->moveto(parent->getX()+scrollposx+x, parent->getY()+scrollposy-y);
+			parent->moveTo(parent->getX()+scrollposx+x, parent->getY()+scrollposy-y);
 			bool found = false;
 			for(unsigned int i = 0; i < objects.size(); i++)
 			{
 				if (objects[i]->inObject())
 				{
 					found = true;
-					parent->moveto(parent->getX()-scrollposx-x, parent->getY()-scrollposy+y);
-					objects[i]->click();
+					parent->moveTo(parent->getX()-scrollposx-x, parent->getY()-scrollposy+y);
+					objects[i]->onClick();
 					break;
 				}
 			}
 			if (!found)
-				parent->moveto(parent->getX()-scrollposx-x, parent->getY()-scrollposy+y);
+				parent->moveTo(parent->getX()-scrollposx-x, parent->getY()-scrollposy+y);
 		}
 	}
 	else if (yy < h-8)
@@ -331,9 +331,9 @@ void cWindowScrollPanel::drag()
 
 	if(draggingObject != NULL)
 	{
-		parent->moveto(parent->getX()-scrollposx-x, parent->getY()-scrollposy-y);
+		parent->moveTo(parent->getX()-scrollposx-x, parent->getY()-scrollposy-y);
 		draggingObject->drag();
-		parent->moveto(parent->getX()+scrollposx+x, parent->getY()+scrollposy+y);
+		parent->moveTo(parent->getX()+scrollposx+x, parent->getY()+scrollposy+y);
 		return ;
 	}
 
@@ -349,18 +349,18 @@ void cWindowScrollPanel::drag()
 	}
 	else
 	{
-		parent->moveto(parent->getX()+scrollposx+x, parent->getY()+scrollposy-y);
+		parent->moveTo(parent->getX()+scrollposx+x, parent->getY()+scrollposy-y);
 		for(unsigned int i = 0; i < objects.size(); i++)
 		{
 			if (objects[i]->inObject())
 			{
 				objects[i]->drag();
 				draggingObject = objects[i];
-				parent->moveto(parent->getX()-scrollposx-x, parent->getY()-scrollposy+y);
+				parent->moveTo(parent->getX()-scrollposx-x, parent->getY()-scrollposy+y);
 				return;
 			}
 		}
-		parent->moveto(parent->getX()-scrollposx-x, parent->getY()-scrollposy+y);
+		parent->moveTo(parent->getX()-scrollposx-x, parent->getY()-scrollposy+y);
 		return;
 	}
 
@@ -396,74 +396,74 @@ bool cWindowScrollPanel::onChar(char keyid, bool shift)
 	return false;
 }
 
-void cWindowScrollPanel::doubleClick()
+void cWindowScrollPanel::onDoubleClick()
 {
-	parent->moveto(parent->getX()+scrollposx+x, parent->getY()+scrollposy-y);
+	parent->moveTo(parent->getX()+scrollposx+x, parent->getY()+scrollposy-y);
 	for(int i = objects.size()-1; i >= 0; i--)
 	{
 		if (objects[i]->inObject())
 		{
-			parent->moveto(parent->getX()-scrollposx-x, parent->getY()-scrollposy+y);
-			objects[i]->doubleClick();
+			parent->moveTo(parent->getX()-scrollposx-x, parent->getY()-scrollposy+y);
+			objects[i]->onDoubleClick();
 			return;
 		}
 	}
-	parent->moveto(parent->getX()-scrollposx-x, parent->getY()-scrollposy+y);
+	parent->moveTo(parent->getX()-scrollposx-x, parent->getY()-scrollposy+y);
 	return;
 }
 
-void cWindowScrollPanel::rightClick()
+void cWindowScrollPanel::onRightClick()
 {
-	parent->moveto(parent->getX()+scrollposx+x, parent->getY()+scrollposy-y);
+	parent->moveTo(parent->getX()+scrollposx+x, parent->getY()+scrollposy-y);
 	for(int i = objects.size()-1; i >= 0; i--)
 	{
 		if (objects[i]->inObject())
-			objects[i]->rightClick();
+			objects[i]->onRightClick();
 	}
-	parent->moveto(parent->getX()-scrollposx-x, parent->getY()-scrollposy+y);
+	parent->moveTo(parent->getX()-scrollposx-x, parent->getY()-scrollposy+y);
 }
 
 
 
 std::string cWindowScrollPanel::getPopup()
 {
-	parent->moveto(parent->getX()+scrollposx+x, parent->getY()+scrollposy-y);
+	parent->moveTo(parent->getX()+scrollposx+x, parent->getY()+scrollposy-y);
 	for(int i = objects.size()-1; i >= 0; i--)
 	{
 		if (objects[i]->inObject())
 		{
-			parent->moveto(parent->getX()-scrollposx-x, parent->getY()-scrollposy+y);
+			parent->moveTo(parent->getX()-scrollposx-x, parent->getY()-scrollposy+y);
 			return objects[i]->getPopup();
 		}
 	}
-	parent->moveto(parent->getX()-scrollposx-x, parent->getY()-scrollposy+y);
+	parent->moveTo(parent->getX()-scrollposx-x, parent->getY()-scrollposy+y);
 	return "";
 }
 
 
 cWindowObject* cWindowScrollPanel::inObject()
 {
-	parent->moveto(parent->getX()+scrollposx+x, parent->getY()+scrollposy-y);
+	parent->moveTo(parent->getX()+scrollposx+x, parent->getY()+scrollposy-y);
 	for(int i = objects.size()-1; i >= 0; i--)
 	{
 		if (objects[i]->inObject())
 		{
-			parent->moveto(parent->getX()-scrollposx-x, parent->getY()-scrollposy+y);
+			parent->moveTo(parent->getX()-scrollposx-x, parent->getY()-scrollposy+y);
 			return objects[i];
 		}
 	}
-	parent->moveto(parent->getX()-scrollposx-x, parent->getY()-scrollposy+y);
+	parent->moveTo(parent->getX()-scrollposx-x, parent->getY()-scrollposy+y);
 	return cWindowObject::inObject();
 }
 
 
-void cWindowScrollPanel::scrollUp()
+void cWindowScrollPanel::onScrollUp()
 {
 	scrollposy= scrollposy - h/2;
 	scrollposy = (int)max(min(scrollposy, innerheight-h), 0);
 }
 
-void cWindowScrollPanel::scrollDown()
+void cWindowScrollPanel::onScrollDown()
 {
 	scrollposy = scrollposy + h/2;
 	scrollposy = (int)max(min(scrollposy, innerheight-h), 0);

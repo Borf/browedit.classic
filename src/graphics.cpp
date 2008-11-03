@@ -68,7 +68,7 @@ int cGraphics::draw(bool drawwm)
 	glEnable(GL_LIGHTING);
 
 	if(state != OBJECTSELECT && state != OBJECTPROPS)
-		world.draw();
+		world->draw();
 
 	glDisable(GL_LIGHTING);
 
@@ -151,7 +151,7 @@ int cGraphics::draw(bool drawwm)
 		}
 		glEnable(GL_DEPTH_TEST);*/
 	}
-	if(world.loaded && editmode != MODE_OBJECTS && editmode != MODE_OBJECTGROUP && editmode != MODE_LIGHTS)
+	if(world->loaded && editmode != MODE_OBJECTS && editmode != MODE_OBJECTGROUP && editmode != MODE_LIGHTS)
 	{
 		int i;
 		glEnable(GL_TEXTURE_2D);
@@ -166,19 +166,19 @@ int cGraphics::draw(bool drawwm)
 			}
 			else if (editmode == MODE_WATER)
 			{
-				if (i+world.water.type >= (int)waterCount)
+				if (i+world->water.type >= (int)waterCount)
 					continue;
 				static float frame = 0;
-				glBindTexture(GL_TEXTURE_2D, waterTextures[i+world.water.type][(int)floor(frame)]->texId());
+				glBindTexture(GL_TEXTURE_2D, waterTextures[i+world->water.type][(int)floor(frame)]->texId());
 				frame+=0.25;
-				if (frame >= waterTextures[i+world.water.type].size())
+				if (frame >= waterTextures[i+world->water.type].size())
 					frame = 0;
 			}
 			else
 			{
-				if (i+texturestart >= (int)world.textures.size())
+				if (i+texturestart >= (int)world->textures.size())
 					continue;
-				glBindTexture(GL_TEXTURE_2D, world.textures[i+texturestart]->texId());
+				glBindTexture(GL_TEXTURE_2D, world->textures[i+texturestart]->texId());
 			}
 			glBegin(GL_QUADS);
 				glTexCoord2f(1,1);		glVertex2f( width, height-(32+288*i));
@@ -254,7 +254,7 @@ int cGraphics::draw(bool drawwm)
 				}
 				else if (editmode == MODE_WATER)
 				{
-					if (i+world.water.type > 5)
+					if (i+world->water.type > 5)
 						continue;
 				}
 				glBegin(GL_LINE_LOOP);
@@ -286,7 +286,7 @@ int cGraphics::draw(bool drawwm)
 			sprintf(buf, "Editing");
 		font->print(1,1,1,width-font->textlen(buf), height-40, buf);
 	}
-	else if (!world.loaded)
+	else if (!world->loaded)
 	{
 		glEnable(GL_TEXTURE_2D);
 		glColor3f(1,1,1);
@@ -350,7 +350,7 @@ int cGraphics::draw(bool drawwm)
 
 	if (SDL_GetTicks() - lastmotion > 500)
 	{
-		cWindow* w = cWM::inwindow();
+		cWindow* w = cWM::inWindow();
 		if (w != NULL)
 		{
 			cWindowObject* o = w->inObject();
@@ -469,19 +469,19 @@ int cGraphics::init(int pWidth, int pHeight, int pBpp, bool pFullscreen)
 	glDisable(GL_LIGHTING);
 	font = new cFont();
 	font->load("data/fonts/"+fontname+".tga");
-	splash = TextureCache.load(config.FirstChildElement("config")->FirstChildElement("splash")->FirstChild()->Value());
+	splash = cTextureCache::load(config.FirstChildElement("config")->FirstChildElement("splash")->FirstChild()->Value());
 	Log(3,0,GetMsg("graphics/INITIALIZINGWM"));
 	cWM::init(skinFile);
-	cWM::addwindow(new cHotkeyWindow());
+	cWM::addWindow(new cHotkeyWindow());
 
 	unsigned int i;
 	for(i = 0; i < gatTiles.size(); i++)
 	{
 		char buf[64];
 		sprintf(buf, "data/gat%i.tga", gatTiles[i]);
-		gatTextures.push_back(TextureCache.load(buf));
+		gatTextures.push_back(cTextureCache::load(buf));
 	}
-	gatBorder = TextureCache.load("data/gatBorder.tga");
+	gatBorder = cTextureCache::load("data/gatBorder.tga");
 
 	
 	waterDirectory =		config.FirstChildElement("config")->FirstChildElement("water")->FirstChildElement("directory")->FirstChild()->Value();
@@ -495,13 +495,13 @@ int cGraphics::init(int pWidth, int pHeight, int pBpp, bool pFullscreen)
 		{
 			char buf[100];
 			sprintf(buf, "%s%swater%i%02i%s", rodir.c_str(), waterDirectory.c_str(), i, ii, waterExtension.c_str());
-			waterTextures[i].push_back(TextureCache.load(buf, TEX_NOCLAMP));
+			waterTextures[i].push_back(cTextureCache::load(buf, TEX_NOCLAMP));
 		}
 	}
 	if(waterCount == 0)
 	{
 		waterTextures.resize(1);
-		waterTextures[i].push_back(TextureCache.load(rodir + waterDirectory + "water" + waterExtension));
+		waterTextures[i].push_back(cTextureCache::load(rodir + waterDirectory + "water" + waterExtension));
 	}
 
 	Log(3,0,GetMsg("file/DONELOADING"), "water.txt");
@@ -609,20 +609,20 @@ int cGraphicsBase::initGL(void)
 void cGraphics::closeAndCleanup()
 {
 	cGraphicsBase::killGLWindow();
-	world.unload();
+	world->unload();
 	
-	TextureCache.unload(splash);
+	cTextureCache::unload(splash);
 	unsigned int i;
 	for(i = 0; i < gatTextures.size(); i++)
-		TextureCache.unload(gatTextures[i]);
+		cTextureCache::unload(gatTextures[i]);
 	
-	TextureCache.unload(gatBorder);
+	cTextureCache::unload(gatBorder);
 	
 	for(i = 0; i < waterCount; i++)
 	{
 		for(unsigned int ii = 0; ii < waterTextures[i].size(); ii++)
 		{
-			TextureCache.unload(waterTextures[i][ii]);
+			cTextureCache::unload(waterTextures[i][ii]);
 		}
 	}
 }
@@ -757,7 +757,7 @@ cVector3 cGraphics::selectionstart3d;
 cVector3 cGraphics::selectionend3d;
 
 
-cWorld cGraphics::world;
+cWorld* cGraphics::world;
 
 
 
@@ -773,8 +773,6 @@ int					cGraphicsBase::bits =		32;
 bool				cGraphicsBase::fullscreen =	false;
 long 				cGraphicsBase::lasttick =	0;
 long				cGraphicsBase::frameticks =	0;
-
-CFrustum cGraphicsBase::frustum;
 
 
 cGraphicsBase::cGraphicsBase()

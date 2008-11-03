@@ -15,21 +15,21 @@ cAmbientLightWindow::cAmbientLightWindowOkButton::cAmbientLightWindowOkButton( c
 	text = "Ok";
 }
 
-void cAmbientLightWindow::cAmbientLightWindowOkButton::click()
+void cAmbientLightWindow::cAmbientLightWindowOkButton::onClick()
 {
-	Graphics.world.ambientLight.ambientr = atoi(parent->objects["ambientr"]->getText(0).c_str());
-	Graphics.world.ambientLight.ambientg = atoi(parent->objects["ambientg"]->getText(0).c_str());
-	Graphics.world.ambientLight.ambientb = atoi(parent->objects["ambientb"]->getText(0).c_str());
+	cGraphics::world->ambientLight.ambientr = atoi(parent->objects["ambientr"]->getText(0).c_str());
+	cGraphics::world->ambientLight.ambientg = atoi(parent->objects["ambientg"]->getText(0).c_str());
+	cGraphics::world->ambientLight.ambientb = atoi(parent->objects["ambientb"]->getText(0).c_str());
 	
-	Graphics.world.ambientLight.diffuse.x = atof(parent->objects["diffuser"]->getText(0).c_str());
-	Graphics.world.ambientLight.diffuse.y = atof(parent->objects["diffuseg"]->getText(0).c_str());
-	Graphics.world.ambientLight.diffuse.z = atof(parent->objects["diffuseb"]->getText(0).c_str());
+	cGraphics::world->ambientLight.diffuse.x = atof(parent->objects["diffuser"]->getText(0).c_str());
+	cGraphics::world->ambientLight.diffuse.y = atof(parent->objects["diffuseg"]->getText(0).c_str());
+	cGraphics::world->ambientLight.diffuse.z = atof(parent->objects["diffuseb"]->getText(0).c_str());
 	
-	Graphics.world.ambientLight.shadow.x = atof(parent->objects["shadowr"]->getText(0).c_str());
-	Graphics.world.ambientLight.shadow.y = atof(parent->objects["shadowg"]->getText(0).c_str());
-	Graphics.world.ambientLight.shadow.z = atof(parent->objects["shadowb"]->getText(0).c_str());
+	cGraphics::world->ambientLight.shadow.x = atof(parent->objects["shadowr"]->getText(0).c_str());
+	cGraphics::world->ambientLight.shadow.y = atof(parent->objects["shadowg"]->getText(0).c_str());
+	cGraphics::world->ambientLight.shadow.z = atof(parent->objects["shadowb"]->getText(0).c_str());
 	
-	Graphics.world.ambientLight.alpha = atof(parent->objects["alpha"]->getText(0).c_str());
+	cGraphics::world->ambientLight.alpha = atof(parent->objects["alpha"]->getText(0).c_str());
 	
 	parent->close();
 }

@@ -22,8 +22,8 @@ public:
 
 		cHotkeyButton(cWindow* parent);
 		~cHotkeyButton();
-		void rightClick();
-		void click();
+		void onRightClick();
+		void onClick();
 		cWindowObject* inObject();
 		void draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom);
 		void* userfunc(void* param);

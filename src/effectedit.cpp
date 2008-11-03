@@ -21,7 +21,7 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 		case SDL_MOUSEMOTION:
 			if(lbuttondown)
 			{
-				if (Graphics.world.effects.size() == 0)
+				if (cGraphics::world->effects.size() == 0)
 					break;
 				if(Graphics.objectStartDrag)
 				{
@@ -29,20 +29,20 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 					bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 					if (!ctrl && !alt)
 					{
-						Graphics.world.effects[Graphics.selectedObject].pos.x = mouse3dx / 5.0f;
-						Graphics.world.effects[Graphics.selectedObject].pos.z = mouse3dz / 5.0f;
+						cGraphics::world->effects[Graphics.selectedObject].pos.x = mouse3dx / 5.0f;
+						cGraphics::world->effects[Graphics.selectedObject].pos.z = mouse3dz / 5.0f;
 						if (SDL_GetModState() & KMOD_SHIFT)
 						{
-							Graphics.world.effects[Graphics.selectedObject].pos.x = floor(Graphics.world.effects[Graphics.selectedObject].pos.x * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsetx) / (Graphics.gridsize/2.0f) + Graphics.gridoffsetx/(Graphics.gridsize/2.0f);
-							Graphics.world.effects[Graphics.selectedObject].pos.z = floor(Graphics.world.effects[Graphics.selectedObject].pos.z * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsety) / (Graphics.gridsize/2.0f) + Graphics.gridoffsety/(Graphics.gridsize/2.0f);
+							cGraphics::world->effects[Graphics.selectedObject].pos.x = floor(cGraphics::world->effects[Graphics.selectedObject].pos.x * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsetx) / (Graphics.gridsize/2.0f) + Graphics.gridoffsetx/(Graphics.gridsize/2.0f);
+							cGraphics::world->effects[Graphics.selectedObject].pos.z = floor(cGraphics::world->effects[Graphics.selectedObject].pos.z * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsety) / (Graphics.gridsize/2.0f) + Graphics.gridoffsety/(Graphics.gridsize/2.0f);
 						}
 					}
 					if(ctrl && !alt)
 					{
-						Graphics.world.effects[Graphics.selectedObject].pos.y += (mouseY-oldmousey);
+						cGraphics::world->effects[Graphics.selectedObject].pos.y += (mouseY-oldmousey);
 						if (SDL_GetModState() & KMOD_SHIFT)
 						{
-							Graphics.world.effects[Graphics.selectedObject].pos.y = floor(Graphics.world.effects[Graphics.selectedObject].pos.y * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsetx) / (Graphics.gridsize/2.0f) + Graphics.gridoffsetx/(Graphics.gridsize/2.0f);
+							cGraphics::world->effects[Graphics.selectedObject].pos.y = floor(cGraphics::world->effects[Graphics.selectedObject].pos.y * (Graphics.gridsize/2.0f) + 0.5-Graphics.gridoffsetx) / (Graphics.gridsize/2.0f) + Graphics.gridoffsetx/(Graphics.gridsize/2.0f);
 						}
 					}
 					if(!ctrl && alt)
@@ -54,13 +54,13 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 		case SDL_MOUSEBUTTONDOWN:
 			if(event.button.button == SDL_BUTTON_LEFT)
 			{
-				if(Graphics.world.effects.size() == 0)
+				if(cGraphics::world->effects.size() == 0)
 					break;
 				int minobj = 0;
 				float mindist = 999999;
-				for(unsigned int i = 0; i < Graphics.world.effects.size(); i++)
+				for(unsigned int i = 0; i < cGraphics::world->effects.size(); i++)
 				{
-					cVector3 d = Graphics.world.effects[i].pos;
+					cVector3 d = cGraphics::world->effects[i].pos;
 					d.x = d.x;
 					
 					d.x -= mouse3dx/5;
@@ -102,17 +102,17 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 					e.todo12 = 0; // seems to be always 0
 					e.todo13 = 0; // seems to be always 0
 
-					Graphics.world.effects.push_back(e);
+					cGraphics::world->effects.push_back(e);
 				}
 				else
 				{
-					if (Graphics.world.effects.size() == 0)
+					if (cGraphics::world->effects.size() == 0)
 						break;
 					int minobj = 0;
 					float mindist = 999999;
-					for(unsigned int i = 0; i < Graphics.world.effects.size(); i++)
+					for(unsigned int i = 0; i < cGraphics::world->effects.size(); i++)
 					{
-						cVector3 d = Graphics.world.effects[i].pos;
+						cVector3 d = cGraphics::world->effects[i].pos;
 						d.x = d.x;
 						
 						d.x -= mouse3dx/5.0f;
@@ -127,7 +127,7 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 					}
 					Graphics.selectedObject = minobj;
 					char buf[100];
-					sprintf(buf, "%i", Graphics.world.effects[Graphics.selectedObject].type);
+					sprintf(buf, "%i", cGraphics::world->effects[Graphics.selectedObject].type);
 				}
 			}
 			break;
@@ -139,28 +139,28 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 				if (Graphics.selectedObject != -1)
 				{
 					undostack.push(new cUndoChangeEffect(Graphics.selectedObject));
-					Graphics.world.effects[Graphics.selectedObject].loop--;
+					cGraphics::world->effects[Graphics.selectedObject].loop--;
 				}
 				break;
 			case SDLK_PAGEUP:
 				if (Graphics.selectedObject != -1)
 				{
 					undostack.push(new cUndoChangeEffect(Graphics.selectedObject));
-					Graphics.world.effects[Graphics.selectedObject].loop++;
+					cGraphics::world->effects[Graphics.selectedObject].loop++;
 				}
 				break;
 			case SDLK_BACKSPACE:
-				if (Graphics.selectedObject > -1 && Graphics.selectedObject < (int)Graphics.world.effects.size())
+				if (Graphics.selectedObject > -1 && Graphics.selectedObject < (int)cGraphics::world->effects.size())
 				{
 					undostack.push(new cUndoEffectDelete(Graphics.selectedObject));
-					Graphics.world.effects.erase(Graphics.world.effects.begin() + Graphics.selectedObject);
+					cGraphics::world->effects.erase(cGraphics::world->effects.begin() + Graphics.selectedObject);
 					Graphics.selectedObject = -1;
 				}
 				break;
 			case SDLK_RETURN:
 				if (Graphics.selectedObject != -1)
 				{
-					cEffect* o = &Graphics.world.effects[Graphics.selectedObject];
+					cEffect* o = &cGraphics::world->effects[Graphics.selectedObject];
 
 					cWindow* w = new cEffectWindow();
 					((cWindowFloatInputBox*)w->objects["posx"])->floatje = &o->pos.x;
@@ -176,7 +176,7 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 
 					((cWindowStringInputBox*)w->objects["objectname"])->stringetje = &o->readablename;
 					((cEffectWindow*)w)->undo = new cUndoChangeEffect(Graphics.selectedObject);
-					cWM::addwindow(w);
+					cWM::addWindow(w);
 				}
 				break;
 

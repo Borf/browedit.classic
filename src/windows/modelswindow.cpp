@@ -5,6 +5,8 @@
 #include "../graphics.h"
 #include "../menu.h"
 #include "../menucommands.h"
+#include <windows/confirmwindow.h>
+#include <wm/windowlabel.h>
 #include <fstream>
 
 extern cGraphics Graphics;
@@ -104,7 +106,7 @@ void cModelsWindow::cWindowModel::draw(int cutoffleft, int cutoffright, int cuto
 }
 
 
-void cModelsWindow::cWindowModel::click()
+void cModelsWindow::cWindowModel::onClick()
 {
 	if(Graphics.previewModel != NULL)
 	{
@@ -165,7 +167,7 @@ cModelsWindow::cWindowModel::~cWindowModel()
 
 
 
-class cConfirmDeleteModel : public cConfirmWindow::cConfirmWindowCaller
+class cConfirmDeleteModel : public cConfirmWindowCaller
 {
 	private:
 		cModelsWindow::cWindowModel* model;
@@ -254,13 +256,13 @@ class cConfirmDeleteModel : public cConfirmWindow::cConfirmWindowCaller
 };
 
 
-void cModelsWindow::cWindowModel::rightClick()
+void cModelsWindow::cWindowModel::onRightClick()
 {
-	((cModelsWindow*)parent)->stopdrag();
+	((cModelsWindow*)parent)->onStopDrag();
 
 	popupmenu = new cMenu();
 	popupmenu->parent = NULL;
-	popupmenu->drawstyle = 1;
+	popupmenu->drawStyle = 1;
 	popupmenu->x = (int)mouseX;
 	popupmenu->y = (int)mouseY;
 	popupmenu->w = 150;
@@ -272,10 +274,10 @@ void cModelsWindow::cWindowModel::rightClick()
 	//cWM::ConfirmWindow(GetMsg("wm/model/DELETECONFIRM"), new cConfirmDeleteModel(this));
 }
 
-void cModelsWindow::cWindowModelCatSelect::rightClick()
+void cModelsWindow::cWindowModelCatSelect::onRightClick()
 {
 	unsigned int i;
-	click();
+	onClick();
 	int a = selected;
 	cTreeNode* node = NULL;
 	for(i = 0; i < nodes.size(); i++)
@@ -288,7 +290,7 @@ void cModelsWindow::cWindowModelCatSelect::rightClick()
 	{
 		popupmenu = new cMenu();
 		popupmenu->parent = NULL;
-		popupmenu->drawstyle = 1;
+		popupmenu->drawStyle = 1;
 		popupmenu->x = (int)mouseX;
 		popupmenu->y = (int)mouseY;
 		popupmenu->w = 150;
@@ -300,7 +302,7 @@ void cModelsWindow::cWindowModelCatSelect::rightClick()
 		
 		
 		
-		std::string newnode = cWM::InputWindow(GetMsg("wm/models/NODENAME"));
+		std::string newnode = cWM::inputWindow(GetMsg("wm/models/NODENAME"));
 		if(newnode == "")
 			return;
 		cTreeNode* n = new cTreeNode(newnode);
@@ -327,7 +329,7 @@ void cModelsWindow::cWindowModelCatSelect::rightClick()
 	}
 	else if (node == NULL)
 	{
-		std::string newnode = cWM::InputWindow(GetMsg("wm/models/NODENAME"));
+		std::string newnode = cWM::inputWindow(GetMsg("wm/models/NODENAME"));
 		if(newnode == "")
 			return;
 		cTreeNode* n = new cTreeNode(newnode);
@@ -428,12 +430,12 @@ cModelsWindow::cWindowModelCatSelect::cWindowModelCatSelect(cWindow* parent, std
 	originalselection = -1;
 }
 
-void cModelsWindow::cWindowModelCatSelect::click()
+void cModelsWindow::cWindowModelCatSelect::onClick()
 {
-	cWindowTree::click();
+	cWindowTree::onClick();
 	refreshmodels();
 }
-void cModelsWindow::cWindowModelCatSelect::holdDragOver()
+void cModelsWindow::cWindowModelCatSelect::onHoldDragOver()
 {
 	if(originalselection == -1)
 		originalselection = selected;
@@ -459,7 +461,7 @@ void cModelsWindow::cWindowModelCatSelect::holdDragOver()
 	}
 }
 
-void cModelsWindow::cWindowModelCatSelect::dragOver()
+void cModelsWindow::cWindowModelCatSelect::onDragOver()
 {
 	bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 	unsigned int i;
@@ -571,7 +573,7 @@ void cModelsWindow::cWindowModelCatSelect::dragOver()
 		selected = originalselection;
 		originalselection = -1;
 	}
-	parent->stopdrag();
+	parent->onStopDrag();
 	draggingObject = NULL;
 	draggingwindow = NULL;
 
@@ -661,7 +663,7 @@ cModelsWindow::cModelsWindow() : cWindow()
 	title = GetMsg("wm/model/TITLE");
 	center();
 
-	initprops("modelswindow");
+	initProps("modelswindow");
 
 	cWindowObject* o;
 
@@ -761,7 +763,7 @@ void cModelsWindow::resizeTo(int ww, int hh)
 	panel->scrollposy = 0;
 	panel->innerheight = y+140;
 }
-void cModelsWindow::stopdrag()
+void cModelsWindow::onStopDrag()
 {
 	objects["zdragger"]->moveTo(-4000,-4000);
 	objects["zdragger"]->setInt(0,0);

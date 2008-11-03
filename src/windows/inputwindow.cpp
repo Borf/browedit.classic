@@ -8,7 +8,7 @@ cInputWindow::cWindowOkButton::cWindowOkButton( cWindow* parent, TiXmlDocument* 
 	text = "Ok";
 }
 
-void cInputWindow::cWindowOkButton::click()
+void cInputWindow::cWindowOkButton::onClick()
 {
 	parent->userfunc((void*)1);
 }
@@ -21,7 +21,7 @@ cInputWindow::cWindowCancelButton::cWindowCancelButton( cWindow* parent, TiXmlDo
 	text = "Cancel";
 }
 
-void cInputWindow::cWindowCancelButton::click()
+void cInputWindow::cWindowCancelButton::onClick()
 {
 	parent->userfunc((void*)0);
 }

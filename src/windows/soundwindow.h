@@ -14,7 +14,7 @@ public:
 	public:
 		cSound*	selectedSound;
 		cWindowSelectFileButton(cWindow* parent, TiXmlDocument* = NULL);
-		void click();
+		void onClick();
 	};
 	cUndoItem* undo;
 	cSoundWindow();	

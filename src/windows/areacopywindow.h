@@ -19,7 +19,7 @@ private:
 	{
 
 	public:
-		cAreaCopyWindowOkButton(cWindow* parent, TiXmlDocument* skin = NULL) : cWindowButton(parent,skin)
+		cAreaCopyWindowOkButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin) : cWindowButton(parent,skin)
 		{
 			alignment = ALIGN_BOTTOM;
 			moveTo(0, 20);
@@ -27,7 +27,7 @@ private:
 			text = GetMsg("wm/OK");
 		}
 		virtual ~cAreaCopyWindowOkButton() {}
-		void click()
+		void onClick()
 		{
 
 /*			Graphics.world.areac.AreaCModel = atof(parent->objects["amplitude"]->GetText(0).c_str());

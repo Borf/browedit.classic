@@ -18,10 +18,10 @@ cSoundSelectWindow::cWindowSoundCatSelect::cWindowSoundCatSelect( cWindow* paren
 	
 }
 
-void cSoundSelectWindow::cWindowSoundCatSelect::click()
+void cSoundSelectWindow::cWindowSoundCatSelect::onClick()
 {
 	unsigned int i;
-	cWindowTree::click();
+	cWindowTree::onClick();
 	cWindowDataListBox<std::string>* box = (cWindowDataListBox<std::string>*)parent->objects["sounds"];
 	box->values.clear();
 	box->data.clear();
@@ -56,9 +56,9 @@ cSoundSelectWindow::cSoundList::cSoundList( cWindow* parent, TiXmlDocument* skin
 	
 }
 
-void cSoundSelectWindow::cSoundList::doubleClick()
+void cSoundSelectWindow::cSoundList::onDoubleClick()
 {
-	parent->objects["play"]->click();
+	parent->objects["play"]->onClick();
 }
 
 cSoundSelectWindow::cWindowPlayButton::cWindowPlayButton( cWindow* w, TiXmlDocument* skin ) : cWindowButton(w,skin)
@@ -69,7 +69,7 @@ cSoundSelectWindow::cWindowPlayButton::cWindowPlayButton( cWindow* w, TiXmlDocum
 	text = "Play";
 }
 
-void cSoundSelectWindow::cWindowPlayButton::click()
+void cSoundSelectWindow::cWindowPlayButton::onClick()
 {
 	if(text == "Play")
 	{
@@ -111,7 +111,7 @@ cSoundSelectWindow::cWindowOkButton::cWindowOkButton( cWindow* w, TiXmlDocument*
 	text = "Ok";
 }
 
-void cSoundSelectWindow::cWindowOkButton::click()
+void cSoundSelectWindow::cWindowOkButton::onClick()
 {
 	int selected = parent->objects["sounds"]->getInt(-1);
 	if(selected >= ((cWindowDataListBox<std::string>*)parent->objects["sounds"])->data.size())
@@ -158,12 +158,12 @@ void cSoundSelectWindow::cWindowOkButton::click()
 		s.unknown7 = -435.095f;
 		s.unknown8 = 0;
 		
-		Graphics.world.sounds.push_back(s);
+		cGraphics::world->sounds.push_back(s);
 		undostack.push(new cUndoNewSound());
 	}
 	parent->close();
 	
-	cWindow* w = cWM::getwindow(WT_SOUNDOVERVIEW);
+	cWindow* w = cWM::getWindow(WT_SOUNDOVERVIEW);
 	if(w != NULL)
 		w->userfunc(NULL);
 }
@@ -176,7 +176,7 @@ cSoundSelectWindow::cWindowCancelButton::cWindowCancelButton( cWindow* w, TiXmlD
 	text = "Cancel";
 }
 
-void cSoundSelectWindow::cWindowCancelButton::click()
+void cSoundSelectWindow::cWindowCancelButton::onClick()
 {
 	parent->close();
 }
@@ -283,7 +283,7 @@ cSoundSelectWindow::cSoundSelectWindow(cVector3 pNewPos ) : cWindow()
 	objects["cancel"] = new cSoundSelectWindow::cWindowCancelButton(this);
 	
 	
-	objects["tree"]->click();
+	objects["tree"]->onClick();
 	
 	//		objects["rollup"] = new cWindowRollupButton(this);
 	objects["close"] = new cWindowCloseButton(this);

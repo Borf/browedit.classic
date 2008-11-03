@@ -3,6 +3,7 @@
 
 #include "windowobject.h"
 #include <string>
+#include <wm/wm.h>
 //using namespace std;
 
 class cWindowCheckBox : public cWindowObject
@@ -17,9 +18,9 @@ protected:
 
 
 public:
-	cWindowCheckBox(cWindow* parent, TiXmlDocument* skin = NULL);
+	cWindowCheckBox(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
 	virtual void draw(int,int,int,int);
-	virtual void click();
+	virtual void onClick();
 	bool onChar(char, bool);
 	void setInt(int, int);
 	int getInt(int);
@@ -33,7 +34,7 @@ class cWindowBoolCheckBox : public cWindowCheckBox
 	bool firstTime;
 public:
 	bool* boolvalue;
-	cWindowBoolCheckBox(cWindow* parent, TiXmlDocument* skin = NULL);
+	cWindowBoolCheckBox(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
 	void draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom);
 	void setInt(int id, int val);
 };

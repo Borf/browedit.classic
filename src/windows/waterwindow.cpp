@@ -1,4 +1,5 @@
 #include "waterwindow.h"
+#include <wm/windowinputbox.h>
 #include <graphics.h>
 extern cGraphics Graphics;
 
@@ -16,13 +17,13 @@ cWaterWindowOkButton::~cWaterWindowOkButton()
 	
 }
 
-void cWaterWindowOkButton::click()
+void cWaterWindowOkButton::onClick()
 {
-	Graphics.world.water.amplitude = atof(parent->objects["amplitude"]->getText(0).c_str());
-	Graphics.world.water.height = atof(parent->objects["height"]->getText(0).c_str());
-	Graphics.world.water.phase = atof(parent->objects["phase"]->getText(0).c_str());
-	Graphics.world.water.surfaceCurve = atof(parent->objects["surfacecurve"]->getText(0).c_str());
-	Graphics.world.water.type = atoi(parent->objects["type"]->getText(0).c_str());
+	cGraphics::world->water.amplitude = atof(parent->objects["amplitude"]->getText(0).c_str());
+	cGraphics::world->water.height = atof(parent->objects["height"]->getText(0).c_str());
+	cGraphics::world->water.phase = atof(parent->objects["phase"]->getText(0).c_str());
+	cGraphics::world->water.surfaceCurve = atof(parent->objects["surfacecurve"]->getText(0).c_str());
+	cGraphics::world->water.type = atoi(parent->objects["type"]->getText(0).c_str());
 	parent->close();
 }
 
@@ -36,7 +37,7 @@ cWaterWindow::cWaterWindow() : cWindow()
 	w = 200+skinOffLeft+skinOffRight;
 	title = GetMsg("wm/water/TITLE");
 	center();
-	initprops("water");
+	initProps("water");
 	
 	defaultObject = "OkButton";
 	

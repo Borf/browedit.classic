@@ -1,4 +1,5 @@
 #include "wm.h"
+#include "window.h"
 
 #include <common.h>
 #include <font.h>
@@ -8,6 +9,7 @@
 #include <graphics.h>
 #include <windows/messagewindow.h>
 #include <windows/confirmwindow.h>
+#include <windows/inputwindow.h>
 #include <windows/xmlwindow.h>
 extern cGraphicsBase Graphics;
 extern cWindow* draggingwindow;
@@ -22,7 +24,7 @@ cTexture*				cWM::texture;
 cFont*					cWM::font;
 TiXmlDocument			cWM::skin;
 float					cWM::color[4];
-float					cWM::colorblur[4];
+float					cWM::colorBlur[4];
 int						cWM::focus;
 
 
@@ -35,19 +37,19 @@ int cWM::draw()
 	glDisable(GL_LIGHTING);
 	glDisable(GL_DEPTH_TEST);
 	//glTranslatef(0,0,9000);
-	CleanWindows();
+	cleanWindows();
 	glEnable(GL_TEXTURE_2D);
 	glDisable(GL_ALPHA_TEST);
-	glColor4fv(colorblur);
+	glColor4fv(colorBlur);
 	glEnable(GL_BLEND);
 	int size = windows.size()-1;
 	int topwindow = 0;
 	for(i = 0; i < windows.size(); i++)
 	{
 		cWindow* w = windows[i];
-		if (w->isenabled())
+		if (w->isEnabled())
 		{
-			if(w->isVisible() && w->isenabled())
+			if(w->isVisible() && w->isEnabled())
 			{
 				topwindow = i;
 				break;
@@ -59,9 +61,9 @@ int cWM::draw()
 	for(ii = size; ii >= 0; ii--)
 	{
 		cWindow* w = windows[ii];
-		if(w->isalwaysontop())
+		if(w->isAlwaysOnTop())
 			continue;
-		if (w->isenabled())
+		if (w->isEnabled())
 		{
 			if (ii == topwindow)
 			{
@@ -70,13 +72,13 @@ int cWM::draw()
 			}
 			else
 			{
-				if(w->canbetransparent())
-					glColor4fv(colorblur);
+				if(w->canBeResized())
+					glColor4fv(colorBlur);
 				else
 					glColor4fv(color);
 				w->istopwindow(false);
 			}
-			if(w->isVisible() && w->isenabled())
+			if(w->isVisible() && w->isEnabled())
 				w->draw();
 		}
 		if (windows[ii] != w)
@@ -85,9 +87,9 @@ int cWM::draw()
 	for(ii = size; ii >= 0; ii--)
 	{
 		cWindow* w = windows[ii];
-		if(!w->isalwaysontop())
+		if(!w->isAlwaysOnTop())
 			continue;
-		if (w->isenabled())
+		if (w->isEnabled())
 		{
 			if (ii == topwindow)
 			{
@@ -96,13 +98,13 @@ int cWM::draw()
 			}
 			else
 			{
-				if(w->canbetransparent())
-					glColor4fv(colorblur);
+				if(w->canBeResized())
+					glColor4fv(colorBlur);
 				else
 					glColor4fv(color);
 				w->istopwindow(false);
 			}
-			if(w->isVisible() && w->isenabled())
+			if(w->isVisible() && w->isEnabled())
 				w->draw();
 		}
 		if (windows[ii] != w)
@@ -118,7 +120,7 @@ int cWM::draw()
 int cWM::init(std::string sSkin)
 {
 	skin = cFileSystem::getXml(sSkin);
-	texture = TextureCache.load(skin.FirstChildElement("skin")->FirstChildElement("texture")->FirstChild()->Value());
+	texture = cTextureCache::load(skin.FirstChildElement("skin")->FirstChildElement("texture")->FirstChild()->Value());
 	font = new cFont();
 	font->load(skin.FirstChildElement("skin")->FirstChildElement("font")->FirstChild()->Value());
 
@@ -129,10 +131,10 @@ int cWM::init(std::string sSkin)
 	color[3] = hex2dec(c.substr(6,2))/255.0f;
 
 	c = skin.FirstChildElement("skin")->FirstChildElement("colorblurred")->FirstChild()->Value();
-	colorblur[0] = hex2dec(c.substr(0,2))/255.0f;
-	colorblur[1] = hex2dec(c.substr(2,2))/255.0f;
-	colorblur[2] = hex2dec(c.substr(4,2))/255.0f;
-	colorblur[3] = hex2dec(c.substr(6,2))/255.0f;
+	colorBlur[0] = hex2dec(c.substr(0,2))/255.0f;
+	colorBlur[1] = hex2dec(c.substr(2,2))/255.0f;
+	colorBlur[2] = hex2dec(c.substr(4,2))/255.0f;
+	colorBlur[3] = hex2dec(c.substr(6,2))/255.0f;
 
 	focus = 0;
 	Log(3,0,"Window Manager initialized");
@@ -151,7 +153,7 @@ void cWM::save()
 //////////////////////////////////////////////////////////////////////////////////////////////
 }
 
-void cWM::unload()
+void cWM::unLoad()
 {
 	for(int i = 0; i < (int)windows.size(); i++)
 	{
@@ -165,14 +167,14 @@ void cWM::unload()
 
 cWM::~cWM()
 {
-	unload();
+	unLoad();
 }
 
 void cWM::click(bool b)
 {
 	for(int i = 0; i < (int)windows.size(); i++)
 	{
-		if (windows[i]->isenabled() && windows[i]->inwindow() && (!windows[0]->modality() || i == 0))
+		if (windows[i]->isEnabled() && windows[i]->inWindow() && (!windows[0]->modality() || i == 0))
 		{
 			//move windows[i] to windows[0].
 			cWindow* w = windows[i];
@@ -187,18 +189,18 @@ void cWM::click(bool b)
 				w->istopwindow(true);
 			}
 			if (b)
-				w->click();
+				w->onClick();
 			break;
 		}
 	}
 
 }
 
-cWindow* cWM::inwindow()
+cWindow* cWM::inWindow()
 {
 	for(int i = 0; i < (int)windows.size(); i++)
 	{
-		if(windows[i]->isenabled() && windows[i]->inwindow() && (i == 0 || !windows[0]->modality()))
+		if(windows[i]->isEnabled() && windows[i]->inWindow() && (i == 0 || !windows[0]->modality()))
 			return windows[i];
 	}
 	return NULL;
@@ -209,27 +211,27 @@ void cWM::drag(cWindow* w)
 {//makes sure window w snaps to other windows....
 	for(int i = 0; i < (int)windows.size(); i++)
 	{
-		if(windows[i]->isenabled() && windows[i] != w)
+		if(windows[i]->isEnabled() && windows[i] != w)
 		{
 			if ((w->getX() <= windows[i]->getX() && windows[i]->getX() <= w->getX()+w->getWidth()) ||
 				(windows[i]->getX() <= w->getX() && w->getX() <= windows[i]->getX()+windows[i]->getWidth()))
 			{
 				if (abs(w->getY() - (windows[i]->getY()+windows[i]->getHeight())) < SNAPPINGDIST)
 				{
-					if (w->resizing())
+					if (w->isResizing())
 					{
 						w->resizeTo(w->getWidth(), w->getHeight()+(w->getY()-(windows[i]->getY()+windows[i]->getHeight())));
-						w->moveto(w->getX(), windows[i]->getY() + windows[i]->getHeight());
+						w->moveTo(w->getX(), windows[i]->getY() + windows[i]->getHeight());
 					}
 					else
-						w->moveto(w->getX(), windows[i]->getY()+windows[i]->getHeight()-w->ph2()+w->getHeight());
+						w->moveTo(w->getX(), windows[i]->getY()+windows[i]->getHeight()-w->ph2()+w->getHeight());
 				}
 				if (abs((w->getY()+w->getHeight()) - windows[i]->getY()) < SNAPPINGDIST)
 				{
-					if (w->resizing())
+					if (w->isResizing())
 						w->resizeTo(w->getWidth(), windows[i]->getY()-w->getY());
 					else
-						w->moveto(w->getX(), windows[i]->getY()-w->ph2());
+						w->moveTo(w->getX(), windows[i]->getY()-w->ph2());
 				}
 				
 			}
@@ -238,20 +240,20 @@ void cWM::drag(cWindow* w)
 			{
 				if (abs(w->getX() - (windows[i]->getX()+windows[i]->getWidth())) < SNAPPINGDIST)
 				{
-					if (w->resizing())
+					if (w->isResizing())
 					{
 						w->resizeTo(w->getWidth()+(w->getX()-(windows[i]->getX()+windows[i]->getWidth())), w->getHeight());
-						w->moveto(windows[i]->getX() + windows[i]->getWidth(), w->getY());
+						w->moveTo(windows[i]->getX() + windows[i]->getWidth(), w->getY());
 					}
 					else
-						w->moveto(windows[i]->getX()+windows[i]->getWidth(), w->getY());
+						w->moveTo(windows[i]->getX()+windows[i]->getWidth(), w->getY());
 				}
 				if (abs((w->getX()+w->getWidth()) - windows[i]->getX()) < SNAPPINGDIST)
 				{
-					if (w->resizing())
+					if (w->isResizing())
 						w->resizeTo(windows[i]->getX()-w->getX(), w->getHeight());
 					else
-						w->moveto(windows[i]->getX()-w->getWidth(), w->getY());
+						w->moveTo(windows[i]->getX()-w->getWidth(), w->getY());
 				}
 
 			}
@@ -262,31 +264,31 @@ void cWM::drag(cWindow* w)
 
 }
 
-void cWM::showwindow(WINDOW_TYPE wt)
+void cWM::showWindow(WINDOW_TYPE wt)
 {
 	for(int i = 0; i < (int)windows.size(); i++)
 	{
-		if (windows[i]->isenabled() && windows[i]->windowtype() == wt)
+		if (windows[i]->isEnabled() && windows[i]->windowtype() == wt)
 			windows[i]->show();
 	}
 }
 
-bool cWM::existswindow(WINDOW_TYPE wt)
+bool cWM::existsWindow(WINDOW_TYPE wt)
 {
 	for(int i = 0; i < (int)windows.size(); i++)
 	{
-		if (windows[i]->isenabled() && windows[i]->windowtype() == wt)
+		if (windows[i]->isEnabled() && windows[i]->windowtype() == wt)
 			return true;
 	}
 	return false;
 }
 
 
-void cWM::togglewindow(WINDOW_TYPE wt)
+void cWM::toggleWindow(WINDOW_TYPE wt)
 {
 	for(int i = 0; i < (int)windows.size(); i++)
 	{
-		if (windows[i]->isenabled() && windows[i]->windowtype() == wt)
+		if (windows[i]->isEnabled() && windows[i]->windowtype() == wt)
 		{
 			windows[i]->togglevis();
 			if (windows[i]->isVisible())
@@ -301,36 +303,36 @@ void cWM::togglewindow(WINDOW_TYPE wt)
 	}
 }
 
-int cWM::closewindow(WINDOW_TYPE wt, bool force)
+int cWM::closeWindow(WINDOW_TYPE wt, bool force)
 {
 	for(int i = 0; i < (int)windows.size(); i++)
 	{
 		cWindow* w = windows[i];
 		if (w != NULL)
 
-			if (w->isenabled() && w->windowtype() == wt)
+			if (w->isEnabled() && w->windowtype() == wt)
 				w->close(force);
 	}
 	return 0;
 
 }
 
-bool cWM::onchar(char c, bool shift)
+bool cWM::onChar(char c, bool shift)
 {
 	if (windows.size() > 0)
-		if (windows[0]->isenabled() && windows[0]->isVisible())
+		if (windows[0]->isEnabled() && windows[0]->isVisible())
 			return windows[0]->onChar(c, shift);
 	return false;
 }
 
-bool cWM::onkeydown(int key, bool shift)
+bool cWM::onKeyDown(int key, bool shift)
 {
 	if(windows.size() == 0)
 		return false;
 
-/*	if (key == SDLK_RETURN && windows[0]->isenabled() && windows[0]->defaultobject == "")
+/*	if (key == SDLK_RETURN && windows[0]->isEnabled() && windows[0]->defaultobject == "")
 	{
-		cWindow* w = getwindow(WT_CHAT);
+		cWindow* w = getWindow(WT_CHAT);
 		if (w != NULL)
 		{
 			int i;
@@ -369,44 +371,44 @@ bool cWM::onkeydown(int key, bool shift)
 
 	if (SDL_GetModState() & KMOD_CTRL)
 	{
-		cWindow* w = Graphics.WM.getwindow(WT_MAIN);
+		cWindow* w = Graphics.WM.getWindow(WT_MAIN);
 		if (w != NULL)
 		{
 			if (key == '1')
-				w->objects["Status"]->click();
+				w->objects["Status"]->onClick();
 			else if (key == '2')
-				w->objects["Equip"]->click();
+				w->objects["Equip"]->onClick();
 			else if (key == '3')
-				w->objects["Skills"]->click();
+				w->objects["Skills"]->onClick();
 			else if (key == '4')
-				w->objects["Items"]->click();
+				w->objects["Items"]->onClick();
 			return true;
 		}
 	}*/
 
 	
 	if(windows.size() > 0)
-		if (windows[0]->isenabled() && windows[0]->isVisible())
+		if (windows[0]->isEnabled() && windows[0]->isVisible())
 			return windows[0]->onKeyDown(key, shift);
 	return false;
 }
-bool cWM::onkeyup(int key, bool shift)
+bool cWM::onKeyUp(int key, bool shift)
 {
 	if(windows.size() > 0)
 	{
 		bool parsekey = true;
 
-		if (parsekey && windows[0]->isVisible() && windows[0]->isenabled())
+		if (parsekey && windows[0]->isVisible() && windows[0]->isEnabled())
 			return windows[0]->onKeyUp(key, shift);
 	}
 	return false;
 }
 
-void cWM::doubleclick()
+void cWM::onDoubleClick()
 {
 	for(int i = 0; i < (int)windows.size(); i++)
 	{
-		if (windows[i]->isenabled() && windows[i]->inwindow() && (!windows[0]->modality() || i == 0))
+		if (windows[i]->isEnabled() && windows[i]->inWindow() && (!windows[0]->modality() || i == 0))
 		{
 			//move windows[i] to windows[0].
 			cWindow* w = windows[i];
@@ -420,17 +422,17 @@ void cWM::doubleclick()
 				windows[0] = w;
 				w->istopwindow(true);
 			}
-			w->doubleclick();
+			w->onDoubleClick();
 			break;
 		}
 	}
 }
 
-void cWM::rightclick()
+void cWM::onRightClick()
 {
 	for(int i = 0; i < (int)windows.size(); i++)
 	{
-		if (windows[i]->isenabled() && windows[i]->inwindow() && (!windows[0]->modality() || i == 0))
+		if (windows[i]->isEnabled() && windows[i]->inWindow() && (!windows[0]->modality() || i == 0))
 		{
 			//move windows[i] to windows[0].
 			cWindow* w = windows[i];
@@ -444,27 +446,27 @@ void cWM::rightclick()
 				windows[0] = w;
 				w->istopwindow(true);
 			}
-			w->rightclick();
+			w->onRightClick();
 			break;
 		}
 	}
 }
 
 
-void cWM::ShowMessage(std::string message)
+void cWM::showMessage(std::string message)
 {
 	cWindow* w = new cMessageWindow();
 	w->objects["text"]->setText(0, message);
 	w->show();
-	addwindow(w);
+	addWindow(w);
 }
 
 
-cWindow* cWM::getwindow(WINDOW_TYPE wt)
+cWindow* cWM::getWindow(WINDOW_TYPE wt)
 {
 	for(int i = 0; i < (int)windows.size(); i++)
 	{
-		if (windows[i]->isenabled() && windows[i]->windowtype() == wt)
+		if (windows[i]->isEnabled() && windows[i]->windowtype() == wt)
 		{
 			return windows[i];
 		}
@@ -473,7 +475,7 @@ cWindow* cWM::getwindow(WINDOW_TYPE wt)
 }
 
 
-void cWM::addwindow(cWindow* w)
+void cWM::addWindow(cWindow* w)
 {
 	w->enable();
 	windows.resize(windows.size()+1);
@@ -484,17 +486,17 @@ void cWM::addwindow(cWindow* w)
 
 
 
-void cWM::CleanWindows()
+void cWM::cleanWindows()
 {
 	std::vector<cWindow*>::iterator i;
 	for(i = windows.begin(); i != windows.end(); i++)
 	{
-		if (!(*i)->isenabled() && (*i)->currentColor[3] == 0)
+		if (!(*i)->isEnabled() && (*i)->currentColor[3] == 0)
 		{
 			if(draggingwindow == (*i))
 				draggingwindow = NULL;
 
-			Log(3,0,"Deleting window %s", (*i)->gettitle().c_str());
+			Log(3,0,"Deleting window %s", (*i)->getTitle().c_str());
 			if ((*i) != NULL)
 			{
 				if( (*i)->saveWindow)
@@ -503,29 +505,29 @@ void cWM::CleanWindows()
 			delete((*i));
 			windows.erase(i);
 			Log(3,0,"Closed a window");
-			CleanWindows();
+			cleanWindows();
 			return;
 		}
 	}
 }
 
-void cWM::printdebug()
+void cWM::printDebug()
 {
 	Log(3,0,"----------------------");
 	for(int i = 0; i < (int)windows.size(); i++)
 	{
 		Log(3,0,"Window %i\nTitle: %s\nEnabled: %s\nVisible: %s\npos: (%i,%i)\nsize: (%i,%i)\n",
-			i, windows[i]->gettitle().c_str(), windows[i]->isenabled() ? "yes":"no", windows[i]->isVisible() ? "yes":"no", windows[i]->getX(), windows[i]->getY(), windows[i]->getWidth(), windows[i]->getHeight());
+			i, windows[i]->getTitle().c_str(), windows[i]->isEnabled() ? "yes":"no", windows[i]->isVisible() ? "yes":"no", windows[i]->getX(), windows[i]->getY(), windows[i]->getWidth(), windows[i]->getHeight());
 	}
 }
 
 
-void cWM::ConfirmWindow(std::string title, cConfirmWindow::cConfirmWindowCaller* caller)
+void cWM::confirmWindow(std::string title, cConfirmWindowCaller* caller)
 {
 	cWindow* w = new cConfirmWindow(caller);
 	w->objects["text"]->setText(0, title);
 	w->show();
-	addwindow(w);
+	addWindow(w);
 }
 
 /*
@@ -546,29 +548,29 @@ void cWM::defocus()
 		windows[i]->selectedObject = NULL;
 }
 
-cWindow* cWM::InputWindow(std::string title, cInputWindow::cInputWindowCaller* caller)
+cWindow* cWM::inputWindow(std::string title, cInputWindowCaller* caller)
 {
 	cWindow* w = new cInputWindow(caller);
 	w->init(texture, font);
 	w->objects["text"]->setText(0, title);
 	w->objects["input"]->setText(0,"");
 	w->show();
-	addwindow(w);
+	addWindow(w);
 	return w;
 }
 
-cWindow* cWM::XmlWindow(std::string src)
+cWindow* cWM::xmlWindow(std::string src)
 {
 	TiXmlDocument layout = cFileSystem::getXml(src);
 	cWindow* w = new cXmlWindow(layout);
-	addwindow(w);
+	addWindow(w);
 	return w;
 }
 
 
-std::string cWM::InputWindow(std::string title, std::string defaulttext)
+std::string cWM::inputWindow(std::string title, std::string defaulttext)
 {
-	class cDefaultInputWindowCaller : public cInputWindow::cInputWindowCaller
+	class cDefaultInputWindowCaller : public cInputWindowCaller
 	{
 	public:
 		bool* b;
@@ -594,7 +596,7 @@ std::string cWM::InputWindow(std::string title, std::string defaulttext)
 	bool b = false;
 	std::string data = "";
 
-	cWindow* w = InputWindow(title, new cDefaultInputWindowCaller(&b, &data));
+	cWindow* w = inputWindow(title, new cDefaultInputWindowCaller(&b, &data));
 	w->objects["input"]->setText(0, defaulttext);
 	while(!b)
 	{
@@ -606,9 +608,9 @@ std::string cWM::InputWindow(std::string title, std::string defaulttext)
 }
 
 
-bool cWM::ConfirmWindow(std::string title)
+bool cWM::confirmWindow(std::string title)
 {
-	class cDefaultConfirmWindowCaller : public cConfirmWindow::cConfirmWindowCaller
+	class cDefaultConfirmWindowCaller : public cConfirmWindowCaller
 	{
 	public:
 		int* b;
@@ -628,7 +630,7 @@ bool cWM::ConfirmWindow(std::string title)
 
 	int b = 0;
 
-	ConfirmWindow(title, new cDefaultConfirmWindowCaller(&b));
+	confirmWindow(title, new cDefaultConfirmWindowCaller(&b));
 	while(b == 0)
 	{
 		mainloop();

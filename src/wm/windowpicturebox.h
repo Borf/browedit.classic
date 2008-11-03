@@ -17,7 +17,7 @@ public:
 	cWindowPictureBox(cWindow* parent);
 	~cWindowPictureBox();
 	virtual void draw(int,int,int,int);
-	virtual void click();
+	virtual void onClick();
 
 	virtual void setText(int, std::string);
 	void setInt(int, int);

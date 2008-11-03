@@ -10,7 +10,7 @@ class cWindowOkButton : public cWindowButton
 public:
 	cWindowOkButton(cWindow* parent, TiXmlDocument* = NULL);
 	virtual ~cWindowOkButton();
-	void click();
+	void onClick();
 };
 
 
@@ -19,7 +19,7 @@ class cWindowCancelButton : public cWindowButton
 public:
 	cWindowCancelButton(cWindow* parent, TiXmlDocument* = NULL);
 	virtual ~cWindowCancelButton();
-	void click();
+	void onClick();
 };
 
 class cObjectWindow : public cWindow

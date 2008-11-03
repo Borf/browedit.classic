@@ -93,7 +93,7 @@ void cWindowRGBPicker::draw(int cutoffleft, int cutoffright, int cutofftop, int 
 }
 
 
-void cWindowRGBPicker::click()
+void cWindowRGBPicker::onClick()
 {
 	float clickx = mouseX - (x + 4);
 	int color = (int)((clickx/(float)(w-8)) * 16777216);
@@ -106,7 +106,7 @@ void cWindowRGBPicker::click()
 }
 void cWindowRGBPicker::drag()
 {
-	click();
+	onClick();
 }
 
 cWindowRGBPicker::cWindowRGBPicker( cWindow* parent ) : cWindowObject(parent)

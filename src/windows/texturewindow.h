@@ -1,6 +1,7 @@
 #ifndef __TEXTUREWINDOW_H__
 #define __TEXTUREWINDOW_H__
 
+#include <wm/wm.h>
 #include <wm/window.h>
 #include <wm/windowtree.h>
 #include <wm/windowpicturebox.h>
@@ -16,7 +17,7 @@ class cTextureWindow : public cWindow
 		std::string data;
 	public:
 		cWindowTexture(cWindow* parent);
-		void click();
+		void onClick();
 		void setText(int i, std::string s);
 	};
 
@@ -24,8 +25,8 @@ class cTextureWindow : public cWindow
 	class cWindowTextureCatSelect : public cWindowTree
 	{
 	public:
-		cWindowTextureCatSelect(cWindow* parent, std::vector<cWindowTree::cTreeNode*> n, TiXmlDocument* skin = NULL);
-		void click();
+		cWindowTextureCatSelect(cWindow* parent, std::vector<cWindowTree::cTreeNode*> n, TiXmlDocument* skin = &cWM::skin);
+		void onClick();
 	};
 
 

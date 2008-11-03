@@ -140,7 +140,7 @@ void cWindowTabPanel::draw(int cutoffleft, int cutoffright, int cutofftop, int c
 	glColor4fv(colors);
 }
 
-void cWindowTabPanel::click()
+void cWindowTabPanel::onClick()
 {
 	if(tabs.size() == 0)
 		return;

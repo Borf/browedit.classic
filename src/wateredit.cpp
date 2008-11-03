@@ -23,18 +23,18 @@ int cProcessManagement::wateredit_process_events(SDL_Event &event)
 			switch (event.key.keysym.sym)
 			{
 			case SDLK_LEFTBRACKET:
-				Graphics.world.water.type = max(0, Graphics.world.water.type - 1);
+				cGraphics::world->water.type = max(0, cGraphics::world->water.type - 1);
 				break;
 			case SDLK_RIGHTBRACKET:
-				Graphics.world.water.type = min(Graphics.waterCount-1, Graphics.world.water.type + 1);
+				cGraphics::world->water.type = min(Graphics.waterCount-1, cGraphics::world->water.type + 1);
 				break;
 			case SDLK_PAGEDOWN:
-				undostack.push(new cUndoChangeWater(Graphics.world.water));
-				Graphics.world.water.height++;
+				undostack.push(new cUndoChangeWater(cGraphics::world->water));
+				cGraphics::world->water.height++;
 				break;
 			case SDLK_PAGEUP:
-				undostack.push(new cUndoChangeWater(Graphics.world.water));
-				Graphics.world.water.height--;
+				undostack.push(new cUndoChangeWater(cGraphics::world->water));
+				cGraphics::world->water.height--;
 				break;
 			default:
 				break;

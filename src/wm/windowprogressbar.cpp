@@ -65,7 +65,7 @@ void cWindowProgressBar::drawprogress(int ww, int i)
 	glEnd();
 }
 
-void cWindowProgressBar::click()
+void cWindowProgressBar::onClick()
 {
 	Log(3,0,"Clicked the progress bar");
 }

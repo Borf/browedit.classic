@@ -4,6 +4,7 @@
 #include "windowobject.h"
 #include <string>
 #include <vector>
+#include <wm/wm.h>
 //using namespace std;
 
 class cWindowTree : public cWindowObject
@@ -67,11 +68,11 @@ public:
 	float selectFontColor[3];
 
 
-	cWindowTree(cWindow* parent, std::vector<cTreeNode*> n, TiXmlDocument* skin = NULL);
+	cWindowTree(cWindow* parent, std::vector<cTreeNode*> n, TiXmlDocument* skin = &cWM::skin);
 	virtual ~cWindowTree() {}
 	virtual void draw(int,int,int,int);
-	virtual void click();
-	virtual void rightClick();
+	virtual void onClick();
+	virtual void onRightClick();
 	virtual void onChange() {};
 	bool onKeyDown(int, bool);
 //	void onchar(char);
@@ -79,11 +80,11 @@ public:
 	void setText(int, std::string);
 
 	void drag();
-	void doubleClick();
+	void onDoubleClick();
 	void setInt(int, int);
 	int getInt(int);
-	void scrollUp();
-	void scrollDown();
+	void onScrollUp();
+	void onScrollDown();
 };
 
 

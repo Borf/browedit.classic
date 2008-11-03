@@ -40,10 +40,10 @@ int cProcessManagement::globalheightedit_process_events(SDL_Event &event)
 					int x,y;
 					if(!ctrl && !alt)
 					{
-						for(x = 0; x < Graphics.world.width; x++)
+						for(x = 0; x < cGraphics::world->width; x++)
 						{
-							for(y = 0; y < Graphics.world.height; y++)
-								Graphics.world.cubes[y][x].selected = false;
+							for(y = 0; y < cGraphics::world->height; y++)
+								cGraphics::world->cubes[y][x].selected = false;
 						}
 					}
 
@@ -51,9 +51,9 @@ int cProcessManagement::globalheightedit_process_events(SDL_Event &event)
 					{
 						for(y = (int)floor(mouse3dzstart/10); y < (int)floor(mouse3dz/10); y++)
 						{
-							if (x >= 0 && x < Graphics.world.width && y >= 0 && y < Graphics.world.height)
+							if (x >= 0 && x < cGraphics::world->width && y >= 0 && y < cGraphics::world->height)
 							{
-								Graphics.world.cubes[y][x].selected = !alt;
+								cGraphics::world->cubes[y][x].selected = !alt;
 							}
 						}
 					}
@@ -70,66 +70,66 @@ int cProcessManagement::globalheightedit_process_events(SDL_Event &event)
 			{
 			case SDLK_PAGEDOWN:
 				{
-					undostack.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
-					for(int x = 0; x < Graphics.world.width; x++)
+					undostack.push(new cUndoHeightEdit(0,0,cGraphics::world->width, cGraphics::world->height));
+					for(int x = 0; x < cGraphics::world->width; x++)
 					{
-						for(int y = 0; y < Graphics.world.height; y++)
+						for(int y = 0; y < cGraphics::world->height; y++)
 						{
-							if(!Graphics.world.cubes[y][x].selected)
+							if(!cGraphics::world->cubes[y][x].selected)
 								continue;
-							Graphics.world.cubes[y][x].cell1 += 1;
-							Graphics.world.cubes[y][x].cell2 += 1;
-							Graphics.world.cubes[y][x].cell3 += 1;
-							Graphics.world.cubes[y][x].cell4 += 1;
+							cGraphics::world->cubes[y][x].cell1 += 1;
+							cGraphics::world->cubes[y][x].cell2 += 1;
+							cGraphics::world->cubes[y][x].cell3 += 1;
+							cGraphics::world->cubes[y][x].cell4 += 1;
 						}
 					}
-					for(unsigned int y = 0; y < Graphics.world.gattiles.size(); y++)
+					for(unsigned int y = 0; y < cGraphics::world->gattiles.size(); y++)
 					{
-						for(unsigned int x = 0; x < Graphics.world.gattiles[y].size(); x++)
+						for(unsigned int x = 0; x < cGraphics::world->gattiles[y].size(); x++)
 						{
-							if(!Graphics.world.cubes[y/2][x/2].selected)
+							if(!cGraphics::world->cubes[y/2][x/2].selected)
 								continue;
-							Graphics.world.gattiles[y][x].cell1 += 1;
-							Graphics.world.gattiles[y][x].cell2 += 1;
-							Graphics.world.gattiles[y][x].cell3 += 1;
-							Graphics.world.gattiles[y][x].cell4 += 1;
+							cGraphics::world->gattiles[y][x].cell1 += 1;
+							cGraphics::world->gattiles[y][x].cell2 += 1;
+							cGraphics::world->gattiles[y][x].cell3 += 1;
+							cGraphics::world->gattiles[y][x].cell4 += 1;
 						}
 					}
 				}
 				break;
 			case SDLK_PAGEUP:
 				{
-					undostack.push(new cUndoHeightEdit(0,0,Graphics.world.width, Graphics.world.height));
-					for(int x = 0; x < Graphics.world.width; x++)
+					undostack.push(new cUndoHeightEdit(0,0,cGraphics::world->width, cGraphics::world->height));
+					for(int x = 0; x < cGraphics::world->width; x++)
 					{
-						for(int y = 0; y < Graphics.world.height; y++)
+						for(int y = 0; y < cGraphics::world->height; y++)
 						{
-							if(!Graphics.world.cubes[y][x].selected)
+							if(!cGraphics::world->cubes[y][x].selected)
 								continue;
-							Graphics.world.cubes[y][x].cell1 -= 1;
-							Graphics.world.cubes[y][x].cell2 -= 1;
-							Graphics.world.cubes[y][x].cell3 -= 1;
-							Graphics.world.cubes[y][x].cell4 -= 1;
+							cGraphics::world->cubes[y][x].cell1 -= 1;
+							cGraphics::world->cubes[y][x].cell2 -= 1;
+							cGraphics::world->cubes[y][x].cell3 -= 1;
+							cGraphics::world->cubes[y][x].cell4 -= 1;
 						}
 					}
-					for(unsigned int y = 0; y < Graphics.world.gattiles.size(); y++)
+					for(unsigned int y = 0; y < cGraphics::world->gattiles.size(); y++)
 					{
-						for(unsigned int x = 0; x < Graphics.world.gattiles[y].size(); x++)
+						for(unsigned int x = 0; x < cGraphics::world->gattiles[y].size(); x++)
 						{
-							if(!Graphics.world.cubes[y/2][x/2].selected)
+							if(!cGraphics::world->cubes[y/2][x/2].selected)
 								continue;
-							Graphics.world.gattiles[y][x].cell1 -= 1;
-							Graphics.world.gattiles[y][x].cell2 -= 1;
-							Graphics.world.gattiles[y][x].cell3 -= 1;
-							Graphics.world.gattiles[y][x].cell4 -= 1;
+							cGraphics::world->gattiles[y][x].cell1 -= 1;
+							cGraphics::world->gattiles[y][x].cell2 -= 1;
+							cGraphics::world->gattiles[y][x].cell3 -= 1;
+							cGraphics::world->gattiles[y][x].cell4 -= 1;
 						}
 					}
 				}
 				break;
 			case SDLK_c:
-				if(cWM::getwindow(WT_AREACOPY) != NULL)
+				if(cWM::getWindow(WT_AREACOPY) != NULL)
 					return 0;
-				cWM::addwindow(new cAreaCopyWindow() );
+				cWM::addWindow(new cAreaCopyWindow() );
 				break;
 
 			default:

@@ -29,8 +29,8 @@ public:
 	class cModelOverViewTree : public cWindowTree
 	{
 	public:
-		cModelOverViewTree(cWindow* parent, std::vector<cWindowTree::cTreeNode*> nodes, TiXmlDocument* skin = NULL);
-		void rightClick();
+		cModelOverViewTree(cWindow* parent, std::vector<cWindowTree::cTreeNode*> nodes, TiXmlDocument* skin = &cWM::skin);
+		void onRightClick();
 		void onChange();
 		void getObject(cRSMModel* m);
 	};

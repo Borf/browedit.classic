@@ -9,7 +9,7 @@ cProgressWindow::cCancelButton::cCancelButton( cWindow* parent, bool* pCancel, T
 	moveTo(0,0);
 }
 
-void cProgressWindow::cCancelButton::click()
+void cProgressWindow::cCancelButton::onClick()
 {
 	if(cancel != NULL)
 		*cancel = false;

@@ -12,8 +12,8 @@ class cProgressWindow : public cWindow
 	private:
 		bool* cancel;
 	public:
-		cCancelButton(cWindow* parent, bool* pCancel, TiXmlDocument* skin = NULL);
-		void click();
+		cCancelButton(cWindow* parent, bool* pCancel, TiXmlDocument* skin = &cWM::skin);
+		void onClick();
 	};
 public:
 	cProgressWindow(bool* cancel);

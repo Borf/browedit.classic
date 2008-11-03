@@ -40,7 +40,7 @@ void cWindowCheckBox::draw(int cutoffleft, int cutoffright, int cutofftop, int c
 }
 
 
-void cWindowCheckBox::click()
+void cWindowCheckBox::onClick()
 {
 	value = !value;
 }

@@ -20,21 +20,21 @@ cSoundWindow::cWindowSelectFileButton::cWindowSelectFileButton( cWindow* parent,
 	alignment = ALIGN_TOPLEFT;
 }
 
-void cSoundWindow::cWindowSelectFileButton::click()
+void cSoundWindow::cWindowSelectFileButton::onClick()
 {
 	if(selectedSound == NULL)
 		return;
-	cWindow* w = cWM::getwindow(WT_SOUNDSELECT);
+	cWindow* w = cWM::getWindow(WT_SOUNDSELECT);
 	if(w)
 	{
-		cWM::togglewindow(WT_SOUNDSELECT);
+		cWM::toggleWindow(WT_SOUNDSELECT);
 		((cSoundSelectWindow*)w)->selectedSound = selectedSound;
 	}
 	else
 	{
 		cSoundSelectWindow* w = new cSoundSelectWindow(cVector3());
 		w->selectedSound = selectedSound;
-		cWM::addwindow(w);
+		cWM::addWindow(w);
 	}
 }
 
@@ -215,7 +215,7 @@ void* cSoundWindow::userfunc( void* param )
 			if(i->second->type == OBJECT_FLOATINPUTBOX)
 				i->second->onKeyDown(SDLK_RETURN, false);
 		}
-		cWindow* w = cWM::getwindow(WT_SOUNDOVERVIEW);
+		cWindow* w = cWM::getWindow(WT_SOUNDOVERVIEW);
 		if(w != NULL)
 			w->userfunc(NULL);
 		undostack.push(undo);

@@ -4,6 +4,7 @@
 #include <menu.h>
 #include <menucommands.h>
 #include <graphics.h>
+#include <wm/windowbutton.h>
 
 extern cGraphics Graphics;
 extern cMenu* popupmenu;
@@ -76,12 +77,12 @@ cModelOverViewWindow::cModelOverViewTree::cModelOverViewTree( cWindow* parent, s
 	alignment = ALIGN_TOPLEFT;
 }
 
-void cModelOverViewWindow::cModelOverViewTree::rightClick()
+void cModelOverViewWindow::cModelOverViewTree::onRightClick()
 {
-	cWindowTree::rightClick();
+	cWindowTree::onRightClick();
 	popupmenu = new cMenu();
 	popupmenu->parent = NULL;
-	popupmenu->drawstyle = 1;
+	popupmenu->drawStyle = 1;
 	popupmenu->x = (int)mouseX;
 	popupmenu->y = (int)mouseY;
 	popupmenu->w = 150;
@@ -109,11 +110,11 @@ void cModelOverViewWindow::cModelOverViewTree::onChange()
 	if(!((cModelOverViewTreeNode*)node)->isCat)
 	{
 		Graphics.camerapointer.x = -5*((cModelOverViewTreeNode*)node)->model->pos.x;
-		Graphics.camerapointer.y = Graphics.world.height*-10+5*((cModelOverViewTreeNode*)node)->model->pos.z;
-		
-		for(i = 0; i < Graphics.world.models.size(); i++)
+		Graphics.camerapointer.y = cGraphics::world->height*-10+5*((cModelOverViewTreeNode*)node)->model->pos.z;
+	
+		for(i = 0; i < cGraphics::world->models.size(); i++)
 		{
-			if(Graphics.world.models[i] == ((cModelOverViewTreeNode*)node)->model)
+			if(cGraphics::world->models[i] == ((cModelOverViewTreeNode*)node)->model)
 				Graphics.selectedObject = i;
 		}
 	}
@@ -165,11 +166,11 @@ void cModelOverViewWindow::addObjects( cModelOverViewTreeNode* parent, bool root
 		windowtreenode->isCat = true;
 		parent->addchild(windowtreenode);
 		
-		for(unsigned int i = 0; i < Graphics.world.models.size(); i++)
+		for(unsigned int i = 0; i < cGraphics::world->models.size(); i++)
 		{
-			cModelOverViewTreeNode* node = windowtreenode->addNodeTree(Graphics.world.models[i]->name);
+			cModelOverViewTreeNode* node = windowtreenode->addNodeTree(cGraphics::world->models[i]->name);
 			node->isCat = false;
-			node->model = Graphics.world.models[i];
+			node->model = cGraphics::world->models[i];
 		}
 	}
 }

@@ -1,6 +1,7 @@
 #ifndef __WINDOWPROGRESSBAR_H__
 #define __WINDOWPROGRESSBAR_H__
 
+#include <wm/wm.h>
 #include "windowobject.h"
 #include <string>
 #include <vector>
@@ -42,12 +43,12 @@ protected:
 	std::vector<cProgressSkin> skins;
 
 public:
-	cWindowProgressBar(cWindow* parent, TiXmlDocument* skin = NULL);
+	cWindowProgressBar(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
 
 	void drawprogress(int,int);
 	virtual ~cWindowProgressBar() {}
 	virtual void draw(int,int,int,int);
-	virtual void click();
+	virtual void onClick();
 	virtual std::string getPopup();
 
 	void setInt(int, int);

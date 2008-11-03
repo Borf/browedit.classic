@@ -5,13 +5,13 @@ extern cGraphics Graphics;
 
 int cTextureModel::open(std::string filename)
 {
-	tex = TextureCache.load(filename);
+	tex = cTextureCache::load(filename);
 	return 0;
 }
 
 int cTextureModel::close()
 {
-	TextureCache.unload(tex);
+	cTextureCache::unload(tex);
 	return 0;
 }
 

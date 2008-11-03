@@ -1,4 +1,6 @@
 #include "rsmeditwindow.h"
+#include <wm/windowlabel.h>
+
 #include <common.h>
 #ifdef WIN32
 #include <windows.h>
@@ -21,7 +23,7 @@ cRSMEditWindow::cWindowOpenButton::cWindowOpenButton( cWindow* parent, TiXmlDocu
 	text = "Open";
 }
 
-void cRSMEditWindow::cWindowOpenButton::click()
+void cRSMEditWindow::cWindowOpenButton::onClick()
 {
 #ifdef WIN32
 	char curdir[255];
@@ -65,9 +67,9 @@ cRSMEditWindow::cWindowSaveButton::cWindowSaveButton( cWindow* parent, TiXmlDocu
 	text = "Save";
 }
 
-void cRSMEditWindow::cWindowSaveButton::click()
+void cRSMEditWindow::cWindowSaveButton::onClick()
 {
-	if(!cWM::ConfirmWindow("Are you sure you want to overwrite this file?"))
+	if(!cWM::confirmWindow("Are you sure you want to overwrite this file?"))
 		return;
 	int i;
 	unsigned int ii;
@@ -128,7 +130,7 @@ cRSMEditWindow::cWindowSaveAsButton::cWindowSaveAsButton( cWindow* parent, TiXml
 	text = "Save As";
 }
 
-void cRSMEditWindow::cWindowSaveAsButton::click()
+void cRSMEditWindow::cWindowSaveAsButton::onClick()
 {
 	std::string oldfilename = ((cRSMEditWindow*)parent)->filename;
 	int i;
@@ -400,12 +402,12 @@ cRSMEditWindow::cWindowModel::~cWindowModel()
 	model = NULL;
 }
 
-void cRSMEditWindow::cWindowModel::scrollUp()
+void cRSMEditWindow::cWindowModel::onScrollUp()
 {
 	model->scale = model->scale * 1.1f;
 }
 
-void cRSMEditWindow::cWindowModel::scrollDown()
+void cRSMEditWindow::cWindowModel::onScrollDown()
 {
 	model->scale = model->scale / 1.1f;
 }
@@ -417,7 +419,7 @@ cRSMEditWindow::cWindowModelTexture::cWindowModelTexture( cWindow* parent, int i
 	i = ii;
 }
 
-void cRSMEditWindow::cWindowModelTexture::click()
+void cRSMEditWindow::cWindowModelTexture::onClick()
 {
 	((cRSMEditWindow*)parent)->selected = i;
 	SDL_Event ev;
@@ -436,9 +438,9 @@ cRSMEditWindow::cRGBPicker::cRGBPicker( cWindow* p ) : cWindowRGBPicker(p)
 	alignment = ALIGN_TOPLEFT;
 }
 
-void cRSMEditWindow::cRGBPicker::click()
+void cRSMEditWindow::cRGBPicker::onClick()
 {
-	cWindowRGBPicker::click();
+	cWindowRGBPicker::onClick();
 	parent->objects["model"]->setInt(0,(int)(r*256));
 	parent->objects["model"]->setInt(1,(int)(g*256));
 	parent->objects["model"]->setInt(2,(int)(b*256));
@@ -511,7 +513,7 @@ void cRSMEditWindow::open()
 	scroll->objects.clear();
 }
 
-void cRSMEditWindow::stopdrag()
+void cRSMEditWindow::onStopDrag()
 {
 	((cWindowModel*)objects["model"])->oldy = -1;
 }
@@ -521,8 +523,8 @@ void cRSMEditWindow::changetexture( std::string newtexture )
 	cWindowModel* model = ((cWindowModel*)objects["model"]);
 	
 	Log(3,0,"Old tid: %i", model->model->textures[selected]->texId());
-	TextureCache.unload(model->model->textures[selected]);
-	model->model->textures[selected] = TextureCache.load(rodir + newtexture);
+	cTextureCache::unload(model->model->textures[selected]);
+	model->model->textures[selected] = cTextureCache::load(rodir + newtexture);
 	Log(3,0,"new vtid: %i", model->model->textures[selected]->texId());
 	
 	cWindowScrollPanel* scroll = (cWindowScrollPanel*)objects["scroll"];

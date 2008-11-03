@@ -218,7 +218,7 @@ void cWindow::draw()
 }
 
 
-bool cWindow::inwindow()
+bool cWindow::inWindow()
 {
 	if (!visible) return false;
 	if (mouseX > x && mouseX < x+w &&
@@ -271,7 +271,7 @@ bool cWindow::drag()
 		}
 	}
 
-	if (movable && !(resizing() && resizable))
+	if (movable && !(isResizing() && resizable))
 	{
 		x=(int)mouseX-(int)dragoffsetx;
 		y=(Graphics.h()-(int)mouseY)-(int)dragoffsety;
@@ -287,7 +287,7 @@ bool cWindow::drag()
 	return true;
 }
 
-void cWindow::click()
+void cWindow::onClick()
 {
 //	xx-=x;
 //	yy-=y;
@@ -297,7 +297,7 @@ void cWindow::click()
 	{
 		if (i->second->inObject() && i->second->selectable && i->second->isEnabled())
 		{
-			i->second->click();
+			i->second->onClick();
 			selectedObject = i->second;
 			break;
 		}
@@ -306,7 +306,7 @@ void cWindow::click()
 }
 
 
-int cWindow::getcursor()
+int cWindow::getCursor()
 {
 	if (!visible) return 0;
 
@@ -360,7 +360,7 @@ int cWindow::getcursor()
 	return 0;
 }
 
-bool cWindow::onborder()
+bool cWindow::onBorder()
 {
 	if (!visible) return false;
 	if (resizable && !rolledUp)
@@ -502,7 +502,7 @@ void cWindow::close(bool force)
 }
 
 
-void cWindow::doubleclick()
+void cWindow::onDoubleClick()
 {
 //	xx-=x;
 //	yy-=y;
@@ -516,13 +516,13 @@ void cWindow::doubleclick()
 	}
 	if (o != NULL)
 	{
-		o->doubleClick();
+		o->onDoubleClick();
 		selectedObject = o;
 	}
 
 }
 
-void cWindow::rightclick()
+void cWindow::onRightClick()
 {
 //	xx-=x;
 //	yy-=y;
@@ -534,7 +534,7 @@ void cWindow::rightclick()
 		if (o != NULL && i->second->selectable)
 		{
 			selectedObject = o;
-			o->rightClick();
+			o->onRightClick();
 			break;
 		}
 	}
@@ -556,6 +556,8 @@ cWindowObject* cWindow::addLabel(std::string name, int x, int y, std::string tex
 
 cWindowObject* cWindow::addInputBox(std::string name, int x, int y, int w, std::string text, TiXmlDocument* skin)
 {
+	if(!skin)
+		skin = &cWM::skin;
 	cWindowObject* o = new cWindowInputBox(this,skin);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(x,y);
@@ -567,6 +569,8 @@ cWindowObject* cWindow::addInputBox(std::string name, int x, int y, int w, std::
 
 cWindowObject* cWindow::addCheckBox(std::string name, int x, int y, bool checked, TiXmlDocument* skin)
 {
+	if(!skin)
+		skin = &cWM::skin;
 	cWindowObject* o = new cWindowCheckBox(this,skin);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(x,y);
@@ -576,21 +580,21 @@ cWindowObject* cWindow::addCheckBox(std::string name, int x, int y, bool checked
 }
 
 
-void cWindow::holddragover()
+void cWindow::onHoldDragOver()
 {
 	cWindowObject* o = inObject();
 	if(o != NULL)
-		o->holdDragOver();	
+		o->onHoldDragOver();	
 }
 
-void cWindow::dragover()
+void cWindow::onDragOver()
 {
 	cWindowObject* o = inObject();
 	if(o != NULL)
-		o->dragOver();	
+		o->onDragOver();	
 }
 
-void cWindow::scrollUp()
+void cWindow::onScrollUp()
 {
 	if (!visible) return;
 
@@ -599,13 +603,13 @@ void cWindow::scrollUp()
 		cWindowObject* o = i->second->inObject();
 		if (o != NULL && i->second->selectable)
 		{
-			i->second->scrollUp();
+			i->second->onScrollUp();
 			break;
 		}
 	}
 }
 
-void cWindow::scrollDown()
+void cWindow::onScrollDown()
 {
 	if (!visible) return;
 
@@ -614,7 +618,7 @@ void cWindow::scrollDown()
 		cWindowObject* o = i->second->inObject();
 		if (o != NULL)
 		{
-			i->second->scrollDown();
+			i->second->onScrollDown();
 			break;
 		}
 	}
@@ -669,7 +673,7 @@ void cWindow::save()
 #endif
 }
 
-void cWindow::initprops(std::string s)
+void cWindow::initProps(std::string s)
 {
 #ifndef __NOXML__
 	saveProperties = s;

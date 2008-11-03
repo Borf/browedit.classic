@@ -7,36 +7,37 @@
 #include <wm/windowinputbox.h>
 
 
+class cInputWindowCaller
+{
+public:
+	virtual ~cInputWindowCaller() {};
+	std::string data;
+	
+	cInputWindowCaller() {};
+	virtual void Ok() = 0;
+	virtual void Cancel() {};
+};
+
 
 class cInputWindow : public cWindow
 {
 	class cWindowOkButton : public cWindowButton
 	{
 	public:
-		cWindowOkButton(cWindow* parent, TiXmlDocument* skin = NULL);
+		cWindowOkButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
 		virtual ~cWindowOkButton() {}
-		void click();
+		void onClick();
 	};
 
 	class cWindowCancelButton : public cWindowButton
 	{
 	public:
-		cWindowCancelButton(cWindow* parent, TiXmlDocument* skin = NULL);
+		cWindowCancelButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
 		virtual ~cWindowCancelButton() {}
-		void click();
+		void onClick();
 	};
 
 public:
-	class cInputWindowCaller
-	{
-	public:
-		virtual ~cInputWindowCaller() {};
-		std::string data;
-
-		cInputWindowCaller() {};
-		virtual void Ok() = 0;
-		virtual void Cancel() {};
-	};
 
 	cInputWindowCaller* caller;
 	cInputWindow(cInputWindowCaller* c);	
