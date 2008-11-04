@@ -1,13 +1,11 @@
 #include <common.h>
 #include "graphics.h"
 #include "undo.h"
+#include "clipboard.h"
 
 extern long mouseX;
 extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
-extern std::vector<std::vector<int > > clipboardgat;
-
-std::vector<std::vector<cTile> > clipboardtexture;
 
 int cProcessManagement::textureedit_process_events(SDL_Event &event)
 {
@@ -207,86 +205,39 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 					int posx = (int)mouse3dx / 10;
 					int posy = (int)mouse3dz / 10;
 
-					clipboardtexture.clear();
-					clipboardgat.clear();
+					std::vector<std::vector<std::pair<int, cTile> > > data;
 
 					for(int x = posx; x > posx-selsizex; x--)
 					{
-						std::vector<cTile> row;
-						std::vector<int> row2;
+						std::vector<std::pair<int, cTile> > row;
 						for(int y = posy; y > posy-selsizey; y--)
 						{
 							if(x >= 0 && x < cGraphics::world->width && y >= 0 && y < cGraphics::world->height)
 							{
 								if(cGraphics::world->cubes[y][x].tileUp != -1)
 								{
-									row.push_back(cGraphics::world->tiles[cGraphics::world->cubes[y][x].tileUp]);
-									row2.push_back(1);
+									row.push_back(std::pair<int, cTile>(1, cGraphics::world->tiles[cGraphics::world->cubes[y][x].tileUp]));
 								}
 								else
 								{
-									row.push_back(cTile());
-									row2.push_back(2);
+									row.push_back(std::pair<int ,cTile>(2, cTile()));
 								}
 							}
 							else
 							{
-								row.push_back(cTile());
-								row2.push_back(0);
+								row.push_back(std::pair<int ,cTile>(0, cTile()));
 							}
 
 						}
-						clipboardtexture.push_back(row);
-						clipboardgat.push_back(row2);
-					}						
+						data.push_back(row);
+					}
+					cClipBoard::setClipBoard(new cClipboardTexture(data));
+
 				}
 				break; 
 			case SDLK_p:
-				if(mouseX < cGraphics::w()-256)
-				{
-					float selsizex = (fabs(cGraphics::worldContainer->settings.selectionstart.x - cGraphics::worldContainer->settings.selectionend.x) / 32);
-					float selsizey = (fabs(cGraphics::worldContainer->settings.selectionstart.y - cGraphics::worldContainer->settings.selectionend.y) / 32);
-
-					selsizex = floor(selsizex*cGraphics::worldContainer->settings.brushsize);
-					selsizey = floor(selsizey*cGraphics::worldContainer->settings.brushsize);
-
-					int posx = (int)mouse3dx / 10;
-					int posy = (int)mouse3dz / 10;
-
-					if (cGraphics::worldContainer->settings.textureRot % 2 == 1)
-					{
-						float a = selsizex;
-						selsizex = selsizey;
-						selsizey = a;
-					}
-					if(clipboardgat.size() != selsizex || selsizex == 0)
-						break;
-					if(clipboardgat[0].size() != selsizey)
-						break;
-
-					
-					cGraphics::worldContainer->undoStack->push(new cUndoTexture(posx-(int)selsizex+1, posy-(int)selsizey+1, posx+1, posy+1));
-
-					for(int x = posx; x > posx-selsizex; x--)
-					{
-						for(int y = posy; y > posy-selsizey; y--)
-						{
-							if(x < 0 || y < 0)
-								continue;
-							int xx = posx - x;
-							int yy = posy - y;
-							if(clipboardgat[xx][yy] == 2)
-							{
-								cGraphics::world->cubes[y][x].tileUp = -1;
-							}
-							if(clipboardgat[xx][yy] == 1)
-							{
-								cGraphics::world->tiles.push_back(clipboardtexture[xx][yy]);
-								cGraphics::world->cubes[y][x].tileUp = cGraphics::world->tiles.size()-1;
-							}
-						}
-					}						
-				}
+				if(cClipBoard::currentClipBoard->type == cClipBoard::CLIP_TEXTURE)
+					cClipBoard::currentClipBoard->apply();
 				break;
 			case SDLK_BACKSPACE:
 				{

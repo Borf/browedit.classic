@@ -21,8 +21,8 @@
         <!--        <resx>1680</resx>
         <resy>1050</resy>
         <fullscreen>true</fullscreen>-->
-        <resx>1280</resx>
-        <resy>900</resy>
+        <resx>1024</resx>
+        <resy>768</resy>
         <fullscreen>false</fullscreen>
         <bpp>32</bpp>
         <font>tahoma</font>
