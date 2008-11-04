@@ -91,7 +91,7 @@ void cSoundOverViewWindow::cSoundOverViewTree::onChange()
 		for(i = 0; i < cGraphics::world->sounds.size(); i++)
 		{
 			if(cGraphics::world->sounds[i] == ((cSoundOverViewTreeNode*)node)->sound)
-				cGraphics::selectedObject = i;
+				cGraphics::worldContainer->settings.selectedObject = i;
 		}
 	}
 }

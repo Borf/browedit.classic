@@ -1034,31 +1034,22 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,rnd, "eAthena Script",									&MenuCommand_eascript);
 	ADDMENUITEM(mm,rnd, "NPC stuff",										&MenuCommand_npcscreenies);
 
-	ADDMENUITEM(grid,view,GetMsg("menu/view/GRID"),							&MenuCommand_grid); //grid
-	grid->ticked = true;
-	ADDMENUITEM(showobjects,view,GetMsg("menu/view/OBJECTS"),				&MenuCommand_showobjects);
-	ADDMENUITEMDATALINK(transparentobjects,view,GetMsg("menu/view/TRANSPARENTOBJECTS"),	&MenuCommand_toggle, (void*)&cGraphics::showObjectsAsTransparent);
-	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/BOUNDINGBOXES"),				&MenuCommand_toggle, (void*)&cGraphics::worldContainer->view.showBoundingBoxes);
-	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/LIGHTMAPS"),					&MenuCommand_toggle, (void*)&cGraphics::worldContainer->view.showLightmaps);
-	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/OGLLIGHTING"),				&MenuCommand_toggle, (void*)&cGraphics::worldContainer->view.showOglLighting);
-	mm->ticked = true;
-	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/TILECOLORS"),				&MenuCommand_toggle, (void*)&cGraphics::worldContainer->view.showTileColors);
-	mm->ticked = true;
-	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/SHOWWATER"),					&MenuCommand_toggle, (void*)&cGraphics::worldContainer->view.showWater);
-	mm->ticked = true;
-	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/TOPCAMERA"),					&MenuCommand_toggle, (void*)&cGraphics::worldContainer->camera.topCamera);
-	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/INVISIBLETILES"),			&MenuCommand_toggle, (void*)&cGraphics::worldContainer->view.showNoTiles);
-	mm->ticked = true;
-	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/SHOWAMBIENTLIGHTING"),		&MenuCommand_toggle, (void*)&cGraphics::worldContainer->view.showambientlighting);
-	mm->ticked = true;
-	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/WATERANIMATION"),			&MenuCommand_toggle, (void*)&cGraphics::worldContainer->view.showWaterAnimation);
-	mm->ticked = true;
-	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/GATTILES"),					&MenuCommand_toggle, (void*)&cGraphics::worldContainer->view.showgat);
-	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/SHOWDOT"),					&MenuCommand_toggle, (void*)&cGraphics::worldContainer->view.showDot);
-	mm->ticked = true;
-	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/SHOWSPRITES"),				&MenuCommand_toggle, (void*)&cGraphics::worldContainer->view.showSprites);
-	mm->ticked = true;
-	ADDMENUITEMDATALINK(mm,view,"Show all light spheres",						&MenuCommand_toggle, (void*)&cGraphics::worldContainer->view.showAllLights);
+	ADDMENUITEMDATALINK(grid,view,GetMsg("menu/view/GRID"),					&MenuCommand_toggle, (void*)&cGraphics::view.showGrid); //grid
+	ADDMENUITEMDATALINK(showobjects,view,GetMsg("menu/view/OBJECTS"),				&MenuCommand_toggle, (void*)&cGraphics::view.showObjects);
+	ADDMENUITEMDATALINK(transparentobjects,view,GetMsg("menu/view/TRANSPARENTOBJECTS"),	&MenuCommand_toggle, (void*)&cGraphics::view.showObjectsAsTransparent);
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/BOUNDINGBOXES"),				&MenuCommand_toggle, (void*)&cGraphics::view.showBoundingBoxes);
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/LIGHTMAPS"),					&MenuCommand_toggle, (void*)&cGraphics::view.showLightmaps);
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/OGLLIGHTING"),				&MenuCommand_toggle, (void*)&cGraphics::view.showOglLighting);
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/TILECOLORS"),				&MenuCommand_toggle, (void*)&cGraphics::view.showTileColors);
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/SHOWWATER"),					&MenuCommand_toggle, (void*)&cGraphics::view.showWater);
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/INVISIBLETILES"),			&MenuCommand_toggle, (void*)&cGraphics::view.showNoTiles);
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/SHOWAMBIENTLIGHTING"),		&MenuCommand_toggle, (void*)&cGraphics::view.showAmbientLighting);
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/WATERANIMATION"),			&MenuCommand_toggle, (void*)&cGraphics::view.showWaterAnimation);
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/GATTILES"),					&MenuCommand_toggle, (void*)&cGraphics::view.showGat);
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/SHOWDOT"),					&MenuCommand_toggle, (void*)&cGraphics::view.showDot);
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/SHOWSPRITES"),				&MenuCommand_toggle, (void*)&cGraphics::view.showSprites);
+	ADDMENUITEMDATALINK(mm,view,"Show all light spheres",						&MenuCommand_toggle, (void*)&cGraphics::view.showAllLights);
+	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/TOPCAMERA"),					&MenuCommand_toggle, (void*)&cGraphics::worldContainer->camera.topCamera);
 
 
 	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/TEXTUREEDIT"),				&MenuCommand_mode);
@@ -1094,8 +1085,8 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,speed,"100",												&MenuCommand_speed);
 	ADDMENUITEM(mm,speed,"250",												&MenuCommand_speed);
 	ADDMENUITEM(mm,speed,"500",												&MenuCommand_speed);
-	ADDMENUITEM(mm,edit,GetMsg("menu/edit/SLOPING"),						&MenuCommand_slope);
-	ADDMENUITEM(snaptofloor,edit,GetMsg("menu/edit/SNAPOBJECTS"),			&MenuCommand_snaptofloor);
+	ADDMENUITEMDATAP(mm,edit,GetMsg("menu/edit/SLOPING"),					&MenuCommand_toggle, (void*)&cGraphics::slope);
+	ADDMENUITEMDATAP(snaptofloor,edit,GetMsg("menu/edit/SNAPOBJECTS"),		&MenuCommand_toggle, NULL);
 	snaptofloor->ticked = true;
 
 	ADDMENUITEM(mm,edit,GetMsg("menu/edit/FILLAREA"),						&MenuCommand_fillarea);
@@ -1526,7 +1517,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				else if (SDL_GetModState() & KMOD_CTRL)
 				{
-					if (!(cGraphics::selectionstart3d == cGraphics::selectionend3d))
+					if (!(cGraphics::worldContainer->settings.selectionstart3d == cGraphics::worldContainer->settings.selectionend3d))
 					{
 					}
 				}
@@ -1552,25 +1543,25 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					int offset = cGraphics::w()%32;
 
-					cGraphics::selectionstart.x = floor(mousestartx / 32.0)*32;
-					cGraphics::selectionstart.y = floor(mousestarty / 32.0)*32;
-					cGraphics::selectionend.x = (int)ceil((mouseX-offset) / 32.0)*32;
-					cGraphics::selectionend.y = (int)ceil((mouseY-offset) / 32.0)*32;
+					cGraphics::worldContainer->settings.selectionstart.x = floor(mousestartx / 32.0)*32;
+					cGraphics::worldContainer->settings.selectionstart.y = floor(mousestarty / 32.0)*32;
+					cGraphics::worldContainer->settings.selectionend.x = (int)ceil((mouseX-offset) / 32.0)*32;
+					cGraphics::worldContainer->settings.selectionend.y = (int)ceil((mouseY-offset) / 32.0)*32;
 
-					cGraphics::selectionstart.x += cGraphics::w()%32;
-					cGraphics::selectionend.x += cGraphics::w()%32;
+					cGraphics::worldContainer->settings.selectionstart.x += cGraphics::w()%32;
+					cGraphics::worldContainer->settings.selectionend.x += cGraphics::w()%32;
 
-					if(cGraphics::selectionstart.x > cGraphics::selectionend.x)
+					if(cGraphics::worldContainer->settings.selectionstart.x > cGraphics::worldContainer->settings.selectionend.x)
 					{
-						float f = cGraphics::selectionstart.x;
-						cGraphics::selectionstart.x = cGraphics::selectionend.x;
-						cGraphics::selectionend.x = f;
+						float f = cGraphics::worldContainer->settings.selectionstart.x;
+						cGraphics::worldContainer->settings.selectionstart.x = cGraphics::worldContainer->settings.selectionend.x;
+						cGraphics::worldContainer->settings.selectionend.x = f;
 					}
-					if(cGraphics::selectionstart.y > cGraphics::selectionend.y)
+					if(cGraphics::worldContainer->settings.selectionstart.y > cGraphics::worldContainer->settings.selectionend.y)
 					{
-						float f = cGraphics::selectionstart.y;
-						cGraphics::selectionstart.y = cGraphics::selectionend.y;
-						cGraphics::selectionend.y = f;
+						float f = cGraphics::worldContainer->settings.selectionstart.y;
+						cGraphics::worldContainer->settings.selectionstart.y = cGraphics::worldContainer->settings.selectionend.y;
+						cGraphics::worldContainer->settings.selectionend.y = f;
 					}
 					return 1;
 				}
@@ -1595,7 +1586,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				cWindow* w = cWM::inWindow();
 				if(w != NULL)
 					w->onScrollUp();
-				else
+				else if(cGraphics::worldContainer)
 				{
 					if(cGraphics::worldContainer->camera.topCamera)
 					{
@@ -1623,7 +1614,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				cWindow* w = cWM::inWindow();
 				if(w != NULL)
 					w->onScrollDown();
-				else
+				else if(cGraphics::worldContainer)
 				{
 					if(cGraphics::worldContainer->camera.topCamera)
 					{
@@ -1839,7 +1830,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 				if(movement < 3 && (editmode == MODE_OBJECTS || editmode == MODE_EFFECTS))
 				{
-					cGraphics::selectedObject = -1;
+					cGraphics::worldContainer->settings.selectedObject = -1;
 					return 1;
 				}
 			}
@@ -1861,6 +1852,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					return 1;
 			}
 
+			if(!Graphics.worldContainer)
+				break;
+
 			switch (event.key.keysym.sym)
 			{
 			case SDLK_SPACE:
@@ -1868,7 +1862,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					cGraphics::previewColor = 20;
 				break;
 			case SDLK_g:
-				MenuCommand_grid((cMenuItem*)grid);
+				cGraphics::view.showGrid = !cGraphics::view.showGrid;
 				break;
 			case SDLK_l:
 				MenuCommand_toggle((cMenuItem*)menu->find("Lightmaps"));
@@ -1883,9 +1877,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			case SDLK_o:
 			{
 				if((event.key.keysym.mod&KMOD_SHIFT) == 0)
-					MenuCommand_showobjects((cMenuItem*)showobjects);
+					cGraphics::view.showObjects = !cGraphics::view.showObjects;
 				else
-					MenuCommand_toggle((cMenuItem*)transparentobjects);
+					cGraphics::view.showObjectsAsTransparent = !cGraphics::view.showObjectsAsTransparent;
 				break;
 			}
 			case SDLK_INSERT:
@@ -1906,8 +1900,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				if((event.key.keysym.mod&KMOD_SHIFT) == 0 && cGraphics::world)
 				{
 					editmode = MODE_TEXTURE;
-					if (cGraphics::texturestart >= (int)cGraphics::world->textures.size())
-						cGraphics::texturestart = 0;
+					if (cGraphics::worldContainer->settings.texturestart >= (int)cGraphics::world->textures.size())
+						cGraphics::worldContainer->settings.texturestart = 0;
 				}
 				else
 				{
@@ -1918,22 +1912,22 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				if((event.key.keysym.mod&KMOD_SHIFT) == 0 && cGraphics::world)
 				{
 					editmode = MODE_HEIGHTGLOBAL;
-					if (cGraphics::texturestart >= (int)cGraphics::world->textures.size())
-						cGraphics::texturestart = 0;
+					if (cGraphics::worldContainer->settings.texturestart >= (int)cGraphics::world->textures.size())
+						cGraphics::worldContainer->settings.texturestart = 0;
 				}
 				else if(cGraphics::world)
 				{
 					editmode = MODE_TEXTUREPAINT;
-					if (cGraphics::texturestart >= (int)cGraphics::world->textures.size())
-						cGraphics::texturestart = 0;
+					if (cGraphics::worldContainer->settings.texturestart >= (int)cGraphics::world->textures.size())
+						cGraphics::worldContainer->settings.texturestart = 0;
 				}
 				break;
 			case SDLK_F3:
 				if(!cGraphics::world)
 					break;
 				editmode = MODE_HEIGHTDETAIL;
-				if (cGraphics::texturestart >= (int)cGraphics::world->textures.size())
-					cGraphics::texturestart = 0;
+				if (cGraphics::worldContainer->settings.texturestart >= (int)cGraphics::world->textures.size())
+					cGraphics::worldContainer->settings.texturestart = 0;
 				break;
 			case SDLK_F4:
 				if(!cGraphics::world)
@@ -1944,27 +1938,27 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				if(!cGraphics::world)
 					break;
 				editmode = MODE_OBJECTS;
-				if (cGraphics::texturestart >= (int)cGraphics::world->textures.size())
-					cGraphics::texturestart = 0;
+				if (cGraphics::worldContainer->settings.texturestart >= (int)cGraphics::world->textures.size())
+					cGraphics::worldContainer->settings.texturestart = 0;
 				break;
 			case SDLK_F6:
 				if(!cGraphics::world)
 					break;
 				editmode = MODE_GAT;
-				if (cGraphics::texturestart >= cGraphics::gatTiles.size()-1)
-					cGraphics::texturestart = 0;
+				if (cGraphics::worldContainer->settings.texturestart >= cGraphics::gatTiles.size()-1)
+					cGraphics::worldContainer->settings.texturestart = 0;
 				break;
 			case SDLK_F7:
 				if(!cGraphics::world)
 					break;
 				editmode = MODE_WATER;
-				cGraphics::texturestart = cGraphics::world->water.type;
+				cGraphics::worldContainer->settings.texturestart = cGraphics::world->water.type;
 				break;
 			case SDLK_F8:
 				if(!cGraphics::world)
 					break;
 				editmode = MODE_EFFECTS;
-				cGraphics::selectedObject = -1;
+				cGraphics::worldContainer->settings.selectedObject = -1;
 				break;
 			case SDLK_F9:
 				if(!cGraphics::world)
@@ -1991,23 +1985,24 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			case SDLK_8:
 			case SDLK_9:
 				if(SDL_GetModState() & KMOD_SHIFT)
-					cGraphics::gridoffsetx = (event.key.keysym.sym - SDLK_0) / 10.0f;
+					cGraphics::worldContainer->settings.gridoffsetx = (event.key.keysym.sym - SDLK_0) / 10.0f;
 				else if(SDL_GetModState() & KMOD_CTRL)
-					cGraphics::gridoffsety = (event.key.keysym.sym - SDLK_0) / 10.0f;
+					cGraphics::worldContainer->settings.gridoffsety = (event.key.keysym.sym - SDLK_0) / 10.0f;
 				else
-					cGraphics::gridsize = (event.key.keysym.sym - SDLK_0) / 4.0f;
+					cGraphics::worldContainer->settings.gridSize = (event.key.keysym.sym - SDLK_0) / 4.0f;
 				break;
 			case SDLK_0:
 				if(SDL_GetModState() & KMOD_SHIFT)
-					cGraphics::gridoffsetx = 0;
+					cGraphics::worldContainer->settings.gridoffsetx = 0;
 				else if(SDL_GetModState() & KMOD_CTRL)
-					cGraphics::gridoffsety = 0;
+					cGraphics::worldContainer->settings.gridoffsety = 0;
 				else
-					cGraphics::gridsize = 16 / 4.0f;
+					cGraphics::worldContainer->settings.gridSize = 16 / 4.0f;
 				break;
 			case SDLK_u:
-				cGraphics::worldContainer->undoStack->undo();
-					break;
+				if(cGraphics::worldContainer)
+					cGraphics::worldContainer->undoStack->undo();
+				break;
 			case SDLK_t:
 				{
 					cWindow* w = cWM::getWindow(WT_TEXTURE);

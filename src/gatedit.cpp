@@ -20,7 +20,7 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 				int posx = (int)mouse3dx / 5;
 				int posy = (int)mouse3dz / 5;
 
-				int f = (int)ceil(cGraphics::brushsize);
+				int f = (int)ceil(cGraphics::worldContainer->settings.brushsize);
 
 			//	if (posx >= floor(f/2.0f) && posx < 2*cGraphics::world->width-(int)ceil(f/2.0f) && posy >= floor(f/2.0f) && posy< 2*cGraphics::world->height-(int)ceil(f/2.0f))
 				{
@@ -36,7 +36,7 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 							if (y < 0 || y >= cGraphics::world->height*2 || x < 0 || x >= cGraphics::world->width*2)
 								continue;
 							cGatTile* c = &cGraphics::world->gattiles[y][x];
-							c->type = cGraphics::gatTiles[cGraphics::texturestart];
+							c->type = cGraphics::gatTiles[cGraphics::worldContainer->settings.texturestart];
 						}
 					}
 				}
@@ -49,7 +49,7 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 				int posx = (int)mouse3dx / 5;
 				int posy = (int)mouse3dz / 5;
 
-				int f = (int)ceil(cGraphics::brushsize);
+				int f = (int)ceil(cGraphics::worldContainer->settings.brushsize);
 
 			//	if (posx >= floor(f/2.0f) && posx < 2*cGraphics::world->width-(int)ceil(f/2.0f) && posy >= floor(f/2.0f) && posy< 2*cGraphics::world->height-(int)ceil(f/2.0f))
 				{
@@ -65,7 +65,7 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 							if (y < 0 || y >= cGraphics::world->height*2 || x < 0 || x >= cGraphics::world->width*2)
 								continue;
 							cGatTile* c = &cGraphics::world->gattiles[y][x];
-							c->type = cGraphics::gatTiles[cGraphics::texturestart];
+							c->type = cGraphics::gatTiles[cGraphics::worldContainer->settings.texturestart];
 						}
 					}
 				}
@@ -77,18 +77,18 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 			switch (event.key.keysym.sym)
 			{
 			case SDLK_EQUALS:
-				cGraphics::brushsize*=2;
+				cGraphics::worldContainer->settings.brushsize*=2;
 				break;
 			case SDLK_MINUS:
-				if (cGraphics::brushsize > 1)
-					cGraphics::brushsize/=2;
+				if (cGraphics::worldContainer->settings.brushsize > 1)
+					cGraphics::worldContainer->settings.brushsize/=2;
 				break;
 			case SDLK_SPACE:
 				{
 					int posx = (int)mouse3dx / 5;
 					int posy = (int)mouse3dz / 5;
 
-					float f = (int)ceil(cGraphics::brushsize);
+					float f = (int)ceil(cGraphics::worldContainer->settings.brushsize);
 
 
 					if (posx >= (int)floor(f/2.0f) && posx < 2*cGraphics::world->width-(int)ceil(f/2.0f) && posy >= (int)floor(f/2.0f) && posy< 2*cGraphics::world->height-(int)ceil(f/2.0f))
@@ -139,7 +139,7 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 					int posx = (int)mouse3dx / 5;
 					int posy = (int)mouse3dz / 5;
 
-					float f = ceil(cGraphics::brushsize);
+					float f = ceil(cGraphics::worldContainer->settings.brushsize);
 
 
 					if (posx >= (int)floor(f/2.0f) && posx < 2*cGraphics::world->width-(int)ceil(f/2.0f) && posy >= (int)floor(f/2.0f) && posy< 2*cGraphics::world->height-(int)ceil(f/2.0f))
@@ -168,7 +168,7 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 					int posx = (int)mouse3dx / 5;
 					int posy = (int)mouse3dz / 5;
 
-					float f = (int)ceil(cGraphics::brushsize);
+					float f = (int)ceil(cGraphics::worldContainer->settings.brushsize);
 
 					cGraphics::worldContainer->undoStack->push(new cUndoGatHeightEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
 					glColor4f(1,0,0,1);
@@ -199,7 +199,7 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 					int posx = (int)mouse3dx / 5;
 					int posy = (int)mouse3dz / 5;
 
-					int f = (int)ceil(cGraphics::brushsize);
+					int f = (int)ceil(cGraphics::worldContainer->settings.brushsize);
 
 					if (posx >= (int)floor(f/2.0f) && posx < 2*cGraphics::world->width-(int)ceil(f/2.0f) && posy >= f && posy< 2*cGraphics::world->height-f)
 					{
@@ -230,7 +230,7 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 					int posx = (int)mouse3dx / 5;
 					int posy = (int)mouse3dz / 5;
 
-					int f = (int)ceil(cGraphics::brushsize);
+					int f = (int)ceil(cGraphics::worldContainer->settings.brushsize);
 
 					if ((int)clipboard.size() != f)
 						break;
@@ -263,7 +263,7 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 					int posx = (int)mouse3dx / 5;
 					int posy = (int)mouse3dz / 5;
 
-					float f = (int)ceil(cGraphics::brushsize);
+					float f = (int)ceil(cGraphics::worldContainer->settings.brushsize);
 
 
 					cGraphics::worldContainer->undoStack->push(new cUndoGatHeightEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
@@ -285,14 +285,14 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 				}
 				break;
 			case SDLK_LEFTBRACKET:
-				cGraphics::texturestart--;
-				if (cGraphics::texturestart < 0)
-					cGraphics::texturestart = 0;
+				cGraphics::worldContainer->settings.texturestart--;
+				if (cGraphics::worldContainer->settings.texturestart < 0)
+					cGraphics::worldContainer->settings.texturestart = 0;
 				break;
 			case SDLK_RIGHTBRACKET:
-				cGraphics::texturestart++;
-				if (cGraphics::texturestart > 8)
-					cGraphics::texturestart--;
+				cGraphics::worldContainer->settings.texturestart++;
+				if (cGraphics::worldContainer->settings.texturestart > 8)
+					cGraphics::worldContainer->settings.texturestart--;
 				break;
 			case SDLK_i:
 				{

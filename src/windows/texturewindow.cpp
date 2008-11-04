@@ -33,7 +33,7 @@ void cTextureWindow::cWindowTexture::onClick()
 	{
 		if(SDL_GetModState() & KMOD_SHIFT)
 		{
-			int id = cGraphics::texturestart + (int)(cGraphics::selectionstart.y - 32) / 288;
+			int id = cGraphics::worldContainer->settings.texturestart + (int)(cGraphics::worldContainer->settings.selectionstart.y - 32) / 288;
 			cTextureCache::unload(cGraphics::world->textures[id]->texture);
 			delete cGraphics::world->textures[id];
 			
@@ -57,7 +57,7 @@ void cTextureWindow::cWindowTexture::onClick()
 			t->RoFilename2 = std::string(buf,40);
 			t->texture = cTextureCache::load(rodir + "data\\texture\\" + data);
 			cGraphics::world->textures.push_back(t);
-			cGraphics::texturestart = cGraphics::world->textures.size() - 2;
+			cGraphics::worldContainer->settings.texturestart = cGraphics::world->textures.size() - 2;
 		}
 	}
 }

@@ -281,7 +281,7 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 							idoff--;
 						}
 					}
-					cGraphics::selectedObject = -1;
+					cGraphics::worldContainer->settings.selectedObject = -1;
 					if (objectsdeleted.size() > 0)
 						cGraphics::worldContainer->undoStack->push(new cUndoObjectsDelete(objectsdeleted));
 					cWindow* w = cWM::getWindow(WT_MODELOVERVIEW);

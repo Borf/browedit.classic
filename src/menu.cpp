@@ -443,8 +443,10 @@ void cMenu::update()
 }
 void cMenuItemLinked::update()
 {
-//	if(pdata)
-//		ticked = *((bool*)pdata);
+	if(title == "Grid")
+		sleep(0);
+	if(pdata)
+		ticked = *((bool*)pdata);
 	cMenu::update();
 }
 

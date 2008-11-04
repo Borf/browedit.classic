@@ -302,36 +302,36 @@ cSpriteWindow::cOkButton::cOkButton( cWindow* parent, TiXmlDocument* skin ) : cW
 
 void cSpriteWindow::cOkButton::onClick()
 {
-	if((int)cGraphics::world->sprites.size() > cGraphics::selectedObject && cGraphics::selectedObject != -1)
+	if((int)cGraphics::world->sprites.size() > cGraphics::worldContainer->settings.selectedObject && cGraphics::worldContainer->settings.selectedObject != -1)
 	{
 		
 		if(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->head != NULL)
-			cGraphics::world->sprites[cGraphics::selectedObject]->loadHead(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->head->fileName);
+			cGraphics::world->sprites[cGraphics::worldContainer->settings.selectedObject]->loadHead(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->head->fileName);
 		else
 		{
-			delete cGraphics::world->sprites[cGraphics::selectedObject]->head;
-			cGraphics::world->sprites[cGraphics::selectedObject]->head = NULL;
+			delete cGraphics::world->sprites[cGraphics::worldContainer->settings.selectedObject]->head;
+			cGraphics::world->sprites[cGraphics::worldContainer->settings.selectedObject]->head = NULL;
 		}
-		cGraphics::world->sprites[cGraphics::selectedObject]->loadBody(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->body->fileName);
+		cGraphics::world->sprites[cGraphics::worldContainer->settings.selectedObject]->loadBody(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->body->fileName);
 		
 		for(unsigned int i = 0; i < ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras.size(); i++)
 		{
 			if(((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[i] != NULL)
 			{
-				cGraphics::world->sprites[cGraphics::selectedObject]->setExtra(i, ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[i]->fileName);
+				cGraphics::world->sprites[cGraphics::worldContainer->settings.selectedObject]->setExtra(i, ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras[i]->fileName);
 			}
 			else
 			{
-				if(cGraphics::world->sprites[cGraphics::selectedObject]->extras.size() > i)
-					if(cGraphics::world->sprites[cGraphics::selectedObject]->extras[i] != NULL)
+				if(cGraphics::world->sprites[cGraphics::worldContainer->settings.selectedObject]->extras.size() > i)
+					if(cGraphics::world->sprites[cGraphics::worldContainer->settings.selectedObject]->extras[i] != NULL)
 					{
-						delete cGraphics::world->sprites[cGraphics::selectedObject]->extras[i];
-						cGraphics::world->sprites[cGraphics::selectedObject]->extras[i] = NULL;
+						delete cGraphics::world->sprites[cGraphics::worldContainer->settings.selectedObject]->extras[i];
+						cGraphics::world->sprites[cGraphics::worldContainer->settings.selectedObject]->extras[i] = NULL;
 					}
 			}
 		}
-		cGraphics::world->sprites[cGraphics::selectedObject]->action = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->action;
-		cGraphics::world->sprites[cGraphics::selectedObject]->direction = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->direction;
+		cGraphics::world->sprites[cGraphics::worldContainer->settings.selectedObject]->action = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->action;
+		cGraphics::world->sprites[cGraphics::worldContainer->settings.selectedObject]->direction = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->direction;
 	}
 	
 	parent->close();

@@ -60,7 +60,7 @@ int cProcessManagement::texturepaintedit_process_events(SDL_Event &event)
 					}
 					else if (cGraphics::textureTool == TOOL_BRUSH)
 					{
-						int texture = cGraphics::texturestart;
+						int texture = cGraphics::worldContainer->settings.texturestart;
 
 						int x = (int)mouse3dx / 10;
 						int y = (int)mouse3dz / 10;
@@ -72,10 +72,10 @@ int cProcessManagement::texturepaintedit_process_events(SDL_Event &event)
 								int xi = 1;
 								int yi = 1;
 								
-								if		(cGraphics::textureRot == 0)	{ yyy = yy;										xxx = xx;										}
-								else if (cGraphics::textureRot == 1)	{ yyy = xx;										xxx = cGraphics::textureBrush[0].size()-1-yy;		}
-								else if (cGraphics::textureRot == 2)	{ yyy = cGraphics::textureBrush.size()-1-yy;		xxx = cGraphics::textureBrush[0].size()-1-xx;		}
-								else if	(cGraphics::textureRot == 3)	{ yyy = cGraphics::textureBrush.size()-1-xx;		xxx = yy;										}
+								if		(cGraphics::worldContainer->settings.textureRot == 0)	{ yyy = yy;										xxx = xx;										}
+								else if (cGraphics::worldContainer->settings.textureRot == 1)	{ yyy = xx;										xxx = cGraphics::textureBrush[0].size()-1-yy;		}
+								else if (cGraphics::worldContainer->settings.textureRot == 2)	{ yyy = cGraphics::textureBrush.size()-1-yy;		xxx = cGraphics::textureBrush[0].size()-1-xx;		}
+								else if	(cGraphics::worldContainer->settings.textureRot == 3)	{ yyy = cGraphics::textureBrush.size()-1-xx;		xxx = yy;										}
 								
 								if( cGraphics::textureBrush.size() <= yyy ||
 									cGraphics::textureBrush[0].size() <= xxx)
@@ -91,7 +91,7 @@ int cProcessManagement::texturepaintedit_process_events(SDL_Event &event)
 										t.lightmap = -1;
 										t.texture = texture;
 //todo: make this code nicer and less repetiditiditive
-										if(cGraphics::textureRot == 0)
+										if(cGraphics::worldContainer->settings.textureRot == 0)
 										{
 											t.u1 = (xxx+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX;
 											t.v1 = (yyy+1+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY;
@@ -102,7 +102,7 @@ int cProcessManagement::texturepaintedit_process_events(SDL_Event &event)
 											t.u4 = (xxx+1+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX;
 											t.v4 = (yyy+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY;
 										}
-										else if (cGraphics::textureRot == 1)
+										else if (cGraphics::worldContainer->settings.textureRot == 1)
 										{
 											t.u1 = (xxx+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX;
 											t.v1 = (yyy+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY;
@@ -113,7 +113,7 @@ int cProcessManagement::texturepaintedit_process_events(SDL_Event &event)
 											t.u4 = (xxx+1+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX;
 											t.v4 = (yyy+1+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY;
 										}
-										else if (cGraphics::textureRot == 2)
+										else if (cGraphics::worldContainer->settings.textureRot == 2)
 										{
 											t.u1 = (xxx+1+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX;
 											t.v1 = (yyy+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY;
@@ -124,7 +124,7 @@ int cProcessManagement::texturepaintedit_process_events(SDL_Event &event)
 											t.u4 = (xxx+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX;
 											t.v4 = (yyy+1+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY;
 										}
-										else if (cGraphics::textureRot == 3)
+										else if (cGraphics::worldContainer->settings.textureRot == 3)
 										{
 											t.u1 = (xxx+1+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX;
 											t.v1 = (yyy+1+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY;
@@ -154,14 +154,14 @@ int cProcessManagement::texturepaintedit_process_events(SDL_Event &event)
 			switch (event.key.keysym.sym)
 			{
 			case SDLK_LEFTBRACKET:
-				cGraphics::texturestart--;
-				if (cGraphics::texturestart < 0)
-					cGraphics::texturestart = 0;
+				cGraphics::worldContainer->settings.texturestart--;
+				if (cGraphics::worldContainer->settings.texturestart < 0)
+					cGraphics::worldContainer->settings.texturestart = 0;
 				break;
 			case SDLK_RIGHTBRACKET:
-				cGraphics::texturestart++;
-				if (cGraphics::texturestart >= cGraphics::world->textures.size())
-					cGraphics::texturestart--;
+				cGraphics::worldContainer->settings.texturestart++;
+				if (cGraphics::worldContainer->settings.texturestart >= cGraphics::world->textures.size())
+					cGraphics::worldContainer->settings.texturestart--;
 				break;
 			case SDLK_SPACE:
 				if(event.key.keysym.mod & KMOD_CTRL)
@@ -177,7 +177,7 @@ int cProcessManagement::texturepaintedit_process_events(SDL_Event &event)
 					cGraphics::textureBrush = newBrush;
 				}
 				else
-				cGraphics::textureRot = (cGraphics::textureRot+1)%4;
+				cGraphics::worldContainer->settings.textureRot = (cGraphics::worldContainer->settings.textureRot+1)%4;
 				break;
 			case SDLK_LEFT:
 				cGraphics::textureBrushOffset.x--;
@@ -200,10 +200,10 @@ int cProcessManagement::texturepaintedit_process_events(SDL_Event &event)
 					cGraphics::textureBrushOffset.y = cGraphics::textureGridSizeY;
 				break;
 			case SDLK_h:
-				cGraphics::fliph = !cGraphics::fliph;
+				cGraphics::worldContainer->settings.fliph = !cGraphics::worldContainer->settings.fliph;
 				break;
 			case SDLK_v:
-				cGraphics::flipv = !cGraphics::flipv;
+				cGraphics::worldContainer->settings.flipv = !cGraphics::worldContainer->settings.flipv;
 				break;
 			case SDLK_MINUS:
 				cGraphics::textureBrushSize = max(cGraphics::textureBrushSize-1,1);

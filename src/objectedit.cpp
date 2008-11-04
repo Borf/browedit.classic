@@ -26,43 +26,43 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 		case SDL_MOUSEMOTION:
 			if (lbuttondown && !rbuttondown)
 			{
-				if(cGraphics::objectStartDrag && cGraphics::selectedObject != -1)
+				if(cGraphics::objectStartDrag && cGraphics::worldContainer->settings.selectedObject != -1)
 				{
 					if (doneaction)
 					{
-						cGraphics::worldContainer->undoStack->push(new cUndoChangeObject(cGraphics::selectedObject));
+						cGraphics::worldContainer->undoStack->push(new cUndoChangeObject(cGraphics::worldContainer->settings.selectedObject));
 						doneaction = false;
 					}
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 					bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 					if (!ctrl && !alt)
 					{
-						cGraphics::world->models[cGraphics::selectedObject]->pos.x = mouse3dx / 5;
+						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->pos.x = mouse3dx / 5;
 						if(snaptofloor->ticked)
-							cGraphics::world->models[cGraphics::selectedObject]->pos.y = -mouse3dy;
-						cGraphics::world->models[cGraphics::selectedObject]->pos.z = mouse3dz / 5;
+							cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->pos.y = -mouse3dy;
+						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->pos.z = mouse3dz / 5;
 						if (SDL_GetModState() & KMOD_SHIFT)
 						{
-							cGraphics::world->models[cGraphics::selectedObject]->pos.x = floor(cGraphics::world->models[cGraphics::selectedObject]->pos.x * (cGraphics::gridsize/2.0f) + 0.5-cGraphics::gridoffsetx) / (cGraphics::gridsize/2.0f) + cGraphics::gridoffsetx/(cGraphics::gridsize/2.0f);
-							cGraphics::world->models[cGraphics::selectedObject]->pos.z = floor(cGraphics::world->models[cGraphics::selectedObject]->pos.z * (cGraphics::gridsize/2.0f) + 0.5-cGraphics::gridoffsety) / (cGraphics::gridsize/2.0f) + cGraphics::gridoffsety/(cGraphics::gridsize/2.0f);
+							cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->pos.x = floor(cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->pos.x * (cGraphics::worldContainer->settings.gridSize/2.0f) + 0.5-cGraphics::worldContainer->settings.gridoffsetx) / (cGraphics::worldContainer->settings.gridSize/2.0f) + cGraphics::worldContainer->settings.gridoffsetx/(cGraphics::worldContainer->settings.gridSize/2.0f);
+							cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->pos.z = floor(cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->pos.z * (cGraphics::worldContainer->settings.gridSize/2.0f) + 0.5-cGraphics::worldContainer->settings.gridoffsety) / (cGraphics::worldContainer->settings.gridSize/2.0f) + cGraphics::worldContainer->settings.gridoffsety/(cGraphics::worldContainer->settings.gridSize/2.0f);
 						}
 					}
 					if(ctrl && !alt)
 					{
-						cGraphics::world->models[cGraphics::selectedObject]->rot.x += mouseY - oldmousey;
-						cGraphics::world->models[cGraphics::selectedObject]->rot.y += mouseX - oldmousex;
+						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->rot.x += mouseY - oldmousey;
+						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->rot.y += mouseX - oldmousex;
 						if (SDL_GetModState() & KMOD_SHIFT)
 						{
 
-							cGraphics::world->models[cGraphics::selectedObject]->rot.x = floor((cGraphics::world->models[cGraphics::selectedObject]->rot.x+22.5) / 45) * 45;
-							cGraphics::world->models[cGraphics::selectedObject]->rot.y = floor((cGraphics::world->models[cGraphics::selectedObject]->rot.y+22.5) / 45) * 45;
+							cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->rot.x = floor((cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->rot.x+22.5) / 45) * 45;
+							cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->rot.y = floor((cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->rot.y+22.5) / 45) * 45;
 						}
 					}
 					if(!ctrl && alt)
 					{
- 						cGraphics::world->models[cGraphics::selectedObject]->scale.x += (mouseX - oldmousex)/10.0;
-						cGraphics::world->models[cGraphics::selectedObject]->scale.y += (mouseX - oldmousex)/10.0;
-						cGraphics::world->models[cGraphics::selectedObject]->scale.z += (mouseX - oldmousex)/10.0;
+ 						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->scale.x += (mouseX - oldmousex)/10.0;
+						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->scale.y += (mouseX - oldmousex)/10.0;
+						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->scale.z += (mouseX - oldmousex)/10.0;
 					}
 				}
 			}
@@ -87,7 +87,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 						minobj = i;
 					}
 				}
-				cGraphics::objectStartDrag = cGraphics::selectedObject == minobj;
+				cGraphics::objectStartDrag = cGraphics::worldContainer->settings.selectedObject == minobj;
 			}
 			break;
 		case SDL_MOUSEBUTTONUP:
@@ -105,7 +105,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 					char buf[100];
 					sprintf(buf, "%s-%i", cGraphics::previewModel->rofilename.c_str(), rand()%100);
 					cGraphics::world->models.push_back(model);
-					cGraphics::selectedObject = cGraphics::world->models.size()-1;
+					cGraphics::worldContainer->settings.selectedObject = cGraphics::world->models.size()-1;
 					cGraphics::worldContainer->undoStack->push(new cUndoNewObject());
 				}
 				else
@@ -127,16 +127,16 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 							minobj = i;
 						}
 					}
-					cGraphics::selectedObject = minobj;
+					cGraphics::worldContainer->settings.selectedObject = minobj;
 				}
 				cWindow* w = cWM::getWindow(WT_MODELOVERVIEW);
 				if(w != NULL)
 				{
 					w->userfunc(NULL);
-					if(cGraphics::selectedObject >= 0 && cGraphics::selectedObject < (int)cGraphics::world->models.size()-1)
+					if(cGraphics::worldContainer->settings.selectedObject >= 0 && cGraphics::worldContainer->settings.selectedObject < (int)cGraphics::world->models.size()-1)
 					{
 						cModelOverViewWindow::cModelOverViewTree* tree = (cModelOverViewWindow::cModelOverViewTree*)w->objects["list"];
-						tree->getObject(cGraphics::world->models[cGraphics::selectedObject]);
+						tree->getObject(cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]);
 					}
 				}
 			}
@@ -145,63 +145,63 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 			switch (event.key.keysym.sym)
 			{
 			case SDLK_UP:
-				if (cGraphics::selectedObject > -1 && cGraphics::selectedObject < (int)cGraphics::world->models.size())
+				if (cGraphics::worldContainer->settings.selectedObject > -1 && cGraphics::worldContainer->settings.selectedObject < (int)cGraphics::world->models.size())
 				{
-					cGraphics::worldContainer->undoStack->push(new cUndoChangeObject(cGraphics::selectedObject));
+					cGraphics::worldContainer->undoStack->push(new cUndoChangeObject(cGraphics::worldContainer->settings.selectedObject));
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 					bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 					bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
 					if (!ctrl && !alt)
-						cGraphics::world->models[cGraphics::selectedObject]->pos.z+=0.1 + (shift ? 0.4 : 0);
+						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->pos.z+=0.1 + (shift ? 0.4 : 0);
 					if (ctrl && !alt)
-						cGraphics::world->models[cGraphics::selectedObject]->rot.z+=1 + (shift ? 44 : 0);
+						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->rot.z+=1 + (shift ? 44 : 0);
 					if (!ctrl && alt)
-						cGraphics::world->models[cGraphics::selectedObject]->scale.z+=0.1 + shift ? 0.1 : 0;
+						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->scale.z+=0.1 + shift ? 0.1 : 0;
 				}						
 				break;
 			case SDLK_DOWN:
-				if (cGraphics::selectedObject > -1 && cGraphics::selectedObject < (int)cGraphics::world->models.size())
+				if (cGraphics::worldContainer->settings.selectedObject > -1 && cGraphics::worldContainer->settings.selectedObject < (int)cGraphics::world->models.size())
 				{
-					cGraphics::worldContainer->undoStack->push(new cUndoChangeObject(cGraphics::selectedObject));
+					cGraphics::worldContainer->undoStack->push(new cUndoChangeObject(cGraphics::worldContainer->settings.selectedObject));
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 					bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 					bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
 					if (!ctrl && !alt)
-						cGraphics::world->models[cGraphics::selectedObject]->pos.z-=0.1 + (shift ? 0.4 : 0);
+						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->pos.z-=0.1 + (shift ? 0.4 : 0);
 					if (ctrl && !alt)
-						cGraphics::world->models[cGraphics::selectedObject]->rot.z-=1 + (shift ? 44 : 0);
+						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->rot.z-=1 + (shift ? 44 : 0);
 					if (!ctrl && alt)
-						cGraphics::world->models[cGraphics::selectedObject]->scale.z-=0.1 + shift ? 0.1 : 0;
+						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->scale.z-=0.1 + shift ? 0.1 : 0;
 				}
 				break;
 			case SDLK_RIGHT:
-				if (cGraphics::selectedObject > -1 && cGraphics::selectedObject < (int)cGraphics::world->models.size())
+				if (cGraphics::worldContainer->settings.selectedObject > -1 && cGraphics::worldContainer->settings.selectedObject < (int)cGraphics::world->models.size())
 				{
-					cGraphics::worldContainer->undoStack->push(new cUndoChangeObject(cGraphics::selectedObject));
+					cGraphics::worldContainer->undoStack->push(new cUndoChangeObject(cGraphics::worldContainer->settings.selectedObject));
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 					bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 					bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
 					if (!ctrl && !alt)
-						cGraphics::world->models[cGraphics::selectedObject]->pos.x+=0.1 + (shift ? 0.4 : 0);
+						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->pos.x+=0.1 + (shift ? 0.4 : 0);
 					if (ctrl && !alt)
-						cGraphics::world->models[cGraphics::selectedObject]->rot.x+=1 + (shift ? 44 : 0);
+						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->rot.x+=1 + (shift ? 44 : 0);
 					if (!ctrl && alt)
-						cGraphics::world->models[cGraphics::selectedObject]->scale.x+=0.1 + shift ? 0.1 : 0;
+						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->scale.x+=0.1 + shift ? 0.1 : 0;
 				}						
 				break;
 			case SDLK_LEFT:
-				if (cGraphics::selectedObject > -1 && cGraphics::selectedObject < (int)cGraphics::world->models.size())
+				if (cGraphics::worldContainer->settings.selectedObject > -1 && cGraphics::worldContainer->settings.selectedObject < (int)cGraphics::world->models.size())
 				{
-					cGraphics::worldContainer->undoStack->push(new cUndoChangeObject(cGraphics::selectedObject));
+					cGraphics::worldContainer->undoStack->push(new cUndoChangeObject(cGraphics::worldContainer->settings.selectedObject));
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 					bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 					bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
 					if (!ctrl && !alt)
-						cGraphics::world->models[cGraphics::selectedObject]->pos.x-=0.1 + (shift ? 0.4 : 0);
+						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->pos.x-=0.1 + (shift ? 0.4 : 0);
 					if (ctrl && !alt)
-						cGraphics::world->models[cGraphics::selectedObject]->rot.x-=1 + (shift ? 44 : 0);
+						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->rot.x-=1 + (shift ? 44 : 0);
 					if (!ctrl && alt)
-						cGraphics::world->models[cGraphics::selectedObject]->scale.x-=0.1 + shift ? 0.1 : 0;
+						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->scale.x-=0.1 + shift ? 0.1 : 0;
 				}
 				break;
 			case SDLK_MINUS:
@@ -227,62 +227,62 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 				}
 				break;
 			case SDLK_h:
-				if (cGraphics::selectedObject != -1)
+				if (cGraphics::worldContainer->settings.selectedObject != -1)
 				{
-					cGraphics::worldContainer->undoStack->push(new cUndoChangeObject(cGraphics::selectedObject));
+					cGraphics::worldContainer->undoStack->push(new cUndoChangeObject(cGraphics::worldContainer->settings.selectedObject));
 					if(SDL_GetModState() & KMOD_ALT)
-						cGraphics::world->models[cGraphics::selectedObject]->scale.y = -	cGraphics::world->models[cGraphics::selectedObject]->scale.y;
+						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->scale.y = -	cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->scale.y;
 					else
-						cGraphics::world->models[cGraphics::selectedObject]->scale.x = -	cGraphics::world->models[cGraphics::selectedObject]->scale.x;
+						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->scale.x = -	cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->scale.x;
 				}
 				break;
 			case SDLK_v:
-				if (cGraphics::selectedObject != -1)
+				if (cGraphics::worldContainer->settings.selectedObject != -1)
 				{
-					cGraphics::worldContainer->undoStack->push(new cUndoChangeObject(cGraphics::selectedObject));
-					cGraphics::world->models[cGraphics::selectedObject]->scale.z = -	cGraphics::world->models[cGraphics::selectedObject]->scale.z;
+					cGraphics::worldContainer->undoStack->push(new cUndoChangeObject(cGraphics::worldContainer->settings.selectedObject));
+					cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->scale.z = -	cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->scale.z;
 				}
 				break;
 			case SDLK_PAGEDOWN:
-				if (cGraphics::selectedObject > -1 && cGraphics::selectedObject < (int)cGraphics::world->models.size())
+				if (cGraphics::worldContainer->settings.selectedObject > -1 && cGraphics::worldContainer->settings.selectedObject < (int)cGraphics::world->models.size())
 				{
-					cGraphics::worldContainer->undoStack->push(new cUndoChangeObject(cGraphics::selectedObject));
+					cGraphics::worldContainer->undoStack->push(new cUndoChangeObject(cGraphics::worldContainer->settings.selectedObject));
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 					bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 					bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
 					if (!ctrl && !alt)
-						cGraphics::world->models[cGraphics::selectedObject]->pos.y+=0.1 + (shift ? 0.4 : 0);
+						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->pos.y+=0.1 + (shift ? 0.4 : 0);
 					if (ctrl && !alt)
-						cGraphics::world->models[cGraphics::selectedObject]->rot.y+=1 + (shift ? 44 : 0);
+						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->rot.y+=1 + (shift ? 44 : 0);
 					if (!ctrl && alt)
-						cGraphics::world->models[cGraphics::selectedObject]->scale.y+=0.1 + shift ? 0.1 : 0;
+						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->scale.y+=0.1 + shift ? 0.1 : 0;
 				}						
 				break;
 			case SDLK_PAGEUP:
-				if (cGraphics::selectedObject > -1 && cGraphics::selectedObject < (int)cGraphics::world->models.size())
+				if (cGraphics::worldContainer->settings.selectedObject > -1 && cGraphics::worldContainer->settings.selectedObject < (int)cGraphics::world->models.size())
 				{
-					cGraphics::worldContainer->undoStack->push(new cUndoChangeObject(cGraphics::selectedObject));
+					cGraphics::worldContainer->undoStack->push(new cUndoChangeObject(cGraphics::worldContainer->settings.selectedObject));
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 					bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 					bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
 					if (!ctrl && !alt)
-						cGraphics::world->models[cGraphics::selectedObject]->pos.y-=0.1 + (shift ? 0.4 : 0);
+						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->pos.y-=0.1 + (shift ? 0.4 : 0);
 					if (ctrl && !alt)
-						cGraphics::world->models[cGraphics::selectedObject]->rot.y-=1 + (shift ? 44 : 0);
+						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->rot.y-=1 + (shift ? 44 : 0);
 					if (!ctrl && alt)
-						cGraphics::world->models[cGraphics::selectedObject]->scale.y-=0.1 + shift ? 0.1 : 0;
+						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->scale.y-=0.1 + shift ? 0.1 : 0;
 				}
 				break;
 			case SDLK_c:
-				if (cGraphics::selectedObject != -1)
+				if (cGraphics::worldContainer->settings.selectedObject != -1)
 				{
-					cGraphics::clipboardRot = cGraphics::world->models[cGraphics::selectedObject]->rot;
-					cGraphics::clipboardScale = cGraphics::world->models[cGraphics::selectedObject]->scale;
-					cGraphics::clipboardFile = cGraphics::world->models[cGraphics::selectedObject]->filename;
-					cGraphics::clipboardY = cGraphics::world->models[cGraphics::selectedObject]->pos.y;
-					cGraphics::clipboardName = cGraphics::world->models[cGraphics::selectedObject]->name;
-					cGraphics::clipboardFloat = cGraphics::world->models[cGraphics::selectedObject]->lightopacity;
-					currentobject = models->findData("data\\model\\" + cGraphics::world->models[cGraphics::selectedObject]->rofilename);
+					cGraphics::clipboardRot = cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->rot;
+					cGraphics::clipboardScale = cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->scale;
+					cGraphics::clipboardFile = cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->filename;
+					cGraphics::clipboardY = cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->pos.y;
+					cGraphics::clipboardName = cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->name;
+					cGraphics::clipboardFloat = cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->lightopacity;
+					currentobject = models->findData("data\\model\\" + cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->rofilename);
 					if(currentobject != NULL)
 						MenuCommand_model((cMenuItem*)currentobject);
 				}
@@ -292,7 +292,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 				{
 					if (SDL_GetModState() & KMOD_CTRL)
 					{
-						cGraphics::world->models[cGraphics::selectedObject]->pos.y = cGraphics::clipboardY;
+						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->pos.y = cGraphics::clipboardY;
 					}
 					else
 					{
@@ -333,28 +333,28 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 						}
 
 						cGraphics::world->models.push_back(model);
-						cGraphics::selectedObject = cGraphics::world->models.size()-1;
+						cGraphics::worldContainer->settings.selectedObject = cGraphics::world->models.size()-1;
 						cGraphics::worldContainer->undoStack->push(new cUndoNewObject());
 					}
 				}
 				break;
 			case SDLK_BACKSPACE:
-				if (cGraphics::selectedObject > -1 && cGraphics::selectedObject < (int)cGraphics::world->models.size())
+				if (cGraphics::worldContainer->settings.selectedObject > -1 && cGraphics::worldContainer->settings.selectedObject < (int)cGraphics::world->models.size())
 				{
-					cGraphics::worldContainer->undoStack->push(new cUndoObjectDelete(cGraphics::selectedObject));
-					delete cGraphics::world->models[cGraphics::selectedObject];
-					cGraphics::world->models.erase(cGraphics::world->models.begin() + cGraphics::selectedObject);
-					cGraphics::selectedObject = -1;
+					cGraphics::worldContainer->undoStack->push(new cUndoObjectDelete(cGraphics::worldContainer->settings.selectedObject));
+					delete cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject];
+					cGraphics::world->models.erase(cGraphics::world->models.begin() + cGraphics::worldContainer->settings.selectedObject);
+					cGraphics::worldContainer->settings.selectedObject = -1;
 					cWindow* w = cWM::getWindow(WT_MODELOVERVIEW);
 					if(w != NULL)
 						w->userfunc(NULL);
 				}
 				break;
 			case SDLK_i:
-				if (cGraphics::selectedObject != -1)
+				if (cGraphics::worldContainer->settings.selectedObject != -1)
 				{
-					cRSMModel* m = cGraphics::world->models[cGraphics::selectedObject];
-					Log(3,0,"Objects: %i", cGraphics::selectedObject);
+					cRSMModel* m = cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject];
+					Log(3,0,"Objects: %i", cGraphics::worldContainer->settings.selectedObject);
 					Log(3,0,"Pos: %f,%f,%f", m->pos.x, m->pos.y, m->pos.z);
 					Log(3,0,"scale: %f,%f,%f", m->scale.x, m->scale.y, m->scale.z);
 					Log(3,0,"rot: %f,%f,%f", m->rot.x, m->rot.y, m->rot.z);
@@ -362,9 +362,9 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 				}
 				break;
 			case SDLK_RETURN:
-				if (cGraphics::selectedObject != -1)
+				if (cGraphics::worldContainer->settings.selectedObject != -1)
 				{
-					cRSMModel* o = cGraphics::world->models[cGraphics::selectedObject];
+					cRSMModel* o = cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject];
 					cMenuItem* menuitem = (cMenuItem*)models->findData("data\\model\\" + o->rofilename);
 
 					cWindow* w = new cObjectWindow();
@@ -382,16 +382,16 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 					((cWindowStringInputBox*)w->objects["objectname"])->stringetje = &o->name;
 					((cWindowFloatInputBox*)w->objects["lightopacity"])->floatje = &o->lightopacity;
 					
-					((cObjectWindow*)w)->undo = new cUndoChangeObject(cGraphics::selectedObject);
+					((cObjectWindow*)w)->undo = new cUndoChangeObject(cGraphics::worldContainer->settings.selectedObject);
 
 					cWM::addWindow(w);
 				}
 				break;
 			case SDLK_r:
-				if (cGraphics::selectedObject != -1)
+				if (cGraphics::worldContainer->settings.selectedObject != -1)
 				{
-					cGraphics::worldContainer->undoStack->push(new cUndoChangeObject(cGraphics::selectedObject));
-					cGraphics::world->models[cGraphics::selectedObject]->rot = cVector3(0,0,0);
+					cGraphics::worldContainer->undoStack->push(new cUndoChangeObject(cGraphics::worldContainer->settings.selectedObject));
+					cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->rot = cVector3(0,0,0);
 				}
 				break;
 

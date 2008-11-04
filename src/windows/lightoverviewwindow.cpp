@@ -111,7 +111,7 @@ void cLightOverViewWindow::cLightOverViewTree::onChange()
 		for(i = 0; i < cGraphics::world->lights.size(); i++)
 		{
 			if(cGraphics::world->lights[i] == ((cLightOverViewTreeNode*)node)->light)
-				cGraphics::selectedObject = i;
+				cGraphics::worldContainer->settings.selectedObject = i;
 		}
 	}
 }

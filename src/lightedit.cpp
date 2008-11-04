@@ -81,32 +81,32 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 				{
 					if(doneaction)
 					{
-						cGraphics::worldContainer->undoStack->push(new cUndoChangeLight(cGraphics::selectedObject));
+						cGraphics::worldContainer->undoStack->push(new cUndoChangeLight(cGraphics::worldContainer->settings.selectedObject));
 						doneaction = false;
 					}
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 					bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 					if (!ctrl && !alt)
 					{
-						cGraphics::world->lights[cGraphics::selectedObject].pos.x = mouse3dx / 5;
-						cGraphics::world->lights[cGraphics::selectedObject].pos.z = mouse3dz / 5;
+						cGraphics::world->lights[cGraphics::worldContainer->settings.selectedObject].pos.x = mouse3dx / 5;
+						cGraphics::world->lights[cGraphics::worldContainer->settings.selectedObject].pos.z = mouse3dz / 5;
 						if (SDL_GetModState() & KMOD_SHIFT)
 						{
-							cGraphics::world->lights[cGraphics::selectedObject].pos.x = floor(cGraphics::world->lights[cGraphics::selectedObject].pos.x * (cGraphics::gridsize/2.0f) + 0.5-cGraphics::gridoffsetx) / (cGraphics::gridsize/2.0f) + cGraphics::gridoffsetx/(cGraphics::gridsize/2.0f);
-							cGraphics::world->lights[cGraphics::selectedObject].pos.z = floor(cGraphics::world->lights[cGraphics::selectedObject].pos.z * (cGraphics::gridsize/2.0f) + 0.5-cGraphics::gridoffsety) / (cGraphics::gridsize/2.0f) + cGraphics::gridoffsety/(cGraphics::gridsize/2.0f);
+							cGraphics::world->lights[cGraphics::worldContainer->settings.selectedObject].pos.x = floor(cGraphics::world->lights[cGraphics::worldContainer->settings.selectedObject].pos.x * (cGraphics::worldContainer->settings.gridSize/2.0f) + 0.5-cGraphics::worldContainer->settings.gridoffsetx) / (cGraphics::worldContainer->settings.gridSize/2.0f) + cGraphics::worldContainer->settings.gridoffsetx/(cGraphics::worldContainer->settings.gridSize/2.0f);
+							cGraphics::world->lights[cGraphics::worldContainer->settings.selectedObject].pos.z = floor(cGraphics::world->lights[cGraphics::worldContainer->settings.selectedObject].pos.z * (cGraphics::worldContainer->settings.gridSize/2.0f) + 0.5-cGraphics::worldContainer->settings.gridoffsety) / (cGraphics::worldContainer->settings.gridSize/2.0f) + cGraphics::worldContainer->settings.gridoffsety/(cGraphics::worldContainer->settings.gridSize/2.0f);
 						}
 					}
 					if(ctrl && !alt)
 					{
-						cGraphics::world->lights[cGraphics::selectedObject].pos.y += (mouseY-oldmousey);
+						cGraphics::world->lights[cGraphics::worldContainer->settings.selectedObject].pos.y += (mouseY-oldmousey);
 						if (SDL_GetModState() & KMOD_SHIFT)
 						{
-							cGraphics::world->lights[cGraphics::selectedObject].pos.y = floor(cGraphics::world->lights[cGraphics::selectedObject].pos.y * (cGraphics::gridsize/2.0f) + 0.5-cGraphics::gridoffsetx) / (cGraphics::gridsize/2.0f) + cGraphics::gridoffsetx/(cGraphics::gridsize/2.0f);
+							cGraphics::world->lights[cGraphics::worldContainer->settings.selectedObject].pos.y = floor(cGraphics::world->lights[cGraphics::worldContainer->settings.selectedObject].pos.y * (cGraphics::worldContainer->settings.gridSize/2.0f) + 0.5-cGraphics::worldContainer->settings.gridoffsetx) / (cGraphics::worldContainer->settings.gridSize/2.0f) + cGraphics::worldContainer->settings.gridoffsetx/(cGraphics::worldContainer->settings.gridSize/2.0f);
 						}
 					}
 					if(!ctrl && alt)
 					{
-						cGraphics::world->lights[cGraphics::selectedObject].range += (mouseY-oldmousey);
+						cGraphics::world->lights[cGraphics::worldContainer->settings.selectedObject].range += (mouseY-oldmousey);
 					}
 				}
 			}
@@ -134,7 +134,7 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 						minobj = i;
 					}
 				}
-				cGraphics::objectStartDrag = cGraphics::selectedObject == minobj;
+				cGraphics::objectStartDrag = cGraphics::worldContainer->settings.selectedObject == minobj;
 			}
 			break;
 		}
@@ -158,7 +158,7 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 					l.range = 200;
 					l.lightFalloff = 1;
 
-					cGraphics::selectedObject = cGraphics::world->lights.size();
+					cGraphics::worldContainer->settings.selectedObject = cGraphics::world->lights.size();
 					cGraphics::world->lights.push_back(l);
 					cGraphics::worldContainer->undoStack->push(new cUndoNewLight());
 				}
@@ -183,14 +183,14 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 							minobj = i;
 						}
 					}
-					cGraphics::selectedObject = minobj;
+					cGraphics::worldContainer->settings.selectedObject = minobj;
 				}
 				cWindow* w = cWM::getWindow(WT_LIGHTOVERVIEW);
 				if(w != NULL)
 				{
 					w->userfunc(NULL);
 					cLightOverViewWindow::cLightOverViewTree* tree = (cLightOverViewWindow::cLightOverViewTree*)w->objects["list"];
-					tree->getObject(cGraphics::world->lights[cGraphics::selectedObject]);
+					tree->getObject(cGraphics::world->lights[cGraphics::worldContainer->settings.selectedObject]);
 				}
 
 			}
@@ -234,11 +234,11 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 			switch (event.key.keysym.sym)
 			{
 			case SDLK_BACKSPACE:
-				if (cGraphics::selectedObject > -1 && cGraphics::selectedObject < (int)cGraphics::world->lights.size())
+				if (cGraphics::worldContainer->settings.selectedObject > -1 && cGraphics::worldContainer->settings.selectedObject < (int)cGraphics::world->lights.size())
 				{
-					cGraphics::worldContainer->undoStack->push(new cUndoLightDelete(cGraphics::selectedObject));
-					cGraphics::world->lights.erase(cGraphics::world->lights.begin() + cGraphics::selectedObject);
-					cGraphics::selectedObject = -1;
+					cGraphics::worldContainer->undoStack->push(new cUndoLightDelete(cGraphics::worldContainer->settings.selectedObject));
+					cGraphics::world->lights.erase(cGraphics::world->lights.begin() + cGraphics::worldContainer->settings.selectedObject);
+					cGraphics::worldContainer->settings.selectedObject = -1;
 					cWindow* w = cWM::getWindow(WT_LIGHTOVERVIEW);
 					if(w != NULL)
 						w->userfunc(NULL);
@@ -247,11 +247,11 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 				}
 				break;
 			case SDLK_RETURN:
-				if (cGraphics::selectedObject != -1)
+				if (cGraphics::worldContainer->settings.selectedObject != -1)
 				{
-					if(cGraphics::selectedObject < (int)cGraphics::world->lights.size())
+					if(cGraphics::worldContainer->settings.selectedObject < (int)cGraphics::world->lights.size())
 					{
-						cLight* l = &cGraphics::world->lights[cGraphics::selectedObject];
+						cLight* l = &cGraphics::world->lights[cGraphics::worldContainer->settings.selectedObject];
 
 						cWindow* w = new cLightWindow();
 						((cWindowStringInputBox*)w->objects["name"])->stringetje = &l->name;
@@ -267,7 +267,7 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 						((cWindowFloatInputBox*)w->objects["lightfalloff"])->floatje = &l->lightFalloff;
 						((cWindowBoolCheckBox*)w->objects["castshadow"])->boolvalue = &l->givesShadow;
 
-						//((cEffectWindow*)w)->undo = new cUndoChangeEffect(cGraphics::selectedObject);
+						//((cEffectWindow*)w)->undo = new cUndoChangeEffect(cGraphics::worldContainer->settings.selectedObject);
 						cWM::addWindow(w);
 					}
 				}

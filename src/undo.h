@@ -429,7 +429,7 @@ public:
 		model->rot = rot;
 		model->scale = scale;
 		cGraphics::world->models.insert(cGraphics::world->models.begin() + id, model);
-		cGraphics::selectedObject = id;
+		cGraphics::worldContainer->settings.selectedObject = id;
 //		cGraphics::world->models.push_back(model);
 	}
 };
@@ -447,7 +447,7 @@ public:
 	void undo()
 	{
 		cGraphics::world->effects.insert(cGraphics::world->effects.begin() + id, effect);
-		cGraphics::selectedObject = id;
+		cGraphics::worldContainer->settings.selectedObject = id;
 	}
 };
 
@@ -502,7 +502,7 @@ public:
 	void undo()
 	{
 		cGraphics::world->lights.insert(cGraphics::world->lights.begin() + id, light);
-		cGraphics::selectedObject = id;
+		cGraphics::worldContainer->settings.selectedObject = id;
 	}
 };
 
@@ -588,7 +588,7 @@ public:
 	void undo()
 	{
 		cGraphics::world->sounds.insert(cGraphics::world->sounds.begin() + id, sound);
-		cGraphics::selectedObject = id;
+		cGraphics::worldContainer->settings.selectedObject = id;
 	}
 };
 

@@ -75,12 +75,42 @@ public:
 		bool				showWater;
 		bool				showSprites;
 		bool				showAllLights;
-		bool				showgat;
-		bool				showgrid;
-		bool				showambientlighting;
+		bool				showGat;
+		bool				showGrid;
+		bool				showAmbientLighting;
 		bool				showBoundingBoxes;
 		bool				showDot;
 		bool				showWaterAnimation;
+		bool				showObjectsAsTransparent;
+	};
+
+	class cSettings
+	{
+	public:
+		cSettings();
+		
+		float						gridSize;
+		float						gridoffsetx;
+		float						gridoffsety;
+		
+		cVector2					selectedTile;
+		cVector2					selectionstart;
+		cVector2					selectionend;
+		cVector3					selectionstart3d;
+		cVector3					selectionend3d;
+		std::vector<int>			selectedobjects;
+		int							selectedObject;
+		
+		float						brushsize;
+		int							texturestart;
+		int							textureRot;
+		bool						fliph;
+		bool						flipv;
+		
+		GLfloat						lightAmbient[4];
+		GLfloat						lightDiffuse[4];
+		GLfloat						lightPosition[4];
+
 	};
 
 	cWorldContainer(cWorld* w);
@@ -91,6 +121,7 @@ public:
 
 	cCamera					camera;
 	cView					view;
+	cSettings				settings;
 	
 };
 
@@ -106,42 +137,18 @@ public:
 	static cWorld*							world;
 	static cWorldContainer*					worldContainer;
 	static std::vector<cWorldContainer*>	worlds;
+	static cWorldContainer::cView			view;
 
 	static void								newWorld();
 	static void								updateMenu();
 
 
-	static bool						groupeditmode;
 
-	static float					gridsize;
-	static float					gridoffsetx;
-	static float					gridoffsety;
-
-	static cVector2					selectedTile;
-	static cVector2					selectionstart;
-	static cVector2					selectionend;
-	static cVector3					selectionstart3d;
-	static cVector3					selectionend3d;
-	static std::vector<int>			selectedobjects;
-	static int						selectedObjectProp;
-	static int						selectedObject;
-
-	static float					brushsize;
-	static int						texturestart;
-	static int						textureRot;
-	static bool						fliph;
-	static bool						flipv;
-
-	static GLfloat					lightAmbient[4];
-	static GLfloat					lightDiffuse[4];
-	static GLfloat					lightPosition[4];
 
 	static bool						objectStartDrag;
 	static bool						slope;
-
-	static std::string				editstring;
-	static float*					editval;
-
+	
+	
 	static bool						is3dSelected(float, float, float);
 	static std::string				popup(std::string, std::string = "");
 
@@ -155,11 +162,12 @@ public:
 	static cRSMModel*				previewModel;
 	static int						previewColor;
 
-	static bool						showObjectsAsTransparent;
 	static bool						clearLightmaps;
 	static float					gatTransparency;
 	static int						quadtreeView;
 	static int						gatType;	
+
+	static bool						groupeditmode;
 
 	static eTool									textureTool;
 	static std::vector<std::vector<bool> >			textureBrush;

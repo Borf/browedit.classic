@@ -418,10 +418,10 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 					if (x < 0 || x > cGraphics::world->width - 1)
 						break;
 
-					float selstartx = (((cGraphics::selectionstart.x - (cGraphics::w()-256)) / 32.0f)) / 8.0f;
-					float selstarty = (((int)(cGraphics::selectionstart.y - 32) % 288) / 32) / 8.0f;
-					float selendx = (((cGraphics::selectionend.x - (cGraphics::w()-256)) / 32.0f)) / 8.0f;
-					float selendy = (((int)(cGraphics::selectionend.y - 32) % 288) / 32) / 8.0f;
+					float selstartx = (((cGraphics::worldContainer->settings.selectionstart.x - (cGraphics::w()-256)) / 32.0f)) / 8.0f;
+					float selstarty = (((int)(cGraphics::worldContainer->settings.selectionstart.y - 32) % 288) / 32) / 8.0f;
+					float selendx = (((cGraphics::worldContainer->settings.selectionend.x - (cGraphics::w()-256)) / 32.0f)) / 8.0f;
+					float selendy = (((int)(cGraphics::worldContainer->settings.selectionend.y - 32) % 288) / 32) / 8.0f;
 					float selheight = selendy - selstarty;
 					float selwidth = selendx - selstartx;
 
@@ -481,13 +481,13 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 							t.color[1] = (char)255;
 							t.color[2] = (char)255;
 							t.color[3] = (char)255;
-							t.texture = cGraphics::texturestart + ((int)cGraphics::selectionstart.y - 32) / 288;
+							t.texture = cGraphics::worldContainer->settings.texturestart + ((int)cGraphics::worldContainer->settings.selectionstart.y - 32) / 288;
 							t.lightmap = 0;
 							if(wrap)
 							{
 
-								int gridsize = (int)(cGraphics::gridsize * 4);
-								int gridoff = (int)(cGraphics::gridoffsetx * gridsize);
+								int gridsize = (int)(cGraphics::worldContainer->settings.gridSize * 4);
+								int gridoff = (int)(cGraphics::worldContainer->settings.gridoffsetx * gridsize);
 								t.u1 = selstartx + ((yy+gridoff)%gridsize+1) *  ((float)selwidth/gridsize);
 								t.u2 = selstartx + ((yy+gridoff)%gridsize) *  ((float)selwidth/gridsize);
 								t.u3 = selstartx + ((yy+gridoff)%gridsize+1) *  ((float)selwidth/gridsize);
@@ -582,14 +582,14 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 							t.color[1] = (char)255;
 							t.color[2] = (char)255;
 							t.color[3] = (char)255;
-							t.texture = cGraphics::texturestart + ((int)cGraphics::selectionstart.y - 32) / 288;
+							t.texture = cGraphics::worldContainer->settings.texturestart + ((int)cGraphics::worldContainer->settings.selectionstart.y - 32) / 288;
 							t.lightmap = 0;
 
 
 							if (wrap)
 							{
-								int gridsize = (int)(cGraphics::gridsize * 4);
-								int gridoff = (int)(cGraphics::gridoffsetx * gridsize);
+								int gridsize = (int)(cGraphics::worldContainer->settings.gridSize * 4);
+								int gridoff = (int)(cGraphics::worldContainer->settings.gridoffsetx * gridsize);
 
 								t.u1 = selstartx + ((xx+gridoff)%gridsize) *  ((float)selwidth/gridsize);
 								t.u2 = selstartx + ((xx+gridoff)%gridsize+1) *  ((float)selwidth/gridsize);
@@ -694,12 +694,12 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 							t.color[1] = (char)255;
 							t.color[2] = (char)255;
 							t.color[3] = (char)255;
-							t.texture = cGraphics::texturestart + ((int)cGraphics::selectionstart.y - 32) / 288;
+							t.texture = cGraphics::worldContainer->settings.texturestart + ((int)cGraphics::worldContainer->settings.selectionstart.y - 32) / 288;
 							t.lightmap = 0;
-							float selstartx = (((cGraphics::selectionstart.x - (cGraphics::w()-256)) / 32.0f)) / 8.0f;
-							float selstarty = (((int)(cGraphics::selectionstart.y - 32) % 288) / 32) / 8.0f;
-							float selendx = (((cGraphics::selectionend.x - (cGraphics::w()-256)) / 32.0f)) / 8.0f;
-							float selendy = (((int)(cGraphics::selectionend.y - 32) % 288) / 32) / 8.0f;
+							float selstartx = (((cGraphics::worldContainer->settings.selectionstart.x - (cGraphics::w()-256)) / 32.0f)) / 8.0f;
+							float selstarty = (((int)(cGraphics::worldContainer->settings.selectionstart.y - 32) % 288) / 32) / 8.0f;
+							float selendx = (((cGraphics::worldContainer->settings.selectionend.x - (cGraphics::w()-256)) / 32.0f)) / 8.0f;
+							float selendy = (((int)(cGraphics::worldContainer->settings.selectionend.y - 32) % 288) / 32) / 8.0f;
 
 							
 							t.u1 = selstartx;
@@ -774,12 +774,12 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 							t.color[1] = (char)255;
 							t.color[2] = (char)255;
 							t.color[3] = (char)255;
-							t.texture = cGraphics::texturestart + (int)(cGraphics::selectionstart.y - 32) / 288;
+							t.texture = cGraphics::worldContainer->settings.texturestart + (int)(cGraphics::worldContainer->settings.selectionstart.y - 32) / 288;
 							t.lightmap = 0;
-							float selstartx = (((cGraphics::selectionstart.x - (cGraphics::w()-256)) / 32.0f)) / 8.0f;
-							float selstarty = (((int)(cGraphics::selectionstart.y - 32) % 288) / 32) / 8.0f;
-							float selendx = (((cGraphics::selectionend.x - (cGraphics::w()-256)) / 32.0f)) / 8.0f;
-							float selendy = (((int)(cGraphics::selectionend.y - 32) % 288) / 32) / 8.0f;
+							float selstartx = (((cGraphics::worldContainer->settings.selectionstart.x - (cGraphics::w()-256)) / 32.0f)) / 8.0f;
+							float selstarty = (((int)(cGraphics::worldContainer->settings.selectionstart.y - 32) % 288) / 32) / 8.0f;
+							float selendx = (((cGraphics::worldContainer->settings.selectionend.x - (cGraphics::w()-256)) / 32.0f)) / 8.0f;
+							float selendy = (((int)(cGraphics::worldContainer->settings.selectionend.y - 32) % 288) / 32) / 8.0f;
 
 							
 							t.u1 = selstartx;
@@ -800,14 +800,14 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 				}
 				break;
 			case SDLK_LEFTBRACKET:
-				cGraphics::texturestart--;
-				if (cGraphics::texturestart < 0)
-					cGraphics::texturestart = 0;
+				cGraphics::worldContainer->settings.texturestart--;
+				if (cGraphics::worldContainer->settings.texturestart < 0)
+					cGraphics::worldContainer->settings.texturestart = 0;
 				break;
 			case SDLK_RIGHTBRACKET:
-				cGraphics::texturestart++;
-				if (cGraphics::texturestart > ((int)cGraphics::world->textures.size()) - (cGraphics::h() / 288))
-					cGraphics::texturestart--;
+				cGraphics::worldContainer->settings.texturestart++;
+				if (cGraphics::worldContainer->settings.texturestart > ((int)cGraphics::world->textures.size()) - (cGraphics::h() / 288))
+					cGraphics::worldContainer->settings.texturestart--;
 				break;
 
 			default:

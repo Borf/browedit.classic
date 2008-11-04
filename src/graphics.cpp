@@ -54,19 +54,19 @@ int cGraphics::draw(bool drawwm)
 	{
 		if(worldContainer->camera.topCamera)
 		{
-			lightPosition[0] = mouse3dx;
-			lightPosition[1] = -mouse3dz;
-			lightPosition[2] = 1000;
-			lightPosition[3] = 1.0f;
+			worldContainer->settings.lightPosition[0] = mouse3dx;
+			worldContainer->settings.lightPosition[1] = -mouse3dz;
+			worldContainer->settings.lightPosition[2] = 1000;
+			worldContainer->settings.lightPosition[3] = 1.0f;
 		}
 		else
 		{
-			lightPosition[0] = -worldContainer->camera.pointer.x + worldContainer->camera.height*sin(worldContainer->camera.rot);
-			lightPosition[1] = 10+worldContainer->camera.height+worldContainer->camera.angle;
-			lightPosition[2] = -worldContainer->camera.pointer.y + worldContainer->camera.height*cos(worldContainer->camera.rot);
-			lightPosition[3] = 1.0f;
+			worldContainer->settings.lightPosition[0] = -worldContainer->camera.pointer.x + worldContainer->camera.height*sin(worldContainer->camera.rot);
+			worldContainer->settings.lightPosition[1] = 10+worldContainer->camera.height+worldContainer->camera.angle;
+			worldContainer->settings.lightPosition[2] = -worldContainer->camera.pointer.y + worldContainer->camera.height*cos(worldContainer->camera.rot);
+			worldContainer->settings.lightPosition[3] = 1.0f;
 		}
-		glLightfv(GL_LIGHT1, GL_POSITION, lightPosition);			// Position The Light
+		glLightfv(GL_LIGHT1, GL_POSITION, worldContainer->settings.lightPosition);			// Position The Light
 		glEnable(GL_LIGHTING);
 	}
 	else
@@ -166,9 +166,9 @@ int cGraphics::draw(bool drawwm)
 		{
 			if (editmode == MODE_GAT)
 			{
-				if ((unsigned int)i+texturestart > gatTextures.size()-1)
+				if ((unsigned int)i+worldContainer->settings.texturestart > gatTextures.size()-1)
 					continue;
-				glBindTexture(GL_TEXTURE_2D, gatTextures[i+texturestart]->texId());
+				glBindTexture(GL_TEXTURE_2D, gatTextures[i+worldContainer->settings.texturestart]->texId());
 			}
 			else if (editmode == MODE_WATER)
 			{
@@ -182,9 +182,9 @@ int cGraphics::draw(bool drawwm)
 			}
 			else
 			{
-				if (i+texturestart >= (int)world->textures.size())
+				if (i+worldContainer->settings.texturestart >= (int)world->textures.size())
 					continue;
-				glBindTexture(GL_TEXTURE_2D, world->textures[i+texturestart]->texId());
+				glBindTexture(GL_TEXTURE_2D, world->textures[i+worldContainer->settings.texturestart]->texId());
 			}
 			glBegin(GL_QUADS);
 				glTexCoord2f(1,1);		glVertex2f( width, height-(32+288*i));
@@ -255,7 +255,7 @@ int cGraphics::draw(bool drawwm)
 			{
 				if (editmode == MODE_GAT)
 				{
-					if (i+texturestart > 6)
+					if (i+worldContainer->settings.texturestart > 6)
 						continue;
 				}
 				else if (editmode == MODE_WATER)
@@ -275,10 +275,10 @@ int cGraphics::draw(bool drawwm)
 
 			glColor3f(1,0,0);
 			glBegin(GL_LINE_LOOP);
-				glVertex2f( selectionstart.x, height-selectionstart.y);
-				glVertex2f( selectionstart.x, height-selectionend.y);
-				glVertex2f( selectionend.x, height-selectionend.y);
-				glVertex2f( selectionend.x, height-selectionstart.y);
+				glVertex2f( worldContainer->settings.selectionstart.x,	height-worldContainer->settings.selectionstart.y);
+				glVertex2f( worldContainer->settings.selectionstart.x,	height-worldContainer->settings.selectionend.y);
+				glVertex2f( worldContainer->settings.selectionend.x,	height-worldContainer->settings.selectionend.y);
+				glVertex2f( worldContainer->settings.selectionend.x,	height-worldContainer->settings.selectionstart.y);
 			glEnd();
 		}
 		glColor3f(1,1,1);
@@ -515,25 +515,6 @@ int cGraphics::init(int pWidth, int pHeight, int pBpp, bool pFullscreen)
 
 	previewModel = NULL;
 
-	lightAmbient[0] = 0.1f;
-	lightAmbient[1] = 0.1f;
-	lightAmbient[2] = 0.1f;
-	lightAmbient[3] = 2.0f;
-
-	lightDiffuse[0] = 0.9f;
-	lightDiffuse[1] = 0.9f;
-	lightDiffuse[2] = 0.9f;
-	lightDiffuse[3] = 2.0f;
-
-	lightPosition[0] = 0.0f;
-	lightPosition[1] = 0.0f;
-	lightPosition[2] = 0.0f;
-	lightPosition[3] = 0.0f;
-
-
-	glLightfv(GL_LIGHT1, GL_AMBIENT, lightAmbient);				// Setup The Ambient Light
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, lightDiffuse);				// Setup The Diffuse Light
-	glLightfv(GL_LIGHT1, GL_POSITION,lightPosition);			// Position The Light
 	glEnable(GL_LIGHT1);										// Enable Light One
 	glEnable(GL_LIGHTING);
 	glEnable(GL_COLOR_MATERIAL);
@@ -643,14 +624,14 @@ void cGraphicsBase::killGLWindow(void)								// Properly Kill The Window
 
 bool cGraphics::is3dSelected(float x, float y, float z)
 {
-	if(selectionstart3d.x < selectionend3d.x)
+	if(worldContainer->settings.selectionstart3d.x < worldContainer->settings.selectionend3d.x)
 	{
-		if(x < selectionstart3d.x || x > selectionend3d.x)
+		if(x < worldContainer->settings.selectionstart3d.x || x > worldContainer->settings.selectionend3d.x)
 			return false;
 	}
 	else
 	{
-		if(x > selectionstart3d.x || x < selectionend3d.x)
+		if(x > worldContainer->settings.selectionstart3d.x || x < worldContainer->settings.selectionend3d.x)
 			return false;
 	}
 
@@ -666,14 +647,14 @@ bool cGraphics::is3dSelected(float x, float y, float z)
 			return false;
 	}*/
 
-	if(selectionstart3d.z < selectionend3d.z)
+	if(worldContainer->settings.selectionstart3d.z < worldContainer->settings.selectionend3d.z)
 	{
-		if(z < selectionstart3d.z || z > selectionend3d.z)
+		if(z < worldContainer->settings.selectionstart3d.z || z > worldContainer->settings.selectionend3d.z)
 			return false;
 	}
 	else
 	{
-		if(z > selectionstart3d.z || z < selectionend3d.z)
+		if(z > worldContainer->settings.selectionstart3d.z || z < worldContainer->settings.selectionend3d.z)
 			return false;
 	}
 
@@ -681,14 +662,7 @@ bool cGraphics::is3dSelected(float x, float y, float z)
 }
 
 
-int cGraphics::selectedObjectProp = 0;
-float cGraphics::brushsize = 1.0f;
-int cGraphics::texturestart = 0;
 
-int cGraphics::textureRot = 0;
-bool cGraphics::fliph = false;
-bool cGraphics::flipv = false;
-int cGraphics::selectedObject = -1;
 bool cGraphics::objectStartDrag = false;
 bool cGraphics::slope = false;
 int cGraphics::quadtreeView = -1;
@@ -696,9 +670,6 @@ int cGraphics::gatType = 0;
 cVector2 cGraphics::wallHeightMin(-1,-1);
 cVector2 cGraphics::wallHeightMax(-1,-1);
 cTexture* cGraphics::texturePreview = NULL;
-float cGraphics::gridsize = 1;
-float  cGraphics::gridoffsetx = 0;
-float  cGraphics::gridoffsety = 0;
 bool cGraphics::groupeditmode = false;
 
 cVector3 cGraphics::selectionCenter = cVector3(-1,-1,-1);
@@ -726,23 +697,15 @@ cVector3 cGraphics::clipboardScale;
 cVector3 cGraphics::clipboardRot;
 std::string cGraphics::clipboardFile;
 cRSMModel* cGraphics::previewModel;
-cVector2 cGraphics::selectionend;
-cVector2 cGraphics::selectionstart;
 unsigned int cGraphics::waterCount;
 cTexture* cGraphics::splash = NULL;
 std::vector<std::vector<cTexture*> > cGraphics::waterTextures;
 std::vector<cTexture*> cGraphics::gatTextures;
 int cGraphics::previewColor;
 cFont* cGraphics::font;
-float cGraphics::lightPosition[4];
-float cGraphics::lightDiffuse[4];
-float cGraphics::lightAmbient[4];
 std::string cGraphics::waterExtension;
 std::string cGraphics::waterDirectory;
 cTexture* cGraphics::gatBorder;
-bool cGraphics::showObjectsAsTransparent;
-cVector3 cGraphics::selectionstart3d;
-cVector3 cGraphics::selectionend3d;
 
 
 
@@ -751,6 +714,7 @@ cVector3 cGraphics::selectionend3d;
 cWorld*							cGraphics::world = NULL;
 cWorldContainer*				cGraphics::worldContainer = NULL;
 std::vector<cWorldContainer*>	cGraphics::worlds;
+cWorldContainer::cView			cGraphics::view;
 
 
 
@@ -766,6 +730,7 @@ void cGraphics::newWorld()
 {
 	world = new cWorld();
 	worldContainer = new cWorldContainer(world);
+	view = worldContainer->view;
 	worlds.insert(worlds.begin(), worldContainer);
 	updateMenu();
 }
@@ -837,13 +802,29 @@ cWorldContainer::cView::cView()
 	showTileColors = true;
 	showWater = true;
 	showOglLighting = true;
-	showambientlighting = true;
+	showAmbientLighting = true;
 	showNoTiles = true;
-	showgat = false;
+	showGat = false;
 	showDot = true;
 	showSprites = true;
 	showAllLights = false;
-	showgrid = true;
+	showGrid = true;
 	showObjects = false;
 	showBoundingBoxes = false;
+	showObjectsAsTransparent = false;
+	showWaterAnimation = true;
+}
+
+cWorldContainer::cSettings::cSettings()
+{
+	gridSize			= 1;
+	gridoffsetx			= 0;
+	gridoffsety			= 0;
+	selectedObject		= 0;
+	brushsize			= 1;
+	texturestart		= 0;
+	textureRot			= 0;
+	fliph				= false;
+	flipv				= false;
+
 }

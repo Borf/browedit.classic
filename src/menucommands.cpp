@@ -91,6 +91,8 @@ MENUCOMMAND(open)
 		cGraphics::world->fileName[strlen(cGraphics::world->fileName)-1] = '\0';
 		chdir(curdir);
 		cGraphics::world->load();
+		if(!cGraphics::world->loaded)
+			MenuCommand_close(src);
 		cGraphics::updateMenu();
 	}
 #else
@@ -109,6 +111,8 @@ void openfunc(std::string param)
 	ZeroMemory(cGraphics::world->fileName, 128);
 	memcpy(cGraphics::world->fileName, param.c_str(), param.length());
 	cGraphics::world->load();
+	if(!cGraphics::world->loaded)
+		MenuCommand_close(NULL);
 	cGraphics::updateMenu();
 }
 
@@ -945,8 +949,8 @@ MENUCOMMAND(random3)
 		}
 	}
 
-	cGraphics::selectionstart.y = 320;
-	cGraphics::texturestart = 0;
+	cGraphics::worldContainer->settings.selectionstart.y = 320;
+	cGraphics::worldContainer->settings.texturestart = 0;
 	MenuCommand_addwalls(src);
 
 
@@ -1175,20 +1179,20 @@ MENUCOMMAND(mode)
 	if(title == GetMsg("menu/editmode/GLOBALHEIGHTEDIT"))
 	{
 		editmode = MODE_HEIGHTGLOBAL;
-		if (cGraphics::texturestart >= (int)cGraphics::world->textures.size())
-			cGraphics::texturestart = 0;
+		if (cGraphics::worldContainer->settings.texturestart >= (int)cGraphics::world->textures.size())
+			cGraphics::worldContainer->settings.texturestart = 0;
 	}
 	else if (title == GetMsg("menu/editmode/DETAILTERRAINEDIT"))
 	{
 		editmode = MODE_HEIGHTDETAIL;
-		if (cGraphics::texturestart >= (int)cGraphics::world->textures.size())
-			cGraphics::texturestart = 0;
+		if (cGraphics::worldContainer->settings.texturestart >= (int)cGraphics::world->textures.size())
+			cGraphics::worldContainer->settings.texturestart = 0;
 	}
 	else if (title == GetMsg("menu/editmode/TEXTUREEDIT"))
 	{
 		editmode = MODE_TEXTURE;
-		if (cGraphics::texturestart >= (int)cGraphics::world->textures.size())
-			cGraphics::texturestart = 0;
+		if (cGraphics::worldContainer->settings.texturestart >= (int)cGraphics::world->textures.size())
+			cGraphics::worldContainer->settings.texturestart = 0;
 	}
 	else if (title == GetMsg("menu/editmode/WALLEDIT"))
 	{
@@ -1197,24 +1201,24 @@ MENUCOMMAND(mode)
 	else if (title == GetMsg("menu/editmode/OBJECTEDIT"))
 	{
 		editmode = MODE_OBJECTS;
-		if (cGraphics::texturestart >= (int)cGraphics::world->textures.size())
-			cGraphics::texturestart = 0;
+		if (cGraphics::worldContainer->settings.texturestart >= (int)cGraphics::world->textures.size())
+			cGraphics::worldContainer->settings.texturestart = 0;
 	}
 	else if (title == GetMsg("menu/editmode/GATEDIT"))
 	{
 		editmode = MODE_GAT;
-		if (cGraphics::texturestart >= 6)
-			cGraphics::texturestart = 0;
+		if (cGraphics::worldContainer->settings.texturestart >= 6)
+			cGraphics::worldContainer->settings.texturestart = 0;
 	}
 	else if (title == GetMsg("menu/editmode/WATEREDIT"))
 	{
 		editmode = MODE_WATER;
-		cGraphics::texturestart = cGraphics::world->water.type;
+		cGraphics::worldContainer->settings.texturestart = cGraphics::world->water.type;
 	}
 	else if (title == GetMsg("menu/editmode/EFFECTSEDIT"))
 	{
 		editmode = MODE_EFFECTS;
-		cGraphics::selectedObject = -1;
+		cGraphics::worldContainer->settings.selectedObject = -1;
 	}
 	else if (title == GetMsg("menu/editmode/SOUNDSEDIT"))
 	{
@@ -1232,13 +1236,6 @@ MENUCOMMAND(mode)
 	{
 		editmode = MODE_SPRITE;
 	}
-	return true;
-}
-
-MENUCOMMAND(grid)
-{
-	src->ticked = !src->ticked;
-	cGraphics::worldContainer->view.showgrid = src->ticked;
 	return true;
 }
 
@@ -1264,14 +1261,6 @@ MENUCOMMAND(speed)
 	return true;
 }
 
-MENUCOMMAND(showobjects)
-{
-	src->ticked = !src->ticked;
-	cGraphics::worldContainer->view.showObjects = src->ticked;
-	return true;
-}
-
-
 MENUCOMMAND(model)
 {
 	delete cGraphics::previewModel;
@@ -1288,13 +1277,6 @@ MENUCOMMAND(model)
 	return true;
 }
 
-
-MENUCOMMAND(slope)
-{
-	src->ticked = !src->ticked;
-	cGraphics::slope = src->ticked;
-	return true;
-}
 
 MENUCOMMAND(quadtree)
 {
@@ -2075,7 +2057,7 @@ MENUCOMMAND(addwalls)
 					t.color[1] = (char)255;
 					t.color[2] = (char)255;
 					t.color[3] = (char)255;
-					t.texture = cGraphics::texturestart + ((int)cGraphics::selectionstart.y - 32) / 288;
+					t.texture = cGraphics::worldContainer->settings.texturestart + ((int)cGraphics::worldContainer->settings.selectionstart.y - 32) / 288;
 					t.lightmap = 0;
 					t.u1 = 0;
 					t.v1 = 0;
@@ -2101,7 +2083,7 @@ MENUCOMMAND(addwalls)
 					t.color[1] = (char)255;
 					t.color[2] = (char)255;
 					t.color[3] = (char)255;
-					t.texture = cGraphics::texturestart + ((int)cGraphics::selectionstart.y - 32) / 288;
+					t.texture = cGraphics::worldContainer->settings.texturestart + ((int)cGraphics::worldContainer->settings.selectionstart.y - 32) / 288;
 					t.lightmap = 0;
 					t.u1 = 0;
 					t.v1 = 0;
@@ -2179,7 +2161,7 @@ MENUCOMMAND(tempfunc)
 	t.color[1] = (char)255;
 	t.color[2] = (char)255;
 	t.color[3] = (char)255;
-	t.texture = cGraphics::texturestart + ((int)cGraphics::selectionstart.y - 32) / 288;
+	t.texture = cGraphics::worldContainer->settings.texturestart + ((int)cGraphics::worldContainer->settings.selectionstart.y - 32) / 288;
 	t.lightmap = 0;
 	t.u1 = 0;
 	t.v1 = 0;
@@ -2224,12 +2206,6 @@ MENUCOMMAND(tempfunc)
 
 }
 
-MENUCOMMAND(snaptofloor)
-{
-	src->ticked = !src->ticked;
-	return true;
-}
-
 
 bool mouseovertexture(cMenu* src)
 {
@@ -2260,10 +2236,10 @@ MENUCOMMAND(effect)
 	if (selectedeffect != NULL)
 		selectedeffect->ticked = false;
 	src->ticked = true;
-	if (cGraphics::selectedObject != -1)
+	if (cGraphics::worldContainer->settings.selectedObject != -1)
 	{
-		cGraphics::world->effects[cGraphics::selectedObject].type = atoi(src->data.c_str());
-		cGraphics::world->effects[cGraphics::selectedObject].readablename = src->title;
+		cGraphics::world->effects[cGraphics::worldContainer->settings.selectedObject].type = atoi(src->data.c_str());
+		cGraphics::world->effects[cGraphics::worldContainer->settings.selectedObject].readablename = src->title;
 	}
 	selectedeffect = src;
 	return true;
@@ -2271,9 +2247,13 @@ MENUCOMMAND(effect)
 
 MENUCOMMAND(toggle)
 {
-	src->ticked = !src->ticked;
-	*((bool*)src->pdata) = src->ticked;
-
+	if(src->pdata)
+	{
+		*((bool*)src->pdata) = !*((bool*)src->pdata);
+		src->ticked = *((bool*)src->pdata);
+	}
+	else
+		src->ticked = !src->ticked;
 	return true;
 }
 
@@ -2315,7 +2295,7 @@ MENUCOMMAND(cleantextures)
 			cGraphics::world->textures.erase(cGraphics::world->textures.begin() + i);
 		}
 	}
-	cGraphics::texturestart = 0;
+	cGraphics::worldContainer->settings.texturestart = 0;
 	return true;
 }
 
@@ -2412,7 +2392,7 @@ MENUCOMMAND(fillarea)
 				int yy = y % 4;
 				cTile t;
 				t.lightmap = cGraphics::world->textures.size()-1;
-				t.texture = cGraphics::texturestart + ((int)cGraphics::selectionstart.y - 32) / 288;
+				t.texture = cGraphics::worldContainer->settings.texturestart + ((int)cGraphics::worldContainer->settings.selectionstart.y - 32) / 288;
 				t.u1 = xx/4.0;
 				t.v1 = yy/4.0;
 				t.u2 = (xx+1)/4.0;
@@ -2819,8 +2799,8 @@ MENUCOMMAND(random5)
 		}
 	}
 
-	cGraphics::selectionstart.y = 320;
-	cGraphics::texturestart = 1;
+	cGraphics::worldContainer->settings.selectionstart.y = 320;
+	cGraphics::worldContainer->settings.texturestart = 1;
 	MenuCommand_addwalls(src);
 
 
@@ -3172,7 +3152,7 @@ MENUCOMMAND(addfavorite)
 	l.range = atoi(n->FirstChildElement("range")->FirstChild()->Value());
 	l.lightFalloff = atof(n->FirstChildElement("lightFalloff")->FirstChild()->Value());
 
-	cGraphics::selectedObject = cGraphics::world->lights.size();
+	cGraphics::worldContainer->settings.selectedObject = cGraphics::world->lights.size();
 	cGraphics::world->lights.push_back(l);
 	cGraphics::worldContainer->undoStack->push(new cUndoNewLight());
 
@@ -3182,7 +3162,7 @@ MENUCOMMAND(addfavorite)
 		w->userfunc(NULL);
 		cLightOverViewWindow::cLightOverViewTree* tree = (cLightOverViewWindow::cLightOverViewTree*)w->objects["list"];
 		Log(3,0,"Calling getobject for %i", tree);
-		tree->getObject(cGraphics::world->lights[cGraphics::selectedObject]);
+		tree->getObject(cGraphics::world->lights[cGraphics::worldContainer->settings.selectedObject]);
 	}
 
 	return true;
@@ -3191,21 +3171,23 @@ MENUCOMMAND(addfavorite)
 
 MENUCOMMAND(deselectlight)
 {
-	cGraphics::selectedObject = -1;
+	cGraphics::worldContainer->settings.selectedObject = -1;
 	return true;
 }
 
 
 MENUCOMMAND(light_disableshadow)
 {
-	cGraphics::world->lights[cGraphics::selectedObject].givesShadow = !cGraphics::world->lights[cGraphics::selectedObject].givesShadow;
+	cGraphics::world->lights[cGraphics::worldContainer->settings.selectedObject].givesShadow = !cGraphics::world->lights[cGraphics::worldContainer->settings.selectedObject].givesShadow;
 	return true;
 }
 MENUCOMMAND(light_snaptofloor)
 {
-	cGraphics::world->lights[cGraphics::selectedObject].pos.y = cGraphics::world->cubes[(int)cGraphics::world->lights[cGraphics::selectedObject].pos.z/2][(int)cGraphics::world->lights[cGraphics::selectedObject].pos.x/2].cell1;
+	cGraphics::world->lights[cGraphics::worldContainer->settings.selectedObject].pos.y = cGraphics::world->cubes[(int)cGraphics::world->lights[cGraphics::worldContainer->settings.selectedObject].pos.z/2][(int)cGraphics::world->lights[cGraphics::worldContainer->settings.selectedObject].pos.x/2].cell1;
 	return true;
 }
+
+
 MENUCOMMAND(light_setheight)
 {
 	delete popupmenu;
@@ -3213,7 +3195,7 @@ MENUCOMMAND(light_setheight)
 
 
 	MenuCommand_light_snaptofloor(src);
-	cGraphics::world->lights[cGraphics::selectedObject].pos.y += atoi(cWM::inputWindow("Height:").c_str());
+	cGraphics::world->lights[cGraphics::worldContainer->settings.selectedObject].pos.y += atoi(cWM::inputWindow("Height:").c_str());
 
 
 	return true;
@@ -3786,7 +3768,7 @@ inline void setLightIntensity( BYTE* buf, int yy, int xx, cVector3 worldpos, std
 	unsigned int to = cGraphics::world->lights.size();
 	if(lightonly)
 	{
-		from = cGraphics::selectedObject;
+		from = cGraphics::worldContainer->settings.selectedObject;
 		to = from+1;
 	}
 	for(unsigned int i = from; i < to; i++)
@@ -3888,11 +3870,11 @@ MENUCOMMAND(makeMinimaps)
 
 		cGraphics::worldContainer->camera.topCamera = true;
 		cGraphics::worldContainer->camera.pointer = cVector2(-cGraphics::world->height*10,0);
-		cGraphics::worldContainer->view.showDot = false;
-		cGraphics::worldContainer->view.showgrid = false;
-		cGraphics::worldContainer->view.showLightmaps = false;
-		cGraphics::worldContainer->view.showObjects = false;
-		cGraphics::worldContainer->view.showNoTiles = true;
+		cGraphics::view.showDot = false;
+		cGraphics::view.showGrid = false;
+		cGraphics::view.showLightmaps = false;
+		cGraphics::view.showObjects = false;
+		cGraphics::view.showNoTiles = true;
 		cGraphics::noTileColor = cVector3(0,0,0);
 
 		unsigned char *pixels = NULL;
@@ -3957,8 +3939,8 @@ MENUCOMMAND(makeMinimaps)
 		}
 
 
-		cGraphics::worldContainer->view.showLightmaps = true;
-		cGraphics::worldContainer->view.showObjects = true;
+		cGraphics::view.showLightmaps = true;
+		cGraphics::view.showObjects = true;
 		yto = mindist;
 		cGraphics::worldContainer->camera.height = minheight;
 		if (!cGraphics::draw(false))
@@ -4015,10 +3997,12 @@ MENUCOMMAND(makeMinimaps)
 
 MENUCOMMAND(switchMap)
 {
+	cGraphics::worldContainer->view = cGraphics::view;
 	int newMap = ((cMenuItem*)src)->data3;
 	
 	cGraphics::worldContainer = cGraphics::worlds[newMap];
 	cGraphics::world = cGraphics::worldContainer->world;
+	cGraphics::view = cGraphics::worldContainer->view;
 
 	for(int i = newMap; i > 0; i--)
 	{
@@ -4029,3 +4013,23 @@ MENUCOMMAND(switchMap)
 	cGraphics::updateMenu();
 	return true;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

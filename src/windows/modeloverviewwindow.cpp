@@ -114,7 +114,7 @@ void cModelOverViewWindow::cModelOverViewTree::onChange()
 		for(i = 0; i < cGraphics::world->models.size(); i++)
 		{
 			if(cGraphics::world->models[i] == ((cModelOverViewTreeNode*)node)->model)
-				cGraphics::selectedObject = i;
+				cGraphics::worldContainer->settings.selectedObject = i;
 		}
 	}
 }
