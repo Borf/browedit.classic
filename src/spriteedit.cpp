@@ -6,7 +6,6 @@
 
 extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
-extern cUndoStack undostack;
 extern bool lbuttondown, doneaction;
 extern float oldmousey,oldmousex;
 extern int movement;
@@ -26,7 +25,7 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 				{
 					if(doneaction)
 					{
-						//undostack.push(new cUndoChangeSprite(cGraphics::selectedObject));
+						//cGraphics::worldContainer->undostack->push(new cUndoChangeSprite(cGraphics::selectedObject));
 						doneaction = false;
 					}
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
@@ -106,7 +105,7 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 					cGraphics::world->sprites.push_back(sprite);
 
 					Log(3,0,"Sprite click");
-					//undostack.push(new cUndoNewSprite());
+					//cGraphics::worldContainer->undostack->push(new cUndoNewSprite());
 				}
 				else
 				{
@@ -144,7 +143,7 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 			case SDLK_BACKSPACE:
 				if (cGraphics::selectedObject > -1 && cGraphics::selectedObject < (int)cGraphics::world->sprites.size())
 				{
-					//undostack.push(new cUndoSpriteDelete(cGraphics::selectedObject));
+					//cGraphics::worldContainer->undostack->push(new cUndoSpriteDelete(cGraphics::selectedObject));
 					delete cGraphics::world->sprites[cGraphics::selectedObject];
 					cGraphics::world->sprites.erase(cGraphics::world->sprites.begin() + cGraphics::selectedObject);
 					cGraphics::selectedObject = -1;

@@ -11,7 +11,6 @@ MENUCOMMAND(model);
 
 extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
-extern cUndoStack undostack;
 extern bool lbuttondown,rbuttondown;
 extern bool	doneaction;
 extern cMenu* snaptofloor;
@@ -31,7 +30,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 				{
 					if (doneaction)
 					{
-						undostack.push(new cUndoChangeObject(cGraphics::selectedObject));
+						cGraphics::worldContainer->undoStack->push(new cUndoChangeObject(cGraphics::selectedObject));
 						doneaction = false;
 					}
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
@@ -107,7 +106,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 					sprintf(buf, "%s-%i", cGraphics::previewModel->rofilename.c_str(), rand()%100);
 					cGraphics::world->models.push_back(model);
 					cGraphics::selectedObject = cGraphics::world->models.size()-1;
-					undostack.push(new cUndoNewObject());
+					cGraphics::worldContainer->undoStack->push(new cUndoNewObject());
 				}
 				else
 				{
@@ -148,7 +147,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 			case SDLK_UP:
 				if (cGraphics::selectedObject > -1 && cGraphics::selectedObject < (int)cGraphics::world->models.size())
 				{
-					undostack.push(new cUndoChangeObject(cGraphics::selectedObject));
+					cGraphics::worldContainer->undoStack->push(new cUndoChangeObject(cGraphics::selectedObject));
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 					bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 					bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
@@ -163,7 +162,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 			case SDLK_DOWN:
 				if (cGraphics::selectedObject > -1 && cGraphics::selectedObject < (int)cGraphics::world->models.size())
 				{
-					undostack.push(new cUndoChangeObject(cGraphics::selectedObject));
+					cGraphics::worldContainer->undoStack->push(new cUndoChangeObject(cGraphics::selectedObject));
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 					bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 					bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
@@ -178,7 +177,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 			case SDLK_RIGHT:
 				if (cGraphics::selectedObject > -1 && cGraphics::selectedObject < (int)cGraphics::world->models.size())
 				{
-					undostack.push(new cUndoChangeObject(cGraphics::selectedObject));
+					cGraphics::worldContainer->undoStack->push(new cUndoChangeObject(cGraphics::selectedObject));
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 					bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 					bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
@@ -193,7 +192,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 			case SDLK_LEFT:
 				if (cGraphics::selectedObject > -1 && cGraphics::selectedObject < (int)cGraphics::world->models.size())
 				{
-					undostack.push(new cUndoChangeObject(cGraphics::selectedObject));
+					cGraphics::worldContainer->undoStack->push(new cUndoChangeObject(cGraphics::selectedObject));
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 					bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 					bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
@@ -230,7 +229,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 			case SDLK_h:
 				if (cGraphics::selectedObject != -1)
 				{
-					undostack.push(new cUndoChangeObject(cGraphics::selectedObject));
+					cGraphics::worldContainer->undoStack->push(new cUndoChangeObject(cGraphics::selectedObject));
 					if(SDL_GetModState() & KMOD_ALT)
 						cGraphics::world->models[cGraphics::selectedObject]->scale.y = -	cGraphics::world->models[cGraphics::selectedObject]->scale.y;
 					else
@@ -240,14 +239,14 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 			case SDLK_v:
 				if (cGraphics::selectedObject != -1)
 				{
-					undostack.push(new cUndoChangeObject(cGraphics::selectedObject));
+					cGraphics::worldContainer->undoStack->push(new cUndoChangeObject(cGraphics::selectedObject));
 					cGraphics::world->models[cGraphics::selectedObject]->scale.z = -	cGraphics::world->models[cGraphics::selectedObject]->scale.z;
 				}
 				break;
 			case SDLK_PAGEDOWN:
 				if (cGraphics::selectedObject > -1 && cGraphics::selectedObject < (int)cGraphics::world->models.size())
 				{
-					undostack.push(new cUndoChangeObject(cGraphics::selectedObject));
+					cGraphics::worldContainer->undoStack->push(new cUndoChangeObject(cGraphics::selectedObject));
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 					bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 					bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
@@ -262,7 +261,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 			case SDLK_PAGEUP:
 				if (cGraphics::selectedObject > -1 && cGraphics::selectedObject < (int)cGraphics::world->models.size())
 				{
-					undostack.push(new cUndoChangeObject(cGraphics::selectedObject));
+					cGraphics::worldContainer->undoStack->push(new cUndoChangeObject(cGraphics::selectedObject));
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 					bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 					bool shift = (SDL_GetModState() & KMOD_SHIFT) != 0;
@@ -335,14 +334,14 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 
 						cGraphics::world->models.push_back(model);
 						cGraphics::selectedObject = cGraphics::world->models.size()-1;
-						undostack.push(new cUndoNewObject());
+						cGraphics::worldContainer->undoStack->push(new cUndoNewObject());
 					}
 				}
 				break;
 			case SDLK_BACKSPACE:
 				if (cGraphics::selectedObject > -1 && cGraphics::selectedObject < (int)cGraphics::world->models.size())
 				{
-					undostack.push(new cUndoObjectDelete(cGraphics::selectedObject));
+					cGraphics::worldContainer->undoStack->push(new cUndoObjectDelete(cGraphics::selectedObject));
 					delete cGraphics::world->models[cGraphics::selectedObject];
 					cGraphics::world->models.erase(cGraphics::world->models.begin() + cGraphics::selectedObject);
 					cGraphics::selectedObject = -1;
@@ -391,7 +390,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 			case SDLK_r:
 				if (cGraphics::selectedObject != -1)
 				{
-					undostack.push(new cUndoChangeObject(cGraphics::selectedObject));
+					cGraphics::worldContainer->undoStack->push(new cUndoChangeObject(cGraphics::selectedObject));
 					cGraphics::world->models[cGraphics::selectedObject]->rot = cVector3(0,0,0);
 				}
 				break;

@@ -79,9 +79,11 @@ unsigned int cMenu::h()
 {
 	return (unsigned int) ((drawStyle==0) ? 20 : 20*items.size());
 }
-cMenuItem::cMenuItem()
+
+cMenuItem::cMenuItem() : cMenu()
 {
 	item = true;
+	pdata = NULL;
 }
 
 
@@ -432,4 +434,22 @@ cMenu* cMenu::findData(std::string d)
 			return m;
 	}
 	return NULL;
+}
+
+void cMenu::update()
+{
+	for(unsigned int i = 0; i < items.size(); i++)
+		items[i]->update();
+}
+void cMenuItemLinked::update()
+{
+//	if(pdata)
+//		ticked = *((bool*)pdata);
+	cMenu::update();
+}
+
+cMenuItemLinked::cMenuItemLinked()
+{
+	cMenuItem();	
+	pdata = NULL;
 }

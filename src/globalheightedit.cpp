@@ -4,7 +4,6 @@
 
 extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
-extern cUndoStack undostack;
 extern double mouse3dxstart, mouse3dystart, mouse3dzstart;
 #include "windows/areacopywindow.h"
 
@@ -69,7 +68,7 @@ int cProcessManagement::globalheightedit_process_events(SDL_Event &event)
 			{
 			case SDLK_PAGEDOWN:
 				{
-					undostack.push(new cUndoHeightEdit(0,0,cGraphics::world->width, cGraphics::world->height));
+					cGraphics::worldContainer->undoStack->push(new cUndoHeightEdit(0,0,cGraphics::world->width, cGraphics::world->height));
 					for(int x = 0; x < cGraphics::world->width; x++)
 					{
 						for(int y = 0; y < cGraphics::world->height; y++)
@@ -98,7 +97,7 @@ int cProcessManagement::globalheightedit_process_events(SDL_Event &event)
 				break;
 			case SDLK_PAGEUP:
 				{
-					undostack.push(new cUndoHeightEdit(0,0,cGraphics::world->width, cGraphics::world->height));
+					cGraphics::worldContainer->undoStack->push(new cUndoHeightEdit(0,0,cGraphics::world->width, cGraphics::world->height));
 					for(int x = 0; x < cGraphics::world->width; x++)
 					{
 						for(int y = 0; y < cGraphics::world->height; y++)

@@ -1550,13 +1550,13 @@ void cWorld::draw()
 
 	glEnable(GL_TEXTURE_2D);
 	glDisable(GL_BLEND);
-	if (cGraphics::showLightmaps || !cGraphics::showOglLighting)
+	if (cGraphics::worldContainer->view.showLightmaps || !cGraphics::worldContainer->view.showOglLighting)
 		glDisable(GL_LIGHTING);
 	else
 		glEnable(GL_LIGHTING);
 
 
-//	if(cGraphics::showambientlighting)
+//	if(cGraphics::worldContainer->view.showambientlighting)
 //		glColor4f(ambientlight.diffuse.x+ambientlight.shadow.x,ambientlight.diffuse.y+ambientlight.shadow.y,ambientlight.diffuse.z+ambientlight.shadow.z,1);
 //	else
 		glColor4f(1,1,1,1);
@@ -1609,10 +1609,10 @@ void cWorld::draw()
 
 				int texture = textures[t->texture]->texId();
 
-				if (	(editmode == MODE_WALLS && cGraphics::showgrid && (c->tileOtherSide != -1 || c->tileSide != -1) || c->minHeight != 99999)
+				if (	(editmode == MODE_WALLS && cGraphics::worldContainer->view.showgrid && (c->tileOtherSide != -1 || c->tileSide != -1) || c->minHeight != 99999)
 					||	(editmode == MODE_HEIGHTGLOBAL && c->selected))
 					glColor3f(1,0,1);
-//				else if (cGraphics::showtilecolors)
+//				else if (cGraphics::worldContainer->view.showtilecolors)
 //					glColor3f((BYTE)t->color[0] / 256.0f,(BYTE)t->color[1] / 256.0f,(BYTE)t->color[2] / 256.0f);
 				else if(editmode == MODE_TEXTUREPAINT && cGraphics::textureTool == TOOL_SELECTAREA)
 				{
@@ -1629,7 +1629,7 @@ void cWorld::draw()
 				}
 				else if(editmode == MODE_TEXTUREPAINT && inverseSelection && !c->selected)
 					glColor4f(0.2f, 0.2f, 0.2f, 1);
-				else if (cGraphics::showambientlighting)
+				else if (cGraphics::worldContainer->view.showambientlighting)
 					glColor4f(ambientLight.diffuse.x,ambientLight.diffuse.y,ambientLight.diffuse.z,1);
 				else
 					glColor4f(1,1,1,1);
@@ -1644,7 +1644,7 @@ void cWorld::draw()
 					glTexCoord2f(t->u4, 1-t->v4);				glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
 				glEnd();
 			}
-			else if (cGraphics::showNoTiles)
+			else if (cGraphics::worldContainer->view.showNoTiles)
 			{
 
 				glColor3f(cGraphics::noTileColor.x, cGraphics::noTileColor.y, cGraphics::noTileColor.z);
@@ -1666,7 +1666,7 @@ void cWorld::draw()
 					break;
 				int texture = textures[t->texture]->texId();
 				glBindTexture(GL_TEXTURE_2D, texture);
-				if(cGraphics::showambientlighting)
+				if(cGraphics::worldContainer->view.showambientlighting)
 					glColor4f(ambientLight.diffuse.x,ambientLight.diffuse.y,ambientLight.diffuse.z,1);
 				else
 					glColor4f(1,1,1,1);
@@ -1685,7 +1685,7 @@ void cWorld::draw()
 					break;
  				int texture = textures[t->texture]->texId();
 				glBindTexture(GL_TEXTURE_2D, texture);
-				if(cGraphics::showambientlighting)
+				if(cGraphics::worldContainer->view.showambientlighting)
 					glColor4f(ambientLight.diffuse.x,ambientLight.diffuse.y,ambientLight.diffuse.z,1);
 				else
 					glColor4f(1,1,1,1);
@@ -1703,7 +1703,7 @@ void cWorld::draw()
 
 	glColor4f(1,1,1,1);
 	glEnable(GL_BLEND);
-	if(cGraphics::showLightmaps)
+	if(cGraphics::worldContainer->view.showLightmaps)
 	{
 		for(x = 0; (int)x < width; x++)
 		{
@@ -1838,14 +1838,14 @@ void cWorld::draw()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set the correct blending mode
 	glColor4f(1,1,1,0.5);
 
-	if(cGraphics::showWater || editmode == MODE_WATER)
+	if(cGraphics::worldContainer->view.showWater || editmode == MODE_WATER)
 	{
 		glDepthMask(0);
 		static float waterindex = 0;
 
 		glBindTexture(GL_TEXTURE_2D, cGraphics::waterTextures[water.type][(int)ceil(waterindex)]->texId());
 
-		if(cGraphics::animateWater)
+		if(cGraphics::worldContainer->view.showWaterAnimation)
 			waterindex+=max((float)0,(cGraphicsBase::getFrameTicks()) / 50.0f);
 		if (waterindex > cGraphics::waterTextures[water.type].size()-1)
 			waterindex = 0;
@@ -1859,7 +1859,7 @@ void cWorld::draw()
 		glDepthMask(1);
 	}
 
-	if (editmode == MODE_GAT || cGraphics::showgat)
+	if (editmode == MODE_GAT || cGraphics::worldContainer->view.showgat)
 	{
 		glEnable(GL_BLEND);
 		glEnable(GL_TEXTURE_2D);
@@ -1881,7 +1881,7 @@ void cWorld::draw()
 					glTexCoord2f(1,1); glVertex3f(x*5+5,-c->cell4+0.1,(2*height-y)*5-5);
 				glEnd();
 
-				if(cGraphics::showgrid)
+				if(cGraphics::worldContainer->view.showgrid)
 				{
 					glColor4f(1,1,1,1);
 					glBindTexture(GL_TEXTURE_2D, cGraphics::gatBorder->texId());
@@ -2091,7 +2091,7 @@ void cWorld::draw()
 
 
 
-		if (cGraphics::showgrid)
+		if (cGraphics::worldContainer->view.showgrid)
 		{
 			glDisable(GL_TEXTURE_2D);
 			glBegin(GL_LINES);
@@ -2218,7 +2218,7 @@ void cWorld::draw()
 		glColor4f(1,1,1,1);
 	}
 
-	if ((cGraphics::showObjects || editmode == MODE_OBJECTS) && editmode != MODE_OBJECTGROUP)
+	if ((cGraphics::worldContainer->view.showObjects || editmode == MODE_OBJECTS) && editmode != MODE_OBJECTGROUP)
 	{
 		glEnable(GL_BLEND);
 
@@ -2229,9 +2229,9 @@ void cWorld::draw()
 		for(i = 0; i < models.size(); i++)
 		{
 			if((int)i == cGraphics::selectedObject && editmode == MODE_OBJECTS)
-				glColor4f(1,0,0, cGraphics::transparentObjects ? 0.2f : 1);
+				glColor4f(1,0,0, cGraphics::showObjectsAsTransparent ? 0.2f : 1);
 			else
-				glColor4f(1,1,1,cGraphics::transparentObjects ? 0.2f : 1);
+				glColor4f(1,1,1,cGraphics::showObjectsAsTransparent ? 0.2f : 1);
 //			models[i]->collides(cVector3(0,0,0), cVector3(0,0,0));
 			models[i]->draw();
 		}
@@ -2240,7 +2240,7 @@ void cWorld::draw()
 		glColor4f(1,1,1,1);
 
 
-		if(editmode == MODE_OBJECTS && cGraphics::showObjects)
+		if(editmode == MODE_OBJECTS && cGraphics::worldContainer->view.showObjects)
 		{
 			glDisable(GL_TEXTURE_2D);
 			glBegin(GL_QUADS);
@@ -2290,7 +2290,7 @@ void cWorld::draw()
 		}
 	
 	}
-	if(editmode == MODE_OBJECTS && cGraphics::showgrid)
+	if(editmode == MODE_OBJECTS && cGraphics::worldContainer->view.showgrid)
 	{
 		glDisable(GL_TEXTURE_2D);
 		glColor4f(1,1,1,1);
@@ -2330,9 +2330,9 @@ void cWorld::draw()
 		for(i = 0; i < models.size(); i++)
 		{
 			if(models[i]->selected)
-				glColor4f(1,0,0, cGraphics::transparentObjects ? 0.2f : 1);
+				glColor4f(1,0,0, cGraphics::showObjectsAsTransparent ? 0.2f : 1);
 			else
-				glColor4f(1,1,1, cGraphics::transparentObjects ? 0.2f : 1);
+				glColor4f(1,1,1, cGraphics::showObjectsAsTransparent ? 0.2f : 1);
 			models[i]->draw();
 		}
 		glScalef(1,1,-1);
@@ -2463,7 +2463,7 @@ void cWorld::draw()
 					glVertex3f(0,-999, 0);
 				glEnd();
 			}
-			if((int)i == cGraphics::selectedObject || cGraphics::showAllLights)
+			if((int)i == cGraphics::selectedObject || cGraphics::worldContainer->view.showAllLights)
 			{
 				glColor4f(lights[i].color.x,lights[i].color.y,lights[i].color.z,0.3f);
 
@@ -2525,7 +2525,7 @@ void cWorld::draw()
 			glLineWidth(1);
 		}
 	}
-	if(editmode == MODE_SPRITE  || cGraphics::showSprites)
+	if(editmode == MODE_SPRITE  || cGraphics::worldContainer->view.showSprites)
 	{
 		for(i = 0; i < sprites.size(); i++)
 		{
@@ -2539,7 +2539,7 @@ void cWorld::draw()
 	}
 	if(editmode == MODE_TEXTUREPAINT)
 	{
-		if (cGraphics::showgrid)
+		if (cGraphics::worldContainer->view.showgrid)
 		{
 			glDisable(GL_TEXTURE_2D);
 			glBegin(GL_LINES);
@@ -2766,7 +2766,7 @@ void cWorld::draw()
 
 
 
-	if(cGraphics::showWater || editmode == MODE_WATER)
+	if(cGraphics::worldContainer->view.showWater || editmode == MODE_WATER)
 	{
 		glEnable(GL_BLEND);
 		glEnable(GL_TEXTURE_2D);
@@ -2776,7 +2776,7 @@ void cWorld::draw()
 
 		glBindTexture(GL_TEXTURE_2D, cGraphics::waterTextures[water.type][(int)ceil(waterindex)]->texId());
 
-		if(cGraphics::animateWater)
+		if(cGraphics::worldContainer->view.showWaterAnimation)
 			waterindex+=max((float)0,(cGraphicsBase::getFrameTicks()) / 50.0f);
 		if (waterindex > cGraphics::waterTextures[water.type].size()-1)
 			waterindex = 0;
@@ -2790,7 +2790,7 @@ void cWorld::draw()
 		glDisable(GL_BLEND);
 	}
 
-	if(cGraphics::showDot)
+	if(cGraphics::worldContainer->view.showDot)
 	{
 		glColor4f(1,1,0,1);
 		glDisable(GL_TEXTURE_2D);

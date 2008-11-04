@@ -15,6 +15,7 @@
 #include <map>
 #include "windows/hotkeywindow.h"
 #include "menucommands.h"
+#include <undo.h>
 
 #include "menu.h"
 
@@ -40,8 +41,8 @@ cMenu* popupmenu = NULL;
 
 int cGraphics::draw(bool drawwm)
 {
-	frameticks = SDL_GetTicks() - lasttick;
-	lasttick += frameticks;
+	frameTicks = SDL_GetTicks() - lastTick;
+	lastTick += frameTicks;
 
 	glClearColor(backgroundColor.x, backgroundColor.y, backgroundColor.z, 1.0f);				// Black Background
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
@@ -49,25 +50,30 @@ int cGraphics::draw(bool drawwm)
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set the correct blending mode
 
-	if(worldContainer->camera.topCamera)
+	if(worldContainer)
 	{
-		lightPosition[0] = mouse3dx;
-		lightPosition[1] = -mouse3dz;
-		lightPosition[2] = 1000;
-		lightPosition[3] = 1.0f;
+		if(worldContainer->camera.topCamera)
+		{
+			lightPosition[0] = mouse3dx;
+			lightPosition[1] = -mouse3dz;
+			lightPosition[2] = 1000;
+			lightPosition[3] = 1.0f;
+		}
+		else
+		{
+			lightPosition[0] = -worldContainer->camera.pointer.x + worldContainer->camera.height*sin(worldContainer->camera.rot);
+			lightPosition[1] = 10+worldContainer->camera.height+worldContainer->camera.angle;
+			lightPosition[2] = -worldContainer->camera.pointer.y + worldContainer->camera.height*cos(worldContainer->camera.rot);
+			lightPosition[3] = 1.0f;
+		}
+		glLightfv(GL_LIGHT1, GL_POSITION, lightPosition);			// Position The Light
+		glEnable(GL_LIGHTING);
 	}
 	else
-	{
-		lightPosition[0] = -worldContainer->camera.pointer.x + worldContainer->camera.height*sin(worldContainer->camera.rot);
-		lightPosition[1] = 10+worldContainer->camera.height+worldContainer->camera.angle;
-		lightPosition[2] = -worldContainer->camera.pointer.y + worldContainer->camera.height*cos(worldContainer->camera.rot);
-		lightPosition[3] = 1.0f;
-	}
-	glLightfv(GL_LIGHT1, GL_POSITION, lightPosition);			// Position The Light
+		glDisable(GL_LIGHTING);
 
-	glEnable(GL_LIGHTING);
 
-	if(state != OBJECTSELECT && state != OBJECTPROPS)
+	if(world && state != OBJECTSELECT && state != OBJECTPROPS)
 		world->draw();
 
 	glDisable(GL_LIGHTING);
@@ -147,11 +153,11 @@ int cGraphics::draw(bool drawwm)
 			glEnable(GL_TEXTURE_2D);
 			previewModel->pos = cVector3((w()/5)-25,-h()+32+250,0);
 			previewModel->draw(false);
-			previewModel->rot.y+=40*(frameticks / 1000.0f);
+			previewModel->rot.y+=40*(frameTicks / 1000.0f);
 		}
 		glEnable(GL_DEPTH_TEST);*/
 	}
-	if(world->loaded && editmode != MODE_OBJECTS && editmode != MODE_OBJECTGROUP && editmode != MODE_LIGHTS)
+	if(world && world->loaded && editmode != MODE_OBJECTS && editmode != MODE_OBJECTGROUP && editmode != MODE_LIGHTS)
 	{
 		int i;
 		glEnable(GL_TEXTURE_2D);
@@ -286,7 +292,7 @@ int cGraphics::draw(bool drawwm)
 			sprintf(buf, "Editing");
 		font->print(1,1,1,width-font->textlen(buf), height-40, buf);
 	}
-	else if (!world->loaded)
+	else if (!world || !world->loaded)
 	{
 		glEnable(GL_TEXTURE_2D);
 		glColor3f(1,1,1);
@@ -305,6 +311,7 @@ int cGraphics::draw(bool drawwm)
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_BLEND);
 	glDisable(GL_LIGHTING);
+	menu->update();
 	menu->draw();
 
 	if(drawwm)
@@ -675,42 +682,28 @@ bool cGraphics::is3dSelected(float x, float y, float z)
 
 
 int cGraphics::selectedObjectProp = 0;
-bool cGraphics::showgrid = true;
 float cGraphics::brushsize = 1.0f;
 int cGraphics::texturestart = 0;
 
 int cGraphics::textureRot = 0;
 bool cGraphics::fliph = false;
 bool cGraphics::flipv = false;
-bool cGraphics::showObjects = false;
 int cGraphics::selectedObject = -1;
 bool cGraphics::objectStartDrag = false;
 bool cGraphics::slope = false;
 int cGraphics::quadtreeView = -1;
-bool cGraphics::showBoundingBoxes = false;
 int cGraphics::gatType = 0;
-bool cGraphics::showLightmaps = false;
-bool cGraphics::showTileColors = true;
-bool cGraphics::showWater = true;
-bool cGraphics::showOglLighting = true;
 cVector2 cGraphics::wallHeightMin(-1,-1);
 cVector2 cGraphics::wallHeightMax(-1,-1);
 cTexture* cGraphics::texturePreview = NULL;
 float cGraphics::gridsize = 1;
 float  cGraphics::gridoffsetx = 0;
 float  cGraphics::gridoffsety = 0;
-bool cGraphics::showambientlighting = true;
 bool cGraphics::groupeditmode = false;
-bool cGraphics::animateWater = true;
 
-bool cGraphics::showNoTiles = true;
 cVector3 cGraphics::selectionCenter = cVector3(-1,-1,-1);
-bool cGraphics::showgat = false;
 cVector3 cGraphics::backgroundColor = cVector3(0,0,0);
 cVector3 cGraphics::noTileColor = cVector3(1,1,1);
-bool cGraphics::showDot = true;
-bool cGraphics::showSprites = true;
-bool cGraphics::showAllLights = false;
 bool cGraphics::clearLightmaps = false;
 float cGraphics::gatTransparency = 0.3f;
 eTool cGraphics::textureTool = TOOL_BRUSH;
@@ -747,7 +740,7 @@ float cGraphics::lightAmbient[4];
 std::string cGraphics::waterExtension;
 std::string cGraphics::waterDirectory;
 cTexture* cGraphics::gatBorder;
-bool cGraphics::transparentObjects;
+bool cGraphics::showObjectsAsTransparent;
 cVector3 cGraphics::selectionstart3d;
 cVector3 cGraphics::selectionend3d;
 
@@ -800,8 +793,8 @@ int					cGraphicsBase::width =		1024;
 int					cGraphicsBase::height =		768;
 int					cGraphicsBase::bits =		32;
 bool				cGraphicsBase::fullscreen =	false;
-long 				cGraphicsBase::lasttick =	0;
-long				cGraphicsBase::frameticks =	0;
+long 				cGraphicsBase::lastTick =	0;
+long				cGraphicsBase::frameTicks =	0;
 
 
 cGraphicsBase::cGraphicsBase()
@@ -810,7 +803,7 @@ cGraphicsBase::cGraphicsBase()
 
 long cGraphicsBase::getFrameTicks()
 {
-	return frameticks;	
+	return frameTicks;	
 }
 
 
@@ -821,4 +814,36 @@ cWorldContainer::cCamera::cCamera()
 	rot = 0.0f;
 	pointer = cVector2(-774,-963.5);
 	topCamera = false;
+}
+
+cWorldContainer::cWorldContainer( cWorld* w )
+{
+	world = w;
+	undoStack = new cUndoStack();
+}
+
+cWorldContainer::~cWorldContainer()
+{
+	if(world)
+		delete world;
+	world = NULL;
+	if(undoStack)
+		delete undoStack;
+	undoStack = NULL;
+}
+cWorldContainer::cView::cView()
+{
+	showLightmaps = false;
+	showTileColors = true;
+	showWater = true;
+	showOglLighting = true;
+	showambientlighting = true;
+	showNoTiles = true;
+	showgat = false;
+	showDot = true;
+	showSprites = true;
+	showAllLights = false;
+	showgrid = true;
+	showObjects = false;
+	showBoundingBoxes = false;
 }

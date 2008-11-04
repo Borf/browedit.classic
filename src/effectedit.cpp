@@ -6,7 +6,6 @@
 
 extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
-extern cUndoStack undostack;
 extern float oldmousex, oldmousey;
 extern int movement;
 extern cMenuItem* selectedeffect;
@@ -137,21 +136,21 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 			case SDLK_PAGEDOWN:
 				if (cGraphics::selectedObject != -1)
 				{
-					undostack.push(new cUndoChangeEffect(cGraphics::selectedObject));
+					cGraphics::worldContainer->undoStack->push(new cUndoChangeEffect(cGraphics::selectedObject));
 					cGraphics::world->effects[cGraphics::selectedObject].loop--;
 				}
 				break;
 			case SDLK_PAGEUP:
 				if (cGraphics::selectedObject != -1)
 				{
-					undostack.push(new cUndoChangeEffect(cGraphics::selectedObject));
+					cGraphics::worldContainer->undoStack->push(new cUndoChangeEffect(cGraphics::selectedObject));
 					cGraphics::world->effects[cGraphics::selectedObject].loop++;
 				}
 				break;
 			case SDLK_BACKSPACE:
 				if (cGraphics::selectedObject > -1 && cGraphics::selectedObject < (int)cGraphics::world->effects.size())
 				{
-					undostack.push(new cUndoEffectDelete(cGraphics::selectedObject));
+					cGraphics::worldContainer->undoStack->push(new cUndoEffectDelete(cGraphics::selectedObject));
 					cGraphics::world->effects.erase(cGraphics::world->effects.begin() + cGraphics::selectedObject);
 					cGraphics::selectedObject = -1;
 				}

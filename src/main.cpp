@@ -89,8 +89,6 @@ std::vector<std::pair<std::string, std::string> > translations;
 bool mouseouttexture(cMenu*);
 bool mouseovertexture(cMenu*);
 
-cUndoStack undostack;
-
 std::string rodir;
 
 
@@ -297,27 +295,29 @@ void mainloop()
 	}
 
 //Todo: move this somewhere else!
-	while(!cGraphics::world->plugin_api_deleteobjects.empty())
+	if(cGraphics::world)
 	{
-		int i = cGraphics::world->plugin_api_deleteobjects.front();
-		delete cGraphics::world->models[i];
-		cGraphics::world->models.erase(cGraphics::world->models.begin() + i);
-		cGraphics::world->plugin_api_deleteobjects.pop_front();
-		if(cGraphics::world->plugin_api_deleteobjects.empty())
+		while(!cGraphics::world->plugin_api_deleteobjects.empty())
 		{
-			cWindow* w = cWM::getWindow(WT_MODELOVERVIEW);
-			if(w)
-				w->userfunc(NULL);
+			int i = cGraphics::world->plugin_api_deleteobjects.front();
+			delete cGraphics::world->models[i];
+			cGraphics::world->models.erase(cGraphics::world->models.begin() + i);
+			cGraphics::world->plugin_api_deleteobjects.pop_front();
+			if(cGraphics::world->plugin_api_deleteobjects.empty())
+			{
+				cWindow* w = cWM::getWindow(WT_MODELOVERVIEW);
+				if(w)
+					w->userfunc(NULL);
+			}
+		}
+		while(!cGraphics::world->plugin_api_deletesprites.empty())
+		{
+			int i = cGraphics::world->plugin_api_deletesprites.front();
+			delete cGraphics::world->sprites[i];
+			cGraphics::world->sprites.erase(cGraphics::world->sprites.begin() + i);
+			cGraphics::world->plugin_api_deletesprites.pop_front();
 		}
 	}
-	while(!cGraphics::world->plugin_api_deletesprites.empty())
-	{
-		int i = cGraphics::world->plugin_api_deletesprites.front();
-		delete cGraphics::world->sprites[i];
-		cGraphics::world->sprites.erase(cGraphics::world->sprites.begin() + i);
-		cGraphics::world->plugin_api_deletesprites.pop_front();
-	}
-
 	
 	process_events( );
 
@@ -999,6 +999,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,file,GetMsg("menu/file/NEW"),							&MenuCommand_new); //new
 	ADDMENUITEM(mm,file,GetMsg("menu/file/OPEN"),							&MenuCommand_open); //open
 	ADDMENUITEM(mm,file,GetMsg("menu/file/OPENGRF"),						&MenuCommand_opengrf); //open
+	ADDMENUITEM(mm,file,GetMsg("menu/file/CLOSE"),							&MenuCommand_close); //close
 	ADDMENUITEM(mm,file,GetMsg("menu/file/SAVE"),							&MenuCommand_save); //save
 	ADDMENUITEM(mm,file,GetMsg("menu/file/QUICKSAVE"),						&MenuCommand_quicksave); //save
 	ADDMENUITEM(mm,file,GetMsg("menu/file/SAVEAS"),							&MenuCommand_saveAs); //save as
@@ -1036,28 +1037,28 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(grid,view,GetMsg("menu/view/GRID"),							&MenuCommand_grid); //grid
 	grid->ticked = true;
 	ADDMENUITEM(showobjects,view,GetMsg("menu/view/OBJECTS"),				&MenuCommand_showobjects);
-	ADDMENUITEMDATAP(transparentobjects,view,GetMsg("menu/view/TRANSPARENTOBJECTS"),	&MenuCommand_toggle, (void*)&cGraphics::transparentObjects);
-	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/BOUNDINGBOXES"),				&MenuCommand_toggle, (void*)&cGraphics::showBoundingBoxes);
-	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/LIGHTMAPS"),					&MenuCommand_toggle, (void*)&cGraphics::showLightmaps);
-	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/OGLLIGHTING"),				&MenuCommand_toggle, (void*)&cGraphics::showOglLighting);
+	ADDMENUITEMDATALINK(transparentobjects,view,GetMsg("menu/view/TRANSPARENTOBJECTS"),	&MenuCommand_toggle, (void*)&cGraphics::showObjectsAsTransparent);
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/BOUNDINGBOXES"),				&MenuCommand_toggle, (void*)&cGraphics::worldContainer->view.showBoundingBoxes);
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/LIGHTMAPS"),					&MenuCommand_toggle, (void*)&cGraphics::worldContainer->view.showLightmaps);
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/OGLLIGHTING"),				&MenuCommand_toggle, (void*)&cGraphics::worldContainer->view.showOglLighting);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/TILECOLORS"),				&MenuCommand_toggle, (void*)&cGraphics::showTileColors);
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/TILECOLORS"),				&MenuCommand_toggle, (void*)&cGraphics::worldContainer->view.showTileColors);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/SHOWWATER"),					&MenuCommand_toggle, (void*)&cGraphics::showWater);
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/SHOWWATER"),					&MenuCommand_toggle, (void*)&cGraphics::worldContainer->view.showWater);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/TOPCAMERA"),					&MenuCommand_toggle, (void*)&cGraphics::worldContainer->camera.topCamera);
-	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/INVISIBLETILES"),			&MenuCommand_toggle, (void*)&cGraphics::showNoTiles);
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/TOPCAMERA"),					&MenuCommand_toggle, (void*)&cGraphics::worldContainer->camera.topCamera);
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/INVISIBLETILES"),			&MenuCommand_toggle, (void*)&cGraphics::worldContainer->view.showNoTiles);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/SHOWAMBIENTLIGHTING"),		&MenuCommand_toggle, (void*)&cGraphics::showambientlighting);
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/SHOWAMBIENTLIGHTING"),		&MenuCommand_toggle, (void*)&cGraphics::worldContainer->view.showambientlighting);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/WATERANIMATION"),			&MenuCommand_toggle, (void*)&cGraphics::animateWater);
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/WATERANIMATION"),			&MenuCommand_toggle, (void*)&cGraphics::worldContainer->view.showWaterAnimation);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/GATTILES"),					&MenuCommand_toggle, (void*)&cGraphics::showgat);
-	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/SHOWDOT"),					&MenuCommand_toggle, (void*)&cGraphics::showDot);
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/GATTILES"),					&MenuCommand_toggle, (void*)&cGraphics::worldContainer->view.showgat);
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/SHOWDOT"),					&MenuCommand_toggle, (void*)&cGraphics::worldContainer->view.showDot);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/SHOWSPRITES"),				&MenuCommand_toggle, (void*)&cGraphics::showSprites);
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/SHOWSPRITES"),				&MenuCommand_toggle, (void*)&cGraphics::worldContainer->view.showSprites);
 	mm->ticked = true;
-	ADDMENUITEMDATAP(mm,view,"Show all light spheres",						&MenuCommand_toggle, (void*)&cGraphics::showAllLights);
+	ADDMENUITEMDATALINK(mm,view,"Show all light spheres",						&MenuCommand_toggle, (void*)&cGraphics::worldContainer->view.showAllLights);
 
 
 	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/TEXTUREEDIT"),				&MenuCommand_mode);
@@ -1105,7 +1106,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,edit,GetMsg("menu/edit/GATCOLLISION")+std::string("2"),		&MenuCommand_gatcollision2);
 	ADDMENUITEM(mm,edit,GetMsg("menu/edit/CLEANLIGHTMAPS"),					&MenuCommand_cleanuplightmaps);
 	ADDMENUITEM(mm,edit,GetMsg("menu/edit/REMOVETEXTURES"),					&MenuCommand_cleantextures);
-	ADDMENUITEMDATAP(mm,edit,GetMsg("menu/edit/CLEARLIGHTMAPSONEDIT"),		&MenuCommand_toggle, (void*)&cGraphics::clearLightmaps);
+	ADDMENUITEMDATALINK(mm,edit,GetMsg("menu/edit/CLEARLIGHTMAPSONEDIT"),		&MenuCommand_toggle, (void*)&cGraphics::clearLightmaps);
 
 	ADDMENUITEM(mm,windows,GetMsg("menu/windows/AMBIENTLIGHTING"),			&MenuCommand_ambientlight);
 	ADDMENUITEM(mm,windows,GetMsg("menu/windows/MODELWINDOW"),				&MenuCommand_modelwindow);
@@ -1246,8 +1247,6 @@ int main(int argc, char *argv[])
 
 
 	cGraphics::newWorld();
-
-
 	Log(3,0,GetMsg("DONEINIT"));
 	cGraphics::world->newWorld();
 	if(config.FirstChildElement("config")->FirstChildElement("firstmap"))
@@ -1269,6 +1268,12 @@ int main(int argc, char *argv[])
 		cGraphics::world->load();
 //	cGraphics::world->importalpha();
 #endif
+
+	if(!cGraphics::world->loaded)
+	{
+		MenuCommand_close(NULL);
+	}
+
 	cGraphics::updateMenu();
 
 	for(i = 0; i < SDLK_LAST-SDLK_FIRST; i++)
@@ -1300,7 +1305,13 @@ int main(int argc, char *argv[])
 	Mix_CloseAudio();
 	// Shutdown
 	cGraphics::closeAndCleanup();				// Kill The Window
-	cGraphics::world->unload();
+	for(i = 0; i < cGraphics::worlds.size(); i++)
+		delete cGraphics::worlds[i];
+
+	cGraphics::worlds.clear();
+	cGraphics::worldContainer = NULL;
+	cGraphics::world = NULL;
+
 	cTextureCache::status();
 
 	log_close();
@@ -1379,6 +1390,10 @@ int process_events()
 		}
 	
 		int go = processManagement.main_process_events(event);
+
+		if(!cGraphics::world)
+			break;
+
 		if(go == 0)
 		{
 			switch(editmode)
@@ -1467,6 +1482,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 			if(menu->inWindow((int)mousestartx, cGraphics::h()-(int)mousestarty) != NULL)
 				return 1;
+
+			if(!cGraphics::world)
+				return 0;
 
 			if (rbuttondown && !lbuttondown)
 			{
@@ -1810,7 +1828,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				else
 					lastrclick = SDL_GetTicks();
-				if(doubleclick && movement < 3)
+				if(doubleclick && movement < 3 && cGraphics::worldContainer)
 				{
 					cGraphics::worldContainer->camera.rot = 0;
 				}
@@ -1885,7 +1903,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				break;
 			case SDLK_F1:
-				if((event.key.keysym.mod&KMOD_SHIFT) == 0)
+				if((event.key.keysym.mod&KMOD_SHIFT) == 0 && cGraphics::world)
 				{
 					editmode = MODE_TEXTURE;
 					if (cGraphics::texturestart >= (int)cGraphics::world->textures.size())
@@ -1897,13 +1915,13 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				break;
 			case SDLK_F2:
-				if((event.key.keysym.mod&KMOD_SHIFT) == 0)
+				if((event.key.keysym.mod&KMOD_SHIFT) == 0 && cGraphics::world)
 				{
 					editmode = MODE_HEIGHTGLOBAL;
 					if (cGraphics::texturestart >= (int)cGraphics::world->textures.size())
 						cGraphics::texturestart = 0;
 				}
-				else
+				else if(cGraphics::world)
 				{
 					editmode = MODE_TEXTUREPAINT;
 					if (cGraphics::texturestart >= (int)cGraphics::world->textures.size())
@@ -1911,38 +1929,56 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				break;
 			case SDLK_F3:
+				if(!cGraphics::world)
+					break;
 				editmode = MODE_HEIGHTDETAIL;
 				if (cGraphics::texturestart >= (int)cGraphics::world->textures.size())
 					cGraphics::texturestart = 0;
 				break;
 			case SDLK_F4:
+				if(!cGraphics::world)
+					break;
 				editmode = MODE_WALLS;
 				break;
 			case SDLK_F5:
+				if(!cGraphics::world)
+					break;
 				editmode = MODE_OBJECTS;
 				if (cGraphics::texturestart >= (int)cGraphics::world->textures.size())
 					cGraphics::texturestart = 0;
 				break;
 			case SDLK_F6:
+				if(!cGraphics::world)
+					break;
 				editmode = MODE_GAT;
 				if (cGraphics::texturestart >= cGraphics::gatTiles.size()-1)
 					cGraphics::texturestart = 0;
 				break;
 			case SDLK_F7:
+				if(!cGraphics::world)
+					break;
 				editmode = MODE_WATER;
 				cGraphics::texturestart = cGraphics::world->water.type;
 				break;
 			case SDLK_F8:
+				if(!cGraphics::world)
+					break;
 				editmode = MODE_EFFECTS;
 				cGraphics::selectedObject = -1;
 				break;
 			case SDLK_F9:
+				if(!cGraphics::world)
+					break;
 				editmode = MODE_SOUNDS;
 				break;
 			case SDLK_F10:
+				if(!cGraphics::world)
+					break;
 				editmode = MODE_LIGHTS;
 				break;
 			case SDLK_F11:
+				if(!cGraphics::world)
+					break;
 				editmode = MODE_OBJECTGROUP;
 				break;
 			case SDLK_1:
@@ -1970,7 +2006,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					cGraphics::gridsize = 16 / 4.0f;
 				break;
 			case SDLK_u:
-					undostack.undo();
+				cGraphics::worldContainer->undoStack->undo();
 					break;
 			case SDLK_t:
 				{
@@ -2025,6 +2061,12 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					cWM::addWindow(new cMiniMapWindow()	);
 				else
 					cWM::toggleWindow(WT_MINIMAP);
+			}
+			else if(event.key.keysym.sym == SDLK_TAB)
+			{
+				if(cGraphics::worlds.size() > 1)
+					MenuCommand_switchMap((cMenuItem*)openMaps->items[1]);
+
 			}
 
 			if(event.key.keysym.sym == SDLK_PRINT || event.key.keysym.sym == SDLK_SYSREQ)

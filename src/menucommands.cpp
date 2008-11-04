@@ -22,7 +22,6 @@
 #include "plugins/base/base.h"
 
 extern bool running;
-extern cUndoStack undostack;
 extern eMode editmode;
 extern int brushsize;
 extern double mouse3dx, mouse3dy, mouse3dz;
@@ -118,6 +117,27 @@ MENUCOMMAND(opengrf)
 	cWM::addWindow(new cFileWindow(openfunc));
 	return true;
 }
+
+MENUCOMMAND(close)
+{
+	cGraphics::world->unload();
+	delete cGraphics::worldContainer;
+	cGraphics::worlds.erase(cGraphics::worlds.begin());
+	
+	cGraphics::worldContainer = NULL;
+	cGraphics::world = NULL;
+
+	if(cGraphics::worlds.size() > 0)
+	{
+		cGraphics::worldContainer = cGraphics::worlds[0];
+		cGraphics::world = cGraphics::worldContainer->world;
+	}
+
+	cGraphics::updateMenu();
+
+	return true;
+}
+
 
 MENUCOMMAND(save)
 {
@@ -304,7 +324,7 @@ MENUCOMMAND(random1)
 		return true;
 	}
 
-	undostack.push(new cUndoHeightEdit(0,0,cGraphics::world->width, cGraphics::world->height));
+	cGraphics::worldContainer->undoStack->push(new cUndoHeightEdit(0,0,cGraphics::world->width, cGraphics::world->height));
 	int x,y;
 	for(y = 0; y < cGraphics::world->height; y++)
 	{
@@ -377,7 +397,7 @@ MENUCOMMAND(random2)
 	unsigned int i;
 	unsigned int smooth  = 3;//atoi(cWM::inputWindow("Smoothing level (use 5-10 for decent results)").c_str());
 
-	undostack.push(new cUndoHeightEdit(0,0,cGraphics::world->width, cGraphics::world->height));
+	cGraphics::worldContainer->undoStack->push(new cUndoHeightEdit(0,0,cGraphics::world->width, cGraphics::world->height));
 	float x,y;
 
 	cGraphics::world->tiles.clear();
@@ -698,7 +718,7 @@ MENUCOMMAND(random3)
 	unsigned int i;
 	int xx,yy;
 
-	undostack.push(new cUndoHeightEdit(0,0,cGraphics::world->width, cGraphics::world->height));
+	cGraphics::worldContainer->undoStack->push(new cUndoHeightEdit(0,0,cGraphics::world->width, cGraphics::world->height));
 	float x,y;
 
 	cGraphics::world->tiles.clear();
@@ -996,7 +1016,7 @@ MENUCOMMAND(random4)
 	unsigned int i;
 	int x,y;
 
-	undostack.push(new cUndoHeightEdit(0,0,cGraphics::world->width, cGraphics::world->height));
+	cGraphics::worldContainer->undoStack->push(new cUndoHeightEdit(0,0,cGraphics::world->width, cGraphics::world->height));
 
 
 	cGraphics::world->tiles.clear();
@@ -1218,7 +1238,7 @@ MENUCOMMAND(mode)
 MENUCOMMAND(grid)
 {
 	src->ticked = !src->ticked;
-	cGraphics::showgrid = src->ticked;
+	cGraphics::worldContainer->view.showgrid = src->ticked;
 	return true;
 }
 
@@ -1247,7 +1267,7 @@ MENUCOMMAND(speed)
 MENUCOMMAND(showobjects)
 {
 	src->ticked = !src->ticked;
-	cGraphics::showObjects = src->ticked;
+	cGraphics::worldContainer->view.showObjects = src->ticked;
 	return true;
 }
 
@@ -1299,7 +1319,7 @@ MENUCOMMAND(quadtree)
 
 MENUCOMMAND(gatheight)
 {
-	undostack.push(new cUndoGatHeightEdit(0,0,cGraphics::world->gattiles[0].size(), cGraphics::world->gattiles.size()));
+	cGraphics::worldContainer->undoStack->push(new cUndoGatHeightEdit(0,0,cGraphics::world->gattiles[0].size(), cGraphics::world->gattiles.size()));
 	int x,y;
 	for(y = 0; y < cGraphics::world->height; y++)
 	{
@@ -2558,7 +2578,7 @@ MENUCOMMAND(random5)
 	unsigned int i;
 	int xx,yy;
 
-	undostack.push(new cUndoHeightEdit(0,0,cGraphics::world->width, cGraphics::world->height));
+	cGraphics::worldContainer->undoStack->push(new cUndoHeightEdit(0,0,cGraphics::world->width, cGraphics::world->height));
 	float x,y;
 
 	cGraphics::world->tiles.clear();
@@ -3154,7 +3174,7 @@ MENUCOMMAND(addfavorite)
 
 	cGraphics::selectedObject = cGraphics::world->lights.size();
 	cGraphics::world->lights.push_back(l);
-	undostack.push(new cUndoNewLight());
+	cGraphics::worldContainer->undoStack->push(new cUndoNewLight());
 
 	cWindow* w = cWM::getWindow(WT_LIGHTOVERVIEW);
 	if(w != NULL)
@@ -3868,11 +3888,11 @@ MENUCOMMAND(makeMinimaps)
 
 		cGraphics::worldContainer->camera.topCamera = true;
 		cGraphics::worldContainer->camera.pointer = cVector2(-cGraphics::world->height*10,0);
-		cGraphics::showDot = false;
-		cGraphics::showgrid = false;
-		cGraphics::showLightmaps = false;
-		cGraphics::showObjects = false;
-		cGraphics::showNoTiles = true;
+		cGraphics::worldContainer->view.showDot = false;
+		cGraphics::worldContainer->view.showgrid = false;
+		cGraphics::worldContainer->view.showLightmaps = false;
+		cGraphics::worldContainer->view.showObjects = false;
+		cGraphics::worldContainer->view.showNoTiles = true;
 		cGraphics::noTileColor = cVector3(0,0,0);
 
 		unsigned char *pixels = NULL;
@@ -3937,8 +3957,8 @@ MENUCOMMAND(makeMinimaps)
 		}
 
 
-		cGraphics::showLightmaps = true;
-		cGraphics::showObjects = true;
+		cGraphics::worldContainer->view.showLightmaps = true;
+		cGraphics::worldContainer->view.showObjects = true;
 		yto = mindist;
 		cGraphics::worldContainer->camera.height = minheight;
 		if (!cGraphics::draw(false))

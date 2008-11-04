@@ -7,7 +7,6 @@
 extern long mouseX;
 extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
-extern cUndoStack undostack;
 extern bool lbuttondown, rbuttondown,doneaction;
 extern cMenu* snaptofloor;
 extern float oldmousex, oldmousey;
@@ -29,7 +28,7 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 						if(cGraphics::world->models[i]->selected)
 							objectsselected.push_back(i);
 					if (objectsselected.size() > 0)
-						undostack.push(new cUndoChangeObjects(objectsselected));
+						cGraphics::worldContainer->undoStack->push(new cUndoChangeObjects(objectsselected));
 					doneaction = false;
 				}
 				bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
@@ -174,7 +173,7 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 				break;
 			case SDLK_d:
 				{
-					undostack.push(new cUndoNewObjects(cGraphics::world->models.size()));
+					cGraphics::worldContainer->undoStack->push(new cUndoNewObjects(cGraphics::world->models.size()));
 					int start = cGraphics::world->models.size();
 					int i;
 					for(i = 0; i < start; i++)
@@ -284,7 +283,7 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 					}
 					cGraphics::selectedObject = -1;
 					if (objectsdeleted.size() > 0)
-						undostack.push(new cUndoObjectsDelete(objectsdeleted));
+						cGraphics::worldContainer->undoStack->push(new cUndoObjectsDelete(objectsdeleted));
 					cWindow* w = cWM::getWindow(WT_MODELOVERVIEW);
 					if(w != NULL)
 						w->userfunc(NULL);

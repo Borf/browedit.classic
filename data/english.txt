@@ -21,6 +21,7 @@
 			<NEW>New</NEW>
 			<OPEN>Open</OPEN>
 			<OPENGRF>Open from GRF</OPENGRF>
+			<CLOSE>Close</CLOSE>
 			<SAVE>Save</SAVE>
 			<QUICKSAVE>Quicksave</QUICKSAVE>
 			<SAVEAS>Save As</SAVEAS>

@@ -38,7 +38,8 @@ class cMenu
 
 		cMenu();
 		unsigned int		h();
-		void				draw();
+		virtual void		draw();
+		virtual void		update();
 		cMenu*				inWindow(int, int);
 		void				click(int, int);
 		void				unMouseOver();
@@ -53,14 +54,20 @@ class cMenu
 class cMenuItem : public cMenu
 {
 public:
+	cMenuItem();
 	bool (*proc) (cMenuItem* m);
 	std::string		data;
 	std::string		data2;
 	void*			pdata;
 	int				data3;
-	cMenuItem();
+};
+
+class cMenuItemLinked : public cMenuItem
+{
+public:
+	cMenuItemLinked();
+	void update();
 
 };
- 
 
 #endif

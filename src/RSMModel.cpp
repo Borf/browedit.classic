@@ -255,7 +255,7 @@ void cRSMModel::draw(bool checkfrust, bool dodraw, bool setheight, bool dolightm
 			glTranslatef(-bb2.bbrange[0], bb2.bbmin[1], -bb2.bbrange[2]);
 	}
 
-	if(dodraw && cGraphics::showBoundingBoxes)
+	if(dodraw && cGraphics::worldContainer->view.showBoundingBoxes)
 	{
 		cVector3 v1 = cVector3(bb2.bbmin[0], bb2.bbmin[1], bb2.bbmin[2]);
 		cVector3 v2 = cVector3(bb2.bbmax[0], bb2.bbmax[1], bb2.bbmax[2]);

@@ -8,7 +8,6 @@
 #include "objectwindow.h"
 #include "soundselectwindow.h"
 #include <undo.h>
-extern cUndoStack undostack;
 
 
 cSoundWindow::cWindowSelectFileButton::cWindowSelectFileButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent,skin)
@@ -218,7 +217,7 @@ void* cSoundWindow::userfunc( void* param )
 		cWindow* w = cWM::getWindow(WT_SOUNDOVERVIEW);
 		if(w != NULL)
 			w->userfunc(NULL);
-		undostack.push(undo);
+		cGraphics::worldContainer->undoStack->push(undo);
 	}
 	
 	return NULL;

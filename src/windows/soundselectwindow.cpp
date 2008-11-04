@@ -10,7 +10,6 @@ extern cWindow* draggingwindow;
 extern cWindowObject* draggingObject;
 extern std::vector<std::pair<std::string, std::string> > translations;
 extern void mainloop();
-extern cUndoStack undostack;
 extern std::vector<std::string> soundfiles;
 
 cSoundSelectWindow::cWindowSoundCatSelect::cWindowSoundCatSelect( cWindow* parent, std::vector<cWindowTree::cTreeNode*> n, TiXmlDocument* skin ) : cWindowTree(parent, n,skin)
@@ -159,7 +158,7 @@ void cSoundSelectWindow::cWindowOkButton::onClick()
 		s.unknown8 = 0;
 		
 		cGraphics::world->sounds.push_back(s);
-		undostack.push(new cUndoNewSound());
+		cGraphics::worldContainer->undoStack->push(new cUndoNewSound());
 	}
 	parent->close();
 	

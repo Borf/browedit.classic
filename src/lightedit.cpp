@@ -10,7 +10,6 @@
 
 extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
-extern cUndoStack undostack;
 extern bool	doneaction;
 extern float oldmousex, oldmousey;
 extern int movement;
@@ -82,7 +81,7 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 				{
 					if(doneaction)
 					{
-						undostack.push(new cUndoChangeLight(cGraphics::selectedObject));
+						cGraphics::worldContainer->undoStack->push(new cUndoChangeLight(cGraphics::selectedObject));
 						doneaction = false;
 					}
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
@@ -161,7 +160,7 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 
 					cGraphics::selectedObject = cGraphics::world->lights.size();
 					cGraphics::world->lights.push_back(l);
-					undostack.push(new cUndoNewLight());
+					cGraphics::worldContainer->undoStack->push(new cUndoNewLight());
 				}
 				else
 				{
@@ -237,7 +236,7 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 			case SDLK_BACKSPACE:
 				if (cGraphics::selectedObject > -1 && cGraphics::selectedObject < (int)cGraphics::world->lights.size())
 				{
-					undostack.push(new cUndoLightDelete(cGraphics::selectedObject));
+					cGraphics::worldContainer->undoStack->push(new cUndoLightDelete(cGraphics::selectedObject));
 					cGraphics::world->lights.erase(cGraphics::world->lights.begin() + cGraphics::selectedObject);
 					cGraphics::selectedObject = -1;
 					cWindow* w = cWM::getWindow(WT_LIGHTOVERVIEW);

@@ -1,7 +1,6 @@
 #include "effectwindow.h"
 #include <undo.h>
 
-extern cUndoStack undostack;
 
 cEffectWindow::cEffectWindow() : cWindow()
 {
@@ -119,7 +118,7 @@ void* cEffectWindow::userfunc( void* param )
 			if(i->second->type == OBJECT_FLOATINPUTBOX)
 				i->second->onKeyDown(SDLK_RETURN, false);
 		}
-		undostack.push(undo);
+		cGraphics::worldContainer->undoStack->push(undo);
 	}
 	
 	return NULL;

@@ -1,7 +1,6 @@
 #include "objectwindow.h"
 #include <wm/windowinputbox.h>
 #include <undo.h>
-extern cUndoStack undostack;
 
 
 cWindowOkButton::cWindowOkButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent, skin)
@@ -170,7 +169,7 @@ void* cObjectWindow::userfunc( void* param )
 		cWindow* w = cWM::getWindow(WT_MODELOVERVIEW);
 		if(w != NULL)
 			w->userfunc(NULL);
-		undostack.push(undo);
+		cGraphics::worldContainer->undoStack->push(undo);
 	}
 	
 	return NULL;

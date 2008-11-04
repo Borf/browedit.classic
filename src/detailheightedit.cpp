@@ -4,7 +4,6 @@
 
 extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
-extern cUndoStack undostack;
 extern long tilex,tiley;
 extern int brushsize;
 extern bool lbuttondown, rbuttondown;
@@ -44,7 +43,7 @@ int cProcessManagement::detailheightedit_process_events(SDL_Event &event)
 					
 				}
 
-				undostack.push(new cUndoHeightEdit(0,0,cGraphics::world->width, cGraphics::world->height));
+				cGraphics::worldContainer->undoStack->push(new cUndoHeightEdit(0,0,cGraphics::world->width, cGraphics::world->height));
 
 //				if (posx >= floor(brushsize/2.0f) && posx <= cGraphics::world->width-(int)ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= cGraphics::world->height-(int)ceil(brushsize/2.0f))
 				{
@@ -142,7 +141,7 @@ int cProcessManagement::detailheightedit_process_events(SDL_Event &event)
 					if ((int)clipboard.size() != brushsize)
 						break;
 
-					undostack.push(new cUndoHeightEdit(posx-(int)floor(brushsize/2.0f), posy-(int)floor(brushsize/2.0f), posx+(int)ceil(brushsize/2.0f), posy+(int)ceil(brushsize/2.0f)));
+					cGraphics::worldContainer->undoStack->push(new cUndoHeightEdit(posx-(int)floor(brushsize/2.0f), posy-(int)floor(brushsize/2.0f), posx+(int)ceil(brushsize/2.0f), posy+(int)ceil(brushsize/2.0f)));
 //					if (posx >= (int)floor(brushsize/2.0f) && posx <= cGraphics::world->width-(int)ceil(brushsize/2.0f) && posy >= (int)floor(brushsize/2.0f) && posy <= cGraphics::world->height-(int)ceil(brushsize/2.0f))
 					{
 						int yy = 0;
@@ -171,7 +170,7 @@ int cProcessManagement::detailheightedit_process_events(SDL_Event &event)
 					int posx = (int)mouse3dx / 10;
 					int posy = (int)mouse3dz / 10;
 
-					undostack.push(new cUndoHeightEdit(posx-(int)floor(brushsize/2.0f), posy-(int)floor(brushsize/2.0f), posx+(int)ceil(brushsize/2.0f), posy+(int)ceil(brushsize/2.0f)));
+					cGraphics::worldContainer->undoStack->push(new cUndoHeightEdit(posx-(int)floor(brushsize/2.0f), posy-(int)floor(brushsize/2.0f), posx+(int)ceil(brushsize/2.0f), posy+(int)ceil(brushsize/2.0f)));
 					for(int x = posx-(int)floor(brushsize/2.0f); x < posx+(int)ceil(brushsize/2.0f)-1; x++)
 					{
 						for(int y = posy-(int)floor(brushsize/2.0f)+1; y < posy+(int)ceil(brushsize/2.0f); y++)
@@ -199,7 +198,7 @@ int cProcessManagement::detailheightedit_process_events(SDL_Event &event)
 					int x,y;
 					int posx = (int)mouse3dx / 10;
 					int posy = (int)mouse3dz / 10;
-					undostack.push(new cUndoHeightEdit(posx-(int)floor(brushsize/2.0f), posy-(int)floor(brushsize/2.0f), posx+(int)ceil(brushsize/2.0f), posy+(int)ceil(brushsize/2.0f)));
+					cGraphics::worldContainer->undoStack->push(new cUndoHeightEdit(posx-(int)floor(brushsize/2.0f), posy-(int)floor(brushsize/2.0f), posx+(int)ceil(brushsize/2.0f), posy+(int)ceil(brushsize/2.0f)));
 					for(x = posx-(int)floor(brushsize/2.0f); x < posx+(int)ceil(brushsize/2.0f)-1; x++)
 					{
 						for(y = posy-(int)floor(brushsize/2.0f)+1; y < posy+(int)ceil(brushsize/2.0f); y++)

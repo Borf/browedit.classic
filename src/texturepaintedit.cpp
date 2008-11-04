@@ -4,7 +4,6 @@
 
 extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
-extern cUndoStack undostack;
 extern double mouse3dxstart, mouse3dystart, mouse3dzstart;
 #include "windows/areacopywindow.h"
 

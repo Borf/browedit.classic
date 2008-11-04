@@ -167,7 +167,7 @@ int cFont::print(float r, float g, float b, float x, float y, const char *fmt, .
 	std::string txt = text;
 	std::string colorcode = "#";
 	glListBase(list_base);
-	while(txt.find(colorcode) != std::string::npos)
+	while(txt.find(colorcode) != std::string::npos && txt.find(colorcode) < txt.length()-6)
 	{
 		std::string before = txt.substr(0, txt.find(colorcode));		
 		std::string color = txt.substr(txt.find(colorcode)+colorcode.length(),6);

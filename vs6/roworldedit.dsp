@@ -190,6 +190,10 @@ SOURCE=..\src\bthread.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\clipboard.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\common.cpp
 # End Source File
 # Begin Source File
@@ -271,6 +275,10 @@ SOURCE=..\src\bmutex.h
 # Begin Source File
 
 SOURCE=..\src\bthread.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\clipboard.h
 # End Source File
 # Begin Source File
 

@@ -5,7 +5,6 @@
 extern long mouseX;
 extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
-extern cUndoStack undostack;
 extern std::vector<std::vector<int > > clipboardgat;
 
 std::vector<std::vector<cTile> > clipboardtexture;
@@ -58,7 +57,7 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 
 					}
 
-					undostack.push(new cUndoTexture(posx-(int)selsizex+1, posy-(int)selsizey+1, posx+1, posy+1));
+					cGraphics::worldContainer->undoStack->push(new cUndoTexture(posx-(int)selsizex+1, posy-(int)selsizey+1, posx+1, posy+1));
 
 
 					for(int x = posx; x > posx-selsizex; x--)
@@ -266,7 +265,7 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 						break;
 
 					
-					undostack.push(new cUndoTexture(posx-(int)selsizex+1, posy-(int)selsizey+1, posx+1, posy+1));
+					cGraphics::worldContainer->undoStack->push(new cUndoTexture(posx-(int)selsizex+1, posy-(int)selsizey+1, posx+1, posy+1));
 
 					for(int x = posx; x > posx-selsizex; x--)
 					{
@@ -306,7 +305,7 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 					}
 
 
-					undostack.push(new cUndoTexture(posx-(int)selsizex+1, posy-(int)selsizey+1, posx+1, posy+1));
+					cGraphics::worldContainer->undoStack->push(new cUndoTexture(posx-(int)selsizex+1, posy-(int)selsizey+1, posx+1, posy+1));
 					for(int x = posx; x > posx-selsizex; x--)
 					{
 						for(int y = posy; y > posy-selsizey; y--)

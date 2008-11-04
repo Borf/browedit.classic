@@ -5,7 +5,6 @@
 
 extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
-extern cUndoStack undostack;
 extern bool lbuttondown, rbuttondown;
 extern std::vector<std::vector<std::vector<float> > > clipboard;
 std::vector<std::vector<int > > clipboardgat;
@@ -25,7 +24,7 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 
 			//	if (posx >= floor(f/2.0f) && posx < 2*cGraphics::world->width-(int)ceil(f/2.0f) && posy >= floor(f/2.0f) && posy< 2*cGraphics::world->height-(int)ceil(f/2.0f))
 				{
-					undostack.push(new cUndoGatTileEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
+					cGraphics::worldContainer->undoStack->push(new cUndoGatTileEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
 
 					glColor4f(1,0,0,1);
 					glDisable(GL_TEXTURE_2D);
@@ -54,7 +53,7 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 
 			//	if (posx >= floor(f/2.0f) && posx < 2*cGraphics::world->width-(int)ceil(f/2.0f) && posy >= floor(f/2.0f) && posy< 2*cGraphics::world->height-(int)ceil(f/2.0f))
 				{
-					undostack.push(new cUndoGatTileEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
+					cGraphics::worldContainer->undoStack->push(new cUndoGatTileEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
 
 					glColor4f(1,0,0,1);
 					glDisable(GL_TEXTURE_2D);
@@ -94,7 +93,7 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 
 					if (posx >= (int)floor(f/2.0f) && posx < 2*cGraphics::world->width-(int)ceil(f/2.0f) && posy >= (int)floor(f/2.0f) && posy< 2*cGraphics::world->height-(int)ceil(f/2.0f))
 					{
-						undostack.push(new cUndoGatHeightEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
+						cGraphics::worldContainer->undoStack->push(new cUndoGatHeightEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
 						for(int x = posx-(int)floor(f/2.0f); x < posx+(int)ceil(f/2.0f); x++)
 						{
 							for(int y = posy-(int)floor(f/2.0f); y < posy+(int)ceil(f/2.0f); y++)
@@ -145,7 +144,7 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 
 					if (posx >= (int)floor(f/2.0f) && posx < 2*cGraphics::world->width-(int)ceil(f/2.0f) && posy >= (int)floor(f/2.0f) && posy< 2*cGraphics::world->height-(int)ceil(f/2.0f))
 					{
-						undostack.push(new cUndoGatHeightEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
+						cGraphics::worldContainer->undoStack->push(new cUndoGatHeightEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
 						for(int x = posx-(int)floor(f/2.0f); x < posx+(int)ceil(f/2.0f); x++)
 						{
 							for(int y = posy-(int)floor(f/2.0f); y < posy+(int)ceil(f/2.0f); y++)
@@ -171,7 +170,7 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 
 					float f = (int)ceil(cGraphics::brushsize);
 
-					undostack.push(new cUndoGatHeightEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
+					cGraphics::worldContainer->undoStack->push(new cUndoGatHeightEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
 					glColor4f(1,0,0,1);
 					glDisable(GL_TEXTURE_2D);
 					glDisable(GL_BLEND);
@@ -236,8 +235,8 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 					if ((int)clipboard.size() != f)
 						break;
 
-					undostack.push(new cUndoGatHeightEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
-					undostack.push(new cUndoGatTileEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
+					cGraphics::worldContainer->undoStack->push(new cUndoGatHeightEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
+					cGraphics::worldContainer->undoStack->push(new cUndoGatTileEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
 
 					if (posx >= (int)floor(f/2.0f) && posx < 2*cGraphics::world->width-(int)ceil(f/2.0f) && posy >= f && posy< 2*cGraphics::world->height-f)
 					{
@@ -267,7 +266,7 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 					float f = (int)ceil(cGraphics::brushsize);
 
 
-					undostack.push(new cUndoGatHeightEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
+					cGraphics::worldContainer->undoStack->push(new cUndoGatHeightEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
 					for(int x = posx-(int)floor(f/2.0f); x < posx+(int)ceil(f/2.0f)-1; x++)
 					{
 						for(int y = posy-(int)floor(f/2.0f)+1; y < posy+(int)ceil(f/2.0f); y++)

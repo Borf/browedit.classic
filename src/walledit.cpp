@@ -4,7 +4,6 @@
 
 extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
-extern cUndoStack undostack;
 extern int movement;
 
 int cProcessManagement::walledit_process_events(SDL_Event &event)
@@ -118,7 +117,7 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 						}
 					}
 					if (tilesedited.size() > 0)
-						undostack.push(new cUndoTileEdit(tilesedited));
+						cGraphics::worldContainer->undoStack->push(new cUndoTileEdit(tilesedited));
 				}
 				break;
 			case SDLK_v:
@@ -205,7 +204,7 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 						}
 					}
 					if (tilesedited.size() > 0)
-						undostack.push(new cUndoTileEdit(tilesedited));
+						cGraphics::worldContainer->undoStack->push(new cUndoTileEdit(tilesedited));
 				}
 				break;
 			case SDLK_PAGEDOWN:
@@ -251,7 +250,7 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 							cGraphics::world->tiles[cGraphics::world->cubes[y][x].tileSide].u3+=0.03125;
 					}
 					if(tileschanged.size() > 0)
-						undostack.push(new cUndoTileEdit(tileschanged));
+						cGraphics::worldContainer->undoStack->push(new cUndoTileEdit(tileschanged));
 				}
 				break;
 			case SDLK_PAGEUP:
@@ -297,7 +296,7 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 						cGraphics::world->tiles[cGraphics::world->cubes[y][x].tileSide].u3-=0.03125;
 					}
 					if(tileschanged.size() > 0)
-						undostack.push(new cUndoTileEdit(tileschanged));
+						cGraphics::worldContainer->undoStack->push(new cUndoTileEdit(tileschanged));
 				}
 				break;
 			case SDLK_HOME:
@@ -351,7 +350,7 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 						cGraphics::world->tiles[cGraphics::world->cubes[y][x].tileSide].u4+=0.03125;
 					}
 					if(tileschanged.size() > 0)
-						undostack.push(new cUndoTileEdit(tileschanged));
+						cGraphics::worldContainer->undoStack->push(new cUndoTileEdit(tileschanged));
 				}
 				break;
 			case SDLK_END:
@@ -402,7 +401,7 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 						cGraphics::world->tiles[cGraphics::world->cubes[y][x].tileSide].u4-=0.03125;
 					}
 					if(tileschanged.size() > 0)
-						undostack.push(new cUndoTileEdit(tileschanged));
+						cGraphics::worldContainer->undoStack->push(new cUndoTileEdit(tileschanged));
 				}
 				break;
 			case SDLK_w:
@@ -528,7 +527,7 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 							cGraphics::world->cubes[yy][x].tileOtherSide = cGraphics::world->tiles.size()-1;
 						}
 						if(wallschanged.size() > 0)
-							undostack.push(new cUndoChangeWalls(1, wallschanged));
+							cGraphics::worldContainer->undoStack->push(new cUndoChangeWalls(1, wallschanged));
 					}
 					else
 					{
@@ -634,7 +633,7 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 							cGraphics::world->cubes[y][xx].tileSide = cGraphics::world->tiles.size()-1;
 						}
 						if(wallschanged.size() > 0)
-							undostack.push(new cUndoChangeWalls(0, wallschanged));
+							cGraphics::worldContainer->undoStack->push(new cUndoChangeWalls(0, wallschanged));
 					}
 				}
 				break;
@@ -647,7 +646,7 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 					if (x < 0 || x > (int)cGraphics::world->cubes[0].size()-1)
 						break;
 
-					undostack.push(new cUndoChangeWall(0,x,y, cGraphics::world->cubes[y][x].tileSide));
+					cGraphics::worldContainer->undoStack->push(new cUndoChangeWall(0,x,y, cGraphics::world->cubes[y][x].tileSide));
 
 					int from = x;
 					int to = x+1;
@@ -729,7 +728,7 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 					if (x <= 0 || x > (int)cGraphics::world->cubes[y].size()-2)
 						break;
 
-					undostack.push(new cUndoChangeWall(1,x,y, cGraphics::world->cubes[y][x].tileOtherSide));
+					cGraphics::worldContainer->undoStack->push(new cUndoChangeWall(1,x,y, cGraphics::world->cubes[y][x].tileOtherSide));
 
 					int from = y;
 					int to = y+1;
