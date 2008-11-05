@@ -143,8 +143,6 @@ public:
 	static void								updateMenu();
 
 
-
-
 	static bool						objectStartDrag;
 	static bool						slope;
 	

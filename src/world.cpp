@@ -10,6 +10,7 @@
 #include "windows/hotkeywindow.h"
 #include <windows/confirmwindow.h>
 #include "font.h"
+#include <clipboard.h>
 #include <frustum.h>
 
 #ifdef _WIN32
@@ -1935,163 +1936,185 @@ void cWorld::draw()
 
 	if(editmode == MODE_TEXTURE)
 	{
-		float selsizex = (fabs(cGraphics::worldContainer->settings.selectionstart.x - cGraphics::worldContainer->settings.selectionend.x) / 32);
-		float selsizey = (fabs(cGraphics::worldContainer->settings.selectionstart.y - cGraphics::worldContainer->settings.selectionend.y) / 32);
-
-		selsizex = floor(selsizex*cGraphics::worldContainer->settings.brushsize);
-		selsizey = floor(selsizey*cGraphics::worldContainer->settings.brushsize);
-
-
 		int posx = (int)mouse3dx / 10;
 		int posy = (int)mouse3dz / 10;
 
-
+		glColor4f(1,1,1,0.7f);
+		glEnable(GL_BLEND);
 		glEnable(GL_TEXTURE_2D);
 		if (posx >= 0 && posx < width && posy >= 0 && posy < height)
 		{
-			float selstartx = ((cGraphics::worldContainer->settings.selectionstart.x - (cGraphics::w()-256)) / 32.0f);
-			float selstarty = ((int)(cGraphics::worldContainer->settings.selectionstart.y - 32) % 288) / 32;
-			float selendx = ((cGraphics::worldContainer->settings.selectionend.x - (cGraphics::w()-256)) / 32.0f);
-			float selendy = ((int)(cGraphics::worldContainer->settings.selectionend.y - 32) % 288) / 32;
-
-			selstartx += (cGraphics::w()%32)/32.0f;
-			selendx += (cGraphics::w()%32)/32.0f;
-
-			
-			glColor4f(1,1,1,0.7f);
-			glEnable(GL_BLEND);
-
-			if (cGraphics::worldContainer->settings.textureRot % 2 == 1)
+			if(cClipBoard::pasting && cClipBoard::currentClipBoard && cClipBoard::currentClipBoard->type == cClipBoard::CLIP_TEXTURE)
 			{
-				float a = selsizex;
-				selsizex = selsizey;
-				selsizey = a;
-
-				a = selstartx;
-				selstartx = selstarty;
-				selstarty = a;
-
-				a = selendx;
-				selendx = selendy;
-				selendy = a;
-
-			}
-
-			for(x = posx; x > posx-selsizex; x--)
-			{
-				for(y = posy; y > posy-selsizey; y--)
+				cClipboardTexture* clipboard = (cClipboardTexture*)cClipBoard::currentClipBoard;
+				for(x = 0; x < clipboard->data.size(); x++)
 				{
-					if(!cFrustum::CubeInFrustum(x*10+5,0,(height-y)*10+5, 20))
-						continue;
-					int xx = posx - x;
-					int yy = posy - y;
-					if (y < 0)
-						continue;
-					if (x < 0)
-						continue;
-					cTile t;
-					t.texture = cGraphics::worldContainer->settings.texturestart + ((int)cGraphics::worldContainer->settings.selectionstart.y - 32) / 288;
-					if(t.texture >= (int)textures.size())
-						break;
-					if (cGraphics::worldContainer->settings.textureRot == 0)
+					for(y = 0; y < clipboard->data[x].size(); y++)
 					{
-						t.u1 = (selendx*cGraphics::worldContainer->settings.brushsize-xx-1) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize));
-						t.v1 = ((selendy*cGraphics::worldContainer->settings.brushsize-yy-1) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize)));
-
-						t.u2 = (selendx*cGraphics::worldContainer->settings.brushsize-xx) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize));
-						t.v2 = ((selendy*cGraphics::worldContainer->settings.brushsize-yy-1) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize)));
+						if(clipboard->data[x][y].first != 1)
+							continue;
+						cTile t = clipboard->data[x][y].second;
+						glBindTexture(GL_TEXTURE_2D, clipboard->worldContainer->world->textures[t.texture]->texId());
+						cCube* c = &cubes[y][x];
+						glColor4f(1,1,1,0.8f);
+						glBegin(GL_QUADS);
+							glTexCoord2f(t.u1, 1-t.v1); glVertex3f((posx-x)*10,		-c->cell1+0.1,(height-(posy-y))*10);
+							glTexCoord2f(t.u2, 1-t.v2); glVertex3f((posx-x)*10+10,	-c->cell2+0.1,(height-(posy-y))*10);
+							glTexCoord2f(t.u4, 1-t.v4); glVertex3f((posx-x)*10+10,	-c->cell4+0.1,(height-(posy-y))*10-10);
+							glTexCoord2f(t.u3, 1-t.v3); glVertex3f((posx-x)*10,		-c->cell3+0.1,(height-(posy-y))*10-10);
+						glEnd();
 						
-						t.u3 = (selendx*cGraphics::worldContainer->settings.brushsize-xx-1) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize));
-						t.v3 = ((selendy*cGraphics::worldContainer->settings.brushsize-yy) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize)));
-						
-						t.u4 = (selendx*cGraphics::worldContainer->settings.brushsize-xx) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize));
-						t.v4 = ((selendy*cGraphics::worldContainer->settings.brushsize-yy) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize)));
 					}
-					if (cGraphics::worldContainer->settings.textureRot == 1)
-					{
-						t.v1 = (selendx*cGraphics::worldContainer->settings.brushsize-xx-1) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize));
-						t.u1 = ((selstarty*cGraphics::worldContainer->settings.brushsize+yy+1) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize)));
-
-						t.v2 = (selendx*cGraphics::worldContainer->settings.brushsize-xx) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize));
-						t.u2 = ((selstarty*cGraphics::worldContainer->settings.brushsize+yy+1) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize)));
-						
-						t.v3 = (selendx*cGraphics::worldContainer->settings.brushsize-xx-1) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize));
-						t.u3 = ((selstarty*cGraphics::worldContainer->settings.brushsize+yy) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize)));
-						
-						t.v4 = (selendx*cGraphics::worldContainer->settings.brushsize-xx) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize));
-						t.u4 = ((selstarty*cGraphics::worldContainer->settings.brushsize+yy) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize)));
-					}
-					if(cGraphics::worldContainer->settings.textureRot == 2)
-					{
-						t.u1 = (selstartx*cGraphics::worldContainer->settings.brushsize+xx+1) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize));
-						t.v1 = ((selstarty*cGraphics::worldContainer->settings.brushsize+yy+1) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize)));
-
-						t.u2 = (selstartx*cGraphics::worldContainer->settings.brushsize+xx) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize));
-						t.v2 = ((selstarty*cGraphics::worldContainer->settings.brushsize+yy+1) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize)));
-						
-						t.u3 = (selstartx*cGraphics::worldContainer->settings.brushsize+xx+1) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize));
-						t.v3 = ((selstarty*cGraphics::worldContainer->settings.brushsize+yy) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize)));
-						
-						t.u4 = (selstartx*cGraphics::worldContainer->settings.brushsize+xx) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize));
-						t.v4 = ((selstarty*cGraphics::worldContainer->settings.brushsize+yy) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize)));
-					}
-					if (cGraphics::worldContainer->settings.textureRot == 3)
-					{
-						t.v1 = (selstartx*cGraphics::worldContainer->settings.brushsize+xx+1) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize));
-						t.u1 = ((selendy*cGraphics::worldContainer->settings.brushsize-yy-1) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize)));
-
-						t.v2 = (selstartx*cGraphics::worldContainer->settings.brushsize+xx) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize));
-						t.u2 = ((selendy*cGraphics::worldContainer->settings.brushsize-yy-1) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize)));
-						
-						t.v3 = (selstartx*cGraphics::worldContainer->settings.brushsize+xx+1) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize));
-						t.u3 = ((selendy*cGraphics::worldContainer->settings.brushsize-yy) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize)));
-						
-						t.v4 = (selstartx*cGraphics::worldContainer->settings.brushsize+xx) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize));
-						t.u4 = ((selendy*cGraphics::worldContainer->settings.brushsize-yy) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize)));
-					}
-					
-
-					if(cGraphics::worldContainer->settings.fliph)
-					{
-						t.u1 = ((selendx+selstartx)/8.0)-t.u1;
-						t.u2 = ((selendx+selstartx)/8.0)-t.u2;
-						t.u3 = ((selendx+selstartx)/8.0)-t.u3;
-						t.u4 = ((selendx+selstartx)/8.0)-t.u4;
-					}
-					if(cGraphics::worldContainer->settings.flipv)
-					{
-						t.v1 = ((selendy+selstarty)/8.0)-t.v1;
-						t.v2 = ((selendy+selstarty)/8.0)-t.v2;
-						t.v3 = ((selendy+selstarty)/8.0)-t.v3;
-						t.v4 = ((selendy+selstarty)/8.0)-t.v4;
-					}
-
-					glBindTexture(GL_TEXTURE_2D, textures[t.texture]->texId());
-					cCube* c = &cubes[y][x];
-					glBegin(GL_QUADS);
-						glTexCoord2f(t.u1, 1-t.v1); glVertex3f(x*10,-c->cell1+0.1,(height-y)*10);
-						glTexCoord2f(t.u2, 1-t.v2); glVertex3f(x*10+10,-c->cell2+0.1,(height-y)*10);
-						glTexCoord2f(t.u4, 1-t.v4); glVertex3f(x*10+10,-c->cell4+0.1,(height-y)*10-10);
-						glTexCoord2f(t.u3, 1-t.v3); glVertex3f(x*10,-c->cell3+0.1,(height-y)*10-10);
-					glEnd();
-					glDisable(GL_BLEND);
-					glColor4f(1,0,0,1);
-					glBegin(GL_LINE_LOOP);
-						glTexCoord2f(t.u1, 1-t.v1); glVertex3f(x*10,-c->cell1+0.2,(height-y)*10);
-						glTexCoord2f(t.u2, 1-t.v2); glVertex3f(x*10+10,-c->cell2+0.2,(height-y)*10);
-						glTexCoord2f(t.u4, 1-t.v4); glVertex3f(x*10+10,-c->cell4+0.2,(height-y)*10-10);
-						glTexCoord2f(t.u3, 1-t.v3); glVertex3f(x*10,-c->cell3+0.2,(height-y)*10-10);
-					glEnd();
-					glEnable(GL_BLEND);
-					glColor4f(1,1,1,0.7f);
-					
-
 				}
 			}
-			glDisable(GL_BLEND);
+			else
+			{
+				float selsizex = (fabs(cGraphics::worldContainer->settings.selectionstart.x - cGraphics::worldContainer->settings.selectionend.x) / 32);
+				float selsizey = (fabs(cGraphics::worldContainer->settings.selectionstart.y - cGraphics::worldContainer->settings.selectionend.y) / 32);
+				
+				selsizex = floor(selsizex*cGraphics::worldContainer->settings.brushsize);
+				selsizey = floor(selsizey*cGraphics::worldContainer->settings.brushsize);
+
+				float selstartx = ((cGraphics::worldContainer->settings.selectionstart.x - (cGraphics::w()-256)) / 32.0f);
+				float selstarty = ((int)(cGraphics::worldContainer->settings.selectionstart.y - 32) % 288) / 32;
+				float selendx = ((cGraphics::worldContainer->settings.selectionend.x - (cGraphics::w()-256)) / 32.0f);
+				float selendy = ((int)(cGraphics::worldContainer->settings.selectionend.y - 32) % 288) / 32;
+
+				selstartx += (cGraphics::w()%32)/32.0f;
+				selendx += (cGraphics::w()%32)/32.0f;
+
+				
+
+				if (cGraphics::worldContainer->settings.textureRot % 2 == 1)
+				{
+					float a = selsizex;
+					selsizex = selsizey;
+					selsizey = a;
+
+					a = selstartx;
+					selstartx = selstarty;
+					selstarty = a;
+
+					a = selendx;
+					selendx = selendy;
+					selendy = a;
+
+				}
+
+				for(x = posx; x > posx-selsizex; x--)
+				{
+					for(y = posy; y > posy-selsizey; y--)
+					{
+						if(!cFrustum::CubeInFrustum(x*10+5,0,(height-y)*10+5, 20))
+							continue;
+						int xx = posx - x;
+						int yy = posy - y;
+						if (y < 0)
+							continue;
+						if (x < 0)
+							continue;
+						cTile t;
+						t.texture = cGraphics::worldContainer->settings.texturestart + ((int)cGraphics::worldContainer->settings.selectionstart.y - 32) / 288;
+						if(t.texture >= (int)textures.size())
+							break;
+						if (cGraphics::worldContainer->settings.textureRot == 0)
+						{
+							t.u1 = (selendx*cGraphics::worldContainer->settings.brushsize-xx-1) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize));
+							t.v1 = ((selendy*cGraphics::worldContainer->settings.brushsize-yy-1) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize)));
+
+							t.u2 = (selendx*cGraphics::worldContainer->settings.brushsize-xx) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize));
+							t.v2 = ((selendy*cGraphics::worldContainer->settings.brushsize-yy-1) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize)));
+							
+							t.u3 = (selendx*cGraphics::worldContainer->settings.brushsize-xx-1) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize));
+							t.v3 = ((selendy*cGraphics::worldContainer->settings.brushsize-yy) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize)));
+							
+							t.u4 = (selendx*cGraphics::worldContainer->settings.brushsize-xx) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize));
+							t.v4 = ((selendy*cGraphics::worldContainer->settings.brushsize-yy) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize)));
+						}
+						if (cGraphics::worldContainer->settings.textureRot == 1)
+						{
+							t.v1 = (selendx*cGraphics::worldContainer->settings.brushsize-xx-1) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize));
+							t.u1 = ((selstarty*cGraphics::worldContainer->settings.brushsize+yy+1) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize)));
+
+							t.v2 = (selendx*cGraphics::worldContainer->settings.brushsize-xx) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize));
+							t.u2 = ((selstarty*cGraphics::worldContainer->settings.brushsize+yy+1) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize)));
+							
+							t.v3 = (selendx*cGraphics::worldContainer->settings.brushsize-xx-1) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize));
+							t.u3 = ((selstarty*cGraphics::worldContainer->settings.brushsize+yy) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize)));
+							
+							t.v4 = (selendx*cGraphics::worldContainer->settings.brushsize-xx) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize));
+							t.u4 = ((selstarty*cGraphics::worldContainer->settings.brushsize+yy) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize)));
+						}
+						if(cGraphics::worldContainer->settings.textureRot == 2)
+						{
+							t.u1 = (selstartx*cGraphics::worldContainer->settings.brushsize+xx+1) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize));
+							t.v1 = ((selstarty*cGraphics::worldContainer->settings.brushsize+yy+1) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize)));
+
+							t.u2 = (selstartx*cGraphics::worldContainer->settings.brushsize+xx) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize));
+							t.v2 = ((selstarty*cGraphics::worldContainer->settings.brushsize+yy+1) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize)));
+							
+							t.u3 = (selstartx*cGraphics::worldContainer->settings.brushsize+xx+1) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize));
+							t.v3 = ((selstarty*cGraphics::worldContainer->settings.brushsize+yy) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize)));
+							
+							t.u4 = (selstartx*cGraphics::worldContainer->settings.brushsize+xx) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize));
+							t.v4 = ((selstarty*cGraphics::worldContainer->settings.brushsize+yy) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize)));
+						}
+						if (cGraphics::worldContainer->settings.textureRot == 3)
+						{
+							t.v1 = (selstartx*cGraphics::worldContainer->settings.brushsize+xx+1) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize));
+							t.u1 = ((selendy*cGraphics::worldContainer->settings.brushsize-yy-1) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize)));
+
+							t.v2 = (selstartx*cGraphics::worldContainer->settings.brushsize+xx) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize));
+							t.u2 = ((selendy*cGraphics::worldContainer->settings.brushsize-yy-1) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize)));
+							
+							t.v3 = (selstartx*cGraphics::worldContainer->settings.brushsize+xx+1) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize));
+							t.u3 = ((selendy*cGraphics::worldContainer->settings.brushsize-yy) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize)));
+							
+							t.v4 = (selstartx*cGraphics::worldContainer->settings.brushsize+xx) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize));
+							t.u4 = ((selendy*cGraphics::worldContainer->settings.brushsize-yy) * (1/(8.0f*cGraphics::worldContainer->settings.brushsize)));
+						}
+						
+
+						if(cGraphics::worldContainer->settings.fliph)
+						{
+							t.u1 = ((selendx+selstartx)/8.0)-t.u1;
+							t.u2 = ((selendx+selstartx)/8.0)-t.u2;
+							t.u3 = ((selendx+selstartx)/8.0)-t.u3;
+							t.u4 = ((selendx+selstartx)/8.0)-t.u4;
+						}
+						if(cGraphics::worldContainer->settings.flipv)
+						{
+							t.v1 = ((selendy+selstarty)/8.0)-t.v1;
+							t.v2 = ((selendy+selstarty)/8.0)-t.v2;
+							t.v3 = ((selendy+selstarty)/8.0)-t.v3;
+							t.v4 = ((selendy+selstarty)/8.0)-t.v4;
+						}
+
+						glBindTexture(GL_TEXTURE_2D, textures[t.texture]->texId());
+						cCube* c = &cubes[y][x];
+						glBegin(GL_QUADS);
+							glTexCoord2f(t.u1, 1-t.v1); glVertex3f(x*10,-c->cell1+0.1,(height-y)*10);
+							glTexCoord2f(t.u2, 1-t.v2); glVertex3f(x*10+10,-c->cell2+0.1,(height-y)*10);
+							glTexCoord2f(t.u4, 1-t.v4); glVertex3f(x*10+10,-c->cell4+0.1,(height-y)*10-10);
+							glTexCoord2f(t.u3, 1-t.v3); glVertex3f(x*10,-c->cell3+0.1,(height-y)*10-10);
+						glEnd();
+						glDisable(GL_BLEND);
+						glColor4f(1,0,0,1);
+						glBegin(GL_LINE_LOOP);
+							glTexCoord2f(t.u1, 1-t.v1); glVertex3f(x*10,-c->cell1+0.2,(height-y)*10);
+							glTexCoord2f(t.u2, 1-t.v2); glVertex3f(x*10+10,-c->cell2+0.2,(height-y)*10);
+							glTexCoord2f(t.u4, 1-t.v4); glVertex3f(x*10+10,-c->cell4+0.2,(height-y)*10-10);
+							glTexCoord2f(t.u3, 1-t.v3); glVertex3f(x*10,-c->cell3+0.2,(height-y)*10-10);
+						glEnd();
+						glEnable(GL_BLEND);
+						glColor4f(1,1,1,0.7f);
+						
+
+					}
+				}
+				glDisable(GL_BLEND);
+			}
 		}
-
-
 
 		if (cGraphics::view.showGrid)
 		{
@@ -2105,7 +2128,7 @@ void cWorld::draw()
 					cCube* c = &cubes[y][x];
 					if(!cFrustum::CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 20))
 						continue;
-
+					
 					if (c->tileUp != -1)
 					{
 						cTile* t = &tiles[cubes[y][x].tileUp];
@@ -2140,15 +2163,17 @@ void cWorld::draw()
 					{
 						glVertex3f(x*10,-c->cell1+0.1,(height-y)*10);
 						glVertex3f(x*10+10,-c->cell2+0.1,(height-y)*10);
-
+						
 						glVertex3f(x*10+10,-c->cell2+0.1,(height-y)*10);
 						glVertex3f(x*10+10,-c->cell4+0.1,(height-y)*10-10);
 					}
 				}
 			}
-
+			
 			glEnd();
 		}
+	
+
 	}
 	else if(editmode == MODE_HEIGHTDETAIL)
 	{

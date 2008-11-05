@@ -6,6 +6,8 @@
 class cWorldContainer;
 #include <world.h>
 
+class cClipBoardContents;
+
 class cClipBoard
 {
 public:
@@ -16,24 +18,27 @@ public:
 		CLIP_OBJECT,
 		CLIP_GAT,
 	};
-	eClipBoardType type;
-	cClipBoard(eClipBoardType);
-	virtual void apply() = 0;
 
-
-	static void setClipBoard(cClipBoard*);
-	static cClipBoard* currentClipBoard;
-
-protected:	
-	cWorldContainer*	worldContainer;
+	static void					setClipBoard(cClipBoardContents*);
+	static cClipBoardContents*	currentClipBoard;
+	static bool					pasting;
 };
 
 
-class cClipboardTexture : public cClipBoard
+class cClipBoardContents
+{
+public:
+	cClipBoardContents(cClipBoard::eClipBoardType);
+	cClipBoard::eClipBoardType		type;
+	virtual void					apply() = 0;
+	cWorldContainer*				worldContainer;
+};
+
+class cClipboardTexture : public cClipBoardContents
 {
 public:
 	std::vector<std::vector<std::pair<int, cTile> > > data;
-	cClipboardTexture(std::vector<std::vector<std::pair<int, cTile> > > pData) : cClipBoard(cClipBoard::CLIP_TEXTURE)
+	cClipboardTexture(std::vector<std::vector<std::pair<int, cTile> > > pData) : cClipBoardContents(cClipBoard::CLIP_TEXTURE)
 	{
 		data = pData;
 	}

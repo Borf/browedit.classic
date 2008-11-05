@@ -8,15 +8,16 @@ extern double mouse3dx, mouse3dz;
 extern std::string rodir;
 
 
-cClipBoard* cClipBoard::currentClipBoard = NULL;
+cClipBoardContents* cClipBoard::currentClipBoard = NULL;
+bool				cClipBoard::pasting = false;
 
-cClipBoard::cClipBoard( eClipBoardType t)
+cClipBoardContents::cClipBoardContents( cClipBoard::eClipBoardType t)
 {
 	type = t;
 	worldContainer = cGraphics::worldContainer;
 }
 
-void cClipBoard::setClipBoard( cClipBoard* clipboard)
+void cClipBoard::setClipBoard( cClipBoardContents* clipboard)
 {
 	if(currentClipBoard)
 		delete currentClipBoard;
