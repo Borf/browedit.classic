@@ -213,8 +213,7 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 
 					int posx = (int)mouse3dx / 10;
 					int posy = (int)mouse3dz / 10;
-
-					std::vector<std::vector<std::pair<int, cTile> > > data;
+					cClipboardTexture* clipboard = new cClipboardTexture();
 
 					for(int x = posx; x > posx-selsizex; x--)
 					{
@@ -238,17 +237,15 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 							}
 
 						}
-						data.push_back(row);
+						clipboard->data.push_back(row);
 					}
-					cClipBoard::setClipBoard(new cClipboardTexture(data));
+					cClipBoard::setClipBoard(clipboard);
 					cClipBoard::pasting = true;
 				}
 				break; 
 			case SDLK_p:
 				if(cClipBoard::currentClipBoard->type == cClipBoard::CLIP_TEXTURE)
-				{
 					cClipBoard::pasting = !cClipBoard::pasting;
-				}
 				break;
 			case SDLK_BACKSPACE:
 				{

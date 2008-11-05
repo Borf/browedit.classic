@@ -1594,6 +1594,8 @@ void cWorld::draw()
 
 	bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 	bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
+	int posx = (int)mouse3dx / 10;
+	int posy = (int)mouse3dz / 10;
 
 	for(x = 0; x < width; x++)
 	{
@@ -1632,12 +1634,17 @@ void cWorld::draw()
 				}
 				else if(editmode == MODE_TEXTUREPAINT && inverseSelection && !c->selected)
 					glColor4f(0.2f, 0.2f, 0.2f, 1);
+				else if (editmode == MODE_HEIGHTDETAIL && cClipBoard::pasting && cClipBoard::currentClipBoard->type == cClipBoard::CLIP_HEIGHT && 
+					inbetween<int>(x, posx-floor(((cClipboardHeight*)cClipBoard::currentClipBoard)->data[0].size()/2.0f),	posx+ceil(((cClipboardHeight*)cClipBoard::currentClipBoard)->data[0].size()/2.0f)) &&
+					inbetween<int>(y, posy-floor(((cClipboardHeight*)cClipBoard::currentClipBoard)->data.size()/2.0f),		posy+ceil(((cClipboardHeight*)cClipBoard::currentClipBoard)->data.size()/2.0f)))
+					glColor4f(0.7f,0.7f,0.7f,1);
 				else if (cGraphics::view.showAmbientLighting)
 					glColor4f(ambientLight.diffuse.x,ambientLight.diffuse.y,ambientLight.diffuse.z,1);
 				else
 					glColor4f(1,1,1,1);
 
 				glDisable(GL_BLEND);
+//				glEnable(GL_BLEND);
 				glBindTexture(GL_TEXTURE_2D, texture);
 				glNormal3f(c->normal.x, c->normal.y, c->normal.z);
 				glBegin(GL_TRIANGLE_STRIP);
@@ -1835,7 +1842,6 @@ void cWorld::draw()
 	mouse3dy = yyy;
 	mouse3dz = (height*10)-zzz;
 
-
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set the correct blending mode
@@ -1864,9 +1870,14 @@ void cWorld::draw()
 
 	if (editmode == MODE_GAT || cGraphics::view.showGat)
 	{
+		if(cClipBoard::pasting && cClipBoard::currentClipBoard && cClipBoard::currentClipBoard->type == cClipBoard::CLIP_GAT)
+			cClipBoard::currentClipBoard->render();
 		glEnable(GL_BLEND);
 		glEnable(GL_TEXTURE_2D);
 		glColor4f(1,1,1, cGraphics::gatTransparency);
+	
+
+
 		for(y = 0; y < (int)gattiles.size(); y++)
 		{
 			if(!cFrustum::BoxInFrustum(0,-1000,(2*height-y)*5, gattiles[y].size()*5,1000,(2*height-y)*5-5))
@@ -1945,28 +1956,7 @@ void cWorld::draw()
 		if (posx >= 0 && posx < width && posy >= 0 && posy < height)
 		{
 			if(cClipBoard::pasting && cClipBoard::currentClipBoard && cClipBoard::currentClipBoard->type == cClipBoard::CLIP_TEXTURE)
-			{
-				cClipboardTexture* clipboard = (cClipboardTexture*)cClipBoard::currentClipBoard;
-				for(x = 0; x < clipboard->data.size(); x++)
-				{
-					for(y = 0; y < clipboard->data[x].size(); y++)
-					{
-						if(clipboard->data[x][y].first != 1)
-							continue;
-						cTile t = clipboard->data[x][y].second;
-						glBindTexture(GL_TEXTURE_2D, clipboard->worldContainer->world->textures[t.texture]->texId());
-						cCube* c = &cubes[y][x];
-						glColor4f(1,1,1,0.8f);
-						glBegin(GL_QUADS);
-							glTexCoord2f(t.u1, 1-t.v1); glVertex3f((posx-x)*10,		-c->cell1+0.1,(height-(posy-y))*10);
-							glTexCoord2f(t.u2, 1-t.v2); glVertex3f((posx-x)*10+10,	-c->cell2+0.1,(height-(posy-y))*10);
-							glTexCoord2f(t.u4, 1-t.v4); glVertex3f((posx-x)*10+10,	-c->cell4+0.1,(height-(posy-y))*10-10);
-							glTexCoord2f(t.u3, 1-t.v3); glVertex3f((posx-x)*10,		-c->cell3+0.1,(height-(posy-y))*10-10);
-						glEnd();
-						
-					}
-				}
-			}
+				cClipBoard::currentClipBoard->render();
 			else
 			{
 				float selsizex = (fabs(cGraphics::worldContainer->settings.selectionstart.x - cGraphics::worldContainer->settings.selectionend.x) / 32);
@@ -2203,6 +2193,9 @@ void cWorld::draw()
 
 			}
 		}
+		if(cClipBoard::pasting && cClipBoard::currentClipBoard != NULL && cClipBoard::currentClipBoard->type == cClipBoard::CLIP_HEIGHT)
+			cClipBoard::currentClipBoard->render();
+
 	}
 	else if (editmode == MODE_WALLS)
 	{
@@ -2262,6 +2255,13 @@ void cWorld::draw()
 //			models[i]->collides(cVector3(0,0,0), cVector3(0,0,0));
 			models[i]->draw();
 		}
+
+		if(editmode == MODE_OBJECTS && cClipBoard::pasting && cClipBoard::currentClipBoard && cClipBoard::currentClipBoard->type == cClipBoard::CLIP_OBJECT)
+		{
+			glColor4f(1,1,1,1);
+			cClipBoard::currentClipBoard->render();
+		}
+		
 		glScalef(1,1,-1);
 		glTranslatef(0,0,-height*10);
 		glColor4f(1,1,1,1);

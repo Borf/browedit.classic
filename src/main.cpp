@@ -113,7 +113,6 @@ cMenu* models;
 std::map<int, cMenu*, std::less<int> >	effects;
 cMenu* effectsmenu;
 
-std::vector<std::vector<std::vector<float> > > clipboard;
 long lasttimer;
 
 
@@ -1243,7 +1242,7 @@ int main(int argc, char *argv[])
 	if(config.FirstChildElement("config")->FirstChildElement("firstmap"))
 		strcpy(cGraphics::world->fileName, std::string(rodir + "data\\" + config.FirstChildElement("config")->FirstChildElement("firstmap")->FirstChild()->Value()).c_str());
 	else
-		strcpy(cGraphics::world->fileName, std::string(rodir + "data\\prontera").c_str());
+		strcpy(cGraphics::world->fileName, std::string(rodir + "data\\test").c_str());
 
 	if(argc > 1)
 	{

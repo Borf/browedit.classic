@@ -2,12 +2,11 @@
 #include <wm/window.h>
 #include "graphics.h"
 #include "undo.h"
+#include "clipboard.h"
 
 extern long mousestartx, mousestarty;
 extern double mouse3dx, mouse3dy, mouse3dz;
 extern bool lbuttondown, rbuttondown;
-extern std::vector<std::vector<std::vector<float> > > clipboard;
-std::vector<std::vector<int > > clipboardgat;
 
 
 int cProcessManagement::gatedit_process_events(SDL_Event &event)
@@ -46,26 +45,35 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 		{
 			if(event.button.button == SDL_BUTTON_LEFT)
 			{
-				int posx = (int)mouse3dx / 5;
-				int posy = (int)mouse3dz / 5;
-
-				int f = (int)ceil(cGraphics::worldContainer->settings.brushsize);
-
-			//	if (posx >= floor(f/2.0f) && posx < 2*cGraphics::world->width-(int)ceil(f/2.0f) && posy >= floor(f/2.0f) && posy< 2*cGraphics::world->height-(int)ceil(f/2.0f))
+				if(cClipBoard::pasting && cClipBoard::currentClipBoard && cClipBoard::currentClipBoard->type == cClipBoard::CLIP_GAT)
 				{
-					cGraphics::worldContainer->undoStack->push(new cUndoGatTileEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
+					cClipBoard::currentClipBoard->apply();
+					if((SDL_GetModState() & KMOD_CTRL) == 0)
+						cClipBoard::pasting = false;
+				}
+				else
+				{
+					int posx = (int)mouse3dx / 5;
+					int posy = (int)mouse3dz / 5;
 
-					glColor4f(1,0,0,1);
-					glDisable(GL_TEXTURE_2D);
-					glDisable(GL_BLEND);
-					for(int x = posx-(int)floor(f/2.0f); x < posx+(int)ceil(f/2.0f); x++)
+					int f = (int)ceil(cGraphics::worldContainer->settings.brushsize);
+
+				//	if (posx >= floor(f/2.0f) && posx < 2*cGraphics::world->width-(int)ceil(f/2.0f) && posy >= floor(f/2.0f) && posy< 2*cGraphics::world->height-(int)ceil(f/2.0f))
 					{
-						for(int y = posy-(int)floor(f/2.0f); y < posy+(int)ceil(f/2.0f); y++)
+						cGraphics::worldContainer->undoStack->push(new cUndoGatTileEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
+
+						glColor4f(1,0,0,1);
+						glDisable(GL_TEXTURE_2D);
+						glDisable(GL_BLEND);
+						for(int x = posx-(int)floor(f/2.0f); x < posx+(int)ceil(f/2.0f); x++)
 						{
-							if (y < 0 || y >= cGraphics::world->height*2 || x < 0 || x >= cGraphics::world->width*2)
-								continue;
-							cGatTile* c = &cGraphics::world->gattiles[y][x];
-							c->type = cGraphics::gatTiles[cGraphics::worldContainer->settings.texturestart];
+							for(int y = posy-(int)floor(f/2.0f); y < posy+(int)ceil(f/2.0f); y++)
+							{
+								if (y < 0 || y >= cGraphics::world->height*2 || x < 0 || x >= cGraphics::world->width*2)
+									continue;
+								cGatTile* c = &cGraphics::world->gattiles[y][x];
+								c->type = cGraphics::gatTiles[cGraphics::worldContainer->settings.texturestart];
+							}
 						}
 					}
 				}
@@ -203,12 +211,10 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 
 					if (posx >= (int)floor(f/2.0f) && posx < 2*cGraphics::world->width-(int)ceil(f/2.0f) && posy >= f && posy< 2*cGraphics::world->height-f)
 					{
-						clipboard.clear();
-						clipboardgat.clear();
+						cClipboardGat* clipboard = new cClipboardGat();
 						for(int y = posy-(int)floor(f/2.0f); y < posy+(int)ceil(f/2.0f); y++)
 						{
-							std::vector<std::vector<float> > row;
-							std::vector<int > row2;
+							std::vector<std::pair<int, std::vector<float> > > row;
 							for(int x = posx-(int)floor(f/2.0f); x < posx+(int)ceil(f/2.0f); x++)
 							{
 								std::vector<float> c;
@@ -216,47 +222,19 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 								c.push_back(cGraphics::world->gattiles[y][x].cell2);
 								c.push_back(cGraphics::world->gattiles[y][x].cell3);
 								c.push_back(cGraphics::world->gattiles[y][x].cell4);
-								row.push_back(c);
-								row2.push_back(cGraphics::world->gattiles[y][x].type);
+								row.push_back(std::pair<int, std::vector<float> >(cGraphics::world->gattiles[y][x].type, c));
 							}
-							clipboard.push_back(row);
-							clipboardgat.push_back(row2);
+							clipboard->data.push_back(row);
 						}
+						cClipBoard::setClipBoard(clipboard);
+						cClipBoard::pasting = true;
 					}
 				}
 				break;
 			case SDLK_p:
 				{
-					int posx = (int)mouse3dx / 5;
-					int posy = (int)mouse3dz / 5;
-
-					int f = (int)ceil(cGraphics::worldContainer->settings.brushsize);
-
-					if ((int)clipboard.size() != f)
-						break;
-
-					cGraphics::worldContainer->undoStack->push(new cUndoGatHeightEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
-					cGraphics::worldContainer->undoStack->push(new cUndoGatTileEdit(posx-(int)floor(f/2.0f), posy-(int)floor(f/2.0f), posx+(int)ceil(f/2.0f), posy+(int)ceil(f/2.0f)));
-
-					if (posx >= (int)floor(f/2.0f) && posx < 2*cGraphics::world->width-(int)ceil(f/2.0f) && posy >= f && posy< 2*cGraphics::world->height-f)
-					{
-						int yy = 0;
-						for(int y = posy-(int)floor(f/2.0f); y < posy+(int)ceil(f/2.0f); y++)
-						{
-							int xx = 0;
-							for(int x = posx-(int)floor(f/2.0f); x < posx+(int)ceil(f/2.0f); x++)
-							{
-								cGraphics::world->gattiles[y][x].cell1 = clipboard[yy][xx][0];
-								cGraphics::world->gattiles[y][x].cell2 = clipboard[yy][xx][1];
-								cGraphics::world->gattiles[y][x].cell3 = clipboard[yy][xx][2];
-								cGraphics::world->gattiles[y][x].cell4 = clipboard[yy][xx][3];
-								cGraphics::world->gattiles[y][x].type = clipboardgat[yy][xx];
-								xx++;
-							}
-							yy++;
-						}
-					}
-				}
+					cClipBoard::pasting = !cClipBoard::pasting;
+				}					
 				break;
 			case SDLK_f:
 				{

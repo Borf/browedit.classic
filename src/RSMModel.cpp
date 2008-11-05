@@ -9,6 +9,8 @@ bool boundingBoxCollisions = false;
 
 void cRSMModel::load(std::string fname)
 {
+	glPushMatrix();
+	glLoadIdentity();
 	unsigned int i;
 //	Log(3,0,"Loading %s", fname.c_str());
 	recalcbb = true;
@@ -16,7 +18,10 @@ void cRSMModel::load(std::string fname)
 	rofilename = filename.substr(filename.find("model\\") + 6);
 	cFile* pFile = cFileSystem::open(filename);
 	if (pFile == NULL)
+	{
+		glPopMatrix();
 		return;
+	}
 
 
 	char buffer[100];
@@ -32,7 +37,10 @@ void cRSMModel::load(std::string fname)
 
 	animated = false;
 	if(ntextures < 1 || ntextures > 1000)
+	{
+		glPopMatrix();
 		return;
+	}
 
 	for(i = 0; i < ntextures; i++)
 	{
@@ -77,6 +85,7 @@ void cRSMModel::load(std::string fname)
 	rot = cVector3(0,0,0);
 	scale = cVector3(1,1,1);
 	draw(false,false);
+	glPopMatrix();
 }
 
 void cRSMModelMesh::load(cFile* pFile, cRSMModel* model, bool main)
@@ -98,7 +107,10 @@ void cRSMModelMesh::load(cFile* pFile, cRSMModel* model, bool main)
 	unsigned int nTextures;
 	pFile->read((char*)&nTextures, 4);
 	if (nTextures > 1000 || nTextures < 0)
+	{
+		glPopMatrix();
 		return;
+	}
 	for(i = 0; i < nTextures; i++)
 	{
 		unsigned int id;
@@ -259,7 +271,7 @@ void cRSMModel::draw(bool checkfrust, bool dodraw, bool setheight, bool dolightm
 	{
 		cVector3 v1 = cVector3(bb2.bbmin[0], bb2.bbmin[1], bb2.bbmin[2]);
 		cVector3 v2 = cVector3(bb2.bbmax[0], bb2.bbmax[1], bb2.bbmax[2]);
-		glColor4f(1,0,1,1);
+	//	glColor4f(1,0,1,1);
 		glDisable(GL_TEXTURE_2D);
 		glBegin(GL_LINE_LOOP);
 			glVertex3f(v1.x, -v1.y, v1.z);
@@ -284,7 +296,7 @@ void cRSMModel::draw(bool checkfrust, bool dodraw, bool setheight, bool dolightm
 			glVertex3f(v1.x, -v2.y, v2.z);
 		glEnd();
 		glEnable(GL_TEXTURE_2D);
-		glColor4f(1,1,1,1);
+		//glColor4f(1,1,1,1);
 	}
 
 

@@ -179,13 +179,6 @@ public:
 
 	static cVector3									selectionCenter;
 
-	static cVector3					clipboardRot;
-	static cVector3					clipboardScale;
-	static std::string				clipboardFile;
-	static std::string				clipboardName;
-	static float					clipboardY;
-	static float					clipboardFloat;
-
 	static std::vector<cTexture*>	gatTextures;
 	static cTexture*				gatBorder;
 	static cTexture*				splash;

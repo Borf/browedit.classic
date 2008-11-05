@@ -5,6 +5,7 @@
 #include <wm/windowinputbox.h>
 #include "windows/objectwindow.h"
 #include "windows/modeloverviewwindow.h"
+#include <clipboard.h>
 
 #define MENUCOMMAND(x) bool MenuCommand_ ## x (cMenuItem* src)
 MENUCOMMAND(model);
@@ -93,41 +94,50 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 		case SDL_MOUSEBUTTONUP:
 			if(event.button.button == SDL_BUTTON_LEFT && movement < 3)
 			{
-				if (SDL_GetModState() & KMOD_CTRL && cGraphics::previewModel != NULL)
+				if(cClipBoard::pasting && cClipBoard::currentClipBoard && cClipBoard::currentClipBoard->type == cClipBoard::CLIP_OBJECT)
 				{
-					cRSMModel* model = new cRSMModel();
-					model->load(cGraphics::previewModel->filename);
-					model->pos = cVector3(mouse3dx/5, -mouse3dy, mouse3dz/5);
-					model->scale = cVector3(1,1,1);
-					model->rot = cVector3(0,0,0);
-					model->name = "Object" + inttostring(rand()%1000);
-					model->lightopacity = 1;
-					char buf[100];
-					sprintf(buf, "%s-%i", cGraphics::previewModel->rofilename.c_str(), rand()%100);
-					cGraphics::world->models.push_back(model);
-					cGraphics::worldContainer->settings.selectedObject = cGraphics::world->models.size()-1;
-					cGraphics::worldContainer->undoStack->push(new cUndoNewObject());
+					cClipBoard::currentClipBoard->apply();
+					if((SDL_GetModState() & KMOD_CTRL) == 0)
+						cClipBoard::pasting = false;
 				}
 				else
 				{
-					int minobj = 0;
-					float mindist = 999999;
-					for(unsigned int i = 0; i < cGraphics::world->models.size(); i++)
+					if (SDL_GetModState() & KMOD_CTRL && cGraphics::previewModel != NULL)
 					{
-						cVector3 d = cGraphics::world->models[i]->pos;
-						d.x = d.x;
-						
-						d.x -= mouse3dx/5;
-						d.z -= mouse3dz/5;
-						d.y = 0;
-
-						if(mindist > d.Magnitude())
-						{
-							mindist = d.Magnitude();
-							minobj = i;
-						}
+						cRSMModel* model = new cRSMModel();
+						model->load(cGraphics::previewModel->filename);
+						model->pos = cVector3(mouse3dx/5, -mouse3dy, mouse3dz/5);
+						model->scale = cVector3(1,1,1);
+						model->rot = cVector3(0,0,0);
+						model->name = "Object" + inttostring(rand()%1000);
+						model->lightopacity = 1;
+						char buf[100];
+						sprintf(buf, "%s-%i", cGraphics::previewModel->rofilename.c_str(), rand()%100);
+						cGraphics::world->models.push_back(model);
+						cGraphics::worldContainer->settings.selectedObject = cGraphics::world->models.size()-1;
+						cGraphics::worldContainer->undoStack->push(new cUndoNewObject());
 					}
-					cGraphics::worldContainer->settings.selectedObject = minobj;
+					else
+					{
+						int minobj = 0;
+						float mindist = 999999;
+						for(unsigned int i = 0; i < cGraphics::world->models.size(); i++)
+						{
+							cVector3 d = cGraphics::world->models[i]->pos;
+							d.x = d.x;
+							
+							d.x -= mouse3dx/5;
+							d.z -= mouse3dz/5;
+							d.y = 0;
+
+							if(mindist > d.Magnitude())
+							{
+								mindist = d.Magnitude();
+								minobj = i;
+							}
+						}
+						cGraphics::worldContainer->settings.selectedObject = minobj;
+					}
 				}
 				cWindow* w = cWM::getWindow(WT_MODELOVERVIEW);
 				if(w != NULL)
@@ -276,67 +286,24 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 			case SDLK_c:
 				if (cGraphics::worldContainer->settings.selectedObject != -1)
 				{
-					cGraphics::clipboardRot = cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->rot;
-					cGraphics::clipboardScale = cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->scale;
-					cGraphics::clipboardFile = cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->filename;
-					cGraphics::clipboardY = cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->pos.y;
-					cGraphics::clipboardName = cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->name;
-					cGraphics::clipboardFloat = cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->lightopacity;
+					cClipboardObject* clipboard = new cClipboardObject();
+
+					clipboard->clipboardRot = cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->rot;
+					clipboard->clipboardScale = cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->scale;
+					clipboard->clipboardFile = cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->filename;
+					clipboard->clipboardY = cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->pos.y;
+					clipboard->clipboardName = cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->name;
+					clipboard->clipboardFloat = cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->lightopacity;
 					currentobject = models->findData("data\\model\\" + cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->rofilename);
 					if(currentobject != NULL)
 						MenuCommand_model((cMenuItem*)currentobject);
+					cClipBoard::setClipBoard(clipboard);
+					cClipBoard::pasting = true;
 				}
 				break;
 			case SDLK_p:
-				if (cGraphics::clipboardFile != "")
-				{
-					if (SDL_GetModState() & KMOD_CTRL)
-					{
-						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->pos.y = cGraphics::clipboardY;
-					}
-					else
-					{
-						cRSMModel* model = new cRSMModel();
-						model->load(cGraphics::clipboardFile);
-						model->pos = cVector3(mouse3dx/5.0f, -mouse3dy, mouse3dz/5.0f);
-						if (SDL_GetModState() & KMOD_SHIFT)
-							model->pos.y = cGraphics::clipboardY;
-						model->scale = cGraphics::clipboardScale;
-						model->rot = cGraphics::clipboardRot;
-						model->lightopacity = cGraphics::clipboardFloat;
-
-						model->name = cGraphics::clipboardName;
-						if(model->name != "")
-						{
-							int i = model->name.length()-1;
-							while((atoi(model->name.substr(i).c_str()) != 0 || model->name.substr(i,1) == "0") && i > 0)
-								i--;
-
-							char buf[100];
-							int newid = atoi(model->name.substr(i+1).c_str());
-
-							bool found = true;
-
-							while(found)
-							{
-								newid++;
-								found = false;
-								sprintf(buf, "%s%i", model->name.substr(0,i+1).c_str(), newid);
-
-								for(int ii = 0; ii < cGraphics::world->models.size() && !found; ii++)
-								{
-									if(cGraphics::world->models[ii]->name == buf)
-										found = true;
-								}
-							}
-							model->name = buf;
-						}
-
-						cGraphics::world->models.push_back(model);
-						cGraphics::worldContainer->settings.selectedObject = cGraphics::world->models.size()-1;
-						cGraphics::worldContainer->undoStack->push(new cUndoNewObject());
-					}
-				}
+				if(cClipBoard::currentClipBoard->type == cClipBoard::CLIP_OBJECT)
+					cClipBoard::pasting = !cClipBoard::pasting;
 				break;
 			case SDLK_BACKSPACE:
 				if (cGraphics::worldContainer->settings.selectedObject > -1 && cGraphics::worldContainer->settings.selectedObject < (int)cGraphics::world->models.size())

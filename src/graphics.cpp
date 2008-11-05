@@ -690,12 +690,6 @@ float cGraphics::textureGridSizeY = 4;
 int cGraphics::textureBrushSize = 1;
 
 std::vector<int> cGraphics::gatTiles;
-float cGraphics::clipboardFloat;
-std::string cGraphics::clipboardName;
-float cGraphics::clipboardY;
-cVector3 cGraphics::clipboardScale;
-cVector3 cGraphics::clipboardRot;
-std::string cGraphics::clipboardFile;
 cRSMModel* cGraphics::previewModel;
 unsigned int cGraphics::waterCount;
 cTexture* cGraphics::splash = NULL;
