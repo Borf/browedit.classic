@@ -2,9 +2,9 @@
 #include "clipboard.h"
 #include <graphics.h>
 #include <undo.h>
+#include "settings.h"
 
 extern int brushsize;
-extern std::string rodir;
 
 
 cClipBoardContents* cClipBoard::currentClipBoard = NULL;
@@ -80,7 +80,7 @@ void cClipboardTexture::apply()
 							cTextureContainer* t = new cTextureContainer();
 							t->RoFilename = texture->RoFilename;
 							t->RoFilename2 = texture->RoFilename2;
-							t->texture = cTextureCache::load(rodir + "data\\texture\\" + texture->RoFilename);
+							t->texture = cTextureCache::load(cSettings::roDir + "data\\texture\\" + texture->RoFilename);
 							found = cGraphics::world->textures.size();
 							cGraphics::world->textures.push_back(t);
 
@@ -263,7 +263,10 @@ void cClipboardObject::apply()
 	{
 		cRSMModel* model = new cRSMModel();
 		model->load(clipboardFile);
-		model->pos = cVector3(cGraphics::cMouse::x3d/5.0f, -cGraphics::cMouse::y3d, cGraphics::cMouse::z3d/5.0f);
+		if(usePos)
+			model->pos = pos+pos2;
+		else
+			model->pos = cVector3(cGraphics::cMouse::x3d/5.0f, -cGraphics::cMouse::y3d, cGraphics::cMouse::z3d/5.0f);
 		if (SDL_GetModState() & KMOD_SHIFT)
 			model->pos.y = clipboardY;
 		model->scale = clipboardScale;
@@ -318,7 +321,10 @@ void cClipboardObject::render()
 		rsmmodel->lightopacity = clipboardFloat;
 		rsmmodel->name = "clipboard";
 	}
-	rsmmodel->pos = cVector3(cGraphics::cMouse::x3d/5.0f, -cGraphics::cMouse::y3d, cGraphics::cMouse::z3d/5.0f);
+	if(usePos)
+		rsmmodel->pos = pos+pos2;
+	else
+		rsmmodel->pos = cVector3(cGraphics::cMouse::x3d/5.0f, -cGraphics::cMouse::y3d, cGraphics::cMouse::z3d/5.0f);
 	rsmmodel->draw();
 }
 
@@ -326,4 +332,182 @@ cClipboardObject::~cClipboardObject()
 {
 	if(rsmmodel)
 		delete rsmmodel;
+}
+
+cClipBoardArea::cClipBoardArea(bool pTextures, bool pHeight, bool pObjects, bool pGat) : cClipBoardContents(cClipBoard::CLIP_AREA)
+{
+	doTextures = pTextures;
+	doHeight = pHeight;
+	doObjects = pObjects;
+	doGat = pGat;
+
+	startX = round(cGraphics::cMouse::x3d/10.0f);
+	startZ = round(cGraphics::cMouse::z3d/10.0f);
+
+	unsigned int x,y,i;
+
+	int minx = 9999, miny = 9999;
+
+	for(y = 0; y < cGraphics::world->height; y++)
+	{
+		for(x = 0; x < cGraphics::world->width; x++)
+		{
+			if(cGraphics::world->cubes[y][x].selected)
+			{
+				if(x < minx)
+					minx = x;
+				if(y < miny)
+					miny = y;
+				cContainer container;
+				container.cube = cGraphics::world->cubes[y][x];
+				container.x = x;
+				container.y = y;
+				container.gat = cGraphics::world->gattiles[y][x];
+				tiles.push_back(container);
+			}
+		}
+	}
+	for(i = 0; i < cGraphics::world->models.size(); i++)
+	{
+		if(cGraphics::world->models[i]->pos.x > 0 && cGraphics::world->models[i]->pos.z > 0)
+		{
+			x = round(cGraphics::world->models[i]->pos.x / 2.0f);
+			y = round(cGraphics::world->models[i]->pos.z / 2.0f);
+			if(x < cGraphics::world->width && y < cGraphics::world->height)
+			{
+				if(cGraphics::world->cubes[y][x].selected)
+				{
+					cClipboardObject* clipboard = new cClipboardObject();
+					clipboard->clipboardRot = cGraphics::world->models[i]->rot;
+					clipboard->clipboardScale = cGraphics::world->models[i]->scale;
+					clipboard->clipboardFile = cGraphics::world->models[i]->filename;
+					clipboard->clipboardY = cGraphics::world->models[i]->pos.y;
+					clipboard->clipboardName = cGraphics::world->models[i]->name;
+					clipboard->clipboardFloat = cGraphics::world->models[i]->lightopacity;
+					clipboard->usePos = true;
+					clipboard->pos = cGraphics::world->models[i]->pos - cVector3(2*minx,0,2*miny);
+					objects.push_back(clipboard);
+				}
+			}
+
+		}
+	}
+	Log(3,0,"Copied %i models", objects.size());
+	for(i = 0; i < tiles.size(); i++)
+	{
+		tiles[i].x -= minx;
+		tiles[i].y -= miny;
+	}
+}
+
+void cClipBoardArea::apply()
+{
+	unsigned int i;
+	int offX = round(cGraphics::cMouse::x3d/10.0f);
+	int offZ = round(cGraphics::cMouse::z3d/10.0f);
+	for(i = 0; i < tiles.size(); i++)
+	{
+		if(doHeight)
+		{
+			cGraphics::world->cubes[tiles[i].y+offZ][tiles[i].x+offX].cell1 = tiles[i].cube.cell1;
+			cGraphics::world->cubes[tiles[i].y+offZ][tiles[i].x+offX].cell2 = tiles[i].cube.cell2;
+			cGraphics::world->cubes[tiles[i].y+offZ][tiles[i].x+offX].cell3 = tiles[i].cube.cell3;
+			cGraphics::world->cubes[tiles[i].y+offZ][tiles[i].x+offX].cell4 = tiles[i].cube.cell4;
+		}
+		if(doTextures)
+		{
+			if(tiles[i].cube.tileUp == -1)
+			{
+				cGraphics::world->cubes[tiles[i].y+offZ][tiles[i].x+offX].tileUp = -1;
+			}
+			else
+			{
+				cGraphics::world->cubes[tiles[i].y+offZ][tiles[i].x+offX].tileUp = cGraphics::world->tiles.size();
+				cGraphics::world->tiles.push_back(worldContainer->world->tiles[tiles[i].cube.tileUp]);
+				
+				cTextureContainer* texture = worldContainer->world->textures[worldContainer->world->tiles[tiles[i].cube.tileUp].texture];
+				int found = -1;
+				for(unsigned int ii = 0; ii < cGraphics::world->textures.size() && found == -1; ii++)
+				{
+					if(cGraphics::world->textures[ii]->RoFilename == texture->RoFilename)
+						found = ii;
+				}
+				if(found == -1)
+				{
+					cTextureContainer* container = new cTextureContainer();
+					container->RoFilename = texture->RoFilename;
+					container->RoFilename2 = texture->RoFilename2;
+					container->texture = cTextureCache::load(cSettings::roDir + "data\\texture\\" + texture->RoFilename);
+					found = cGraphics::world->textures.size();				
+					cGraphics::world->textures.push_back(container);
+				}
+				cGraphics::world->tiles[cGraphics::world->tiles.size()-1].texture = found;
+
+			}
+		}
+	}
+
+
+	if(doObjects)
+	{
+		for(i = 0; i < objects.size(); i++)
+			objects[i]->apply();
+	}
+}
+
+void cClipBoardArea::render()
+{
+	int offX = round(cGraphics::cMouse::x3d/10.0f);
+	int offZ = round(cGraphics::cMouse::z3d/10.0f);
+	glColor4f(1,1,1,1);
+
+	unsigned int i;
+	for(i = 0; i < tiles.size(); i++)
+	{
+		cCube* c = &tiles[i].cube;
+		if(c->tileUp == -1)
+			continue;
+
+		cTile* t = &worldContainer->world->tiles[c->tileUp];
+
+		if(!doHeight)
+			c = &cGraphics::world->cubes[tiles[i].y+offZ][tiles[i].x+offX];
+		if(!doTextures)
+		{
+			if(cGraphics::world->cubes[tiles[i].y+offZ][tiles[i].x+offX].tileUp == -1)
+				continue;
+			t = &cGraphics::world->tiles[cGraphics::world->cubes[tiles[i].y+offZ][tiles[i].x+offX].tileUp];
+		}
+
+		glBindTexture(GL_TEXTURE_2D, worldContainer->world->textures[t->texture]->texId());
+		glBegin(GL_TRIANGLE_STRIP);
+			glTexCoord2f(t->u1, 1-t->v1);	glVertex3f((offX+tiles[i].x)*10,	-c->cell1+0.1f,(cGraphics::world->height-(offZ+tiles[i].y))*10);
+			glTexCoord2f(t->u3, 1-t->v3);	glVertex3f((offX+tiles[i].x)*10,	-c->cell3+0.1f,(cGraphics::world->height-(offZ+tiles[i].y))*10-10);
+			glTexCoord2f(t->u2, 1-t->v2);	glVertex3f((offX+tiles[i].x)*10+10,	-c->cell2+0.1f,(cGraphics::world->height-(offZ+tiles[i].y))*10);
+			glTexCoord2f(t->u4, 1-t->v4);	glVertex3f((offX+tiles[i].x)*10+10,	-c->cell4+0.1f,(cGraphics::world->height-(offZ+tiles[i].y))*10-10);
+		glEnd();
+	}
+
+	if(doObjects)
+	{
+		glPushMatrix();
+		glEnable(GL_BLEND);
+		glEnable(GL_TEXTURE_2D);
+		glTranslatef(0,0,cGraphics::world->height*10);
+		glScalef(1,1,-1);
+		for(i = 0; i < objects.size(); i++)
+		{
+			objects[i]->pos2 = cVector3(2*offX, 0.1f, 2*offZ);
+			objects[i]->render();
+		}
+		glPopMatrix();
+	}	
+
+}
+
+cClipBoardArea::~cClipBoardArea()
+{
+	for(unsigned int i = 0; i < objects.size(); i++)
+		delete objects[i];
+	objects.clear();
 }

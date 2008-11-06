@@ -5,7 +5,7 @@
 #endif
 #include <fstream>
 #include <zlib.h>
-extern std::string rodir;
+#include "settings.h"
 
 
 
@@ -29,7 +29,7 @@ int cFileSystem::loadPackedFile(std::string grffilename)
 	
 	for(unsigned int i =0 ; i < grffile->grf->nfiles; i++)
 	{
-		std::string filename = replace(lcase(rodir + grffile->grf->files[i].name),"/","\\");
+		std::string filename = replace(lcase(cSettings::roDir + grffile->grf->files[i].name),"/","\\");
 		grffile->files[filename] = new cFile();
 		grffile->files[filename]->fileName = grffile->grf->files[i].name;
 		grffile->files[filename]->location = thislocation;

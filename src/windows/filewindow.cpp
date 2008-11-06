@@ -2,9 +2,9 @@
 #include <graphics.h>
 #include <filesystem.h>
 #include <wm/windowlistbox.h>
+#include "settings.h"
 
 extern cGraphicsBase Graphics;
-extern std::string rodir;
 
 cFileWindow::cOkButton::cOkButton( cWindow* parent, void (*pCallback)(std::string), TiXmlDocument* skin ) : cWindowButton(parent,skin)
 {
@@ -20,7 +20,7 @@ void cFileWindow::cOkButton::onClick()
 	std::string filename = parent->objects["filebox"]->getText(-1);
 	filename = filename.substr(0, filename.length()-4);
 	parent->close();
-	callback(rodir + filename);
+	callback(cSettings::roDir + filename);
 }
 
 cFileWindow::cWindowFilterBox::cWindowFilterBox( cWindow* parent, TiXmlDocument* skin ) : cWindowInputBox(parent,skin)
@@ -76,7 +76,7 @@ cFileWindow::cFileWindow(void (*pCallback)(std::string)) : cWindow()
 		for(std::map<std::string, cFile*, std::less<std::string> >::iterator it = cFileSystem::locations[i]->files.begin(); it != cFileSystem::locations[i]->files.end(); it++)
 		{
 			if(it->first.find(".rsw") != std::string::npos)
-				mapnames.push_back(it->first.substr(rodir.length()));
+				mapnames.push_back(it->first.substr(cSettings::roDir.length()));
 			
 		}
 	}

@@ -31,11 +31,13 @@ public:
 	{
 	public:
 		static bool			lbuttondown, rbuttondown;
+		static long			lastlclick, lastrclick;
 		static long			x, y;
 		static long			xStart, yStart;
 		static long			xOld, yOld;		
 		static double		x3d, y3d, z3d;
 		static double		x3dStart, y3dStart, z3dStart;		
+		static bool			doubleClick;
 	};
 	cGraphicsBase();
 	static int				init(int,int,int,bool);
@@ -160,7 +162,6 @@ public:
 
 
 	static bool						objectStartDrag;
-	static bool						slope;
 	
 	
 	static bool						is3dSelected(float, float, float);
@@ -181,6 +182,7 @@ public:
 	static int						quadtreeView;
 	static int						gatType;	
 
+	static bool						slope;
 	static bool						groupeditmode;
 
 	static eTool									textureTool;
@@ -210,6 +212,5 @@ public:
 
 	static std::vector<int>							gatTiles;
 };
-
 
 #endif

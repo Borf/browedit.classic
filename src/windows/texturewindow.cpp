@@ -9,8 +9,8 @@
 
 #include <filesystem.h>
 #include <graphics.h>
+#include <settings.h>
 
-extern std::string rodir;
 extern std::vector<std::pair<std::string, std::string> > translations;
 extern std::vector<std::string> texturefiles;
 
@@ -41,7 +41,7 @@ void cTextureWindow::cWindowTexture::onClick()
 			ZeroMemory(buf, 40);
 			sprintf(buf, "%i%i", rand(), rand());
 			t->RoFilename2 = std::string(buf,40);
-			t->texture = cTextureCache::load(rodir + "data\\texture\\" + data);
+			t->texture = cTextureCache::load(cSettings::roDir + "data\\texture\\" + data);
 			cGraphics::world->textures[id] = t;
 			
 		}
@@ -53,7 +53,7 @@ void cTextureWindow::cWindowTexture::onClick()
 			ZeroMemory(buf, 40);
 			sprintf(buf, "%i%i", rand(), rand());
 			t->RoFilename2 = std::string(buf,40);
-			t->texture = cTextureCache::load(rodir + "data\\texture\\" + data);
+			t->texture = cTextureCache::load(cSettings::roDir + "data\\texture\\" + data);
 			cGraphics::world->textures.push_back(t);
 			cGraphics::worldContainer->settings.texturestart = cGraphics::world->textures.size() - 2;
 		}
@@ -103,7 +103,7 @@ void cTextureWindow::cWindowTextureCatSelect::onClick()
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveTo(i*130, 32);
 		o->resizeTo(128,128);
-		o->setText(0,rodir + "data\\texture\\" + p.second);
+		o->setText(0,cSettings::roDir + "data\\texture\\" + p.second);
 		o->setText(1,p.second);
 		o->setPopup(p.first);
 		box->objects.push_back(o);

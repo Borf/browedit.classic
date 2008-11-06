@@ -1,5 +1,6 @@
 #include <common.h>
 #include "graphics.h"
+#include "settings.h"
 #include "undo.h"
 #include <SDL/SDL_mixer.h>
 #include <windows/soundoverviewwindow.h>
@@ -10,7 +11,6 @@
 
 extern int movement;
 extern bool doneAction;
-extern std::string rodir;
 extern void mainloop();
 
 int cProcessManagement::soundedit_process_events(SDL_Event &event)
@@ -187,7 +187,7 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 
 						cSound* o = &cGraphics::world->sounds[cGraphics::worldContainer->settings.selectedObject];
 						Mix_Chunk *sample;
-						cFile* pFile = cFileSystem::open(rodir+"data/wav/" + o->fileName);
+						cFile* pFile = cFileSystem::open(cSettings::roDir+"data/wav/" + o->fileName);
 						sample=Mix_QuickLoad_WAV((BYTE*)pFile->data);
 						Mix_Volume(-1,MIX_MAX_VOLUME);
 						Mix_PlayChannel(0, sample, 0);

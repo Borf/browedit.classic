@@ -3,8 +3,8 @@
 #include <sprite.h>
 #include "objectwindow.h"
 #include <graphics.h>
+#include <settings.h>
 
-extern std::string rodir;
 TiXmlDocument sprites;
 
 
@@ -110,12 +110,12 @@ void cSpriteWindow::cTabPanel::tabchange( int oldtab )
 	if(selectedtab == 0 && ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->body != NULL)
 	{
 		name = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->body->fileName;
-		name = name.substr(rodir.length() + 12);
+		name = name.substr(cSettings::roDir.length() + 12);
 	}
 	if(selectedtab == 1 && ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->head != NULL)
 	{
 		name = ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->head->fileName;
-		name = name.substr(rodir.length() + 12);
+		name = name.substr(cSettings::roDir.length() + 12);
 	}
 	if(selectedtab == 2 && ((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->extras.size() > 0)
 	{
@@ -245,15 +245,15 @@ void cSpriteWindow::cTree::onChange()
 			cSpriteWindow::cSpriteInfo* info = &((cSpriteWindow*)parent)->lookupMap[node];
 			//	cGraphics::WM.MessageBox("Selected: " + info->fileName);
 			if(selectedtab == 0)
-				((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->loadBody(rodir + "data\\sprite\\" + info->fileName);
+				((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->loadBody(cSettings::roDir + "data\\sprite\\" + info->fileName);
 			if(selectedtab == 1)
-				((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->loadHead(rodir + "data\\sprite\\" + info->fileName);
+				((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->loadHead(cSettings::roDir + "data\\sprite\\" + info->fileName);
 			if(selectedtab == 2)
-				((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->setExtra(0, rodir + "data\\sprite\\악세사리\\" + (((cSpriteWindow*)parent)->male ? "남\\남" : "여\\여")+ info->fileName);
+				((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->setExtra(0, cSettings::roDir + "data\\sprite\\악세사리\\" + (((cSpriteWindow*)parent)->male ? "남\\남" : "여\\여")+ info->fileName);
 			if(selectedtab == 3)
-				((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->setExtra(1, rodir + "data\\sprite\\악세사리\\" + (((cSpriteWindow*)parent)->male ? "남\\남" : "여\\여")+ info->fileName);
+				((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->setExtra(1, cSettings::roDir + "data\\sprite\\악세사리\\" + (((cSpriteWindow*)parent)->male ? "남\\남" : "여\\여")+ info->fileName);
 			if(selectedtab == 4)
-				((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->setExtra(2, rodir + "data\\sprite\\악세사리\\" + (((cSpriteWindow*)parent)->male ? "남\\남" : "여\\여")+ info->fileName);
+				((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->setExtra(2, cSettings::roDir + "data\\sprite\\악세사리\\" + (((cSpriteWindow*)parent)->male ? "남\\남" : "여\\여")+ info->fileName);
 		}
 	}
 }

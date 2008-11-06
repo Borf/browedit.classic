@@ -11,7 +11,6 @@ int keymap[SDLK_LAST-SDLK_FIRST];
 #include <SDL/SDL_mixer.h>
 #include "filesystem.h"
 #include <math.h>
-#include "main.h"
 #include "menu.h"
 #include <fstream>
 #include <list>
@@ -29,7 +28,7 @@ int keymap[SDLK_LAST-SDLK_FIRST];
 #include "windows/minimapwindow.h"
 #include <bmutex.h>
 #include "plugins/base/base.h"
-
+#include "settings.h"
 #include "texturecache.h"
 #ifdef WIN32
 #include <windows.h>
@@ -42,11 +41,8 @@ int keymap[SDLK_LAST-SDLK_FIRST];
 cGraphics		Graphics;
 
 bool IsLegal2 = true;
-std::string inputboxresult;
 bool IsInsideVPC();
 bool IsInsideVMWare();
-std::string configfile;
-TiXmlDocument config;
 bool IsLegal = true;
 
 cBMutex* renderMutex;
@@ -62,14 +58,10 @@ void CleanSurfaces();
 int process_events();
 bool running = true;
 eMode editmode = MODE_TEXTURE;
-float paintspeed = 100;
 long tilex,tiley;
 long lastmotion;
-bool doubleclick = false;
-std::string fontname = "tahoma";
 bool	doneAction = true;
 TiXmlDocument favoritelights;
-std::string skinFile;
 
 unsigned int undosize = 50;
 std::vector<std::string> texturefiles;
@@ -82,14 +74,9 @@ std::vector<std::pair<std::string, std::string> > translations;
 bool mouseouttexture(cMenu*);
 bool mouseovertexture(cMenu*);
 
-std::string rodir;
-
 
 int brushsize = 1;
 
-cMenu* grid;
-cMenu* showobjects;
-cMenu* transparentobjects;
 cMenu* currentobject;
 cMenu* snaptofloor;
 cMenu* lastmenu = NULL;
@@ -206,11 +193,11 @@ std::string downloadfile(std::string url, long &filesize)
 void mainloop()
 {
 	renderMutex->lock();
-	if(lasttimer + paintspeed < SDL_GetTicks())
+	if(lasttimer + cSettings::paintSpeed < SDL_GetTicks())
 	{
-		if(editmode == MODE_HEIGHTDETAIL && cGraphics::menu->inWindow((int)mouseX, cGraphics::h()-(int)mouseY) == NULL)
+		if(editmode == MODE_HEIGHTDETAIL && cGraphics::menu->inWindow((int)cGraphics::cMouse::x, cGraphics::h()-(int)cGraphics::cMouse::y) == NULL)
 		{
-			if (lbuttondown || rbuttondown)
+			if (cGraphics::cMouse::lbuttondown || cGraphics::cMouse::rbuttondown)
 			{
 				int posx = tilex;
 				int posy = tiley;
@@ -240,7 +227,7 @@ void mainloop()
 						if(x >= 0 && y >= 0 && x < cGraphics::world->width && y < cGraphics::world->height)
 						{
 							cCube* c = &cGraphics::world->cubes[y][x];
-							if(lbuttondown && !rbuttondown)
+							if(cGraphics::cMouse::lbuttondown && !cGraphics::cMouse::rbuttondown)
 							{
 								if (!cGraphics::slope || (x > posx-(int)floor(brushsize/2.0f)) && y > posy-(int)floor(brushsize/2.0f))
 									c->cell1-=1;
@@ -258,7 +245,7 @@ void mainloop()
 									c->cell4 = max(mmin,c->cell4);
 								}
 							}
-							if(lbuttondown && rbuttondown)
+							if(cGraphics::cMouse::lbuttondown && cGraphics::cMouse::rbuttondown)
 							{
 								if (!cGraphics::slope || (x > posx-(int)floor(brushsize/2.0f)) && y > posy-(int)floor(brushsize/2.0f))
 									c->cell1+=1;
@@ -533,26 +520,26 @@ int main(int argc, char *argv[])
 	cFile* pFile = cFileSystem::open("config.txt");
 	if (pFile == NULL)
 	{
-		Log(2,0,"Error opening configfile, trying one directory up");
+		Log(2,0,"Error opening configFileName, trying one directory up");
 		chdir("..");
 		pFile = cFileSystem::open("config.txt");
 		if(pFile == NULL)
 		{
-			Log(1,0,"Could not find configfile one directory up, stopping");
+			Log(1,0,"Could not find configFileName one directory up, stopping");
 			return 0;
 		}
 	}
-	configfile = pFile->readLine();
+	cSettings::configFileName = pFile->readLine();
 	pFile->close();
 
-	config = cFileSystem::getXml(configfile);
-	if(config.Error())
+	cSettings::config = cFileSystem::getXml(cSettings::configFileName);
+	if(cSettings::config.Error())
 	{
-		Log(1,0,"Could not load config xml: %s at %i:%i", config.ErrorDesc(), config.ErrorCol(), config.ErrorRow());
+		Log(1,0,"Could not load config xml: %s at %i:%i", cSettings::config.ErrorDesc(), cSettings::config.ErrorCol(), cSettings::config.ErrorRow());
 		Log(2,0,"Browedit will most likely crash");
 
 	}
-	std::string language = config.FirstChildElement("config")->FirstChildElement("language")->FirstChild()->Value();
+	std::string language = cSettings::config.FirstChildElement("config")->FirstChildElement("language")->FirstChild()->Value();
 	language = language.substr(language.find("=")+1);
 	msgtable = cFileSystem::getXml("data/" + language + ".txt");
 
@@ -798,7 +785,7 @@ int main(int argc, char *argv[])
 	levelm[models] = 0;
 	
 
-	TiXmlElement* el = config.FirstChildElement("config")->FirstChildElement();
+	TiXmlElement* el = cSettings::config.FirstChildElement("config")->FirstChildElement();
 
 
 	int windowWidth = 1024,windowHeight = 768, windowBpp = 32;
@@ -810,7 +797,7 @@ int main(int argc, char *argv[])
 
 		if(option == "ro")
 		{
-			rodir = el->Attribute("directory");
+			cSettings::roDir = el->Attribute("directory");
 			TiXmlElement* el2 = el->FirstChildElement("grf");
 			while(el2 != NULL)
 			{
@@ -833,9 +820,9 @@ int main(int argc, char *argv[])
 				else if(strcmp(el2->Value(),					"bpp") == 0)
 					windowBpp = atoi(el2->FirstChild()->Value());
 				else if(strcmp(el2->Value(),					"font") == 0)
-					fontname = el2->FirstChild()->Value();
+					cSettings::fontName = el2->FirstChild()->Value();
 				else if(strcmp(el2->Value(),					"skin") == 0)
-					skinFile = el2->FirstChild()->Value();
+					cSettings::skinFile = el2->FirstChild()->Value();
 				else if(strcmp(el2->Value(),					"bgcolor") == 0)
 					cGraphics::backgroundColor = hex2floats(el2->FirstChild()->Value());
 				else if(strcmp(el2->Value(),					"noTileColor") == 0)
@@ -1025,21 +1012,21 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,rnd, "eAthena Script",									&MenuCommand_eascript);
 	ADDMENUITEM(mm,rnd, "NPC stuff",										&MenuCommand_npcscreenies);
 
-	ADDMENUITEMDATALINK(grid,view,GetMsg("menu/view/GRID"),					&MenuCommand_toggle, (void*)&cGraphics::view.showGrid); //grid
-	ADDMENUITEMDATALINK(showobjects,view,GetMsg("menu/view/OBJECTS"),				&MenuCommand_toggle, (void*)&cGraphics::view.showObjects);
-	ADDMENUITEMDATALINK(transparentobjects,view,GetMsg("menu/view/TRANSPARENTOBJECTS"),	&MenuCommand_toggle, (void*)&cGraphics::view.showObjectsAsTransparent);
-	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/BOUNDINGBOXES"),				&MenuCommand_toggle, (void*)&cGraphics::view.showBoundingBoxes);
-	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/LIGHTMAPS"),					&MenuCommand_toggle, (void*)&cGraphics::view.showLightmaps);
-	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/OGLLIGHTING"),				&MenuCommand_toggle, (void*)&cGraphics::view.showOglLighting);
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/GRID"),					&MenuCommand_toggle, (void*)&cGraphics::view.showGrid); //grid
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/OBJECTS"),				&MenuCommand_toggle, (void*)&cGraphics::view.showObjects);
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/TRANSPARENTOBJECTS"),		&MenuCommand_toggle, (void*)&cGraphics::view.showObjectsAsTransparent);
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/BOUNDINGBOXES"),			&MenuCommand_toggle, (void*)&cGraphics::view.showBoundingBoxes);
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/LIGHTMAPS"),				&MenuCommand_toggle, (void*)&cGraphics::view.showLightmaps);
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/OGLLIGHTING"),			&MenuCommand_toggle, (void*)&cGraphics::view.showOglLighting);
 	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/TILECOLORS"),				&MenuCommand_toggle, (void*)&cGraphics::view.showTileColors);
-	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/SHOWWATER"),					&MenuCommand_toggle, (void*)&cGraphics::view.showWater);
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/SHOWWATER"),				&MenuCommand_toggle, (void*)&cGraphics::view.showWater);
 	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/INVISIBLETILES"),			&MenuCommand_toggle, (void*)&cGraphics::view.showNoTiles);
-	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/SHOWAMBIENTLIGHTING"),		&MenuCommand_toggle, (void*)&cGraphics::view.showAmbientLighting);
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/SHOWAMBIENTLIGHTING"),	&MenuCommand_toggle, (void*)&cGraphics::view.showAmbientLighting);
 	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/WATERANIMATION"),			&MenuCommand_toggle, (void*)&cGraphics::view.showWaterAnimation);
-	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/GATTILES"),					&MenuCommand_toggle, (void*)&cGraphics::view.showGat);
-	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/SHOWDOT"),					&MenuCommand_toggle, (void*)&cGraphics::view.showDot);
-	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/SHOWSPRITES"),				&MenuCommand_toggle, (void*)&cGraphics::view.showSprites);
-	ADDMENUITEMDATALINK(mm,view,"Show all light spheres",						&MenuCommand_toggle, (void*)&cGraphics::view.showAllLights);
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/GATTILES"),				&MenuCommand_toggle, (void*)&cGraphics::view.showGat);
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/SHOWDOT"),				&MenuCommand_toggle, (void*)&cGraphics::view.showDot);
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/SHOWSPRITES"),			&MenuCommand_toggle, (void*)&cGraphics::view.showSprites);
+	ADDMENUITEMDATALINK(mm,view,"Show all light spheres",					&MenuCommand_toggle, (void*)&cGraphics::view.showAllLights);
 	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/TOPCAMERA"),					&MenuCommand_toggle, (void*)&cGraphics::worldContainer->camera.topCamera);
 
 
@@ -1163,8 +1150,8 @@ int main(int argc, char *argv[])
 
 
 
-	lastlclick = 0;
-	lastrclick = 0;
+	cGraphics::cMouse::lastlclick = 0;
+	cGraphics::cMouse::lastrclick = 0;
 
 	Log(3,0,GetMsg("file/LOADING"), "data/keymap.txt");
 	pFile = cFileSystem::open("data/keymap.txt");
@@ -1231,14 +1218,14 @@ int main(int argc, char *argv[])
 	cGraphics::newWorld();
 	Log(3,0,GetMsg("DONEINIT"));
 	cGraphics::world->newWorld();
-	if(config.FirstChildElement("config")->FirstChildElement("firstmap"))
-		strcpy(cGraphics::world->fileName, std::string(rodir + "data\\" + config.FirstChildElement("config")->FirstChildElement("firstmap")->FirstChild()->Value()).c_str());
+	if(cSettings::config.FirstChildElement("config")->FirstChildElement("firstmap"))
+		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\" + cSettings::config.FirstChildElement("config")->FirstChildElement("firstmap")->FirstChild()->Value()).c_str());
 	else
-		strcpy(cGraphics::world->fileName, std::string(rodir + "data\\test").c_str());
+		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\prontera").c_str());
 
 	if(argc > 1)
 	{
-		strcpy(cGraphics::world->fileName, std::string(rodir + "data\\" + argv[1]).c_str());
+		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\" + argv[1]).c_str());
 		cGraphics::world->load();
 	}
 #ifndef WIN32
@@ -1365,12 +1352,6 @@ int process_events()
 		}
 		
 		
-		if (showmessage)
-		{
-			if (event.type == SDL_KEYDOWN || event.type == SDL_MOUSEBUTTONUP)
-				showmessage = false;
-		}
-	
 		int go = processManagement.main_process_events(event);
 
 		if(!cGraphics::world)
@@ -1398,9 +1379,8 @@ int process_events()
 
 		if(event.type == SDL_MOUSEMOTION)
 		{
-			dragged = true;
-			oldmousex = mouseX;
-			oldmousey = mouseY;
+			cGraphics::cMouse::xOld = cGraphics::cMouse::x;
+			cGraphics::cMouse::yOld = cGraphics::cMouse::y;
 		}
 	}
 	return 0;
@@ -1419,14 +1399,12 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 	{
 	case SDL_MOUSEMOTION:
 		{
-			dragged = true;
-	
-			if(mouseX != event.motion.x || mouseY != event.motion.y)
+			if(cGraphics::cMouse::x != event.motion.x || cGraphics::cMouse::y != event.motion.y)
 				lastmotion = SDL_GetTicks();
 
-			mouseX = event.motion.x;
-			mouseY = event.motion.y;
-			cMenu* m = cGraphics::menu->inWindow((int)mouseX, cGraphics::h()-(int)mouseY);
+			cGraphics::cMouse::x = event.motion.x;
+			cGraphics::cMouse::y = event.motion.y;
+			cMenu* m = cGraphics::menu->inWindow((int)cGraphics::cMouse::x, cGraphics::h()-(int)cGraphics::cMouse::y);
 
 
 			if(movement > 4)
@@ -1468,15 +1446,15 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			if(!cGraphics::world)
 				return 0;
 
-			if (rbuttondown && !lbuttondown)
+			if (cGraphics::cMouse::rbuttondown && !cGraphics::cMouse::lbuttondown)
 			{
 				if(SDL_GetModState() & KMOD_SHIFT)
 				{
 					if (SDL_GetModState() & KMOD_CTRL)
 					{
-						cGraphics::worldContainer->camera.angle += (oldmousey - mouseY) / 10.0f;
+						cGraphics::worldContainer->camera.angle += (cGraphics::cMouse::yOld - cGraphics::cMouse::y) / 10.0f;
 						cGraphics::worldContainer->camera.angle = max(min(cGraphics::worldContainer->camera.angle, (float)20), (float)-10);
-						cGraphics::worldContainer->camera.rot += (oldmousex - mouseX) / 100.0f;
+						cGraphics::worldContainer->camera.rot += (cGraphics::cMouse::xOld - cGraphics::cMouse::x) / 100.0f;
 						while(cGraphics::worldContainer->camera.rot < 0)
 							cGraphics::worldContainer->camera.rot+=2*(float)PI;
 						while(cGraphics::worldContainer->camera.rot > 2*PI)
@@ -1486,20 +1464,20 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					{
 						if(cGraphics::worldContainer->camera.topCamera)
 						{
-							cGraphics::worldContainer->camera.height += (oldmousey - mouseY) / 2.0f;
+							cGraphics::worldContainer->camera.height += (cGraphics::cMouse::yOld - cGraphics::cMouse::y) / 2.0f;
 							cGraphics::worldContainer->camera.height = max(min(cGraphics::worldContainer->camera.height, (float)15000), (float)-5);
 							if(cGraphics::worldContainer->camera.height != -5 && cGraphics::worldContainer->camera.height != 15000)
 							{
-								cGraphics::worldContainer->camera.pointer.x -= (oldmousey - mouseY) / 4.0f;
-								cGraphics::worldContainer->camera.pointer.y += (oldmousey - mouseY) / 4.0f;
+								cGraphics::worldContainer->camera.pointer.x -= (cGraphics::cMouse::yOld - cGraphics::cMouse::y) / 4.0f;
+								cGraphics::worldContainer->camera.pointer.y += (cGraphics::cMouse::yOld - cGraphics::cMouse::y) / 4.0f;
 							}
 						}
 						else
 						{
-							cGraphics::worldContainer->camera.height += (oldmousey - mouseY) / 2.0f;
+							cGraphics::worldContainer->camera.height += (cGraphics::cMouse::yOld - cGraphics::cMouse::y) / 2.0f;
 							cGraphics::worldContainer->camera.height = max(min(cGraphics::worldContainer->camera.height, (float)15000), (float)-5);
 						}
-						cGraphics::worldContainer->camera.rot += (oldmousex - mouseX) / 100.0f;
+						cGraphics::worldContainer->camera.rot += (cGraphics::cMouse::xOld - cGraphics::cMouse::x) / 100.0f;
 						while(cGraphics::worldContainer->camera.rot < 0)
 							cGraphics::worldContainer->camera.rot+=2*(float)PI;
 						while(cGraphics::worldContainer->camera.rot > 2*PI)
@@ -1516,19 +1494,19 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if(!cGraphics::worldContainer->camera.topCamera)
 					{
-						cVector2 v = cVector2((oldmousex - mouseX),  (oldmousey - mouseY));
+						cVector2 v = cVector2((cGraphics::cMouse::xOld - cGraphics::cMouse::x),  (cGraphics::cMouse::yOld - cGraphics::cMouse::y));
 						v.rotate(-cGraphics::worldContainer->camera.rot / PI * 180.0f);
 						cGraphics::worldContainer->camera.pointer = cGraphics::worldContainer->camera.pointer - v;
 					}
 					else
 					{
-						cGraphics::worldContainer->camera.pointer.x -= (oldmousey - mouseY);
-						cGraphics::worldContainer->camera.pointer.y -= (oldmousex - mouseX);
+						cGraphics::worldContainer->camera.pointer.x -= (cGraphics::cMouse::yOld - cGraphics::cMouse::y);
+						cGraphics::worldContainer->camera.pointer.y -= (cGraphics::cMouse::xOld - cGraphics::cMouse::x);
 
 					}
 				}
 			}
-			else if (lbuttondown && !rbuttondown)
+			else if (cGraphics::cMouse::lbuttondown && !cGraphics::cMouse::rbuttondown)
 			{
 				if(cGraphics::cMouse::xStart > cGraphics::w()-256)
 				{
@@ -1629,26 +1607,25 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			}
 
 
-			dragged = false;
-			doubleclick = false;
-			if (SDL_GetTicks() - lastlclick < 250)
-				doubleclick = true;
+			cGraphics::cMouse::doubleClick = false;
+			if (SDL_GetTicks() - cGraphics::cMouse::lastlclick < 250)
+				cGraphics::cMouse::doubleClick = true;
 
 		
-			cMenu* m = cGraphics::menu->inWindow((int)mouseX, cGraphics::h()-(int)mouseY);
+			cMenu* m = cGraphics::menu->inWindow((int)cGraphics::cMouse::x, cGraphics::h()-(int)cGraphics::cMouse::y);
 		
 			cMenu* pm = NULL;
 			if(cGraphics::popupMenu != NULL)
 			{
-				pm = cGraphics::popupMenu->inWindow((int)mouseX, cGraphics::h()-(int)mouseY);
+				pm = cGraphics::popupMenu->inWindow((int)cGraphics::cMouse::x, cGraphics::h()-(int)cGraphics::cMouse::y);
 				return 1;
 			}
 
-			if(doubleclick && m == NULL && pm == NULL && event.button.button == SDL_BUTTON_LEFT)
+			if(cGraphics::cMouse::doubleClick && m == NULL && pm == NULL && event.button.button == SDL_BUTTON_LEFT)
 			{
 				return 1;
 			}
-			if (!dragged && !doubleclick && m == NULL && pm == NULL && event.button.button == SDL_BUTTON_LEFT)
+			if (movement < 3 && !cGraphics::cMouse::doubleClick && m == NULL && pm == NULL && event.button.button == SDL_BUTTON_LEFT)
 			{
 				cWM::draggingObject = NULL;
 				cWM::draggingWindow = NULL;
@@ -1658,7 +1635,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					if (!w->inObject())
 					{ // drag this window
 						cGraphics::dragoffsetx = cGraphics::cMouse::x - w->getX();
-						cGraphics::dragoffsety = (cGraphics::h()-mouseY) - w->py2();
+						cGraphics::dragoffsety = (cGraphics::h()-cGraphics::cMouse::y) - w->py2();
 						cWM::click(false);
 						cWM::draggingWindow = cWM::inWindow();
 						if(cGraphics::cMouse::xStart < cWM::draggingWindow->getX()+cWM::draggingWindow->getWidth() && cGraphics::cMouse::xStart > cWM::draggingWindow->getX()+cWM::draggingWindow->getWidth() - DRAGBORDER)
@@ -1687,9 +1664,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			}			
 			
 			if(event.button.button == SDL_BUTTON_LEFT)
-				lbuttondown = true;
+				cGraphics::cMouse::lbuttondown = true;
 			else // rbutton
-				rbuttondown = true;
+				cGraphics::cMouse::rbuttondown = true;
 			if(m != NULL)
 				return 1;
 			if(pm != NULL)
@@ -1702,14 +1679,14 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			
 			if(event.button.button == SDL_BUTTON_LEFT)
 			{
-				cMenu* m = cGraphics::menu->inWindow((int)mouseX, cGraphics::h()-(int)mouseY);
+				cMenu* m = cGraphics::menu->inWindow((int)cGraphics::cMouse::x, cGraphics::h()-(int)cGraphics::cMouse::y);
 				cMenu* pm = NULL;
 				if(cGraphics::popupMenu != NULL)
-					pm = cGraphics::popupMenu->inWindow((int)mouseX, cGraphics::h()-(int)mouseY);
+					pm = cGraphics::popupMenu->inWindow((int)cGraphics::cMouse::x, cGraphics::h()-(int)cGraphics::cMouse::y);
 				doneAction = true;
-				lbuttondown = false;
-				mouseX = event.motion.x;
-				mouseY = event.motion.y;
+				cGraphics::cMouse::lbuttondown = false;
+				cGraphics::cMouse::x = event.motion.x;
+				cGraphics::cMouse::y = event.motion.y;
 				cWindow* w = cWM::inWindow();
 				if (cWM::draggingWindow != NULL && m == NULL)
 				{
@@ -1727,16 +1704,16 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					cWM::draggingObject = NULL;
 				}
 
-				lbuttondown = false;
-				if (SDL_GetTicks() - lastlclick < 250)
+				cGraphics::cMouse::lbuttondown = false;
+				if (SDL_GetTicks() - cGraphics::cMouse::lastlclick < 250)
 				{
-					doubleclick = true;
-					lastlclick = SDL_GetTicks();
+					cGraphics::cMouse::doubleClick = true;
+					cGraphics::cMouse::lastlclick = SDL_GetTicks();
 					if(m == NULL)
 						cWM::onDoubleClick();
 				}
 				else
-					lastlclick = SDL_GetTicks();
+					cGraphics::cMouse::lastlclick = SDL_GetTicks();
 				cGraphics::menu->unMouseOver();
 				if(pm != NULL)
 					pm->unMouseOver();
@@ -1752,12 +1729,12 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				if (m != NULL && m->opened)
 				{
-					m->click((int)mouseX, cGraphics::h()-(int)mouseY);
+					m->click((int)cGraphics::cMouse::x, cGraphics::h()-(int)cGraphics::cMouse::y);
 					return 1;
 				}
 				else if (pm != NULL && pm->opened)
 				{
-					pm->click((int)mouseX, cGraphics::h()-(int)mouseY);
+					pm->click((int)cGraphics::cMouse::x, cGraphics::h()-(int)cGraphics::cMouse::y);
 					if(!pm->opened)
 					{
 						delete cGraphics::popupMenu;
@@ -1773,10 +1750,10 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			}
 			else // right button
 			{
-				cMenu* m = cGraphics::menu->inWindow((int)mouseX, cGraphics::h()-(int)mouseY);
+				cMenu* m = cGraphics::menu->inWindow((int)cGraphics::cMouse::x, cGraphics::h()-(int)cGraphics::cMouse::y);
 				cMenu* pm = NULL;
 				if(cGraphics::popupMenu != NULL)
-					pm = cGraphics::popupMenu->inWindow((int)mouseX, cGraphics::h()-(int)mouseY);
+					pm = cGraphics::popupMenu->inWindow((int)cGraphics::cMouse::x, cGraphics::h()-(int)cGraphics::cMouse::y);
 				cGraphics::menu->unMouseOver();
 				if(pm != NULL)
 					pm->unMouseOver();
@@ -1792,8 +1769,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					return 1;
 				}
 
-				rbuttondown = false;
-				doubleclick = false;
+				cGraphics::cMouse::rbuttondown = false;
+				cGraphics::cMouse::doubleClick = false;
 				if (movement < 2)
 				{
 					if(cWM::inWindow() != NULL)
@@ -1803,21 +1780,21 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 				}
 				long l = SDL_GetTicks();
-				if (l - lastrclick < 250)
+				if (l - cGraphics::cMouse::lastrclick < 250)
 				{
-					doubleclick = true;
-					lastrclick = 0;
+					cGraphics::cMouse::doubleClick = true;
+					cGraphics::cMouse::lastrclick = 0;
 				}
 				else
-					lastrclick = SDL_GetTicks();
-				if(doubleclick && movement < 3 && cGraphics::worldContainer)
+					cGraphics::cMouse::lastrclick = SDL_GetTicks();
+				if(cGraphics::cMouse::doubleClick && movement < 3 && cGraphics::worldContainer)
 				{
 					cGraphics::worldContainer->camera.rot = 0;
 				}
-				lastrclick = SDL_GetTicks();
-				rbuttondown = false;
-				mouseX = event.motion.x;
-				mouseY = event.motion.y;
+				cGraphics::cMouse::lastrclick = SDL_GetTicks();
+				cGraphics::cMouse::rbuttondown = false;
+				cGraphics::cMouse::x = event.motion.x;
+				cGraphics::cMouse::y = event.motion.y;
 
 				if(movement < 3 && (editmode == MODE_OBJECTS || editmode == MODE_EFFECTS))
 				{

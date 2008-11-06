@@ -17,6 +17,8 @@ public:
 		CLIP_HEIGHT,
 		CLIP_OBJECT,
 		CLIP_GAT,
+		CLIP_OBJECTS,
+		CLIP_AREA,
 	};
 
 	static void					setClipBoard(cClipBoardContents*);
@@ -68,17 +70,57 @@ class cClipboardObject : public cClipBoardContents
 public:
 	cVector3 clipboardRot;
 	cVector3 clipboardScale;
+	cVector3 pos;
+	cVector3 pos2;
 	std::string clipboardFile;
 	std::string clipboardName;
 	float clipboardY;
 	float clipboardFloat;
 	cRSMModel* rsmmodel;
+	bool usePos;
 
 	cClipboardObject() : cClipBoardContents(cClipBoard::CLIP_OBJECT)
 	{
 		rsmmodel = NULL;
+		usePos = false;
 	}
 	~cClipboardObject();
+	void apply();
+	void render();
+};
+
+class cClipBoardObjects : public cClipBoardContents
+{
+public:
+	std::vector<cClipboardObject*> objects;
+	void rotate();
+	void apply();
+	void render();
+};
+
+class cClipBoardArea : public cClipBoardContents
+{
+public:
+	class cContainer
+	{
+	public:
+		cCube		cube;
+		cGatTile	gat;
+		int x;
+		int y;
+	};
+	std::vector<cContainer>			tiles;
+	std::vector<cClipboardObject*>	objects;
+
+	int startX,startZ;
+
+	bool doTextures;
+	bool doHeight;
+	bool doObjects;
+	bool doGat;
+
+	cClipBoardArea(bool,bool,bool,bool);
+	~cClipBoardArea();
 	void apply();
 	void render();
 };

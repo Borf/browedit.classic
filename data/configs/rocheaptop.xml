@@ -30,7 +30,7 @@
     </graphics>
     <undo size="50" />
     <language>english</language>
-<!--    <firstmap>prontera</firstmap>-->
+    <!--    <firstmap>prontera</firstmap>-->
     <splash>data/hamtaro.tga</splash>
     <water>
         <directory>data\texture\ฟ๖ลอ\</directory>
@@ -47,41 +47,11 @@
         <tile>6</tile>
     </gattiles>
     <wm>
-        <minimap>
-            <x>598</x>
-            <y>70</y>
-        </minimap>
-        <hotbar>
-            <x>744</x>
-            <y>0</y>
-        </hotbar>
-        <sprite>
-            <x>237</x>
-            <y>184</y>
-        </sprite>
-        <textures>
-            <x>25</x>
-            <y>25</y>
-            <w>974</w>
-            <h>718</h>
-        </textures>
-        <modelswindow>
-            <x>25</x>
-            <y>25</y>
-            <w>974</w>
-            <h>718</h>
-        </modelswindow>
         <texturetools>
             <x>0</x>
-            <y>586</y>
-            <w>56</w>
-            <h>124</h>
+            <y>568</y>
+            <w>50</w>
+            <h>164</h>
         </texturetools>
-        <texturebrush>
-            <x>56</x>
-            <y>53</y>
-            <w>905</w>
-            <h>665</h>
-        </texturebrush>
     </wm>
 </config>

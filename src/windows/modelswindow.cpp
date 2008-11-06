@@ -8,8 +8,7 @@
 #include <windows/confirmwindow.h>
 #include <wm/windowlabel.h>
 #include <fstream>
-
-extern std::string rodir;
+#include <settings.h>
 extern eMode editmode;
 
 extern std::vector<std::string> objectfiles;
@@ -35,7 +34,7 @@ void cModelsWindow::cWindowModel::draw(int cutoffleft, int cutoffright, int cuto
 		glPushMatrix();
 		glLoadIdentity();
 		model = new cRSMModel();
-		model->load(rodir + data);
+		model->load(cSettings::roDir + data);
 		model->pos = cVector3(0,0.3*w,1000);
 		
 		float sc = 0;
@@ -116,7 +115,7 @@ void cModelsWindow::cWindowModel::onClick()
 		delete cGraphics::previewModel;
 	}
 	cGraphics::previewModel = new cRSMModel();
-	cGraphics::previewModel->load(rodir + data);
+	cGraphics::previewModel->load(cSettings::roDir + data);
 	cGraphics::previewModel->rot = cVector3(0,0,0);
 	cGraphics::previewModel->scale = cVector3(4,4,4);
 	cGraphics::previewModel->pos = cVector3(40,-40,-40);
@@ -605,7 +604,7 @@ void cModelsWindow::cWindowModelCatSelect::refreshmodels()
 		o->alignment = ALIGN_TOPLEFT;
 		o->moveTo(i*130, 32);
 		o->resizeTo(128,128);
-		o->setText(0,rodir + p.second);
+		o->setText(0,cSettings::roDir + p.second);
 		o->setText(1,p.second);
 		o->setPopup(p.first);
 		box->objects.push_back(o);

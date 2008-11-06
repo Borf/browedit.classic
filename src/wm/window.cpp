@@ -15,9 +15,7 @@
 #include <GL/glu.h>												// Header File For The GLu32 Library
 
 #ifndef __NOXML__
-#include <tinyxml/tinyxml.h>
-extern TiXmlDocument	config;
-extern std::string			configfile;
+#include <settings.h>
 #endif
 
 
@@ -633,17 +631,17 @@ void cWindow::save()
 			std::pair<char*,bool*>("w", &resizable),
 			std::pair<char*,bool*>("h", &resizable) };
 
-		if(config.FirstChildElement("config")->FirstChildElement("wm") == NULL)
-			config.FirstChildElement("config")->InsertEndChild(TiXmlElement("wm"));
-		if(config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveProperties.c_str()) == NULL)
-			config.FirstChildElement("config")->FirstChildElement("wm")->InsertEndChild(TiXmlElement(saveProperties.c_str()));
+		if(cSettings::config.FirstChildElement("config")->FirstChildElement("wm") == NULL)
+			cSettings::config.FirstChildElement("config")->InsertEndChild(TiXmlElement("wm"));
+		if(cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveProperties.c_str()) == NULL)
+			cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->InsertEndChild(TiXmlElement(saveProperties.c_str()));
 
 		for(int i = 0; i < 4; i++)
 		{
-			if(*elements[i].second && config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveProperties.c_str())->FirstChildElement(elements[i].first) == NULL)
+			if(*elements[i].second && cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveProperties.c_str())->FirstChildElement(elements[i].first) == NULL)
 			{
-				config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveProperties.c_str())->InsertEndChild(TiXmlElement(elements[i].first));
-				config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveProperties.c_str())->FirstChildElement(elements[i].first)->InsertEndChild(TiXmlText(""));
+				cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveProperties.c_str())->InsertEndChild(TiXmlElement(elements[i].first));
+				cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveProperties.c_str())->FirstChildElement(elements[i].first)->InsertEndChild(TiXmlText(""));
 			}
 		}
 
@@ -651,20 +649,20 @@ void cWindow::save()
 		if(movable)
 		{
 			sprintf(buf, "%i", x);
-			config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveProperties.c_str())->FirstChildElement("x")->FirstChild()->SetValue(buf);
+			cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveProperties.c_str())->FirstChildElement("x")->FirstChild()->SetValue(buf);
 
 			sprintf(buf, "%i", y);
-			config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveProperties.c_str())->FirstChildElement("y")->FirstChild()->SetValue(buf);
+			cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveProperties.c_str())->FirstChildElement("y")->FirstChild()->SetValue(buf);
 		}
 		if(resizable)
 		{
 			sprintf(buf, "%i", h);
-			config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveProperties.c_str())->FirstChildElement("h")->FirstChild()->SetValue(buf);
+			cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveProperties.c_str())->FirstChildElement("h")->FirstChild()->SetValue(buf);
 
 			sprintf(buf, "%i", w);
-			config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveProperties.c_str())->FirstChildElement("w")->FirstChild()->SetValue(buf);
+			cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveProperties.c_str())->FirstChildElement("w")->FirstChild()->SetValue(buf);
 		}
-		config.SaveFile(configfile.c_str());
+		cSettings::config.SaveFile(cSettings::configFileName.c_str());
 
 	}
 #endif
@@ -674,41 +672,41 @@ void cWindow::initProps(std::string s)
 {
 #ifndef __NOXML__
 	saveProperties = s;
-	if(!config.FirstChildElement("config"))
+	if(!cSettings::config.FirstChildElement("config"))
 		return;
-	if(!config.FirstChildElement("config")->FirstChildElement("wm"))
+	if(!cSettings::config.FirstChildElement("config")->FirstChildElement("wm"))
 		return;
 
-	if(config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str()))
+	if(cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str()))
 	{
 		if(movable)
 		{
-			if(config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str())->FirstChildElement("x"))
-				x = atoi(config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str())->FirstChildElement("x")->FirstChild()->Value());
-			if(config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str())->FirstChildElement("y"))
-				y = atoi(config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str())->FirstChildElement("y")->FirstChild()->Value());
+			if(cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str())->FirstChildElement("x"))
+				x = atoi(cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str())->FirstChildElement("x")->FirstChild()->Value());
+			if(cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str())->FirstChildElement("y"))
+				y = atoi(cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str())->FirstChildElement("y")->FirstChild()->Value());
 		}
 		if(resizable)
 		{
-			if(config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str())->FirstChildElement("h"))
-				h = atoi(config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str())->FirstChildElement("h")->FirstChild()->Value());
-			if(config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str())->FirstChildElement("w"))
-				w = atoi(config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str())->FirstChildElement("w")->FirstChild()->Value());
+			if(cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str())->FirstChildElement("h"))
+				h = atoi(cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str())->FirstChildElement("h")->FirstChild()->Value());
+			if(cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str())->FirstChildElement("w"))
+				w = atoi(cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str())->FirstChildElement("w")->FirstChild()->Value());
 		}
 
-		if(movable)
-		{
-			if(x > cGraphics::w())
-				x = cGraphics::w() - w;
-			if(y > cGraphics::h())
-				y = cGraphics::h() - h;
-			if(x < 0)
-				x = 0;
-			if(y < 0)
-				y = 0;
-		}
 	}
 #endif
+	if(movable)
+	{
+		if(x > cGraphics::w())
+			x = cGraphics::w() - w;
+		if(y > cGraphics::h()-h)
+			y = cGraphics::h() - h;
+		if(x < 0)
+			x = 0;
+		if(y < 0)
+			y = 0;
+	}
 }
 
 cWindow::~cWindow()

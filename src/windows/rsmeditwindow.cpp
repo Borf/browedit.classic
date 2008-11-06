@@ -10,9 +10,8 @@
 #include <fstream>
 #include <SDL/SDL_syswm.h>
 #include <common.h>
+#include <settings.h>
 
-
-extern std::string rodir;
 
 cRSMEditWindow::cWindowOpenButton::cWindowOpenButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent,skin)
 {
@@ -111,7 +110,7 @@ void cRSMEditWindow::cWindowSaveButton::onClick()
 		char bufje[40];
 		ZeroMemory(bufje, 40);
 		std::string t = model->model->textures[ii]->getfilename();
-		t = t.substr(rodir.length()+13);
+		t = t.substr(cSettings::roDir.length()+13);
 		strcpy(bufje, t.c_str());
 		pFile2.write(bufje, 40);
 	}
@@ -207,7 +206,7 @@ void cRSMEditWindow::cWindowSaveAsButton::onClick()
 						char bufje[40];
 						ZeroMemory(bufje, 40);
 						std::string t = model->model->textures[i]->getfilename();
-						t = t.substr(rodir.length()+13);
+						t = t.substr(cSettings::roDir.length()+13);
 						strcpy(bufje, t.c_str());
 						pFile2.write(bufje, 40);
 					}
@@ -274,13 +273,13 @@ void cRSMEditWindow::cWindowModel::draw( int cutoffleft, int cutoffright, int cu
 			scroll->innerheight = 130*i+130;
 
 			o = new cWindowLabel(parent);
-			o->setText(0, "#000000" + model->textures[i]->getfilename().substr(rodir.length() + 13));
+			o->setText(0, "#000000" + model->textures[i]->getfilename().substr(cSettings::roDir.length() + 13));
 			o->moveTo(5,130*i+111);
 			o->alignment = ALIGN_TOPLEFT;
 			scroll->objects.push_back(o);
 
 			o = new cWindowLabel(parent);
-			o->setText(0, "#FF0000" + model->textures[i]->getfilename().substr(rodir.length() + 13));
+			o->setText(0, "#FF0000" + model->textures[i]->getfilename().substr(cSettings::roDir.length() + 13));
 			o->moveTo(4,130*i+110);
 			o->alignment = ALIGN_TOPLEFT;
 			scroll->objects.push_back(o);
@@ -447,7 +446,7 @@ void cRSMEditWindow::cRGBPicker::onClick()
 
 cRSMEditWindow::cRSMEditWindow( ) : cWindow()
 {
-	strcpy(filename, std::string(rodir + "data\\model\\프론테라\\분수대.rsm").c_str());
+	strcpy(filename, std::string(cSettings::roDir + "data\\model\\프론테라\\분수대.rsm").c_str());
 	windowType = WT_RSMEDIT;
 	resizable = true;
 	visible = true;
@@ -523,13 +522,13 @@ void cRSMEditWindow::changetexture( std::string newtexture )
 	
 	Log(3,0,"Old tid: %i", model->model->textures[selected]->texId());
 	cTextureCache::unload(model->model->textures[selected]);
-	model->model->textures[selected] = cTextureCache::load(rodir + newtexture);
+	model->model->textures[selected] = cTextureCache::load(cSettings::roDir + newtexture);
 	Log(3,0,"new vtid: %i", model->model->textures[selected]->texId());
 	
 	cWindowScrollPanel* scroll = (cWindowScrollPanel*)objects["scroll"];
 	delete scroll->objects[selected];
 	cWindowObject* o = new cWindowModelTexture(this,selected);
-	o->setText(0, rodir + newtexture);
+	o->setText(0, cSettings::roDir + newtexture);
 	o->moveTo(0, 130*selected);
 	scroll->objects[selected] = o;
 }

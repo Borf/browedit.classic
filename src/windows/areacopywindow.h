@@ -10,33 +10,32 @@
 #include <wm/windowinputbox.h>
 #include <wm/windowcheckbox.h>
 
-
+#include <clipboard.h>
 
 class cAreaCopyWindow : public cWindow
 {
 private:
-	class cAreaCopyWindowOkButton : public cWindowButton
+	class cWindowOkButton : public cWindowButton
 	{
 
 	public:
-		cAreaCopyWindowOkButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin) : cWindowButton(parent,skin)
+		cWindowOkButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin) : cWindowButton(parent,skin)
 		{
 			alignment = ALIGN_BOTTOM;
 			moveTo(0, 20);
 			resizeTo(100, 20);
 			text = GetMsg("wm/OK");
 		}
-		virtual ~cAreaCopyWindowOkButton() {}
+		virtual ~cWindowOkButton() {}
 		void onClick()
 		{
-
-/*			Graphics.world.areac.AreaCModel = atof(parent->objects["amplitude"]->GetText(0).c_str());
-			Graphics.world.areac.AreaCTextures = atof(parent->objects["height"]->GetText(0).c_str());
-			Graphics.world.areac.AreaCHeight = atof(parent->objects["phase"]->GetText(0).c_str());
-			Graphics.world.areac.AreaCGat = atof(parent->objects["surfacecurve"]->GetText(0).c_str());
-			Graphics.world.areac.AreaCLights = atoi(parent->objects["type"]->GetText(0).c_str());
+			bool textures = 1==parent->objects["textures"]->getInt(0);
+			bool height =	1==parent->objects["height"]->getInt(0);
+			bool objects =	1==parent->objects["objects"]->getInt(0);
+			bool gat =		1==parent->objects["gat"]->getInt(0);
+			cClipBoard::setClipBoard(new cClipBoardArea(textures, height, objects, gat));
+			cClipBoard::pasting = true;
 			parent->close();
-*/
 		}
 	};
 public:
@@ -53,8 +52,6 @@ public:
 
 		defaultObject = "OkButton";
 
-		cWindowObject* o;
-		
 		objects["rollup"] = new cWindowRollupButton(this);
 		objects["close"] = new cWindowCloseButton(this);
 
@@ -63,52 +60,12 @@ public:
 		addLabel("lblAreaCTextures", 15,40,GetMsg("wm/areacopy/TEXTURES"));
 		addLabel("lblAreaCHeight", 15,60,GetMsg("wm/areacopy/HEIGHT"));
 		addLabel("lblAareaCGat", 15,80,GetMsg("wm/areacopy/GAT"));
-		addLabel("lblAreaCLights", 15,100,GetMsg("wm/areacopy/LIGHTS"));
-		addLabel("lblAreaCEffects", 15,120,GetMsg("wm/areacopy/EFFECTS"));
-	
-	o = new cWindowCheckBox(this);
-	o->alignment = ALIGN_TOPLEFT;
-	o->moveTo(120,20);
-	o->setInt(0,1);
-	objects["Models"] = o;
-//	return o;
-  
-	o = new cWindowCheckBox(this);
-	o->alignment = ALIGN_TOPLEFT;
-	o->moveTo(120,40);
-	o->setInt(0,1);
-	objects["Textures"] = o;
-//	return o;
 
-	o = new cWindowCheckBox(this);
-	o->alignment = ALIGN_TOPLEFT;
-	o->moveTo(120,60);
-	o->setInt(0,1);
-	objects["Height"] = o;
-//	return o;
-
-	o = new cWindowCheckBox(this);
-	o->alignment = ALIGN_TOPLEFT;
-	o->moveTo(120,80);
-	o->setInt(0,1);
-	objects["Gat"] = o;
-//	return o;
-
-	o = new cWindowCheckBox(this);
-	o->alignment = ALIGN_TOPLEFT;
-	o->moveTo(120,100);
-	o->setInt(0,1);
-	objects["Lights"] = o;
-//	return o;
-
-	o = new cWindowCheckBox(this);
-	o->alignment = ALIGN_TOPLEFT;
-	o->moveTo(120,120);
-	o->setInt(0,1);
-	objects["Effects"] = o;
-//	return o;
-
-		objects["OkButton"] = new cAreaCopyWindowOkButton(this);
+		addCheckBox("objects", 120,20,true);
+		addCheckBox("textures", 120,40,true);
+		addCheckBox("height", 120,60,true);
+		addCheckBox("gat", 120,80,true);
+		objects["OkButton"] = new cWindowOkButton(this);
 	}	
 };
 

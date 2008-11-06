@@ -20,19 +20,18 @@
 #include "windows/filewindow.h"
 #include "windows/mapswindow.h"
 #include "plugins/base/base.h"
+#include "settings.h"
 
 extern bool running;
 extern eMode editmode;
 extern int brushsize;
 int process_events( );
 extern std::vector<std::string> objectfiles;
-extern std::string rodir;
 extern cMenu* mode;
 extern cMenu* editdetail;
 extern cMenu* speed;
 extern cMenu* models;
 extern cMenu* currentobject;
-extern float paintspeed;
 extern TiXmlDocument sprites;
 extern double mouseclickx, mouseclicky, mouseclickz;
 extern long userid;
@@ -70,7 +69,9 @@ MENUCOMMAND(open)
 	ofn.hwndOwner = hWnd;
 
 	strcpy(cGraphics::world->fileName, replace(cGraphics::world->fileName, "/", "\\").c_str());
-	ofn.lpstrFile = cGraphics::world->fileName;
+	char buf[256];
+	strcpy(buf, cGraphics::world->fileName);
+	ofn.lpstrFile = buf;
 	ofn.nMaxFile = 256;
 	ofn.lpstrFilter = "All\0*.*\0RO Maps\0*.rsw\0";
 	ofn.nFilterIndex = 2;
@@ -82,7 +83,7 @@ MENUCOMMAND(open)
 	{
 
 		cGraphics::newWorld();
-
+		strcpy(cGraphics::world->fileName,buf);
 		while(cGraphics::world->fileName[strlen(cGraphics::world->fileName)-1] != '.')
 			cGraphics::world->fileName[strlen(cGraphics::world->fileName)-1] = '\0';
 		cGraphics::world->fileName[strlen(cGraphics::world->fileName)-1] = '\0';
@@ -569,7 +570,7 @@ MENUCOMMAND(random2)
 	for(i = 0; i < 50; i++)
 	{
 		cRSMModel* model = new cRSMModel();
-		model->load(rodir +  randommodels[rand() % randommodels.size()]);
+		model->load(cSettings::roDir +  randommodels[rand() % randommodels.size()]);
 
 		bool ok = false;
 		while(!ok || cGraphics::world->cubes[(int)(model->pos.z/2)][(int)(model->pos.x/2)].cell1 != 0)
@@ -935,7 +936,7 @@ MENUCOMMAND(random3)
 
 
 			cRSMModel* model = new cRSMModel();
-			model->load(rodir +  "data\\model\\郴何家前\\枚促府.rsm");
+			model->load(cSettings::roDir +  "data\\model\\郴何家前\\枚促府.rsm");
 			model->pos.x = (xx+x) + ((xx == x) ? 1 : 0);
 			model->pos.z = (yy+y) + ((yy == y) ? 1 : 0);
 			model->pos.y = 10;
@@ -1146,7 +1147,7 @@ MENUCOMMAND(random4)
 		for(i = 0; i < 1000; i++)
 		{
 			cRSMModel* model = new cRSMModel();
-			model->load(rodir +  randommodels[rand() % randommodels.size()]);
+			model->load(cSettings::roDir +  randommodels[rand() % randommodels.size()]);
 
 			model->pos = cVector3(rand()%(cGraphics::world->width*2), 0, rand()%(cGraphics::world->height*2));
 
@@ -1254,7 +1255,7 @@ MENUCOMMAND(speed)
 	for(unsigned int i =0 ; i < speed->items.size(); i++)
 		speed->items[i]->ticked = false;
 	src->ticked = true;
-	paintspeed = atof(src->title.c_str());
+	cSettings::paintSpeed = atof(src->title.c_str());
 	return true;
 }
 
@@ -1262,7 +1263,7 @@ MENUCOMMAND(model)
 {
 	delete cGraphics::previewModel;
 	cGraphics::previewModel = new cRSMModel();
-	cGraphics::previewModel->load(rodir + src->data);
+	cGraphics::previewModel->load(cSettings::roDir + src->data);
 	cGraphics::previewModel->rot = cVector3(0,0,0);
 	cGraphics::previewModel->scale = cVector3(4,4,4);
 
@@ -2206,9 +2207,9 @@ MENUCOMMAND(tempfunc)
 
 bool mouseovertexture(cMenu* src)
 {
-	if (cGraphics::texturePreview == NULL || cGraphics::texturePreview->getfilename() != rodir + "data\\texture\\" + ((cMenuItem*)src)->data)
+	if (cGraphics::texturePreview == NULL || cGraphics::texturePreview->getfilename() != cSettings::roDir + "data\\texture\\" + ((cMenuItem*)src)->data)
 	{
-		cGraphics::texturePreview = cTextureCache::load(rodir + "data\\texture\\" + ((cMenuItem*)src)->data);
+		cGraphics::texturePreview = cTextureCache::load(cSettings::roDir + "data\\texture\\" + ((cMenuItem*)src)->data);
 		return false;
 	}
 	else
@@ -2482,7 +2483,7 @@ MENUCOMMAND(exportmapfiles)
 	std::ofstream pFile((std::string(cGraphics::world->fileName) + ".txt").c_str());
 	for(i = 0; i < cGraphics::world->textures.size(); i++)
 	{
-		cFile* pF = cFileSystem::open(rodir + "data\\texture\\" + cGraphics::world->textures[i]->RoFilename);
+		cFile* pF = cFileSystem::open(cSettings::roDir + "data\\texture\\" + cGraphics::world->textures[i]->RoFilename);
 		if(pF->location != -1)
 		{
 			pF->close();
@@ -2491,7 +2492,7 @@ MENUCOMMAND(exportmapfiles)
 		pF->close();
 
 
-		CopyFile((rodir + "data\\texture\\" + cGraphics::world->textures[i]->RoFilename).c_str(), (std::string(cGraphics::world->fileName) + "\\texture\\" + cGraphics::world->textures[i]->RoFilename2).c_str(), false);
+		CopyFile((cSettings::roDir + "data\\texture\\" + cGraphics::world->textures[i]->RoFilename).c_str(), (std::string(cGraphics::world->fileName) + "\\texture\\" + cGraphics::world->textures[i]->RoFilename2).c_str(), false);
 		pFile.write("texture\\", 8);
 		pFile.write(cGraphics::world->textures[i]->RoFilename.c_str(), cGraphics::world->textures[i]->RoFilename.length());
 		pFile.put('\r');
@@ -2532,7 +2533,7 @@ MENUCOMMAND(exportmapfiles)
 			}
 			pF->close();
 
-			file = file.substr(rodir.length()+5);
+			file = file.substr(cSettings::roDir.length()+5);
 			pFile.write(file.c_str(), file.length());
 			pFile.put('\r');
 			pFile.put('\n');
@@ -2838,23 +2839,23 @@ MENUCOMMAND(99dun)
 
 		if(mode == 0)
 		{
-			sprintf(cGraphics::world->fileName, "%sdata\\random_pay", rodir.c_str());
+			sprintf(cGraphics::world->fileName, "%sdata\\random_pay", cSettings::roDir.c_str());
 			cGraphics::world->load();
 			MenuCommand_random2(src);
 		}
 		else if (mode == 1)
 		{
-			sprintf(cGraphics::world->fileName, "%sdata\\random_cul", rodir.c_str());
+			sprintf(cGraphics::world->fileName, "%sdata\\random_cul", cSettings::roDir.c_str());
 			cGraphics::world->load();
 			MenuCommand_random3(src);
 		}
 		else if (mode == 2)
 		{
-			sprintf(cGraphics::world->fileName, "%sdata\\random_ama", rodir.c_str());
+			sprintf(cGraphics::world->fileName, "%sdata\\random_ama", cSettings::roDir.c_str());
 			cGraphics::world->load();
 			MenuCommand_random5(src);
 		}
-		sprintf(cGraphics::world->fileName, "%sdata\\ulti_dun%02i", rodir.c_str(), i);
+		sprintf(cGraphics::world->fileName, "%sdata\\ulti_dun%02i", cSettings::roDir.c_str(), i);
 		cGraphics::world->save();
 	}
 
@@ -2923,7 +2924,7 @@ void readscript(std::string filename)
 								direction = 0;
 							s->action = 0;
 							s->direction = dirmap[(8-direction)%8];
-							s->loadBody(rodir + "data\\sprite\\npc\\" + el->FirstChild()->Value());
+							s->loadBody(cSettings::roDir + "data\\sprite\\npc\\" + el->FirstChild()->Value());
 							cGraphics::world->sprites.push_back(s);
 						}
 						break;
@@ -3057,7 +3058,7 @@ MENUCOMMAND(npcscreenies)
 	WIN32_FIND_DATA FileData;													// thingy for searching through a directory
 	HANDLE hSearch;																// thingy for searching through a directory
 	
-	hSearch = FindFirstFile(std::string(rodir + "data/*.rsw").c_str(), &FileData);						// look for all files
+	hSearch = FindFirstFile(std::string(cSettings::roDir + "data/*.rsw").c_str(), &FileData);						// look for all files
 	if (hSearch != INVALID_HANDLE_VALUE)										// if there are results...
 	{
 		while (true)														// loop through all the files
@@ -3065,7 +3066,7 @@ MENUCOMMAND(npcscreenies)
 			std::string filename = FileData.cFileName;
 			if(filename != "." && filename != "..")
 			{
-				strcpy(cGraphics::world->fileName, (rodir + "data\\" + filename.substr(0, filename.rfind("."))).c_str());
+				strcpy(cGraphics::world->fileName, (cSettings::roDir + "data\\" + filename.substr(0, filename.rfind("."))).c_str());
 				cGraphics::world->load();
 				if(!sprites.FirstChild())
 					sprites = cFileSystem::getXml("sprites.xml");
@@ -3460,12 +3461,12 @@ MENUCOMMAND(rebuildtexturefile)
 	{
 		for(std::map<std::string, cFile*, std::less<std::string> >::iterator it = cFileSystem::locations[i]->files.begin(); it != cFileSystem::locations[i]->files.end(); it++)
 		{
-			if(it->first.substr(rodir.length(),13) != "data\\texture\\")
+			if(it->first.substr(cSettings::roDir.length(),13) != "data\\texture\\")
 				continue;
 			std::string ext = it->first.substr(it->first.length()-4);
 			if(ext == ".jpg" || ext == ".bmp" || ext == ".tga")
 			{
-				std::string filename = it->first.substr(rodir.length()+13);
+				std::string filename = it->first.substr(cSettings::roDir.length()+13);
 				filename = "RO/" + replace(filename, "\\", "/").substr(0, filename.length()-4) + "|" + filename + "\r\n";
 				pFile.write(filename.c_str(), filename.length());
 			}
@@ -3487,12 +3488,12 @@ MENUCOMMAND(rebuildmodelfile)
 	{
 		for(std::map<std::string, cFile*, std::less<std::string> >::iterator it = cFileSystem::locations[i]->files.begin(); it != cFileSystem::locations[i]->files.end(); it++)
 		{
-			if(it->first.substr(rodir.length(),11) != "data\\model\\")
+			if(it->first.substr(cSettings::roDir.length(),11) != "data\\model\\")
 				continue;
 			std::string ext = it->first.substr(it->first.length()-4);
 			if(ext == ".rsm")
 			{
-				std::string filename = it->first.substr(rodir.length());
+				std::string filename = it->first.substr(cSettings::roDir.length());
 				std::string shortname = filename.substr(11);
 				filename = "RO/" + replace(shortname, "\\", "/").substr(0, shortname.length()-4) + "|" + filename + "\r\n";
 				pFile.write(filename.c_str(), filename.length());
@@ -3514,12 +3515,12 @@ MENUCOMMAND(rebuildsoundsfile)
 	{
 		for(std::map<std::string, cFile*, std::less<std::string> >::iterator it = cFileSystem::locations[i]->files.begin(); it != cFileSystem::locations[i]->files.end(); it++)
 		{
-			if(it->first.substr(rodir.length(),9) != "data\\wav\\")
+			if(it->first.substr(cSettings::roDir.length(),9) != "data\\wav\\")
 				continue;
 			std::string ext = it->first.substr(it->first.length()-4);
 			if(ext == ".wav")
 			{
-				std::string filename = it->first.substr(rodir.length());
+				std::string filename = it->first.substr(cSettings::roDir.length());
 				std::string shortname = filename.substr(9);
 				filename = "RO/" + replace(shortname, "\\", "/").substr(0, shortname.length()-4) + "|" + filename.substr(9) + "\r\n";
 				pFile.write(filename.c_str(), filename.length());
@@ -3562,7 +3563,7 @@ MENUCOMMAND(saveOnline)
 		for(int ii = 0; ii < cGraphics::world->models[i]->textures.size(); ii++)
 		{
 			std::string filename = cGraphics::world->models[i]->textures[ii]->getfilename();
-			filename = filename.substr(rodir.length() + 13);
+			filename = filename.substr(cSettings::roDir.length() + 13);
 			textures[filename] = true;
 		}
 	}
@@ -3616,7 +3617,7 @@ MENUCOMMAND(saveOnline)
 					if(lines[i].find("texture:") == 0)
 					{
 						std::string filename = lines[i].substr(8);
-						cFile* pFile = cFileSystem::open(rodir + "data/texture/" + filename);
+						cFile* pFile = cFileSystem::open(cSettings::roDir + "data/texture/" + filename);
 						if(pFile)
 						{
 							CURL *curl_handle;
@@ -3648,7 +3649,7 @@ MENUCOMMAND(saveOnline)
 					else if(lines[i].find("model:") == 0)
 					{
 						std::string filename = lines[i].substr(6);
-						cFile* pFile = cFileSystem::open(rodir + "data/model/" + filename);
+						cFile* pFile = cFileSystem::open(cSettings::roDir + "data/model/" + filename);
 						if(pFile)
 						{
 							CURL *curl_handle;
@@ -3837,7 +3838,7 @@ MENUCOMMAND(makeMinimaps)
 		{
 			if(it->first.find(".rsw") != std::string::npos)
 			{
-				std::string mapname = it->first.substr(rodir.length());
+				std::string mapname = it->first.substr(cSettings::roDir.length());
 				bool found = false;
 				for(int ii = 0; ii < mapnames.size() && !found; ii++)
 					if(mapnames[ii] == mapname)
@@ -3853,7 +3854,7 @@ MENUCOMMAND(makeMinimaps)
 	int mapcount = 0;
 	for(i = 0; i < mapnames.size(); i++)
 	{
-		sprintf(cGraphics::world->fileName, "%s%s", rodir.c_str(), mapnames[i].substr(0, mapnames[i].length()-4).c_str());
+		sprintf(cGraphics::world->fileName, "%s%s", cSettings::roDir.c_str(), mapnames[i].substr(0, mapnames[i].length()-4).c_str());
 		FILE* pFile = fopen((std::string(cGraphics::world->fileName) + ".minimap.tga").c_str(),"rb");
 		if(pFile)
 		{

@@ -14,7 +14,13 @@ int cProcessManagement::globalheightedit_process_events(SDL_Event &event)
 		case SDL_MOUSEBUTTONUP:
 			if(event.button.button == SDL_BUTTON_LEFT)
 			{
-				if(cGraphics::cMouse::x < cGraphics::w()-256)
+				if(cClipBoard::pasting && cClipBoard::currentClipBoard && cClipBoard::currentClipBoard->type == cClipBoard::CLIP_AREA)
+				{
+					cClipBoard::currentClipBoard->apply();
+					if((SDL_GetModState() & KMOD_CTRL) == 0)
+						cClipBoard::pasting = false;
+				}
+				else if(cGraphics::cMouse::x < cGraphics::w()-256)
 				{
 					if (cGraphics::cMouse::x3dStart > cGraphics::cMouse::x3d)
 					{
@@ -42,9 +48,9 @@ int cProcessManagement::globalheightedit_process_events(SDL_Event &event)
 						}
 					}
 
-					for(x = (int)floor(cGraphics::cMouse::x3dStart/10); x < floor(cGraphics::cMouse::x3d/10); x++)
+					for(x = (int)round(cGraphics::cMouse::x3dStart/10); x < round(cGraphics::cMouse::x3d/10); x++)
 					{
-						for(y = (int)floor(cGraphics::cMouse::z3dStart/10); y < (int)floor(cGraphics::cMouse::z3d/10); y++)
+						for(y = (int)round(cGraphics::cMouse::z3dStart/10); y < (int)round(cGraphics::cMouse::z3d/10); y++)
 						{
 							if (x >= 0 && x < cGraphics::world->width && y >= 0 && y < cGraphics::world->height)
 							{
@@ -126,6 +132,17 @@ int cProcessManagement::globalheightedit_process_events(SDL_Event &event)
 					return 0;
 				cWM::addWindow(new cAreaCopyWindow() );
 				break;
+			case SDLK_p:
+				if(cClipBoard::currentClipBoard->type == cClipBoard::CLIP_AREA)
+				{
+					cClipBoard::pasting = !cClipBoard::pasting;
+					if(cClipBoard::pasting)
+					{
+						((cClipBoardArea*)cClipBoard::currentClipBoard)->startX = round(cGraphics::cMouse::x3d / 10.0f);
+						((cClipBoardArea*)cClipBoard::currentClipBoard)->startZ = round(cGraphics::cMouse::z3d / 10.0f);
+					}
+				}
+
 
 			default:
 				break;

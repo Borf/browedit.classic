@@ -1,7 +1,7 @@
 #include "sprite.h"
 #include "graphics.h"
 #include "filesystem.h"
-extern std::string rodir;
+#include "settings.h"
 
 #define SPRITESIZE 128
 

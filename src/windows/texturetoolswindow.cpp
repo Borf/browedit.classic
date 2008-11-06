@@ -94,6 +94,8 @@ void cTextureToolsWindow::cWindowBrushShape::draw( int a,int b,int c,int d )
 	if(inObject())
 		glColor3f(0.6f, 0.6f, 0.9f);
 	cWindowObject::draw();
+	if(cGraphics::textureBrush.size() == 0)
+		return;
 	
 	//draw brush
 
@@ -159,7 +161,7 @@ cTextureToolsWindow::cTextureToolsWindow( ) : cWindow()
 	h = 100;
 	w = 50;
 	x = 0;
-	y = cGraphics::h()-32;
+	y = cGraphics::h()-h;
 	minWidth = 20 + skinOffLeft+skinOffRight;
 	minHeight = 20 + skinOffTop+skinOffBottom;
 	

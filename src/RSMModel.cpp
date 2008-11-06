@@ -2,7 +2,7 @@
 #include "graphics.h"
 #include "texturecache.h"
 #include <frustum.h>
-extern std::string rodir;
+#include "settings.h"
 extern cVector3 lightpos;
 
 bool boundingBoxCollisions = false;
@@ -46,7 +46,7 @@ void cRSMModel::load(std::string fname)
 	{
 		pFile->read(buffer, 40);
 		std::string filename = buffer;
-		cTexture* tex = cTextureCache::load(rodir + "data\\texture\\" + filename, TEX_NEARESTFILTER);
+		cTexture* tex = cTextureCache::load(cSettings::roDir + "data\\texture\\" + filename, TEX_NEARESTFILTER);
 		textures.push_back(tex);
 	}
 

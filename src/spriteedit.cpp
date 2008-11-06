@@ -3,10 +3,10 @@
 #include "undo.h"
 #include "sprite.h"
 #include "windows/spritewindow.h"
+#include "settings.h"
 
 extern int movement;
 extern bool doneAction;
-extern std::string rodir;
 
 
 int cProcessManagement::spriteedit_process_events(SDL_Event &event)
@@ -92,11 +92,11 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 					int sex = rand() % 2;
 					int bodyid = rand() % (sizeof(bodies)/sizeof(std::string));
 
-					sprite->loadBody(rodir + "data\\sprite\\인간족\\몸통\\" + sexes[sex] + "\\" + bodies[bodyid] + "_" + sexes[sex]);
+					sprite->loadBody(cSettings::roDir + "data\\sprite\\인간족\\몸통\\" + sexes[sex] + "\\" + bodies[bodyid] + "_" + sexes[sex]);
 					int headid = 1+ rand() % 22;
 					char buf[20];
 					sprintf(buf, "%i", headid);
-					sprite->loadHead(rodir + "data\\sprite\\인간족\\머리통\\" + sexes[sex] + "\\" + buf + "_" + sexes[sex]);
+					sprite->loadHead(cSettings::roDir + "data\\sprite\\인간족\\머리통\\" + sexes[sex] + "\\" + buf + "_" + sexes[sex]);
 					
 					sprite->pos = cVector3(cGraphics::cMouse::x3d/5, cGraphics::cMouse::y3d, cGraphics::cMouse::z3d/5);
 					cGraphics::world->sprites.push_back(sprite);

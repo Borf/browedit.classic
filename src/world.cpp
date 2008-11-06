@@ -1,4 +1,3 @@
-#include "main.h"
 #include "world.h"
 #include "graphics.h"
 #include "filesystem.h"
@@ -12,6 +11,7 @@
 #include "font.h"
 #include <clipboard.h>
 #include <frustum.h>
+#include "settings.h"
 
 #ifdef _WIN32
 #include <gd/gd.h>
@@ -27,7 +27,6 @@ extern bool IsLegal;
 
 extern eMode	editmode;
 extern int brushsize;
-extern std::string rodir;
 extern long userid;
 extern void mainloop();
 
@@ -177,7 +176,7 @@ void cWorld::load()
 		cTextureContainer* t = new cTextureContainer();
 		t->RoFilename = s;
 		t->RoFilename2 = std::string(buf+40);
-		t->texture = cTextureCache::load(rodir + "data\\texture\\" + s);
+		t->texture = cTextureCache::load(cSettings::roDir + "data\\texture\\" + s);
 		textures[i] = t;
 	}
 
@@ -448,7 +447,7 @@ void cWorld::load()
 				pFile->read(buf, 248);
 				std::string filename = buf+52;
 				cRSMModel* m = new cRSMModel();
-				m->load(rodir+ "data\\model\\" + filename);
+				m->load(cSettings::roDir+ "data\\model\\" + filename);
 				m->lightopacity = 1;
 
 				if (m->meshes.size() == 0)
@@ -603,7 +602,7 @@ void cWorld::load()
 				pFile->read(buf, 248);
 				std::string filename = buf+52;
 				cRSMModel* m = new cRSMModel();
-				m->load(rodir+ "data\\model\\" + filename);
+				m->load(cSettings::roDir+ "data\\model\\" + filename);
 	
 				m->lightopacity = 1;
 
@@ -724,14 +723,14 @@ void cWorld::load()
 			s->action = atoi(sprite->Attribute("action"));
 
 			if(sprite->FirstChildElement("body"))
-				s->loadBody(rodir + sprite->FirstChildElement("body")->FirstChild()->Value());
+				s->loadBody(cSettings::roDir + sprite->FirstChildElement("body")->FirstChild()->Value());
 			if(sprite->FirstChildElement("head"))
-				s->loadHead(rodir + sprite->FirstChildElement("head")->FirstChild()->Value());
+				s->loadHead(cSettings::roDir + sprite->FirstChildElement("head")->FirstChild()->Value());
 			TiXmlElement* el = sprite->FirstChildElement("extra");
 
 			while(el != NULL)
 			{
-				s->setExtra(atoi(el->Attribute("id")), rodir + el->FirstChild()->Value());
+				s->setExtra(atoi(el->Attribute("id")), cSettings::roDir + el->FirstChild()->Value());
 				el = el->NextSiblingElement();
 			}
 			sprites.push_back(s);
@@ -1441,13 +1440,13 @@ void cWorld::save()
 			if(sprites[i]->body != NULL)
 			{
 				TiXmlElement body("body");
-				body.InsertEndChild(TiXmlText(sprites[i]->body->fileName.substr(rodir.length()).c_str()));
+				body.InsertEndChild(TiXmlText(sprites[i]->body->fileName.substr(cSettings::roDir.length()).c_str()));
 				el.InsertEndChild(body);
 			}
 			if(sprites[i]->head != NULL)
 			{
 				TiXmlElement head("head");
-				head.InsertEndChild(TiXmlText(sprites[i]->head->fileName.substr(rodir.length()).c_str()));
+				head.InsertEndChild(TiXmlText(sprites[i]->head->fileName.substr(cSettings::roDir.length()).c_str()));
 				el.InsertEndChild(head);
 			}
 			for(unsigned int ii = 0; ii < sprites[i]->extras.size(); ii++)
@@ -1455,7 +1454,7 @@ void cWorld::save()
 				if(sprites[i]->extras[ii] != NULL)
 				{
 					TiXmlElement extra("extra");
-					extra.InsertEndChild(TiXmlText(sprites[i]->extras[ii]->fileName.substr(rodir.length()).c_str()));
+					extra.InsertEndChild(TiXmlText(sprites[i]->extras[ii]->fileName.substr(cSettings::roDir.length()).c_str()));
 					extra.SetAttribute("id", ii);
 					el.InsertEndChild(extra);
 				}
@@ -1575,7 +1574,7 @@ void cWorld::draw()
 
 
 	bool inverseSelection = false;
-	if(editmode == MODE_TEXTUREPAINT)
+	if(editmode == MODE_TEXTUREPAINT || editmode == MODE_HEIGHTGLOBAL)
 	{
 		for(x = 0; x < width && !inverseSelection; x++)
 		{
@@ -1609,12 +1608,11 @@ void cWorld::draw()
 
 				int texture = textures[t->texture]->texId();
 
-				if (	(editmode == MODE_WALLS && cGraphics::view.showGrid && (c->tileOtherSide != -1 || c->tileSide != -1) || c->minHeight != 99999)
-					||	(editmode == MODE_HEIGHTGLOBAL && c->selected))
+				if (	(editmode == MODE_WALLS && cGraphics::view.showGrid && (c->tileOtherSide != -1 || c->tileSide != -1) || c->minHeight != 99999))
 					glColor3f(1,0,1);
 //				else if (cGraphics::view.showtilecolors)
 //					glColor3f((BYTE)t->color[0] / 256.0f,(BYTE)t->color[1] / 256.0f,(BYTE)t->color[2] / 256.0f);
-				else if(editmode == MODE_TEXTUREPAINT && cGraphics::textureTool == TOOL_SELECTAREA)
+				else if(((editmode == MODE_TEXTUREPAINT && cGraphics::textureTool == TOOL_SELECTAREA) || editmode == MODE_HEIGHTGLOBAL) && !cClipBoard::pasting)
 				{
 						if(cGraphics::cMouse::lbuttondown && cGraphics::cMouse::y < cGraphics::h() - 20 && inbetween<int>(x, round(cGraphics::cMouse::x3dStart/10), round(cGraphics::cMouse::x3d/10)) && inbetween<int>(y, round(cGraphics::cMouse::z3dStart/10), round(cGraphics::cMouse::z3d/10)) && alt)
 						glColor4f(0.3f, 0.3f, 0.3f, 1);
@@ -1627,7 +1625,7 @@ void cWorld::draw()
 					else
 						glColor4f(1,1,1,1);
 				}
-				else if(editmode == MODE_TEXTUREPAINT && inverseSelection && !c->selected)
+				else if((editmode == MODE_TEXTUREPAINT || editmode == MODE_HEIGHTGLOBAL) && inverseSelection && !c->selected && !cClipBoard::pasting)
 					glColor4f(0.2f, 0.2f, 0.2f, 1);
 				else if (editmode == MODE_HEIGHTDETAIL && cClipBoard::pasting && cClipBoard::currentClipBoard->type == cClipBoard::CLIP_HEIGHT && 
 					inbetween<int>(x, posx-floor(((cClipboardHeight*)cClipBoard::currentClipBoard)->data[0].size()/2.0f),	posx+ceil(((cClipboardHeight*)cClipBoard::currentClipBoard)->data[0].size()/2.0f)) &&
@@ -1862,6 +1860,11 @@ void cWorld::draw()
 		glDisable(GL_BLEND);
 		glDepthMask(1);
 	}
+
+	
+	if(editmode == MODE_HEIGHTGLOBAL && cClipBoard::pasting && cClipBoard::currentClipBoard && cClipBoard::currentClipBoard->type == cClipBoard::CLIP_AREA)
+		cClipBoard::currentClipBoard->render();
+
 
 	if (editmode == MODE_GAT || cGraphics::view.showGat)
 	{
@@ -2247,6 +2250,18 @@ void cWorld::draw()
 				glColor4f(1,0,0, cGraphics::view.showObjectsAsTransparent ? 0.2f : 1);
 			else
 				glColor4f(1,1,1,cGraphics::view.showObjectsAsTransparent ? 0.2f : 1);
+			if((editmode == MODE_HEIGHTGLOBAL || editmode == MODE_TEXTUREPAINT) && inverseSelection && !cClipBoard::pasting)
+			{
+				x = round(cGraphics::world->models[i]->pos.x / 2.0f);
+				y = round(cGraphics::world->models[i]->pos.z / 2.0f);
+				if(x >= 0 && y >= 0 && x < cGraphics::world->width && y < cGraphics::world->height)
+				{
+					if(cubes[y][x].selected)
+						glColor3f(1,1,1);
+					else
+						glColor3f(0.2f, 0.2f, 0.2f);
+				}				
+			}
 //			models[i]->collides(cVector3(0,0,0), cVector3(0,0,0));
 			models[i]->draw();
 		}
@@ -2513,21 +2528,7 @@ void cWorld::draw()
 	}
 	if (editmode == MODE_HEIGHTGLOBAL)
 	{
-		if (cGraphics::cMouse::lbuttondown)
-		{
-			glDisable(GL_TEXTURE_2D);
-			glLineWidth(2);
-			glColor3f(1,0,0);
-			glBegin(GL_LINE_LOOP);
-				glVertex3f(floor(cGraphics::cMouse::x3dStart/10)*10,	cGraphics::cMouse::y3d+1, height*10-floor(cGraphics::cMouse::z3dStart/10)*10);
-				glVertex3f(floor(cGraphics::cMouse::x3dStart/10)*10,	cGraphics::cMouse::y3d+1, height*10-floor(cGraphics::cMouse::z3d/10)*10);
-				glVertex3f(floor(cGraphics::cMouse::x3d/10)*10,		cGraphics::cMouse::y3d+1, height*10-floor(cGraphics::cMouse::z3d/10)*10);
-				glVertex3f(floor(cGraphics::cMouse::x3d/10)*10,		cGraphics::cMouse::y3d+1, height*10-floor(cGraphics::cMouse::z3dStart/10)*10);
-			glEnd();
-
-			glColor3f(1,1,1);
-			glLineWidth(1);
-		}
+//borf
 	}
 	if (editmode == MODE_OBJECTGROUP)
 	{

@@ -4,8 +4,8 @@
 #include "rsmeditwindow.h"
 #include <filesystem.h>
 #include <undo.h>
+#include <settings.h>
 
-extern std::string rodir;
 extern std::vector<std::pair<std::string, std::string> > translations;
 extern void mainloop();
 extern std::vector<std::string> soundfiles;
@@ -80,7 +80,7 @@ void cSoundSelectWindow::cWindowPlayButton::onClick()
 		
 		Mix_Chunk *sample;
 		
-		cFile* pFile = cFileSystem::open(rodir+"data/wav/" + filename);
+		cFile* pFile = cFileSystem::open(cSettings::roDir+"data/wav/" + filename);
 		sample=Mix_QuickLoad_WAV((BYTE*)pFile->data);
 		Mix_Volume(-1,MIX_MAX_VOLUME);
 		Mix_PlayChannel(0, sample, 0);

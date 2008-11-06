@@ -1,7 +1,6 @@
 #define __GRAPHICS_CPP__
 #include "graphics.h"
 
-#include "main.h"
 #include "common.h"
 #include "world.h"
 #include "font.h"
@@ -16,20 +15,13 @@
 #include "windows/hotkeywindow.h"
 #include "menucommands.h"
 #include <undo.h>
-
+#include "settings.h"
 #include "menu.h"
 
-extern eState			state;
-extern void				ChangeGrid();
-extern std::map<long, std::string, std::less<long> >	idtomodel;
-extern eMode			editmode;
-float f = 0;
-extern cMenu*			currentobject;
-extern std::string			rodir;
-extern long				lastmotion;
-extern std::string			fontname;
-extern std::string			skinFile;
-extern TiXmlDocument	config;
+extern void												ChangeGrid();
+extern eMode											editmode;
+extern cMenu*											currentobject;
+extern long												lastmotion;
 
 int cGraphics::draw(bool drawwm)
 {
@@ -65,7 +57,7 @@ int cGraphics::draw(bool drawwm)
 		glDisable(GL_LIGHTING);
 
 
-	if(world && state != OBJECTSELECT && state != OBJECTPROPS)
+	if(world)
 		world->draw();
 
 	glDisable(GL_LIGHTING);
@@ -453,10 +445,10 @@ int cGraphics::init(int pWidth, int pHeight, int pBpp, bool pFullscreen)
 
 	glDisable(GL_LIGHTING);
 	font = new cFont();
-	font->load("data/fonts/"+fontname+".tga");
-	splash = cTextureCache::load(config.FirstChildElement("config")->FirstChildElement("splash")->FirstChild()->Value());
+	font->load("data/fonts/"+cSettings::fontName+".tga");
+	splash = cTextureCache::load(cSettings::config.FirstChildElement("config")->FirstChildElement("splash")->FirstChild()->Value());
 	Log(3,0,GetMsg("graphics/INITIALIZINGWM"));
-	cWM::init(skinFile);
+	cWM::init(cSettings::skinFile);
 	cWM::addWindow(new cHotkeyWindow());
 
 	unsigned int i;
@@ -469,9 +461,9 @@ int cGraphics::init(int pWidth, int pHeight, int pBpp, bool pFullscreen)
 	gatBorder = cTextureCache::load("data/gatBorder.tga");
 
 	
-	waterDirectory =		config.FirstChildElement("config")->FirstChildElement("water")->FirstChildElement("directory")->FirstChild()->Value();
-	waterExtension =		config.FirstChildElement("config")->FirstChildElement("water")->FirstChildElement("extension")->FirstChild()->Value();
-	waterCount=atoi(config.FirstChildElement("config")->FirstChildElement("water")->FirstChildElement("count")->FirstChild()->Value());
+	waterDirectory =		cSettings::config.FirstChildElement("config")->FirstChildElement("water")->FirstChildElement("directory")->FirstChild()->Value();
+	waterExtension =		cSettings::config.FirstChildElement("config")->FirstChildElement("water")->FirstChildElement("extension")->FirstChild()->Value();
+	waterCount=atoi(cSettings::config.FirstChildElement("config")->FirstChildElement("water")->FirstChildElement("count")->FirstChild()->Value());
 
 	waterTextures.resize(waterCount);
 	for(i = 0; i < waterCount; i++)
@@ -479,14 +471,14 @@ int cGraphics::init(int pWidth, int pHeight, int pBpp, bool pFullscreen)
 		for(int ii = 0; ii < 32; ii++)
 		{
 			char buf[100];
-			sprintf(buf, "%s%swater%i%02i%s", rodir.c_str(), waterDirectory.c_str(), i, ii, waterExtension.c_str());
+			sprintf(buf, "%s%swater%i%02i%s", cSettings::roDir.c_str(), waterDirectory.c_str(), i, ii, waterExtension.c_str());
 			waterTextures[i].push_back(cTextureCache::load(buf, TEX_NOCLAMP));
 		}
 	}
 	if(waterCount == 0)
 	{
 		waterTextures.resize(1);
-		waterTextures[i].push_back(cTextureCache::load(rodir + waterDirectory + "water" + waterExtension));
+		waterTextures[i].push_back(cTextureCache::load(cSettings::roDir + waterDirectory + "water" + waterExtension));
 	}
 
 	Log(3,0,GetMsg("file/DONELOADING"), "water.txt");
@@ -726,30 +718,33 @@ void cGraphics::updateMenu()
 
 }
 
-int					cGraphicsBase::width =			1024;
-int					cGraphicsBase::height =			768;
-int					cGraphicsBase::bits =			32;
-bool				cGraphicsBase::fullscreen =		false;
-long 				cGraphicsBase::lastTick =		0;
-long				cGraphicsBase::frameTicks =		0;
-cMenu*				cGraphicsBase::popupMenu =		NULL;
-cMenu*				cGraphicsBase::menu =			NULL;
-bool				cGraphicsBase::cMouse::lbuttondown =	false;
-bool				cGraphicsBase::cMouse::rbuttondown =	false;
+int					cGraphicsBase::width =				1024;
+int					cGraphicsBase::height =				768;
+int					cGraphicsBase::bits =				32;
+bool				cGraphicsBase::fullscreen =			false;
+long 				cGraphicsBase::lastTick =			0;
+long				cGraphicsBase::frameTicks =			0;
+cMenu*				cGraphicsBase::popupMenu =			NULL;
+cMenu*				cGraphicsBase::menu =				NULL;
+long				cGraphicsBase::dragoffsety =		0;
+long				cGraphicsBase::dragoffsetx =		0;
+bool				cGraphicsBase::cMouse::lbuttondown =false;
+bool				cGraphicsBase::cMouse::rbuttondown =false;
 long				cGraphicsBase::cMouse::x =			0;
 long				cGraphicsBase::cMouse::y =			0;
 long				cGraphicsBase::cMouse::xOld =		0;
 long				cGraphicsBase::cMouse::yOld =		0;
-long				cGraphicsBase::cMouse::xStart =	0;
-long				cGraphicsBase::cMouse::yStart =	0;
+long				cGraphicsBase::cMouse::xStart =		0;
+long				cGraphicsBase::cMouse::yStart =		0;
 double				cGraphicsBase::cMouse::x3d =		0;
 double				cGraphicsBase::cMouse::y3d =		0;
 double				cGraphicsBase::cMouse::z3d =		0;
 double				cGraphicsBase::cMouse::x3dStart =	0;
 double				cGraphicsBase::cMouse::y3dStart =	0;
 double				cGraphicsBase::cMouse::z3dStart =	0;
-long				cGraphicsBase::dragoffsety =	0;
-long				cGraphicsBase::dragoffsetx =	0;
+bool				cGraphicsBase::cMouse::doubleClick =false;
+long				cGraphicsBase::cMouse::lastlclick =	0;
+long				cGraphicsBase::cMouse::lastrclick =	0;
 
 cGraphicsBase::cGraphicsBase()
 {
@@ -815,5 +810,6 @@ cWorldContainer::cSettings::cSettings()
 	textureRot			= 0;
 	fliph				= false;
 	flipv				= false;
-
+	selectionstart		= cVector2(0,0);
+	selectionend		= cVector2(0,0);
 }
