@@ -60,8 +60,8 @@ void cHotkeyWindow::cHotkeyButton::onClick()
 
 cWindowObject* cHotkeyWindow::cHotkeyButton::inObject()
 {
-	int xx=(int)mouseX-parent->getX();
-	int yy=(cGraphics::h()-(int)mouseY)-parent->getY();
+	int xx=(int)cGraphics::cMouse::x-parent->getX();
+	int yy=(cGraphics::h()-(int)cGraphics::cMouse::y)-parent->getY();
 	if (xx > getX() && xx < getX()+w &&
 		yy > getY() && yy < getY()+h)
 		return this;

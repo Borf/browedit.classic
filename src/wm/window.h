@@ -15,8 +15,6 @@ class cWindowObject;
 
 typedef std::map<std::string, cWindowObject*, std::less<std::string> > objectlist;
 
-extern cWindowObject* draggingObject;
-
 enum WINDOW_TYPE
 {
 	WT_GENERIC,
@@ -200,7 +198,5 @@ public:
 	objectlist				objects;
 	cWindowObject*			selectedObject;
 };
-
-extern long mousestartx, mousestarty, dragoffsetx, dragoffsety;
 
 #endif

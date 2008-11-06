@@ -268,10 +268,10 @@ int cWindowListBox::getInt(int index)
 
 void cWindowListBox::onClick()
 {
-	int xx = (int)mouseX;
+	int xx = (int)cGraphics::cMouse::x;
 	xx -= realX();
 	xx -= parent->getX();
-	int yy = Graphics.h()-(int)mouseY;
+	int yy = Graphics.h()-(int)cGraphics::cMouse::y;
 	yy -= realY();
 	yy -= parent->getY();
 
@@ -325,14 +325,14 @@ void cWindowListBox::onClick()
 
 void cWindowListBox::drag()
 {
-	int xx = (int)mouseX;
+	int xx = (int)cGraphics::cMouse::x;
 	xx -= realX();
 	xx -= parent->getX();
-	int yy = Graphics.h()-(int)mouseY;
+	int yy = Graphics.h()-(int)cGraphics::cMouse::y;
 	yy -= realY();
 	yy -= parent->getY();
 
-	if (mousestartx - realX() - parent->getX() > w-14 && mousestartx - realX() - parent->getX() < w)
+	if (cGraphics::cMouse::xStart - realX() - parent->getX() > w-14 && cGraphics::cMouse::xStart - realX() - parent->getX() < w)
 	{
 		int i = 0;
 		int yyy = realY()+h-5-12;
@@ -347,7 +347,7 @@ void cWindowListBox::drag()
 		if (barpos != 0)
 			barpos = (int)((float)(h-(skinButtonDownHeight+skinButtonUpHeight)) * ((float)liststart / (float)values.size()));
 
-		int offset = (int)(yy-dragoffsety);
+		int offset = (int)(yy-cGraphics::dragoffsety);
 
 		barpos-=offset;
 		if (barpos < 0)
@@ -359,7 +359,7 @@ void cWindowListBox::drag()
 		int oldliststart = liststart;
 		liststart = max(min((int)((((float)barpos / (float)(h-(skinButtonDownHeight+skinButtonUpHeight))) * (float)values.size())+0.5f), (int)values.size()-i), 0);
 		if (oldliststart != liststart)
-			dragoffsety = yy;
+			cGraphics::dragoffsety = yy;
 	}
 }
 

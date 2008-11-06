@@ -8,14 +8,9 @@
 #include <wm/windowcheckbox.h>
 #include <wm/windowinputbox.h>
 
-extern long mousestartx, mousestarty;
-extern double mouse3dx, mouse3dy, mouse3dz;
-extern bool	doneaction;
-extern float oldmousex, oldmousey;
+extern bool	doneAction;
 extern int movement;
-extern bool lbuttondown;
 
-extern cMenu* popupmenu;
 extern TiXmlDocument favoritelights;
 
 double mouseclickx, mouseclicky, mouseclickz;
@@ -73,23 +68,23 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 	switch(event.type)
 	{
 		case SDL_MOUSEMOTION:
-			if(lbuttondown)
+			if(cGraphics::cMouse::lbuttondown)
 			{
 				if (cGraphics::world->lights.size() == 0)
 					break;
 				if(cGraphics::objectStartDrag)
 				{
-					if(doneaction)
+					if(doneAction)
 					{
 						cGraphics::worldContainer->undoStack->push(new cUndoChangeLight(cGraphics::worldContainer->settings.selectedObject));
-						doneaction = false;
+						doneAction = false;
 					}
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 					bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 					if (!ctrl && !alt)
 					{
-						cGraphics::world->lights[cGraphics::worldContainer->settings.selectedObject].pos.x = mouse3dx / 5;
-						cGraphics::world->lights[cGraphics::worldContainer->settings.selectedObject].pos.z = mouse3dz / 5;
+						cGraphics::world->lights[cGraphics::worldContainer->settings.selectedObject].pos.x = cGraphics::cMouse::x3d / 5;
+						cGraphics::world->lights[cGraphics::worldContainer->settings.selectedObject].pos.z = cGraphics::cMouse::z3d / 5;
 						if (SDL_GetModState() & KMOD_SHIFT)
 						{
 							cGraphics::world->lights[cGraphics::worldContainer->settings.selectedObject].pos.x = floor(cGraphics::world->lights[cGraphics::worldContainer->settings.selectedObject].pos.x * (cGraphics::worldContainer->settings.gridSize/2.0f) + 0.5-cGraphics::worldContainer->settings.gridoffsetx) / (cGraphics::worldContainer->settings.gridSize/2.0f) + cGraphics::worldContainer->settings.gridoffsetx/(cGraphics::worldContainer->settings.gridSize/2.0f);
@@ -98,7 +93,7 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 					}
 					if(ctrl && !alt)
 					{
-						cGraphics::world->lights[cGraphics::worldContainer->settings.selectedObject].pos.y += (mouseY-oldmousey);
+						cGraphics::world->lights[cGraphics::worldContainer->settings.selectedObject].pos.y += (cGraphics::cMouse::y-cGraphics::cMouse::yOld);
 						if (SDL_GetModState() & KMOD_SHIFT)
 						{
 							cGraphics::world->lights[cGraphics::worldContainer->settings.selectedObject].pos.y = floor(cGraphics::world->lights[cGraphics::worldContainer->settings.selectedObject].pos.y * (cGraphics::worldContainer->settings.gridSize/2.0f) + 0.5-cGraphics::worldContainer->settings.gridoffsetx) / (cGraphics::worldContainer->settings.gridSize/2.0f) + cGraphics::worldContainer->settings.gridoffsetx/(cGraphics::worldContainer->settings.gridSize/2.0f);
@@ -106,7 +101,7 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 					}
 					if(!ctrl && alt)
 					{
-						cGraphics::world->lights[cGraphics::worldContainer->settings.selectedObject].range += (mouseY-oldmousey);
+						cGraphics::world->lights[cGraphics::worldContainer->settings.selectedObject].range += (cGraphics::cMouse::y-cGraphics::cMouse::yOld);
 					}
 				}
 			}
@@ -124,13 +119,13 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 					cVector3 d = cGraphics::world->lights[i].pos;
 					d.x = d.x;
 					
-					d.x -= mouse3dx/5;
-					d.z -= mouse3dz/5;
+					d.x -= cGraphics::cMouse::x3d/5;
+					d.z -= cGraphics::cMouse::z3d/5;
 					d.y = 0;
 
-					if(mindist > d.Magnitude())
+					if(mindist > d.magnitude())
 					{
-						mindist = d.Magnitude();
+						mindist = d.magnitude();
 						minobj = i;
 					}
 				}
@@ -151,7 +146,7 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 					l.color.x = 0;
 					l.color.y = 0;
 					l.color.z = 0;
-					l.pos = cVector3(mouse3dx/5, mouse3dy+10, mouse3dz/5);
+					l.pos = cVector3(cGraphics::cMouse::x3d/5, cGraphics::cMouse::y3d+10, cGraphics::cMouse::z3d/5);
 					l.todo = std::string(buf, 40);
 					l.todo2 = 192;
 					l.maxLightIncrement = 256;
@@ -173,13 +168,13 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 						cVector3 d = cGraphics::world->lights[i].pos;
 						d.x = d.x;
 						
-						d.x -= mouse3dx/5;
-						d.z -= mouse3dz/5;
+						d.x -= cGraphics::cMouse::x3d/5;
+						d.z -= cGraphics::cMouse::z3d/5;
 						d.y = 0;
 
-						if(mindist > d.Magnitude())
+						if(mindist > d.magnitude())
 						{
-							mindist = d.Magnitude();
+							mindist = d.magnitude();
 							minobj = i;
 						}
 					}
@@ -198,30 +193,32 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 			{
 				if(movement < 3)
 				{
-					mouseclickx = mouse3dx;
-					mouseclicky = mouse3dy;
-					mouseclickz = mouse3dz;
+					mouseclickx = cGraphics::cMouse::x3d;
+					mouseclicky = cGraphics::cMouse::y3d;
+					mouseclickz = cGraphics::cMouse::z3d;
 
-					popupmenu = new cMenu();
-					popupmenu->parent = NULL;
-					popupmenu->drawStyle = 1;
-					popupmenu->x = (int)mouseX;
-					popupmenu->y = (int)mouseY;
-					popupmenu->w = 150;
-					popupmenu->opened = true;
+					if(cGraphics::popupMenu)
+						delete cGraphics::popupMenu;
+					cGraphics::popupMenu = new cMenu();
+					cGraphics::popupMenu->parent = NULL;
+					cGraphics::popupMenu->drawStyle = 1;
+					cGraphics::popupMenu->x = (int)cGraphics::cMouse::x;
+					cGraphics::popupMenu->y = (int)cGraphics::cMouse::y;
+					cGraphics::popupMenu->w = 150;
+					cGraphics::popupMenu->opened = true;
 					cMenuItem* mm;
 					cMenu* favs;
-					ADDMENUITEM(mm,popupmenu,"Deselect light",		&MenuCommand_deselectlight);
-					ADDMENUITEM(mm,popupmenu,"Properties",		&MenuCommand_properties);
-					ADDMENU(favs,		popupmenu, "Favorites",		popupmenu->x + 150,200);
-					favs->y = popupmenu->y;
-					favs->x = popupmenu->x + popupmenu->w;
+					ADDMENUITEM(mm,cGraphics::popupMenu,"Deselect light",		&MenuCommand_deselectlight);
+					ADDMENUITEM(mm,cGraphics::popupMenu,"Properties",		&MenuCommand_properties);
+					ADDMENU(favs,cGraphics::popupMenu, "Favorites",		cGraphics::popupMenu->x + 150,200);
+					favs->y = cGraphics::popupMenu->y;
+					favs->x = cGraphics::popupMenu->x + cGraphics::popupMenu->w;
 					favs->w = 200;
 
-					ADDMENUITEM(mm,popupmenu,"Disable Shadows",		&MenuCommand_light_disableshadow);
-					ADDMENUITEM(mm,popupmenu,"Snap to floor",		&MenuCommand_light_snaptofloor);
-					ADDMENUITEM(mm,popupmenu,"Set height",			&MenuCommand_light_setheight);
-					ADDMENUITEM(mm,popupmenu,"Set as sunlight",		&MenuCommand_new);
+					ADDMENUITEM(mm,cGraphics::popupMenu,"Disable Shadows",		&MenuCommand_light_disableshadow);
+					ADDMENUITEM(mm,cGraphics::popupMenu,"Snap to floor",		&MenuCommand_light_snaptofloor);
+					ADDMENUITEM(mm,cGraphics::popupMenu,"Set height",			&MenuCommand_light_setheight);
+					ADDMENUITEM(mm,cGraphics::popupMenu,"Set as sunlight",		&MenuCommand_new);
 
 
 					addmenustuff(favs, favoritelights.FirstChildElement("lights")->FirstChildElement());

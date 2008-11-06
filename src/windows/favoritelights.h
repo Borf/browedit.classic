@@ -13,7 +13,6 @@
 #include "objectwindow.h"
 #include <wm/windowcheckbox.h>
 extern TiXmlDocument favoritelights;
-extern cMenu* popupmenu;
 #include <menucommands.h>
 
 

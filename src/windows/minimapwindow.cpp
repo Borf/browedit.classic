@@ -45,8 +45,8 @@ void cMiniMapWindow::cMiniMap::onClick()
 	xx = realX()+parent->getX();
 	yy = realY()+parent->getY();
 	
-	cGraphics::worldContainer->camera.pointer.x = -10*(mouseX - xx);
-	cGraphics::worldContainer->camera.pointer.y = -10*( cGraphics::world->height - ((cGraphics::h() -mouseY) - yy));
+	cGraphics::worldContainer->camera.pointer.x = -10*(cGraphics::cMouse::x - xx);
+	cGraphics::worldContainer->camera.pointer.y = -10*( cGraphics::world->height - ((cGraphics::h() -cGraphics::cMouse::y) - yy));
 }
 
 void cMiniMapWindow::cMiniMap::drag()

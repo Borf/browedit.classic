@@ -12,6 +12,7 @@
 
 #include <font.h>
 #include <common.h>
+#include <graphics.h>
 
 void cWindowInputBox::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {
@@ -39,7 +40,7 @@ void cWindowInputBox::draw(int cutoffleft, int cutoffright, int cutofftop, int c
 		startindex = 0;
 	t = t.substr(startindex);
 	int l = t.size();
-	while(l > 0 && parent->font->textlen(t.substr(0, l)) > w-5)
+	while(l > 0 && parent->font->textLen(t.substr(0, l)) > w-5)
 		l--;
 	t.resize(l);
 
@@ -48,15 +49,15 @@ void cWindowInputBox::draw(int cutoffleft, int cutoffright, int cutofftop, int c
 	float xoff = 0;
 	if (cursor > selectionstart)
 	{
-		len = parent->font->textlen(text.substr(max(selectionstart, startindex), cursor-selectionstart-(startindex > selectionstart ? startindex : 0)));
-		xoff = parent->font->textlen(text.substr(startindex, selectionstart-startindex))+5;
+		len = parent->font->textLen(text.substr(max(selectionstart, startindex), cursor-selectionstart-(startindex > selectionstart ? startindex : 0)));
+		xoff = parent->font->textLen(text.substr(startindex, selectionstart-startindex))+5;
 		if (selectionstart < startindex)
 			xoff = 5;
 	}
 	if (cursor < selectionstart)
 	{
- 		len = parent->font->textlen(text.substr(cursor, min(selectionstart-cursor, (int)t.length()-(cursor-startindex))));
-		xoff = parent->font->textlen(text.substr(startindex, cursor-startindex))+5;
+ 		len = parent->font->textLen(text.substr(cursor, min(selectionstart-cursor, (int)t.length()-(cursor-startindex))));
+		xoff = parent->font->textLen(text.substr(startindex, cursor-startindex))+5;
 	}
 
 	if (focussed)
@@ -78,7 +79,7 @@ void cWindowInputBox::draw(int cutoffleft, int cutoffright, int cutofftop, int c
 		parent->font->print(fontcolor[0], fontcolor[1], fontcolor[2], parent->getX()+xx+5, parent->getY()+yy+2, t.c_str());
 	}
 	if (editable && focussed && (SDL_GetTicks() % 1000) > 500)
-		parent->font->print(fontcolor[0], fontcolor[1], fontcolor[2],parent->getX()+2+xx+parent->font->textlen(t.substr(0, cursor-startindex)), parent->getY()+yy+2, "|");
+		parent->font->print(fontcolor[0], fontcolor[1], fontcolor[2],parent->getX()+2+xx+parent->font->textLen(t.substr(0, cursor-startindex)), parent->getY()+yy+2, "|");
 
 	text = temptext;
 
@@ -88,7 +89,7 @@ void cWindowInputBox::draw(int cutoffleft, int cutoffright, int cutofftop, int c
 
 void cWindowInputBox::onClick()
 {
-	int xx = (int)mouseX;
+	int xx = (int)cGraphics::cMouse::x;
 	xx -= realX();
 	xx -= parent->getX();
 	int i = startindex;
@@ -108,7 +109,7 @@ void cWindowInputBox::onDoubleClick()
 	cursor = 0;
 	while(cursor < startindex)
 		startindex = max(0, cursor-4);
-	while(parent->font->textlen(text.substr(startindex, cursor-startindex)) > w-10)
+	while(parent->font->textLen(text.substr(startindex, cursor-startindex)) > w-10)
 		startindex = min(startindex + 4, (int)text.length());
 	if (selectionstart > (int)text.length())
 		selectionstart = cursor;
@@ -183,7 +184,7 @@ bool cWindowInputBox::onKeyDown(int keyid, bool shift)
 		}
 		while(cursor < startindex)
 			startindex = max(0, cursor-4);
-		while(parent->font->textlen(text.substr(startindex, cursor-startindex)) > w-10)
+		while(parent->font->textLen(text.substr(startindex, cursor-startindex)) > w-10)
 			startindex = min(startindex + 4, (int)text.length());
 		if (selectionstart > (int)text.length())
 			selectionstart = cursor;
@@ -204,10 +205,10 @@ bool cWindowInputBox::onChar(char keyid, bool shift)
 		cursor++;
 		while(cursor < startindex)
 			startindex = max(0, cursor-4);
-		while(parent->font->textlen(text.substr(startindex, cursor-startindex)) > w-10)
+		while(parent->font->textLen(text.substr(startindex, cursor-startindex)) > w-10)
 			startindex = min(startindex + 4, (int)text.length());
 
-		while(parent->font->textlen(text.substr(startindex, cursor-startindex)) > w-10)
+		while(parent->font->textLen(text.substr(startindex, cursor-startindex)) > w-10)
 			startindex = min(startindex + 4, (int)text.length());
 
 		if (!shift)

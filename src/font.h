@@ -25,7 +25,7 @@ public:
 
 	int		print(float, float, float, float, float, const char*, ...);
 	int		print3d(float, float, float, float, float, float, float, float, const char*, ...);
-	int		textlen(std::string);
+	int		textLen(std::string);
 };
 
 

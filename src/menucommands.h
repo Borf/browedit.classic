@@ -11,7 +11,7 @@
 #define ADDMENUITEMDATAP(m, p, t, pr,d) m = new cMenuItem(); m->parent = p; m->title = t; m->item = true; m->drawStyle = 1; ((cMenuItem*)m)->proc = pr; ((cMenuItem*)m)->pdata = d; p->items.push_back(m);
 #define ADDMENUITEMDATALINK(m, p, t, pr,d) m = new cMenuItemLinked(); m->parent = p; m->title = t; m->item = true; m->drawStyle = 1; ((cMenuItem*)m)->proc = pr; ((cMenuItem*)m)->pdata = d; p->items.push_back(m);
 #define ADDMENU(m,p,t,xpos,width) m = new cMenu(); m->parent = p; m->title = t; m->item = false; m->drawStyle = 1; m->y = 20; m->x = xpos; m->w = width; p->items.push_back(m);
-#define ADDMENU2(m,p,t,xpos) m = new cMenu(); m->parent = p; m->title = t; m->item = false; m->drawStyle = 1; m->y = 20; m->x = xpos; m->w = Graphics.font->textlen(t)+10; p->items.push_back(m); xpos += Graphics.font->textlen(t)+10;
+#define ADDMENU2(m,p,t,xpos) m = new cMenu(); m->parent = p; m->title = t; m->item = false; m->drawStyle = 1; m->y = 20; m->x = xpos; m->w = Graphics.font->textLen(t)+10; p->items.push_back(m); xpos += Graphics.font->textLen(t)+10;
 
 
 MENUCOMMAND(new);

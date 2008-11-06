@@ -4,9 +4,6 @@
 #include "undo.h"
 #include "clipboard.h"
 
-extern long mousestartx, mousestarty;
-extern double mouse3dx, mouse3dy, mouse3dz;
-extern bool lbuttondown, rbuttondown;
 
 
 int cProcessManagement::gatedit_process_events(SDL_Event &event)
@@ -14,10 +11,10 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 	switch(event.type)
 	{
 		case SDL_MOUSEMOTION:
-			if(lbuttondown && !rbuttondown)
+			if(cGraphics::cMouse::lbuttondown && !cGraphics::cMouse::rbuttondown)
 			{
-				int posx = (int)mouse3dx / 5;
-				int posy = (int)mouse3dz / 5;
+				int posx = (int)cGraphics::cMouse::x3d / 5;
+				int posy = (int)cGraphics::cMouse::z3d / 5;
 
 				int f = (int)ceil(cGraphics::worldContainer->settings.brushsize);
 
@@ -53,8 +50,8 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 				}
 				else
 				{
-					int posx = (int)mouse3dx / 5;
-					int posy = (int)mouse3dz / 5;
+					int posx = (int)cGraphics::cMouse::x3d / 5;
+					int posy = (int)cGraphics::cMouse::z3d / 5;
 
 					int f = (int)ceil(cGraphics::worldContainer->settings.brushsize);
 
@@ -93,8 +90,8 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 				break;
 			case SDLK_SPACE:
 				{
-					int posx = (int)mouse3dx / 5;
-					int posy = (int)mouse3dz / 5;
+					int posx = (int)cGraphics::cMouse::x3d / 5;
+					int posy = (int)cGraphics::cMouse::z3d / 5;
 
 					float f = (int)ceil(cGraphics::worldContainer->settings.brushsize);
 
@@ -144,8 +141,8 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 				break;
 			case SDLK_PAGEDOWN:
 				{
-					int posx = (int)mouse3dx / 5;
-					int posy = (int)mouse3dz / 5;
+					int posx = (int)cGraphics::cMouse::x3d / 5;
+					int posy = (int)cGraphics::cMouse::z3d / 5;
 
 					float f = ceil(cGraphics::worldContainer->settings.brushsize);
 
@@ -173,8 +170,8 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 				break;
 			case SDLK_PAGEUP:
 				{
-					int posx = (int)mouse3dx / 5;
-					int posy = (int)mouse3dz / 5;
+					int posx = (int)cGraphics::cMouse::x3d / 5;
+					int posy = (int)cGraphics::cMouse::z3d / 5;
 
 					float f = (int)ceil(cGraphics::worldContainer->settings.brushsize);
 
@@ -204,8 +201,8 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 				break;
 			case SDLK_c:
 				{
-					int posx = (int)mouse3dx / 5;
-					int posy = (int)mouse3dz / 5;
+					int posx = (int)cGraphics::cMouse::x3d / 5;
+					int posy = (int)cGraphics::cMouse::z3d / 5;
 
 					int f = (int)ceil(cGraphics::worldContainer->settings.brushsize);
 
@@ -238,8 +235,8 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 				break;
 			case SDLK_f:
 				{
-					int posx = (int)mouse3dx / 5;
-					int posy = (int)mouse3dz / 5;
+					int posx = (int)cGraphics::cMouse::x3d / 5;
+					int posy = (int)cGraphics::cMouse::z3d / 5;
 
 					float f = (int)ceil(cGraphics::worldContainer->settings.brushsize);
 
@@ -274,8 +271,8 @@ int cProcessManagement::gatedit_process_events(SDL_Event &event)
 				break;
 			case SDLK_i:
 				{
-				int posx = (int)mouse3dx / 5;
-				int posy = (int)mouse3dz / 5;
+				int posx = (int)cGraphics::cMouse::x3d / 5;
+				int posy = (int)cGraphics::cMouse::z3d / 5;
 				char buf[100];
 				sprintf(buf, "Your cursor is at %i,%i", posx, posy);
 				if(cWM::getWindow(WT_MESSAGE))

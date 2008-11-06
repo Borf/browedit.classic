@@ -10,12 +10,8 @@
 #define MENUCOMMAND(x) bool MenuCommand_ ## x (cMenuItem* src)
 MENUCOMMAND(model);
 
-extern long mousestartx, mousestarty;
-extern double mouse3dx, mouse3dy, mouse3dz;
-extern bool lbuttondown,rbuttondown;
-extern bool	doneaction;
+extern bool	doneAction;
 extern cMenu* snaptofloor;
-extern float oldmousex, oldmousey;
 extern int movement;
 extern cMenu* currentobject;
 extern cMenu* models;
@@ -25,23 +21,23 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 	switch(event.type)
 	{
 		case SDL_MOUSEMOTION:
-			if (lbuttondown && !rbuttondown)
+			if (cGraphics::cMouse::lbuttondown && !cGraphics::cMouse::rbuttondown)
 			{
 				if(cGraphics::objectStartDrag && cGraphics::worldContainer->settings.selectedObject != -1)
 				{
-					if (doneaction)
+					if (doneAction)
 					{
 						cGraphics::worldContainer->undoStack->push(new cUndoChangeObject(cGraphics::worldContainer->settings.selectedObject));
-						doneaction = false;
+						doneAction = false;
 					}
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 					bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 					if (!ctrl && !alt)
 					{
-						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->pos.x = mouse3dx / 5;
+						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->pos.x = cGraphics::cMouse::x3d / 5;
 						if(snaptofloor->ticked)
-							cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->pos.y = -mouse3dy;
-						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->pos.z = mouse3dz / 5;
+							cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->pos.y = -cGraphics::cMouse::y3d;
+						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->pos.z = cGraphics::cMouse::z3d / 5;
 						if (SDL_GetModState() & KMOD_SHIFT)
 						{
 							cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->pos.x = floor(cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->pos.x * (cGraphics::worldContainer->settings.gridSize/2.0f) + 0.5-cGraphics::worldContainer->settings.gridoffsetx) / (cGraphics::worldContainer->settings.gridSize/2.0f) + cGraphics::worldContainer->settings.gridoffsetx/(cGraphics::worldContainer->settings.gridSize/2.0f);
@@ -50,8 +46,8 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 					}
 					if(ctrl && !alt)
 					{
-						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->rot.x += mouseY - oldmousey;
-						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->rot.y += mouseX - oldmousex;
+						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->rot.x += cGraphics::cMouse::y - cGraphics::cMouse::yOld;
+						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->rot.y += cGraphics::cMouse::x - cGraphics::cMouse::xOld;
 						if (SDL_GetModState() & KMOD_SHIFT)
 						{
 
@@ -61,9 +57,9 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 					}
 					if(!ctrl && alt)
 					{
- 						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->scale.x += (mouseX - oldmousex)/10.0;
-						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->scale.y += (mouseX - oldmousex)/10.0;
-						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->scale.z += (mouseX - oldmousex)/10.0;
+ 						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->scale.x += (cGraphics::cMouse::x - cGraphics::cMouse::xOld)/10.0;
+						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->scale.y += (cGraphics::cMouse::x - cGraphics::cMouse::xOld)/10.0;
+						cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->scale.z += (cGraphics::cMouse::x - cGraphics::cMouse::xOld)/10.0;
 					}
 				}
 			}
@@ -78,13 +74,13 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 					cVector3 d = cGraphics::world->models[i]->pos;
 					d.x = d.x;
 					
-					d.x -= mouse3dx/5;
-					d.z -= mouse3dz/5;
+					d.x -= cGraphics::cMouse::x3d/5;
+					d.z -= cGraphics::cMouse::z3d/5;
 					d.y = 0;
 
-					if(mindist > d.Magnitude())
+					if(mindist > d.magnitude())
 					{
-						mindist = d.Magnitude();
+						mindist = d.magnitude();
 						minobj = i;
 					}
 				}
@@ -106,7 +102,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 					{
 						cRSMModel* model = new cRSMModel();
 						model->load(cGraphics::previewModel->filename);
-						model->pos = cVector3(mouse3dx/5, -mouse3dy, mouse3dz/5);
+						model->pos = cVector3(cGraphics::cMouse::x3d/5, -cGraphics::cMouse::y3d, cGraphics::cMouse::z3d/5);
 						model->scale = cVector3(1,1,1);
 						model->rot = cVector3(0,0,0);
 						model->name = "Object" + inttostring(rand()%1000);
@@ -126,13 +122,13 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 							cVector3 d = cGraphics::world->models[i]->pos;
 							d.x = d.x;
 							
-							d.x -= mouse3dx/5;
-							d.z -= mouse3dz/5;
+							d.x -= cGraphics::cMouse::x3d/5;
+							d.z -= cGraphics::cMouse::z3d/5;
 							d.y = 0;
 
-							if(mindist > d.Magnitude())
+							if(mindist > d.magnitude())
 							{
-								mindist = d.Magnitude();
+								mindist = d.magnitude();
 								minobj = i;
 							}
 						}

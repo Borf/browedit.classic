@@ -5,9 +5,6 @@
 #include "font.h"
 
 extern cMenu*			lastmenu;
-extern cMenu*			menu;
-extern long				mouseX;
-extern long				mouseY;
 
 
 
@@ -122,7 +119,7 @@ void cMenu::draw()
 		glEnd();
 		for(i = 0; i < (int)items.size(); i++)
 		{
-			if (mouseX >= x + items[i]->x && mouseX < x + items[i]->x + items[i]->w && mouseY < 20)
+			if (cGraphics::cMouse::x >= x + items[i]->x && cGraphics::cMouse::x < x + items[i]->x + items[i]->w && cGraphics::cMouse::y < 20)
 			{
 				glDisable(GL_TEXTURE_2D);
 				glColor4f(0.2f,0.2f,0.9f,0.5);
@@ -139,7 +136,7 @@ void cMenu::draw()
 				glEnd();
 				glColor4f(0,0,0,1);
 			}
-			else if (oneopened && items[i]->opened && mouseY < 20)
+			else if (oneopened && items[i]->opened && cGraphics::cMouse::y < 20)
 				items[i]->closeMenu();
 
 			cGraphics::font->print(0,0,0,x+items[i]->x+3,cGraphics::h()-y-18,"%s",items[i]->title.c_str());
@@ -156,8 +153,8 @@ void cMenu::draw()
 		{
 			for(i = 0; i < (int)items.size(); i++)
 			{
-				if (cGraphics::font->textlen(items[i]->title.c_str()) > maxlen-50)
-					maxlen = cGraphics::font->textlen(items[i]->title.c_str())+50;
+				if (cGraphics::font->textLen(items[i]->title.c_str()) > maxlen-50)
+					maxlen = cGraphics::font->textLen(items[i]->title.c_str())+50;
 			}
 		}
 		if(opacity < 0.75f)
@@ -191,10 +188,10 @@ void cMenu::draw()
 		glColor4f(0,0,0,opacity+0.25f);
 		for(i = 0; i < (int)items.size(); i++)
 		{
-			if (cGraphics::font->textlen(items[i]->title.c_str()) > maxlen-50)
-				maxlen = cGraphics::font->textlen(items[i]->title.c_str())+50;
+			if (cGraphics::font->textLen(items[i]->title.c_str()) > maxlen-50)
+				maxlen = cGraphics::font->textLen(items[i]->title.c_str())+50;
 			float color = 0;
-			if ((mouseX > x && mouseX < x+maxlen && (mouseY) > y+i*20 && (mouseY) < y+i*20+20))
+			if ((cGraphics::cMouse::x > x && cGraphics::cMouse::x < x+maxlen && (cGraphics::cMouse::y) > y+i*20 && (cGraphics::cMouse::y) < y+i*20+20))
 			{
 				glDisable(GL_TEXTURE_2D);
 				glColor4f(0.2f,0.2f,0.9f,opacity+0.25f);
@@ -246,8 +243,8 @@ cMenu* cMenu::inWindow(int xx, int yy)
 	{
 		for(i = 0; i < (int)items.size(); i++)
 		{
-			if (cGraphics::font->textlen(items[i]->title.c_str()) > m-50)
-				m = cGraphics::font->textlen(items[i]->title.c_str())+50;
+			if (cGraphics::font->textLen(items[i]->title.c_str()) > m-50)
+				m = cGraphics::font->textLen(items[i]->title.c_str())+50;
 
 		}
 	}
@@ -281,12 +278,12 @@ void cMenu::click(int xx, int yy)
 			m = items[i]->w;
 			for(ii = 0; ii < items[i]->items.size(); ii++)
 			{
-				if (cGraphics::font->textlen(items[i]->items[ii]->title.c_str()) > m-50)
-					m = cGraphics::font->textlen(items[i]->items[ii]->title.c_str())+50;
+				if (cGraphics::font->textLen(items[i]->items[ii]->title.c_str()) > m-50)
+					m = cGraphics::font->textLen(items[i]->items[ii]->title.c_str())+50;
 			}
 
 			
-			if (mouseX > x+items[i]->x && mouseX < x+items[i]->x+m)
+			if (cGraphics::cMouse::x > x+items[i]->x && cGraphics::cMouse::x < x+items[i]->x+m)
 			{
 				items[i]->opacity = 0;
 				items[i]->opened = !items[i]->opened;
@@ -302,8 +299,8 @@ void cMenu::click(int xx, int yy)
 			{
 				for(i = 0; i < items.size(); i++)
 				{
-					if (cGraphics::font->textlen(items[i]->title.c_str()) > m-50)
-						m = cGraphics::font->textlen(items[i]->title.c_str())+50;
+					if (cGraphics::font->textLen(items[i]->title.c_str()) > m-50)
+						m = cGraphics::font->textLen(items[i]->title.c_str())+50;
 
 				}
 			}
@@ -311,7 +308,7 @@ void cMenu::click(int xx, int yy)
 		for(i = 0; i < items.size(); i++)
 		{
 
-			if (mouseX > x && mouseX < x+m && (mouseY) > y+20*i && (mouseY) < y+20*i+20)
+			if (cGraphics::cMouse::x > x && cGraphics::cMouse::x < x+m && (cGraphics::cMouse::y) > y+20*i && (cGraphics::cMouse::y) < y+20*i+20)
 			{
 				if(items[i]->item)
 				{
@@ -321,7 +318,7 @@ void cMenu::click(int xx, int yy)
 							return;
 					}
 					lastmenu = this;
-					menu->closeMenu();
+					cGraphics::menu->closeMenu();
 					closeMenu();
 					((cMenuItem*)items[i])->proc((cMenuItem*)items[i]);
 					return;

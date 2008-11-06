@@ -4,20 +4,15 @@
 #include "menu.h"
 #include "windows/effectwindow.h"
 
-extern long mousestartx, mousestarty;
-extern double mouse3dx, mouse3dy, mouse3dz;
-extern float oldmousex, oldmousey;
 extern int movement;
 extern cMenuItem* selectedeffect;
-extern cMenu* effectsmenu;
-extern bool lbuttondown;
 
 int cProcessManagement::effectedit_process_events(SDL_Event &event)
 {
 	switch(event.type)
 	{
 		case SDL_MOUSEMOTION:
-			if(lbuttondown)
+			if(cGraphics::cMouse::lbuttondown)
 			{
 				if (cGraphics::world->effects.size() == 0)
 					break;
@@ -27,8 +22,8 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 					bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 					if (!ctrl && !alt)
 					{
-						cGraphics::world->effects[cGraphics::worldContainer->settings.selectedObject].pos.x = mouse3dx / 5.0f;
-						cGraphics::world->effects[cGraphics::worldContainer->settings.selectedObject].pos.z = mouse3dz / 5.0f;
+						cGraphics::world->effects[cGraphics::worldContainer->settings.selectedObject].pos.x = cGraphics::cMouse::x3d / 5.0f;
+						cGraphics::world->effects[cGraphics::worldContainer->settings.selectedObject].pos.z = cGraphics::cMouse::z3d / 5.0f;
 						if (SDL_GetModState() & KMOD_SHIFT)
 						{
 							cGraphics::world->effects[cGraphics::worldContainer->settings.selectedObject].pos.x = floor(cGraphics::world->effects[cGraphics::worldContainer->settings.selectedObject].pos.x * (cGraphics::worldContainer->settings.gridSize/2.0f) + 0.5-cGraphics::worldContainer->settings.gridoffsetx) / (cGraphics::worldContainer->settings.gridSize/2.0f) + cGraphics::worldContainer->settings.gridoffsetx/(cGraphics::worldContainer->settings.gridSize/2.0f);
@@ -37,7 +32,7 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 					}
 					if(ctrl && !alt)
 					{
-						cGraphics::world->effects[cGraphics::worldContainer->settings.selectedObject].pos.y += (mouseY-oldmousey);
+						cGraphics::world->effects[cGraphics::worldContainer->settings.selectedObject].pos.y += (cGraphics::cMouse::y-cGraphics::cMouse::yOld);
 						if (SDL_GetModState() & KMOD_SHIFT)
 						{
 							cGraphics::world->effects[cGraphics::worldContainer->settings.selectedObject].pos.y = floor(cGraphics::world->effects[cGraphics::worldContainer->settings.selectedObject].pos.y * (cGraphics::worldContainer->settings.gridSize/2.0f) + 0.5-cGraphics::worldContainer->settings.gridoffsetx) / (cGraphics::worldContainer->settings.gridSize/2.0f) + cGraphics::worldContainer->settings.gridoffsetx/(cGraphics::worldContainer->settings.gridSize/2.0f);
@@ -61,13 +56,13 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 					cVector3 d = cGraphics::world->effects[i].pos;
 					d.x = d.x;
 					
-					d.x -= mouse3dx/5;
-					d.z -= mouse3dz/5;
+					d.x -= cGraphics::cMouse::x3d/5;
+					d.z -= cGraphics::cMouse::z3d/5;
 					d.y = 0;
 
-					if(mindist > d.Magnitude())
+					if(mindist > d.magnitude())
 					{
-						mindist = d.Magnitude();
+						mindist = d.magnitude();
 						minobj = i;
 					}
 				}
@@ -86,7 +81,7 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 					sprintf(buf, "obj%i", rand());
 					e.category = "\0\0\0\0";
 					e.loop = 40;
-					e.pos = cVector3(mouse3dx/5, -mouse3dy-10, mouse3dz/5);
+					e.pos = cVector3(cGraphics::cMouse::x3d/5, -cGraphics::cMouse::y3d-10, cGraphics::cMouse::z3d/5);
 					e.name = buf;
 					e.readablename = selectedeffect->title;
 					e.type = atoi(selectedeffect->data.c_str());
@@ -113,13 +108,13 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 						cVector3 d = cGraphics::world->effects[i].pos;
 						d.x = d.x;
 						
-						d.x -= mouse3dx/5.0f;
-						d.z -= mouse3dz/5.0f;
+						d.x -= cGraphics::cMouse::x3d/5.0f;
+						d.z -= cGraphics::cMouse::z3d/5.0f;
 						d.y = 0;
 
-						if(mindist > d.Magnitude())
+						if(mindist > d.magnitude())
 						{
-							mindist = d.Magnitude();
+							mindist = d.magnitude();
 							minobj = i;
 						}
 					}

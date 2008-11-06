@@ -4,11 +4,8 @@
 #include "sprite.h"
 #include "windows/spritewindow.h"
 
-extern long mousestartx, mousestarty;
-extern double mouse3dx, mouse3dy, mouse3dz;
-extern bool lbuttondown, doneaction;
-extern float oldmousey,oldmousex;
 extern int movement;
+extern bool doneAction;
 extern std::string rodir;
 
 
@@ -17,23 +14,23 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 	switch(event.type)
 	{
 		case SDL_MOUSEMOTION:
-			if(lbuttondown)
+			if(cGraphics::cMouse::lbuttondown)
 			{
 				if (cGraphics::world->sprites.size() == 0)
 					break;
 				if(cGraphics::objectStartDrag)
 				{
-					if(doneaction)
+					if(doneAction)
 					{
 						//cGraphics::worldContainer->undostack->push(new cUndoChangeSprite(cGraphics::worldContainer->settings.selectedObject));
-						doneaction = false;
+						doneAction = false;
 					}
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 					bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 					if (!ctrl && !alt)
 					{
-						cGraphics::world->sprites[cGraphics::worldContainer->settings.selectedObject]->pos.x = mouse3dx / 5;
-						cGraphics::world->sprites[cGraphics::worldContainer->settings.selectedObject]->pos.z = mouse3dz / 5;
+						cGraphics::world->sprites[cGraphics::worldContainer->settings.selectedObject]->pos.x = cGraphics::cMouse::x3d / 5;
+						cGraphics::world->sprites[cGraphics::worldContainer->settings.selectedObject]->pos.z = cGraphics::cMouse::z3d / 5;
 						if (SDL_GetModState() & KMOD_SHIFT)
 						{
 							cGraphics::world->sprites[cGraphics::worldContainer->settings.selectedObject]->pos.x = floor(cGraphics::world->sprites[cGraphics::worldContainer->settings.selectedObject]->pos.x * (cGraphics::worldContainer->settings.gridSize/2.0f) + 0.5-cGraphics::worldContainer->settings.gridoffsetx) / (cGraphics::worldContainer->settings.gridSize/2.0f) + cGraphics::worldContainer->settings.gridoffsetx/(cGraphics::worldContainer->settings.gridSize/2.0f);
@@ -42,7 +39,7 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 					}
 					if(ctrl && !alt)
 					{
-						cGraphics::world->sprites[cGraphics::worldContainer->settings.selectedObject]->pos.y += (mouseY-oldmousey);
+						cGraphics::world->sprites[cGraphics::worldContainer->settings.selectedObject]->pos.y += (cGraphics::cMouse::y-cGraphics::cMouse::yOld);
 						if (SDL_GetModState() & KMOD_SHIFT)
 						{
 							cGraphics::world->sprites[cGraphics::worldContainer->settings.selectedObject]->pos.y = floor(cGraphics::world->sprites[cGraphics::worldContainer->settings.selectedObject]->pos.y * (cGraphics::worldContainer->settings.gridSize/2.0f) + 0.5-cGraphics::worldContainer->settings.gridoffsetx) / (cGraphics::worldContainer->settings.gridSize/2.0f) + cGraphics::worldContainer->settings.gridoffsetx/(cGraphics::worldContainer->settings.gridSize/2.0f);
@@ -67,13 +64,13 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 					cVector3 d = cGraphics::world->sprites[i]->pos;
 					d.x = d.x;
 					
-					d.x -= mouse3dx/5;
-					d.z -= mouse3dz/5;
+					d.x -= cGraphics::cMouse::x3d/5;
+					d.z -= cGraphics::cMouse::z3d/5;
 					d.y = 0;
 
-					if(mindist > d.Magnitude())
+					if(mindist > d.magnitude())
 					{
-						mindist = d.Magnitude();
+						mindist = d.magnitude();
 						minobj = i;
 					}
 				}
@@ -101,7 +98,7 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 					sprintf(buf, "%i", headid);
 					sprite->loadHead(rodir + "data\\sprite\\인간족\\머리통\\" + sexes[sex] + "\\" + buf + "_" + sexes[sex]);
 					
-					sprite->pos = cVector3(mouse3dx/5, mouse3dy, mouse3dz/5);
+					sprite->pos = cVector3(cGraphics::cMouse::x3d/5, cGraphics::cMouse::y3d, cGraphics::cMouse::z3d/5);
 					cGraphics::world->sprites.push_back(sprite);
 
 					Log(3,0,"Sprite click");
@@ -118,13 +115,13 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 						cVector3 d = cGraphics::world->sprites[i]->pos;
 						d.x = d.x;
 						
-						d.x -= mouse3dx/5;
-						d.z -= mouse3dz/5;
+						d.x -= cGraphics::cMouse::x3d/5;
+						d.z -= cGraphics::cMouse::z3d/5;
 						d.y = 0;
 
-						if(mindist > d.Magnitude())
+						if(mindist > d.magnitude())
 						{
-							mindist = d.Magnitude();
+							mindist = d.magnitude();
 							minobj = i;
 						}
 					}

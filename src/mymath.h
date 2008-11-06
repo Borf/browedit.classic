@@ -84,15 +84,15 @@ public:
 		return false;
 	}
 
-	cVector3 Normalize()
+	cVector3 normalize()
 	{
-		float m = Magnitude();
+		float m = magnitude();
 		if (m != 0)
-			return (*this / Magnitude());
+			return (*this / magnitude());
 		else
 			return *this;
 	}
-	float Magnitude()
+	float magnitude()
 	{
 		return (float)sqrt( (x * x) + 
 							(y * y) + 
@@ -107,7 +107,7 @@ public:
         return *this;
     }
 
-	float Dot(cVector3 v2)
+	float dot(cVector3 v2)
 	{
 		/*cVector3 vNormal;	
 		vNormal.x = ((vVector1.y * z) - (vVector1.z * y));
@@ -118,7 +118,7 @@ public:
 	}
 
 
-	cVector3 Cross(cVector3 v2)
+	cVector3 cross(cVector3 v2)
 	{
 		return cVector3(y*v2.z - z*v2.y,
 						z*v2.x - x*v2.z,

@@ -274,10 +274,10 @@ void cWindowTree::onClick()
 	}
 
 	
-	int xx = (int)mouseX;
+	int xx = (int)cGraphics::cMouse::x;
 	xx -= realX();
 	xx -= parent->getX();
-	int yy = Graphics.h()-(int)mouseY;
+	int yy = Graphics.h()-(int)cGraphics::cMouse::y;
 	yy -= realY();
 	yy -= parent->getY();
 
@@ -352,14 +352,14 @@ void cWindowTree::onClick()
 
 void cWindowTree::drag()
 {
-	int xx = (int)mouseX;
+	int xx = (int)cGraphics::cMouse::x;
 	xx -= realX();
 	xx -= parent->getX();
-	int yy = Graphics.h()-(int)mouseY;
+	int yy = Graphics.h()-(int)cGraphics::cMouse::y;
 	yy -= realY();
 	yy -= parent->getY();
 
-	if (mousestartx - realX() - parent->getX() > w-14 && mousestartx - realX() - parent->getX() < w)
+	if (cGraphics::cMouse::xStart - realX() - parent->getX() > w-14 && cGraphics::cMouse::xStart - realX() - parent->getX() < w)
 	{
 		unsigned int i;
 		if(!validCache)
@@ -382,7 +382,7 @@ void cWindowTree::drag()
 		if (barpos != 0)
 			barpos = (int)((float)(h-(skinButtonDownHeight+skinButtonUpHeight)) * ((float)liststart / (float)values.size()));
 
-		int offset = (int)(yy-dragoffsety);
+		int offset = (int)(yy-cGraphics::dragoffsety);
 
 		barpos-=offset;
 		if (barpos < 0)
@@ -394,7 +394,7 @@ void cWindowTree::drag()
 		int oldliststart = liststart;
 		liststart = max(min((int)((((float)barpos / (float)(h-(skinButtonDownHeight+skinButtonUpHeight))) * (float)values.size())+0.5f), (int)(values.size()-i)), 0);
 		if (oldliststart != liststart)
-			dragoffsety = yy;
+			cGraphics::dragoffsety = yy;
 	}
 }
 

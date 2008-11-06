@@ -11,8 +11,6 @@
 #include <graphics.h>
 
 extern std::string rodir;
-extern cWindow* draggingwindow;
-extern cWindowObject* draggingObject;
 extern std::vector<std::pair<std::string, std::string> > translations;
 extern std::vector<std::string> texturefiles;
 
@@ -123,8 +121,8 @@ void cTextureWindow::cWindowTextureCatSelect::onClick()
 
 	}
 	parent->resizeTo(parent->getWidth(), parent->getHeight());
-	draggingwindow = NULL;
-	draggingObject = NULL;
+	cWM::draggingWindow = NULL;
+	cWM::draggingObject = NULL;
 }
 
 cTextureWindow::cTextureWindow( ) : cWindow()

@@ -129,6 +129,4 @@ public:
 	cWindow* parent;
 };
 
-extern long mouseX, mouseY;
-
 #endif

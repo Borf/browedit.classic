@@ -25,17 +25,12 @@ extern cMenu* effectsmenu;
 extern bool IsLegal;
 
 
-extern double mouse3dx, mouse3dy, mouse3dz;
-extern long mouseX, mouseY;
 extern eMode	editmode;
 extern int brushsize;
 extern std::string rodir;
-extern bool lbuttondown;
 extern long userid;
-extern double mouse3dxstart, mouse3dystart, mouse3dzstart;
 extern void mainloop();
-extern cWindow*				draggingwindow;
-extern cWindowObject*		draggingObject;
+
 extern bool IsLegal2;
 
 
@@ -44,8 +39,8 @@ void cWorld::load()
 	unload();
 	quickSave = false;
 	cGraphics::worldContainer->settings.selectedObject = -1;
-	draggingwindow = NULL;
-	draggingObject = NULL;
+	cWM::draggingWindow = NULL;
+	cWM::draggingObject = NULL;
 	unsigned int i;
 	unsigned int x,y;
 	if(light == NULL)
@@ -1540,7 +1535,7 @@ void cWorld::draw()
 	glDisable(GL_BLEND);
 
 	//glTranslatef(cGraphics::camerapointer.x, 0, cGraphics::camerapointer.y);
-	cFrustum::CalculateFrustum();
+	cFrustum::calculateFrustum();
 
 
 /*	float selsizex = (fabs(cGraphics::worldContainer->settings.selectionstart.x - cGraphics::worldContainer->settings.selectionend.x) / 32);
@@ -1594,15 +1589,15 @@ void cWorld::draw()
 
 	bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 	bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
-	int posx = (int)mouse3dx / 10;
-	int posy = (int)mouse3dz / 10;
+	int posx = (int)cGraphics::cMouse::x3d / 10;
+	int posy = (int)cGraphics::cMouse::z3d / 10;
 
 	for(x = 0; x < width; x++)
 	{
 		for(y = 0; y < height; y++)
 		{
 			cCube* c = &cubes[y][x];
-			if(!cFrustum::CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 20))
+			if(!cFrustum::cubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 20))
 				continue;
 			if (c->tileUp > -1 && c->tileUp < (int)tiles.size())
 			{
@@ -1621,11 +1616,11 @@ void cWorld::draw()
 //					glColor3f((BYTE)t->color[0] / 256.0f,(BYTE)t->color[1] / 256.0f,(BYTE)t->color[2] / 256.0f);
 				else if(editmode == MODE_TEXTUREPAINT && cGraphics::textureTool == TOOL_SELECTAREA)
 				{
-						if(lbuttondown && mouseY < cGraphics::h() - 20 && inbetween<int>(x, round(mouse3dxstart/10), round(mouse3dx/10)) && inbetween<int>(y, round(mouse3dzstart/10), round(mouse3dz/10)) && alt)
+						if(cGraphics::cMouse::lbuttondown && cGraphics::cMouse::y < cGraphics::h() - 20 && inbetween<int>(x, round(cGraphics::cMouse::x3dStart/10), round(cGraphics::cMouse::x3d/10)) && inbetween<int>(y, round(cGraphics::cMouse::z3dStart/10), round(cGraphics::cMouse::z3d/10)) && alt)
 						glColor4f(0.3f, 0.3f, 0.3f, 1);
-					else if(lbuttondown && mouseY < cGraphics::h() - 20 && inbetween<int>(x, round(mouse3dxstart/10), round(mouse3dx/10)) && inbetween<int>(y, round(mouse3dzstart/10), round(mouse3dz/10)))
+					else if(cGraphics::cMouse::lbuttondown && cGraphics::cMouse::y < cGraphics::h() - 20 && inbetween<int>(x, round(cGraphics::cMouse::x3dStart/10), round(cGraphics::cMouse::x3d/10)) && inbetween<int>(y, round(cGraphics::cMouse::z3dStart/10), round(cGraphics::cMouse::z3d/10)))
 						glColor4f(0.6f,0.6f,0.6f,1);
-					else if(lbuttondown && mouseY < cGraphics::h() - 20 && (ctrl || alt) && c->selected)
+					else if(cGraphics::cMouse::lbuttondown && cGraphics::cMouse::y < cGraphics::h() - 20 && (ctrl || alt) && c->selected)
 						glColor4f(0.4f,0.4f,0.4f,1);
 					else if(inverseSelection && !c->selected)
 						glColor4f(0.2f, 0.2f, 0.2f, 1);
@@ -1720,7 +1715,7 @@ void cWorld::draw()
 			for(y = 0; (int)y < height; y++)
 			{
 				cCube* c = &cubes[y][x];
-				if(!cFrustum::CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 20))
+				if(!cFrustum::cubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 20))
 					continue;
 				if (c->tileUp != -1)
 				{
@@ -1814,7 +1809,7 @@ void cWorld::draw()
 
 
 	float winZ;
-	glReadPixels( (int)mouseX, cGraphics::h()-(int)mouseY, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ );
+	glReadPixels( (int)cGraphics::cMouse::x, cGraphics::h()-(int)cGraphics::cMouse::y, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ );
 
 
 	double ModelMatrix[16]; 
@@ -1828,8 +1823,8 @@ void cWorld::draw()
 	double xxx,yyy,zzz;
 	gluUnProject
 	(
-		mouseX, 
-		cGraphics::h()-mouseY, 
+		cGraphics::cMouse::x, 
+		cGraphics::h()-cGraphics::cMouse::y, 
 		winZ, 
 		ModelMatrix, 
 		ProjMatrix,
@@ -1838,9 +1833,9 @@ void cWorld::draw()
 		&yyy,
 		&zzz
 	);
-	mouse3dx = xxx;
-	mouse3dy = yyy;
-	mouse3dz = (height*10)-zzz;
+	cGraphics::cMouse::x3d = xxx;
+	cGraphics::cMouse::y3d = yyy;
+	cGraphics::cMouse::z3d = (height*10)-zzz;
 
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
@@ -1880,12 +1875,12 @@ void cWorld::draw()
 
 		for(y = 0; y < (int)gattiles.size(); y++)
 		{
-			if(!cFrustum::BoxInFrustum(0,-1000,(2*height-y)*5, gattiles[y].size()*5,1000,(2*height-y)*5-5))
+			if(!cFrustum::boxInFrustum(0,-1000,(2*height-y)*5, gattiles[y].size()*5,1000,(2*height-y)*5-5))
 				continue;
 			for(x = 0; x < (int)gattiles[y].size(); x++)
 			{
 				cGatTile* c = &gattiles[y][x];
-				if(!cFrustum::CubeInFrustum(x*5+2.5,-c->cell1,(2*height-y)*5-2.5, 5))
+				if(!cFrustum::cubeInFrustum(x*5+2.5,-c->cell1,(2*height-y)*5-2.5, 5))
 					continue;
 				glBindTexture(GL_TEXTURE_2D, cGraphics::gatTextures[c->type]->texId());
 				glBegin(GL_TRIANGLE_STRIP);
@@ -1910,8 +1905,8 @@ void cWorld::draw()
 
 			}
 		}
-		int posx = (int)mouse3dx / 5;
-		int posy = (int)mouse3dz / 5;
+		int posx = (int)cGraphics::cMouse::x3d / 5;
+		int posy = (int)cGraphics::cMouse::z3d / 5;
 
 		int s = (int)ceil(cGraphics::worldContainer->settings.brushsize);
 
@@ -1947,8 +1942,8 @@ void cWorld::draw()
 
 	if(editmode == MODE_TEXTURE)
 	{
-		int posx = (int)mouse3dx / 10;
-		int posy = (int)mouse3dz / 10;
+		int posx = (int)cGraphics::cMouse::x3d / 10;
+		int posy = (int)cGraphics::cMouse::z3d / 10;
 
 		glColor4f(1,1,1,0.7f);
 		glEnable(GL_BLEND);
@@ -1995,7 +1990,7 @@ void cWorld::draw()
 				{
 					for(y = posy; y > posy-selsizey; y--)
 					{
-						if(!cFrustum::CubeInFrustum(x*10+5,0,(height-y)*10+5, 20))
+						if(!cFrustum::cubeInFrustum(x*10+5,0,(height-y)*10+5, 20))
 							continue;
 						int xx = posx - x;
 						int yy = posy - y;
@@ -2116,7 +2111,7 @@ void cWorld::draw()
 				for(y = 1; y < height-1; y++)
 				{
 					cCube* c = &cubes[y][x];
-					if(!cFrustum::CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 20))
+					if(!cFrustum::cubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 20))
 						continue;
 					
 					if (c->tileUp != -1)
@@ -2168,8 +2163,8 @@ void cWorld::draw()
 	else if(editmode == MODE_HEIGHTDETAIL)
 	{
 
-		int posx = (int)mouse3dx / 10;
-		int posy = (int)mouse3dz / 10;
+		int posx = (int)cGraphics::cMouse::x3d / 10;
+		int posy = (int)cGraphics::cMouse::z3d / 10;
 
 		glColor4f(1,0,0,1);
 		glDisable(GL_TEXTURE_2D);
@@ -2181,7 +2176,7 @@ void cWorld::draw()
 				if (y >= height || y < 0 || x < 0 || x >= width)
 					continue;
 				cCube* c = &cubes[y][x];
-				if(!cFrustum::CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 20))
+				if(!cFrustum::cubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 20))
 					continue;
 				glBegin(GL_LINE_LOOP);
 					glVertex3f(x*10,-c->cell1+0.2,(height-y)*10);
@@ -2201,8 +2196,8 @@ void cWorld::draw()
 	{
 		glDisable(GL_TEXTURE_2D);
 		glColor3f(1,0,0);
-		int x = (int)mouse3dx / 10;
-		int y = (int)mouse3dz / 10;
+		int x = (int)cGraphics::cMouse::x3d / 10;
+		int y = (int)cGraphics::cMouse::z3d / 10;
 		if (x >= 0 && x < width-1 && y >= 0 && y< height-1)
 		{
 			cCube* c = &cubes[y][x];
@@ -2327,12 +2322,12 @@ void cWorld::draw()
 		glTranslatef(s*cGraphics::worldContainer->settings.gridoffsetx,0,s*cGraphics::worldContainer->settings.gridoffsety);
 		for(int x = 0; x < width*cGraphics::worldContainer->settings.gridSize; x++)
 		{
-			if(!cFrustum::BoxInFrustum(x*s,-1000,0, x*s+s,1000,height*cGraphics::worldContainer->settings.gridSize*s))
+			if(!cFrustum::boxInFrustum(x*s,-1000,0, x*s+s,1000,height*cGraphics::worldContainer->settings.gridSize*s))
 				continue;
 			for(int y = 0; y < height*cGraphics::worldContainer->settings.gridSize; y++)
 			{
 				cCube* c = &cubes[(int)(y/cGraphics::worldContainer->settings.gridSize)][(int)(x/cGraphics::worldContainer->settings.gridSize)];
-				if(!cFrustum::PointInFrustum(x*s,-c->cell1,(height*cGraphics::worldContainer->settings.gridSize-y)*s))
+				if(!cFrustum::pointInFrustum(x*s,-c->cell1,(height*cGraphics::worldContainer->settings.gridSize-y)*s))
 					continue;
 
 				glBegin(GL_LINE_LOOP);
@@ -2518,16 +2513,16 @@ void cWorld::draw()
 	}
 	if (editmode == MODE_HEIGHTGLOBAL)
 	{
-		if (lbuttondown)
+		if (cGraphics::cMouse::lbuttondown)
 		{
 			glDisable(GL_TEXTURE_2D);
 			glLineWidth(2);
 			glColor3f(1,0,0);
 			glBegin(GL_LINE_LOOP);
-				glVertex3f(floor(mouse3dxstart/10)*10,	mouse3dy+1, height*10-floor(mouse3dzstart/10)*10);
-				glVertex3f(floor(mouse3dxstart/10)*10,	mouse3dy+1, height*10-floor(mouse3dz/10)*10);
-				glVertex3f(floor(mouse3dx/10)*10,		mouse3dy+1, height*10-floor(mouse3dz/10)*10);
-				glVertex3f(floor(mouse3dx/10)*10,		mouse3dy+1, height*10-floor(mouse3dzstart/10)*10);
+				glVertex3f(floor(cGraphics::cMouse::x3dStart/10)*10,	cGraphics::cMouse::y3d+1, height*10-floor(cGraphics::cMouse::z3dStart/10)*10);
+				glVertex3f(floor(cGraphics::cMouse::x3dStart/10)*10,	cGraphics::cMouse::y3d+1, height*10-floor(cGraphics::cMouse::z3d/10)*10);
+				glVertex3f(floor(cGraphics::cMouse::x3d/10)*10,		cGraphics::cMouse::y3d+1, height*10-floor(cGraphics::cMouse::z3d/10)*10);
+				glVertex3f(floor(cGraphics::cMouse::x3d/10)*10,		cGraphics::cMouse::y3d+1, height*10-floor(cGraphics::cMouse::z3dStart/10)*10);
 			glEnd();
 
 			glColor3f(1,1,1);
@@ -2536,16 +2531,16 @@ void cWorld::draw()
 	}
 	if (editmode == MODE_OBJECTGROUP)
 	{
-		if (lbuttondown && !cGraphics::groupeditmode)
+		if (cGraphics::cMouse::lbuttondown && !cGraphics::groupeditmode)
 		{
 			glDisable(GL_TEXTURE_2D);
 			glLineWidth(2);
 			glColor3f(1,0,0);
 			glBegin(GL_LINE_LOOP);
-				glVertex3f(mouse3dxstart,	mouse3dy+1, height*10-mouse3dzstart);
-				glVertex3f(mouse3dxstart,	mouse3dy+1, height*10-mouse3dz);
-				glVertex3f(mouse3dx,		mouse3dy+1, height*10-mouse3dz);
-				glVertex3f(mouse3dx,		mouse3dy+1, height*10-mouse3dzstart);
+				glVertex3f(cGraphics::cMouse::x3dStart,cGraphics::cMouse::y3d+1, height*10-cGraphics::cMouse::z3dStart);
+				glVertex3f(cGraphics::cMouse::x3dStart,cGraphics::cMouse::y3d+1, height*10-cGraphics::cMouse::z3d);
+				glVertex3f(cGraphics::cMouse::x3d,		cGraphics::cMouse::y3d+1, height*10-cGraphics::cMouse::z3d);
+				glVertex3f(cGraphics::cMouse::x3d,		cGraphics::cMouse::y3d+1, height*10-cGraphics::cMouse::z3dStart);
 			glEnd();
 
 			glColor3f(1,1,1);
@@ -2576,7 +2571,7 @@ void cWorld::draw()
 				for(y = 1; y < height-1; y++)
 				{
 					cCube* c = &cubes[y][x];
-					if(!cFrustum::CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 20))
+					if(!cFrustum::cubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 20))
 						continue;
 					
 					if (c->tileUp != -1)
@@ -2626,21 +2621,21 @@ void cWorld::draw()
 		
 		if(cGraphics::textureTool == TOOL_BRUSH)
 		{
-			if(inverseSelection && lbuttondown)
+			if(inverseSelection && cGraphics::cMouse::lbuttondown)
 			{
 				int texture = textures[cGraphics::worldContainer->settings.texturestart + ((int)cGraphics::worldContainer->settings.selectionstart.y - 32) / 288]->texId();
 				glEnable(GL_BLEND);
 				glColor4f(1,1,1,0.8f);
 		
-				float offx = (mouse3dxstart - mouse3dx) / 40.0f;
-				float offy = (mouse3dzstart - mouse3dz) / 40.0f;
+				float offx = (cGraphics::cMouse::x3dStart - cGraphics::cMouse::x3d) / 40.0f;
+				float offy = (cGraphics::cMouse::z3dStart - cGraphics::cMouse::z3d) / 40.0f;
 
 				for(x = 0; x < width; x++)
 				{
 					for(y = 0; y < height; y++)
 					{
 						cCube* c = &cubes[y][x];
-						if(!c->selected || !cFrustum::CubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 20))
+						if(!c->selected || !cFrustum::cubeInFrustum(x*10+5,-c->cell1,(height-y)*10-5, 20))
 							continue;
 						if (c->tileUp > -1 && c->tileUp < (int)tiles.size())
 						{
@@ -2666,8 +2661,8 @@ void cWorld::draw()
 				glColor4f(1,1,1,0.8f);
 				glBindTexture(GL_TEXTURE_2D, texture);
 
-				int x = (int)mouse3dx / 10;
-				int y = (int)mouse3dz / 10;
+				int x = (int)cGraphics::cMouse::x3d / 10;
+				int y = (int)cGraphics::cMouse::z3d / 10;
 				for(int yy = 0; yy < cGraphics::textureGridSizeY*cGraphics::textureBrushSize; yy++)
 				{
 					for(int xx = 0; xx < cGraphics::textureGridSizeX*cGraphics::textureBrushSize; xx++)
@@ -2768,10 +2763,10 @@ void cWorld::draw()
 							else
 							{
 								c = &tempCube;
-								c->cell1 = -mouse3dy;
-								c->cell2 = -mouse3dy;
-								c->cell3 = -mouse3dy;
-								c->cell4 = -mouse3dy;
+								c->cell1 = -cGraphics::cMouse::y3d;
+								c->cell2 = -cGraphics::cMouse::y3d;
+								c->cell3 = -cGraphics::cMouse::y3d;
+								c->cell4 = -cGraphics::cMouse::y3d;
 							}
 							
 							glDisable(GL_TEXTURE_2D);

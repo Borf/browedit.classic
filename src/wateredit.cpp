@@ -2,10 +2,6 @@
 #include "graphics.h"
 #include "undo.h"
 
-extern long mousestartx, mousestarty;
-extern double mouse3dx, mouse3dy, mouse3dz;
-
-
 int cProcessManagement::wateredit_process_events(SDL_Event &event)
 {
 	switch(event.type)

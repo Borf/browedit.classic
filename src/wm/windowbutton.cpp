@@ -27,7 +27,7 @@ void cWindowButton::draw(int cutoffleft, int cutoffright, int cutofftop, int cut
 		glColor4f(0.25, 0.25, 0.25, colors[3]);
 
 	cWindowObject::draw(cutoffleft, cutoffright, cutofftop, cutoffbottom);
-	parent->font->print(fontcolor[0], fontcolor[1], fontcolor[2], parent->getX() + xx + (w/2)- (parent->font->textlen(text)/2), parent->getY() + yy + (h/2)-6, text.c_str());
+	parent->font->print(fontcolor[0], fontcolor[1], fontcolor[2], parent->getX() + xx + (w/2)- (parent->font->textLen(text)/2), parent->getY() + yy + (h/2)-6, text.c_str());
 	glColor4fv(colors);
 }
 

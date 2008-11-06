@@ -3,8 +3,6 @@
 #include <graphics.h>
 #include <undo.h>
 
-extern long mouseX;
-extern double mouse3dx, mouse3dy, mouse3dz;
 extern int brushsize;
 extern std::string rodir;
 
@@ -27,7 +25,7 @@ void cClipBoard::setClipBoard( cClipBoardContents* clipboard)
 
 void cClipboardTexture::apply()
 {
-	if(mouseX < cGraphics::w()-256)
+	if(cGraphics::cMouse::x < cGraphics::w()-256)
 	{
 		float selsizex = (fabs(cGraphics::worldContainer->settings.selectionstart.x - cGraphics::worldContainer->settings.selectionend.x) / 32);
 		float selsizey = (fabs(cGraphics::worldContainer->settings.selectionstart.y - cGraphics::worldContainer->settings.selectionend.y) / 32);
@@ -35,8 +33,8 @@ void cClipboardTexture::apply()
 		selsizex = floor(selsizex*cGraphics::worldContainer->settings.brushsize);
 		selsizey = floor(selsizey*cGraphics::worldContainer->settings.brushsize);
 		
-		int posx = (int)mouse3dx / 10;
-		int posy = (int)mouse3dz / 10;
+		int posx = (int)cGraphics::cMouse::x3d / 10;
+		int posy = (int)cGraphics::cMouse::z3d / 10;
 		
 		if (cGraphics::worldContainer->settings.textureRot % 2 == 1)
 		{
@@ -100,8 +98,8 @@ void cClipboardTexture::apply()
 
 void cClipboardTexture::render()
 {
-	int posx = (int)mouse3dx / 10;
-	int posy = (int)mouse3dz / 10;
+	int posx = (int)cGraphics::cMouse::x3d / 10;
+	int posy = (int)cGraphics::cMouse::z3d / 10;
 	unsigned int x,y;
 
 	for(x = 0; x < data.size(); x++)
@@ -127,8 +125,8 @@ void cClipboardTexture::render()
 }
 void cClipboardHeight::apply()
 {
-	int posx = (int)mouse3dx / 10;
-	int posy = (int)mouse3dz / 10;
+	int posx = (int)cGraphics::cMouse::x3d / 10;
+	int posy = (int)cGraphics::cMouse::z3d / 10;
 	if ((int)data.size() != brushsize)
 		return;
 	
@@ -158,8 +156,8 @@ void cClipboardHeight::apply()
 
 void cClipboardHeight::render()
 {
-	int posx = (int)mouse3dx / 10;
-	int posy = (int)mouse3dz / 10;
+	int posx = (int)cGraphics::cMouse::x3d / 10;
+	int posy = (int)cGraphics::cMouse::z3d / 10;
 
 	posx = posx + ceil(data[0].size()/2.0f)-1;
 	posy = posy + ceil(data[0].size()/2.0f)-1;
@@ -195,8 +193,8 @@ void cClipboardHeight::render()
 
 void cClipboardGat::apply()
 {
-	int posx = (int)mouse3dx / 5;
-	int posy = (int)mouse3dz / 5;
+	int posx = (int)cGraphics::cMouse::x3d / 5;
+	int posy = (int)cGraphics::cMouse::z3d / 5;
 	
 	int f = data.size();
 		
@@ -226,8 +224,8 @@ void cClipboardGat::apply()
 
 void cClipboardGat::render()
 {
-	int posx = (int)mouse3dx / 5;
-	int posy = (int)mouse3dz / 5;
+	int posx = (int)cGraphics::cMouse::x3d / 5;
+	int posy = (int)cGraphics::cMouse::z3d / 5;
 	
 	posx = posx + ceil(data[0].size()/2.0f)-1;
 	posy = posy + ceil(data[0].size()/2.0f)-1;
@@ -265,7 +263,7 @@ void cClipboardObject::apply()
 	{
 		cRSMModel* model = new cRSMModel();
 		model->load(clipboardFile);
-		model->pos = cVector3(mouse3dx/5.0f, -mouse3dy, mouse3dz/5.0f);
+		model->pos = cVector3(cGraphics::cMouse::x3d/5.0f, -cGraphics::cMouse::y3d, cGraphics::cMouse::z3d/5.0f);
 		if (SDL_GetModState() & KMOD_SHIFT)
 			model->pos.y = clipboardY;
 		model->scale = clipboardScale;
@@ -312,7 +310,7 @@ void cClipboardObject::render()
 	{
 		rsmmodel = new cRSMModel();
 		rsmmodel->load(clipboardFile);
-		rsmmodel->pos = cVector3(mouse3dx/5.0f, -mouse3dy, mouse3dz/5.0f);
+		rsmmodel->pos = cVector3(cGraphics::cMouse::x3d/5.0f, -cGraphics::cMouse::y3d, cGraphics::cMouse::z3d/5.0f);
 		if (SDL_GetModState() & KMOD_SHIFT)
 			rsmmodel->pos.y = clipboardY;
 		rsmmodel->scale = clipboardScale;
@@ -320,7 +318,7 @@ void cClipboardObject::render()
 		rsmmodel->lightopacity = clipboardFloat;
 		rsmmodel->name = "clipboard";
 	}
-	rsmmodel->pos = cVector3(mouse3dx/5.0f, -mouse3dy, mouse3dz/5.0f);
+	rsmmodel->pos = cVector3(cGraphics::cMouse::x3d/5.0f, -cGraphics::cMouse::y3d, cGraphics::cMouse::z3d/5.0f);
 	rsmmodel->draw();
 }
 

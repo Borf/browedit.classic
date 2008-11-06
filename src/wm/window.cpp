@@ -7,9 +7,6 @@
 
 #include <graphics.h>
 
-extern cGraphicsBase Graphics;
-extern cWindowObject* draggingObject;
-
 #include <font.h>
 #include "windowinputbox.h"
 #include "windowlabel.h"
@@ -221,8 +218,8 @@ void cWindow::draw()
 bool cWindow::inWindow()
 {
 	if (!visible) return false;
-	if (mouseX > x && mouseX < x+w &&
-		(Graphics.h()-mouseY) > getY() && (Graphics.h()-mouseY) < getY()+getHeight())
+	if (cGraphics::cMouse::x > x && cGraphics::cMouse::x < x+w &&
+		(cGraphics::h()-cGraphics::cMouse::y) > getY() && (cGraphics::h()-cGraphics::cMouse::y) < getY()+getHeight())
 		return true;
 	return false;
 }
@@ -234,15 +231,15 @@ bool cWindow::drag()
 	if (!visible) return false;
 	if (resizable)
 	{
-		if (resizingXY && (mouseX-x) > minWidth)
-			resizeTo((int)mouseX - x, h);
+		if (resizingXY && (cGraphics::cMouse::x-x) > minWidth)
+			resizeTo((int)cGraphics::cMouse::x - x, h);
 		else if (resizingXY)
 			resizeTo(minWidth, h);
 
-		if (resizingYX && ((getY()+h)-(Graphics.h()-mouseY)) > minHeight)
+		if (resizingYX && ((getY()+h)-(cGraphics::h()-cGraphics::cMouse::y)) > minHeight)
 		{
-			resizeTo(w, (getY()+h)-(Graphics.h()-(int)mouseY));
-			y = (Graphics.h()-(int)mouseY);
+			resizeTo(w, (getY()+h)-(cGraphics::h()-(int)cGraphics::cMouse::y));
+			y = (cGraphics::h()-(int)cGraphics::cMouse::y);
 		}
 		else if (resizingYX)
 		{
@@ -250,10 +247,10 @@ bool cWindow::drag()
 			resizeTo(w, minHeight);
 		}
 
-		if (resizingX && (w+x-(int)mouseX) > minHeight)
+		if (resizingX && (w+x-(int)cGraphics::cMouse::x) > minHeight)
 		{
-			resizeTo(w + x - (int)mouseX, h);
-			x = (int)mouseX;
+			resizeTo(w + x - (int)cGraphics::cMouse::x, h);
+			x = (int)cGraphics::cMouse::x;
 		}
 		else if (resizingX)
 		{
@@ -261,9 +258,9 @@ bool cWindow::drag()
 			resizeTo(minWidth, h);
 		}
 
-		if (resizingY && ((Graphics.h()-mouseY)-py2() > minHeight))
+		if (resizingY && ((cGraphics::h()-cGraphics::cMouse::y)-py2() > minHeight))
 		{
-			resizeTo(w, (Graphics.h()-(int)mouseY) - py2());
+			resizeTo(w, (cGraphics::h()-(int)cGraphics::cMouse::y) - py2());
 		}
 		else if (resizingY)
 		{
@@ -273,16 +270,16 @@ bool cWindow::drag()
 
 	if (movable && !(isResizing() && resizable))
 	{
-		x=(int)mouseX-(int)dragoffsetx;
-		y=(Graphics.h()-(int)mouseY)-(int)dragoffsety;
+		x=(int)cGraphics::cMouse::x-(int)cGraphics::dragoffsetx;
+		y=(cGraphics::h()-(int)cGraphics::cMouse::y)-(int)cGraphics::dragoffsety;
 		if (abs(x) < SNAPPINGDIST) 
 			x = 0;
 		if (abs(getY()) < SNAPPINGDIST)
 			y = -ph2()+getHeight();
-		if (abs(Graphics.w()-(x+w)) < SNAPPINGDIST)
-			x=Graphics.w()-w;
-		if (abs(Graphics.h()-(y+ph2())) < SNAPPINGDIST)
-			y=Graphics.h()-h;
+		if (abs(cGraphics::w()-(x+w)) < SNAPPINGDIST)
+			x=cGraphics::w()-w;
+		if (abs(cGraphics::h()-(y+ph2())) < SNAPPINGDIST)
+			y=cGraphics::h()-h;
 	}
 	return true;
 }
@@ -321,13 +318,13 @@ int cWindow::getCursor()
 	{
 		int hresize = 0;
 		int vresize = 0;
-		if(mouseX < x+w && mouseX > x+w - DRAGBORDER)
+		if(cGraphics::cMouse::x < x+w && cGraphics::cMouse::x > x+w - DRAGBORDER)
 			hresize = 1;
-		if((Graphics.h()-mouseY) > y && (Graphics.h()-mouseY) < y + DRAGBORDER)
+		if((cGraphics::h()-cGraphics::cMouse::y) > y && (cGraphics::h()-cGraphics::cMouse::y) < y + DRAGBORDER)
 			vresize = 1;
-		if(mouseX > x && mouseX < x + DRAGBORDER)
+		if(cGraphics::cMouse::x > x && cGraphics::cMouse::x < x + DRAGBORDER)
 			hresize = 2;
-		if((Graphics.h()-mouseY) < y+h && (Graphics.h()-mouseY) > y+h - DRAGBORDER)
+		if((cGraphics::h()-cGraphics::cMouse::y) < y+h && (cGraphics::h()-cGraphics::cMouse::y) > y+h - DRAGBORDER)
 			vresize = 2;
 
 		if (hresize == 0)
@@ -365,13 +362,13 @@ bool cWindow::onBorder()
 	if (!visible) return false;
 	if (resizable && !rolledUp)
 	{
-		if(mouseX < x+w && mouseX > x+w - DRAGBORDER)
+		if(cGraphics::cMouse::x < x+w && cGraphics::cMouse::x > x+w - DRAGBORDER)
 			return true;
-		if((Graphics.h()-mouseY) > y && (Graphics.h()-mouseY) < y + DRAGBORDER)
+		if((cGraphics::h()-cGraphics::cMouse::y) > y && (cGraphics::h()-cGraphics::cMouse::y) < y + DRAGBORDER)
 			return true;
-		if(mouseX > x && mouseX < x + DRAGBORDER)
+		if(cGraphics::cMouse::x > x && cGraphics::cMouse::x < x + DRAGBORDER)
 			return true;
-		if((Graphics.h()-mouseY) < y+h && (Graphics.h()-mouseY) > y+h - DRAGBORDER)
+		if((cGraphics::h()-cGraphics::cMouse::y) < y+h && (cGraphics::h()-cGraphics::cMouse::y) > y+h - DRAGBORDER)
 			return true;
 	}
 
@@ -394,8 +391,8 @@ cWindowObject* cWindow::inObject()
 
 void cWindow::center()
 {
-	x = (Graphics.w()/2)-(w/2);
-	y = (Graphics.h()/2)-(h/2);
+	x = (cGraphics::w()/2)-(w/2);
+	y = (cGraphics::h()/2)-(h/2);
 }
 
 bool cWindow::onChar(char c,bool shift)
@@ -547,7 +544,7 @@ cWindowObject* cWindow::addLabel(std::string name, int x, int y, std::string tex
 	cWindowObject* o = new cWindowLabel(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(x,y);
-	o->resizeTo(cWM::font->textlen(text), 12);
+	o->resizeTo(cWM::font->textLen(text), 12);
 	o->setText(0,text);
 	objects[name] = o;
 	return o;
@@ -701,10 +698,10 @@ void cWindow::initProps(std::string s)
 
 		if(movable)
 		{
-			if(x > Graphics.w())
-				x = Graphics.w() - w;
-			if(y > Graphics.h())
-				y = Graphics.h() - h;
+			if(x > cGraphics::w())
+				x = cGraphics::w() - w;
+			if(y > cGraphics::h())
+				y = cGraphics::h() - h;
 			if(x < 0)
 				x = 0;
 			if(y < 0)
@@ -718,8 +715,8 @@ cWindow::~cWindow()
 {
 	for(objectlist::iterator i = objects.begin(); i != objects.end(); i++)
 	{
-		if(draggingObject == i->second)
-			draggingObject = NULL;
+		if(cWM::draggingObject == i->second)
+			cWM::draggingObject = NULL;
 		delete i->second;
 	}
 	

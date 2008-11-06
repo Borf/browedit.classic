@@ -5,8 +5,6 @@
 #include <graphics.h>
 #include <wm/windowbutton.h>
 
-extern cMenu* popupmenu;
-
 
 cLightOverViewWindow::cLightOverViewTreeNode::cLightOverViewTreeNode() : cWindowTree::cTreeNode()
 {
@@ -75,18 +73,20 @@ cLightOverViewWindow::cLightOverViewTree::cLightOverViewTree( cWindow* parent, s
 
 void cLightOverViewWindow::cLightOverViewTree::onRightClick()
 {
+	if(cGraphics::popupMenu)
+		delete cGraphics::popupMenu;
 	cWindowTree::onRightClick();
-	popupmenu = new cMenu();
-	popupmenu->parent = NULL;
-	popupmenu->drawStyle = 1;
-	popupmenu->x = (int)mouseX;
-	popupmenu->y = (int)mouseY;
-	popupmenu->w = 150;
-	popupmenu->opened = true;
+	cGraphics::popupMenu = new cMenu();
+	cGraphics::popupMenu->parent = NULL;
+	cGraphics::popupMenu->drawStyle = 1;
+	cGraphics::popupMenu->x = (int)cGraphics::cMouse::x;
+	cGraphics::popupMenu->y = (int)cGraphics::cMouse::y;
+	cGraphics::popupMenu->w = 150;
+	cGraphics::popupMenu->opened = true;
 	cMenuItem* mm;
-	ADDMENUITEM(mm,popupmenu,"Go to",		&MenuCommand_removefavlight); //new
-	ADDMENUITEM(mm,popupmenu,"Insert light",		&MenuCommand_addfavlight); //new
-	ADDMENUITEM(mm,popupmenu,"Insert category",		&MenuCommand_addfavlightcat); //new
+	ADDMENUITEM(mm,cGraphics::popupMenu,"Go to",		&MenuCommand_removefavlight); //new
+	ADDMENUITEM(mm,cGraphics::popupMenu,"Insert light",		&MenuCommand_addfavlight); //new
+	ADDMENUITEM(mm,cGraphics::popupMenu,"Insert category",		&MenuCommand_addfavlightcat); //new
 }
 
 void cLightOverViewWindow::cLightOverViewTree::onChange()

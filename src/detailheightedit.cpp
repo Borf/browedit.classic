@@ -3,11 +3,8 @@
 #include "undo.h"
 #include <clipboard.h>
 
-extern long mousestartx, mousestarty;
-extern double mouse3dx, mouse3dy, mouse3dz;
 extern long tilex,tiley;
 extern int brushsize;
-extern bool lbuttondown, rbuttondown;
 extern long lasttimer;
 
 
@@ -62,7 +59,7 @@ int cProcessManagement::detailheightedit_process_events(SDL_Event &event)
 								if(x >= 0 && y >= 0 && x < cGraphics::world->width && y < cGraphics::world->height)
 								{
 									cCube* c = &cGraphics::world->cubes[y][x];
-									if(lbuttondown && !rbuttondown)
+									if(cGraphics::cMouse::lbuttondown && !cGraphics::cMouse::rbuttondown)
 									{
 										if (!cGraphics::slope || ((x > posx-(int)floor(brushsize/2.0f)) && y > posy-(int)floor(brushsize/2.0f)))
 											c->cell1-=1;
@@ -80,7 +77,7 @@ int cProcessManagement::detailheightedit_process_events(SDL_Event &event)
 											c->cell4 = max(mmin,c->cell4);
 										}
 									}
-									if(lbuttondown && rbuttondown)
+									if(cGraphics::cMouse::lbuttondown && cGraphics::cMouse::rbuttondown)
 									{
 										if (!cGraphics::slope || ((x > posx-(int)floor(brushsize/2.0f)) && y > posy-(int)floor(brushsize/2.0f)))
 											c->cell1+=1;
@@ -120,8 +117,8 @@ int cProcessManagement::detailheightedit_process_events(SDL_Event &event)
 				break;
 			case SDLK_c:
 				{
-					int posx = (int)mouse3dx / 10;
-					int posy = (int)mouse3dz / 10;
+					int posx = (int)cGraphics::cMouse::x3d / 10;
+					int posy = (int)cGraphics::cMouse::z3d / 10;
 
 					if (posx >= (int)floor(brushsize/2.0f) && posx <= cGraphics::world->width-(int)ceil(brushsize/2.0f) && posy >= (int)floor(brushsize/2.0f) && posy<= cGraphics::world->height-(int)ceil(brushsize/2.0f))
 					{
@@ -153,8 +150,8 @@ int cProcessManagement::detailheightedit_process_events(SDL_Event &event)
 				break;
 			case SDLK_f:
 				{
-					int posx = (int)mouse3dx / 10;
-					int posy = (int)mouse3dz / 10;
+					int posx = (int)cGraphics::cMouse::x3d / 10;
+					int posy = (int)cGraphics::cMouse::z3d / 10;
 
 					cGraphics::worldContainer->undoStack->push(new cUndoHeightEdit(posx-(int)floor(brushsize/2.0f), posy-(int)floor(brushsize/2.0f), posx+(int)ceil(brushsize/2.0f), posy+(int)ceil(brushsize/2.0f)));
 					for(int x = posx-(int)floor(brushsize/2.0f); x < posx+(int)ceil(brushsize/2.0f)-1; x++)
@@ -182,8 +179,8 @@ int cProcessManagement::detailheightedit_process_events(SDL_Event &event)
 			case SDLK_s:
 				{
 					int x,y;
-					int posx = (int)mouse3dx / 10;
-					int posy = (int)mouse3dz / 10;
+					int posx = (int)cGraphics::cMouse::x3d / 10;
+					int posy = (int)cGraphics::cMouse::z3d / 10;
 					cGraphics::worldContainer->undoStack->push(new cUndoHeightEdit(posx-(int)floor(brushsize/2.0f), posy-(int)floor(brushsize/2.0f), posx+(int)ceil(brushsize/2.0f), posy+(int)ceil(brushsize/2.0f)));
 					for(x = posx-(int)floor(brushsize/2.0f); x < posx+(int)ceil(brushsize/2.0f)-1; x++)
 					{

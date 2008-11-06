@@ -100,7 +100,7 @@ public:
 		cVector3 b1, b2;
 		b1 = cVector3(10,-cell1,-10) - cVector3(0,-cell4,0);
 		b2 = cVector3(0,-cell3,-10) - cVector3(0,-cell4,0);
-		normal = b1.Cross(b2).Normalize();//cVector3(b1.y * b2.z - b1.z * b2.y, b1.z * b2.x - b1.x * b2.z, b1.x * b2.y - b1.y * b2.x);
+		normal = b1.cross(b2).normalize();//cVector3(b1.y * b2.z - b1.z * b2.y, b1.z * b2.x - b1.x * b2.z, b1.x * b2.y - b1.y * b2.x);
 	}
 	cVector3 normal;
 };

@@ -8,6 +8,7 @@
 #include <texture.h>
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
+#include <graphics.h>
 
 void cWindowRGBPicker::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {
@@ -95,7 +96,7 @@ void cWindowRGBPicker::draw(int cutoffleft, int cutoffright, int cutofftop, int 
 
 void cWindowRGBPicker::onClick()
 {
-	float clickx = mouseX - (x + 4);
+	float clickx = cGraphics::cMouse::x - (x + 4);
 	int color = (int)((clickx/(float)(w-8)) * 16777216);
 
 	r = (color&255)/256.0f;

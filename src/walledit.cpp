@@ -2,8 +2,6 @@
 #include "graphics.h"
 #include "undo.h"
 
-extern long mousestartx, mousestarty;
-extern double mouse3dx, mouse3dy, mouse3dz;
 extern int movement;
 
 int cProcessManagement::walledit_process_events(SDL_Event &event)
@@ -15,8 +13,8 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 		case SDL_MOUSEBUTTONUP:
 			if(event.button.button == SDL_BUTTON_LEFT && movement < 3)
 			{
-				int x = (int)mouse3dx / 10;
-				int y = (int)mouse3dz / 10;
+				int x = (int)cGraphics::cMouse::x3d / 10;
+				int y = (int)cGraphics::cMouse::z3d / 10;
 				if (y < 0 || y > cGraphics::world->height-1)
 					break;
 				if (x < 0 || x > cGraphics::world->width-1)
@@ -28,8 +26,8 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 			}
 			else if(event.button.button == SDL_BUTTON_RIGHT && movement < 3)
 			{
-				int x = (int)mouse3dx / 10;
-				int y = (int)mouse3dz / 10;
+				int x = (int)cGraphics::cMouse::x3d / 10;
+				int y = (int)cGraphics::cMouse::z3d / 10;
 				if (y < 0 || y > cGraphics::world->height-1)
 					break;
 				if (x < 0 || x > cGraphics::world->width-1)
@@ -53,8 +51,8 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 				{
 					std::vector<std::pair<int, cTile> > tilesedited;
 
-					int x = (int)mouse3dx / 10;
-					int y = (int)mouse3dz / 10;
+					int x = (int)cGraphics::cMouse::x3d / 10;
+					int y = (int)cGraphics::cMouse::z3d / 10;
 					if (y < 0)
 						break;
 					if (x < 0)
@@ -123,8 +121,8 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 			case SDLK_v:
 				{
 					std::vector<std::pair<int, cTile> > tilesedited;
-					int x = (int)mouse3dx / 10;
-					int y = (int)mouse3dz / 10;
+					int x = (int)cGraphics::cMouse::x3d / 10;
+					int y = (int)cGraphics::cMouse::z3d / 10;
 					if (y < 0)
 						break;
 					if (x < 0)
@@ -210,8 +208,8 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 			case SDLK_PAGEDOWN:
 				{
 					std::vector<std::pair<int, cTile> > tileschanged;
-					int x = (int)mouse3dx / 10;
-					int y = (int)mouse3dz / 10;
+					int x = (int)cGraphics::cMouse::x3d / 10;
+					int y = (int)cGraphics::cMouse::z3d / 10;
 					if(SDL_GetModState() & KMOD_SHIFT)
 					{
 						int xx = x;
@@ -256,8 +254,8 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 			case SDLK_PAGEUP:
 				{
 					std::vector<std::pair<int, cTile> > tileschanged;
-					int x = (int)mouse3dx / 10;
-					int y = (int)mouse3dz / 10;
+					int x = (int)cGraphics::cMouse::x3d / 10;
+					int y = (int)cGraphics::cMouse::z3d / 10;
 					if(SDL_GetModState() & KMOD_SHIFT)
 					{
 						int xx = x;
@@ -302,8 +300,8 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 			case SDLK_HOME:
 				{
 					std::vector<std::pair<int, cTile> > tileschanged;
-					int x = (int)mouse3dx / 10;
-					int y = (int)mouse3dz / 10;
+					int x = (int)cGraphics::cMouse::x3d / 10;
+					int y = (int)cGraphics::cMouse::z3d / 10;
 					if(SDL_GetModState() & KMOD_SHIFT)
 					{
 						int xx = x;
@@ -356,8 +354,8 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 			case SDLK_END:
 				{
 					std::vector<std::pair<int, cTile> > tileschanged;
-					int x = (int)mouse3dx / 10;
-					int y = (int)mouse3dz / 10;
+					int x = (int)cGraphics::cMouse::x3d / 10;
+					int y = (int)cGraphics::cMouse::z3d / 10;
 					if(SDL_GetModState() & KMOD_SHIFT)
 					{
 						int xx = x;
@@ -411,8 +409,8 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 						wrap = false;
 
 
-					int x = (int)mouse3dx / 10;
-					int y = (int)mouse3dz / 10;
+					int x = (int)cGraphics::cMouse::x3d / 10;
+					int y = (int)cGraphics::cMouse::z3d / 10;
 					if (y < 0 || y > cGraphics::world->height - 1)
 						break;
 					if (x < 0 || x > cGraphics::world->width - 1)
@@ -639,8 +637,8 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 				break;
 			case SDLK_COMMA:
 				{
-					int x = (int)mouse3dx / 10;
-					int y = (int)mouse3dz / 10;
+					int x = (int)cGraphics::cMouse::x3d / 10;
+					int y = (int)cGraphics::cMouse::z3d / 10;
 					if (y < 0 || y > (int)cGraphics::world->cubes.size()-1)
 						break;
 					if (x < 0 || x > (int)cGraphics::world->cubes[0].size()-1)
@@ -721,8 +719,8 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 				break;
 			case SDLK_PERIOD:
 				{
-					int x = (int)mouse3dx / 10;
-					int y = (int)mouse3dz / 10;
+					int x = (int)cGraphics::cMouse::x3d / 10;
+					int y = (int)cGraphics::cMouse::z3d / 10;
 					if (y < 0 || y > (int)cGraphics::world->cubes.size()-1)
 						break;
 					if (x <= 0 || x > (int)cGraphics::world->cubes[y].size()-2)

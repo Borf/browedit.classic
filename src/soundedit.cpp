@@ -8,12 +8,8 @@
 #include <windows/objectwindow.h>
 #include <wm/windowinputbox.h>
 
-extern long mousestartx, mousestarty;
-extern double mouse3dx, mouse3dy, mouse3dz;
-extern float oldmousex, oldmousey;
-extern bool lbuttondown;
 extern int movement;
-extern bool doneaction;
+extern bool doneAction;
 extern std::string rodir;
 extern void mainloop();
 
@@ -22,23 +18,23 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 	switch(event.type)
 	{
 		case SDL_MOUSEMOTION:
-			if(lbuttondown)
+			if(cGraphics::cMouse::lbuttondown)
 			{
 				if (cGraphics::world->sounds.size() == 0)
 					break;
 				if(cGraphics::objectStartDrag)
 				{
-					if(doneaction)
+					if(doneAction)
 					{
 						cGraphics::worldContainer->undoStack->push(new cUndoChangeSound(cGraphics::worldContainer->settings.selectedObject));
-						doneaction = false;
+						doneAction = false;
 					}
 					bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 					bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
 					if (!ctrl && !alt)
 					{
-						cGraphics::world->sounds[cGraphics::worldContainer->settings.selectedObject].pos.x = mouse3dx / 5;
-						cGraphics::world->sounds[cGraphics::worldContainer->settings.selectedObject].pos.z = mouse3dz / 5;
+						cGraphics::world->sounds[cGraphics::worldContainer->settings.selectedObject].pos.x = cGraphics::cMouse::x3d / 5;
+						cGraphics::world->sounds[cGraphics::worldContainer->settings.selectedObject].pos.z = cGraphics::cMouse::z3d / 5;
 						if (SDL_GetModState() & KMOD_SHIFT)
 						{
 							cGraphics::world->sounds[cGraphics::worldContainer->settings.selectedObject].pos.x = floor(cGraphics::world->sounds[cGraphics::worldContainer->settings.selectedObject].pos.x * (cGraphics::worldContainer->settings.gridSize/2.0f) + 0.5-cGraphics::worldContainer->settings.gridoffsetx) / (cGraphics::worldContainer->settings.gridSize/2.0f) + cGraphics::worldContainer->settings.gridoffsetx/(cGraphics::worldContainer->settings.gridSize/2.0f);
@@ -47,7 +43,7 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 					}
 					if(ctrl && !alt)
 					{
-						cGraphics::world->sounds[cGraphics::worldContainer->settings.selectedObject].pos.y += (mouseY-oldmousey);
+						cGraphics::world->sounds[cGraphics::worldContainer->settings.selectedObject].pos.y += (cGraphics::cMouse::y-cGraphics::cMouse::yOld);
 						if (SDL_GetModState() & KMOD_SHIFT)
 						{
 							cGraphics::world->sounds[cGraphics::worldContainer->settings.selectedObject].pos.y = floor(cGraphics::world->sounds[cGraphics::worldContainer->settings.selectedObject].pos.y * (cGraphics::worldContainer->settings.gridSize/2.0f) + 0.5-cGraphics::worldContainer->settings.gridoffsetx) / (cGraphics::worldContainer->settings.gridSize/2.0f) + cGraphics::worldContainer->settings.gridoffsetx/(cGraphics::worldContainer->settings.gridSize/2.0f);
@@ -71,13 +67,13 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 					cVector3 d = cGraphics::world->sounds[i].pos;
 					d.x = d.x;
 					
-					d.x -= mouse3dx/5;
-					d.z -= mouse3dz/5;
+					d.x -= cGraphics::cMouse::x3d/5;
+					d.z -= cGraphics::cMouse::z3d/5;
 					d.y = 0;
 
-					if(mindist > d.Magnitude())
+					if(mindist > d.magnitude())
 					{
-						mindist = d.Magnitude();
+						mindist = d.magnitude();
 						minobj = i;
 					}
 				}
@@ -93,11 +89,11 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 					if(w)
 					{
 						w->show();
-						((cSoundSelectWindow*)w)->newPos = cVector3(mouse3dx, mouse3dy, mouse3dz);
+						((cSoundSelectWindow*)w)->newPos = cVector3(cGraphics::cMouse::x3d, cGraphics::cMouse::y3d, cGraphics::cMouse::z3d);
 						((cSoundSelectWindow*)w)->selectedSound = NULL;
 					}
 					else
-						cWM::addWindow(new cSoundSelectWindow(cVector3(mouse3dx, mouse3dy, mouse3dz)));
+						cWM::addWindow(new cSoundSelectWindow(cVector3(cGraphics::cMouse::x3d, cGraphics::cMouse::y3d, cGraphics::cMouse::z3d)));
 					
 
 				}
@@ -112,13 +108,13 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 						cVector3 d = cGraphics::world->sounds[i].pos;
 						d.x = d.x;
 						
-						d.x -= mouse3dx/5;
-						d.z -= mouse3dz/5;
+						d.x -= cGraphics::cMouse::x3d/5;
+						d.z -= cGraphics::cMouse::z3d/5;
 						d.y = 0;
 
-						if(mindist > d.Magnitude())
+						if(mindist > d.magnitude())
 						{
-							mindist = d.Magnitude();
+							mindist = d.magnitude();
 							minobj = i;
 						}
 					}

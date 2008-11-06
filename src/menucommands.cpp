@@ -24,7 +24,6 @@
 extern bool running;
 extern eMode editmode;
 extern int brushsize;
-extern double mouse3dx, mouse3dy, mouse3dz;
 int process_events( );
 extern std::vector<std::string> objectfiles;
 extern std::string rodir;
@@ -36,8 +35,6 @@ extern cMenu* currentobject;
 extern float paintspeed;
 extern TiXmlDocument sprites;
 extern double mouseclickx, mouseclicky, mouseclickz;
-extern std::string message;
-extern bool showmessage;
 extern long userid;
 extern bool boundingBoxCollisions;
 
@@ -307,7 +304,7 @@ int ClassifyPoint(cVector3 point, cVector3 pO, cVector3 pN)
 	TempVect.y = pO.y - point.y;
 	TempVect.z = pO.z - point.z;
 	cVector3 dir = TempVect;
-	GLfloat d = dir.Dot(pN);;
+	GLfloat d = dir.dot(pN);;
 	
 	if (d < -0.00001f)
 		return 1;
@@ -380,8 +377,8 @@ MENUCOMMAND(random1)
 		SDL_PushEvent(&ev);
 
 	int b = brushsize;
-	mouse3dx = cGraphics::world->width*5;
-	mouse3dz = cGraphics::world->height*5;
+	cGraphics::cMouse::x3d = cGraphics::world->width*5;
+	cGraphics::cMouse::z3d = cGraphics::world->height*5;
 	brushsize = cGraphics::world->width+cGraphics::world->height;
 	
 	process_events();
@@ -611,8 +608,8 @@ MENUCOMMAND(random2)
 		SDL_PushEvent(&ev);
 
 	int b = brushsize;
-	mouse3dx = cGraphics::world->width*5;
-	mouse3dz = cGraphics::world->height*5;
+	cGraphics::cMouse::x3d = cGraphics::world->width*5;
+	cGraphics::cMouse::z3d = cGraphics::world->height*5;
 	brushsize = cGraphics::world->width+cGraphics::world->height;
 	
 	process_events();
@@ -1091,8 +1088,8 @@ MENUCOMMAND(random4)
 		SDL_PushEvent(&ev);
 
 	int b = brushsize;
-	mouse3dx = cGraphics::world->width*5;
-	mouse3dz = cGraphics::world->height*5;
+	cGraphics::cMouse::x3d = cGraphics::world->width*5;
+	cGraphics::cMouse::z3d = cGraphics::world->height*5;
 	brushsize = cGraphics::world->width+cGraphics::world->height;
 	
 	process_events();
@@ -3190,8 +3187,9 @@ MENUCOMMAND(light_snaptofloor)
 
 MENUCOMMAND(light_setheight)
 {
-	delete popupmenu;
-	popupmenu = NULL;
+	if(cGraphics::popupMenu)
+		delete cGraphics::popupMenu;
+	cGraphics::popupMenu = NULL;
 
 
 	MenuCommand_light_snaptofloor(src);
@@ -3295,8 +3293,9 @@ MENUCOMMAND(removefavlight)
 
 MENUCOMMAND(addfavlight)
 {
-	delete popupmenu;
-	popupmenu = NULL;
+	if(cGraphics::popupMenu)
+		delete cGraphics::popupMenu;
+	cGraphics::popupMenu = NULL;
 	cFavoriteLightsWindow* w = (cFavoriteLightsWindow*)cWM::getWindow(WT_FAVLIGHTS);
 	if(w != NULL)
 	{
@@ -3379,8 +3378,9 @@ MENUCOMMAND(addfavlight)
 
 MENUCOMMAND(addfavlightcat)
 {
-	delete popupmenu;
-	popupmenu = NULL;
+	if(cGraphics::popupMenu)
+		delete cGraphics::popupMenu;
+	cGraphics::popupMenu = NULL;
 	cFavoriteLightsWindow* w = (cFavoriteLightsWindow*)cWM::getWindow(WT_FAVLIGHTS);
 	if(w != NULL)
 	{
@@ -3783,7 +3783,7 @@ inline void setLightIntensity( BYTE* buf, int yy, int xx, cVector3 worldpos, std
 		if(diff.y > 0)
 			continue;
 		
-		float length = diff.Magnitude();
+		float length = diff.magnitude();
 		if(length > l->range)
 			continue;
 		

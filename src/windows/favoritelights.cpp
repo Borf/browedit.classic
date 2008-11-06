@@ -1,5 +1,5 @@
 #include "favoritelights.h"
-
+#include <graphics.h>
 #include <filesystem.h>
 
 cFavoriteLightsWindow::cFavoriteTreeNode::cFavoriteTreeNode( std::string t, std::vector<cWindowTree::cTreeNode*> items ) : cWindowTree::cTreeNode(t, items)
@@ -177,18 +177,20 @@ cFavoriteLightsWindow::cFavoritesTree::cFavoritesTree( cWindow* parent, std::vec
 
 void cFavoriteLightsWindow::cFavoritesTree::onRightClick()
 {
+	if(cGraphics::popupMenu)
+		delete cGraphics::popupMenu;
 	cWindowTree::onRightClick();
-	popupmenu = new cMenu();
-	popupmenu->parent = NULL;
-	popupmenu->drawStyle = 1;
-	popupmenu->x = (int)mouseX;
-	popupmenu->y = (int)mouseY;
-	popupmenu->w = 150;
-	popupmenu->opened = true;
+	cGraphics::popupMenu = new cMenu();
+	cGraphics::popupMenu->parent = NULL;
+	cGraphics::popupMenu->drawStyle = 1;
+	cGraphics::popupMenu->x = (int)cGraphics::cMouse::x;
+	cGraphics::popupMenu->y = (int)cGraphics::cMouse::y;
+	cGraphics::popupMenu->w = 150;
+	cGraphics::popupMenu->opened = true;
 	cMenuItem* mm;
-	ADDMENUITEM(mm,popupmenu,"Remove light/category",		&MenuCommand_removefavlight); //new
-	ADDMENUITEM(mm,popupmenu,"Insert light",		&MenuCommand_addfavlight); //new
-	ADDMENUITEM(mm,popupmenu,"Insert category",		&MenuCommand_addfavlightcat); //new
+	ADDMENUITEM(mm,cGraphics::popupMenu,"Remove light/category",		&MenuCommand_removefavlight); //new
+	ADDMENUITEM(mm,cGraphics::popupMenu,"Insert light",		&MenuCommand_addfavlight); //new
+	ADDMENUITEM(mm,cGraphics::popupMenu,"Insert category",		&MenuCommand_addfavlightcat); //new
 }
 
 void cFavoriteLightsWindow::cFavoritesTree::onChange()

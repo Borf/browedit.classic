@@ -3,9 +3,6 @@
 #include "undo.h"
 #include "clipboard.h"
 
-extern long mouseX;
-extern long mousestartx, mousestarty;
-extern double mouse3dx, mouse3dy, mouse3dz;
 
 int cProcessManagement::textureedit_process_events(SDL_Event &event)
 {
@@ -17,7 +14,7 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 		{
 			if(event.button.button == SDL_BUTTON_LEFT)
 			{
-				if(mousestartx < cGraphics::w()-256)
+				if(cGraphics::cMouse::xStart < cGraphics::w()-256)
 				{
 					if(cClipBoard::pasting && cClipBoard::currentClipBoard && cClipBoard::currentClipBoard->type == cClipBoard::CLIP_TEXTURE)
 					{
@@ -33,8 +30,8 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 						selsizex = floor(selsizex*cGraphics::worldContainer->settings.brushsize);
 						selsizey = floor(selsizey*cGraphics::worldContainer->settings.brushsize);
 
-						int posx = (int)mouse3dx / 10;
-						int posy = (int)mouse3dz / 10;
+						int posx = (int)cGraphics::cMouse::x3d / 10;
+						int posy = (int)cGraphics::cMouse::z3d / 10;
 
 						float selstartx = ((cGraphics::worldContainer->settings.selectionstart.x - (cGraphics::w()-256)) / 32.0f);
 						float selstarty = ((int)(cGraphics::worldContainer->settings.selectionstart.y - 32) % 288) / 32;
@@ -196,7 +193,7 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 				cGraphics::worldContainer->settings.flipv = !cGraphics::worldContainer->settings.flipv;
 				break;
 			case SDLK_c:
-				if(mouseX < cGraphics::w()-256)
+				if(cGraphics::cMouse::x < cGraphics::w()-256)
 				{
 					float selsizex = (fabs(cGraphics::worldContainer->settings.selectionstart.x - cGraphics::worldContainer->settings.selectionend.x) / 32);
 					float selsizey = (fabs(cGraphics::worldContainer->settings.selectionstart.y - cGraphics::worldContainer->settings.selectionend.y) / 32);
@@ -211,8 +208,8 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 						selsizey = a;
 					}
 
-					int posx = (int)mouse3dx / 10;
-					int posy = (int)mouse3dz / 10;
+					int posx = (int)cGraphics::cMouse::x3d / 10;
+					int posy = (int)cGraphics::cMouse::z3d / 10;
 					cClipboardTexture* clipboard = new cClipboardTexture();
 
 					for(int x = posx; x > posx-selsizex; x--)
@@ -249,8 +246,8 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 				break;
 			case SDLK_BACKSPACE:
 				{
-					int posx = (int)mouse3dx / 10;
-					int posy = (int)mouse3dz / 10;
+					int posx = (int)cGraphics::cMouse::x3d / 10;
+					int posy = (int)cGraphics::cMouse::z3d / 10;
 					float selsizex = (fabs(cGraphics::worldContainer->settings.selectionstart.x - cGraphics::worldContainer->settings.selectionend.x) / 32);
 					float selsizey = (fabs((int)cGraphics::worldContainer->settings.selectionstart.y - cGraphics::worldContainer->settings.selectionend.y) / 32);
 					selsizex = (int)floor(selsizex*cGraphics::worldContainer->settings.brushsize);
@@ -280,8 +277,8 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 				}
 			case SDLK_i:
 				{
-					int posx = (int)mouse3dx / 10;
-					int posy = (int)mouse3dz / 10;
+					int posx = (int)cGraphics::cMouse::x3d / 10;
+					int posy = (int)cGraphics::cMouse::z3d / 10;
 					if(posx > -1 && posy > -1 && posx < cGraphics::world->width && posy < cGraphics::world->height)
 					{
 						Log(3,0,"Cube (%i,%i): %f,%f,%f,%f", posx, posy, cGraphics::world->cubes[posy][posx].cell1, cGraphics::world->cubes[posy][posx].cell2, cGraphics::world->cubes[posy][posx].cell3, cGraphics::world->cubes[posy][posx].cell4);

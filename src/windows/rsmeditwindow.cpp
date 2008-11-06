@@ -357,18 +357,18 @@ void cRSMEditWindow::cWindowModel::drag()
 	{
 		if(SDL_GetModState() & KMOD_SHIFT)
 		{
-			model->pos.y -= (oldy - mouseY) * 2.0f;
-			model->pos.x -= (oldx - mouseX) / 2.0f;
+			model->pos.y -= (oldy - cGraphics::cMouse::y) * 2.0f;
+			model->pos.x -= (oldx - cGraphics::cMouse::x) / 2.0f;
 		}
 		else
 		{
-			roty += (oldy-mouseY) / 2.0f;
-			model->rot.y -= (oldx - mouseX) / 2.0f;
+			roty += (oldy-cGraphics::cMouse::y) / 2.0f;
+			model->rot.y -= (oldx - cGraphics::cMouse::x) / 2.0f;
 			rotate = tickcount() + 5000;
 		}
 	}
-	oldy = mouseY;
-	oldx = mouseX;
+	oldy = cGraphics::cMouse::y;
+	oldx = cGraphics::cMouse::x;
 }
 
 void cRSMEditWindow::cWindowModel::setText( int i, std::string s )

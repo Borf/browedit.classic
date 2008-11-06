@@ -72,8 +72,8 @@ void cWindowObject::draw(int cutoffleft, int cutoffright, int cutofftop, int cut
 
 cWindowObject* cWindowObject::inObject()
 {
-	int xx=(int)mouseX-parent->getX();
-	int yy=(Graphics.h()-(int)mouseY)-parent->getY();
+	int xx=(int)cGraphics::cMouse::x-parent->getX();
+	int yy=(Graphics.h()-(int)cGraphics::cMouse::y)-parent->getY();
 	if (xx > realX() && xx < realX()+w &&
 		yy > realY() && yy < realY()+h)
 		return this;

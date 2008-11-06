@@ -72,7 +72,7 @@ void NormalizePlane(float frustum[6][4], int side)
 /////
 ///////////////////////////////// CALCULATE FRUSTUM \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 
-void cFrustum::CalculateFrustum()
+void cFrustum::calculateFrustum()
 {    
 	float   proj[16];								// This will hold our projection matrix
 	float   modl[16];								// This will hold our modelview matrix
@@ -182,7 +182,7 @@ void cFrustum::CalculateFrustum()
 /////
 ///////////////////////////////// POINT IN FRUSTUM \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 
-bool cFrustum::PointInFrustum( float x, float y, float z )
+bool cFrustum::pointInFrustum( float x, float y, float z )
 {
 	// Go through all the sides of the frustum
 	for(int i = 0; i < 6; i++ )
@@ -206,7 +206,7 @@ bool cFrustum::PointInFrustum( float x, float y, float z )
 /////
 ///////////////////////////////// SPHERE IN FRUSTUM \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 
-bool cFrustum::SphereInFrustum( float x, float y, float z, float radius )
+bool cFrustum::sphereInFrustum( float x, float y, float z, float radius )
 {
 	// Go through all the sides of the frustum
 	for(int i = 0; i < 6; i++ )	
@@ -230,7 +230,7 @@ bool cFrustum::SphereInFrustum( float x, float y, float z, float radius )
 /////
 ///////////////////////////////// CUBE IN FRUSTUM \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 
-bool cFrustum::CubeInFrustum( float x, float y, float z, float size )
+bool cFrustum::cubeInFrustum( float x, float y, float z, float size )
 {
 	// Basically, what is going on is, that we are given the center of the cube,
 	// and half the length.  Think of it like a radius.  Then we checking each point
@@ -275,7 +275,7 @@ bool cFrustum::CubeInFrustum( float x, float y, float z, float size )
 /////
 ///////////////////////////////// BOX IN FRUSTUM \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
 
-bool cFrustum::BoxInFrustum( float x, float y, float z, float x2, float y2, float z2)
+bool cFrustum::boxInFrustum( float x, float y, float z, float x2, float y2, float z2)
 {
 	// Go through all of the corners of the box and check then again each plane
 	// in the frustum.  If all of them are behind one of the planes, then it most
@@ -299,128 +299,4 @@ bool cFrustum::BoxInFrustum( float x, float y, float z, float x2, float y2, floa
 	return true;
 }
 
-
-///////////////////////////////// RENDER DEBUG LINES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
-/////
-/////	This goes through all of the lines that we stored in our list and draws them
-/////
-///////////////////////////////// RENDER DEBUG LINES \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
-
-void CDebug::RenderDebugLines()				// This renders all of the lines
-{
-    glDisable(GL_TEXTURE_2D);
-
-	glBegin(GL_LINES);						// Start rendering lines
-
-		glColor3ub(255, 255, 0);			// Turn the lines yellow
-
-		// Go through the whole list of lines stored in the vector m_vLines.
-		for(unsigned int i = 0; i < m_vLines.size(); i++)
-		{
-			// Pass in the current point to be rendered as part of a line
-			glVertex3f(m_vLines[i].x, m_vLines[i].y, m_vLines[i].z);
-		}	
-
-	glEnd();				
-}
-
-
-///////////////////////////////// ADD DEBUG LINE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
-/////
-/////	This adds a debug LINE to the stack of lines
-/////
-///////////////////////////////// ADD DEBUG LINE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
-
-void CDebug::AddDebugLine(cVector3 vPoint1, cVector3 vPoint2)
-{
-	// Add the 2 points that make up the line into our line list.
-	m_vLines.push_back(vPoint1);
-	m_vLines.push_back(vPoint2);
-}
-
-
-///////////////////////////////// ADD DEBUG BOX \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
-/////
-/////	This adds a debug BOX to the stack of lines
-/////
-///////////////////////////////// ADD DEBUG BOX\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\*
-
-void CDebug::AddDebugBox(cVector3 vCenter, float width, float height, float depth)
-{
-	// So we can work with the code better, we divide the dimensions in half.
-	// That way we can create the box from the center outwards.
-	width /= 2.0f;	height /= 2.0f;	depth /= 2.0f;
-
-	// Below we create all the 8 points so it will be easier to input the lines
-	// of the box.  With the dimensions we calculate the points.
-	cVector3 vTopLeftFront( vCenter.x - width, vCenter.y + height, vCenter.z + depth);
-	cVector3 vTopLeftBack(  vCenter.x - width, vCenter.y + height, vCenter.z - depth);
-	cVector3 vTopRightBack( vCenter.x + width, vCenter.y + height, vCenter.z - depth);
-	cVector3 vTopRightFront(vCenter.x + width, vCenter.y + height, vCenter.z + depth);
-
-	cVector3 vBottom_LeftFront( vCenter.x - width, vCenter.y - height, vCenter.z + depth);
-	cVector3 vBottom_LeftBack(  vCenter.x - width, vCenter.y - height, vCenter.z - depth);
-	cVector3 vBottomRightBack( vCenter.x + width, vCenter.y - height, vCenter.z - depth);
-	cVector3 vBottomRightFront(vCenter.x + width, vCenter.y - height, vCenter.z + depth);
-
-	////////// TOP LINES ////////// 
-
-	// Store the top front line of the box
-	m_vLines.push_back(vTopLeftFront);		m_vLines.push_back(vTopRightFront);
-
-	// Store the top back line of the box
-	m_vLines.push_back(vTopLeftBack);  		m_vLines.push_back(vTopRightBack);
-
-	// Store the top left line of the box
-	m_vLines.push_back(vTopLeftFront);		m_vLines.push_back(vTopLeftBack);
-
-	// Store the top right line of the box
-	m_vLines.push_back(vTopRightFront);		m_vLines.push_back(vTopRightBack);
-
-	////////// BOTTOM LINES ////////// 
-
-	// Store the bottom front line of the box
-	m_vLines.push_back(vBottom_LeftFront);	m_vLines.push_back(vBottomRightFront);
-
-	// Store the bottom back line of the box
-	m_vLines.push_back(vBottom_LeftBack);	m_vLines.push_back(vBottomRightBack);
-
-	// Store the bottom left line of the box
-	m_vLines.push_back(vBottom_LeftFront);	m_vLines.push_back(vBottom_LeftBack);
-
-	// Store the bottom right line of the box
-	m_vLines.push_back(vBottomRightFront);	m_vLines.push_back(vBottomRightBack);
-
-	////////// SIDE LINES ////////// 
-
-	// Store the bottom front line of the box
-	m_vLines.push_back(vTopLeftFront);		m_vLines.push_back(vBottom_LeftFront);
-
-	// Store the back left line of the box
-	m_vLines.push_back(vTopLeftBack);		m_vLines.push_back(vBottom_LeftBack);
-
-	// Store the front right line of the box
-	m_vLines.push_back(vTopRightBack);		m_vLines.push_back(vBottomRightBack);
-
-	// Store the front left line of the box
-	m_vLines.push_back(vTopRightFront);		m_vLines.push_back(vBottomRightFront);
-}
-
-
-/////////////////////////////////////////////////////////////////////////////////
-//
-// * QUICK NOTES * 
-//
-// This code was taken directly from the frustum tutorial located at www.GameTutorials.com.
-// Most of the large block of comments were taken out.  If you want to learn more about
-// this frustum code, visit our site.  We added BoxInFrustum() to this file so that we
-// could check against bounding boxes.
-//
-//
-// Ben Humphrey
-// Game Programmer
-// DigiBen@GameTutorials.com
-// www.GameTutorials.com
-//
-//
 

@@ -11,6 +11,7 @@ class TiXmlDocument;
 class cInputWindowCaller;
 class cConfirmWindowCaller;
 class cWindow;
+class cWindowObject;
 enum WINDOW_TYPE;
 
 class cWM
@@ -59,6 +60,8 @@ public:
 	static float					colorBlur[4];
 	static int						focus;
 	
+	static cWindow*					draggingWindow;
+	static cWindowObject*			draggingObject;
 
 
 };

@@ -26,7 +26,8 @@ TiXmlDocument			cWM::skin;
 float					cWM::color[4];
 float					cWM::colorBlur[4];
 int						cWM::focus;
-
+cWindow*				cWM::draggingWindow = NULL;
+cWindowObject*			cWM::draggingObject = NULL;
 
 
 
@@ -493,8 +494,8 @@ void cWM::cleanWindows()
 	{
 		if (!(*i)->isEnabled() && (*i)->currentColor[3] == 0)
 		{
-			if(draggingwindow == (*i))
-				draggingwindow = NULL;
+			if(draggingWindow == (*i))
+				draggingWindow = NULL;
 
 			Log(3,0,"Deleting window %s", (*i)->getTitle().c_str());
 			if ((*i) != NULL)

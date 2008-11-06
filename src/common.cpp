@@ -374,12 +374,12 @@ bool LinePlaneIntersection(tPlane &Plane,
 			   float &t)
 {
 	cVector3 LineDir = EndLine - StartLine;			
-	float Denominator = LineDir.Dot(Plane.Normal);
+	float Denominator = LineDir.dot(Plane.Normal);
 	if (fabs(Denominator) <= EPSILON) // Parallel to the plane
 	{		
 		return false;
 	}		
-	float Numerator = StartLine.Dot(Plane.Normal) + Plane.D;
+	float Numerator = StartLine.dot(Plane.Normal) + Plane.D;
 	t = - Numerator / Denominator;			  
 	if (t < 0.0f || t > 1.0f) // The intersection point is not on the line
 	{
@@ -398,7 +398,7 @@ cVector3 Normal(cVector3* vertices)
 	normal.y = b1.z * b2.x - b1.x * b2.z;
 	normal.z = b1.x * b2.y - b1.y * b2.x;
 
-	normal.Normalize();
+	normal.normalize();
 	return normal;
 	
 }
@@ -412,7 +412,7 @@ bool LineIntersectPolygon( cVector3 *Vertices,
 {
 	tPlane Plane;
 	Plane.Normal = Normal(Vertices);
-	Plane.D = - Plane.Normal.Dot(Vertices[0]);
+	Plane.D = - Plane.Normal.dot(Vertices[0]);
 	float tt;
 	
 	if (!LinePlaneIntersection(Plane, StartLine, EndLine, tt))
@@ -428,11 +428,11 @@ bool LineIntersectPolygon( cVector3 *Vertices,
 		tPlane EdgePlane;		
 		int NextVertex = (Vertex + 1) % NumVertices;
 		cVector3 EdgeVector = Vertices[NextVertex] - Vertices[Vertex];			
-		EdgePlane.Normal = EdgeVector.Cross(Plane.Normal);
-		EdgePlane.Normal.Normalize();
-		EdgePlane.D = - EdgePlane.Normal.Dot(Vertices[Vertex]);
+		EdgePlane.Normal = EdgeVector.cross(Plane.Normal);
+		EdgePlane.Normal.normalize();
+		EdgePlane.D = - EdgePlane.Normal.dot(Vertices[Vertex]);
 											
-		if (EdgePlane.Normal.Dot(Intersection) + EdgePlane.D < 0.0f)
+		if (EdgePlane.Normal.dot(Intersection) + EdgePlane.D < 0.0f)
 			return false;
 	}
 

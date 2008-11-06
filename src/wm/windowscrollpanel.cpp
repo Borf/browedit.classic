@@ -251,10 +251,10 @@ void cWindowScrollPanel::draw(int cutoffleft, int cutoffright, int cutofftop, in
 
 void cWindowScrollPanel::onClick()
 {
-	int xx = (int)mouseX;
+	int xx = (int)cGraphics::cMouse::x;
 	xx -= realX();
 	xx -= parent->getX();
-	int yy = (Graphics.h()-(int)mouseY);
+	int yy = (Graphics.h()-(int)cGraphics::cMouse::y);
 	yy -= realY();
 	yy -= parent->getY();
 
@@ -275,7 +275,7 @@ void cWindowScrollPanel::onClick()
 			}
 			else
 			{
-				scrollposx = (int)((mouseX +(xbarwidth/2)- parent->getX() - xbarwidth) / (float)(w-16))*innerwidth;
+				scrollposx = (int)((cGraphics::cMouse::x +(xbarwidth/2)- parent->getX() - xbarwidth) / (float)(w-16))*innerwidth;
 				scrollposx = (int)min(max(scrollposx, 0), innerwidth-w);
 			}
 		}
@@ -310,7 +310,7 @@ void cWindowScrollPanel::onClick()
 		}
 		else if (yy > 14)
 		{
-			scrollposy = (int)((h-(((Graphics.h()-mouseY)+(ybarheight/2)) -parent->getY() - ybarheight)) / (float)(h-16)) * innerheight - h;
+			scrollposy = (int)((h-(((Graphics.h()-cGraphics::cMouse::y)+(ybarheight/2)) -parent->getY() - ybarheight)) / (float)(h-16)) * innerheight - h;
 			scrollposy = (int)min(max(scrollposy, 0), innerheight-h);
 		}	
 	}
@@ -319,10 +319,10 @@ void cWindowScrollPanel::onClick()
 
 void cWindowScrollPanel::drag()
 {
-	int xx = (int)mouseX;
+	int xx = (int)cGraphics::cMouse::x;
 	xx -= realX();
 	xx -= parent->getX();
-	int yy = (Graphics.h()-(int)mouseY);
+	int yy = (Graphics.h()-(int)cGraphics::cMouse::y);
 	yy -= realY();
 	yy -= parent->getY();
 	int ybarheight = (int)max((int)(((float)h/(float)innerheight)*h), 16);
@@ -337,14 +337,14 @@ void cWindowScrollPanel::drag()
 		return ;
 	}
 
-	if (mousestartx - realX() - parent->getX() > w-14 && mousestartx - realX() - parent->getX() < w)
+	if (cGraphics::cMouse::xStart - realX() - parent->getX() > w-14 && cGraphics::cMouse::xStart - realX() - parent->getX() < w)
 	{
-		scrollposy = (int)(((h-(((Graphics.h()-mouseY)+(ybarheight/2)) -parent->getY() - ybarheight)) / (float)(h-16)) * innerheight - h);
+		scrollposy = (int)(((h-(((Graphics.h()-cGraphics::cMouse::y)+(ybarheight/2)) -parent->getY() - ybarheight)) / (float)(h-16)) * innerheight - h);
 		scrollposy = (int)min(max(scrollposy, 0), innerheight-h);
 	}
-	else if ((Graphics.h()-mousestarty) - parent->getY() - realY() < 14)
+	else if ((Graphics.h()-cGraphics::cMouse::yStart) - parent->getY() - realY() < 14)
 	{
-		scrollposx = (int)((mouseX +(xbarwidth/2)- parent->getX() - xbarwidth) / (float)(w-16))*innerwidth;
+		scrollposx = (int)((cGraphics::cMouse::x +(xbarwidth/2)- parent->getX() - xbarwidth) / (float)(w-16))*innerwidth;
 		scrollposx = (int)min(max(scrollposx, 0), innerwidth-w);
 	}
 	else

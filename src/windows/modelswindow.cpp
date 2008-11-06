@@ -10,12 +10,9 @@
 #include <fstream>
 
 extern std::string rodir;
-extern cWindow* draggingwindow;
-extern cWindowObject* draggingObject;
 extern eMode editmode;
 
 extern std::vector<std::string> objectfiles;
-extern cMenu* popupmenu;
 extern std::vector<std::pair<std::string, std::string> > translations;
 
 
@@ -142,7 +139,7 @@ std::string cModelsWindow::cWindowModel::getText(int i)
 
 void cModelsWindow::cWindowModel::drag()
 {
-	parent->objects["zdragger"]->moveTo((int)mouseX-parent->getX(),(int)mouseY-(cGraphics::h()-parent->getHeight()-parent->getY()));
+	parent->objects["zdragger"]->moveTo((int)cGraphics::cMouse::x-parent->getX(),(int)cGraphics::cMouse::y-(cGraphics::h()-parent->getHeight()-parent->getY()));
 	parent->objects["zdragger"]->setText(1, data);
 }
 
@@ -257,18 +254,19 @@ class cConfirmDeleteModel : public cConfirmWindowCaller
 
 void cModelsWindow::cWindowModel::onRightClick()
 {
+	if(cGraphics::popupMenu)
+		delete cGraphics::popupMenu;
 	((cModelsWindow*)parent)->onStopDrag();
-
-	popupmenu = new cMenu();
-	popupmenu->parent = NULL;
-	popupmenu->drawStyle = 1;
-	popupmenu->x = (int)mouseX;
-	popupmenu->y = (int)mouseY;
-	popupmenu->w = 150;
-	popupmenu->opened = true;
+	cGraphics::popupMenu = new cMenu();
+	cGraphics::popupMenu->parent = NULL;
+	cGraphics::popupMenu->drawStyle = 1;
+	cGraphics::popupMenu->x = (int)cGraphics::cMouse::x;
+	cGraphics::popupMenu->y = (int)cGraphics::cMouse::y;
+	cGraphics::popupMenu->w = 150;
+	cGraphics::popupMenu->opened = true;
 	cMenuItem* mm;
-	ADDMENUITEM(mm,popupmenu,"Remove model from list",		&MenuCommand_new);
-	ADDMENUITEM(mm,popupmenu,"Rename Model",				&MenuCommand_new);
+	ADDMENUITEM(mm,cGraphics::popupMenu,"Remove model from list",		&MenuCommand_new);
+	ADDMENUITEM(mm,cGraphics::popupMenu,"Rename Model",				&MenuCommand_new);
 
 	//cWM::ConfirmWindow(GetMsg("wm/model/DELETECONFIRM"), new cConfirmDeleteModel(this));
 }
@@ -287,16 +285,18 @@ void cModelsWindow::cWindowModelCatSelect::onRightClick()
 	}
 	if(node != NULL)
 	{
-		popupmenu = new cMenu();
-		popupmenu->parent = NULL;
-		popupmenu->drawStyle = 1;
-		popupmenu->x = (int)mouseX;
-		popupmenu->y = (int)mouseY;
-		popupmenu->w = 150;
-		popupmenu->opened = true;
+		if(cGraphics::popupMenu)
+			delete cGraphics::popupMenu;
+		cGraphics::popupMenu = new cMenu();
+		cGraphics::popupMenu->parent = NULL;
+		cGraphics::popupMenu->drawStyle = 1;
+		cGraphics::popupMenu->x = (int)cGraphics::cMouse::x;
+		cGraphics::popupMenu->y = (int)cGraphics::cMouse::y;
+		cGraphics::popupMenu->w = 150;
+		cGraphics::popupMenu->opened = true;
 		cMenuItem* mm;
-		ADDMENUITEM(mm,popupmenu,"Add new category",		&MenuCommand_new);
-		ADDMENUITEM(mm,popupmenu,"Rename category",			&MenuCommand_new);
+		ADDMENUITEM(mm,cGraphics::popupMenu,"Add new category",		&MenuCommand_new);
+		ADDMENUITEM(mm,cGraphics::popupMenu,"Rename category",			&MenuCommand_new);
 
 		
 		
@@ -444,10 +444,10 @@ void cModelsWindow::cWindowModelCatSelect::onHoldDragOver()
 		nodes[i]->getdata(values);
 
 	
-	int xx = (int)mouseX;
+	int xx = (int)cGraphics::cMouse::x;
 	xx -= realX();
 	xx -= parent->getX();
-	int yy = cGraphics::h()-(int)mouseY;
+	int yy = cGraphics::h()-(int)cGraphics::cMouse::y;
 	yy -= realY();
 	yy -= parent->getY();
 
@@ -510,9 +510,9 @@ void cModelsWindow::cWindowModelCatSelect::onDragOver()
 				std::string pre = line.substr(0, line.find("|"));
 				std::string filename = line.substr(line.find("|")+1);
 				std::string directory = pre.substr(0, pre.rfind("/"));
-				if(filename == draggingObject->getText(0) && directory == orig)
+				if(filename == cWM::draggingObject->getText(0) && directory == orig)
 				{
-					std::string bla = dest + "/" + draggingObject->getPopup() + "|" + draggingObject->getText(0) + "\n";
+					std::string bla = dest + "/" + cWM::draggingObject->getPopup() + "|" + cWM::draggingObject->getText(0) + "\n";
 					pFile2.write(bla.c_str(), bla.length());
 					if (ctrl)
 					{
@@ -548,7 +548,7 @@ void cModelsWindow::cWindowModelCatSelect::onDragOver()
 		for(i = 0; i < ((cModelsWindow*)parent)->items[nodeorig].size(); i++)
 		{
 			std::string a = ((cModelsWindow*)parent)->items[nodeorig][i].second;
-			std::string b = draggingObject->getText(0);
+			std::string b = cWM::draggingObject->getText(0);
 			if(a == b)
 			{
 				((cModelsWindow*)parent)->items[node].push_back(((cModelsWindow*)parent)->items[nodeorig][i]);
@@ -573,8 +573,8 @@ void cModelsWindow::cWindowModelCatSelect::onDragOver()
 		originalselection = -1;
 	}
 	parent->onStopDrag();
-	draggingObject = NULL;
-	draggingwindow = NULL;
+	cWM::draggingObject = NULL;
+	cWM::draggingWindow = NULL;
 
 }
 
@@ -622,8 +622,8 @@ void cModelsWindow::cWindowModelCatSelect::refreshmodels()
 		box->objects.push_back(o);
 	}
 	parent->resizeTo(parent->getWidth(), parent->getHeight());
-	draggingwindow = NULL;
-	draggingObject = NULL;
+	cWM::draggingWindow = NULL;
+	cWM::draggingObject = NULL;
 }
 
 void addnode(std::vector<cWindowTree::cTreeNode*> &nodes, std::map<std::string, cWindowTree::cTreeNode*, std::less<std::string> > &lookup, std::string cat)
@@ -767,7 +767,7 @@ void cModelsWindow::onStopDrag()
 	objects["zdragger"]->moveTo(-4000,-4000);
 	objects["zdragger"]->setInt(0,0);
 	((cWindowScrollPanel*)objects["models"])->draggingObject = NULL;
-	draggingObject = NULL;
+	cWM::draggingObject = NULL;
 
 }	
 

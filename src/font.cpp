@@ -288,7 +288,7 @@ int cFont::print3d(float r, float g, float b, float a, float x, float y, float z
 
 
 
-int	cFont::textlen(std::string s)
+int	cFont::textLen(std::string s)
 {
 	int l = 0;
 	for(int i = 0; i < (int)s.length(); i++)

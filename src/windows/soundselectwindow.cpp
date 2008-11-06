@@ -6,8 +6,6 @@
 #include <undo.h>
 
 extern std::string rodir;
-extern cWindow* draggingwindow;
-extern cWindowObject* draggingObject;
 extern std::vector<std::pair<std::string, std::string> > translations;
 extern void mainloop();
 extern std::vector<std::string> soundfiles;
@@ -46,8 +44,8 @@ void cSoundSelectWindow::cWindowSoundCatSelect::onClick()
 		
 	}
 	parent->resizeTo(parent->getWidth(), parent->getHeight());
-	draggingwindow = NULL;
-	draggingObject = NULL;
+	cWM::draggingWindow = NULL;
+	cWM::draggingObject = NULL;
 }
 
 cSoundSelectWindow::cSoundList::cSoundList( cWindow* parent, TiXmlDocument* skin ) : cWindowDataListBox<std::string>(parent,skin)

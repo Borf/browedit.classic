@@ -68,7 +68,7 @@ void cWindowLabel::draw(int cutoffleft, int cutoffright, int cutofftop, int cuto
 				}
 			}
 
-			if (parent->font->textlen(removecolors(t1 + " " + next)) > w || space == "\n")
+			if (parent->font->textLen(removecolors(t1 + " " + next)) > w || space == "\n")
 			{
 				lines.push_back(t1);
 				t1 = next;
@@ -118,7 +118,7 @@ void cWindowLabel::draw(int cutoffleft, int cutoffright, int cutofftop, int cuto
 					textleft = "";
 				}
 
-				if(parent->font->textlen(removecolors(curline + word)) > w)
+				if(parent->font->textLen(removecolors(curline + word)) > w)
 				{
 					if(curline == "")
 					{

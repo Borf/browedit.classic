@@ -13,6 +13,7 @@
 
 class cUndoStack;
 class cFont;
+class cMenu;
 
 enum eTool
 {
@@ -26,6 +27,16 @@ enum eTool
 class cGraphicsBase
 {
 public:
+	class cMouse
+	{
+	public:
+		static bool			lbuttondown, rbuttondown;
+		static long			x, y;
+		static long			xStart, yStart;
+		static long			xOld, yOld;		
+		static double		x3d, y3d, z3d;
+		static double		x3dStart, y3dStart, z3dStart;		
+	};
 	cGraphicsBase();
 	static int				init(int,int,int,bool);
 	static int				resizeGLScene(int, int);
@@ -33,6 +44,13 @@ public:
 	static int&				h()	{		return				height;	}
 	static int&				w()	{		return				width;	}
 	static long				getFrameTicks();
+
+	static cMenu*			popupMenu;
+	static cMenu*			menu;
+
+
+	static long				dragoffsety, dragoffsetx;
+
 protected:
 	static int				createGLWindow();
 	static int				initGL(void);
@@ -44,8 +62,6 @@ protected:
 
 	static long				lastTick;
 	static long				frameTicks;
-
-
 };
 
 

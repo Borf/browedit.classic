@@ -37,8 +37,8 @@ void cWindowRoundButton::onClick()
 
 cWindowObject* cWindowRoundButton::inObject()
 {
-	int xx=(int)mouseX-parent->getX();
-	int yy=(Graphics.h()-(int)mouseY)-parent->getY();
+	int xx=(int)cGraphics::cMouse::x-parent->getX();
+	int yy=(Graphics.h()-(int)cGraphics::cMouse::y)-parent->getY();
 	int xxx = realX() + (w/2);
 	int yyy = realY() + (h/2);
 	if (((xx - xxx)*(xx - xxx))+((yy - yyy)*(yy - yyy)) < (w*w)/2)

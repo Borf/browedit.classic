@@ -2,9 +2,6 @@
 #include "graphics.h"
 #include "undo.h"
 
-extern long mousestartx, mousestarty;
-extern double mouse3dx, mouse3dy, mouse3dz;
-extern double mouse3dxstart, mouse3dystart, mouse3dzstart;
 #include "windows/areacopywindow.h"
 
 
@@ -17,21 +14,21 @@ int cProcessManagement::texturepaintedit_process_events(SDL_Event &event)
 		case SDL_MOUSEBUTTONUP:
 			if(event.button.button == SDL_BUTTON_LEFT)
 			{
-				if(mouseX < cGraphics::w()-256)
+				if(cGraphics::cMouse::x < cGraphics::w()-256)
 				{
 					if(cGraphics::textureTool == TOOL_SELECTAREA)
 					{
-						if (mouse3dxstart > mouse3dx)
+						if (cGraphics::cMouse::x3dStart > cGraphics::cMouse::x3d)
 						{
-							double d = mouse3dx;
-							mouse3dx = mouse3dxstart;
-							mouse3dxstart = d;
+							double d = cGraphics::cMouse::x3d;
+							cGraphics::cMouse::x3d = cGraphics::cMouse::x3dStart;
+							cGraphics::cMouse::x3dStart = d;
 						}
-						if (mouse3dzstart > mouse3dz)
+						if (cGraphics::cMouse::z3dStart > cGraphics::cMouse::z3d)
 						{
-							double d = mouse3dz;
-							mouse3dz = mouse3dzstart;
-							mouse3dzstart = d;
+							double d = cGraphics::cMouse::z3d;
+							cGraphics::cMouse::z3d = cGraphics::cMouse::z3dStart;
+							cGraphics::cMouse::z3dStart = d;
 						}
 						bool ctrl = (SDL_GetModState() & KMOD_CTRL) != 0;
 						bool alt = (SDL_GetModState() & KMOD_ALT) != 0;
@@ -47,9 +44,9 @@ int cProcessManagement::texturepaintedit_process_events(SDL_Event &event)
 							}
 						}
 
-						for(x = (int)round(mouse3dxstart/10); x < round(mouse3dx/10); x++)
+						for(x = (int)round(cGraphics::cMouse::x3dStart/10); x < round(cGraphics::cMouse::x3d/10); x++)
 						{
-							for(y = (int)round(mouse3dzstart/10); y < (int)round(mouse3dz/10); y++)
+							for(y = (int)round(cGraphics::cMouse::z3dStart/10); y < (int)round(cGraphics::cMouse::z3d/10); y++)
 							{
 								if (x >= 0 && x < cGraphics::world->width && y >= 0 && y < cGraphics::world->height)
 								{
@@ -62,8 +59,8 @@ int cProcessManagement::texturepaintedit_process_events(SDL_Event &event)
 					{
 						int texture = cGraphics::worldContainer->settings.texturestart;
 
-						int x = (int)mouse3dx / 10;
-						int y = (int)mouse3dz / 10;
+						int x = (int)cGraphics::cMouse::x3d / 10;
+						int y = (int)cGraphics::cMouse::z3d / 10;
 						for(int yy = 0; yy < cGraphics::textureGridSizeY; yy++)
 						{
 							for(int xx = 0; xx < cGraphics::textureGridSizeX; xx++)

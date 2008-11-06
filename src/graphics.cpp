@@ -19,25 +19,17 @@
 
 #include "menu.h"
 
-extern long			mouseX, mouseY;
 extern eState			state;
 extern void				ChangeGrid();
-extern std::string			message;
-extern bool				showmessage;
-extern cMenu*			menu;
 extern std::map<long, std::string, std::less<long> >	idtomodel;
 extern eMode			editmode;
 float f = 0;
-extern bool				lbuttondown;
 extern cMenu*			currentobject;
 extern std::string			rodir;
 extern long				lastmotion;
 extern std::string			fontname;
 extern std::string			skinFile;
-double mouse3dx, mouse3dy, mouse3dz;
 extern TiXmlDocument	config;
-
-cMenu* popupmenu = NULL;
 
 int cGraphics::draw(bool drawwm)
 {
@@ -54,8 +46,8 @@ int cGraphics::draw(bool drawwm)
 	{
 		if(worldContainer->camera.topCamera)
 		{
-			worldContainer->settings.lightPosition[0] = mouse3dx;
-			worldContainer->settings.lightPosition[1] = -mouse3dz;
+			worldContainer->settings.lightPosition[0] = cMouse::x3d;
+			worldContainer->settings.lightPosition[1] = -cMouse::z3d;
 			worldContainer->settings.lightPosition[2] = 1000;
 			worldContainer->settings.lightPosition[3] = 1.0f;
 		}
@@ -86,20 +78,6 @@ int cGraphics::draw(bool drawwm)
 	glOrtho(0,width,0,height,-10000,10000);
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 	glLoadIdentity();									// Reset The Modelview Matrix
-
-
-	
-	if (showmessage)
-		{
-		glDisable(GL_TEXTURE_2D);
-		glBegin(GL_QUADS);
-			glVertex2f( (width / 2) - (font->textlen(message)/2.0f) - 50, height/2.0f - 50);
-			glVertex2f( (width / 2) + (font->textlen(message)/2.0f) + 50, height/2.0f - 50);
-			glVertex2f( (width / 2) + (font->textlen(message)/2.0f) + 50, height/2.0f + 50);
-			glVertex2f( (width / 2) - (font->textlen(message)/2.0f) - 50, height/2.0f + 50);
-		glEnd();
-		font->print(0,0,0,(width / 2) - (font->textlen(message)/2.0f),height/2.0f,"%s", message.c_str());
-	}
 
 	if(texturePreview != NULL)
 	{
@@ -290,7 +268,7 @@ int cGraphics::draw(bool drawwm)
 			sprintf(buf, "Selecting");
 		else
 			sprintf(buf, "Editing");
-		font->print(1,1,1,width-font->textlen(buf), height-40, buf);
+		font->print(1,1,1,width-font->textLen(buf), height-40, buf);
 	}
 	else if (!world || !world->loaded)
 	{
@@ -351,7 +329,7 @@ int cGraphics::draw(bool drawwm)
 										editmode == MODE_SPRITE ?			GetMsg("menu/editmode/SPRITEEDIT") : 
 										editmode == MODE_TEXTUREPAINT ?		GetMsg("menu/editmode/TEXTUREPAINTEDIT") : 
 	"");
-	float l = font->textlen(buf);
+	float l = font->textLen(buf);
 	font->print(0,0,0,width-l,height-14,buf);
 
 
@@ -369,24 +347,24 @@ int cGraphics::draw(bool drawwm)
 					glDisable(GL_TEXTURE_2D);
 					glDisable(GL_DEPTH_TEST);
 					glColor3f(0.5,0.5,1);
-					int len = font->textlen(popup);
+					int len = font->textLen(popup);
 					glBegin(GL_QUADS);
-						glVertex2f(mouseX-2, h()-mouseY-2);
-						glVertex2f(mouseX+len+2, h()-mouseY-2);
-						glVertex2f(mouseX+len+2, h()-mouseY+16);
-						glVertex2f(mouseX-2, h()-mouseY+16);
+						glVertex2f(cMouse::x-2, h()-cMouse::y-2);
+						glVertex2f(cMouse::x+len+2, h()-cMouse::y-2);
+						glVertex2f(cMouse::x+len+2, h()-cMouse::y+16);
+						glVertex2f(cMouse::x-2, h()-cMouse::y+16);
 					glEnd();
-					font->print(1,1,1,mouseX, h()-mouseY, "%s", popup.c_str());
+					font->print(1,1,1,cMouse::x, h()-cMouse::y, "%s", popup.c_str());
 					glEnable(GL_DEPTH_TEST);
 				}
 			}
 		}
 	}
 
-	if(popupmenu != NULL)
+	if(popupMenu != NULL)
 	{
 		glDisable(GL_DEPTH_TEST);
-		popupmenu->draw();
+		popupMenu->draw();
 		glEnable(GL_DEPTH_TEST);
 	}
 	
@@ -520,22 +498,22 @@ int cGraphics::init(int pWidth, int pHeight, int pBpp, bool pFullscreen)
 	glEnable(GL_COLOR_MATERIAL);
 
 
-	/*popupmenu = new cMenu();
-	popupmenu->parent = NULL;
-	popupmenu->drawstyle = 1;
-	popupmenu->x = 100;
-	popupmenu->y = 100;
-	popupmenu->w = 150;
-	popupmenu->opened = true;
+	/*popupMenu = new cMenu();
+	popupMenu->parent = NULL;
+	popupMenu->drawstyle = 1;
+	popupMenu->x = 100;
+	popupMenu->y = 100;
+	popupMenu->w = 150;
+	popupMenu->opened = true;
 	cMenuItem* mm;
 	cMenu* favs;
-	ADDMENU(favs,		popupmenu, "Favorites",		popupmenu->x + 150,200); // File
+	ADDMENU(favs,		popupMenu, "Favorites",		popupMenu->x + 150,200); // File
 	favs->y = 100;
 
-	ADDMENUITEM(mm,popupmenu,"Disable Shadows",		&MenuCommand_new); //new
-	ADDMENUITEM(mm,popupmenu,"Snap to floor",		&MenuCommand_new); //new
-	ADDMENUITEM(mm,popupmenu,"Set to 50 over floor",		&MenuCommand_new); //new
-	ADDMENUITEM(mm,popupmenu,"Set as sunlight",		&MenuCommand_new); //new
+	ADDMENUITEM(mm,popupMenu,"Disable Shadows",		&MenuCommand_new); //new
+	ADDMENUITEM(mm,popupMenu,"Snap to floor",		&MenuCommand_new); //new
+	ADDMENUITEM(mm,popupMenu,"Set to 50 over floor",		&MenuCommand_new); //new
+	ADDMENUITEM(mm,popupMenu,"Set as sunlight",		&MenuCommand_new); //new
 
 	ADDMENUITEM(mm,favs,"Torch",		&MenuCommand_new); //new
 	ADDMENUITEM(mm,favs,"Spotlight",		&MenuCommand_new); //new
@@ -748,13 +726,30 @@ void cGraphics::updateMenu()
 
 }
 
-int					cGraphicsBase::width =		1024;
-int					cGraphicsBase::height =		768;
-int					cGraphicsBase::bits =		32;
-bool				cGraphicsBase::fullscreen =	false;
-long 				cGraphicsBase::lastTick =	0;
-long				cGraphicsBase::frameTicks =	0;
-
+int					cGraphicsBase::width =			1024;
+int					cGraphicsBase::height =			768;
+int					cGraphicsBase::bits =			32;
+bool				cGraphicsBase::fullscreen =		false;
+long 				cGraphicsBase::lastTick =		0;
+long				cGraphicsBase::frameTicks =		0;
+cMenu*				cGraphicsBase::popupMenu =		NULL;
+cMenu*				cGraphicsBase::menu =			NULL;
+bool				cGraphicsBase::cMouse::lbuttondown =	false;
+bool				cGraphicsBase::cMouse::rbuttondown =	false;
+long				cGraphicsBase::cMouse::x =			0;
+long				cGraphicsBase::cMouse::y =			0;
+long				cGraphicsBase::cMouse::xOld =		0;
+long				cGraphicsBase::cMouse::yOld =		0;
+long				cGraphicsBase::cMouse::xStart =	0;
+long				cGraphicsBase::cMouse::yStart =	0;
+double				cGraphicsBase::cMouse::x3d =		0;
+double				cGraphicsBase::cMouse::y3d =		0;
+double				cGraphicsBase::cMouse::z3d =		0;
+double				cGraphicsBase::cMouse::x3dStart =	0;
+double				cGraphicsBase::cMouse::y3dStart =	0;
+double				cGraphicsBase::cMouse::z3dStart =	0;
+long				cGraphicsBase::dragoffsety =	0;
+long				cGraphicsBase::dragoffsetx =	0;
 
 cGraphicsBase::cGraphicsBase()
 {
