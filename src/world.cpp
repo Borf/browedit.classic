@@ -1500,7 +1500,7 @@ void cWorld::draw()
 	glViewport(0,0,ww,hh);						// Reset The Current Viewport
 	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
 	glLoadIdentity();									// Reset The Projection Matrix
-	if (cGraphics::worldContainer->camera.topCamera)
+	if (cGraphics::worldContainer->view.topCamera)
 		glOrtho(0,cGraphics::worldContainer->camera.height,0,cGraphics::worldContainer->camera.height * (hh/(float)ww),-10000,10000);
 	else
 		gluPerspective(45.0f,(GLfloat)(ww)/(GLfloat)hh,10.0f,10000.0f);
@@ -1515,7 +1515,7 @@ void cWorld::draw()
 
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 	glLoadIdentity();									// Reset The Modelview Matrix
-	if (cGraphics::worldContainer->camera.topCamera)
+	if (cGraphics::worldContainer->view.topCamera)
 		gluLookAt(  -cGraphics::worldContainer->camera.pointer.y,
 					100,
 					-cGraphics::worldContainer->camera.pointer.x,
@@ -2819,7 +2819,7 @@ void cWorld::draw()
 		glDisable(GL_TEXTURE_2D);
 		glBegin(GL_POLYGON);
 			for(double ii = 0; ii < 2*PI; ii+= 2*PI/20.0)
-				if(cGraphics::worldContainer->camera.topCamera)
+				if(cGraphics::worldContainer->view.topCamera)
 					glVertex3f(-cGraphics::worldContainer->camera.pointer.y+cos(ii)*2 + cGraphics::worldContainer->camera.height/2.0f + 15 ,camheight+0.1,-cGraphics::worldContainer->camera.pointer.x-cGraphics::worldContainer->camera.height/2.0f+sin(ii)*2-15);
 				else
 					glVertex3f(-cGraphics::worldContainer->camera.pointer.x+cos(ii)*2,camheight+0.1,-cGraphics::worldContainer->camera.pointer.y+sin(ii)*2);

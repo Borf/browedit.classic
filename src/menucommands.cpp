@@ -3869,7 +3869,7 @@ MENUCOMMAND(makeMinimaps)
 		cGraphics::world->load();
 #endif
 
-		cGraphics::worldContainer->camera.topCamera = true;
+		cGraphics::worldContainer->view.topCamera = true;
 		cGraphics::worldContainer->camera.pointer = cVector2(-cGraphics::world->height*10,0);
 		cGraphics::view.showDot = false;
 		cGraphics::view.showGrid = false;

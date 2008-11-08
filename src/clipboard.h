@@ -118,6 +118,10 @@ public:
 	bool doHeight;
 	bool doObjects;
 	bool doGat;
+	bool doWalls;
+	bool doLights;
+	bool doEffects;
+	bool doSounds;
 
 	cClipBoardArea(bool,bool,bool,bool);
 	~cClipBoardArea();

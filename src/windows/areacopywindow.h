@@ -22,7 +22,7 @@ private:
 		cWindowOkButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin) : cWindowButton(parent,skin)
 		{
 			alignment = ALIGN_BOTTOM;
-			moveTo(0, 20);
+			moveTo(0, 10);
 			resizeTo(100, 20);
 			text = GetMsg("wm/OK");
 		}
@@ -45,7 +45,7 @@ public:
 		resizable = false;
 		visible = true;
 
-		h = 200;
+		h = 250;
 		w = 350;
 		title = GetMsg("wm/areacopy/TITLE");
 		center();
@@ -56,15 +56,23 @@ public:
 		objects["close"] = new cWindowCloseButton(this);
 
 
-		addLabel("lblAreaCModel", 15,20,GetMsg("wm/areacopy/MODELS"));
-		addLabel("lblAreaCTextures", 15,40,GetMsg("wm/areacopy/TEXTURES"));
-		addLabel("lblAreaCHeight", 15,60,GetMsg("wm/areacopy/HEIGHT"));
-		addLabel("lblAareaCGat", 15,80,GetMsg("wm/areacopy/GAT"));
+		addLabel("lblAreaCModel",		15,20,GetMsg("wm/areacopy/MODELS"));
+		addLabel("lblAreaCTextures",	15,40,GetMsg("wm/areacopy/TEXTURES"));
+		addLabel("lblAreaCHeight",		15,60,GetMsg("wm/areacopy/HEIGHT"));
+		addLabel("lblAareaCGat",		15,80,GetMsg("wm/areacopy/GAT"));
+		addLabel("lblAareaCWalls",		15,100,GetMsg("wm/areacopy/WALLS"));
+		addLabel("lblAareaCLights",		15,120,GetMsg("wm/areacopy/LIGHTS"));
+		addLabel("lblAareaCEffects",	15,140,GetMsg("wm/areacopy/EFFECTS"));
+		addLabel("lblAareaCSounds",		15,160,GetMsg("wm/areacopy/SOUNDS"));
 
-		addCheckBox("objects", 120,20,true);
+		addCheckBox("objects",	120,20,true);
 		addCheckBox("textures", 120,40,true);
-		addCheckBox("height", 120,60,true);
-		addCheckBox("gat", 120,80,true);
+		addCheckBox("height",	120,60,true);
+		addCheckBox("gat",		120,80,true);
+		addCheckBox("walls",	120,100,true);
+		addCheckBox("lights",	120,120,true);
+		addCheckBox("effects",	120,140,true);
+		addCheckBox("sounds",	120,160,true);
 		objects["OkButton"] = new cWindowOkButton(this);
 	}	
 };

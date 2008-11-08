@@ -445,6 +445,11 @@ void cClipBoardArea::apply()
 
 			}
 		}
+		if(doGat)
+		{
+			cGraphics::world->gattiles[tiles[i].y+offZ][tiles[i].x+offX] = tiles[i].gat;
+
+		}
 	}
 
 

@@ -36,7 +36,7 @@ int cGraphics::draw(bool drawwm)
 
 	if(worldContainer)
 	{
-		if(worldContainer->camera.topCamera)
+		if(worldContainer->view.topCamera)
 		{
 			worldContainer->settings.lightPosition[0] = cMouse::x3d;
 			worldContainer->settings.lightPosition[1] = -cMouse::z3d;
@@ -762,7 +762,6 @@ cWorldContainer::cCamera::cCamera()
 	height = 123;
 	rot = 0.0f;
 	pointer = cVector2(-774,-963.5);
-	topCamera = false;
 }
 
 cWorldContainer::cWorldContainer( cWorld* w )
@@ -797,6 +796,7 @@ cWorldContainer::cView::cView()
 	showBoundingBoxes = false;
 	showObjectsAsTransparent = false;
 	showWaterAnimation = true;
+	topCamera = false;
 }
 
 cWorldContainer::cSettings::cSettings()

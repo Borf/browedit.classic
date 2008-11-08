@@ -1027,7 +1027,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/SHOWDOT"),				&MenuCommand_toggle, (void*)&cGraphics::view.showDot);
 	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/SHOWSPRITES"),			&MenuCommand_toggle, (void*)&cGraphics::view.showSprites);
 	ADDMENUITEMDATALINK(mm,view,"Show all light spheres",					&MenuCommand_toggle, (void*)&cGraphics::view.showAllLights);
-	ADDMENUITEMDATAP(mm,view,GetMsg("menu/view/TOPCAMERA"),					&MenuCommand_toggle, (void*)&cGraphics::worldContainer->camera.topCamera);
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/TOPCAMERA"),				&MenuCommand_toggle, (void*)&cGraphics::view.topCamera);
 
 
 	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/TEXTUREEDIT"),				&MenuCommand_mode);
@@ -1462,7 +1462,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					}
 					else
 					{
-						if(cGraphics::worldContainer->camera.topCamera)
+						if(cGraphics::worldContainer->view.topCamera)
 						{
 							cGraphics::worldContainer->camera.height += (cGraphics::cMouse::yOld - cGraphics::cMouse::y) / 2.0f;
 							cGraphics::worldContainer->camera.height = max(min(cGraphics::worldContainer->camera.height, (float)15000), (float)-5);
@@ -1492,7 +1492,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				else
 				{
-					if(!cGraphics::worldContainer->camera.topCamera)
+					if(!cGraphics::worldContainer->view.topCamera)
 					{
 						cVector2 v = cVector2((cGraphics::cMouse::xOld - cGraphics::cMouse::x),  (cGraphics::cMouse::yOld - cGraphics::cMouse::y));
 						v.rotate(-cGraphics::worldContainer->camera.rot / PI * 180.0f);
@@ -1557,7 +1557,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					w->onScrollUp();
 				else if(cGraphics::worldContainer)
 				{
-					if(cGraphics::worldContainer->camera.topCamera)
+					if(cGraphics::worldContainer->view.topCamera)
 					{
 						float diff = cGraphics::worldContainer->camera.height;
 						cGraphics::worldContainer->camera.height*=1.1f;
@@ -1585,7 +1585,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					w->onScrollDown();
 				else if(cGraphics::worldContainer)
 				{
-					if(cGraphics::worldContainer->camera.topCamera)
+					if(cGraphics::worldContainer->view.topCamera)
 					{
 						float diff = cGraphics::worldContainer->camera.height;
 						cGraphics::worldContainer->camera.height/=1.1f;

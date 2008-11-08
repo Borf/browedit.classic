@@ -79,7 +79,6 @@ public:
 		float				angle;
 		float				rot;
 		cVector2			pointer;
-		bool				topCamera;
 	};
 	class cView
 	{
@@ -100,6 +99,7 @@ public:
 		bool				showDot;
 		bool				showWaterAnimation;
 		bool				showObjectsAsTransparent;
+		bool				topCamera;
 	};
 
 	class cSettings

@@ -238,8 +238,10 @@
 			<TEXTURES>Textures:</TEXTURES>
 			<HEIGHT>Height:</HEIGHT>
 			<GAT>Gat:</GAT>
+			<WALLS>Walls:</WALLS>
 			<LIGHTS>Lights:</LIGHTS>
 			<EFFECTS>Effects:</EFFECTS>
+			<SOUNDS>Sounds:</SOUNDS>
 		</areacopy>
 		<sprite>
 			<TITLE>Sprite...</TITLE>
