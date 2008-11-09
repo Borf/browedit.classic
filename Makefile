@@ -175,7 +175,7 @@ $(TARGET): $(OBJECTS_ALL)
 	@$(CXX) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
 
 
-plugin_base: obj/plugins/base_win32.o libs/lib/plugin_base.a
+plugin_base: obj/plugins/base_win32.o
 	@echo -e "    \033[1mLD\033[1m\t\033[22;35m$@\033[39m"
 	@mingw32-ar rcs libs/lib/libplugin_base.a obj/plugins/base_win32.o
 
