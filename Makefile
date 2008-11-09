@@ -175,10 +175,10 @@ $(TARGET): $(OBJECTS_ALL)
 	@$(CXX) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
 
 
-plugin_base: obj/plugins/base_win32.o
+plugin_base: obj/plugins/base_win32.o libs/lib/plugin_base.a
 	@echo -e "    \033[1mLD\033[1m\t\033[22;35m$@\033[39m"
 	@mingw32-ar rcs libs/lib/libplugin_base.a obj/plugins/base_win32.o
 
 plugin_clearmap: obj/plugins/clearmap_win32.o
 	@echo -e "    \033[1mLD\033[1m\t\033[22;35m$@\033[39m"
-	@$(CXX) $(CFLAGS) $(LDFLAGS) -Llibs/lib -W1 --out-implib -shared -o plugins/$@.dll $^ -lopengl32 -lglu32 -lplugin_base
+	@$(CXX) $(CFLAGS) $(LDFLAGS) -Llibs/lib -W1 --out-implib -shared -o plugins/clearmap.dll $^ -lopengl32 -lglu32 -lplugin_base
