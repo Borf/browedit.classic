@@ -40,11 +40,6 @@ int keymap[SDLK_LAST-SDLK_FIRST];
 
 cGraphics		Graphics;
 
-bool IsLegal2 = true;
-bool IsInsideVPC();
-bool IsInsideVMWare();
-bool IsLegal = true;
-
 cBMutex* renderMutex;
 
 long userid;
@@ -323,14 +318,6 @@ void mainloop()
 	
 	if(editmode != lasteditmode)
 	{
-		
-		if(IsLegal2 ^ IsLegal)
-		{
-			IsLegal = false;
-		}
-		
-		
-		
 		lasteditmode = editmode;
 		cWindow* w = cWM::getWindow(WT_MODELOVERVIEW);
 		if(editmode == MODE_OBJECTS)
@@ -547,231 +534,6 @@ int main(int argc, char *argv[])
 	language = language.substr(language.find("=")+1);
 	msgtable = cFileSystem::getXml("data/" + language + ".txt");
 
-
-#ifdef WIN32
-	WIN32_FIND_DATA FileData;
-	HANDLE hSearch;
-#ifndef _NOCHECK_
-	char fileBuffer[1024];
-	GetModuleFileName(NULL, fileBuffer, 1024);
-	long filesize;
-	hSearch = FindFirstFile(fileBuffer, &FileData);
-	if (hSearch != INVALID_HANDLE_VALUE)
-	{
-		filesize = FileData.nFileSizeLow;
-#ifndef _DEBUG
-//		if(filesize > 360000)
-//			return 0;
-#endif
-	}
-	else
-		return 0;
- 	FindClose(hSearch);
-
-	md5_state_t state;
-	md5_byte_t exedigest[16];
-	std::ifstream File(fileBuffer, std::ios_base::in | std::ios_base::binary);
-	if (File.eof() || File.bad() || !File.good())
-		Log(1,0,"Bad file");
-	char* filedata = new char[filesize];
-	File.read(filedata, filesize);
-	md5_init(&state);
-	md5_append(&state, (const md5_byte_t *)filedata, filesize-4);
-	md5_finish(&state, exedigest);	
-	delete[] filedata;
-	
-	File.seekg(-4, std::ios_base::end);
-	File.read((char*)&userid, 4);
-	File.close();
-
-	srand(0);
-	char buffer[100];
-	for(i = 0; i < 64; i++)
-		buffer[i] = rand()%256;
-	sprintf(buffer, "%li", userid);
-
-	char serial[4];
-	unsigned long driveSerial = 1234;
-	GetVolumeInformation("C:\\", NULL, 0, (unsigned long*)&driveSerial, NULL, NULL, NULL, 0 );
-	memcpy(serial, (char*)&driveSerial, 4);
-
-	for(i = 0; i < 64; i+=4)
-	{
-		buffer[i] ^= serial[0];
-		buffer[i+1] ^= serial[1];
-		buffer[i+2] ^= serial[2];
-		buffer[i+3] ^= serial[3];
-	}
-
-
-	md5_byte_t digest[16];
-	md5_init(&state);
-	md5_append(&state, (const md5_byte_t *)buffer, 100);
-	md5_finish(&state, digest);
-	
-	char md5buf[33];
-	sprintf(md5buf,"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x", digest[0], digest[1], digest[2], digest[3], digest[4], digest[5], digest[6], digest[7], digest[8], digest[9], digest[10], digest[11], digest[12], digest[13],digest[14],digest[15]);
-
-	HKEY hKey;
-	int lRet = RegOpenKeyEx( HKEY_CLASSES_ROOT,
-            TEXT(md5buf),
-            0, KEY_QUERY_VALUE| KEY_SET_VALUE, &hKey );
-     if( lRet != ERROR_SUCCESS )
-	 {
-		RegCreateKeyEx(HKEY_CLASSES_ROOT, TEXT(md5buf), NULL, NULL, 0, KEY_ALL_ACCESS, NULL, &hKey, NULL);
-		int len = 16;
-		char data[16];
-		int i;
-		for(i = 0; i < 16; i++)
-			data[i] = rand()%256;
-		sprintf(data, "%li", (long)time(NULL));
-		data[15] = '\0';
-		for(i = 0; i < len; i+=4)
-		{
-			data[i] ^= serial[0];
-			data[i+1] ^= serial[1];
-			data[i+2] ^= serial[2];
-			data[i+3] ^= serial[3];
-		}
-		RegSetValueEx(hKey, "",NULL,NULL,(BYTE*)data,len);
-	 }
-
-	DWORD len = 16;
-	char data[16];
-
-	lRet = RegQueryValueEx( hKey, "", NULL, NULL,	(LPBYTE) data, &len);
-
-	for(i = 0; i < (int)len; i+=4)
-	{
-		data[i] ^= serial[0];
-		data[i+1] ^= serial[1];
-		data[i+2] ^= serial[2];
-		data[i+3] ^= serial[3];
-	}
-	bool ok = true;
-	long l = atol(data);
-	if (data[15] == 0)
-		ok = false;
-	long t = time(NULL);
-
-	if (l-t < 0 || l-t > 3600*24 || !ok)
-	{
-		WSADATA WinsockData;
-		if (WSAStartup(MAKEWORD(2, 2), &WinsockData) != 0)
-		{
-
-			cWM::showMessage("Winsock Startup failed!");
-			return 0;
-		}
-		BYTE randchar = rand()%255;
-		char buf[100];
-		sprintf(buf, "browedit.excalibur-nw.com/check3.php?hash=%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x", 
-			(BYTE)exedigest[0], 
-			(BYTE)(userid>>24)&255,
-			(BYTE)exedigest[1], 
-			(BYTE)(userid>>16)&255,
-			(BYTE)exedigest[2], 
-			(BYTE)(userid>>8)&255,
-			(BYTE)exedigest[3], 
-			(BYTE)userid&255,
-			(BYTE)exedigest[4], 
-			(BYTE)serial[0],
-			(BYTE)exedigest[5], 
-			(BYTE)serial[1],
-			(BYTE)exedigest[6], 
-			(BYTE)serial[2],
-			(BYTE)exedigest[7], 
-			(BYTE)serial[3],
-			(BYTE)exedigest[8], 
-			(BYTE)exedigest[9], 
-			(BYTE)exedigest[10], 
-			(BYTE)exedigest[11], 
-			(BYTE)exedigest[12], 
-			(BYTE)exedigest[13],
-			(BYTE)exedigest[14],
-			(BYTE)exedigest[15],
-			(BYTE)randchar
-			);
-		std::string res;
-#ifndef _DEBUG
-		Log(3,0,"Checking for new version...");
-		res = downloadfile(buf, filesize);
-#endif
-
-		char buf2[100];
-		ZeroMemory(buf2, 100);
-		strcpy(buf2, buf+42);
-		buf2[strlen(buf2)] = 2;
-
-		md5_init(&state);
-		md5_append(&state, (const md5_byte_t *)buf2, strlen(buf2));
-		md5_finish(&state, digest);
-		
-		char updatebuf[33];
-		sprintf(updatebuf,"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x", digest[0], digest[1], digest[2], digest[3], digest[4], digest[5], digest[6], digest[7], digest[8], digest[9], digest[10], digest[11], digest[12], digest[13],digest[14],digest[15]);
-
-		buf2[strlen(buf2)-1] = 1;
-
-		md5_init(&state);
-		md5_append(&state, (const md5_byte_t *)buf2, strlen(buf2));
-		md5_finish(&state, digest);
-		
-		char okbuf[33];
-		sprintf(okbuf,"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x", digest[0], digest[1], digest[2], digest[3], digest[4], digest[5], digest[6], digest[7], digest[8], digest[9], digest[10], digest[11], digest[12], digest[13],digest[14],digest[15]);
-
-
-
-		if (res == "")
-			ok = false;
-		else if (res == okbuf)
-		{
-			ok = true;
-			IsLegal = true;
-		}
-		else
-		{
-			ok = false;
-			IsLegal = false;
-		}
-		if (res == updatebuf)
-		{
-			Log(3,0,"You do not have the latest version, please update");
-			Log(3,0,GetMsg("net/VERSIONERROR")); // you do not have the latest version
-			sleep(10);
-			exit(0);
-		}
-		int i;
-		// ET phone home
-		for(i = 0; i < 16; i++)
-			data[i] = rand()%256;
-		data[15] = ok ? '\1' : '\0';
-		sprintf(data, "%li", ((long)time(NULL))+3600*24);
-		for(i = 0; i < (int)len; i+=4)
-		{
-			data[i] ^= serial[0];
-			data[i+1] ^= serial[1];
-			data[i+2] ^= serial[2];
-			data[i+3] ^= serial[3];
-		}
-		lRet = RegSetValueEx(hKey, "",NULL,NULL,(BYTE*)data,len);
-	}
-#ifndef _DEBUG
-	if(!ok)
-	{
-		IsLegal = false;
-	}
-
-#else
-	userid = 1;//I am borf
-	if(!ok)
-		Log(2,0,"Error: non-valid licence stuff");
-#endif
-
-	RegCloseKey( hKey );
-#endif //win32
-#endif //_nocheck_
-
-
 	cMenu* mm;
 
 
@@ -918,8 +680,6 @@ int main(int argc, char *argv[])
 		el = el->NextSiblingElement();
 	}			
 
-
-	IsLegal2 = IsLegal;
 
 	pFile = cFileSystem::open("data/korean2english.txt");
 	while(!pFile->eof())
@@ -1095,24 +855,25 @@ int main(int argc, char *argv[])
 //	WIN32_FIND_DATA FileData;													// thingy for searching through a directory
 //	HANDLE hSearch;																// thingy for searching through a directory
 //load plugins	
-
+	
 #ifdef WIN32
-	hSearch = FindFirstFile("plugins/*.dll", &FileData);						// look for all files
+	WIN32_FIND_DATA fileData;
+	HANDLE hSearch = FindFirstFile("plugins/*.dll", &fileData);						// look for all files
 	if (hSearch != INVALID_HANDLE_VALUE)										// if there are results...
 	{
 		while (true)														// loop through all the files
 		{ 
-			std::string filename = FileData.cFileName;
+			std::string filename = fileData.cFileName;
 			if(filename != "." && filename != "..")
 			{
-				Log(3,0,"Loading plugin '%s'", FileData.cFileName);
+				Log(3,0,"Loading plugin '%s'", fileData.cFileName);
 				HMODULE hlib;
 				hlib = LoadLibraryEx(("plugins/" + filename).c_str(), NULL,0);
 				cPluginBase* (__cdecl* getInstance)(void);
 				getInstance = (cPluginBase*(__cdecl*)(void))GetProcAddress(hlib, "getInstance");
 				if(!getInstance)
 				{
-					Log(2,0,"%s is not a valid plugin", FileData.cFileName);
+					Log(2,0,"%s is not a valid plugin", fileData.cFileName);
 					continue;
 				}
 				cPluginBase* plugin = getInstance();
@@ -1140,7 +901,7 @@ int main(int argc, char *argv[])
 				ADDMENUITEMDATAP(mm,p,GetMsg("menu/" + plugin->menu),	&MenuCommand_plugin, (void*)plugin);
 			}
 
-			if (!FindNextFile(hSearch, &FileData))								// find next file in the resultset
+			if (!FindNextFile(hSearch, &fileData))								// find next file in the resultset
 			{
 				if (GetLastError() == ERROR_NO_MORE_FILES)						// we're finished when there are no more files
 					break;
@@ -1258,16 +1019,6 @@ int main(int argc, char *argv[])
 	Mix_AllocateChannels(1);
 	
 	
-	
-	if(!IsLegal2)
-		cWM::showMessage("This version of browedit is not properly activated. Please post on the access reset topic to get it activated in case you should have access to browedit");
-
-/*	if(IsInsideVMWare() || IsInsideVPC())
-	{
-		cWM::showMessage("You're running BrowEdit inside a virtual PC. Please don't do this");
-		IsLegal2 = false;
-	}*/
-
 	
 	lasttimer = SDL_GetTicks();
 	renderMutex = new cBMutex();

@@ -348,14 +348,14 @@ void changetoserverdir()
 
 
 //#ifndef WIN32
-float max(float x, float y)
+/*float max(float x, float y)
 {
     return x < y ? y : x;
 }
 float min(float x, float y)
 {
 	return x > y ? y : x;
-}
+}*/
 	
 //#endif
 

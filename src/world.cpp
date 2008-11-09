@@ -22,15 +22,10 @@
 #define floatheight 0.1f
 extern cMenu* effectsmenu;
 
-extern bool IsLegal;
-
 
 extern eMode	editmode;
 extern int brushsize;
-extern long userid;
 extern void mainloop();
-
-extern bool IsLegal2;
 
 
 void cWorld::load()
@@ -889,11 +884,6 @@ class cAddQuadtreeConfirm : public cConfirmWindowCaller
 
 void cWorld::save()
 {
-	if(!IsLegal2)
-	{
-		cWM::showMessage("This copy of browedit is not activated. Please don't use it");
-		return;
-	}
 
 	srand(tickcount());
 	if (!loaded)
@@ -976,9 +966,8 @@ void cWorld::save()
 			pFile.write(textures[i]->RoFilename.c_str(), textures[i]->RoFilename.length());
 			if (i == rnd)
 			{
-				for(ii = 0; ii < 36-textures[i]->RoFilename.length(); ii++)
+				for(ii = 0; ii < 40-textures[i]->RoFilename.length(); ii++)
 					pFile.put('\0');
-				pFile.write((char*)&userid, 4);
 			}
 			else
 			{
@@ -1002,8 +991,6 @@ void cWorld::save()
 		for(i = 0; i < lightmaps.size(); i++)
 		{
 			pFile.write(lightmaps[i]->buf, 256);
-			if(!IsLegal)
-				pFile.put(rand());
 		}
 
 		int nTiles = tiles.size();
@@ -1029,8 +1016,6 @@ void cWorld::save()
 			pFile.put(((t->lightmap)>>8) & 255);
 
 			pFile.write(t->color, 4);
-			if(!IsLegal)
-				pFile.put(rand());
 		}
 
 		for(int y = 0; y < height; y++)
@@ -1045,8 +1030,6 @@ void cWorld::save()
 				pFile.write((char*)&c->tileUp, 4);
 				pFile.write((char*)&c->tileSide, 4);
 				pFile.write((char*)&c->tileOtherSide, 4);
-				if(!IsLegal)
-					pFile.put(rand());
 			}
 		}
 		pFile.close();
@@ -1075,8 +1058,6 @@ void cWorld::save()
 		for(i = 0; i < 40; i++) // ini file
 			pFile.put('\0');
 
-		if(!IsLegal)
-			pFile.put(rand());
 		pFile.write(fname, strlen(fname));
 		pFile.write(".gnd", 4);
 		for(i = 0; i < 40-strlen(fname)-4; i++)
@@ -1099,8 +1080,6 @@ void cWorld::save()
 		pFile.write((char*)&water.amplitude, 4);
 		pFile.write((char*)&water.phase, 4);
 		pFile.write((char*)&water.surfaceCurve, 4);
-		if(!IsLegal)
-			pFile.put(rand());
 
 		pFile.write((char*)&ambientLight.ambientr, 4);
 		pFile.write((char*)&ambientLight.ambientg, 4);
@@ -1150,8 +1129,6 @@ void cWorld::save()
 				pFile.put('\0');	 // filename
 			
 			pFile.write(buf, 40); // reserved
-			if(!IsLegal)
-				pFile.put(rand());
 
 			ZeroMemory(buf, 100);
 			sprintf(buf, "%s", "Object01");
@@ -1160,8 +1137,6 @@ void cWorld::save()
 			pFile.write(buf, 20); // sound			
 
 			ZeroMemory(buf, 100);
-			if (i == rnd)
-				memcpy(buf+10,(char*)&userid,4);
 			pFile.write(buf, 40); // unknown
 
 			f = (m->pos.x - width) * 5.0;
@@ -1177,8 +1152,6 @@ void cWorld::save()
 			pFile.write((char*)&m->scale.x, 4);
 			pFile.write((char*)&m->scale.y, 4);
 			pFile.write((char*)&m->scale.z, 4);
-			if(!IsLegal)
-				pFile.put(rand());
 
 			TiXmlElement model("model");
 			model.SetAttribute("id", i);
@@ -1204,8 +1177,6 @@ void cWorld::save()
 			pFile.write((char*)&lights[i].pos.y, 4);
 			f = (lights[i].pos.z - height) * 5.0;
 			pFile.write((char*)&f, 4);
-			if(!IsLegal)
-				pFile.put(rand());
 			
 			ZeroMemory(buf,41);
 			strcpy(buf, lights[i].todo.c_str());
@@ -1232,8 +1203,6 @@ void cWorld::save()
 			sprintf(buf, "%f", lights[i].maxLightIncrement);
 			maxlightincrement.InsertEndChild(TiXmlText(buf));
 			light.InsertEndChild(maxlightincrement);
-			if(!IsLegal)
-				pFile.put(rand());
 
 
 			TiXmlElement lightfalloff("lightfalloff");
@@ -1250,8 +1219,6 @@ void cWorld::save()
 
 		for(i = 0; i < sounds.size(); i++)
 		{
-			if(!IsLegal)
-				pFile.put(rand());
 			long l = 3;
 			pFile.write((char*)&l, 4);
 			char buf[41];
@@ -1297,8 +1264,6 @@ void cWorld::save()
 			pFile.write((char*)&sounds[i].unknown3,4);			//180
 			pFile.write((char*)&sounds[i].unknown2,4);			//184
 			pFile.write((char*)&sounds[i].repeatDelay,4);			//188
-			if(!IsLegal)
-				pFile.put(rand());
 		}
 
 		for(i = 0; i < effects.size(); i++)
@@ -1330,8 +1295,6 @@ void cWorld::save()
 			f = (effects[i].pos.z - height) * 5.0;
 			pFile.write((char*)&f, 4);
 			
-			if(!IsLegal)
-				pFile.put(rand());
 			pFile.write((char*)&effects[i].type,4);
 			pFile.write((char*)&effects[i].loop,4);
 			pFile.write((char*)&effects[i].todo10,4);
@@ -1342,8 +1305,6 @@ void cWorld::save()
 
 		for(i = 0; i < quadTreeFloats.size(); i++)
 		{
-			if(!IsLegal)
-				pFile.put(rand());
 			pFile.write((char*)&quadTreeFloats[i].x, 4);
 			pFile.write((char*)&quadTreeFloats[i].y, 4);
 			pFile.write((char*)&quadTreeFloats[i].z, 4);
@@ -1373,8 +1334,6 @@ void cWorld::save()
 				pFile.put(0);
 				pFile.put(0);
 				pFile.put(0);
-				if(!IsLegal)
-					pFile.put(rand());
 			}
 		}
 
