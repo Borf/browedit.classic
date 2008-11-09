@@ -97,12 +97,12 @@ typedef int32_t intptr_t;
 #define DEBUG_LEVEL 5
 
 
-#ifndef WIN32
+//#ifndef WIN32
 //#define min(x,y) (x) > (y) ? (y) : (x)
 //#define max(x,y) (x) < (y) ? (y) : (x)
 float max(float x, float y);
 float min(float x, float y);
-#endif
+//#endif
 
 #include <string>
 //using namespace std;

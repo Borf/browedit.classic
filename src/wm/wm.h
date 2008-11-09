@@ -6,13 +6,12 @@ class cTexture;
 
 #include <vector>
 #include <string>
+#include "window.h"
 
 class TiXmlDocument;
 class cInputWindowCaller;
 class cConfirmWindowCaller;
-class cWindow;
 class cWindowObject;
-enum WINDOW_TYPE;
 
 class cWM
 {

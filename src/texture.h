@@ -31,7 +31,8 @@ protected:
 
 public:
 	bool				loaded;
-	cTexture(std::string,eTextureOptions);
+						cTexture(std::string,eTextureOptions);
+	virtual 			~cTexture() {};
 	void				resizeToLog();
 
 	int					width;
@@ -60,6 +61,7 @@ public:
 	std::string		extension;
 
 	cTextureFromMemory(std::string, char*, int);
+	~cTextureFromMemory() {};
 	GLuint texId();
 };
 
