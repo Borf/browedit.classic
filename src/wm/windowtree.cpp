@@ -9,7 +9,7 @@ extern cGraphicsBase Graphics;
 
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
-
+#include <algorithm>
 #include <font.h>
 
 void cWindowTree::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
@@ -582,8 +582,7 @@ bool treeComp(cWindowTree::cTreeNode* a, cWindowTree::cTreeNode* b)
 
 void cWindowTree::cTreeNode::sort()
 {
-//	mergesort<cTreeNode*>(children, treeComp);
-	//TODO
+	std::sort(children.begin(), children.end(), treeComp);
 	for(unsigned int i = 0; i < children.size(); i++)
 		children[i]->sort();
 }

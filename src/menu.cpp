@@ -3,6 +3,7 @@
 
 #include "graphics.h"
 #include "font.h"
+#include <algorithm>
 
 extern cMenu*			lastmenu;
 
@@ -66,8 +67,7 @@ cMenu* cMenu::find(std::string s, bool recurse)
 
 void cMenu::sort()
 {
-//	mergesort(items, cmp);
-	//TODO
+	std::sort(items.begin(), items.end(), cmp);
 	for(unsigned int i = 0; i < items.size(); i++)
 		items[i]->sort();
 }

@@ -1,6 +1,5 @@
 #define _MAIN_CPP_
 #include "tinyxml/tinyxml.h"
-TiXmlDocument msgtable;
 #include <common.h>
 #include <font.h>
 int keymap[SDLK_LAST-SDLK_FIRST];
@@ -30,6 +29,7 @@ int keymap[SDLK_LAST-SDLK_FIRST];
 #include "plugins/base/base.h"
 #include "settings.h"
 #include "texturecache.h"
+#include <algorithm>
 #ifdef WIN32
 #include <windows.h>
 #endif
@@ -38,11 +38,9 @@ int keymap[SDLK_LAST-SDLK_FIRST];
 #include <GL/glext.h>											// We use a define from this file: GL_BGRA_EXT
 #endif
 
-cGraphics		Graphics;
-
 cBMutex* renderMutex;
+TiXmlDocument msgtable;
 
-long userid;
 void MakeUndo();
 void Undo();
 int movement;
@@ -102,92 +100,6 @@ unsigned char * getPixelsBGR()
   return pixels;
 }
 
-std::string downloadfile(std::string url, long &filesize)
-{
-//#define DOWNLOADBUFFERSIZE 1
-#define DOWNLOADBUFFERSIZE 2024
-	std::string server = url;
-	std::string file = "/";
-	if (url.find("/") != std::string::npos)
-	{
-		server = url.substr(0, url.find("/"));
-		file = url.substr(url.find("/"));
-	}
-
-
-
-	SOCKET s;
-    struct sockaddr_in addr;
-    struct hostent* host;    
-	host = gethostbyname("206.222.12.202");
-	if(host==NULL)
-	{
-		Log(1,0,GetMsg("net/HOSTNOTFOUND"), server.c_str());
-		return 0;
-	}
-	addr.sin_family = host->h_addrtype;
-	memcpy((char*) &addr.sin_addr.s_addr, host->h_addr_list[0], host->h_length);
-	addr.sin_port = htons(80);
-	memset(addr.sin_zero, 0, 8);
-
-#ifdef __MINGW32__
-	if ((s = socket(AF_INET,SOCK_STREAM,0)) == (unsigned int)-1)
-#else
-	if ((s = socket(AF_INET,SOCK_STREAM,0)) == -1)
-#endif
-	{
-		Log(1,0,GetMsg("net/NOSOCKET"));
-		return 0;
-	}
-
-	int rc;
-	int siz = sizeof(addr);
-	rc = connect(s, (struct sockaddr*) &addr, siz);
-	if (rc < 0)
-	{
-		Log(3,0,"Could not connect to the server: %s", server.c_str());
-		return 0;
-	}
-
-	std::string header;
-
-
-	header+= "GET "+file+" HTTP/1.0\r\nhost: "+server+"\r\n\r\n";
-
-	send(s, header.c_str(), header.size(), 0);
-
-	char buffer[DOWNLOADBUFFERSIZE+1];
-	buffer[DOWNLOADBUFFERSIZE] = 0;
-	std::string buf;
-	header = "";
-	filesize = 0;
-	std::string downloadbuffer = "";
-	while((rc = recv(s, buffer, DOWNLOADBUFFERSIZE, 0)))
-	{
-		if (rc <= 0)
-			break;
-
-		buf += std::string(buffer, rc);
-
-		if (header == "" && buf.find("\r\n\r\n") != std::string::npos)
-		{
-			header = buf.substr(0, buf.find("\r\n\r\n"));
-			if (header.find("HTTP/1.1 301 Moved Permanently") != std::string::npos)
-			{
-				std::string newurl = header.substr(header.find("Location: http://")+17);
-				newurl = newurl.substr(0, newurl.find("\r\n"));
-				return downloadfile(newurl, filesize);
-			}
-			else
-			{
-				int startpage = buf.find("\r\n\r\n")+4;
-				buf = buf.substr(startpage);
-			}
-		}
-	}
-	
-	return buf;
-}
 
 void mainloop()
 {
@@ -689,8 +601,7 @@ int main(int argc, char *argv[])
 		translations.push_back(std::pair<std::string, std::string>(a,b));
 	}
 //	mergesort<std::pair<std::string, std::string> >(translations, translationcomp);
-//	std::sort(translations.begin(), translations::end());
-	///TODO
+	std::sort(translations.begin(), translations.end(), translationcomp);
 	pFile->close();
 
 
@@ -1576,7 +1487,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					return 1;
 			}
 
-			if(!Graphics.worldContainer)
+			if(!cGraphics::worldContainer)
 				break;
 
 			switch (event.key.keysym.sym)

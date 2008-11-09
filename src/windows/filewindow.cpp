@@ -3,6 +3,7 @@
 #include <filesystem.h>
 #include <wm/windowlistbox.h>
 #include "settings.h"
+#include <algorithm>
 
 extern cGraphicsBase Graphics;
 
@@ -81,8 +82,7 @@ cFileWindow::cFileWindow(void (*pCallback)(std::string)) : cWindow()
 		}
 	}
 	
-//	mergesort<std::string>(mapnames, compare<std::string>);
-	//TODO
+	std::sort(mapnames.begin(), mapnames.end());
 	
 	for(i = 0; i < mapnames.size(); i++)
 		o->setText(-1, mapnames[i]);

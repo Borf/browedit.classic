@@ -34,7 +34,6 @@ extern cMenu* models;
 extern cMenu* currentobject;
 extern TiXmlDocument sprites;
 extern double mouseclickx, mouseclicky, mouseclickz;
-extern long userid;
 extern bool boundingBoxCollisions;
 
 void mainloop();
@@ -3572,7 +3571,7 @@ MENUCOMMAND(saveOnline)
 	std::string resources;
 
 	resources = "mapname=" + mapname;
-	resources+= "&uid=" + inttostring(userid);
+	resources+= "&uid=" + inttostring(1);//TODO
 	resources+= "&pass=" + password;
 
 
@@ -3748,7 +3747,7 @@ MENUCOMMAND(saveOnline)
 		CURLFORM_END);
 	curl_formadd(&post, &last,
 		CURLFORM_COPYNAME, "uid",
-		CURLFORM_COPYCONTENTS, inttostring(userid).c_str(), 
+		CURLFORM_COPYCONTENTS, inttostring(1).c_str(), 
 		CURLFORM_END);
 	curl_formadd(&post, &last,
 		CURLFORM_COPYNAME, "pass",
