@@ -19,8 +19,10 @@ cFileWindow::cOkButton::cOkButton( cWindow* parent, void (*pCallback)(std::strin
 void cFileWindow::cOkButton::onClick()
 {
 	std::string filename = parent->objects["filebox"]->getText(-1);
-	filename = filename.substr(0, filename.length()-4);
 	parent->close();
+	if(filename == "")
+		return;
+	filename = filename.substr(0, filename.length()-4);
 	callback(cSettings::roDir + filename);
 }
 

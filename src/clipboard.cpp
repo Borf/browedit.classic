@@ -505,7 +505,7 @@ void cClipBoardArea::render()
 			objects[i]->render();
 		}
 		glPopMatrix();
-	}	
+	}
 
 }
 

@@ -111,6 +111,10 @@ public:
 	};
 	std::vector<cContainer>			tiles;
 	std::vector<cClipboardObject*>	objects;
+	std::vector<cLight>				lights;
+	std::vector<cEffect>			effects;
+	std::vector<cSound>				sounds;
+
 
 	int startX,startZ;
 
