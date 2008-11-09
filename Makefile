@@ -177,8 +177,8 @@ $(TARGET): $(OBJECTS_ALL)
 
 plugin_base: obj/plugins/base_win32.o
 	@echo -e "    \033[1mLD\033[1m\t\033[22;35m$@\033[39m"
-	@mingw32-ar rcs libs/lib/plugin_base.a obj/plugins/base_win32.o
+	@mingw32-ar rcs libs/lib/libplugin_base.a obj/plugins/base_win32.o
 
 plugin_clearmap: obj/plugins/clearmap_win32.o
 	@echo -e "    \033[1mLD\033[1m\t\033[22;35m$@\033[39m"
-	@$(CXX) $(CFLAGS) $(LDFLAGS) -W1 --out-implib -shared -o plugins/$@.dll $^ -lopengl32 -lglu32 -lplugin_base -Llibs/lib
+	@$(CXX) $(CFLAGS) $(LDFLAGS) -Llibs/lib -W1 --out-implib -shared -o plugins/$@.dll $^ -lopengl32 -lglu32 -lplugin_base
