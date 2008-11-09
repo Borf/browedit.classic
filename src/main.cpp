@@ -135,7 +135,11 @@ std::string downloadfile(std::string url, long &filesize)
 	addr.sin_port = htons(80);
 	memset(addr.sin_zero, 0, 8);
 
+#ifdef __MINGW32__
+	if ((s = socket(AF_INET,SOCK_STREAM,0)) == (unsigned int)-1)
+#else
 	if ((s = socket(AF_INET,SOCK_STREAM,0)) == -1)
+#endif
 	{
 		Log(1,0,GetMsg("net/NOSOCKET"));
 		return 0;
@@ -550,15 +554,14 @@ int main(int argc, char *argv[])
 #ifndef _NOCHECK_
 	char fileBuffer[1024];
 	GetModuleFileName(NULL, fileBuffer, 1024);
-	bool fFinished = false;
 	long filesize;
 	hSearch = FindFirstFile(fileBuffer, &FileData);
 	if (hSearch != INVALID_HANDLE_VALUE)
 	{
 		filesize = FileData.nFileSizeLow;
 #ifndef _DEBUG
-		if(filesize > 360000)
-			return 0;
+//		if(filesize > 360000)
+//			return 0;
 #endif
 	}
 	else
@@ -585,7 +588,7 @@ int main(int argc, char *argv[])
 	char buffer[100];
 	for(i = 0; i < 64; i++)
 		buffer[i] = rand()%256;
-	sprintf(buffer, "%i", userid);
+	sprintf(buffer, "%li", userid);
 
 	char serial[4];
 	unsigned long driveSerial = 1234;
@@ -616,11 +619,12 @@ int main(int argc, char *argv[])
      if( lRet != ERROR_SUCCESS )
 	 {
 		RegCreateKeyEx(HKEY_CLASSES_ROOT, TEXT(md5buf), NULL, NULL, 0, KEY_ALL_ACCESS, NULL, &hKey, NULL);
-		unsigned long len = 16;
+		int len = 16;
 		char data[16];
-		for(int i = 0; i < 16; i++)
+		int i;
+		for(i = 0; i < 16; i++)
 			data[i] = rand()%256;
-		sprintf(data, "%i", (long)time(NULL));
+		sprintf(data, "%li", (long)time(NULL));
 		data[15] = '\0';
 		for(i = 0; i < len; i+=4)
 		{
@@ -637,7 +641,7 @@ int main(int argc, char *argv[])
 
 	lRet = RegQueryValueEx( hKey, "", NULL, NULL,	(LPBYTE) data, &len);
 
-	for(i = 0; i < len; i+=4)
+	for(i = 0; i < (int)len; i+=4)
 	{
 		data[i] ^= serial[0];
 		data[i+1] ^= serial[1];
@@ -736,12 +740,13 @@ int main(int argc, char *argv[])
 			sleep(10);
 			exit(0);
 		}
+		int i;
 		// ET phone home
-		for(int i = 0; i < 16; i++)
+		for(i = 0; i < 16; i++)
 			data[i] = rand()%256;
 		data[15] = ok ? '\1' : '\0';
-		sprintf(data, "%i", ((long)time(NULL))+3600*24);
-		for(i = 0; i < len; i+=4)
+		sprintf(data, "%li", ((long)time(NULL))+3600*24);
+		for(i = 0; i < (int)len; i+=4)
 		{
 			data[i] ^= serial[0];
 			data[i+1] ^= serial[1];
@@ -1257,11 +1262,11 @@ int main(int argc, char *argv[])
 	if(!IsLegal2)
 		cWM::showMessage("This version of browedit is not properly activated. Please post on the access reset topic to get it activated in case you should have access to browedit");
 
-	if(IsInsideVMWare() || IsInsideVPC())
+/*	if(IsInsideVMWare() || IsInsideVPC())
 	{
 		cWM::showMessage("You're running BrowEdit inside a virtual PC. Please don't do this");
 		IsLegal2 = false;
-	}
+	}*/
 
 	
 	lasttimer = SDL_GetTicks();
@@ -1274,7 +1279,7 @@ int main(int argc, char *argv[])
 	Mix_CloseAudio();
 	// Shutdown
 	cGraphics::closeAndCleanup();				// Kill The Window
-	for(i = 0; i < cGraphics::worlds.size(); i++)
+	for(i = 0; i < (int)cGraphics::worlds.size(); i++)
 		delete cGraphics::worlds[i];
 
 	cGraphics::worlds.clear();
@@ -1913,7 +1918,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				if(!cGraphics::world)
 					break;
 				editmode = MODE_GAT;
-				if (cGraphics::worldContainer->settings.texturestart >= cGraphics::gatTiles.size()-1)
+				if (cGraphics::worldContainer->settings.texturestart >= (int)cGraphics::gatTiles.size()-1)
 					cGraphics::worldContainer->settings.texturestart = 0;
 				break;
 			case SDLK_F7:

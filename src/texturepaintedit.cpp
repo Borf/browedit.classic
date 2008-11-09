@@ -65,17 +65,15 @@ int cProcessManagement::texturepaintedit_process_events(SDL_Event &event)
 						{
 							for(int xx = 0; xx < cGraphics::textureGridSizeX; xx++)
 							{
-								int xxx,yyy;
-								int xi = 1;
-								int yi = 1;
+								int xxx=0,yyy=0;
 								
 								if		(cGraphics::worldContainer->settings.textureRot == 0)	{ yyy = yy;										xxx = xx;										}
 								else if (cGraphics::worldContainer->settings.textureRot == 1)	{ yyy = xx;										xxx = cGraphics::textureBrush[0].size()-1-yy;		}
 								else if (cGraphics::worldContainer->settings.textureRot == 2)	{ yyy = cGraphics::textureBrush.size()-1-yy;		xxx = cGraphics::textureBrush[0].size()-1-xx;		}
 								else if	(cGraphics::worldContainer->settings.textureRot == 3)	{ yyy = cGraphics::textureBrush.size()-1-xx;		xxx = yy;										}
 								
-								if( cGraphics::textureBrush.size() <= yyy ||
-									cGraphics::textureBrush[0].size() <= xxx)
+								if( (int)cGraphics::textureBrush.size() <= yyy ||
+									(int)cGraphics::textureBrush[0].size() <= xxx)
 									continue;
 								
 								if(cGraphics::textureBrush[yyy][xxx])
@@ -157,16 +155,16 @@ int cProcessManagement::texturepaintedit_process_events(SDL_Event &event)
 				break;
 			case SDLK_RIGHTBRACKET:
 				cGraphics::worldContainer->settings.texturestart++;
-				if (cGraphics::worldContainer->settings.texturestart >= cGraphics::world->textures.size())
+				if (cGraphics::worldContainer->settings.texturestart >= (int)cGraphics::world->textures.size())
 					cGraphics::worldContainer->settings.texturestart--;
 				break;
 			case SDLK_SPACE:
 				if(event.key.keysym.mod & KMOD_CTRL)
 				{
 					std::vector<std::vector<bool> > newBrush(cGraphics::textureBrush[0].size(), std::vector<bool> (cGraphics::textureBrush.size()));
-					for(int y = 0; y < cGraphics::textureBrush.size(); y++)
+					for(unsigned int y = 0; y < cGraphics::textureBrush.size(); y++)
 					{
-						for(int x = 0; x < cGraphics::textureBrush[y].size(); x++)
+						for(unsigned int x = 0; x < cGraphics::textureBrush[y].size(); x++)
 						{
 							newBrush[cGraphics::textureBrush[0].size()-1-x][y] = cGraphics::textureBrush[y][x];
 						}						

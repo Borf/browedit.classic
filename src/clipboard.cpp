@@ -70,7 +70,7 @@ void cClipboardTexture::apply()
 						cTile* tile = &data[xx][yy].second;
 						cTextureContainer* texture = worldContainer->world->textures[tile->texture];
 						int found = -1;
-						for(int i = 0; i < cGraphics::world->textures.size() && found == -1; i++)
+						for(unsigned int i = 0; i < cGraphics::world->textures.size() && found == -1; i++)
 						{
 							if(cGraphics::world->textures[i]->RoFilename == texture->RoFilename)
 								found = i;
@@ -162,14 +162,13 @@ void cClipboardHeight::render()
 	posx = posx + ceil(data[0].size()/2.0f)-1;
 	posy = posy + ceil(data[0].size()/2.0f)-1;
 
-	int yy = 0;
 	glEnable(GL_TEXTURE_2D);
 	glColor4f(1,1,1,1);
-	for(int y = 0; y < data.size(); y++)
+	for(unsigned int y = 0; y < data.size(); y++)
 	{
-		for(int x = 0; x <data[y].size(); x++)
+		for(unsigned int x = 0; x <data[y].size(); x++)
 		{
-			if (posx-x >= cGraphics::world->width || posx-x < 0 || posy-y < 0 || posy-y >= cGraphics::world->height)
+			if (posx-(int)x >= cGraphics::world->width || posx-(int)x < 0 || posy-(int)y < 0 || posy-(int)y >= cGraphics::world->height)
 				continue;
 			
 			cCube* c = &cGraphics::world->cubes[posy-y][posx-x];
@@ -230,15 +229,14 @@ void cClipboardGat::render()
 	posx = posx + ceil(data[0].size()/2.0f)-1;
 	posy = posy + ceil(data[0].size()/2.0f)-1;
 	
-	int yy = 0;
 	glDisable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
 	glColor4f(1,1,1,1);
-	for(int y = 0; y < data.size(); y++)
+	for(unsigned int y = 0; y < data.size(); y++)
 	{
-		for(int x = 0; x <data[y].size(); x++)
+		for(unsigned int x = 0; x <data[y].size(); x++)
 		{
-			if (posx-x >= cGraphics::world->width*2 || posx-x < 0 || posy-y < 0 || posy-y >= cGraphics::world->height*2)
+			if (posx-(int)x >= cGraphics::world->width*2 || posx-(int)x < 0 || posy-(int)y < 0 || posy-(int)y >= cGraphics::world->height*2)
 				continue;
 						
 
@@ -291,7 +289,7 @@ void cClipboardObject::apply()
 				found = false;
 				sprintf(buf, "%s%i", model->name.substr(0,i+1).c_str(), newid);
 				
-				for(int ii = 0; ii < cGraphics::world->models.size() && !found; ii++)
+				for(unsigned int ii = 0; ii < cGraphics::world->models.size() && !found; ii++)
 				{
 					if(cGraphics::world->models[ii]->name == buf)
 						found = true;
@@ -344,7 +342,8 @@ cClipBoardArea::cClipBoardArea(bool pTextures, bool pHeight, bool pObjects, bool
 	startX = round(cGraphics::cMouse::x3d/10.0f);
 	startZ = round(cGraphics::cMouse::z3d/10.0f);
 
-	unsigned int x,y,i;
+	int x,y;
+	unsigned int i;
 
 	int minx = 9999, miny = 9999;
 

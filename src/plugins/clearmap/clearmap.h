@@ -11,8 +11,11 @@
 #define PLUGIN_CLEARMAP_API __declspec(dllimport)
 #endif
 
+#ifndef __MINGW32__
 #pragma warning( disable : 4786 )
 #pragma warning( disable : 4503 )
+#endif
+
 #include "../base/base.h"
 
 extern "C"

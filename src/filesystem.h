@@ -6,7 +6,10 @@
 #include <map>
 #include "grflib/grf.h"
 #include "tinyxml/tinyxml.h"
+
+#ifndef __MINGW32__
 #pragma warning(disable : 4786)
+#endif
 //using namespace std;
 
 enum STARTPOS

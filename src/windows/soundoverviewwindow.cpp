@@ -73,7 +73,7 @@ void cSoundOverViewWindow::cSoundOverViewTree::onChange()
 {
 	unsigned int i;
 	int a = selected;
-	cWindowTree::cTreeNode* node;
+	cWindowTree::cTreeNode* node = NULL;
 	for(i = 0; i < nodes.size(); i++)
 	{
 		node = nodes[i]->getnode(a);
@@ -114,7 +114,7 @@ void cSoundOverViewWindow::cSoundOverViewTree::getObject( cSound m )
 			
 			selected = nn->getselectionnr();
 			std::vector<std::string> values;
-			for(i = 0; i < nodes.size() && i < selected; i++)
+			for(i = 0; i < nodes.size() && (int)i < selected; i++)
 				nodes[i]->getdata(values);
 			
 			i = 0;

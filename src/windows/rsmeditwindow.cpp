@@ -131,7 +131,7 @@ cRSMEditWindow::cWindowSaveAsButton::cWindowSaveAsButton( cWindow* parent, TiXml
 void cRSMEditWindow::cWindowSaveAsButton::onClick()
 {
 	std::string oldfilename = ((cRSMEditWindow*)parent)->filename;
-	int i;
+	unsigned int i;
 	cFile* pFile = cFileSystem::open(((cRSMEditWindow*)parent)->filename);
 	
 	char buffer[100];
@@ -146,7 +146,7 @@ void cRSMEditWindow::cWindowSaveAsButton::onClick()
 	long nTextures;
 	memcpy((char*)&nTextures, buffer, 4);
 	
-	for(i = 0; i < nTextures; i++)
+	for(i = 0; (int)i < nTextures; i++)
 		pFile->read(buffer, 40);
 	
 	std::string rest = "";

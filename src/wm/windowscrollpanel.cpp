@@ -115,7 +115,6 @@ void cWindowScrollPanel::draw(int cutoffleft, int cutoffright, int cutofftop, in
 /// block
 		if(skinBarCenterHeight != 0)
 		{
-			int center = (skinBarTop-skinBarTopHeight + skinBarBottom)/ 2;
 			int c1 = skinBarTop-skinBarTopHeight-	skinBarCenterHeight/2;
 			int c2 = (skinBarBottom+				skinBarCenterHeight/2);
 

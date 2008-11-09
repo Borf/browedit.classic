@@ -44,10 +44,12 @@ typedef int32_t intptr_t;
 
 #ifdef WIN32
 	#include <windows.h>
+#ifndef __MINGW32__
 	#pragma warning( disable : 4786 )
 	#pragma warning( disable : 4503 )
 	#pragma warning( disable : 4244 ) //bad borf
 	#pragma warning( disable : 4018 ) //bad borf
+#endif
 	#include <fstream>
 	#define sleep(x) Sleep(1000*(x))
 	#define DIR_SEPERATOR "\\"

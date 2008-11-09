@@ -25,7 +25,7 @@ void cSoundSelectWindow::cWindowSoundCatSelect::onClick()
 	box->setInt(-2,0);
 	
 	int a = selected;
-	cWindowTree::cTreeNode* node;
+	cWindowTree::cTreeNode* node = NULL;
 	for(i = 0; i < nodes.size(); i++)
 	{
 		node = nodes[i]->getnode(a);
@@ -71,7 +71,7 @@ void cSoundSelectWindow::cWindowPlayButton::onClick()
 	if(text == "Play")
 	{
 		int selected = parent->objects["sounds"]->getInt(-1);
-		if(selected >= ((cWindowDataListBox<std::string>*)parent->objects["sounds"])->data.size())
+		if(selected >= (int)((cWindowDataListBox<std::string>*)parent->objects["sounds"])->data.size())
 			return;
 		
 		std::string filename = ((cWindowDataListBox<std::string>*)parent->objects["sounds"])->data[selected];
@@ -111,7 +111,7 @@ cSoundSelectWindow::cWindowOkButton::cWindowOkButton( cWindow* w, TiXmlDocument*
 void cSoundSelectWindow::cWindowOkButton::onClick()
 {
 	int selected = parent->objects["sounds"]->getInt(-1);
-	if(selected >= ((cWindowDataListBox<std::string>*)parent->objects["sounds"])->data.size())
+	if(selected >= (int)((cWindowDataListBox<std::string>*)parent->objects["sounds"])->data.size())
 		return;
 	
 	std::string filename = ((cWindowDataListBox<std::string>*)parent->objects["sounds"])->data[selected];

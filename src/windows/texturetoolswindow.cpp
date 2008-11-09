@@ -108,9 +108,9 @@ void cTextureToolsWindow::cWindowBrushShape::draw( int a,int b,int c,int d )
 	glDisable(GL_TEXTURE_2D);
 	glColor4f(0,0,0,colors[3]);
 	glBegin(GL_QUADS);
-	for(int yyy = 0; yyy < cGraphics::textureBrush.size(); yyy++)
+	for(unsigned int yyy = 0; yyy < cGraphics::textureBrush.size(); yyy++)
 	{
-		for(int xxx = 0; xxx < cGraphics::textureBrush[yyy].size(); xxx++)
+		for(unsigned int xxx = 0; xxx < cGraphics::textureBrush[yyy].size(); xxx++)
 		{
 			if(cGraphics::textureBrush[cGraphics::textureBrush.size()-1-yyy][xxx])
 			{

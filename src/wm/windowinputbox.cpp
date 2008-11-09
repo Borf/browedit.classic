@@ -372,7 +372,7 @@ void cWindowLongInputBox::draw( int cutoffleft, int cutoffright, int cutofftop, 
 	{
 		firstdraw = false;
 		char buf[100];
-		sprintf(buf, "%i", *longje);
+		sprintf(buf, "%li", *longje);
 		while(buf[strlen(buf)-1] == '0')
 			buf[strlen(buf)-1] = '\0';
 		if(buf[strlen(buf)-1] == '.')

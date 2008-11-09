@@ -33,15 +33,12 @@ void cGifTextureLoader::load(char* filedata,int datlen, cTexture* tex)
 
 
 	int color,x,y;
-	int width = pImageData->sx*3;
 
 	for(x = 0; x < pImageData->sx; x++)
 	{
-		int xx = 3*x;
 		for(y = 0; y < pImageData->sy; y++)
 		{
 			color = gdImagePalettePixel(pImageData, x, pImageData->sy - y-1);
-
 			tex->data[3*x+3*pImageData->sx*y+0] = gdImageRed(pImageData, color);
 			tex->data[3*x+3*pImageData->sx*y+1] = gdImageGreen(pImageData, color);
 			tex->data[3*x+3*pImageData->sx*y+2] = gdImageBlue(pImageData, color);

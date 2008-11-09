@@ -1,5 +1,5 @@
 #!make
-LIBS = -lz -lGL -lSDL -lgd -lGLU -lSDL_mixer -lcurl
+LIBS = -lz -lGL -lSDL -lgd -lGLU -lSDL_mixer -lcurl -lplugin_base
 INCLUDES = -Isrc -DGRF_STATIC -D__NOXML__
 CXX = g++
 CC = gcc
@@ -74,7 +74,7 @@ endif
 WINDRES=mingw32-windres
 BINARY_EXT=.exe
 INCLUDES += -Ilibs/include
-LIBS = -L. -lzlib1 -lSDL -lbgd -lopengl32 -lglu32 -lws2_32 -lcomdlg32 -lcurl -lSDL_mixer
+LIBS = -L. -Llibs/lib -lzlib1 -lSDL -lbgd -lopengl32 -lglu32 -lws2_32 -lcomdlg32 -lcurl -lSDL_mixer -lplugin_base
 # ws2_32.lib sdl.lib sdlmain.lib zlib.lib bgd.lib opengl32.lib glu32.lib 
 endif
 
@@ -88,10 +88,10 @@ DEBUG=yes
 endif
 
 ifeq ($(DEBUG),yes)
-CFLAGS += -g -ggdb -fstack-protector-all -D_DEBUG
+CFLAGS += -g -ggdb -D_DEBUG
 else
 # We suppose everyone have SSE. If this cause problems, switch mfpmath back to 387
-CFLAGS += -O3 -fomit-frame-pointer -momit-leaf-frame-pointer -mfpmath=sse
+CFLAGS += -O3 -fomit-frame-pointer -momit-leaf-frame-pointer -mfpmath=387
 endif
 
 TARGET=roworldedit_$(PLATFORM)$(BINARY_EXT)
@@ -113,8 +113,8 @@ ifeq ($(PLATFORM),win32)
 OBJECTS_SRC += obj/src_Script1_rc_$(PLATFORM).o
 endif
 
-all: $(TARGET)
-
+plugins: plugin_base plugin_clearmap
+all: plugins $(TARGET)
 clean:
 	$(RM) obj/*.o obj/*.dep obj/*.mak $(TARGET)
 
@@ -147,6 +147,17 @@ obj/%_$(PLATFORM).o: %.cpp
 	@echo -e "    \033[1mCC\033[1m\t\033[22;34m$<\033[39m"
 	@$(CXX) $(CFLAGS) $(INCLUDES) -c -o $@ $<
 
+
+
+obj/plugins/%_$(PLATFORM).o: src/plugins/base/%.cpp
+	@echo -e "    \033[1mCC\033[1m\t\033[22;34m$<\033[39m"
+	@$(CXX) $(CFLAGS) $(INCLUDES) -c -o $@ $<
+
+obj/plugins/%_$(PLATFORM).o: src/plugins/clearmap/%.cpp
+	@echo -e "    \033[1mCC\033[1m\t\033[22;34m$<\033[39m"
+	@$(CXX) $(CFLAGS) $(INCLUDES) -DPLUGIN_CLEARMAP_EXPORTS -D_USRDLL -c -o $@ $<
+
+
 # depencies
 
 obj/%_$(PLATFORM).dep: %.c
@@ -164,3 +175,10 @@ $(TARGET): $(OBJECTS_ALL)
 	@$(CXX) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
 
 
+plugin_base: obj/plugins/base_win32.o
+	@echo -e "    \033[1mLD\033[1m\t\033[22;35m$@\033[39m"
+	@mingw32-ar rcs libs/lib/plugin_base.a obj/plugins/base_win32.o
+
+plugin_clearmap: obj/plugins/clearmap_win32.o
+	@echo -e "    \033[1mLD\033[1m\t\033[22;35m$@\033[39m"
+	@$(CXX) $(CFLAGS) $(LDFLAGS) -W1 --out-implib -shared -o plugins/$@.dll $^ -lopengl32 -lglu32 -lplugin_base -Llibs/lib

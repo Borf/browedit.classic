@@ -1,4 +1,4 @@
-#pragma warning( disable : 4503 )
+#include <common.h>
 #include "modelswindow.h"
 
 #include <filesystem.h>
@@ -586,7 +586,7 @@ void cModelsWindow::cWindowModelCatSelect::refreshmodels()
 		delete box->objects[i];
 	box->objects.clear();
 	int a = selected;
-	cWindowTree::cTreeNode* node;
+	cWindowTree::cTreeNode* node = NULL;
 	for(i = 0; i < nodes.size(); i++)
 	{
 		 node = nodes[i]->getnode(a);

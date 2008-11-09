@@ -43,9 +43,9 @@ void cTextureBrushWindow::cWindowBrushButton::draw(int,int,int,int)
 	glDisable(GL_TEXTURE_2D);
 	glColor4f(0,0,0,colors[3]);
 	glBegin(GL_QUADS);
-	for(int yyy = 0; yyy < brush.size(); yyy++)
+	for(unsigned int yyy = 0; yyy < brush.size(); yyy++)
 	{
-		for(int xxx = 0; xxx < brush[yyy].size(); xxx++)
+		for(unsigned int xxx = 0; xxx < brush[yyy].size(); xxx++)
 		{
 			if(brush[brush.size()-1-yyy][xxx])
 			{
@@ -78,9 +78,9 @@ void cTextureBrushWindow::cWindowBrushButton::onClick()
 		}
 	}
 
-	for(y = 0; y < brush.size(); y++)
+	for(y = 0; y < (int)brush.size(); y++)
 	{
-		for(x = 0; x < brush[y].size(); x++)
+		for(x = 0; x < (int)brush[y].size(); x++)
 		{
 			cWindowBrushTile* tile = new cWindowBrushTile(parent);
 			tile->moveTo(64*x,64*y);
@@ -395,9 +395,9 @@ cTextureBrushWindow::cTextureBrushWindow() : cWindow()
 	brushWidth = cGraphics::textureBrush[0].size();
 	brushHeight = cGraphics::textureBrush.size();
 	
-	for(int y = 0; y < cGraphics::textureBrush.size(); y++)
+	for(unsigned int y = 0; y < cGraphics::textureBrush.size(); y++)
 	{
-		for(int x = 0; x < cGraphics::textureBrush[y].size(); x++)
+		for(unsigned int x = 0; x < cGraphics::textureBrush[y].size(); x++)
 		{
 			tile = new cWindowBrushTile(this);
 			tile->moveTo(64*x,64*y);
@@ -438,7 +438,7 @@ void cTextureBrushWindow::resizeTo(int xx, int yy)
 
 	int x = 2;
 	int y = 10;
-	for(int i = 0; i < panel->objects.size(); i++)
+	for(unsigned int i = 0; i < panel->objects.size(); i++)
 	{
 		panel->objects[i]->moveTo(x,y);
 		x+=132;

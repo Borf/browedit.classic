@@ -1335,7 +1335,8 @@ MENUCOMMAND(gatheight)
 MENUCOMMAND(gatcollision2)
 {
 	MenuCommand_gatheight(src);
-	int i, x, y;
+	int x, y;
+	unsigned int i;
 	int ww = cGraphics::w();
 	ww -= 256;
 	int hh = cGraphics::h()-20;
@@ -1549,7 +1550,7 @@ public:
 				{
 					for(int xx = 0; xx < 8; xx++)
 					{
-						float fx = (xx-1)/6.0f;
+//						float fx = (xx-1)/6.0f;
 						float fy = (yy-1)/6.0f;
 						
 						cCube* c2 = &cGraphics::world->cubes[y+1][x];
@@ -1575,7 +1576,7 @@ public:
 				{
 					for(int xx = 0; xx < 8; xx++)
 					{
-						float fx = (xx-1)/6.0f;
+//						float fx = (xx-1)/6.0f;
 						float fy = (yy-1)/6.0f;
 						
 						cCube* c2 = &cGraphics::world->cubes[y][x+1];
@@ -1692,7 +1693,7 @@ MENUCOMMAND(dolightmaps2)
 	unsigned long timer = tickcount();
 
 
-#if 0
+#if 1
 	int x,y;
 	for(y = 0; y < cGraphics::world->height && rendering; y++)
 	{
@@ -1730,7 +1731,7 @@ MENUCOMMAND(dolightmaps2)
 				{
 					for(int xx = 0; xx < 8; xx++)
 					{
-						float fx = (xx-1)/6.0f;
+//						float fx = (xx-1)/6.0f;
 						float fy = (yy-1)/6.0f;
 						
 						cCube* c2 = &cGraphics::world->cubes[y+1][x];
@@ -1755,7 +1756,7 @@ MENUCOMMAND(dolightmaps2)
 				{
 					for(int xx = 0; xx < 8; xx++)
 					{
-						float fx = (xx-1)/6.0f;
+//						float fx = (xx-1)/6.0f;
 						float fy = (yy-1)/6.0f;
 
 						cCube* c2 = &cGraphics::world->cubes[y][x+1];
@@ -2479,7 +2480,7 @@ MENUCOMMAND(exportmapfiles)
 	CreateDirectory(cGraphics::world->fileName, NULL);
 	CreateDirectory((cGraphics::world->fileName + std::string("\\texture\\")).c_str(), NULL);
 
-	int i;
+	unsigned int i;
 	std::ofstream pFile((std::string(cGraphics::world->fileName) + ".txt").c_str());
 	for(i = 0; i < cGraphics::world->textures.size(); i++)
 	{
@@ -2522,7 +2523,7 @@ MENUCOMMAND(exportmapfiles)
 		pFile.put('\r');
 		pFile.put('\n');
 
-		for(int ii = 0; ii < cGraphics::world->models[i]->textures.size(); ii++)
+		for(unsigned int ii = 0; ii < cGraphics::world->models[i]->textures.size(); ii++)
 		{
 			std::string file = cGraphics::world->models[i]->textures[ii]->getfilename();
 			cFile* pF = cFileSystem::open(file);
@@ -3223,7 +3224,7 @@ MENUCOMMAND(removefavlight)
 		cFavoriteLightsWindow::cFavoritesTree* tree = (cFavoriteLightsWindow::cFavoritesTree*)w->objects["list"];
 		int i;
 		int a = tree->selected;
-		cWindowTree::cTreeNode* node;
+		cWindowTree::cTreeNode* node = NULL;
 		for(i = 0; i < (int)tree->nodes.size(); i++)
 		{
 			 node = tree->nodes[i]->getnode(a);
@@ -3303,7 +3304,7 @@ MENUCOMMAND(addfavlight)
 		cFavoriteLightsWindow::cFavoritesTree* tree = (cFavoriteLightsWindow::cFavoritesTree*)w->objects["list"];
 		int i;
 		int a = tree->selected;
-		cWindowTree::cTreeNode* node;
+		cWindowTree::cTreeNode* node = NULL;
 		for(i = 0; i < (int)tree->nodes.size(); i++)
 		{
 			 node = tree->nodes[i]->getnode(a);
@@ -3388,7 +3389,7 @@ MENUCOMMAND(addfavlightcat)
 		cFavoriteLightsWindow::cFavoritesTree* tree = (cFavoriteLightsWindow::cFavoritesTree*)w->objects["list"];
 		int i;
 		int a = tree->selected;
-		cWindowTree::cTreeNode* node;
+		cWindowTree::cTreeNode* node = NULL;
 		for(i = 0; i < (int)tree->nodes.size(); i++)
 		{
 			 node = tree->nodes[i]->getnode(a);
@@ -3554,13 +3555,13 @@ MENUCOMMAND(saveOnline)
 	std::string password = cWM::inputWindow("Please enter your browedit account password", "");
 	std::map<std::string, bool, std::less<std::string> > textures;
 	std::map<std::string, bool, std::less<std::string> > models;
-	int i;
+	unsigned int i;
 	for(i = 0; i < cGraphics::world->textures.size(); i++)
 		textures[cGraphics::world->textures[i]->RoFilename] = true;
 	for(i = 0; i < cGraphics::world->models.size(); i++)
 	{
 		models[cGraphics::world->models[i]->rofilename] = true;
-		for(int ii = 0; ii < cGraphics::world->models[i]->textures.size(); ii++)
+		for(unsigned int ii = 0; ii < cGraphics::world->models[i]->textures.size(); ii++)
 		{
 			std::string filename = cGraphics::world->models[i]->textures[ii]->getfilename();
 			filename = filename.substr(cSettings::roDir.length() + 13);
@@ -3608,7 +3609,7 @@ MENUCOMMAND(saveOnline)
 				w->objects["progress"]->setInt(2,lines.size());
 				renderMutex->unlock();
 
-				for(int i = 0; i < lines.size(); i++)
+				for(unsigned int i = 0; i < lines.size(); i++)
 				{
 					renderMutex->lock();
 					w->objects["progress"]->setInt(0,i);
@@ -3840,7 +3841,7 @@ MENUCOMMAND(makeMinimaps)
 			{
 				std::string mapname = it->first.substr(cSettings::roDir.length());
 				bool found = false;
-				for(int ii = 0; ii < mapnames.size() && !found; ii++)
+				for(unsigned int ii = 0; ii < mapnames.size() && !found; ii++)
 					if(mapnames[ii] == mapname)
 						found = true;
 

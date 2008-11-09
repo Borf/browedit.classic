@@ -2640,8 +2640,6 @@ void cWorld::draw()
 							continue;
 						if (c->tileUp > -1 && c->tileUp < (int)tiles.size())
 						{
-							cTile* t = &tiles[c->tileUp];
-
 							glBindTexture(GL_TEXTURE_2D, texture);
 							glNormal3f(c->normal.x, c->normal.y, c->normal.z);
 							glBegin(GL_TRIANGLE_STRIP);
@@ -2668,17 +2666,14 @@ void cWorld::draw()
 				{
 					for(int xx = 0; xx < cGraphics::textureGridSizeX*cGraphics::textureBrushSize; xx++)
 					{
-						int xxx,yyy;
-						int xi = 1;
-						int yi = 1;
-
+						int xxx = 0,yyy = 0;
 						if		(cGraphics::worldContainer->settings.textureRot == 0)	{ yyy = yy;																	xxx = xx;										}
 						else if (cGraphics::worldContainer->settings.textureRot == 1)	{ yyy = xx;																	xxx = cGraphics::textureBrush[0].size()*cGraphics::textureBrushSize-1-yy;		}
 						else if (cGraphics::worldContainer->settings.textureRot == 2)	{ yyy = cGraphics::textureBrush.size()*cGraphics::textureBrushSize-1-yy;		xxx = cGraphics::textureBrush[0].size()*cGraphics::textureBrushSize-1-xx;		}
 						else if	(cGraphics::worldContainer->settings.textureRot == 3)	{ yyy = cGraphics::textureBrush.size()*cGraphics::textureBrushSize-1-xx;		xxx = yy;										}
 
-						if( cGraphics::textureBrush.size()*cGraphics::textureBrushSize <= yyy ||
-							cGraphics::textureBrush[0].size()*cGraphics::textureBrushSize <= xxx)
+						if( (int)cGraphics::textureBrush.size()*cGraphics::textureBrushSize <= yyy ||
+							(int)cGraphics::textureBrush[0].size()*cGraphics::textureBrushSize <= xxx)
 							continue;
 
 						if(cGraphics::textureBrush[yyy/cGraphics::textureBrushSize][xxx/cGraphics::textureBrushSize])
@@ -2688,7 +2683,7 @@ void cWorld::draw()
 								cCube* c = &cubes[y-yy][x+xx];
 								glNormal3f(c->normal.x, c->normal.y, c->normal.z);
 
-								cVector2 v1,v2,v3,v4;
+								cVector2 v1(0,0),v2(0,0),v3(0,0),v4(0,0);
 
 								if(cGraphics::worldContainer->settings.textureRot == 0)
 								{
@@ -2752,9 +2747,9 @@ void cWorld::draw()
 							}
 						}
 						if( (cGraphics::worldContainer->settings.textureRot == 0 && yy == 0 && xx == 0) ||
-							(cGraphics::worldContainer->settings.textureRot == 1 && yy == cGraphics::textureBrush[0].size()-1 && xx == 0) ||
-							(cGraphics::worldContainer->settings.textureRot == 2 && yy == cGraphics::textureBrush.size()-1 && xx == cGraphics::textureBrush[0].size()-1) ||
-							(cGraphics::worldContainer->settings.textureRot == 3 && yy == 0 && xx == cGraphics::textureBrush.size()-1)
+							(cGraphics::worldContainer->settings.textureRot == 1 && yy == (int)cGraphics::textureBrush[0].size()-1 && xx == 0) ||
+							(cGraphics::worldContainer->settings.textureRot == 2 && yy == (int)cGraphics::textureBrush.size()-1 && xx == (int)cGraphics::textureBrush[0].size()-1) ||
+							(cGraphics::worldContainer->settings.textureRot == 3 && yy == 0 && xx == (int)cGraphics::textureBrush.size()-1)
 							)
 						{
 							cCube tempCube;
@@ -3678,12 +3673,12 @@ cQuadTreeNode::~cQuadTreeNode()
 
 void cWorld::fixGridding()
 {
-	int lightmap,lightmapleft,lightmaptop,lightmapright,lightmapbottom,i;
-	cLightmap* map;
-	cLightmap* mapleft;
-	cLightmap* maptop;
-	cLightmap* mapright;
-	cLightmap* mapbottom;
+	int lightmap = -1,lightmapleft = -1,lightmaptop = -1,lightmapright = -1,lightmapbottom = -1,i = -1;
+	cLightmap* map = NULL;
+	cLightmap* mapleft = NULL;
+	cLightmap* maptop = NULL;
+	cLightmap* mapright = NULL;
+	cLightmap* mapbottom = NULL;
 	for(int x = 1; x < width-1; x++)
 	{
 		for(int y = 1; y < height-1; y++)

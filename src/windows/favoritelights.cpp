@@ -197,7 +197,7 @@ void cFavoriteLightsWindow::cFavoritesTree::onChange()
 {
 	int i;
 	int a = selected;
-	cWindowTree::cTreeNode* node;
+	cWindowTree::cTreeNode* node = NULL;
 	for(i = 0; i < (int)nodes.size(); i++)
 	{
 		node = nodes[i]->getnode(a);

@@ -308,7 +308,7 @@ void cMenu::click(int xx, int yy)
 		for(i = 0; i < items.size(); i++)
 		{
 
-			if (cGraphics::cMouse::x > x && cGraphics::cMouse::x < x+m && (cGraphics::cMouse::y) > y+20*i && (cGraphics::cMouse::y) < y+20*i+20)
+			if (cGraphics::cMouse::x > x && cGraphics::cMouse::x < x+m && (cGraphics::cMouse::y) > y+20*(int)i && (cGraphics::cMouse::y) < y+20*(int)i+20)
 			{
 				if(items[i]->item)
 				{

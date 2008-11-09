@@ -122,7 +122,6 @@ void cWindowTree::draw(int cutoffleft, int cutoffright, int cutofftop, int cutof
 
 		if(skinBarCenterHeight != 0)
 		{
-			int center = (skinBarTop-skinBarTopHeight + skinBarBottom)/ 2;
 			int c1 = skinBarTop-skinBarTopHeight-	skinBarCenterHeight/2;
 			int c2 = (skinBarBottom+				skinBarCenterHeight/2);
 
@@ -161,7 +160,7 @@ void cWindowTree::draw(int cutoffleft, int cutoffright, int cutofftop, int cutof
 		glTexCoord2f((skinBarLeft)/512.0f,				(skinBarBottom)/512.0f);						glVertex2d(xx+ww,				yy+h-skinButtonUpHeight-barpos-barheight+skinBarBottomHeight);
 
 ///selection
-		if (selected >= liststart && selected < liststart+i && showselection)
+		if (selected >= liststart && selected < liststart+(int)i && showselection)
 		{
 			glColor4f(selectColor[0],selectColor[1],selectColor[2],colors[3]);
 			glTexCoord2f((skinLeft+skinLeftWidth)/512.0f,	skinBottom/512.0f);						glVertex2d(xx+4, yy+h-12*(selected-liststart)-12-4);
@@ -484,7 +483,7 @@ void cWindowTree::onScrollUp()
 }
 void cWindowTree::onScrollDown()
 {
-	unsigned int i;
+	unsigned int i = 0;
 	if(!validCache)
 	{
 		values.clear();

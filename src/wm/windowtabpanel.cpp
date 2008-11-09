@@ -14,7 +14,7 @@ extern cGraphicsBase Graphics;
 
 void cWindowTabPanel::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {
-	int i;
+	unsigned int i;
 	GLfloat colors[4];
 	glGetFloatv(GL_CURRENT_COLOR, colors);
 	int xx, yy;
@@ -87,7 +87,7 @@ void cWindowTabPanel::draw(int cutoffleft, int cutoffright, int cutofftop, int c
 		float left = maxOverlapLeft+((w-maxOverlapLeft-maxOverlapRight)/(float)tabs.size()) * i;
 		float right = maxOverlapLeft+((w-maxOverlapLeft-maxOverlapRight)/(float)tabs.size()) * (i+1);
 
-		int t = (i == selectedtab) ? 0 : 1;
+		int t = ((int)i == selectedtab) ? 0 : 1;
 
 		glDisable(GL_CULL_FACE);
 		glBegin(GL_QUADS);

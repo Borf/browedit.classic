@@ -2,7 +2,9 @@
 #define __WINDOW_H__
 
 #ifdef WIN32
+#ifndef __MINGW32__
 #pragma warning( disable : 4786 )
+#endif
 #endif
 #include <map>
 #include <string>

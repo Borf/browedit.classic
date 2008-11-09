@@ -28,7 +28,7 @@ void cWindowProgressBar::draw(int cutoffleft, int cutoffright, int cutofftop, in
 	else if(skinType == CONDITIONAL)
 	{
 		int s = 1;
-		for(int i = 1; i < skins.size(); i++)
+		for(unsigned int i = 1; i < skins.size(); i++)
 		{
 			if(ratio*100 < skins[i].condition && ratio*100 > skins[i-1].condition)
 				s = i;

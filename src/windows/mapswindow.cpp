@@ -71,7 +71,7 @@ cMapsWindow::cMapsWindow() : cWindow()
 			void whenDone(cBThread* caller)
 			{
 				renderMutex->lock();
-				for(int i = 0; i < wnd->threads.size(); i++)
+				for(unsigned int i = 0; i < wnd->threads.size(); i++)
 					if(wnd->threads[i] == caller)
 						wnd->threads[i] = NULL;
 
@@ -113,7 +113,7 @@ cMapsWindow::cMapsWindow() : cWindow()
 			TiXmlElement* m = list.RootElement()->FirstChildElement("map");
 			cWindowScrollPanel* panel = (cWindowScrollPanel*)wnd->objects["results"];
 			panel->objects.clear();
-			int i = 0;
+			unsigned int i = 0;
 			cWindowObject* o;
 			std::vector<int> screenshots;
 			while(m != NULL)
@@ -219,7 +219,7 @@ void cMapsWindow::cWindowTextureBox::draw(int cutoffleft, int cutoffright, int c
 
 cMapsWindow::~cMapsWindow()
 {
-	for(int i = 0; i < threads.size(); i++)
+	for(unsigned int i = 0; i < threads.size(); i++)
 		if(threads[i] != NULL)
 		{
 			threads[i]->stop();

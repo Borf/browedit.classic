@@ -212,7 +212,7 @@ void cSpriteWindow::cTree::onChange()
 {
 	unsigned int i;
 	int a = selected;
-	cWindowTree::cTreeNode* node;
+	cWindowTree::cTreeNode* node = NULL;
 	for(i = 0; i < nodes.size(); i++)
 	{
 		node = nodes[i]->getnode(a);
