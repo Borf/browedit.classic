@@ -332,12 +332,16 @@ cClipboardObject::~cClipboardObject()
 		delete rsmmodel;
 }
 
-cClipBoardArea::cClipBoardArea(bool pTextures, bool pHeight, bool pObjects, bool pGat) : cClipBoardContents(cClipBoard::CLIP_AREA)
+cClipBoardArea::cClipBoardArea(bool pTextures, bool pHeight, bool pObjects, bool pGat, bool pWalls, bool pLights, bool pEffects, bool pSounds) : cClipBoardContents(cClipBoard::CLIP_AREA)
 {
 	doTextures = pTextures;
 	doHeight = pHeight;
 	doObjects = pObjects;
 	doGat = pGat;
+	doWalls = pWalls;
+	doLights = pLights;
+	doEffects = pEffects;
+	doSounds = pSounds;
 
 	startX = round(cGraphics::cMouse::x3d/10.0f);
 	startZ = round(cGraphics::cMouse::z3d/10.0f);
@@ -388,10 +392,59 @@ cClipBoardArea::cClipBoardArea(bool pTextures, bool pHeight, bool pObjects, bool
 					objects.push_back(clipboard);
 				}
 			}
-
 		}
 	}
-	Log(3,0,"Copied %i models", objects.size());
+	for(i = 0; i < cGraphics::world->lights.size(); i++)
+	{
+		if(cGraphics::world->lights[i].pos.x > 0 && cGraphics::world->lights[i].pos.z > 0)
+		{
+			x = round(cGraphics::world->lights[i].pos.x / 2.0f);
+			y = round(cGraphics::world->lights[i].pos.z / 2.0f);
+			if(x < cGraphics::world->width && y < cGraphics::world->height)
+			{
+				if(cGraphics::world->cubes[y][x].selected)
+				{
+					lights.push_back(cGraphics::world->lights[i]);
+					lights[lights.size()-1].pos -= cVector3(2*minx,0,2*miny);
+				}
+			}
+		}
+	}
+	for(i = 0; i < cGraphics::world->effects.size(); i++)
+	{
+		if(cGraphics::world->effects[i].pos.x > 0 && cGraphics::world->effects[i].pos.z > 0)
+		{
+			x = round(cGraphics::world->effects[i].pos.x / 2.0f);
+			y = round(cGraphics::world->effects[i].pos.z / 2.0f);
+			if(x < cGraphics::world->width && y < cGraphics::world->height)
+			{
+				if(cGraphics::world->cubes[y][x].selected)
+				{
+					effects.push_back(cGraphics::world->effects[i]);
+					effects[effects.size()-1].pos -= cVector3(2*minx,0,2*miny);
+				}
+			}
+		}
+	}
+	for(i = 0; i < cGraphics::world->sounds.size(); i++)
+	{
+		if(cGraphics::world->sounds[i].pos.x > 0 && cGraphics::world->sounds[i].pos.z > 0)
+		{
+			x = round(cGraphics::world->sounds[i].pos.x / 2.0f);
+			y = round(cGraphics::world->sounds[i].pos.z / 2.0f);
+			if(x < cGraphics::world->width && y < cGraphics::world->height)
+			{
+				if(cGraphics::world->cubes[y][x].selected)
+				{
+					sounds.push_back(cGraphics::world->sounds[i]);
+					sounds[sounds.size()-1].pos -= cVector3(2*minx,0,2*miny);
+				}
+			}
+		}
+	}
+	Log(3,0,"Copied %i models, %i lights, %i effects and %i sounds", objects.size(), lights.size(), effects.size(), sounds.size());
+
+
 	for(i = 0; i < tiles.size(); i++)
 	{
 		tiles[i].x -= minx;
@@ -441,7 +494,7 @@ void cClipBoardArea::apply()
 					cGraphics::world->textures.push_back(container);
 				}
 				cGraphics::world->tiles[cGraphics::world->tiles.size()-1].texture = found;
-
+				
 			}
 		}
 		if(doGat)
@@ -457,6 +510,32 @@ void cClipBoardArea::apply()
 		for(i = 0; i < objects.size(); i++)
 			objects[i]->apply();
 	}
+	if(doLights)
+	{
+		for(i = 0; i < lights.size(); i++)
+		{
+			cGraphics::world->lights.push_back(lights[i]);
+			cGraphics::world->lights[cGraphics::world->lights.size()-1].pos += cVector3(2*offX, 0, 2*offZ);
+		}
+	}
+	if(doEffects)
+	{
+		for(i = 0; i < effects.size(); i++)
+		{
+			cGraphics::world->effects.push_back(effects[i]);
+			cGraphics::world->effects[cGraphics::world->effects.size()-1].pos += cVector3(2*offX, 0, 2*offZ);
+		}
+	}
+	if(doSounds)
+	{
+		for(i = 0; i < sounds.size(); i++)
+		{
+			cGraphics::world->sounds.push_back(sounds[i]);
+			cGraphics::world->sounds[cGraphics::world->sounds.size()-1].pos += cVector3(2*offX, 0, 2*offZ);
+		}
+	}
+
+
 }
 
 void cClipBoardArea::render()

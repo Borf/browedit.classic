@@ -127,7 +127,7 @@ public:
 	bool doEffects;
 	bool doSounds;
 
-	cClipBoardArea(bool,bool,bool,bool);
+	cClipBoardArea(bool,bool,bool,bool,bool,bool,bool,bool);
 	~cClipBoardArea();
 	void apply();
 	void render();

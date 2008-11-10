@@ -33,7 +33,12 @@ private:
 			bool height =	1==parent->objects["height"]->getInt(0);
 			bool objects =	1==parent->objects["objects"]->getInt(0);
 			bool gat =		1==parent->objects["gat"]->getInt(0);
-			cClipBoard::setClipBoard(new cClipBoardArea(textures, height, objects, gat));
+			bool walls =	1==parent->objects["walls"]->getInt(0);
+			bool lights =	1==parent->objects["lights"]->getInt(0);
+			bool effects =	1==parent->objects["effects"]->getInt(0);
+			bool sounds =	1==parent->objects["sounds"]->getInt(0);
+
+			cClipBoard::setClipBoard(new cClipBoardArea(textures, height, objects, gat, walls, lights, effects, sounds));
 			cClipBoard::pasting = true;
 			parent->close();
 		}

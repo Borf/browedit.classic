@@ -83,6 +83,12 @@ public:
 			return true;
 		return false;
 	}
+	void operator-=(cVector3 v2)
+	{
+		x -= v2.x;
+		y -= v2.y;
+		z -= v2.z;
+	}
 
 	cVector3 normalize()
 	{
