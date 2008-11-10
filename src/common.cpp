@@ -307,7 +307,7 @@ void drawlogo()
 	Log(3,0,"//////////////////////////////////////////////////////////////");
 	Log(3,0,"");
 	Log(3,0,"");
-	Log(3,0,"       Private Alpha Release, DO NOT DISTRIBUTE OR BE BLOCKED!");
+	Log(3,0,"       Public Beta Release, don't nag about any bugs please");
 	Log(3,0,"       Version %i", getversion());
 	Log(3,0,"");
 }
@@ -502,4 +502,10 @@ int hex2dec(std::string s, int mult)
 cVector3 hex2floats(std::string c)
 {
 	return cVector3(hex2dec(c.substr(0,2))/256.0f, hex2dec(c.substr(2,2))/256.0f, hex2dec(c.substr(4,2))/256.0f);
+}
+
+void hex2floats( std::string c, float* floats, int count)
+{
+	for(int i = 0; i < count; i++)
+		floats[i] = hex2dec(c.substr(2*i, 2)) / 255.0f;
 }

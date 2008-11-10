@@ -423,14 +423,16 @@ int main(int argc, char *argv[])
 	cFile* pFile = cFileSystem::open("config.txt");
 	if (pFile == NULL)
 	{
-		Log(2,0,"Error opening configFileName, trying one directory up");
+		Log(2,0,"Error opening configfile, trying one directory up");
 		chdir("..");
 		pFile = cFileSystem::open("config.txt");
 		if(pFile == NULL)
 		{
-			Log(1,0,"Could not find configFileName one directory up, stopping");
+			Log(1,0,"Could not find configfile one directory up, stopping");
 			return 0;
 		}
+		log_close();
+		log_open("log_worldeditor.txt","worldedit",2);
 	}
 	cSettings::configFileName = pFile->readLine();
 	pFile->close();
@@ -625,6 +627,7 @@ int main(int argc, char *argv[])
 	cMenu* edit;
 	cMenu* windows;
 
+	cMenu::initSkin(cWM::skin);
 	cGraphics::menu = new cMenu();
 	cGraphics::menu->title = "root";
 	cGraphics::menu->item = false;

@@ -8,6 +8,33 @@
 extern cMenu*			lastmenu;
 
 
+float		cMenu::barColor[4] = { 1,0,0,1 };
+float		cMenu::barFontColor[4];
+float		cMenu::barHighlightColor[4];
+
+float		cMenu::menuColor[3];
+float		cMenu::menuFontColor[3];
+float		cMenu::menuHighlightColor[3];
+float		cMenu::opacityStart = 0;
+float		cMenu::opacityEnd = 0.75f;
+
+
+void cMenu::initSkin(TiXmlDocument &skin)
+{
+	if(!skin.FirstChildElement("skin"))
+		return;
+	TiXmlElement* s = skin.FirstChildElement("skin")->FirstChildElement("menubar");
+	hex2floats(s->FirstChildElement("color")->FirstChild()->Value(),		barColor,			4);
+	hex2floats(s->FirstChildElement("fontcolor")->FirstChild()->Value(),	barFontColor,		4);
+	hex2floats(s->FirstChildElement("highlight")->FirstChild()->Value(),	barHighlightColor,	4);
+
+	hex2floats(s->FirstChildElement("menu")->FirstChildElement("color")->FirstChild()->Value(),			menuColor,			3);
+	hex2floats(s->FirstChildElement("menu")->FirstChildElement("fontcolor")->FirstChild()->Value(),		menuFontColor,		3);
+	hex2floats(s->FirstChildElement("menu")->FirstChildElement("highlight")->FirstChild()->Value(),		menuHighlightColor,	3);
+	
+	opacityStart = atof(s->FirstChildElement("menu")->FirstChildElement("startopacity")->FirstChild()->Value());
+	opacityEnd = atof(s->FirstChildElement("menu")->FirstChildElement("targetopacity")->FirstChild()->Value());
+}
 
 cMenu::cMenu()
 {
@@ -95,7 +122,7 @@ void cMenu::draw()
 				oneopened = true;
 		
 		glDisable(GL_TEXTURE_2D);
-		glColor4f(1,1,1,1);
+		glColor4fv(barColor);
 		glBegin(GL_QUADS);
 			glVertex2f(0, cGraphics::h()-20);
 			glVertex2f(cGraphics::w(), cGraphics::h()-20);
@@ -119,13 +146,14 @@ void cMenu::draw()
 		glEnd();
 		for(i = 0; i < (int)items.size(); i++)
 		{
+			glColor4fv(barFontColor);
 			if (cGraphics::cMouse::x >= x + items[i]->x && cGraphics::cMouse::x < x + items[i]->x + items[i]->w && cGraphics::cMouse::y < 20)
 			{
 				glDisable(GL_TEXTURE_2D);
-				glColor4f(0.2f,0.2f,0.9f,0.5);
+				glColor4fv(barHighlightColor);
 				glBegin(GL_QUADS);
-					glVertex2f(x+items[i]->x, 		cGraphics::h()-y-15);
-					glVertex2f(x+items[i]->x+items[i]->w, 	cGraphics::h()-y-15);
+					glVertex2f(x+items[i]->x, 		cGraphics::h()-y-17);
+					glVertex2f(x+items[i]->x+items[i]->w, 	cGraphics::h()-y-17);
 					glVertex2f(x+items[i]->x+items[i]->w, 	cGraphics::h()-y);
 					glVertex2f(x+items[i]->x, 		cGraphics::h()-y);
 					if (oneopened && !items[i]->opened)
@@ -134,12 +162,12 @@ void cMenu::draw()
 						items[i]->opened = true;
 					}
 				glEnd();
-				glColor4f(0,0,0,1);
+				glColor4f(1,1,1,1);
 			}
 			else if (oneopened && items[i]->opened && cGraphics::cMouse::y < 20)
 				items[i]->closeMenu();
 
-			cGraphics::font->print(0,0,0,x+items[i]->x+3,cGraphics::h()-y-18,"%s",items[i]->title.c_str());
+			cGraphics::font->print(2,2,2,x+items[i]->x+3,cGraphics::h()-y-18,"%s",items[i]->title.c_str());
 
 			if(items[i]->opened)
 				items[i]->draw();
@@ -185,9 +213,9 @@ void cMenu::draw()
 			glVertex2f(x+maxlen-1, cGraphics::h()-y-1);
 			glVertex2f(x+1, cGraphics::h()-y-1);
 		glEnd();
-		glColor4f(0,0,0,opacity+0.25f);
 		for(i = 0; i < (int)items.size(); i++)
 		{
+			glColor4f(0,0,0,opacity+0.25f);
 			if (cGraphics::font->textLen(items[i]->title.c_str()) > maxlen-50)
 				maxlen = cGraphics::font->textLen(items[i]->title.c_str())+50;
 			float color = 0;

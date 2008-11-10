@@ -4,6 +4,7 @@
 
 #include "common.h"
 #include <string>
+#include <tinyxml/tinyxml.h>
 
 class cMenuItem;
 class cMenu;
@@ -12,6 +13,20 @@ bool cmp(cMenu* a, cMenu* b);
 class cMenu
 {
 	public:
+		static float		barColor[4];
+		static float		barFontColor[4];
+		static float		barHighlightColor[4];
+
+		static float		menuColor[3];
+		static float		menuFontColor[3];
+		static float		menuHighlightColor[3];
+		static float		opacityStart;
+		static float		opacityEnd;
+		static void			initSkin(TiXmlDocument &);
+
+
+
+
 		float				opacity;
 		std::string			title;
 		bool				item;

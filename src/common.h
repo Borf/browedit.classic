@@ -125,6 +125,7 @@ std::string rtrim(std::string s);
 std::string inttostring(int);
 int hex2dec(std::string,int = 0);
 cVector3 hex2floats(std::string);
+void hex2floats(std::string, float*, int=4);
 
 template <class T> inline bool inbetween(T val, T start, T end)
 {
