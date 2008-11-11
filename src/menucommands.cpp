@@ -67,9 +67,15 @@ MENUCOMMAND(open)
 	ofn.lStructSize = sizeof(ofn);
 	ofn.hwndOwner = hWnd;
 
-	strcpy(cGraphics::world->fileName, replace(cGraphics::world->fileName, "/", "\\").c_str());
+	if(cGraphics::world)
+		strcpy(cGraphics::world->fileName, replace(cGraphics::world->fileName, "/", "\\").c_str());
 	char buf[256];
-	strcpy(buf, cGraphics::world->fileName);
+
+	ZeroMemory(buf, 256);
+	if(cGraphics::world)
+		strcpy(buf, cGraphics::world->fileName);
+	else
+		strcpy(buf, (cSettings::roDir + "prontera.rsw").c_str());
 	ofn.lpstrFile = buf;
 	ofn.nMaxFile = 256;
 	ofn.lpstrFilter = "All\0*.*\0RO Maps\0*.rsw\0";
