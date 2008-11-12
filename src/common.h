@@ -101,8 +101,10 @@ typedef int32_t intptr_t;
 
 //#ifndef WIN32
 #ifndef min
-#define min(x,y) (x) > (y) ? (y) : (x)
-#define max(x,y) (x) < (y) ? (y) : (x)
+//#define min(x,y) (x) > (y) ? (y) : (x)
+//#define max(x,y) (x) < (y) ? (y) : (x)
+float max(float x, float y);
+float min(float x, float y);
 #endif
 //float max(float x, float y);
 //float min(float x, float y);
