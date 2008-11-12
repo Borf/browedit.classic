@@ -347,7 +347,7 @@ void changetoserverdir()
 
 
 
-#ifndef MIN
+#ifndef min
 
 float max(float x, float y)
 {

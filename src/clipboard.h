@@ -21,6 +21,7 @@ public:
 		CLIP_AREA,
 	};
 
+	cClipBoard(){};
 	static void					setClipBoard(cClipBoardContents*);
 	static cClipBoardContents*	currentClipBoard;
 	static bool					pasting;
@@ -92,6 +93,7 @@ public:
 class cClipBoardObjects : public cClipBoardContents
 {
 public:
+	cClipBoardObjects() : cClipBoardContents(cClipBoard::CLIP_OBJECTS) {};
 	std::vector<cClipboardObject*> objects;
 	void rotate();
 	void apply();

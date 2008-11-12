@@ -931,8 +931,7 @@ int main(int argc, char *argv[])
 
 	Mix_OpenAudio(11025,MIX_DEFAULT_FORMAT,2,1024);
 	Mix_AllocateChannels(1);
-	
-	
+		
 	
 	lasttimer = SDL_GetTicks();
 	renderMutex = new cBMutex();

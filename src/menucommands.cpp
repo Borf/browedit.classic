@@ -75,7 +75,7 @@ MENUCOMMAND(open)
 	if(cGraphics::world)
 		strcpy(buf, cGraphics::world->fileName);
 	else
-		strcpy(buf, (cSettings::roDir + "prontera.rsw").c_str());
+		strcpy(buf, (cSettings::roDir + "data\\prontera.rsw").c_str());
 	ofn.lpstrFile = buf;
 	ofn.nMaxFile = 256;
 	ofn.lpstrFilter = "All\0*.*\0RO Maps\0*.rsw\0";
