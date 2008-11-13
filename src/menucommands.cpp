@@ -2254,6 +2254,9 @@ MENUCOMMAND(toggle)
 	if(src->pdata)
 	{
 		*((bool*)src->pdata) = !*((bool*)src->pdata);
+		if(cGraphics::worldContainer)
+			cGraphics::worldContainer->view = cGraphics::view;
+
 		src->ticked = *((bool*)src->pdata);
 	}
 	else
