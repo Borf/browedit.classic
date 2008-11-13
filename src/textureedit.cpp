@@ -241,7 +241,7 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 				}
 				break; 
 			case SDLK_p:
-				if(cClipBoard::currentClipBoard->type == cClipBoard::CLIP_TEXTURE)
+				if(cClipBoard::currentClipBoard && cClipBoard::currentClipBoard->type == cClipBoard::CLIP_TEXTURE)
 					cClipBoard::pasting = !cClipBoard::pasting;
 				break;
 			case SDLK_BACKSPACE:

@@ -156,7 +156,7 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 					((cWindowFloatInputBox*)w->objects["scalez"])->floatje = &o->scale.z;
 					((cWindowStringInputBox*)w->objects["objectname"])->stringetje = &o->name;
 					((cWindowStringInputBox*)w->objects["objectfile"])->stringetje = &o->fileName;
-					((cWindowFloatInputBox*)w->objects["repeatDelay"])->floatje = &o->repeatDelay;
+					((cWindowFloatInputBox*)w->objects["repeatdelay"])->floatje = &o->repeatDelay;
 					((cWindowFloatInputBox*)w->objects["unknown2"])->floatje = &o->unknown2;
 					((cWindowLongInputBox*)w->objects["unknown3"])->longje = &o->unknown3;
 					((cWindowLongInputBox*)w->objects["unknown4"])->longje = &o->unknown4;
