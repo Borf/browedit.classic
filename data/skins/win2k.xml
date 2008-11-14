@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="iso-8859-1" ?>
 <skin name="Win2k">
+     <menubar> 
+          <color>FFFFFFFF</color> 
+          <fontcolor>000000FF</fontcolor> 
+          <highlight>3333E5FF</highlight> 
+          <menu> 
+               <color>FFFFFF</color> 
+               <fontcolor>000000</fontcolor> 
+               <highlight>3333E5</highlight> 
+               <targetopacity>0.75</targetopacity> 
+               <startopacity>0</startopacity> 
+          </menu>                
+     </menubar> 
 	<texture>data/skins/win2k.tga</texture>
 	<font>data/fonts/tahoma.tga</font>
 	<window>

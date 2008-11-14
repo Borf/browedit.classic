@@ -707,7 +707,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/SHOWSPRITES"),			&MenuCommand_toggle, (void*)&cGraphics::view.showSprites);
 	ADDMENUITEMDATALINK(mm,view,"Show all light spheres",					&MenuCommand_toggle, (void*)&cGraphics::view.showAllLights);
 	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/TOPCAMERA"),				&MenuCommand_toggle, (void*)&cGraphics::view.topCamera);
-
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/SIDECAMERA"),				&MenuCommand_toggle, (void*)&cGraphics::view.sideCamera);
 
 	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/TEXTUREEDIT"),				&MenuCommand_mode);
 	mm->ticked = true;
@@ -1146,12 +1146,25 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							cGraphics::worldContainer->camera.height += (cGraphics::cMouse::yOld - cGraphics::cMouse::y) / 2.0f;
 							cGraphics::worldContainer->camera.height = max(min(cGraphics::worldContainer->camera.height, (float)15000), (float)-5);
 						}
+					
 						cGraphics::worldContainer->camera.rot += (cGraphics::cMouse::xOld - cGraphics::cMouse::x) / 100.0f;
 						while(cGraphics::worldContainer->camera.rot < 0)
 							cGraphics::worldContainer->camera.rot+=2*(float)PI;
 						while(cGraphics::worldContainer->camera.rot > 2*PI)
 							cGraphics::worldContainer->camera.rot-=2*(float)PI;
 					}
+				}
+				if(cGraphics::worldContainer->view.sideCamera && (cGraphics::worldContainer->camera.rot < 1.75*PI ) ||  (cGraphics::worldContainer->camera.rot > 1.75*PI ) )
+				{
+					if(SDL_GetModState() & KMOD_SHIFT) //A17kaliva
+					{
+						break;
+					}
+					else
+					{
+						cGraphics::worldContainer->camera.rot = 1.75*PI;
+					}
+
 				}
 				else if (SDL_GetModState() & KMOD_CTRL)
 				{

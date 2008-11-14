@@ -44,6 +44,7 @@ void cHotkeyWindow::cHotkeyButton::onRightClick()
 	cameraheight = cGraphics::worldContainer->camera.height;
 	cameraangle = cGraphics::worldContainer->camera.angle;
 	topcamera = cGraphics::worldContainer->view.topCamera;
+	sidecamera = cGraphics::worldContainer->view.sideCamera;
 }
 
 void cHotkeyWindow::cHotkeyButton::onClick()
@@ -55,6 +56,7 @@ void cHotkeyWindow::cHotkeyButton::onClick()
 		cGraphics::worldContainer->camera.height = cameraheight;
 		cGraphics::worldContainer->camera.angle = cameraangle;
 		cGraphics::worldContainer->view.topCamera = topcamera;
+		cGraphics::worldContainer->view.sideCamera = sidecamera;
 	}
 }
 

@@ -797,6 +797,7 @@ cWorldContainer::cView::cView()
 	showObjectsAsTransparent = false;
 	showWaterAnimation = true;
 	topCamera = false;
+	sideCamera = false;
 }
 
 cWorldContainer::cSettings::cSettings()

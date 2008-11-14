@@ -19,6 +19,7 @@ public:
 		float cameraheight;
 		float cameraangle;
 		bool topcamera;
+		bool sidecamera;
 
 		cHotkeyButton(cWindow* parent);
 		~cHotkeyButton();

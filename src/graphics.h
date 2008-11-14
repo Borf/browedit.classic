@@ -100,6 +100,7 @@ public:
 		bool				showWaterAnimation;
 		bool				showObjectsAsTransparent;
 		bool				topCamera;
+		bool				sideCamera;
 	};
 
 	class cSettings
