@@ -1156,12 +1156,14 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				if(cGraphics::worldContainer->view.sideCamera && (cGraphics::worldContainer->camera.rot < 1.75*PI ) ||  (cGraphics::worldContainer->camera.rot > 1.75*PI ) )
 				{
-					if(SDL_GetModState() & KMOD_SHIFT) //A17kaliva
+					if(SDL_GetModState() & KMOD_SHIFT) //A17kaliva Reference
 					{
 						break;
 					}
 					else
 					{
+						cGraphics::worldContainer->camera.pointer.x -= (cGraphics::cMouse::yOld - cGraphics::cMouse::y);
+						cGraphics::worldContainer->camera.pointer.y -= (cGraphics::cMouse::xOld - cGraphics::cMouse::x);
 						cGraphics::worldContainer->camera.rot = 1.75*PI;
 					}
 
@@ -1185,9 +1187,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						cGraphics::worldContainer->camera.pointer.x -= (cGraphics::cMouse::yOld - cGraphics::cMouse::y);
 						cGraphics::worldContainer->camera.pointer.y -= (cGraphics::cMouse::xOld - cGraphics::cMouse::x);
 
-					}
-				}
-			}
+					} 
+				} 
+			}//---------------------- right mouse down end reference
 			else if (cGraphics::cMouse::lbuttondown && !cGraphics::cMouse::rbuttondown)
 			{
 				if(cGraphics::cMouse::xStart > cGraphics::w()-256)
