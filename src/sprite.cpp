@@ -246,8 +246,8 @@ void cSprite::cActSpr::load(std::string fname)
 				{
 					pFile->read(buf, 4);
 					pFile->read((char*)&subframe->dontJump,4);
-					if(subframe->dontJump != 0)
-						pFile->read(buf, 12);
+					//if(subframe->dontJump != 0)
+					//	pFile->read(buf, 12);
 					if(version1 >= 5)
 					{
 						pFile->read((char*)&subframe->sizeX,4);
@@ -396,7 +396,7 @@ void cSprite::draw()
 	height/=2;
 
 	glPushMatrix();
-	glTranslatef(-(subframe->offsetY + bodyframe->extraX - myframe->extraX), -(subframe->offsetY + bodyframe->extraY - myframe->extraY), 0);
+	glTranslatef(-(subframe->offsetX + bodyframe->extraX - myframe->extraX), -(subframe->offsetY + bodyframe->extraY - myframe->extraY), 0);
 	glBegin(GL_QUADS);
 		glTexCoord2f(dir,0);		glVertex3f(width,height,0);
 		glTexCoord2f(1-dir,0);	glVertex3f(-width,height,0);
@@ -425,7 +425,7 @@ void cSprite::draw()
 		height/=2;
 
 		glPushMatrix();
-		glTranslatef(-(subframe->offsetY + bodyframe->extraX - myframe->extraX), -(subframe->offsetY + bodyframe->extraY - myframe->extraY), 0);
+		glTranslatef(-(subframe->offsetX + bodyframe->extraX - myframe->extraX), -(subframe->offsetY + bodyframe->extraY - myframe->extraY), 0);
 		glBegin(GL_QUADS);
 			glTexCoord2f(dir,0);		glVertex3f(width,height,1);
 			glTexCoord2f(1-dir,0);	glVertex3f(-width,height,1);

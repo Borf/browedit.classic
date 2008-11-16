@@ -901,7 +901,7 @@ int main(int argc, char *argv[])
 	if(cSettings::config.FirstChildElement("config")->FirstChildElement("firstmap"))
 		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\" + cSettings::config.FirstChildElement("config")->FirstChildElement("firstmap")->FirstChild()->Value()).c_str());
 	else
-		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\prontera").c_str());
+		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\random_pay").c_str());
 
 	if(argc > 1)
 	{
@@ -1154,7 +1154,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							cGraphics::worldContainer->camera.rot-=2*(float)PI;
 					}
 				}
-				if(cGraphics::worldContainer->view.sideCamera && (cGraphics::worldContainer->camera.rot < 1.75*PI ) ||  (cGraphics::worldContainer->camera.rot > 1.75*PI ) )
+/*broken code				if(cGraphics::worldContainer->view.sideCamera && (cGraphics::worldContainer->camera.rot < 1.75*PI ) ||  (cGraphics::worldContainer->camera.rot > 1.75*PI ) )
 				{
 					if(SDL_GetModState() & KMOD_SHIFT) //A17kaliva Reference
 					{
@@ -1164,10 +1164,10 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					{
 						cGraphics::worldContainer->camera.pointer.x -= (cGraphics::cMouse::yOld - cGraphics::cMouse::y);
 						cGraphics::worldContainer->camera.pointer.y -= (cGraphics::cMouse::xOld - cGraphics::cMouse::x);
-						cGraphics::worldContainer->camera.rot = 1.75*PI;
+						cGraphics::worldContainer->camera.rot = (float)(1.75f*PI);
 					}
 
-				}
+				}*/
 				else if (SDL_GetModState() & KMOD_CTRL)
 				{
 					if (!(cGraphics::worldContainer->settings.selectionstart3d == cGraphics::worldContainer->settings.selectionend3d))
