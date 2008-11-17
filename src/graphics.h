@@ -84,7 +84,6 @@ public:
 	{
 	public:
 		cView();
-		bool				showOglLighting;
 		bool				showNoTiles;
 		bool				showObjects;
 		bool				showLightmaps;
@@ -95,6 +94,7 @@ public:
 		bool				showGat;
 		bool				showGrid;
 		bool				showAmbientLighting;
+		bool				showOglLighting;
 		bool				showBoundingBoxes;
 		bool				showDot;
 		bool				showWaterAnimation;

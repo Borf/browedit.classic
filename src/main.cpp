@@ -696,11 +696,9 @@ int main(int argc, char *argv[])
 	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/TRANSPARENTOBJECTS"),		&MenuCommand_toggle, (void*)&cGraphics::view.showObjectsAsTransparent);
 	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/BOUNDINGBOXES"),			&MenuCommand_toggle, (void*)&cGraphics::view.showBoundingBoxes);
 	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/LIGHTMAPS"),				&MenuCommand_toggle, (void*)&cGraphics::view.showLightmaps);
-	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/OGLLIGHTING"),			&MenuCommand_toggle, (void*)&cGraphics::view.showOglLighting);
 	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/TILECOLORS"),				&MenuCommand_toggle, (void*)&cGraphics::view.showTileColors);
 	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/SHOWWATER"),				&MenuCommand_toggle, (void*)&cGraphics::view.showWater);
 	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/INVISIBLETILES"),			&MenuCommand_toggle, (void*)&cGraphics::view.showNoTiles);
-	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/SHOWAMBIENTLIGHTING"),	&MenuCommand_toggle, (void*)&cGraphics::view.showAmbientLighting);
 	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/WATERANIMATION"),			&MenuCommand_toggle, (void*)&cGraphics::view.showWaterAnimation);
 	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/GATTILES"),				&MenuCommand_toggle, (void*)&cGraphics::view.showGat);
 	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/SHOWDOT"),				&MenuCommand_toggle, (void*)&cGraphics::view.showDot);
@@ -901,7 +899,7 @@ int main(int argc, char *argv[])
 	if(cSettings::config.FirstChildElement("config")->FirstChildElement("firstmap"))
 		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\" + cSettings::config.FirstChildElement("config")->FirstChildElement("firstmap")->FirstChild()->Value()).c_str());
 	else
-		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\moc_pryd03").c_str());
+		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\prontera").c_str());
 
 	if(argc > 1)
 	{
@@ -1509,6 +1507,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 			switch (event.key.keysym.sym)
 			{
+			case SDLK_r:
+				cGraphics::world->calcVertexNormals();
+				break;
 			case SDLK_SPACE:
 				if (cGraphics::previewColor > 20)
 					cGraphics::previewColor = 20;
@@ -1711,7 +1712,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			}
 			else if(event.key.keysym.sym == SDLK_TAB)
 			{
-				if(cGraphics::worlds.size() > 1)
+				if(event.key.keysym.mod == 0 && cGraphics::worlds.size() > 1)
 					MenuCommand_switchMap((cMenuItem*)openMaps->items[1]);
 
 			}

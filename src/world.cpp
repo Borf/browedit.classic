@@ -592,10 +592,26 @@ void cWorld::load()
 		if(version == 0x0109)
 		{
 			pFile->read(buf, 240);
-			water.type = 0;
-			water.height = 0;
-			ambientLight.diffuse = cVector3(1,1,1);
-			ambientLight.shadow = cVector3(1,1,1);
+			char* w = buf+160;
+			water.height = *((float*)(w));
+			water.type = *((int*)(w+4));
+			water.amplitude = *((float*)(w+8));
+			water.phase = *((float*)(w+12));
+			water.surfaceCurve = *((float*)(w+16));
+			
+			ambientLight.ambientr = *((int*)(w+20));
+			ambientLight.ambientg = *((int*)(w+24));
+			ambientLight.ambientb = *((int*)(w+28));
+			
+			ambientLight.diffuse.x = *((float*)(w+32));
+			ambientLight.diffuse.y = *((float*)(w+36));
+			ambientLight.diffuse.z = *((float*)(w+40));
+			
+			ambientLight.shadow.x = *((float*)(w+44));
+			ambientLight.shadow.y = *((float*)(w+48));
+			ambientLight.shadow.z = *((float*)(w+52));
+			
+			ambientLight.alpha = *((float*)(w+56));
 			nObjects = *((unsigned int*)(buf+236));
 
 
@@ -780,7 +796,8 @@ void cWorld::load()
 		}
 
 	}
-
+	
+	calcVertexNormals();
 	checkSanity();
 	Log(3,0,GetMsg("world/LOADDONE"), fileName);
 
@@ -1524,10 +1541,7 @@ void cWorld::draw()
 
 	glEnable(GL_TEXTURE_2D);
 	glDisable(GL_BLEND);
-	if (cGraphics::view.showLightmaps || !cGraphics::view.showOglLighting)
-		glDisable(GL_LIGHTING);
-	else
-		glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHTING);
 
 
 //	if(cGraphics::view.showambientlighting)
@@ -1536,19 +1550,36 @@ void cWorld::draw()
 		glColor4f(1,1,1,1);
 
 
-	cGraphics::worldContainer->settings.lightAmbient[0] = ambientLight.shadow.x;
-	cGraphics::worldContainer->settings.lightAmbient[1] = ambientLight.shadow.y;
-	cGraphics::worldContainer->settings.lightAmbient[2] = ambientLight.shadow.z;
-	cGraphics::worldContainer->settings.lightAmbient[3] = 1.0f;
-
-	cGraphics::worldContainer->settings.lightDiffuse[0] = ambientLight.diffuse.x;
-	cGraphics::worldContainer->settings.lightDiffuse[1] = ambientLight.diffuse.y;
-	cGraphics::worldContainer->settings.lightDiffuse[2] = ambientLight.diffuse.z;
-	cGraphics::worldContainer->settings.lightDiffuse[3] = 1.0f;
-
+	if(cGraphics::view.showLightmaps && false)
+	{
+		cGraphics::worldContainer->settings.lightAmbient[0] = ambientLight.diffuse.x;
+		cGraphics::worldContainer->settings.lightAmbient[1] = ambientLight.diffuse.y;
+		cGraphics::worldContainer->settings.lightAmbient[2] = ambientLight.diffuse.z;
+		cGraphics::worldContainer->settings.lightAmbient[3] = 1.0f;
+		
+		cGraphics::worldContainer->settings.lightDiffuse[0] = ambientLight.shadow.x;
+		cGraphics::worldContainer->settings.lightDiffuse[1] = ambientLight.shadow.y;
+		cGraphics::worldContainer->settings.lightDiffuse[2] = ambientLight.shadow.z;
+		cGraphics::worldContainer->settings.lightDiffuse[3] = 1.0f;
+	}
+	else
+	{
+		cGraphics::worldContainer->settings.lightAmbient[0] = 0.5f;
+		cGraphics::worldContainer->settings.lightAmbient[1] = 0.5f;
+		cGraphics::worldContainer->settings.lightAmbient[2] = 0.5f;
+		cGraphics::worldContainer->settings.lightAmbient[3] = 1.0f;
+		
+		cGraphics::worldContainer->settings.lightDiffuse[0] = 1.0f;
+		cGraphics::worldContainer->settings.lightDiffuse[1] = 1.0f;
+		cGraphics::worldContainer->settings.lightDiffuse[2] = 1.0f;
+		cGraphics::worldContainer->settings.lightDiffuse[3] = 1.0f;
+	}
+	float tmp[4] = { 0,0,0,0 };
 	
 	glLightfv(GL_LIGHT1, GL_AMBIENT, cGraphics::worldContainer->settings.lightAmbient);				// Setup The Ambient Light
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, cGraphics::worldContainer->settings.lightDiffuse);				// Setup The Diffuse Light
+	glLightfv(GL_LIGHT1, GL_SPECULAR, tmp);				// Setup The Diffuse Light
+
 	//glLightfv(GL_LIGHT1, GL_POSITION,worldContainer->settings.lightPosition);			// Position The Light
 
 
@@ -1610,19 +1641,24 @@ void cWorld::draw()
 					inbetween<int>(x, posx-floor(((cClipboardHeight*)cClipBoard::currentClipBoard)->data[0].size()/2.0f),	posx+ceil(((cClipboardHeight*)cClipBoard::currentClipBoard)->data[0].size()/2.0f)) &&
 					inbetween<int>(y, posy-floor(((cClipboardHeight*)cClipBoard::currentClipBoard)->data.size()/2.0f),		posy+ceil(((cClipboardHeight*)cClipBoard::currentClipBoard)->data.size()/2.0f)))
 					glColor4f(0.7f,0.7f,0.7f,1);
-				else if (cGraphics::view.showAmbientLighting)
-					glColor4f(ambientLight.diffuse.x,ambientLight.diffuse.y,ambientLight.diffuse.z,1);
+//				else if (cGraphics::view.showAmbientLighting)
+//					glColor4f(ambientLight.diffuse.x,ambientLight.diffuse.y,ambientLight.diffuse.z,1);
 				else
 					glColor4f(1,1,1,1);
 
 				glDisable(GL_BLEND);
-//				glEnable(GL_BLEND);
+				glEnable(GL_BLEND);
+				glColor4f(1,1,1,1);
 				glBindTexture(GL_TEXTURE_2D, texture);
 				glNormal3f(c->normal.x, c->normal.y, c->normal.z);
 				glBegin(GL_TRIANGLE_STRIP);
+					glNormal3f(c->vNormal1.x, c->vNormal1.y, c->vNormal1.z);
 					glTexCoord2f(t->u1, 1-t->v1);				glVertex3f(x*10,-c->cell1,(height-y)*10);
+					glNormal3f(c->vNormal2.x, c->vNormal2.y, c->vNormal2.z);
 					glTexCoord2f(t->u3, 1-t->v3);				glVertex3f(x*10,-c->cell3,(height-y)*10-10);
+					glNormal3f(c->vNormal3.x, c->vNormal3.y, c->vNormal3.z);
 					glTexCoord2f(t->u2, 1-t->v2);				glVertex3f(x*10+10,-c->cell2,(height-y)*10);
+					glNormal3f(c->vNormal4.x, c->vNormal4.y, c->vNormal4.z);
 					glTexCoord2f(t->u4, 1-t->v4);				glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
 				glEnd();
 			}
@@ -1633,9 +1669,13 @@ void cWorld::draw()
 				glDisable(GL_TEXTURE_2D);
 				glNormal3f(c->normal.x, c->normal.y, c->normal.z);
 				glBegin(GL_TRIANGLE_STRIP);
+					glNormal3f(c->vNormal1.x, c->vNormal1.y, c->vNormal1.z);
 					glVertex3f(x*10,-c->cell1+0.01f,(height-y)*10);
+					glNormal3f(c->vNormal2.x, c->vNormal2.y, c->vNormal2.z);
 					glVertex3f(x*10,-c->cell3+0.01f,(height-y)*10-10);
+					glNormal3f(c->vNormal3.x, c->vNormal1.y, c->vNormal3.z);
 					glVertex3f(x*10+10,-c->cell2+0.01f,(height-y)*10);
+					glNormal3f(c->vNormal4.x, c->vNormal4.y, c->vNormal4.z);
 					glVertex3f(x*10+10,-c->cell4+0.01f,(height-y)*10-10);
 				glEnd();
 				glEnable(GL_TEXTURE_2D);
@@ -1648,9 +1688,9 @@ void cWorld::draw()
 					break;
 				int texture = textures[t->texture]->texId();
 				glBindTexture(GL_TEXTURE_2D, texture);
-				if(cGraphics::view.showAmbientLighting)
-					glColor4f(ambientLight.diffuse.x,ambientLight.diffuse.y,ambientLight.diffuse.z,1);
-				else
+//				if(cGraphics::view.showAmbientLighting)
+//					glColor4f(ambientLight.diffuse.x,ambientLight.diffuse.y,ambientLight.diffuse.z,1);
+//				else
 					glColor4f(1,1,1,1);
 				glNormal3f(c->cell4 > (c+1)->cell3 ? -1 : 1,0,0);
 				glBegin(GL_TRIANGLE_STRIP);
@@ -1667,9 +1707,9 @@ void cWorld::draw()
 					break;
  				int texture = textures[t->texture]->texId();
 				glBindTexture(GL_TEXTURE_2D, texture);
-				if(cGraphics::view.showAmbientLighting)
-					glColor4f(ambientLight.diffuse.x,ambientLight.diffuse.y,ambientLight.diffuse.z,1);
-				else
+//				if(cGraphics::view.showAmbientLighting)
+//					glColor4f(ambientLight.diffuse.x,ambientLight.diffuse.y,ambientLight.diffuse.z,1);
+//				else
 					glColor4f(1,1,1,1);
 				glNormal3f(0,0, cubes[y+1][x].cell1 > c->cell4 ? -1 : 1);
 				glBegin(GL_TRIANGLE_STRIP);
@@ -1685,6 +1725,7 @@ void cWorld::draw()
 
 	glColor4f(1,1,1,1);
 	glEnable(GL_BLEND);
+	glDisable(GL_LIGHTING);
 	if(cGraphics::view.showLightmaps)
 	{
 		for(x = 0; (int)x < width; x++)
@@ -1705,22 +1746,29 @@ void cWorld::draw()
 					int lightmap2 = realLightmaps[y][x]->texId2();
 					glBlendFunc(GL_ONE ,GL_DST_COLOR);				
 					glBindTexture(GL_TEXTURE_2D, lightmap);
-					glNormal3f(1,0,0);
 					double d = 1/128.0;
 					double d6 = 6/128.0;
 					glBegin(GL_TRIANGLE_STRIP);
+						glNormal3f(c->vNormal1.x, c->vNormal1.y, c->vNormal1.z);
 						glTexCoord2f(d + d6*(x%21),d + d6*(y%21));					glVertex3f(x*10,-c->cell1,(height-y)*10);
-						glTexCoord2f(d + d6*(x%21),d + d6*(y%21)+d6);					glVertex3f(x*10,-c->cell3,(height-y)*10-10);
-						glTexCoord2f(d + d6*(x%21)+d6,d + d6*(y%21));					glVertex3f(x*10+10,-c->cell2,(height-y)*10);
-						glTexCoord2f(d + d6*(x%21)+d6,d + d6*(y%21)+d6);					glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
+						glNormal3f(c->vNormal2.x, c->vNormal2.y, c->vNormal2.z);
+						glTexCoord2f(d + d6*(x%21),d + d6*(y%21)+d6);				glVertex3f(x*10,-c->cell3,(height-y)*10-10);
+						glNormal3f(c->vNormal3.x, c->vNormal3.y, c->vNormal3.z);
+						glTexCoord2f(d + d6*(x%21)+d6,d + d6*(y%21));				glVertex3f(x*10+10,-c->cell2,(height-y)*10);
+						glNormal3f(c->vNormal4.x, c->vNormal4.y, c->vNormal4.z);
+						glTexCoord2f(d + d6*(x%21)+d6,d + d6*(y%21)+d6);			glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
 					glEnd();
 
 					glBlendFunc(GL_DST_COLOR, GL_ZERO);
 					glBindTexture(GL_TEXTURE_2D, lightmap2);
 					glBegin(GL_TRIANGLE_STRIP);
+						glNormal3f(c->vNormal1.x, c->vNormal1.y, c->vNormal1.z);
 						glTexCoord2f(d + d6*(x%21),d + d6*(y%21));					glVertex3f(x*10,-c->cell1,(height-y)*10);
+						glNormal3f(c->vNormal2.x, c->vNormal2.y, c->vNormal2.z);
 						glTexCoord2f(d + d6*(x%21),d + d6*(y%21)+d6);					glVertex3f(x*10,-c->cell3,(height-y)*10-10);
+						glNormal3f(c->vNormal3.x, c->vNormal3.y, c->vNormal3.z);
 						glTexCoord2f(d + d6*(x%21)+d6,d + d6*(y%21));					glVertex3f(x*10+10,-c->cell2,(height-y)*10);
+						glNormal3f(c->vNormal4.x, c->vNormal4.y, c->vNormal4.z);
 						glTexCoord2f(d + d6*(x%21)+d6,d + d6*(y%21)+d6);					glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
 					glEnd();
 				}
@@ -2217,8 +2265,7 @@ void cWorld::draw()
 
 	if ((cGraphics::view.showObjects || editmode == MODE_OBJECTS) && editmode != MODE_OBJECTGROUP)
 	{
-		glEnable(GL_BLEND);
-
+		glEnable(GL_LIGHTING);
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
 		glTranslatef(0,0,height*10);
@@ -2254,6 +2301,7 @@ void cWorld::draw()
 		glScalef(1,1,-1);
 		glTranslatef(0,0,-height*10);
 		glColor4f(1,1,1,1);
+		glDisable(GL_LIGHTING);
 
 
 		if(editmode == MODE_OBJECTS && cGraphics::view.showObjects)
@@ -2339,6 +2387,7 @@ void cWorld::draw()
 	{
 		glColor4f(1,1,1,1);
 
+		glEnable(GL_LIGHTING);
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
 		glTranslatef(0,0,height*10);
@@ -2353,6 +2402,7 @@ void cWorld::draw()
 		}
 		glScalef(1,1,-1);
 		glTranslatef(0,0,-height*10);
+		glDisable(GL_LIGHTING);
 
 
 		
@@ -4008,4 +4058,32 @@ bool cWorld::checkSanity()
 	}
 
 	return true;
+}
+
+void cWorld::calcVertexNormals()
+{
+	unsigned int x,y;
+
+
+	for(y = 1; y < height-1; y++)
+	{
+		for(x = 1; x < width-1; x++)
+		{
+			cubes[y][x].vNormal1 = (cubes[y][x].normal + cubes[y-1][x].normal + cubes[y][x-1].normal + cubes[y-1][x-1].normal).normalize();
+			cubes[y][x].vNormal2 = (cubes[y][x].normal + cubes[y+1][x].normal + cubes[y][x-1].normal + cubes[y+1][x-1].normal).normalize();
+			cubes[y][x].vNormal3 = (cubes[y][x].normal + cubes[y-1][x].normal + cubes[y][x+1].normal + cubes[y-1][x+1].normal).normalize();
+			cubes[y][x].vNormal4 = (cubes[y][x].normal + cubes[y+1][x].normal + cubes[y][x+1].normal + cubes[y+1][x+1].normal).normalize();
+
+/*
+glNormal3f(c->vNormal1.x, c->vNormal1.y, c->vNormal1.z);
+glVertex3f(x*10,-c->cell1,(height-y)*10);
+glNormal3f(c->vNormal2.x, c->vNormal2.y, c->vNormal2.z);
+glVertex3f(x*10,-c->cell3,(height-y)*10-10);
+glNormal3f(c->vNormal3.x, c->vNormal3.y, c->vNormal3.z);
+glVertex3f(x*10+10,-c->cell2,(height-y)*10);
+glNormal3f(c->vNormal4.x, c->vNormal4.y, c->vNormal4.z);
+glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
+*/		
+		}
+	}
 }

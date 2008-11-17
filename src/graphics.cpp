@@ -485,9 +485,11 @@ int cGraphics::init(int pWidth, int pHeight, int pBpp, bool pFullscreen)
 
 	previewModel = NULL;
 
+	glDisable(GL_LIGHT0);
 	glEnable(GL_LIGHT1);										// Enable Light One
 	glEnable(GL_LIGHTING);
-	glEnable(GL_COLOR_MATERIAL);
+	//glEnable(GL_COLOR_MATERIAL);
+	glDisable(GL_COLOR_MATERIAL);
 
 
 	/*popupMenu = new cMenu();
@@ -784,8 +786,6 @@ cWorldContainer::cView::cView()
 	showLightmaps = false;
 	showTileColors = true;
 	showWater = true;
-	showOglLighting = true;
-	showAmbientLighting = true;
 	showNoTiles = true;
 	showGat = false;
 	showDot = true;
