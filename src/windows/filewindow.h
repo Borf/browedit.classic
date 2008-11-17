@@ -27,7 +27,7 @@ public:
 		void onChange();
 	};
 
-	std::vector<std::string> mapnames;
+	std::vector<std::string> mapNames;
 
 	cFileWindow(void (*pCallback)(std::string));
 	void resizeTo(int ww, int hh);

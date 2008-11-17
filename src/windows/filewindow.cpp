@@ -38,10 +38,10 @@ void cFileWindow::cWindowFilterBox::onChange()
 {
 	cWindowListBox* o = (cWindowListBox*)parent->objects["filebox"];
 	o->values.clear();
-	for(unsigned int i = 0; i < ((cFileWindow*)parent)->mapnames.size(); i++)
+	for(unsigned int i = 0; i < ((cFileWindow*)parent)->mapNames.size(); i++)
 	{
-		if(((cFileWindow*)parent)->mapnames[i].find(text) != std::string::npos)
-			o->setText(-1, ((cFileWindow*)parent)->mapnames[i]);
+		if(((cFileWindow*)parent)->mapNames[i].find(text) != std::string::npos)
+			o->setText(-1, ((cFileWindow*)parent)->mapNames[i]);
 	}
 }
 
@@ -72,22 +72,31 @@ cFileWindow::cFileWindow(void (*pCallback)(std::string)) : cWindow()
 	o->resizeTo(innerWidth(), innerHeight()-20);
 	objects["filebox"] = o;
 	
-	mapnames.clear();
+	mapNames.clear();
 	unsigned int i;
 	for(i = 0; i < cFileSystem::locations.size(); i++)
 	{
 		for(std::map<std::string, cFile*, std::less<std::string> >::iterator it = cFileSystem::locations[i]->files.begin(); it != cFileSystem::locations[i]->files.end(); it++)
 		{
 			if(it->first.find(".rsw") != std::string::npos)
-				mapnames.push_back(it->first.substr(cSettings::roDir.length()));
+				mapNames.push_back(it->first.substr(cSettings::roDir.length()));
 			
 		}
 	}
 	
-	std::sort(mapnames.begin(), mapnames.end());
+	std::sort(mapNames.begin(), mapNames.end());
 	
-	for(i = 0; i < mapnames.size(); i++)
-		o->setText(-1, mapnames[i]);
+	for(i = 1; i < mapNames.size(); i++)
+	{
+		if(mapNames[i] == mapNames[i-1])
+		{
+			mapNames.erase(mapNames.begin() + i);
+			i--;
+		}
+	}
+	
+	for(i = 0; i < mapNames.size(); i++)
+		o->setText(-1, mapNames[i]);
 	
 	objects["OkButton"] = new cOkButton(this, pCallback);
 	selectedObject = objects["filter"];

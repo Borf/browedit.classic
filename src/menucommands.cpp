@@ -2583,16 +2583,16 @@ MENUCOMMAND(random5)
 			for(x = 0; x < 5; x++)
 			{
 				cTile t;
-				t.lightmap = 1;
+				t.lightmap = 0;
 				t.texture = tex;
-				t.u1 = x/5.0;
-				t.v1 = y/5.0;
-				t.u2 = (x+1)/5.0;
-				t.v2 = (y)/5.0;
-				t.u3 = (x)/5.0;
-				t.v3 = (y+1)/5.0;
-				t.u4 = (x+1)/5.0;
-				t.v4 = (y+1)/5.0;
+				t.u1 = x/4.0;
+				t.v1 = y/4.0;
+				t.u2 = (x+1)/4.0;
+				t.v2 = (y)/4.0;
+				t.u3 = (x)/4.0;
+				t.v3 = (y+1)/4.0;
+				t.u4 = (x+1)/4.0;
+				t.v4 = (y+1)/4.0;
 				t.color[0] = (char)255;
 				t.color[1] = (char)255;
 				t.color[2] = (char)255;
@@ -2609,7 +2609,7 @@ MENUCOMMAND(random5)
 		{
 			cGraphics::world->cubes[(int)y][(int)x].tileOtherSide = -1;
 			cGraphics::world->cubes[(int)y][(int)x].tileSide = -1;
-			cGraphics::world->cubes[(int)y][(int)x].tileUp = 0 + ((int)x%5) + 5*((int)y%5);
+			cGraphics::world->cubes[(int)y][(int)x].tileUp = 0 + ((int)x%4) + 4*((int)y%4);
 		}
 	}
 
@@ -2715,7 +2715,7 @@ MENUCOMMAND(random5)
 						cGraphics::world->cubes[yy][xx].cell2 = 0;//rand()%25;
 						cGraphics::world->cubes[yy][xx].cell3 = 0;//rand()%25;
 						cGraphics::world->cubes[yy][xx].cell4 = 0;//rand()%25;
-						cGraphics::world->cubes[yy][xx].tileUp = 25 + (xx%5) + 5*(yy%5);
+						cGraphics::world->cubes[yy][xx].tileUp = 16 + (xx%4) + 4*(yy%4);
 					}
 				}
 				if(island != -1)
@@ -2792,7 +2792,7 @@ MENUCOMMAND(random5)
 						cGraphics::world->cubes[yy+yyy][xx+xxx].cell2 = 0;//rand()%25;
 						cGraphics::world->cubes[yy+yyy][xx+xxx].cell3 = 0;//rand()%25;
 						cGraphics::world->cubes[yy+yyy][xx+xxx].cell4 = 0;//rand()%25;
-						cGraphics::world->cubes[yy+yyy][xx+xxx].tileUp = 25 + ((xx+xxx)%5) + 5*((yy+yyy)%5);
+						cGraphics::world->cubes[yy+yyy][xx+xxx].tileUp = 16 + ((xx+xxx)%4) + 4*((yy+yyy)%4);
 						if(xx > x)
 							xx--;
 						if(xx < x)
@@ -2806,7 +2806,7 @@ MENUCOMMAND(random5)
 						cGraphics::world->cubes[yy+yyy][xx+xxx].cell2 = 0;//rand()%25;
 						cGraphics::world->cubes[yy+yyy][xx+xxx].cell3 = 0;//rand()%25;
 						cGraphics::world->cubes[yy+yyy][xx+xxx].cell4 = 0;//rand()%25;
-						cGraphics::world->cubes[yy+yyy][xx+xxx].tileUp = 25 + ((xx+xxx)%5) + 5*((yy+yyy)%5);
+						cGraphics::world->cubes[yy+yyy][xx+xxx].tileUp = 16 + ((xx+xxx)%4) + 4*((yy+yyy)%4);
 					}
 				}
 			}
