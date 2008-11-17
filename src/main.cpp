@@ -901,7 +901,7 @@ int main(int argc, char *argv[])
 	if(cSettings::config.FirstChildElement("config")->FirstChildElement("firstmap"))
 		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\" + cSettings::config.FirstChildElement("config")->FirstChildElement("firstmap")->FirstChild()->Value()).c_str());
 	else
-		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\random_pay").c_str());
+		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\moc_pryd03").c_str());
 
 	if(argc > 1)
 	{
