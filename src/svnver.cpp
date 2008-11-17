@@ -2,5 +2,5 @@
 
 int getversion()
 {
-	return SVN_VERSION;
+	return atoi("$Revision$");
 }

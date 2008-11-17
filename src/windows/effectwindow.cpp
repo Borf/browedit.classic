@@ -22,6 +22,7 @@ cEffectWindow::cEffectWindow() : cWindow()
 	addLabel("lblPos", 15,60,GetMsg("wm/effect/POS"));
 	addLabel("lblScale", 15,80, GetMsg("wm/effect/SCALE"));
 	addLabel("lblRot", 15,100,GetMsg("wm/effect/ROT"));
+	addLabel("lblLoopTime", 15, 120, GetMsg("wm/effect/LOOPTIME"));
 	
 	o = new cWindowInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
@@ -108,8 +109,11 @@ void* cEffectWindow::userfunc( void* param )
 	int p = (int)param;
 	if(p == 0) // cancel
 	{
-		undo->undo();
-		delete undo;
+		if(undo)
+		{
+			undo->undo();
+			delete undo;
+		}
 	}
 	else
 	{
