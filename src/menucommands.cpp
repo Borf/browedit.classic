@@ -410,21 +410,21 @@ MENUCOMMAND(random2)
 	cGraphics::world->tiles.clear();
 	for(int tex = 0; tex < 3; tex++)
 	{
-		for(y = 0; y < 5; y++)
+		for(y = 0; y < 4; y++)
 		{
-			for(x = 0; x < 5; x++)
+			for(x = 0; x < 4; x++)
 			{
 				cTile t;
-				t.lightmap = 1;
+				t.lightmap = 0;
 				t.texture = tex;
-				t.u1 = x/5.0;
-				t.v1 = y/5.0;
-				t.u2 = (x+1)/5.0;
-				t.v2 = (y)/5.0;
-				t.u3 = (x)/5.0;
-				t.v3 = (y+1)/5.0;
-				t.u4 = (x+1)/5.0;
-				t.v4 = (y+1)/5.0;
+				t.u1 = x/4.0;
+				t.v1 = y/4.0;
+				t.u2 = (x+1)/4.0;
+				t.v2 = (y)/4.0;
+				t.u3 = (x)/4.0;
+				t.v3 = (y+1)/4.0;
+				t.u4 = (x+1)/4.0;
+				t.v4 = (y+1)/4.0;
 				t.color[0] = (char)255;
 				t.color[1] = (char)255;
 				t.color[2] = (char)255;
@@ -446,6 +446,11 @@ MENUCOMMAND(random2)
 	}
 	cGraphics::draw();
 	SDL_GL_SwapBuffers();
+
+	if(!cGraphics::world->makeLightmapsUnique())
+		return false;
+	if(!cGraphics::world->blackLightmaps())
+		return false;
 
 
 	for(y = 0; y < cGraphics::world->height; y++)
@@ -638,9 +643,9 @@ MENUCOMMAND(random2)
 		for(x = 0; x < cGraphics::world->width; x++)
 		{
 			if((cGraphics::world->cubes[(int)y][(int)x].cell1 <= -8 || cGraphics::world->cubes[(int)y][(int)x].cell2 <= -8 || cGraphics::world->cubes[(int)y][(int)x].cell3  <= -8|| cGraphics::world->cubes[(int)y][(int)x].cell4 <= -8) && cGraphics::world->cubes[(int)y][(int)x].cell1 > -63)
-				cGraphics::world->cubes[(int)y][(int)x].tileUp= 50 + ((int)x%5) + 5*((int)y%5);
+				cGraphics::world->cubes[(int)y][(int)x].tileUp= 32 + ((int)x%4) + 4*((int)y%4);
 			else if(cGraphics::world->cubes[(int)y][(int)x].cell1 >= -63)
-				cGraphics::world->cubes[(int)y][(int)x].tileUp= 25 + ((int)x%5) + 5*((int)y%5);
+				cGraphics::world->cubes[(int)y][(int)x].tileUp= 16 + ((int)x%4) + 4*((int)y%4);
 		}
 	}
 
@@ -731,21 +736,21 @@ MENUCOMMAND(random3)
 	cGraphics::world->tiles.clear();
 	for(int tex = 0; tex < 5; tex++)
 	{
-		for(y = 0; y < 5; y++)
+		for(y = 0; y < 4; y++)
 		{
-			for(x = 0; x < 5; x++)
+			for(x = 0; x < 4; x++)
 			{
 				cTile t;
-				t.lightmap = 1;
+				t.lightmap = 0;
 				t.texture = tex;
-				t.u1 = x/5.0;
-				t.v1 = y/5.0;
-				t.u2 = (x+1)/5.0;
-				t.v2 = (y)/5.0;
-				t.u3 = (x)/5.0;
-				t.v3 = (y+1)/5.0;
-				t.u4 = (x+1)/5.0;
-				t.v4 = (y+1)/5.0;
+				t.u1 = x/4.0;
+				t.v1 = y/4.0;
+				t.u2 = (x+1)/4.0;
+				t.v2 = (y)/4.0;
+				t.u3 = (x)/4.0;
+				t.v3 = (y+1)/4.0;
+				t.u4 = (x+1)/4.0;
+				t.v4 = (y+1)/4.0;
 				t.color[0] = (char)255;
 				t.color[1] = (char)255;
 				t.color[2] = (char)255;
@@ -762,7 +767,7 @@ MENUCOMMAND(random3)
 		{
 			cGraphics::world->cubes[(int)y][(int)x].tileOtherSide = -1;
 			cGraphics::world->cubes[(int)y][(int)x].tileSide = -1;
-			cGraphics::world->cubes[(int)y][(int)x].tileUp = 75 + ((int)x%5) + 5*((int)y%5);
+			cGraphics::world->cubes[(int)y][(int)x].tileUp = 48 + ((int)x%4) + 4*((int)y%4);
 		}
 	}
 
@@ -870,7 +875,7 @@ MENUCOMMAND(random3)
 						cGraphics::world->cubes[yy][xx].cell2 = 0;//rand()%25;
 						cGraphics::world->cubes[yy][xx].cell3 = 0;//rand()%25;
 						cGraphics::world->cubes[yy][xx].cell4 = 0;//rand()%25;
-						cGraphics::world->cubes[yy][xx].tileUp = 50 + (xx%5) + 5*(yy%5);
+						cGraphics::world->cubes[yy][xx].tileUp = 32 + (xx%4) + 4*(yy%4);
 					}
 				}
 				if(island != -1)
@@ -1029,21 +1034,21 @@ MENUCOMMAND(random4)
 	cGraphics::world->tiles.clear();
 	for(int tex = 0; tex < 5; tex++)
 	{
-		for(y = 0; y < 5; y++)
+		for(y = 0; y < 4; y++)
 		{
-			for(x = 0; x < 5; x++)
+			for(x = 0; x < 4; x++)
 			{
 				cTile t;
-				t.lightmap = 1;
+				t.lightmap = 0;
 				t.texture = tex;
-				t.u1 = x/5.0;
-				t.v1 = y/5.0;
-				t.u2 = (x+1)/5.0;
-				t.v2 = (y)/5.0;
-				t.u3 = (x)/5.0;
-				t.v3 = (y+1)/5.0;
-				t.u4 = (x+1)/5.0;
-				t.v4 = (y+1)/5.0;
+				t.u1 = x/4.0;
+				t.v1 = y/4.0;
+				t.u2 = (x+1)/4.0;
+				t.v2 = (y)/4.0;
+				t.u3 = (x)/4.0;
+				t.v3 = (y+1)/4.0;
+				t.u4 = (x+1)/4.0;
+				t.v4 = (y+1)/4.0;
 				t.color[0] = (char)255;
 				t.color[1] = (char)255;
 				t.color[2] = (char)255;
@@ -1059,7 +1064,7 @@ MENUCOMMAND(random4)
 		{
 			cGraphics::world->cubes[y][x].tileOtherSide = -1;
 			cGraphics::world->cubes[y][x].tileSide = -1;
-			cGraphics::world->cubes[y][x].tileUp = 25 + ((int)x%5) + 5*((int)y%5);
+			cGraphics::world->cubes[y][x].tileUp = 16 + ((int)x%4) + 4*((int)y%4);
 		}
 	}
 
@@ -1120,7 +1125,7 @@ MENUCOMMAND(random4)
 				fabs(cGraphics::world->cubes[y][x].cell2 - cGraphics::world->cubes[y][x].cell3) > 5 ||
 				fabs(cGraphics::world->cubes[y][x].cell2 - cGraphics::world->cubes[y][x].cell4) > 5 ||
 				fabs(cGraphics::world->cubes[y][x].cell3 - cGraphics::world->cubes[y][x].cell4) > 5)
-				cGraphics::world->cubes[y][x].tileUp = 50 + ((int)x%5) + 5*((int)y%5);
+				cGraphics::world->cubes[y][x].tileUp = 32 + ((int)x%4) + 4*((int)y%4);
 		}
 	}
 
@@ -1156,7 +1161,7 @@ MENUCOMMAND(random4)
 
 			model->pos = cVector3(rand()%(cGraphics::world->width*2), 0, rand()%(cGraphics::world->height*2));
 
-			while(cGraphics::world->cubes[(int)(model->pos.z/2)][(int)(model->pos.x/2)].tileUp > 50)
+			while(cGraphics::world->cubes[(int)(model->pos.z/2)][(int)(model->pos.x/2)].tileUp > 32)
 				model->pos = cVector3(rand()%(cGraphics::world->width*2), 0, rand()%(cGraphics::world->height*2));
 
 
@@ -1662,7 +1667,8 @@ MENUCOMMAND(dolightmaps2)
 	mainloop();
 
 	Log(3,0,"Starting Lightmap Clearing");
-	cGraphics::world->makeLightmapsUnique();
+	if(!cGraphics::world->makeLightmapsUnique())
+		return false;
 	//cGraphics::world->blackLightmaps();
 	Log(3,0,"Done initializing for lightmaps...");
 
@@ -2029,15 +2035,16 @@ MENUCOMMAND(fixcolors)
 
 MENUCOMMAND(savelightmaps)
 {
-	cGraphics::world->savelightmap();
+	cGraphics::world->saveLightmap();
 	return true;
 }
 
 MENUCOMMAND(loadlightmaps)
 {
 
-	cGraphics::world->makeLightmapsUnique();
-	cGraphics::world->loadlightmap();
+	if(!cGraphics::world->makeLightmapsUnique())
+		return false;
+	cGraphics::world->loadLightmap();
 	cGraphics::world->fixGridding();
 
 	return true;

@@ -761,7 +761,7 @@ void cWorld::load()
 
 	}
 
-
+	checkSanity();
 	Log(3,0,GetMsg("world/LOADDONE"), fileName);
 
 }
@@ -3268,7 +3268,7 @@ int tgaSave(    char            *filename,
 		return(0);
 }
 
-void cWorld::savelightmap()
+void cWorld::saveLightmap()
 {
 	int x,y,xx,yy;
 	char* imgdata = new char[width*height*6*6*3];
@@ -3352,7 +3352,7 @@ void cWorld::savelightmap()
 	delete[] imgdata;*/
 }
 
-void cWorld::loadlightmap()
+void cWorld::loadLightmap()
 {
 	{
 		cFile* pFile = cFileSystem::open(std::string(fileName) + ".lightmap.tga");
@@ -3719,7 +3719,7 @@ void cWorld::fixGridding()
 }
 
 
-void cWorld::makeLightmapsUnique()
+bool cWorld::makeLightmapsUnique()
 {
 	int x,y;
 
@@ -3763,6 +3763,8 @@ void cWorld::makeLightmapsUnique()
 	}
 ////////// all tiles are now unique
 	used.clear();
+	if(!checkSanity())
+		return false;
 
 	for(x = 0; x < width; x++)
 	{
@@ -3825,11 +3827,13 @@ void cWorld::makeLightmapsUnique()
 
 		}
 	}
-
+	if(!checkSanity())
+		return false;
+	return true;
 }
 
 
-void cWorld::blackLightmaps()
+bool cWorld::blackLightmaps()
 {
 	int x,y;
 	for(x = 0; x < width; x++)
@@ -3849,8 +3853,7 @@ void cWorld::blackLightmaps()
 		}
 	}
 
-
-
+	return checkSanity();
 }
 
 cWorld::cWorld()
@@ -3868,4 +3871,103 @@ cWorld::cWorld()
 cWorld::~cWorld()
 {
 	unload();
+}
+
+bool cWorld::checkSanity()
+{
+	unsigned int x,y;
+
+	if(height != cubes.size() && width != cubes[0].size())
+	{
+		cWM::showMessage("Sanity error: Map height/width don't match");
+		return false;
+	}
+	for(y = 0; y < cubes.size(); y++)
+	{
+		for(x = 0; x < cubes[y].size(); x++)
+		{
+			cCube* c = &cubes[y][x];
+			if(c->tileUp != -1)
+			{
+				if(c->tileUp < 0 || c->tileUp >= tiles.size())
+				{
+					cWM::showMessage("Sanity error: tile out of bounds");
+					return false;
+				}
+				cTile* t = &tiles[c->tileUp];
+				if(t->lightmap != -1)
+				{
+					if(t->lightmap < 0 || t->lightmap >= lightmaps.size())
+					{
+						cWM::showMessage("Sanity error: lightmap out of bounds");
+						return false;
+					}
+				}
+				if(t->texture != -1)
+				{
+					if(t->texture < 0 || t->texture >= textures.size())
+					{
+						cWM::showMessage("Sanity error: texture out of bounds");
+						return false;
+					}
+				}
+			}
+
+			if(c->tileSide != -1)
+			{
+				if(c->tileSide < 0 || c->tileSide >= tiles.size())
+				{
+					cWM::showMessage("Sanity error: tile out of bounds");
+					return false;
+				}
+				cTile* t = &tiles[c->tileSide];
+				if(t->lightmap != -1)
+				{
+					if(t->lightmap < 0 || t->lightmap >= lightmaps.size())
+					{
+						cWM::showMessage("Sanity error: lightmap out of bounds");
+						return false;
+					}
+				}
+				if(t->texture != -1)
+				{
+					if(t->texture < 0 || t->texture >= textures.size())
+					{
+						cWM::showMessage("Sanity error: texture out of bounds");
+						return false;
+					}
+				}
+			}
+
+
+			if(c->tileOtherSide != -1)
+			{
+				if(c->tileOtherSide < 0 || c->tileOtherSide >= tiles.size())
+				{
+					cWM::showMessage("Sanity error: tile out of bounds");
+					return false;
+				}
+				cTile* t = &tiles[c->tileOtherSide];
+				if(t->lightmap != -1)
+				{
+					if(t->lightmap < 0 || t->lightmap >= lightmaps.size())
+					{
+						cWM::showMessage("Sanity error: lightmap out of bounds");
+						return false;
+					}
+				}
+				if(t->texture != -1)
+				{
+					if(t->texture < 0 || t->texture >= textures.size())
+					{
+						cWM::showMessage("Sanity error: texture out of bounds");
+						return false;
+					}
+				}
+			}
+
+
+		}
+	}
+	return true;
 }

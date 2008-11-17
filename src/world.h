@@ -291,6 +291,30 @@ public:
 	std::vector<cEffect>				effects;
 	std::vector<cSprite*>				sprites;
 
+	
+	long								size;
+	float								tileScale;
+	
+	int									lightmapWidth;
+	int									lightmapHeight;
+	int									gridSizeCell;
+	
+	cTextureModel*						light;
+	cTextureModel*						light2;
+	cTextureModel*						sound;
+	cTextureModel*						effect;
+	
+	std::vector<cVector3>				quadTreeFloats;
+	cQuadTreeNode* root;
+	
+	std::string							useless;
+	
+	std::list<int>						plugin_api_deleteobjects;
+	std::list<int>						plugin_api_deletesprites;
+
+	
+	
+	
 	cWorld();
 	~cWorld();
 	void								draw();
@@ -299,38 +323,16 @@ public:
 	void								exportheight();
 	void								unload();
 	void								newWorld();
-
-
 	void								clean();
 
-	void								savelightmap();
-	void								loadlightmap();
-
-
-	long								size;
-	float								tileScale;
-
-	int									lightmapWidth;
-	int									lightmapHeight;
-	int									gridSizeCell;
-
-	cTextureModel*						light;
-	cTextureModel*						light2;
-	cTextureModel*						sound;
-	cTextureModel*						effect;
-	
-	std::vector<cVector3>				quadTreeFloats;
-	cQuadTreeNode* root;
-
+	void								saveLightmap();
+	void								loadLightmap();
+	bool								checkSanity();
 
 	void								fixGridding();
-	void								makeLightmapsUnique();
-	void								blackLightmaps();
-
-	std::string							useless;
-
-	std::list<int>						plugin_api_deleteobjects;
-	std::list<int>						plugin_api_deletesprites;
+	bool								makeLightmapsUnique();
+	bool								blackLightmaps();
+	
 
 
 };
