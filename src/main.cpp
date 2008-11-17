@@ -1146,26 +1146,19 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						}
 					
 						cGraphics::worldContainer->camera.rot += (cGraphics::cMouse::xOld - cGraphics::cMouse::x) / 100.0f;
+						if(cGraphics::worldContainer->view.sideCamera)
+						{
+							if(cGraphics::worldContainer->camera.rot < 1.6*PI)
+								cGraphics::worldContainer->camera.rot = 1.6*PI;
+							if(cGraphics::worldContainer->camera.rot >= 1.8*PI)
+								cGraphics::worldContainer->camera.rot = 1.8*PI;
+						}						
 						while(cGraphics::worldContainer->camera.rot < 0)
 							cGraphics::worldContainer->camera.rot+=2*(float)PI;
 						while(cGraphics::worldContainer->camera.rot > 2*PI)
 							cGraphics::worldContainer->camera.rot-=2*(float)PI;
 					}
 				}
-/*broken code				if(cGraphics::worldContainer->view.sideCamera && (cGraphics::worldContainer->camera.rot < 1.75*PI ) ||  (cGraphics::worldContainer->camera.rot > 1.75*PI ) )
-				{
-					if(SDL_GetModState() & KMOD_SHIFT) //A17kaliva Reference
-					{
-						break;
-					}
-					else
-					{
-						cGraphics::worldContainer->camera.pointer.x -= (cGraphics::cMouse::yOld - cGraphics::cMouse::y);
-						cGraphics::worldContainer->camera.pointer.y -= (cGraphics::cMouse::xOld - cGraphics::cMouse::x);
-						cGraphics::worldContainer->camera.rot = (float)(1.75f*PI);
-					}
-
-				}*/
 				else if (SDL_GetModState() & KMOD_CTRL)
 				{
 					if (!(cGraphics::worldContainer->settings.selectionstart3d == cGraphics::worldContainer->settings.selectionend3d))
