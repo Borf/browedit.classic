@@ -661,6 +661,63 @@ void cWorld::load()
 				models.push_back(m);
 				}
 				break;
+			case 2:
+				{
+				pFile->read(buf, 108);
+				cLight l;
+				l.name = std::string(buf);
+				l.pos.x = *((float*)(buf+40));
+				l.pos.y = *((float*)(buf+44));
+				l.pos.z = *((float*)(buf+48));
+				
+				l.pos.x = (l.pos.x / 5) + width;
+				l.pos.z = (l.pos.z / 5) + height;
+				
+				l.todo = std::string(buf+52, 40);
+				l.color.x = *((float*)(buf+92));
+				l.color.y = *((float*)(buf+96));
+				l.color.z = *((float*)(buf+100));
+				l.todo2 = *((float*)(buf+104));
+				lights.push_back(l);
+				break;
+				}
+			case 3:
+				{
+					pFile->read(buf, 188);
+					cSound s;			
+					s.name = std::string(buf);
+					s.todo1 = std::string(buf+40, 40);
+					s.fileName = std::string(buf+80);
+					
+					s.unknown8 = *((float*)(buf+120));	//0
+					s.unknown7 = *((float*)(buf+124));	//-435.095
+					s.rotation.x = *((float*)(buf+128));
+					s.rotation.y = *((float*)(buf+132));
+					s.rotation.z = *((float*)(buf+136));
+					
+					s.scale.x = *((float*)(buf+140));
+					s.scale.y = *((float*)(buf+144));
+					s.scale.z = *((float*)(buf+148));
+					
+					memcpy(s.unknown6, buf+152, 8);		//	152-159 -> 8 bytes of unknown
+					
+					s.pos.x = *((float*)(buf+160));
+					s.pos.y = *((float*)(buf+164));
+					s.pos.z = *((float*)(buf+168));
+					
+					s.unknown5 = *((float*)(buf+172));	//1
+					s.unknown4 = *((long*)(buf+176));	//50
+					s.unknown3 = *((long*)(buf+180));	//45
+					s.unknown2 = *((float*)(buf+184));	//70
+//					s.repeatDelay = *((float*)(buf+188));	//4
+					s.repeatDelay = 100;
+					
+					
+					s.pos.x = (s.pos.x / 5) + width;
+					s.pos.z = (s.pos.z / 5) + height;
+					sounds.push_back(s);
+				}
+				break;
 			default:
 				Log(2,0,GetMsg("world/UNKNOWNOBJECT"), type);
 				pFile->close();
@@ -1625,30 +1682,56 @@ void cWorld::draw()
 				else if(((editmode == MODE_TEXTUREPAINT && cGraphics::textureTool == TOOL_SELECTAREA) || editmode == MODE_HEIGHTGLOBAL) && !cClipBoard::pasting)
 				{
 						if(cGraphics::cMouse::lbuttondown && cGraphics::cMouse::y < cGraphics::h() - 20 && inbetween<int>(x, round(cGraphics::cMouse::x3dStart/10), round(cGraphics::cMouse::x3d/10)) && inbetween<int>(y, round(cGraphics::cMouse::z3dStart/10), round(cGraphics::cMouse::z3d/10)) && alt)
+					{
+
+						glEnable(GL_COLOR_MATERIAL);
 						glColor4f(0.3f, 0.3f, 0.3f, 1);
+					}
 					else if(cGraphics::cMouse::lbuttondown && cGraphics::cMouse::y < cGraphics::h() - 20 && inbetween<int>(x, round(cGraphics::cMouse::x3dStart/10), round(cGraphics::cMouse::x3d/10)) && inbetween<int>(y, round(cGraphics::cMouse::z3dStart/10), round(cGraphics::cMouse::z3d/10)))
+					{
+						
+						glEnable(GL_COLOR_MATERIAL);
 						glColor4f(0.6f,0.6f,0.6f,1);
+					}
 					else if(cGraphics::cMouse::lbuttondown && cGraphics::cMouse::y < cGraphics::h() - 20 && (ctrl || alt) && c->selected)
+					{
+						
+						glEnable(GL_COLOR_MATERIAL);
 						glColor4f(0.4f,0.4f,0.4f,1);
+					}
 					else if(inverseSelection && !c->selected)
+					{
+						
+						glEnable(GL_COLOR_MATERIAL);
 						glColor4f(0.2f, 0.2f, 0.2f, 1);
+					}
 					else
+					{
+						glDisable(GL_COLOR_MATERIAL);
 						glColor4f(1,1,1,1);
+					}
 				}
 				else if((editmode == MODE_TEXTUREPAINT || editmode == MODE_HEIGHTGLOBAL) && inverseSelection && !c->selected && !cClipBoard::pasting)
+				{
+					glEnable(GL_COLOR_MATERIAL);
 					glColor4f(0.2f, 0.2f, 0.2f, 1);
+				}
 				else if (editmode == MODE_HEIGHTDETAIL && cClipBoard::pasting && cClipBoard::currentClipBoard->type == cClipBoard::CLIP_HEIGHT && 
 					inbetween<int>(x, posx-floor(((cClipboardHeight*)cClipBoard::currentClipBoard)->data[0].size()/2.0f),	posx+ceil(((cClipboardHeight*)cClipBoard::currentClipBoard)->data[0].size()/2.0f)) &&
 					inbetween<int>(y, posy-floor(((cClipboardHeight*)cClipBoard::currentClipBoard)->data.size()/2.0f),		posy+ceil(((cClipboardHeight*)cClipBoard::currentClipBoard)->data.size()/2.0f)))
+				{
+					
+					glEnable(GL_COLOR_MATERIAL);
 					glColor4f(0.7f,0.7f,0.7f,1);
+				}
 //				else if (cGraphics::view.showAmbientLighting)
 //					glColor4f(ambientLight.diffuse.x,ambientLight.diffuse.y,ambientLight.diffuse.z,1);
 				else
+				{
+					
+					glDisable(GL_COLOR_MATERIAL);
 					glColor4f(1,1,1,1);
-
-				glDisable(GL_BLEND);
-				glEnable(GL_BLEND);
-				glColor4f(1,1,1,1);
+				}
 				glBindTexture(GL_TEXTURE_2D, texture);
 				glNormal3f(c->normal.x, c->normal.y, c->normal.z);
 				glBegin(GL_TRIANGLE_STRIP);
@@ -1725,7 +1808,7 @@ void cWorld::draw()
 
 	glColor4f(1,1,1,1);
 	glEnable(GL_BLEND);
-	glDisable(GL_LIGHTING);
+	glEnable(GL_LIGHTING);
 	if(cGraphics::view.showLightmaps)
 	{
 		for(x = 0; (int)x < width; x++)
