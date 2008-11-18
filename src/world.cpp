@@ -1586,38 +1586,40 @@ void cWorld::draw()
 				int texture = textures[t->texture]->texId();
 
 				if (	(editmode == MODE_WALLS && cGraphics::view.showGrid && (c->tileOtherSide != -1 || c->tileSide != -1) || c->minHeight != 99999))
+				{
+					glEnable(GL_COLOR_MATERIAL);
 					glColor3f(1,0,1);
+				}
 //				else if (cGraphics::view.showtilecolors)
 //					glColor3f((BYTE)t->color[0] / 256.0f,(BYTE)t->color[1] / 256.0f,(BYTE)t->color[2] / 256.0f);
 				else if(((editmode == MODE_TEXTUREPAINT && cGraphics::textureTool == TOOL_SELECTAREA) || editmode == MODE_HEIGHTGLOBAL) && !cClipBoard::pasting)
 				{
+					glEnable(GL_COLOR_MATERIAL);
 						if(cGraphics::cMouse::lbuttondown && cGraphics::cMouse::y < cGraphics::h() - 20 && inbetween<int>(x, round(cGraphics::cMouse::x3dStart/10), round(cGraphics::cMouse::x3d/10)) && inbetween<int>(y, round(cGraphics::cMouse::z3dStart/10), round(cGraphics::cMouse::z3d/10)) && alt)
 					{
 
-						glEnable(GL_COLOR_MATERIAL);
 						glColor4f(0.3f, 0.3f, 0.3f, 1);
 					}
 					else if(cGraphics::cMouse::lbuttondown && cGraphics::cMouse::y < cGraphics::h() - 20 && inbetween<int>(x, round(cGraphics::cMouse::x3dStart/10), round(cGraphics::cMouse::x3d/10)) && inbetween<int>(y, round(cGraphics::cMouse::z3dStart/10), round(cGraphics::cMouse::z3d/10)))
 					{
 						
-						glEnable(GL_COLOR_MATERIAL);
 						glColor4f(0.6f,0.6f,0.6f,1);
 					}
 					else if(cGraphics::cMouse::lbuttondown && cGraphics::cMouse::y < cGraphics::h() - 20 && (ctrl || alt) && c->selected)
 					{
 						
-						glEnable(GL_COLOR_MATERIAL);
 						glColor4f(0.4f,0.4f,0.4f,1);
 					}
 					else if(inverseSelection && !c->selected)
 					{
-						
-						glEnable(GL_COLOR_MATERIAL);
 						glColor4f(0.2f, 0.2f, 0.2f, 1);
+					}
+					else if(inverseSelection)
+					{
+						glColor4f(1,1,1,1);
 					}
 					else
 					{
-						glDisable(GL_COLOR_MATERIAL);
 						glColor4f(1,1,1,1);
 					}
 				}

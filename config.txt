@@ -1,1 +1,1 @@
-data/configs/A17.xml
+data/configs/rodesktop.xml

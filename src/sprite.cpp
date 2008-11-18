@@ -308,7 +308,7 @@ void cSprite::draw()
 	glLoadMatrixf(modelview);
 	glScalef(scale,scale,1);
 
-	//glTranslatef(0,0,10);
+	glTranslatef(0,0,5);
 
 	if(!body->loaded)
 	{
@@ -428,8 +428,8 @@ void cSprite::draw()
 		glTranslatef(-(subframe->offsetX + bodyframe->extraX - myframe->extraX), -(subframe->offsetY + bodyframe->extraY - myframe->extraY), 0);
 		glBegin(GL_QUADS);
 			glTexCoord2f(dir,0);		glVertex3f(width,height,1);
-			glTexCoord2f(1-dir,0);	glVertex3f(-width,height,1);
-			glTexCoord2f(1-dir,1);	glVertex3f(-width,-height,1);
+			glTexCoord2f(1-dir,0);		glVertex3f(-width,height,1);
+			glTexCoord2f(1-dir,1);		glVertex3f(-width,-height,1);
 			glTexCoord2f(dir,1);		glVertex3f(width,-height,1);
 		glEnd();
 		glPopMatrix();
