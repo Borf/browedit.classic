@@ -398,333 +398,239 @@ void cWorld::load()
 	pFile->read(buf, 6);
 	version = ((BYTE)buf[4])<<8 | ((BYTE)buf[5]);
 
-	if(version >= 0x0200)
+	//pFile->read(buf, 236);
+	pFile->read(iniFile, 40);
+	pFile->read(gndFile, 40);
+	if(version >= 0x104)
+		pFile->read(gatFile,40);
+	else
 	{
-		pFile->read(buf, 236);
-
-
-		useless = std::string(buf+160, 76);
-
-		char* w = (char*)useless.c_str();
-		water.height = *((float*)(w));
-		water.type = *((int*)(w+4));
-		water.amplitude = *((float*)(w+8));
-		water.phase = *((float*)(w+12));
-		water.surfaceCurve = *((float*)(w+16));
-		
-		ambientLight.ambientr = *((int*)(w+20));
-		ambientLight.ambientg = *((int*)(w+24));
-		ambientLight.ambientb = *((int*)(w+28));
-
-		ambientLight.diffuse.x = *((float*)(w+32));
-		ambientLight.diffuse.y = *((float*)(w+36));
-		ambientLight.diffuse.z = *((float*)(w+40));
-
-		ambientLight.shadow.x = *((float*)(w+44));
-		ambientLight.shadow.y = *((float*)(w+48));
-		ambientLight.shadow.z = *((float*)(w+52));
-
-		ambientLight.alpha = *((float*)(w+56));
-		
-
-		pFile->read(buf, 4);
-		unsigned int nObjects = *((unsigned int*)buf);
-
-
-		for(i = 0; i < nObjects; i++)
-		{
-			pFile->read(buf, 4);
-			long type = *((long*)buf);
-			switch(type)
-			{
-			case 1:
-				{
-				pFile->read(buf, 248);
-				std::string filename = buf+52;
-				cRSMModel* m = new cRSMModel();
-				m->load(cSettings::roDir+ "data\\model\\" + filename);
-				m->lightopacity = 1;
-
-				if (m->meshes.size() == 0)
-				{
-					Log(2,0,GetMsg("world/MODELFAIL"), filename.c_str());
-				}
-
-				m->name = std::string(buf);
-
-				m->pos.x = *((float*)(buf+212));
-				m->pos.y = *((float*)(buf+216));
-				m->pos.z = *((float*)(buf+220));
-
-
-				m->pos.x = (m->pos.x / 5) + width;
-				m->pos.z = (m->pos.z / 5) + height;
-
-				m->rot.x = *((float*)(buf+224));
-				m->rot.y = *((float*)(buf+228));
-				m->rot.z = *((float*)(buf+232));
-
-				m->scale.x = *((float*)(buf+236));
-				m->scale.y = *((float*)(buf+240));
-				m->scale.z = *((float*)(buf+244));
-				models.push_back(m);
-				}
-				break;
-			case 2:
-				{
-				pFile->read(buf, 108);
-				cLight l;
-				l.name = std::string(buf);
-				l.pos.x = *((float*)(buf+40));
-				l.pos.y = *((float*)(buf+44));
-				l.pos.z = *((float*)(buf+48));
-
-				l.pos.x = (l.pos.x / 5) + width;
-				l.pos.z = (l.pos.z / 5) + height;
-
-				l.todo = std::string(buf+52, 40);
-				l.color.x = *((float*)(buf+92));
-				l.color.y = *((float*)(buf+96));
-				l.color.z = *((float*)(buf+100));
-				l.todo2 = *((float*)(buf+104));
-				lights.push_back(l);
-				}
-				break;
-			case 3:
-				{
-				pFile->read(buf, 192);
-				cSound s;			
-				s.name = std::string(buf);
-				s.todo1 = std::string(buf+40, 40);
-				s.fileName = std::string(buf+80);
-
-				s.unknown8 = *((float*)(buf+120));	//0
-				s.unknown7 = *((float*)(buf+124));	//-435.095
-				s.rotation.x = *((float*)(buf+128));
-				s.rotation.y = *((float*)(buf+132));
-				s.rotation.z = *((float*)(buf+136));
-				
-				s.scale.x = *((float*)(buf+140));
-				s.scale.y = *((float*)(buf+144));
-				s.scale.z = *((float*)(buf+148));
-
-				memcpy(s.unknown6, buf+152, 8);		//	152-159 -> 8 bytes of unknown
-
-				s.pos.x = *((float*)(buf+160));
-				s.pos.y = *((float*)(buf+164));
-				s.pos.z = *((float*)(buf+168));
-
-				s.unknown5 = *((float*)(buf+172));	//1
-				s.unknown4 = *((long*)(buf+176));	//50
-				s.unknown3 = *((long*)(buf+180));	//45
-				s.unknown2 = *((float*)(buf+184));	//70
-				s.repeatDelay = *((float*)(buf+188));	//4
-
-
-				s.pos.x = (s.pos.x / 5) + width;
-				s.pos.z = (s.pos.z / 5) + height;
-				sounds.push_back(s);
-				}
-				break;
-			case 4:
-				{
-				pFile->read(buf, 116);
-				cEffect e;
-				e.name = std::string(buf);
-				e.todo1 = *((float*)(buf+40));
-				e.todo2 = *((float*)(buf+44));
-				e.todo3 = *((float*)(buf+48));
-				e.rotation.x = *((float*)(buf+52));
-				e.rotation.y = *((float*)(buf+56));
-				e.rotation.z = *((float*)(buf+60));
-				e.scale.x = *((float*)(buf+64));
-				e.scale.y = *((float*)(buf+68));
-				e.scale.z = *((float*)(buf+72));
-				e.category = std::string(buf+76, 4);
-				e.pos.x = *((float*)(buf+80));
-				e.pos.y = *((float*)(buf+84));
-				e.pos.z = *((float*)(buf+88));
-				e.type = *((int*)(buf+92));
-				e.loop = *((float*)(buf+96));
-				e.todo10 = *((float*)(buf+100));
-				e.todo11 = *((float*)(buf+104));
-				e.todo12 = *((int*)(buf+108));
-				e.todo13 = *((int*)(buf+112));
-				e.pos.x = (e.pos.x / 5) + width;
-				e.pos.z = (e.pos.z / 5) + height;
-
-				char buf[100];
-				sprintf(buf, "%i", e.type);
-				cMenu* m = effectsmenu->findData(buf);
-				if (m != NULL)
-					e.readablename = m->title;
-				effects.push_back(e);
-				}
-				break;
-			default:
-				Log(2,0,GetMsg("world/UNKNOWNOBJECT"), type);
-				pFile->close();
-				return;
-			};
-		}
-		quadTreeFloats.clear();
-		while(!pFile->eof())
-		{
-			cVector3 f;
-			pFile->read((char*)&f.x, 4);
-			pFile->read((char*)&f.y, 4);
-			pFile->read((char*)&f.z, 4);
-			quadTreeFloats.push_back(f);
-		}
+		strcpy(gatFile, gndFile);
+		//todo: gnd -> gat
 	}
-	else if (version >= 0x0106)
+	pFile->read(iniFile, 40);
+
+	if(version >= 0x103)
+		pFile->read((char*)&water.height,4);
+	else
+		water.height = 0;
+
+	if(version >= 0x108)
 	{
-		unsigned int nObjects;
-		if(version == 0x0106)
-		{
-			pFile->read(buf, 216);
-			water.type = 0;
-			water.height = 0;
-			ambientLight.diffuse = cVector3(1,1,1);
-			ambientLight.shadow = cVector3(1,1,1);
-			nObjects = *((unsigned int*)(buf+212));
-		}
-		if(version == 0x0109)
-		{
-			pFile->read(buf, 240);
-			char* w = buf+160;
-			water.height = *((float*)(w));
-			water.type = *((int*)(w+4));
-			water.amplitude = *((float*)(w+8));
-			water.phase = *((float*)(w+12));
-			water.surfaceCurve = *((float*)(w+16));
-			
-			ambientLight.ambientr = *((int*)(w+20));
-			ambientLight.ambientg = *((int*)(w+24));
-			ambientLight.ambientb = *((int*)(w+28));
-			
-			ambientLight.diffuse.x = *((float*)(w+32));
-			ambientLight.diffuse.y = *((float*)(w+36));
-			ambientLight.diffuse.z = *((float*)(w+40));
-			
-			ambientLight.shadow.x = *((float*)(w+44));
-			ambientLight.shadow.y = *((float*)(w+48));
-			ambientLight.shadow.z = *((float*)(w+52));
-			
-			ambientLight.alpha = *((float*)(w+56));
-			nObjects = *((unsigned int*)(buf+236));
-
-
-		}
-		if(nObjects < 0 || nObjects > 50000)
-		{
-			Log(1,0,"Warning: %i objects!", nObjects);
-			return;
-		}
-
-		for(i = 0; i < nObjects; i++)
-		{
-			pFile->read(buf, 4);
-			long type = *((long*)buf);
-			switch(type)
-			{
-			case 1:
-				{
-				pFile->read(buf, 248);
-				std::string filename = buf+52;
-				cRSMModel* m = new cRSMModel();
-				m->load(cSettings::roDir+ "data\\model\\" + filename);
+		pFile->read((char*)&water.type,4);
+		pFile->read((char*)&water.amplitude,4);
+		pFile->read((char*)&water.phase,4);
+		pFile->read((char*)&water.surfaceCurve,4);
+	}
+	else
+	{
+		water.type = 0;
+		water.amplitude = 1;
+		water.phase = 2;
+		water.surfaceCurve = 0.5f;
+	}
+	if(version >= 0x109)
+		pFile->read((char*)&ambientLight.ambientr,4);
+	else
+		ambientLight.ambientr = 3;
 	
-				m->lightopacity = 1;
+	if(version >= 0x104)
+	{
+		pFile->read((char*)&ambientLight.ambientg,4);
+		pFile->read((char*)&ambientLight.ambientb,4);
 
-				if (m->meshes.size() == 0)
-				{
-					Log(2,0,GetMsg("world/MODELFAIL"), filename.c_str());
-				}
+		pFile->read((char*)&ambientLight.diffuse.x,4);
+		pFile->read((char*)&ambientLight.diffuse.y,4);
+		pFile->read((char*)&ambientLight.diffuse.z,4);
+
+		pFile->read((char*)&ambientLight.shadow.x,4);
+		pFile->read((char*)&ambientLight.shadow.y,4);
+		pFile->read((char*)&ambientLight.shadow.z,4);
+	}
+	else
+	{
+		ambientLight.ambientg = 45;
+		ambientLight.ambientb = 45;
+
+		ambientLight.diffuse = cVector3(1,1,1);
+		ambientLight.shadow = cVector3(0.3f,0.3f,0.3f);
+	}
+
+	if(version >= 0x107)
+		pFile->read((char*)&ambientLight.alpha,4);
+	else
+		ambientLight.alpha = 0.5f;
+
+	if(version >= 0x106)
+	{
+		pFile->read((char*)&unknown1,4);
+		pFile->read((char*)&unknown2,4);
+		pFile->read((char*)&unknown3,4);
+		pFile->read((char*)&unknown4,4);
+	}
+	else
+	{
+		unknown1 = -500;
+		unknown2 = 500;
+		unknown3 = -500;
+		unknown4 = 500;
+	}
+
+	pFile->read(buf, 4);
+	unsigned int nObjects = *((unsigned int*)buf);
 
 
-				m->pos.x = *((float*)(buf+212));
-				m->pos.y = *((float*)(buf+216));
-				m->pos.z = *((float*)(buf+220));
+	for(i = 0; i < nObjects; i++)
+	{
+		pFile->read(buf, 4);
+		long type = *((long*)buf);
+		switch(type)
+		{
+		case 1:
+			{
+			
+			ZeroMemory(buf, 248);
+			if(version >= 0x103)
+				pFile->read(buf,		248);
+			else
+				pFile->read(buf+40+12,	196);
 
 
-				m->pos.x = (m->pos.x / 5) + width;
-				m->pos.z = (m->pos.z / 5) + height;
+			std::string filename = buf+52;
+			cRSMModel* m = new cRSMModel();
+			m->load(cSettings::roDir+ "data\\model\\" + filename);
+			m->lightopacity = 1;
 
-				m->rot.x = *((float*)(buf+224));
-				m->rot.y = *((float*)(buf+228));
-				m->rot.z = *((float*)(buf+232));
+			if (m->meshes.size() == 0)
+			{
+				Log(2,0,GetMsg("world/MODELFAIL"), filename.c_str());
+			}
 
-				m->scale.x = *((float*)(buf+236));
-				m->scale.y = *((float*)(buf+240));
-				m->scale.z = *((float*)(buf+244));
-				models.push_back(m);
-				}
-				break;
-			case 2:
-				{
-				pFile->read(buf, 108);
-				cLight l;
-				l.name = std::string(buf);
-				l.pos.x = *((float*)(buf+40));
-				l.pos.y = *((float*)(buf+44));
-				l.pos.z = *((float*)(buf+48));
-				
-				l.pos.x = (l.pos.x / 5) + width;
-				l.pos.z = (l.pos.z / 5) + height;
-				
-				l.todo = std::string(buf+52, 40);
-				l.color.x = *((float*)(buf+92));
-				l.color.y = *((float*)(buf+96));
-				l.color.z = *((float*)(buf+100));
-				l.todo2 = *((float*)(buf+104));
-				lights.push_back(l);
-				break;
-				}
-			case 3:
-				{
-					pFile->read(buf, 188);
-					cSound s;			
-					s.name = std::string(buf);
-					s.todo1 = std::string(buf+40, 40);
-					s.fileName = std::string(buf+80);
-					
-					s.unknown8 = *((float*)(buf+120));	//0
-					s.unknown7 = *((float*)(buf+124));	//-435.095
-					s.rotation.x = *((float*)(buf+128));
-					s.rotation.y = *((float*)(buf+132));
-					s.rotation.z = *((float*)(buf+136));
-					
-					s.scale.x = *((float*)(buf+140));
-					s.scale.y = *((float*)(buf+144));
-					s.scale.z = *((float*)(buf+148));
-					
-					memcpy(s.unknown6, buf+152, 8);		//	152-159 -> 8 bytes of unknown
-					
-					s.pos.x = *((float*)(buf+160));
-					s.pos.y = *((float*)(buf+164));
-					s.pos.z = *((float*)(buf+168));
-					
-					s.unknown5 = *((float*)(buf+172));	//1
-					s.unknown4 = *((long*)(buf+176));	//50
-					s.unknown3 = *((long*)(buf+180));	//45
-					s.unknown2 = *((float*)(buf+184));	//70
-//					s.repeatDelay = *((float*)(buf+188));	//4
-					s.repeatDelay = 100;
-					
-					
-					s.pos.x = (s.pos.x / 5) + width;
-					s.pos.z = (s.pos.z / 5) + height;
-					sounds.push_back(s);
-				}
-				break;
-			default:
-				Log(2,0,GetMsg("world/UNKNOWNOBJECT"), type);
-				pFile->close();
-				return;
-			};
-		}
+			m->name = std::string(buf);
 
+			m->pos.x = *((float*)(buf+212));
+			m->pos.y = *((float*)(buf+216));
+			m->pos.z = *((float*)(buf+220));
+
+
+			m->pos.x = (m->pos.x / 5) + width;
+			m->pos.z = (m->pos.z / 5) + height;
+
+			m->rot.x = *((float*)(buf+224));
+			m->rot.y = *((float*)(buf+228));
+			m->rot.z = *((float*)(buf+232));
+
+			m->scale.x = *((float*)(buf+236));
+			m->scale.y = *((float*)(buf+240));
+			m->scale.z = *((float*)(buf+244));
+			models.push_back(m);
+			}
+			break;
+		case 2:
+			{
+			pFile->read(buf, 108);
+			cLight l;
+			l.name = std::string(buf);
+			l.pos.x = *((float*)(buf+40));
+			l.pos.y = *((float*)(buf+44));
+			l.pos.z = *((float*)(buf+48));
+
+			l.pos.x = (l.pos.x / 5) + width;
+			l.pos.z = (l.pos.z / 5) + height;
+
+			l.todo = std::string(buf+52, 40);
+			l.color.x = *((float*)(buf+92));
+			l.color.y = *((float*)(buf+96));
+			l.color.z = *((float*)(buf+100));
+			l.todo2 = *((float*)(buf+104));
+			lights.push_back(l);
+			}
+			break;
+		case 3:
+			{
+			pFile->read(buf, 192);
+			cSound s;			
+			s.name = std::string(buf);
+			s.todo1 = std::string(buf+40, 40);
+			s.fileName = std::string(buf+80);
+
+			s.unknown8 = *((float*)(buf+120));	//0
+			s.unknown7 = *((float*)(buf+124));	//-435.095
+			s.rotation.x = *((float*)(buf+128));
+			s.rotation.y = *((float*)(buf+132));
+			s.rotation.z = *((float*)(buf+136));
+			
+			s.scale.x = *((float*)(buf+140));
+			s.scale.y = *((float*)(buf+144));
+			s.scale.z = *((float*)(buf+148));
+
+			memcpy(s.unknown6, buf+152, 8);		//	152-159 -> 8 bytes of unknown
+
+			s.pos.x = *((float*)(buf+160));
+			s.pos.y = *((float*)(buf+164));
+			s.pos.z = *((float*)(buf+168));
+
+			s.unknown5 = *((float*)(buf+172));	//1
+			s.unknown4 = *((long*)(buf+176));	//50
+			s.unknown3 = *((long*)(buf+180));	//45
+			s.unknown2 = *((float*)(buf+184));	//70
+			s.repeatDelay = *((float*)(buf+188));	//4
+
+
+			s.pos.x = (s.pos.x / 5) + width;
+			s.pos.z = (s.pos.z / 5) + height;
+			sounds.push_back(s);
+			}
+			break;
+		case 4:
+			{
+			pFile->read(buf, 116);
+			cEffect e;
+			e.name = std::string(buf);
+			e.todo1 = *((float*)(buf+40));
+			e.todo2 = *((float*)(buf+44));
+			e.todo3 = *((float*)(buf+48));
+			e.rotation.x = *((float*)(buf+52));
+			e.rotation.y = *((float*)(buf+56));
+			e.rotation.z = *((float*)(buf+60));
+			e.scale.x = *((float*)(buf+64));
+			e.scale.y = *((float*)(buf+68));
+			e.scale.z = *((float*)(buf+72));
+			e.category = std::string(buf+76, 4);
+			e.pos.x = *((float*)(buf+80));
+			e.pos.y = *((float*)(buf+84));
+			e.pos.z = *((float*)(buf+88));
+			e.type = *((int*)(buf+92));
+			e.loop = *((float*)(buf+96));
+			e.todo10 = *((float*)(buf+100));
+			e.todo11 = *((float*)(buf+104));
+			e.todo12 = *((int*)(buf+108));
+			e.todo13 = *((int*)(buf+112));
+			e.pos.x = (e.pos.x / 5) + width;
+			e.pos.z = (e.pos.z / 5) + height;
+
+			char buf[100];
+			sprintf(buf, "%i", e.type);
+			cMenu* m = effectsmenu->findData(buf);
+			if (m != NULL)
+				e.readablename = m->title;
+			effects.push_back(e);
+			}
+			break;
+		default:
+			Log(2,0,GetMsg("world/UNKNOWNOBJECT"), type);
+			pFile->close();
+			return;
+		};
+	}
+	quadTreeFloats.clear();
+	while(!pFile->eof())
+	{
+		cVector3 f;
+		pFile->read((char*)&f.x, 4);
+		pFile->read((char*)&f.y, 4);
+		pFile->read((char*)&f.z, 4);
+		quadTreeFloats.push_back(f);
 	}
 	pFile->close(); 
 	Log(3,0,GetMsg("world/LOADDONE"), (std::string(fileName) + ".rsw").c_str());
@@ -1186,7 +1092,10 @@ void cWorld::save()
 		pFile.write((char*)&ambientLight.shadow.z, 4);
 		pFile.write((char*)&ambientLight.alpha, 4);
 
-		pFile.write(useless.c_str()+60, useless.length()-60);
+		pFile.write((char*)&unknown1, 4);
+		pFile.write((char*)&unknown2, 4);
+		pFile.write((char*)&unknown3, 4);
+		pFile.write((char*)&unknown4, 4);
 
 		long count = models.size() + lights.size()+effects.size() + sounds.size();
 
@@ -4011,7 +3920,6 @@ bool cWorld::blackLightmaps()
 
 cWorld::cWorld()
 {
-	showTextures = false;
 	loaded = false;
 	light = NULL;
 	light2 = NULL;
@@ -4169,4 +4077,141 @@ glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
 */		
 		}
 	}
+}
+
+void cWorld::newEmpty(int newWidth,int newHeight)
+{
+	unsigned int i,x,y;
+	if(light == NULL)
+	{
+		light = new cTextureModel();
+		light->open("data/bulb.tga");
+	}
+	if(light2 == NULL)
+	{
+		light2 = new cTextureModel();
+		light2->open("data/bulb.tga");
+		light2->boundingbox1 = light2->boundingbox1 * 1.1f;
+		light2->boundingbox2 = light2->boundingbox2 * 1.1f;
+	}
+	if(effect == NULL)
+	{
+		effect = new cTextureModel();
+		effect->open("data/explosion.tga");
+	}
+	if(sound == NULL)
+	{
+		sound = new cTextureModel();
+		sound->open("data/Speaker.tga");
+	}
+	
+	for(i = 0; i < textures.size(); i++)
+		cTextureCache::unload(textures[i]->texture);
+	textures.clear();
+	
+	for(y = 0; y < realLightmaps.size(); y+=21)
+	{
+		for(x = 0; x < realLightmaps[y].size(); x+=21)
+		{
+			if(realLightmaps[y][x] != NULL)
+				delete realLightmaps[y][x];
+			realLightmaps[y][x] = NULL;
+		}
+	}
+	realLightmaps.clear();
+	
+	cWindow* wnd = cWM::getWindow(WT_HOTKEY);
+	if (wnd != NULL)
+	{
+		for(i = 0; i < 8; i++)
+		{
+			char buf[10];
+			sprintf(buf, "obj%i", i);
+			delete wnd->objects[buf];
+			cWindowObject* o = new cHotkeyWindow::cHotkeyButton(wnd);
+			o->moveTo(20+32*i, 4);
+			o->resizeTo(32,32);
+			wnd->objects[buf] = o;
+		}
+	}
+	
+	
+	
+	
+	tiles.clear();
+	for(i = 0; i < cubes.size(); i++)
+		cubes[i].clear();
+	cubes.clear();
+	
+	for(i = 0; i < lightmaps.size(); i++)
+	{
+		lightmaps[i]->del();
+		lightmaps[i]->del2();
+		delete lightmaps[i];
+	}
+	lightmaps.clear();
+	
+	for(i = 0; i < models.size(); i++)
+		delete models[i];
+	models.clear();
+	
+	delete root;
+	root = NULL;
+	
+	quadTreeFloats.clear();
+	sounds.clear();
+	effects.clear();
+	lights.clear();
+	
+	for(i = 0; i < gattiles.size(); i++)
+		gattiles[i].clear();
+	
+	gattiles.clear();
+	
+
+	width = newWidth;
+	height = newHeight;
+
+
+	cubes.resize(height);
+	for(y = 0; y < height; y++)
+	{
+		cubes[y].resize(width);
+		for(x = 0; x < width; x++)
+		{
+			cubes[y][x].cell1 = 0;
+			cubes[y][x].cell2 = 0;
+			cubes[y][x].cell3 = 0;
+			cubes[y][x].cell4 = 0;
+
+			cubes[y][x].tileUp = -1;
+			cubes[y][x].tileSide = -1;
+			cubes[y][x].tileOtherSide = -1;
+
+			cubes[y][x].calcNormal();
+		}
+	}
+
+	gattiles.resize(height*2);
+	for(y = 0; y < height*2; y++)
+	{
+		gattiles[y].resize(width*2);
+	}
+	water.height = -1;
+	water.type = 0;
+	water.amplitude = 1;
+	water.phase = 2;
+	water.surfaceCurve = 0.5f;
+	ambientLight.ambientr = 3;
+	ambientLight.ambientg = 45;
+	ambientLight.ambientb = 45;
+	
+	ambientLight.diffuse = cVector3(1,1,1);
+	ambientLight.shadow = cVector3(0.3f,0.3f,0.3f);
+	ambientLight.alpha = 0.5f;
+	unknown1 = -500;
+	unknown2 = 500;
+	unknown3 = -500;
+	unknown4 = 500;
+	loaded = true;
 }

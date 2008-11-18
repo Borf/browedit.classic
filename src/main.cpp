@@ -899,7 +899,7 @@ int main(int argc, char *argv[])
 	if(cSettings::config.FirstChildElement("config")->FirstChildElement("firstmap"))
 		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\" + cSettings::config.FirstChildElement("config")->FirstChildElement("firstmap")->FirstChild()->Value()).c_str());
 	else
-		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\moc_pryd03").c_str());
+		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\prontera").c_str());
 
 	if(argc > 1)
 	{
@@ -1148,10 +1148,10 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						cGraphics::worldContainer->camera.rot += (cGraphics::cMouse::xOld - cGraphics::cMouse::x) / 100.0f;
 						if(cGraphics::worldContainer->view.sideCamera)
 						{
-							if(cGraphics::worldContainer->camera.rot < 1.6*PI)
-								cGraphics::worldContainer->camera.rot = 1.6*PI;
-							if(cGraphics::worldContainer->camera.rot >= 1.8*PI)
-								cGraphics::worldContainer->camera.rot = 1.8*PI;
+							if(cGraphics::worldContainer->camera.rot <  (float)(1.6*PI))
+								cGraphics::worldContainer->camera.rot = (float)(1.6*PI);
+							if(cGraphics::worldContainer->camera.rot >= (float)(1.8*PI))
+								cGraphics::worldContainer->camera.rot = (float)(1.8*PI);
 						}						
 						while(cGraphics::worldContainer->camera.rot < 0)
 							cGraphics::worldContainer->camera.rot+=2*(float)PI;
@@ -1705,7 +1705,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			}
 			else if(event.key.keysym.sym == SDLK_TAB)
 			{
-				if(event.key.keysym.mod == 0 && cGraphics::worlds.size() > 1)
+				if((event.key.keysym.mod & ~KMOD_NUM) == 0 && cGraphics::worlds.size() > 1)
 					MenuCommand_switchMap((cMenuItem*)openMaps->items[1]);
 
 			}

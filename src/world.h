@@ -280,8 +280,6 @@ public:
 	bool								loaded;
 
 	char								fileName[128];
-	bool								showTextures;
-
 	int									height;
 	int									width;
 	int									texSize;
@@ -315,8 +313,6 @@ public:
 	std::vector<cVector3>				quadTreeFloats;
 	cQuadTreeNode* root;
 	
-	std::string							useless;
-	
 	std::list<int>						plugin_api_deleteobjects;
 	std::list<int>						plugin_api_deletesprites;
 
@@ -325,6 +321,7 @@ public:
 	
 	cWorld();
 	~cWorld();
+	void newEmpty(int,int);
 	void								draw();
 	void								load();
 	void								save();
@@ -342,6 +339,17 @@ public:
 	bool								blackLightmaps();
 	void								calcVertexNormals();
 	
+
+	char								iniFile[40];
+	char								gndFile[40];
+	char								gatFile[40];
+
+
+	int									unknown1;
+	int									unknown2;
+	int									unknown3;
+	int									unknown4;
+
 
 
 };

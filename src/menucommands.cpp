@@ -47,7 +47,20 @@ cMenuItem* selectedeffect = NULL;
 
 MENUCOMMAND(new)
 {
-	cWM::showMessage("This feature isn't working yet...");
+	int newWidth = atoi(cWM::inputWindow("Width", "300").c_str());
+	if(newWidth == 0)
+		return false;
+	int newHeight = atoi(cWM::inputWindow("Width", "300").c_str());
+	if(newHeight == 0)
+		return false;
+	
+	cGraphics::newWorld();
+	strcpy(cGraphics::world->fileName,(cSettings::roDir + "data\\untitled").c_str());
+	cGraphics::world->newEmpty(newWidth, newHeight);
+	if(!cGraphics::world->loaded)
+		MenuCommand_close(src);
+	cGraphics::updateMenu();
+	
 	return true;
 }
 

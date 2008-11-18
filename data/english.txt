@@ -176,6 +176,7 @@
 			<POS>Position:</POS>
 			<SCALE>Scale:</SCALE>
 			<ROT>Rotation:</ROT>
+			<LOOPTIME>Loop Time:</LOOPTIME>
 		</effect>
 		<input>
 			<TITLE>Please Input...</TITLE>
