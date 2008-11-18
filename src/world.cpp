@@ -1516,7 +1516,7 @@ void cWorld::draw()
 		glColor4f(1,1,1,1);
 
 
-	if(cGraphics::view.showLightmaps && false)
+	if(cGraphics::view.showLightmaps)
 	{
 		cGraphics::worldContainer->settings.lightAmbient[0] = ambientLight.diffuse.x;
 		cGraphics::worldContainer->settings.lightAmbient[1] = ambientLight.diffuse.y;
@@ -1567,6 +1567,7 @@ void cWorld::draw()
 	int posx = (int)cGraphics::cMouse::x3d / 10;
 	int posy = (int)cGraphics::cMouse::z3d / 10;
 
+	glDisable(GL_COLOR_MATERIAL);
 	for(x = 0; x < width; x++)
 	{
 		for(y = 0; y < height; y++)
@@ -1718,6 +1719,7 @@ void cWorld::draw()
 	glColor4f(1,1,1,1);
 	glEnable(GL_BLEND);
 	glEnable(GL_LIGHTING);
+	glEnable(GL_COLOR_MATERIAL);
 	if(cGraphics::view.showLightmaps)
 	{
 		for(x = 0; (int)x < width; x++)
@@ -2384,6 +2386,7 @@ void cWorld::draw()
 		glEnable(GL_BLEND);
 		glTranslatef(0,0,height*10);
 		glScalef(1,1,-1);
+		glDisable(GL_COLOR_MATERIAL);
 		for(i = 0; i < models.size(); i++)
 		{
 			if(models[i]->selected)
@@ -4214,4 +4217,8 @@ void cWorld::newEmpty(int newWidth,int newHeight)
 	unknown3 = -500;
 	unknown4 = 500;
 	loaded = true;
+
+
+
+	cGraphics::worldContainer->settings.texturestart = 0;
 }

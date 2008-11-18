@@ -1,7 +1,6 @@
 <config>
     <ro directory="d:\games\new_exRO\">
         <grf>d:\games\new_exRO\sdata.grf</grf>
-        <grf>d:\games\new_exRO\data.grf</grf>
     </ro>
     <files>
         <models>
@@ -48,45 +47,5 @@
         <tile>6</tile>
     </gattiles>
     <wm>
-        <sprite>
-            <x>237</x>
-            <y>184</y>
-        </sprite>
-        <water>
-            <x>410</x>
-            <y>302</y>
-        </water>
-        <minimap>
-            <x>864</x>
-            <y>0</y>
-        </minimap>
-        <textures>
-            <x>25</x>
-            <y>25</y>
-            <w>974</w>
-            <h>718</h>
-        </textures>
-        <modelswindow>
-            <x>25</x>
-            <y>10</y>
-            <w>955</w>
-            <h>733</h>
-        </modelswindow>
-        <hotbar>
-            <x>744</x>
-            <y>0</y>
-        </hotbar>
-        <texturetools>
-            <x>0</x>
-            <y>649</y>
-            <w>50</w>
-            <h>112</h>
-        </texturetools>
-        <texturebrush>
-            <x>50</x>
-            <y>50</y>
-            <w>924</w>
-            <h>668</h>
-        </texturebrush>
     </wm>
 </config>

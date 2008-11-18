@@ -53,6 +53,13 @@ MENUCOMMAND(new)
 	int newHeight = atoi(cWM::inputWindow("Width", "300").c_str());
 	if(newHeight == 0)
 		return false;
+
+
+	if(newHeight < 8 || newWidth < 8)
+	{
+		cWM::showMessage("Cannot make a map with a height or width lower then 8");
+		return false;
+	}
 	
 	cGraphics::newWorld();
 	strcpy(cGraphics::world->fileName,(cSettings::roDir + "data\\untitled").c_str());

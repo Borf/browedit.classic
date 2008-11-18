@@ -153,6 +153,13 @@ void cRSMModelMesh::load(cFile* pFile, cRSMModel* model, bool main)
 		pFile->read((char*)&f.todo, sizeof(f.todo));
 		pFile->read((char*)&f.todo2, sizeof(f.todo2));
 		pFile->read((char*)&f.nsurf, sizeof(f.nsurf));
+
+		
+		cVector3 b1, b2;
+		b1 = vertices[f.v[0]] - vertices[f.v[2]];
+		b2 = vertices[f.v[1]] - vertices[f.v[2]];
+		f.normal = b1.cross(b2).normalize();//cVector3(b1.y * b2.z - b1.z * b2.y, b1.z * b2.x - b1.x * b2.z, b1.x * b2.y - b1.y * b2.x);
+
 		faces.push_back(f);
 	}
 	pFile->read((char*)&nFrameAnimations, 4);
@@ -632,6 +639,7 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 		{
 			cRSMModelFace* f = &faces[i];
 			glBindTexture(GL_TEXTURE_2D, model->textures[textures[f->texid]]->texId());
+			glNormal3f(f->normal.x, f->normal.y, f->normal.z);
 			glBegin(GL_TRIANGLES);
 				glTexCoord2f(texcoords[f->t[0]].y, 1-texcoords[f->t[0]].z); glVertex3f(vertices[f->v[0]].x, vertices[f->v[0]].y, vertices[f->v[0]].z);
 				glTexCoord2f(texcoords[f->t[1]].y, 1-texcoords[f->t[1]].z); glVertex3f(vertices[f->v[1]].x, vertices[f->v[1]].y, vertices[f->v[1]].z);

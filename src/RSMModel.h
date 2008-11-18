@@ -16,6 +16,7 @@ public:
 	unsigned short todo;
 	unsigned int todo2;
 	unsigned int nsurf;
+	cVector3	 normal;
 };
 
 class cRSMModelFrame

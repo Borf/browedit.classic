@@ -136,7 +136,7 @@ int cGraphics::draw(bool drawwm)
 		{
 			if (editmode == MODE_GAT)
 			{
-				if ((unsigned int)i+worldContainer->settings.texturestart > gatTextures.size()-1)
+				if (i+worldContainer->settings.texturestart > (int)gatTextures.size()-1)
 					continue;
 				glBindTexture(GL_TEXTURE_2D, gatTextures[i+worldContainer->settings.texturestart]->texId());
 			}
