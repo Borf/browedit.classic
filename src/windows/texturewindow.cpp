@@ -55,7 +55,7 @@ void cTextureWindow::cWindowTexture::onClick()
 			t->RoFilename2 = std::string(buf,40);
 			t->texture = cTextureCache::load(cSettings::roDir + "data\\texture\\" + data);
 			cGraphics::world->textures.push_back(t);
-			cGraphics::worldContainer->settings.texturestart = cGraphics::world->textures.size() - 2;
+			cGraphics::worldContainer->settings.texturestart = max((int)cGraphics::world->textures.size() - 2,0);
 		}
 	}
 }

@@ -20,7 +20,7 @@ int cProcessManagement::wateredit_process_events(SDL_Event &event)
 				cGraphics::world->water.type = max(0, cGraphics::world->water.type - 1);
 				break;
 			case SDLK_RIGHTBRACKET:
-				cGraphics::world->water.type = min(cGraphics::waterCount-1, cGraphics::world->water.type + 1);
+				cGraphics::world->water.type = min((int)cGraphics::waterCount-1, cGraphics::world->water.type + 1);
 				break;
 			case SDLK_PAGEDOWN:
 				cGraphics::worldContainer->undoStack->push(new cUndoChangeWater(cGraphics::world->water));

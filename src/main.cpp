@@ -637,7 +637,7 @@ int main(int argc, char *argv[])
 	ADDMENU2(file,		cGraphics::menu, GetMsg("menu/file/TITLE"),		posx); // File
 	ADDMENU2(rnd,		cGraphics::menu, GetMsg("menu/generate/TITLE"),	posx); // Generate
 	ADDMENU2(view,		cGraphics::menu, GetMsg("menu/view/TITLE"),		posx); // view
-	ADDMENU2(mode,		cGraphics::menu, GetMsg("menu/cSettings::editMode/TITLE"),	posx); // edit mode
+	ADDMENU2(mode,		cGraphics::menu, GetMsg("menu/editmode/TITLE"),	posx); // edit mode
 	ADDMENU2(edit,		cGraphics::menu, GetMsg("menu/edit/TITLE"),		posx); // edit
 	//ADDMENU2(models,		menu, cSettings::msgTable[MENU_MODELS],	posx); // models
 //	models->parent = menu;
@@ -703,10 +703,10 @@ int main(int argc, char *argv[])
 	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/TOPCAMERA"),				&MenuCommand_toggle, (void*)&cGraphics::view.topCamera);
 	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/SIDECAMERA"),				&MenuCommand_toggle, (void*)&cGraphics::view.sideCamera);
 
-	ADDMENUITEM(mm,mode,GetMsg("menu/cSettings::editMode/TEXTUREEDIT"),				&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/TEXTUREEDIT"),				&MenuCommand_mode);
 	mm->ticked = true;
-	ADDMENUITEM(mm,mode,GetMsg("menu/cSettings::editMode/GLOBALHEIGHTEDIT"),			&MenuCommand_mode);
-	ADDMENU(editdetail,mode,GetMsg("menu/cSettings::editMode/DETAILTERRAINEDIT"),		400,100);
+	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/GLOBALHEIGHTEDIT"),			&MenuCommand_mode);
+	ADDMENU(editdetail,mode,GetMsg("menu/editmode/DETAILTERRAINEDIT"),		400,100);
 
 	ADDMENUITEM(mm, editdetail, "1",										&MenuCommand_mode_detail);
 	ADDMENUITEM(mm, editdetail, "2",										&MenuCommand_mode_detail);
@@ -716,16 +716,16 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm, editdetail, "32",										&MenuCommand_mode_detail);
 	ADDMENUITEM(mm, editdetail, "64",										&MenuCommand_mode_detail);
 
-	ADDMENUITEM(mm,mode,GetMsg("menu/cSettings::editMode/WALLEDIT"),					&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,GetMsg("menu/cSettings::editMode/OBJECTEDIT"),					&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,GetMsg("menu/cSettings::editMode/GATEDIT"),					&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,GetMsg("menu/cSettings::editMode/WATEREDIT"),					&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,GetMsg("menu/cSettings::editMode/EFFECTSEDIT"),				&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,GetMsg("menu/cSettings::editMode/SOUNDSEDIT"),					&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,GetMsg("menu/cSettings::editMode/LIGHTSEDIT"),					&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,GetMsg("menu/cSettings::editMode/OBJECTGROUPEDIT"),			&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,GetMsg("menu/cSettings::editMode/SPRITEEDIT"),					&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,GetMsg("menu/cSettings::editMode/TEXTUREPAINTEDIT"),			&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/WALLEDIT"),					&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/OBJECTEDIT"),					&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/GATEDIT"),					&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/WATEREDIT"),					&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/EFFECTSEDIT"),				&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/SOUNDSEDIT"),					&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/LIGHTSEDIT"),					&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/OBJECTGROUPEDIT"),			&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/SPRITEEDIT"),					&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/TEXTUREPAINTEDIT"),			&MenuCommand_mode);
 
 
 	ADDMENU(speed,edit, GetMsg("menu/edit/SPEED"),						480, 100);
@@ -907,8 +907,8 @@ int main(int argc, char *argv[])
 #endif
 
 #ifdef _DEBUG
-	if(argc == 1)
-		cGraphics::world->load();
+//	if(argc == 1)
+//		cGraphics::world->load();
 //	cGraphics::world->importalpha();
 #endif
 

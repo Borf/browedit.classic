@@ -47,7 +47,7 @@ MENUCOMMAND(new)
 	int newWidth = atoi(cWM::inputWindow("Width", "300").c_str());
 	if(newWidth == 0)
 		return false;
-	int newHeight = atoi(cWM::inputWindow("Width", "300").c_str());
+	int newHeight = atoi(cWM::inputWindow("Height", "300").c_str());
 	if(newHeight == 0)
 		return false;
 
@@ -1201,63 +1201,63 @@ MENUCOMMAND(mode)
 		mode->items[i]->ticked = false;
 	src->ticked = true;
 
-	if(title == GetMsg("menu/cSettings::editMode/GLOBALHEIGHTEDIT"))
+	if(title == GetMsg("menu/editmode//GLOBALHEIGHTEDIT"))
 	{
 		cSettings::editMode = MODE_HEIGHTGLOBAL;
 		if (cGraphics::worldContainer->settings.texturestart >= (int)cGraphics::world->textures.size())
 			cGraphics::worldContainer->settings.texturestart = 0;
 	}
-	else if (title == GetMsg("menu/cSettings::editMode/DETAILTERRAINEDIT"))
+	else if (title == GetMsg("menu/editmode//DETAILTERRAINEDIT"))
 	{
 		cSettings::editMode = MODE_HEIGHTDETAIL;
 		if (cGraphics::worldContainer->settings.texturestart >= (int)cGraphics::world->textures.size())
 			cGraphics::worldContainer->settings.texturestart = 0;
 	}
-	else if (title == GetMsg("menu/cSettings::editMode/TEXTUREEDIT"))
+	else if (title == GetMsg("menu/editmode//TEXTUREEDIT"))
 	{
 		cSettings::editMode = MODE_TEXTURE;
 		if (cGraphics::worldContainer->settings.texturestart >= (int)cGraphics::world->textures.size())
 			cGraphics::worldContainer->settings.texturestart = 0;
 	}
-	else if (title == GetMsg("menu/cSettings::editMode/WALLEDIT"))
+	else if (title == GetMsg("menu/editmode//WALLEDIT"))
 	{
 		cSettings::editMode = MODE_WALLS;
 	}
-	else if (title == GetMsg("menu/cSettings::editMode/OBJECTEDIT"))
+	else if (title == GetMsg("menu/editmode//OBJECTEDIT"))
 	{
 		cSettings::editMode = MODE_OBJECTS;
 		if (cGraphics::worldContainer->settings.texturestart >= (int)cGraphics::world->textures.size())
 			cGraphics::worldContainer->settings.texturestart = 0;
 	}
-	else if (title == GetMsg("menu/cSettings::editMode/GATEDIT"))
+	else if (title == GetMsg("menu/editmode//GATEDIT"))
 	{
 		cSettings::editMode = MODE_GAT;
 		if (cGraphics::worldContainer->settings.texturestart >= 6)
 			cGraphics::worldContainer->settings.texturestart = 0;
 	}
-	else if (title == GetMsg("menu/cSettings::editMode/WATEREDIT"))
+	else if (title == GetMsg("menu/editmode//WATEREDIT"))
 	{
 		cSettings::editMode = MODE_WATER;
 		cGraphics::worldContainer->settings.texturestart = cGraphics::world->water.type;
 	}
-	else if (title == GetMsg("menu/cSettings::editMode/EFFECTSEDIT"))
+	else if (title == GetMsg("menu/editmode//EFFECTSEDIT"))
 	{
 		cSettings::editMode = MODE_EFFECTS;
 		cGraphics::worldContainer->settings.selectedObject = -1;
 	}
-	else if (title == GetMsg("menu/cSettings::editMode/SOUNDSEDIT"))
+	else if (title == GetMsg("menu/editmode//SOUNDSEDIT"))
 	{
 		cSettings::editMode = MODE_SOUNDS;
 	}
-	else if (title == GetMsg("menu/cSettings::editMode/LIGHTSEDIT"))
+	else if (title == GetMsg("menu/editmode//LIGHTSEDIT"))
 	{
 		cSettings::editMode = MODE_LIGHTS;
 	}
-	else if (title == GetMsg("menu/cSettings::editMode/OBJECTGROUPEDIT"))
+	else if (title == GetMsg("menu/editmode//OBJECTGROUPEDIT"))
 	{
 		cSettings::editMode = MODE_OBJECTGROUP;
 	}
-	else if (title == GetMsg("menu/cSettings::editMode/SPRITEEDIT"))
+	else if (title == GetMsg("menu/editmode//SPRITEEDIT"))
 	{
 		cSettings::editMode = MODE_SPRITE;
 	}

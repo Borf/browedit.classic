@@ -3941,7 +3941,7 @@ bool cWorld::checkSanity()
 {
 	unsigned int x,y;
 
-	if(height != cubes.size() && width != cubes[0].size())
+	if(height != (int)cubes.size() && width != (int)cubes[0].size())
 	{
 		cWM::showMessage("Sanity error: Map height/width don't match");
 		Log(1,0,"Sanity error: Map height/width don't match");
@@ -3954,7 +3954,7 @@ bool cWorld::checkSanity()
 			cCube* c = &cubes[y][x];
 			if(c->tileUp != -1)
 			{
-				if(c->tileUp < 0 || c->tileUp >= tiles.size())
+				if(c->tileUp < 0 || c->tileUp >= (int)tiles.size())
 				{
 					cWM::showMessage("Sanity error: tile out of bounds");
 					Log(1,0,"Sanity error: tile out of bounds");
@@ -3963,7 +3963,7 @@ bool cWorld::checkSanity()
 				cTile* t = &tiles[c->tileUp];
 				if(t->lightmap != -1)
 				{
-					if(t->lightmap < 0 || t->lightmap >= lightmaps.size())
+					if(t->lightmap < 0 || t->lightmap >= (int)lightmaps.size())
 					{
 						cWM::showMessage("Sanity error: lightmap out of bounds");
 						Log(1,0,"Sanity error: lightmap out of bounds");
@@ -3972,7 +3972,7 @@ bool cWorld::checkSanity()
 				}
 				if(t->texture != -1)
 				{
-					if(t->texture < 0 || t->texture >= textures.size())
+					if(t->texture < 0 || t->texture >= (int)textures.size())
 					{
 						cWM::showMessage("Sanity error: texture out of bounds");
 						Log(1,0,"Sanity error: texture out of bounds");
@@ -3983,7 +3983,7 @@ bool cWorld::checkSanity()
 
 			if(c->tileSide != -1)
 			{
-				if(c->tileSide < 0 || c->tileSide >= tiles.size())
+				if(c->tileSide < 0 || c->tileSide >= (int)tiles.size())
 				{
 					cWM::showMessage("Sanity error: tile out of bounds");
 					Log(1,0,"Sanity error: tile out of bounds");
@@ -3992,7 +3992,7 @@ bool cWorld::checkSanity()
 				cTile* t = &tiles[c->tileSide];
 				if(t->lightmap != -1)
 				{
-					if(t->lightmap < 0 || t->lightmap >= lightmaps.size())
+					if(t->lightmap < 0 || t->lightmap >= (int)lightmaps.size())
 					{
 						cWM::showMessage("Sanity error: lightmap out of bounds");
 						Log(1,0,"Sanity error: lightmap out of bounds");
@@ -4001,7 +4001,7 @@ bool cWorld::checkSanity()
 				}
 				if(t->texture != -1)
 				{
-					if(t->texture < 0 || t->texture >= textures.size())
+					if(t->texture < 0 || t->texture >= (int)textures.size())
 					{
 						cWM::showMessage("Sanity error: texture out of bounds");
 						Log(1,0,"Sanity error: texture out of bounds");
@@ -4013,7 +4013,7 @@ bool cWorld::checkSanity()
 
 			if(c->tileOtherSide != -1)
 			{
-				if(c->tileOtherSide < 0 || c->tileOtherSide >= tiles.size())
+				if(c->tileOtherSide < 0 || c->tileOtherSide >= (int)tiles.size())
 				{
 					cWM::showMessage("Sanity error: tile out of bounds");
 					Log(1,0,"Sanity error: tile out of bounds");
@@ -4022,7 +4022,7 @@ bool cWorld::checkSanity()
 				cTile* t = &tiles[c->tileOtherSide];
 				if(t->lightmap != -1)
 				{
-					if(t->lightmap < 0 || t->lightmap >= lightmaps.size())
+					if(t->lightmap < 0 || t->lightmap >= (int)lightmaps.size())
 					{
 						cWM::showMessage("Sanity error: lightmap out of bounds");
 						Log(1,0,"Sanity error: lightmap out of bounds");
@@ -4031,7 +4031,7 @@ bool cWorld::checkSanity()
 				}
 				if(t->texture != -1)
 				{
-					if(t->texture < 0 || t->texture >= textures.size())
+					if(t->texture < 0 || t->texture >= (int)textures.size())
 					{
 						cWM::showMessage("Sanity error: texture out of bounds");
 						Log(1,0,"Sanity error: texture out of bounds");
@@ -4044,7 +4044,7 @@ bool cWorld::checkSanity()
 		}
 	}
 
-	if(water.type < 0 || water.type >= cGraphics::waterCount)
+	if(water.type < 0 || water.type >= (int)cGraphics::waterCount)
 	{
 		cWM::showMessage("Sanity error: Invalid Watertype!");
 		Log(1,0,"Sanity error: invalid watertype");
@@ -4056,7 +4056,7 @@ bool cWorld::checkSanity()
 
 void cWorld::calcVertexNormals()
 {
-	unsigned int x,y;
+	int x,y;
 
 
 	for(y = 1; y < height-1; y++)
@@ -4177,10 +4177,10 @@ void cWorld::newEmpty(int newWidth,int newHeight)
 
 
 	cubes.resize(height);
-	for(y = 0; y < height; y++)
+	for(y = 0; y < (unsigned int)height; y++)
 	{
 		cubes[y].resize(width);
-		for(x = 0; x < width; x++)
+		for(x = 0; x < (unsigned int)width; x++)
 		{
 			cubes[y][x].cell1 = 0;
 			cubes[y][x].cell2 = 0;
@@ -4196,11 +4196,11 @@ void cWorld::newEmpty(int newWidth,int newHeight)
 	}
 
 	gattiles.resize(height*2);
-	for(y = 0; y < height*2; y++)
+	for(y = 0; y < (unsigned int)height*2; y++)
 	{
 		gattiles[y].resize(width*2);
 	}
-	water.height = -1;
+	water.height = 1;
 	water.type = 0;
 	water.amplitude = 1;
 	water.phase = 2;

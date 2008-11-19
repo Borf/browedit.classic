@@ -47,8 +47,8 @@ typedef int32_t intptr_t;
 #ifndef __MINGW32__
 	#pragma warning( disable : 4786 )
 	#pragma warning( disable : 4503 )
-	#pragma warning( disable : 4244 ) //bad borf
-	#pragma warning( disable : 4018 ) //bad borf
+	#pragma warning( disable : 4244 ) //bad borf, implicit conversion with data loss (double -> float, int -> float)
+	//#pragma warning( disable : 4018 ) //bad borf, signed/unsigned
 #endif
 	#include <fstream>
 	#define sleep(x) Sleep(1000*(x))
