@@ -44,10 +44,10 @@ cMenuItem* selectedeffect = NULL;
 
 MENUCOMMAND(new)
 {
-	int newWidth = atoi(cWM::inputWindow("Width", "300").c_str());
+	int newWidth = atoi(cWM::inputWindow("Width", "100").c_str());
 	if(newWidth == 0)
 		return false;
-	int newHeight = atoi(cWM::inputWindow("Height", "300").c_str());
+	int newHeight = atoi(cWM::inputWindow("Height", "100").c_str());
 	if(newHeight == 0)
 		return false;
 
@@ -2100,6 +2100,15 @@ MENUCOMMAND(addwalls)
 					t.v4 = 1;
 					cGraphics::world->tiles.push_back(t);
 					cGraphics::world->cubes[y][x].tileOtherSide = cGraphics::world->tiles.size()-1;
+
+					cGraphics::cMouse::x3d = x*10+5;
+					cGraphics::cMouse::z3d = y*10+5;
+					SDL_Event ev;
+					ev.type = SDL_KEYDOWN;
+					ev.key.keysym.sym = SDLK_w;
+					ev.key.keysym.mod = KMOD_LALT;
+					cProcessManagement::walledit_process_events(ev);
+
 				}
 			}
 			if (c->tileSide == -1)
@@ -2126,6 +2135,15 @@ MENUCOMMAND(addwalls)
 					t.v4 = 1;
 					cGraphics::world->tiles.push_back(t);
 					cGraphics::world->cubes[y][x].tileSide = cGraphics::world->tiles.size()-1;
+
+					cGraphics::cMouse::x3d = x*10+5;
+					cGraphics::cMouse::z3d = y*10+5;
+					SDL_Event ev;
+					ev.type = SDL_KEYDOWN;
+					ev.key.keysym.sym = SDLK_w;
+					ev.key.keysym.mod = (SDLMod)0;
+					cProcessManagement::walledit_process_events(ev);
+			
 				}
 			}
 		}
@@ -2586,6 +2604,11 @@ MENUCOMMAND(exportmapfiles)
 
 MENUCOMMAND(random5)
 {
+	if(cGraphics::world->textures.size() < 3)
+	{
+		cWM::showMessage("You need at least 3 textures for this generator (floor, top and walls)");
+		return false;
+	}
 	unsigned int i;
 	int xx,yy;
 
@@ -2595,9 +2618,9 @@ MENUCOMMAND(random5)
 	cGraphics::world->tiles.clear();
 	for(int tex = 0; tex < 5; tex++)
 	{
-		for(y = 0; y < 5; y++)
+		for(y = 0; y < 4; y++)
 		{
-			for(x = 0; x < 5; x++)
+			for(x = 0; x < 4; x++)
 			{
 				cTile t;
 				t.lightmap = 0;
@@ -2627,14 +2650,7 @@ MENUCOMMAND(random5)
 			cGraphics::world->cubes[(int)y][(int)x].tileOtherSide = -1;
 			cGraphics::world->cubes[(int)y][(int)x].tileSide = -1;
 			cGraphics::world->cubes[(int)y][(int)x].tileUp = 0 + ((int)x%4) + 4*((int)y%4);
-		}
-	}
-
-
-	for(y = 0; y < cGraphics::world->height; y++)
-	{
-		for(x = 0; x < cGraphics::world->width; x++)
-		{
+			cGraphics::world->cubes[(int)y][(int)x].minHeight = 99999;
 			cGraphics::world->cubes[(int)y][(int)x].cell1 = -32;
 			cGraphics::world->cubes[(int)y][(int)x].cell2 = -32;
 			cGraphics::world->cubes[(int)y][(int)x].cell3 = -32;
@@ -2642,7 +2658,7 @@ MENUCOMMAND(random5)
 		}
 	}
 
-	
+
 
 	
 	int lasta = 0;

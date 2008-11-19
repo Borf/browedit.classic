@@ -424,7 +424,7 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 					float selwidth = selendx - selstartx;
 
 					std::vector<std::pair<std::pair<int,int>, int> > wallschanged;
-					if(SDL_GetModState() & KMOD_ALT)
+					if(event.key.keysym.mod & KMOD_ALT)
 					{
 						if(cGraphics::world->cubes[y][x].tileOtherSide == -1)
 							break;

@@ -955,8 +955,6 @@ int main(int argc, char *argv[])
 	return 0;							// Exit The Program
 }
 
-cProcessManagement processManagement;
-
 /**
  * Main Process Management loop, decides what process handlers to call
  */
@@ -1015,7 +1013,7 @@ int process_events()
 		}
 		
 		
-		int go = processManagement.main_process_events(event);
+		int go = cProcessManagement::main_process_events(event);
 
 		if(!cGraphics::world)
 			break;
@@ -1024,19 +1022,19 @@ int process_events()
 		{
 			switch(cSettings::editMode)
 			{
-			case MODE_TEXTURE:			processManagement.textureedit_process_events(event);		break;
-			case MODE_HEIGHTDETAIL:		processManagement.detailheightedit_process_events(event);	break;
-			case MODE_HEIGHTGLOBAL:		processManagement.globalheightedit_process_events(event);	break;
-			case MODE_WALLS:			processManagement.walledit_process_events(event);			break;
-			case MODE_OBJECTS:			processManagement.objectedit_process_events(event);			break;
-			case MODE_GAT:				processManagement.gatedit_process_events(event);			break;
-			case MODE_WATER:			processManagement.wateredit_process_events(event);			break;
-			case MODE_EFFECTS:			processManagement.effectedit_process_events(event);			break;
-			case MODE_SOUNDS:			processManagement.soundedit_process_events(event);			break;
-			case MODE_LIGHTS:			processManagement.lightedit_process_events(event);			break;
-			case MODE_OBJECTGROUP:		processManagement.objectgroupedit_process_events(event);	break;
-			case MODE_SPRITE:			processManagement.spriteedit_process_events(event);			break;
-			case MODE_TEXTUREPAINT:		processManagement.texturepaintedit_process_events(event);	break;
+			case MODE_TEXTURE:			cProcessManagement::textureedit_process_events(event);		break;
+			case MODE_HEIGHTDETAIL:		cProcessManagement::detailheightedit_process_events(event);	break;
+			case MODE_HEIGHTGLOBAL:		cProcessManagement::globalheightedit_process_events(event);	break;
+			case MODE_WALLS:			cProcessManagement::walledit_process_events(event);			break;
+			case MODE_OBJECTS:			cProcessManagement::objectedit_process_events(event);		break;
+			case MODE_GAT:				cProcessManagement::gatedit_process_events(event);			break;
+			case MODE_WATER:			cProcessManagement::wateredit_process_events(event);		break;
+			case MODE_EFFECTS:			cProcessManagement::effectedit_process_events(event);		break;
+			case MODE_SOUNDS:			cProcessManagement::soundedit_process_events(event);		break;
+			case MODE_LIGHTS:			cProcessManagement::lightedit_process_events(event);		break;
+			case MODE_OBJECTGROUP:		cProcessManagement::objectgroupedit_process_events(event);	break;
+			case MODE_SPRITE:			cProcessManagement::spriteedit_process_events(event);		break;
+			case MODE_TEXTUREPAINT:		cProcessManagement::texturepaintedit_process_events(event);	break;
 			}
 		}
 

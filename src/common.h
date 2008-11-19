@@ -228,21 +228,21 @@ const char* GetMsg(std::string s);
 class cProcessManagement
 {
 public:
-	int main_process_events(SDL_Event &);
+	static int main_process_events(SDL_Event &);
 
-	int textureedit_process_events(SDL_Event &);
-	int detailheightedit_process_events(SDL_Event &);
-	int globalheightedit_process_events(SDL_Event &);
-	int walledit_process_events(SDL_Event &);
-	int objectedit_process_events(SDL_Event &);
-	int gatedit_process_events(SDL_Event &);
-	int wateredit_process_events(SDL_Event &);
-	int effectedit_process_events(SDL_Event &);
-	int lightedit_process_events(SDL_Event &);
-	int soundedit_process_events(SDL_Event &);
-	int objectgroupedit_process_events(SDL_Event &);
-	int spriteedit_process_events(SDL_Event &);
-	int texturepaintedit_process_events(SDL_Event &);
+	static int textureedit_process_events(SDL_Event &);
+	static int detailheightedit_process_events(SDL_Event &);
+	static int globalheightedit_process_events(SDL_Event &);
+	static int walledit_process_events(SDL_Event &);
+	static int objectedit_process_events(SDL_Event &);
+	static int gatedit_process_events(SDL_Event &);
+	static int wateredit_process_events(SDL_Event &);
+	static int effectedit_process_events(SDL_Event &);
+	static int lightedit_process_events(SDL_Event &);
+	static int soundedit_process_events(SDL_Event &);
+	static int objectgroupedit_process_events(SDL_Event &);
+	static int spriteedit_process_events(SDL_Event &);
+	static int texturepaintedit_process_events(SDL_Event &);
 };
 
 
