@@ -38,6 +38,8 @@ public:
 		static double		x3d, y3d, z3d;
 		static double		x3dStart, y3dStart, z3dStart;		
 		static bool			doubleClick;
+		static double		click3dx, click3dy, click3dz;
+
 	};
 	cGraphicsBase();
 	static int				init(int,int,int,bool);
@@ -121,6 +123,7 @@ public:
 		int							selectedObject;
 		
 		float						brushsize;
+		int							brushSizeDetailHeight;
 		int							texturestart;
 		int							textureRot;
 		bool						fliph;

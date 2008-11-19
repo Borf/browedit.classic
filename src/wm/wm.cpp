@@ -11,9 +11,6 @@
 #include <windows/confirmwindow.h>
 #include <windows/inputwindow.h>
 #include <windows/xmlwindow.h>
-extern cGraphicsBase Graphics;
-extern cWindow* draggingwindow;
-
 extern void mainloop();
 
 

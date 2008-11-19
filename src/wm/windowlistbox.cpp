@@ -1,7 +1,6 @@
 #include "windowlistbox.h"
 #include "window.h"
 #include <graphics.h>
-extern cGraphicsBase Graphics;
 
 #ifdef _WIN32
 #include <windows.h>
@@ -270,7 +269,7 @@ void cWindowListBox::onClick()
 	int xx = (int)cGraphics::cMouse::x;
 	xx -= realX();
 	xx -= parent->getX();
-	int yy = Graphics.h()-(int)cGraphics::cMouse::y;
+	int yy = cGraphics::h()-(int)cGraphics::cMouse::y;
 	yy -= realY();
 	yy -= parent->getY();
 
@@ -327,7 +326,7 @@ void cWindowListBox::drag()
 	int xx = (int)cGraphics::cMouse::x;
 	xx -= realX();
 	xx -= parent->getX();
-	int yy = Graphics.h()-(int)cGraphics::cMouse::y;
+	int yy = cGraphics::h()-(int)cGraphics::cMouse::y;
 	yy -= realY();
 	yy -= parent->getY();
 

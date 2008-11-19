@@ -4,7 +4,6 @@
 #include <GL/glext.h>											// We use a define from this file: GL_BGRA_EXT
 #endif
 
-extern cFileSystem fs;
 #define GL_CLAMP_TO_EDGE 0x812F
 
 GLint glMaxTexDim;
@@ -123,7 +122,7 @@ void cTextureLoaders::load(std::string filename, cTexture* tex, eTextureOptions 
 		{
 			if(loaders[i]->extensions[ii] == ext)
 			{
-				cFile* pFile = fs.open(filename);
+				cFile* pFile = cFileSystem::open(filename);
 				if(!pFile)
 				{
 					Log(2,0,"Error loading texture %s!", filename.c_str());

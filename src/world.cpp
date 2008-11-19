@@ -23,8 +23,6 @@
 extern cMenu* effectsmenu;
 
 
-extern eMode	editmode;
-extern int brushsize;
 extern void mainloop();
 
 
@@ -1530,9 +1528,9 @@ void cWorld::draw()
 	}
 	else
 	{
-		cGraphics::worldContainer->settings.lightAmbient[0] = 0.5f;
-		cGraphics::worldContainer->settings.lightAmbient[1] = 0.5f;
-		cGraphics::worldContainer->settings.lightAmbient[2] = 0.5f;
+		cGraphics::worldContainer->settings.lightAmbient[0] = 0.7f;
+		cGraphics::worldContainer->settings.lightAmbient[1] = 0.7f;
+		cGraphics::worldContainer->settings.lightAmbient[2] = 0.7f;
 		cGraphics::worldContainer->settings.lightAmbient[3] = 1.0f;
 		
 		cGraphics::worldContainer->settings.lightDiffuse[0] = 1.0f;
@@ -1550,7 +1548,7 @@ void cWorld::draw()
 
 
 	bool inverseSelection = false;
-	if(editmode == MODE_TEXTUREPAINT || editmode == MODE_HEIGHTGLOBAL)
+	if(cSettings::editMode == MODE_TEXTUREPAINT || cSettings::editMode == MODE_HEIGHTGLOBAL)
 	{
 		for(x = 0; x < width && !inverseSelection; x++)
 		{
@@ -1585,14 +1583,14 @@ void cWorld::draw()
 
 				int texture = textures[t->texture]->texId();
 
-				if (	(editmode == MODE_WALLS && cGraphics::view.showGrid && (c->tileOtherSide != -1 || c->tileSide != -1) || c->minHeight != 99999))
+				if (	(cSettings::editMode == MODE_WALLS && cGraphics::view.showGrid && (c->tileOtherSide != -1 || c->tileSide != -1) || c->minHeight != 99999))
 				{
 					glEnable(GL_COLOR_MATERIAL);
 					glColor3f(1,0,1);
 				}
 //				else if (cGraphics::view.showtilecolors)
 //					glColor3f((BYTE)t->color[0] / 256.0f,(BYTE)t->color[1] / 256.0f,(BYTE)t->color[2] / 256.0f);
-				else if(((editmode == MODE_TEXTUREPAINT && cGraphics::textureTool == TOOL_SELECTAREA) || editmode == MODE_HEIGHTGLOBAL) && !cClipBoard::pasting)
+				else if(((cSettings::editMode == MODE_TEXTUREPAINT && cGraphics::textureTool == TOOL_SELECTAREA) || cSettings::editMode == MODE_HEIGHTGLOBAL) && !cClipBoard::pasting)
 				{
 					glEnable(GL_COLOR_MATERIAL);
 						if(cGraphics::cMouse::lbuttondown && cGraphics::cMouse::y < cGraphics::h() - 20 && inbetween<int>(x, round(cGraphics::cMouse::x3dStart/10), round(cGraphics::cMouse::x3d/10)) && inbetween<int>(y, round(cGraphics::cMouse::z3dStart/10), round(cGraphics::cMouse::z3d/10)) && alt)
@@ -1623,12 +1621,12 @@ void cWorld::draw()
 						glColor4f(1,1,1,1);
 					}
 				}
-				else if((editmode == MODE_TEXTUREPAINT || editmode == MODE_HEIGHTGLOBAL) && inverseSelection && !c->selected && !cClipBoard::pasting)
+				else if((cSettings::editMode == MODE_TEXTUREPAINT || cSettings::editMode == MODE_HEIGHTGLOBAL) && inverseSelection && !c->selected && !cClipBoard::pasting)
 				{
 					glEnable(GL_COLOR_MATERIAL);
 					glColor4f(0.2f, 0.2f, 0.2f, 1);
 				}
-				else if (editmode == MODE_HEIGHTDETAIL && cClipBoard::pasting && cClipBoard::currentClipBoard->type == cClipBoard::CLIP_HEIGHT && 
+				else if (cSettings::editMode == MODE_HEIGHTDETAIL && cClipBoard::pasting && cClipBoard::currentClipBoard->type == cClipBoard::CLIP_HEIGHT && 
 					inbetween<int>(x, posx-floor(((cClipboardHeight*)cClipBoard::currentClipBoard)->data[0].size()/2.0f),	posx+ceil(((cClipboardHeight*)cClipBoard::currentClipBoard)->data[0].size()/2.0f)) &&
 					inbetween<int>(y, posy-floor(((cClipboardHeight*)cClipBoard::currentClipBoard)->data.size()/2.0f),		posy+ceil(((cClipboardHeight*)cClipBoard::currentClipBoard)->data.size()/2.0f)))
 				{
@@ -1863,7 +1861,7 @@ void cWorld::draw()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set the correct blending mode
 	glColor4f(1,1,1,0.5);
 
-	if(cGraphics::view.showWater || editmode == MODE_WATER)
+	if(cGraphics::view.showWater || cSettings::editMode == MODE_WATER)
 	{
 		glDepthMask(0);
 		static float waterindex = 0;
@@ -1885,11 +1883,11 @@ void cWorld::draw()
 	}
 
 	
-	if(editmode == MODE_HEIGHTGLOBAL && cClipBoard::pasting && cClipBoard::currentClipBoard && cClipBoard::currentClipBoard->type == cClipBoard::CLIP_AREA)
+	if(cSettings::editMode == MODE_HEIGHTGLOBAL && cClipBoard::pasting && cClipBoard::currentClipBoard && cClipBoard::currentClipBoard->type == cClipBoard::CLIP_AREA)
 		cClipBoard::currentClipBoard->render();
 
 
-	if (editmode == MODE_GAT || cGraphics::view.showGat)
+	if (cSettings::editMode == MODE_GAT || cGraphics::view.showGat)
 	{
 		if(cClipBoard::pasting && cClipBoard::currentClipBoard && cClipBoard::currentClipBoard->type == cClipBoard::CLIP_GAT)
 			cClipBoard::currentClipBoard->render();
@@ -1936,7 +1934,7 @@ void cWorld::draw()
 
 		int s = (int)ceil(cGraphics::worldContainer->settings.brushsize);
 
-		if (posx >= floor(brushsize/2.0f) && posx <= 2*width-ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy <= 2*height-ceil(brushsize/2.0f))
+		if (posx >= floor(cGraphics::worldContainer->settings.brushsize/2.0f) && posx <= 2*width-ceil(cGraphics::worldContainer->settings.brushsize/2.0f) && posy >= floor(cGraphics::worldContainer->settings.brushsize/2.0f) && posy <= 2*height-ceil(cGraphics::worldContainer->settings.brushsize/2.0f))
 		{
 			glColor4f(1,0,0,1);
 			glDisable(GL_TEXTURE_2D);
@@ -1966,7 +1964,7 @@ void cWorld::draw()
 
 
 
-	if(editmode == MODE_TEXTURE)
+	if(cSettings::editMode == MODE_TEXTURE)
 	{
 		int posx = (int)cGraphics::cMouse::x3d / 10;
 		int posy = (int)cGraphics::cMouse::z3d / 10;
@@ -2186,7 +2184,7 @@ void cWorld::draw()
 	
 
 	}
-	else if(editmode == MODE_HEIGHTDETAIL)
+	else if(cSettings::editMode == MODE_HEIGHTDETAIL)
 	{
 
 		int posx = (int)cGraphics::cMouse::x3d / 10;
@@ -2195,9 +2193,9 @@ void cWorld::draw()
 		glColor4f(1,0,0,1);
 		glDisable(GL_TEXTURE_2D);
 		glDisable(GL_BLEND);
-		for(x = posx-(int)floor(brushsize/2.0f); x < posx+ceil(brushsize/2.0f); x++)
+		for(x = posx-(int)floor(cGraphics::worldContainer->settings.brushsize/2.0f); x < posx+ceil(cGraphics::worldContainer->settings.brushsize/2.0f); x++)
 		{
-			for(y = posy-(int)floor(brushsize/2.0f); y < posy+ceil(brushsize/2.0f); y++)
+			for(y = posy-(int)floor(cGraphics::worldContainer->settings.brushsize/2.0f); y < posy+ceil(cGraphics::worldContainer->settings.brushsize/2.0f); y++)
 			{
 				if (y >= height || y < 0 || x < 0 || x >= width)
 					continue;
@@ -2218,7 +2216,7 @@ void cWorld::draw()
 			cClipBoard::currentClipBoard->render();
 
 	}
-	else if (editmode == MODE_WALLS)
+	else if (cSettings::editMode == MODE_WALLS)
 	{
 		glDisable(GL_TEXTURE_2D);
 		glColor3f(1,0,0);
@@ -2259,7 +2257,7 @@ void cWorld::draw()
 		glColor4f(1,1,1,1);
 	}
 
-	if ((cGraphics::view.showObjects || editmode == MODE_OBJECTS) && editmode != MODE_OBJECTGROUP)
+	if ((cGraphics::view.showObjects || cSettings::editMode == MODE_OBJECTS) && cSettings::editMode != MODE_OBJECTGROUP)
 	{
 		glEnable(GL_LIGHTING);
 		glEnable(GL_TEXTURE_2D);
@@ -2268,11 +2266,11 @@ void cWorld::draw()
 		glScalef(1,1,-1);
 		for(i = 0; i < models.size(); i++)
 		{
-			if((int)i == cGraphics::worldContainer->settings.selectedObject && editmode == MODE_OBJECTS)
+			if((int)i == cGraphics::worldContainer->settings.selectedObject && cSettings::editMode == MODE_OBJECTS)
 				glColor4f(1,0,0, cGraphics::view.showObjectsAsTransparent ? 0.2f : 1);
 			else
 				glColor4f(1,1,1,cGraphics::view.showObjectsAsTransparent ? 0.2f : 1);
-			if((editmode == MODE_HEIGHTGLOBAL || editmode == MODE_TEXTUREPAINT) && inverseSelection && !cClipBoard::pasting)
+			if((cSettings::editMode == MODE_HEIGHTGLOBAL || cSettings::editMode == MODE_TEXTUREPAINT) && inverseSelection && !cClipBoard::pasting)
 			{
 				x = round(cGraphics::world->models[i]->pos.x / 2.0f);
 				y = round(cGraphics::world->models[i]->pos.z / 2.0f);
@@ -2288,7 +2286,7 @@ void cWorld::draw()
 			models[i]->draw();
 		}
 
-		if(editmode == MODE_OBJECTS && cClipBoard::pasting && cClipBoard::currentClipBoard && cClipBoard::currentClipBoard->type == cClipBoard::CLIP_OBJECT)
+		if(cSettings::editMode == MODE_OBJECTS && cClipBoard::pasting && cClipBoard::currentClipBoard && cClipBoard::currentClipBoard->type == cClipBoard::CLIP_OBJECT)
 		{
 			glColor4f(1,1,1,1);
 			cClipBoard::currentClipBoard->render();
@@ -2300,7 +2298,7 @@ void cWorld::draw()
 		glDisable(GL_LIGHTING);
 
 
-		if(editmode == MODE_OBJECTS && cGraphics::view.showObjects)
+		if(cSettings::editMode == MODE_OBJECTS && cGraphics::view.showObjects)
 		{
 			glDisable(GL_TEXTURE_2D);
 			glBegin(GL_QUADS);
@@ -2350,7 +2348,7 @@ void cWorld::draw()
 		}
 	
 	}
-	if(editmode == MODE_OBJECTS && cGraphics::view.showGrid)
+	if(cSettings::editMode == MODE_OBJECTS && cGraphics::view.showGrid)
 	{
 		glDisable(GL_TEXTURE_2D);
 		glColor4f(1,1,1,1);
@@ -2379,7 +2377,7 @@ void cWorld::draw()
 		glTranslatef(-s*cGraphics::worldContainer->settings.gridoffsetx,0,-s*cGraphics::worldContainer->settings.gridoffsety);
 	}
 
-	if(editmode == MODE_OBJECTGROUP)
+	if(cSettings::editMode == MODE_OBJECTGROUP)
 	{
 		glColor4f(1,1,1,1);
 
@@ -2450,7 +2448,7 @@ void cWorld::draw()
 		glEnd();
 	}
 
-	if(editmode == MODE_EFFECTS)
+	if(cSettings::editMode == MODE_EFFECTS)
 	{
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
@@ -2478,7 +2476,7 @@ void cWorld::draw()
 
 		}
 	}
-	if(editmode == MODE_SOUNDS)
+	if(cSettings::editMode == MODE_SOUNDS)
 	{
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
@@ -2506,7 +2504,7 @@ void cWorld::draw()
 
 		}
 	}
-	if(editmode == MODE_LIGHTS)
+	if(cSettings::editMode == MODE_LIGHTS)
 	{
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
@@ -2552,11 +2550,11 @@ void cWorld::draw()
 		}
 		glColor3f(1,1,1);
 	}
-	if (editmode == MODE_HEIGHTGLOBAL)
+	if (cSettings::editMode == MODE_HEIGHTGLOBAL)
 	{
 //borf
 	}
-	if (editmode == MODE_OBJECTGROUP)
+	if (cSettings::editMode == MODE_OBJECTGROUP)
 	{
 		if (cGraphics::cMouse::lbuttondown && !cGraphics::groupeditmode)
 		{
@@ -2574,11 +2572,11 @@ void cWorld::draw()
 			glLineWidth(1);
 		}
 	}
-	if(editmode == MODE_SPRITE  || cGraphics::view.showSprites)
+	if(cSettings::editMode == MODE_SPRITE  || cGraphics::view.showSprites)
 	{
 		for(i = 0; i < sprites.size(); i++)
 		{
-			if(editmode == MODE_SPRITE && (int)i == cGraphics::worldContainer->settings.selectedObject)
+			if(cSettings::editMode == MODE_SPRITE && (int)i == cGraphics::worldContainer->settings.selectedObject)
 				glColor4f(1,0,0,1);
 			else
 				glColor4f(1,1,1,1);
@@ -2586,7 +2584,7 @@ void cWorld::draw()
 			sprites[i]->draw();
 		}
 	}
-	if(editmode == MODE_TEXTUREPAINT)
+	if(cSettings::editMode == MODE_TEXTUREPAINT)
 	{
 		if (cGraphics::view.showGrid)
 		{
@@ -2810,7 +2808,7 @@ void cWorld::draw()
 
 
 
-	if(cGraphics::view.showWater || editmode == MODE_WATER)
+	if(cGraphics::view.showWater || cSettings::editMode == MODE_WATER)
 	{
 		glEnable(GL_BLEND);
 		glEnable(GL_TEXTURE_2D);

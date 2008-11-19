@@ -6,8 +6,6 @@
 #include "objectwindow.h"
 #include <graphics.h>
 
-extern cGraphicsBase Graphics;
-
 cLightWindow::cLightWindow( ) : cWindow()
 {
 	windowType = WT_LIGHT;

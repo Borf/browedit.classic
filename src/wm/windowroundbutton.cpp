@@ -9,7 +9,6 @@
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
 #include <graphics.h>
-extern cGraphicsBase Graphics;
 
 void cWindowRoundButton::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {
@@ -38,7 +37,7 @@ void cWindowRoundButton::onClick()
 cWindowObject* cWindowRoundButton::inObject()
 {
 	int xx=(int)cGraphics::cMouse::x-parent->getX();
-	int yy=(Graphics.h()-(int)cGraphics::cMouse::y)-parent->getY();
+	int yy=(cGraphics::h()-(int)cGraphics::cMouse::y)-parent->getY();
 	int xxx = realX() + (w/2);
 	int yyy = realY() + (h/2);
 	if (((xx - xxx)*(xx - xxx))+((yy - yyy)*(yy - yyy)) < (w*w)/2)

@@ -13,7 +13,7 @@ extern int movement;
 
 extern TiXmlDocument favoritelights;
 
-double mouseclickx, mouseclicky, mouseclickz;
+//double mouseclickx, mouseclicky, mouseclickz;
 
 
 void addmenustuff(cMenu* m, TiXmlElement* el)
@@ -193,9 +193,9 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 			{
 				if(movement < 3)
 				{
-					mouseclickx = cGraphics::cMouse::x3d;
-					mouseclicky = cGraphics::cMouse::y3d;
-					mouseclickz = cGraphics::cMouse::z3d;
+					cGraphics::cMouse::click3dx = cGraphics::cMouse::x3d;
+					cGraphics::cMouse::click3dy = cGraphics::cMouse::y3d;
+					cGraphics::cMouse::click3dz = cGraphics::cMouse::z3d;
 
 					if(cGraphics::popupMenu)
 						delete cGraphics::popupMenu;

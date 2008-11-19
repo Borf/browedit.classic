@@ -12,10 +12,10 @@
 #include "mapdetailwindow.h"
 
 extern void	mainloop();
+extern cBMutex* renderMutex;
 
 
 #include <bthread.h>
-extern cBMutex* renderMutex;
 
 cMapsWindow::cMapsWindow() : cWindow()
 {

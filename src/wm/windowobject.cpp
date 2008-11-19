@@ -10,7 +10,6 @@
 #include <GL/glu.h>												// Header File For The GLu32 Library
 #include <graphics.h>
 
-extern cGraphicsBase Graphics;
 void cWindowObject::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {
 	int xx, yy;
@@ -73,7 +72,7 @@ void cWindowObject::draw(int cutoffleft, int cutoffright, int cutofftop, int cut
 cWindowObject* cWindowObject::inObject()
 {
 	int xx=(int)cGraphics::cMouse::x-parent->getX();
-	int yy=(Graphics.h()-(int)cGraphics::cMouse::y)-parent->getY();
+	int yy=(cGraphics::h()-(int)cGraphics::cMouse::y)-parent->getY();
 	if (xx > realX() && xx < realX()+w &&
 		yy > realY() && yy < realY()+h)
 		return this;

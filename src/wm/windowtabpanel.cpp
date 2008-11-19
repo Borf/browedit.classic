@@ -10,7 +10,6 @@
 #include <font.h>
 #include "window.h"
 #include <graphics.h>
-extern cGraphicsBase Graphics;
 
 void cWindowTabPanel::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {
@@ -22,7 +21,7 @@ void cWindowTabPanel::draw(int cutoffleft, int cutoffright, int cutofftop, int c
 	yy = realy2();
 	glEnable(GL_TEXTURE_2D);
 	bool overtabs = false;
-	if (this->inObject() && parent->istopwindow() && ((Graphics.h()-cGraphics::cMouse::y) - parent->getY() - yy - h > -14))
+	if (this->inObject() && parent->istopwindow() && ((cGraphics::h()-cGraphics::cMouse::y) - parent->getY() - yy - h > -14))
 		overtabs = true;
 
 	glTranslatef((float)xx, (float)yy, 0);
@@ -147,7 +146,7 @@ void cWindowTabPanel::onClick()
 	int xx, yy;
 	xx = realX();
 	yy = realy2();
-	if (this->inObject() && parent->istopwindow() && ((Graphics.h()-cGraphics::cMouse::y) - parent->getY() - yy - h > -14))
+	if (this->inObject() && parent->istopwindow() && ((cGraphics::h()-cGraphics::cMouse::y) - parent->getY() - yy - h > -14))
 	{
 		int oldtab = selectedtab;
 		selectedtab = ((int)cGraphics::cMouse::x - parent->getX() - xx) / (w/tabs.size());

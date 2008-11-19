@@ -19,7 +19,6 @@
 #include "menu.h"
 
 extern void												ChangeGrid();
-extern eMode											editmode;
 extern cMenu*											currentobject;
 extern long												lastmotion;
 
@@ -109,7 +108,7 @@ int cGraphics::draw(bool drawwm)
 				previewColor--;
 		}
 	/*	glColor4f(1,1,1,1);
-		if (editmode == MODE_OBJECTS)
+		if (cSettings::editMode == MODE_OBJECTS)
 		{
 			glDisable(GL_TEXTURE_2D);
 			glEnable(GL_BLEND);
@@ -127,20 +126,20 @@ int cGraphics::draw(bool drawwm)
 		}
 		glEnable(GL_DEPTH_TEST);*/
 	}
-	if(world && world->loaded && editmode != MODE_OBJECTS && editmode != MODE_OBJECTGROUP && editmode != MODE_LIGHTS)
+	if(world && world->loaded && cSettings::editMode != MODE_OBJECTS && cSettings::editMode != MODE_OBJECTGROUP && cSettings::editMode != MODE_LIGHTS)
 	{
 		int i;
 		glEnable(GL_TEXTURE_2D);
 		glColor4f(1,1,1,1);
 		for(i = 0; 288*i+256 < height; i++)
 		{
-			if (editmode == MODE_GAT)
+			if (cSettings::editMode == MODE_GAT)
 			{
 				if (i+worldContainer->settings.texturestart > (int)gatTextures.size()-1)
 					continue;
 				glBindTexture(GL_TEXTURE_2D, gatTextures[i+worldContainer->settings.texturestart]->texId());
 			}
-			else if (editmode == MODE_WATER)
+			else if (cSettings::editMode == MODE_WATER)
 			{
 				if (i+world->water.type >= (int)waterCount)
 					continue;
@@ -164,7 +163,7 @@ int cGraphics::draw(bool drawwm)
 			glEnd();
 		}
 		glDisable(GL_TEXTURE_2D);
-		if(editmode == MODE_TEXTUREPAINT)
+		if(cSettings::editMode == MODE_TEXTUREPAINT)
 		{
 			glEnable(GL_BLEND);
 //			int ww = textureBrush[0].size();
@@ -223,12 +222,12 @@ int cGraphics::draw(bool drawwm)
 			glColor3f(0.5f,0.5f,1);
 			for(i = 0; 288*i+256 < height; i++)
 			{
-				if (editmode == MODE_GAT)
+				if (cSettings::editMode == MODE_GAT)
 				{
 					if (i+worldContainer->settings.texturestart > 6)
 						continue;
 				}
-				else if (editmode == MODE_WATER)
+				else if (cSettings::editMode == MODE_WATER)
 				{
 					if (i+world->water.type > 5)
 						continue;
@@ -253,7 +252,7 @@ int cGraphics::draw(bool drawwm)
 		}
 		glColor3f(1,1,1);
 	}
-	else if (editmode == MODE_OBJECTGROUP)
+	else if (cSettings::editMode == MODE_OBJECTGROUP)
 	{
 		char buf[100];
 		if (!groupeditmode)
@@ -290,36 +289,36 @@ int cGraphics::draw(bool drawwm)
 
 	char buf[100];
 	if(currentobject != NULL)
-		sprintf(buf, "Editmode: %s, File: %s", 	editmode == MODE_TEXTURE ?			GetMsg("menu/editmode/TEXTUREEDIT") : 
-												editmode == MODE_HEIGHTDETAIL ?		GetMsg("menu/editmode/DETAILTERRAINEDIT") : 
-												editmode == MODE_HEIGHTGLOBAL ?		GetMsg("menu/editmode/GLOBALHEIGHTEDIT") :
-												editmode == MODE_WALLS ?			GetMsg("menu/editmode/WALLEDIT") :
-												editmode == MODE_OBJECTS ?			GetMsg("menu/editmode/OBJECTEDIT") :
-												editmode == MODE_GAT ?				GetMsg("menu/editmode/GATEDIT") :
-												editmode == MODE_WATER ?			GetMsg("menu/editmode/WATEREDIT") :
-												editmode == MODE_EFFECTS ?			GetMsg("menu/editmode/EFFECTSEDIT") :
-												editmode == MODE_SOUNDS ?			GetMsg("menu/editmode/SOUNDSEDIT") :
-												editmode == MODE_LIGHTS ?			GetMsg("menu/editmode/LIGHTSEDIT") :
-												editmode == MODE_OBJECTGROUP ?		GetMsg("menu/editmode/OBJECTGROUPEDIT") : 
-												editmode == MODE_SPRITE ?			GetMsg("menu/editmode/SPRITEEDIT") : 
-												editmode == MODE_TEXTUREPAINT ?		GetMsg("menu/editmode/TEXTUREPAINTEDIT") : 
+		sprintf(buf, "Editmode: %s, File: %s", 	cSettings::editMode == MODE_TEXTURE ?			GetMsg("menu/cSettings::editMode/TEXTUREEDIT") : 
+												cSettings::editMode == MODE_HEIGHTDETAIL ?		GetMsg("menu/cSettings::editMode/DETAILTERRAINEDIT") : 
+												cSettings::editMode == MODE_HEIGHTGLOBAL ?		GetMsg("menu/cSettings::editMode/GLOBALHEIGHTEDIT") :
+												cSettings::editMode == MODE_WALLS ?			GetMsg("menu/cSettings::editMode/WALLEDIT") :
+												cSettings::editMode == MODE_OBJECTS ?			GetMsg("menu/cSettings::editMode/OBJECTEDIT") :
+												cSettings::editMode == MODE_GAT ?				GetMsg("menu/cSettings::editMode/GATEDIT") :
+												cSettings::editMode == MODE_WATER ?			GetMsg("menu/cSettings::editMode/WATEREDIT") :
+												cSettings::editMode == MODE_EFFECTS ?			GetMsg("menu/cSettings::editMode/EFFECTSEDIT") :
+												cSettings::editMode == MODE_SOUNDS ?			GetMsg("menu/cSettings::editMode/SOUNDSEDIT") :
+												cSettings::editMode == MODE_LIGHTS ?			GetMsg("menu/cSettings::editMode/LIGHTSEDIT") :
+												cSettings::editMode == MODE_OBJECTGROUP ?		GetMsg("menu/cSettings::editMode/OBJECTGROUPEDIT") : 
+												cSettings::editMode == MODE_SPRITE ?			GetMsg("menu/cSettings::editMode/SPRITEEDIT") : 
+												cSettings::editMode == MODE_TEXTUREPAINT ?		GetMsg("menu/cSettings::editMode/TEXTUREPAINTEDIT") : 
 	
 	"", 
 		((cMenuItem*)currentobject)->data2.c_str());
 	else
-		sprintf(buf, "Editmode: %s",	editmode == MODE_TEXTURE ?			GetMsg("menu/editmode/TEXTUREEDIT") : 
-										editmode == MODE_HEIGHTDETAIL ?		GetMsg("menu/editmode/DETAILTERRAINEDIT") : 
-										editmode == MODE_HEIGHTGLOBAL ?		GetMsg("menu/editmode/GLOBALHEIGHTEDIT") :
-										editmode == MODE_WALLS ?			GetMsg("menu/editmode/WALLEDIT") :
-										editmode == MODE_OBJECTS ?			GetMsg("menu/editmode/OBJECTEDIT") :
-										editmode == MODE_GAT ?				GetMsg("menu/editmode/GATEDIT") :
-										editmode == MODE_WATER ?			GetMsg("menu/editmode/WATEREDIT") :
-										editmode == MODE_EFFECTS ?			GetMsg("menu/editmode/EFFECTSEDIT") :
-										editmode == MODE_SOUNDS ?			GetMsg("menu/editmode/SOUNDSEDIT") :
-										editmode == MODE_LIGHTS ?			GetMsg("menu/editmode/LIGHTSEDIT") :
-										editmode == MODE_OBJECTGROUP ?		GetMsg("menu/editmode/OBJECTGROUPEDIT") : 
-										editmode == MODE_SPRITE ?			GetMsg("menu/editmode/SPRITEEDIT") : 
-										editmode == MODE_TEXTUREPAINT ?		GetMsg("menu/editmode/TEXTUREPAINTEDIT") : 
+		sprintf(buf, "Editmode: %s",	cSettings::editMode == MODE_TEXTURE ?			GetMsg("menu/cSettings::editMode/TEXTUREEDIT") : 
+										cSettings::editMode == MODE_HEIGHTDETAIL ?		GetMsg("menu/cSettings::editMode/DETAILTERRAINEDIT") : 
+										cSettings::editMode == MODE_HEIGHTGLOBAL ?		GetMsg("menu/cSettings::editMode/GLOBALHEIGHTEDIT") :
+										cSettings::editMode == MODE_WALLS ?			GetMsg("menu/cSettings::editMode/WALLEDIT") :
+										cSettings::editMode == MODE_OBJECTS ?			GetMsg("menu/cSettings::editMode/OBJECTEDIT") :
+										cSettings::editMode == MODE_GAT ?				GetMsg("menu/cSettings::editMode/GATEDIT") :
+										cSettings::editMode == MODE_WATER ?			GetMsg("menu/cSettings::editMode/WATEREDIT") :
+										cSettings::editMode == MODE_EFFECTS ?			GetMsg("menu/cSettings::editMode/EFFECTSEDIT") :
+										cSettings::editMode == MODE_SOUNDS ?			GetMsg("menu/cSettings::editMode/SOUNDSEDIT") :
+										cSettings::editMode == MODE_LIGHTS ?			GetMsg("menu/cSettings::editMode/LIGHTSEDIT") :
+										cSettings::editMode == MODE_OBJECTGROUP ?		GetMsg("menu/cSettings::editMode/OBJECTGROUPEDIT") : 
+										cSettings::editMode == MODE_SPRITE ?			GetMsg("menu/cSettings::editMode/SPRITEEDIT") : 
+										cSettings::editMode == MODE_TEXTUREPAINT ?		GetMsg("menu/cSettings::editMode/TEXTUREPAINTEDIT") : 
 	"");
 	float l = font->textLen(buf);
 	font->print(0,0,0,width-l,height-14,buf);
@@ -747,6 +746,10 @@ double				cGraphicsBase::cMouse::z3dStart =	0;
 bool				cGraphicsBase::cMouse::doubleClick =false;
 long				cGraphicsBase::cMouse::lastlclick =	0;
 long				cGraphicsBase::cMouse::lastrclick =	0;
+double				cGraphicsBase::cMouse::click3dx	=	0;
+double				cGraphicsBase::cMouse::click3dy	=	0;
+double				cGraphicsBase::cMouse::click3dz	=	0;
+
 
 cGraphicsBase::cGraphicsBase()
 {
@@ -806,6 +809,7 @@ cWorldContainer::cSettings::cSettings()
 	gridoffsetx			= 0;
 	gridoffsety			= 0;
 	selectedObject		= 0;
+	brushSizeDetailHeight= 1;
 	brushsize			= 1;
 	texturestart		= 0;
 	textureRot			= 0;

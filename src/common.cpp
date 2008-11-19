@@ -16,9 +16,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "tinyxml/tinyxml.h"
-extern TiXmlDocument msgtable;
-
-
+#include <settings.h>
 const float EPSILON = 0.001f;
 
 
@@ -462,7 +460,7 @@ HWND GetConsoleHwnd()
 const char* GetMsg(std::string s)
 {
 	std::string olds = s;
-	TiXmlNode* n = msgtable.FirstChildElement("language");
+	TiXmlNode* n = cSettings::msgTable.FirstChildElement("language");
 
 	while(s.find("/") != std::string::npos)
 	{

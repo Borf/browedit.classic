@@ -3,10 +3,6 @@
 #include <graphics.h>
 #include <undo.h>
 #include "settings.h"
-
-extern int brushsize;
-
-
 cClipBoardContents* cClipBoard::currentClipBoard = NULL;
 bool				cClipBoard::pasting = false;
 
@@ -127,18 +123,18 @@ void cClipboardHeight::apply()
 {
 	int posx = (int)cGraphics::cMouse::x3d / 10;
 	int posy = (int)cGraphics::cMouse::z3d / 10;
-	if ((int)data.size() != brushsize)
+	if ((int)data.size() != cGraphics::worldContainer->settings.brushSizeDetailHeight)
 		return;
 	
-	cGraphics::worldContainer->undoStack->push(new cUndoHeightEdit(posx-(int)floor(brushsize/2.0f), posy-(int)floor(brushsize/2.0f), posx+(int)ceil(brushsize/2.0f), posy+(int)ceil(brushsize/2.0f)));
-	//					if (posx >= (int)floor(brushsize/2.0f) && posx <= cGraphics::world->width-(int)ceil(brushsize/2.0f) && posy >= (int)floor(brushsize/2.0f) && posy <= cGraphics::world->height-(int)ceil(brushsize/2.0f))
+	cGraphics::worldContainer->undoStack->push(new cUndoHeightEdit(posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f), posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f), posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f), posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)));
+	//					if (posx >= (int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f) && posx <= cGraphics::world->width-(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f) && posy >= (int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f) && posy <= cGraphics::world->height-(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f))
 	{
 		int yy = 0;
-		for(int y = posy-(int)floor(brushsize/2.0f); y < posy+(int)ceil(brushsize/2.0f); y++)
+		for(int y = posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); y++)
 		{
 			std::vector<std::vector<float> > row;
 			int xx = 0;
-			for(int x = posx-(int)floor(brushsize/2.0f); x < posx+(int)ceil(brushsize/2.0f); x++)
+			for(int x = posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); x++)
 			{
 				if (x >= cGraphics::world->width || x < 0 || y < 0 || y >= cGraphics::world->height)
 					continue;

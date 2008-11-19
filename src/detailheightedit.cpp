@@ -4,7 +4,6 @@
 #include <clipboard.h>
 
 extern long tilex,tiley;
-extern int brushsize;
 extern long lasttimer;
 
 
@@ -33,11 +32,11 @@ int cProcessManagement::detailheightedit_process_events(SDL_Event &event)
 					float mmax = -9999999.0f;
 					if (ctrl)
 					{
-						if (posx >= floor(brushsize/2.0f) && posx <= cGraphics::world->width-(int)ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= cGraphics::world->height-(int)ceil(brushsize/2.0f))
+						if (posx >= floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f) && posx <= cGraphics::world->width-(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f) && posy >= floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f) && posy<= cGraphics::world->height-(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f))
 						{
-							for(int x = posx-(int)floor(brushsize/2.0f); x < posx+(int)ceil(brushsize/2.0f); x++)
+							for(int x = posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); x++)
 							{
-								for(int y = posy-(int)floor(brushsize/2.0f); y < posy+(int)ceil(brushsize/2.0f); y++)
+								for(int y = posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); y++)
 								{
 									cCube* c = &cGraphics::world->cubes[y][x];
 									mmin = min(min(min(min(mmin, c->cell1),c->cell2),c->cell3),c->cell4);
@@ -50,24 +49,24 @@ int cProcessManagement::detailheightedit_process_events(SDL_Event &event)
 
 					cGraphics::worldContainer->undoStack->push(new cUndoHeightEdit(0,0,cGraphics::world->width, cGraphics::world->height));
 
-	//				if (posx >= floor(brushsize/2.0f) && posx <= cGraphics::world->width-(int)ceil(brushsize/2.0f) && posy >= floor(brushsize/2.0f) && posy<= cGraphics::world->height-(int)ceil(brushsize/2.0f))
+	//				if (posx >= floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f) && posx <= cGraphics::world->width-(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f) && posy >= floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f) && posy<= cGraphics::world->height-(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f))
 					{
-						for(int x = posx-(int)floor(brushsize/2.0f); x < posx+(int)ceil(brushsize/2.0f); x++)
+						for(int x = posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); x++)
 						{
-							for(int y = posy-(int)floor(brushsize/2.0f); y < posy+(int)ceil(brushsize/2.0f); y++)
+							for(int y = posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); y++)
 							{
 								if(x >= 0 && y >= 0 && x < cGraphics::world->width && y < cGraphics::world->height)
 								{
 									cCube* c = &cGraphics::world->cubes[y][x];
 									if(cGraphics::cMouse::lbuttondown && !cGraphics::cMouse::rbuttondown)
 									{
-										if (!cGraphics::slope || ((x > posx-(int)floor(brushsize/2.0f)) && y > posy-(int)floor(brushsize/2.0f)))
+										if (!cGraphics::slope || ((x > posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)) && y > posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)))
 											c->cell1-=1;
-										if (!cGraphics::slope || ((x < posx+(int)ceil(brushsize/2.0f)-1) && y > posy-(int)floor(brushsize/2.0f)))
+										if (!cGraphics::slope || ((x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1) && y > posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)))
 											c->cell2-=1;
-										if (!cGraphics::slope || ((x > posx-(int)floor(brushsize/2.0f)) && y < posy+(int)ceil(brushsize/2.0f)-1))
+										if (!cGraphics::slope || ((x > posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)) && y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1))
 											c->cell3-=1;
-										if (!cGraphics::slope || ((x < posx+(int)ceil(brushsize/2.0f)-1) && y < posy+(int)ceil(brushsize/2.0f)-1))
+										if (!cGraphics::slope || ((x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1) && y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1))
 											c->cell4-=1;
 										if(ctrl)
 										{
@@ -79,13 +78,13 @@ int cProcessManagement::detailheightedit_process_events(SDL_Event &event)
 									}
 									if(cGraphics::cMouse::lbuttondown && cGraphics::cMouse::rbuttondown)
 									{
-										if (!cGraphics::slope || ((x > posx-(int)floor(brushsize/2.0f)) && y > posy-(int)floor(brushsize/2.0f)))
+										if (!cGraphics::slope || ((x > posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)) && y > posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)))
 											c->cell1+=1;
-										if (!cGraphics::slope || ((x < posx+(int)ceil(brushsize/2.0f)-1) && y > posy-(int)floor(brushsize/2.0f)))
+										if (!cGraphics::slope || ((x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1) && y > posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)))
 											c->cell2+=1;
-										if (!cGraphics::slope || ((x > posx-(int)floor(brushsize/2.0f)) && y < posy+(int)ceil(brushsize/2.0f)-1))
+										if (!cGraphics::slope || ((x > posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)) && y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1))
 											c->cell3+=1;
-										if (!cGraphics::slope || ((x < posx+(int)ceil(brushsize/2.0f)-1) && y < posy+(int)ceil(brushsize/2.0f)-1))
+										if (!cGraphics::slope || ((x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1) && y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1))
 											c->cell4+=1;
 										if(ctrl)
 										{
@@ -109,25 +108,25 @@ int cProcessManagement::detailheightedit_process_events(SDL_Event &event)
 			switch (event.key.keysym.sym)
 			{
 			case SDLK_MINUS:
-				if (brushsize > 1)
-					brushsize/=2;
+				if (cGraphics::worldContainer->settings.brushSizeDetailHeight > 1)
+					cGraphics::worldContainer->settings.brushSizeDetailHeight/=2;
 				break;
 			case SDLK_EQUALS:
-				brushsize*=2;
+				cGraphics::worldContainer->settings.brushSizeDetailHeight*=2;
 				break;
 			case SDLK_c:
 				{
 					int posx = (int)cGraphics::cMouse::x3d / 10;
 					int posy = (int)cGraphics::cMouse::z3d / 10;
 
-					if (posx >= (int)floor(brushsize/2.0f) && posx <= cGraphics::world->width-(int)ceil(brushsize/2.0f) && posy >= (int)floor(brushsize/2.0f) && posy<= cGraphics::world->height-(int)ceil(brushsize/2.0f))
+					if (posx >= (int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f) && posx <= cGraphics::world->width-(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f) && posy >= (int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f) && posy<= cGraphics::world->height-(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f))
 					{
 						cClipboardHeight* clipboard = new cClipboardHeight();
 
-						for(int y = posy-(int)floor(brushsize/2.0f); y < posy+(int)ceil(brushsize/2.0f); y++)
+						for(int y = posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); y++)
 						{
 							std::vector<std::vector<float> > row;
-							for(int x = posx-(int)floor(brushsize/2.0f); x < posx+(int)ceil(brushsize/2.0f); x++)
+							for(int x = posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); x++)
 							{
 								std::vector<float> c;
 								c.push_back(cGraphics::world->cubes[y][x].cell1);
@@ -153,12 +152,12 @@ int cProcessManagement::detailheightedit_process_events(SDL_Event &event)
 					int posx = (int)cGraphics::cMouse::x3d / 10;
 					int posy = (int)cGraphics::cMouse::z3d / 10;
 
-					cGraphics::worldContainer->undoStack->push(new cUndoHeightEdit(posx-(int)floor(brushsize/2.0f), posy-(int)floor(brushsize/2.0f), posx+(int)ceil(brushsize/2.0f), posy+(int)ceil(brushsize/2.0f)));
-					for(int x = posx-(int)floor(brushsize/2.0f); x < posx+(int)ceil(brushsize/2.0f)-1; x++)
+					cGraphics::worldContainer->undoStack->push(new cUndoHeightEdit(posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f), posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f), posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f), posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)));
+					for(int x = posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1; x++)
 					{
-						for(int y = posy-(int)floor(brushsize/2.0f)+1; y < posy+(int)ceil(brushsize/2.0f); y++)
+						for(int y = posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)+1; y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); y++)
 						{
-							if (x >= 0 && x < cGraphics::world->width-(int)ceil(brushsize/2.0f) && y > 0 && y <= cGraphics::world->height-(int)ceil(brushsize/2.0f))
+							if (x >= 0 && x < cGraphics::world->width-(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f) && y > 0 && y <= cGraphics::world->height-(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f))
 							{
 								float to = cGraphics::world->cubes[y][x].cell2;
 								cGraphics::world->cubes[y][x].cell2 = to;
@@ -181,10 +180,10 @@ int cProcessManagement::detailheightedit_process_events(SDL_Event &event)
 					int x,y;
 					int posx = (int)cGraphics::cMouse::x3d / 10;
 					int posy = (int)cGraphics::cMouse::z3d / 10;
-					cGraphics::worldContainer->undoStack->push(new cUndoHeightEdit(posx-(int)floor(brushsize/2.0f), posy-(int)floor(brushsize/2.0f), posx+(int)ceil(brushsize/2.0f), posy+(int)ceil(brushsize/2.0f)));
-					for(x = posx-(int)floor(brushsize/2.0f); x < posx+(int)ceil(brushsize/2.0f)-1; x++)
+					cGraphics::worldContainer->undoStack->push(new cUndoHeightEdit(posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f), posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f), posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f), posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)));
+					for(x = posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1; x++)
 					{
-						for(y = posy-(int)floor(brushsize/2.0f)+1; y < posy+(int)ceil(brushsize/2.0f); y++)
+						for(y = posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)+1; y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); y++)
 						{
 							if (x >= 0 && x < cGraphics::world->width && y >= 0 && y < cGraphics::world->height)
 							{
@@ -202,9 +201,9 @@ int cProcessManagement::detailheightedit_process_events(SDL_Event &event)
 						}
 					}
 					
-					for(x = posx-(int)floor(brushsize/2.0f); x < posx+(int)ceil(brushsize/2.0f)-1; x++)
+					for(x = posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1; x++)
 					{
-						for(y = posy-(int)floor(brushsize/2.0f)+1; y < posy+(int)ceil(brushsize/2.0f); y++)
+						for(y = posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)+1; y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); y++)
 						{
 							if (x >= -1 && x < cGraphics::world->width && y >= 0 && y <= cGraphics::world->height)
 							{

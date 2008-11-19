@@ -5,8 +5,6 @@
 #include "settings.h"
 #include <algorithm>
 
-extern cGraphicsBase Graphics;
-
 cFileWindow::cOkButton::cOkButton( cWindow* parent, void (*pCallback)(std::string), TiXmlDocument* skin ) : cWindowButton(parent,skin)
 {
 	callback = pCallback;
@@ -51,7 +49,7 @@ cFileWindow::cFileWindow(void (*pCallback)(std::string)) : cWindow()
 	resizable = true;
 	visible = true;
 	
-	h = Graphics.h()-20;
+	h = cGraphics::h()-20;
 	w = 350;
 	title = GetMsg("wm/file/TITLE");
 	center();

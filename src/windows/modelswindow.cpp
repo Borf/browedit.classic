@@ -9,8 +9,6 @@
 #include <wm/windowlabel.h>
 #include <fstream>
 #include <settings.h>
-extern eMode editmode;
-
 extern std::vector<std::string> objectfiles;
 extern std::vector<std::pair<std::string, std::string> > translations;
 
@@ -107,7 +105,7 @@ void cModelsWindow::cWindowModel::onClick()
 	{
 		if(cGraphics::previewModel->filename == model->filename)
 		{
-			if (editmode == MODE_OBJECTS)
+			if (cSettings::editMode == MODE_OBJECTS)
 				cGraphics::previewColor = 0;
 			parent->close();
 			return;

@@ -39,7 +39,6 @@ int keymap[SDLK_LAST-SDLK_FIRST];
 #endif
 
 cBMutex* renderMutex;
-TiXmlDocument msgtable;
 
 void MakeUndo();
 void Undo();
@@ -49,8 +48,6 @@ void ChangeGrid();
 void UpdateTriangleMenu();
 void CleanSurfaces();
 int process_events();
-bool running = true;
-eMode editmode = MODE_TEXTURE;
 long tilex,tiley;
 long lastmotion;
 bool	doneAction = true;
@@ -68,7 +65,6 @@ bool mouseouttexture(cMenu*);
 bool mouseovertexture(cMenu*);
 
 
-int brushsize = 1;
 
 cMenu* currentobject;
 cMenu* snaptofloor;
@@ -106,7 +102,7 @@ void mainloop()
 	renderMutex->lock();
 	if(lasttimer + cSettings::paintSpeed < SDL_GetTicks())
 	{
-		if(editmode == MODE_HEIGHTDETAIL && cGraphics::menu->inWindow((int)cGraphics::cMouse::x, cGraphics::h()-(int)cGraphics::cMouse::y) == NULL)
+		if(cSettings::editMode == MODE_HEIGHTDETAIL && cGraphics::menu->inWindow((int)cGraphics::cMouse::x, cGraphics::h()-(int)cGraphics::cMouse::y) == NULL)
 		{
 			if (cGraphics::cMouse::lbuttondown || cGraphics::cMouse::rbuttondown)
 			{
@@ -117,9 +113,9 @@ void mainloop()
 				float mmax = -9999999.0f;
 				if (ctrl)
 				{
-					for(int x = posx-(int)floor(brushsize/2.0f); x < posx+(int)ceil(brushsize/2.0f); x++)
+					for(int x = posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); x++)
 					{
-						for(int y = posy-(int)floor(brushsize/2.0f); y < posy+(int)ceil(brushsize/2.0f); y++)
+						for(int y = posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); y++)
 						{
 							if(x >= 0 && y >= 0 && x < cGraphics::world->width && y < cGraphics::world->height)
 							{
@@ -131,22 +127,22 @@ void mainloop()
 					}
 				}
 
-				for(int x = posx-(int)floor(brushsize/2.0f); x < posx+(int)ceil(brushsize/2.0f); x++)
+				for(int x = posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); x++)
 				{
-					for(int y = posy-(int)floor(brushsize/2.0f); y < posy+(int)ceil(brushsize/2.0f); y++)
+					for(int y = posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); y++)
 					{
 						if(x >= 0 && y >= 0 && x < cGraphics::world->width && y < cGraphics::world->height)
 						{
 							cCube* c = &cGraphics::world->cubes[y][x];
 							if(cGraphics::cMouse::lbuttondown && !cGraphics::cMouse::rbuttondown)
 							{
-								if (!cGraphics::slope || (x > posx-(int)floor(brushsize/2.0f)) && y > posy-(int)floor(brushsize/2.0f))
+								if (!cGraphics::slope || (x > posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)) && y > posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f))
 									c->cell1-=1;
-								if (!cGraphics::slope || (x < posx+(int)ceil(brushsize/2.0f)-1) && y > posy-(int)floor(brushsize/2.0f))
+								if (!cGraphics::slope || (x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1) && y > posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f))
 									c->cell2-=1;
-								if (!cGraphics::slope || (x > posx-(int)floor(brushsize/2.0f)) && y < posy+(int)ceil(brushsize/2.0f)-1)
+								if (!cGraphics::slope || (x > posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)) && y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1)
 									c->cell3-=1;
-								if (!cGraphics::slope || (x < posx+(int)ceil(brushsize/2.0f)-1) && y < posy+(int)ceil(brushsize/2.0f)-1)
+								if (!cGraphics::slope || (x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1) && y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1)
 									c->cell4-=1;
 								if(ctrl)
 								{
@@ -158,13 +154,13 @@ void mainloop()
 							}
 							if(cGraphics::cMouse::lbuttondown && cGraphics::cMouse::rbuttondown)
 							{
-								if (!cGraphics::slope || (x > posx-(int)floor(brushsize/2.0f)) && y > posy-(int)floor(brushsize/2.0f))
+								if (!cGraphics::slope || (x > posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)) && y > posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f))
 									c->cell1+=1;
-								if (!cGraphics::slope || (x < posx+(int)ceil(brushsize/2.0f)-1) && y > posy-(int)floor(brushsize/2.0f))
+								if (!cGraphics::slope || (x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1) && y > posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f))
 									c->cell2+=1;
-								if (!cGraphics::slope || (x > posx-(int)floor(brushsize/2.0f)) && y < posy+(int)ceil(brushsize/2.0f)-1)
+								if (!cGraphics::slope || (x > posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)) && y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1)
 									c->cell3+=1;
-								if (!cGraphics::slope || (x < posx+(int)ceil(brushsize/2.0f)-1) && y < posy+(int)ceil(brushsize/2.0f)-1)
+								if (!cGraphics::slope || (x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1) && y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1)
 									c->cell4+=1;
 								if(ctrl)
 								{
@@ -226,13 +222,13 @@ void mainloop()
 		}
 	}
 
-	static eMode lasteditmode = editmode;
+	static eMode lasteditmode = cSettings::editMode;
 	
-	if(editmode != lasteditmode)
+	if(cSettings::editMode != lasteditmode)
 	{
-		lasteditmode = editmode;
+		lasteditmode = cSettings::editMode;
 		cWindow* w = cWM::getWindow(WT_MODELOVERVIEW);
-		if(editmode == MODE_OBJECTS)
+		if(cSettings::editMode == MODE_OBJECTS)
 		{
 			if(w == NULL)
 				cWM::addWindow(new cModelOverViewWindow());
@@ -247,7 +243,7 @@ void mainloop()
 
 
 		w = cWM::getWindow(WT_LIGHTOVERVIEW);
-		if (editmode == MODE_LIGHTS)
+		if (cSettings::editMode == MODE_LIGHTS)
 		{
 			if(w == NULL)
 				cWM::addWindow(new cLightOverViewWindow());
@@ -261,7 +257,7 @@ void mainloop()
 			w->close();
 
 		w = cWM::getWindow(WT_SOUNDOVERVIEW);
-		if (editmode == MODE_SOUNDS)
+		if (cSettings::editMode == MODE_SOUNDS)
 		{
 			if(w == NULL)
 				cWM::addWindow(new cSoundOverViewWindow());
@@ -275,7 +271,7 @@ void mainloop()
 			w->close();
 
 		w = cWM::getWindow(WT_TEXTURETOOLS);
-		if (editmode == MODE_TEXTUREPAINT)
+		if (cSettings::editMode == MODE_TEXTUREPAINT)
 		{
 			if(w == NULL)
 				cWM::addWindow(new cTextureToolsWindow());
@@ -292,7 +288,7 @@ void mainloop()
 	}
 
 	if (!cGraphics::draw())
-		running = false;
+		cSettings::running = false;
 	SDL_GL_SwapBuffers();
 	renderMutex->unlock();
 	Sleep(1);
@@ -446,14 +442,14 @@ int main(int argc, char *argv[])
 	}
 	std::string language = cSettings::config.FirstChildElement("config")->FirstChildElement("language")->FirstChild()->Value();
 	language = language.substr(language.find("=")+1);
-	msgtable = cFileSystem::getXml("data/" + language + ".txt");
+	cSettings::msgTable = cFileSystem::getXml("data/" + language + ".txt");
 
 	cMenu* mm;
 
 
 	models = new cMenu();
 //	models->parent = NULL;
-//	models->title = msgtable[MENU_MODELS]; 
+//	models->title = cSettings::msgTable[MENU_MODELS]; 
 	models->item = false; 
 	models->drawStyle = 1; 
 	models->y = 20; 
@@ -641,9 +637,9 @@ int main(int argc, char *argv[])
 	ADDMENU2(file,		cGraphics::menu, GetMsg("menu/file/TITLE"),		posx); // File
 	ADDMENU2(rnd,		cGraphics::menu, GetMsg("menu/generate/TITLE"),	posx); // Generate
 	ADDMENU2(view,		cGraphics::menu, GetMsg("menu/view/TITLE"),		posx); // view
-	ADDMENU2(mode,		cGraphics::menu, GetMsg("menu/editmode/TITLE"),	posx); // edit mode
+	ADDMENU2(mode,		cGraphics::menu, GetMsg("menu/cSettings::editMode/TITLE"),	posx); // edit mode
 	ADDMENU2(edit,		cGraphics::menu, GetMsg("menu/edit/TITLE"),		posx); // edit
-	//ADDMENU2(models,		menu, msgtable[MENU_MODELS],	posx); // models
+	//ADDMENU2(models,		menu, cSettings::msgTable[MENU_MODELS],	posx); // models
 //	models->parent = menu;
 //	menu->items.push_back(models);
 //	models->x = posx;
@@ -707,10 +703,10 @@ int main(int argc, char *argv[])
 	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/TOPCAMERA"),				&MenuCommand_toggle, (void*)&cGraphics::view.topCamera);
 	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/SIDECAMERA"),				&MenuCommand_toggle, (void*)&cGraphics::view.sideCamera);
 
-	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/TEXTUREEDIT"),				&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,GetMsg("menu/cSettings::editMode/TEXTUREEDIT"),				&MenuCommand_mode);
 	mm->ticked = true;
-	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/GLOBALHEIGHTEDIT"),			&MenuCommand_mode);
-	ADDMENU(editdetail,mode,GetMsg("menu/editmode/DETAILTERRAINEDIT"),		400,100);
+	ADDMENUITEM(mm,mode,GetMsg("menu/cSettings::editMode/GLOBALHEIGHTEDIT"),			&MenuCommand_mode);
+	ADDMENU(editdetail,mode,GetMsg("menu/cSettings::editMode/DETAILTERRAINEDIT"),		400,100);
 
 	ADDMENUITEM(mm, editdetail, "1",										&MenuCommand_mode_detail);
 	ADDMENUITEM(mm, editdetail, "2",										&MenuCommand_mode_detail);
@@ -720,16 +716,16 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm, editdetail, "32",										&MenuCommand_mode_detail);
 	ADDMENUITEM(mm, editdetail, "64",										&MenuCommand_mode_detail);
 
-	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/WALLEDIT"),					&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/OBJECTEDIT"),					&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/GATEDIT"),					&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/WATEREDIT"),					&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/EFFECTSEDIT"),				&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/SOUNDSEDIT"),					&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/LIGHTSEDIT"),					&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/OBJECTGROUPEDIT"),			&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/SPRITEEDIT"),					&MenuCommand_mode);
-	ADDMENUITEM(mm,mode,GetMsg("menu/editmode/TEXTUREPAINTEDIT"),			&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,GetMsg("menu/cSettings::editMode/WALLEDIT"),					&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,GetMsg("menu/cSettings::editMode/OBJECTEDIT"),					&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,GetMsg("menu/cSettings::editMode/GATEDIT"),					&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,GetMsg("menu/cSettings::editMode/WATEREDIT"),					&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,GetMsg("menu/cSettings::editMode/EFFECTSEDIT"),				&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,GetMsg("menu/cSettings::editMode/SOUNDSEDIT"),					&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,GetMsg("menu/cSettings::editMode/LIGHTSEDIT"),					&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,GetMsg("menu/cSettings::editMode/OBJECTGROUPEDIT"),			&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,GetMsg("menu/cSettings::editMode/SPRITEEDIT"),					&MenuCommand_mode);
+	ADDMENUITEM(mm,mode,GetMsg("menu/cSettings::editMode/TEXTUREPAINTEDIT"),			&MenuCommand_mode);
 
 
 	ADDMENU(speed,edit, GetMsg("menu/edit/SPEED"),						480, 100);
@@ -933,7 +929,7 @@ int main(int argc, char *argv[])
 	
 	lasttimer = SDL_GetTicks();
 	renderMutex = new cBMutex();
-	while( running )
+	while( cSettings::running )
 		mainloop();
 	delete renderMutex;
 
@@ -974,7 +970,7 @@ int process_events()
 		{
 		case SDL_QUIT:
 			if(cWM::confirmWindow("Are you sure you want to quit?"))
-				running = false;
+				cSettings::running = false;
 			break;
 		case SDL_KEYUP:
 			keys[event.key.keysym.sym-SDLK_FIRST] = 0;
@@ -982,7 +978,7 @@ int process_events()
 				return 0;
 #ifdef _DEBUG
 			if(keymap[event.key.keysym.sym] == SDLK_ESCAPE)
-				running = false;
+				cSettings::running = false;
 #endif
 			switch (event.key.keysym.sym)
 			{
@@ -1026,7 +1022,7 @@ int process_events()
 
 		if(go == 0)
 		{
-			switch(editmode)
+			switch(cSettings::editMode)
 			{
 			case MODE_TEXTURE:			processManagement.textureedit_process_events(event);		break;
 			case MODE_HEIGHTDETAIL:		processManagement.detailheightedit_process_events(event);	break;
@@ -1471,7 +1467,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				cGraphics::cMouse::x = event.motion.x;
 				cGraphics::cMouse::y = event.motion.y;
 
-				if(movement < 3 && (editmode == MODE_OBJECTS || editmode == MODE_EFFECTS))
+				if(movement < 3 && (cSettings::editMode == MODE_OBJECTS || cSettings::editMode == MODE_EFFECTS))
 				{
 					cGraphics::worldContainer->settings.selectedObject = -1;
 					return 1;
@@ -1545,25 +1541,25 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			case SDLK_F1:
 				if((event.key.keysym.mod&KMOD_SHIFT) == 0 && cGraphics::world)
 				{
-					editmode = MODE_TEXTURE;
+					cSettings::editMode = MODE_TEXTURE;
 					if (cGraphics::worldContainer->settings.texturestart >= (int)cGraphics::world->textures.size())
 						cGraphics::worldContainer->settings.texturestart = 0;
 				}
 				else
 				{
-					editmode = MODE_SPRITE;
+					cSettings::editMode = MODE_SPRITE;
 				}
 				break;
 			case SDLK_F2:
 				if((event.key.keysym.mod&KMOD_SHIFT) == 0 && cGraphics::world)
 				{
-					editmode = MODE_HEIGHTGLOBAL;
+					cSettings::editMode = MODE_HEIGHTGLOBAL;
 					if (cGraphics::worldContainer->settings.texturestart >= (int)cGraphics::world->textures.size())
 						cGraphics::worldContainer->settings.texturestart = 0;
 				}
 				else if(cGraphics::world)
 				{
-					editmode = MODE_TEXTUREPAINT;
+					cSettings::editMode = MODE_TEXTUREPAINT;
 					if (cGraphics::worldContainer->settings.texturestart >= (int)cGraphics::world->textures.size())
 						cGraphics::worldContainer->settings.texturestart = 0;
 				}
@@ -1571,55 +1567,55 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			case SDLK_F3:
 				if(!cGraphics::world)
 					break;
-				editmode = MODE_HEIGHTDETAIL;
+				cSettings::editMode = MODE_HEIGHTDETAIL;
 				if (cGraphics::worldContainer->settings.texturestart >= (int)cGraphics::world->textures.size())
 					cGraphics::worldContainer->settings.texturestart = 0;
 				break;
 			case SDLK_F4:
 				if(!cGraphics::world)
 					break;
-				editmode = MODE_WALLS;
+				cSettings::editMode = MODE_WALLS;
 				break;
 			case SDLK_F5:
 				if(!cGraphics::world)
 					break;
-				editmode = MODE_OBJECTS;
+				cSettings::editMode = MODE_OBJECTS;
 				if (cGraphics::worldContainer->settings.texturestart >= (int)cGraphics::world->textures.size())
 					cGraphics::worldContainer->settings.texturestart = 0;
 				break;
 			case SDLK_F6:
 				if(!cGraphics::world)
 					break;
-				editmode = MODE_GAT;
+				cSettings::editMode = MODE_GAT;
 				if (cGraphics::worldContainer->settings.texturestart >= (int)cGraphics::gatTiles.size()-1)
 					cGraphics::worldContainer->settings.texturestart = 0;
 				break;
 			case SDLK_F7:
 				if(!cGraphics::world)
 					break;
-				editmode = MODE_WATER;
+				cSettings::editMode = MODE_WATER;
 				cGraphics::worldContainer->settings.texturestart = cGraphics::world->water.type;
 				break;
 			case SDLK_F8:
 				if(!cGraphics::world)
 					break;
-				editmode = MODE_EFFECTS;
+				cSettings::editMode = MODE_EFFECTS;
 				cGraphics::worldContainer->settings.selectedObject = -1;
 				break;
 			case SDLK_F9:
 				if(!cGraphics::world)
 					break;
-				editmode = MODE_SOUNDS;
+				cSettings::editMode = MODE_SOUNDS;
 				break;
 			case SDLK_F10:
 				if(!cGraphics::world)
 					break;
-				editmode = MODE_LIGHTS;
+				cSettings::editMode = MODE_LIGHTS;
 				break;
 			case SDLK_F11:
 				if(!cGraphics::world)
 					break;
-				editmode = MODE_OBJECTGROUP;
+				cSettings::editMode = MODE_OBJECTGROUP;
 				break;
 			case SDLK_1:
 			case SDLK_2:
@@ -1715,7 +1711,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				if((event.key.keysym.mod&KMOD_SHIFT) != 0)
 				{
 				if (!cGraphics::draw(false))
-					running = false;
+					cSettings::running = false;
 				SDL_GL_SwapBuffers();
 
 				}

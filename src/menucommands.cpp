@@ -22,9 +22,6 @@
 #include "plugins/base/base.h"
 #include "settings.h"
 
-extern bool running;
-extern eMode editmode;
-extern int brushsize;
 int process_events( );
 extern std::vector<std::string> objectfiles;
 extern cMenu* mode;
@@ -33,7 +30,7 @@ extern cMenu* speed;
 extern cMenu* models;
 extern cMenu* currentobject;
 extern TiXmlDocument sprites;
-extern double mouseclickx, mouseclicky, mouseclickz;
+//extern double mouseclickx, mouseclicky, mouseclickz;
 extern bool boundingBoxCollisions;
 
 void mainloop();
@@ -307,7 +304,7 @@ MENUCOMMAND(saveAs)
 }
 MENUCOMMAND(exit)
 {
-	running = false;
+	cSettings::running = false;
 	return true;
 }	
 MENUCOMMAND(undo)
@@ -393,8 +390,8 @@ MENUCOMMAND(random1)
 		}
 	}
 
-	eMode m = editmode;
-	editmode = MODE_HEIGHTDETAIL;
+	eMode m = cSettings::editMode;
+	cSettings::editMode = MODE_HEIGHTDETAIL;
 
 	SDL_Event ev;
 	ev.type = SDL_KEYDOWN;
@@ -402,19 +399,19 @@ MENUCOMMAND(random1)
 	for(int i = 0; i < smooth; i++)
 		SDL_PushEvent(&ev);
 
-	int b = brushsize;
+	int b = cGraphics::worldContainer->settings.brushSizeDetailHeight;
 	cGraphics::cMouse::x3d = cGraphics::world->width*5;
 	cGraphics::cMouse::z3d = cGraphics::world->height*5;
-	brushsize = cGraphics::world->width+cGraphics::world->height;
+	cGraphics::worldContainer->settings.brushSizeDetailHeight = cGraphics::world->width+cGraphics::world->height;
 	
 	process_events();
-	brushsize = b;
+	cGraphics::worldContainer->settings.brushSizeDetailHeight = b;
 
 
 	ev.type = SDL_KEYUP;
 	ev.key.keysym.sym = SDLK_s;
 	SDL_PushEvent(&ev);
-	editmode = m;
+	cSettings::editMode = m;
 
 	return true;
 }
@@ -629,8 +626,8 @@ MENUCOMMAND(random2)
 	}
 
 
-	eMode m = editmode;
-	editmode = MODE_HEIGHTDETAIL;
+	eMode m = cSettings::editMode;
+	cSettings::editMode = MODE_HEIGHTDETAIL;
 
 	SDL_Event ev;
 	ev.type = SDL_KEYDOWN;
@@ -638,16 +635,16 @@ MENUCOMMAND(random2)
 	for(i = 0; i < smooth; i++)
 		SDL_PushEvent(&ev);
 
-	int b = brushsize;
+	int b = cGraphics::worldContainer->settings.brushSizeDetailHeight;
 	cGraphics::cMouse::x3d = cGraphics::world->width*5;
 	cGraphics::cMouse::z3d = cGraphics::world->height*5;
-	brushsize = cGraphics::world->width+cGraphics::world->height;
+	cGraphics::worldContainer->settings.brushSizeDetailHeight = cGraphics::world->width+cGraphics::world->height;
 	
 	process_events();
 	cGraphics::draw();
 	SDL_GL_SwapBuffers();
 
-	brushsize = b;
+	cGraphics::worldContainer->settings.brushSizeDetailHeight = b;
 
 
 	ev.type = SDL_KEYUP;
@@ -656,7 +653,7 @@ MENUCOMMAND(random2)
 
 
 
-	editmode = m;
+	cSettings::editMode = m;
 
 	for(y = 0; y < cGraphics::world->height; y++)
 	{
@@ -1109,8 +1106,8 @@ MENUCOMMAND(random4)
 			cGraphics::world->cubes[y][x].cell4 = f;
 		}
 	}
-	eMode m = editmode;
-	editmode = MODE_HEIGHTDETAIL;
+	eMode m = cSettings::editMode;
+	cSettings::editMode = MODE_HEIGHTDETAIL;
 
 	SDL_Event ev;
 	ev.type = SDL_KEYDOWN;
@@ -1118,19 +1115,19 @@ MENUCOMMAND(random4)
 	for(i = 0; i < 3; i++)
 		SDL_PushEvent(&ev);
 
-	int b = brushsize;
+	int b = cGraphics::worldContainer->settings.brushSizeDetailHeight;
 	cGraphics::cMouse::x3d = cGraphics::world->width*5;
 	cGraphics::cMouse::z3d = cGraphics::world->height*5;
-	brushsize = cGraphics::world->width+cGraphics::world->height;
+	cGraphics::worldContainer->settings.brushSizeDetailHeight = cGraphics::world->width+cGraphics::world->height;
 	
 	process_events();
-	brushsize = b;
+	cGraphics::worldContainer->settings.brushSizeDetailHeight = b;
 
 
 	ev.type = SDL_KEYUP;
 	ev.key.keysym.sym = SDLK_s;
 	SDL_PushEvent(&ev);
-	editmode = m;
+	cSettings::editMode = m;
 
 
 
@@ -1204,65 +1201,65 @@ MENUCOMMAND(mode)
 		mode->items[i]->ticked = false;
 	src->ticked = true;
 
-	if(title == GetMsg("menu/editmode/GLOBALHEIGHTEDIT"))
+	if(title == GetMsg("menu/cSettings::editMode/GLOBALHEIGHTEDIT"))
 	{
-		editmode = MODE_HEIGHTGLOBAL;
+		cSettings::editMode = MODE_HEIGHTGLOBAL;
 		if (cGraphics::worldContainer->settings.texturestart >= (int)cGraphics::world->textures.size())
 			cGraphics::worldContainer->settings.texturestart = 0;
 	}
-	else if (title == GetMsg("menu/editmode/DETAILTERRAINEDIT"))
+	else if (title == GetMsg("menu/cSettings::editMode/DETAILTERRAINEDIT"))
 	{
-		editmode = MODE_HEIGHTDETAIL;
+		cSettings::editMode = MODE_HEIGHTDETAIL;
 		if (cGraphics::worldContainer->settings.texturestart >= (int)cGraphics::world->textures.size())
 			cGraphics::worldContainer->settings.texturestart = 0;
 	}
-	else if (title == GetMsg("menu/editmode/TEXTUREEDIT"))
+	else if (title == GetMsg("menu/cSettings::editMode/TEXTUREEDIT"))
 	{
-		editmode = MODE_TEXTURE;
+		cSettings::editMode = MODE_TEXTURE;
 		if (cGraphics::worldContainer->settings.texturestart >= (int)cGraphics::world->textures.size())
 			cGraphics::worldContainer->settings.texturestart = 0;
 	}
-	else if (title == GetMsg("menu/editmode/WALLEDIT"))
+	else if (title == GetMsg("menu/cSettings::editMode/WALLEDIT"))
 	{
-		editmode = MODE_WALLS;
+		cSettings::editMode = MODE_WALLS;
 	}
-	else if (title == GetMsg("menu/editmode/OBJECTEDIT"))
+	else if (title == GetMsg("menu/cSettings::editMode/OBJECTEDIT"))
 	{
-		editmode = MODE_OBJECTS;
+		cSettings::editMode = MODE_OBJECTS;
 		if (cGraphics::worldContainer->settings.texturestart >= (int)cGraphics::world->textures.size())
 			cGraphics::worldContainer->settings.texturestart = 0;
 	}
-	else if (title == GetMsg("menu/editmode/GATEDIT"))
+	else if (title == GetMsg("menu/cSettings::editMode/GATEDIT"))
 	{
-		editmode = MODE_GAT;
+		cSettings::editMode = MODE_GAT;
 		if (cGraphics::worldContainer->settings.texturestart >= 6)
 			cGraphics::worldContainer->settings.texturestart = 0;
 	}
-	else if (title == GetMsg("menu/editmode/WATEREDIT"))
+	else if (title == GetMsg("menu/cSettings::editMode/WATEREDIT"))
 	{
-		editmode = MODE_WATER;
+		cSettings::editMode = MODE_WATER;
 		cGraphics::worldContainer->settings.texturestart = cGraphics::world->water.type;
 	}
-	else if (title == GetMsg("menu/editmode/EFFECTSEDIT"))
+	else if (title == GetMsg("menu/cSettings::editMode/EFFECTSEDIT"))
 	{
-		editmode = MODE_EFFECTS;
+		cSettings::editMode = MODE_EFFECTS;
 		cGraphics::worldContainer->settings.selectedObject = -1;
 	}
-	else if (title == GetMsg("menu/editmode/SOUNDSEDIT"))
+	else if (title == GetMsg("menu/cSettings::editMode/SOUNDSEDIT"))
 	{
-		editmode = MODE_SOUNDS;
+		cSettings::editMode = MODE_SOUNDS;
 	}
-	else if (title == GetMsg("menu/editmode/LIGHTSEDIT"))
+	else if (title == GetMsg("menu/cSettings::editMode/LIGHTSEDIT"))
 	{
-		editmode = MODE_LIGHTS;
+		cSettings::editMode = MODE_LIGHTS;
 	}
-	else if (title == GetMsg("menu/editmode/OBJECTGROUPEDIT"))
+	else if (title == GetMsg("menu/cSettings::editMode/OBJECTGROUPEDIT"))
 	{
-		editmode = MODE_OBJECTGROUP;
+		cSettings::editMode = MODE_OBJECTGROUP;
 	}
-	else if (title == GetMsg("menu/editmode/SPRITEEDIT"))
+	else if (title == GetMsg("menu/cSettings::editMode/SPRITEEDIT"))
 	{
-		editmode = MODE_SPRITE;
+		cSettings::editMode = MODE_SPRITE;
 	}
 	return true;
 }
@@ -1275,8 +1272,8 @@ MENUCOMMAND(mode_detail)
 	for(i = 0; i < editdetail->items.size(); i++)
 		editdetail->items[i]->ticked = false;
 	src->ticked = true;
-	editmode = MODE_HEIGHTDETAIL;
-	brushsize = atoi(src->title.c_str());
+	cSettings::editMode = MODE_HEIGHTDETAIL;
+	cGraphics::worldContainer->settings.brushSizeDetailHeight = atoi(src->title.c_str());
 
 	return true;
 }
@@ -1299,7 +1296,7 @@ MENUCOMMAND(model)
 
 	cGraphics::previewModel->pos = cVector3(40,-40,-40);
 
-	if (editmode != MODE_OBJECTS)
+	if (cSettings::editMode != MODE_OBJECTS)
 		cGraphics::previewColor = 200;
 	currentobject = src;
 	return true;
@@ -1459,7 +1456,7 @@ MENUCOMMAND(gatcollision2)
 
 
 
-cVector3 lightpos = cVector3(-20000,20000,-20000);
+//cVector3 lightpos = cVector3(-20000,20000,-20000);
 bool selectonly;
 bool lightonly;
 bool noshadow;
@@ -3179,7 +3176,7 @@ MENUCOMMAND(addfavorite)
 	l.color.x = atof(n->FirstChildElement("color")->Attribute("r"));
 	l.color.y = atof(n->FirstChildElement("color")->Attribute("g"));
 	l.color.z = atof(n->FirstChildElement("color")->Attribute("b"));
-	l.pos = cVector3(mouseclickx/5, mouseclicky+atoi(n->FirstChildElement("height")->FirstChild()->Value()), mouseclickz/5);
+	l.pos = cVector3(cGraphics::cMouse::click3dx/5, cGraphics::cMouse::click3dy+atoi(n->FirstChildElement("height")->FirstChild()->Value()), cGraphics::cMouse::click3dz/5);
 	l.todo = std::string(buf, 40);
 	l.todo2 = atoi(n->FirstChildElement("brightness")->FirstChild()->Value());
 	l.maxLightIncrement = atoi(n->FirstChildElement("maxlight")->FirstChild()->Value());
@@ -3932,10 +3929,10 @@ MENUCOMMAND(makeMinimaps)
 		for(int iii = 0; iii < 20; iii++)
 		{
 			if (!cGraphics::draw(false))
-				running = false;
+				cSettings::running = false;
 			SDL_GL_SwapBuffers();
 			if (!cGraphics::draw(false))
-				running = false;
+				cSettings::running = false;
 			SDL_GL_SwapBuffers();
 			
 			if(pixels)
@@ -3981,7 +3978,7 @@ MENUCOMMAND(makeMinimaps)
 		yto = mindist;
 		cGraphics::worldContainer->camera.height = minheight;
 		if (!cGraphics::draw(false))
-			running = false;
+			cSettings::running = false;
 		SDL_GL_SwapBuffers();
 
 		if(pixels)

@@ -8,8 +8,6 @@
 #include <GL/glu.h>												// Header File For The GLu32 Library
 #include "window.h"
 #include <graphics.h>
-extern cGraphicsBase Graphics;
-extern cWindowObject* draggingObject;
 
 cWindowScrollPanel::~cWindowScrollPanel()
 {
@@ -253,7 +251,7 @@ void cWindowScrollPanel::onClick()
 	int xx = (int)cGraphics::cMouse::x;
 	xx -= realX();
 	xx -= parent->getX();
-	int yy = (Graphics.h()-(int)cGraphics::cMouse::y);
+	int yy = (cGraphics::h()-(int)cGraphics::cMouse::y);
 	yy -= realY();
 	yy -= parent->getY();
 
@@ -309,7 +307,7 @@ void cWindowScrollPanel::onClick()
 		}
 		else if (yy > 14)
 		{
-			scrollposy = (int)((h-(((Graphics.h()-cGraphics::cMouse::y)+(ybarheight/2)) -parent->getY() - ybarheight)) / (float)(h-16)) * innerheight - h;
+			scrollposy = (int)((h-(((cGraphics::h()-cGraphics::cMouse::y)+(ybarheight/2)) -parent->getY() - ybarheight)) / (float)(h-16)) * innerheight - h;
 			scrollposy = (int)min(max(scrollposy, 0), innerheight-h);
 		}	
 	}
@@ -321,7 +319,7 @@ void cWindowScrollPanel::drag()
 	int xx = (int)cGraphics::cMouse::x;
 	xx -= realX();
 	xx -= parent->getX();
-	int yy = (Graphics.h()-(int)cGraphics::cMouse::y);
+	int yy = (cGraphics::h()-(int)cGraphics::cMouse::y);
 	yy -= realY();
 	yy -= parent->getY();
 	int ybarheight = (int)max((int)(((float)h/(float)innerheight)*h), 16);
@@ -338,10 +336,10 @@ void cWindowScrollPanel::drag()
 
 	if (cGraphics::cMouse::xStart - realX() - parent->getX() > w-14 && cGraphics::cMouse::xStart - realX() - parent->getX() < w)
 	{
-		scrollposy = (int)(((h-(((Graphics.h()-cGraphics::cMouse::y)+(ybarheight/2)) -parent->getY() - ybarheight)) / (float)(h-16)) * innerheight - h);
+		scrollposy = (int)(((h-(((cGraphics::h()-cGraphics::cMouse::y)+(ybarheight/2)) -parent->getY() - ybarheight)) / (float)(h-16)) * innerheight - h);
 		scrollposy = (int)min(max(scrollposy, 0), innerheight-h);
 	}
-	else if ((Graphics.h()-cGraphics::cMouse::yStart) - parent->getY() - realY() < 14)
+	else if ((cGraphics::h()-cGraphics::cMouse::yStart) - parent->getY() - realY() < 14)
 	{
 		scrollposx = (int)((cGraphics::cMouse::x +(xbarwidth/2)- parent->getX() - xbarwidth) / (float)(w-16))*innerwidth;
 		scrollposx = (int)min(max(scrollposx, 0), innerwidth-w);

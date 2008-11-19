@@ -212,27 +212,6 @@ template <class T> int linsearch(T needle, std::vector<T> &haystack)
 }
 
 
-
-enum eMode
-{
-	MODE_TEXTURE,
-	MODE_HEIGHTDETAIL,
-	MODE_HEIGHTGLOBAL,
-	MODE_WALLS,
-	MODE_OBJECTS,
-	MODE_GAT,
-	MODE_WATER,
-	MODE_EFFECTS,
-	MODE_SOUNDS,
-	MODE_LIGHTS,
-	MODE_OBJECTGROUP,
-	MODE_SPRITE,
-	MODE_TEXTUREPAINT,
-};
-
-
-
-
 bool LineIntersectPolygon( cVector3 *,int,cVector3 &,cVector3 &, float &);
 
 /*#ifdef WIN32

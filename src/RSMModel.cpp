@@ -3,8 +3,6 @@
 #include "texturecache.h"
 #include <frustum.h>
 #include "settings.h"
-extern cVector3 lightpos;
-
 bool boundingBoxCollisions = false;
 
 void cRSMModel::load(std::string fname)
@@ -578,6 +576,7 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 			}
 			if(dolightmaps)
 			{
+/*old lightmapping code, can be removed
 				float v[3];
 				cVector3 triangle[3];
 				MatrixMultVect(ModelMatrix, vertices[f->v[0]], v);
@@ -620,7 +619,7 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 						}
 					}
 				}
-
+*/
 
 			}
 
