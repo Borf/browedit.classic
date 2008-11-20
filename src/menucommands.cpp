@@ -2208,7 +2208,7 @@ MENUCOMMAND(tempfunc)
 	t.color[2] = (char)255;
 	t.color[3] = (char)255;
 	t.texture = cGraphics::worldContainer->settings.texturestart + ((int)cGraphics::worldContainer->settings.selectionstart.y - 32) / 288;
-	t.lightmap = 0;
+	t.lightmap = -1;
 	t.u1 = 0;
 	t.v1 = 0;
 
@@ -2615,8 +2615,17 @@ MENUCOMMAND(random5)
 	cGraphics::worldContainer->undoStack->push(new cUndoHeightEdit(0,0,cGraphics::world->width, cGraphics::world->height));
 	float x,y;
 
+	
+	for(i = 0; i < cGraphics::world->lightmaps.size(); i++)
+		delete cGraphics::world->lightmaps[i];
+	cGraphics::world->lightmaps.clear();
+
+	cLightmap* l = new cLightmap();
+	ZeroMemory(l->buf,255);
+	cGraphics::world->lightmaps.push_back(l);
+
 	cGraphics::world->tiles.clear();
-	for(int tex = 0; tex < 5; tex++)
+	for(int tex = 0; tex < 3; tex++)
 	{
 		for(y = 0; y < 4; y++)
 		{

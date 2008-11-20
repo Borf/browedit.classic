@@ -2232,26 +2232,26 @@ void cWorld::draw()
 				glVertex3f(x*10,-c->cell3+0.2,(height-y)*10-10);
 			glEnd();
 		}
-		if (!(cGraphics::wallHeightMax == cVector2(-1,-1)))
+		if (!(cGraphics::worldContainer->settings.wallHeightMax == cVector2(-1,-1)))
 		{
-			cCube* c = &cubes[(int)cGraphics::wallHeightMax.y][(int)cGraphics::wallHeightMax.x];
+			cCube* c = &cubes[(int)cGraphics::worldContainer->settings.wallHeightMax.y][(int)cGraphics::worldContainer->settings.wallHeightMax.x];
 			glColor4f(1,0,0,0.5);
 			glBegin(GL_QUADS);
-				glVertex3f(cGraphics::wallHeightMax.x*10,-c->cell1+0.2,(height-cGraphics::wallHeightMax.y)*10);
-				glVertex3f(cGraphics::wallHeightMax.x*10+10,-c->cell2+0.2,(height-cGraphics::wallHeightMax.y)*10);
-				glVertex3f(cGraphics::wallHeightMax.x*10+10,-c->cell4+0.2,(height-cGraphics::wallHeightMax.y)*10-10);
-				glVertex3f(cGraphics::wallHeightMax.x*10,-c->cell3+0.2,(height-cGraphics::wallHeightMax.y)*10-10);
+				glVertex3f(cGraphics::worldContainer->settings.wallHeightMax.x*10,-c->cell1+0.2,(height-cGraphics::worldContainer->settings.wallHeightMax.y)*10);
+				glVertex3f(cGraphics::worldContainer->settings.wallHeightMax.x*10+10,-c->cell2+0.2,(height-cGraphics::worldContainer->settings.wallHeightMax.y)*10);
+				glVertex3f(cGraphics::worldContainer->settings.wallHeightMax.x*10+10,-c->cell4+0.2,(height-cGraphics::worldContainer->settings.wallHeightMax.y)*10-10);
+				glVertex3f(cGraphics::worldContainer->settings.wallHeightMax.x*10,-c->cell3+0.2,(height-cGraphics::worldContainer->settings.wallHeightMax.y)*10-10);
 			glEnd();
 		}
-		if (!(cGraphics::wallHeightMin == cVector2(-1,-1)))
+		if (!(cGraphics::worldContainer->settings.wallHeightMin == cVector2(-1,-1)))
 		{
-			cCube* c = &cubes[(int)cGraphics::wallHeightMin.y][(int)cGraphics::wallHeightMin.x];
+			cCube* c = &cubes[(int)cGraphics::worldContainer->settings.wallHeightMin.y][(int)cGraphics::worldContainer->settings.wallHeightMin.x];
 			glColor4f(0,1,0,0.5);
 			glBegin(GL_QUADS);
-				glVertex3f(cGraphics::wallHeightMin.x*10,-c->cell1+0.2,(height-cGraphics::wallHeightMin.y)*10);
-				glVertex3f(cGraphics::wallHeightMin.x*10+10,-c->cell2+0.2,(height-cGraphics::wallHeightMin.y)*10);
-				glVertex3f(cGraphics::wallHeightMin.x*10+10,-c->cell4+0.2,(height-cGraphics::wallHeightMin.y)*10-10);
-				glVertex3f(cGraphics::wallHeightMin.x*10,-c->cell3+0.2,(height-cGraphics::wallHeightMin.y)*10-10);
+				glVertex3f(cGraphics::worldContainer->settings.wallHeightMin.x*10,-c->cell1+0.2,(height-cGraphics::worldContainer->settings.wallHeightMin.y)*10);
+				glVertex3f(cGraphics::worldContainer->settings.wallHeightMin.x*10+10,-c->cell2+0.2,(height-cGraphics::worldContainer->settings.wallHeightMin.y)*10);
+				glVertex3f(cGraphics::worldContainer->settings.wallHeightMin.x*10+10,-c->cell4+0.2,(height-cGraphics::worldContainer->settings.wallHeightMin.y)*10-10);
+				glVertex3f(cGraphics::worldContainer->settings.wallHeightMin.x*10,-c->cell3+0.2,(height-cGraphics::worldContainer->settings.wallHeightMin.y)*10-10);
 			glEnd();
 		}
 		glColor4f(1,1,1,1);
@@ -3524,6 +3524,8 @@ int cRealLightMap::texId()
 		{
 			if(cGraphics::world->cubes[y+yy][x+xx].tileUp == -1)
 				continue;
+			if(cGraphics::world->tiles[cGraphics::world->cubes[y+yy][x+xx].tileUp].lightmap == -1)
+				continue;
 			char* b = cGraphics::world->lightmaps[cGraphics::world->tiles[cGraphics::world->cubes[y+yy][x+xx].tileUp].lightmap]->buf;
 			for(int xxx = 0; xxx < 6; xxx++)
 			{
@@ -4216,9 +4218,39 @@ void cWorld::newEmpty(int newWidth,int newHeight)
 	unknown2 = 500;
 	unknown3 = -500;
 	unknown4 = 500;
+
+	
+	
+	
+	cRealLightMap* m = NULL;
+	realLightmaps.resize(height+21, std::vector<cRealLightMap*>(width+21, m));
+	
+	for(y = 0; y < (unsigned int)height+21; y+=21)
+	{
+		for(x = 0; x < (unsigned int)width+21; x+=21)
+		{
+			cRealLightMap* l = new cRealLightMap();
+			l->x = x;
+			l->y = y;
+			realLightmaps[y][x] = l;
+		}
+	}
+	for(y = 0; y < (unsigned int)height; y++)
+	{
+		for(x = 0; x < (unsigned int)width; x++)
+		{
+			cRealLightMap* l = realLightmaps[y - (y%21)][x - (x%21)];
+			if(l != NULL)
+				realLightmaps[y][x] = l;
+			if(l == NULL)
+				Log(1,0,"Something went wrong with the reallightmaps");
+			
+		}
+	}
+	
+	
+	
+	
 	loaded = true;
-
-
-
 	cGraphics::worldContainer->settings.texturestart = 0;
 }

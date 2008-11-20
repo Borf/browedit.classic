@@ -133,6 +133,9 @@ public:
 		GLfloat						lightDiffuse[4];
 		GLfloat						lightPosition[4];
 
+		cVector2					wallHeightMin;
+		cVector2					wallHeightMax;
+
 	};
 
 	cWorldContainer(cWorld* w);
@@ -196,8 +199,6 @@ public:
 	static float									textureGridSizeY;
 	static int										textureBrushSize;
 
-	static cVector2									wallHeightMin;
-	static cVector2									wallHeightMax;
 
 	static cVector3									selectionCenter;
 

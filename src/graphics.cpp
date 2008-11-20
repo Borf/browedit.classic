@@ -638,8 +638,6 @@ bool cGraphics::objectStartDrag = false;
 bool cGraphics::slope = false;
 int cGraphics::quadtreeView = -1;
 int cGraphics::gatType = 0;
-cVector2 cGraphics::wallHeightMin(-1,-1);
-cVector2 cGraphics::wallHeightMax(-1,-1);
 cTexture* cGraphics::texturePreview = NULL;
 bool cGraphics::groupeditmode = false;
 
@@ -817,4 +815,6 @@ cWorldContainer::cSettings::cSettings()
 	flipv				= false;
 	selectionstart		= cVector2(0,0);
 	selectionend		= cVector2(0,0);
+	wallHeightMin		= cVector2(-1,-1);
+	wallHeightMax		= cVector2(-1,-1);
 }

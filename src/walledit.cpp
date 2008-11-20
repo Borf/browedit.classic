@@ -19,10 +19,10 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 					break;
 				if (x < 0 || x > cGraphics::world->width-1)
 					break;
-				if (cGraphics::wallHeightMin == cVector2(x,y))
-					cGraphics::wallHeightMin = cVector2(-1,-1);
+				if (cGraphics::worldContainer->settings.wallHeightMin == cVector2(x,y))
+					cGraphics::worldContainer->settings.wallHeightMin = cVector2(-1,-1);
 				else
-					cGraphics::wallHeightMin = cVector2(x,y);
+					cGraphics::worldContainer->settings.wallHeightMin = cVector2(x,y);
 			}
 			else if(event.button.button == SDL_BUTTON_RIGHT && movement < 3)
 			{
@@ -32,10 +32,10 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 					break;
 				if (x < 0 || x > cGraphics::world->width-1)
 					break;
-				if (cGraphics::wallHeightMax == cVector2(x,y))
-					cGraphics::wallHeightMax = cVector2(-1,-1);
+				if (cGraphics::worldContainer->settings.wallHeightMax == cVector2(x,y))
+					cGraphics::worldContainer->settings.wallHeightMax = cVector2(-1,-1);
 				else
-					cGraphics::wallHeightMax = cVector2(x,y);
+					cGraphics::worldContainer->settings.wallHeightMax = cVector2(x,y);
 
 			}
 			break;
@@ -455,19 +455,19 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 							vmin = min(vmin, cGraphics::world->cubes[yy][x+1].cell1/32.0f);
 							vmax = max(vmax, cGraphics::world->cubes[yy][x+1].cell1/32.0f);
 						}
-						if (!(cGraphics::wallHeightMin == cVector2(-1,-1)))
+						if (!(cGraphics::worldContainer->settings.wallHeightMin == cVector2(-1,-1)))
 						{
-							vmin = min(vmin, cGraphics::world->cubes[(int)cGraphics::wallHeightMin.y][(int)cGraphics::wallHeightMin.x].cell4/32.0f);
-							vmin = min(vmin, cGraphics::world->cubes[(int)cGraphics::wallHeightMin.y][(int)cGraphics::wallHeightMin.x].cell2/32.0f);
-							vmin = min(vmin, cGraphics::world->cubes[(int)cGraphics::wallHeightMin.y][(int)cGraphics::wallHeightMin.x].cell3/32.0f);
-							vmin = min(vmin, cGraphics::world->cubes[(int)cGraphics::wallHeightMin.y][(int)cGraphics::wallHeightMin.x].cell1/32.0f);
+							vmin = min(vmin, cGraphics::world->cubes[(int)cGraphics::worldContainer->settings.wallHeightMin.y][(int)cGraphics::worldContainer->settings.wallHeightMin.x].cell4/32.0f);
+							vmin = min(vmin, cGraphics::world->cubes[(int)cGraphics::worldContainer->settings.wallHeightMin.y][(int)cGraphics::worldContainer->settings.wallHeightMin.x].cell2/32.0f);
+							vmin = min(vmin, cGraphics::world->cubes[(int)cGraphics::worldContainer->settings.wallHeightMin.y][(int)cGraphics::worldContainer->settings.wallHeightMin.x].cell3/32.0f);
+							vmin = min(vmin, cGraphics::world->cubes[(int)cGraphics::worldContainer->settings.wallHeightMin.y][(int)cGraphics::worldContainer->settings.wallHeightMin.x].cell1/32.0f);
 						}
-						if (!(cGraphics::wallHeightMax == cVector2(-1,-1)))
+						if (!(cGraphics::worldContainer->settings.wallHeightMax == cVector2(-1,-1)))
 						{
-							vmax = max(vmax, cGraphics::world->cubes[(int)cGraphics::wallHeightMax.y][(int)cGraphics::wallHeightMax.x].cell4/32.0f);
-							vmax = max(vmax, cGraphics::world->cubes[(int)cGraphics::wallHeightMax.y][(int)cGraphics::wallHeightMax.x].cell2/32.0f);
-							vmax = max(vmax, cGraphics::world->cubes[(int)cGraphics::wallHeightMax.y][(int)cGraphics::wallHeightMax.x].cell3/32.0f);
-							vmax = max(vmax, cGraphics::world->cubes[(int)cGraphics::wallHeightMax.y][(int)cGraphics::wallHeightMax.x].cell1/32.0f);
+							vmax = max(vmax, cGraphics::world->cubes[(int)cGraphics::worldContainer->settings.wallHeightMax.y][(int)cGraphics::worldContainer->settings.wallHeightMax.x].cell4/32.0f);
+							vmax = max(vmax, cGraphics::world->cubes[(int)cGraphics::worldContainer->settings.wallHeightMax.y][(int)cGraphics::worldContainer->settings.wallHeightMax.x].cell2/32.0f);
+							vmax = max(vmax, cGraphics::world->cubes[(int)cGraphics::worldContainer->settings.wallHeightMax.y][(int)cGraphics::worldContainer->settings.wallHeightMax.x].cell3/32.0f);
+							vmax = max(vmax, cGraphics::world->cubes[(int)cGraphics::worldContainer->settings.wallHeightMax.y][(int)cGraphics::worldContainer->settings.wallHeightMax.x].cell1/32.0f);
 						}
 
 
@@ -557,19 +557,19 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 							vmin = min(vmin, cGraphics::world->cubes[y+1][xx].cell2/32.0f);
 							vmax = max(vmax, cGraphics::world->cubes[y+1][xx].cell2/32.0f);
 						}
-						if (!(cGraphics::wallHeightMin == cVector2(-1,-1)))
+						if (!(cGraphics::worldContainer->settings.wallHeightMin == cVector2(-1,-1)))
 						{
-							vmin = min(vmin, cGraphics::world->cubes[(int)cGraphics::wallHeightMin.y][(int)cGraphics::wallHeightMin.x].cell4/32.0f);
-							vmin = min(vmin, cGraphics::world->cubes[(int)cGraphics::wallHeightMin.y][(int)cGraphics::wallHeightMin.x].cell2/32.0f);
-							vmin = min(vmin, cGraphics::world->cubes[(int)cGraphics::wallHeightMin.y][(int)cGraphics::wallHeightMin.x].cell3/32.0f);
-							vmin = min(vmin, cGraphics::world->cubes[(int)cGraphics::wallHeightMin.y][(int)cGraphics::wallHeightMin.x].cell1/32.0f);
+							vmin = min(vmin, cGraphics::world->cubes[(int)cGraphics::worldContainer->settings.wallHeightMin.y][(int)cGraphics::worldContainer->settings.wallHeightMin.x].cell4/32.0f);
+							vmin = min(vmin, cGraphics::world->cubes[(int)cGraphics::worldContainer->settings.wallHeightMin.y][(int)cGraphics::worldContainer->settings.wallHeightMin.x].cell2/32.0f);
+							vmin = min(vmin, cGraphics::world->cubes[(int)cGraphics::worldContainer->settings.wallHeightMin.y][(int)cGraphics::worldContainer->settings.wallHeightMin.x].cell3/32.0f);
+							vmin = min(vmin, cGraphics::world->cubes[(int)cGraphics::worldContainer->settings.wallHeightMin.y][(int)cGraphics::worldContainer->settings.wallHeightMin.x].cell1/32.0f);
 						}
-						if (!(cGraphics::wallHeightMax == cVector2(-1,-1)))
+						if (!(cGraphics::worldContainer->settings.wallHeightMax == cVector2(-1,-1)))
 						{
-							vmax = max(vmax, cGraphics::world->cubes[(int)cGraphics::wallHeightMax.y][(int)cGraphics::wallHeightMax.x].cell4/32.0f);
-							vmax = max(vmax, cGraphics::world->cubes[(int)cGraphics::wallHeightMax.y][(int)cGraphics::wallHeightMax.x].cell2/32.0f);
-							vmax = max(vmax, cGraphics::world->cubes[(int)cGraphics::wallHeightMax.y][(int)cGraphics::wallHeightMax.x].cell3/32.0f);
-							vmax = max(vmax, cGraphics::world->cubes[(int)cGraphics::wallHeightMax.y][(int)cGraphics::wallHeightMax.x].cell1/32.0f);
+							vmax = max(vmax, cGraphics::world->cubes[(int)cGraphics::worldContainer->settings.wallHeightMax.y][(int)cGraphics::worldContainer->settings.wallHeightMax.x].cell4/32.0f);
+							vmax = max(vmax, cGraphics::world->cubes[(int)cGraphics::worldContainer->settings.wallHeightMax.y][(int)cGraphics::worldContainer->settings.wallHeightMax.x].cell2/32.0f);
+							vmax = max(vmax, cGraphics::world->cubes[(int)cGraphics::worldContainer->settings.wallHeightMax.y][(int)cGraphics::worldContainer->settings.wallHeightMax.x].cell3/32.0f);
+							vmax = max(vmax, cGraphics::world->cubes[(int)cGraphics::worldContainer->settings.wallHeightMax.y][(int)cGraphics::worldContainer->settings.wallHeightMax.x].cell1/32.0f);
 						}
 
 
