@@ -955,23 +955,12 @@ void cWorld::save()
 		pFile.write((char*)&i, 4);
 
 
-		unsigned int rnd = rand() % textures.size();
-		while(textures[rnd]->RoFilename.length() > 35)
-			rnd = rand() % textures.size();
 		unsigned int ii;
 		for(i = 0; i < textures.size(); i++)
 		{
 			pFile.write(textures[i]->RoFilename.c_str(), textures[i]->RoFilename.length());
-			if (i == rnd)
-			{
-				for(ii = 0; ii < 40-textures[i]->RoFilename.length(); ii++)
-					pFile.put('\0');
-			}
-			else
-			{
-				for(ii = 0; ii < 40-textures[i]->RoFilename.length(); ii++)
-					pFile.put('\0');
-			}
+			for(ii = 0; ii < 40-textures[i]->RoFilename.length(); ii++)
+				pFile.put('\0');
 			pFile.write(textures[i]->RoFilename2.c_str(), textures[i]->RoFilename2.length());
 			for(ii = 0; ii < 40-textures[i]->RoFilename2.length(); ii++)
 				pFile.put('\0');
@@ -4188,10 +4177,14 @@ void cWorld::newEmpty(int newWidth,int newHeight)
 			cubes[y][x].cell2 = 0;
 			cubes[y][x].cell3 = 0;
 			cubes[y][x].cell4 = 0;
+			cubes[y][x].maxHeight = -99999;
+			cubes[y][x].minHeight = 99999;
 
 			cubes[y][x].tileUp = -1;
 			cubes[y][x].tileSide = -1;
 			cubes[y][x].tileOtherSide = -1;
+
+			cubes[y][x].selected = false;
 
 			cubes[y][x].calcNormal();
 		}
@@ -4250,6 +4243,7 @@ void cWorld::newEmpty(int newWidth,int newHeight)
 	
 	
 	
+	cGraphics::worldContainer->camera.pointer = cVector2(-width*5,-height*5);
 	
 	loaded = true;
 	cGraphics::worldContainer->settings.texturestart = 0;

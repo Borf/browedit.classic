@@ -71,6 +71,7 @@ MENUCOMMAND(mapdatabase);
 MENUCOMMAND(saveOnline);
 MENUCOMMAND(makeMinimaps);
 MENUCOMMAND(switchMap);
+MENUCOMMAND(selectAll);
 
 MENUCOMMAND(rebuildtexturefile);
 MENUCOMMAND(rebuildmodelfile);

@@ -1,7 +1,7 @@
 #include <common.h>
 #include "graphics.h"
 #include "undo.h"
-
+#include <menucommands.h>
 #include "windows/areacopywindow.h"
 
 
@@ -142,8 +142,11 @@ int cProcessManagement::globalheightedit_process_events(SDL_Event &event)
 						((cClipBoardArea*)cClipBoard::currentClipBoard)->startZ = round(cGraphics::cMouse::z3d / 10.0f);
 					}
 				}
-
-
+				break;
+			case SDLK_a:
+				if(event.key.keysym.mod & KMOD_CTRL)
+					MenuCommand_selectAll(NULL);
+				break;
 			default:
 				break;
 			}

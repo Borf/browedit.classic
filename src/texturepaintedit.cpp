@@ -1,6 +1,7 @@
 #include <common.h>
 #include "graphics.h"
 #include "undo.h"
+#include <menucommands.h>
 
 #include "windows/areacopywindow.h"
 
@@ -205,6 +206,11 @@ int cProcessManagement::texturepaintedit_process_events(SDL_Event &event)
 				break;
 			case SDLK_EQUALS:
 				cGraphics::textureBrushSize = min(cGraphics::textureBrushSize+1, 16);
+				break;
+			case SDLK_a:
+				if(event.key.keysym.mod & KMOD_CTRL)
+					MenuCommand_selectAll(NULL);
+				break;
 			default:
 				break;
 			}

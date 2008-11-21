@@ -749,6 +749,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,edit,GetMsg("menu/edit/CLEANLIGHTMAPS"),					&MenuCommand_cleanuplightmaps);
 	ADDMENUITEM(mm,edit,GetMsg("menu/edit/REMOVETEXTURES"),					&MenuCommand_cleantextures);
 	ADDMENUITEMDATALINK(mm,edit,GetMsg("menu/edit/CLEARLIGHTMAPSONEDIT"),		&MenuCommand_toggle, (void*)&cGraphics::clearLightmaps);
+	ADDMENUITEM(mm,edit,GetMsg("menu/edit/SELECTALL"),						&MenuCommand_selectAll);
 
 	ADDMENUITEM(mm,windows,GetMsg("menu/windows/AMBIENTLIGHTING"),			&MenuCommand_ambientlight);
 	ADDMENUITEM(mm,windows,GetMsg("menu/windows/MODELWINDOW"),				&MenuCommand_modelwindow);

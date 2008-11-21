@@ -165,6 +165,8 @@ MENUCOMMAND(close)
 
 MENUCOMMAND(save)
 {
+	if(!cGraphics::world)
+		return false;
 #ifdef WIN32
 	if(cGraphics::world->fileName[0] == '\0')
 	{
@@ -208,6 +210,8 @@ MENUCOMMAND(save)
 
 MENUCOMMAND(quicksave)
 {
+	if(!cGraphics::world)
+		return false;
 	cGraphics::world->quickSave = true;
 #ifdef WIN32
 	if(cGraphics::world->fileName[0] == '\0')
@@ -253,6 +257,8 @@ MENUCOMMAND(quicksave)
 
 MENUCOMMAND(saveAs)
 {
+	if(!cGraphics::world)
+		return false;
 #ifdef WIN32
 	char curdir[100];
 	getcwd(curdir, 100);
@@ -309,6 +315,8 @@ MENUCOMMAND(exit)
 }	
 MENUCOMMAND(undo)
 {
+	if(!cGraphics::world)
+		return false;
 	SDL_Event ev;
 	ev.type = SDL_KEYDOWN;
 	ev.key.keysym.sym = SDLK_u;
@@ -340,6 +348,8 @@ int ClassifyPoint(cVector3 point, cVector3 pO, cVector3 pN)
 
 MENUCOMMAND(random1)
 {
+	if(!cGraphics::world)
+		return false;
 	int height = atoi(cWM::inputWindow("Height:").c_str());
 	int smooth  = atoi(cWM::inputWindow("Smoothing level (use 5-10 for decent results)").c_str());
 	if(height == 0)
@@ -418,6 +428,8 @@ MENUCOMMAND(random1)
 
 MENUCOMMAND(random2)
 {
+	if(!cGraphics::world)
+		return false;
 	unsigned int i;
 	unsigned int smooth  = 3;//atoi(cWM::inputWindow("Smoothing level (use 5-10 for decent results)").c_str());
 
@@ -744,6 +756,8 @@ public:
 
 MENUCOMMAND(random3)
 {
+	if(!cGraphics::world)
+		return false;
 	unsigned int i;
 	int xx,yy;
 
@@ -1042,6 +1056,8 @@ MENUCOMMAND(random3)
 
 MENUCOMMAND(random4)
 {
+	if(!cGraphics::world)
+		return false;
 	unsigned int i;
 	int x,y;
 
@@ -1196,68 +1212,70 @@ MENUCOMMAND(random4)
 
 MENUCOMMAND(mode)
 {
+	if(!cGraphics::world)
+		return false;
 	std::string title = src->title;
 	for(unsigned int i = 0; i < mode->items.size(); i++)
 		mode->items[i]->ticked = false;
 	src->ticked = true;
 
-	if(title == GetMsg("menu/editmode//GLOBALHEIGHTEDIT"))
+	if(title == GetMsg("menu/editmode/GLOBALHEIGHTEDIT"))
 	{
 		cSettings::editMode = MODE_HEIGHTGLOBAL;
 		if (cGraphics::worldContainer->settings.texturestart >= (int)cGraphics::world->textures.size())
 			cGraphics::worldContainer->settings.texturestart = 0;
 	}
-	else if (title == GetMsg("menu/editmode//DETAILTERRAINEDIT"))
+	else if (title == GetMsg("menu/editmode/DETAILTERRAINEDIT"))
 	{
 		cSettings::editMode = MODE_HEIGHTDETAIL;
 		if (cGraphics::worldContainer->settings.texturestart >= (int)cGraphics::world->textures.size())
 			cGraphics::worldContainer->settings.texturestart = 0;
 	}
-	else if (title == GetMsg("menu/editmode//TEXTUREEDIT"))
+	else if (title == GetMsg("menu/editmode/TEXTUREEDIT"))
 	{
 		cSettings::editMode = MODE_TEXTURE;
 		if (cGraphics::worldContainer->settings.texturestart >= (int)cGraphics::world->textures.size())
 			cGraphics::worldContainer->settings.texturestart = 0;
 	}
-	else if (title == GetMsg("menu/editmode//WALLEDIT"))
+	else if (title == GetMsg("menu/editmode/WALLEDIT"))
 	{
 		cSettings::editMode = MODE_WALLS;
 	}
-	else if (title == GetMsg("menu/editmode//OBJECTEDIT"))
+	else if (title == GetMsg("menu/editmode/OBJECTEDIT"))
 	{
 		cSettings::editMode = MODE_OBJECTS;
 		if (cGraphics::worldContainer->settings.texturestart >= (int)cGraphics::world->textures.size())
 			cGraphics::worldContainer->settings.texturestart = 0;
 	}
-	else if (title == GetMsg("menu/editmode//GATEDIT"))
+	else if (title == GetMsg("menu/editmode/GATEDIT"))
 	{
 		cSettings::editMode = MODE_GAT;
 		if (cGraphics::worldContainer->settings.texturestart >= 6)
 			cGraphics::worldContainer->settings.texturestart = 0;
 	}
-	else if (title == GetMsg("menu/editmode//WATEREDIT"))
+	else if (title == GetMsg("menu/editmode/WATEREDIT"))
 	{
 		cSettings::editMode = MODE_WATER;
 		cGraphics::worldContainer->settings.texturestart = cGraphics::world->water.type;
 	}
-	else if (title == GetMsg("menu/editmode//EFFECTSEDIT"))
+	else if (title == GetMsg("menu/editmode/EFFECTSEDIT"))
 	{
 		cSettings::editMode = MODE_EFFECTS;
 		cGraphics::worldContainer->settings.selectedObject = -1;
 	}
-	else if (title == GetMsg("menu/editmode//SOUNDSEDIT"))
+	else if (title == GetMsg("menu/editmode/SOUNDSEDIT"))
 	{
 		cSettings::editMode = MODE_SOUNDS;
 	}
-	else if (title == GetMsg("menu/editmode//LIGHTSEDIT"))
+	else if (title == GetMsg("menu/editmode/LIGHTSEDIT"))
 	{
 		cSettings::editMode = MODE_LIGHTS;
 	}
-	else if (title == GetMsg("menu/editmode//OBJECTGROUPEDIT"))
+	else if (title == GetMsg("menu/editmode/OBJECTGROUPEDIT"))
 	{
 		cSettings::editMode = MODE_OBJECTGROUP;
 	}
-	else if (title == GetMsg("menu/editmode//SPRITEEDIT"))
+	else if (title == GetMsg("menu/editmode/SPRITEEDIT"))
 	{
 		cSettings::editMode = MODE_SPRITE;
 	}
@@ -1266,6 +1284,8 @@ MENUCOMMAND(mode)
 
 MENUCOMMAND(mode_detail)
 {
+	if(!cGraphics::world)
+		return false;
 	unsigned int i;
 	for(i = 0; i < mode->items.size(); i++)
 		mode->items[i]->ticked = (mode->items[i]->title == "Detail Terrain Edit" ? true : false);
@@ -1288,6 +1308,8 @@ MENUCOMMAND(speed)
 
 MENUCOMMAND(model)
 {
+	if(!cGraphics::world)
+		return false;
 	delete cGraphics::previewModel;
 	cGraphics::previewModel = new cRSMModel();
 	cGraphics::previewModel->load(cSettings::roDir + src->data);
@@ -1305,6 +1327,8 @@ MENUCOMMAND(model)
 
 MENUCOMMAND(quadtree)
 {
+	if(!cGraphics::world)
+		return false;
 	int x,y;
 	for(x = 0; x < cGraphics::world->width; x++)
 		for(y = 0; y < cGraphics::world->height; y++)
@@ -1326,6 +1350,8 @@ MENUCOMMAND(quadtree)
 
 MENUCOMMAND(gatheight)
 {
+	if(!cGraphics::world)
+		return false;
 	cGraphics::worldContainer->undoStack->push(new cUndoGatHeightEdit(0,0,cGraphics::world->gattiles[0].size(), cGraphics::world->gattiles.size()));
 	int x,y;
 	for(y = 0; y < cGraphics::world->height; y++)
@@ -1361,6 +1387,8 @@ MENUCOMMAND(gatheight)
 
 MENUCOMMAND(gatcollision2)
 {
+	if(!cGraphics::world)
+		return false;
 	MenuCommand_gatheight(src);
 	int x, y;
 	unsigned int i;
@@ -1669,6 +1697,8 @@ public:
 
 MENUCOMMAND(dolightmaps2)
 {
+	if(!cGraphics::world)
+		return false;
 
 	unsigned int i;
 
@@ -1972,6 +2002,8 @@ BYTE* getLightMap(int x, int y)
 
 MENUCOMMAND(smoothlightmaps)
 {
+	if(!cGraphics::world)
+		return false;
 	std::string strFactor = cWM::inputWindow("Smoothing factor:", "1");
 	if(strFactor == "")
 		return true;
@@ -2032,6 +2064,8 @@ MENUCOMMAND(smoothlightmaps)
 
 MENUCOMMAND(fixcolors)
 {
+	if(!cGraphics::world)
+		return false;
 	int x,y;
 	for(x = 0; x < cGraphics::world->width; x++)
 		for(y = 0; y < cGraphics::world->height; y++)
@@ -2052,6 +2086,8 @@ MENUCOMMAND(fixcolors)
 
 MENUCOMMAND(savelightmaps)
 {
+	if(!cGraphics::world)
+		return false;
 	cGraphics::world->saveLightmap();
 	return true;
 }
@@ -2059,6 +2095,8 @@ MENUCOMMAND(savelightmaps)
 MENUCOMMAND(loadlightmaps)
 {
 
+	if(!cGraphics::world)
+		return false;
 	if(!cGraphics::world->makeLightmapsUnique())
 		return false;
 	cGraphics::world->loadLightmap();
@@ -2070,6 +2108,8 @@ MENUCOMMAND(loadlightmaps)
 
 MENUCOMMAND(addwalls)
 {
+	if(!cGraphics::world)
+		return false;
 	int x,y;
 	for(x = 0; x < cGraphics::world->width-1; x++)
 	{
@@ -2153,6 +2193,8 @@ MENUCOMMAND(addwalls)
 
 MENUCOMMAND(gatcollision)
 {
+	if(!cGraphics::world)
+		return false;
 	int x,y;
 	for(y = 0; y < cGraphics::world->height; y++)
 	{
@@ -2172,6 +2214,8 @@ MENUCOMMAND(gatcollision)
 
 MENUCOMMAND(cleanuplightmaps)
 {
+	if(!cGraphics::world)
+		return false;
 	unsigned int i;
 	std::vector<int> newvalue;
 	std::map<int, bool, std::less<int> > used;
@@ -2199,6 +2243,8 @@ MENUCOMMAND(cleanuplightmaps)
 
 MENUCOMMAND(tempfunc)
 {
+	if(!cGraphics::world)
+		return false;
 	glColor4f(1,1,1,0.7f);
 	glEnable(GL_BLEND);
 
@@ -2279,6 +2325,8 @@ bool mouseouttexture(cMenu* src)
 
 MENUCOMMAND(effect)
 {
+	if(!cGraphics::world)
+		return false;
 	if (selectedeffect != NULL)
 		selectedeffect->ticked = false;
 	src->ticked = true;
@@ -2293,6 +2341,8 @@ MENUCOMMAND(effect)
 
 MENUCOMMAND(toggle)
 {
+	if(!cGraphics::world)
+		return false;
 	if(src->pdata)
 	{
 		*((bool*)src->pdata) = !*((bool*)src->pdata);
@@ -2308,6 +2358,8 @@ MENUCOMMAND(toggle)
 
 MENUCOMMAND(water)
 {
+	if(!cGraphics::world)
+		return false;
 	char buf[100];
 	cWindow* w = new cWaterWindow();
 	sprintf(buf, "%f", cGraphics::world->water.amplitude);		w->objects["amplitude"]->setText(0,buf);
@@ -2321,6 +2373,8 @@ MENUCOMMAND(water)
 
 MENUCOMMAND(cleantextures)
 {
+	if(!cGraphics::world)
+		return false;
 	cGraphics::world->clean();
 	std::vector<bool> used;
 	int i;
@@ -2350,6 +2404,8 @@ MENUCOMMAND(cleantextures)
 
 MENUCOMMAND(ambientlight)
 {
+	if(!cGraphics::world)
+		return false;
 	char buf[100];
 	cWindow* w = new cAmbientLightWindow();
 	sprintf(buf, "%i", cGraphics::world->ambientLight.ambientr);		w->objects["ambientr"]->setText(0,buf);
@@ -2397,6 +2453,8 @@ MENUCOMMAND(modelwindow)
 
 MENUCOMMAND(properties)
 {
+	if(!cGraphics::world)
+		return false;
 	SDL_Event ev;
 	ev.type = SDL_KEYDOWN;
 	ev.key.keysym.sym = SDLK_RETURN;
@@ -2418,6 +2476,8 @@ MENUCOMMAND(preferences)
 
 MENUCOMMAND(fillarea)
 {
+	if(!cGraphics::world)
+		return false;
 	int x,y,i;
 	std::map<int, bool, std::less<int> > used;
 
@@ -2526,6 +2586,8 @@ MENUCOMMAND(favlights)
 
 MENUCOMMAND(exportmapfiles)
 {
+	if(!cGraphics::world)
+		return false;
 #ifdef WIN32
 	CreateDirectory(cGraphics::world->fileName, NULL);
 	CreateDirectory((cGraphics::world->fileName + std::string("\\texture\\")).c_str(), NULL);
@@ -2604,6 +2666,8 @@ MENUCOMMAND(exportmapfiles)
 
 MENUCOMMAND(random5)
 {
+	if(!cGraphics::world)
+		return false;
 	if(cGraphics::world->textures.size() < 3)
 	{
 		cWM::showMessage("You need at least 3 textures for this generator (floor, top and walls)");
@@ -3001,6 +3065,8 @@ void readscript(std::string filename)
 
 MENUCOMMAND(eascript)
 {
+	if(!cGraphics::world)
+		return false;
 	for(unsigned int i = 0; i < cGraphics::world->sprites.size(); i++)
 		delete cGraphics::world->sprites[i];
 
@@ -3112,6 +3178,8 @@ void checknpcs()
 
 MENUCOMMAND(npcscreenies)
 {
+	if(!cGraphics::world)
+		return false;
 #ifdef WIN32
 	WIN32_FIND_DATA FileData;													// thingy for searching through a directory
 	HANDLE hSearch;																// thingy for searching through a directory
@@ -3592,6 +3660,8 @@ MENUCOMMAND(rebuildsoundsfile)
 
 MENUCOMMAND(plugin)
 {
+	if(!cGraphics::world)
+		return false;
 	((cPluginBase*)src->pdata)->action(cGraphics::world);
 	return true;
 }
@@ -3606,6 +3676,8 @@ MENUCOMMAND(mapdatabase)
 
 MENUCOMMAND(saveOnline)
 {
+	if(!cGraphics::world)
+		return false;
 	if(!cWM::confirmWindow("This will save your map. Are you sure you want to save?"))
 		return false;
 	std::string mapname = cWM::inputWindow("Please enter the mapname", cGraphics::world->fileName);
@@ -3885,6 +3957,8 @@ inline void setLightIntensity( BYTE* buf, int yy, int xx, cVector3 worldpos, std
 
 MENUCOMMAND(makeMinimaps)
 {
+	if(!cGraphics::world)
+		return false;
 #define MULTIMINIMAP
 #ifdef MULTIMINIMAP
 	std::vector<std::string> mapnames;
@@ -4056,6 +4130,8 @@ MENUCOMMAND(makeMinimaps)
 
 MENUCOMMAND(switchMap)
 {
+	if(!cGraphics::world)
+		return false;
 	cGraphics::worldContainer->view = cGraphics::view;
 	int newMap = ((cMenuItem*)src)->data3;
 	
@@ -4076,7 +4152,15 @@ MENUCOMMAND(switchMap)
 
 
 
-
+MENUCOMMAND(selectAll)
+{
+	if(!cGraphics::world)
+		return false;
+	for(unsigned int y = 0; y < cGraphics::world->cubes.size(); y++)
+		for(unsigned int x = 0; x < cGraphics::world->cubes[y].size(); x++)
+			cGraphics::world->cubes[y][x].selected = true;
+	return true;
+}
 
 
 

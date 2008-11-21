@@ -349,6 +349,8 @@ void cMenu::click(int xx, int yy)
 					cGraphics::menu->closeMenu();
 					closeMenu();
 					((cMenuItem*)items[i])->proc((cMenuItem*)items[i]);
+					if(cGraphics::world)
+						cGraphics::world->checkSanity();
 					return;
 				}
 				else
