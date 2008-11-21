@@ -2526,7 +2526,7 @@ MENUCOMMAND(fillarea)
 		for(y = 0; y < cGraphics::world->height; y++)
 		{
 			int tile = cGraphics::world->cubes[y][x].tileUp;
-			if(used.find(tile) != used.end())
+			if(used.find(tile) != used.end() && tile != -1)
 			{
 				cTile t = cGraphics::world->tiles[tile];
 				tile = cGraphics::world->tiles.size();
@@ -2536,30 +2536,24 @@ MENUCOMMAND(fillarea)
 			used[tile] = 1;
 ///////////////////////////////////////
 			tile = cGraphics::world->cubes[y][x].tileSide;
-			if (tile != -1)
+			if(used.find(tile) != used.end() && tile != -1)
 			{
-				if(used.find(tile) != used.end())
-				{
-					cTile t = cGraphics::world->tiles[tile];
-					tile = cGraphics::world->tiles.size();
-					cGraphics::world->tiles.push_back(t);
-					cGraphics::world->cubes[y][x].tileSide = tile;
-				}
-				used[tile] = 1;
+				cTile t = cGraphics::world->tiles[tile];
+				tile = cGraphics::world->tiles.size();
+				cGraphics::world->tiles.push_back(t);
+				cGraphics::world->cubes[y][x].tileSide = tile;
 			}
+			used[tile] = 1;
 /////////////////////////////////////
 			tile = cGraphics::world->cubes[y][x].tileOtherSide;
-			if (tile!= -1)
+			if(used.find(tile) != used.end() && tile!= -1)
 			{
-				if(used.find(tile) != used.end())
-				{
-					cTile t = cGraphics::world->tiles[tile];
-					tile = cGraphics::world->tiles.size();
-					cGraphics::world->tiles.push_back(t);
-					cGraphics::world->cubes[y][x].tileOtherSide = tile;
-				}
-				used[tile] = 1;
+				cTile t = cGraphics::world->tiles[tile];
+				tile = cGraphics::world->tiles.size();
+				cGraphics::world->tiles.push_back(t);
+				cGraphics::world->cubes[y][x].tileOtherSide = tile;
 			}
+			used[tile] = 1;
 		}
 	}
 

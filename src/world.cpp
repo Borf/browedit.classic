@@ -2989,21 +2989,22 @@ void cWorld::clean()
 		}
 	}
 
+	int si;
 	count = 0;
-	for(i = lightmaps.size()-1; (signed int)i >= 0; i--)
+	for(si = lightmaps.size()-1; si >= 0; si--)
 	{
-		if (lightmapsused.find(i) == lightmapsused.end())
+		if (lightmapsused.find(si) == lightmapsused.end())
 		{
-			lightmaps[i]->del();
-			lightmaps[i]->del2();
-			delete lightmaps[i];
-			for(ii = i; ii < lightmaps.size()-1; ii++)
+			lightmaps[si]->del();
+			lightmaps[si]->del2();
+			delete lightmaps[si];
+			for(ii = si; ii < lightmaps.size()-1; ii++)
 			{
 				lightmaps[ii] = lightmaps[ii+1];
 			}
 			for(ii = 0; ii < tiles.size(); ii++)
 			{
-				if(tiles[ii].lightmap > (int)i)
+				if(tiles[ii].lightmap > (int)si)
 					tiles[ii].lightmap--;
 			}
 
@@ -3013,7 +3014,7 @@ void cWorld::clean()
 			if(count % 50 == 0)
 				printf(".");
 			if(count % 500 == 0)
-				printf("%i ", i);
+				printf("%i ", si);
 		}
 	}
 
