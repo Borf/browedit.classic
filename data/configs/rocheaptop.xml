@@ -18,7 +18,7 @@
         </sounds>
     </files>
     <graphics>
-        <resx>800</resx>
+        <resx>1200</resx>
         <resy>600</resy>
         <fullscreen>false</fullscreen>
         <bpp>32</bpp>

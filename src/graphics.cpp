@@ -568,7 +568,6 @@ int cGraphicsBase::initGL(void)
 void cGraphics::closeAndCleanup()
 {
 	cGraphicsBase::killGLWindow();
-	world->unload();
 	
 	cTextureCache::unload(splash);
 	unsigned int i;

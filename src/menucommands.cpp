@@ -144,6 +144,8 @@ MENUCOMMAND(opengrf)
 
 MENUCOMMAND(close)
 {
+	if(!cGraphics::world)
+		return false;
 	cGraphics::world->unload();
 	delete cGraphics::worldContainer;
 	cGraphics::worlds.erase(cGraphics::worlds.begin());

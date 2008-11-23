@@ -23,7 +23,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 		case SDL_MOUSEMOTION:
 			if (cGraphics::cMouse::lbuttondown && !cGraphics::cMouse::rbuttondown)
 			{
-				if(cGraphics::objectStartDrag && cGraphics::worldContainer->settings.selectedObject != -1)
+				if(cGraphics::objectStartDrag && cGraphics::worldContainer->settings.selectedObject != -1 && cGraphics::worldContainer->settings.selectedObject < (int)cGraphics::world->models.size())
 				{
 					if (doneAction)
 					{

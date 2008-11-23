@@ -169,7 +169,7 @@ void cWorld::load()
 		cTextureContainer* t = new cTextureContainer();
 		t->RoFilename = s;
 		t->RoFilename2 = std::string(buf+40);
-		t->texture = cTextureCache::load(cSettings::roDir + "data\\texture\\" + s);
+		t->texture = cTextureCache::load(cSettings::roDir + "data\\texture\\" + s, TEX_NEARESTFILTER);
 		textures[i] = t;
 	}
 
