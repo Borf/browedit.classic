@@ -5,6 +5,7 @@
 #include <wm/window.h>
 #include <wm/windowtree.h>
 #include <wm/windowpicturebox.h>
+#include <wm/windowinputbox.h>
 
 
 
@@ -29,6 +30,12 @@ class cTextureWindow : public cWindow
 		void onClick();
 	};
 
+	class cWindowFilterBox : public cWindowInputBox
+	{
+	public:
+		cWindowFilterBox(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		bool onKeyDown(int, bool);
+	};
 
 
 public:

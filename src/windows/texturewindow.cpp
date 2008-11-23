@@ -94,10 +94,14 @@ void cTextureWindow::cWindowTextureCatSelect::onClick()
 	std::vector<std::pair<std::string, std::string> > v;
 	v = *((std::vector<std::pair<std::string, std::string> >*)parent->userfunc(node));
 	
+	std::string filter = parent->objects["filter"]->getText(0);
 	cWindowObject* o;
 	for(i = 0; i < v.size(); i++)
 	{
 		std::pair<std::string, std::string> p = v[i];
+
+		if(filter != "" && p.first.find(filter) == std::string::npos)
+			continue;
 		
 		o = new cWindowTexture(parent);
 		o->alignment = ALIGN_TOPLEFT;
@@ -228,9 +232,13 @@ cTextureWindow::cTextureWindow( ) : cWindow()
 	o->resizeTo(100,100);
 	objects["textures"] = o;
 	
+
+	o = new cWindowFilterBox(this);
+	objects["filter"] = o;
+
 	//		objects["rollup"] = new cWindowRollupButton(this);
 	objects["close"] = new cWindowCloseButton(this);
-	
+	selectedObject = objects["filter"];
 	resizeTo(w,h);
 }
 
@@ -238,9 +246,10 @@ void cTextureWindow::resizeTo( int ww, int hh )
 {
 	cWindow::resizeTo(ww,hh);
 	objects["tree"]->resizeTo(200, innerHeight());
+	objects["filter"]->resizeTo(ww-220, objects["filter"]->getHeight());
 	cWindowScrollPanel* panel = (cWindowScrollPanel*)objects["textures"];
 	panel->moveTo(200, 0);
-	panel->resizeTo(innerWidth()-200, innerHeight());
+	panel->resizeTo(innerWidth()-200, innerHeight()-20);
 	panel->innerwidth = innerWidth()-200;
 	
 	int x = 0;
@@ -273,21 +282,35 @@ void* cTextureWindow::userfunc( void* param )
 
 bool cTextureWindow::onKeyDown( int keyid, bool shift )
 {
-	bool b = cWindow::onKeyDown(keyid, shift);
-	if(!b)
+	if(keyid == SDLK_MINUS)
 	{
-		if(keyid == SDLK_MINUS)
-		{
-			iconSize=(int)(iconSize/1.5);
-			if(iconSize < 1)
-				iconSize = 1;
-			resizeTo(w,h);
-		}
-		if(keyid == SDLK_EQUALS)
-		{
-			iconSize=(int)(iconSize*1.5);
-			resizeTo(w,h);
-		}
+		iconSize=(int)(iconSize/1.5);
+		if(iconSize < 1)
+			iconSize = 1;
+		resizeTo(w,h);
+		return true;
 	}
+	else if(keyid == SDLK_EQUALS)
+	{
+		iconSize=(int)(iconSize*1.5);
+		resizeTo(w,h);
+		return true;
+	}
+	else
+		return cWindow::onKeyDown(keyid, shift);
+}
+
+cTextureWindow::cWindowFilterBox::cWindowFilterBox(cWindow* parent, TiXmlDocument* skin) : cWindowInputBox(parent,skin)
+{
+	alignment = ALIGN_BOTTOMRIGHT;
+	text = "";
+	moveTo(0,0);
+}
+
+
+bool cTextureWindow::cWindowFilterBox::onKeyDown(int keyId, bool shift)
+{
+	bool b = cWindowInputBox::onKeyDown(keyId, shift);
+	parent->objects["tree"]->onClick();
 	return b;
 }

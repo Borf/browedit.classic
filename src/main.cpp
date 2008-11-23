@@ -1682,7 +1682,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 #ifdef _DEBUG
 			case SDLK_d:
 				{
-					MenuCommand_mapdatabase(NULL);
+					if(event.key.keysym.mod & KMOD_CTRL)
+						MenuCommand_mapdatabase(NULL);
 				}
 				break;
 #endif
