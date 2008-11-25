@@ -44,7 +44,7 @@ void cRSMModel::load(std::string fname)
 	{
 		pFile->read(buffer, 40);
 		std::string filename = buffer;
-		cTexture* tex = cTextureCache::load(cSettings::roDir + "data\\texture\\" + filename, TEX_NEARESTFILTER);
+		cTexture* tex = cTextureCache::load(cSettings::roDir + "data\\texture\\" + filename, (eTextureOptions)(TEX_NEARESTFILTER | TEX_NOCLAMP));
 		textures.push_back(tex);
 	}
 

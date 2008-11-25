@@ -10,8 +10,8 @@ class cRSMModel;
 class cRSMModelFace
 {
 public:
-	short v[3];
-	short t[3];
+	unsigned short v[3];
+	unsigned short t[3];
 	unsigned short texid;
 	unsigned short todo;
 	unsigned int todo2;
