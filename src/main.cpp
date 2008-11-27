@@ -54,9 +54,6 @@ bool	doneAction = true;
 TiXmlDocument favoritelights;
 
 unsigned int undosize = 50;
-std::vector<std::string> texturefiles;
-std::vector<std::string> objectfiles;
-std::vector<std::string> soundfiles;
 
 unsigned long keys[SDLK_LAST-SDLK_FIRST];
 std::vector<std::pair<std::string, std::string> > translations;
@@ -531,7 +528,7 @@ int main(int argc, char *argv[])
 				while(model != NULL)
 				{
 					std::string value = model->FirstChild()->Value();
-					objectfiles.push_back(value);
+					cSettings::objectFiles.push_back(value);
 					cFile* pFile2 = cFileSystem::open(value);
 					if (pFile2 != NULL)
 					{
@@ -570,7 +567,7 @@ int main(int argc, char *argv[])
 				TiXmlElement* texture = el2->FirstChildElement("texture");
 				while(texture != NULL)
 				{
-					texturefiles.push_back(texture->FirstChild()->Value());
+					cSettings::textureFiles.push_back(texture->FirstChild()->Value());
 					texture = texture->NextSiblingElement("texture");
 				}
 			}
@@ -580,7 +577,7 @@ int main(int argc, char *argv[])
 				TiXmlElement* sound = el2->FirstChildElement("sound");
 				while(sound != NULL)
 				{
-					soundfiles.push_back(sound->FirstChild()->Value());
+					cSettings::soundFiles.push_back(sound->FirstChild()->Value());
 					sound = sound->NextSiblingElement("sound");
 				}
 			}
@@ -909,8 +906,8 @@ int main(int argc, char *argv[])
 #endif
 
 #ifdef _DEBUG
-//	if(argc == 1)
-//		cGraphics::world->load();
+	if(argc == 1)
+		cGraphics::world->load();
 //	cGraphics::world->importalpha();
 #endif
 

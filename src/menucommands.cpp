@@ -23,7 +23,6 @@
 #include "settings.h"
 
 int process_events( );
-extern std::vector<std::string> objectfiles;
 extern cMenu* mode;
 extern cMenu* editdetail;
 extern cMenu* speed;
@@ -586,9 +585,9 @@ MENUCOMMAND(random2)
 	}
 
 	std::vector<std::string>	randommodels;
-	for(i = 0; i < objectfiles.size(); i++)
+	for(i = 0; i < cSettings::objectFiles.size(); i++)
 	{
-		cFile* pFile = cFileSystem::open(objectfiles[i]);
+		cFile* pFile = cFileSystem::open(cSettings::objectFiles[i]);
 		while(!pFile->eof())
 		{
 			std::string line = pFile->readLine();
@@ -1166,9 +1165,9 @@ MENUCOMMAND(random4)
 
 
 	std::vector<std::string>	randommodels;
-	for(i = 0; i < objectfiles.size(); i++)
+	for(i = 0; i < cSettings::objectFiles.size(); i++)
 	{
-		cFile* pFile = cFileSystem::open(objectfiles[i]);
+		cFile* pFile = cFileSystem::open(cSettings::objectFiles[i]);
 		while(!pFile->eof())
 		{
 			std::string line = pFile->readLine();

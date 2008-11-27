@@ -305,7 +305,7 @@ void drawlogo()
 	Log(3,0,"//////////////////////////////////////////////////////////////");
 	Log(3,0,"");
 	Log(3,0,"");
-	Log(3,0,"       Public Beta Release, don't nag about any bugs please");
+	Log(3,0,"       Public Beta Release, don't bug about any bugs...");
 	Log(3,0,"       Version %i", getversion());
 	Log(3,0,"");
 }

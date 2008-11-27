@@ -11,8 +11,6 @@
 #include <graphics.h>
 #include <settings.h>
 
-extern std::vector<std::pair<std::string, std::string> > translations;
-extern std::vector<std::string> texturefiles;
 
 cTextureWindow::cWindowTexture::cWindowTexture( cWindow* parent ) : cWindowPictureBox(parent)
 {
@@ -153,9 +151,9 @@ cTextureWindow::cTextureWindow( ) : cWindow()
 	
 	std::map<std::string, std::string, std::less<std::string> > translationcache;
 	
-	for(unsigned int i = 0; i < texturefiles.size(); i++)
+	for(unsigned int i = 0; i < cSettings::textureFiles.size(); i++)
 	{
-		cFile* pFile = cFileSystem::open(texturefiles[i]);
+		cFile* pFile = cFileSystem::open(cSettings::textureFiles[i]);
 		if(pFile == NULL)
 			continue;
 		while(!pFile->eof())
@@ -174,8 +172,8 @@ cTextureWindow::cTextureWindow( ) : cWindow()
 			else
 			{
 				std::string origcat = cat;
-				for(unsigned int ii = 0; ii < translations.size(); ii++)
-					cat = replace(cat, translations[ii].first, translations[ii].second);
+				for(unsigned int ii = 0; ii < cSettings::translations.size(); ii++)
+					cat = replace(cat, cSettings::translations[ii].first, cSettings::translations[ii].second);
 				translationcache[origcat] = cat;
 			}
 			

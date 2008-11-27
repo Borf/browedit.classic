@@ -9,8 +9,6 @@
 #include <wm/windowlabel.h>
 #include <fstream>
 #include <settings.h>
-extern std::vector<std::string> objectfiles;
-extern std::vector<std::pair<std::string, std::string> > translations;
 
 
 cModelsWindow::cWindowModel::cWindowModel(cWindow* parent) : cWindowObject(parent)
@@ -191,10 +189,10 @@ class cConfirmDeleteModel : public cConfirmWindowCaller
 			orig = orig.substr(1);
 
 
-			for(i = 0; i < objectfiles.size(); i++)
+			for(i = 0; i < cSettings::objectFiles.size(); i++)
 			{
-				cFile* pFile = cFileSystem::open(objectfiles[i]);
-				std::ofstream pFile2((objectfiles[i] + ".tmp").c_str());
+				cFile* pFile = cFileSystem::open(cSettings::objectFiles[i]);
+				std::ofstream pFile2((cSettings::objectFiles[i] + ".tmp").c_str());
 				while(!pFile->eof())
 				{
 					std::string line = pFile->readLine();
@@ -214,13 +212,13 @@ class cConfirmDeleteModel : public cConfirmWindowCaller
 				pFile->close();
 				pFile2.close();
 #ifdef WIN32
-				DeleteFile((objectfiles[i]+".bak").c_str());
-				MoveFile(objectfiles[i].c_str(), (objectfiles[i]+".bak").c_str());
-				MoveFile((objectfiles[i]+".tmp").c_str(), objectfiles[i].c_str());
+				DeleteFile((cSettings::objectFiles[i]+".bak").c_str());
+				MoveFile(cSettings::objectFiles[i].c_str(), (cSettings::objectFiles[i]+".bak").c_str());
+				MoveFile((cSettings::objectFiles[i]+".tmp").c_str(), cSettings::objectFiles[i].c_str());
 #else
-				unlink((objectfiles[i]+".bak").c_str());
-				rename(objectfiles[i].c_str(), (objectfiles[i]+".bak").c_str());
-				rename((objectfiles[i]+".tmp").c_str(), objectfiles[i].c_str());
+				unlink((cSettings::objectFiles[i]+".bak").c_str());
+				rename(cSettings::objectFiles[i].c_str(), (cSettings::objectFiles[i]+".bak").c_str());
+				rename((cSettings::objectFiles[i]+".tmp").c_str(), cSettings::objectFiles[i].c_str());
 #endif
 			}
 
@@ -386,10 +384,10 @@ bool cModelsWindow::cWindowModelCatSelect::onKeyDown(int key, bool shift)
 				n = n->parent;
 			}
 
-			for(i = 0; i < objectfiles.size(); i++)
+			for(i = 0; i < cSettings::objectFiles.size(); i++)
 			{
-				cFile* pFile = cFileSystem::open(objectfiles[i]);
-				std::ofstream pFile2((objectfiles[i] + ".tmp").c_str());
+				cFile* pFile = cFileSystem::open(cSettings::objectFiles[i]);
+				std::ofstream pFile2((cSettings::objectFiles[i] + ".tmp").c_str());
 				while(!pFile->eof())
 				{
 					std::string line = pFile->readLine();
@@ -402,13 +400,13 @@ bool cModelsWindow::cWindowModelCatSelect::onKeyDown(int key, bool shift)
 				pFile->close();
 				pFile2.close();
 #ifdef WIN32
-				DeleteFile((objectfiles[i]+".bak").c_str());
-				MoveFile(objectfiles[i].c_str(), (objectfiles[i]+".bak").c_str());
-				MoveFile((objectfiles[i]+".tmp").c_str(), objectfiles[i].c_str());
+				DeleteFile((cSettings::objectFiles[i]+".bak").c_str());
+				MoveFile(cSettings::objectFiles[i].c_str(), (cSettings::objectFiles[i]+".bak").c_str());
+				MoveFile((cSettings::objectFiles[i]+".tmp").c_str(), cSettings::objectFiles[i].c_str());
 #else
-				unlink((objectfiles[i]+".bak").c_str());
-				rename(objectfiles[i].c_str(), (objectfiles[i]+".bak").c_str());
-				rename((objectfiles[i]+".tmp").c_str(), objectfiles[i].c_str());
+				unlink((cSettings::objectFiles[i]+".bak").c_str());
+				rename(cSettings::objectFiles[i].c_str(), (cSettings::objectFiles[i]+".bak").c_str());
+				rename((cSettings::objectFiles[i]+".tmp").c_str(), cSettings::objectFiles[i].c_str());
 #endif
 			}
 
@@ -497,10 +495,10 @@ void cModelsWindow::cWindowModelCatSelect::onDragOver()
 		}
 		orig = orig.substr(1);
 
-		for(i = 0; i < objectfiles.size(); i++)
+		for(i = 0; i < cSettings::objectFiles.size(); i++)
 		{
-			cFile* pFile = cFileSystem::open(objectfiles[i]);
-			std::ofstream pFile2((objectfiles[i] + ".tmp").c_str());
+			cFile* pFile = cFileSystem::open(cSettings::objectFiles[i]);
+			std::ofstream pFile2((cSettings::objectFiles[i] + ".tmp").c_str());
 			while(!pFile->eof())
 			{
 				std::string line = pFile->readLine();
@@ -527,13 +525,13 @@ void cModelsWindow::cWindowModelCatSelect::onDragOver()
 			pFile->close();
 			pFile2.close();
 #ifdef WIN32
-			DeleteFile((objectfiles[i]+".bak").c_str());
-			MoveFile(objectfiles[i].c_str(), (objectfiles[i]+".bak").c_str());
-			MoveFile((objectfiles[i]+".tmp").c_str(), objectfiles[i].c_str());
+			DeleteFile((cSettings::objectFiles[i]+".bak").c_str());
+			MoveFile(cSettings::objectFiles[i].c_str(), (cSettings::objectFiles[i]+".bak").c_str());
+			MoveFile((cSettings::objectFiles[i]+".tmp").c_str(), cSettings::objectFiles[i].c_str());
 #else
-			unlink((objectfiles[i]+".bak").c_str());
-			rename(objectfiles[i].c_str(), (objectfiles[i]+".bak").c_str());
-			rename((objectfiles[i]+".tmp").c_str(), objectfiles[i].c_str());
+			unlink((cSettings::objectFiles[i]+".bak").c_str());
+			rename(cSettings::objectFiles[i].c_str(), (cSettings::objectFiles[i]+".bak").c_str());
+			rename((cSettings::objectFiles[i]+".tmp").c_str(), cSettings::objectFiles[i].c_str());
 #endif
 		}
 
@@ -666,9 +664,9 @@ cModelsWindow::cModelsWindow() : cWindow()
 	std::vector<cWindowTree::cTreeNode*> nodes;
 	std::map<std::string, cWindowTree::cTreeNode*, std::less<std::string> > lookup;
 
-	for(unsigned int i = 0; i < objectfiles.size(); i++)
+	for(unsigned int i = 0; i < cSettings::objectFiles.size(); i++)
 	{
-		cFile* pFile = cFileSystem::open(objectfiles[i]);
+		cFile* pFile = cFileSystem::open(cSettings::objectFiles[i]);
 		while(!pFile->eof())
 		{
 			std::string line = pFile->readLine();
@@ -680,10 +678,10 @@ cModelsWindow::cModelsWindow() : cWindow()
 			std::string cat = pre.substr(0, pre.rfind("/"));
 			std::string name = pre.substr(pre.rfind("/")+1);
 
-			for(unsigned int ii = 0; ii < translations.size(); ii++)
+			for(unsigned int ii = 0; ii < cSettings::translations.size(); ii++)
 			{
-				name = replace(name, translations[ii].first, translations[ii].second);
-				cat = replace(cat, translations[ii].first, translations[ii].second);
+				name = replace(name, cSettings::translations[ii].first, cSettings::translations[ii].second);
+				cat = replace(cat, cSettings::translations[ii].first, cSettings::translations[ii].second);
 			}
 
 			if(lookup.find(cat) == lookup.end())

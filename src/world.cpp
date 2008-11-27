@@ -2182,9 +2182,9 @@ void cWorld::draw()
 		glColor4f(1,0,0,1);
 		glDisable(GL_TEXTURE_2D);
 		glDisable(GL_BLEND);
-		for(x = posx-(int)floor(cGraphics::worldContainer->settings.brushsize/2.0f); x < posx+ceil(cGraphics::worldContainer->settings.brushsize/2.0f); x++)
+		for(x = posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); x < posx+ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); x++)
 		{
-			for(y = posy-(int)floor(cGraphics::worldContainer->settings.brushsize/2.0f); y < posy+ceil(cGraphics::worldContainer->settings.brushsize/2.0f); y++)
+			for(y = posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); y < posy+ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); y++)
 			{
 				if (y >= height || y < 0 || x < 0 || x >= width)
 					continue;

@@ -1,8 +1,9 @@
 #ifndef __SETTINGS_H__
 #define __SETTINGS_H__
 
-
+#include <common.h>
 #include <string>
+#include <vector>
 #include <tinyxml/tinyxml.h>
 
 enum eMode
@@ -35,8 +36,10 @@ public:
 	static bool				running;
 	static eMode			editMode;
 	static TiXmlDocument	msgTable;
-
+	static std::vector<std::pair<std::string, std::string> >	translations;
+	static std::vector<std::string>								objectFiles;
+	static std::vector<std::string>								textureFiles;
+	static std::vector<std::string>								soundFiles;
 };
-
 
 #endif

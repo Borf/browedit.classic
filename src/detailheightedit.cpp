@@ -21,7 +21,10 @@ int cProcessManagement::detailheightedit_process_events(SDL_Event &event)
 				{
 					cClipBoard::currentClipBoard->apply();
 					if((SDL_GetModState() & KMOD_CTRL) == 0)
+					{
 						cClipBoard::pasting = false;
+						cGraphics::cMouse::lbuttondown = false;
+					}
 				}
 				else
 				{

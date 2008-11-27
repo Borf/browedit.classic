@@ -9,3 +9,7 @@ std::string			cSettings::skinFile =		"";
 bool				cSettings::running =		true;
 eMode				cSettings::editMode =		MODE_TEXTURE;
 TiXmlDocument		cSettings::msgTable;
+std::vector<std::string>							cSettings::objectFiles;
+std::vector<std::pair<std::string, std::string> >	cSettings::translations;
+std::vector<std::string>							cSettings::textureFiles;
+std::vector<std::string>							cSettings::soundFiles;

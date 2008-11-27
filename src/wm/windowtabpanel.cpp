@@ -13,7 +13,7 @@
 
 void cWindowTabPanel::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {
-	unsigned int i;
+	int i;
 	GLfloat colors[4];
 	glGetFloatv(GL_CURRENT_COLOR, colors);
 	int xx, yy;
@@ -133,8 +133,8 @@ void cWindowTabPanel::draw(int cutoffleft, int cutoffright, int cutofftop, int c
 
 	glTranslatef(-(float)realX(), -(float)realy2(), 0);
 
-	for(i = 0; i < tabs.size(); i++)
-		parent->font->print(0,0,0, maxOverlapLeft+parent->getX() + xx+5+skinTabFontOffX + ((w-maxOverlapLeft-maxOverlapRight) / (float)tabs.size()) * i, parent->getY() + yy+h-16+skinTabFontOffY, tabs[i].c_str());
+	for(unsigned int ii = 0; ii < tabs.size(); ii++)
+		parent->font->print(0,0,0, maxOverlapLeft+parent->getX() + xx+5+skinTabFontOffX + ((w-maxOverlapLeft-maxOverlapRight) / (float)tabs.size()) * ii, parent->getY() + yy+h-16+skinTabFontOffY, tabs[ii].c_str());
 
 	glColor4fv(colors);
 }

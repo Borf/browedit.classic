@@ -269,8 +269,8 @@ int cGraphics::draw(bool drawwm)
 		glBegin(GL_QUADS);
 			glTexCoord2f(0,1);		glVertex2f( 0, height-20);
 			glTexCoord2f(0,0);		glVertex2f( 0, 0);
-			glTexCoord2f(1,0);		glVertex2f( width-256, 0);
-			glTexCoord2f(1,1);		glVertex2f( width-256, height-20);
+			glTexCoord2f(1,0);		glVertex2f( min(height, width-256), 0);
+			glTexCoord2f(1,1);		glVertex2f( min(height, width-256), height-20);
 		glEnd();
 	}
 	glEnable(GL_BLEND);
@@ -292,10 +292,10 @@ int cGraphics::draw(bool drawwm)
 		sprintf(buf, "Editmode: %s, File: %s", 	cSettings::editMode == MODE_TEXTURE ?			GetMsg("menu/editmode/TEXTUREEDIT") : 
 												cSettings::editMode == MODE_HEIGHTDETAIL ?		GetMsg("menu/editmode/DETAILTERRAINEDIT") : 
 												cSettings::editMode == MODE_HEIGHTGLOBAL ?		GetMsg("menu/editmode/GLOBALHEIGHTEDIT") :
-												cSettings::editMode == MODE_WALLS ?			GetMsg("menu/editmode/WALLEDIT") :
+												cSettings::editMode == MODE_WALLS ?				GetMsg("menu/editmode/WALLEDIT") :
 												cSettings::editMode == MODE_OBJECTS ?			GetMsg("menu/editmode/OBJECTEDIT") :
 												cSettings::editMode == MODE_GAT ?				GetMsg("menu/editmode/GATEDIT") :
-												cSettings::editMode == MODE_WATER ?			GetMsg("menu/editmode/WATEREDIT") :
+												cSettings::editMode == MODE_WATER ?				GetMsg("menu/editmode/WATEREDIT") :
 												cSettings::editMode == MODE_EFFECTS ?			GetMsg("menu/editmode/EFFECTSEDIT") :
 												cSettings::editMode == MODE_SOUNDS ?			GetMsg("menu/editmode/SOUNDSEDIT") :
 												cSettings::editMode == MODE_LIGHTS ?			GetMsg("menu/editmode/LIGHTSEDIT") :
@@ -309,10 +309,10 @@ int cGraphics::draw(bool drawwm)
 		sprintf(buf, "Editmode: %s",	cSettings::editMode == MODE_TEXTURE ?			GetMsg("menu/editmode/TEXTUREEDIT") : 
 										cSettings::editMode == MODE_HEIGHTDETAIL ?		GetMsg("menu/editmode/DETAILTERRAINEDIT") : 
 										cSettings::editMode == MODE_HEIGHTGLOBAL ?		GetMsg("menu/editmode/GLOBALHEIGHTEDIT") :
-										cSettings::editMode == MODE_WALLS ?			GetMsg("menu/editmode/WALLEDIT") :
+										cSettings::editMode == MODE_WALLS ?				GetMsg("menu/editmode/WALLEDIT") :
 										cSettings::editMode == MODE_OBJECTS ?			GetMsg("menu/editmode/OBJECTEDIT") :
 										cSettings::editMode == MODE_GAT ?				GetMsg("menu/editmode/GATEDIT") :
-										cSettings::editMode == MODE_WATER ?			GetMsg("menu/editmode/WATEREDIT") :
+										cSettings::editMode == MODE_WATER ?				GetMsg("menu/editmode/WATEREDIT") :
 										cSettings::editMode == MODE_EFFECTS ?			GetMsg("menu/editmode/EFFECTSEDIT") :
 										cSettings::editMode == MODE_SOUNDS ?			GetMsg("menu/editmode/SOUNDSEDIT") :
 										cSettings::editMode == MODE_LIGHTS ?			GetMsg("menu/editmode/LIGHTSEDIT") :

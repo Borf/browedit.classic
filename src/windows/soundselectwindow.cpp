@@ -8,7 +8,6 @@
 
 extern std::vector<std::pair<std::string, std::string> > translations;
 extern void mainloop();
-extern std::vector<std::string> soundfiles;
 
 cSoundSelectWindow::cWindowSoundCatSelect::cWindowSoundCatSelect( cWindow* parent, std::vector<cWindowTree::cTreeNode*> n, TiXmlDocument* skin ) : cWindowTree(parent, n,skin)
 {
@@ -202,9 +201,9 @@ cSoundSelectWindow::cSoundSelectWindow(cVector3 pNewPos ) : cWindow()
 	
 	std::map<std::string, std::string, std::less<std::string> > translationcache;
 	
-	for(unsigned int i = 0; i < soundfiles.size(); i++)
+	for(unsigned int i = 0; i < cSettings::soundFiles.size(); i++)
 	{
-		cFile* pFile = cFileSystem::open(soundfiles[i]);
+		cFile* pFile = cFileSystem::open(cSettings::soundFiles[i]);
 		if(pFile == NULL)
 			continue;
 		while(!pFile->eof())
