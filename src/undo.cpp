@@ -1,6 +1,5 @@
 #include "undo.h"
-
-extern unsigned int undosize;
+#include <settings.h>
 
 void cUndoStack::undo()
 {
@@ -16,7 +15,7 @@ void cUndoStack::undo()
 void cUndoStack::push(cUndoItem* u)
 {
 	items.push_back(u);
-	while(items.size() > undosize)
+	while(items.size() > cSettings::undoSize)
 	{
 		delete items.front();
 		items.pop_front();

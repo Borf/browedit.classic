@@ -36,10 +36,15 @@ public:
 	static bool				running;
 	static eMode			editMode;
 	static TiXmlDocument	msgTable;
+	static int				keyMap[SDLK_LAST-SDLK_FIRST];
+	static unsigned int		undoSize;
+
+	
 	static std::vector<std::pair<std::string, std::string> >	translations;
 	static std::vector<std::string>								objectFiles;
 	static std::vector<std::string>								textureFiles;
 	static std::vector<std::string>								soundFiles;
+
 };
 
 #endif

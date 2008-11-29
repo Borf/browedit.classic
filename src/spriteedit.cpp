@@ -5,7 +5,6 @@
 #include "windows/spritewindow.h"
 #include "settings.h"
 
-extern int movement;
 extern bool doneAction;
 
 
@@ -79,7 +78,7 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 			break;
 		}
 		case SDL_MOUSEBUTTONUP:
-			if(event.button.button == SDL_BUTTON_LEFT && movement < 3)
+			if(event.button.button == SDL_BUTTON_LEFT && cWM::movement < 3)
 			{
 
 				if (SDL_GetModState() & KMOD_CTRL)
@@ -128,7 +127,7 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 					cGraphics::worldContainer->settings.selectedObject = minobj;
 				}
 			}
-			else if(event.button.button == SDL_BUTTON_RIGHT && movement < 3)
+			else if(event.button.button == SDL_BUTTON_RIGHT && cWM::movement < 3)
 			{
 				cGraphics::worldContainer->settings.selectedObject = -1;
 			}

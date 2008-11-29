@@ -100,6 +100,7 @@
 			<CLEANLIGHTMAPS>Clean Lightmaps</CLEANLIGHTMAPS>
 			<REMOVETEXTURES>Remove unused textures</REMOVETEXTURES>
 			<CLEARLIGHTMAPSONEDIT>Clear lightmaps when you edit textures</CLEARLIGHTMAPSONEDIT>
+			<SELECTALL>Select All Tiles</SELECTALL>
 		</edit>
 		<effects>
 			<TITLE>Effects</TITLE>

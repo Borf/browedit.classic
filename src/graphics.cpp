@@ -688,12 +688,26 @@ cGraphics::cGraphics()
 
 
 void cGraphics::newWorld()
-{
+{	
 	world = new cWorld();
 	worldContainer = new cWorldContainer(world);
 	view = worldContainer->view;
 	worlds.insert(worlds.begin(), worldContainer);
 	updateMenu();
+
+	for(unsigned int ii = 0; ii < cWM::windows.size(); ii++)
+	{
+		if(cWM::windows[ii]->getWindowType() == WT_HOTKEY)
+		{
+			cWM::windows[ii]->hide();
+			if(((cHotkeyWindow*)cWM::windows[ii])->worldContainer == cGraphics::worldContainer)
+			{
+				cWM::windows[ii]->show();
+			}
+		}
+	}
+
+
 }
 
 

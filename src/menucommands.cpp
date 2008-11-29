@@ -21,6 +21,7 @@
 #include "windows/mapswindow.h"
 #include "plugins/base/base.h"
 #include "settings.h"
+#include "windows/hotkeywindow.h"
 
 int process_events( );
 extern cMenu* mode;
@@ -29,7 +30,6 @@ extern cMenu* speed;
 extern cMenu* models;
 extern cMenu* currentobject;
 extern TiXmlDocument sprites;
-//extern double mouseclickx, mouseclicky, mouseclickz;
 extern bool boundingBoxCollisions;
 
 void mainloop();
@@ -4141,6 +4141,20 @@ MENUCOMMAND(switchMap)
 	cGraphics::worlds[0] = cGraphics::worldContainer;
 
 	cGraphics::updateMenu();
+
+	for(unsigned int ii = 0; ii < cWM::windows.size(); ii++)
+	{
+		if(cWM::windows[ii]->getWindowType() == WT_HOTKEY)
+		{
+			cWM::windows[ii]->hide();
+			if(((cHotkeyWindow*)cWM::windows[ii])->worldContainer == cGraphics::worldContainer)
+			{
+				cWM::windows[ii]->show();
+			}
+		}
+	}
+
+
 	return true;
 }
 

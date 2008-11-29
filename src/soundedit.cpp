@@ -9,7 +9,6 @@
 #include <windows/objectwindow.h>
 #include <wm/windowinputbox.h>
 
-extern int movement;
 extern bool doneAction;
 extern void mainloop();
 
@@ -81,7 +80,7 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 			}
 			break;
 		case SDL_MOUSEBUTTONUP:
-			if(event.button.button == SDL_BUTTON_LEFT && movement < 3)
+			if(event.button.button == SDL_BUTTON_LEFT && cWM::movement < 3)
 			{
 				if (SDL_GetModState() & KMOD_CTRL)
 				{

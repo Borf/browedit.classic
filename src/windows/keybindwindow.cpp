@@ -1,6 +1,9 @@
-#include "keybindwindow.h"
-#include <fstream>
 #include <common.h>
+#include <fstream>
+
+#include <settings.h>
+
+#include "keybindwindow.h"
 
 std::string keytostring(SDLKey key)
 {
@@ -276,70 +279,70 @@ cKeyBindWindow::cWindowOkButton::cWindowOkButton( cWindow* parent, TiXmlDocument
 
 void cKeyBindWindow::cWindowOkButton::onClick()
 {
-	keymap[SDLK_UP] = parent->objects["Up"]->getInt(0);
-	keymap[SDLK_DOWN] = parent->objects["Down"]->getInt(0);
-	keymap[SDLK_LEFT] = parent->objects["Left"]->getInt(0);
-	keymap[SDLK_RIGHT] = parent->objects["Right"]->getInt(0);
-	keymap[SDLK_MINUS] = parent->objects["Minus"]->getInt(0);
-	keymap[SDLK_EQUALS] = parent->objects["Equals"]->getInt(0);
-	keymap[SDLK_LEFTBRACKET] = parent->objects["lbracket"]->getInt(0);
-	keymap[SDLK_RIGHTBRACKET] = parent->objects["rbracket"]->getInt(0);
-	keymap[SDLK_SPACE] = parent->objects["Space"]->getInt(0);
-	keymap[SDLK_h] = parent->objects["H"]->getInt(0);
-	keymap[SDLK_v] = parent->objects["V"]->getInt(0);
-	keymap[SDLK_g] = parent->objects["G"]->getInt(0);
-	keymap[SDLK_l] = parent->objects["L"]->getInt(0);
-	keymap[SDLK_d] = parent->objects["D"]->getInt(0);
-	keymap[SDLK_COMMA] = parent->objects["Comma"]->getInt(0);
-	keymap[SDLK_PERIOD] = parent->objects["Period"]->getInt(0);
-	keymap[SDLK_PAGEUP] = parent->objects["Pageup"]->getInt(0);
-	keymap[SDLK_PAGEDOWN] = parent->objects["Pagedown"]->getInt(0);
-	keymap[SDLK_HOME] = parent->objects["Home"]->getInt(0);
-	keymap[SDLK_END] = parent->objects["End"]->getInt(0);
-	keymap[SDLK_w] = parent->objects["W"]->getInt(0);
-	keymap[SDLK_c] = parent->objects["C"]->getInt(0);
-	keymap[SDLK_p] = parent->objects["P"]->getInt(0);
-	keymap[SDLK_o] = parent->objects["O"]->getInt(0);
-	keymap[SDLK_BACKSPACE] = parent->objects["Backspace"]->getInt(0);
-	keymap[SDLK_f] = parent->objects["F"]->getInt(0);
-	keymap[SDLK_INSERT] = parent->objects["Ins"]->getInt(0);
-	keymap[SDLK_DELETE] = parent->objects["Del"]->getInt(0);
-	keymap[SDLK_r] = parent->objects["R"]->getInt(0);
-	keymap[SDLK_F1] = parent->objects["F1"]->getInt(0);
-	keymap[SDLK_F2] = parent->objects["F2"]->getInt(0);
-	keymap[SDLK_F3] = parent->objects["F3"]->getInt(0);
-	keymap[SDLK_F4] = parent->objects["F4"]->getInt(0);
+	cSettings::keyMap[SDLK_UP] = parent->objects["Up"]->getInt(0);
+	cSettings::keyMap[SDLK_DOWN] = parent->objects["Down"]->getInt(0);
+	cSettings::keyMap[SDLK_LEFT] = parent->objects["Left"]->getInt(0);
+	cSettings::keyMap[SDLK_RIGHT] = parent->objects["Right"]->getInt(0);
+	cSettings::keyMap[SDLK_MINUS] = parent->objects["Minus"]->getInt(0);
+	cSettings::keyMap[SDLK_EQUALS] = parent->objects["Equals"]->getInt(0);
+	cSettings::keyMap[SDLK_LEFTBRACKET] = parent->objects["lbracket"]->getInt(0);
+	cSettings::keyMap[SDLK_RIGHTBRACKET] = parent->objects["rbracket"]->getInt(0);
+	cSettings::keyMap[SDLK_SPACE] = parent->objects["Space"]->getInt(0);
+	cSettings::keyMap[SDLK_h] = parent->objects["H"]->getInt(0);
+	cSettings::keyMap[SDLK_v] = parent->objects["V"]->getInt(0);
+	cSettings::keyMap[SDLK_g] = parent->objects["G"]->getInt(0);
+	cSettings::keyMap[SDLK_l] = parent->objects["L"]->getInt(0);
+	cSettings::keyMap[SDLK_d] = parent->objects["D"]->getInt(0);
+	cSettings::keyMap[SDLK_COMMA] = parent->objects["Comma"]->getInt(0);
+	cSettings::keyMap[SDLK_PERIOD] = parent->objects["Period"]->getInt(0);
+	cSettings::keyMap[SDLK_PAGEUP] = parent->objects["Pageup"]->getInt(0);
+	cSettings::keyMap[SDLK_PAGEDOWN] = parent->objects["Pagedown"]->getInt(0);
+	cSettings::keyMap[SDLK_HOME] = parent->objects["Home"]->getInt(0);
+	cSettings::keyMap[SDLK_END] = parent->objects["End"]->getInt(0);
+	cSettings::keyMap[SDLK_w] = parent->objects["W"]->getInt(0);
+	cSettings::keyMap[SDLK_c] = parent->objects["C"]->getInt(0);
+	cSettings::keyMap[SDLK_p] = parent->objects["P"]->getInt(0);
+	cSettings::keyMap[SDLK_o] = parent->objects["O"]->getInt(0);
+	cSettings::keyMap[SDLK_BACKSPACE] = parent->objects["Backspace"]->getInt(0);
+	cSettings::keyMap[SDLK_f] = parent->objects["F"]->getInt(0);
+	cSettings::keyMap[SDLK_INSERT] = parent->objects["Ins"]->getInt(0);
+	cSettings::keyMap[SDLK_DELETE] = parent->objects["Del"]->getInt(0);
+	cSettings::keyMap[SDLK_r] = parent->objects["R"]->getInt(0);
+	cSettings::keyMap[SDLK_F1] = parent->objects["F1"]->getInt(0);
+	cSettings::keyMap[SDLK_F2] = parent->objects["F2"]->getInt(0);
+	cSettings::keyMap[SDLK_F3] = parent->objects["F3"]->getInt(0);
+	cSettings::keyMap[SDLK_F4] = parent->objects["F4"]->getInt(0);
 	
-	keymap[SDLK_F5] = parent->objects["F5"]->getInt(0);
-	keymap[SDLK_F6] = parent->objects["F6"]->getInt(0);
-	keymap[SDLK_F7] = parent->objects["F7"]->getInt(0);
-	keymap[SDLK_F8] = parent->objects["F8"]->getInt(0);
-	keymap[SDLK_F9] = parent->objects["F9"]->getInt(0);
-	keymap[SDLK_F10] = parent->objects["F10"]->getInt(0);
-	keymap[SDLK_F11] = parent->objects["F11"]->getInt(0);
-	keymap[SDLK_u] = parent->objects["U"]->getInt(0);
-	keymap[SDLK_t] = parent->objects["T"]->getInt(0);
-	keymap[SDLK_m] = parent->objects["M"]->getInt(0);
-	keymap[SDLK_RETURN] = parent->objects["Return"]->getInt(0);
-	keymap[SDLK_s] = parent->objects["S"]->getInt(0);
-	keymap[SDLK_1] = SDLK_1;
-	keymap[SDLK_2] = SDLK_2;
-	keymap[SDLK_3] = SDLK_3;
-	keymap[SDLK_4] = SDLK_4;
-	keymap[SDLK_5] = SDLK_5;
-	keymap[SDLK_6] = SDLK_6;
-	keymap[SDLK_7] = SDLK_7;
-	keymap[SDLK_8] = SDLK_8;
-	keymap[SDLK_9] = SDLK_9;
-	keymap[SDLK_0] = SDLK_0;
-	keymap[SDLK_ESCAPE] = parent->objects["Esc"]->getInt(0);;
+	cSettings::keyMap[SDLK_F5] = parent->objects["F5"]->getInt(0);
+	cSettings::keyMap[SDLK_F6] = parent->objects["F6"]->getInt(0);
+	cSettings::keyMap[SDLK_F7] = parent->objects["F7"]->getInt(0);
+	cSettings::keyMap[SDLK_F8] = parent->objects["F8"]->getInt(0);
+	cSettings::keyMap[SDLK_F9] = parent->objects["F9"]->getInt(0);
+	cSettings::keyMap[SDLK_F10] = parent->objects["F10"]->getInt(0);
+	cSettings::keyMap[SDLK_F11] = parent->objects["F11"]->getInt(0);
+	cSettings::keyMap[SDLK_u] = parent->objects["U"]->getInt(0);
+	cSettings::keyMap[SDLK_t] = parent->objects["T"]->getInt(0);
+	cSettings::keyMap[SDLK_m] = parent->objects["M"]->getInt(0);
+	cSettings::keyMap[SDLK_RETURN] = parent->objects["Return"]->getInt(0);
+	cSettings::keyMap[SDLK_s] = parent->objects["S"]->getInt(0);
+	cSettings::keyMap[SDLK_1] = SDLK_1;
+	cSettings::keyMap[SDLK_2] = SDLK_2;
+	cSettings::keyMap[SDLK_3] = SDLK_3;
+	cSettings::keyMap[SDLK_4] = SDLK_4;
+	cSettings::keyMap[SDLK_5] = SDLK_5;
+	cSettings::keyMap[SDLK_6] = SDLK_6;
+	cSettings::keyMap[SDLK_7] = SDLK_7;
+	cSettings::keyMap[SDLK_8] = SDLK_8;
+	cSettings::keyMap[SDLK_9] = SDLK_9;
+	cSettings::keyMap[SDLK_0] = SDLK_0;
+	cSettings::keyMap[SDLK_ESCAPE] = parent->objects["Esc"]->getInt(0);;
 	
 	
-	std::ofstream pFile("data/keymap.txt");
+	std::ofstream pFile("data/cSettings::keyMap.txt");
 	for(int i = 0; i < SDLK_LAST-SDLK_FIRST; i++)
 	{
 		char buf[100];
-		sprintf(buf, "%i\n", keymap[i]);
+		sprintf(buf, "%i\n", cSettings::keyMap[i]);
 		pFile.write(buf, strlen(buf));
 	}
 	pFile.close();
@@ -500,54 +503,54 @@ cKeyBindWindow::cKeyBindWindow( ) : cWindow()
 	addLabel("lblEsc",		160,440,"Exit")->alignment = ALIGN_TOPRIGHT;
 	
 	
-	addbox("Up",			160,  0,keymap[SDLK_UP]);
-	addbox("Down",			160, 20,keymap[SDLK_DOWN]);
-	addbox("Left",			160, 40,keymap[SDLK_LEFT]);
-	addbox("Right",			160, 60,keymap[SDLK_RIGHT]);
-	addbox("Minus",			160, 80,keymap[SDLK_MINUS]);
-	addbox("Equals",		160,100,keymap[SDLK_EQUALS]);
-	addbox("lbracket",		160,120,keymap[SDLK_LEFTBRACKET]);
-	addbox("rbracket",		160,140,keymap[SDLK_RIGHTBRACKET]);
-	addbox("Space",			160,160,keymap[SDLK_SPACE]);
-	addbox("H",				160,180,keymap[SDLK_h]);
-	addbox("V",				160,200,keymap[SDLK_v]);
-	addbox("G",				160,220,keymap[SDLK_g]);
-	addbox("L",				160,240,keymap[SDLK_l]);
-	addbox("D",				160,260,keymap[SDLK_d]);
-	addbox("Comma",			160,280,keymap[SDLK_COMMA]);
-	addbox("Period",		160,300,keymap[SDLK_PERIOD]);
-	addbox("Pageup",		160,320,keymap[SDLK_PAGEUP]);
-	addbox("Pagedown",		160,340,keymap[SDLK_PAGEDOWN]);
-	addbox("Home",			160,360,keymap[SDLK_HOME]);
-	addbox("End",			160,380,keymap[SDLK_END]);
-	addbox("W",				160,400,keymap[SDLK_w]);
-	addbox("C",				160,420,keymap[SDLK_c]);
-	addbox("P",				160,440,keymap[SDLK_p]);
+	addbox("Up",			160,  0,cSettings::keyMap[SDLK_UP]);
+	addbox("Down",			160, 20,cSettings::keyMap[SDLK_DOWN]);
+	addbox("Left",			160, 40,cSettings::keyMap[SDLK_LEFT]);
+	addbox("Right",			160, 60,cSettings::keyMap[SDLK_RIGHT]);
+	addbox("Minus",			160, 80,cSettings::keyMap[SDLK_MINUS]);
+	addbox("Equals",		160,100,cSettings::keyMap[SDLK_EQUALS]);
+	addbox("lbracket",		160,120,cSettings::keyMap[SDLK_LEFTBRACKET]);
+	addbox("rbracket",		160,140,cSettings::keyMap[SDLK_RIGHTBRACKET]);
+	addbox("Space",			160,160,cSettings::keyMap[SDLK_SPACE]);
+	addbox("H",				160,180,cSettings::keyMap[SDLK_h]);
+	addbox("V",				160,200,cSettings::keyMap[SDLK_v]);
+	addbox("G",				160,220,cSettings::keyMap[SDLK_g]);
+	addbox("L",				160,240,cSettings::keyMap[SDLK_l]);
+	addbox("D",				160,260,cSettings::keyMap[SDLK_d]);
+	addbox("Comma",			160,280,cSettings::keyMap[SDLK_COMMA]);
+	addbox("Period",		160,300,cSettings::keyMap[SDLK_PERIOD]);
+	addbox("Pageup",		160,320,cSettings::keyMap[SDLK_PAGEUP]);
+	addbox("Pagedown",		160,340,cSettings::keyMap[SDLK_PAGEDOWN]);
+	addbox("Home",			160,360,cSettings::keyMap[SDLK_HOME]);
+	addbox("End",			160,380,cSettings::keyMap[SDLK_END]);
+	addbox("W",				160,400,cSettings::keyMap[SDLK_w]);
+	addbox("C",				160,420,cSettings::keyMap[SDLK_c]);
+	addbox("P",				160,440,cSettings::keyMap[SDLK_p]);
 	
 	
-	addbox("O",				50,  0,keymap[SDLK_o])->alignment = ALIGN_TOPRIGHT;
-	addbox("Backspace",		50, 20,keymap[SDLK_BACKSPACE])->alignment = ALIGN_TOPRIGHT;
-	addbox("F",				50, 40,keymap[SDLK_f])->alignment = ALIGN_TOPRIGHT;
-	addbox("Ins",			50, 60,keymap[SDLK_INSERT])->alignment = ALIGN_TOPRIGHT;
-	addbox("Del",			50, 80,keymap[SDLK_DELETE])->alignment = ALIGN_TOPRIGHT;
-	addbox("R",				50,100,keymap[SDLK_r])->alignment = ALIGN_TOPRIGHT;
-	addbox("F1",			50,120,keymap[SDLK_F1])->alignment = ALIGN_TOPRIGHT;
-	addbox("F2",			50,140,keymap[SDLK_F2])->alignment = ALIGN_TOPRIGHT;
-	addbox("F3",			50,160,keymap[SDLK_F3])->alignment = ALIGN_TOPRIGHT;
-	addbox("F4",			50,180,keymap[SDLK_F4])->alignment = ALIGN_TOPRIGHT;
-	addbox("F5",			50,200,keymap[SDLK_F5])->alignment = ALIGN_TOPRIGHT;
-	addbox("F6",			50,220,keymap[SDLK_F6])->alignment = ALIGN_TOPRIGHT;
-	addbox("F7",			50,240,keymap[SDLK_F7])->alignment = ALIGN_TOPRIGHT;
-	addbox("F8",			50,260,keymap[SDLK_F8])->alignment = ALIGN_TOPRIGHT;
-	addbox("F9",			50,280,keymap[SDLK_F9])->alignment = ALIGN_TOPRIGHT;
-	addbox("F10",			50,300,keymap[SDLK_F10])->alignment = ALIGN_TOPRIGHT;
-	addbox("F11",			50,320,keymap[SDLK_F11])->alignment = ALIGN_TOPRIGHT;
-	addbox("U",				50,340,keymap[SDLK_u])->alignment = ALIGN_TOPRIGHT;
-	addbox("T",				50,360,keymap[SDLK_t])->alignment = ALIGN_TOPRIGHT;
-	addbox("M",				50,380,keymap[SDLK_m])->alignment = ALIGN_TOPRIGHT;
-	addbox("Return",		50,400,keymap[SDLK_RETURN])->alignment = ALIGN_TOPRIGHT;
-	addbox("S",				50,420,keymap[SDLK_s])->alignment = ALIGN_TOPRIGHT;
-	addbox("Esc",			50,440,keymap[SDLK_ESCAPE])->alignment = ALIGN_TOPRIGHT;
+	addbox("O",				50,  0,cSettings::keyMap[SDLK_o])->alignment = ALIGN_TOPRIGHT;
+	addbox("Backspace",		50, 20,cSettings::keyMap[SDLK_BACKSPACE])->alignment = ALIGN_TOPRIGHT;
+	addbox("F",				50, 40,cSettings::keyMap[SDLK_f])->alignment = ALIGN_TOPRIGHT;
+	addbox("Ins",			50, 60,cSettings::keyMap[SDLK_INSERT])->alignment = ALIGN_TOPRIGHT;
+	addbox("Del",			50, 80,cSettings::keyMap[SDLK_DELETE])->alignment = ALIGN_TOPRIGHT;
+	addbox("R",				50,100,cSettings::keyMap[SDLK_r])->alignment = ALIGN_TOPRIGHT;
+	addbox("F1",			50,120,cSettings::keyMap[SDLK_F1])->alignment = ALIGN_TOPRIGHT;
+	addbox("F2",			50,140,cSettings::keyMap[SDLK_F2])->alignment = ALIGN_TOPRIGHT;
+	addbox("F3",			50,160,cSettings::keyMap[SDLK_F3])->alignment = ALIGN_TOPRIGHT;
+	addbox("F4",			50,180,cSettings::keyMap[SDLK_F4])->alignment = ALIGN_TOPRIGHT;
+	addbox("F5",			50,200,cSettings::keyMap[SDLK_F5])->alignment = ALIGN_TOPRIGHT;
+	addbox("F6",			50,220,cSettings::keyMap[SDLK_F6])->alignment = ALIGN_TOPRIGHT;
+	addbox("F7",			50,240,cSettings::keyMap[SDLK_F7])->alignment = ALIGN_TOPRIGHT;
+	addbox("F8",			50,260,cSettings::keyMap[SDLK_F8])->alignment = ALIGN_TOPRIGHT;
+	addbox("F9",			50,280,cSettings::keyMap[SDLK_F9])->alignment = ALIGN_TOPRIGHT;
+	addbox("F10",			50,300,cSettings::keyMap[SDLK_F10])->alignment = ALIGN_TOPRIGHT;
+	addbox("F11",			50,320,cSettings::keyMap[SDLK_F11])->alignment = ALIGN_TOPRIGHT;
+	addbox("U",				50,340,cSettings::keyMap[SDLK_u])->alignment = ALIGN_TOPRIGHT;
+	addbox("T",				50,360,cSettings::keyMap[SDLK_t])->alignment = ALIGN_TOPRIGHT;
+	addbox("M",				50,380,cSettings::keyMap[SDLK_m])->alignment = ALIGN_TOPRIGHT;
+	addbox("Return",		50,400,cSettings::keyMap[SDLK_RETURN])->alignment = ALIGN_TOPRIGHT;
+	addbox("S",				50,420,cSettings::keyMap[SDLK_s])->alignment = ALIGN_TOPRIGHT;
+	addbox("Esc",			50,440,cSettings::keyMap[SDLK_ESCAPE])->alignment = ALIGN_TOPRIGHT;
 	
 	
 	

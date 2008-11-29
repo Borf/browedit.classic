@@ -1312,7 +1312,18 @@ void cWorld::save()
 	}
 	{
 		int i;
-		cWindow* w = cWM::getWindow(WT_HOTKEY);
+		cWindow* w = NULL;
+		for(unsigned int ii = 0; ii < cWM::windows.size(); ii++)
+		{
+			if(cWM::windows[ii]->getWindowType() == WT_HOTKEY)
+			{
+				if(((cHotkeyWindow*)cWM::windows[ii])->worldContainer == cGraphics::worldContainer)
+				{
+					w = cWM::windows[ii];
+					break;
+				}
+			}
+		}
 		int loadcount = 0;
 		for(i = 0; i < 8; i++)
 		{
@@ -1627,6 +1638,7 @@ void cWorld::draw()
 			}
 			else if (cGraphics::view.showNoTiles)
 			{
+				glDisable(GL_BLEND);
 				glEnable(GL_COLOR_MATERIAL);
 				glDisable(GL_TEXTURE_2D);
 				glColor3f(cGraphics::noTileColor.x, cGraphics::noTileColor.y, cGraphics::noTileColor.z);

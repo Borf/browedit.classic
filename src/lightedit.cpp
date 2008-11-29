@@ -9,7 +9,6 @@
 #include <wm/windowinputbox.h>
 
 extern bool	doneAction;
-extern int movement;
 
 extern TiXmlDocument favoritelights;
 
@@ -134,7 +133,7 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 			break;
 		}
 		case SDL_MOUSEBUTTONUP:
-			if(event.button.button == SDL_BUTTON_LEFT && movement < 3)
+			if(event.button.button == SDL_BUTTON_LEFT && cWM::movement < 3)
 			{
 
 				if (SDL_GetModState() & KMOD_CTRL)
@@ -189,9 +188,9 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 				}
 
 			}
-			if(event.button.button == SDL_BUTTON_RIGHT && movement < 3)
+			if(event.button.button == SDL_BUTTON_RIGHT && cWM::movement < 3)
 			{
-				if(movement < 3)
+				if(cWM::movement < 3)
 				{
 					cGraphics::cMouse::click3dx = cGraphics::cMouse::x3d;
 					cGraphics::cMouse::click3dy = cGraphics::cMouse::y3d;

@@ -12,7 +12,6 @@ MENUCOMMAND(model);
 
 extern bool	doneAction;
 extern cMenu* snaptofloor;
-extern int movement;
 extern cMenu* currentobject;
 extern cMenu* models;
 
@@ -88,7 +87,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 			}
 			break;
 		case SDL_MOUSEBUTTONUP:
-			if(event.button.button == SDL_BUTTON_LEFT && movement < 3)
+			if(event.button.button == SDL_BUTTON_LEFT && cWM::movement < 3)
 			{
 				if(cClipBoard::pasting && cClipBoard::currentClipBoard && cClipBoard::currentClipBoard->type == cClipBoard::CLIP_OBJECT)
 				{

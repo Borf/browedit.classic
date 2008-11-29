@@ -1,38 +1,38 @@
-#define _MAIN_CPP_
-#include "tinyxml/tinyxml.h"
 #include <common.h>
-#include <font.h>
-int keymap[SDLK_LAST-SDLK_FIRST];
-#include <utility>
-#ifdef WIN32
-#include <winsock.h>
-#endif
+
 #include <SDL/SDL_mixer.h>
-#include "filesystem.h"
-#include <math.h>
-#include "menu.h"
 #include <fstream>
 #include <list>
-#include "md5.h"
+#include <algorithm>
+#include <utility>
+#include <math.h>
 #include <time.h>
+#include <tinyxml/tinyxml.h>
+
+
+#include "font.h"
+#include "filesystem.h"
+#include "menu.h"
+#include "undo.h"
+#include "menucommands.h"
 #include "windows/lightwindow.h"
 #include "windows/texturewindow.h"
 #include "windows/modelswindow.h"
-#include "undo.h"
-#include "menucommands.h"
 #include "windows/modeloverviewwindow.h"
 #include "windows/lightoverviewwindow.h"
 #include "windows/soundoverviewwindow.h"
 #include "windows/texturetoolswindow.h"
 #include "windows/minimapwindow.h"
-#include <bmutex.h>
 #include "plugins/base/base.h"
+#include "bmutex.h"
 #include "settings.h"
 #include "texturecache.h"
-#include <algorithm>
+
 #ifdef WIN32
+#include <winsock.h>
 #include <windows.h>
 #endif
+
 
 #ifdef __MINGW32__
 #include <GL/glext.h>											// We use a define from this file: GL_BGRA_EXT
@@ -42,7 +42,7 @@ cBMutex* renderMutex;
 
 void MakeUndo();
 void Undo();
-int movement;
+int cWM::movement;
 
 void ChangeGrid();
 void UpdateTriangleMenu();
@@ -53,7 +53,6 @@ long lastmotion;
 bool	doneAction = true;
 TiXmlDocument favoritelights;
 
-unsigned int undosize = 50;
 
 unsigned long keys[SDLK_LAST-SDLK_FIRST];
 std::vector<std::pair<std::string, std::string> > translations;
@@ -583,7 +582,7 @@ int main(int argc, char *argv[])
 			}
 		}
 		else if (option == "undo")
-			undosize = atoi(el->Attribute("size"));
+			cSettings::undoSize = atoi(el->Attribute("size"));
 		el = el->NextSiblingElement();
 	}			
 
@@ -825,12 +824,12 @@ int main(int argc, char *argv[])
 	cGraphics::cMouse::lastlclick = 0;
 	cGraphics::cMouse::lastrclick = 0;
 
-	Log(3,0,GetMsg("file/LOADING"), "data/keymap.txt");
-	pFile = cFileSystem::open("data/keymap.txt");
+	Log(3,0,GetMsg("file/LOADING"), "data/cSettings::keyMap.txt");
+	pFile = cFileSystem::open("data/cSettings::keyMap.txt");
 	if(pFile == NULL)
 	{
 		Log(3,0,"Keymap file not found, writing default");
-		std::ofstream pFile2("data/keymap.txt");
+		std::ofstream pFile2("data/cSettings::keyMap.txt");
 		for(i = 0; i < SDLK_LAST-SDLK_FIRST; i++)
 		{
 			char buf[100];
@@ -839,16 +838,16 @@ int main(int argc, char *argv[])
 			
 		}
 		pFile2.close();
-		pFile = cFileSystem::open("data/keymap.txt");
+		pFile = cFileSystem::open("data/cSettings::keyMap.txt");
 
 	}
 	for(i = 0; i < SDLK_LAST-SDLK_FIRST; i++)
 	{
-		keymap[i] = atoi(pFile->readLine().c_str());
+		cSettings::keyMap[i] = atoi(pFile->readLine().c_str());
 	}
 
 	pFile->close();
-	Log(3,0,GetMsg("file/DONELOADING"), "data/keymap.txt");
+	Log(3,0,GetMsg("file/DONELOADING"), "data/cSettings::keyMap.txt");
 
 
 	float effectCount = cGraphics::h() / 21;
@@ -974,7 +973,7 @@ int process_events()
 			if (cWM::onKeyUp(event.key.keysym.sym, (event.key.keysym.mod&KMOD_SHIFT) != 0))
 				return 0;
 #ifdef _DEBUG
-			if(keymap[event.key.keysym.sym] == SDLK_ESCAPE)
+			if(cSettings::keyMap[event.key.keysym.sym] == SDLK_ESCAPE)
 				cSettings::running = false;
 #endif
 			switch (event.key.keysym.sym)
@@ -1067,7 +1066,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			cMenu* m = cGraphics::menu->inWindow((int)cGraphics::cMouse::x, cGraphics::h()-(int)cGraphics::cMouse::y);
 
 
-			if(movement > 4)
+			if(cWM::movement > 4)
 			{
 				tilex = (int)cGraphics::cMouse::x3d / 10;
 				tiley = (int)cGraphics::cMouse::z3d / 10;
@@ -1075,9 +1074,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			if(m != NULL)
 				return 1;
 
-			movement++;
+			cWM::movement++;
 
-			if (movement > 0)
+			if (cWM::movement > 0)
 			{
 				if (cWM::draggingWindow != NULL)
 				{
@@ -1207,7 +1206,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 		} 
 		case SDL_MOUSEBUTTONDOWN:
 			{
-			movement = 0;
+			cWM::movement = 0;
 			cGraphics::cMouse::xStart = cGraphics::cMouse::x = event.motion.x;
 			cGraphics::cMouse::yStart = cGraphics::cMouse::y = event.motion.y;
 
@@ -1293,7 +1292,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			{
 				return 1;
 			}
-			if (movement < 3 && !cGraphics::cMouse::doubleClick && m == NULL && pm == NULL && event.button.button == SDL_BUTTON_LEFT)
+			if (cWM::movement < 3 && !cGraphics::cMouse::doubleClick && m == NULL && pm == NULL && event.button.button == SDL_BUTTON_LEFT)
 			{
 				cWM::draggingObject = NULL;
 				cWM::draggingWindow = NULL;
@@ -1361,7 +1360,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					cWM::draggingWindow->stopresizing();
 				}
 				cWM::draggingWindow = NULL;
-				if (movement <= 1 && m == NULL && cGraphics::popupMenu == NULL)
+				if (cWM::movement <= 1 && m == NULL && cGraphics::popupMenu == NULL)
 					cWM::click(true);
 				if (cWM::draggingObject != NULL && m == NULL)
 				{
@@ -1439,7 +1438,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 				cGraphics::cMouse::rbuttondown = false;
 				cGraphics::cMouse::doubleClick = false;
-				if (movement < 2)
+				if (cWM::movement < 2)
 				{
 					if(cWM::inWindow() != NULL)
 					{
@@ -1455,7 +1454,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				else
 					cGraphics::cMouse::lastrclick = SDL_GetTicks();
-				if(cGraphics::cMouse::doubleClick && movement < 3 && cGraphics::worldContainer)
+				if(cGraphics::cMouse::doubleClick && cWM::movement < 3 && cGraphics::worldContainer)
 				{
 					cGraphics::worldContainer->camera.rot = 0;
 				}
@@ -1464,7 +1463,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				cGraphics::cMouse::x = event.motion.x;
 				cGraphics::cMouse::y = event.motion.y;
 
-				if(movement < 3 && (cSettings::editMode == MODE_OBJECTS || cSettings::editMode == MODE_EFFECTS))
+				if(cWM::movement < 3 && (cSettings::editMode == MODE_OBJECTS || cSettings::editMode == MODE_EFFECTS))
 				{
 					cGraphics::worldContainer->settings.selectedObject = -1;
 					return 1;
@@ -1477,7 +1476,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				bool found = false;
 				for(int i = 0; i < SDLK_LAST-SDLK_FIRST; i++)
 				{
-					if (keymap[i] == event.key.keysym.sym+SDLK_FIRST)
+					if (cSettings::keyMap[i] == event.key.keysym.sym+SDLK_FIRST)
 					{
 						event.key.keysym.sym = (SDLKey)(i+SDLK_FIRST);
 						found = true;

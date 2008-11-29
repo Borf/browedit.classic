@@ -55,11 +55,9 @@ typedef int32_t intptr_t;
 	#define DIR_SEPERATOR "\\"
 	#define newline "\r\n"
 	#define usleep(x) Sleep((x) / 1000);
-	#define msgbox(x, y) showMessage(NULL, x, y, MB_OK);
 	#include <direct.h>
 
 	HWND GetConsoleHwnd();
-
 #else
 	#include <netdb.h>
 	#include <netinet/in.h>
@@ -79,11 +77,6 @@ typedef int32_t intptr_t;
 	#define Sleep(x) usleep(x*1000)
 #endif
 
-#ifndef _MAIN_CPP_
-	#include <vector>
-	//using namespace std;
-	extern int keymap[SDLK_LAST-SDLK_FIRST];
-#endif
 
 #include <vector>
 

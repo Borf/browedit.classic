@@ -9,6 +9,8 @@ std::string			cSettings::skinFile =		"";
 bool				cSettings::running =		true;
 eMode				cSettings::editMode =		MODE_TEXTURE;
 TiXmlDocument		cSettings::msgTable;
+int					cSettings::keyMap[SDLK_LAST-SDLK_FIRST];
+unsigned int		cSettings::undoSize = 50;
 std::vector<std::string>							cSettings::objectFiles;
 std::vector<std::pair<std::string, std::string> >	cSettings::translations;
 std::vector<std::string>							cSettings::textureFiles;

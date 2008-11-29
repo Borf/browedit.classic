@@ -58,6 +58,7 @@ public:
 	static float					color[4];
 	static float					colorBlur[4];
 	static int						focus;
+	static int						movement;
 	
 	static cWindow*					draggingWindow;
 	static cWindowObject*			draggingObject;

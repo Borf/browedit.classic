@@ -2,7 +2,6 @@
 #include "graphics.h"
 #include "undo.h"
 
-extern int movement;
 
 int cProcessManagement::walledit_process_events(SDL_Event &event)
 {
@@ -11,7 +10,7 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 		case SDL_MOUSEMOTION:
 			break;
 		case SDL_MOUSEBUTTONUP:
-			if(event.button.button == SDL_BUTTON_LEFT && movement < 3)
+			if(event.button.button == SDL_BUTTON_LEFT && cWM::movement < 3)
 			{
 				int x = (int)cGraphics::cMouse::x3d / 10;
 				int y = (int)cGraphics::cMouse::z3d / 10;
@@ -24,7 +23,7 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 				else
 					cGraphics::worldContainer->settings.wallHeightMin = cVector2(x,y);
 			}
-			else if(event.button.button == SDL_BUTTON_RIGHT && movement < 3)
+			else if(event.button.button == SDL_BUTTON_RIGHT && cWM::movement < 3)
 			{
 				int x = (int)cGraphics::cMouse::x3d / 10;
 				int y = (int)cGraphics::cMouse::z3d / 10;
