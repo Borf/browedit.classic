@@ -218,10 +218,6 @@ SOURCE=..\src\main.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\md5.c
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\menu.cpp
 # End Source File
 # Begin Source File
@@ -299,10 +295,6 @@ SOURCE=..\src\frustum.h
 # Begin Source File
 
 SOURCE=..\src\graphics.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\md5.h
 # End Source File
 # Begin Source File
 
