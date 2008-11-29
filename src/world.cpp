@@ -73,24 +73,6 @@ void cWorld::load()
 	}
 	realLightmaps.clear();
 
-	cWindow* wnd = cWM::getWindow(WT_HOTKEY);
-	if (wnd != NULL)
-	{
-		for(i = 0; i < 8; i++)
-		{
-			char buf[10];
-			sprintf(buf, "obj%i", i);
-			delete wnd->objects[buf];
-			cWindowObject* o = new cHotkeyWindow::cHotkeyButton(wnd);
-			o->moveTo(20+32*i, 4);
-			o->resizeTo(32,32);
-			wnd->objects[buf] = o;
-		}
-	}
-
-
-
-
 	tiles.clear();
 	for(i = 0; i < cubes.size(); i++)
 		cubes[i].clear();
@@ -664,35 +646,34 @@ void cWorld::load()
 	pFile->close();
 	Log(3,0,GetMsg("world/LOADDONE"), (std::string(fileName) + ".gat").c_str());
 
-	wnd = cWM::getWindow(WT_HOTKEY);
-	if (wnd != NULL)
+
+	cHotkeyWindow* wnd = new cHotkeyWindow(cGraphics::worldContainer);
+	cWM::addWindow(wnd);
+	pFile = cFileSystem::open(std::string(fileName) + ".locations");
+	if(pFile != NULL)
 	{
-		pFile = cFileSystem::open(std::string(fileName) + ".locations");
-		if(pFile != NULL)
+		while(!pFile->eof())
 		{
-			while(!pFile->eof())
-			{
-				int i;
-				i = pFile->get();
-				char buf[10];
-				sprintf(buf, "obj%i", i);
+			int i;
+			i = pFile->get();
+			char buf[10];
+			sprintf(buf, "obj%i", i);
 
-				cHotkeyWindow::cHotkeyButton* o = (cHotkeyWindow::cHotkeyButton*)wnd->objects[buf];
+			cHotkeyWindow::cHotkeyButton* o = (cHotkeyWindow::cHotkeyButton*)wnd->objects[buf];
 
 
-				pFile->read((char*)&o->cameraangle, 4);
-				pFile->read((char*)&o->cameraheight, 4);
-				pFile->read((char*)&o->camerarot, 4);
-				pFile->read((char*)&o->camerapointer.x, 4);
-				pFile->read((char*)&o->camerapointer.y, 4);
-				o->topcamera = pFile->get() != 0;
-				o->im = new char[256*256*3];
-				pFile->read(o->im, 256*256*3);
-				o->userfunc(NULL);
-				o->loaded = true;
-			}
-			pFile->close();
+			pFile->read((char*)&o->cameraangle, 4);
+			pFile->read((char*)&o->cameraheight, 4);
+			pFile->read((char*)&o->camerarot, 4);
+			pFile->read((char*)&o->camerapointer.x, 4);
+			pFile->read((char*)&o->camerapointer.y, 4);
+			o->topcamera = pFile->get() != 0;
+			o->im = new char[256*256*3];
+			pFile->read(o->im, 256*256*3);
+			o->userfunc(NULL);
+			o->loaded = true;
 		}
+		pFile->close();
 	}
 
 	for(i = 0; i < sprites.size(); i++)
@@ -1646,22 +1627,19 @@ void cWorld::draw()
 			}
 			else if (cGraphics::view.showNoTiles)
 			{
-
-				glColor3f(cGraphics::noTileColor.x, cGraphics::noTileColor.y, cGraphics::noTileColor.z);
+				glEnable(GL_COLOR_MATERIAL);
 				glDisable(GL_TEXTURE_2D);
+				glColor3f(cGraphics::noTileColor.x, cGraphics::noTileColor.y, cGraphics::noTileColor.z);
 				glNormal3f(c->normal.x, c->normal.y, c->normal.z);
 				glBegin(GL_TRIANGLE_STRIP);
-					glNormal3f(c->vNormal1.x, c->vNormal1.y, c->vNormal1.z);
 					glVertex3f(x*10,-c->cell1+0.01f,(height-y)*10);
-					glNormal3f(c->vNormal2.x, c->vNormal2.y, c->vNormal2.z);
 					glVertex3f(x*10,-c->cell3+0.01f,(height-y)*10-10);
-					glNormal3f(c->vNormal3.x, c->vNormal1.y, c->vNormal3.z);
 					glVertex3f(x*10+10,-c->cell2+0.01f,(height-y)*10);
-					glNormal3f(c->vNormal4.x, c->vNormal4.y, c->vNormal4.z);
 					glVertex3f(x*10+10,-c->cell4+0.01f,(height-y)*10-10);
 				glEnd();
-				glEnable(GL_TEXTURE_2D);
 				glColor3f(1,1,1);
+				glDisable(GL_COLOR_MATERIAL);
+				glEnable(GL_TEXTURE_2D);
 			}
 			if (c->tileOtherSide != -1 && c->tileOtherSide < (int)tiles.size())
 			{
@@ -3081,6 +3059,15 @@ void cWorld::unload()
 		
 	gattiles.clear();
 
+	for(i = 0; i < cWM::windows.size(); i++)
+	{
+		if(cWM::windows[i]->getWindowType() == WT_HOTKEY)
+		{
+			if(((cHotkeyWindow*)cWM::windows[i])->worldContainer == cGraphics::worldContainer)
+				cWM::windows[i]->close();
+		}
+
+	}
 }
 
 
@@ -4248,4 +4235,5 @@ void cWorld::newEmpty(int newWidth,int newHeight)
 	
 	loaded = true;
 	cGraphics::worldContainer->settings.texturestart = 0;
+	wnd = new cHotkeyWindow(cGraphics::worldContainer);
 }

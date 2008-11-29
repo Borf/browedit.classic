@@ -137,7 +137,7 @@ public:
 
 			void			init(cTexture* t, cFont* f)	{ texture = t; font = f; }
 				
-			WINDOW_TYPE		windowtype()				{ return windowType; }
+			WINDOW_TYPE		getWindowType()				{ return windowType; }
 			bool 			isVisible()					{ return visible || currentColor[3] != 0; }
 			void 			hide()						{ visible = false; }
 			void 			show()						{ visible = true; }

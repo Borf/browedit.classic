@@ -2,8 +2,9 @@
 #define __HOTKEYWINDOW_H__
 
 #include <wm/window.h>
-
 #include <wm/windowpicturebox.h>
+class cWorldContainer;
+
 
 class cHotkeyWindow : public cWindow
 {
@@ -32,7 +33,8 @@ public:
 
 
 
-	cHotkeyWindow();	
+	cWorldContainer*	worldContainer;
+	cHotkeyWindow(cWorldContainer*);
 
 };
 

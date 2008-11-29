@@ -266,7 +266,7 @@ void cWM::showWindow(WINDOW_TYPE wt)
 {
 	for(int i = 0; i < (int)windows.size(); i++)
 	{
-		if (windows[i]->isEnabled() && windows[i]->windowtype() == wt)
+		if (windows[i]->isEnabled() && windows[i]->getWindowType() == wt)
 			windows[i]->show();
 	}
 }
@@ -275,7 +275,7 @@ bool cWM::existsWindow(WINDOW_TYPE wt)
 {
 	for(int i = 0; i < (int)windows.size(); i++)
 	{
-		if (windows[i]->isEnabled() && windows[i]->windowtype() == wt)
+		if (windows[i]->isEnabled() && windows[i]->getWindowType() == wt)
 			return true;
 	}
 	return false;
@@ -286,7 +286,7 @@ void cWM::toggleWindow(WINDOW_TYPE wt)
 {
 	for(int i = 0; i < (int)windows.size(); i++)
 	{
-		if (windows[i]->isEnabled() && windows[i]->windowtype() == wt)
+		if (windows[i]->isEnabled() && windows[i]->getWindowType() == wt)
 		{
 			windows[i]->togglevis();
 			if (windows[i]->isVisible())
@@ -308,7 +308,7 @@ int cWM::closeWindow(WINDOW_TYPE wt, bool force)
 		cWindow* w = windows[i];
 		if (w != NULL)
 
-			if (w->isEnabled() && w->windowtype() == wt)
+			if (w->isEnabled() && w->getWindowType() == wt)
 				w->close(force);
 	}
 	return 0;
@@ -335,12 +335,12 @@ bool cWM::onKeyDown(int key, bool shift)
 		{
 			int i;
 			for(i = 0; i < (int)windows.size(); i++)
-				if (windows[i]->windowtype() == WT_CHAT) break;
+				if (windows[i]->getWindowType() == WT_CHAT) break;
 			
 
 			
 
-			if (windows[0]->windowtype() == WT_CHAT && w->selectedobject != w->objects["inputbox"])
+			if (windows[0]->getWindowType() == WT_CHAT && w->selectedobject != w->objects["inputbox"])
 			{
 				w->selectedobject = w->objects["inputbox"];
 				// selects
@@ -464,7 +464,7 @@ cWindow* cWM::getWindow(WINDOW_TYPE wt)
 {
 	for(int i = 0; i < (int)windows.size(); i++)
 	{
-		if (windows[i]->isEnabled() && windows[i]->windowtype() == wt)
+		if (windows[i]->isEnabled() && windows[i]->getWindowType() == wt)
 		{
 			return windows[i];
 		}

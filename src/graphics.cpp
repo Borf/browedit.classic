@@ -448,7 +448,6 @@ int cGraphics::init(int pWidth, int pHeight, int pBpp, bool pFullscreen)
 	splash = cTextureCache::load(cSettings::config.FirstChildElement("config")->FirstChildElement("splash")->FirstChild()->Value());
 	Log(3,0,GetMsg("graphics/INITIALIZINGWM"));
 	cWM::init(cSettings::skinFile);
-	cWM::addWindow(new cHotkeyWindow());
 
 	unsigned int i;
 	for(i = 0; i < gatTiles.size(); i++)

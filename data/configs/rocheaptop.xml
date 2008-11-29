@@ -18,13 +18,13 @@
         </sounds>
     </files>
     <graphics>
-        <resx>1200</resx>
+        <resx>800</resx>
         <resy>600</resy>
         <fullscreen>false</fullscreen>
         <bpp>32</bpp>
         <font>tahoma</font>
         <skin>data/skins/hamvista.xml</skin>
-        <notilecolor>FFFF80</notilecolor>
+        <notilecolor>FFFF40</notilecolor>
         <bgcolor>8000FF</bgcolor>
     </graphics>
     <undo size="50" />
@@ -52,5 +52,9 @@
             <w>50</w>
             <h>164</h>
         </texturetools>
+        <hotbar>
+            <x>520</x>
+            <y>0</y>
+        </hotbar>
     </wm>
 </config>

@@ -1,5 +1,4 @@
 #include "hotkeywindow.h"
-
 #include <graphics.h>
 
 
@@ -157,8 +156,9 @@ void* cHotkeyWindow::cHotkeyButton::userfunc( void* param )
 	return NULL;
 }
 
-cHotkeyWindow::cHotkeyWindow() : cWindow()
+cHotkeyWindow::cHotkeyWindow(cWorldContainer* container) : cWindow()
 {
+	worldContainer = container;
 	windowType = WT_HOTKEY;
 	resizable = false;
 	visible = true;

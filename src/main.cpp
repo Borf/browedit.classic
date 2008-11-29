@@ -499,9 +499,9 @@ int main(int argc, char *argv[])
 					cSettings::skinFile = el2->FirstChild()->Value();
 				else if(strcmp(el2->Value(),					"bgcolor") == 0)
 					cGraphics::backgroundColor = hex2floats(el2->FirstChild()->Value());
-				else if(strcmp(el2->Value(),					"noTileColor") == 0)
+				else if(strcmp(el2->Value(),					"notilecolor") == 0)
 					cGraphics::noTileColor = hex2floats(el2->FirstChild()->Value());
-				else if(strcmp(el2->Value(),					"gatTransparency") == 0)
+				else if(strcmp(el2->Value(),					"gattransparency") == 0)
 					cGraphics::gatTransparency = atof(el2->FirstChild()->Value());
 
 				el2 = el2->NextSiblingElement();
