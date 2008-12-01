@@ -838,7 +838,7 @@ int main(int argc, char *argv[])
 			
 		}
 		pFile2.close();
-		pFile = cFileSystem::open("data/cSettings::keyMap.txt");
+		pFile = cFileSystem::open("data/keymap.txt");
 
 	}
 	for(i = 0; i < SDLK_LAST-SDLK_FIRST; i++)

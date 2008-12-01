@@ -263,6 +263,14 @@ void cClipboardObject::apply()
 			model->pos = cVector3(cGraphics::cMouse::x3d/5.0f, -cGraphics::cMouse::y3d, cGraphics::cMouse::z3d/5.0f);
 		if (SDL_GetModState() & KMOD_SHIFT)
 			model->pos.y = clipboardY;
+
+		if(SDL_GetModState() & KMOD_SHIFT)
+		{
+			model->pos.x = round(model->pos.x);
+			model->pos.z = round(model->pos.z);
+		}
+
+		
 		model->scale = clipboardScale;
 		model->rot = clipboardRot;
 		model->lightopacity = clipboardFloat;
@@ -308,7 +316,7 @@ void cClipboardObject::render()
 		rsmmodel = new cRSMModel();
 		rsmmodel->load(clipboardFile);
 		rsmmodel->pos = cVector3(cGraphics::cMouse::x3d/5.0f, -cGraphics::cMouse::y3d, cGraphics::cMouse::z3d/5.0f);
-		if (SDL_GetModState() & KMOD_SHIFT)
+		if (SDL_GetModState() & KMOD_CTRL)
 			rsmmodel->pos.y = clipboardY;
 		rsmmodel->scale = clipboardScale;
 		rsmmodel->rot = clipboardRot;
@@ -318,7 +326,14 @@ void cClipboardObject::render()
 	if(usePos)
 		rsmmodel->pos = pos+pos2;
 	else
+	{
 		rsmmodel->pos = cVector3(cGraphics::cMouse::x3d/5.0f, -cGraphics::cMouse::y3d, cGraphics::cMouse::z3d/5.0f);
+		if(SDL_GetModState() & KMOD_SHIFT)
+		{
+			rsmmodel->pos.x = round(rsmmodel->pos.x);
+			rsmmodel->pos.z = round(rsmmodel->pos.z);
+		}
+	}
 	rsmmodel->draw();
 }
 

@@ -356,10 +356,13 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 					cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->rot = cVector3(0,0,0);
 				}
 				break;
-
-
-
-
+			case SDLK_SPACE:
+				if(cClipBoard::currentClipBoard && cClipBoard::pasting && cClipBoard::currentClipBoard->type == cClipBoard::CLIP_OBJECT)
+				{
+					((cClipboardObject*)cClipBoard::currentClipBoard)->clipboardRot.y+=90;
+					((cClipboardObject*)cClipBoard::currentClipBoard)->rsmmodel->rot.y += 90;
+				}
+				break;
 			default:
 				break;
 			}
