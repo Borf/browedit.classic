@@ -10,3 +10,4 @@ custom/face|data\model\face.rsm
 custom/building|data\model\building.rsm
 custom/ifrit|data\model\ifrit.rsm
 custom/Warlord|data\model\Warlord.rsm
+custom/candle|data\model\Candle.rsm

@@ -12,6 +12,8 @@ public:
 	virtual cWindow* addXmlWindow(std::string) = 0;
 	virtual int  getSelectedTextureIndex() = 0;
 	virtual void render() = 0;
+	virtual std::string inputWindow(std::string, std::string) = 0;
+	virtual void messageWindow(std::string) = 0;
 };
 
 

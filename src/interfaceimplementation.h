@@ -10,6 +10,9 @@ public:
 	cWindow* addXmlWindow(std::string);
 	int getSelectedTextureIndex();
 	void render();
+	std::string inputWindow(std::string, std::string);
+	void messageWindow(std::string);
+
 };
 
 

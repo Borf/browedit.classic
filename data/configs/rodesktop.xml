@@ -47,5 +47,13 @@
         <tile>6</tile>
     </gattiles>
     <wm>
+        <hotbar>
+            <x>744</x>
+            <y>0</y>
+        </hotbar>
+        <sprite>
+            <x>237</x>
+            <y>184</y>
+        </sprite>
     </wm>
 </config>

@@ -26,3 +26,14 @@ void cBrowInterfaceImplementation::render()
 	cGraphics::draw();
 	SDL_GL_SwapBuffers();
 }
+
+std::string cBrowInterfaceImplementation::inputWindow( std::string msg, std::string defaultText)
+{
+	return cWM::inputWindow(msg, defaultText);
+}
+
+void cBrowInterfaceImplementation::messageWindow( std::string msg)
+{
+	cWM::showMessage(msg);
+}
+

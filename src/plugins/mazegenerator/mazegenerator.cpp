@@ -56,10 +56,15 @@ public:
 
 bool cMazeGenerator::action(cWorld* world)
 {
+	if(world->textures.size() < 3)
+	{
+		browInterface->messageWindow("You need at least 3 textures for this tool (floor, top and walls)");
+		return false;
+	}
 	int x,y,i;
 	int tileStart = world->tiles.size();
 
-	for(int tex = 0; tex < 3; tex++)
+	for(int tex = 0; tex < 2; tex++)
 	{
 		for(y = 0; y < 4; y++)
 		{
@@ -83,6 +88,25 @@ bool cMazeGenerator::action(cWorld* world)
 				world->tiles.push_back(t);
 			}
 		}
+	}
+	for(x = 0; x < 2; x++)
+	{
+		cTile t;
+		t.lightmap = 0;
+		t.texture = 2;
+		t.u1 = (x+1)/2.0f;
+		t.v1 = 0;
+		t.u2 = (x)/2.0f;
+		t.v2 = 0;
+		t.u3 = (x+1)/2.0f;
+		t.v3 = 1;
+		t.u4 = (x)/2.0f;
+		t.v4 = 1;
+		t.color[0] = (char)255;
+		t.color[1] = (char)255;
+		t.color[2] = (char)255;
+		t.color[3] = (char)255;
+		world->tiles.push_back(t);
 	}
 
 	for(y = 0; y < world->height; y++)
@@ -162,12 +186,34 @@ bool cMazeGenerator::action(cWorld* world)
 
 		if((repeat++) % 10 == 0)
 			browInterface->render();
-		
-
-
 	}
-	
 
+
+	for(x = 0; x < world->width-1; x++)
+	{
+		for(y = 0; y < world->height-1; y++)
+		{
+			cCube* c = &world->cubes[y][x];
+			if (c->tileOtherSide == -1)
+			{
+				if (c->cell4 != (c+1)->cell1 && c->cell2 != (c+1)->cell3)
+				{
+					world->cubes[y][x].tileOtherSide = tileStart+32+(y%2);
+				}
+			}
+			if (c->tileSide == -1)
+			{
+				if (c->cell4 != world->cubes[y+1][x].cell1 && c->cell3 != world->cubes[y+1][x].cell2)
+				{
+					world->cubes[y][x].tileSide = tileStart+32+(x%2);
+				}
+			}
+		}
+		browInterface->render();
+	}
+
+
+	browInterface->fixNormals();
 
 	return true;
 }
