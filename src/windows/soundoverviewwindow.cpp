@@ -1,3 +1,4 @@
+#include <common.h>
 #include "soundoverviewwindow.h"
 
 #include <wm/windowbutton.h>

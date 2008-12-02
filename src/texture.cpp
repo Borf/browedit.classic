@@ -1,3 +1,5 @@
+#include "common.h"
+#include "filesystem.h"
 #include "texture.h"
 
 #ifdef __MINGW32__

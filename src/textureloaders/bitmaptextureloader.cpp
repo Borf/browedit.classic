@@ -1,3 +1,4 @@
+#include <common.h>
 #include "bitmaptextureloader.h"
 #ifdef __MINGW32__
 #include <GL/glext.h> // for GL_BGRA_EXT

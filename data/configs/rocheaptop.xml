@@ -26,6 +26,7 @@
         <skin>data/skins/hamvista.xml</skin>
         <notilecolor>FFFF40</notilecolor>
         <bgcolor>8000FF</bgcolor>
+        <camerasmoothing>0.75</camerasmoothing>
     </graphics>
     <undo size="50" />
     <language>english</language>

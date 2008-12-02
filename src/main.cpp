@@ -24,6 +24,7 @@
 #include "windows/texturetoolswindow.h"
 #include "windows/minimapwindow.h"
 #include "plugins/base/base.h"
+#include "interfaceimplementation.h"
 #include "bmutex.h"
 #include "settings.h"
 #include "texturecache.h"
@@ -81,6 +82,7 @@ cMenu* effectsmenu;
 long lasttimer;
 
 
+cBrowInterfaceImplementation interface;
 
 unsigned char * getPixelsBGR()
 {
@@ -167,10 +169,10 @@ void mainloop()
 									c->cell4 = min(mmax,c->cell4);
 								}
 							}
-							c->calcNormal();
 						}
 					}
 				}
+				cGraphics::world->calcVertexNormals(posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f), posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f), posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f), posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f));
 				lasttimer = SDL_GetTicks();
 			}
 		}
@@ -783,7 +785,7 @@ int main(int argc, char *argv[])
 					continue;
 				}
 				cPluginBase* plugin = getInstance();
-				plugin->SetFunctions(XmlWindow);
+				plugin->setInterface(&interface);
 
 				cMenu* p = cGraphics::menu;
 				std::string s = plugin->menu;
@@ -894,7 +896,7 @@ int main(int argc, char *argv[])
 	if(cSettings::config.FirstChildElement("config")->FirstChildElement("firstmap"))
 		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\" + cSettings::config.FirstChildElement("config")->FirstChildElement("firstmap")->FirstChild()->Value()).c_str());
 	else
-		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\prontera").c_str());
+		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\lighttest").c_str());
 
 	if(argc > 1)
 	{
@@ -1156,12 +1158,12 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 							cGraphics::worldContainer->camera.rot-=2*(float)PI;
 					}
 				}
-				else if (SDL_GetModState() & KMOD_CTRL)
+			/*	else if (SDL_GetModState() & KMOD_CTRL)
 				{
 					if (!(cGraphics::worldContainer->settings.selectionstart3d == cGraphics::worldContainer->settings.selectionend3d))
 					{
 					}
-				}
+				}*/
 				else
 				{
 					if(!cGraphics::worldContainer->view.topCamera)

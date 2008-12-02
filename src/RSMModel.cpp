@@ -1,3 +1,4 @@
+#include "common.h"
 #include "RSMModel.h"
 #include "graphics.h"
 #include "texturecache.h"

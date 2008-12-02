@@ -1,3 +1,4 @@
+#include <common.h>
 #include "lightwindow.h"
 
 #include <wm/windowbutton.h>

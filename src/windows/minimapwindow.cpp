@@ -1,3 +1,4 @@
+#include <common.h>
 #include "minimapwindow.h"
 
 #include <graphics.h>

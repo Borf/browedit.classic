@@ -1,4 +1,3 @@
-#include <common.h>
 #include <string>
 
 int getversion()

@@ -1,9 +1,10 @@
+#include <common.h>
 #include "jpegtextureloader.h"
 #ifdef __MINGW32__
 #include <GL/glext.h> // for GL_BGR_EXT
 #endif
 
-#ifdef _WIN32
+#ifdef WIN32
 #include <gd/gd.h>
 #else
 #include <gd.h>

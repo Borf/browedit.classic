@@ -47,10 +47,10 @@ class cUndoHeightEdit : public cUndoItem
 						cGraphics::world->cubes[y+yy][x+xx].cell2 = data[yy][xx].cell2;
 						cGraphics::world->cubes[y+yy][x+xx].cell3 = data[yy][xx].cell3;
 						cGraphics::world->cubes[y+yy][x+xx].cell4 = data[yy][xx].cell4;
-						cGraphics::world->cubes[y+yy][x+xx].calcNormal();
 					}
 				}
 			}
+			cGraphics::world->calcVertexNormals(x,y,x+data.size(), y+data[0].size());
 		}
 };
 

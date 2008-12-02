@@ -1,9 +1,13 @@
+#ifndef __MINGW32__
+#pragma warning(disable : 4786)
+#endif
+
 #include "giftextureloader.h"
 #ifdef __MINGW32__
 #include <GL/glext.h> // for GL_BGR_EXT
 #endif
 
-#ifdef _WIN32
+#ifdef WIN32
 #include <gd/gd.h>
 #else
 #include <gd.h>

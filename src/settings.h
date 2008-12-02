@@ -38,6 +38,7 @@ public:
 	static TiXmlDocument	msgTable;
 	static int				keyMap[SDLK_LAST-SDLK_FIRST];
 	static unsigned int		undoSize;
+	static float			cameraSmoothing;
 
 	
 	static std::vector<std::pair<std::string, std::string> >	translations;

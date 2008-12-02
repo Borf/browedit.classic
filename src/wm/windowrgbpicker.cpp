@@ -1,7 +1,8 @@
+#include <common.h>
 #include "windowrgbpicker.h"
 #include "window.h"
 
-#ifdef _WIN32
+#ifdef WIN32
 #include <windows.h>
 #endif
 

@@ -1,6 +1,7 @@
+#include <common.h>
 #include "windowscrollpanel.h"
 
-#ifdef _WIN32
+#ifdef WIN32
 #include <windows.h>
 #endif
 

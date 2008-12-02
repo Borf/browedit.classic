@@ -1,5 +1,6 @@
 #include "base.h"
 #include <wm/wm.h>
+#include <graphics.h>
 
 cPluginBase::cPluginBase(std::string n, std::string m)
 {
@@ -7,12 +8,7 @@ cPluginBase::cPluginBase(std::string n, std::string m)
 	menu = m;
 }
 
-void cPluginBase::SetFunctions(cWindow* (*func)(std::string))
+void cPluginBase::setInterface(cBrowInterface* pInterface)
 {
-	addxml = func;
-}
-
-cWindow* cPluginBase::addWindow(std::string s)
-{
-	return addxml(s);
+	interface = pInterface;
 }

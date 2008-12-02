@@ -1,3 +1,4 @@
+#include <common.h>
 #include "sprite.h"
 #include "graphics.h"
 #include "filesystem.h"

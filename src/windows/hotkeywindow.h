@@ -1,6 +1,7 @@
 #ifndef __HOTKEYWINDOW_H__
 #define __HOTKEYWINDOW_H__
 
+#include <mymath.h>
 #include <wm/window.h>
 #include <wm/windowpicturebox.h>
 class cWorldContainer;

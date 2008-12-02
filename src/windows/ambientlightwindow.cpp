@@ -1,3 +1,4 @@
+#include <common.h>
 #include "ambientlightwindow.h"
 #include <graphics.h>
 

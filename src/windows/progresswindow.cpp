@@ -1,3 +1,4 @@
+#include <common.h>
 #include "progresswindow.h"
 #include <wm/windowprogressbar.h>
 

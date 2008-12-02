@@ -52,57 +52,55 @@ int cProcessManagement::detailheightedit_process_events(SDL_Event &event)
 
 					cGraphics::worldContainer->undoStack->push(new cUndoHeightEdit(0,0,cGraphics::world->width, cGraphics::world->height));
 
-	//				if (posx >= floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f) && posx <= cGraphics::world->width-(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f) && posy >= floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f) && posy<= cGraphics::world->height-(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f))
+					for(int x = posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); x++)
 					{
-						for(int x = posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); x++)
+						for(int y = posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); y++)
 						{
-							for(int y = posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); y++)
+							if(x >= 0 && y >= 0 && x < cGraphics::world->width && y < cGraphics::world->height)
 							{
-								if(x >= 0 && y >= 0 && x < cGraphics::world->width && y < cGraphics::world->height)
+								cCube* c = &cGraphics::world->cubes[y][x];
+								if(cGraphics::cMouse::lbuttondown && !cGraphics::cMouse::rbuttondown)
 								{
-									cCube* c = &cGraphics::world->cubes[y][x];
-									if(cGraphics::cMouse::lbuttondown && !cGraphics::cMouse::rbuttondown)
+									if (!cGraphics::slope || ((x > posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)) && y > posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)))
+										c->cell1-=1;
+									if (!cGraphics::slope || ((x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1) && y > posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)))
+										c->cell2-=1;
+									if (!cGraphics::slope || ((x > posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)) && y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1))
+										c->cell3-=1;
+									if (!cGraphics::slope || ((x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1) && y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1))
+										c->cell4-=1;
+									if(ctrl)
 									{
-										if (!cGraphics::slope || ((x > posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)) && y > posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)))
-											c->cell1-=1;
-										if (!cGraphics::slope || ((x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1) && y > posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)))
-											c->cell2-=1;
-										if (!cGraphics::slope || ((x > posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)) && y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1))
-											c->cell3-=1;
-										if (!cGraphics::slope || ((x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1) && y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1))
-											c->cell4-=1;
-										if(ctrl)
-										{
-											c->cell1 = max(mmin,c->cell1);
-											c->cell2 = max(mmin,c->cell2);
-											c->cell3 = max(mmin,c->cell3);
-											c->cell4 = max(mmin,c->cell4);
-										}
+										c->cell1 = max(mmin,c->cell1);
+										c->cell2 = max(mmin,c->cell2);
+										c->cell3 = max(mmin,c->cell3);
+										c->cell4 = max(mmin,c->cell4);
 									}
-									if(cGraphics::cMouse::lbuttondown && cGraphics::cMouse::rbuttondown)
+								}
+								if(cGraphics::cMouse::lbuttondown && cGraphics::cMouse::rbuttondown)
+								{
+									if (!cGraphics::slope || ((x > posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)) && y > posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)))
+										c->cell1+=1;
+									if (!cGraphics::slope || ((x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1) && y > posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)))
+										c->cell2+=1;
+									if (!cGraphics::slope || ((x > posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)) && y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1))
+										c->cell3+=1;
+									if (!cGraphics::slope || ((x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1) && y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1))
+										c->cell4+=1;
+									if(ctrl)
 									{
-										if (!cGraphics::slope || ((x > posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)) && y > posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)))
-											c->cell1+=1;
-										if (!cGraphics::slope || ((x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1) && y > posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)))
-											c->cell2+=1;
-										if (!cGraphics::slope || ((x > posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)) && y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1))
-											c->cell3+=1;
-										if (!cGraphics::slope || ((x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1) && y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1))
-											c->cell4+=1;
-										if(ctrl)
-										{
-											c->cell1 = min(mmax,c->cell1);
-											c->cell2 = min(mmax,c->cell2);
-											c->cell3 = min(mmax,c->cell3);
-											c->cell4 = min(mmax,c->cell4);
-										}
+										c->cell1 = min(mmax,c->cell1);
+										c->cell2 = min(mmax,c->cell2);
+										c->cell3 = min(mmax,c->cell3);
+										c->cell4 = min(mmax,c->cell4);
 									}
-									c->calcNormal();
 								}
 							}
 						}
-						lasttimer = SDL_GetTicks()+500;
 					}
+					lasttimer = SDL_GetTicks()+500;
+					
+					cGraphics::world->calcVertexNormals(posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f), posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f), x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f), posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f));
 				}
 			}
 			break;
@@ -167,15 +165,10 @@ int cProcessManagement::detailheightedit_process_events(SDL_Event &event)
 								cGraphics::world->cubes[y][x+1].cell1 = to;
 								cGraphics::world->cubes[y-1][x+1].cell3 = to;
 								cGraphics::world->cubes[y-1][x].cell4 = to;
-
-								cGraphics::world->cubes[y][x].calcNormal();
-								cGraphics::world->cubes[y][x+1].calcNormal();
-								cGraphics::world->cubes[y-1][x+1].calcNormal();
-								cGraphics::world->cubes[y-1][x].calcNormal();
 							}
 						}
 					}
-
+					cGraphics::world->calcVertexNormals(posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1, posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f), x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f), posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)+1);
 				}
 				break;
 			case SDLK_s:
@@ -277,24 +270,10 @@ int cProcessManagement::detailheightedit_process_events(SDL_Event &event)
 									if(x >= 0)
 										cGraphics::world->cubes[y-1][x].cell4 = to;
 								}
-
-
-								if(x >= 0 && y < cGraphics::world->height)
-									cGraphics::world->cubes[y][x].calcNormal();
-								if(x < cGraphics::world->width-1 && y < cGraphics::world->height)
-									cGraphics::world->cubes[y][x+1].calcNormal();
-								if(y > 0)
-								{
-									if(x < cGraphics::world->width-1)
-										cGraphics::world->cubes[y-1][x+1].calcNormal();
-									if(x >= 0)
-										cGraphics::world->cubes[y-1][x].calcNormal();
-								}
 							}
 						}
 					}
-					
-
+					cGraphics::world->calcVertexNormals(posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1, posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f), posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f), posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)+1);
 				}
 				break;
 			default:

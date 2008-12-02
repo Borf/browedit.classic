@@ -34,6 +34,7 @@ cClearMapPlugin::cClearMapPlugin() : cPluginBase("Clear Map", "tools/CLEARMAP")
 }
 
 cWorld* world;
+cClearMapPlugin* plugin;
 
 void handleevent(cWindow* w, std::string name, std::string event)
 {
@@ -143,9 +144,9 @@ void handleevent(cWindow* w, std::string name, std::string event)
 				world->cubes[y][x].cell2 = 0;
 				world->cubes[y][x].cell3 = 0;
 				world->cubes[y][x].cell4 = 0;
-				world->cubes[y][x].calcNormal();
 			}
 		}
+		plugin->interface->fixNormals();
 	}
 
 	if(w->objects["chkWalls"]->getInt(0) != 0)
@@ -233,7 +234,8 @@ void handleevent(cWindow* w, std::string name, std::string event)
 bool cClearMapPlugin::action(cWorld* wrld)
 {
 	world = wrld;
-	cXmlWindow* w = (cXmlWindow*)addWindow("plugins/clearmap.xml");
+	plugin = this;
+	cXmlWindow* w = (cXmlWindow*)interface->addXmlWindow("plugins/clearmap.xml");
 	w->eventhandler = handleevent;
 	return true;
 }

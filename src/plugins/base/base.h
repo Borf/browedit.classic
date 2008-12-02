@@ -9,22 +9,19 @@ class cTexture;
 class cFont;
 class TiXmlDocument;
 class cWindow;
-
+class cBrowInterface;
 
 class cPluginBase
 {
-private:
-	cWindow*			(*addxml)(std::string);
 public:
 	std::string			name;
 	std::string			menu;
 
 	cPluginBase(std::string,std::string);
 
-	void				SetFunctions(cWindow* (*func)(std::string));
+	void				setInterface(cBrowInterface*);
 	virtual bool		action(cWorld*) = 0;
-	cWindow*			addWindow(std::string);
-
+	cBrowInterface*		interface;
 };
 
 

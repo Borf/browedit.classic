@@ -1,7 +1,11 @@
 #ifndef __TEXTURECACHE_H__
 #define __TEXTURECACHE_H__
 
-#include "common.h"
+#ifndef __MINGW32__
+#pragma warning(disable : 4786)
+#endif
+
+
 #include <map>
 #include <string>
 #include "texture.h"

@@ -1,9 +1,9 @@
 #ifndef __RSMMODEL_H__
 #define __RSMMODEL_H__
 
-#include "common.h"
 #include "texture.h"
 #include "filesystem.h"
+#include <mymath.h>
 
 class cRSMModel;
 

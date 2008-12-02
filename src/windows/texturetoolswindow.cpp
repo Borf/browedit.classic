@@ -1,3 +1,4 @@
+#include <common.h>
 #include "texturetoolswindow.h"
 #include "texturebrushwindow.h"
 

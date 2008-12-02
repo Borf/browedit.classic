@@ -1,5 +1,6 @@
 #ifndef __FONT_H__
 #define __FONT_H__
+#include <common.h>
 
 #ifdef WIN32
 	#include <windows.h>

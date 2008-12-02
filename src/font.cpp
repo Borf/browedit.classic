@@ -3,7 +3,6 @@
 
 #include "font.h"
 
-#include <common.h>
 #include "texture.h"
 #include <vector>
 

@@ -1,3 +1,4 @@
+#include <common.h>
 #include "world.h"
 #include "graphics.h"
 #include "filesystem.h"
@@ -13,7 +14,7 @@
 #include <frustum.h>
 #include "settings.h"
 
-#ifdef _WIN32
+#ifdef WIN32
 #include <gd/gd.h>
 #else
 #include <gd.h>
@@ -231,7 +232,6 @@ void cWorld::load()
 					c.tileSide = *((short*)(buf+18));
 					c.tileOtherSide = *((short*)(buf+20));
 				}
-				c.calcNormal();
 				row[x] = c;
 			}
 			cubes[y] = row;
@@ -322,7 +322,6 @@ void cWorld::load()
 				c.cell2 = *((float*)(buf+16));
 				c.cell3 = *((float*)(buf+20));
 				c.cell4 = *((float*)(buf+24));
-				c.calcNormal();
 				c.maxHeight = -99999;
 				c.minHeight = 99999;
 				row[x] = c;
@@ -1454,6 +1453,10 @@ void cWorld::draw()
 		camheight = -cubes[height+(int)cGraphics::worldContainer->camera.pointer.y/10-1][-(int)cGraphics::worldContainer->camera.pointer.x/10].cell1;
 	}
 
+	
+	static cVector3 lastLookAt, lastEye;
+
+
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 	glLoadIdentity();									// Reset The Modelview Matrix
 	if (cGraphics::worldContainer->view.topCamera)
@@ -1465,11 +1468,20 @@ void cWorld::draw()
 					-cGraphics::worldContainer->camera.pointer.x-0.001,
 					0,1,0);
 	else
-		gluLookAt(  -cGraphics::worldContainer->camera.pointer.x + cGraphics::worldContainer->camera.height*sin(cGraphics::worldContainer->camera.rot),
-					camrad+cGraphics::worldContainer->camera.height+camheight,
-					-cGraphics::worldContainer->camera.pointer.y + cGraphics::worldContainer->camera.height*cos(cGraphics::worldContainer->camera.rot),
-					-cGraphics::worldContainer->camera.pointer.x,camrad + cGraphics::worldContainer->camera.height * (cGraphics::worldContainer->camera.angle/10.0f)+camheight,-cGraphics::worldContainer->camera.pointer.y,
+	{
+		cVector3 eye = cVector3(-cGraphics::worldContainer->camera.pointer.x + cGraphics::worldContainer->camera.height*sin(cGraphics::worldContainer->camera.rot),
+								camrad+cGraphics::worldContainer->camera.height+camheight,
+								-cGraphics::worldContainer->camera.pointer.y + cGraphics::worldContainer->camera.height*cos(cGraphics::worldContainer->camera.rot));
+		cVector3 lookAt = cVector3(	-cGraphics::worldContainer->camera.pointer.x,camrad + 
+									cGraphics::worldContainer->camera.height * (cGraphics::worldContainer->camera.angle/10.0f)+camheight,
+									-cGraphics::worldContainer->camera.pointer.y);
+
+		lastEye =		lastEye		* cSettings::cameraSmoothing	+ eye		* (1-cSettings::cameraSmoothing);
+		lastLookAt =	lastLookAt	* cSettings::cameraSmoothing	+ lookAt	*(1-cSettings::cameraSmoothing);
+		gluLookAt(  lastEye.x, lastEye.y, lastEye.z,
+					lastLookAt.x, lastLookAt.y, lastLookAt.z,
 					0,1,0);
+	}
 
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_BLEND);
@@ -1635,6 +1647,7 @@ void cWorld::draw()
 					glNormal3f(c->vNormal4.x, c->vNormal4.y, c->vNormal4.z);
 					glTexCoord2f(t->u4, 1-t->v4);				glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
 				glEnd();
+				glDisable(GL_COLOR_MATERIAL);
 			}
 			else if (cGraphics::view.showNoTiles)
 			{
@@ -4045,30 +4058,75 @@ bool cWorld::checkSanity()
 	return true;
 }
 
-void cWorld::calcVertexNormals()
+void cWorld::calcVertexNormals(int xfrom, int yfrom, int xto, int yto)
 {
+	if(xto >= width)
+		xto = width-1;
+	if(yto >= height)
+		yto = height-1;
+	if(xto == -1)
+		xto = width;
+	if(yto == -1)
+		yto = height;
+	if(xfrom < 0)
+		xfrom = 0;
+	if(yfrom < 0)
+		yfrom = 0;
+
+	if(xfrom >= width || yfrom >= height || xto < 0 || yto < 0)
+	{
+		Log(1,0,"WTF");
+		return;
+	}
+
 	int x,y;
 
 
-	for(y = 1; y < height-1; y++)
-	{
-		for(x = 1; x < width-1; x++)
-		{
-			cubes[y][x].vNormal1 = (cubes[y][x].normal + cubes[y-1][x].normal + cubes[y][x-1].normal + cubes[y-1][x-1].normal).normalize();
-			cubes[y][x].vNormal2 = (cubes[y][x].normal + cubes[y+1][x].normal + cubes[y][x-1].normal + cubes[y+1][x-1].normal).normalize();
-			cubes[y][x].vNormal3 = (cubes[y][x].normal + cubes[y-1][x].normal + cubes[y][x+1].normal + cubes[y-1][x+1].normal).normalize();
-			cubes[y][x].vNormal4 = (cubes[y][x].normal + cubes[y+1][x].normal + cubes[y][x+1].normal + cubes[y+1][x+1].normal).normalize();
+	for(y = yfrom; y < yto; y++)
+		for(x = xfrom; x < xto; x++)
+			cubes[y][x].calcNormal();
 
-/*
-glNormal3f(c->vNormal1.x, c->vNormal1.y, c->vNormal1.z);
-glVertex3f(x*10,-c->cell1,(height-y)*10);
-glNormal3f(c->vNormal2.x, c->vNormal2.y, c->vNormal2.z);
-glVertex3f(x*10,-c->cell3,(height-y)*10-10);
-glNormal3f(c->vNormal3.x, c->vNormal3.y, c->vNormal3.z);
-glVertex3f(x*10+10,-c->cell2,(height-y)*10);
-glNormal3f(c->vNormal4.x, c->vNormal4.y, c->vNormal4.z);
-glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
-*/		
+	for(y = yfrom; y < yto; y++)
+	{
+		for(x = xfrom; x < xto; x++)
+		{
+			cubes[y][x].vNormal1 = cubes[y][x].normal;
+			cubes[y][x].vNormal2 = cubes[y][x].normal;
+			cubes[y][x].vNormal3 = cubes[y][x].normal; 
+			cubes[y][x].vNormal4 = cubes[y][x].normal;
+
+			if(y > 0)
+			{
+				cubes[y][x].vNormal1 += cubes[y-1][x].normal;
+				cubes[y][x].vNormal3 += cubes[y-1][x].normal;
+				if(x > 0)
+					cubes[y][x].vNormal1 += cubes[y-1][x-1].normal;
+				if(x < width-1)
+					cubes[y][x].vNormal3 += cubes[y-1][x+1].normal;
+			}
+			if(x > 0)
+			{
+				cubes[y][x].vNormal1 += cubes[y][x-1].normal;
+				cubes[y][x].vNormal2 += cubes[y][x-1].normal;
+				if(y < height-1)
+					cubes[y][x].vNormal2 += cubes[y+1][x-1].normal;
+			}
+			if(y < height-1)
+			{
+				cubes[y][x].vNormal2 += cubes[y+1][x].normal;
+				cubes[y][x].vNormal4 += cubes[y+1][x].normal;
+				if(x < width-1)
+					cubes[y][x].vNormal4 += cubes[y+1][x+1].normal;
+			}
+			if(x < width-1)
+			{
+				cubes[y][x].vNormal3 += cubes[y][x+1].normal;
+				cubes[y][x].vNormal4 += cubes[y][x+1].normal;
+			}
+			cubes[y][x].vNormal1.normalize();
+			cubes[y][x].vNormal2.normalize();
+			cubes[y][x].vNormal3.normalize();
+			cubes[y][x].vNormal4.normalize();
 		}
 	}
 }
@@ -4248,4 +4306,12 @@ void cWorld::newEmpty(int newWidth,int newHeight)
 	loaded = true;
 	cGraphics::worldContainer->settings.texturestart = 0;
 	wnd = new cHotkeyWindow(cGraphics::worldContainer);
+}
+
+void cCube::calcNormal()
+{
+	cVector3 b1, b2;
+	b1 = cVector3(10,-cell1,-10) - cVector3(0,-cell4,0);
+	b2 = cVector3(0,-cell3,-10) - cVector3(0,-cell4,0);
+	normal = b1.cross(b2).normalize();//cVector3(b1.y * b2.z - b1.z * b2.y, b1.z * b2.x - b1.x * b2.z, b1.x * b2.y - b1.y * b2.x);
 }

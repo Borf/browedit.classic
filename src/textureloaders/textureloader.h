@@ -2,7 +2,6 @@
 #define __TEXTURELOADER_H__
 
 
-#include <common.h>
 #include <texture.h>
 
 class cTextureLoader

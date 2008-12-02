@@ -95,17 +95,8 @@ public:
 	float minHeight;
 	bool selected;
 
-	void calcNormal()
-	{
-		cVector3 b1, b2;
-		b1 = cVector3(10,-cell1,-10) - cVector3(0,-cell4,0);
-		b2 = cVector3(0,-cell3,-10) - cVector3(0,-cell4,0);
-		normal = b1.cross(b2).normalize();//cVector3(b1.y * b2.z - b1.z * b2.y, b1.z * b2.x - b1.x * b2.z, b1.x * b2.y - b1.y * b2.x);
-	}
-
-
+	void calcNormal();
 	cVector3 normal;
-
 	cVector3 vNormal1;
 	cVector3 vNormal2;
 	cVector3 vNormal3;
@@ -337,7 +328,7 @@ public:
 	void								fixGridding();
 	bool								makeLightmapsUnique();
 	bool								blackLightmaps();
-	void								calcVertexNormals();
+	void								calcVertexNormals(int = 0, int = 0, int = -1, int=-1);
 	
 
 	char								iniFile[40];

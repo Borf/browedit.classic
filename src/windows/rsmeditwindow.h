@@ -1,6 +1,7 @@
 #ifndef __RSMEDITWINDOW_H__
 #define __RSMEDITWINDOW_H__
 
+#include <mymath.h>
 #include <wm/window.h>
 
 #include <wm/windowbutton.h>

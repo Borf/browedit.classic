@@ -1,3 +1,4 @@
+#include <common.h>
 #include "tgatextureloader.h"
 #ifdef __MINGW32__
 #include <GL/glext.h> // for GL_BGR_EXT & GL_BGRA_EXT

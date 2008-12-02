@@ -1,8 +1,9 @@
+#include <common.h>
 #include "windowroundbutton.h"
 #include "window.h"
 #include <math.h>
 
-#ifdef _WIN32
+#ifdef WIN32
 #include <windows.h>
 #endif
 

@@ -131,27 +131,26 @@ void cClipboardHeight::apply()
 		return;
 	
 	cGraphics::worldContainer->undoStack->push(new cUndoHeightEdit(posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f), posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f), posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f), posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)));
-	//					if (posx >= (int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f) && posx <= cGraphics::world->width-(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f) && posy >= (int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f) && posy <= cGraphics::world->height-(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f))
+	int yy = 0;
+	for(int y = posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); y++)
 	{
-		int yy = 0;
-		for(int y = posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); y++)
+		std::vector<std::vector<float> > row;
+		int xx = 0;
+		for(int x = posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); x++)
 		{
-			std::vector<std::vector<float> > row;
-			int xx = 0;
-			for(int x = posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f); x++)
-			{
-				if (x >= cGraphics::world->width || x < 0 || y < 0 || y >= cGraphics::world->height)
-					continue;
-				cGraphics::world->cubes[y][x].cell1 = data[yy][xx][0];
-				cGraphics::world->cubes[y][x].cell2 = data[yy][xx][1];
-				cGraphics::world->cubes[y][x].cell3 = data[yy][xx][2];
-				cGraphics::world->cubes[y][x].cell4 = data[yy][xx][3];
-				cGraphics::world->cubes[y][x].calcNormal();
-				xx++;
-			}
-			yy++;
+			if (x >= cGraphics::world->width || x < 0 || y < 0 || y >= cGraphics::world->height)
+				continue;
+			cGraphics::world->cubes[y][x].cell1 = data[yy][xx][0];
+			cGraphics::world->cubes[y][x].cell2 = data[yy][xx][1];
+			cGraphics::world->cubes[y][x].cell3 = data[yy][xx][2];
+			cGraphics::world->cubes[y][x].cell4 = data[yy][xx][3];
+			xx++;
 		}
+		yy++;
 	}
+
+
+	cGraphics::world->calcVertexNormals(posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f), posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f), posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f), posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f));
 }
 
 void cClipboardHeight::render()

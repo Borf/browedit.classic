@@ -1,3 +1,4 @@
+#include <common.h>
 #include "texturebrushwindow.h"
 #include <wm/windowscrollpanel.h>
 

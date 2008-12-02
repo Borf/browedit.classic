@@ -30,6 +30,7 @@
         <skin>data/skins/HamVista.xml</skin>
         <notilecolor>FFFF80</notilecolor>
         <bgcolor>8000FF</bgcolor>
+		<camerasmoothing>0.75</camerasmoothing>
     </graphics>
     <undo size="50" />
     <language>english</language>

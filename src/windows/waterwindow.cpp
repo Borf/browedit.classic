@@ -1,3 +1,4 @@
+#include <common.h>
 #include "waterwindow.h"
 #include <wm/windowinputbox.h>
 #include <graphics.h>
