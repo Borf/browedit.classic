@@ -1,6 +1,7 @@
 #include <common.h>
 #include "graphics.h"
-#include "undo.h"
+#include "undo/effectchange.h"
+#include "undo/effectdelete.h"
 #include "menu.h"
 #include "windows/effectwindow.h"
 

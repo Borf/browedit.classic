@@ -1,6 +1,8 @@
 #include <common.h>
 #include "graphics.h"
-#include "undo.h"
+#include "undo/lightchange.h"
+#include "undo/lightnew.h"
+#include "undo/lightdelete.h"
 #include "menu.h"
 #include "menucommands.h"
 #include "windows/lightwindow.h"

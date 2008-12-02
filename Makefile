@@ -6,7 +6,7 @@ CC = gcc
 DEFINES = 
 CFLAGS = -Wall -pipe
 # where are source files located?
-SOURCE_DIRS= src src/wm src/tinyxml src/grflib src/textureloaders src/windows
+SOURCE_DIRS= src src/wm src/tinyxml src/grflib src/textureloaders src/windows src/undo
 # Host platform
 UNAME=$(shell uname -s | sed -e 's/_.*$$//')
 

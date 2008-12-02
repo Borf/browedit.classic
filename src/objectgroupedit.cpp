@@ -1,7 +1,9 @@
 #include <common.h>
 #include <wm/window.h>
 #include "graphics.h"
-#include "undo.h"
+#include "undo/objectschange.h"
+#include "undo/objectsnew.h"
+#include "undo/objectsdelete.h"
 #include "menu.h"
 
 extern bool doneAction;

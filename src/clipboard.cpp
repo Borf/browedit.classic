@@ -1,7 +1,11 @@
 #include <common.h>
 #include "clipboard.h"
 #include <graphics.h>
-#include <undo.h>
+#include <undo/texture.h>
+#include <undo/heightedit.h>
+#include <undo/gatheightedit.h>
+#include <undo/gattileedit.h>
+#include <undo/objectnew.h>
 #include "settings.h"
 cClipBoardContents* cClipBoard::currentClipBoard = NULL;
 bool				cClipBoard::pasting = false;
@@ -261,7 +265,7 @@ void cClipboardObject::apply()
 			model->pos = pos+pos2;
 		else
 			model->pos = cVector3(cGraphics::cMouse::x3d/5.0f, -cGraphics::cMouse::y3d, cGraphics::cMouse::z3d/5.0f);
-		if (SDL_GetModState() & KMOD_SHIFT)
+		if (SDL_GetModState() & KMOD_ALT)
 			model->pos.y = clipboardY;
 
 		if(SDL_GetModState() & KMOD_SHIFT)
@@ -333,6 +337,8 @@ void cClipboardObject::render()
 			rsmmodel->pos.x = round(rsmmodel->pos.x);
 			rsmmodel->pos.z = round(rsmmodel->pos.z);
 		}
+		if(SDL_GetModState() & KMOD_ALT)
+			rsmmodel->pos.y = clipboardY;
 	}
 	rsmmodel->draw();
 }

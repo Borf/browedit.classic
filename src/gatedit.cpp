@@ -1,7 +1,8 @@
 #include <common.h>
 #include <wm/window.h>
 #include "graphics.h"
-#include "undo.h"
+#include "undo/gattileedit.h"
+#include "undo/gatheightedit.h"
 #include "clipboard.h"
 
 

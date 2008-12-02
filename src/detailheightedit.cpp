@@ -1,6 +1,6 @@
 #include <common.h>
 #include "graphics.h"
-#include "undo.h"
+#include "undo/heightedit.h"
 #include <clipboard.h>
 
 extern long tilex,tiley;

@@ -27,6 +27,7 @@
 #include "bmutex.h"
 #include "settings.h"
 #include "texturecache.h"
+#include "clipboard.h"
 
 #ifdef WIN32
 #include <winsock.h>
@@ -929,11 +930,11 @@ int main(int argc, char *argv[])
 	renderMutex = new cBMutex();
 	while( cSettings::running )
 		mainloop();
-	delete renderMutex;
 
-
-	Mix_CloseAudio();
+	
 	// Shutdown
+	delete renderMutex;
+	Mix_CloseAudio();
 	cGraphics::closeAndCleanup();				// Kill The Window
 	for(i = 0; i < (int)cGraphics::worlds.size(); i++)
 		delete cGraphics::worlds[i];
@@ -941,6 +942,10 @@ int main(int argc, char *argv[])
 	cGraphics::worlds.clear();
 	cGraphics::worldContainer = NULL;
 	cGraphics::world = NULL;
+
+	if(cClipBoard::currentClipBoard)
+		delete cClipBoard::currentClipBoard;
+
 
 	cTextureCache::status();
 

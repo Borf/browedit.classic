@@ -861,5 +861,101 @@ SOURCE=..\src\wm\wm.cpp
 SOURCE=..\src\wm\wm.h
 # End Source File
 # End Group
+# Begin Group "undo"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\src\undo\effectchange.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\undo\effectdelete.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\undo\effectsdelete.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\undo\gatheightedit.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\undo\gattileedit.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\undo\heightedit.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\undo\lightchange.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\undo\lightdelete.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\undo\lightnew.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\undo\objectchange.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\undo\objectdelete.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\undo\objectnew.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\undo\objectschange.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\undo\objectsdelete.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\undo\objectsnew.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\undo\soundchange.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\undo\sounddelete.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\undo\soundnew.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\undo\texture.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\undo\tileedit.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\undo\wallchange.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\undo\wallschange.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\undo\waterchange.h
+# End Source File
+# End Group
 # End Target
 # End Project

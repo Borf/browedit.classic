@@ -1,6 +1,8 @@
 #include <common.h>
 #include "graphics.h"
-#include "undo.h"
+#include "undo/tileedit.h"
+#include "undo/wallschange.h"
+#include "undo/wallchange.h"
 
 
 int cProcessManagement::walledit_process_events(SDL_Event &event)

@@ -1,6 +1,8 @@
 #include <common.h>
 #include "graphics.h"
-#include "undo.h"
+#include "undo/objectchange.h"
+#include "undo/objectnew.h"
+#include "undo/objectdelete.h"
 #include "menu.h"
 #include <wm/windowinputbox.h>
 #include "windows/objectwindow.h"

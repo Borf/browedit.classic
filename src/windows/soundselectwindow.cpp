@@ -3,7 +3,7 @@
 #include <SDL/SDL_mixer.h>
 #include "rsmeditwindow.h"
 #include <filesystem.h>
-#include <undo.h>
+#include <undo/soundnew.h>
 #include <settings.h>
 
 extern std::vector<std::pair<std::string, std::string> > translations;

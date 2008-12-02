@@ -7,7 +7,9 @@
 #include "menucommands.h"
 #include "graphics.h"
 #include <SDL/SDL_syswm.h>
-#include "undo.h"
+#include "undo/heightedit.h"
+#include "undo/gatheightedit.h"
+#include "undo/lightnew.h"
 #include "filesystem.h"
 #include "windows/waterwindow.h"
 #include "windows/ambientlightwindow.h"
