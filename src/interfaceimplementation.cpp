@@ -1,7 +1,7 @@
 #include "interfaceimplementation.h"
 #include <graphics.h>
 #include <windows/xmlwindow.h>
-#include <sdl/SDL.h>
+#include <SDL/SDL.h>
 void cBrowInterfaceImplementation::fixNormals()
 {
 	cGraphics::world->calcVertexNormals();
