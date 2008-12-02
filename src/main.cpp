@@ -505,6 +505,8 @@ int main(int argc, char *argv[])
 					cGraphics::noTileColor = hex2floats(el2->FirstChild()->Value());
 				else if(strcmp(el2->Value(),					"gattransparency") == 0)
 					cGraphics::gatTransparency = atof(el2->FirstChild()->Value());
+				else if(strcmp(el2->Value(),					"camerasmoothing") == 0)
+					cSettings::cameraSmoothing = atof(el2->FirstChild()->Value());
 
 				el2 = el2->NextSiblingElement();
 
@@ -796,7 +798,7 @@ int main(int argc, char *argv[])
 					cMenu* pp = p->find(GetMsg("menu/" + past + s.substr(0,s.find("/")) + "/TITLE"),false);
 					if(!pp)
 					{
-						if(p == cGraphics::menu) //root
+					//	if(p == cGraphics::menu) //root
 						{
 							ADDMENU2(pp,p, GetMsg("menu/" + past + s.substr(0,s.find("/")) + "/TITLE"),	posx);
 						}
@@ -806,6 +808,8 @@ int main(int argc, char *argv[])
 					past += s.substr(0, s.find("/")) + "/";
 					s = s.substr(s.find("/")+1);
 				}
+				if(!p)
+					Log(1,0,"Couldn't find parent!");
 				ADDMENUITEMDATAP(mm,p,GetMsg("menu/" + plugin->menu),	&MenuCommand_plugin, (void*)plugin);
 			}
 

@@ -120,6 +120,10 @@
 		<tools>
 			<TITLE>Tools</TITLE>
 			<CLEARMAP>Clear Map</CLEARMAP>
+			<generators>
+				<TITLE>Generators</TITLE>
+				<MAZEGENERATOR>Maze</MAZEGENERATOR>
+			</generators>
 		</tools>
 	</menu>
 	<fs>

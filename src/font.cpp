@@ -33,115 +33,22 @@ cFont::~cFont()
 {
   glDeleteLists(list_base,256);                       // Delete All 256 Display Lists
 }
-/*
-
-int cFont::print(float r, float g, float b, float x, float y, const char *fmt, ...)
-{
-	char type = 0;
-	char    text[1024];                            // Holds Our String
-	int screenStats[4],blendSrc,blendDst;
-	char typ=type;
-	unsigned char blending;
-
-	va_list ap;                                    // Pointer To List Of Arguments
-
-	if (fmt == NULL)                               // If There's No Text
-		return 1;                                      // Do Nothing
-
-	va_start(ap, fmt);                             // Parses The String For Variables
-		vsprintf(text, fmt, ap);                       // And Converts Symbols To Actual Numbers
-	va_end(ap);                                    // Results Are Stored In Text
-
-	if (type>3)                                     // Did User Choose An Invalid Character Set?
-		type=3;                                       // If So, Select Set 2 (Italic)
-
-
-	glGetIntegerv(GL_VIEWPORT, screenStats);
-
-	glGetIntegerv(GL_BLEND_SRC, &blendSrc);
-	glGetIntegerv(GL_BLEND_DST, &blendDst);
-	glGetBooleanv(GL_BLEND, &blending);
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set the correct blending mode
-	glBindTexture(GL_TEXTURE_2D, texture->texId());
-	glEnable(GL_BLEND);
-	glEnable(GL_TEXTURE_2D);
-
-	if (r != 2 && g != 2 && b != 2)
-		glColor3f(r,g,b);
-
-	if(type>1) typ=typ-2;
-	string s = text;
-	glLoadIdentity();
-	glTranslated(x,y,0);
-	do
-	{
-		string s2 = "";
-		if (s.find((char)1) == string::npos)
-		{
-			s2 = s;
-			s = "";
-		}
-		else if (s.find((char)1) != 0)
-		{
-			s2 = s.substr(0, s.find((char)1));
-			s = s.substr(s.find((char)1));
-		}
-		else
-		{
-			// parse color code
-			s2 = "";
-			s = s.substr(1);
-			int r2 = atoi(s.substr(0,3).c_str());
-			s = s.substr(3);
-			int g2 = atoi(s.substr(0,3).c_str());
-			s = s.substr(3);
-			int b2 = atoi(s.substr(0,3).c_str());
-			s = s.substr(3);
-			glColor3ub(r2, g2, b2);
-		}
-
-		if (type == 0)
-		{
-			glListBase(list_base-32+(128*typ));
-			glCallLists(strlen(text),GL_UNSIGNED_BYTE, s2.c_str()); // Write The Text To The Screen
-		}
-		if(type>0)
-		{
-			glListBase((signed int)list_base-32+(128*((signed int)type-2)));
-			glCallLists(strlen(text),GL_UNSIGNED_BYTE, s2.c_str()); // Write The Text To The Screen
-		}
-
-
-	} while (s.size() > 0);
-	glMatrixMode(GL_MODELVIEW);
-	glPopMatrix();
-
-	if (!blending)
-		glDisable(GL_BLEND);
-	glBlendFunc(blendSrc, blendDst);
-	return 1;
-}
-
-*/
 
 
 int cFont::print(float r, float g, float b, float x, float y, const char *fmt, ...)
 {
-	char    text[1024];                            // Holds Our String
+	char    text[1024];
 	int screenStats[4],blendSrc,blendDst;
 	unsigned char blending;
 
-	va_list ap;                                    // Pointer To List Of Arguments
+	va_list ap;
 
-	if (fmt == NULL)                               // If There's No Text
-		return 1;                                      // Do Nothing
+	if (fmt == NULL)
+		return 1;
 
-	va_start(ap, fmt);                             // Parses The String For Variables
-		vsprintf(text, fmt, ap);                       // And Converts Symbols To Actual Numbers
-	va_end(ap);                                    // Results Are Stored In Text
+	va_start(ap, fmt);
+		vsprintf(text, fmt, ap);
+	va_end(ap);
 
 
 	glGetIntegerv(GL_VIEWPORT, screenStats);
@@ -150,7 +57,7 @@ int cFont::print(float r, float g, float b, float x, float y, const char *fmt, .
 	glGetBooleanv(GL_BLEND, &blending);
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set the correct blending mode
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glBindTexture(GL_TEXTURE_2D, texture->texId());
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
@@ -204,22 +111,22 @@ int cFont::print(float r, float g, float b, float x, float y, const char *fmt, .
 int cFont::print3d(float r, float g, float b, float a, float x, float y, float z, float scale, const char *fmt, ...)
 {
 	char type = 0;
-	char    text[1024];                            // Holds Our String
+	char    text[1024];
 	int screenStats[4],blendSrc,blendDst;
 	char typ=type;
 	unsigned char blending;
+	
+	va_list ap;
 
-	va_list ap;                                    // Pointer To List Of Arguments
+	if (fmt == NULL)
+		return 1;
 
-	if (fmt == NULL)                               // If There's No Text
-		return 1;                                      // Do Nothing
+	va_start(ap, fmt);
+		vsprintf(text, fmt, ap);
+	va_end(ap);
 
-	va_start(ap, fmt);                             // Parses The String For Variables
-		vsprintf(text, fmt, ap);                       // And Converts Symbols To Actual Numbers
-	va_end(ap);                                    // Results Are Stored In Text
-
-	if (type>3)                                     // Did User Choose An Invalid Character Set?
-		type=3;                                       // If So, Select Set 2 (Italic)
+	if (type>3)
+		type=3;
 
 
 	glGetIntegerv(GL_VIEWPORT, screenStats);
@@ -228,7 +135,7 @@ int cFont::print3d(float r, float g, float b, float a, float x, float y, float z
 	glGetIntegerv(GL_BLEND_DST, &blendDst);
 	glGetBooleanv(GL_BLEND, &blending);
 
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set the correct blending mode
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glBindTexture(GL_TEXTURE_2D, texture->texId());
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
@@ -312,12 +219,12 @@ int cFont::load(std::string filename)
 	texture = cTextureLoaders::load(filename,TEX_NOFREEDATA);
 	Log(5,0,"Loading font %s", filename.c_str());
 	float cx, cy;
-	list_base=glGenLists(256);                          // Creating 256 Display Lists
-	glBindTexture(GL_TEXTURE_2D, texture->texId());	 // Select Our Font Texture
-	for (int loop1=0; loop1<256; loop1++)              // Loop Through All 256 Lists
+	list_base=glGenLists(256);
+	glBindTexture(GL_TEXTURE_2D, texture->texId());
+	for (int loop1=0; loop1<256; loop1++)
 	{
-		cx=(float)(loop1%16)/16.0f;                  // X Position Of Current Character
-		cy=(float)(loop1/16)/16.0f;                  // Y Position Of Current Character
+		cx=(float)(loop1%16)/16.0f;
+		cy=(float)(loop1/16)/16.0f;
 	
 		int w = 2;
 		for(int x = (int)(cx*(float)texture->width)+2; x < (int)((cx+(1.0f/16.0f))*(float)texture->width); x++)
@@ -339,23 +246,16 @@ int cFont::load(std::string filename)
 		#define fontwidth  0.059f
 		#define fontheight 0.0625f
 
-		glNewList(list_base+loop1,GL_COMPILE);            // Start Building A List
-		glBegin(GL_QUADS);                           // Use A Quad For Each Character
-			glTexCoord2f(cx,cy);          // Texture Coord (Bottom Left)
-			glVertex2d(0,16);                          // Vertex Coord (Bottom Left)
-
-			glTexCoord2f(cx,cy+fontheight);           // Texture Coord (Top Left)
-			glVertex2i(0,0);                           // Vertex Coord (Top Left)
-
-			glTexCoord2f(cx+fontwidth,cy+fontheight);   // Texture Coord (Top Right)
-			glVertex2i(16,0);                          // Vertex Coord (Top Right)
-
-			glTexCoord2f(cx+fontwidth,cy);  // Texture Coord (Bottom Right)
-			glVertex2i(16,16);                         // Vertex Coord (Bottom Right)
-		glEnd();                                     // Done Building Our Quad (Character)
-		glTranslated(width[loop1]+1,0,0);                        // Move To The Right Of The Character
-		glEndList();                                 // Done Building The Display List
-	}                                              // Loop Until All 256 Are Built
+		glNewList(list_base+loop1,GL_COMPILE); 
+		glBegin(GL_QUADS);
+			glTexCoord2f(cx,cy);						glVertex2d(0,16);
+			glTexCoord2f(cx,cy+fontheight);				glVertex2i(0,0); 
+			glTexCoord2f(cx+fontwidth,cy+fontheight);	glVertex2i(16,0);
+			glTexCoord2f(cx+fontwidth,cy);				glVertex2i(16,16);
+		glEnd();
+		glTranslated(width[loop1]+1,0,0);
+		glEndList();
+	}
 	delete[] texture->data;
 	Log(3,0,"Done loading font %s", filename.c_str());
 	return 1;

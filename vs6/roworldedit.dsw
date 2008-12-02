@@ -30,6 +30,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "plugin_mazegenerator"=.\plugins\mazegenerator.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "roworldedit"=.\roworldedit.dsp - Package Owner=<4>
 
 Package=<5>
@@ -40,6 +52,9 @@ Package=<4>
 {{{
     Begin Project Dependency
     Project_Dep_Name plugin_clearmap
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name plugin_mazegenerator
     End Project Dependency
 }}}
 

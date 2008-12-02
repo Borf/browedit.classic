@@ -4298,6 +4298,9 @@ void cWorld::newEmpty(int newWidth,int newHeight)
 			
 		}
 	}
+
+	cLightmap* l = new cLightmap();
+	lightmaps.push_back(l);
 	
 	
 	

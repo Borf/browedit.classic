@@ -36,7 +36,10 @@ cClearMapPlugin::cClearMapPlugin() : cPluginBase("Clear Map", "tools/CLEARMAP")
 cWorld* world;
 cClearMapPlugin* plugin;
 
-void handleevent(cWindow* w, std::string name, std::string event)
+
+
+
+void clickOk(cWindow* w)
 {
 	if(w->objects["chkTextures"]->getInt(0) != 0)
 	{
@@ -58,8 +61,8 @@ void handleevent(cWindow* w, std::string name, std::string event)
 			for(x = 0; x < 4; x++)
 			{
 				cTile t;
-				t.lightmap = 1;
-				t.texture = 0;
+				t.lightmap = 0;
+				t.texture = plugin->browInterface->getSelectedTextureIndex();
 				t.u1 = x/4.0f;
 				t.v1 = y/4.0f;
 				t.u2 = (x+1)/4.0f;
@@ -229,6 +232,14 @@ void handleevent(cWindow* w, std::string name, std::string event)
 		world->effects.clear();
 
 	w->close();
+}
+
+
+
+void handleevent(cWindow* w, std::string name, std::string event)
+{
+	if(name == "btnOk" && event == "click")
+		clickOk(w);
 }
 
 bool cClearMapPlugin::action(cWorld* wrld)

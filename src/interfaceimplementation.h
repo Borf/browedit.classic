@@ -8,8 +8,8 @@ class cBrowInterfaceImplementation : public cBrowInterface
 public:
 	void fixNormals();
 	cWindow* addXmlWindow(std::string);
-
-
+	int getSelectedTextureIndex();
+	void render();
 };
 
 

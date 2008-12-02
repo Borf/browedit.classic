@@ -10,6 +10,8 @@ class cBrowInterface
 public:
 	virtual void fixNormals() = 0;
 	virtual cWindow* addXmlWindow(std::string) = 0;
+	virtual int  getSelectedTextureIndex() = 0;
+	virtual void render() = 0;
 };
 
 

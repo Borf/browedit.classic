@@ -3,6 +3,7 @@
 
 #include <wm/window.h>
 #include <wm/windowbutton.h>
+#include <wm/windowcheckbox.h>
 
 
 
@@ -15,6 +16,13 @@ public:
 		cXmlButton(cWindow*, TiXmlDocument* = NULL);
 		void onClick();
 	};
+	class cXmlCheckBox : public cWindowCheckBox
+	{
+	public:
+		cXmlCheckBox(cWindow*, TiXmlDocument* = NULL);
+		void onClick();
+	};
+
 	cXmlWindow(TiXmlDocument&);
 
 	void event(cWindowObject*, std::string);

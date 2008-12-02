@@ -1,7 +1,5 @@
 #include "xmlwindow.h"
 #include <common.h>
-#include <wm/windowbutton.h>
-#include <wm/windowcheckbox.h>
 #include <wm/windowlabel.h>
 
 cXmlWindow::cXmlWindow(TiXmlDocument &layout) : cWindow()	
@@ -25,7 +23,7 @@ cXmlWindow::cXmlWindow(TiXmlDocument &layout) : cWindow()
 			h = skinOffTop + skinOffBottom + atoi(el->FirstChild()->Value());
 		else if(strcmp(el->Value(), "checkbox") == 0)
 		{
-			cWindowObject* o = new cWindowCheckBox(this);
+			cWindowObject* o = new cXmlCheckBox(this);
 			o->moveTo(atoi(el->FirstChildElement("x")->FirstChild()->Value()), atoi(el->FirstChildElement("y")->FirstChild()->Value()));
 			o->alignment = ALIGN_TOPLEFT;
 			o->setInt(0, atoi(el->Attribute("value")));
@@ -73,3 +71,14 @@ void cXmlWindow::cXmlButton::onClick()
 {
 	((cXmlWindow*)parent)->event(this, "click");
 }
+
+cXmlWindow::cXmlCheckBox::cXmlCheckBox( cWindow* p, TiXmlDocument* skin) : cWindowCheckBox(p,skin)
+{
+	
+}
+
+void cXmlWindow::cXmlCheckBox::onClick()
+{
+	((cXmlWindow*)parent)->event(this, "click");		
+}
+
