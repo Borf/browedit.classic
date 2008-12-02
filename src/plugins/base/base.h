@@ -21,7 +21,7 @@ public:
 
 	void				setInterface(cBrowInterface*);
 	virtual bool		action(cWorld*) = 0;
-	cBrowInterface*		interface;
+	cBrowInterface*		browInterface;
 };
 
 

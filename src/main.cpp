@@ -82,7 +82,7 @@ cMenu* effectsmenu;
 long lasttimer;
 
 
-cBrowInterfaceImplementation interface;
+cBrowInterfaceImplementation browInterface;
 
 unsigned char * getPixelsBGR()
 {
@@ -785,7 +785,7 @@ int main(int argc, char *argv[])
 					continue;
 				}
 				cPluginBase* plugin = getInstance();
-				plugin->setInterface(&interface);
+				plugin->setInterface(&browInterface);
 
 				cMenu* p = cGraphics::menu;
 				std::string s = plugin->menu;

@@ -1,4 +1,5 @@
 #include "base.h"
+#include "interface.h"
 #include <wm/wm.h>
 #include <graphics.h>
 
@@ -10,5 +11,5 @@ cPluginBase::cPluginBase(std::string n, std::string m)
 
 void cPluginBase::setInterface(cBrowInterface* pInterface)
 {
-	interface = pInterface;
+	browInterface = pInterface;
 }

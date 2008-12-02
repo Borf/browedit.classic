@@ -8,8 +8,8 @@ class cWindow;
 class cBrowInterface
 {
 public:
-	virtual void fixNormals() = 0 { return; };
-	virtual cWindow* addXmlWindow(std::string) = 0 { return NULL; };
+	virtual void fixNormals() = 0;
+	virtual cWindow* addXmlWindow(std::string) = 0;
 };
 
 

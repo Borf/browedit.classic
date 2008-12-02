@@ -146,7 +146,7 @@ void handleevent(cWindow* w, std::string name, std::string event)
 				world->cubes[y][x].cell4 = 0;
 			}
 		}
-		plugin->interface->fixNormals();
+		plugin->browInterface->fixNormals();
 	}
 
 	if(w->objects["chkWalls"]->getInt(0) != 0)
@@ -235,7 +235,7 @@ bool cClearMapPlugin::action(cWorld* wrld)
 {
 	world = wrld;
 	plugin = this;
-	cXmlWindow* w = (cXmlWindow*)interface->addXmlWindow("plugins/clearmap.xml");
+	cXmlWindow* w = (cXmlWindow*)browInterface->addXmlWindow("plugins/clearmap.xml");
 	w->eventhandler = handleevent;
 	return true;
 }
