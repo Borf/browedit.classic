@@ -108,6 +108,7 @@ bool cMazeGenerator::action(cWorld* world)
 	std::vector<std::vector<bool> > tempMap;
 	tempMap.resize(world->height, std::vector<bool>(world->width, true));
 
+	int repeat = 0;
 	while(positions.size() > 0)
 	{
 		cPoint p = positions.back();
@@ -158,7 +159,9 @@ bool cMazeGenerator::action(cWorld* world)
 			}
 			p = ppp;
 		}
-		browInterface->render();
+
+		if((repeat++) % 10 == 0)
+			browInterface->render();
 		
 
 
