@@ -1,29 +1,6 @@
-// plugin_mazegenerator.cpp : Defines the entry point for the DLL application.
-//
-
 #include <windows.h>
 #include "mazegenerator.h"
 #include "../base/types.h"
-
-BOOL APIENTRY DllMain( HANDLE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved )
-{
-    switch (ul_reason_for_call)
-	{
-		case DLL_PROCESS_ATTACH:
-		case DLL_THREAD_ATTACH:
-		case DLL_THREAD_DETACH:
-		case DLL_PROCESS_DETACH:
-			break;
-    }
-    return TRUE;
-}
-
-
-// This is an example of an exported function.
-PLUGIN_MAZEGENERATOR_API cPluginBase* _cdecl getInstance()
-{
-	return new cMazeGenerator();
-}
 
 
 
@@ -89,18 +66,18 @@ bool cMazeGenerator::action(cWorld* world)
 			}
 		}
 	}
-	for(x = 0; x < 2; x++)
+	for(x = 0; x < 4; x++)
 	{
 		cTile t;
 		t.lightmap = 0;
 		t.texture = 2;
-		t.u1 = (x+1)/2.0f;
+		t.u1 = (x+1)/4.0f;
 		t.v1 = 0;
-		t.u2 = (x)/2.0f;
+		t.u2 = (x)/4.0f;
 		t.v2 = 0;
-		t.u3 = (x+1)/2.0f;
+		t.u3 = (x+1)/4.0f;
 		t.v3 = 1;
-		t.u4 = (x)/2.0f;
+		t.u4 = (x)/4.0f;
 		t.v4 = 1;
 		t.color[0] = (char)255;
 		t.color[1] = (char)255;
@@ -116,10 +93,10 @@ bool cMazeGenerator::action(cWorld* world)
 			world->cubes[y][x].tileUp = tileStart+16+((int)x%4) + 4*((int)y%4);
 			world->cubes[y][x].tileSide = -1;
 			world->cubes[y][x].tileOtherSide = -1;
-			world->cubes[y][x].cell1 = -10;
-			world->cubes[y][x].cell2 = -10;
-			world->cubes[y][x].cell3 = -10;
-			world->cubes[y][x].cell4 = -10;
+			world->cubes[y][x].cell1 = -32;
+			world->cubes[y][x].cell2 = -32;
+			world->cubes[y][x].cell3 = -32;
+			world->cubes[y][x].cell4 = -32;
 		}
 	}
 	
@@ -150,7 +127,7 @@ bool cMazeGenerator::action(cWorld* world)
 		{
 			cPoint ppp = p;
 			int rnd2 = rand()%10+2;
-			for(int ii = 0; i < rnd2; i++)
+			for(; i < rnd2; i++)
 			{
 				cPoint pp = p + (offsets[i]*2);
 
@@ -198,14 +175,14 @@ bool cMazeGenerator::action(cWorld* world)
 			{
 				if (c->cell4 != (c+1)->cell1 && c->cell2 != (c+1)->cell3)
 				{
-					world->cubes[y][x].tileOtherSide = tileStart+32+(y%2);
+					world->cubes[y][x].tileOtherSide = tileStart+32+(y%4);
 				}
 			}
 			if (c->tileSide == -1)
 			{
 				if (c->cell4 != world->cubes[y+1][x].cell1 && c->cell3 != world->cubes[y+1][x].cell2)
 				{
-					world->cubes[y][x].tileSide = tileStart+32+(x%2);
+					world->cubes[y][x].tileSide = tileStart+32+(x%4);
 				}
 			}
 		}

@@ -779,38 +779,51 @@ int main(int argc, char *argv[])
 				Log(3,0,"Loading plugin '%s'", fileData.cFileName);
 				HMODULE hlib;
 				hlib = LoadLibraryEx(("plugins/" + filename).c_str(), NULL,0);
-				cPluginBase* (__cdecl* getInstance)(void);
-				getInstance = (cPluginBase*(__cdecl*)(void))GetProcAddress(hlib, "getInstance");
-				if(!getInstance)
+				cPluginBase** (__cdecl* getInstances)(void);
+				getInstances = (cPluginBase**(__cdecl*)(void))GetProcAddress(hlib, "getInstances");
+				if(!getInstances)
 				{
 					Log(2,0,"%s is not a valid plugin", fileData.cFileName);
+					if (!FindNextFile(hSearch, &fileData))								// find next file in the resultset
+					{
+						if (GetLastError() == ERROR_NO_MORE_FILES)						// we're finished when there are no more files
+							break;
+						else 
+							break;														// wow, something really weird happened
+					}
 					continue;
 				}
-				cPluginBase* plugin = getInstance();
-				plugin->setInterface(&browInterface);
+				int instanceCount = *((int*)GetProcAddress(hlib, "getInstanceCount"));
 
-				cMenu* p = cGraphics::menu;
-				std::string s = plugin->menu;
-				std::string past = "";
-				
-				while(s.find("/") != std::string::npos)
+				cPluginBase** plugins = getInstances();
+
+				for(i = 0; i < instanceCount; i++)
 				{
-					cMenu* pp = p->find(GetMsg("menu/" + past + s.substr(0,s.find("/")) + "/TITLE"),false);
-					if(!pp)
+					plugins[i]->setInterface(&browInterface);
+
+					cMenu* p = cGraphics::menu;
+					std::string s = plugins[i]->menu;
+					std::string past = "";
+					
+					while(s.find("/") != std::string::npos)
 					{
-					//	if(p == cGraphics::menu) //root
+						cMenu* pp = p->find(GetMsg("menu/" + past + s.substr(0,s.find("/")) + "/TITLE"),false);
+						if(!pp)
 						{
-							ADDMENU2(pp,p, GetMsg("menu/" + past + s.substr(0,s.find("/")) + "/TITLE"),	posx);
+						//	if(p == cGraphics::menu) //root
+							{
+								ADDMENU2(pp,p, GetMsg("menu/" + past + s.substr(0,s.find("/")) + "/TITLE"),	posx);
+							}
+							
 						}
-						
+						p = pp;
+						past += s.substr(0, s.find("/")) + "/";
+						s = s.substr(s.find("/")+1);
 					}
-					p = pp;
-					past += s.substr(0, s.find("/")) + "/";
-					s = s.substr(s.find("/")+1);
+					if(!p)
+						Log(1,0,"Couldn't find parent!");
+					ADDMENUITEMDATAP(mm,p,GetMsg("menu/" + plugins[i]->menu),	&MenuCommand_plugin, (void*)plugins[i]);
 				}
-				if(!p)
-					Log(1,0,"Couldn't find parent!");
-				ADDMENUITEMDATAP(mm,p,GetMsg("menu/" + plugin->menu),	&MenuCommand_plugin, (void*)plugin);
 			}
 
 			if (!FindNextFile(hSearch, &fileData))								// find next file in the resultset

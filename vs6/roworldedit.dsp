@@ -969,5 +969,9 @@ SOURCE=..\src\undo\wallschange.h
 SOURCE=..\src\undo\waterchange.h
 # End Source File
 # End Group
+# Begin Source File
+
+SOURCE=..\Makefile
+# End Source File
 # End Target
 # End Project

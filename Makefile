@@ -113,7 +113,7 @@ ifeq ($(PLATFORM),win32)
 OBJECTS_SRC += obj/src_Script1_rc_$(PLATFORM).o
 endif
 
-plugins: plugin_base plugin_clearmap plugin_mazegenerator
+plugins: plugin_base plugin_clearmap plugin_generators
 all: plugins $(TARGET)
 clean:
 	$(RM) obj/*.o obj/*.dep obj/*.mak $(TARGET)
@@ -157,9 +157,9 @@ obj/plugins/%_$(PLATFORM).o: src/plugins/clearmap/%.cpp
 	@echo -e "    \033[1mCC\033[1m\t\033[22;34m$<\033[39m"
 	@$(CXX) $(CFLAGS) $(INCLUDES) -DPLUGIN_CLEARMAP_EXPORTS -D_USRDLL -c -o $@ $<
 
-obj/plugins/%_$(PLATFORM).o: src/plugins/mazegenerator/%.cpp
+obj/plugins/%_$(PLATFORM).o: src/plugins/generators/%.cpp
 	@echo -e "    \033[1mCC\033[1m\t\033[22;34m$<\033[39m"
-	@$(CXX) $(CFLAGS) $(INCLUDES) -DPLUGIN_MAZEGENERATOR_EXPORTS -D_USRDLL -c -o $@ $<
+	@$(CXX) $(CFLAGS) $(INCLUDES) -DPLUGIN_EXPORTS -D_USRDLL -c -o $@ $<
 
 
 # depencies
@@ -187,6 +187,6 @@ plugin_clearmap: obj/plugins/clearmap_win32.o
 	@echo -e "    \033[1mLD\033[1m\t\033[22;35m$@\033[39m"
 	@$(CXX) $(CFLAGS) $(LDFLAGS) -Llibs/lib -W1 --out-implib -shared -o plugins/clearmap.dll $^ -lopengl32 -lglu32 -lplugin_base
 
-plugin_mazegenerator: obj/plugins/mazegenerator_win32.o
+plugin_generators: obj/plugins/generators/mazegenerator_win32.o obj/plugins/generators/plugin_win32.o
 	@echo -e "    \033[1mLD\033[1m\t\033[22;35m$@\033[39m"
 	@$(CXX) $(CFLAGS) $(LDFLAGS) -Llibs/lib -W1 --out-implib -shared -o plugins/mazegenerator.dll $^ -lopengl32 -lglu32 -lplugin_base

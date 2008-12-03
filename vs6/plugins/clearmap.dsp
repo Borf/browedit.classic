@@ -65,12 +65,12 @@ LINK32=link.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "../../obj/vs6/Debug/plugins/"
-# PROP Intermediate_Dir "../../obj/vs6/Debug/plugins/"
+# PROP Output_Dir "../../obj/vs6/Debug/plugins/clearmap"
+# PROP Intermediate_Dir "../../obj/vs6/Debug/plugins/clearmap"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "PLUGIN_CLEARMAP_EXPORTS" /Yu"stdafx.h" /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /WX /Gm /Gi /GR /GX /ZI /Od /I "..\..\libs\include\stlport" /I "..\..\src" /I "..\..\libs\include" /D "WIN32_LEAN_AND_MEAN" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "PLUGIN_CLEARMAP_EXPORTS" /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /WX /Gm /Gi /GR /GX /ZI /Od /I "..\..\libs\include\stlport" /I "..\..\src" /I "..\..\libs\include" /D "WIN32_LEAN_AND_MEAN" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "PLUGIN_EXPORTS" /FD /GZ /c
 # SUBTRACT CPP /YX /Yc /Yu
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -96,6 +96,10 @@ LINK32=link.exe
 
 SOURCE=..\..\src\plugins\clearmap\clearmap.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\src\plugins\clearmap\plugin.cpp
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -103,6 +107,10 @@ SOURCE=..\..\src\plugins\clearmap\clearmap.cpp
 # Begin Source File
 
 SOURCE=..\..\src\plugins\clearmap\clearmap.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\plugins\clearmap\plugin.h
 # End Source File
 # End Group
 # End Target

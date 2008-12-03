@@ -30,7 +30,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "plugin_mazegenerator"=.\plugins\mazegenerator.dsp - Package Owner=<4>
+Project: "plugin_generators"=.\plugins\generators.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -54,7 +54,13 @@ Package=<4>
     Project_Dep_Name plugin_clearmap
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name plugin_mazegenerator
+    Project_Dep_Name generators
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name plugin_base
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name plugin_generators
     End Project Dependency
 }}}
 

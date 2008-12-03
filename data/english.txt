@@ -123,6 +123,7 @@
 			<generators>
 				<TITLE>Generators</TITLE>
 				<MAZEGENERATOR>Maze</MAZEGENERATOR>
+				<CULVERTGENERATOR>Culvert</CULVERTGENERATOR>
 			</generators>
 		</tools>
 	</menu>
