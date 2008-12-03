@@ -4292,6 +4292,67 @@ void cWorld::newEmpty(int newWidth,int newHeight)
 	wnd = new cHotkeyWindow(cGraphics::worldContainer);
 }
 
+std::vector<cCube*> cWorld::getWall( int x, int y, bool vertical, bool single)
+{
+	std::vector<cCube*> ret;
+
+	if(vertical)
+	{
+		if(cubes[y][x].tileOtherSide == -1)
+			return ret;
+		
+		int yy = y;
+		int ymax = yy+1;
+		int ymin = yy;
+		int ydiff = 2;
+		
+		if (!single)
+		{
+			yy = y;
+			while(cubes[yy][x].tileOtherSide != -1)
+				yy++;
+			ymax = yy;
+			yy = y;
+			while(cubes[yy][x].tileOtherSide != -1)
+				yy--;
+			ymin = yy+1;
+			ydiff = 4;
+		}
+		
+		for(yy = ymin; yy < ymax; yy++)
+			ret.push_back(&cubes[yy][x]);
+	}
+	else
+	{
+		if(cubes[y][x].tileSide == -1)
+			return ret;
+		
+		int xx = x;
+		int xmax = xx+1;
+		int xmin = xx;
+		int xdiff = 4;
+		if (!single)
+		{
+			xx = x;
+			while(cubes[y][xx].tileSide != -1)
+				xx++;
+			xmax = xx;
+			xx = x;
+			while(cubes[y][xx].tileSide != -1)
+				xx--;
+			xmin = xx+1;
+			xdiff = 4;
+		}
+		
+		for(xx = xmin; xx < xmax; xx++)
+		{
+			ret.push_back(&cubes[y][xx]);
+		}
+	}
+
+	return ret;
+}
+
 void cCube::calcNormal()
 {
 	cVector3 b1, b2;

@@ -329,6 +329,8 @@ public:
 	bool								makeLightmapsUnique();
 	bool								blackLightmaps();
 	void								calcVertexNormals(int = 0, int = 0, int = -1, int=-1);
+	std::vector<cCube*>					getWall(int,int,bool,bool);
+
 	
 
 	char								iniFile[40];

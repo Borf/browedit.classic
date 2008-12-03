@@ -51,69 +51,32 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 			case SDLK_h:
 				{
 					std::vector<std::pair<int, cTile> > tilesedited;
-
 					int x = (int)cGraphics::cMouse::x3d / 10;
 					int y = (int)cGraphics::cMouse::z3d / 10;
 					if (y < 0)
 						break;
 					if (x < 0)
 						break;
-
-					if(SDL_GetModState() & KMOD_ALT)
+					
+					std::vector<cCube*> cubes = cGraphics::world->getWall(x,y,(SDL_GetModState() & KMOD_ALT) != 0, (SDL_GetModState() & KMOD_CTRL) != 0);
+					for(unsigned int i = 0; i < cubes.size(); i++)
 					{
-						if(cGraphics::world->cubes[y][x].tileOtherSide == -1)
-							break;
-
-						int yy = y;
-						while(cGraphics::world->cubes[yy][x].tileOtherSide != -1)
-							yy++;
-						int ymax = yy;
-						yy = y;
-						while(cGraphics::world->cubes[yy][x].tileOtherSide != -1)
-							yy--;
-						int ymin = yy+1;
-
-						for(yy = ymin; yy < ymax; yy++)
-						{
-							cTile* t = &cGraphics::world->tiles[cGraphics::world->cubes[yy][x].tileOtherSide];
-							tilesedited.push_back(std::pair<int, cTile>(cGraphics::world->cubes[yy][x].tileOtherSide, *t));
-							float f;
-							f = t->u1;
-							t->u1 = t->u2;
-							t->u2 = f;
-
-							f = t->u3;
-							t->u3 = t->u4;
-							t->u4 = f;
-						}
-					}
-					else
-					{
-						if(cGraphics::world->cubes[y][x].tileSide == -1)
-							break;
-
-						int xx = x;
-						while(cGraphics::world->cubes[y][xx].tileSide != -1)
-							xx++;
-						int xmax = xx;
-						xx = x;
-						while(cGraphics::world->cubes[y][xx].tileSide != -1)
-							xx--;
-						int xmin = xx+1;
-
-						for(xx = xmin; xx < xmax; xx++)
-						{
-							cTile* t = &cGraphics::world->tiles[cGraphics::world->cubes[y][xx].tileSide];
-							tilesedited.push_back(std::pair<int, cTile>(cGraphics::world->cubes[y][xx].tileSide, *t));
-							float f;
-							f = t->u1;
-							t->u1 = t->u2;
-							t->u2 = f;
-
-							f = t->u3;
-							t->u3 = t->u4;
-							t->u4 = f;
-						}
+						int tileId = -1;
+						if(SDL_GetModState() & KMOD_ALT)
+							tileId = cubes[i]->tileOtherSide;
+						else
+							tileId = cubes[i]->tileSide;
+						
+						cTile* t = &cGraphics::world->tiles[tileId];
+						tilesedited.push_back(std::pair<int, cTile>(tileId, *t));
+						float f;
+						f = t->u1;
+						t->u1 = t->u2;
+						t->u2 = f;
+						
+						f = t->u3;
+						t->u3 = t->u4;
+						t->u4 = f;
 					}
 					if (tilesedited.size() > 0)
 						cGraphics::worldContainer->undoStack->push(new cUndoTileEdit(tilesedited));
@@ -129,78 +92,25 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 					if (x < 0)
 						break;
 
-					if(SDL_GetModState() & KMOD_ALT)
+					std::vector<cCube*> cubes = cGraphics::world->getWall(x,y,(SDL_GetModState() & KMOD_ALT) != 0, (SDL_GetModState() & KMOD_CTRL) != 0);
+					for(unsigned int i = 0; i < cubes.size(); i++)
 					{
-						if(cGraphics::world->cubes[y][x].tileOtherSide == -1)
-							break;
+						int tileId = -1;
+						if(SDL_GetModState() & KMOD_ALT)
+							tileId = cubes[i]->tileOtherSide;
+						else
+							tileId = cubes[i]->tileSide;
 
-						int yy = y;
-						int ymax = yy+1;
-						int ymin = yy;
-						int ydiff = 2;
+						cTile* t = &cGraphics::world->tiles[tileId];
+						tilesedited.push_back(std::pair<int, cTile>(tileId, *t));
+						float f;
+						f = t->v1;
+						t->v1 = t->v3;
+						t->v3 = f;
 
-						if (SDL_GetModState() & KMOD_SHIFT)
-						{
-							yy = y;
-							while(cGraphics::world->cubes[yy][x].tileOtherSide != -1)
-								yy++;
-							ymax = yy;
-							yy = y;
-							while(cGraphics::world->cubes[yy][x].tileOtherSide != -1)
-								yy--;
-							ymin = yy+1;
-							ydiff = 4;
-						}
-
-						for(yy = ymin; yy < ymax; yy++)
-						{
-							cTile* t = &cGraphics::world->tiles[cGraphics::world->cubes[yy][x].tileOtherSide];
-							tilesedited.push_back(std::pair<int, cTile>(cGraphics::world->cubes[yy][x].tileOtherSide, *t));
-							float f;
-							f = t->v1;
-							t->v1 = t->v3;
-							t->v3 = f;
-
-							f = t->v2;
-							t->v2 = t->v4;
-							t->v4 = f;
-						}
-					}
-					else
-					{
-						if(cGraphics::world->cubes[y][x].tileSide == -1)
-							break;
-
-						int xx = x;
-						int xmax = xx+1;
-						int xmin = xx;
-						int xdiff = 4;
-						if (SDL_GetModState() & KMOD_SHIFT)
-						{
-							xx = x;
-							while(cGraphics::world->cubes[y][xx].tileSide != -1)
-								xx++;
-							xmax = xx;
-							xx = x;
-							while(cGraphics::world->cubes[y][xx].tileSide != -1)
-								xx--;
-							xmin = xx+1;
-							xdiff = 4;
-						}
-
-						for(xx = xmin; xx < xmax; xx++)
-						{
-							cTile* t = &cGraphics::world->tiles[cGraphics::world->cubes[y][xx].tileSide];
-							tilesedited.push_back(std::pair<int, cTile>(cGraphics::world->cubes[y][xx].tileSide, *t));
-							float f;
-							f = t->v1;
-							t->v1 = t->v3;
-							t->v3 = f;
-
-							f = t->v2;
-							t->v2 = t->v4;
-							t->v4 = f;
-						}
+						f = t->v2;
+						t->v2 = t->v4;
+						t->v4 = f;
 					}
 					if (tilesedited.size() > 0)
 						cGraphics::worldContainer->undoStack->push(new cUndoTileEdit(tilesedited));
