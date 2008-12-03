@@ -35,6 +35,7 @@ public:
 	int				close();
 	bool			eof();
 	void			seek(int, STARTPOS);
+	void			skip(int);
 
 	char			get();
 	int				getword();

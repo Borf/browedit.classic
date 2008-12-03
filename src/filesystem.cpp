@@ -149,6 +149,11 @@ int cFile::getword()
 	return ((BYTE)data[index-2]) | (((BYTE)data[index-1])<<8);
 }
 
+void cFile::skip(int b)
+{
+	index+=b;
+}
+
 
 int cFile::read(char* buffer, int length)
 {

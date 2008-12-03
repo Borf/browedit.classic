@@ -156,8 +156,8 @@
 		</texturecache>
 	</graphics>
 	<world>
-		<LOAD>World: Loading map %s</LOAD>
-		<LOADFAIL>World: Could not open map %s</LOADFAIL>
+		<LOAD>World: Loading %s</LOAD>
+		<LOADFAIL>World: Could not open %s</LOADFAIL>
 		<LOADDONE>World: Done loading %s</LOADDONE>
 		<MODELFAIL>World: Could not open model %s</MODELFAIL>
 		<UNKNOWNOBJECT>World: Unknown object type %i</UNKNOWNOBJECT>

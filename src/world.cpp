@@ -101,7 +101,6 @@ void cWorld::load()
 	
 	for(i = 0; i < gattiles.size(); i++)
 		gattiles[i].clear();
-		
 	gattiles.clear();
 
 	water.height = 1;
@@ -202,39 +201,36 @@ void cWorld::load()
 		cubes.resize(height);
 		for(y = 0; y < (unsigned int)height; y++)
 		{
-			std::vector<cCube> row;
-			row.resize(width);
+			cubes[y].resize(width);
 			for(x = 0; x < (unsigned int)width; x++)
 			{
-				cCube c;
-				c.maxHeight = -99999;
-				c.minHeight = 99999;
-				c.selected = false;
+				cCube* c = &cubes[y][x];
+				c->maxHeight = -99999;
+				c->minHeight = 99999;
+				c->selected = false;
 				if(version >= 0x0106)
 				{
 					pFile->read(buf, 28);
-					memcpy((char*)&c.cell1, buf, 4);
-					memcpy((char*)&c.cell2, buf+4, 4);
-					memcpy((char*)&c.cell3, buf+8, 4);
-					memcpy((char*)&c.cell4, buf+12, 4);
-					c.tileUp = *((int*)(buf+16));
-					c.tileSide = *((int*)(buf+20));
-					c.tileOtherSide = *((int*)(buf+24));
+					memcpy((char*)&c->cell1, buf, 4);
+					memcpy((char*)&c->cell2, buf+4, 4);
+					memcpy((char*)&c->cell3, buf+8, 4);
+					memcpy((char*)&c->cell4, buf+12, 4);
+					c->tileUp = *((int*)(buf+16));
+					c->tileSide = *((int*)(buf+20));
+					c->tileOtherSide = *((int*)(buf+24));
 				}
 				else
 				{
 					pFile->read(buf, 24);
-					memcpy((char*)&c.cell1, buf, 4);
-					memcpy((char*)&c.cell2, buf+4, 4);
-					memcpy((char*)&c.cell3, buf+8, 4);
-					memcpy((char*)&c.cell4, buf+12, 4);
-					c.tileUp = *((short*)(buf+16));
-					c.tileSide = *((short*)(buf+18));
-					c.tileOtherSide = *((short*)(buf+20));
+					memcpy((char*)&c->cell1, buf, 4);
+					memcpy((char*)&c->cell2, buf+4, 4);
+					memcpy((char*)&c->cell3, buf+8, 4);
+					memcpy((char*)&c->cell4, buf+12, 4);
+					c->tileUp = *((short*)(buf+16));
+					c->tileSide = *((short*)(buf+18));
+					c->tileOtherSide = *((short*)(buf+20));
 				}
-				row[x] = c;
 			}
-			cubes[y] = row;
 		}
 	}
 	else
@@ -244,12 +240,11 @@ void cWorld::load()
 		cubes.resize(height);
 		for(y = 0; y < (unsigned int)height; y++)
 		{
-			std::vector<cCube> row;
-			row.resize(width);
+			cubes[y].resize(width);
 			for(x = 0; x < (unsigned int)width; x++)
 			{
 				pFile->read(buf, 132);
-				cCube c;
+				cCube* c = &cubes[y][x];
 				cTile t;
 					
 				long texture = * ((long*)(buf));
@@ -273,7 +268,7 @@ void cWorld::load()
 					t.v4 = *((float*)(buf+64));
 					tiles.push_back(t);
 				}
-				c.tileUp = texture == -1 ? -1 : tiles.size()-1;
+				c->tileUp = texture == -1 ? -1 : tiles.size()-1;
 
 				texture = * ((long*)(buf+4));
 				if(texture > -1)
@@ -294,7 +289,7 @@ void cWorld::load()
 					t.v4 = *((float*)(buf+96));
 					tiles.push_back(t);
 				}
-				c.tileOtherSide = texture == -1 ? -1 : tiles.size()-1;
+				c->tileOtherSide = texture == -1 ? -1 : tiles.size()-1;
 				
 
 				texture = * ((long*)(buf+8));
@@ -316,18 +311,16 @@ void cWorld::load()
 					t.v4 = *((float*)(buf+128));
 					tiles.push_back(t);
 				}
-				c.tileSide = texture == -1 ? -1 : tiles.size()-1;
+				c->tileSide = texture == -1 ? -1 : tiles.size()-1;
 				
-				c.cell1 = *((float*)(buf+12));
-				c.cell2 = *((float*)(buf+16));
-				c.cell3 = *((float*)(buf+20));
-				c.cell4 = *((float*)(buf+24));
-				c.maxHeight = -99999;
-				c.minHeight = 99999;
-				row[x] = c;
+				c->cell1 = *((float*)(buf+12));
+				c->cell2 = *((float*)(buf+16));
+				c->cell3 = *((float*)(buf+20));
+				c->cell4 = *((float*)(buf+24));
+				c->maxHeight = -99999;
+				c->minHeight = 99999;
 
 			}
-			cubes[y] = row;
 		}
 		loaded = true;
 
@@ -458,7 +451,6 @@ void cWorld::load()
 	pFile->read(buf, 4);
 	unsigned int nObjects = *((unsigned int*)buf);
 
-
 	for(i = 0; i < nObjects; i++)
 	{
 		pFile->read(buf, 4);
@@ -483,6 +475,7 @@ void cWorld::load()
 			if (m->meshes.size() == 0)
 			{
 				Log(2,0,GetMsg("world/MODELFAIL"), filename.c_str());
+				continue;
 			}
 
 			m->name = std::string(buf);
@@ -625,22 +618,21 @@ void cWorld::load()
 	pFile = cFileSystem::open(std::string(fileName) + ".gat");
 	pFile->read(buf, 14);
 	
+	gattiles.resize(height*2);
 	for(y = 0; y < (unsigned int)height*2; y++)
 	{
-		std::vector<cGatTile> row;
+		gattiles[y].resize(width*2);
 		for(x = 0; x < (unsigned int)width*2; x++)
 		{
-			cGatTile g;
-			pFile->read((char*)&g.cell1, 4);
-			pFile->read((char*)&g.cell2, 4);
-			pFile->read((char*)&g.cell3, 4);
-			pFile->read((char*)&g.cell4, 4);
-			g.type = pFile->get();
+			cGatTile* g = &gattiles[y][x];
+			pFile->read((char*)&g->cell1, 4);
+			pFile->read((char*)&g->cell2, 4);
+			pFile->read((char*)&g->cell3, 4);
+			pFile->read((char*)&g->cell4, 4);
+			g->type = pFile->get();
 
 			pFile->get();pFile->get();pFile->get();
-			row.push_back(g);
 		}
-		gattiles.push_back(row);
 	}
 	pFile->close();
 	Log(3,0,GetMsg("world/LOADDONE"), (std::string(fileName) + ".gat").c_str());
@@ -1576,41 +1568,30 @@ void cWorld::draw()
 
 				int texture = textures[t->texture]->texId();
 
+				glBindTexture(GL_TEXTURE_2D, texture);
 				if (	(cSettings::editMode == MODE_WALLS && cGraphics::view.showGrid && (c->tileOtherSide != -1 || c->tileSide != -1) || c->minHeight != 99999))
 				{
 					glEnable(GL_COLOR_MATERIAL);
-					glColor3f(1,0,1);
+					glColor4f(1,0,1,1);
 				}
 //				else if (cGraphics::view.showtilecolors)
 //					glColor3f((BYTE)t->color[0] / 256.0f,(BYTE)t->color[1] / 256.0f,(BYTE)t->color[2] / 256.0f);
 				else if(((cSettings::editMode == MODE_TEXTUREPAINT && cGraphics::textureTool == TOOL_SELECTAREA) || cSettings::editMode == MODE_HEIGHTGLOBAL) && !cClipBoard::pasting)
 				{
 					glEnable(GL_COLOR_MATERIAL);
-						if(cGraphics::cMouse::lbuttondown && cGraphics::cMouse::y < cGraphics::h() - 20 && inbetween<int>(x, round(cGraphics::cMouse::x3dStart/10), round(cGraphics::cMouse::x3d/10)) && inbetween<int>(y, round(cGraphics::cMouse::z3dStart/10), round(cGraphics::cMouse::z3d/10)) && alt)
-					{
-
+					if(cGraphics::cMouse::lbuttondown && cGraphics::cMouse::y < cGraphics::h() - 20 && inbetween<int>(x, round(cGraphics::cMouse::x3dStart/10), round(cGraphics::cMouse::x3d/10)) && inbetween<int>(y, round(cGraphics::cMouse::z3dStart/10), round(cGraphics::cMouse::z3d/10)) && alt)
 						glColor4f(0.3f, 0.3f, 0.3f, 1);
-					}
 					else if(cGraphics::cMouse::lbuttondown && cGraphics::cMouse::y < cGraphics::h() - 20 && inbetween<int>(x, round(cGraphics::cMouse::x3dStart/10), round(cGraphics::cMouse::x3d/10)) && inbetween<int>(y, round(cGraphics::cMouse::z3dStart/10), round(cGraphics::cMouse::z3d/10)))
-					{
-						
 						glColor4f(0.6f,0.6f,0.6f,1);
-					}
 					else if(cGraphics::cMouse::lbuttondown && cGraphics::cMouse::y < cGraphics::h() - 20 && (ctrl || alt) && c->selected)
-					{
-						
 						glColor4f(0.4f,0.4f,0.4f,1);
-					}
 					else if(inverseSelection && !c->selected)
-					{
 						glColor4f(0.2f, 0.2f, 0.2f, 1);
-					}
 					else if(inverseSelection)
-					{
 						glColor4f(1,1,1,1);
-					}
 					else
 					{
+						glDisable(GL_COLOR_MATERIAL);
 						glColor4f(1,1,1,1);
 					}
 				}
@@ -1627,16 +1608,12 @@ void cWorld::draw()
 					glEnable(GL_COLOR_MATERIAL);
 					glColor4f(0.7f,0.7f,0.7f,1);
 				}
-//				else if (cGraphics::view.showAmbientLighting)
-//					glColor4f(ambientLight.diffuse.x,ambientLight.diffuse.y,ambientLight.diffuse.z,1);
 				else
 				{
-					
 					glDisable(GL_COLOR_MATERIAL);
 					glColor4f(1,1,1,1);
 				}
-				glBindTexture(GL_TEXTURE_2D, texture);
-				glNormal3f(c->normal.x, c->normal.y, c->normal.z);
+//				glNormal3f(c->normal.x, c->normal.y, c->normal.z);
 				glBegin(GL_TRIANGLE_STRIP);
 					glNormal3f(c->vNormal1.x, c->vNormal1.y, c->vNormal1.z);
 					glTexCoord2f(t->u1, 1-t->v1);				glVertex3f(x*10,-c->cell1,(height-y)*10);
@@ -1647,6 +1624,7 @@ void cWorld::draw()
 					glNormal3f(c->vNormal4.x, c->vNormal4.y, c->vNormal4.z);
 					glTexCoord2f(t->u4, 1-t->v4);				glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
 				glEnd();
+				glColor4f(1,1,1,1);
 				glDisable(GL_COLOR_MATERIAL);
 			}
 			else if (cGraphics::view.showNoTiles)
@@ -1666,6 +1644,9 @@ void cWorld::draw()
 				glDisable(GL_COLOR_MATERIAL);
 				glEnable(GL_TEXTURE_2D);
 			}
+			glColor4f(1,1,1,1);
+			glDisable(GL_COLOR_MATERIAL);
+			glColor4f(1,1,1,1);
 			if (c->tileOtherSide != -1 && c->tileOtherSide < (int)tiles.size())
 			{
 				cTile* t = &tiles[c->tileOtherSide];
