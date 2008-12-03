@@ -149,7 +149,7 @@ void cRSMModelMesh::load(cFile* pFile, cRSMModel* model, bool main)
 		pFile->read((char*)&f.v, sizeof(f.v));
 		pFile->read((char*)&f.t, sizeof(f.t));
 		pFile->read((char*)&f.texid, sizeof(f.texid));
-		if(f.texid < 0 || f.texid > textures.size())
+		if(f.texid > textures.size())
 			Log(2,0,"Wrong texture offset on face %i", f.texid); 
 		pFile->read((char*)&f.todo, sizeof(f.todo));
 		pFile->read((char*)&f.todo2, sizeof(f.todo2));

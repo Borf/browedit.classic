@@ -113,12 +113,18 @@ ifeq ($(PLATFORM),win32)
 OBJECTS_SRC += obj/src_Script1_rc_$(PLATFORM).o
 endif
 
-plugins: plugin_base plugin_clearmap plugin_generators
+plugins: objdirectories plugin_base plugin_clearmap plugin_generators
 all: plugins $(TARGET)
 clean:
 	$(RM) obj/*.o obj/*.dep obj/*.mak $(TARGET)
 
 # Depencies
+
+objdirectories:
+	@mkdir -p obj/plugins
+	@mkdir -p obj/plugins/base
+	@mkdir -p obj/plugins/clearmap
+	@mkdir -p obj/plugins/generators
 
 .PHONY: dep
 
@@ -135,6 +141,12 @@ obj/depencies_$(PLATFORM).mak: $(DEP_ALL)
 
 # type-specific targets (compile, target = %.o)
 
+obj/plugins/%_$(PLATFORM).o: src/plugins/%.cpp
+	@echo -e "    \033[1mCC\033[1m\t\033[22;34m$<\033[39m"
+	@$(CXX) $(CFLAGS) $(INCLUDES) -DPLUGIN_EXPORTS -D_USRDLL -c -o $@ $<
+
+
+
 obj/%_$(PLATFORM).o: %.c
 	@echo -e "    \033[1mCC\033[1m\t\033[22;34m$<\033[39m"
 	@$(CC) $(CFLAGS) $(INCLUDES) -c -o $@ $<
@@ -149,17 +161,6 @@ obj/%_$(PLATFORM).o: %.cpp
 
 
 
-obj/plugins/%_$(PLATFORM).o: src/plugins/base/%.cpp
-	@echo -e "    \033[1mCC\033[1m\t\033[22;34m$<\033[39m"
-	@$(CXX) $(CFLAGS) $(INCLUDES) -c -o $@ $<
-
-obj/plugins/%_$(PLATFORM).o: src/plugins/clearmap/%.cpp
-	@echo -e "    \033[1mCC\033[1m\t\033[22;34m$<\033[39m"
-	@$(CXX) $(CFLAGS) $(INCLUDES) -DPLUGIN_CLEARMAP_EXPORTS -D_USRDLL -c -o $@ $<
-
-obj/plugins/%_$(PLATFORM).o: src/plugins/generators/%.cpp
-	@echo -e "    \033[1mCC\033[1m\t\033[22;34m$<\033[39m"
-	@$(CXX) $(CFLAGS) $(INCLUDES) -DPLUGIN_EXPORTS -D_USRDLL -c -o $@ $<
 
 
 # depencies
@@ -179,14 +180,14 @@ $(TARGET): $(OBJECTS_ALL)
 	@$(CXX) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
 
 
-plugin_base: obj/plugins/base_win32.o
+plugin_base: obj/plugins/base/base_win32.o
 	@echo -e "    \033[1mLD\033[1m\t\033[22;35m$@\033[39m"
-	@mingw32-ar rcs libs/lib/libplugin_base.a obj/plugins/base_win32.o
+	@mingw32-ar rcs libs/lib/libplugin_base.a obj/plugins/base/base_win32.o
 
-plugin_clearmap: obj/plugins/clearmap_win32.o
+plugin_clearmap: obj/plugins/clearmap/clearmap_win32.o obj/plugins/clearmap/plugin_win32.o
 	@echo -e "    \033[1mLD\033[1m\t\033[22;35m$@\033[39m"
 	@$(CXX) $(CFLAGS) $(LDFLAGS) -Llibs/lib -W1 --out-implib -shared -o plugins/clearmap.dll $^ -lopengl32 -lglu32 -lplugin_base
 
-plugin_generators: obj/plugins/generators/mazegenerator_win32.o obj/plugins/generators/plugin_win32.o
+plugin_generators: obj/plugins/generators/mazegenerator_win32.o obj/plugins/generators/culvertgenerator_win32.o obj/plugins/generators/plugin_win32.o
 	@echo -e "    \033[1mLD\033[1m\t\033[22;35m$@\033[39m"
 	@$(CXX) $(CFLAGS) $(LDFLAGS) -Llibs/lib -W1 --out-implib -shared -o plugins/mazegenerator.dll $^ -lopengl32 -lglu32 -lplugin_base

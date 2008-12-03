@@ -2,6 +2,7 @@
 #define PLUGIN_API __declspec(dllexport)
 #else
 #define PLUGIN_API __declspec(dllimport)
+#pragma warning "Uhoh"
 #endif
 
 #include "../base/base.h"
