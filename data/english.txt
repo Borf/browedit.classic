@@ -40,7 +40,6 @@
 			<TITLE>Generate</TITLE>
 			<RANDOM1>Hills</RANDOM1>
 			<RANDOM2>Cave Dungeon</RANDOM2>
-			<RANDOM3>Culverts</RANDOM3>
 			<RANDOM4>Mountains</RANDOM4>
 			<RANDOM5>Room maze</RANDOM5>
 			<MAZESTUFF>Maze Stuff</MAZESTUFF>
@@ -125,6 +124,10 @@
 				<MAZEGENERATOR>Maze</MAZEGENERATOR>
 				<CULVERTGENERATOR>Culvert</CULVERTGENERATOR>
 			</generators>
+			<gat>
+				<TITLE>GAT</TITLE>
+				<GATHEIGHT>Set height to geometry height</GATHEIGHT>
+			</gat>
 		</tools>
 	</menu>
 	<fs>

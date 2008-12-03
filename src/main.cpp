@@ -674,7 +674,6 @@ int main(int argc, char *argv[])
 	
 	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/RANDOM1"),					&MenuCommand_random1); // random1 Hills
 	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/RANDOM2"),					&MenuCommand_random2); // random2 Valleys 
-	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/RANDOM3"),					&MenuCommand_random3); // random3 Culverts
 	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/RANDOM4"),					&MenuCommand_random4); // random4 Mountains 
 	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/RANDOM5"),					&MenuCommand_random5); // random4 Mountains 
 	ADDMENUITEM(mm,rnd, GetMsg("menu/generate/MAZESTUFF"),					&MenuCommand_tempfunc); // Maze stuff

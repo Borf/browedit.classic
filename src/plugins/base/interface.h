@@ -3,7 +3,7 @@
 
 #include <string>
 class cWindow;
-
+class cRSMModel;
 
 class cBrowInterface
 {
@@ -14,6 +14,8 @@ public:
 	virtual void render() = 0;
 	virtual std::string inputWindow(std::string, std::string) = 0;
 	virtual void messageWindow(std::string) = 0;
+	virtual cRSMModel* loadModel(std::string) = 0;
+	virtual void removeModel(int) = 0;
 };
 
 

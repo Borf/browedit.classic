@@ -1,0 +1,13 @@
+#ifndef __#CLASSU#_H__
+#define __#CLASSU#_H__
+
+#include "../base/base.h"
+
+class c#CLASS#Plugin : public cPluginBase
+{
+public:
+	c#CLASS#Plugin();
+	bool action(cWorld*);
+};
+
+#endif

@@ -113,7 +113,7 @@ ifeq ($(PLATFORM),win32)
 OBJECTS_SRC += obj/src_Script1_rc_$(PLATFORM).o
 endif
 
-plugins: objdirectories plugin_base plugin_clearmap plugin_generators
+plugins: objdirectories plugin_base plugin_clearmap plugin_generators plugin_gat #NEWDEPENDENCY#
 all: plugins $(TARGET)
 clean:
 	$(RM) obj/*.o obj/*.dep obj/*.mak $(TARGET)
@@ -125,6 +125,8 @@ objdirectories:
 	@mkdir -p obj/plugins/base
 	@mkdir -p obj/plugins/clearmap
 	@mkdir -p obj/plugins/generators
+	@mkdir -p obj/plugins/gat
+#NEWMKDIR#
 
 .PHONY: dep
 
@@ -191,3 +193,9 @@ plugin_clearmap: obj/plugins/clearmap/clearmap_win32.o obj/plugins/clearmap/plug
 plugin_generators: obj/plugins/generators/mazegenerator_win32.o obj/plugins/generators/culvertgenerator_win32.o obj/plugins/generators/plugin_win32.o
 	@echo -e "    \033[1mLD\033[1m\t\033[22;35m$@\033[39m"
 	@$(CXX) $(CFLAGS) $(LDFLAGS) -Llibs/lib -W1 --out-implib -shared -o plugins/generators.dll $^ -lopengl32 -lglu32 -lplugin_base
+
+plugin_gat: obj/plugins/gat/setgatheight_win32.o obj/plugins/gat/plugin_win32.o
+	@echo -e "    \033[1mLD\033[1m\t\033[22;35m$@\033[39m"
+	@$(CXX) $(CFLAGS) $(LDFLAGS) -Llibs/lib -W1 --out-implib -shared -o plugins/gat.dll $^ -lopengl32 -lglu32 -lplugin_base
+
+#NEWTARGET#

@@ -30,6 +30,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "plugin_gat"=.\plugins\gat.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "plugin_generators"=.\plugins\generators.dsp - Package Owner=<4>
 
 Package=<5>
@@ -61,6 +73,9 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name plugin_generators
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name plugin_gat
     End Project Dependency
 }}}
 

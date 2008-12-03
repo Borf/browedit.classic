@@ -1,24 +1,24 @@
-# Microsoft Developer Studio Project File - Name="plugin_generators" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="plugin_gat" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Dynamic-Link Library" 0x0102
 
-CFG=plugin_generators - Win32 Debug
+CFG=plugin_gat - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "generators.mak".
+!MESSAGE NMAKE /f "gat.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "generators.mak" CFG="plugin_generators - Win32 Debug"
+!MESSAGE NMAKE /f "gat.mak" CFG="plugin_gat - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "plugin_generators - Win32 Release" (based on "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "plugin_generators - Win32 Debug" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "plugin_gat - Win32 Release" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "plugin_gat - Win32 Debug" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE 
 
 # Begin Project
@@ -29,7 +29,7 @@ CPP=cl.exe
 MTL=midl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "plugin_generators - Win32 Release"
+!IF  "$(CFG)" == "plugin_gat - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -42,8 +42,8 @@ RSC=rc.exe
 # PROP Intermediate_Dir "../../obj/vs6/Release/plugins/"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "PLUGIN_generators_EXPORTS" /Yu"stdafx.h" /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /I "..\..\libs\include\stlport" /I "..\..\src" /I "..\..\libs\include" /D "WIN32_LEAN_AND_MEAN" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "PLUGIN_generators_EXPORTS" /FD /c
+# ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "PLUGIN_EXPORTS" /Yu"stdafx.h" /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /I "..\..\libs\include\stlport" /I "..\..\src" /I "..\..\libs\include" /D "WIN32_LEAN_AND_MEAN" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "PLUGIN_EXPORTS" /FD /c
 # SUBTRACT CPP /YX /Yc /Yu
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
@@ -54,9 +54,9 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
-# ADD LINK32 opengl32.lib plugin_base.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386 /out:"..\..\plugins\generators.dll" /libpath:"..\..\libs\lib"
+# ADD LINK32 opengl32.lib plugin_base.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386 /out:"..\..\plugins\gat.dll" /libpath:"..\..\libs\lib"
 
-!ELSEIF  "$(CFG)" == "plugin_generators - Win32 Debug"
+!ELSEIF  "$(CFG)" == "plugin_gat - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -65,11 +65,11 @@ LINK32=link.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "../../obj/vs6/Debug/plugins/generators"
-# PROP Intermediate_Dir "../../obj/vs6/Debug/plugins/generators"
+# PROP Output_Dir "../../obj/vs6/Debug/plugins/gat"
+# PROP Intermediate_Dir "../../obj/vs6/Debug/plugins/gat"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "PLUGIN_generators_EXPORTS" /Yu"stdafx.h" /FD /GZ /c
+# ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "PLUGIN_EXPORTS" /Yu"stdafx.h" /FD /GZ /c
 # ADD CPP /nologo /MDd /W3 /WX /Gm /Gi /GR /GX /ZI /Od /I "..\..\libs\include\stlport" /I "..\..\src" /I "..\..\libs\include" /D "WIN32_LEAN_AND_MEAN" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "PLUGIN_EXPORTS" /FD /GZ /c
 # SUBTRACT CPP /YX /Yc /Yu
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -81,32 +81,24 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 opengl32.lib plugin_baseD.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /out:"..\..\plugins\generators.dll" /pdbtype:sept /libpath:"..\..\libs\lib"
+# ADD LINK32 opengl32.lib plugin_baseD.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /out:"..\..\plugins\gat.dll" /pdbtype:sept /libpath:"..\..\libs\lib"
 
 !ENDIF 
 
 # Begin Target
 
-# Name "plugin_generators - Win32 Release"
-# Name "plugin_generators - Win32 Debug"
+# Name "plugin_gat - Win32 Release"
+# Name "plugin_gat - Win32 Debug"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=..\..\src\plugins\generators\culvertgenerator.cpp
+SOURCE=..\..\src\plugins\gat\setgatheight.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\plugins\generators\mazegenerator.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\plugins\generators\mymath.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\plugins\generators\plugin.cpp
+SOURCE=..\..\src\plugins\gat\plugin.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -114,23 +106,11 @@ SOURCE=..\..\src\plugins\generators\plugin.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=..\..\src\plugins\generators\culvertgenerator.h
+SOURCE=..\..\src\plugins\gat\setgatheight.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\plugins\generators\mazegenerator.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\plugins\generators\mymath.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\plugins\generators\plugin.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\plugins\generators\types.h
+SOURCE=..\..\src\plugins\gat\plugin.h
 # End Source File
 # End Group
 # End Target

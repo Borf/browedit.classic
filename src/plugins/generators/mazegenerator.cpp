@@ -1,7 +1,7 @@
 #include <windows.h>
 #include "mazegenerator.h"
 #include "../base/types.h"
-
+#include "types.h"
 
 
 cMazeGenerator::cMazeGenerator() : cPluginBase("Maze Generator", "tools/generators/MAZEGENERATOR")
@@ -10,25 +10,6 @@ cMazeGenerator::cMazeGenerator() : cPluginBase("Maze Generator", "tools/generato
 }
 
 
-class cPoint
-{
-public:
-	cPoint(int xx,int yy)
-	{
-		x = xx;
-		y = yy;
-	}
-	cPoint operator+(cPoint b)
-	{
-		return cPoint(x+b.x, y+b.y);
-	}
-	cPoint operator*(int b)
-	{
-		return cPoint(x*b, y*b);
-	}
-
-	int x,y;
-};
 
 
 bool cMazeGenerator::action(cWorld* world)
