@@ -132,7 +132,7 @@ template <class T> inline T limitinbetween(T val, T start, T end)
 	return (start < end) ? (val < start ? start : (val > end ? end : val)) : (val > start ? start : (val < end ? end : val));
 }
 
-template <class T> inline swap(T &a, T &b)
+template <class T> inline void swap(T &a, T &b)
 {
 	T c = a;
 	a = b;
