@@ -504,6 +504,10 @@ SOURCE=..\src\windows\ambientlightwindow.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\windows\areacopywindow.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\windows\confirmwindow.h
 # End Source File
 # Begin Source File
@@ -604,6 +608,10 @@ SOURCE=..\src\windows\texturewindow.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\windows\walltexturewindow.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\windows\waterwindow.h
 # End Source File
 # Begin Source File
@@ -614,10 +622,6 @@ SOURCE=..\src\windows\xmlwindow.h
 # Begin Source File
 
 SOURCE=..\src\windows\ambientlightwindow.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\windows\areacopywindow.h
 # End Source File
 # Begin Source File
 
@@ -718,6 +722,10 @@ SOURCE=..\src\windows\texturetoolswindow.cpp
 # Begin Source File
 
 SOURCE=..\src\windows\texturewindow.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\windows\walltexturewindow.cpp
 # End Source File
 # Begin Source File
 

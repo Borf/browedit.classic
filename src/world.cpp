@@ -1435,7 +1435,7 @@ void cWorld::draw()
 	if (cGraphics::worldContainer->view.topCamera)
 		glOrtho(0,cGraphics::worldContainer->camera.height,0,cGraphics::worldContainer->camera.height * (hh/(float)ww),-10000,10000);
 	else
-		gluPerspective(45.0f,(GLfloat)(ww)/(GLfloat)hh,10.0f,10000.0f);
+		gluPerspective(45.0f,(GLfloat)(ww)/(GLfloat)hh,10.0f,5000.0f);
 	float camrad = 10;
 
 
@@ -4054,7 +4054,7 @@ void cWorld::calcVertexNormals(int xfrom, int yfrom, int xto, int yto)
 	if(yfrom < 0)
 		yfrom = 0;
 
-	if(xfrom >= width || yfrom >= height || xto < 0 || yto < 0)
+	if(!inbetween(xfrom, 0, width) || !inbetween(yfrom, 0, height))
 	{
 		Log(1,0,"WTF");
 		return;
@@ -4309,11 +4309,11 @@ std::vector<cCube*> cWorld::getWall( int x, int y, bool vertical, bool single)
 		if (!single)
 		{
 			yy = y;
-			while(cubes[yy][x].tileOtherSide != -1)
+			while(yy < height && cubes[yy][x].tileOtherSide != -1)
 				yy++;
 			ymax = yy;
 			yy = y;
-			while(cubes[yy][x].tileOtherSide != -1)
+			while(yy >= 0 && cubes[yy][x].tileOtherSide != -1)
 				yy--;
 			ymin = yy+1;
 			ydiff = 4;
@@ -4334,20 +4334,18 @@ std::vector<cCube*> cWorld::getWall( int x, int y, bool vertical, bool single)
 		if (!single)
 		{
 			xx = x;
-			while(cubes[y][xx].tileSide != -1)
+			while(xx < width && cubes[y][xx].tileSide != -1)
 				xx++;
 			xmax = xx;
 			xx = x;
-			while(cubes[y][xx].tileSide != -1)
+			while(xx >= 0 && cubes[y][xx].tileSide != -1)
 				xx--;
 			xmin = xx+1;
 			xdiff = 4;
 		}
 		
 		for(xx = xmin; xx < xmax; xx++)
-		{
 			ret.push_back(&cubes[y][xx]);
-		}
 	}
 
 	return ret;

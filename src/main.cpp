@@ -202,7 +202,18 @@ void mainloop()
 			cGraphics::world->plugin_api_deletesprites.pop_front();
 		}
 	}
+
 	
+	if(cGraphics::cMouse::rbuttondown && (keys[SDLK_w] || keys[SDLK_s] || keys[SDLK_a] || keys[SDLK_d]))
+	{
+		cVector2 v = cVector2((keys[SDLK_a] ? 1 : 0) - (keys[SDLK_d] ? 1 : 0), (keys[SDLK_w] ? 1 : 0) - (keys[SDLK_s] ? 1 : 0));
+		v = v * (cGraphics::getFrameTicks()/5.0f);
+		v.rotate(-cGraphics::worldContainer->camera.rot / PI * 180.0f);
+		cGraphics::worldContainer->camera.pointer = cGraphics::worldContainer->camera.pointer + v;
+	}
+	
+	
+
 	process_events( );
 
 	unsigned long currenttime = SDL_GetTicks();
@@ -1529,6 +1540,10 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				MenuCommand_toggle((cMenuItem*)cGraphics::menu->find("Lightmaps"));
 				break;
 			case SDLK_w:
+				if(cGraphics::cMouse::rbuttondown)
+				{
+					return 1;
+				}
 				if(SDL_GetModState() & KMOD_META)
 				{
 					MenuCommand_toggle((cMenuItem*)cGraphics::menu->find("Water"));
@@ -1701,6 +1716,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 #ifdef _DEBUG
 			case SDLK_d:
 				{
+					if(cGraphics::cMouse::rbuttondown)
+						return 1;
 					if(event.key.keysym.mod & KMOD_CTRL)
 						MenuCommand_mapdatabase(NULL);
 				}

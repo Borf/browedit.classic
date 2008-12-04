@@ -3,6 +3,7 @@
 #include "undo/tileedit.h"
 #include "undo/wallschange.h"
 #include "undo/wallchange.h"
+#include "windows/walltexturewindow.h"
 
 
 int cProcessManagement::walledit_process_events(SDL_Event &event)
@@ -12,14 +13,13 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 		case SDL_MOUSEMOTION:
 			break;
 		case SDL_MOUSEBUTTONUP:
-			if(event.button.button == SDL_BUTTON_LEFT && cWM::movement < 3)
+			if(event.button.button == SDL_BUTTON_RIGHT && cWM::movement < 3 && (SDL_GetModState() & KMOD_CTRL))
 			{
 				int x = (int)cGraphics::cMouse::x3d / 10;
 				int y = (int)cGraphics::cMouse::z3d / 10;
-				if (y < 0 || y > cGraphics::world->height-1)
+				if(!inbetween(x, 0, cGraphics::world->width-1) && !inbetween(y, 0, cGraphics::world->height-1))
 					break;
-				if (x < 0 || x > cGraphics::world->width-1)
-					break;
+
 				if (cGraphics::worldContainer->settings.wallHeightMin == cVector2(x,y))
 					cGraphics::worldContainer->settings.wallHeightMin = cVector2(-1,-1);
 				else
@@ -29,10 +29,9 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 			{
 				int x = (int)cGraphics::cMouse::x3d / 10;
 				int y = (int)cGraphics::cMouse::z3d / 10;
-				if (y < 0 || y > cGraphics::world->height-1)
+				if(!inbetween(x, 0, cGraphics::world->width-1) && !inbetween(y, 0, cGraphics::world->height-1))
 					break;
-				if (x < 0 || x > cGraphics::world->width-1)
-					break;
+
 				if (cGraphics::worldContainer->settings.wallHeightMax == cVector2(x,y))
 					cGraphics::worldContainer->settings.wallHeightMax = cVector2(-1,-1);
 				else
@@ -42,6 +41,44 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 			break;
 		case SDL_MOUSEBUTTONDOWN:
 		{
+			if(event.button.button == SDL_BUTTON_LEFT)
+			{
+				int x = (int)cGraphics::cMouse::x3d / 10;
+				int y = (int)cGraphics::cMouse::z3d / 10;
+				if(!inbetween(x, 0, cGraphics::world->width-1) && !inbetween(y, 0, cGraphics::world->height-1))
+					break;
+				
+				float height = fabs(-cGraphics::cMouse::y3d - ((cGraphics::world->cubes[y][x].cell1 + cGraphics::world->cubes[y][x].cell2 + cGraphics::world->cubes[y][x].cell3 + cGraphics::world->cubes[y][x].cell4) / 4.0f));
+				if(height > 4)
+				{
+					float xoff = fabs(cGraphics::cMouse::x3d/10.0f-x-0.5f);
+					float yoff = fabs(cGraphics::cMouse::z3d/10.0f-y-0.5f);
+					Log(3,0,"xoff: %f, yoff: %f", xoff, yoff);
+					if(xoff < yoff)
+					{
+						if(cGraphics::world->cubes[y][x].tileSide == -1)
+						{
+							y--;
+							if(y < 0)
+								break;
+						}
+						cWM::addWindow(new cWallTextureWindow(x,y,true));
+					}
+					else
+					{
+						if(cGraphics::world->cubes[y][x].tileOtherSide == -1)
+						{
+							x--;
+							if(x < 0)
+								break;
+							cWM::addWindow(new cWallTextureWindow(x,y,false));
+						}
+					}
+					
+				}
+				
+				
+			}
 			break;
 		}
 		case SDL_KEYDOWN:
@@ -53,12 +90,11 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 					std::vector<std::pair<int, cTile> > tilesedited;
 					int x = (int)cGraphics::cMouse::x3d / 10;
 					int y = (int)cGraphics::cMouse::z3d / 10;
-					if (y < 0)
-						break;
-					if (x < 0)
+					if(!inbetween(x, 0, cGraphics::world->width-1) && !inbetween(y, 0, cGraphics::world->height-1))
 						break;
 					
 					std::vector<cCube*> cubes = cGraphics::world->getWall(x,y,(SDL_GetModState() & KMOD_ALT) != 0, (SDL_GetModState() & KMOD_CTRL) != 0);
+					Log(3,0,"%i cubes", cubes.size());
 					for(unsigned int i = 0; i < cubes.size(); i++)
 					{
 						int tileId = -1;
@@ -69,14 +105,8 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 						
 						cTile* t = &cGraphics::world->tiles[tileId];
 						tilesedited.push_back(std::pair<int, cTile>(tileId, *t));
-						float f;
-						f = t->u1;
-						t->u1 = t->u2;
-						t->u2 = f;
-						
-						f = t->u3;
-						t->u3 = t->u4;
-						t->u4 = f;
+						swap(t->u1, t->u2);
+						swap(t->u3, t->u4);
 					}
 					if (tilesedited.size() > 0)
 						cGraphics::worldContainer->undoStack->push(new cUndoTileEdit(tilesedited));
@@ -87,12 +117,11 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 					std::vector<std::pair<int, cTile> > tilesedited;
 					int x = (int)cGraphics::cMouse::x3d / 10;
 					int y = (int)cGraphics::cMouse::z3d / 10;
-					if (y < 0)
-						break;
-					if (x < 0)
+					if(!inbetween(x, 0, cGraphics::world->width-1) && !inbetween(y, 0, cGraphics::world->height-1))
 						break;
 
 					std::vector<cCube*> cubes = cGraphics::world->getWall(x,y,(SDL_GetModState() & KMOD_ALT) != 0, (SDL_GetModState() & KMOD_CTRL) != 0);
+					Log(3,0,"%i cubes", cubes.size());
 					for(unsigned int i = 0; i < cubes.size(); i++)
 					{
 						int tileId = -1;
@@ -103,14 +132,8 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 
 						cTile* t = &cGraphics::world->tiles[tileId];
 						tilesedited.push_back(std::pair<int, cTile>(tileId, *t));
-						float f;
-						f = t->v1;
-						t->v1 = t->v3;
-						t->v3 = f;
-
-						f = t->v2;
-						t->v2 = t->v4;
-						t->v4 = f;
+						swap(t->v1, t->v3);
+						swap(t->v2, t->v4);
 					}
 					if (tilesedited.size() > 0)
 						cGraphics::worldContainer->undoStack->push(new cUndoTileEdit(tilesedited));
