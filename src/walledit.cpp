@@ -105,8 +105,8 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 						
 						cTile* t = &cGraphics::world->tiles[tileId];
 						tilesedited.push_back(std::pair<int, cTile>(tileId, *t));
-						swap(t->u1, t->u2);
-						swap(t->u3, t->u4);
+						swapValues(t->u1, t->u2);
+						swapValues(t->u3, t->u4);
 					}
 					if (tilesedited.size() > 0)
 						cGraphics::worldContainer->undoStack->push(new cUndoTileEdit(tilesedited));
@@ -132,8 +132,8 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 
 						cTile* t = &cGraphics::world->tiles[tileId];
 						tilesedited.push_back(std::pair<int, cTile>(tileId, *t));
-						swap(t->v1, t->v3);
-						swap(t->v2, t->v4);
+						swapValues(t->v1, t->v3);
+						swapValues(t->v2, t->v4);
 					}
 					if (tilesedited.size() > 0)
 						cGraphics::worldContainer->undoStack->push(new cUndoTileEdit(tilesedited));
