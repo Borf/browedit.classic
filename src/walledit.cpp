@@ -54,6 +54,8 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 					float xoff = fabs(cGraphics::cMouse::x3d/10.0f-x-0.5f);
 					float yoff = fabs(cGraphics::cMouse::z3d/10.0f-y-0.5f);
 					Log(3,0,"xoff: %f, yoff: %f", xoff, yoff);
+					int yy = y;
+					int xx = x;
 					if(xoff < yoff)
 					{
 						if(cGraphics::world->cubes[y][x].tileSide == -1)
@@ -62,18 +64,50 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 							if(y < 0)
 								break;
 						}
-						cWM::addWindow(new cWallTextureWindow(x,y,true));
-					}
-					else
-					{
-						if(cGraphics::world->cubes[y][x].tileOtherSide == -1)
+						if(cGraphics::world->cubes[y][x].tileSide != -1)
 						{
-							x--;
-							if(x < 0)
-								break;
-							cWM::addWindow(new cWallTextureWindow(x,y,false));
+							cWM::addWindow(new cWallTextureWindow(x,y,true));
+							break;
 						}
+						y = yy;
 					}
+
+					if(cGraphics::world->cubes[y][x].tileOtherSide != -1)
+					{
+						cWM::addWindow(new cWallTextureWindow(x,y,false));
+						break;
+					}
+					if(cGraphics::world->cubes[y][x].tileOtherSide == -1)
+					{
+						x--;
+						if(x < 0)
+							break;
+						if(cGraphics::world->cubes[y][x].tileOtherSide != -1)
+						{
+							cWM::addWindow(new cWallTextureWindow(x,y,false));
+							break;
+						}
+						x = xx;
+					}
+
+
+					if(cGraphics::world->cubes[y][x].tileSide != -1)
+					{
+						cWM::addWindow(new cWallTextureWindow(x,y,true));
+						break;
+					}
+					if(cGraphics::world->cubes[y][x].tileSide == -1)
+					{
+						y--;
+						if(y < 0)
+							break;
+					}
+					if(cGraphics::world->cubes[y][x].tileSide != -1)
+					{
+						cWM::addWindow(new cWallTextureWindow(x,y,true));
+						break;
+					}
+					y = yy;
 					
 				}
 				
@@ -459,7 +493,7 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 							cGraphics::world->cubes[yy][x].tileOtherSide = cGraphics::world->tiles.size()-1;
 						}
 						if(wallschanged.size() > 0)
-							cGraphics::worldContainer->undoStack->push(new cUndoChangeWalls(1, wallschanged));
+							cGraphics::worldContainer->undoStack->push(new cUndoWallsChange(1, wallschanged));
 					}
 					else
 					{
@@ -565,7 +599,7 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 							cGraphics::world->cubes[y][xx].tileSide = cGraphics::world->tiles.size()-1;
 						}
 						if(wallschanged.size() > 0)
-							cGraphics::worldContainer->undoStack->push(new cUndoChangeWalls(0, wallschanged));
+							cGraphics::worldContainer->undoStack->push(new cUndoWallsChange(0, wallschanged));
 					}
 				}
 				break;
@@ -578,7 +612,7 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 					if (x < 0 || x > (int)cGraphics::world->cubes[0].size()-1)
 						break;
 
-					cGraphics::worldContainer->undoStack->push(new cUndoChangeWall(0,x,y, cGraphics::world->cubes[y][x].tileSide));
+					cGraphics::worldContainer->undoStack->push(new cUndoWallChange(0,x,y, cGraphics::world->cubes[y][x].tileSide));
 
 					int from = x;
 					int to = x+1;
@@ -660,7 +694,7 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 					if (x <= 0 || x > (int)cGraphics::world->cubes[y].size()-2)
 						break;
 
-					cGraphics::worldContainer->undoStack->push(new cUndoChangeWall(1,x,y, cGraphics::world->cubes[y][x].tileOtherSide));
+					cGraphics::worldContainer->undoStack->push(new cUndoWallChange(1,x,y, cGraphics::world->cubes[y][x].tileOtherSide));
 
 					int from = y;
 					int to = y+1;

@@ -2807,6 +2807,7 @@ void cWorld::draw()
 
 	if(cGraphics::view.showDot)
 	{
+		glDisable(GL_DEPTH_TEST);
 		glColor4f(1,1,0,1);
 		glDisable(GL_TEXTURE_2D);
 		glBegin(GL_POLYGON);
@@ -2816,6 +2817,7 @@ void cWorld::draw()
 				else
 					glVertex3f(-cGraphics::worldContainer->camera.pointer.x+cos(ii)*2,camheight+0.1,-cGraphics::worldContainer->camera.pointer.y+sin(ii)*2);
 		glEnd();
+		glEnable(GL_DEPTH_TEST);
 	}
 
 //	cVector3 colors[] = {cVector3(1,1,1), cVector3(1,0,0), cVector3(1,1,0), cVector3(1,0,1), cVector3(0,1,0), cVector3(0,1,1), cVector3(0,0,1) };
@@ -4041,25 +4043,8 @@ bool cWorld::checkSanity()
 
 void cWorld::calcVertexNormals(int xfrom, int yfrom, int xto, int yto)
 {
-	if(xto >= width)
-		xto = width-1;
-	if(yto >= height)
-		yto = height-1;
-	if(xto == -1)
-		xto = width;
-	if(yto == -1)
-		yto = height;
-	if(xfrom < 0)
-		xfrom = 0;
-	if(yfrom < 0)
-		yfrom = 0;
-
-	if(!inbetween(xfrom, 0, width) || !inbetween(yfrom, 0, height))
-	{
-		Log(1,0,"WTF");
-		return;
-	}
-
+	xfrom = limitinbetween(xfrom, 0, width-1);
+	yfrom = limitinbetween(yfrom, 0, height-1);
 	int x,y;
 
 

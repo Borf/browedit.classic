@@ -3,12 +3,12 @@
 
 #include <undo.h>
 
-class cUndoChangeWalls : public cUndoItem
+class cUndoWallsChange : public cUndoItem
 {
 	int type;
 	std::vector<std::pair<std::pair<int,int>, int> > vals;
 public:
-	cUndoChangeWalls(int t, std::vector<std::pair<std::pair<int,int>, int> > v)
+	cUndoWallsChange(int t, std::vector<std::pair<std::pair<int,int>, int> > v)
 	{
 		type = t;
 		vals = v;

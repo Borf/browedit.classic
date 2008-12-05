@@ -1,11 +1,13 @@
 #ifndef __UNDO_CHANGEWALL_H__
 #define __UNDO_CHANGEWALL_H__
 
-class cUndoChangeWall : public cUndoItem
+#include <undo.h>
+
+class cUndoWallChange : public cUndoItem
 {
 	int x,y,type,val;
 public:
-	cUndoChangeWall(int t, int xx, int yy,int v)
+	cUndoWallChange(int t, int xx, int yy,int v)
 	{
 		type = t;
 		x = xx;

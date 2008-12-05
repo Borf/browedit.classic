@@ -1,6 +1,8 @@
 #include <common.h>
 #include "walltexturewindow.h"
 #include <graphics.h>
+#include <undo/wallchange.h>
+#include <wm/windowinputbox.h>
 
 cWallTextureWindow::cWallTextureWindow(int tileX, int tileY, bool horizontal ) : cWindow()
 {
@@ -14,10 +16,46 @@ cWallTextureWindow::cWallTextureWindow(int tileX, int tileY, bool horizontal ) :
 	title = "Walltexture";
 	center();
 
+	
+	if(horizontal)
+	{
+		if(cGraphics::world->cubes[tileY][tileX].tileSide != -1)
+		{
+			cGraphics::world->tiles.push_back(cGraphics::world->tiles[cGraphics::world->cubes[tileY][tileX].tileSide]);
+			undo = new cUndoWallChange(0, tileX, tileY, cGraphics::world->cubes[tileY][tileX].tileSide);
+			cGraphics::world->cubes[tileY][tileX].tileSide = cGraphics::world->tiles.size()-1;
+		}
+		else
+			Log(2,0,"uhoh");
+	}
+	else
+	{
+		if(cGraphics::world->cubes[tileY][tileX].tileOtherSide != -1)
+		{
+			cGraphics::world->tiles.push_back(cGraphics::world->tiles[cGraphics::world->cubes[tileY][tileX].tileOtherSide]);
+			undo = new cUndoWallChange(1, tileX, tileY, cGraphics::world->cubes[tileY][tileX].tileOtherSide);
+			cGraphics::world->cubes[tileY][tileX].tileOtherSide = cGraphics::world->tiles.size()-1;
+		}
+		else
+			Log(2,0,"uhoh");
+	}
+
+
 
 	objects["texture"] = new cWindowWallTextureBox(tileX, tileY, horizontal, this);
+	objects["btnClose"] = new cWindowMyCloseButton(this);
+	objects["btnOk"] = new cWindowOkButton(this);
+	objects["btnCancel"] = new cWindowCancelButton(this);
+	objects["btnFlipH"] = new cWindowHorizontalFlipButton(this);
+	objects["btnFlipV"] = new cWindowVerticalFlipButton(this);
+	addLabel("lblGrid", 0, 4*objects["btnOk"]->getHeight()-2, "Gridsize")->alignment = ALIGN_TOPRIGHT;
+	cWindowObject* o = new cWindowInputBox(this);
+	o->alignment = ALIGN_TOPRIGHT;
+	o->moveTo(0, 4*objects["btnOk"]->getHeight()+12);
+	o->resizeTo(100, o->getHeight());
+	o->setText(0, "4");
+	objects["grid"] = o;
 
-	objects["btnClose"] = new cWindowCloseButton(this);
 }
 
 cWallTextureWindow::cWindowWallTextureBox::cWindowWallTextureBox( int tileX, int tileY, bool horizontal, cWindow* parent, TiXmlDocument* skin) : cWindowObject(parent, skin->FirstChildElement("skin")->FirstChildElement("frame"))
@@ -36,7 +74,7 @@ cWallTextureWindow::cWindowWallTextureBox::cWindowWallTextureBox( int tileX, int
 				(cGraphics::world->cubes[tileY+1][tileX].cell1 + cGraphics::world->cubes[tileY+1][tileX].cell2);
 		}
 		else
-			Log(2,0,"uhoh");
+			parent->close();
 	}
 	else
 	{
@@ -48,13 +86,14 @@ cWallTextureWindow::cWindowWallTextureBox::cWindowWallTextureBox( int tileX, int
 				(cGraphics::world->cubes[tileY][tileX+1].cell1 + cGraphics::world->cubes[tileY][tileX+1].cell3);
 		}
 		else
-			Log(2,0,"uhoh");
+			parent->close();
 	}
 
 }
 
 void cWallTextureWindow::cWindowWallTextureBox::draw( int a,int b,int c,int d)
 {
+	*applyTile = tile;
 	GLfloat colors[4];
 	glGetFloatv(GL_CURRENT_COLOR, colors);
 	cWindowObject::draw(a,b,c,d);
@@ -76,17 +115,17 @@ void cWallTextureWindow::cWindowWallTextureBox::draw( int a,int b,int c,int d)
 	glDisable(GL_TEXTURE_2D);
 	glColor4f(0,0,0,1);
 	glBegin(GL_LINE_LOOP);
-		glVertex2f(50+300*tile.u1,	50+300*tile.v1);
-		glVertex2f(50+300*tile.u2,	50+300*tile.v2);
-		glVertex2f(50+300*tile.u4,	50+300*tile.v4);
-		glVertex2f(50+300*tile.u3,	50+300*tile.v3);
+		glVertex2f(50+300*tile.u1,	350-300*tile.v1);
+		glVertex2f(50+300*tile.u2,	350-300*tile.v2);
+		glVertex2f(50+300*tile.u4,	350-300*tile.v4);
+		glVertex2f(50+300*tile.u3,	350-300*tile.v3);
 	glEnd();
 	glColor4f(1,1,1,0.25f);
 	glBegin(GL_QUADS);
-		glVertex2f(50+300*tile.u1,	50+300*tile.v1);
-		glVertex2f(50+300*tile.u2,	50+300*tile.v2);
-		glVertex2f(50+300*tile.u4,	50+300*tile.v4);
-		glVertex2f(50+300*tile.u3,	50+300*tile.v3);
+		glVertex2f(50+300*tile.u1,	350-300*tile.v1);
+		glVertex2f(50+300*tile.u2,	350-300*tile.v2);
+		glVertex2f(50+300*tile.u4,	350-300*tile.v4);
+		glVertex2f(50+300*tile.u3,	350-300*tile.v3);
 	glEnd();
 
 	glColor4fv(colors);
@@ -94,25 +133,25 @@ void cWallTextureWindow::cWindowWallTextureBox::draw( int a,int b,int c,int d)
 
 void cWallTextureWindow::cWindowWallTextureBox::drag()
 {
-	if((cVector2(cGraphics::cMouse::xOld-parent->getX(), cGraphics::h()-cGraphics::cMouse::yOld-parent->getY()) - cVector2(realX() + 50+300*tile.u1,	realY() + 50+300*tile.v1)).Magnitude() < 20)
+	if((cVector2(cGraphics::cMouse::xOld-parent->getX(), cGraphics::h()-cGraphics::cMouse::yOld-parent->getY()) - cVector2(realX() + 50+300*tile.u1,	realY() + 350-300*tile.v1)).Magnitude() < 20)
 	{
 		tile.u1 += (cGraphics::cMouse::x - cGraphics::cMouse::xOld)/300.0f;
-		tile.v1 -= (cGraphics::cMouse::y - cGraphics::cMouse::yOld)/300.0f;
+		tile.v1 += (cGraphics::cMouse::y - cGraphics::cMouse::yOld)/300.0f;
 	}
-	else if((cVector2(cGraphics::cMouse::xOld-parent->getX(), cGraphics::h()-cGraphics::cMouse::yOld-parent->getY()) - cVector2(realX() + 50+300*tile.u2,	realY() + 50+300*tile.v2)).Magnitude() < 20)
+	else if((cVector2(cGraphics::cMouse::xOld-parent->getX(), cGraphics::h()-cGraphics::cMouse::yOld-parent->getY()) - cVector2(realX() + 50+300*tile.u2,	realY() + 350-300*tile.v2)).Magnitude() < 20)
 	{
 		tile.u2 += (cGraphics::cMouse::x - cGraphics::cMouse::xOld)/300.0f;
-		tile.v2 -= (cGraphics::cMouse::y - cGraphics::cMouse::yOld)/300.0f;
+		tile.v2 += (cGraphics::cMouse::y - cGraphics::cMouse::yOld)/300.0f;
 	}
-	else if((cVector2(cGraphics::cMouse::xOld-parent->getX(), cGraphics::h()-cGraphics::cMouse::yOld-parent->getY()) - cVector2(realX() + 50+300*tile.u3,	realY() + 50+300*tile.v3)).Magnitude() < 20)
+	else if((cVector2(cGraphics::cMouse::xOld-parent->getX(), cGraphics::h()-cGraphics::cMouse::yOld-parent->getY()) - cVector2(realX() + 50+300*tile.u3,	realY() + 350-300*tile.v3)).Magnitude() < 20)
 	{
 		tile.u3 += (cGraphics::cMouse::x - cGraphics::cMouse::xOld)/300.0f;
-		tile.v3 -= (cGraphics::cMouse::y - cGraphics::cMouse::yOld)/300.0f;
+		tile.v3 += (cGraphics::cMouse::y - cGraphics::cMouse::yOld)/300.0f;
 	}
-	else if((cVector2(cGraphics::cMouse::xOld-parent->getX(), cGraphics::h()-cGraphics::cMouse::yOld-parent->getY()) - cVector2(realX() + 50+300*tile.u4,	realY() + 50+300*tile.v4)).Magnitude() < 20)
+	else if((cVector2(cGraphics::cMouse::xOld-parent->getX(), cGraphics::h()-cGraphics::cMouse::yOld-parent->getY()) - cVector2(realX() + 50+300*tile.u4,	realY() + 350-300*tile.v4)).Magnitude() < 20)
 	{
 		tile.u4 += (cGraphics::cMouse::x - cGraphics::cMouse::xOld)/300.0f;
-		tile.v4 -= (cGraphics::cMouse::y - cGraphics::cMouse::yOld)/300.0f;
+		tile.v4 += (cGraphics::cMouse::y - cGraphics::cMouse::yOld)/300.0f;
 	}
 
 
@@ -170,34 +209,116 @@ void cWallTextureWindow::cWindowWallTextureBox::drag()
 	else
 	{
 		tile.u1 += (cGraphics::cMouse::x - cGraphics::cMouse::xOld)/300.0f;
-		tile.v1 -= (cGraphics::cMouse::y - cGraphics::cMouse::yOld)/300.0f;
+		tile.v1 += (cGraphics::cMouse::y - cGraphics::cMouse::yOld)/300.0f;
 		
 		tile.u2 += (cGraphics::cMouse::x - cGraphics::cMouse::xOld)/300.0f;
-		tile.v2 -= (cGraphics::cMouse::y - cGraphics::cMouse::yOld)/300.0f;
+		tile.v2 += (cGraphics::cMouse::y - cGraphics::cMouse::yOld)/300.0f;
 		
 		tile.u3 += (cGraphics::cMouse::x - cGraphics::cMouse::xOld)/300.0f;
-		tile.v3 -= (cGraphics::cMouse::y - cGraphics::cMouse::yOld)/300.0f;
+		tile.v3 += (cGraphics::cMouse::y - cGraphics::cMouse::yOld)/300.0f;
 		
 		tile.u4 += (cGraphics::cMouse::x - cGraphics::cMouse::xOld)/300.0f;
-		tile.v4 -= (cGraphics::cMouse::y - cGraphics::cMouse::yOld)/300.0f;
+		tile.v4 += (cGraphics::cMouse::y - cGraphics::cMouse::yOld)/300.0f;
 		
 
 	}
 	if(SDL_GetModState() & KMOD_SHIFT)
 	{
-		tile.u1 = round(tile.u1*4.0f) / 4.0f;
-		tile.v1 = round(tile.v1*4.0f) / 4.0f;
-		
-		tile.u2 = round(tile.u2*4.0f) / 4.0f;
-		tile.v2 = round(tile.v2*4.0f) / 4.0f;
-		
-		tile.u3 = round(tile.u3*4.0f) / 4.0f;
-		tile.v3 = round(tile.v3*4.0f) / 4.0f;
-		
-		tile.u4 = round(tile.u4*4.0f) / 4.0f;
-		tile.v4 = round(tile.v4*4.0f) / 4.0f;
-		
+		float gridSize = atof(parent->objects["grid"]->getText(0).c_str());
+
+		if(gridSize != 0)
+		{
+			tile.u1 = round(tile.u1*gridSize) / gridSize;
+			tile.v1 = round(tile.v1*gridSize) / gridSize;
+			
+			tile.u2 = round(tile.u2*gridSize) / gridSize;
+			tile.v2 = round(tile.v2*gridSize) / gridSize;
+			
+			tile.u3 = round(tile.u3*gridSize) / gridSize;
+			tile.v3 = round(tile.v3*gridSize) / gridSize;
+			
+			tile.u4 = round(tile.u4*gridSize) / gridSize;
+			tile.v4 = round(tile.v4*gridSize) / gridSize;
+		}		
 	}
 
-	*applyTile = tile;
+}
+
+cWallTextureWindow::cWindowOkButton::cWindowOkButton( cWindow* parent) : cWindowButton(parent)
+{
+	alignment = ALIGN_TOPRIGHT;
+	moveTo(0,0);
+	resizeTo(100, h);
+	text = "Ok";
+}
+
+void cWallTextureWindow::cWindowOkButton::onClick()
+{
+	cGraphics::worldContainer->undoStack->push(((cWallTextureWindow*)parent)->undo);
+	parent->close();
+}
+
+
+cWallTextureWindow::cWindowCancelButton::cWindowCancelButton( cWindow* parent) : cWindowButton(parent)
+{
+	alignment = ALIGN_TOPRIGHT;
+	moveTo(0,h);
+	resizeTo(100, h);
+	text = "Cancel";
+}
+
+void cWallTextureWindow::cWindowCancelButton::onClick()
+{
+	((cWallTextureWindow*)parent)->undo->undo();
+	delete ((cWallTextureWindow*)parent)->undo;
+	parent->close();
+}
+
+cWallTextureWindow::cWindowMyCloseButton::cWindowMyCloseButton( cWindow* parent) : cWindowCloseButton(parent)
+{
+}
+
+void cWallTextureWindow::cWindowMyCloseButton::onClick()
+{
+	cWindowCloseButton::onClick();
+	((cWallTextureWindow*)parent)->undo->undo();
+	delete ((cWallTextureWindow*)parent)->undo;
+}
+
+
+cWallTextureWindow::cWindowHorizontalFlipButton::cWindowHorizontalFlipButton( cWindow* parent ) : cWindowButton(parent)
+{
+	alignment = ALIGN_TOPRIGHT;
+	moveTo(0,2*h);
+	resizeTo(100, h);
+	text = "Flip Horizontal";
+	
+}
+
+void cWallTextureWindow::cWindowHorizontalFlipButton::onClick()
+{
+	cTile* t = &((cWindowWallTextureBox*)parent->objects["texture"])->tile;
+	float center = (t->u1 + t->u2 + t->u3 + t->u4) / 4.0f;
+	t->u1 = center-(t->u1-center);
+	t->u2 = center-(t->u2-center);
+	t->u3 = center-(t->u3-center);
+	t->u4 = center-(t->u4-center);	
+}
+
+cWallTextureWindow::cWindowVerticalFlipButton::cWindowVerticalFlipButton( cWindow* parent) : cWindowButton(parent)
+{
+	alignment = ALIGN_TOPRIGHT;
+	moveTo(0,3*h);
+	resizeTo(100, h);
+	text = "Flip Vertical";
+}
+
+void cWallTextureWindow::cWindowVerticalFlipButton::onClick()
+{
+	cTile* t = &((cWindowWallTextureBox*)parent->objects["texture"])->tile;
+	float center = (t->v1 + t->v2 + t->v3 + t->v4) / 4.0f;
+	t->v1 = center-(t->v1-center);
+	t->v2 = center-(t->v2-center);
+	t->v3 = center-(t->v3-center);
+	t->v4 = center-(t->v4-center);	
 }
