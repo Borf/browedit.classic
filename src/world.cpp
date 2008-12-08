@@ -4045,6 +4045,10 @@ void cWorld::calcVertexNormals(int xfrom, int yfrom, int xto, int yto)
 {
 	xfrom = limitinbetween(xfrom, 0, width-1);
 	yfrom = limitinbetween(yfrom, 0, height-1);
+
+	xto = limitinbetween(xto, 0, width-1);
+	yto = limitinbetween(yto, 0, height-1);
+
 	int x,y;
 
 
