@@ -27,6 +27,10 @@ cXmlWindow::cXmlWindow(TiXmlDocument &layout) : cWindow()
 			o->moveTo(atoi(el->FirstChildElement("x")->FirstChild()->Value()), atoi(el->FirstChildElement("y")->FirstChild()->Value()));
 			o->alignment = ALIGN_TOPLEFT;
 			o->setInt(0, atoi(el->Attribute("value")));
+			if(el->FirstChildElement("width"))
+				o->resizeTo(atoi(el->FirstChildElement("width")->FirstChild()->Value()), o->getHeight());
+			if(el->FirstChildElement("height"))
+				o->resizeTo(o->getWidth(), atoi(el->FirstChildElement("height")->FirstChild()->Value()));
 			objects[el->Attribute("name")] = o;
 		}
 		else if(strcmp(el->Value(), "label") == 0)
@@ -39,6 +43,10 @@ cXmlWindow::cXmlWindow(TiXmlDocument &layout) : cWindow()
 			o->moveTo(atoi(el->FirstChildElement("x")->FirstChild()->Value()), atoi(el->FirstChildElement("y")->FirstChild()->Value()));
 			o->alignment = ALIGN_TOPLEFT;
 			o->setText(0, el->Attribute("value"));
+			if(el->FirstChildElement("width"))
+				o->resizeTo(atoi(el->FirstChildElement("width")->FirstChild()->Value()), o->getHeight());
+			if(el->FirstChildElement("height"))
+				o->resizeTo(o->getWidth(), atoi(el->FirstChildElement("height")->FirstChild()->Value()));
 			objects[el->Attribute("name")] = o;
 		}
 		else

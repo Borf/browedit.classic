@@ -51,3 +51,9 @@ void cBrowInterfaceImplementation::removeModel(int id)
 	delete cGraphics::world->models[id];
 	cGraphics::world->models.erase(cGraphics::world->models.begin() + id);
 }
+
+void cBrowInterfaceImplementation::removeSprite(int id)
+{
+	delete cGraphics::world->sprites[id];
+	cGraphics::world->sprites.erase(cGraphics::world->sprites.begin() + id);
+}

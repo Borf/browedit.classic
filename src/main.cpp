@@ -178,32 +178,6 @@ void mainloop()
 		}
 	}
 
-//Todo: move this somewhere else!
-	if(cGraphics::world)
-	{
-		while(!cGraphics::world->plugin_api_deleteobjects.empty())
-		{
-			int i = cGraphics::world->plugin_api_deleteobjects.front();
-			delete cGraphics::world->models[i];
-			cGraphics::world->models.erase(cGraphics::world->models.begin() + i);
-			cGraphics::world->plugin_api_deleteobjects.pop_front();
-			if(cGraphics::world->plugin_api_deleteobjects.empty())
-			{
-				cWindow* w = cWM::getWindow(WT_MODELOVERVIEW);
-				if(w)
-					w->userfunc(NULL);
-			}
-		}
-		while(!cGraphics::world->plugin_api_deletesprites.empty())
-		{
-			int i = cGraphics::world->plugin_api_deletesprites.front();
-			delete cGraphics::world->sprites[i];
-			cGraphics::world->sprites.erase(cGraphics::world->sprites.begin() + i);
-			cGraphics::world->plugin_api_deletesprites.pop_front();
-		}
-	}
-
-	
 	if(cGraphics::cMouse::rbuttondown && (keys[SDLK_w] || keys[SDLK_s] || keys[SDLK_a] || keys[SDLK_d]))
 	{
 		cVector2 v = cVector2((keys[SDLK_a] ? 1 : 0) - (keys[SDLK_d] ? 1 : 0), (keys[SDLK_w] ? 1 : 0) - (keys[SDLK_s] ? 1 : 0));

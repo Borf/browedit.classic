@@ -16,6 +16,7 @@ public:
 	virtual void messageWindow(std::string) = 0;
 	virtual cRSMModel* loadModel(std::string) = 0;
 	virtual void removeModel(int) = 0;
+	virtual void removeSprite(int) = 0;
 };
 
 

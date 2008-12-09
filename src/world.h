@@ -304,11 +304,6 @@ public:
 	std::vector<cVector3>				quadTreeFloats;
 	cQuadTreeNode* root;
 	
-	std::list<int>						plugin_api_deleteobjects;
-	std::list<int>						plugin_api_deletesprites;
-
-	
-	
 	
 	cWorld();
 	~cWorld();

@@ -14,6 +14,7 @@ public:
 	void messageWindow(std::string);
 	cRSMModel* loadModel(std::string);
 	void removeModel(int);
+	void removeSprite(int);
 };
 
 

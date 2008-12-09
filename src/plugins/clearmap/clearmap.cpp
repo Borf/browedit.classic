@@ -190,13 +190,13 @@ void clickOk(cWindow* w)
 	}
 	if(w->objects["chkObjects"]->getInt(0) != 0)
 	{
-		for(unsigned int i = 0; i < world->models.size(); i++)
-			world->plugin_api_deleteobjects.push_back(0);
+		while(world->models.size() > 0)
+			plugin->browInterface->removeModel(0);
 	}
 	if(w->objects["chkSprites"]->getInt(0) != 0)
 	{
-		for(unsigned int i = 0; i < world->sprites.size(); i++)
-			world->plugin_api_deletesprites.push_back(0);
+		while(world->sprites.size() > 0)
+			plugin->browInterface->removeSprite(0);
 	}
 
 
@@ -216,6 +216,21 @@ void handleevent(cWindow* w, std::string name, std::string event)
 {
 	if(name == "btnOk" && event == "click")
 		clickOk(w);
+
+	else if(name.substr(0,3) == "btn")
+	{
+		std::map<std::string, cWindowObject*, std::less<std::string> >::iterator it;
+		for(it = w->objects.begin(); it != w->objects.end(); it++)
+		{
+			if(it->first == "chk" + name.substr(3))
+			{
+				it->second->setInt(0,1);
+			}
+			else if(it->first.substr(0,3) == "chk")
+				it->second->setInt(0,0);
+
+		}
+	}
 }
 
 bool cClearMapPlugin::action(cWorld* wrld)
