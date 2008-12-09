@@ -14,8 +14,8 @@ class cBrowInterface;
 class cPluginBase
 {
 public:
-	std::string			name;
-	std::string			menu;
+	char				name[128];
+	char				menu[512];
 
 	cPluginBase(std::string,std::string);
 

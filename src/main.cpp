@@ -806,7 +806,7 @@ int main(int argc, char *argv[])
 					}
 					if(!p)
 						Log(1,0,"Couldn't find parent!");
-					ADDMENUITEMDATAP(mm,p,GetMsg("menu/" + plugins[i]->menu),	&MenuCommand_plugin, (void*)plugins[i]);
+					ADDMENUITEMDATAP(mm,p,GetMsg("menu/" + std::string(plugins[i]->menu)),	&MenuCommand_plugin, (void*)plugins[i]);
 				}
 			}
 

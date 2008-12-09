@@ -5,8 +5,10 @@
 
 cPluginBase::cPluginBase(std::string n, std::string m)
 {
-	name = n;
-	menu = m;
+	ZeroMemory(name, 128);
+	ZeroMemory(menu, 512);
+	strcpy(name,n.c_str());
+	strcpy(menu,m.c_str());
 }
 
 void cPluginBase::setInterface(cBrowInterface* pInterface)
