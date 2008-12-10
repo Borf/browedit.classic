@@ -1,5 +1,5 @@
 #!make
-LIBS = -lz -lGL -lSDL -lgd -lGLU -lSDL_mixer -lcurl -lplugin_base
+LIBS = -lGL -lSDL -lgd -lGLU -lSDL_mixer -lcurl -lplugin_base
 INCLUDES = -Isrc -DGRF_STATIC -D__NOXML__
 CXX = g++
 CC = gcc
