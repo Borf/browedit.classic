@@ -828,7 +828,7 @@ int main(int argc, char *argv[])
 	cGraphics::cMouse::lastlclick = 0;
 	cGraphics::cMouse::lastrclick = 0;
 
-	Log(3,0,GetMsg("file/LOADING"), "data/cSettings::keyMap.txt");
+	Log(3,0,GetMsg("file/LOADING"), "data/keymap.txt");
 	pFile = cFileSystem::open("data/cSettings::keyMap.txt");
 	if(pFile == NULL)
 	{
@@ -847,7 +847,12 @@ int main(int argc, char *argv[])
 	}
 	for(i = 0; i < SDLK_LAST-SDLK_FIRST; i++)
 	{
-		cSettings::keyMap[i] = atoi(pFile->readLine().c_str());
+		if(pFile->eof())
+		{
+			cSettings::keyMap[i] = i;
+		}
+		else
+			cSettings::keyMap[i] = atoi(pFile->readLine().c_str());
 	}
 
 	pFile->close();
