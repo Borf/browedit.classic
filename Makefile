@@ -121,6 +121,7 @@ clean:
 # Depencies
 
 objdirectories:
+	@rm -r obj/plugins
 	@mkdir -p obj/plugins
 	@mkdir -p obj/plugins/base
 	@mkdir -p obj/plugins/clearmap

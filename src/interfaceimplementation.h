@@ -7,12 +7,12 @@ class cBrowInterfaceImplementation : public cBrowInterface
 {
 public:
 	void fixNormals();
-	cWindow* addXmlWindow(char*);
+	cWindow* addXmlWindow(const char*);
 	int getSelectedTextureIndex();
 	void render();
-	char* inputWindow(char*, char*);
-	void messageWindow(char*);
-	cRSMModel* loadModel(char*);
+	const char* inputWindow(const char*, const char*);
+	void messageWindow(const char*);
+	cRSMModel* loadModel(const char*);
 	void removeModel(int);
 	void removeSprite(int);
 };

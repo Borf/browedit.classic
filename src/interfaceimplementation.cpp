@@ -9,7 +9,7 @@ void cBrowInterfaceImplementation::fixNormals()
 	cGraphics::world->calcVertexNormals();
 }
 
-cWindow* cBrowInterfaceImplementation::addXmlWindow( char* fileName)
+cWindow* cBrowInterfaceImplementation::addXmlWindow(const char* fileName)
 {
 	TiXmlDocument windowLayout = cFileSystem::getXml(fileName);
 	cXmlWindow* w = new cXmlWindow(windowLayout);
@@ -29,17 +29,17 @@ void cBrowInterfaceImplementation::render()
 	SDL_GL_SwapBuffers();
 }
 
-char* cBrowInterfaceImplementation::inputWindow( char* msg, char* defaultText)
+const char* cBrowInterfaceImplementation::inputWindow( const char* msg, const char* defaultText)
 {
-	return (char*)cWM::inputWindow(msg, defaultText).c_str();
+	return cWM::inputWindow(msg, defaultText).c_str();
 }
 
-void cBrowInterfaceImplementation::messageWindow( char* msg)
+void cBrowInterfaceImplementation::messageWindow( const char* msg)
 {
 	cWM::showMessage(msg);
 }
 
-cRSMModel* cBrowInterfaceImplementation::loadModel( char* )
+cRSMModel* cBrowInterfaceImplementation::loadModel( const char* )
 {
 	cRSMModel* model = new cRSMModel();
 	model->load(cSettings::roDir +  "data\\model\\郴何家前\\枚促府.rsm");

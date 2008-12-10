@@ -101,7 +101,7 @@ void cWallTextureWindow::cWindowWallTextureBox::draw( int a,int b,int c,int d)
 	
 	glBindTexture(GL_TEXTURE_2D, cGraphics::world->textures[tile.texture]->texture->texId());
 
-	int width = 200 / (wallHeight/15);
+//	int width = 200 / (wallHeight/15);
 
 	glColor4f(1,1,1,1);
 	glBegin(GL_TRIANGLE_STRIP);
