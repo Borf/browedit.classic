@@ -3,12 +3,12 @@
 #include <wm/wm.h>
 #include <graphics.h>
 
-cPluginBase::cPluginBase(char* n, char* m)
+cPluginBase::cPluginBase(std::string n, std::string m)
 {
 	ZeroMemory(name, 128);
 	ZeroMemory(menu, 512);
-	strcpy(name,n);
-	strcpy(menu,m);
+	strcpy(name,n.c_str());
+	strcpy(menu,m.c_str());
 }
 
 void cPluginBase::setInterface(cBrowInterface* pInterface)
