@@ -17,7 +17,7 @@ public:
 	char				name[128];
 	char				menu[512];
 
-	cPluginBase(std::string,std::string);
+	cPluginBase(char*, char*);
 
 	void				setInterface(cBrowInterface*);
 	virtual bool		action(cWorld*) = 0;

@@ -3,7 +3,7 @@
 #include "../base/types.h"
 
 
-cSetGatHeightPlugin::cSetGatHeightPlugin() : cPluginBase("TODO", "tools/gat/GATHEIGHT")
+cSetGatHeightPlugin::cSetGatHeightPlugin() : cPluginBase("Gat Height", "tools/gat/GATHEIGHT")
 {
 	
 }
