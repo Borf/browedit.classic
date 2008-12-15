@@ -51,7 +51,7 @@ void cRSMModel::load(std::string fname)
 
 	do
 	{
-		cRSMModelMesh* mesh = new cRSMModelMesh();
+		cRSMModel::cMesh* mesh = new cRSMModel::cMesh();
 		mesh->load(pFile, this, meshes.size() == 0);
 		meshes.push_back(mesh);
 	}
@@ -87,7 +87,7 @@ void cRSMModel::load(std::string fname)
 	glPopMatrix();
 }
 
-void cRSMModelMesh::load(cFile* pFile, cRSMModel* model, bool main)
+void cRSMModel::cMesh::load(cFile* pFile, cRSMModel* model, bool main)
 {
 	unsigned int i;
 	char buffer[100];
@@ -145,7 +145,7 @@ void cRSMModelMesh::load(cFile* pFile, cRSMModel* model, bool main)
 	pFile->read((char*)&nFaces, 4);
 	for(i = 0; i < nFaces; i++)
 	{
-		cRSMModelFace f;
+		cRSMModel::cFace f;
 		pFile->read((char*)&f.v, sizeof(f.v));
 		pFile->read((char*)&f.t, sizeof(f.t));
 		pFile->read((char*)&f.texid, sizeof(f.texid));
@@ -184,7 +184,7 @@ void MatrixMultVect(const float *M, cVector3 Vin, float *Vout)
 
 
 
-void cRSMModelMesh::boundingbox(float* ptransf, bool only)
+void cRSMModel::cMesh::boundingbox(float* ptransf, bool only)
 {
 	GLfloat Rot[16];
 	unsigned int i;
@@ -370,7 +370,7 @@ void cRSMModel::draw2(cBoundingbox* box, int mesh, float* transf, bool only, boo
 
 
 
-void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel* model, bool dodraw, bool setheight, bool dolightmaps)
+void cRSMModel::cMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel* model, bool dodraw, bool setheight, bool dolightmaps)
 {
 	bool main = (ptransf == NULL);
 	GLfloat Rot[16];
@@ -510,7 +510,7 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 
 		for(i = 0; i < nFaces; i++)
 		{
-			cRSMModelFace* f = &faces[i];
+			cRSMModel::cFace* f = &faces[i];
 			if(!setheight && !dolightmaps)
 			{
 				v1.x = min(v1.x, vertices[f->v[0]].x);
@@ -639,7 +639,7 @@ void cRSMModelMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMModel
 	{
 		for(i = 0; i < nFaces; i++)
 		{
-			cRSMModelFace* f = &faces[i];
+			cRSMModel::cFace* f = &faces[i];
 			glBindTexture(GL_TEXTURE_2D, model->textures[textures[f->texid]]->texId());
 			glNormal3f(f->normal.x, f->normal.y, f->normal.z);
 			glBegin(GL_TRIANGLES);
@@ -895,7 +895,7 @@ bool cRSMModel::collides2(cBoundingbox* box, int mesh, float* transf, bool only,
 
 
 
-bool cRSMModelMesh::collides(cBoundingbox* box, float* ptransf, bool only, cRSMModel* model, cVector3 start, cVector3 end)
+bool cRSMModel::cMesh::collides(cBoundingbox* box, float* ptransf, bool only, cRSMModel* model, cVector3 start, cVector3 end)
 {
 	bool main = (ptransf == NULL);
 	GLfloat Rot[16];
@@ -1032,7 +1032,7 @@ bool cRSMModelMesh::collides(cBoundingbox* box, float* ptransf, bool only, cRSMM
 
 	for(i = 0; i < nFaces; i++)
 	{
-		cRSMModelFace* f = &faces[i];
+		cRSMModel::cFace* f = &faces[i];
 		float v[3];
 		cVector3 triangle[3];
 		MatrixMultVect(ModelMatrix, vertices[f->v[0]], v);
@@ -1053,6 +1053,11 @@ bool cRSMModelMesh::collides(cBoundingbox* box, float* ptransf, bool only, cRSMM
 
 	glPopMatrix();
 	return false; 
+}
+
+cRSMModel::cMesh::cMesh()
+{
+	nstep = 0;
 }
 
 

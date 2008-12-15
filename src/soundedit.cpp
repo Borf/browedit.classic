@@ -149,9 +149,9 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 					((cWindowFloatInputBox*)w->objects["posx"])->floatje = &o->pos.x;
 					((cWindowFloatInputBox*)w->objects["posy"])->floatje = &o->pos.y;
 					((cWindowFloatInputBox*)w->objects["posz"])->floatje = &o->pos.z;
-					((cWindowFloatInputBox*)w->objects["rotx"])->floatje = &o->rotation.x;
-					((cWindowFloatInputBox*)w->objects["roty"])->floatje = &o->rotation.y;
-					((cWindowFloatInputBox*)w->objects["rotz"])->floatje = &o->rotation.z;
+					((cWindowFloatInputBox*)w->objects["rotx"])->floatje = &o->rot.x;
+					((cWindowFloatInputBox*)w->objects["roty"])->floatje = &o->rot.y;
+					((cWindowFloatInputBox*)w->objects["rotz"])->floatje = &o->rot.z;
 					((cWindowFloatInputBox*)w->objects["scalex"])->floatje = &o->scale.x;
 					((cWindowFloatInputBox*)w->objects["scaley"])->floatje = &o->scale.y;
 					((cWindowFloatInputBox*)w->objects["scalez"])->floatje = &o->scale.z;

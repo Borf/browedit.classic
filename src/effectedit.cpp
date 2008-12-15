@@ -88,7 +88,7 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 					e.todo1 = 1;
 					e.todo2 = 1;
 					e.todo3 = 1;
-					e.rotation = cVector3(0,0,0);
+					e.rot = cVector3(0,0,0);
 					e.scale = cVector3(1,1,1);
 					e.todo10 = 1; // seems to be linked to 11
 					e.todo11 = 1; // seems to be linked to 10
@@ -159,9 +159,9 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 					((cWindowFloatInputBox*)w->objects["posx"])->floatje = &o->pos.x;
 					((cWindowFloatInputBox*)w->objects["posy"])->floatje = &o->pos.y;
 					((cWindowFloatInputBox*)w->objects["posz"])->floatje = &o->pos.z;
-					((cWindowFloatInputBox*)w->objects["rotx"])->floatje = &o->rotation.x;
-					((cWindowFloatInputBox*)w->objects["roty"])->floatje = &o->rotation.y;
-					((cWindowFloatInputBox*)w->objects["rotz"])->floatje = &o->rotation.z;
+					((cWindowFloatInputBox*)w->objects["rotx"])->floatje = &o->rot.x;
+					((cWindowFloatInputBox*)w->objects["roty"])->floatje = &o->rot.y;
+					((cWindowFloatInputBox*)w->objects["rotz"])->floatje = &o->rot.z;
 					((cWindowFloatInputBox*)w->objects["scalex"])->floatje = &o->scale.x;
 					((cWindowFloatInputBox*)w->objects["scaley"])->floatje = &o->scale.y;
 					((cWindowFloatInputBox*)w->objects["scalez"])->floatje = &o->scale.z;

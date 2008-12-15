@@ -13,9 +13,10 @@
 #include "texturecache.h"
 #include "texturemodel.h"
 #include "sprite.h"
+#include "plugins/base/interface.h"
 
 
-class cLightmap
+class cLightmap : public cBrowInterface::cPluginLightmap
 {
 public:
 	cLightmap()
@@ -61,26 +62,16 @@ public:
 	void reset();
 };
 
-class cTile
+class cTile : public cBrowInterface::cPluginTile
 {
 public:
-	float	u1,
-			u2,
-			u3,
-			u4,
-			v1,
-			v2,
-			v3,
-			v4;
-	int texture;
-	int lightmap;
-	char color[4];
-	bool used;
 	std::vector<std::vector<int> > lightsWithShadow;
+	cTile() {};
+	cTile(cBrowInterface::cPluginTile t);
 };
 
 
-class cCube
+class cCube : public cBrowInterface::cPluginCube
 {
 public:
 	float	cell1,
@@ -104,7 +95,7 @@ public:
 
 };
 
-class cTextureContainer
+class cTextureContainer : public cBrowInterface::cPluginTexture
 {
 public:
 	cTexture* texture;
@@ -114,94 +105,29 @@ public:
 
 };
 
-class cLight
+class cLight : public cBrowInterface::cPluginLight
 {
 public:
-	std::string		name;
-	cVector3	pos;
-	std::string		todo;
-	cVector3	color;
-	float		todo2;
-// custom properties
-
-	float		range;
-	float		maxLightIncrement;
-	bool		givesShadow;
-	float		lightFalloff;
-	bool operator == (cLight other)
-	{
-		return	name == other.name &&
-				pos == other.pos &&
-				todo == other.todo &&
-				color == other.color &&
-				todo2 == other.todo2 &&
-				range == other.range &&
-				maxLightIncrement == other.maxLightIncrement &&
-				givesShadow == other.givesShadow &&
-				lightFalloff == other.lightFalloff;
-	}
+	cLight() {};
+	cLight(cBrowInterface::cPluginLight other);
+	bool operator == (cLight other);
 };
 
 
-class cSound
+class cSound : public cBrowInterface::cPluginSound
 {
 public:
-	std::string name;
-	std::string todo1;
-	std::string fileName;
-	cVector3 pos;
-	cVector3 rotation;
-	cVector3 scale;
-
-	float repeatDelay;
-	float unknown2;
-	long	unknown3;
-	long	unknown4;
-	float	unknown5;
-	char	unknown6[6];
-	float	unknown7;
-	float	unknown8;
-
-	bool operator == (cSound other)
-	{
-		return	name == other.name &&
-				todo1 == other.todo1 &&
-				fileName == other.fileName &&
-				pos == other.pos &&
-				rotation == other.rotation &&
-				scale == other.scale &&
-				repeatDelay == other.repeatDelay &&
-				unknown2 == other.unknown2 &&
-				unknown3 == other.unknown3 &&
-				unknown4 == other.unknown4 &&
-				unknown5 == other.unknown5 &&
-				memcmp(unknown6,other.unknown6,6) == 0 &&
-				unknown7 == other.unknown7 &&
-				unknown8 == other.unknown8;
-	}
+	cSound(){};
+	cSound(cBrowInterface::cPluginSound);
+	bool operator == (cSound other);
 
 };
 
-class cEffect
+class cEffect : public cBrowInterface::cPluginEffect
 {
 public:
-	std::string readablename;
-
-
-	std::string name;
-	float todo1;
-	float todo2;
-	float todo3;
-	cVector3 rotation;
-	cVector3 scale;
-	std::string category;
-	cVector3 pos;
-	int	type;
-	float loop;
-	float todo10;
-	float todo11;
-	int todo12;
-	int todo13;
+	cEffect() {};
+	cEffect(cBrowInterface::cPluginEffect e);
 };
 
 

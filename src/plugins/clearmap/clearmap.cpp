@@ -22,6 +22,7 @@ void clickOk(cWindow* w)
 		int x,y,i;
 		std::map<int, bool, std::less<int> > used;
 
+		
 		world->tiles.clear();
 		world->lightmaps.clear();
 		cLightmap* map = new cLightmap();

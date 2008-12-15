@@ -528,9 +528,9 @@ void cWorld::load()
 
 			s.unknown8 = *((float*)(buf+120));	//0
 			s.unknown7 = *((float*)(buf+124));	//-435.095
-			s.rotation.x = *((float*)(buf+128));
-			s.rotation.y = *((float*)(buf+132));
-			s.rotation.z = *((float*)(buf+136));
+			s.rot.x = *((float*)(buf+128));
+			s.rot.y = *((float*)(buf+132));
+			s.rot.z = *((float*)(buf+136));
 			
 			s.scale.x = *((float*)(buf+140));
 			s.scale.y = *((float*)(buf+144));
@@ -562,9 +562,9 @@ void cWorld::load()
 			e.todo1 = *((float*)(buf+40));
 			e.todo2 = *((float*)(buf+44));
 			e.todo3 = *((float*)(buf+48));
-			e.rotation.x = *((float*)(buf+52));
-			e.rotation.y = *((float*)(buf+56));
-			e.rotation.z = *((float*)(buf+60));
+			e.rot.x = *((float*)(buf+52));
+			e.rot.y = *((float*)(buf+56));
+			e.rot.z = *((float*)(buf+60));
 			e.scale.x = *((float*)(buf+64));
 			e.scale.y = *((float*)(buf+68));
 			e.scale.z = *((float*)(buf+72));
@@ -1200,9 +1200,9 @@ void cWorld::save()
 			pFile.write((char*)&sounds[i].unknown7, 4);		//124
 
 			
-			pFile.write((char*)&sounds[i].rotation.x, 4);		//128
-			pFile.write((char*)&sounds[i].rotation.y, 4);		//132
-			pFile.write((char*)&sounds[i].rotation.z, 4);		//136
+			pFile.write((char*)&sounds[i].rot.x, 4);		//128
+			pFile.write((char*)&sounds[i].rot.y, 4);		//132
+			pFile.write((char*)&sounds[i].rot.z, 4);		//136
 
 			pFile.write((char*)&sounds[i].scale.x, 4);			//140
 			pFile.write((char*)&sounds[i].scale.y, 4);			//144
@@ -1240,9 +1240,9 @@ void cWorld::save()
 			pFile.write((char*)&effects[i].todo2,4);
 			pFile.write((char*)&effects[i].todo3,4);
 
-			pFile.write((char*)&effects[i].rotation.x,4);
-			pFile.write((char*)&effects[i].rotation.y,4);
-			pFile.write((char*)&effects[i].rotation.z,4);
+			pFile.write((char*)&effects[i].rot.x,4);
+			pFile.write((char*)&effects[i].rot.y,4);
+			pFile.write((char*)&effects[i].rot.z,4);
 
 			pFile.write((char*)&effects[i].scale.x,4);
 			pFile.write((char*)&effects[i].scale.y,4);
@@ -4346,4 +4346,98 @@ void cCube::calcNormal()
 	b1 = cVector3(10,-cell1,-10) - cVector3(0,-cell4,0);
 	b2 = cVector3(0,-cell3,-10) - cVector3(0,-cell4,0);
 	normal = b1.cross(b2).normalize();//cVector3(b1.y * b2.z - b1.z * b2.y, b1.z * b2.x - b1.x * b2.z, b1.x * b2.y - b1.y * b2.x);
+}
+
+cTile::cTile( cBrowInterface::cPluginTile t )
+{
+	u1 = t.u1;
+	v1 = t.v1;
+	u2 = t.u2;
+	v2 = t.v2;
+	u3 = t.u3;
+	v3 = t.v3;
+	u4 = t.u4;
+	v4 = t.v4;
+	texture = t.texture;
+	lightmap = t.lightmap;
+	memcpy(color, t.color, 4);
+	used = t.used;
+}
+
+cEffect::cEffect( cBrowInterface::cPluginEffect e )
+{
+	readablename = e.readablename;
+	name = e.name;
+	todo1 = e.todo1;
+	todo2 = e.todo2;
+	todo3 = e.todo3;
+	category = e.category;
+	type = e.type;
+	loop = e.loop;
+	todo10 = e.todo10;
+	todo11 = e.todo11;
+	todo12 = e.todo12;
+	todo13 = e.todo13;
+}
+
+cLight::cLight( cBrowInterface::cPluginLight other )
+{
+	name = other.name;
+	pos = other.pos;
+	todo = other.todo;
+	color = other.color;
+	todo2 = other.todo2;
+	range = other.range;
+	maxLightIncrement = other.maxLightIncrement;
+	givesShadow = other.givesShadow;
+	lightFalloff = other.lightFalloff;
+}
+
+bool cLight::operator==( cLight other )
+{
+	return	name == other.name &&
+		pos == other.pos &&
+		todo == other.todo &&
+		color == other.color &&
+		todo2 == other.todo2 &&
+		range == other.range &&
+		maxLightIncrement == other.maxLightIncrement &&
+		givesShadow == other.givesShadow &&
+		lightFalloff == other.lightFalloff;
+}
+
+cSound::cSound( cBrowInterface::cPluginSound other )
+{
+	name = other.name;
+	todo1 = other.todo1;
+	fileName = other.fileName;
+	pos = other.pos;
+	rot = other.rot;
+	scale = other.scale;
+	repeatDelay = other.repeatDelay;
+	unknown2 = other.unknown2;
+	unknown3 = other.unknown3;
+	unknown4 = other.unknown4;
+	unknown5 = other.unknown5;
+	memcpy(unknown6,other.unknown6,6);
+	unknown7 = other.unknown7;
+	unknown8 = other.unknown8;
+}
+
+bool cSound::operator==( cSound other )
+{
+	return	name == other.name &&
+		todo1 == other.todo1 &&
+		fileName == other.fileName &&
+		pos == other.pos &&
+		rot == other.rot &&
+		scale == other.scale &&
+		repeatDelay == other.repeatDelay &&
+		unknown2 == other.unknown2 &&
+		unknown3 == other.unknown3 &&
+		unknown4 == other.unknown4 &&
+		unknown5 == other.unknown5 &&
+		memcmp(unknown6,other.unknown6,6) == 0 &&
+		unknown7 == other.unknown7 &&
+		unknown8 == other.unknown8;
 }

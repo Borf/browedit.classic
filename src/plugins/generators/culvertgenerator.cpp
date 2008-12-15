@@ -231,13 +231,13 @@ bool cCulvertGenerator::action(cWorld* world)
 			}
 
 
-			cRSMModel* model = browInterface->loadModel("data\\model\\郴何家前\\枚促府.rsm");
+			cBrowInterface::cPluginRSMModel* model = browInterface->loadModel("data\\model\\郴何家前\\枚促府.rsm");
 			model->pos.x = (xx+x) + ((xx == x) ? 1 : 0);
 			model->pos.z = (yy+y) + ((yy == y) ? 1 : 0);
 			model->pos.y = 10;
 			model->scale = cVector3((xx == x) ? 0.95f : 1,1,(yy == y) ? 0.95f : 1);
 			model->rot = cVector3(0,xx==x ? 0 : 90,0);
-			world->models.push_back(model);
+			browInterface->addModel(model);
 
 		}
 	}

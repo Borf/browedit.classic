@@ -127,7 +127,7 @@ void cSoundSelectWindow::cWindowOkButton::onClick()
 		s.fileName = filename;
 		s.name = ((cWindowDataListBox<std::string>*)parent->objects["sounds"])->values[selected];
 		s.pos = cVector3(newPos.x/5, newPos.y-17, newPos.z/5);
-		s.rotation = cVector3(0,-45,0);
+		s.rot = cVector3(0,-45,0);
 		s.scale = cVector3(0.94f,0.94f,0.94f);
 		s.unknown6[0] = (BYTE)0xc7;
 		s.unknown6[1] = (BYTE)0xc1;
