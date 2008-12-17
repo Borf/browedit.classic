@@ -7,7 +7,9 @@ class cClearMapPlugin : public cPluginBase
 {
 public:
 	cClearMapPlugin();
-	bool action(cWorld*);
+	bool action();
+
+	void clickOk(cWindow* w);
 };
 
 #endif

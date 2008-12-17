@@ -7,7 +7,7 @@ class cCulvertGenerator : public cPluginBase
 {
 public:
 	cCulvertGenerator();	
-	bool action(cWorld*);	
+	bool action();	
 };
 
 #endif

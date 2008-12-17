@@ -7,6 +7,7 @@ class cBrowInterfaceImplementation : public cBrowInterface
 {
 public:
 	cPluginCube*			getCube(int, int);
+	cPluginGatCube*			getGatCube(int, int);
 	
 	cPluginTile*			getTile(int);
 	int						tileCount();
@@ -18,6 +19,7 @@ public:
 	void					removeTexture(int);
 	void					addTexture(cPluginTexture*);
 	
+	cPluginLightmap*		newLightmap();
 	cPluginLightmap*		getLightmap(int);
 	int						lightmapCount();
 	void					removeLightmap(int);
@@ -39,19 +41,30 @@ public:
 	void					addLight(cPluginLight);
 	
 	
-	cPluginRSMModel* loadModel(const char*);
-	void removeModel(int);
-	void addModel(cPluginRSMModel*);
-	void removeSprite(int);
+	cPluginRSMModel*		loadModel(const char*);
+	void					removeModel(int);
+	void					addModel(cPluginRSMModel*);
+	int						modelCount();
+
+
+
+	void					removeSprite(int);
+	int						spriteCount();
 	
 	
-	void fixNormals();
-	int  getSelectedTextureIndex();
-	void render();
+	int						getWorldHeight();
+	int						getWorldWidth();
+	void					setWaterHeight(float);
+	int						getSelectedTextureIndex();
 	
-	cWindow* addXmlWindow(const char*);
-	const char* inputWindow(const char*, const char*);
-	void messageWindow(const char*);
+	void					makeTilesUnique();
+	void					fixGridding();
+	void					fixNormals();
+	void					render();
+	
+	cWindow*				addXmlWindow(const char*);
+	const char*				inputWindow(const char*, const char*);
+	void					messageWindow(const char*);
 };
 
 

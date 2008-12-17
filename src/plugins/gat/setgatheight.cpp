@@ -8,33 +8,44 @@ cSetGatHeightPlugin::cSetGatHeightPlugin() : cPluginBase("Gat Height", "tools/ga
 	
 }
 
-bool cSetGatHeightPlugin::action(cWorld* world)
+bool cSetGatHeightPlugin::action()
 {
-	int x,y;
-	for(y = 0; y < world->height; y++)
+	for(int y = 0; y < browInterface->getWorldHeight(); y++)
 	{
-		for(x = 0; x < world->width; x++)
+		for(int x = 0; x < browInterface->getWorldWidth(); x++)
 		{
-			cCube* c = &world->cubes[y][x];
-			world->gattiles[2*y][2*x].cell1 = (c->cell1+c->cell1) / 2.0f;
-			world->gattiles[2*y][2*x].cell2 = (c->cell1+c->cell2) / 2.0f;
-			world->gattiles[2*y][2*x].cell3 = (c->cell1+c->cell3) / 2.0f;
-			world->gattiles[2*y][2*x].cell4 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
+			cBrowInterface::cPluginCube* c = browInterface->getCube(x,y);
 			
-			world->gattiles[2*y][2*x+1].cell1 = (c->cell1+c->cell2) / 2.0f;
-			world->gattiles[2*y][2*x+1].cell2 = (c->cell2+c->cell2) / 2.0f;
-			world->gattiles[2*y][2*x+1].cell3 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
-			world->gattiles[2*y][2*x+1].cell4 = (c->cell4+c->cell2) / 2.0f;
+			cBrowInterface::cPluginGatCube* gc;
 			
-			world->gattiles[2*y+1][2*x+1].cell1 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
-			world->gattiles[2*y+1][2*x+1].cell2 = (c->cell4 + c->cell2) / 2.0f;
-			world->gattiles[2*y+1][2*x+1].cell3 = (c->cell4 + c->cell3) / 2.0f;
-			world->gattiles[2*y+1][2*x+1].cell4 = (c->cell4 + c->cell4) / 2.0f;
+			gc = browInterface->getGatCube(2*x, 2*y);
 			
-			world->gattiles[2*y+1][2*x].cell1 = (c->cell3 + c->cell1) / 2.0f;
-			world->gattiles[2*y+1][2*x].cell2 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
-			world->gattiles[2*y+1][2*x].cell3 = (c->cell3 + c->cell3) / 2.0f;
-			world->gattiles[2*y+1][2*x].cell4 = (c->cell3 + c->cell4) / 2.0f;
+			gc->cell1 = (c->cell1+c->cell1) / 2.0f;
+			gc->cell2 = (c->cell1+c->cell2) / 2.0f;
+			gc->cell3 = (c->cell1+c->cell3) / 2.0f;
+			gc->cell4 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
+			gc->type = 0;
+			
+			gc = browInterface->getGatCube(2*x+1, 2*y);
+			gc->cell1 = (c->cell1+c->cell2) / 2.0f;
+			gc->cell2 = (c->cell2+c->cell2) / 2.0f;
+			gc->cell3 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
+			gc->cell4 = (c->cell4+c->cell2) / 2.0f;
+			gc->type = 0;
+			
+			gc = browInterface->getGatCube(2*x+1, 2*y+1);
+			gc->cell1 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
+			gc->cell2 = (c->cell4 + c->cell2) / 2.0f;
+			gc->cell3 = (c->cell4 + c->cell3) / 2.0f;
+			gc->cell4 = (c->cell4 + c->cell4) / 2.0f;
+			gc->type = 0;
+			
+			gc = browInterface->getGatCube(2*x, 2*y+1);
+			gc->cell1 = (c->cell3 + c->cell1) / 2.0f;
+			gc->cell2 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
+			gc->cell3 = (c->cell3 + c->cell3) / 2.0f;
+			gc->cell4 = (c->cell3 + c->cell4) / 2.0f;
+			gc->type = 0;
 		}
 		
 	}

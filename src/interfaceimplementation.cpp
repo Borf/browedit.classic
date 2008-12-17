@@ -165,6 +165,60 @@ cBrowInterfaceImplementation::cPluginEffect* cBrowInterfaceImplementation::getEf
 
 void cBrowInterfaceImplementation::addLightmap(cPluginLightmap* p)
 {
-	Log(1,0,"TODO! ");
+	cGraphics::world->lightmaps.push_back((cLightmap*)p);
+}
 
+cBrowInterface::cPluginLightmap* cBrowInterfaceImplementation::newLightmap()
+{
+	return new cLightmap();
+}
+
+void cBrowInterfaceImplementation::setWaterHeight(float f)
+{
+	cGraphics::world->water.height = f;
+}
+
+int cBrowInterfaceImplementation::getWorldHeight()
+{
+	return cGraphics::world->height;
+}
+
+int cBrowInterfaceImplementation::getWorldWidth()
+{
+	return cGraphics::world->width;
+}
+
+void cBrowInterfaceImplementation::makeTilesUnique()
+{
+	cGraphics::world->makeLightmapsUnique();
+}
+
+void cBrowInterfaceImplementation::fixGridding()
+{
+	cGraphics::world->fixGridding();
+}
+
+int cBrowInterfaceImplementation::spriteCount()
+{
+	return cGraphics::world->sprites.size();
+}
+
+int cBrowInterfaceImplementation::modelCount()
+{
+	return cGraphics::world->models.size();
+}
+
+int cBrowInterfaceImplementation::lightCount()
+{
+	return cGraphics::world->lights.size();
+}
+
+cBrowInterface::cPluginLight* cBrowInterfaceImplementation::getLight(int index)
+{
+	return &cGraphics::world->lights[index];
+}
+
+cBrowInterface::cPluginGatCube* cBrowInterfaceImplementation::getGatCube(int x, int y)
+{
+	return &cGraphics::world->gattiles[y][x];
 }

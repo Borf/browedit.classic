@@ -7,7 +7,7 @@ class cSetGatHeightPlugin : public cPluginBase
 {
 public:
 	cSetGatHeightPlugin();
-	bool action(cWorld*);
+	bool action();
 };
 
 #endif

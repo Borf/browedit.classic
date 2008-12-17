@@ -3350,7 +3350,7 @@ MENUCOMMAND(plugin)
 {
 	if(!cGraphics::world)
 		return false;
-	((cPluginBase*)src->pdata)->action(cGraphics::world);
+	((cPluginBase*)src->pdata)->action();
 	return true;
 }
 

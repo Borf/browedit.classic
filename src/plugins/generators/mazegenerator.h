@@ -8,7 +8,7 @@ class cMazeGenerator : public cPluginBase
 public:
 	cMazeGenerator();
 	
-	bool action(cWorld*);
+	bool action();
 	
 };
 

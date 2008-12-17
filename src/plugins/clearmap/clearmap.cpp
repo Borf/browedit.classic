@@ -9,37 +9,42 @@ cClearMapPlugin::cClearMapPlugin() : cPluginBase("Clear Map", "tools/CLEARMAP")
 	
 }
 
-cWorld* world;
 cClearMapPlugin* plugin;
 
 
 
 
-void clickOk(cWindow* w)
+void cClearMapPlugin::clickOk(cWindow* w)
 {
 	if(w->objects["chkTextures"]->getInt(0) != 0)
 	{
 		int x,y,i;
 		std::map<int, bool, std::less<int> > used;
 
+		while(browInterface->lightmapCount() > 0)
+			browInterface->removeLightmap(0);
+		while(browInterface->tileCount() > 0)
+			browInterface->removeTile(0);
+
+
+		cBrowInterface::cPluginLightmap* map = browInterface->newLightmap();
+		for(i = 0; i < 256; i++)
+			map->buf[i] = i < 64 ? 255 : 0;
+		browInterface->addLightmap(map);
+
+		map = browInterface->newLightmap();
+		for(i = 0; i < 256; i++)
+			map->buf[i] = i < 64 ? 255 : 0;
+		browInterface->addLightmap(map);
+
 		
-		world->tiles.clear();
-		world->lightmaps.clear();
-		cLightmap* map = new cLightmap();
-		for(i = 0; i < 256; i++)
-			map->buf[i] = i < 64 ? 255 : 0;
-		world->lightmaps.push_back(map);
-		map = new cLightmap();
-		for(i = 0; i < 256; i++)
-			map->buf[i] = i < 64 ? 255 : 0;
-		world->lightmaps.push_back(map);
 		for(y = 0; y < 4; y++)
 		{
 			for(x = 0; x < 4; x++)
 			{
-				cTile t;
+				cBrowInterface::cPluginTile t;
 				t.lightmap = 0;
-				t.texture = plugin->browInterface->getSelectedTextureIndex();
+				t.texture = browInterface->getSelectedTextureIndex();
 				t.u1 = x/4.0f;
 				t.v1 = y/4.0f;
 				t.u2 = (x+1)/4.0f;
@@ -52,161 +57,139 @@ void clickOk(cWindow* w)
 				t.color[1] = (char)255;
 				t.color[2] = (char)255;
 				t.color[3] = (char)255;
-				world->tiles.push_back(t);
+				browInterface->addTile(t);
 			}
 		}
 
 
-		for(y = 0; y < world->height; y++)
+		for(y = 0; y < browInterface->getWorldHeight(); y++)
 		{
-			for(x = 0; x < world->width; x++)
+			for(x = 0; x < browInterface->getWorldWidth(); x++)
 			{
-				world->cubes[y][x].tileUp = (x%4) + 4*(y % 4);
-				world->cubes[y][x].tileSide = -1;
-				world->cubes[y][x].tileOtherSide = -1;
+				cBrowInterface::cPluginCube* c = browInterface->getCube(x,y);
+				c->tileUp = (x%4) + 4*(y % 4);
+				c->tileSide = -1;
+				c->tileOtherSide = -1;
 			}
 		}
-
-
-		for(x = 0; x < world->width; x++)
-		{
-			for(y = 0; y < world->height; y++)
-			{
-				int tile = world->cubes[y][x].tileUp;
-				if(used.find(tile) != used.end())
-				{
-					cTile t = world->tiles[tile];
-					tile = world->tiles.size();
-					world->tiles.push_back(t);
-					world->cubes[y][x].tileUp = tile;
-				}
-				used[tile] = 1;
-	///////////////////////////////////////
-				tile = world->cubes[y][x].tileSide;
-				if (tile != -1)
-				{
-					if(used.find(tile) != used.end())
-					{
-						cTile t = world->tiles[tile];
-						tile = world->tiles.size();
-						world->tiles.push_back(t);
-						world->cubes[y][x].tileSide = tile;
-					}
-					used[tile] = 1;
-				}
-	/////////////////////////////////////
-				tile = world->cubes[y][x].tileOtherSide;
-				if (tile!= -1)
-				{
-					if(used.find(tile) != used.end())
-					{
-						cTile t = world->tiles[tile];
-						tile = world->tiles.size();
-						world->tiles.push_back(t);
-						world->cubes[y][x].tileOtherSide = tile;
-					}
-					used[tile] = 1;
-				}
-			}
-		}		
+		browInterface->makeTilesUnique();
 	}
 
 
 	if(w->objects["chkHeight"]->getInt(0) != 0)
 	{
-		for(int y = 0; y < world->height; y++)
+		for(int y = 0; y < browInterface->getWorldHeight(); y++)
 		{
-			for(int x = 0; x < world->width; x++)
+			for(int x = 0; x < browInterface->getWorldWidth(); x++)
 			{
-				world->cubes[y][x].tileOtherSide = -1;
-				world->cubes[y][x].tileSide = -1;
-				world->cubes[y][x].cell1 = 0;
-				world->cubes[y][x].cell2 = 0;
-				world->cubes[y][x].cell3 = 0;
-				world->cubes[y][x].cell4 = 0;
+				cBrowInterface::cPluginCube* c = browInterface->getCube(x,y);
+				c->tileOtherSide = -1;
+				c->tileSide = -1;
+				c->cell1 = 0;
+				c->cell2 = 0;
+				c->cell3 = 0;
+				c->cell4 = 0;
 			}
 		}
-		plugin->browInterface->fixNormals();
+		browInterface->fixNormals();
 	}
 
 	if(w->objects["chkWalls"]->getInt(0) != 0)
 	{
-		for(int y = 0; y < world->height; y++)
+		for(int y = 0; y < browInterface->getWorldHeight(); y++)
 		{
-			for(int x = 0; x < world->width; x++)
+			for(int x = 0; x < browInterface->getWorldWidth(); x++)
 			{
-				world->cubes[y][x].tileOtherSide = -1;
-				world->cubes[y][x].tileSide = -1;
+				cBrowInterface::cPluginCube* c = browInterface->getCube(x,y);
+				c->tileOtherSide = -1;
+				c->tileSide = -1;
 			}
 		}
 	}
 	if(w->objects["chkGat"]->getInt(0) != 0)
 	{
-		int x,y;
-		for(y = 0; y < world->height; y++)
+		for(int y = 0; y < browInterface->getWorldHeight(); y++)
 		{
-			for(x = 0; x < world->width; x++)
+			for(int x = 0; x < browInterface->getWorldWidth(); x++)
 			{
-				cCube* c = &world->cubes[y][x];
-				world->gattiles[2*y][2*x].cell1 = (c->cell1+c->cell1) / 2.0f;
-				world->gattiles[2*y][2*x].cell2 = (c->cell1+c->cell2) / 2.0f;
-				world->gattiles[2*y][2*x].cell3 = (c->cell1+c->cell3) / 2.0f;
-				world->gattiles[2*y][2*x].cell4 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
-				world->gattiles[2*y][2*x].type = 0;
+				cBrowInterface::cPluginCube* c = browInterface->getCube(x,y);
+				
+				cBrowInterface::cPluginGatCube* gc;
 
-				world->gattiles[2*y][2*x+1].cell1 = (c->cell1+c->cell2) / 2.0f;
-				world->gattiles[2*y][2*x+1].cell2 = (c->cell2+c->cell2) / 2.0f;
-				world->gattiles[2*y][2*x+1].cell3 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
-				world->gattiles[2*y][2*x+1].cell4 = (c->cell4+c->cell2) / 2.0f;
-				world->gattiles[2*y][2*x+1].type = 0;
+				gc = browInterface->getGatCube(2*x, 2*y);
 
-				world->gattiles[2*y+1][2*x+1].cell1 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
-				world->gattiles[2*y+1][2*x+1].cell2 = (c->cell4 + c->cell2) / 2.0f;
-				world->gattiles[2*y+1][2*x+1].cell3 = (c->cell4 + c->cell3) / 2.0f;
-				world->gattiles[2*y+1][2*x+1].cell4 = (c->cell4 + c->cell4) / 2.0f;
-				world->gattiles[2*y+1][2*x+1].type = 0;
+				gc->cell1 = (c->cell1+c->cell1) / 2.0f;
+				gc->cell2 = (c->cell1+c->cell2) / 2.0f;
+				gc->cell3 = (c->cell1+c->cell3) / 2.0f;
+				gc->cell4 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
+				gc->type = 0;
 
-				world->gattiles[2*y+1][2*x].cell1 = (c->cell3 + c->cell1) / 2.0f;
-				world->gattiles[2*y+1][2*x].cell2 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
-				world->gattiles[2*y+1][2*x].cell3 = (c->cell3 + c->cell3) / 2.0f;
-				world->gattiles[2*y+1][2*x].cell4 = (c->cell3 + c->cell4) / 2.0f;
-				world->gattiles[2*y+1][2*x].type = 0;
+				gc = browInterface->getGatCube(2*x+1, 2*y);
+				gc->cell1 = (c->cell1+c->cell2) / 2.0f;
+				gc->cell2 = (c->cell2+c->cell2) / 2.0f;
+				gc->cell3 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
+				gc->cell4 = (c->cell4+c->cell2) / 2.0f;
+				gc->type = 0;
+
+				gc = browInterface->getGatCube(2*x+1, 2*y+1);
+				gc->cell1 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
+				gc->cell2 = (c->cell4 + c->cell2) / 2.0f;
+				gc->cell3 = (c->cell4 + c->cell3) / 2.0f;
+				gc->cell4 = (c->cell4 + c->cell4) / 2.0f;
+				gc->type = 0;
+
+				gc = browInterface->getGatCube(2*x, 2*y+1);
+				gc->cell1 = (c->cell3 + c->cell1) / 2.0f;
+				gc->cell2 = (c->cell1+c->cell4+c->cell2+c->cell3) / 4.0f;
+				gc->cell3 = (c->cell3 + c->cell3) / 2.0f;
+				gc->cell4 = (c->cell3 + c->cell4) / 2.0f;
+				gc->type = 0;
 			}
 
 		}
 	}
 	if(w->objects["chkLightmaps"]->getInt(0) != 0)
 	{
-		unsigned int i;
-		for(i = 0; i < world->lightmaps.size(); i++)
-			delete 	world->lightmaps[i];
-		world->lightmaps.clear();
-		cLightmap* m = new cLightmap();
+		int i;
+		while(browInterface->lightmapCount() > 0)
+			browInterface->removeLightmap(0);		
+		cBrowInterface::cPluginLightmap* map = browInterface->newLightmap();
 		for(i = 0; i < 256; i++)
-			m->buf[i] = i < 64 ? 255 : 0;
-		world->lightmaps.push_back(m);
+			map->buf[i] = i < 64 ? 255 : 0;
+		browInterface->addLightmap(map);
 
-		for(i = 0; i < world->tiles.size(); i++)
-			world->tiles[i].lightmap = 0;
+
+		
+		for(i = 0; i < browInterface->tileCount(); i++)
+			browInterface->getTile(i)->lightmap = 0;
 	}
 	if(w->objects["chkObjects"]->getInt(0) != 0)
 	{
-		while(world->models.size() > 0)
-			plugin->browInterface->removeModel(0);
+		while(browInterface->modelCount() > 0)
+			browInterface->removeModel(0);
 	}
 	if(w->objects["chkSprites"]->getInt(0) != 0)
 	{
-		while(world->sprites.size() > 0)
-			plugin->browInterface->removeSprite(0);
+		while(browInterface->spriteCount() > 0)
+			browInterface->removeSprite(0);
 	}
 
 
 	if(w->objects["chkLights"]->getInt(0) != 0)
-		world->lights.clear();
+	{
+		while(browInterface->lightCount() > 0)
+			browInterface->removeLight(0);
+	}
 	if(w->objects["chkSounds"]->getInt(0) != 0)
-		world->sounds.clear();
+	{
+		while(browInterface->soundCount() > 0)
+			browInterface->removeSound(0);
+	}
 	if(w->objects["chkEffects"]->getInt(0) != 0)
-		world->effects.clear();
+	{
+		while(browInterface->effectCount() > 0)
+			browInterface->removeEffect(0);
+	}
 
 	w->close();
 }
@@ -216,7 +199,7 @@ void clickOk(cWindow* w)
 void handleevent(cWindow* w, std::string name, std::string event)
 {
 	if(name == "btnOk" && event == "click")
-		clickOk(w);
+		plugin->clickOk(w);
 
 	else if(name.substr(0,3) == "btn")
 	{
@@ -234,9 +217,8 @@ void handleevent(cWindow* w, std::string name, std::string event)
 	}
 }
 
-bool cClearMapPlugin::action(cWorld* wrld)
+bool cClearMapPlugin::action()
 {
-	world = wrld;
 	plugin = this;
 	cXmlWindow* w = (cXmlWindow*)browInterface->addXmlWindow("plugins/clearmap.xml");
 	w->eventhandler = handleevent;

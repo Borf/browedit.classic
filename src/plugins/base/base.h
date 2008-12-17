@@ -20,7 +20,7 @@ public:
 	cPluginBase(const char*, const char*);
 
 	void				setInterface(cBrowInterface*);
-	virtual bool		action(cWorld*) = 0;
+	virtual bool		action() = 0;
 	cBrowInterface*		browInterface;
 };
 

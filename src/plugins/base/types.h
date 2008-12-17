@@ -9,7 +9,6 @@ class cWorld
 
 
 };*/
-#include <world.h>
 //#include <wm/wm.h>
 
 

@@ -1,7 +1,12 @@
+#ifndef __MINGW32__
+#pragma warning( disable : 4786 )
+#endif
+
 #include <windows.h>
 #include "mazegenerator.h"
 #include "../base/types.h"
 #include "types.h"
+#include <list>
 
 
 cMazeGenerator::cMazeGenerator() : cPluginBase("Maze Generator", "tools/generators/MAZEGENERATOR")
@@ -12,15 +17,15 @@ cMazeGenerator::cMazeGenerator() : cPluginBase("Maze Generator", "tools/generato
 
 
 
-bool cMazeGenerator::action(cWorld* world)
+bool cMazeGenerator::action()
 {
-	if(world->textures.size() < 3)
+	if(browInterface->textureCount() < 3)
 	{
 		browInterface->messageWindow("You need at least 3 textures for this tool (floor, top and walls)");
 		return false;
 	}
 	int x,y,i;
-	int tileStart = world->tiles.size();
+	int tileStart = browInterface->tileCount();
 
 	for(int tex = 0; tex < 2; tex++)
 	{
@@ -28,7 +33,7 @@ bool cMazeGenerator::action(cWorld* world)
 		{
 			for(x = 0; x < 4; x++)
 			{
-				cTile t;
+				cBrowInterface::cPluginTile t;
 				t.lightmap = 0;
 				t.texture = tex;
 				t.u1 = x/4.0f;
@@ -43,13 +48,13 @@ bool cMazeGenerator::action(cWorld* world)
 				t.color[1] = (char)255;
 				t.color[2] = (char)255;
 				t.color[3] = (char)255;
-				world->tiles.push_back(t);
+				browInterface->addTile(t);
 			}
 		}
 	}
 	for(x = 0; x < 4; x++)
 	{
-		cTile t;
+		cBrowInterface::cPluginTile t;
 		t.lightmap = 0;
 		t.texture = 2;
 		t.u1 = (x+1)/4.0f;
@@ -64,20 +69,21 @@ bool cMazeGenerator::action(cWorld* world)
 		t.color[1] = (char)255;
 		t.color[2] = (char)255;
 		t.color[3] = (char)255;
-		world->tiles.push_back(t);
+		browInterface->addTile(t);
 	}
 
-	for(y = 0; y < world->height; y++)
+	for(y = 0; y < browInterface->getWorldHeight(); y++)
 	{
-		for(x = 0; x < world->width; x++)
+		for(x = 0; x < browInterface->getWorldWidth(); x++)
 		{
-			world->cubes[y][x].tileUp = tileStart+16+((int)x%4) + 4*((int)y%4);
-			world->cubes[y][x].tileSide = -1;
-			world->cubes[y][x].tileOtherSide = -1;
-			world->cubes[y][x].cell1 = -32;
-			world->cubes[y][x].cell2 = -32;
-			world->cubes[y][x].cell3 = -32;
-			world->cubes[y][x].cell4 = -32;
+			cBrowInterface::cPluginCube* c = browInterface->getCube(x,y);
+			c->tileUp = tileStart+16+((int)x%4) + 4*((int)y%4);
+			c->tileSide = -1;
+			c->tileOtherSide = -1;
+			c->cell1 = -32;
+			c->cell2 = -32;
+			c->cell3 = -32;
+			c->cell4 = -32;
 		}
 	}
 	
@@ -88,7 +94,7 @@ bool cMazeGenerator::action(cWorld* world)
 	cPoint offsets[4] = { cPoint(-1,0), cPoint(1, 0), cPoint(0, 1), cPoint(0, -1) };
 
 	std::vector<std::vector<bool> > tempMap;
-	tempMap.resize(world->height, std::vector<bool>(world->width, true));
+	tempMap.resize(browInterface->getWorldHeight(), std::vector<bool>(browInterface->getWorldWidth(), true));
 
 	int repeat = 0;
 	while(positions.size() > 0)
@@ -112,24 +118,27 @@ bool cMazeGenerator::action(cWorld* world)
 			{
 				cPoint pp = p + (offsets[i]*2);
 
-				if(pp.x >= 0 && pp.y >= 0 && pp.x < world->width-1 && pp.y < world->height-1)
+				if(pp.x >= 0 && pp.y >= 0 && pp.x < browInterface->getWorldWidth()-1 && pp.y < browInterface->getWorldHeight()-1)
 				{
 					if(tempMap[pp.y][pp.x])
 					{
 						tempMap[pp.y][pp.x] = false;
 						positions.push_front(pp);
-						world->cubes[pp.y][pp.x].tileUp = tileStart+0+((int)pp.x%4) + 4*((int)pp.y%4);
-						world->cubes[pp.y][pp.x].cell1 = 0;
-						world->cubes[pp.y][pp.x].cell2 = 0;
-						world->cubes[pp.y][pp.x].cell3 = 0;
-						world->cubes[pp.y][pp.x].cell4 = 0;
+
+						cBrowInterface::cPluginCube* c = browInterface->getCube(pp.x, pp.y);
+						c->tileUp = tileStart+0+((int)pp.x%4) + 4*((int)pp.y%4);
+						c->cell1 = 0;
+						c->cell2 = 0;
+						c->cell3 = 0;
+						c->cell4 = 0;
 
 						pp = p + offsets[i];
-						world->cubes[pp.y][pp.x].tileUp = tileStart+0+((int)pp.x%4) + 4*((int)pp.y%4);
-						world->cubes[pp.y][pp.x].cell1 = 0;
-						world->cubes[pp.y][pp.x].cell2 = 0;
-						world->cubes[pp.y][pp.x].cell3 = 0;
-						world->cubes[pp.y][pp.x].cell4 = 0;
+						c = browInterface->getCube(pp.x, pp.y);
+						c->tileUp = tileStart+0+((int)pp.x%4) + 4*((int)pp.y%4);
+						c->cell1 = 0;
+						c->cell2 = 0;
+						c->cell3 = 0;
+						c->cell4 = 0;
 
 						p = p + (offsets[i]*2);
 					}
@@ -147,23 +156,23 @@ bool cMazeGenerator::action(cWorld* world)
 	}
 
 
-	for(x = 0; x < world->width-1; x++)
+	for(x = 0; x < browInterface->getWorldWidth()-1; x++)
 	{
-		for(y = 0; y < world->height-1; y++)
+		for(y = 0; y < browInterface->getWorldHeight()-1; y++)
 		{
-			cCube* c = &world->cubes[y][x];
+			cBrowInterface::cPluginCube* c = browInterface->getCube(x,y);
 			if (c->tileOtherSide == -1)
 			{
 				if (c->cell4 != (c+1)->cell1 && c->cell2 != (c+1)->cell3)
 				{
-					world->cubes[y][x].tileOtherSide = tileStart+32+(y%4);
+					c->tileOtherSide = tileStart+32+(y%4);
 				}
 			}
 			if (c->tileSide == -1)
 			{
-				if (c->cell4 != world->cubes[y+1][x].cell1 && c->cell3 != world->cubes[y+1][x].cell2)
+				if (c->cell4 != browInterface->getCube(x,y+1)->cell1 && c->cell3 != browInterface->getCube(x,y+1)->cell2)
 				{
-					world->cubes[y][x].tileSide = tileStart+32+(x%4);
+					c->tileSide = tileStart+32+(x%4);
 				}
 			}
 		}

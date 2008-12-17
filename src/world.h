@@ -33,7 +33,11 @@ public:
 			glDeleteTextures(1, &tid2);
 		generated2 = false;
 	}
-	char buf[256];
+	void regenerate()
+	{
+		del();
+		del2();
+	}
 	int texId();
 	int texId2();
 	void del();
@@ -74,18 +78,8 @@ public:
 class cCube : public cBrowInterface::cPluginCube
 {
 public:
-	float	cell1,
-			cell2,
-			cell3,
-			cell4;
-	int tileUp,
-		tileSide,
-		tileOtherSide;
-
 	float maxHeight;
 	float minHeight;
-	bool selected;
-
 	void calcNormal();
 	cVector3 normal;
 	cVector3 vNormal1;
@@ -156,14 +150,10 @@ public:
 };
 
 
-class cGatTile
+class cGatTile : public cBrowInterface::cPluginGatCube
 {
 public:
-	float	cell1,
-			cell2,
-			cell3,
-			cell4;
-	int type;
+
 };
 
 class cWater

@@ -14,23 +14,22 @@ cCulvertGenerator::cCulvertGenerator() : cPluginBase("Culvert Generator", "tools
 
 
 
-bool cCulvertGenerator::action(cWorld* world)
+bool cCulvertGenerator::action()
 {
-	if(!world)
-		return false;
 	unsigned int i;
 	int xx,yy;
 
 	float x,y;
 
-	world->tiles.clear();
+	while(browInterface->tileCount() > 0)
+		browInterface->removeTile(0);
 	for(int tex = 0; tex < 5; tex++)
 	{
 		for(y = 0; y < 4; y++)
 		{
 			for(x = 0; x < 4; x++)
 			{
-				cTile t;
+				cBrowInterface::cPluginTile t;
 				t.lightmap = 0;
 				t.texture = tex;
 				t.u1 = x/4.0f;
@@ -45,34 +44,26 @@ bool cCulvertGenerator::action(cWorld* world)
 				t.color[1] = (char)255;
 				t.color[2] = (char)255;
 				t.color[3] = (char)255;
-				world->tiles.push_back(t);
+				browInterface->addTile(t);
 			}
 		}
 	}
 	
 	
-	for(y = 0; y < world->height; y++)
+	for(y = 0; y < browInterface->getWorldHeight(); y++)
 	{
-		for(x = 0; x < world->width; x++)
+		for(x = 0; x < browInterface->getWorldWidth(); x++)
 		{
-			world->cubes[(int)y][(int)x].tileOtherSide = -1;
-			world->cubes[(int)y][(int)x].tileSide = -1;
-			world->cubes[(int)y][(int)x].tileUp = 48 + ((int)x%4) + 4*((int)y%4);
+			cBrowInterface::cPluginCube* c = browInterface->getCube(x,y);
+			c->tileOtherSide = -1;
+			c->tileSide = -1;
+			c->tileUp = 48 + ((int)x%4) + 4*((int)y%4);
+			c->cell1 = 16;
+			c->cell2 = 16;
+			c->cell3 = 16;
+			c->cell4 = 16;
 		}
 	}
-
-
-	for(y = 0; y < world->height; y++)
-	{
-		for(x = 0; x < world->width; x++)
-		{
-			world->cubes[(int)y][(int)x].cell1 = 16;
-			world->cubes[(int)y][(int)x].cell2 = 16;
-			world->cubes[(int)y][(int)x].cell3 = 16;
-			world->cubes[(int)y][(int)x].cell4 = 16;
-		}
-	}
-
 	
 	browInterface->render();
 
@@ -138,18 +129,18 @@ bool cCulvertGenerator::action(cWorld* world)
 		}
 		else
 		{
-			x = (world->width-w)/2;
-			y = (world->height-h)/2;
+			x = (browInterface->getWorldWidth()-w)/2;
+			y = (browInterface->getWorldHeight()-h)/2;
 		}
 
-		if(!(x + w >= world->width-1 || y+h >= world->height-1 || x <= 1 || y <= 1))
+		if(!(x + w >= browInterface->getWorldWidth()-1 || y+h >= browInterface->getWorldHeight()-1 || x <= 1 || y <= 1))
 		{
 			int takencount = 0;
 			for(xx = (int)x; xx < (int)x+w; xx++)
 			{
 				for(yy = (int)y; yy < (int)y+h; yy++)
 				{
-					if(world->cubes[yy][xx].cell1 == 0)
+					if(browInterface->getCube(xx,yy)->cell1 == 0)
 						takencount++;
 				}
 			}
@@ -159,11 +150,12 @@ bool cCulvertGenerator::action(cWorld* world)
 				{
 					for(yy = (int)y; yy < (int)y+h; yy++)
 					{
-						world->cubes[yy][xx].cell1 = 0;//rand()%25;
-						world->cubes[yy][xx].cell2 = 0;//rand()%25;
-						world->cubes[yy][xx].cell3 = 0;//rand()%25;
-						world->cubes[yy][xx].cell4 = 0;//rand()%25;
-						world->cubes[yy][xx].tileUp = 32 + (xx%4) + 4*(yy%4);
+						cBrowInterface::cPluginCube* c = browInterface->getCube(xx,yy);
+						c->cell1 = 0;//rand()%25;
+						c->cell2 = 0;//rand()%25;
+						c->cell3 = 0;//rand()%25;
+						c->cell4 = 0;//rand()%25;
+						c->tileUp = 32 + (xx%4) + 4*(yy%4);
 					}
 				}
 				if(island != -1)
@@ -174,21 +166,21 @@ bool cCulvertGenerator::action(cWorld* world)
 					islands[islands.size()-1].connections.push_back(island);
 			}
 			int count = 0;
-			for(int yy = 0; yy < world->height; yy++)
+			for(int yy = 0; yy < browInterface->getWorldHeight(); yy++)
 			{
-				for(int xx = 0; xx < world->width; xx++)
+				for(int xx = 0; xx < browInterface->getWorldWidth(); xx++)
 				{
-					if(world->cubes[yy][xx].cell1 == 0)
+					if(browInterface->getCube(xx,yy)->cell1 == 0)
 						count++;
 				}
 			}
-			if(count > world->height*world->width / 2)
+			if(count > browInterface->getWorldHeight()*browInterface->getWorldWidth() / 2)
 				filledenough = true;
 
 		}
 	}
 
-	while(world->models.size() > 0)
+	while(browInterface->modelCount() > 0)
 		browInterface->removeModel(0);
 
 
@@ -243,21 +235,21 @@ bool cCulvertGenerator::action(cWorld* world)
 	}
 
 
-	world->water.height = 8;
+	browInterface->setWaterHeight(8);
 
 
 
 
 
-	for(y = 0; y < world->height; y++)
+	for(y = 0; y < browInterface->getWorldHeight(); y++)
 	{
-		for(x = 0; x < world->width; x++)
+		for(x = 0; x < browInterface->getWorldWidth(); x++)
 		{
-			cCube* c = &world->cubes[(int)y][(int)x];
-			world->gattiles[2*(int)y][2*(int)x].type = (c->cell1+c->cell2+c->cell3+c->cell4) != 0 ? '\1' : '\0';
-			world->gattiles[2*(int)y][2*(int)x+1].type = (c->cell1+c->cell2+c->cell3+c->cell4) != 0 ? '\1' : '\0';
-			world->gattiles[2*(int)y+1][2*(int)x].type = (c->cell1+c->cell2+c->cell3+c->cell4) != 0 ? '\1' : '\0';
-			world->gattiles[2*(int)y+1][2*(int)x+1].type = (c->cell1+c->cell2+c->cell3+c->cell4) != 0 ? '\1' : '\0';
+			cBrowInterface::cPluginCube* c = browInterface->getCube(x,y);
+			browInterface->getGatCube(2*(int)x,		2*(int)y)->type =	(c->cell1+c->cell2+c->cell3+c->cell4) != 0 ? '\1' : '\0';
+			browInterface->getGatCube(2*(int)x+1,	2*(int)y)->type =	(c->cell1+c->cell2+c->cell3+c->cell4) != 0 ? '\1' : '\0';
+			browInterface->getGatCube(2*(int)x,		2*(int)y+1)->type = (c->cell1+c->cell2+c->cell3+c->cell4) != 0 ? '\1' : '\0';
+			browInterface->getGatCube(2*(int)x+1,	2*(int)y+1)->type = (c->cell1+c->cell2+c->cell3+c->cell4) != 0 ? '\1' : '\0';
 		}
 
 	}
@@ -265,16 +257,16 @@ bool cCulvertGenerator::action(cWorld* world)
 
 
 
-	for(x = 0; x < world->width; x++)
-		for(y = 0; y < world->height; y++)
+/*	for(x = 0; x < browInterface->getWorldWidth; x++)
+		for(y = 0; y < browInterface->getWorldHeight; y++)
 		{
 			world->cubes[(int)y][(int)x].maxHeight = -99999;
 			world->cubes[(int)y][(int)x].minHeight = 99999;
 		}
 
-	for(y = 0; y < world->height; y++)
+	for(y = 0; y < browInterface->getWorldHeight; y++)
 	{
-		for(x = 0; x < world->width; x++)
+		for(x = 0; x < browInterface->getWorldWidth; x++)
 		{
 			if(world->cubes[(int)y][(int)x].maxHeight != -99999)
 			{
@@ -290,25 +282,25 @@ bool cCulvertGenerator::action(cWorld* world)
 			}
 		}
 
-	}
+	}*/
 
-	for(x = 0; x < world->width-1; x++)
+	for(x = 0; x < browInterface->getWorldWidth()-1; x++)
 	{
-		for(y = 0; y < world->height-1; y++)
+		for(y = 0; y < browInterface->getWorldHeight()-1; y++)
 		{
-			cCube* c = &world->cubes[y][x];
+			cBrowInterface::cPluginCube* c = browInterface->getCube(x,y);
 			if (c->tileOtherSide == -1)
 			{
 				if (c->cell4 != (c+1)->cell1 && c->cell2 != (c+1)->cell3)
 				{
-					world->cubes[y][x].tileOtherSide = 32+((int)y%4);
+					c->tileOtherSide = 32+((int)y%4);
 				}
 			}
 			if (c->tileSide == -1)
 			{
-				if (c->cell4 != world->cubes[y+1][x].cell1 && c->cell3 != world->cubes[y+1][x].cell2)
+				if (c->cell4 != browInterface->getCube(x,y+1)->cell1 && c->cell3 != browInterface->getCube(x,y+1)->cell2)
 				{
-					world->cubes[y][x].tileSide = 32+((int)x%4);
+					c->tileSide = 32+((int)x%4);
 				}
 			}
 		}

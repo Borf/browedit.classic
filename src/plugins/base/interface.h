@@ -10,6 +10,15 @@ class cBrowInterface
 public:
 	class cPluginCube
 	{
+	public:
+		float	cell1,
+				cell2,
+				cell3,
+				cell4;
+		int		tileUp,
+				tileSide,
+				tileOtherSide;
+		bool	selected;
 
 	};
 	class cPluginTile
@@ -34,7 +43,9 @@ public:
 	};
 	class cPluginLightmap
 	{
-
+	public:
+		char buf[256];
+		virtual void regenerate() = 0;
 	};
 
 	
@@ -97,12 +108,23 @@ public:
 		float	unknown8;
 	};
 
-	
-	
-	
-	virtual cPluginCube*			getCube(int, int) = 0;
+	class cPluginGatCube
+	{
+	public:
+		float	cell1,
+				cell2,
+				cell3,
+				cell4;
+		int type;
+	};
 
-	virtual cPluginTile*			getTile(int) = 0;
+	
+	
+	
+	virtual cPluginCube*			getCube(int x, int y) = 0;
+	virtual cPluginGatCube*			getGatCube(int x, int y) = 0;
+
+	virtual cPluginTile*			getTile(int index) = 0;
 	virtual int						tileCount() = 0;
 	virtual void					removeTile(int) = 0;
 	virtual void					addTile(cPluginTile) = 0;
@@ -112,6 +134,7 @@ public:
 	virtual void					removeTexture(int) = 0;
 	virtual void					addTexture(cPluginTexture*) = 0;
 
+	virtual cPluginLightmap*		newLightmap() = 0;
 	virtual cPluginLightmap*		getLightmap(int) = 0;
 	virtual int						lightmapCount() = 0;
 	virtual void					removeLightmap(int) = 0;
@@ -127,21 +150,36 @@ public:
 	virtual void					removeSound(int) = 0;
 	virtual void					addSound(cPluginSound) = 0;
 
+	virtual cPluginLight*			getLight(int) = 0;
+	virtual int						lightCount() = 0;
+	virtual void					removeLight(int) = 0;
+	virtual void					addLight(cPluginLight) = 0;
+	
 
-	virtual cPluginRSMModel* loadModel(const char*) = 0;
-	virtual void removeModel(int) = 0;
-	virtual void addModel(cPluginRSMModel*) = 0;
-	virtual void removeSprite(int) = 0;
+
+	virtual cPluginRSMModel*		loadModel(const char* fileName) = 0;
+	virtual int						modelCount() = 0;
+	virtual void					removeModel(int index) = 0;
+	virtual void					addModel(cPluginRSMModel* model) = 0;
+
+	
+	virtual int						spriteCount() = 0;
+	virtual void					removeSprite(int) = 0;
 
 
-	virtual void fixNormals() = 0;
-	virtual int  getSelectedTextureIndex() = 0;
-	virtual void render() = 0;
+	virtual void					fixNormals() = 0;
+	virtual void					fixGridding() = 0;
+	virtual void					render() = 0;
+	virtual void					makeTilesUnique() = 0;
 
-	virtual cWindow* addXmlWindow(const char*) = 0;
-	virtual const char* inputWindow(const char*, const char*) = 0;
-	virtual void messageWindow(const char*) = 0;
+	virtual cWindow*				addXmlWindow(const char* fileName) = 0;
+	virtual const char*				inputWindow(const char* message, const char* defaultValue) = 0;
+	virtual void					messageWindow(const char* message) = 0;
 
+	virtual int						getSelectedTextureIndex() = 0;
+	virtual int						getWorldHeight() = 0;
+	virtual int						getWorldWidth() = 0;
+	virtual void					setWaterHeight(float) = 0;
 	
 };
 
