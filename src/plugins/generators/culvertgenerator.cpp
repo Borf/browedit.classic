@@ -1,6 +1,6 @@
 #include <windows.h>
 #include "culvertgenerator.h"
-#include "../base/types.h"
+#include "../base/interface.h"
 #include "types.h"
 
 #ifndef __MINGW32__

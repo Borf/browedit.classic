@@ -101,10 +101,6 @@ SOURCE=..\..\src\plugins\base\base.h
 
 SOURCE=..\..\src\plugins\base\interface.h
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\src\plugins\base\types.h
-# End Source File
 # End Group
 # End Target
 # End Project

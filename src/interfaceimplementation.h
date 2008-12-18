@@ -65,6 +65,7 @@ public:
 	cWindow*				addXmlWindow(const char*);
 	const char*				inputWindow(const char*, const char*);
 	void					messageWindow(const char*);
+	bool					confirmWindow(const char*);
 };
 
 

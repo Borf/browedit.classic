@@ -222,3 +222,8 @@ cBrowInterface::cPluginGatCube* cBrowInterfaceImplementation::getGatCube(int x, 
 {
 	return &cGraphics::world->gattiles[y][x];
 }
+
+bool cBrowInterfaceImplementation::confirmWindow(const char* message)
+{
+	return cWM::confirmWindow(message);
+}

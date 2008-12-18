@@ -102,7 +102,7 @@ SOURCE=..\..\src\plugins\generators\mazegenerator.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\plugins\generators\mymath.cpp
+SOURCE=..\..\src\mymath.cpp
 # End Source File
 # Begin Source File
 
@@ -119,10 +119,6 @@ SOURCE=..\..\src\plugins\generators\culvertgenerator.h
 # Begin Source File
 
 SOURCE=..\..\src\plugins\generators\mazegenerator.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\plugins\generators\mymath.h
 # End Source File
 # Begin Source File
 

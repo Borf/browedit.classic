@@ -1,6 +1,6 @@
 #include <windows.h>
 #include "setgatheight.h"
-#include "../base/types.h"
+#include "../base/interface.h"
 
 
 cSetGatHeightPlugin::cSetGatHeightPlugin() : cPluginBase("Gat Height", "tools/gat/GATHEIGHT")
@@ -10,11 +10,28 @@ cSetGatHeightPlugin::cSetGatHeightPlugin() : cPluginBase("Gat Height", "tools/ga
 
 bool cSetGatHeightPlugin::action()
 {
-	for(int y = 0; y < browInterface->getWorldHeight(); y++)
+	bool selection = false;
+	int x,y;
+
+	
+
+	for(y = 0; y < browInterface->getWorldHeight(); y++)
 	{
-		for(int x = 0; x < browInterface->getWorldWidth(); x++)
+		for(x = 0; x < browInterface->getWorldWidth(); x++)
+		{
+			if(browInterface->getCube(x,y)->selected)
+				selection = true;
+		}
+	}
+
+
+	for(y = 0; y < browInterface->getWorldHeight(); y++)
+	{
+		for(x = 0; x < browInterface->getWorldWidth(); x++)
 		{
 			cBrowInterface::cPluginCube* c = browInterface->getCube(x,y);
+			if(selection && !c->selected)
+				continue;
 			
 			cBrowInterface::cPluginGatCube* gc;
 			

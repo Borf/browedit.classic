@@ -1,6 +1,6 @@
 #include <windows.h>
 #include "clearmap.h"
-#include "../base/types.h"
+#include "../base/interface.h"
 #include <windows/xmlwindow.h>
 
 

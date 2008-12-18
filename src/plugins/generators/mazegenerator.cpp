@@ -4,7 +4,7 @@
 
 #include <windows.h>
 #include "mazegenerator.h"
-#include "../base/types.h"
+#include "../base/interface.h"
 #include "types.h"
 #include <list>
 

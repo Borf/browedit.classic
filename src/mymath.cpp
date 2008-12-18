@@ -1,4 +1,4 @@
-#include "common.h"
+#include "mymath.h"
 
 cVector3::cVector3( float X, float Y, float Z )
 {

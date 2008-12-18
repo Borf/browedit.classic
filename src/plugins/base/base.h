@@ -2,11 +2,6 @@
 #define __PLUGIN_BASE_H__
 
 #include <string>
-//using namespace std;
-class cWorld;
-class cWindow;
-class cTexture;
-class cFont;
 class TiXmlDocument;
 class cWindow;
 class cBrowInterface;

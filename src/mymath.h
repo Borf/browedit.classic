@@ -46,7 +46,7 @@ public:
 	cVector2 operator/(float num);
 	cVector2 Normalize();
 	float Magnitude();
-	void rotate(float angleinc);
+	void	rotate(float angleinc);
 	float getAngle();
 	bool operator==(cVector2 v2);
 	float DotProd(cVector2 v2);

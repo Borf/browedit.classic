@@ -174,6 +174,7 @@ public:
 
 	virtual cWindow*				addXmlWindow(const char* fileName) = 0;
 	virtual const char*				inputWindow(const char* message, const char* defaultValue) = 0;
+	virtual bool					confirmWindow(const char* message) = 0;
 	virtual void					messageWindow(const char* message) = 0;
 
 	virtual int						getSelectedTextureIndex() = 0;
