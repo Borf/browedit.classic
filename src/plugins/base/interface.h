@@ -1,9 +1,12 @@
 #ifndef __INTERFACE_H__
 #define __INTERFACE_H__
 
-class cWindow;
 #include <mymath.h>
-#include <string>//TODO
+#include <string>//TODO: remove this :P
+
+class cWindow;
+class cPluginBase;
+
 
 class cBrowInterface
 {
@@ -181,6 +184,9 @@ public:
 	virtual int						getWorldHeight() = 0;
 	virtual int						getWorldWidth() = 0;
 	virtual void					setWaterHeight(float) = 0;
+
+	virtual cPluginBase*			getPlugin(const char* name) = 0;
+
 	
 };
 

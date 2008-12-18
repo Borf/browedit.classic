@@ -61,7 +61,7 @@ std::vector<std::pair<std::string, std::string> > translations;
 
 bool mouseouttexture(cMenu*);
 bool mouseovertexture(cMenu*);
-
+std::vector<cPluginBase*> plugins;
 
 
 cMenu* currentobject;
@@ -779,14 +779,15 @@ int main(int argc, char *argv[])
 				}
 				int instanceCount = *((int*)GetProcAddress(hlib, "getInstanceCount"));
 
-				cPluginBase** plugins = getInstances();
+				cPluginBase** pluginInstances = getInstances();
 
 				for(i = 0; i < instanceCount; i++)
 				{
-					plugins[i]->setInterface(&browInterface);
+					plugins.push_back(pluginInstances[i]);
+					pluginInstances[i]->setInterface(&browInterface);
 
 					cMenu* p = cGraphics::menu;
-					std::string s = plugins[i]->menu;
+					std::string s = pluginInstances[i]->menu;
 					std::string past = "";
 					
 					while(s.find("/") != std::string::npos)
@@ -806,7 +807,7 @@ int main(int argc, char *argv[])
 					}
 					if(!p)
 						Log(1,0,"Couldn't find parent!");
-					ADDMENUITEMDATAP(mm,p,GetMsg("menu/" + std::string(plugins[i]->menu)),	&MenuCommand_plugin, (void*)plugins[i]);
+					ADDMENUITEMDATAP(mm,p,GetMsg("menu/" + std::string(pluginInstances[i]->menu)),	&MenuCommand_plugin, (void*)pluginInstances[i]);
 				}
 			}
 

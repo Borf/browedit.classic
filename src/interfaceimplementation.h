@@ -2,6 +2,7 @@
 #define __INTERFACEIMPLEMENTATION_H__
 
 #include "plugins/base/interface.h"
+class cPluginBase;
 
 class cBrowInterfaceImplementation : public cBrowInterface
 {
@@ -66,6 +67,7 @@ public:
 	const char*				inputWindow(const char*, const char*);
 	void					messageWindow(const char*);
 	bool					confirmWindow(const char*);
+	cPluginBase*			getPlugin(const char*);
 };
 
 

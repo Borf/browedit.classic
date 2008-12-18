@@ -3,6 +3,9 @@
 #include <windows/xmlwindow.h>
 #include <SDL/SDL.h>
 #include <settings.h>
+#include <plugins/base/base.h>
+
+extern std::vector<cPluginBase*> plugins;
 
 void cBrowInterfaceImplementation::fixNormals()
 {
@@ -226,4 +229,16 @@ cBrowInterface::cPluginGatCube* cBrowInterfaceImplementation::getGatCube(int x, 
 bool cBrowInterfaceImplementation::confirmWindow(const char* message)
 {
 	return cWM::confirmWindow(message);
+}
+
+
+cPluginBase* cBrowInterfaceImplementation::getPlugin(const char* name)
+{
+	unsigned int i = 0;
+	for(i = 0; i < plugins.size(); i++)
+	{
+		if(lcase(plugins[i]->name) == lcase(name))
+			return plugins[i];
+	}
+	return NULL;
 }

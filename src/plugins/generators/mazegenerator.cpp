@@ -163,7 +163,7 @@ bool cMazeGenerator::action()
 			cBrowInterface::cPluginCube* c = browInterface->getCube(x,y);
 			if (c->tileOtherSide == -1)
 			{
-				if (c->cell4 != (c+1)->cell1 && c->cell2 != (c+1)->cell3)
+				if (c->cell4 != browInterface->getCube(x+1,y)->cell1 && c->cell2 != browInterface->getCube(x+1,y)->cell3)
 				{
 					c->tileOtherSide = tileStart+32+(y%4);
 				}
@@ -181,6 +181,11 @@ bool cMazeGenerator::action()
 
 
 	browInterface->fixNormals();
+
+
+	cPluginBase* gatHeight = browInterface->getPlugin("Gat Height");
+	if(gatHeight)
+		gatHeight->action();
 
 	return true;
 }

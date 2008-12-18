@@ -25,6 +25,8 @@ void cClearMapPlugin::clickOk(cWindow* w)
 			browInterface->removeLightmap(0);
 		while(browInterface->tileCount() > 0)
 			browInterface->removeTile(0);
+		while(browInterface->textureCount() > 0)
+			browInterface->removeTile(0);
 
 
 		cBrowInterface::cPluginLightmap* map = browInterface->newLightmap();
@@ -37,37 +39,12 @@ void cClearMapPlugin::clickOk(cWindow* w)
 			map->buf[i] = i < 64 ? 255 : 0;
 		browInterface->addLightmap(map);
 
-		
-		for(y = 0; y < 4; y++)
-		{
-			for(x = 0; x < 4; x++)
-			{
-				cBrowInterface::cPluginTile t;
-				t.lightmap = 0;
-				t.texture = browInterface->getSelectedTextureIndex();
-				t.u1 = x/4.0f;
-				t.v1 = y/4.0f;
-				t.u2 = (x+1)/4.0f;
-				t.v2 = (y)/4.0f;
-				t.u3 = (x)/4.0f;
-				t.v3 = (y+1)/4.0f;
-				t.u4 = (x+1)/4.0f;
-				t.v4 = (y+1)/4.0f;
-				t.color[0] = (char)255;
-				t.color[1] = (char)255;
-				t.color[2] = (char)255;
-				t.color[3] = (char)255;
-				browInterface->addTile(t);
-			}
-		}
-
-
 		for(y = 0; y < browInterface->getWorldHeight(); y++)
 		{
 			for(x = 0; x < browInterface->getWorldWidth(); x++)
 			{
 				cBrowInterface::cPluginCube* c = browInterface->getCube(x,y);
-				c->tileUp = (x%4) + 4*(y % 4);
+				c->tileUp = -1;
 				c->tileSide = -1;
 				c->tileOtherSide = -1;
 			}

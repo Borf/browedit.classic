@@ -1316,15 +1316,17 @@ void cWorld::save()
 			}
 		}
 		int loadcount = 0;
-		for(i = 0; i < 8; i++)
+		if(w != NULL)
 		{
-			char buf[10];
-			sprintf(buf, "obj%i", i);
-			cHotkeyWindow::cHotkeyButton* o = (cHotkeyWindow::cHotkeyButton*)w->objects[buf];
-			if (o->loaded)
-				loadcount++;
+			for(i = 0; i < 8; i++)
+			{
+				char buf[10];
+				sprintf(buf, "obj%i", i);
+				cHotkeyWindow::cHotkeyButton* o = (cHotkeyWindow::cHotkeyButton*)w->objects[buf];
+				if (o->loaded)
+					loadcount++;
+			}
 		}
-
 
 		if(loadcount > 0)
 		{
