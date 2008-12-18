@@ -513,6 +513,65 @@ void cClipBoardArea::apply()
 				
 			}
 		}
+		if(doWalls)
+		{
+			if(tiles[i].cube.tileSide == -1)
+			{
+				cGraphics::world->cubes[tiles[i].y+offZ][tiles[i].x+offX].tileSide = -1;
+			}
+			else
+			{
+				cGraphics::world->cubes[tiles[i].y+offZ][tiles[i].x+offX].tileSide = cGraphics::world->tiles.size();
+				cGraphics::world->tiles.push_back(worldContainer->world->tiles[tiles[i].cube.tileSide]);
+				
+				cTextureContainer* texture = worldContainer->world->textures[worldContainer->world->tiles[tiles[i].cube.tileSide].texture];
+				int found = -1;
+				for(unsigned int ii = 0; ii < cGraphics::world->textures.size() && found == -1; ii++)
+				{
+					if(cGraphics::world->textures[ii]->RoFilename == texture->RoFilename)
+						found = ii;
+				}
+				if(found == -1)
+				{
+					cTextureContainer* container = new cTextureContainer();
+					container->RoFilename = texture->RoFilename;
+					container->RoFilename2 = texture->RoFilename2;
+					container->texture = cTextureCache::load(cSettings::roDir + "data\\texture\\" + texture->RoFilename);
+					found = cGraphics::world->textures.size();				
+					cGraphics::world->textures.push_back(container);
+				}
+				cGraphics::world->tiles[cGraphics::world->tiles.size()-1].texture = found;
+
+			}
+			if(tiles[i].cube.tileOtherSide == -1)
+			{
+				cGraphics::world->cubes[tiles[i].y+offZ][tiles[i].x+offX].tileOtherSide = -1;
+			}
+			else
+			{
+				cGraphics::world->cubes[tiles[i].y+offZ][tiles[i].x+offX].tileOtherSide = cGraphics::world->tiles.size();
+				cGraphics::world->tiles.push_back(worldContainer->world->tiles[tiles[i].cube.tileOtherSide]);
+				
+				cTextureContainer* texture = worldContainer->world->textures[worldContainer->world->tiles[tiles[i].cube.tileOtherSide].texture];
+				int found = -1;
+				for(unsigned int ii = 0; ii < cGraphics::world->textures.size() && found == -1; ii++)
+				{
+					if(cGraphics::world->textures[ii]->RoFilename == texture->RoFilename)
+						found = ii;
+				}
+				if(found == -1)
+				{
+					cTextureContainer* container = new cTextureContainer();
+					container->RoFilename = texture->RoFilename;
+					container->RoFilename2 = texture->RoFilename2;
+					container->texture = cTextureCache::load(cSettings::roDir + "data\\texture\\" + texture->RoFilename);
+					found = cGraphics::world->textures.size();				
+					cGraphics::world->textures.push_back(container);
+				}
+				cGraphics::world->tiles[cGraphics::world->tiles.size()-1].texture = found;
+				
+			}
+		}
 		if(doGat)
 		{
 			cGraphics::world->gattiles[tiles[i].y+offZ][tiles[i].x+offX] = tiles[i].gat;
