@@ -62,12 +62,14 @@ public:
 	void					fixGridding();
 	void					fixNormals();
 	void					render();
+	void					checkModelsOnCubes();
 	
 	cWindow*				addXmlWindow(const char*);
 	const char*				inputWindow(const char*, const char*);
 	void					messageWindow(const char*);
 	bool					confirmWindow(const char*);
 	cPluginBase*			getPlugin(const char*);
+	const char*				getMapFile();
 };
 
 

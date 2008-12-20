@@ -7,7 +7,7 @@ class c#CLASS#Plugin : public cPluginBase
 {
 public:
 	c#CLASS#Plugin();
-	bool action(cWorld*);
+	bool action();
 };
 
 #endif

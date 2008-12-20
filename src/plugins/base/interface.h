@@ -23,6 +23,8 @@ public:
 				tileOtherSide;
 		bool	selected;
 
+		bool	hasModelOnTop;//needs to be calculated
+
 	};
 	class cPluginTile
 	{
@@ -172,6 +174,7 @@ public:
 
 	virtual void					fixNormals() = 0;
 	virtual void					fixGridding() = 0;
+	virtual void					checkModelsOnCubes() = 0;
 	virtual void					render() = 0;
 	virtual void					makeTilesUnique() = 0;
 
@@ -186,6 +189,7 @@ public:
 	virtual void					setWaterHeight(float) = 0;
 
 	virtual cPluginBase*			getPlugin(const char* name) = 0;
+	virtual const char*				getMapFile() = 0;
 
 	
 };

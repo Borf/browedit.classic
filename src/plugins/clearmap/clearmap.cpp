@@ -26,7 +26,7 @@ void cClearMapPlugin::clickOk(cWindow* w)
 		while(browInterface->tileCount() > 0)
 			browInterface->removeTile(0);
 		while(browInterface->textureCount() > 0)
-			browInterface->removeTile(0);
+			browInterface->removeTexture(0);
 
 
 		cBrowInterface::cPluginLightmap* map = browInterface->newLightmap();

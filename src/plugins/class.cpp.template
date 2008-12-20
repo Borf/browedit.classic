@@ -1,6 +1,6 @@
 #include <windows.h>
 #include "#CLASSFILE#.h"
-#include "../base/types.h"
+#include "../base/interface.h"
 
 
 c#CLASS#Plugin::c#CLASS#Plugin() : cPluginBase("TODO", "tools/TODO")
@@ -8,7 +8,7 @@ c#CLASS#Plugin::c#CLASS#Plugin() : cPluginBase("TODO", "tools/TODO")
 	
 }
 
-bool c#CLASS#Plugin::action(cWorld* world)
+bool c#CLASS#Plugin::action()
 {
 //TODO
 	return true;

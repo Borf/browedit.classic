@@ -3,7 +3,7 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
-Project: "plugin_base"=.\plugins\base.dsp - Package Owner=<4>
+Project: "plugin_base"=".\plugins\base.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -15,7 +15,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "plugin_clearmap"=.\plugins\clearmap.dsp - Package Owner=<4>
+Project: "plugin_clearmap"=".\plugins\clearmap.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -30,7 +30,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "plugin_gat"=.\plugins\gat.dsp - Package Owner=<4>
+Project: "plugin_gat"=".\plugins\gat.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -42,7 +42,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "plugin_generators"=.\plugins\generators.dsp - Package Owner=<4>
+Project: "plugin_generators"=".\plugins\generators.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -54,7 +54,19 @@ Package=<4>
 
 ###############################################################################
 
-Project: "roworldedit"=.\roworldedit.dsp - Package Owner=<4>
+Project: "plugin_lightmap"=".\plugins\lightmap.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "roworldedit"=".\roworldedit.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -76,6 +88,9 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name plugin_gat
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name plugin_lightmap
     End Project Dependency
 }}}
 

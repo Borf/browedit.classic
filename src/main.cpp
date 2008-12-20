@@ -396,8 +396,6 @@ int main(int argc, char *argv[])
 #endif
 
 
-	try
-	{
 	int i;
 	log_open("log_worldeditor.txt","worldedit",2);
 	cFile* pFile = cFileSystem::open("config.txt");
@@ -857,7 +855,7 @@ int main(int argc, char *argv[])
 	}
 
 	pFile->close();
-	Log(3,0,GetMsg("file/DONELOADING"), "data/cSettings::keyMap.txt");
+	Log(3,0,GetMsg("file/DONELOADING"), "data/keymap.txt");
 
 
 	float effectCount = cGraphics::h() / 21;
@@ -903,7 +901,7 @@ int main(int argc, char *argv[])
 	if(cSettings::config.FirstChildElement("config")->FirstChildElement("firstmap"))
 		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\" + cSettings::config.FirstChildElement("config")->FirstChildElement("firstmap")->FirstChild()->Value()).c_str());
 	else
-		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\lighttest").c_str());
+		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\comodo").c_str());
 
 	if(argc > 1)
 	{
@@ -959,11 +957,6 @@ int main(int argc, char *argv[])
 	cTextureCache::status();
 
 	log_close();
-	}
-	catch (char* e)
-	{
-		fprintf(stderr, "An error occurred: %s", e);
-	}
 	return 0;							// Exit The Program
 }
 

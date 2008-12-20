@@ -34,7 +34,10 @@ void cBrowInterfaceImplementation::render()
 
 const char* cBrowInterfaceImplementation::inputWindow( const char* msg, const char* defaultText)
 {
-	return cWM::inputWindow(msg, defaultText).c_str();
+	std::string tmp = cWM::inputWindow(msg, defaultText);
+	char* input = new char[1024];
+	strcpy(input, tmp.c_str());
+	return input;
 }
 
 void cBrowInterfaceImplementation::messageWindow( const char* msg)
@@ -241,4 +244,77 @@ cPluginBase* cBrowInterfaceImplementation::getPlugin(const char* name)
 			return plugins[i];
 	}
 	return NULL;
+}
+
+
+void cBrowInterfaceImplementation::checkModelsOnCubes()
+{
+	if(!cGraphics::world)
+		return;
+	int x, y;
+	unsigned int i;
+	int ww = cGraphics::w();
+	ww -= 256;
+	int hh = cGraphics::h()-20;
+	
+	glEnable(GL_DEPTH_TEST);
+	glViewport(0,0,ww,hh);						// Reset The Current Viewport
+	
+	float camrad = 10;
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);				// Black Background
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
+	glLoadIdentity();									// Reset The Projection Matrix
+	gluPerspective(45.0f,(GLfloat)ww/(GLfloat)hh,10.0f,10000.0f);
+	gluLookAt(  -cGraphics::worldContainer->camera.pointer.x + cGraphics::worldContainer->camera.height*sin(cGraphics::worldContainer->camera.rot),
+		camrad+cGraphics::worldContainer->camera.height,
+		-cGraphics::worldContainer->camera.pointer.y + cGraphics::worldContainer->camera.height*cos(cGraphics::worldContainer->camera.rot),
+		-cGraphics::worldContainer->camera.pointer.x,camrad + cGraphics::worldContainer->camera.height * (cGraphics::worldContainer->camera.angle/10.0f),-cGraphics::worldContainer->camera.pointer.y,
+		0,1,0);
+	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
+	glLoadIdentity();									// Reset The Modelview Matrix
+	//	glTranslatef(0,0,cGraphics::world->height*10);
+	//	glScalef(1,1,-1);
+	
+	for(i = 0; i < cGraphics::world->models.size(); i++)
+		cGraphics::world->models[i]->precollides();
+	
+	for(x = 0; x < cGraphics::world->width; x++)
+	{
+		for(y = 0; y < cGraphics::world->height; y++)
+		{
+			cGraphics::world->cubes[y][x].maxHeight = -99999;
+			cGraphics::world->cubes[y][x].minHeight = 99999;
+		}
+	}
+		
+	for(i = 0; i < cGraphics::world->models.size(); i++)
+	{
+		Log(3,0,GetMsg("CALCMODEL"), i, cGraphics::world->models.size(), (i/(float)cGraphics::world->models.size())*100);
+		cGraphics::world->models[i]->draw(false,false,true);
+	}
+	
+	
+	for(x = 0; x < cGraphics::world->width; x++)
+	{
+		for(y = 0; y < cGraphics::world->height; y++)
+		{
+			if(cGraphics::world->cubes[y][x].maxHeight == -99999 || cGraphics::world->cubes[y][x].minHeight == 99999)
+				cGraphics::world->cubes[y][x].hasModelOnTop = true;
+			else
+				cGraphics::world->cubes[y][x].hasModelOnTop = false;
+			
+			cGraphics::world->cubes[y][x].maxHeight = 0;
+			cGraphics::world->cubes[y][x].minHeight = 0;
+		}
+	}
+			
+	return;	
+}
+
+
+
+const char*	cBrowInterfaceImplementation::getMapFile()
+{
+	return cGraphics::world->fileName;
 }
