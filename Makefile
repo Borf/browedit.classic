@@ -192,7 +192,7 @@ plugin_clearmap: obj/plugins/clearmap/clearmap_win32.o obj/plugins/clearmap/plug
 	@echo -e "    \033[1mLD\033[1m\t\033[22;35m$@\033[39m"
 	@$(CXX) $(CFLAGS) $(LDFLAGS) -Llibs/lib -W1 --out-implib -shared -o plugins/clearmap.dll $^ -lopengl32 -lglu32 -lplugin_base
 
-plugin_generators: obj/plugins/generators/mazegenerator_win32.o obj/plugins/generators/culvertgenerator_win32.o obj/plugins/generators/plugin_win32.o obj/plugins/generators/mymath_win32.o
+plugin_generators: obj/plugins/generators/mazegenerator_win32.o obj/plugins/generators/culvertgenerator_win32.o obj/plugins/generators/plugin_win32.o obj/mymath_win32.o
 	@echo -e "    \033[1mLD\033[1m\t\033[22;35m$@\033[39m"
 	@$(CXX) $(CFLAGS) $(LDFLAGS) -Llibs/lib -W1 --out-implib -shared -o plugins/generators.dll $^ -lopengl32 -lglu32 -lplugin_base
 
@@ -202,6 +202,6 @@ plugin_gat: obj/plugins/gat/setgatheight_win32.o obj/plugins/gat/plugin_win32.o
 
 plugin_lightmap: obj/plugins/lightmap/lightmapexport_win32.o obj/plugins/lightmap/lightmapimport_win32.o obj/plugins/lightmap/plugin_win32.o
 	@echo -e "    \033[1mLD\033[1m\t\033[22;35m$@\033[39m"
-	@$(CXX) $(CFLAGS) $(LDFLAGS) -Llibs/lib -W1 --out-implib -shared -o plugins/.dll $^ -lopengl32 -lglu32 -lplugin_base
+	@$(CXX) $(CFLAGS) $(LDFLAGS) -Llibs/lib -W1 --out-implib -shared -o plugins/.dll $^ -lopengl32 -lglu32 -lplugin_base -lbgd
 
 #NEWTARGET#
