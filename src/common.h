@@ -1,6 +1,77 @@
 #ifndef __COMMON_H__
 #define __COMMON_H__
 
+
+#ifdef WIN32
+	#ifndef __MINGW32__
+	#pragma warning( disable : 4786 )
+	#pragma warning( disable : 4503 )
+	#pragma warning( disable : 4244 ) //bad borf, implicit conversion with data loss (double -> float, int -> float)
+	#pragma warning( disable : 4291 )
+	//#pragma warning( disable : 4018 ) //bad borf, signed/unsigned
+	#endif
+
+
+	#include <windows.h>
+	#include <fstream>
+	#include <direct.h>
+
+	#define sleep(x) Sleep(1000*(x))
+	#define DIR_SEPERATOR "\\"
+	#define newline "\r\n"
+	#define usleep(x) Sleep((x) / 1000);
+
+	HWND GetConsoleHwnd();
+#else
+	#include <netdb.h>
+	#include <netinet/in.h>
+	#include <sys/types.h>
+	#include <sys/socket.h>
+	#include <netinet/in.h>
+	#include <arpa/inet.h>
+	#include <fcntl.h>
+	typedef int SOCKET;
+	#define closesocket(x) close(x)
+	#include <dirent.h>
+	#define BYTE unsigned char
+	#include <sys/stat.h>
+	#define DIR_SEPERATOR "/"
+	#define newline "\n"
+	#define ZeroMemory(Destination,Length) memset((Destination),0,(Length))
+	#define Sleep(x) usleep(x*1000)
+#endif
+
+
+#ifdef _DEBUG
+
+
+void AddTrack(DWORD addr,  DWORD asize,  const char *fname, DWORD lnum);
+void RemoveTrack(DWORD addr);
+void DumpUnfreed();
+
+inline void * __cdecl operator new(unsigned int size,
+								   const char *file, int line)
+{
+	void *ptr = (void *)malloc(size);
+	AddTrack((DWORD)ptr, size, file, line);
+	return(ptr);
+};
+inline void __cdecl operator delete(void *p)
+{
+	RemoveTrack((DWORD)p);
+	free(p);
+};
+#endif
+
+#ifdef _DEBUG
+#define DEBUG_NEW new(__FILE__, __LINE__)
+#else
+#define DEBUG_NEW new
+#endif
+#define new DEBUG_NEW
+
+
+
 #define GL_GLEXT_PROTOTYPES	
 #include <SDL/SDL.h>
 #include "svnver.h"
@@ -42,44 +113,11 @@ typedef int32_t intptr_t;
 
 #endif
 
-#ifdef WIN32
-	#include <windows.h>
-#ifndef __MINGW32__
-	#pragma warning( disable : 4786 )
-	#pragma warning( disable : 4503 )
-	#pragma warning( disable : 4244 ) //bad borf, implicit conversion with data loss (double -> float, int -> float)
-	//#pragma warning( disable : 4018 ) //bad borf, signed/unsigned
-#endif
-	#include <fstream>
-	#define sleep(x) Sleep(1000*(x))
-	#define DIR_SEPERATOR "\\"
-	#define newline "\r\n"
-	#define usleep(x) Sleep((x) / 1000);
-	#include <direct.h>
-
-	HWND GetConsoleHwnd();
-#else
-	#include <netdb.h>
-	#include <netinet/in.h>
-	#include <sys/types.h>
-	#include <sys/socket.h>
-	#include <netinet/in.h>
-	#include <arpa/inet.h>
-	#include <fcntl.h>
-	typedef int SOCKET;
-	#define closesocket(x) close(x)
-	#include <dirent.h>
-	#define BYTE unsigned char
-	#include <sys/stat.h>
-	#define DIR_SEPERATOR "/"
-	#define newline "\n"
-	#define ZeroMemory(Destination,Length) memset((Destination),0,(Length))
-	#define Sleep(x) usleep(x*1000)
-#endif
 
 
+
+#include <string>
 #include <vector>
-
 #include "mymath.h"
 
 #define SNAPPINGDIST 10
@@ -103,8 +141,6 @@ float min(float x, float y);
 //float min(float x, float y);
 //#endif
 
-#include <string>
-//using namespace std;
 
 // prototypes
 void Log(int lvl, int options, const char* fmt, ...);

@@ -177,6 +177,9 @@ public:
 	virtual void					checkModelsOnCubes() = 0;
 	virtual void					render() = 0;
 	virtual void					makeTilesUnique() = 0;
+	virtual void					makeLightmapsUnique() = 0; // make tiles unique before running this method
+	virtual void					makeLightmapsBlack() = 0;
+
 
 	virtual cWindow*				addXmlWindow(const char* fileName) = 0;
 	virtual const char*				inputWindow(const char* message, const char* defaultValue) = 0;

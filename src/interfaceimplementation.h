@@ -59,6 +59,8 @@ public:
 	int						getSelectedTextureIndex();
 	
 	void					makeTilesUnique();
+	void					makeLightmapsUnique();
+	void					makeLightmapsBlack();
 	void					fixGridding();
 	void					fixNormals();
 	void					render();

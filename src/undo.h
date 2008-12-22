@@ -39,62 +39,6 @@ public:
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class cUndoStack
 {
 public:
@@ -106,6 +50,7 @@ public:
 	cUndoStack()
 	{
 	}
+	~cUndoStack();
 };
 
 #endif

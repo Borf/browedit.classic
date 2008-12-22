@@ -8,7 +8,7 @@
 #include <math.h>
 #include <time.h>
 #include <tinyxml/tinyxml.h>
-
+#include "StackWalker.h"
 
 #include "font.h"
 #include "filesystem.h"
@@ -29,6 +29,7 @@
 #include "settings.h"
 #include "texturecache.h"
 #include "clipboard.h"
+StackWalker sw;
 
 #ifdef WIN32
 #include <winsock.h>
@@ -387,6 +388,19 @@ cWindow* XmlWindow(std::string s)
 }
 
 
+void Function2()
+{
+
+	sw.ShowCallstack();
+
+}
+
+void Function1()
+{
+	Function2();
+
+}
+
 int main(int argc, char *argv[])
 {
 #if 0
@@ -394,6 +408,10 @@ int main(int argc, char *argv[])
 	if(debugtest == (char*)0xcccccccc)
 		return 0;
 #endif
+	OutputDebugString("-----------------------------------------------------------------");
+	Function1();
+	OutputDebugString("-----------------------------------------------------------------");
+	Function1();
 
 
 	int i;
@@ -955,7 +973,7 @@ int main(int argc, char *argv[])
 
 
 	cTextureCache::status();
-
+	DumpUnfreed();
 	log_close();
 	return 0;							// Exit The Program
 }

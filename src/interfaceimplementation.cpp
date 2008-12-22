@@ -318,3 +318,13 @@ const char*	cBrowInterfaceImplementation::getMapFile()
 {
 	return cGraphics::world->fileName;
 }
+
+void cBrowInterfaceImplementation::makeLightmapsUnique()
+{
+	cGraphics::world->makeLightmapsUnique();	
+}
+
+void cBrowInterfaceImplementation::makeLightmapsBlack()
+{
+	cGraphics::world->blackLightmaps();
+}

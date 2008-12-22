@@ -81,7 +81,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 plugin_baseD.lib libcurl.lib sdl_mixer.lib ws2_32.lib bgd.lib sdl.lib sdlmain.lib zlib.lib opengl32.lib glaux.lib glu32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib SHLWAPI.LIB /nologo /subsystem:console /debug /machine:I386 /nodefaultlib:"MSVCRT" /nodefaultlib:"LIBCMT" /out:"..\roworldeditd.exe" /pdbtype:sept /libpath:"..\libs/lib"
+# ADD LINK32 plugin_baseD.lib libcurl.lib sdl_mixer.lib ws2_32.lib bgd.lib sdl.lib sdlmain.lib zlib.lib opengl32.lib glaux.lib glu32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib SHLWAPI.LIB /nologo /subsystem:console /pdb:"..\roworldeditd.pdb" /debug /machine:I386 /nodefaultlib:"MSVCRT" /nodefaultlib:"LIBCMT" /out:"..\roworldeditd.exe" /pdbtype:sept /libpath:"..\libs/lib"
 # SUBTRACT LINK32 /pdb:none
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
@@ -222,6 +222,10 @@ SOURCE=..\src\main.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\memorymanagement.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\menu.cpp
 # End Source File
 # Begin Source File
@@ -243,6 +247,10 @@ SOURCE=..\src\settings.cpp
 # Begin Source File
 
 SOURCE=..\src\sprite.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\StackWalker.cpp
 # End Source File
 # Begin Source File
 
@@ -331,6 +339,10 @@ SOURCE=..\src\settings.h
 # Begin Source File
 
 SOURCE=..\src\sprite.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\StackWalker.h
 # End Source File
 # Begin Source File
 

@@ -21,3 +21,11 @@ void cUndoStack::push(cUndoItem* u)
 		items.pop_front();
 	}
 }
+
+cUndoStack::~cUndoStack()
+{
+	std::list<cUndoItem*>::iterator i;
+	for(i = items.begin(); i != items.end(); i++)
+		delete *i;
+	items.clear();
+}
