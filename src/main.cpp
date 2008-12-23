@@ -8,7 +8,9 @@
 #include <math.h>
 #include <time.h>
 #include <tinyxml/tinyxml.h>
+#ifdef _MEMORYMAGAGEMENT
 #include "StackWalker.h"
+#endif
 
 #include "font.h"
 #include "filesystem.h"
@@ -31,7 +33,9 @@
 #include "clipboard.h"
 
 
+#ifdef _MEMORYMAGAGEMENT
 MyStackWalker* stackWalker = NULL;
+#endif
 
 #ifdef WIN32
 #include <winsock.h>
@@ -396,7 +400,9 @@ int main(int argc, char *argv[])
 	if(debugtest == (char*)0xcccccccc)
 		return 0;
 #endif 
+#ifdef _MEMORYMAGAGEMENT
 	stackWalker = new MyStackWalker();
+#endif
 	int i;
 	log_open("log_worldeditor.txt","worldedit",2);
 	cFile* pFile = cFileSystem::open("config.txt");
@@ -931,9 +937,10 @@ int main(int argc, char *argv[])
 
 //	cTextureLoaders loaders = GetTextureLoaders();
 //	loaders.unload();
+#ifdef _MEMORYMANAGEMENT
 	delete stackWalker;
-
 	DumpUnfreed();
+#endif
 	log_close();
 	return 0;							// Exit The Program
 }

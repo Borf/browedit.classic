@@ -61,9 +61,7 @@ inline void __cdecl operator delete(void *p)
 	RemoveTrack((DWORD)p);
 	free(p);
 };
-#endif
 
-#ifdef _DEBUG
 #define DEBUG_NEW new(__FILE__, __LINE__)
 #else
 #define DEBUG_NEW new

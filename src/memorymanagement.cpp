@@ -1,3 +1,4 @@
+#ifdef _MEMORYMAGAGEMENT
 #pragma warning( disable : 4786 )
 #include <windows.h>
 #include <map>
@@ -89,3 +90,5 @@ void DumpUnfreed()
 	if(allocMap->size() == 0)
 		OutputDebugString("Woot, no memory leaks!");
 }
+
+#endif
