@@ -32,7 +32,9 @@ cFont::cFont()
 cFont::~cFont()
 {
   glDeleteLists(list_base,256);                       // Delete All 256 Display Lists
-  cTextureCache::unload(texture);
+  texture->unLoad();
+  delete texture;
+  texture = NULL;
 }
 
 
@@ -217,7 +219,7 @@ int	cFont::textLen(std::string s)
 
 int cFont::load(std::string filename)
 {
-	texture = cTextureCache::load(filename,TEX_NOFREEDATA);
+	texture = cTextureLoaders::load(filename,TEX_NOFREEDATA);
 	Log(5,0,"Loading font %s", filename.c_str());
 	float cx, cy;
 	list_base=glGenLists(256);
@@ -257,7 +259,6 @@ int cFont::load(std::string filename)
 		glTranslated(width[loop1]+1,0,0);
 		glEndList();
 	}
-	delete[] texture->data;
 	Log(3,0,"Done loading font %s", filename.c_str());
 	return 1;
 }
