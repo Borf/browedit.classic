@@ -36,6 +36,7 @@ void cHotkeyWindow::cHotkeyButton::onRightClick()
 		}
 	}
 	delete[] image;
+	image = NULL;
 	userfunc(NULL);
 	loaded = true;
 	
@@ -76,8 +77,9 @@ cHotkeyWindow::cHotkeyButton::~cHotkeyButton()
 	{
 		glDeleteTextures(1, &tid);
 		loaded = false;
-		delete[] im;
 	}
+	if(im)
+		delete[] im;
 }
 
 void cHotkeyWindow::cHotkeyButton::draw( int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom )

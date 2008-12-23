@@ -65,9 +65,8 @@ public:
 	static cFile*					open(std::string);
 	static TiXmlDocument			getXml(std::string);
 	static bool						isFile(std::string);
-
-
 	static std::vector<cGRFFile*>	locations;
+	static void						unload();
 };
 
 #endif

@@ -29,7 +29,9 @@
 #include "settings.h"
 #include "texturecache.h"
 #include "clipboard.h"
-StackWalker sw;
+
+
+MyStackWalker* stackWalker = NULL;
 
 #ifdef WIN32
 #include <winsock.h>
@@ -75,7 +77,6 @@ int cursorsize = 1;
 cMenu* mode;
 cMenu* editdetail;
 cMenu* speed;
-cMenu* models;
 
 std::map<int, cMenu*, std::less<int> >	effects;
 cMenu* effectsmenu;
@@ -282,7 +283,7 @@ void mainloop()
 
 
 
-
+/*
 void additem(std::map<std::string, cMenu*, std::less<std::string> > &itemsm, std::map<cMenu*, int, std::less<cMenu*> > &levelm, std::string cat)
 {
 	cMenu* root = models;
@@ -299,7 +300,7 @@ void additem(std::map<std::string, cMenu*, std::less<std::string> > &itemsm, std
 	ADDMENU(submenu,		root, catname + "...",				450 + 100*(levelm[root]+1),100);
 	itemsm[cat] = submenu;
 	levelm[submenu] = levelm[root] + 1;
-}
+}*/
 
 
 
@@ -388,32 +389,14 @@ cWindow* XmlWindow(std::string s)
 }
 
 
-void Function2()
-{
-
-	sw.ShowCallstack();
-
-}
-
-void Function1()
-{
-	Function2();
-
-}
-
 int main(int argc, char *argv[])
 {
 #if 0
 	char* debugtest;
 	if(debugtest == (char*)0xcccccccc)
 		return 0;
-#endif
-	OutputDebugString("-----------------------------------------------------------------");
-	Function1();
-	OutputDebugString("-----------------------------------------------------------------");
-	Function1();
-
-
+#endif 
+	stackWalker = new MyStackWalker();
 	int i;
 	log_open("log_worldeditor.txt","worldedit",2);
 	cFile* pFile = cFileSystem::open("config.txt");
@@ -447,19 +430,19 @@ int main(int argc, char *argv[])
 	cMenu* mm;
 
 
-	models = new cMenu();
+//	models = new cMenu();
 //	models->parent = NULL;
 //	models->title = cSettings::msgTable[MENU_MODELS]; 
-	models->item = false; 
-	models->drawStyle = 1; 
-	models->y = 20; 
-	models->x = 0; 
-	models->w = 50; 
+//	models->item = false; 
+//	models->drawStyle = 1; 
+//	models->y = 20; 
+//	models->x = 0; 
+//	models->w = 50; 
 	
 
-	std::map<std::string, cMenu*, std::less<std::string> > itemsm;
+/*	std::map<std::string, cMenu*, std::less<std::string> > itemsm;
 	std::map<cMenu*, int, std::less<cMenu*> > levelm;
-	levelm[models] = 0;
+	levelm[models] = 0;*/
 	
 
 	TiXmlElement* el = cSettings::config.FirstChildElement("config")->FirstChildElement();
@@ -534,35 +517,6 @@ int main(int argc, char *argv[])
 				{
 					std::string value = model->FirstChild()->Value();
 					cSettings::objectFiles.push_back(value);
-					cFile* pFile2 = cFileSystem::open(value);
-					if (pFile2 != NULL)
-					{
-						Log(3,0,GetMsg("file/LOADING"), value.c_str()); // Loading file
-						while(!pFile2->eof())
-						{
-							std::string line = pFile2->readLine();
-							std::string pre = line.substr(0, line.find("|"));
-							std::string filename = line.substr(line.find("|")+1);
-
-							std::string cat = pre.substr(0, pre.rfind("/"));
-							std::string menuname = pre.substr(pre.rfind("/")+1);
-
-							if (cat != "" && itemsm.find(cat) == itemsm.end())
-							{
-								additem(itemsm, levelm, cat);
-							}
-							if(filename != "")
-							{
-								ADDMENUITEMDATA2(mm,itemsm[cat],menuname, &MenuCommand_model, filename, pre);
-							}
-							
-						}
-						Log(3,0,GetMsg("file/DONELOADING"), value.c_str()); // Done Loading file
-						pFile2->close();
-					}
-					else
-						Log(1,0,GetMsg("file/COULDNOTOPEN"), value.c_str()); // could not open %s
-
 					model = model->NextSiblingElement("model");
 				}
 			}
@@ -604,11 +558,7 @@ int main(int argc, char *argv[])
 	std::sort(translations.begin(), translations.end(), translationcomp);
 	pFile->close();
 
-
-	itemsm.clear();
-	levelm.clear();
-
-	models->sort();
+	//models->sort();
 	
 	favoritelights = cFileSystem::getXml("data/lights.txt");
 
@@ -973,6 +923,16 @@ int main(int argc, char *argv[])
 
 
 	cTextureCache::status();
+	cTextureCache::unloadall();
+	cFileSystem::unload();
+	delete cGraphics::menu;
+	if(cGraphics::popupMenu)
+		delete cGraphics::popupMenu;
+
+//	cTextureLoaders loaders = GetTextureLoaders();
+//	loaders.unload();
+	delete stackWalker;
+
 	DumpUnfreed();
 	log_close();
 	return 0;							// Exit The Program

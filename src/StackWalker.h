@@ -187,3 +187,38 @@ protected:
     RtlCaptureContext(&c); \
 } while(0);
 #endif
+
+#include <string>
+std::string inttostring(int);
+class MyStackWalker : public StackWalker
+{
+public:
+	std::string currentStack;
+	bool addstack;
+	int stacklevel;
+	
+	void OnCallstackEntry(CallstackEntryType eType, CallstackEntry &entry)
+	{
+		if(eType != firstEntry)
+		{
+			if(entry.lineNumber != 0 && addstack)
+			{
+				stacklevel++;
+				if(stacklevel != 1)
+					currentStack += std::string(entry.lineFileName) + ":"  + inttostring(entry.lineNumber) + " - " + entry.name +  "\n";
+			}
+			else
+				addstack = false;
+		}
+	}
+	
+	std::string getStack()
+	{
+		currentStack = "";
+		addstack = true;
+		stacklevel = 0;
+		ShowCallstack();
+		return currentStack;
+	}
+	
+};

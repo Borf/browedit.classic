@@ -34,6 +34,7 @@ void cTextureCache::unload(cTexture* tex)
 		textures[tex->getfilename()]->unLoad();
 		textures.erase(textures.find(tex->getfilename()));
 		used.erase(used.find(tex));
+		delete tex;
 	}
 	if (used[tex] < 0)
 	{
@@ -54,6 +55,16 @@ void cTextureCache::status()
 		}
 	}
 	if(count == 0)
-		Log(3,0,"No textures left");
+		Log(3,0,"TextureCache: No textures left (that's a good thing when you're closing down)");
 
+}
+
+void cTextureCache::unloadall()
+{
+	for(std::map<std::string, cTexture*, std::less<std::string> >::iterator i = textures.begin(); i != textures.end(); i++)
+	{
+		i->second->unLoad();
+	}
+	textures.clear();
+	used.clear();
 }

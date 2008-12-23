@@ -569,11 +569,15 @@ void cGraphics::closeAndCleanup()
 	cGraphicsBase::killGLWindow();
 	
 	cTextureCache::unload(splash);
+	cTextureCache::unload(gatBorder);
+
 	unsigned int i;
 	for(i = 0; i < gatTextures.size(); i++)
 		cTextureCache::unload(gatTextures[i]);
 	
-	cTextureCache::unload(gatBorder);
+	if(font)
+		delete font;
+	font = NULL;
 	
 	for(i = 0; i < waterCount; i++)
 	{
@@ -582,6 +586,7 @@ void cGraphics::closeAndCleanup()
 			cTextureCache::unload(waterTextures[i][ii]);
 		}
 	}
+	cWM::unLoad();
 }
 
 

@@ -23,6 +23,7 @@
  *  2005-08-05   v5    - Removed most Lint (http://www.gimpel.com/) errors... thanks to Okko Willeboordse!
  *
  **********************************************************************/
+#include <common.h>
 #include <windows.h>
 #include <fstream>
 #include <direct.h>
@@ -1014,7 +1015,7 @@ BOOL StackWalker::ShowCallstack(HANDLE hThread, const CONTEXT *context, PReadPro
     csEntry.lineNumber = 0;
     csEntry.loadedImageName[0] = 0;
     csEntry.moduleName[0] = 0;
-    if (s.AddrPC.Offset == s.AddrReturn.Offset)
+    if (s.AddrPC.Offset == s.AddrReturn.Offset && frameNum > 20)
     {
       this->OnDbgHelpErr("StackWalk64-Endless-Callstack!", 0, s.AddrPC.Offset);
       break;
@@ -1047,7 +1048,7 @@ BOOL StackWalker::ShowCallstack(HANDLE hThread, const CONTEXT *context, PReadPro
         }
         else
         {
-          this->OnDbgHelpErr("SymGetLineFromAddr64", GetLastError(), s.AddrPC.Offset);
+//          this->OnDbgHelpErr("SymGetLineFromAddr64", GetLastError(), s.AddrPC.Offset);
         }
       } // yes, we have SymGetLineFromAddr64()
 

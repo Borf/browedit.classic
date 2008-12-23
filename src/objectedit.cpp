@@ -15,7 +15,6 @@ MENUCOMMAND(model);
 extern bool	doneAction;
 extern cMenu* snaptofloor;
 extern cMenu* currentobject;
-extern cMenu* models;
 
 int cProcessManagement::objectedit_process_events(SDL_Event &event)
 {
@@ -291,7 +290,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 					clipboard->clipboardY = cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->pos.y;
 					clipboard->clipboardName = cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->name;
 					clipboard->clipboardFloat = cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->lightopacity;
-					currentobject = models->findData("data\\model\\" + cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->rofilename);
+//TODO					currentobject = models->findData("data\\model\\" + cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->rofilename);
 					if(currentobject != NULL)
 						MenuCommand_model((cMenuItem*)currentobject);
 					cClipBoard::setClipBoard(clipboard);
@@ -329,7 +328,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 				if (cGraphics::worldContainer->settings.selectedObject != -1)
 				{
 					cRSMModel* o = cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject];
-					cMenuItem* menuitem = (cMenuItem*)models->findData("data\\model\\" + o->rofilename);
+					cMenuItem* menuitem = NULL; //TODO (cMenuItem*)models->findData("data\\model\\" + o->rofilename);
 
 					cWindow* w = new cObjectWindow();
 					if (menuitem != NULL)

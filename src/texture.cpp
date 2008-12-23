@@ -61,8 +61,8 @@ void cTexture::unLoad()
 
 cTextureLoaders& GetTextureLoaders()
 {
-	static cTextureLoaders* l = new cTextureLoaders();
-	return *l;
+	static cTextureLoaders l = cTextureLoaders();
+	return l;
 }
 
 //vector<cTextureLoader*> cTextureLoaders::loaders;
@@ -173,6 +173,14 @@ void cTextureLoaders::loadfrommem(std::string ext, char* data, int length, cText
 	}
 }
 
+void cTextureLoaders::unload()
+{
+	/*for(unsigned int i = 0; i < loaders.size(); i++)
+		delete loaders[i];
+	loaders.clear();*/
+//	cTextureLoaders loaders = GetTextureLoaders();
+//	delete &loaders;
+}
 
 void cTexture::resizeToLog()
 {

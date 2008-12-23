@@ -5,7 +5,7 @@
 
 #include "texture.h"
 #include <vector>
-
+#include <texturecache.h>
 
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
@@ -32,6 +32,7 @@ cFont::cFont()
 cFont::~cFont()
 {
   glDeleteLists(list_base,256);                       // Delete All 256 Display Lists
+  cTextureCache::unload(texture);
 }
 
 
@@ -216,7 +217,7 @@ int	cFont::textLen(std::string s)
 
 int cFont::load(std::string filename)
 {
-	texture = cTextureLoaders::load(filename,TEX_NOFREEDATA);
+	texture = cTextureCache::load(filename,TEX_NOFREEDATA);
 	Log(5,0,"Loading font %s", filename.c_str());
 	float cx, cy;
 	list_base=glGenLists(256);

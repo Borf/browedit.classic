@@ -160,7 +160,15 @@ void cWM::unLoad()
 	}
 	windows.clear();
 	if(texture)	
-		texture->unLoad();
+	{
+		cTextureCache::unload(texture);
+		texture = NULL;
+	}
+	if(font)
+	{
+		delete font;
+		font = NULL;
+	}
 }
 
 cWM::~cWM()

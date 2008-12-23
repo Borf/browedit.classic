@@ -57,5 +57,9 @@
             <x>520</x>
             <y>0</y>
         </hotbar>
+        <sprite>
+            <x>125</x>
+            <y>100</y>
+        </sprite>
     </wm>
 </config>

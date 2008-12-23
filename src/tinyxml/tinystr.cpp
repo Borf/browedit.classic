@@ -28,7 +28,7 @@ distribution.
 
 
 #ifndef TIXML_USE_STL
-
+#include <common.h>
 #include "tinystr.h"
 
 // Error value for find primitive

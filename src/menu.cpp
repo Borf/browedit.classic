@@ -468,6 +468,12 @@ void cMenu::update()
 	for(unsigned int i = 0; i < items.size(); i++)
 		items[i]->update();
 }
+
+cMenu::~cMenu()
+{
+	for(unsigned int i = 0; i < items.size(); i++)
+		delete items[i];
+}
 void cMenuItemLinked::update()
 {
 	if(title == "Grid")

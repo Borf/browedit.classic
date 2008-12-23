@@ -3026,7 +3026,10 @@ void cWorld::unload()
 
 	unsigned int x,y,i;
 	for(i = 0; i < textures.size(); i++)
+	{
 		cTextureCache::unload(textures[i]->texture);
+		delete textures[i];
+	}
 	textures.clear();
 
 	for(y = 0; y < realLightmaps.size(); y+=21)

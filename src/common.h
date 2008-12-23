@@ -42,7 +42,7 @@
 #endif
 
 
-#ifdef _DEBUG
+#ifdef _MEMORYMANAGEMENT
 
 
 void AddTrack(DWORD addr,  DWORD asize,  const char *fname, DWORD lnum);

@@ -23,6 +23,7 @@ distribution.
 */
 
 #include <ctype.h>
+#include <common.h>
 
 #ifdef TIXML_USE_STL
 #include <sstream>

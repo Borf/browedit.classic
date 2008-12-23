@@ -75,6 +75,7 @@ public:
 	static cTexture*				load(std::string, eTextureOptions);
 	static void						load(std::string, cTexture*, eTextureOptions);
 	static void						loadfrommem(std::string, char*, int, cTexture*, eTextureOptions);
+	void							unload();
 };
 
 cTextureLoaders& GetTextureLoaders();

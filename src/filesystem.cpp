@@ -314,3 +314,12 @@ cGRFFile::~cGRFFile()
 	grf = NULL;
 }
 
+
+
+void cFileSystem::unload()
+{
+	for(unsigned int i = 0; i < locations.size(); i++)
+		delete locations[i];
+	locations.clear();
+
+}

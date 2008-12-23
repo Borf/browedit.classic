@@ -16,6 +16,7 @@ public:
 	static void status();
 	static cTexture*													load(std::string, eTextureOptions = TEX_NORMAL);
 	static void															unload(cTexture*);
+	static void															unloadall();
 private:
 	static std::map<std::string, cTexture*, std::less<std::string> >	textures;
 	static std::map<cTexture*, int, std::less<cTexture*> >				used;
