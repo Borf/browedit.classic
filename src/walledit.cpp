@@ -691,7 +691,7 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 					int y = (int)cGraphics::cMouse::z3d / 10;
 					if (y < 0 || y > (int)cGraphics::world->cubes.size()-1)
 						break;
-					if (x <= 0 || x > (int)cGraphics::world->cubes[y].size()-2)
+					if (x < 0 || x > (int)cGraphics::world->cubes[y].size()-1)
 						break;
 
 					cGraphics::worldContainer->undoStack->push(new cUndoWallChange(1,x,y, cGraphics::world->cubes[y][x].tileOtherSide));

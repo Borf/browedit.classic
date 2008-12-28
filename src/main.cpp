@@ -875,7 +875,7 @@ int main(int argc, char *argv[])
 	if(cSettings::config.FirstChildElement("config")->FirstChildElement("firstmap"))
 		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\" + cSettings::config.FirstChildElement("config")->FirstChildElement("firstmap")->FirstChild()->Value()).c_str());
 	else
-		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\comodo").c_str());
+		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\lighttest").c_str());
 
 	if(argc > 1)
 	{

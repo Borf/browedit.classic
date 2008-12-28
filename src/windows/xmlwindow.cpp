@@ -87,6 +87,7 @@ cXmlWindow::cXmlCheckBox::cXmlCheckBox( cWindow* p, TiXmlDocument* skin) : cWind
 
 void cXmlWindow::cXmlCheckBox::onClick()
 {
+	cWindowCheckBox::onClick();
 	((cXmlWindow*)parent)->event(this, "click");		
 }
 
