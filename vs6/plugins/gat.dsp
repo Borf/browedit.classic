@@ -38,8 +38,8 @@ RSC=rc.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "../../obj/vs6/Release/plugins/"
-# PROP Intermediate_Dir "../../obj/vs6/Release/plugins/"
+# PROP Output_Dir "../../obj/vs6/Release/plugins/gat"
+# PROP Intermediate_Dir "../../obj/vs6/Release/plugins/gat"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "PLUGIN_EXPORTS" /Yu"stdafx.h" /FD /c

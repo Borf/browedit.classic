@@ -61,5 +61,11 @@
             <x>125</x>
             <y>100</y>
         </sprite>
+        <modelswindow>
+            <x>25</x>
+            <y>25</y>
+            <w>750</w>
+            <h>550</h>
+        </modelswindow>
     </wm>
 </config>

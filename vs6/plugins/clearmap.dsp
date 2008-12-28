@@ -38,12 +38,12 @@ RSC=rc.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "../../obj/vs6/Release/plugins/"
-# PROP Intermediate_Dir "../../obj/vs6/Release/plugins/"
+# PROP Output_Dir "../../obj/vs6/Release/plugins/clearmap"
+# PROP Intermediate_Dir "../../obj/vs6/Release/plugins/clearmap"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "PLUGIN_CLEARMAP_EXPORTS" /Yu"stdafx.h" /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /I "..\..\libs\include\stlport" /I "..\..\src" /I "..\..\libs\include" /D "WIN32_LEAN_AND_MEAN" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "PLUGIN_CLEARMAP_EXPORTS" /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /I "..\..\libs\include\stlport" /I "..\..\src" /I "..\..\libs\include" /D "WIN32_LEAN_AND_MEAN" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "PLUGIN_EXPORTS" /FD /c
 # SUBTRACT CPP /YX /Yc /Yu
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32

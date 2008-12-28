@@ -142,11 +142,15 @@ MENUCOMMAND(opengrf)
 	cWM::addWindow(new cFileWindow(openfunc));
 	return true;
 }
-
 MENUCOMMAND(close)
 {
 	if(!cGraphics::world)
 		return false;
+	if(src)
+	{
+		if(!cWM::confirmWindow("Are you sure you want to close the current map"))
+			return false;
+	}
 	cGraphics::world->unload();
 	delete cGraphics::worldContainer;
 	cGraphics::worlds.erase(cGraphics::worlds.begin());
