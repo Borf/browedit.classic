@@ -618,8 +618,6 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,file,GetMsg("menu/file/SAVEONLINE"),						&MenuCommand_saveOnline);
 	ADDMENUITEM(mm,file,"Make Minimaps",									&MenuCommand_makeMinimaps);
 #endif
-	ADDMENUITEM(mm,file,GetMsg("menu/file/EXPORTLIGHTMAPS"),				&MenuCommand_savelightmaps); // export lightmaps
-	ADDMENUITEM(mm,file,GetMsg("menu/file/IMPORTLIGHTMAPS"),				&MenuCommand_loadlightmaps); // import lightmaps
 	ADDMENUITEM(mm,file,GetMsg("menu/file/EXPORTMAPFILES"),					&MenuCommand_exportmapfiles);
 	ADDMENUITEM(mm,file,GetMsg("menu/file/REBUILDTEXTUREFILE"),				&MenuCommand_rebuildtexturefile);
 	ADDMENUITEM(mm,file,GetMsg("menu/file/REBUILDMODELFILE"),				&MenuCommand_rebuildmodelfile);

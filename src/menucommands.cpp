@@ -1773,28 +1773,6 @@ MENUCOMMAND(fixcolors)
 }
 
 
-MENUCOMMAND(savelightmaps)
-{
-	if(!cGraphics::world)
-		return false;
-	cGraphics::world->saveLightmap();
-	return true;
-}
-
-MENUCOMMAND(loadlightmaps)
-{
-
-	if(!cGraphics::world)
-		return false;
-	if(!cGraphics::world->makeLightmapsUnique())
-		return false;
-	cGraphics::world->loadLightmap();
-	cGraphics::world->fixGridding();
-
-	return true;
-}
-
-
 MENUCOMMAND(addwalls)
 {
 	if(!cGraphics::world)

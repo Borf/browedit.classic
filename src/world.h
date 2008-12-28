@@ -227,13 +227,10 @@ public:
 	void								draw();
 	void								load();
 	void								save();
-	void								exportheight();
 	void								unload();
 	void								newWorld();
 	void								clean();
 
-	void								saveLightmap();
-	void								loadLightmap();
 	bool								checkSanity();
 
 	void								fixGridding();

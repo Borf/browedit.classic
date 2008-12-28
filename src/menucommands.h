@@ -44,8 +44,6 @@ MENUCOMMAND(dolightmapsnoshadow);
 MENUCOMMAND(dolightmaps2);
 MENUCOMMAND(smoothlightmaps);
 MENUCOMMAND(fixcolors);
-MENUCOMMAND(savelightmaps);
-MENUCOMMAND(loadlightmaps);
 MENUCOMMAND(addwalls);
 MENUCOMMAND(gatcollision);
 MENUCOMMAND(cleanuplightmaps);
