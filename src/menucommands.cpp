@@ -2944,7 +2944,7 @@ MENUCOMMAND(addfavorite)
 	l.todo2 = atoi(n->FirstChildElement("brightness")->FirstChild()->Value());
 	l.maxLightIncrement = atoi(n->FirstChildElement("maxlight")->FirstChild()->Value());
 	l.range = atoi(n->FirstChildElement("range")->FirstChild()->Value());
-	l.lightFalloff = atof(n->FirstChildElement("lightFalloff")->FirstChild()->Value());
+	l.lightFalloff = atof(n->FirstChildElement("lightfalloff")->FirstChild()->Value());
 
 	cGraphics::worldContainer->settings.selectedObject = cGraphics::world->lights.size();
 	cGraphics::world->lights.push_back(l);
@@ -3142,8 +3142,8 @@ MENUCOMMAND(addfavlight)
 		light.InsertEndChild(TiXmlElement("range"))->InsertEndChild(TiXmlText("100"));
 		light.InsertEndChild(TiXmlElement("brightness"))->InsertEndChild(TiXmlText("127"));
 		light.InsertEndChild(TiXmlElement("maxlight"))->InsertEndChild(TiXmlText("256"));
-		light.InsertEndChild(TiXmlElement("givesShadow"))->InsertEndChild(TiXmlText("1"));
-		light.InsertEndChild(TiXmlElement("lightFalloff"))->InsertEndChild(TiXmlText("1"));
+		light.InsertEndChild(TiXmlElement("givesshadow"))->InsertEndChild(TiXmlText("1"));
+		light.InsertEndChild(TiXmlElement("lightfalloff"))->InsertEndChild(TiXmlText("1"));
 		light.InsertEndChild(TiXmlElement("height"))->InsertEndChild(TiXmlText("10"));
 
 		n->InsertEndChild(light);

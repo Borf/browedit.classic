@@ -219,7 +219,7 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 					ADDMENUITEM(mm,cGraphics::popupMenu,"Disable Shadows",		&MenuCommand_light_disableshadow);
 					ADDMENUITEM(mm,cGraphics::popupMenu,"Snap to floor",		&MenuCommand_light_snaptofloor);
 					ADDMENUITEM(mm,cGraphics::popupMenu,"Set height",			&MenuCommand_light_setheight);
-					ADDMENUITEM(mm,cGraphics::popupMenu,"Set as sunlight",		&MenuCommand_new);
+					//ADDMENUITEM(mm,cGraphics::popupMenu,"Set as sunlight",		&MenuCommand_new);
 
 
 					addmenustuff(favs, favoritelights.FirstChildElement("lights")->FirstChildElement());

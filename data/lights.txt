@@ -16,7 +16,7 @@
         <range>200000</range>
         <brightness>127</brightness>
         <maxlight>127</maxlight>
-        <givesshadow>0</givesshadow>
+        <givesshadow>1</givesshadow>
         <lightfalloff>0.00001</lightfalloff>
         <height>50</height>
     </light>

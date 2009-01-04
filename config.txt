@@ -1,1 +1,1 @@
-data/configs/rocheaptop.xml
+data/configs/rodesktop.xml
