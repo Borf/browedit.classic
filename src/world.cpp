@@ -1523,9 +1523,6 @@ void cWorld::draw()
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, cGraphics::worldContainer->settings.lightDiffuse);				// Setup The Diffuse Light
 	glLightfv(GL_LIGHT1, GL_SPECULAR, tmp);				// Setup The Diffuse Light
 
-	//glLightfv(GL_LIGHT1, GL_POSITION,worldContainer->settings.lightPosition);			// Position The Light
-
-
 	bool inverseSelection = false;
 	if(cSettings::editMode == MODE_TEXTUREPAINT || cSettings::editMode == MODE_HEIGHTGLOBAL)
 	{

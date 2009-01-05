@@ -44,9 +44,9 @@ int cGraphics::draw(bool drawwm)
 		}
 		else
 		{
-			worldContainer->settings.lightPosition[0] = -worldContainer->camera.pointer.x + worldContainer->camera.height*sin(worldContainer->camera.rot);
-			worldContainer->settings.lightPosition[1] = 10+worldContainer->camera.height+worldContainer->camera.angle;
-			worldContainer->settings.lightPosition[2] = -worldContainer->camera.pointer.y + worldContainer->camera.height*cos(worldContainer->camera.rot);
+			worldContainer->settings.lightPosition[0] = -worldContainer->camera.pointer.x;
+			worldContainer->settings.lightPosition[1] = 100000;
+			worldContainer->settings.lightPosition[2] = -worldContainer->camera.pointer.y;
 			worldContainer->settings.lightPosition[3] = 1.0f;
 		}
 		glLightfv(GL_LIGHT1, GL_POSITION, worldContainer->settings.lightPosition);			// Position The Light
