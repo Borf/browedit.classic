@@ -85,6 +85,8 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 								{
 									if(cGraphics::world->cubes[y][x].tileUp != -1)
 										t.lightmap = cGraphics::world->tiles[cGraphics::world->cubes[y][x].tileUp].lightmap;
+									else
+										t.lightmap = 0;
 								}
 								if (cGraphics::worldContainer->settings.textureRot == 0)
 								{

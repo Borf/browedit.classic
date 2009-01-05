@@ -34,11 +34,6 @@ void cClearMapPlugin::clickOk(cWindow* w)
 			map->buf[i] = i < 64 ? 255 : 0;
 		browInterface->addLightmap(map);
 
-		map = browInterface->newLightmap();
-		for(i = 0; i < 256; i++)
-			map->buf[i] = i < 64 ? 255 : 0;
-		browInterface->addLightmap(map);
-
 		for(y = 0; y < browInterface->getWorldHeight(); y++)
 		{
 			for(x = 0; x < browInterface->getWorldWidth(); x++)

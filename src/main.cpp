@@ -1484,6 +1484,16 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 			switch (event.key.keysym.sym)
 			{
 			case SDLK_r:
+				{
+					for(int y = 0; y < cGraphics::world->height; y++)
+					{
+						for(int x = 0; x < cGraphics::world->width; x++)
+						{
+							cGraphics::world->cubes[y][x].calcNormal();
+						}
+					}
+
+				}
 				cGraphics::world->calcVertexNormals();
 				break;
 			case SDLK_SPACE:

@@ -1429,7 +1429,7 @@ void cWorld::draw()
 	if (cGraphics::worldContainer->view.topCamera)
 		glOrtho(0,cGraphics::worldContainer->camera.height,0,cGraphics::worldContainer->camera.height * (hh/(float)ww),-10000,10000);
 	else
-		gluPerspective(45.0f,(GLfloat)(ww)/(GLfloat)hh,10.0f,5000.0f);
+		gluPerspective(45.0f,(GLfloat)(ww)/(GLfloat)hh,1.0f,5000.0f);
 	float camrad = 10;
 
 
@@ -1445,6 +1445,37 @@ void cWorld::draw()
 
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
 	glLoadIdentity();									// Reset The Modelview Matrix
+
+	
+	if(cGraphics::worldContainer)
+	{
+		if(cGraphics::worldContainer->view.topCamera)
+		{
+			cGraphics::worldContainer->settings.lightPosition[0] = cGraphics::cMouse::x3d;
+			cGraphics::worldContainer->settings.lightPosition[1] = -cGraphics::cMouse::z3d;
+			cGraphics::worldContainer->settings.lightPosition[2] = 1000;
+			cGraphics::worldContainer->settings.lightPosition[3] = 1.0f;
+		}
+		else
+		{
+/*			worldContainer->settings.lightPosition[0] = -worldContainer->camera.pointer.x;
+			worldContainer->settings.lightPosition[1] = -100;
+			worldContainer->settings.lightPosition[2] = -worldContainer->camera.pointer.y;
+			worldContainer->settings.lightPosition[3] = 0.0f;*/
+			cGraphics::worldContainer->settings.lightPosition[0] = 0;
+			cGraphics::worldContainer->settings.lightPosition[1] = 0;
+			cGraphics::worldContainer->settings.lightPosition[2] = 0;
+			cGraphics::worldContainer->settings.lightPosition[3] = 1;
+
+		}
+		glEnable(GL_LIGHTING);
+		glLightfv(GL_LIGHT1, GL_POSITION, cGraphics::worldContainer->settings.lightPosition);			// Position The Light
+	}
+	else
+		glDisable(GL_LIGHTING);
+	
+	
+	
 	if (cGraphics::worldContainer->view.topCamera)
 		gluLookAt(  -cGraphics::worldContainer->camera.pointer.y,
 					100,
@@ -1512,16 +1543,21 @@ void cWorld::draw()
 		cGraphics::worldContainer->settings.lightAmbient[2] = 0.7f;
 		cGraphics::worldContainer->settings.lightAmbient[3] = 1.0f;
 		
-		cGraphics::worldContainer->settings.lightDiffuse[0] = 1.0f;
-		cGraphics::worldContainer->settings.lightDiffuse[1] = 1.0f;
-		cGraphics::worldContainer->settings.lightDiffuse[2] = 1.0f;
+		cGraphics::worldContainer->settings.lightDiffuse[0] = 0.3f;
+		cGraphics::worldContainer->settings.lightDiffuse[1] = 0.3f;
+		cGraphics::worldContainer->settings.lightDiffuse[2] = 0.3f;
 		cGraphics::worldContainer->settings.lightDiffuse[3] = 1.0f;
 	}
-	float tmp[4] = { 0,0,0,0 };
+	float tmp[4] = { 0,0,0,1 };
 	
-	glLightfv(GL_LIGHT1, GL_AMBIENT, cGraphics::worldContainer->settings.lightAmbient);				// Setup The Ambient Light
+	glLightfv(GL_LIGHT1, GL_AMBIENT, tmp);				// Setup The Ambient Light
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, cGraphics::worldContainer->settings.lightDiffuse);				// Setup The Diffuse Light
 	glLightfv(GL_LIGHT1, GL_SPECULAR, tmp);				// Setup The Diffuse Light
+	glMaterialfv ( GL_FRONT_AND_BACK, GL_EMISSION, tmp) ;
+
+	glDisable(GL_LIGHT1);
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, cGraphics::worldContainer->settings.lightAmbient);
+	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
 
 	bool inverseSelection = false;
 	if(cSettings::editMode == MODE_TEXTUREPAINT || cSettings::editMode == MODE_HEIGHTGLOBAL)
@@ -1623,14 +1659,20 @@ void cWorld::draw()
 			else if (cGraphics::view.showNoTiles)
 			{
 				glDisable(GL_BLEND);
+				glColor3f(cGraphics::noTileColor.x, cGraphics::noTileColor.y, cGraphics::noTileColor.z);
 				glEnable(GL_COLOR_MATERIAL);
 				glDisable(GL_TEXTURE_2D);
 				glColor3f(cGraphics::noTileColor.x, cGraphics::noTileColor.y, cGraphics::noTileColor.z);
+				glEnable(GL_COLOR_MATERIAL);
 				glNormal3f(c->normal.x, c->normal.y, c->normal.z);
 				glBegin(GL_TRIANGLE_STRIP);
+					glNormal3f(c->vNormal1.x, c->vNormal1.y, c->vNormal1.z);
 					glVertex3f(x*10,-c->cell1+0.01f,(height-y)*10);
+					glNormal3f(c->vNormal2.x, c->vNormal2.y, c->vNormal2.z);
 					glVertex3f(x*10,-c->cell3+0.01f,(height-y)*10-10);
+					glNormal3f(c->vNormal3.x, c->vNormal3.y, c->vNormal3.z);
 					glVertex3f(x*10+10,-c->cell2+0.01f,(height-y)*10);
+					glNormal3f(c->vNormal4.x, c->vNormal4.y, c->vNormal4.z);
 					glVertex3f(x*10+10,-c->cell4+0.01f,(height-y)*10-10);
 				glEnd();
 				glDisable(GL_COLOR_MATERIAL);
@@ -1691,7 +1733,7 @@ void cWorld::draw()
 	glColor4f(1,1,1,1);
 	glDisable(GL_COLOR_MATERIAL);
 	glColor4f(1,1,1,1);
-	if(cGraphics::view.showLightmaps)
+	if(cGraphics::view.showLightmaps && 0)
 	{
 		for(x = 0; (int)x < width; x++)
 		{

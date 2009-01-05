@@ -33,27 +33,6 @@ int cGraphics::draw(bool drawwm)
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set the correct blending mode
 
-	if(worldContainer)
-	{
-		if(worldContainer->view.topCamera)
-		{
-			worldContainer->settings.lightPosition[0] = cMouse::x3d;
-			worldContainer->settings.lightPosition[1] = -cMouse::z3d;
-			worldContainer->settings.lightPosition[2] = 1000;
-			worldContainer->settings.lightPosition[3] = 1.0f;
-		}
-		else
-		{
-			worldContainer->settings.lightPosition[0] = -worldContainer->camera.pointer.x;
-			worldContainer->settings.lightPosition[1] = 100000;
-			worldContainer->settings.lightPosition[2] = -worldContainer->camera.pointer.y;
-			worldContainer->settings.lightPosition[3] = 1.0f;
-		}
-		glLightfv(GL_LIGHT1, GL_POSITION, worldContainer->settings.lightPosition);			// Position The Light
-		glEnable(GL_LIGHTING);
-	}
-	else
-		glDisable(GL_LIGHTING);
 
 
 	if(world)
@@ -484,6 +463,7 @@ int cGraphics::init(int pWidth, int pHeight, int pBpp, bool pFullscreen)
 	previewModel = NULL;
 
 	glDisable(GL_LIGHT0);
+ 	glColorMaterial ( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE ) ;
 	glEnable(GL_LIGHT1);										// Enable Light One
 	glEnable(GL_LIGHTING);
 	//glEnable(GL_COLOR_MATERIAL);
