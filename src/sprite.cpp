@@ -109,7 +109,7 @@ void cSprite::cActSpr::load(std::string fname)
 	cFile* pFile = cFileSystem::open(fileName + ".spr");
 	if(pFile == NULL)
 	{
-		Log(1,0,"Error opening %s.spr", fileName.c_str());
+		Log(2,0,"Error opening %s.spr", fileName.c_str());
 		return;
 	}
 	pFile->get(); pFile->get();

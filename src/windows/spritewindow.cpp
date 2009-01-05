@@ -87,6 +87,7 @@ void cSpriteWindow::cTabPanel::tabchange( int oldtab )
 {
 	cWindowTree* tree = (cWindowTree*)parent->objects["tree"];
 	tree->nodes.clear();
+	tree->liststart = 0;
 	
 	TiXmlNode* n = sprites.FirstChildElement("sprites");
 	if(selectedtab == 0)
@@ -196,6 +197,8 @@ void cSpriteWindow::cTabPanel::tabchange( int oldtab )
 		
 		if(tree->liststart >= (int)values.size() - (tree->getHeight()/12))
 			tree->liststart = values.size() - (tree->getHeight()/12);
+		if(tree->liststart < 0)
+			tree->liststart = 0;
 		
 		
 		

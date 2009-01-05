@@ -2923,32 +2923,35 @@ void cWorld::clean()
 
 	Log(3,0,GetMsg("world/TILESUSED"), tilesused.size());
 
-	for(i = tiles.size()-1; i > 0; i--)
+	if(tiles.size() > 0)
 	{
-		if(tilesused.find(i) == tilesused.end())
+		for(i = tiles.size()-1; i > 0; i--)
 		{
-			tiles[i].used = false;
-			for(int yy = 0; yy < height; yy++)
+			if(tilesused.find(i) == tilesused.end())
 			{
-				for(int xx = 0; xx < width; xx++)
+				tiles[i].used = false;
+				for(int yy = 0; yy < height; yy++)
 				{
-					c = &cubes[yy][xx];
-					if (c->tileUp > (int)i)
-						c->tileUp--;
-					if (c->tileSide > (int)i)
-						c->tileSide--;
-					if (c->tileOtherSide > (int)i)
-						c->tileOtherSide--;
+					for(int xx = 0; xx < width; xx++)
+					{
+						c = &cubes[yy][xx];
+						if (c->tileUp > (int)i)
+							c->tileUp--;
+						if (c->tileSide > (int)i)
+							c->tileSide--;
+						if (c->tileOtherSide > (int)i)
+							c->tileOtherSide--;
 
+					}
 				}
-			}
 
-			count++;
-			if(count % 100 == 0)
-				Log(3,0,GetMsg("world/TILESLEFT"), tiles.size() - count);
+				count++;
+				if(count % 100 == 0)
+					Log(3,0,GetMsg("world/TILESLEFT"), tiles.size() - count);
+			}
+			else
+				tiles[i].used = true;
 		}
-		else
-			tiles[i].used = true;
 	}
 
 	for(i = 1; i < tiles.size(); i++)
@@ -2982,33 +2985,35 @@ void cWorld::clean()
 
 	int si;
 	count = 0;
-	for(si = lightmaps.size()-1; si >= 0; si--)
+	if(lightmaps.size() > 0)
 	{
-		if (lightmapsused.find(si) == lightmapsused.end())
+		for(si = lightmaps.size()-1; si >= 0; si--)
 		{
-			lightmaps[si]->del();
-			lightmaps[si]->del2();
-			delete lightmaps[si];
-			for(ii = si; ii < lightmaps.size()-1; ii++)
+			if (lightmapsused.find(si) == lightmapsused.end())
 			{
-				lightmaps[ii] = lightmaps[ii+1];
-			}
-			for(ii = 0; ii < tiles.size(); ii++)
-			{
-				if(tiles[ii].lightmap > (int)si)
-					tiles[ii].lightmap--;
-			}
+				lightmaps[si]->del();
+				lightmaps[si]->del2();
+				delete lightmaps[si];
+				for(ii = si; ii < lightmaps.size()-1; ii++)
+				{
+					lightmaps[ii] = lightmaps[ii+1];
+				}
+				for(ii = 0; ii < tiles.size(); ii++)
+				{
+					if(tiles[ii].lightmap > (int)si)
+						tiles[ii].lightmap--;
+				}
 
 
-			lightmaps.resize(lightmaps.size()-1);
-			count++;
-			if(count % 50 == 0)
-				printf(".");
-			if(count % 500 == 0)
-				printf("%i ", si);
+				lightmaps.resize(lightmaps.size()-1);
+				count++;
+				if(count % 50 == 0)
+					printf(".");
+				if(count % 500 == 0)
+					printf("%i ", si);
+			}
 		}
 	}
-
 
 }
 

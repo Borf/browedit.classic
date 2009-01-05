@@ -67,5 +67,11 @@
             <w>750</w>
             <h>550</h>
         </modelswindow>
+        <textures>
+            <x>25</x>
+            <y>25</y>
+            <w>750</w>
+            <h>550</h>
+        </textures>
     </wm>
 </config>
