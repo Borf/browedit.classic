@@ -3847,16 +3847,15 @@ MENUCOMMAND(selectAll)
 }
 
 
-
-
-
-
-
-
-
-
-
-
+MENUCOMMAND(mapinfo)
+{
+	if(!cGraphics::world)
+		return false;
+	char buf[1024];
+	sprintf(buf, "Map size: %i, %i\nObjects: %i\nLights: %i\nTiles: %i\nLightmaps: %i", cGraphics::world->width, cGraphics::world->height, cGraphics::world->models.size(), cGraphics::world->lights.size(), cGraphics::world->tiles.size(), cGraphics::world->lightmaps.size());
+	cWM::showMessage(buf);
+	return true;
+}
 
 
 

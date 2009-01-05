@@ -113,6 +113,7 @@
 			<RSMEDITOR>RSM Editor</RSMEDITOR>
 			<FAVLIGHTS>Favorite lights</FAVLIGHTS>
 			<OVERVIEW>Map Overview</OVERVIEW>
+			<MAPINFO>Map Info</MAPINFO>
 		</windows>
 		<tools>
 			<TITLE>Tools</TITLE>

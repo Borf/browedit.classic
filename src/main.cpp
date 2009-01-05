@@ -714,6 +714,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEM(mm,windows,GetMsg("menu/windows/PREFERENCES"),				&MenuCommand_preferences);
 	ADDMENUITEM(mm,windows,GetMsg("menu/windows/RSMEDITOR"),				&MenuCommand_rsmedit);
 	ADDMENUITEM(mm,windows,GetMsg("menu/windows/FAVLIGHTS"),				&MenuCommand_favlights);
+	ADDMENUITEM(mm,windows,GetMsg("menu/windows/MAPINFO"),					&MenuCommand_mapinfo);
 
 
 //	WIN32_FIND_DATA FileData;													// thingy for searching through a directory
@@ -894,7 +895,7 @@ int main(int argc, char *argv[])
 	{
 		MenuCommand_close(NULL);
 	}
-
+	
 	cGraphics::updateMenu();
 
 	for(i = 0; i < SDLK_LAST-SDLK_FIRST; i++)

@@ -73,7 +73,7 @@ MENUCOMMAND(selectAll);
 MENUCOMMAND(rebuildtexturefile);
 MENUCOMMAND(rebuildmodelfile);
 MENUCOMMAND(rebuildsoundsfile);
-
+MENUCOMMAND(mapinfo);
 
 
 // popup menu
