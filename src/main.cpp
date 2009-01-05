@@ -731,14 +731,14 @@ int main(int argc, char *argv[])
 			std::string filename = fileData.cFileName;
 			if(filename != "." && filename != "..")
 			{
-				Log(3,0,"Loading plugin '%s'", fileData.cFileName);
+				Log(3,0,GetMsg("PLUGIN/LOAD"), fileData.cFileName);
 				HMODULE hlib;
 				hlib = LoadLibraryEx(("plugins/" + filename).c_str(), NULL,0);
 				cPluginBase** (__cdecl* getInstances)(void);
 				getInstances = (cPluginBase**(__cdecl*)(void))GetProcAddress(hlib, "getInstances");
 				if(!getInstances)
 				{
-					Log(2,0,"%s is not a valid plugin", fileData.cFileName);
+					Log(2,0,GetMsg("PLUGIN/INVALID"), fileData.cFileName);
 					if (!FindNextFile(hSearch, &fileData))								// find next file in the resultset
 					{
 						if (GetLastError() == ERROR_NO_MORE_FILES)						// we're finished when there are no more files
@@ -956,7 +956,7 @@ int process_events()
 		switch(event.type)
 		{
 		case SDL_QUIT:
-			if(cWM::confirmWindow("Are you sure you want to quit?"))
+			if(cWM::confirmWindow(GetMsg("QUIT")))
 				cSettings::running = false;
 			break;
 		case SDL_KEYUP:
@@ -1494,7 +1494,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				cGraphics::view.showGrid = !cGraphics::view.showGrid;
 				break;
 			case SDLK_l:
-				MenuCommand_toggle((cMenuItem*)cGraphics::menu->find("Lightmaps"));
+				MenuCommand_toggle((cMenuItem*)cGraphics::menu->find(GetMsg("menu/view/LIGHTMAPS")));
 				break;
 			case SDLK_w:
 				if(cGraphics::cMouse::rbuttondown)
@@ -1503,7 +1503,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				}
 				if(SDL_GetModState() & KMOD_META)
 				{
-					MenuCommand_toggle((cMenuItem*)cGraphics::menu->find("Water"));
+					MenuCommand_toggle((cMenuItem*)cGraphics::menu->find(GetMsg("menu/view/SHOWWATER")));
 					return 1;
 				}
 				break;

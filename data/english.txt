@@ -14,7 +14,11 @@
 	<DONEINIT>Done Initializing</DONEINIT>
 	<CALCMODEL>Calculating model %i out of %i (%.2%%)</CALCMODEL>
 	<PERCENTAGE>%f %%</PERCENTAGE>
-
+	<PLUGIN>
+		<LOAD>Loading plugin: '%s'</LOAD>
+		<INVALID>%s is not a valid plugin</INVALID>
+	</PLUGIN>
+	<QUIT>Are you sure you want to quit?</QUIT>
 	<menu>
 		<file>
 			<TITLE>File</TITLE>

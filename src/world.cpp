@@ -1618,8 +1618,10 @@ void cWorld::draw()
 					glNormal3f(c->vNormal4.x, c->vNormal4.y, c->vNormal4.z);
 					glTexCoord2f(t->u4, 1-t->v4);				glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
 				glEnd();
+				glDisable(GL_COLOR_MATERIAL);
 				glColor4f(1,1,1,1);
 				glDisable(GL_COLOR_MATERIAL);
+				glColor4f(1,1,1,1);
 			}
 			else if (cGraphics::view.showNoTiles)
 			{
@@ -1634,8 +1636,10 @@ void cWorld::draw()
 					glVertex3f(x*10+10,-c->cell2+0.01f,(height-y)*10);
 					glVertex3f(x*10+10,-c->cell4+0.01f,(height-y)*10-10);
 				glEnd();
-				glColor3f(1,1,1);
 				glDisable(GL_COLOR_MATERIAL);
+				glColor4f(1,1,1,1);
+				glDisable(GL_COLOR_MATERIAL);
+				glColor4f(1,1,1,1);
 				glEnable(GL_TEXTURE_2D);
 			}
 			glColor4f(1,1,1,1);
@@ -1686,7 +1690,10 @@ void cWorld::draw()
 	glColor4f(1,1,1,1);
 	glEnable(GL_BLEND);
 	glEnable(GL_LIGHTING);
-	glEnable(GL_COLOR_MATERIAL);
+	glDisable(GL_COLOR_MATERIAL);
+	glColor4f(1,1,1,1);
+	glDisable(GL_COLOR_MATERIAL);
+	glColor4f(1,1,1,1);
 	if(cGraphics::view.showLightmaps)
 	{
 		for(x = 0; (int)x < width; x++)
@@ -1787,6 +1794,10 @@ void cWorld::draw()
 			}
 		}
 	}
+	glEnable(GL_COLOR_MATERIAL);
+	glColor4f(1,1,1,1);
+	glEnable(GL_COLOR_MATERIAL);
+	glColor4f(1,1,1,1);
 
 	glNormal3f(0,1,0);
 	glDisable(GL_BLEND);
