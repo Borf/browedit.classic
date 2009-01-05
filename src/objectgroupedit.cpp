@@ -189,6 +189,7 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 							model->scale = cGraphics::world->models[i]->scale;
 							model->rot = cGraphics::world->models[i]->rot;
 							model->selected = true;
+							model->lightopacity = cGraphics::world->models[i]->lightopacity;
 							cGraphics::world->models.push_back(model);
 						}
 					}
