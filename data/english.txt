@@ -17,6 +17,8 @@
 	<PLUGIN>
 		<LOAD>Loading plugin: '%s'</LOAD>
 		<INVALID>%s is not a valid plugin</INVALID>
+		<VERSIONERROR>%s is a plugin compiled for a version %i of browedit. Please recompile the plugin with the latest plugin SDK</VERSIONERROR>
+		<NOINSTANCE>%s does not contain any commands</NOINSTANCE>
 	</PLUGIN>
 	<QUIT>Are you sure you want to quit?</QUIT>
 	<menu>

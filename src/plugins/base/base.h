@@ -15,6 +15,7 @@ public:
 	cPluginBase(const char*, const char*);
 
 	void				setInterface(cBrowInterface*);
+	int					getVersion();
 	virtual bool		action() = 0;
 	cBrowInterface*		browInterface;
 };

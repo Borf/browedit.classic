@@ -749,11 +749,20 @@ int main(int argc, char *argv[])
 					continue;
 				}
 				int instanceCount = *((int*)GetProcAddress(hlib, "getInstanceCount"));
-
+				if(instanceCount == 0)
+				{
+					Log(2,0,GetMsg("PLUGIN/NOINSTANCE"));
+					continue;
+				}
 				cPluginBase** pluginInstances = getInstances();
 
 				for(i = 0; i < instanceCount; i++)
 				{
+					if(pluginInstances[i]->getVersion() != getversion())
+					{
+						Log(2,0,GetMsg("PLUGIN/VERSIONERROR"), fileData.cFileName, pluginInstances[i]->getVersion());
+						continue;
+					}
 					plugins.push_back(pluginInstances[i]);
 					pluginInstances[i]->setInterface(&browInterface);
 

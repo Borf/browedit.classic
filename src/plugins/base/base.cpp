@@ -2,6 +2,7 @@
 #include "interface.h"
 #include <wm/wm.h>
 #include <graphics.h>
+#include "../../version.h"
 
 cPluginBase::cPluginBase(const char* n, const char* m)
 {
@@ -14,4 +15,9 @@ cPluginBase::cPluginBase(const char* n, const char* m)
 void cPluginBase::setInterface(cBrowInterface* pInterface)
 {
 	browInterface = pInterface;
+}
+
+int cPluginBase::getVersion()
+{
+	return SVN_VERSION;
 }

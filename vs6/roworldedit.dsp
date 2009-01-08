@@ -86,6 +86,8 @@ LINK32=link.exe
 # Begin Special Build Tool
 SOURCE="$(InputPath)"
 PreLink_Cmds=..\svnver ..\src/version.h
+PostBuild_Desc=svn version...
+PostBuild_Cmds=..\svnver.exe ..\src\version.h
 # End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "roworldedit - Win32 Release_nocheck"
@@ -255,6 +257,15 @@ SOURCE=..\src\StackWalker.cpp
 # Begin Source File
 
 SOURCE=..\src\svnver.cpp
+
+!IF  "$(CFG)" == "roworldedit - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "roworldedit - Win32 Debug"
+
+!ELSEIF  "$(CFG)" == "roworldedit - Win32 Release_nocheck"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
@@ -367,6 +378,15 @@ SOURCE=..\src\undo.h
 # Begin Source File
 
 SOURCE=..\src\version.h
+
+!IF  "$(CFG)" == "roworldedit - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "roworldedit - Win32 Debug"
+
+!ELSEIF  "$(CFG)" == "roworldedit - Win32 Release_nocheck"
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
