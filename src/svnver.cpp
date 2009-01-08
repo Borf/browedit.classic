@@ -1,6 +1,7 @@
-#include <string>
+#include "version.h"
 
-int getversion()
-{
-	return atoi(std::string("$Revision: 486$").substr(11).c_str());
+int getversion()	
+{	
+	return SVN_VERSION; 
 }
+
