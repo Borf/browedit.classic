@@ -68,8 +68,17 @@ CC=gcc
 CXX=g++
 CFLAGS += -mno-cygwin
 else
+DEBIAN=$(shell which i586-mingw32msvc-g++)
+ifeq ($(DEBIAN),/usr/bin/i586-mingw32msvc-g++)
+CC=i586-mingw32msvc-gcc
+CXX=i586-mingw32msvc-g++
+AR=i586-mingw32msvc-ar
+else
 CC=mingw32-gcc
 CXX=mingw32-g++
+AR=mingw32-ar
+endif
+
 endif
 WINDRES=mingw32-windres
 BINARY_EXT=.exe
@@ -121,8 +130,9 @@ clean:
 # Depencies
 
 objdirectories:
-	@rm -r obj/plugins
+	@echo $(A)
 	@mkdir -p obj/plugins
+	@rm -r obj/plugins
 	@mkdir -p obj/plugins/base
 	@mkdir -p obj/plugins/clearmap
 	@mkdir -p obj/plugins/generators
@@ -186,7 +196,7 @@ $(TARGET): $(OBJECTS_ALL)
 
 plugin_base: obj/plugins/base/base_win32.o
 	@echo -e "    \033[1mLD\033[1m\t\033[22;35m$@\033[39m"
-	@mingw32-ar rcs libs/lib/libplugin_base.a obj/plugins/base/base_win32.o
+	@$(AR) rcs libs/lib/libplugin_base.a obj/plugins/base/base_win32.o
 
 plugin_clearmap: obj/plugins/clearmap/clearmap_win32.o obj/plugins/clearmap/plugin_win32.o
 	@echo -e "    \033[1mLD\033[1m\t\033[22;35m$@\033[39m"
