@@ -274,7 +274,7 @@ void cFavoriteLightsWindow::cFavoritesTree::onChange()
 	parent->objects["range"]->setText(0, n->FirstChildElement("range")->FirstChild()->Value());
 	parent->objects["maxlightincrement"]->setText(0, n->FirstChildElement("maxlight")->FirstChild()->Value());
 	parent->objects["lightfalloff"]->setText(0, n->FirstChildElement("lightfalloff")->FirstChild()->Value());
-	parent->objects["castshadow"]->setText(0, n->FirstChildElement("givesshadow")->FirstChild()->Value());
+	parent->objects["castshadow"]->setInt(0, atoi(n->FirstChildElement("givesshadow")->FirstChild()->Value()));
 	parent->objects["height"]->setText(0, n->FirstChildElement("height")->FirstChild()->Value());
 }
 

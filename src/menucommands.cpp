@@ -2945,6 +2945,7 @@ MENUCOMMAND(addfavorite)
 	l.maxLightIncrement = atoi(n->FirstChildElement("maxlight")->FirstChild()->Value());
 	l.range = atoi(n->FirstChildElement("range")->FirstChild()->Value());
 	l.lightFalloff = atof(n->FirstChildElement("lightfalloff")->FirstChild()->Value());
+	l.givesShadow = atoi(n->FirstChildElement("givesshadow")->FirstChild()->Value()) != 0;
 
 	cGraphics::worldContainer->settings.selectedObject = cGraphics::world->lights.size();
 	cGraphics::world->lights.push_back(l);

@@ -1538,9 +1538,9 @@ void cWorld::draw()
 	}
 	else
 	{
-		cGraphics::worldContainer->settings.lightAmbient[0] = 0.7f;
-		cGraphics::worldContainer->settings.lightAmbient[1] = 0.7f;
-		cGraphics::worldContainer->settings.lightAmbient[2] = 0.7f;
+		cGraphics::worldContainer->settings.lightAmbient[0] = 0.9f;
+		cGraphics::worldContainer->settings.lightAmbient[1] = 0.9f;
+		cGraphics::worldContainer->settings.lightAmbient[2] = 0.9f;
 		cGraphics::worldContainer->settings.lightAmbient[3] = 1.0f;
 		
 		cGraphics::worldContainer->settings.lightDiffuse[0] = 0.3f;
@@ -1733,7 +1733,7 @@ void cWorld::draw()
 	glColor4f(1,1,1,1);
 	glDisable(GL_COLOR_MATERIAL);
 	glColor4f(1,1,1,1);
-	if(cGraphics::view.showLightmaps && 0)
+	if(cGraphics::view.showLightmaps)
 	{
 		for(x = 0; (int)x < width; x++)
 		{
