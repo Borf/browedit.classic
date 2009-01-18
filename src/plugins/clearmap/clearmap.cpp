@@ -20,13 +20,9 @@ void cClearMapPlugin::clickOk(cWindow* w)
 	{
 		int x,y,i;
 		std::map<int, bool, std::less<int> > used;
-
-		while(browInterface->lightmapCount() > 0)
-			browInterface->removeLightmap(0);
-		while(browInterface->tileCount() > 0)
-			browInterface->removeTile(0);
-		while(browInterface->textureCount() > 0)
-			browInterface->removeTexture(0);
+		browInterface->clearLightmaps();
+		browInterface->clearTiles();
+		browInterface->clearTextures();
 
 
 		cBrowInterface::cPluginLightmap* map = browInterface->newLightmap();
@@ -123,45 +119,25 @@ void cClearMapPlugin::clickOk(cWindow* w)
 	if(w->objects["chkLightmaps"]->getInt(0) != 0)
 	{
 		int i;
-		while(browInterface->lightmapCount() > 0)
-			browInterface->removeLightmap(0);		
+		browInterface->clearLightmaps();
 		cBrowInterface::cPluginLightmap* map = browInterface->newLightmap();
 		for(i = 0; i < 256; i++)
 			map->buf[i] = i < 64 ? 255 : 0;
 		browInterface->addLightmap(map);
 
-
-		
 		for(i = 0; i < browInterface->tileCount(); i++)
 			browInterface->getTile(i)->lightmap = 0;
 	}
 	if(w->objects["chkObjects"]->getInt(0) != 0)
-	{
-		while(browInterface->modelCount() > 0)
-			browInterface->removeModel(0);
-	}
+		browInterface->clearModels();
 	if(w->objects["chkSprites"]->getInt(0) != 0)
-	{
-		while(browInterface->spriteCount() > 0)
-			browInterface->removeSprite(0);
-	}
-
-
+		browInterface->clearSprites();
 	if(w->objects["chkLights"]->getInt(0) != 0)
-	{
-		while(browInterface->lightCount() > 0)
-			browInterface->removeLight(0);
-	}
+		browInterface->clearLights();
 	if(w->objects["chkSounds"]->getInt(0) != 0)
-	{
-		while(browInterface->soundCount() > 0)
-			browInterface->removeSound(0);
-	}
+		browInterface->clearSounds();
 	if(w->objects["chkEffects"]->getInt(0) != 0)
-	{
-		while(browInterface->effectCount() > 0)
-			browInterface->removeEffect(0);
-	}
+		browInterface->clearEffects();
 
 	w->close();
 }

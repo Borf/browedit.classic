@@ -14,43 +14,51 @@ public:
 	int						tileCount();
 	void					removeTile(int);
 	void					addTile(cPluginTile);
+	void					clearTiles();
 	
 	cPluginTexture*			getTexture(int);
 	int						textureCount();
 	void					removeTexture(int);
 	void					addTexture(cPluginTexture*);
+	void					clearTextures();
 	
 	cPluginLightmap*		newLightmap();
 	cPluginLightmap*		getLightmap(int);
 	int						lightmapCount();
 	void					removeLightmap(int);
 	void					addLightmap(cPluginLightmap*);
-	
+	void					clearLightmaps();
+
 	cPluginEffect*			getEffect(int);
 	int						effectCount();
 	void					removeEffect(int);
 	void					addEffect(cPluginEffect);
+	void					clearEffects();
 	
 	cPluginSound*			getSound(int);
 	int						soundCount();
 	void					removeSound(int);
 	void					addSound(cPluginSound);
+	void					clearSounds();
 	
 	cPluginLight*			getLight(int);
 	int						lightCount();
 	void					removeLight(int);
 	void					addLight(cPluginLight);
+	void					clearLights();
 	
 	
 	cPluginRSMModel*		loadModel(const char*);
 	void					removeModel(int);
 	void					addModel(cPluginRSMModel*);
 	int						modelCount();
+	void					clearModels();
 
 
 
 	void					removeSprite(int);
 	int						spriteCount();
+	void					clearSprites();
 	
 	
 	int						getWorldHeight();

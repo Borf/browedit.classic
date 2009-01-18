@@ -328,3 +328,51 @@ void cBrowInterfaceImplementation::makeLightmapsBlack()
 {
 	cGraphics::world->blackLightmaps();
 }
+
+
+void cBrowInterfaceImplementation::clearEffects()
+{
+	cGraphics::world->effects.clear();
+}
+
+void cBrowInterfaceImplementation::clearLightmaps()
+{
+	for(unsigned int i = 0; i < cGraphics::world->lightmaps.size(); i++)
+		delete cGraphics::world->lightmaps[i];
+	cGraphics::world->lightmaps.clear();
+}
+
+void cBrowInterfaceImplementation::clearLights()
+{
+	cGraphics::world->lights.clear();
+}
+
+void cBrowInterfaceImplementation::clearModels()
+{
+	for(unsigned int i = 0; i < cGraphics::world->models.size(); i++)
+		delete cGraphics::world->models[i];
+		cGraphics::world->models.clear();
+}
+
+void cBrowInterfaceImplementation::clearSounds()
+{
+	cGraphics::world->sounds.clear();
+}
+
+void cBrowInterfaceImplementation::clearTextures()
+{
+	for(unsigned int i = 0; i < cGraphics::world->textures.size(); i++)
+		cTextureCache::unload(cGraphics::world->textures[i]->texture);
+	cGraphics::world->textures.clear();
+}
+
+void cBrowInterfaceImplementation::clearTiles()
+{
+	cGraphics::world->tiles.clear();
+}
+
+void cBrowInterfaceImplementation::clearSprites()
+{
+	cGraphics::world->sprites.clear();
+}
+

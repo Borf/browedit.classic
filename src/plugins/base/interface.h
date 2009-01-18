@@ -133,43 +133,51 @@ public:
 	virtual int						tileCount() = 0;
 	virtual void					removeTile(int) = 0;
 	virtual void					addTile(cPluginTile) = 0;
+	virtual void					clearTiles() = 0;
 
 	virtual cPluginTexture*			getTexture(int) = 0;
 	virtual int						textureCount() = 0;
 	virtual void					removeTexture(int) = 0;
 	virtual void					addTexture(cPluginTexture*) = 0;
+	virtual void					clearTextures() = 0;
 
 	virtual cPluginLightmap*		newLightmap() = 0;
 	virtual cPluginLightmap*		getLightmap(int) = 0;
 	virtual int						lightmapCount() = 0;
 	virtual void					removeLightmap(int) = 0;
 	virtual void					addLightmap(cPluginLightmap*) = 0;
+	virtual void					clearLightmaps() = 0;
 
 	virtual cPluginEffect*			getEffect(int) = 0;
 	virtual int						effectCount() = 0;
 	virtual void					removeEffect(int) = 0;
 	virtual void					addEffect(cPluginEffect) = 0;
+	virtual void					clearEffects() = 0;
 
 	virtual cPluginSound*			getSound(int) = 0;
 	virtual int						soundCount() = 0;
 	virtual void					removeSound(int) = 0;
 	virtual void					addSound(cPluginSound) = 0;
+	virtual void					clearSounds() = 0;
 
 	virtual cPluginLight*			getLight(int) = 0;
 	virtual int						lightCount() = 0;
 	virtual void					removeLight(int) = 0;
 	virtual void					addLight(cPluginLight) = 0;
-	
+	virtual void					clearLights() = 0;
+
 
 
 	virtual cPluginRSMModel*		loadModel(const char* fileName) = 0;
 	virtual int						modelCount() = 0;
 	virtual void					removeModel(int index) = 0;
 	virtual void					addModel(cPluginRSMModel* model) = 0;
+	virtual void					clearModels() = 0;
 
 	
 	virtual int						spriteCount() = 0;
 	virtual void					removeSprite(int) = 0;
+	virtual void					clearSprites() = 0;
 
 
 	virtual void					fixNormals() = 0;
