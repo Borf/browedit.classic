@@ -810,7 +810,7 @@ int main(int argc, char *argv[])
 	cGraphics::cMouse::lastrclick = 0;
 
 	Log(3,0,GetMsg("file/LOADING"), "data/keymap.txt");
-	pFile = cFileSystem::open("data/cSettings::keyMap.txt");
+	pFile = cFileSystem::open("data/keymap.txt");
 	if(pFile == NULL)
 	{
 		Log(3,0,"Keymap file not found, writing default");

@@ -458,8 +458,6 @@ int cGraphics::init(int pWidth, int pHeight, int pBpp, bool pFullscreen)
 		waterTextures[i].push_back(cTextureCache::load(cSettings::roDir + waterDirectory + "water" + waterExtension));
 	}
 
-	Log(3,0,GetMsg("file/DONELOADING"), "water.txt");
-
 	previewModel = NULL;
 
 	glDisable(GL_LIGHT0);
