@@ -169,6 +169,9 @@ bool cClearMapPlugin::action()
 {
 	plugin = this;
 	cXmlWindow* w = (cXmlWindow*)browInterface->addXmlWindow("plugins/clearmap.xml");
-	w->eventhandler = handleevent;
+	if(!w)
+		browInterface->messageWindow("Error: could not open plugins/clearmap.xml");
+	else
+		w->eventhandler = handleevent;
 	return true;
 }

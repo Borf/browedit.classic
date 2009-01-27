@@ -15,6 +15,9 @@ void cBrowInterfaceImplementation::fixNormals()
 cWindow* cBrowInterfaceImplementation::addXmlWindow(const char* fileName)
 {
 	TiXmlDocument windowLayout = cFileSystem::getXml(fileName);
+	if(windowLayout.Error() || !windowLayout.FirstChild())
+		return NULL;
+
 	cXmlWindow* w = new cXmlWindow(windowLayout);
 	cWM::addWindow(w);
 	return w;
