@@ -33,9 +33,9 @@ public:
 		SDLKey key;
 	public:
 		cKeyBindBox(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
-		bool onKeyDown(int keyid);
-		bool onKeyUp(int keyid);
-		bool onChar(char ch);
+		bool onKeyDown(int keyid,bool);
+		bool onKeyUp(int keyid, bool);
+		bool onChar(char ch, bool);
 		void draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom);
 		void setInt(int id, int val);
 		int getInt(int id);

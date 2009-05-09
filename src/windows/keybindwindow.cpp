@@ -367,18 +367,18 @@ cKeyBindWindow::cKeyBindBox::cKeyBindBox( cWindow* parent, TiXmlDocument* skin )
 	key = SDLK_UNKNOWN;
 }
 
-bool cKeyBindWindow::cKeyBindBox::onKeyDown( int keyid )
+bool cKeyBindWindow::cKeyBindBox::onKeyDown( int keyid,bool shift )
 {
 	key = (SDLKey)keyid;
 	return true;
 }
 
-bool cKeyBindWindow::cKeyBindBox::onKeyUp( int keyid )
+bool cKeyBindWindow::cKeyBindBox::onKeyUp( int keyid,bool shift )
 {
 	return true;
 }
 
-bool cKeyBindWindow::cKeyBindBox::onChar( char ch )
+bool cKeyBindWindow::cKeyBindBox::onChar( char ch,bool shift )
 {
 	return true;
 }
