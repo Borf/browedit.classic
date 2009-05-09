@@ -69,9 +69,9 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 							{
 								int xx = posx - x;
 								int yy = posy - y;
-								if (y < 0)
+								if (y < 0 || y >= cGraphics::world->height)
 									continue;
-								if (x < 0)
+								if (x < 0 || x >= cGraphics::world->width)
 									continue;
 								cTile t;
 								t.color[0] = (char)255;

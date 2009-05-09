@@ -33,7 +33,7 @@ cWaterWindow::cWaterWindow() : cWindow()
 	resizable = false;
 	visible = true;
 	
-	h = 140+skinOffTop+skinOffBottom;
+	h = 120+skinOffTop+skinOffBottom;
 	w = 200+skinOffLeft+skinOffRight;
 	title = GetMsg("wm/water/TITLE");
 	center();
@@ -50,8 +50,7 @@ cWaterWindow::cWaterWindow() : cWindow()
 	addLabel("lblHeight",		0,20,GetMsg("wm/water/HEIGHT"));
 	addLabel("lblPhase",		0,40,GetMsg("wm/water/PHASE"));
 	addLabel("lblSurfaceCycle", 0,60,GetMsg("wm/water/SURFACECYCLE"));
-	addLabel("lblTexCycle",		0,80,GetMsg("wm/water/TEXTURECYCLE"));
-	addLabel("lblType",			0,100,GetMsg("wm/water/TYPE"));
+	addLabel("lblType",			0,80,GetMsg("wm/water/TYPE"));
 	
 	
 	o = new cWindowInputBox(this);
@@ -77,16 +76,10 @@ cWaterWindow::cWaterWindow() : cWindow()
 	o->moveTo(100,60);
 	o->resizeTo(100,20);
 	objects["surfacecurve"] = o;
-	
+		
 	o = new cWindowInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(100,80);
-	o->resizeTo(100,20);
-	objects["texcycle"] = o;
-	
-	o = new cWindowInputBox(this);
-	o->alignment = ALIGN_TOPLEFT;
-	o->moveTo(100,100);
 	o->resizeTo(100,20);
 	objects["type"] = o;
 	

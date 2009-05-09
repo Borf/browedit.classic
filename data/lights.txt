@@ -6,7 +6,7 @@
         <range>200</range>
         <brightness>127</brightness>
         <maxlight>256</maxlight>
-        <givesshadow>1</givesshadow>
+        <givesshadow>0</givesshadow>
         <lightfalloff>1</lightfalloff>
         <height>10</height>
     </light>

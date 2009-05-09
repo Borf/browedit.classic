@@ -153,7 +153,8 @@ public:
 class cGatTile : public cBrowInterface::cPluginGatCube
 {
 public:
-
+	cGatTile();
+	cGatTile(const cGatTile&);
 };
 
 class cWater

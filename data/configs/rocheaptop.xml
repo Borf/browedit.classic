@@ -23,7 +23,7 @@
         <fullscreen>false</fullscreen>
         <bpp>32</bpp>
         <font>tahoma</font>
-        <skin>data/skins/hamvista.xml</skin>
+        <skin>data/skins/ro.xml</skin>
         <notilecolor>FFFF40</notilecolor>
         <bgcolor>8000FF</bgcolor>
         <camerasmoothing>0.6</camerasmoothing>
@@ -51,7 +51,7 @@
             <x>0</x>
             <y>436</y>
             <w>50</w>
-            <h>164</h>
+            <h>112</h>
         </texturetools>
         <hotbar>
             <x>520</x>
@@ -73,5 +73,9 @@
             <w>750</w>
             <h>550</h>
         </textures>
+        <water>
+            <x>292</x>
+            <y>212</y>
+        </water>
     </wm>
 </config>

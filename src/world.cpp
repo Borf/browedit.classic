@@ -4352,3 +4352,21 @@ bool cSound::operator==( cSound other )
 		unknown7 == other.unknown7 &&
 		unknown8 == other.unknown8;
 }
+
+cGatTile::cGatTile()
+{
+	cell1 = 0;
+	cell2 = 0;
+	cell3 = 0;
+	cell4 = 0;
+	type = 0;
+}
+
+cGatTile::cGatTile( const cGatTile& other)
+{
+	cell1 = other.cell1;
+	cell2 = other.cell2;
+	cell3 = other.cell3;
+	cell4 = other.cell4;
+	type = other.type;
+}
