@@ -1447,35 +1447,6 @@ void cWorld::draw()
 	glLoadIdentity();									// Reset The Modelview Matrix
 
 	
-	if(cGraphics::worldContainer)
-	{
-		if(cGraphics::worldContainer->view.topCamera)
-		{
-			cGraphics::worldContainer->settings.lightPosition[0] = cGraphics::cMouse::x3d;
-			cGraphics::worldContainer->settings.lightPosition[1] = -cGraphics::cMouse::z3d;
-			cGraphics::worldContainer->settings.lightPosition[2] = 1000;
-			cGraphics::worldContainer->settings.lightPosition[3] = 1.0f;
-		}
-		else
-		{
-/*			worldContainer->settings.lightPosition[0] = -worldContainer->camera.pointer.x;
-			worldContainer->settings.lightPosition[1] = -100;
-			worldContainer->settings.lightPosition[2] = -worldContainer->camera.pointer.y;
-			worldContainer->settings.lightPosition[3] = 0.0f;*/
-			cGraphics::worldContainer->settings.lightPosition[0] = 0;
-			cGraphics::worldContainer->settings.lightPosition[1] = 0;
-			cGraphics::worldContainer->settings.lightPosition[2] = 0;
-			cGraphics::worldContainer->settings.lightPosition[3] = 1;
-
-		}
-		glEnable(GL_LIGHTING);
-		glLightfv(GL_LIGHT1, GL_POSITION, cGraphics::worldContainer->settings.lightPosition);			// Position The Light
-	}
-	else
-		glDisable(GL_LIGHTING);
-	
-	
-	
 	if (cGraphics::worldContainer->view.topCamera)
 		gluLookAt(  -cGraphics::worldContainer->camera.pointer.y,
 					100,
@@ -1499,6 +1470,35 @@ void cWorld::draw()
 					lastLookAt.x, lastLookAt.y, lastLookAt.z,
 					0,1,0);
 	}
+
+	if(cGraphics::worldContainer)
+	{
+		if(cGraphics::worldContainer->view.topCamera)
+		{
+			cGraphics::worldContainer->settings.lightPosition[0] = cGraphics::cMouse::x3d;
+			cGraphics::worldContainer->settings.lightPosition[1] = -cGraphics::cMouse::z3d;
+			cGraphics::worldContainer->settings.lightPosition[2] = 1000;
+			cGraphics::worldContainer->settings.lightPosition[3] = 1.0f;
+		}
+		else
+		{
+/*			worldContainer->settings.lightPosition[0] = -worldContainer->camera.pointer.x;
+			worldContainer->settings.lightPosition[1] = -100;
+			worldContainer->settings.lightPosition[2] = -worldContainer->camera.pointer.y;
+			worldContainer->settings.lightPosition[3] = 0.0f;*/
+			cGraphics::worldContainer->settings.lightPosition[0] = -1000;
+			cGraphics::worldContainer->settings.lightPosition[1] = 2000;
+			cGraphics::worldContainer->settings.lightPosition[2] = -1000;
+			cGraphics::worldContainer->settings.lightPosition[3] = 1;
+
+		}
+		glLightfv(GL_LIGHT0, GL_POSITION, cGraphics::worldContainer->settings.lightPosition);			// Position The Light
+		glEnable(GL_LIGHT0);
+		glEnable(GL_LIGHTING);
+	}
+	else
+		glDisable(GL_LIGHTING);
+
 
 	glDisable(GL_CULL_FACE);
 	glDisable(GL_BLEND);
@@ -1538,9 +1538,9 @@ void cWorld::draw()
 	}
 	else
 	{
-		cGraphics::worldContainer->settings.lightAmbient[0] = 0.9f;
-		cGraphics::worldContainer->settings.lightAmbient[1] = 0.9f;
-		cGraphics::worldContainer->settings.lightAmbient[2] = 0.9f;
+		cGraphics::worldContainer->settings.lightAmbient[0] = 0.7f;
+		cGraphics::worldContainer->settings.lightAmbient[1] = 0.7f;
+		cGraphics::worldContainer->settings.lightAmbient[2] = 0.7f;
 		cGraphics::worldContainer->settings.lightAmbient[3] = 1.0f;
 		
 		cGraphics::worldContainer->settings.lightDiffuse[0] = 0.3f;
@@ -1550,12 +1550,12 @@ void cWorld::draw()
 	}
 	float tmp[4] = { 0,0,0,1 };
 	
-	glLightfv(GL_LIGHT1, GL_AMBIENT, tmp);				// Setup The Ambient Light
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, cGraphics::worldContainer->settings.lightDiffuse);				// Setup The Diffuse Light
-	glLightfv(GL_LIGHT1, GL_SPECULAR, tmp);				// Setup The Diffuse Light
+	glLightfv(GL_LIGHT0, GL_AMBIENT, tmp);				// Setup The Ambient Light
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, cGraphics::worldContainer->settings.lightDiffuse);				// Setup The Diffuse Light
+	glLightfv(GL_LIGHT0, GL_SPECULAR, tmp);				// Setup The Diffuse Light
 	glMaterialfv ( GL_FRONT_AND_BACK, GL_EMISSION, tmp) ;
 
-	glDisable(GL_LIGHT1);
+//	glDisable(GL_LIGHT0);
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, cGraphics::worldContainer->settings.lightAmbient);
 	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
 

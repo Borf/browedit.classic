@@ -460,9 +460,8 @@ int cGraphics::init(int pWidth, int pHeight, int pBpp, bool pFullscreen)
 
 	previewModel = NULL;
 
-	glDisable(GL_LIGHT0);
  	glColorMaterial ( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE ) ;
-	glEnable(GL_LIGHT1);										// Enable Light One
+	glEnable(GL_LIGHT0);										// Enable Light One
 	glEnable(GL_LIGHTING);
 	//glEnable(GL_COLOR_MATERIAL);
 	glDisable(GL_COLOR_MATERIAL);
