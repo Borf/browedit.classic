@@ -8,6 +8,7 @@ $classname = trim(fgets(STDIN));
 if($classname == "")
 	$classname = $name;
 
+$dll = $name;
 
 copytemplate("vs6/plugins/template_dsp", "vs6/plugins/" . strtolower($name)  . ".dsp");
 @mkdir("src/plugins/" . strtolower($name));

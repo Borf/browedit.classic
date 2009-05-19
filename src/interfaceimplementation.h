@@ -80,6 +80,11 @@ public:
 	bool					confirmWindow(const char*);
 	cPluginBase*			getPlugin(const char*);
 	const char*				getMapFile();
+
+	std::string				getOpenFile(const char* defaultFilename, const char* filters);
+	std::string				getSaveFile(const char* defaultFilename, const char* filters);
+	void					Log(int lvl, const char*, ...);
+
 };
 
 

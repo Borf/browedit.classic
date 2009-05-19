@@ -202,6 +202,10 @@ public:
 	virtual cPluginBase*			getPlugin(const char* name) = 0;
 	virtual const char*				getMapFile() = 0;
 
+	virtual std::string				getOpenFile(const char* defaultFilename, const char* filters) = 0;
+	virtual std::string				getSaveFile(const char* defaultFilename, const char* filters) = 0;
+	virtual void					Log(int lvl, const char*, ...) = 0;
+
 	
 };
 

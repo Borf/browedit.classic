@@ -55,5 +55,17 @@
             <x>237</x>
             <y>184</y>
         </sprite>
+        <modelswindow>
+            <x>25</x>
+            <y>25</y>
+            <w>974</w>
+            <h>718</h>
+        </modelswindow>
+        <textures>
+            <x>25</x>
+            <y>25</y>
+            <w>974</w>
+            <h>718</h>
+        </textures>
     </wm>
 </config>

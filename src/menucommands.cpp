@@ -73,53 +73,31 @@ MENUCOMMAND(new)
 
 MENUCOMMAND(open)
 {
-#ifdef WIN32
-	char curdir[100];
-	getcwd(curdir, 100);
-	SDL_SysWMinfo wmInfo;
-	SDL_VERSION(&wmInfo.version)	;
-	SDL_GetWMInfo(&wmInfo);
-	HWND hWnd = wmInfo.window;
-	OPENFILENAME ofn;
-	ZeroMemory(&ofn, sizeof(ofn));
-	ofn.lStructSize = sizeof(ofn);
-	ofn.hwndOwner = hWnd;
+	std::string fileName;
 
 	if(cGraphics::world)
 		strcpy(cGraphics::world->fileName, replace(cGraphics::world->fileName, "/", "\\").c_str());
-	char buf[256];
 
-	ZeroMemory(buf, 256);
 	if(cGraphics::world)
-		strcpy(buf, cGraphics::world->fileName);
+		fileName = cGraphics::world->fileName;
 	else
-		strcpy(buf, (cSettings::roDir + "data\\prontera.rsw").c_str());
-	ofn.lpstrFile = buf;
-	ofn.nMaxFile = 256;
-	ofn.lpstrFilter = "All\0*.*\0RO Maps\0*.rsw\0";
-	ofn.nFilterIndex = 2;
-	ofn.lpstrFileTitle = NULL;
-	ofn.nMaxFileTitle = 0;
-	ofn.lpstrInitialDir = NULL;
-	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_ENABLESIZING;
-	if (GetOpenFileName(&ofn))
-	{
+		fileName = cSettings::roDir + "data\\prontera.rsw";
 
+
+	fileName = getOpenFile(fileName.c_str(), "All\0*.*\0RO Maps\0*.rsw\0");
+	if(fileName != "")
+	{
 		cGraphics::newWorld();
-		strcpy(cGraphics::world->fileName,buf);
+		strcpy(cGraphics::world->fileName,fileName.c_str());
 		while(cGraphics::world->fileName[strlen(cGraphics::world->fileName)-1] != '.')
 			cGraphics::world->fileName[strlen(cGraphics::world->fileName)-1] = '\0';
 		cGraphics::world->fileName[strlen(cGraphics::world->fileName)-1] = '\0';
-		chdir(curdir);
 		cGraphics::world->load();
 		if(!cGraphics::world->loaded)
 			MenuCommand_close(src);
 		cGraphics::updateMenu();
 	}
-#else
 
-
-#endif
 	return true;
 }
 

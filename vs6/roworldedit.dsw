@@ -3,6 +3,18 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
+Project: "plugin_3ds2rsm"=".\plugins\3ds2rsm.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "plugin_base"=".\plugins\base.dsp" - Package Owner=<4>
 
 Package=<5>
@@ -91,6 +103,9 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name plugin_lightmap
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name plugin_3ds2rsm
     End Project Dependency
 }}}
 

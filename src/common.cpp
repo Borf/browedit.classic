@@ -19,6 +19,10 @@
 #include <settings.h>
 const float EPSILON = 0.001f;
 
+#include <sdl/SDL_syswm.h>
+#include <direct.h>
+#include <commdlg.h>
+
 
 float DistLineToPoint(cVector2 LineStart, cVector2 LineEnd, cVector2 point)
 {
@@ -46,7 +50,7 @@ float DistLineToPoint(cVector2 LineStart, cVector2 LineEnd, cVector2 point)
 }
 
 
-FILE* pFile = NULL;
+FILE* pLogFile = NULL;
 std::string logfilename;
 int loglines = 0;
 char logname[32];
@@ -54,8 +58,8 @@ char logname[32];
 void log_open(const char* filename, const char* name, int color)
 {
 	logfilename = filename;
-	pFile = fopen(filename, "w");
-	if (pFile == NULL)
+	pLogFile = fopen(filename, "w");
+	if (pLogFile == NULL)
 	{
 		fprintf(stderr, "Error opening logfile!");
 		exit(0);
@@ -70,7 +74,7 @@ void log_open(const char* filename, const char* name, int color)
 
 void log_close()
 {
-	fclose(pFile);
+	fclose(pLogFile);
 }
 
 void Log(int lvl, int options, const char* fmt, ...)
@@ -105,9 +109,9 @@ void Log(int lvl, int options, const char* fmt, ...)
 #else
 		fprintf(stdout, "Info: %s\n", text);
 #endif
-		fputs("Info: ", pFile);
-		fputs(text, pFile);
-		fputc('\n', pFile);
+		fputs("Info: ", pLogFile);
+		fputs(text, pLogFile);
+		fputc('\n', pLogFile);
 	}
 	else
 	{
@@ -116,16 +120,16 @@ void Log(int lvl, int options, const char* fmt, ...)
 #else
 		fprintf(stderr, "Error: %s\n", text);
 #endif
-		fputs("Error: ", pFile);
-		fputs(text, pFile);
-		fputc('\n', pFile);
+		fputs("Error: ", pLogFile);
+		fputs(text, pLogFile);
+		fputc('\n', pLogFile);
 	}
 	loglines++;
 //	if (loglines%10 == 0)
 	{
-		fclose(pFile);
-		pFile = fopen(logfilename.c_str(), "a");
-		if (pFile == NULL)
+		fclose(pLogFile);
+		pLogFile = fopen(logfilename.c_str(), "a");
+		if (pLogFile == NULL)
 		{
 			fprintf(stderr, "Error opening logfile!");
 			exit(0);
@@ -469,20 +473,20 @@ const char* GetMsg(std::string s)
 		if(n == NULL)
 		{
 			Log(1,0,"Could not find translation for %s", olds.c_str());
-			return "NULL";
+			return olds.c_str();
 		}
 		s = s.substr(s.find("/")+1);
 	}
 	if(n == NULL)
 	{
 		Log(1,0,"Could not find translation for %s", olds.c_str());
-		return "NULL";
+		return olds.c_str();
 	}
 	n = n->FirstChildElement(s.c_str());
 	if(n == NULL)
 	{
 		Log(1,0,"Could not find translation for %s", olds.c_str());
-		return "NULL";
+		return olds.c_str();
 	}
 	return (char*)n->FirstChild()->Value();
 }
@@ -507,4 +511,72 @@ void hex2floats( std::string c, float* floats, int count)
 {
 	for(int i = 0; i < count; i++)
 		floats[i] = hex2dec(c.substr(2*i, 2)) / 255.0f;
+}
+
+
+std::string getSaveFile(const char* defaultFilename, const char* filter)
+{
+#ifdef WIN32
+	char buf[256];
+	strcpy(buf, defaultFilename);
+	char curdir[100];
+	getcwd(curdir, 100);
+	SDL_SysWMinfo wmInfo;
+	SDL_VERSION(&wmInfo.version);
+	SDL_GetWMInfo(&wmInfo);
+	HWND hWnd = wmInfo.window;
+	OPENFILENAME ofn;
+	ZeroMemory(&ofn, sizeof(ofn));
+	ofn.lStructSize = sizeof(ofn);
+	ofn.hwndOwner = hWnd;
+	ofn.lpstrFile = buf;
+	ofn.nMaxFile = 256;
+	ofn.lpstrFilter = "All\0*.*\0RO models\0*.rsw\0";
+	ofn.nFilterIndex = 2;
+	ofn.lpstrFileTitle = NULL;
+	ofn.nMaxFileTitle = 0;
+	ofn.lpstrInitialDir = NULL;
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_ENABLESIZING | OFN_OVERWRITEPROMPT;
+	if (GetSaveFileName(&ofn))
+	{
+		chdir(curdir);
+		return buf;
+	}
+	chdir(curdir);
+#endif
+	return "";
+}
+std::string getOpenFile(const char* defaultFilename, const char* filter)
+{
+#ifdef WIN32
+	char curdir[100];
+	getcwd(curdir, 100);
+	SDL_SysWMinfo wmInfo;
+	SDL_VERSION(&wmInfo.version)	;
+	SDL_GetWMInfo(&wmInfo);
+	HWND hWnd = wmInfo.window;
+	OPENFILENAME ofn;
+	ZeroMemory(&ofn, sizeof(ofn));
+	ofn.lStructSize = sizeof(ofn);
+	ofn.hwndOwner = hWnd;
+	
+	char buf[256];
+	ZeroMemory(buf, 256);
+	strcpy(buf, defaultFilename);
+	ofn.lpstrFile = buf;
+	ofn.nMaxFile = 256;
+	ofn.lpstrFilter = filter;
+	ofn.nFilterIndex = 2;
+	ofn.lpstrFileTitle = NULL;
+	ofn.nMaxFileTitle = 0;
+	ofn.lpstrInitialDir = NULL;
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_ENABLESIZING;
+	if (GetOpenFileName(&ofn))
+	{
+		chdir(curdir);
+		return buf;
+	}
+	chdir(curdir);
+#endif
+	return "";
 }

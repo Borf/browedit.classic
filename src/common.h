@@ -182,6 +182,11 @@ std::string getLongTimeString();
 std::string removecolors(std::string s);
 void drawlogo();
 void changetoserverdir();
+
+
+std::string getSaveFile(const char* defaultFilename, const char* filter);
+std::string getOpenFile(const char* defaultFilename, const char* filter);
+
 /*template <class T> void mergesort(std::vector<T> &tosort, bool compare(T,T))
 {
 	if (tosort.size() <= 1)

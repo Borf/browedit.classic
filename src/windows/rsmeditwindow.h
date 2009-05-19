@@ -32,6 +32,12 @@ class cRSMEditWindow : public cWindow
 		cWindowSaveAsButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
 		void onClick();
 	};
+	class cWindowConvertButton : public cWindowButton
+	{
+	public:
+		cWindowConvertButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		void onClick();
+	};
 
 	class cWindowModel : public cWindowObject
 	{

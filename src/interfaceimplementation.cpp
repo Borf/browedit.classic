@@ -1,3 +1,4 @@
+#include <common.h>
 #include "interfaceimplementation.h"
 #include <graphics.h>
 #include <windows/xmlwindow.h>
@@ -330,6 +331,79 @@ void cBrowInterfaceImplementation::makeLightmapsUnique()
 void cBrowInterfaceImplementation::makeLightmapsBlack()
 {
 	cGraphics::world->blackLightmaps();
+}
+
+
+std::string	cBrowInterfaceImplementation::getOpenFile(const char* defaultFilename, const char* filters)
+{
+	return ::getOpenFile(defaultFilename, filters);
+}
+std::string	cBrowInterfaceImplementation::getSaveFile(const char* defaultFilename, const char* filters)
+{
+	return ::getSaveFile(defaultFilename, filters);
+}
+
+extern FILE* pLogFile;
+extern std::string logfilename;
+extern int loglines;
+extern char logname[32];
+
+
+void cBrowInterfaceImplementation::Log(int lvl, const char* fmt, ...)
+{
+	char text[10240];
+	va_list ap;
+	if (fmt == NULL)
+		return;
+	va_start(ap,fmt);
+	vsprintf(text,fmt,ap);
+	va_end(ap);
+	
+	char buf[10240];
+	strcpy(buf, text);
+	sprintf(text, "%s %s", getLongTimeString().c_str(), buf);
+	
+	
+	if (lvl > 2)
+	{
+#ifndef WIN32
+		fprintf(stdout, "\033[22;32mInfo (%s): \033[39m%s\n", logname, text);
+#else
+		fprintf(stdout, "Info: %s\n", text);
+#endif
+		fputs("Info: ", pLogFile);
+		fputs(text, pLogFile);
+		fputc('\n', pLogFile);
+	}
+	else
+	{
+#ifndef WIN32
+		fprintf(stderr, "\033[22;31mError (%s): \033[1;39m%s\n", logname, text);
+#else
+		fprintf(stderr, "Error: %s\n", text);
+#endif
+		fputs("Error: ", pLogFile);
+		fputs(text, pLogFile);
+		fputc('\n', pLogFile);
+	}
+	loglines++;
+	//	if (loglines%10 == 0)
+	{
+		fclose(pLogFile);
+		pLogFile = fopen(logfilename.c_str(), "a");
+		if (pLogFile == NULL)
+		{
+			fprintf(stderr, "Error opening logfile!");
+			exit(0);
+		}
+	}
+	
+#ifndef _NOSLEEP_
+	if(lvl < 2)
+		Sleep(2000);
+#endif
+	if(lvl == 0)
+		exit(0);
 }
 
 

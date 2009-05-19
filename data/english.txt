@@ -124,6 +124,7 @@
 		<tools>
 			<TITLE>Tools</TITLE>
 			<CLEARMAP>Clear Map</CLEARMAP>
+			<CONVERT>Convert 3ds to RSM</CONVERT>
 			<generators>
 				<TITLE>Generators</TITLE>
 				<MAZEGENERATOR>Maze</MAZEGENERATOR>
