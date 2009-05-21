@@ -3,13 +3,14 @@
 #include "../base/interface.h"
 #include "3ds.h"
 
-#include <sdl/SDL.h>
-#include <sdl/SDL_syswm.h>
+#include <SDL/SDL.h>
+#include <SDL/SDL_syswm.h>
 
 #include <commdlg.h>
 #include <shellapi.h>
 #include <direct.h>
-
+#include <stdio.h>
+#include <fstream>
 
 class cRSMModelFace
 {
