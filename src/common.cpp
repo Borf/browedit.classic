@@ -19,7 +19,7 @@
 #include <settings.h>
 const float EPSILON = 0.001f;
 
-#include <sdl/SDL_syswm.h>
+#include <SDL/SDL_syswm.h>
 #include <direct.h>
 #include <commdlg.h>
 
