@@ -111,7 +111,7 @@ void CLoad3DS::CleanUp()
 void CLoad3DS::ProcessNextChunk(t3DModel *pModel, tChunk *pPreviousChunk)
 {
 	t3DObject newObject = {0};					// This is used to add to our object list
-	tMaterialInfo newTexture = {0};				// This is used to add to our material list
+	tMaterialInfo newTexture = {{0}};				// This is used to add to our material list
 
 	tChunk currentChunk = {0};					// The current chunk to load
 	tChunk tempChunk = {0};						// A temp chunk for holding data		
@@ -667,6 +667,7 @@ CVector3 Normalize(CVector3 vNormal)
 void CLoad3DS::ComputeNormals(t3DModel *pModel)
 {
 	CVector3 vVector1, vVector2, vNormal, vPoly[3];
+	int i;
 
 	// If there are no objects, we can skip this part
 	if(pModel->numOfObjects <= 0)
@@ -693,7 +694,7 @@ void CLoad3DS::ComputeNormals(t3DModel *pModel)
 		pObject->pNormals		= new CVector3 [pObject->numOfVerts];
 
 		// Go though all of the faces of this object
-		for(int i=0; i < pObject->numOfFaces; i++)
+		for(i=0; i < pObject->numOfFaces; i++)
 		{												
 			// To cut down LARGE code, we extract the 3 points of this face
 			vPoly[0] = pObject->pVerts[pObject->pFaces[i].vertIndex[0]];
