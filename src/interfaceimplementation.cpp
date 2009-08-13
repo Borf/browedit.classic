@@ -453,3 +453,12 @@ void cBrowInterfaceImplementation::clearSprites()
 	cGraphics::world->sprites.clear();
 }
 
+void cBrowInterfaceImplementation::resetLightmaps()
+{
+	for(int x = 0; x < cGraphics::world->width; x++)
+	{
+		for(int y = 0; y < cGraphics::world->height; y++)
+			cGraphics::world->realLightmaps[y][x]->reset();
+	}
+	
+}

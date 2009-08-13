@@ -73,6 +73,7 @@ public:
 	void					fixNormals();
 	void					render();
 	void					checkModelsOnCubes();
+	void					resetLightmaps();
 	
 	cWindow*				addXmlWindow(const char*);
 	const char*				inputWindow(const char*, const char*);

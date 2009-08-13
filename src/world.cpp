@@ -1577,7 +1577,7 @@ void cWorld::draw()
 	int posx = (int)cGraphics::cMouse::x3d / 10;
 	int posy = (int)cGraphics::cMouse::z3d / 10;
 
-	glDisable(GL_COLOR_MATERIAL);
+	glEnable(GL_COLOR_MATERIAL);
 	for(x = 0; x < width; x++)
 	{
 		for(y = 0; y < height; y++)
@@ -1598,14 +1598,12 @@ void cWorld::draw()
 				glBindTexture(GL_TEXTURE_2D, texture);
 				if (	(cSettings::editMode == MODE_WALLS && cGraphics::view.showGrid && (c->tileOtherSide != -1 || c->tileSide != -1) || c->minHeight != 99999))
 				{
-					glEnable(GL_COLOR_MATERIAL);
 					glColor4f(1,0,1,1);
 				}
 //				else if (cGraphics::view.showtilecolors)
 //					glColor3f((BYTE)t->color[0] / 256.0f,(BYTE)t->color[1] / 256.0f,(BYTE)t->color[2] / 256.0f);
 				else if(((cSettings::editMode == MODE_TEXTUREPAINT && cGraphics::textureTool == TOOL_SELECTAREA) || cSettings::editMode == MODE_HEIGHTGLOBAL) && !cClipBoard::pasting)
 				{
-					glEnable(GL_COLOR_MATERIAL);
 					if(cGraphics::cMouse::lbuttondown && cGraphics::cMouse::y < cGraphics::h() - 20 && inbetween<int>(x, round(cGraphics::cMouse::x3dStart/10), round(cGraphics::cMouse::x3d/10)) && inbetween<int>(y, round(cGraphics::cMouse::z3dStart/10), round(cGraphics::cMouse::z3d/10)) && alt)
 						glColor4f(0.3f, 0.3f, 0.3f, 1);
 					else if(cGraphics::cMouse::lbuttondown && cGraphics::cMouse::y < cGraphics::h() - 20 && inbetween<int>(x, round(cGraphics::cMouse::x3dStart/10), round(cGraphics::cMouse::x3d/10)) && inbetween<int>(y, round(cGraphics::cMouse::z3dStart/10), round(cGraphics::cMouse::z3d/10)))
@@ -1618,13 +1616,11 @@ void cWorld::draw()
 						glColor4f(1,1,1,1);
 					else
 					{
-						glDisable(GL_COLOR_MATERIAL);
 						glColor4f(1,1,1,1);
 					}
 				}
 				else if((cSettings::editMode == MODE_TEXTUREPAINT || cSettings::editMode == MODE_HEIGHTGLOBAL) && inverseSelection && !c->selected && !cClipBoard::pasting)
 				{
-					glEnable(GL_COLOR_MATERIAL);
 					glColor4f(0.2f, 0.2f, 0.2f, 1);
 				}
 				else if (cSettings::editMode == MODE_HEIGHTDETAIL && cClipBoard::pasting && cClipBoard::currentClipBoard->type == cClipBoard::CLIP_HEIGHT && 
@@ -1632,12 +1628,10 @@ void cWorld::draw()
 					inbetween<int>(y, posy-floor(((cClipboardHeight*)cClipBoard::currentClipBoard)->data.size()/2.0f),		posy+ceil(((cClipboardHeight*)cClipBoard::currentClipBoard)->data.size()/2.0f)))
 				{
 					
-					glEnable(GL_COLOR_MATERIAL);
 					glColor4f(0.7f,0.7f,0.7f,1);
 				}
 				else
 				{
-					glDisable(GL_COLOR_MATERIAL);
 					glColor4f(1,1,1,1);
 				}
 //				glNormal3f(c->normal.x, c->normal.y, c->normal.z);
@@ -1651,19 +1645,14 @@ void cWorld::draw()
 					glNormal3f(c->vNormal4.x, c->vNormal4.y, c->vNormal4.z);
 					glTexCoord2f(t->u4, 1-t->v4);				glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
 				glEnd();
-				glDisable(GL_COLOR_MATERIAL);
-				glColor4f(1,1,1,1);
-				glDisable(GL_COLOR_MATERIAL);
 				glColor4f(1,1,1,1);
 			}
 			else if (cGraphics::view.showNoTiles)
 			{
 				glDisable(GL_BLEND);
 				glColor3f(cGraphics::noTileColor.x, cGraphics::noTileColor.y, cGraphics::noTileColor.z);
-				glEnable(GL_COLOR_MATERIAL);
 				glDisable(GL_TEXTURE_2D);
 				glColor3f(cGraphics::noTileColor.x, cGraphics::noTileColor.y, cGraphics::noTileColor.z);
-				glEnable(GL_COLOR_MATERIAL);
 				glNormal3f(c->normal.x, c->normal.y, c->normal.z);
 				glBegin(GL_TRIANGLE_STRIP);
 					glNormal3f(c->vNormal1.x, c->vNormal1.y, c->vNormal1.z);
@@ -1675,14 +1664,9 @@ void cWorld::draw()
 					glNormal3f(c->vNormal4.x, c->vNormal4.y, c->vNormal4.z);
 					glVertex3f(x*10+10,-c->cell4+0.01f,(height-y)*10-10);
 				glEnd();
-				glDisable(GL_COLOR_MATERIAL);
-				glColor4f(1,1,1,1);
-				glDisable(GL_COLOR_MATERIAL);
 				glColor4f(1,1,1,1);
 				glEnable(GL_TEXTURE_2D);
 			}
-			glColor4f(1,1,1,1);
-			glDisable(GL_COLOR_MATERIAL);
 			glColor4f(1,1,1,1);
 			if (c->tileOtherSide != -1 && c->tileOtherSide < (int)tiles.size())
 			{
@@ -1729,9 +1713,6 @@ void cWorld::draw()
 	glColor4f(1,1,1,1);
 	glEnable(GL_BLEND);
 	glEnable(GL_LIGHTING);
-	glDisable(GL_COLOR_MATERIAL);
-	glColor4f(1,1,1,1);
-	glDisable(GL_COLOR_MATERIAL);
 	glColor4f(1,1,1,1);
 	if(cGraphics::view.showLightmaps)
 	{
@@ -1833,9 +1814,6 @@ void cWorld::draw()
 			}
 		}
 	}
-	glEnable(GL_COLOR_MATERIAL);
-	glColor4f(1,1,1,1);
-	glEnable(GL_COLOR_MATERIAL);
 	glColor4f(1,1,1,1);
 
 	glNormal3f(0,1,0);
@@ -2403,7 +2381,6 @@ void cWorld::draw()
 		glEnable(GL_BLEND);
 		glTranslatef(0,0,height*10);
 		glScalef(1,1,-1);
-		glDisable(GL_COLOR_MATERIAL);
 		for(i = 0; i < models.size(); i++)
 		{
 			if(models[i]->selected)

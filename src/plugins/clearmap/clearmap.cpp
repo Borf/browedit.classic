@@ -127,6 +127,8 @@ void cClearMapPlugin::clickOk(cWindow* w)
 
 		for(i = 0; i < browInterface->tileCount(); i++)
 			browInterface->getTile(i)->lightmap = 0;
+
+		browInterface->resetLightmaps();
 	}
 	if(w->objects["chkObjects"]->getInt(0) != 0)
 		browInterface->clearModels();

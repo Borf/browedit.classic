@@ -199,6 +199,8 @@ public:
 	virtual int						getWorldWidth() = 0;
 	virtual void					setWaterHeight(float) = 0;
 
+	virtual void					resetLightmaps() = 0;
+
 	virtual cPluginBase*			getPlugin(const char* name) = 0;
 	virtual const char*				getMapFile() = 0;
 
