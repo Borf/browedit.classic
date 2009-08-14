@@ -460,5 +460,4 @@ void cBrowInterfaceImplementation::resetLightmaps()
 		for(int y = 0; y < cGraphics::world->height; y++)
 			cGraphics::world->realLightmaps[y][x]->reset();
 	}
-	
 }
