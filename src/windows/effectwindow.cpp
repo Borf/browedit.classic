@@ -32,7 +32,7 @@ cEffectWindow::cEffectWindow() : cWindow()
 	o->setInt(0,0);
 	objects["objectmenu"] = o;
 	
-	o = new cWindowInputBox(this);
+	o = new cWindowLabel(this);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(100,40);
 	o->resizeTo(210,20);

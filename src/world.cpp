@@ -586,6 +586,8 @@ void cWorld::load()
 			cMenu* m = effectsmenu->findData(buf);
 			if (m != NULL)
 				e.readablename = m->title;
+			else
+				e.readablename = "?";
 			effects.push_back(e);
 			}
 			break;

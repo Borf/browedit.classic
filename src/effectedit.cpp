@@ -151,7 +151,7 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 				}
 				break;
 			case SDLK_RETURN:
-				if (cGraphics::worldContainer->settings.selectedObject != -1)
+				if (cGraphics::worldContainer->settings.selectedObject != -1 && cGraphics::worldContainer->settings.selectedObject < (int)cGraphics::world->effects.size())
 				{
 					cEffect* o = &cGraphics::world->effects[cGraphics::worldContainer->settings.selectedObject];
 
@@ -167,7 +167,7 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 					((cWindowFloatInputBox*)w->objects["scalez"])->floatje = &o->scale.z;
 					((cWindowFloatInputBox*)w->objects["looptime"])->floatje = &o->loop;
 
-					((cWindowStringInputBox*)w->objects["objectname"])->stringetje = &o->readablename;
+					w->objects["objectname"]->setText(0, o->readablename);
 					((cEffectWindow*)w)->undo = new cUndoChangeEffect(cGraphics::worldContainer->settings.selectedObject);
 					cWM::addWindow(w);
 				}

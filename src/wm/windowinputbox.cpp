@@ -283,10 +283,14 @@ cWindowFloatInputBox::cWindowFloatInputBox( cWindow* parent, TiXmlDocument* skin
 	alignment = ALIGN_TOPLEFT;
 	resizeTo(70,20);
 	firstTime = true;
+	floatje = NULL;
 }
 
 void cWindowFloatInputBox::draw( int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom )
 {
+	if(floatje == NULL)
+		return;
+
 	if(*floatje != lastvalue || firstTime)
 	{
 		firstTime = false;
@@ -329,10 +333,13 @@ cWindowStringInputBox::cWindowStringInputBox( cWindow* parent, TiXmlDocument* sk
 	alignment = ALIGN_TOPLEFT;
 	resizeTo(70,20);
 	firstTime = true;
+	stringetje = NULL;
 }
 
 void cWindowStringInputBox::draw( int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom )
 {
+	if(stringetje == NULL)
+		return;
 	if(*stringetje != lastvalue || firstTime)
 	{
 		firstTime = false;
@@ -368,6 +375,8 @@ void cWindowStringInputBox::setInt( int id, int val )
 
 void cWindowLongInputBox::draw( int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom )
 {
+	if(longje == NULL)
+		return;
 	if(*longje != lastvalue || firstdraw)
 	{
 		firstdraw = false;
@@ -389,6 +398,7 @@ cWindowLongInputBox::cWindowLongInputBox( cWindow* parent, TiXmlDocument* skin )
 	alignment = ALIGN_TOPLEFT;
 	resizeTo(70,20);
 	firstdraw = true;
+	longje = NULL;
 }
 
 bool cWindowLongInputBox::onKeyDown( int keyid, bool shift )
