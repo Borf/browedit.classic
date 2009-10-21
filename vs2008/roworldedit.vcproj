@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="roworldedit"
 	ProjectGUID="{42B28052-ACD9-46C3-B6C1-19B0C6F9C554}"
 	RootNamespace="roworldedit"
@@ -43,7 +43,7 @@
 				UseUnicodeResponseFiles="false"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\src,..\libs/include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;GRF_STATIC;_CRT_SECURE_NO_WARNINGS"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;GRF_STATIC;_CRT_SECURE_NO_WARNINGS;WIN32"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -187,11 +187,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\common.cpp"
+				RelativePath="..\src\clipboard.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\DetectVM.cpp"
+				RelativePath="..\src\common.cpp"
 				>
 			</File>
 			<File
@@ -207,7 +207,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\gatedit.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\graphics.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\interfaceimplementation.cpp"
 				>
 			</File>
 			<File
@@ -215,7 +223,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\md5.c"
+				RelativePath="..\src\memorymanagement.cpp"
 				>
 			</File>
 			<File
@@ -227,11 +235,23 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\mymath.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\RSMModel.cpp"
 				>
 			</File>
 			<File
+				RelativePath="..\src\settings.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\sprite.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\StackWalker.cpp"
 				>
 			</File>
 			<File
@@ -267,10 +287,6 @@
 				</File>
 				<File
 					RelativePath="..\src\effectedit.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\src\gatedit.cpp"
 					>
 				</File>
 				<File
@@ -329,6 +345,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\clipboard.h"
+				>
+			</File>
+			<File
 				RelativePath="..\src\common.h"
 				>
 			</File>
@@ -349,11 +369,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\src\main.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\md5.h"
+				RelativePath="..\src\interfaceimplementation.h"
 				>
 			</File>
 			<File
@@ -377,7 +393,15 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\settings.h"
+				>
+			</File>
+			<File
 				RelativePath="..\src\sprite.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\StackWalker.h"
 				>
 			</File>
 			<File
@@ -436,14 +460,6 @@
 			</File>
 			<File
 				RelativePath="..\src\wm\window.h"
-				>
-			</File>
-			<File
-				RelativePath="..\src\wm\windowobject.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\src\wm\windowobject.h"
 				>
 			</File>
 			<File
@@ -559,6 +575,10 @@
 				</File>
 				<File
 					RelativePath="..\src\windows\texturewindow.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\windows\walltexturewindow.cpp"
 					>
 				</File>
 				<File
@@ -685,6 +705,10 @@
 						>
 					</File>
 					<File
+						RelativePath="..\src\windows\walltexturewindow.h"
+						>
+					</File>
+					<File
 						RelativePath="..\src\windows\waterwindow.h"
 						>
 					</File>
@@ -755,6 +779,14 @@
 				</File>
 				<File
 					RelativePath="..\src\wm\windowmainbutton.h"
+					>
+				</File>
+				<File
+					RelativePath="..\src\wm\windowobject.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\src\wm\windowobject.h"
 					>
 				</File>
 				<File
@@ -892,6 +924,14 @@
 			</File>
 			<File
 				RelativePath="..\src\textureloaders\bitmaptextureloader.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\textureloaders\giftextureloader.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\src\textureloaders\giftextureloader.h"
 				>
 			</File>
 			<File

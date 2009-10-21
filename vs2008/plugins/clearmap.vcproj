@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="plugin_clearmap"
 	ProjectGUID="{80BDA90B-0A0F-45B2-AEAC-E4998BBD74AB}"
 	RootNamespace="clearmap"
@@ -41,7 +41,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\src,..\..\libs\include"
-				PreprocessorDefinitions="PLUGIN_CLEARMAP_EXPORTS"
+				PreprocessorDefinitions="WIN32;_CRT_SECURE_NO_WARNINGS;PLUGIN_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -172,6 +172,10 @@
 				RelativePath="..\..\src\plugins\clearmap\clearmap.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\..\src\plugins\clearmap\plugin.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -180,6 +184,10 @@
 			>
 			<File
 				RelativePath="..\..\src\plugins\clearmap\clearmap.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\src\plugins\clearmap\plugin.h"
 				>
 			</File>
 		</Filter>

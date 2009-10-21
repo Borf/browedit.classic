@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="plugin_base"
 	ProjectGUID="{766DE6ED-86ED-4412-932C-658B875664FD}"
 	RootNamespace="base"
@@ -41,6 +41,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\src,..\..\libs\include"
+				PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS;WIN32"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -170,7 +171,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\src\plugins\base\types.h"
+				RelativePath="..\..\src\plugins\base\interface.h"
 				>
 			</File>
 		</Filter>
