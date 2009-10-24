@@ -9,26 +9,27 @@
 cAmbientLightWindow::cAmbientLightWindowOkButton::cAmbientLightWindowOkButton( cWindow* parent) : cWindowButton(parent)
 {
 	alignment = ALIGN_BOTTOM;
-	moveTo(0, 0);
+	moveTo(0, 5);
 	resizeTo(100, 20);
 	text = "Ok";
 }
 
 void cAmbientLightWindow::cAmbientLightWindowOkButton::onClick()
 {
-	cGraphics::world->ambientLight.ambientr = atoi(parent->objects["ambientr"]->getText(0).c_str());
-	cGraphics::world->ambientLight.ambientg = atoi(parent->objects["ambientg"]->getText(0).c_str());
-	cGraphics::world->ambientLight.ambientb = atoi(parent->objects["ambientb"]->getText(0).c_str());
+	//Corrected global light properties window according to the new file information. by Henko
+
+	cGraphics::world->ambientLight.lightLongitude = atoi(parent->objects["longitude"]->getText(0).c_str());
+	cGraphics::world->ambientLight.lightLatitude = atoi(parent->objects["latitude"]->getText(0).c_str());
+
+	cGraphics::world->ambientLight.ambient.x = atof(parent->objects["ambientr"]->getText(0).c_str());
+	cGraphics::world->ambientLight.ambient.y = atof(parent->objects["ambientg"]->getText(0).c_str());
+	cGraphics::world->ambientLight.ambient.z = atof(parent->objects["ambientb"]->getText(0).c_str());
 	
 	cGraphics::world->ambientLight.diffuse.x = atof(parent->objects["diffuser"]->getText(0).c_str());
 	cGraphics::world->ambientLight.diffuse.y = atof(parent->objects["diffuseg"]->getText(0).c_str());
 	cGraphics::world->ambientLight.diffuse.z = atof(parent->objects["diffuseb"]->getText(0).c_str());
-	
-	cGraphics::world->ambientLight.shadow.x = atof(parent->objects["shadowr"]->getText(0).c_str());
-	cGraphics::world->ambientLight.shadow.y = atof(parent->objects["shadowg"]->getText(0).c_str());
-	cGraphics::world->ambientLight.shadow.z = atof(parent->objects["shadowb"]->getText(0).c_str());
-	
-	cGraphics::world->ambientLight.alpha = atof(parent->objects["alpha"]->getText(0).c_str());
+
+	cGraphics::world->ambientLight.ambintensity = atof(parent->objects["ambintensity"]->getText(0).c_str());
 	
 	parent->close();
 }
@@ -39,9 +40,9 @@ cAmbientLightWindow::cAmbientLightWindow( ) : cWindow()
 	resizable = false;
 	visible = true;
 	
-	h = 150;
-	w = 310+skinOffLeft+skinOffRight;
-	title = GetMsg("wm/ambient/TITLE");
+	h = 240;
+	w = 330+skinOffLeft+skinOffRight;
+	title = GetMsg("wm/globallighting/TITLE");
 	center();
 	
 	defaultObject = "OkButton";
@@ -50,73 +51,81 @@ cAmbientLightWindow::cAmbientLightWindow( ) : cWindow()
 	objects["close"] = new cWindowCloseButton(this);
 	
 	cWindowObject* o;
+
+	//Corrected global light properties window according to the new file information. by Henko
 	
-	addLabel("lblAmbient", 0,0,GetMsg("wm/ambient/AMBIENT"));
-	addLabel("lblDiffuse", 0,20,GetMsg("wm/ambient/DIFFUSE"));
-	addLabel("lblShadow",0,40,GetMsg("wm/ambient/SHADOW"));
-	addLabel("lblAlpha", 0,60,GetMsg("wm/ambient/ALPHA"));
+	addLabel("lblDiffuseTitle", 3,0,GetMsg("wm/globallighting/DIFFUSETITLE"));
+	addLabel("lblDiffuse", 3,20,GetMsg("wm/globallighting/DIFFUSECOLOR"));
+	addLabel("lblLongitude", 3,40,GetMsg("wm/globallighting/LONGITUDE"));
+	addLabel("lblLatitude", 3,60,GetMsg("wm/globallighting/LATITUDE"));
 	
-	o = new cWindowInputBox(this);
-	o->alignment = ALIGN_TOPLEFT;
-	o->moveTo(100,0);
-	o->resizeTo(70,20);
-	objects["ambientr"] = o;
+	addLabel("lblAmbientTitle", 3,100,GetMsg("wm/globallighting/AMBIENTTITLE"));
+	addLabel("lblAmbient", 3,120,GetMsg("wm/globallighting/AMBIENTCOLOR"));
+	addLabel("lblAlpha", 3,140,GetMsg("wm/globallighting/AMBINTENSITY"));
 	
-	o = new cWindowInputBox(this);
-	o->alignment = ALIGN_TOPLEFT;
-	o->moveTo(170,0);
-	o->resizeTo(70,20);
-	objects["ambientg"] = o;
-	
-	o = new cWindowInputBox(this);
-	o->alignment = ALIGN_TOPLEFT;
-	o->moveTo(240,0);
-	o->resizeTo(70,20);
-	objects["ambientb"] = o;
 	///////////////////////////////////////////////
 	
 	o = new cWindowInputBox(this);
-	o->alignment = ALIGN_TOPLEFT;
-	o->moveTo(100,20);
+	o->alignment = ALIGN_TOPRIGHT;
+	o->moveTo(140,20);
 	o->resizeTo(70,20);
 	objects["diffuser"] = o;
 	
 	o = new cWindowInputBox(this);
-	o->alignment = ALIGN_TOPLEFT;
-	o->moveTo(170,20);
+	o->alignment = ALIGN_TOPRIGHT;
+	o->moveTo(70,20);
 	o->resizeTo(70,20);
 	objects["diffuseg"] = o;
 	
 	o = new cWindowInputBox(this);
-	o->alignment = ALIGN_TOPLEFT;
-	o->moveTo(240,20);
+	o->alignment = ALIGN_TOPRIGHT;
+	o->moveTo(0,20);
 	o->resizeTo(70,20);
 	objects["diffuseb"] = o;
+
 	///////////////////////////////////////////////
+
 	o = new cWindowInputBox(this);
-	o->alignment = ALIGN_TOPLEFT;
-	o->moveTo(100,40);
-	o->resizeTo(70,20);
-	objects["shadowr"] = o;
-	
-	o = new cWindowInputBox(this);
-	o->alignment = ALIGN_TOPLEFT;
-	o->moveTo(170,40);
-	o->resizeTo(70,20);
-	objects["shadowg"] = o;
-	
-	o = new cWindowInputBox(this);
-	o->alignment = ALIGN_TOPLEFT;
-	o->moveTo(240,40);
-	o->resizeTo(70,20);
-	objects["shadowb"] = o;
-	/////////////////////////////////////////////////
-	
-	o = new cWindowInputBox(this);
-	o->alignment = ALIGN_TOPLEFT;
-	o->moveTo(100,60);
+	o->alignment = ALIGN_TOPRIGHT;
+	o->moveTo(0,40);
 	o->resizeTo(210,20);
-	objects["alpha"] = o;
+	objects["longitude"] = o;
+
+	o = new cWindowInputBox(this);
+	o->alignment = ALIGN_TOPRIGHT;
+	o->moveTo(0,60);
+	o->resizeTo(210,20);
+	objects["latitude"] = o;
+
+	///////////////////////////////////////////////
+
+	o = new cWindowInputBox(this);
+	o->alignment = ALIGN_TOPRIGHT;
+	o->moveTo(140,120);
+	o->resizeTo(70,20);
+	objects["ambientr"] = o;
+	
+	o = new cWindowInputBox(this);
+	o->alignment = ALIGN_TOPRIGHT;
+	o->moveTo(70,120);
+	o->resizeTo(70,20);
+	objects["ambientg"] = o;
+	
+	o = new cWindowInputBox(this);
+	o->alignment = ALIGN_TOPRIGHT;
+	o->moveTo(0,120);
+	o->resizeTo(70,20);
+	objects["ambientb"] = o;
+
+	///////////////////////////////////////////////
+
+	o = new cWindowInputBox(this);
+	o->alignment = ALIGN_TOPRIGHT;
+	o->moveTo(0,140);
+	o->resizeTo(210,20);
+	objects["ambintensity"] = o;
+
+	///////////////////////////////////////////////
 	
 	objects["OkButton"] = new cAmbientLightWindowOkButton(this);
 }

@@ -165,18 +165,18 @@ public:
 	float	amplitude;
 	float	phase;
 	float	surfaceCurve;
-//	int		texcycle; // unknown
+	int		animSpeed;
 };
 
 class cAmbientLight
 {
 public:
-	int	ambientr;
-	int	ambientg;
-	int	ambientb;
+	//Correct light information. by Henko
+	int lightLongitude;
+	int lightLatitude;
 	cVector3	diffuse;
-	cVector3	shadow;
-	float		alpha;
+	cVector3	ambient;
+	float ambintensity;
 };
 
 class cWorld

@@ -162,6 +162,14 @@ void cWorld::load()
 		lightmapHeight = *((int*)(buf+8));
 		gridSizeCell = *((int*)(buf+12));
 
+		//Fix lightmap format if it was invalid. by Henko
+		if (lightmapWidth != 8 || lightmapHeight != 8 || gridSizeCell != 1)
+		{
+			Log(1, 0, GetMsg("world/INVALIDLIGHTMAPFORMAT"), lightmapWidth, lightmapHeight, gridSizeCell, 8, 8, 1);
+			lightmapWidth = 8;
+			lightmapHeight = 8;
+			gridSizeCell = 1;
+		}
 
 		unsigned int nLightmaps = *((int*)buf);
 		lightmaps.resize(nLightmaps);
@@ -401,37 +409,38 @@ void cWorld::load()
 		water.phase = 2;
 		water.surfaceCurve = 0.5f;
 	}
+
 	if(version >= 0x109)
-		pFile->read((char*)&ambientLight.ambientr,4);
+		pFile->read((char*)&water.animSpeed,4);
 	else
-		ambientLight.ambientr = 3;
+		water.animSpeed = 3;
 	
-	if(version >= 0x104)
+	if(version >= 0x105)
 	{
-		pFile->read((char*)&ambientLight.ambientg,4);
-		pFile->read((char*)&ambientLight.ambientb,4);
+		pFile->read((char*)&ambientLight.lightLongitude,4);
+		pFile->read((char*)&ambientLight.lightLatitude,4);
 
 		pFile->read((char*)&ambientLight.diffuse.x,4);
 		pFile->read((char*)&ambientLight.diffuse.y,4);
 		pFile->read((char*)&ambientLight.diffuse.z,4);
 
-		pFile->read((char*)&ambientLight.shadow.x,4);
-		pFile->read((char*)&ambientLight.shadow.y,4);
-		pFile->read((char*)&ambientLight.shadow.z,4);
+		pFile->read((char*)&ambientLight.ambient.x,4);
+		pFile->read((char*)&ambientLight.ambient.y,4);
+		pFile->read((char*)&ambientLight.ambient.z,4);
 	}
 	else
 	{
-		ambientLight.ambientg = 45;
-		ambientLight.ambientb = 45;
+		ambientLight.lightLongitude = 45;
+		ambientLight.lightLatitude = 45;
 
 		ambientLight.diffuse = cVector3(1,1,1);
-		ambientLight.shadow = cVector3(0.3f,0.3f,0.3f);
+		ambientLight.ambient = cVector3(0.3f,0.3f,0.3f);
 	}
 
 	if(version >= 0x107)
-		pFile->read((char*)&ambientLight.alpha,4);
+		pFile->read((char*)&ambientLight.ambintensity,4);
 	else
-		ambientLight.alpha = 0.5f;
+		ambientLight.ambintensity = 0.5f;
 
 	if(version >= 0x106)
 	{
@@ -934,7 +943,18 @@ void cWorld::save()
 		}
 
 		int nLightmaps = lightmaps.size();
+
 		pFile.write((char*)&nLightmaps, 4);
+
+		//Fix lightmap format if it was invalid. by Henko
+		if (lightmapWidth != 8 || lightmapHeight != 8 || gridSizeCell != 1)
+		{
+			Log(1, 0, GetMsg("world/INVALIDLIGHTMAPFORMAT"), lightmapWidth, lightmapHeight, gridSizeCell, 8, 8, 1);
+			lightmapWidth = 8;
+			lightmapHeight = 8;
+			gridSizeCell = 1;
+		}
+
 		pFile.write((char*)&lightmapWidth, 4);
 		pFile.write((char*)&lightmapHeight, 4);
 		pFile.write((char*)&gridSizeCell, 4);
@@ -989,8 +1009,10 @@ void cWorld::save()
 	}
 	{
 		std::string fname2 = fileName;
-		char fname[50];
-		ZeroMemory(fname, 50);
+
+		//Adjusted fname buffer size to 256 to prevent crash when saving. by Henko
+		char fname[256];
+		ZeroMemory(fname, 256);
 		strcpy(fname, fname2.substr(fname2.rfind("\\")+1).c_str());
 		
 		if(strlen(fname) > 16)
@@ -1033,17 +1055,17 @@ void cWorld::save()
 		pFile.write((char*)&water.amplitude, 4);
 		pFile.write((char*)&water.phase, 4);
 		pFile.write((char*)&water.surfaceCurve, 4);
+		pFile.write((char*)&water.animSpeed, 4);
 
-		pFile.write((char*)&ambientLight.ambientr, 4);
-		pFile.write((char*)&ambientLight.ambientg, 4);
-		pFile.write((char*)&ambientLight.ambientb, 4);
+		pFile.write((char*)&ambientLight.lightLongitude, 4);
+		pFile.write((char*)&ambientLight.lightLatitude, 4);
 		pFile.write((char*)&ambientLight.diffuse.x, 4);
 		pFile.write((char*)&ambientLight.diffuse.y, 4);
 		pFile.write((char*)&ambientLight.diffuse.z, 4);
-		pFile.write((char*)&ambientLight.shadow.x, 4);
-		pFile.write((char*)&ambientLight.shadow.y, 4);
-		pFile.write((char*)&ambientLight.shadow.z, 4);
-		pFile.write((char*)&ambientLight.alpha, 4);
+		pFile.write((char*)&ambientLight.ambient.x, 4);
+		pFile.write((char*)&ambientLight.ambient.y, 4);
+		pFile.write((char*)&ambientLight.ambient.z, 4);
+		pFile.write((char*)&ambientLight.ambintensity, 4);
 
 		pFile.write((char*)&unknown1, 4);
 		pFile.write((char*)&unknown2, 4);
@@ -1526,38 +1548,57 @@ void cWorld::draw()
 		glColor4f(1,1,1,1);
 
 
-	if(cGraphics::view.showLightmaps)
+	//Implemented global opengl lighting. by Henko
+
+	if (cGraphics::view.showGlobalLighting)
 	{
-		cGraphics::worldContainer->settings.lightAmbient[0] = ambientLight.diffuse.x;
-		cGraphics::worldContainer->settings.lightAmbient[1] = ambientLight.diffuse.y;
-		cGraphics::worldContainer->settings.lightAmbient[2] = ambientLight.diffuse.z;
-		cGraphics::worldContainer->settings.lightAmbient[3] = 1.0f;
+		cGraphics::worldContainer->settings.lightAmbient[0] = ambientLight.ambient.x * ambientLight.ambintensity;
+		cGraphics::worldContainer->settings.lightAmbient[1] = ambientLight.ambient.y * ambientLight.ambintensity;
+		cGraphics::worldContainer->settings.lightAmbient[2] = ambientLight.ambient.z * ambientLight.ambintensity;
+		cGraphics::worldContainer->settings.lightAmbient[3] = 1.0f * ambientLight.ambintensity;
 		
-		cGraphics::worldContainer->settings.lightDiffuse[0] = ambientLight.shadow.x;
-		cGraphics::worldContainer->settings.lightDiffuse[1] = ambientLight.shadow.y;
-		cGraphics::worldContainer->settings.lightDiffuse[2] = ambientLight.shadow.z;
+		cGraphics::worldContainer->settings.lightDiffuse[0] = ambientLight.diffuse.x;
+		cGraphics::worldContainer->settings.lightDiffuse[1] = ambientLight.diffuse.y;
+		cGraphics::worldContainer->settings.lightDiffuse[2] = ambientLight.diffuse.z;
 		cGraphics::worldContainer->settings.lightDiffuse[3] = 1.0f;
+
+		float xdir = cos((ambientLight.lightLongitude + 90)*PI/180.0)*sin((90-ambientLight.lightLatitude)*PI/180.0);
+		float zdir = sin((ambientLight.lightLongitude + 90)*PI/180.0)*sin((90-ambientLight.lightLatitude)*PI/180.0);
+		float ydir = -cos((90-ambientLight.lightLatitude)*PI/180.0);
+
+		cGraphics::worldContainer->settings.lightPosition[0] = xdir;
+		cGraphics::worldContainer->settings.lightPosition[1] = ydir;
+		cGraphics::worldContainer->settings.lightPosition[2] = zdir;
+		cGraphics::worldContainer->settings.lightPosition[3] = 0;
 	}
 	else
 	{
-		cGraphics::worldContainer->settings.lightAmbient[0] = 0.7f;
-		cGraphics::worldContainer->settings.lightAmbient[1] = 0.7f;
-		cGraphics::worldContainer->settings.lightAmbient[2] = 0.7f;
+		cGraphics::worldContainer->settings.lightAmbient[0] = 1.0f;
+		cGraphics::worldContainer->settings.lightAmbient[1] = 1.0f;
+		cGraphics::worldContainer->settings.lightAmbient[2] = 1.0f;
 		cGraphics::worldContainer->settings.lightAmbient[3] = 1.0f;
 		
-		cGraphics::worldContainer->settings.lightDiffuse[0] = 0.3f;
-		cGraphics::worldContainer->settings.lightDiffuse[1] = 0.3f;
-		cGraphics::worldContainer->settings.lightDiffuse[2] = 0.3f;
+		cGraphics::worldContainer->settings.lightDiffuse[0] = 0.0f;
+		cGraphics::worldContainer->settings.lightDiffuse[1] = 0.0f;
+		cGraphics::worldContainer->settings.lightDiffuse[2] = 0.0f;
 		cGraphics::worldContainer->settings.lightDiffuse[3] = 1.0f;
+
+		cGraphics::worldContainer->settings.lightPosition[0] = 0;
+		cGraphics::worldContainer->settings.lightPosition[1] = 0;
+		cGraphics::worldContainer->settings.lightPosition[2] = 0;
+		cGraphics::worldContainer->settings.lightPosition[3] = 0;
 	}
+
 	float tmp[4] = { 0,0,0,1 };
 	
-	glLightfv(GL_LIGHT0, GL_AMBIENT, tmp);				// Setup The Ambient Light
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, cGraphics::worldContainer->settings.lightDiffuse);				// Setup The Diffuse Light
-	glLightfv(GL_LIGHT0, GL_SPECULAR, tmp);				// Setup The Diffuse Light
-	glMaterialfv ( GL_FRONT_AND_BACK, GL_EMISSION, tmp) ;
+	glLightfv(GL_LIGHT0, GL_AMBIENT, cGraphics::worldContainer->settings.lightAmbient);				// Setup The Ambient Light
 
-//	glDisable(GL_LIGHT0);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, cGraphics::worldContainer->settings.lightDiffuse);				// Setup The Diffuse Light
+	glLightfv(GL_LIGHT0, GL_POSITION, cGraphics::worldContainer->settings.lightPosition);			// Setup The Diffuse Light Direction
+
+	glEnable(GL_LIGHT0);
+
+	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, tmp) ;
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, cGraphics::worldContainer->settings.lightAmbient);
 	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
 
@@ -1580,6 +1621,7 @@ void cWorld::draw()
 	int posy = (int)cGraphics::cMouse::z3d / 10;
 
 	glEnable(GL_COLOR_MATERIAL);
+	glEnable(GL_LIGHTING);
 	for(x = 0; x < width; x++)
 	{
 		for(y = 0; y < height; y++)
@@ -1636,17 +1678,21 @@ void cWorld::draw()
 				{
 					glColor4f(1,1,1,1);
 				}
-//				glNormal3f(c->normal.x, c->normal.y, c->normal.z);
+
 				glBegin(GL_TRIANGLE_STRIP);
 					glNormal3f(c->vNormal1.x, c->vNormal1.y, c->vNormal1.z);
 					glTexCoord2f(t->u1, 1-t->v1);				glVertex3f(x*10,-c->cell1,(height-y)*10);
+
 					glNormal3f(c->vNormal2.x, c->vNormal2.y, c->vNormal2.z);
 					glTexCoord2f(t->u3, 1-t->v3);				glVertex3f(x*10,-c->cell3,(height-y)*10-10);
+
 					glNormal3f(c->vNormal3.x, c->vNormal3.y, c->vNormal3.z);
 					glTexCoord2f(t->u2, 1-t->v2);				glVertex3f(x*10+10,-c->cell2,(height-y)*10);
+
 					glNormal3f(c->vNormal4.x, c->vNormal4.y, c->vNormal4.z);
 					glTexCoord2f(t->u4, 1-t->v4);				glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
 				glEnd();
+
 				glColor4f(1,1,1,1);
 			}
 			else if (cGraphics::view.showNoTiles)
@@ -1655,7 +1701,7 @@ void cWorld::draw()
 				glColor3f(cGraphics::noTileColor.x, cGraphics::noTileColor.y, cGraphics::noTileColor.z);
 				glDisable(GL_TEXTURE_2D);
 				glColor3f(cGraphics::noTileColor.x, cGraphics::noTileColor.y, cGraphics::noTileColor.z);
-				glNormal3f(c->normal.x, c->normal.y, c->normal.z);
+
 				glBegin(GL_TRIANGLE_STRIP);
 					glNormal3f(c->vNormal1.x, c->vNormal1.y, c->vNormal1.z);
 					glVertex3f(x*10,-c->cell1+0.01f,(height-y)*10);
@@ -1666,6 +1712,7 @@ void cWorld::draw()
 					glNormal3f(c->vNormal4.x, c->vNormal4.y, c->vNormal4.z);
 					glVertex3f(x*10+10,-c->cell4+0.01f,(height-y)*10-10);
 				glEnd();
+
 				glColor4f(1,1,1,1);
 				glEnable(GL_TEXTURE_2D);
 			}
@@ -1711,11 +1758,10 @@ void cWorld::draw()
 		}
 	}
 
-
 	glColor4f(1,1,1,1);
 	glEnable(GL_BLEND);
-	glEnable(GL_LIGHTING);
-	glColor4f(1,1,1,1);
+	glDisable(GL_LIGHTING);
+
 	if(cGraphics::view.showLightmaps)
 	{
 		for(x = 0; (int)x < width; x++)
@@ -1730,35 +1776,39 @@ void cWorld::draw()
 //					cTile* t = &tiles[c->tileUp];
 //					int lightmap = lightmaps[t->lightmap]->texId();
 //					int lightmap2 = lightmaps[t->lightmap]->texId2();
+
 					if(realLightmaps[y][x] == NULL)
 						continue;
+
 					int lightmap = realLightmaps[y][x]->texId();
 					int lightmap2 = realLightmaps[y][x]->texId2();
-					glBlendFunc(GL_ONE ,GL_DST_COLOR);				
-					glBindTexture(GL_TEXTURE_2D, lightmap);
+
 					double d = 1/128.0;
 					double d6 = 6/128.0;
+
+					glBlendFunc(GL_ZERO, GL_SRC_COLOR);
+					glBindTexture(GL_TEXTURE_2D, lightmap2);
 					glBegin(GL_TRIANGLE_STRIP);
-						glNormal3f(c->vNormal1.x, c->vNormal1.y, c->vNormal1.z);
+						glNormal3f(c->vNormal1.x, -c->vNormal1.y, c->vNormal1.z);
 						glTexCoord2f(d + d6*(x%21),d + d6*(y%21));					glVertex3f(x*10,-c->cell1,(height-y)*10);
-						glNormal3f(c->vNormal2.x, c->vNormal2.y, c->vNormal2.z);
+						glNormal3f(c->vNormal2.x, -c->vNormal2.y, c->vNormal2.z);
 						glTexCoord2f(d + d6*(x%21),d + d6*(y%21)+d6);				glVertex3f(x*10,-c->cell3,(height-y)*10-10);
-						glNormal3f(c->vNormal3.x, c->vNormal3.y, c->vNormal3.z);
+						glNormal3f(c->vNormal3.x, -c->vNormal3.y, c->vNormal3.z);
 						glTexCoord2f(d + d6*(x%21)+d6,d + d6*(y%21));				glVertex3f(x*10+10,-c->cell2,(height-y)*10);
-						glNormal3f(c->vNormal4.x, c->vNormal4.y, c->vNormal4.z);
+						glNormal3f(c->vNormal4.x, -c->vNormal4.y, c->vNormal4.z);
 						glTexCoord2f(d + d6*(x%21)+d6,d + d6*(y%21)+d6);			glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
 					glEnd();
 
-					glBlendFunc(GL_DST_COLOR, GL_ZERO);
-					glBindTexture(GL_TEXTURE_2D, lightmap2);
+					glBlendFunc(GL_ONE, GL_ONE);	
+					glBindTexture(GL_TEXTURE_2D, lightmap);
 					glBegin(GL_TRIANGLE_STRIP);
-						glNormal3f(c->vNormal1.x, c->vNormal1.y, c->vNormal1.z);
+						glNormal3f(c->vNormal1.x, -c->vNormal1.y, c->vNormal1.z);
 						glTexCoord2f(d + d6*(x%21),d + d6*(y%21));					glVertex3f(x*10,-c->cell1,(height-y)*10);
-						glNormal3f(c->vNormal2.x, c->vNormal2.y, c->vNormal2.z);
+						glNormal3f(c->vNormal2.x, -c->vNormal2.y, c->vNormal2.z);
 						glTexCoord2f(d + d6*(x%21),d + d6*(y%21)+d6);					glVertex3f(x*10,-c->cell3,(height-y)*10-10);
-						glNormal3f(c->vNormal3.x, c->vNormal3.y, c->vNormal3.z);
+						glNormal3f(c->vNormal3.x, -c->vNormal3.y, c->vNormal3.z);
 						glTexCoord2f(d + d6*(x%21)+d6,d + d6*(y%21));					glVertex3f(x*10+10,-c->cell2,(height-y)*10);
-						glNormal3f(c->vNormal4.x, c->vNormal4.y, c->vNormal4.z);
+						glNormal3f(c->vNormal4.x, -c->vNormal4.y, c->vNormal4.z);
 						glTexCoord2f(d + d6*(x%21)+d6,d + d6*(y%21)+d6);					glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
 					glEnd();
 				}
@@ -1768,8 +1818,9 @@ void cWorld::draw()
 					cTile* t = &tiles[c->tileOtherSide];
 					int lightmap = lightmaps[t->lightmap]->texId();
 					int lightmap2 = lightmaps[t->lightmap]->texId2();
-					glBlendFunc(GL_ONE ,GL_DST_COLOR);				
-					glBindTexture(GL_TEXTURE_2D, lightmap);
+
+					glBlendFunc(GL_ZERO, GL_SRC_COLOR);
+					glBindTexture(GL_TEXTURE_2D, lightmap2);
 					glNormal3f(0,0,1);
 					glBegin(GL_TRIANGLE_STRIP);
 						glTexCoord2f(0.125,0.125);					glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
@@ -1778,8 +1829,8 @@ void cWorld::draw()
 						glTexCoord2f(0.875,0.875);					glVertex3f(x*10+10,-(c+1)->cell1,(height-y)*10);
 					glEnd();
 
-					glBlendFunc(GL_DST_COLOR, GL_ZERO);
-					glBindTexture(GL_TEXTURE_2D, lightmap2);
+					glBlendFunc(GL_ONE, GL_ONE);	
+					glBindTexture(GL_TEXTURE_2D, lightmap);
 					glBegin(GL_TRIANGLE_STRIP);
 						glTexCoord2f(0.125,0.125);					glVertex3f(x*10+10,	-c->cell4,		(height-y)*10-10);
 						glTexCoord2f(0.875,0.125);					glVertex3f(x*10+10,	-c->cell2,		(height-y)*10);
@@ -1792,8 +1843,9 @@ void cWorld::draw()
 					cTile* t = &tiles[c->tileSide];
 					int lightmap = lightmaps[t->lightmap]->texId();
 					int lightmap2 = lightmaps[t->lightmap]->texId2();
-					glBlendFunc(GL_ONE ,GL_DST_COLOR);				
-					glBindTexture(GL_TEXTURE_2D, lightmap);
+
+					glBlendFunc(GL_ZERO, GL_SRC_COLOR);
+					glBindTexture(GL_TEXTURE_2D, lightmap2);
 					glBegin(GL_TRIANGLE_STRIP);
 						glTexCoord2f(0.125,0.125);					glVertex3f(x*10,	-c->cell3,				(height-y)*10-10);
 						glTexCoord2f(0.875,0.125);					glVertex3f(x*10+10,	-c->cell4,				(height-y)*10-10);
@@ -1801,8 +1853,8 @@ void cWorld::draw()
 						glTexCoord2f(0.875,0.875);					glVertex3f(x*10+10,	-cubes[y+1][x].cell2,	(height-y)*10-10);
 					glEnd();
 
-					glBlendFunc(GL_DST_COLOR, GL_ZERO);
-					glBindTexture(GL_TEXTURE_2D, lightmap2);
+					glBlendFunc(GL_ONE, GL_ONE);	
+					glBindTexture(GL_TEXTURE_2D, lightmap);
 					glBegin(GL_TRIANGLE_STRIP);
 						glTexCoord2f(0.125,0.125);					glVertex3f(x*10.0f,		-c->cell3,				(height-y)*10.0f-10);
 						glTexCoord2f(0.875,0.125);					glVertex3f(x*10.0f+10,	-c->cell4,				(height-y)*10.0f-10);
@@ -1820,7 +1872,6 @@ void cWorld::draw()
 
 	glNormal3f(0,1,0);
 	glDisable(GL_BLEND);
-	glDisable(GL_LIGHTING);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set the correct blending mode
 
 
@@ -4084,6 +4135,9 @@ void cWorld::newEmpty(int newWidth,int newHeight)
 	width = newWidth;
 	height = newHeight;
 
+	lightmapWidth = 8;
+	lightmapHeight = 8;
+	gridSizeCell = 1; 
 
 	cubes.resize(height);
 	for(y = 0; y < (unsigned int)height; y++)
@@ -4118,21 +4172,20 @@ void cWorld::newEmpty(int newWidth,int newHeight)
 	water.amplitude = 1;
 	water.phase = 2;
 	water.surfaceCurve = 0.5f;
-	ambientLight.ambientr = 3;
-	ambientLight.ambientg = 45;
-	ambientLight.ambientb = 45;
+	water.animSpeed = 3;
+
+	ambientLight.lightLongitude = 45;
+	ambientLight.lightLatitude = 45;
 	
 	ambientLight.diffuse = cVector3(1,1,1);
-	ambientLight.shadow = cVector3(0.3f,0.3f,0.3f);
-	ambientLight.alpha = 0.5f;
+	ambientLight.ambient = cVector3(0.3f,0.3f,0.3f);
+	ambientLight.ambintensity = 0.5f;
+
 	unknown1 = -500;
 	unknown2 = 500;
 	unknown3 = -500;
 	unknown4 = 500;
 
-	
-	
-	
 	cRealLightMap* m = NULL;
 	realLightmaps.resize(height+21, std::vector<cRealLightMap*>(width+21, m));
 	

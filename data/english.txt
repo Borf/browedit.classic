@@ -62,13 +62,13 @@
 			<TRANSPARENTOBJECTS>Transparent Objects</TRANSPARENTOBJECTS>
 			<BOUNDINGBOXES>Boundingboxes</BOUNDINGBOXES>
 			<LIGHTMAPS>Lightmaps</LIGHTMAPS>
-			<OGLLIGHTING>Show OGL Lighting</OGLLIGHTING>
+			<GLOBALLIGHTING>Global Lighting</GLOBALLIGHTING>
 			<TILECOLORS>Tilecolors</TILECOLORS>
 			<SHOWWATER>Water</SHOWWATER>
 			<TOPCAMERA>Topcamera</TOPCAMERA>
 			<SIDECAMERA>Indoor Camera</SIDECAMERA>
 			<INVISIBLETILES>Invisible Tiles</INVISIBLETILES>
-			<SHOWAMBIENTLIGHTING>Ambient Lighting</SHOWAMBIENTLIGHTING>
+			<SHOWGLOBALLIGHTING>Global Lighting</SHOWGLOBALLIGHTING>
 			<WATERANIMATION>Water Animation</WATERANIMATION>
 			<GATTILES>Gat Tiles</GATTILES>
 			<SHOWDOT>Show Dot</SHOWDOT>
@@ -110,7 +110,7 @@
 		</effects>
 		<windows>
 			<TITLE>Windows</TITLE>
-			<AMBIENTLIGHTING>Ambient Lighting</AMBIENTLIGHTING>
+			<GLOBALLIGHTING>Global Lighting</GLOBALLIGHTING>
 			<MODELWINDOW>Models</MODELWINDOW>
 			<TEXTURES>Textures</TEXTURES>
 			<PROPERTIES>Properties</PROPERTIES>
@@ -177,17 +177,22 @@
 		<MODELCOUNT>World: %i models written</MODELCOUNT>
 		<TILESUSED>World: %i tiles are used</TILESUSED>
 		<TILESLEFT>World: %i tiles left</TILESLEFT>
+		<INVALIDLIGHTMAPFORMAT>Invalid lightmap format: (%dx%d size %d)! Setting it to (%dx%d size %d).</INVALIDLIGHTMAPFORMAT>
 	</world>
 	<wm>
 		<OK>Ok</OK>
 		<CANCEL>Cancel</CANCEL>
-		<ambient>
-			<TITLE>Ambient Light</TITLE>
-			<AMBIENT>Ambient:</AMBIENT>
-			<DIFFUSE>Diffuse:</DIFFUSE>
-			<SHADOW>Shadow:</SHADOW>
-			<ALPHA>Alpha:</ALPHA>
-		</ambient>
+		<globallighting>
+			<TITLE>Global Lighting</TITLE>
+			<DIFFUSETITLE>Diffuse Light</DIFFUSETITLE>
+			<DIFFUSECOLOR>Color:</DIFFUSECOLOR>
+			<LONGITUDE>Longitude angle:</LONGITUDE>
+			<LATITUDE>Latitude angle:</LATITUDE>
+			
+			<AMBIENTTITLE>Ambient Light</AMBIENTTITLE>
+			<AMBIENTCOLOR>Color:</AMBIENTCOLOR>
+			<AMBINTENSITY>Intensity:</AMBINTENSITY>
+		</globallighting>
 		<confirm>
 			<TITLE>Please Confirm...</TITLE>
 		</confirm>

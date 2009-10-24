@@ -299,6 +299,8 @@ void drawlogo()
 	Log(3,0,"//    |____/|_|  \\___/ \\_/\\_/ |______\\__,_|_|\\__|	     //");
 	Log(3,0,"//                                                          //");
 	Log(3,0,"//                   Coded by:      Borf                    //");
+	Log(3,0,"//                   Fixes by:      Henko                   //");
+	Log(3,0,"//                                                          //");
 	Log(3,0,"//                     Libraries used:                      //");
 	Log(3,0,"//            - OpenGL                                      //");
 	Log(3,0,"//            - SDL                                         //");
@@ -466,6 +468,10 @@ const char* GetMsg(std::string s)
 	std::string olds = s;
 	TiXmlNode* n = cSettings::msgTable.FirstChildElement("language");
 
+	//Fixed crash when no translation is found. by Henko
+	//TODO: get the translation string from s. s.c_str() does not work.
+	const char* notfound = "[NO MSG]";
+
 	while(s.find("/") != std::string::npos)
 	{
 		std::string a = s.substr(0, s.find("/"));
@@ -473,21 +479,22 @@ const char* GetMsg(std::string s)
 		if(n == NULL)
 		{
 			Log(1,0,"Could not find translation for %s", olds.c_str());
-			return olds.c_str();
+			return notfound;
 		}
 		s = s.substr(s.find("/")+1);
 	}
 	if(n == NULL)
 	{
 		Log(1,0,"Could not find translation for %s", olds.c_str());
-		return olds.c_str();
+		return notfound;
 	}
 	n = n->FirstChildElement(s.c_str());
 	if(n == NULL)
 	{
 		Log(1,0,"Could not find translation for %s", olds.c_str());
-		return olds.c_str();
+		return notfound;
 	}
+
 	return (char*)n->FirstChild()->Value();
 }
 

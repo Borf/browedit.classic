@@ -258,8 +258,10 @@ void cRSMModel::draw(bool checkfrust, bool dodraw, bool setheight, bool dolightm
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Set the correct blending mode
 	glEnable(GL_BLEND);
 	glTranslatef(5*pos.x, -pos.y, 5*pos.z);
-	glRotatef(-rot.x, 1.0, 0.0, 0.0);
+
+	//Fixed rotation order. by Henko
 	glRotatef(-rot.z, 0.0, 0.0, 1.0);
+	glRotatef(-rot.x, 1.0, 0.0, 0.0);	
 	glRotatef(rot.y, 0.0, 1.0, 0.0);
 
 	glScalef(scale.x, -scale.y, scale.z);
@@ -277,36 +279,8 @@ void cRSMModel::draw(bool checkfrust, bool dodraw, bool setheight, bool dolightm
 
 	if(dodraw && cGraphics::view.showBoundingBoxes)
 	{
-		cVector3 v1 = cVector3(bb2.bbmin[0], bb2.bbmin[1], bb2.bbmin[2]);
-		cVector3 v2 = cVector3(bb2.bbmax[0], bb2.bbmax[1], bb2.bbmax[2]);
-	//	glColor4f(1,0,1,1);
-		glDisable(GL_TEXTURE_2D);
-		glBegin(GL_LINE_LOOP);
-			glVertex3f(v1.x, -v1.y, v1.z);
-			glVertex3f(v2.x, -v1.y, v1.z);
-			glVertex3f(v2.x, -v1.y, v2.z);
-			glVertex3f(v1.x, -v1.y, v2.z);
-		glEnd();
-		glBegin(GL_LINE_LOOP);
-			glVertex3f(v1.x, -v2.y, v1.z);
-			glVertex3f(v2.x, -v2.y, v1.z);
-			glVertex3f(v2.x, -v2.y, v2.z);
-			glVertex3f(v1.x, -v2.y, v2.z);
-		glEnd();
-		glBegin(GL_LINES);
-			glVertex3f(v1.x, -v1.y, v1.z);
-			glVertex3f(v1.x, -v2.y, v1.z);
-			glVertex3f(v2.x, -v1.y, v1.z);
-			glVertex3f(v2.x, -v2.y, v1.z);
-			glVertex3f(v2.x, -v1.y, v2.z);
-			glVertex3f(v2.x, -v2.y, v2.z);
-			glVertex3f(v1.x, -v1.y, v2.z);
-			glVertex3f(v1.x, -v2.y, v2.z);
-		glEnd();
-		glEnable(GL_TEXTURE_2D);
-		//glColor4f(1,1,1,1);
+		bb2.Draw();
 	}
-
 
 #ifdef DISPLAYLIST
 	if(!displaylisted && !setheight && !dolightmaps && dodraw && !animated)
@@ -325,7 +299,13 @@ void cRSMModel::draw(bool checkfrust, bool dodraw, bool setheight, bool dolightm
 	else
 		draw2(&bb,0, NULL, meshes.size() == 1, dodraw, setheight, dolightmaps);
 #else
+
+
+	//TODO: this should be given the models real bounding box calculated from the meshes real bounding boxes, 
+	//that is from the boundaries of transformed used(!) vertices. The bounging box should not be rotated! by Henko
+
 	draw2(&bb,0, NULL, meshes.size() == 1, dodraw, setheight, dolightmaps);
+
 #endif
 
 	
@@ -466,7 +446,6 @@ void cRSMModel::cMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMMo
 		if (nstep >= frames[frames.size()-1].time)
 			nstep = 0;
 	}
-	
 
 	if(main)
 	{	if(!only)
@@ -503,6 +482,7 @@ void cRSMModel::cMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMMo
 	{
 		float ModelMatrix[16]; 
 		glGetFloatv(GL_MODELVIEW_MATRIX, ModelMatrix);
+
 		float mmin = min(min(model->bb2.bbmin[0], model->bb.bbmin[1]), model->bb2.bbmin[2]) / 5;
 		mmin -= 4;
 		float mmax = max(max(model->bb2.bbmax[0], model->bb.bbmax[1]), model->bb2.bbmax[2]) / 5;
@@ -635,6 +615,7 @@ void cRSMModel::cMesh::draw(cBoundingbox* box, float* ptransf, bool only, cRSMMo
 
 
 	}
+
 	if(dodraw)
 	{
 		for(i = 0; i < nFaces; i++)
@@ -1060,12 +1041,35 @@ cRSMModel::cMesh::cMesh()
 	nstep = 0;
 }
 
-
-
-
-
-
-
+void cBoundingbox::Draw()
+{
+	cVector3 v1 = cVector3(bbmin[0], bbmin[1], bbmin[2]);
+	cVector3 v2 = cVector3(bbmax[0], bbmax[1], bbmax[2]);
+	glDisable(GL_TEXTURE_2D);
+	glBegin(GL_LINE_LOOP);
+		glVertex3f(v1.x, -v1.y, v1.z);
+		glVertex3f(v2.x, -v1.y, v1.z);
+		glVertex3f(v2.x, -v1.y, v2.z);
+		glVertex3f(v1.x, -v1.y, v2.z);
+	glEnd();
+	glBegin(GL_LINE_LOOP);
+		glVertex3f(v1.x, -v2.y, v1.z);
+		glVertex3f(v2.x, -v2.y, v1.z);
+		glVertex3f(v2.x, -v2.y, v2.z);
+		glVertex3f(v1.x, -v2.y, v2.z);
+	glEnd();
+	glBegin(GL_LINES);
+		glVertex3f(v1.x, -v1.y, v1.z);
+		glVertex3f(v1.x, -v2.y, v1.z);
+		glVertex3f(v2.x, -v1.y, v1.z);
+		glVertex3f(v2.x, -v2.y, v1.z);
+		glVertex3f(v2.x, -v1.y, v2.z);
+		glVertex3f(v2.x, -v2.y, v2.z);
+		glVertex3f(v1.x, -v1.y, v2.z);
+		glVertex3f(v1.x, -v2.y, v2.z);
+	glEnd();
+	glEnable(GL_TEXTURE_2D);
+}
 
 
 void cRSMModel::precollides()

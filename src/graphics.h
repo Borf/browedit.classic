@@ -95,7 +95,7 @@ public:
 		bool				showAllLights;
 		bool				showGat;
 		bool				showGrid;
-		bool				showAmbientLighting;
+		bool				showGlobalLighting;
 		bool				showOglLighting;
 		bool				showBoundingBoxes;
 		bool				showDot;

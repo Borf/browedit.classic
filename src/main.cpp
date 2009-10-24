@@ -646,6 +646,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/OBJECTS"),				&MenuCommand_toggle, (void*)&cGraphics::view.showObjects);
 	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/TRANSPARENTOBJECTS"),		&MenuCommand_toggle, (void*)&cGraphics::view.showObjectsAsTransparent);
 	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/BOUNDINGBOXES"),			&MenuCommand_toggle, (void*)&cGraphics::view.showBoundingBoxes);
+	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/GLOBALLIGHTING"),			&MenuCommand_toggle, (void*)&cGraphics::view.showGlobalLighting);
 	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/LIGHTMAPS"),				&MenuCommand_toggle, (void*)&cGraphics::view.showLightmaps);
 	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/TILECOLORS"),				&MenuCommand_toggle, (void*)&cGraphics::view.showTileColors);
 	ADDMENUITEMDATALINK(mm,view,GetMsg("menu/view/SHOWWATER"),				&MenuCommand_toggle, (void*)&cGraphics::view.showWater);
@@ -706,7 +707,7 @@ int main(int argc, char *argv[])
 	ADDMENUITEMDATALINK(mm,edit,GetMsg("menu/edit/CLEARLIGHTMAPSONEDIT"),		&MenuCommand_toggle, (void*)&cGraphics::clearLightmaps);
 	ADDMENUITEM(mm,edit,GetMsg("menu/edit/SELECTALL"),						&MenuCommand_selectAll);
 
-	ADDMENUITEM(mm,windows,GetMsg("menu/windows/AMBIENTLIGHTING"),			&MenuCommand_ambientlight);
+	ADDMENUITEM(mm,windows,GetMsg("menu/windows/GLOBALLIGHTING"),			&MenuCommand_ambientlight);
 	ADDMENUITEM(mm,windows,GetMsg("menu/windows/MODELWINDOW"),				&MenuCommand_modelwindow);
 	ADDMENUITEM(mm,windows,GetMsg("menu/windows/TEXTURES"),					&MenuCommand_texturewindow);
 	ADDMENUITEM(mm,windows,GetMsg("menu/windows/PROPERTIES"),				&MenuCommand_properties);
@@ -1513,6 +1514,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				cGraphics::view.showGrid = !cGraphics::view.showGrid;
 				break;
 			case SDLK_l:
+				if (!cGraphics::view.showLightmaps && !cGraphics::view.showGlobalLighting || 
+					 cGraphics::view.showLightmaps &&  cGraphics::view.showGlobalLighting)
+					MenuCommand_toggle((cMenuItem*)cGraphics::menu->find(GetMsg("menu/view/GLOBALLIGHTING")));
 				MenuCommand_toggle((cMenuItem*)cGraphics::menu->find(GetMsg("menu/view/LIGHTMAPS")));
 				break;
 			case SDLK_w:

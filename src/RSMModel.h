@@ -41,6 +41,9 @@ public:
 			bbrange[i] = other.bbrange[i];
 		}
 	}
+
+	//Draws the currect bounding box. By Henko
+	void Draw();
 };
 
 
@@ -121,7 +124,9 @@ public:
 #endif
 	cBoundingbox bb;
 	cBoundingbox bb2;
-	
+
+	//Real bounding box. by Henko
+	cBoundingbox realbb;
 	
 	float absolutebbv1_[3];
 	float absolutebbv2_[3];

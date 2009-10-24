@@ -2053,19 +2053,21 @@ MENUCOMMAND(ambientlight)
 		return false;
 	char buf[100];
 	cWindow* w = new cAmbientLightWindow();
-	sprintf(buf, "%i", cGraphics::world->ambientLight.ambientr);		w->objects["ambientr"]->setText(0,buf);
-	sprintf(buf, "%i", cGraphics::world->ambientLight.ambientg);		w->objects["ambientg"]->setText(0,buf);
-	sprintf(buf, "%i", cGraphics::world->ambientLight.ambientb);		w->objects["ambientb"]->setText(0,buf);
+
+	//Corrected global light properties window according to the new file information. by Henko
+
+	sprintf(buf, "%d", cGraphics::world->ambientLight.lightLongitude);		w->objects["longitude"]->setText(0,buf);
+	sprintf(buf, "%d", cGraphics::world->ambientLight.lightLatitude);		w->objects["latitude"]->setText(0,buf);
+
+	sprintf(buf, "%f", cGraphics::world->ambientLight.ambient.x);		w->objects["ambientr"]->setText(0,buf);
+	sprintf(buf, "%f", cGraphics::world->ambientLight.ambient.y);		w->objects["ambientg"]->setText(0,buf);
+	sprintf(buf, "%f", cGraphics::world->ambientLight.ambient.z);		w->objects["ambientb"]->setText(0,buf);
 
 	sprintf(buf, "%f", cGraphics::world->ambientLight.diffuse.x);		w->objects["diffuser"]->setText(0,buf);
 	sprintf(buf, "%f", cGraphics::world->ambientLight.diffuse.y);		w->objects["diffuseg"]->setText(0,buf);
 	sprintf(buf, "%f", cGraphics::world->ambientLight.diffuse.z);		w->objects["diffuseb"]->setText(0,buf);
 
-	sprintf(buf, "%f", cGraphics::world->ambientLight.shadow.x);		w->objects["shadowr"]->setText(0,buf);
-	sprintf(buf, "%f", cGraphics::world->ambientLight.shadow.y);		w->objects["shadowg"]->setText(0,buf);
-	sprintf(buf, "%f", cGraphics::world->ambientLight.shadow.z);		w->objects["shadowb"]->setText(0,buf);
-	
-	sprintf(buf, "%f", cGraphics::world->ambientLight.alpha);			w->objects["alpha"]->setText(0,buf);
+	sprintf(buf, "%f", cGraphics::world->ambientLight.ambintensity);	w->objects["ambintensity"]->setText(0,buf);
 
 	cWM::addWindow(w);
 	return true;
@@ -3655,6 +3657,7 @@ MENUCOMMAND(makeMinimaps)
 		cGraphics::view.showDot = false;
 		cGraphics::view.showGrid = false;
 		cGraphics::view.showLightmaps = false;
+		cGraphics::view.showGlobalLighting = false;
 		cGraphics::view.showObjects = false;
 		cGraphics::view.showNoTiles = true;
 		cGraphics::noTileColor = cVector3(0,0,0);
@@ -3722,6 +3725,7 @@ MENUCOMMAND(makeMinimaps)
 
 
 		cGraphics::view.showLightmaps = true;
+		cGraphics::view.showGlobalLighting = true;
 		cGraphics::view.showObjects = true;
 		yto = mindist;
 		cGraphics::worldContainer->camera.height = minheight;

@@ -779,6 +779,7 @@ cWorldContainer::~cWorldContainer()
 cWorldContainer::cView::cView()
 {
 	showLightmaps = false;
+	showGlobalLighting = false;
 	showTileColors = true;
 	showWater = true;
 	showNoTiles = true;
