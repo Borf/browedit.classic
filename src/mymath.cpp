@@ -60,7 +60,12 @@ void cVector3::operator-=( cVector3 v2 )
 	z -= v2.z;
 }
 
-cVector3 cVector3::normalize()
+void cVector3::normalize()
+{
+	*this = getnormalized();
+}
+
+cVector3 cVector3::getnormalized()
 {
 	float m = magnitude();
 	if (m != 0)

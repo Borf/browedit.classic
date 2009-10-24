@@ -26,7 +26,8 @@ public:
 	cVector3 operator/(float num);
 	bool operator==(cVector3 v2);
 	void operator-=(cVector3 v2);
-	cVector3 normalize();
+	cVector3 cVector3::getnormalized();
+	void normalize();
 	float magnitude();
 	cVector3& operator+=(const cVector3 &rhs);
 	float dot(cVector3 v2);

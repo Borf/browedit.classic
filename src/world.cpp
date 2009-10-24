@@ -1564,7 +1564,7 @@ void cWorld::draw()
 
 		float xdir = cos((ambientLight.lightLongitude + 90)*PI/180.0)*sin((90-ambientLight.lightLatitude)*PI/180.0);
 		float zdir = sin((ambientLight.lightLongitude + 90)*PI/180.0)*sin((90-ambientLight.lightLatitude)*PI/180.0);
-		float ydir = -cos((90-ambientLight.lightLatitude)*PI/180.0);
+		float ydir = cos((90-ambientLight.lightLatitude)*PI/180.0);
 
 		cGraphics::worldContainer->settings.lightPosition[0] = xdir;
 		cGraphics::worldContainer->settings.lightPosition[1] = ydir;
@@ -1589,18 +1589,17 @@ void cWorld::draw()
 		cGraphics::worldContainer->settings.lightPosition[3] = 0;
 	}
 
-	float tmp[4] = { 0,0,0,1 };
-	
-	glLightfv(GL_LIGHT0, GL_AMBIENT, cGraphics::worldContainer->settings.lightAmbient);				// Setup The Ambient Light
-
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, cGraphics::worldContainer->settings.lightDiffuse);				// Setup The Diffuse Light
 	glLightfv(GL_LIGHT0, GL_POSITION, cGraphics::worldContainer->settings.lightPosition);			// Setup The Diffuse Light Direction
 
-	glEnable(GL_LIGHT0);
+	glLightfv(GL_LIGHT1, GL_AMBIENT, cGraphics::worldContainer->settings.lightAmbient);				// Setup The Ambient Light
 
-	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, tmp) ;
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, cGraphics::worldContainer->settings.lightAmbient);
-	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
+	glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHT1);
+
+	//glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, tmp) ;
+	//glLightModelfv(GL_LIGHT_MODEL_AMBIENT, cGraphics::worldContainer->settings.lightAmbient);
+	//glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
 
 	bool inverseSelection = false;
 	if(cSettings::editMode == MODE_TEXTUREPAINT || cSettings::editMode == MODE_HEIGHTGLOBAL)
@@ -1678,6 +1677,8 @@ void cWorld::draw()
 				{
 					glColor4f(1,1,1,1);
 				}
+
+				//Log(3, 0, "%f %f %f\n", c->vNormal1.x, c->vNormal1.y, c->vNormal1.z);
 
 				glBegin(GL_TRIANGLE_STRIP);
 					glNormal3f(c->vNormal1.x, c->vNormal1.y, c->vNormal1.z);
@@ -1789,26 +1790,26 @@ void cWorld::draw()
 					glBlendFunc(GL_ZERO, GL_SRC_COLOR);
 					glBindTexture(GL_TEXTURE_2D, lightmap2);
 					glBegin(GL_TRIANGLE_STRIP);
-						glNormal3f(c->vNormal1.x, -c->vNormal1.y, c->vNormal1.z);
+						glNormal3f(c->vNormal1.x, c->vNormal1.y, c->vNormal1.z);
 						glTexCoord2f(d + d6*(x%21),d + d6*(y%21));					glVertex3f(x*10,-c->cell1,(height-y)*10);
-						glNormal3f(c->vNormal2.x, -c->vNormal2.y, c->vNormal2.z);
+						glNormal3f(c->vNormal2.x, c->vNormal2.y, c->vNormal2.z);
 						glTexCoord2f(d + d6*(x%21),d + d6*(y%21)+d6);				glVertex3f(x*10,-c->cell3,(height-y)*10-10);
-						glNormal3f(c->vNormal3.x, -c->vNormal3.y, c->vNormal3.z);
+						glNormal3f(c->vNormal3.x, c->vNormal3.y, c->vNormal3.z);
 						glTexCoord2f(d + d6*(x%21)+d6,d + d6*(y%21));				glVertex3f(x*10+10,-c->cell2,(height-y)*10);
-						glNormal3f(c->vNormal4.x, -c->vNormal4.y, c->vNormal4.z);
+						glNormal3f(c->vNormal4.x, c->vNormal4.y, c->vNormal4.z);
 						glTexCoord2f(d + d6*(x%21)+d6,d + d6*(y%21)+d6);			glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
 					glEnd();
 
 					glBlendFunc(GL_ONE, GL_ONE);	
 					glBindTexture(GL_TEXTURE_2D, lightmap);
 					glBegin(GL_TRIANGLE_STRIP);
-						glNormal3f(c->vNormal1.x, -c->vNormal1.y, c->vNormal1.z);
+						glNormal3f(c->vNormal1.x, c->vNormal1.y, c->vNormal1.z);
 						glTexCoord2f(d + d6*(x%21),d + d6*(y%21));					glVertex3f(x*10,-c->cell1,(height-y)*10);
-						glNormal3f(c->vNormal2.x, -c->vNormal2.y, c->vNormal2.z);
+						glNormal3f(c->vNormal2.x, c->vNormal2.y, c->vNormal2.z);
 						glTexCoord2f(d + d6*(x%21),d + d6*(y%21)+d6);					glVertex3f(x*10,-c->cell3,(height-y)*10-10);
-						glNormal3f(c->vNormal3.x, -c->vNormal3.y, c->vNormal3.z);
+						glNormal3f(c->vNormal3.x, c->vNormal3.y, c->vNormal3.z);
 						glTexCoord2f(d + d6*(x%21)+d6,d + d6*(y%21));					glVertex3f(x*10+10,-c->cell2,(height-y)*10);
-						glNormal3f(c->vNormal4.x, -c->vNormal4.y, c->vNormal4.z);
+						glNormal3f(c->vNormal4.x, c->vNormal4.y, c->vNormal4.z);
 						glTexCoord2f(d + d6*(x%21)+d6,d + d6*(y%21)+d6);					glVertex3f(x*10+10,-c->cell4,(height-y)*10-10);
 					glEnd();
 				}
@@ -3984,14 +3985,16 @@ bool cWorld::checkSanity()
 
 void cWorld::calcVertexNormals(int xfrom, int yfrom, int xto, int yto)
 {
-	xfrom = limitinbetween(xfrom, 0, width-1);
-	yfrom = limitinbetween(yfrom, 0, height-1);
+	if (xto == -1) xto = width;
+	if (yto == -1) yto = height;
 
-	xto = limitinbetween(xto, 0, width-1);
-	yto = limitinbetween(yto, 0, height-1);
+	xfrom = limitinbetween(xfrom, 0, width);
+	yfrom = limitinbetween(yfrom, 0, height);
+
+	xto = limitinbetween(xto, 0, width);
+	yto = limitinbetween(yto, 0, height);
 
 	int x,y;
-
 
 	for(y = yfrom; y < yto; y++)
 		for(x = xfrom; x < xto; x++)
@@ -4288,7 +4291,7 @@ void cCube::calcNormal()
 	cVector3 b1, b2;
 	b1 = cVector3(10,-cell1,-10) - cVector3(0,-cell4,0);
 	b2 = cVector3(0,-cell3,-10) - cVector3(0,-cell4,0);
-	normal = b1.cross(b2).normalize();//cVector3(b1.y * b2.z - b1.z * b2.y, b1.z * b2.x - b1.x * b2.z, b1.x * b2.y - b1.y * b2.x);
+	normal = b1.cross(b2).getnormalized();//cVector3(b1.y * b2.z - b1.z * b2.y, b1.z * b2.x - b1.x * b2.z, b1.x * b2.y - b1.y * b2.x);
 }
 
 cTile::cTile( cBrowInterface::cPluginTile t )

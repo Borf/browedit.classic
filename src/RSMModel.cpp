@@ -159,7 +159,7 @@ void cRSMModel::cMesh::load(cFile* pFile, cRSMModel* model, bool main)
 		cVector3 b1, b2;
 		b1 = vertices[f.v[0]] - vertices[f.v[2]];
 		b2 = vertices[f.v[1]] - vertices[f.v[2]];
-		f.normal = b1.cross(b2).normalize();//cVector3(b1.y * b2.z - b1.z * b2.y, b1.z * b2.x - b1.x * b2.z, b1.x * b2.y - b1.y * b2.x);
+		f.normal = b1.cross(b2).getnormalized();//cVector3(b1.y * b2.z - b1.z * b2.y, b1.z * b2.x - b1.x * b2.z, b1.x * b2.y - b1.y * b2.x);
 
 		faces.push_back(f);
 	}
