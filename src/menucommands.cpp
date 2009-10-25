@@ -1497,12 +1497,7 @@ MENUCOMMAND(dolightmaps2)
 				cGraphics::world->lightmaps[cGraphics::world->tiles[c->tileOtherSide].lightmap]->del2();
 			}		
 			
-			
-			
-			
-			
-			
-			
+		
 			if(cGraphics::world->loaded)
 			{
 				cGraphics::worldContainer->camera.pointer.x = -10*x + 5;
