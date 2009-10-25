@@ -255,6 +255,7 @@
 			<SURFACECYCLE>SurfaceCycle:</SURFACECYCLE>
 			<TEXTURECYCLE>TextureCycle:</TEXTURECYCLE>
 			<TYPE>Type:</TYPE>
+			<ANIMSPEED>Speed:</ANIMSPEED>
 		</water>
 		<preferences>
 			<TITLE>Preferences...</TITLE>

@@ -24,6 +24,7 @@ void cWaterWindowOkButton::onClick()
 	cGraphics::world->water.phase = atof(parent->objects["phase"]->getText(0).c_str());
 	cGraphics::world->water.surfaceCurve = atof(parent->objects["surfacecurve"]->getText(0).c_str());
 	cGraphics::world->water.type = atoi(parent->objects["type"]->getText(0).c_str());
+	cGraphics::world->water.animSpeed = atoi(parent->objects["animspeed"]->getText(0).c_str());
 	parent->close();
 }
 
@@ -33,7 +34,7 @@ cWaterWindow::cWaterWindow() : cWindow()
 	resizable = false;
 	visible = true;
 	
-	h = 120+skinOffTop+skinOffBottom;
+	h = 140+skinOffTop+skinOffBottom;
 	w = 200+skinOffLeft+skinOffRight;
 	title = GetMsg("wm/water/TITLE");
 	center();
@@ -51,7 +52,7 @@ cWaterWindow::cWaterWindow() : cWindow()
 	addLabel("lblPhase",		0,40,GetMsg("wm/water/PHASE"));
 	addLabel("lblSurfaceCycle", 0,60,GetMsg("wm/water/SURFACECYCLE"));
 	addLabel("lblType",			0,80,GetMsg("wm/water/TYPE"));
-	
+	addLabel("lblAnimSpeed",	0,100,GetMsg("wm/water/ANIMSPEED"));
 	
 	o = new cWindowInputBox(this);
 	o->alignment = ALIGN_TOPLEFT;
@@ -82,6 +83,12 @@ cWaterWindow::cWaterWindow() : cWindow()
 	o->moveTo(100,80);
 	o->resizeTo(100,20);
 	objects["type"] = o;
+
+	o = new cWindowInputBox(this);
+	o->alignment = ALIGN_TOPLEFT;
+	o->moveTo(100,100);
+	o->resizeTo(100,20);
+	objects["animspeed"] = o;
 	
 	objects["OkButton"] = new cWaterWindowOkButton(this);
 }

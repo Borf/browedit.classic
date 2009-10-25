@@ -333,7 +333,6 @@ void cBrowInterfaceImplementation::makeLightmapsBlack()
 	cGraphics::world->blackLightmaps();
 }
 
-
 std::string	cBrowInterfaceImplementation::getOpenFile(const char* defaultFilename, const char* filters)
 {
 	return ::getOpenFile(defaultFilename, filters);

@@ -2012,6 +2012,7 @@ MENUCOMMAND(water)
 	sprintf(buf, "%f", cGraphics::world->water.phase);			w->objects["phase"]->setText(0,buf);
 	sprintf(buf, "%f", cGraphics::world->water.surfaceCurve);	w->objects["surfacecurve"]->setText(0,buf);
 	sprintf(buf, "%i", cGraphics::world->water.type);			w->objects["type"]->setText(0,buf);
+	sprintf(buf, "%i", cGraphics::world->water.animSpeed);		w->objects["animspeed"]->setText(0,buf);
 	cWM::addWindow(w);
 	return true;
 }

@@ -3085,6 +3085,15 @@ void cWorld::clean()
 		}
 	}
 
+	//Add default lightmap if no more remained. by Henko
+	if (lightmaps.size() == 0)
+	{
+		cLightmap* l = new cLightmap();
+		for(int i = 0; i < 256; i++)
+			l->buf[i] = i < 64 ? 255 : 0;
+		lightmaps.push_back(l);
+	}
+
 }
 
 
@@ -3841,7 +3850,7 @@ bool cWorld::blackLightmaps()
 				int lightmap = tiles[tile].lightmap;
 				if(lightmap != -1)
 				{
-					memset(lightmaps[lightmap]->buf,		'\0', 256);
+					memset(lightmaps[lightmap]->buf, 0, 256);
 				}
 			}
 		}
@@ -4101,9 +4110,6 @@ void cWorld::newEmpty(int newWidth,int newHeight)
 		}
 	}
 	
-	
-	
-	
 	tiles.clear();
 	for(i = 0; i < cubes.size(); i++)
 		cubes[i].clear();
@@ -4134,9 +4140,11 @@ void cWorld::newEmpty(int newWidth,int newHeight)
 	
 	gattiles.clear();
 	
-
 	width = newWidth;
 	height = newHeight;
+
+	//Fixed new maps crashing in the client because tileScale was not set. by Henko
+	tileScale = 10.0;
 
 	lightmapWidth = 8;
 	lightmapHeight = 8;
@@ -4165,17 +4173,20 @@ void cWorld::newEmpty(int newWidth,int newHeight)
 		}
 	}
 
+	calcVertexNormals();
+
 	gattiles.resize(height*2);
 	for(y = 0; y < (unsigned int)height*2; y++)
 	{
 		gattiles[y].resize(width*2);
 	}
-	water.height = 1;
+
+	water.height = 10;
 	water.type = 0;
 	water.amplitude = 1;
-	water.phase = 2;
+	water.phase = 3;
 	water.surfaceCurve = 0.5f;
-	water.animSpeed = 3;
+	water.animSpeed = 5;
 
 	ambientLight.lightLongitude = 45;
 	ambientLight.lightLatitude = 45;
@@ -4202,6 +4213,7 @@ void cWorld::newEmpty(int newWidth,int newHeight)
 			realLightmaps[y][x] = l;
 		}
 	}
+
 	for(y = 0; y < (unsigned int)height; y++)
 	{
 		for(x = 0; x < (unsigned int)width; x++)
@@ -4216,15 +4228,21 @@ void cWorld::newEmpty(int newWidth,int newHeight)
 	}
 
 	cLightmap* l = new cLightmap();
+
+	//Transparent lightmap on new maps. by Henko
+	for(int i = 0; i < 256; i++)
+		l->buf[i] = i < 64 ? 255 : 0;
+
 	lightmaps.push_back(l);
-	
-	
 	
 	cGraphics::worldContainer->camera.pointer = cVector2(-width*5,-height*5);
 	
 	loaded = true;
 	cGraphics::worldContainer->settings.texturestart = 0;
 	wnd = new cHotkeyWindow(cGraphics::worldContainer);
+
+	fileName[0] = '\0';
+	quickSave = false;
 }
 
 std::vector<cCube*> cWorld::getWall( int x, int y, bool vertical, bool single)
