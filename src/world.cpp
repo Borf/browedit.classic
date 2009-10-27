@@ -733,7 +733,7 @@ void cWorld::load()
 			while(model != NULL)
 			{
 				int id = atoi(model->Attribute("id"));
-				models[id]->lightopacity = atoi(model->Attribute("lightopacity"));
+				models[id]->lightopacity = atof(model->Attribute("lightopacity"));
 				model = model->NextSiblingElement();
 
 			}

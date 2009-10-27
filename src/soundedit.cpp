@@ -164,7 +164,6 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 					((cWindowFloatInputBox*)w->objects["unknown5"])->floatje = &o->unknown5;
 //					w->objects["unknown6"]->SetText(0, string(o->unknown6,8));
 //					w->objects["unknown6"]->SetInt(0,0);
-
 					((cSoundWindow::cWindowSelectFileButton*)w->objects["filebutton"])->selectedSound = o;
 
 					((cWindowFloatInputBox*)w->objects["unknown7"])->floatje = &o->unknown7;
