@@ -29,22 +29,21 @@ void cModelsWindow::cWindowModel::draw(int cutoffleft, int cutoffright, int cuto
 	{
 		glPushMatrix();
 		glLoadIdentity();
-		model = new cRSMModel();
-		model->load(cSettings::roDir + data);
+		model = new cRsmModel(cSettings::roDir + data);
 		model->pos = cVector3(0,0.3*w,1000);
 		
 		float sc = 0;
-		sc = max(sc, model->bb2.bbmax[0] - model->bb2.bbmin[0]);
-		sc = max(sc, model->bb2.bbmax[1] - model->bb2.bbmin[1]);
-		sc = max(sc, model->bb2.bbmax[2] - model->bb2.bbmin[2]);
+		sc = max(sc, model->bbmax[0] - model->bbmin[0]);
+		sc = max(sc, model->bbmax[1] - model->bbmin[1]);
+		sc = max(sc, model->bbmax[2] - model->bbmin[2]);
 		sc = 1.4f*min(h,w) / sc;
 
 		model->scale = cVector3(sc,sc,sc);
 
 		model->rot = cVector3(0,0,0);
-		model->bb2.bbrange[0] = 0;
+//TODO		model->bb2.bbrange[0] = 0;
 		//model->bb2.bbmin[1] = 0;
-		model->bb2.bbrange[2] = 0;
+//TODO		model->bb2.bbrange[2] = 0;
 		glPopMatrix();
 	}
 
@@ -81,7 +80,7 @@ void cModelsWindow::cWindowModel::draw(int cutoffleft, int cutoffright, int cuto
 
 	if (model != NULL)
 	{
-		model->draw(false);
+		model->draw(); //TODO: check frustum
 		model->rot.y+=40*(cGraphicsBase::getFrameTicks() / 1000.0f);
 		model->rot.x = -45;
 	}
@@ -110,8 +109,7 @@ void cModelsWindow::cWindowModel::onClick()
 		}
 		delete cGraphics::previewModel;
 	}
-	cGraphics::previewModel = new cRSMModel();
-	cGraphics::previewModel->load(cSettings::roDir + data);
+	cGraphics::previewModel = new cRsmModel(cSettings::roDir + data);
 	cGraphics::previewModel->rot = cVector3(0,0,0);
 	cGraphics::previewModel->scale = cVector3(4,4,4);
 	cGraphics::previewModel->pos = cVector3(40,-40,-40);

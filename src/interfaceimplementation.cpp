@@ -5,6 +5,11 @@
 #include <SDL/SDL.h>
 #include <settings.h>
 #include <plugins/base/base.h>
+#include <filesystem.h>
+#include <RSMModel.h>
+#include <sprite.h>
+#include <texturecache.h>
+#include <world.h>
 
 extern std::vector<cPluginBase*> plugins;
 
@@ -51,8 +56,7 @@ void cBrowInterfaceImplementation::messageWindow( const char* msg)
 
 cBrowInterface::cPluginRSMModel* cBrowInterfaceImplementation::loadModel( const char* )
 {
-	cRSMModel* model = new cRSMModel();
-	model->load(cSettings::roDir +  "data\\model\\郴何家前\\枚促府.rsm");
+	cRsmModel* model = new cRsmModel(cSettings::roDir +  "data\\model\\郴何家前\\枚促府.rsm");
 	return model;	
 }
 
@@ -70,7 +74,7 @@ void cBrowInterfaceImplementation::removeSprite(int id)
 
 void cBrowInterfaceImplementation::addModel(cPluginRSMModel* model)
 {
-	cGraphics::world->models.push_back((cRSMModel*)model);
+	cGraphics::world->models.push_back((cRsmModel*)model);
 }
 
 cBrowInterface::cPluginLightmap* cBrowInterfaceImplementation::getLightmap(int i)
@@ -256,7 +260,7 @@ void cBrowInterfaceImplementation::checkModelsOnCubes()
 	if(!cGraphics::world)
 		return;
 	int x, y;
-	unsigned int i;
+//	unsigned int i;
 	int ww = cGraphics::w();
 	ww -= 256;
 	int hh = cGraphics::h()-20;
@@ -280,8 +284,8 @@ void cBrowInterfaceImplementation::checkModelsOnCubes()
 	//	glTranslatef(0,0,cGraphics::world->height*10);
 	//	glScalef(1,1,-1);
 	
-	for(i = 0; i < cGraphics::world->models.size(); i++)
-		cGraphics::world->models[i]->precollides();
+//TODO	for(i = 0; i < cGraphics::world->models.size(); i++)
+//		cGraphics::world->models[i]->precollides();
 	
 	for(x = 0; x < cGraphics::world->width; x++)
 	{
@@ -292,11 +296,11 @@ void cBrowInterfaceImplementation::checkModelsOnCubes()
 		}
 	}
 		
-	for(i = 0; i < cGraphics::world->models.size(); i++)
+/*TODO	for(i = 0; i < cGraphics::world->models.size(); i++)
 	{
 		Log(3,0,GetMsg("CALCMODEL"), i, cGraphics::world->models.size(), (i/(float)cGraphics::world->models.size())*100);
 		cGraphics::world->models[i]->draw(false,false,true);
-	}
+	}*/
 	
 	
 	for(x = 0; x < cGraphics::world->width; x++)

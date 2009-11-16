@@ -9,6 +9,7 @@
 #include <GL/glu.h>												// Header File For The GLu32 Library
 #include "window.h"
 #include <graphics.h>
+#include <texture.h>
 
 cWindowScrollPanel::~cWindowScrollPanel()
 {

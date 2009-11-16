@@ -11,6 +11,8 @@
 #include <windows/confirmwindow.h>
 #include <windows/inputwindow.h>
 #include <windows/xmlwindow.h>
+#include <filesystem.h>
+#include <texturecache.h>
 extern void mainloop();
 
 

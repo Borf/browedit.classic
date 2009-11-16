@@ -1,19 +1,19 @@
 #ifndef __GRAPHICS_H__
 #define __GRAPHICS_H__
 
+#include <common.h>
 #ifdef WIN32
 #include <windows.h>
 #endif
-
 #include <GL/gl.h>
 #include <map>
 
-#include "world.h"
-#include <wm/wm.h>
-
+class cWorld;
 class cUndoStack;
 class cFont;
 class cMenu;
+class cRsmModel;
+class cTexture;
 
 enum eTool
 {
@@ -181,7 +181,8 @@ public:
 
 
 
-	static cRSMModel*				previewModel;
+	static int						nModelsDrawn;
+	static cRsmModel*				previewModel;
 	static int						previewColor;
 
 	static bool						clearLightmaps;

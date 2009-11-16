@@ -24,8 +24,7 @@ public:
 	{
 		for(unsigned int i = 0; i < objects.size(); i++)
 		{
-			cRSMModel* model = new cRSMModel();
-			model->load(objects[i].filename);
+			cRsmModel* model = new cRsmModel(objects[i].filename);
 			model->pos = objects[i].pos;
 			model->rot = objects[i].rot;
 			model->scale = objects[i].scale;

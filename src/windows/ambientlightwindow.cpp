@@ -1,6 +1,7 @@
 #include <common.h>
 #include "ambientlightwindow.h"
 #include <graphics.h>
+#include <world.h>
 
 #include <wm/windowlabel.h>
 #include <wm/windowinputbox.h>

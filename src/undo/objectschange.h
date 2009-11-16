@@ -2,6 +2,8 @@
 #define __OBJECTSCHANGE_H__
 
 #include <undo.h>
+#include <RSMModel.h>
+#include <world.h>
 
 class cUndoChangeObjects : public cUndoItem
 {

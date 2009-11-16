@@ -5,6 +5,7 @@
 #include "undo/objectsnew.h"
 #include "undo/objectsdelete.h"
 #include "menu.h"
+#include <wm/wm.h>
 
 extern bool doneAction;
 extern cMenu* snaptofloor;
@@ -183,8 +184,7 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 						if (cGraphics::world->models[i]->selected)
 						{
 							cGraphics::world->models[i]->selected = false;
-							cRSMModel* model = new cRSMModel();
-							model->load(cGraphics::world->models[i]->filename);
+							cRsmModel* model = new cRsmModel(cGraphics::world->models[i]->filename);
 							model->pos = cGraphics::world->models[i]->pos + cVector3(4,0,4);
 							model->scale = cGraphics::world->models[i]->scale;
 							model->rot = cGraphics::world->models[i]->rot;

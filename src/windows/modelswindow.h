@@ -28,7 +28,7 @@ public:
 	};
 	class cWindowModel : public cWindowObject
 	{
-		cRSMModel* model;
+		cRsmModel* model;
 		std::string data;
 	public:
 		cWindowModel(cWindow* parent);

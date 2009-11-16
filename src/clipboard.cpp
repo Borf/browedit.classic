@@ -1,6 +1,7 @@
 #include <common.h>
 #include "clipboard.h"
 #include <graphics.h>
+#include <texturecache.h>
 #include <undo/texture.h>
 #include <undo/heightedit.h>
 #include <undo/gatheightedit.h>
@@ -258,8 +259,7 @@ void cClipboardObject::apply()
 {
 	if (clipboardFile != "")
 	{
-		cRSMModel* model = new cRSMModel();
-		model->load(clipboardFile);
+		cRsmModel* model = new cRsmModel(clipboardFile);
 		if(usePos)
 			model->pos = pos+pos2;
 		else
@@ -316,8 +316,7 @@ void cClipboardObject::render()
 {
 	if(!rsmmodel)
 	{
-		rsmmodel = new cRSMModel();
-		rsmmodel->load(clipboardFile);
+		rsmmodel = new cRsmModel(clipboardFile);
 		rsmmodel->pos = cVector3(cGraphics::cMouse::x3d/5.0f, -cGraphics::cMouse::y3d, cGraphics::cMouse::z3d/5.0f);
 		if (SDL_GetModState() & KMOD_CTRL)
 			rsmmodel->pos.y = clipboardY;

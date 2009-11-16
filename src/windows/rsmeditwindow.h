@@ -10,7 +10,7 @@
 #include <wm/windowscrollpanel.h>
 
 
-class cRSMModel;
+class cRsmModel;
 
 class cRSMEditWindow : public cWindow
 {
@@ -42,7 +42,7 @@ class cRSMEditWindow : public cWindow
 	class cWindowModel : public cWindowObject
 	{
 	public:
-		cRSMModel* model;
+		cRsmModel* model;
 		std::string data;
 		float roty;
 		float oldx;

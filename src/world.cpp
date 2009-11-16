@@ -2,17 +2,23 @@
 #include "world.h"
 #include "graphics.h"
 #include "filesystem.h"
-#include <math.h>
-#include <list>
+#include "RSMModel.h"
 #include "texturecache.h"
-#include <fstream>
 #include "menu.h"
-#include "windows/hotkeywindow.h"
-#include <windows/confirmwindow.h>
+#include <frustum.h>
 #include "font.h"
 #include <clipboard.h>
-#include <frustum.h>
 #include "settings.h"
+#include "texturemodel.h"
+#include "sprite.h"
+#include "texture.h"
+#include "texturecache.h"
+#include <windows/confirmwindow.h>
+#include "windows/hotkeywindow.h"
+
+#include <math.h>
+#include <list>
+#include <fstream>
 
 #ifdef WIN32
 #include <gd/gd.h>
@@ -477,15 +483,19 @@ void cWorld::load()
 
 
 			std::string filename = buf+52;
-			cRSMModel* m = new cRSMModel();
-			m->load(cSettings::roDir+ "data\\model\\" + filename);
+			cRsmModel* m = new cRsmModel(cSettings::roDir+ "data\\model\\" + filename);
+			if(!m)
+			{
+				Log(2,0,"ehh..unknown error while loading model");
+				break;
+			}
 			m->lightopacity = 1;
 
-			if (m->meshes.size() == 0)
+/*			if (m->meshes.size() == 0)
 			{
 				Log(2,0,GetMsg("world/MODELFAIL"), filename.c_str());
 				continue;
-			}
+			}*/
 
 			m->name = std::string(buf);
 
@@ -889,31 +899,20 @@ void cWorld::save()
 
 			if(root != NULL)
 			{
-				int x,y;
-				for(x = 0; x < width; x++)
-					for(y = 0; y < height; y++)
-					{
-						cubes[y][x].maxHeight = -99999;
-						cubes[y][x].minHeight = 99999;
-					}
-
-				for(unsigned int i = 0; i < models.size(); i++)
-				{
-					if(i % 10 == 0)
-						Log(3,0,GetMsg("world/QUADTREECALC"), i, models.size(), (i/(float)models.size())*100);
-					models[i]->draw(false,false,true);
-				}
-
-
+				setHeight();
 				root->recalculate();
 				root->save(quadTreeFloats);
-				for(x = 0; x < width; x++)
-					for(y = 0; y < height; y++)
-					{
-						cubes[y][x].maxHeight = -99999;
-						cubes[y][x].minHeight = 99999;
-					}
 			}
+			for(unsigned int y = 0; y < (unsigned int)height; y++)
+			{
+				for(unsigned int x = 0; x < (unsigned int)width; x++)
+				{
+					cCube* c = &cubes[y][x];
+					c->maxHeight = -99999;
+					c->minHeight = 99999;
+				}
+			}
+
 		}
 //		for(int ii = 0; ii < quadTreeFloats.size(); ii++)
 //			quadTreeFloats[ii] = cVector3(0,0,0);
@@ -1086,7 +1085,7 @@ void cWorld::save()
 		{
 			char buf[100];
 			long l;
-			cRSMModel* m = models[i];
+			cRsmModel* m = models[i];
 
 			l = 1;
 			pFile.write((char*)&l, 4);
@@ -2313,8 +2312,18 @@ void cWorld::draw()
 		glEnable(GL_BLEND);
 		glTranslatef(0,0,height*10);
 		glScalef(1,1,-1);
+		cGraphics::nModelsDrawn = 0;
 		for(i = 0; i < models.size(); i++)
 		{
+			//			if(!cFrustum::boxInFrustum(5*models[i]->pos.x, -models[i]->pos.y, 10*height - 5*models[i]->pos.z, max(models[i]->realbbmax.x, -models[i]->realbbmin.x), max(models[i]->realbbmax.y, -models[i]->realbbmin.y), max(models[i]->realbbmax.z, -models[i]->realbbmin.z)))
+			//				continue;
+			if(!cFrustum::cubeInFrustum(5*models[i]->pos.x, -models[i]->pos.y, 10*height - 5*models[i]->pos.z, models[i]->maxrange))
+				continue;
+//			if(!cFrustum::pointInFrustum(5*models[i]->pos.x, -models[i]->pos.y, 10*height - 5*models[i]->pos.z))
+//				continue;
+			cGraphics::nModelsDrawn++;
+
+
 			if((int)i == cGraphics::worldContainer->settings.selectedObject && cSettings::editMode == MODE_OBJECTS)
 				glColor4f(1,0,0, cGraphics::view.showObjectsAsTransparent ? 0.2f : 1);
 			else
@@ -4230,7 +4239,7 @@ void cWorld::newEmpty(int newWidth,int newHeight)
 	cLightmap* l = new cLightmap();
 
 	//Transparent lightmap on new maps. by Henko
-	for(int i = 0; i < 256; i++)
+	for(i = 0; i < 256; i++)
 		l->buf[i] = i < 64 ? 255 : 0;
 
 	lightmaps.push_back(l);
@@ -4302,6 +4311,25 @@ std::vector<cCube*> cWorld::getWall( int x, int y, bool vertical, bool single)
 	}
 
 	return ret;
+}
+
+void cWorld::setHeight()
+{
+	for(unsigned int y = 0; y < (unsigned int)height; y++)
+	{
+		for(unsigned int x = 0; x < (unsigned int)width; x++)
+		{
+			cCube* c = &cubes[y][x];
+			c->maxHeight = -99999;
+			c->minHeight = 99999;
+		}
+	}
+
+	for(unsigned int i = 0; i < models.size(); i++)
+	{
+		models[i]->setHeight();
+	}
+
 }
 
 void cCube::calcNormal()
@@ -4422,4 +4450,9 @@ cGatTile::cGatTile( const cGatTile& other)
 	cell3 = other.cell3;
 	cell4 = other.cell4;
 	type = other.type;
+}
+
+GLuint cTextureContainer::texId()
+{
+	return texture->texId();
 }

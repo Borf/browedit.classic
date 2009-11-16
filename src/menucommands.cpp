@@ -24,6 +24,8 @@
 #include "plugins/base/base.h"
 #include "settings.h"
 #include "windows/hotkeywindow.h"
+#include <RSMModel.h>
+#include <sprite.h>
 
 int process_events( );
 extern cMenu* mode;
@@ -32,7 +34,6 @@ extern cMenu* speed;
 extern cMenu* models;
 extern cMenu* currentobject;
 extern TiXmlDocument sprites;
-extern bool boundingBoxCollisions;
 
 void mainloop();
 #include <bthread.h>
@@ -593,8 +594,7 @@ MENUCOMMAND(random2)
 
 	for(i = 0; i < 50; i++)
 	{
-		cRSMModel* model = new cRSMModel();
-		model->load(cSettings::roDir +  randommodels[rand() % randommodels.size()]);
+		cRsmModel* model = new cRsmModel(cSettings::roDir +  randommodels[rand() % randommodels.size()]);
 
 		bool ok = false;
 		while(!ok || cGraphics::world->cubes[(int)(model->pos.z/2)][(int)(model->pos.x/2)].cell1 != 0)
@@ -694,8 +694,8 @@ MENUCOMMAND(random2)
 			cGraphics::world->cubes[(int)y][(int)x].minHeight = 99999;
 		}
 
-	for(i = 0; i < cGraphics::world->models.size(); i++)
-		cGraphics::world->models[i]->draw(false,false,true);
+/*TODO	for(i = 0; i < cGraphics::world->models.size(); i++)
+		cGraphics::world->models[i]->draw(false,false,true);*/
 
 
 	for(y = 0; y < cGraphics::world->height; y++)
@@ -856,9 +856,7 @@ MENUCOMMAND(random4)
 	{
 		for(i = 0; i < 1000; i++)
 		{
-			cRSMModel* model = new cRSMModel();
-			model->load(cSettings::roDir +  randommodels[rand() % randommodels.size()]);
-
+			cRsmModel* model = new cRsmModel(cSettings::roDir +  randommodels[rand() % randommodels.size()]);
 			model->pos = cVector3(rand()%(cGraphics::world->width*2), 0, rand()%(cGraphics::world->height*2));
 
 			while(cGraphics::world->cubes[(int)(model->pos.z/2)][(int)(model->pos.x/2)].tileUp > 32)
@@ -978,8 +976,7 @@ MENUCOMMAND(model)
 	if(!cGraphics::world)
 		return false;
 	delete cGraphics::previewModel;
-	cGraphics::previewModel = new cRSMModel();
-	cGraphics::previewModel->load(cSettings::roDir + src->data);
+	cGraphics::previewModel = new cRsmModel(cSettings::roDir + src->data);
 	cGraphics::previewModel->rot = cVector3(0,0,0);
 	cGraphics::previewModel->scale = cVector3(4,4,4);
 
@@ -994,23 +991,18 @@ MENUCOMMAND(model)
 
 MENUCOMMAND(quadtree)
 {
-	if(!cGraphics::world)
-		return false;
 	int x,y;
 	for(x = 0; x < cGraphics::world->width; x++)
+	{
 		for(y = 0; y < cGraphics::world->height; y++)
 		{
 			cGraphics::world->cubes[y][x].maxHeight = -99999;
 			cGraphics::world->cubes[y][x].minHeight = 99999;
 		}
-
-	for(unsigned int i = 0; i < cGraphics::world->models.size(); i++)
-	{
-		Log(3,0,GetMsg("CALCMODEL"), i, cGraphics::world->models.size(), (i/(float)cGraphics::world->models.size())*100);
-		cGraphics::world->models[i]->draw(false,false,true);
 	}
 
 
+	cGraphics::world->setHeight();
 	cGraphics::world->root->recalculate();
 	return true;
 }
@@ -1058,34 +1050,6 @@ MENUCOMMAND(gatcollision2)
 		return false;
 	MenuCommand_gatheight(src);
 	int x, y;
-	unsigned int i;
-	int ww = cGraphics::w();
-	ww -= 256;
-	int hh = cGraphics::h()-20;
-
-	glEnable(GL_DEPTH_TEST);
-	glViewport(0,0,ww,hh);						// Reset The Current Viewport
-
-	float camrad = 10;
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);				// Black Background
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
-	glLoadIdentity();									// Reset The Projection Matrix
-	gluPerspective(45.0f,(GLfloat)ww/(GLfloat)hh,10.0f,10000.0f);
-	gluLookAt(  -cGraphics::worldContainer->camera.pointer.x + cGraphics::worldContainer->camera.height*sin(cGraphics::worldContainer->camera.rot),
-				camrad+cGraphics::worldContainer->camera.height,
-				-cGraphics::worldContainer->camera.pointer.y + cGraphics::worldContainer->camera.height*cos(cGraphics::worldContainer->camera.rot),
-				-cGraphics::worldContainer->camera.pointer.x,camrad + cGraphics::worldContainer->camera.height * (cGraphics::worldContainer->camera.angle/10.0f),-cGraphics::worldContainer->camera.pointer.y,
-				0,1,0);
-	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
-	glLoadIdentity();									// Reset The Modelview Matrix
-//	glTranslatef(0,0,cGraphics::world->height*10);
-//	glScalef(1,1,-1);
-
-	for(i = 0; i < cGraphics::world->models.size(); i++)
-		cGraphics::world->models[i]->precollides();
-
-	Log(3,0, "Done Model boundingbox calculations");
 
 	for(x = 0; x < cGraphics::world->width*2; x++)
 	{
@@ -1095,42 +1059,57 @@ MENUCOMMAND(gatcollision2)
 		}
 	}
 	
-
-	for(x = 0; x < cGraphics::world->width; x++)
-		for(y = 0; y < cGraphics::world->height; y++)
-		{
-			cGraphics::world->cubes[y][x].maxHeight = -99999;
-			cGraphics::world->cubes[y][x].minHeight = 99999;
-		}
-
-	for(i = 0; i < cGraphics::world->models.size(); i++)
-	{
-		Log(3,0,GetMsg("CALCMODEL"), i, cGraphics::world->models.size(), (i/(float)cGraphics::world->models.size())*100);
-		cGraphics::world->models[i]->draw(false,false,true);
-	}
-
-
 	for(x = 0; x < cGraphics::world->width*2; x++)
 	{
 		for(y = 0; y < cGraphics::world->height*2; y++)
 		{
-			if(cGraphics::world->cubes[y/2][x/2].maxHeight == -99999 || cGraphics::world->cubes[y/2][x/2].minHeight == 99999)
-				continue;
-
-			
-			cGraphics::worldContainer->camera.pointer.x = -5*x + 2.5;
-//			cGraphics::worldContainer->camera.pointer.y = -5*(2*cGraphics::world->height-y) + 2.5;
+/*			cGraphics::worldContainer->camera.pointer.x = -5*x + 2.5;
+			cGraphics::worldContainer->camera.pointer.y = -5*(2*cGraphics::world->height-y) + 2.5;*/
 
 
-			cVector3 worldpos = cVector3(	5*x+2.5, 
-											-5000,
-											5*y+2.5);
-			
+
+			cVector3 colPos;
+			cVector3 worldpos = cVector3(5*x, -5000, 5*y);
 			cVector3 highup = worldpos + cVector3(0, 10000, 0);
 			for(unsigned int ii = 0; ii < cGraphics::world->models.size(); ii++)
 			{
-				if(cGraphics::world->models[ii]->collides(worldpos, highup))
+				if(cGraphics::world->models[ii]->collides(worldpos, highup, &colPos))
 				{
+					cGraphics::world->gattiles[y][x].cell1 = -colPos.y;
+					cGraphics::world->gattiles[y][x].type = 1;
+					break;
+				}
+			}
+
+			worldpos = cVector3(5*x+5, -5000, 5*y);
+			highup = worldpos + cVector3(0, 10000, 0);
+			for(ii = 0; ii < cGraphics::world->models.size(); ii++)
+			{
+				if(cGraphics::world->models[ii]->collides(worldpos, highup, &colPos))
+				{
+					cGraphics::world->gattiles[y][x].cell2 = -colPos.y;
+					cGraphics::world->gattiles[y][x].type = 1;
+					break;
+				}
+			}
+			worldpos = cVector3(5*x, -5000, 5*y+5);
+			highup = worldpos + cVector3(0, 10000, 0);
+			for(ii = 0; ii < cGraphics::world->models.size(); ii++)
+			{
+				if(cGraphics::world->models[ii]->collides(worldpos, highup, &colPos))
+				{
+					cGraphics::world->gattiles[y][x].cell3 = -colPos.y;
+					cGraphics::world->gattiles[y][x].type = 1;
+					break;
+				}
+			}
+			worldpos = cVector3(5*x+5, -5000, 5*y+5);
+			highup = worldpos + cVector3(0, 10000, 0);
+			for(ii = 0; ii < cGraphics::world->models.size(); ii++)
+			{
+				if(cGraphics::world->models[ii]->collides(worldpos, highup, &colPos))
+				{
+					cGraphics::world->gattiles[y][x].cell4 = -colPos.y;
 					cGraphics::world->gattiles[y][x].type = 1;
 					break;
 				}
@@ -1138,12 +1117,6 @@ MENUCOMMAND(gatcollision2)
 		}
 		mainloop();
 	}
-	for(x = 0; x < cGraphics::world->width; x++)
-		for(y = 0; y < cGraphics::world->height; y++)
-		{
-			cGraphics::world->cubes[y][x].maxHeight = 0;
-			cGraphics::world->cubes[y][x].minHeight = 0;
-		}
 
 
 	return true;
@@ -1367,7 +1340,7 @@ MENUCOMMAND(dolightmaps2)
 	if(!cGraphics::world)
 		return false;
 
-	unsigned int i;
+//TODO	unsigned int i;
 
 	bool rendering = true;
 
@@ -1386,37 +1359,9 @@ MENUCOMMAND(dolightmaps2)
 	//cGraphics::world->blackLightmaps();
 	Log(3,0,"Done initializing for lightmaps...");
 
-	int ww = cGraphics::w();
-	ww -= 256;
-	int hh = cGraphics::h()-20;
-
-	glEnable(GL_DEPTH_TEST);
-	glViewport(0,0,ww,hh);						// Reset The Current Viewport
-
-	float camrad = 10;
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);				// Black Background
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-	glMatrixMode(GL_PROJECTION);						// Select The Projection Matrix
-	glLoadIdentity();									// Reset The Projection Matrix
-	gluPerspective(45.0f,(GLfloat)ww/(GLfloat)hh,10.0f,10000.0f);
-	gluLookAt(  -cGraphics::worldContainer->camera.pointer.x + cGraphics::worldContainer->camera.height*sin(cGraphics::worldContainer->camera.rot),
-				camrad+cGraphics::worldContainer->camera.height,
-				-cGraphics::worldContainer->camera.pointer.y + cGraphics::worldContainer->camera.height*cos(cGraphics::worldContainer->camera.rot),
-				-cGraphics::worldContainer->camera.pointer.x,camrad + cGraphics::worldContainer->camera.height * (cGraphics::worldContainer->camera.angle/10.0f),-cGraphics::worldContainer->camera.pointer.y,
-				0,1,0);
-	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
-	glLoadIdentity();									// Reset The Modelview Matrix
-//	glTranslatef(0,0,cGraphics::world->height*10);
-//	glScalef(1,1,-1);
-
-	for(i = 0; i < cGraphics::world->models.size(); i++)
-		cGraphics::world->models[i]->precollides();
-
 	cGraphics::world->loaded = false;
-
-	Log(3,0, "Done Model boundingbox calculations");
 	unsigned long timer = tickcount();
-
+	unsigned long timer2 = tickcount();
 
 #if 1
 	int x,y;
@@ -1511,7 +1456,7 @@ MENUCOMMAND(dolightmaps2)
 		}
 	}
 #else //threading! :D
-	boundingBoxCollisions = true;
+/*TODO	boundingBoxCollisions = true;
 	cBThread* t = new cLightmapMonitor();
 	t->start();
 	t->wait();
@@ -1521,7 +1466,7 @@ MENUCOMMAND(dolightmaps2)
 	{
 		
 	}
-
+*/
 #endif
 
 
@@ -1531,6 +1476,8 @@ MENUCOMMAND(dolightmaps2)
 	
 	w->close();
 	
+	Log(3,0, "Took %i", tickcount() - timer2);
+
 	//	return true;
 	
 	
@@ -3575,10 +3522,10 @@ inline void setLightIntensity( BYTE* buf, int yy, int xx, cVector3 worldpos, std
 					if(cGraphics::world->models[ii]->collides(worldpos, lightpos))
 					{
 						obstructed -= cGraphics::world->models[ii]->lightopacity;
-						if(boundingBoxCollisions && lights)
+/*TODO						if(boundingBoxCollisions && lights)
 						{
 							(*lights)[i].push_back(ii);
-						}
+						}*/
 					}
 			}
 		}

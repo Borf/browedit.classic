@@ -2,10 +2,8 @@
 #define __CLIPBOARD_H__
 
 #include <vector>
-
-class cWorldContainer;
 #include <world.h>
-
+class cWorldContainer;
 class cClipBoardContents;
 
 class cClipBoard
@@ -77,7 +75,7 @@ public:
 	std::string clipboardName;
 	float clipboardY;
 	float clipboardFloat;
-	cRSMModel* rsmmodel;
+	cRsmModel* rsmmodel;
 	bool usePos;
 
 	cClipboardObject() : cClipBoardContents(cClipBoard::CLIP_OBJECT)

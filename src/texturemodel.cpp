@@ -1,4 +1,5 @@
 #include <common.h>
+#include "texture.h"
 #include "texturemodel.h"
 #include "texturecache.h"
 #include "graphics.h"

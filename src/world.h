@@ -1,19 +1,24 @@
 #ifndef __WORLD_H__
 #define __WORLD_H__
 
-#include <list>
-#include "texture.h"
+
 #ifdef WIN32
+#include <windows.h>
 #include <gd/gd.h>
 #else
 #include <gd.h>
 #endif
+#include <gl/gl.h>
+#include <list>
+#include <vector>
+
 #include <tinyxml/tinyxml.h>
-#include "RSMModel.h"
-#include "texturecache.h"
-#include "texturemodel.h"
-#include "sprite.h"
 #include "plugins/base/interface.h"
+
+class cTexture;
+class cTextureModel;
+class cSprite;
+class cRsmModel;
 
 
 class cLightmap : public cBrowInterface::cPluginLightmap
@@ -95,7 +100,7 @@ public:
 	cTexture* texture;
 	std::string RoFilename;
 	std::string RoFilename2;
-	GLuint texId() { return texture->texId(); }
+	GLuint texId();
 
 };
 
@@ -199,7 +204,7 @@ public:
 	std::vector<std::vector<cGatTile> >		gattiles;
 	std::vector<std::vector<cRealLightMap*> >		realLightmaps;
 
-	std::vector<cRSMModel*>				models;
+	std::vector<cRsmModel*>				models;
 	std::vector<cLight>					lights;
 	std::vector<cSound>					sounds;
 	std::vector<cEffect>				effects;
@@ -219,6 +224,7 @@ public:
 	cTextureModel*						effect;
 	
 	std::vector<cVector3>				quadTreeFloats;
+	void								setHeight();
 	cQuadTreeNode* root;
 	
 	

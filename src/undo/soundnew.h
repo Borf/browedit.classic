@@ -2,6 +2,7 @@
 #define __UNDO_SOUNDNEW_H__
 
 #include <undo.h>
+#include <world.h>
 
 class cUndoNewSound : public cUndoItem
 {

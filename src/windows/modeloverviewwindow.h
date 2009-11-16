@@ -4,7 +4,7 @@
 #include <wm/window.h>
 #include <wm/windowtree.h>
 
-class cRSMModel;
+class cRsmModel;
 
 
 class cModelOverViewWindow : public cWindow
@@ -19,10 +19,10 @@ public:
 
 		bool		isCat;
 		int type;
-		cRSMModel* model;
+		cRsmModel* model;
 
 		cModelOverViewTreeNode* addNodeTree(std::string n);
-		cModelOverViewTreeNode* getNode(cRSMModel* m);
+		cModelOverViewTreeNode* getNode(cRsmModel* m);
 	
 	};
 
@@ -32,7 +32,7 @@ public:
 		cModelOverViewTree(cWindow* parent, std::vector<cWindowTree::cTreeNode*> nodes, TiXmlDocument* skin = &cWM::skin);
 		void onRightClick();
 		void onChange();
-		void getObject(cRSMModel* m);
+		void getObject(cRsmModel* m);
 	};
 
 

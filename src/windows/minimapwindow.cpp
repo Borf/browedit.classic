@@ -1,6 +1,6 @@
 #include <common.h>
 #include "minimapwindow.h"
-
+#include <world.h>
 #include <graphics.h>
 
 

@@ -100,8 +100,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 				{
 					if (SDL_GetModState() & KMOD_CTRL && cGraphics::previewModel != NULL)
 					{
-						cRSMModel* model = new cRSMModel();
-						model->load(cGraphics::previewModel->filename);
+						cRsmModel* model = new cRsmModel(cGraphics::previewModel->filename);
 						model->pos = cVector3(cGraphics::cMouse::x3d/5, -cGraphics::cMouse::y3d, cGraphics::cMouse::z3d/5);
 						model->scale = cVector3(1,1,1);
 						model->rot = cVector3(0,0,0);
@@ -316,18 +315,30 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 			case SDLK_i:
 				if (cGraphics::worldContainer->settings.selectedObject != -1)
 				{
-					cRSMModel* m = cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject];
+					cRsmModel* m = cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject];
 					Log(3,0,"Objects: %i", cGraphics::worldContainer->settings.selectedObject);
 					Log(3,0,"Pos: %f,%f,%f", m->pos.x, m->pos.y, m->pos.z);
 					Log(3,0,"scale: %f,%f,%f", m->scale.x, m->scale.y, m->scale.z);
 					Log(3,0,"rot: %f,%f,%f", m->rot.x, m->rot.y, m->rot.z);
-					Log(3,0,"nr of submeshes: %i", m->meshes.size());
+
+					std::list<cRsmModel::cMesh*> mm;
+					mm.push_back(m->root);
+					int count = 0;
+					while(!mm.empty())
+					{
+						cRsmModel::cMesh* mmm = mm.back();
+						mm.pop_back();
+						for(unsigned int i = 0; i < mmm->children.size(); i++)
+							mm.push_back(mmm->children[i]);
+						count++;
+					}
+					Log(3,0,"nr of submeshes: %i", count);
 				}
 				break;
 			case SDLK_RETURN:
 				if (cGraphics::worldContainer->settings.selectedObject != -1)
 				{
-					cRSMModel* o = cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject];
+					cRsmModel* o = cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject];
 					cMenuItem* menuitem = NULL; //TODO (cMenuItem*)models->findData("data\\model\\" + o->rofilename);
 
 					cWindow* w = new cObjectWindow();

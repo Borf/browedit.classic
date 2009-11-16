@@ -5,7 +5,8 @@
 #include <menucommands.h>
 #include <graphics.h>
 #include <wm/windowbutton.h>
-
+#include <world.h>
+#include <RSMModel.h>
 
 
 
@@ -55,7 +56,7 @@ cModelOverViewWindow::cModelOverViewTreeNode* cModelOverViewWindow::cModelOverVi
 	}
 }
 
-cModelOverViewWindow::cModelOverViewTreeNode* cModelOverViewWindow::cModelOverViewTreeNode::getNode( cRSMModel* m )
+cModelOverViewWindow::cModelOverViewTreeNode* cModelOverViewWindow::cModelOverViewTreeNode::getNode( cRsmModel* m )
 {
 	if(model == m)
 		return this;
@@ -120,7 +121,7 @@ void cModelOverViewWindow::cModelOverViewTree::onChange()
 	}
 }
 
-void cModelOverViewWindow::cModelOverViewTree::getObject( cRSMModel* m )
+void cModelOverViewWindow::cModelOverViewTree::getObject( cRsmModel* m )
 {
 	for(unsigned int i = 0; i < nodes.size(); i++)
 	{

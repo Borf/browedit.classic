@@ -4,6 +4,7 @@
 #include "sprite.h"
 #include "windows/spritewindow.h"
 #include "settings.h"
+#include <world.h>
 
 extern bool doneAction;
 

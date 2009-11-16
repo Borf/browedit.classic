@@ -21,8 +21,7 @@ public:
 	}
 	void undo()
 	{
-		cRSMModel* model = new cRSMModel();
-		model->load(filename);
+		cRsmModel* model = new cRsmModel(filename);
 		model->pos = pos;
 		model->rot = rot;
 		model->scale = scale;

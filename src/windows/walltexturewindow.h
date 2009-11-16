@@ -5,6 +5,7 @@
 #include <wm/windowbutton.h>
 #include <graphics.h>
 #include <undo.h>
+#include <world.h>
 
 class cWallTextureWindow : public cWindow
 {

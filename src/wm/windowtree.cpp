@@ -10,6 +10,7 @@
 #include <GL/glu.h>												// Header File For The GLu32 Library
 #include <algorithm>
 #include <font.h>
+#include <texture.h>
 
 void cWindowTree::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {

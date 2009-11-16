@@ -4,6 +4,7 @@
 #include "objectwindow.h"
 #include <graphics.h>
 #include <settings.h>
+#include <world.h>
 
 TiXmlDocument sprites;
 

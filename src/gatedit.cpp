@@ -4,7 +4,7 @@
 #include "undo/gattileedit.h"
 #include "undo/gatheightedit.h"
 #include "clipboard.h"
-
+#include <wm/wm.h>
 
 
 int cProcessManagement::gatedit_process_events(SDL_Event &event)

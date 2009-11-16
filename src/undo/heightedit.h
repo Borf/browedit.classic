@@ -2,6 +2,7 @@
 #define __UNDO_HEIGHTEDIT_H__
 
 #include <undo.h>
+#include <world.h>
 
 class cUndoHeightEdit : public cUndoItem
 {

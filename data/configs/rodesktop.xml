@@ -49,7 +49,7 @@
     <wm>
         <hotbar>
             <x>744</x>
-            <y>0</y>
+            <y>17</y>
         </hotbar>
         <sprite>
             <x>237</x>
@@ -67,5 +67,9 @@
             <w>974</w>
             <h>718</h>
         </textures>
+        <minimap>
+            <x>966</x>
+            <y>23</y>
+        </minimap>
     </wm>
 </config>

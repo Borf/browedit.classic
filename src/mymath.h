@@ -20,12 +20,14 @@ public:
 	cVector3 operator+(cVector3 vVector);
 	cVector3 operator-(cVector3 vVector);
 	cVector3 operator-(float f);
+	cVector3 operator-();
 	cVector3 operator+(float f);
 	cVector3 operator*(float num);
 	float &operator [](int num);
 	cVector3 operator/(float num);
 	bool operator==(cVector3 v2);
 	void operator-=(cVector3 v2);
+
 	cVector3 getnormalized();
 	void normalize();
 	float magnitude();
@@ -33,7 +35,14 @@ public:
 	float dot(cVector3 v2);
 	cVector3 cross(cVector3 v2);
 
-	float x, y, z;						
+	union
+	{
+		struct  
+		{
+			float x, y, z;
+		};
+		float	data[3];
+	};
 };
 
 class cVector2 
@@ -53,48 +62,96 @@ public:
 	float DotProd(cVector2 v2);
 	cVector2 perp();
 
-	float x, y;
+	union
+	{
+		struct  
+		{
+			float x, y;
+		};
+		float	data[2];
+	};
 };
 
-#if 0
 
-class Quaternion
+
+class cMatrix4x4
 {
-	public:
-		Quaternion( float *angles ) { fromAngles( angles ); }
-		Quaternion( Quaternion& q1, Quaternion& q2, float interp ) { slerp( q1, q2, interp ); }
-		void fromAngles( float *angles );
+public:
+	cMatrix4x4();
+	cMatrix4x4(const cMatrix4x4 &otherMatrix);
+	
+	float values[16];
+	
+	cMatrix4x4 operator*(const cMatrix4x4&);
+	void operator*=(const cMatrix4x4&);
+	cVector3 operator*(const cVector3&);
+	
+	cMatrix4x4 transpose();
+	cVector3   getTranslation();
+	cVector3   getRotation();
+	cVector3   getScale();
+	
+	
+	void		setPosition(const cVector3);
+	void		setPosition(const cVector2);
+	void		setPosition(float = 0, float = 0, float = 0);
+	
+	void		setPositionX(float);
+	void		setPositionY(float);
+	void		setPositionZ(float);
+	
+	void		setScale(float = 1, float = 1, float = 1);
+	void		setScaleX(float);
+	void		setScaleY(float);
+	void		setScaleZ(float);
+	
+	void		setRotationX(float);
+	void		setRotationY(float);
+	void		setRotationZ(float);
 
-		void slerp( Quaternion& q1, Quaternion& q2, float interp );
-		float operator[]( int index ) { return m_quat[index]; }
-		void inverse();
-	private:
-		float m_quat[4];
+	
+	cMatrix4x4	removeTranslation();
+	
+	
+	//constructor-like thingies
+	void		setIdentity();
+
+	static cMatrix4x4 makeIdentity();
+	static cMatrix4x4 makeRotation(float,float,float,float);
+	static cMatrix4x4 makeTranslation(float = 0,float = 0,float = 0);
+	static cMatrix4x4 makeTranslation(cVector3);
+	static cMatrix4x4 makeScale(float = 1,float = 1,float = 1);
+	static cMatrix4x4 makeScale(cVector3);
 };
 
 
-class Matrix
+
+
+class cQuaternion
 {
-	public:
-		Matrix();
-		~Matrix();
-		void loadIdentity();
-		void set( float *matrix );
-		void postMultiply( Matrix& matrix );
-		void setTranslation( float *translation );
-		void setInverseTranslation( float *translation );
-		void setRotationRadians( float *angles );
-		void setRotationDegrees( float *angles );
-		void setRotationQuaternion( Quaternion& quat );
-		void setInverseRotationRadians( float *angles );
-		void setInverseRotationDegrees( float *angles );
-		float *getMatrix() { return m_matrix; }
-		void inverseTranslateVect( float *pVect );
-		void inverseRotateVect( float *pVect );
-	private:
-		float m_matrix[16];
-};
+public:
+	union
+	{
+		struct 
+		{
+			float x,y,z,w;
+		};
+		float values[4];
+	};
 
-#endif
+	cQuaternion() {};	
+	cQuaternion(float x, float y, float z, float w);
+	cQuaternion( float *angles );
+	cQuaternion( cQuaternion& q1, cQuaternion& q2, float interp );
+	
+	void fromAngles( float *angles );
+	void slerp( cQuaternion& q1, cQuaternion& q2, float interp );
+	cQuaternion normalize();
+	float operator[]( int index );
+	void inverse();
+	cMatrix4x4	getRotationMatrix();
+};	
+
+
 
 #endif

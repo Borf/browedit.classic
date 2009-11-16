@@ -3,6 +3,7 @@
 #include <graphics.h>
 #include <undo/wallchange.h>
 #include <wm/windowinputbox.h>
+#include <texture.h>
 
 cWallTextureWindow::cWallTextureWindow(int tileX, int tileY, bool horizontal ) : cWindow()
 {

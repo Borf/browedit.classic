@@ -11,7 +11,8 @@
 #include <SDL/SDL_syswm.h>
 #include <common.h>
 #include <settings.h>
-
+#include <filesystem.h>
+#include <RSMModel.h>
 
 cRSMEditWindow::cWindowOpenButton::cWindowOpenButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent,skin)
 {
@@ -243,22 +244,21 @@ void cRSMEditWindow::cWindowModel::draw( int cutoffleft, int cutoffright, int cu
 	{
 		glPushMatrix();
 		glLoadIdentity();
-		model = new cRSMModel();
-		model->load(data);
+		model = new cRsmModel(data);
 		model->pos = cVector3(0,0.7f*w,1000);
 		
 		float sc = 0;
-		sc = max(sc, model->bb2.bbmax[0] - model->bb2.bbmin[0]);
-		sc = max(sc, model->bb2.bbmax[1] - model->bb2.bbmin[1]);
-		sc = max(sc, model->bb2.bbmax[2] - model->bb2.bbmin[2]);
+		sc = max(sc, model->bbmax[0] - model->bbmin[0]);
+		sc = max(sc, model->bbmax[1] - model->bbmin[1]);
+		sc = max(sc, model->bbmax[2] - model->bbmin[2]);
 		sc = 1.5f*min(h,w) / sc;
 		
 		model->scale = cVector3(sc,sc,sc);
 		
 		model->rot = cVector3(0,0,0);
-		model->bb2.bbrange[0] = 0;
+//TODO		model->bb2.bbrange[0] = 0;
 		//model->bb2.bbmin[1] = 0;
-		model->bb2.bbrange[2] = 0;
+//TODO		model->bb2.bbrange[2] = 0;
 		glPopMatrix();
 		
 		
@@ -333,7 +333,7 @@ void cRSMEditWindow::cWindowModel::draw( int cutoffleft, int cutoffright, int cu
 				
 				if (model != NULL)
 				{
-					model->draw(false);
+					model->draw();
 					if(rotate < cGraphicsBase::getFrameTicks())
 						model->rot.y+=40*(cGraphicsBase::getFrameTicks() / 1000.0f);
 					model->rot.x = roty;

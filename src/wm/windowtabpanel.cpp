@@ -10,6 +10,7 @@
 #include <font.h>
 #include "window.h"
 #include <graphics.h>
+#include <texture.h>
 
 void cWindowTabPanel::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {

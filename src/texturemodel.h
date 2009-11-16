@@ -1,7 +1,8 @@
 #ifndef __TEXTUREMODEL_H__
 #define __TEXTUREMODEL_H__
 
-#include "texture.h"
+class cTexture;
+#include <mymath.h>
 
 class cTextureModel
 {

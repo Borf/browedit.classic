@@ -10,7 +10,7 @@
 #include <filesystem.h>
 #include <graphics.h>
 #include <settings.h>
-
+#include <world.h>
 
 cTextureWindow::cWindowTexture::cWindowTexture( cWindow* parent ) : cWindowPictureBox(parent)
 {

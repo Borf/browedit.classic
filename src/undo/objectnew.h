@@ -2,6 +2,7 @@
 #define __UNDO_OBJECTNEW_H__
 
 #include <undo.h>
+#include <RSMModel.h>
 
 class cUndoNewObject : public cUndoItem
 {

@@ -2,6 +2,7 @@
 #define __UNDO_LIGHTCHANGE_H__
 
 #include <undo.h>
+#include <world.h>
 
 class cUndoChangeLight : public cUndoItem
 {

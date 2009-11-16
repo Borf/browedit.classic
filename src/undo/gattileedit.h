@@ -2,6 +2,7 @@
 #define __UNDO_GATTILEEDIT_H__
 
 #include <undo.h>
+#include <world.h>
 
 class cUndoGatTileEdit : public cUndoItem
 {

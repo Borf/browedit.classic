@@ -14,6 +14,7 @@
 #include <map>
 #include "windows/hotkeywindow.h"
 #include "menucommands.h"
+#include "RSMModel.h"
 #include <undo.h>
 #include "settings.h"
 #include "menu.h"
@@ -82,7 +83,7 @@ int cGraphics::draw(bool drawwm)
 			glEnable(GL_TEXTURE_2D);
 			glColor4f(1,1,1,previewColor > 10 ? 1 : previewColor / 20.0f);
 			previewModel->pos = cVector3(40,-100,0);
-			previewModel->draw(false);
+			previewModel->draw();//false, do not check frustum
 			if (previewColor > -1)
 				previewColor--;
 		}
@@ -110,6 +111,9 @@ int cGraphics::draw(bool drawwm)
 		int i;
 		glEnable(GL_TEXTURE_2D);
 		glColor4f(1,1,1,1);
+		
+		font->print(1,1,1,width-font->textLen("nModels: " + inttostring(cGraphics::nModelsDrawn)), 0, "nModels: %i", cGraphics::nModelsDrawn);
+
 		for(i = 0; 288*i+256 < height; i++)
 		{
 			if (cSettings::editMode == MODE_GAT)
@@ -639,7 +643,8 @@ float cGraphics::textureGridSizeY = 4;
 int cGraphics::textureBrushSize = 1;
 
 std::vector<int> cGraphics::gatTiles;
-cRSMModel* cGraphics::previewModel;
+int cGraphics::nModelsDrawn = 0;
+cRsmModel* cGraphics::previewModel;
 unsigned int cGraphics::waterCount;
 cTexture* cGraphics::splash = NULL;
 std::vector<std::vector<cTexture*> > cGraphics::waterTextures;

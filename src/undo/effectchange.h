@@ -2,6 +2,7 @@
 #define __UNDO_EFFECTCHANGE_H__
 
 #include <undo.h>
+#include <world.h>
 
 class cUndoChangeEffect : public cUndoItem
 {

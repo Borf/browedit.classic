@@ -2,7 +2,7 @@
 #include "waterwindow.h"
 #include <wm/windowinputbox.h>
 #include <graphics.h>
-
+#include <world.h>
 
 cWaterWindowOkButton::cWaterWindowOkButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent,skin)
 {

@@ -287,6 +287,7 @@ int cProcessManagement::textureedit_process_events(SDL_Event &event)
 						Log(3,0,"tileUp: %i", cGraphics::world->cubes[posy][posx].tileUp);
 						if(cGraphics::world->cubes[posy][posx].tileUp != -1)
 							Log(3,0,"Lightmap: %i", cGraphics::world->tiles[cGraphics::world->cubes[posy][posx].tileUp].lightmap);
+						Log(3,0,"min/max: %f,%f", cGraphics::world->cubes[posy][posx].minHeight, cGraphics::world->cubes[posy][posx].maxHeight);
 					}
 
 					break;

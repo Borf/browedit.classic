@@ -4,6 +4,7 @@
 #include "graphics.h"
 #include "font.h"
 #include <algorithm>
+#include <world.h>
 
 extern cMenu*			lastmenu;
 

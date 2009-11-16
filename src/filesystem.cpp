@@ -149,6 +149,12 @@ int cFile::getword()
 	return ((BYTE)data[index-2]) | (((BYTE)data[index-1])<<8);
 }
 
+int cFile::getInt()
+{
+	index+=4;
+	return ((BYTE)data[index-4]) | (((BYTE)data[index-3])<<8) | (((BYTE)data[index-2])<<16) | (((BYTE)data[index-1])<<24);
+}
+
 void cFile::skip(int b)
 {
 	index+=b;
@@ -241,6 +247,12 @@ cFile::cFile()
 	crc = 0;
 	location = -1;
 	version = -1;
+}
+
+float cFile::getFloat()
+{
+	index+=4;
+	return *((float*)(data+index-4));
 }
 
 

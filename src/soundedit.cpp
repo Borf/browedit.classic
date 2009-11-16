@@ -10,6 +10,7 @@
 #include <windows/soundselectwindow.h>
 #include <windows/objectwindow.h>
 #include <wm/windowinputbox.h>
+#include <filesystem.h>
 
 extern bool doneAction;
 extern void mainloop();

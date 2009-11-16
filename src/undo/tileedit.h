@@ -2,6 +2,7 @@
 #define __UNDO_TILEEDIT_H__
 
 #include <undo.h>
+#include <world.h>
 
 class cUndoTileEdit : public cUndoItem
 {

@@ -1,7 +1,7 @@
 #include <common.h>
 #include "hotkeywindow.h"
 #include <graphics.h>
-
+#include <wm/wm.h>
 
 cHotkeyWindow::cHotkeyButton::cHotkeyButton( cWindow* parent ) : cWindowPictureBox(parent)
 {

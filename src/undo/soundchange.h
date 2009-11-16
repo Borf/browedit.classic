@@ -2,6 +2,7 @@
 #define __UNDO_SOUNDCHANGE_H__
 
 #include <undo.h>
+#include <world.h>
 
 class cUndoChangeSound : public cUndoItem
 {

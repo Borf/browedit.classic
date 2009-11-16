@@ -1,155 +1,130 @@
 #ifndef __RSMMODEL_H__
 #define __RSMMODEL_H__
 
-#include "texture.h"
-#include "filesystem.h"
-#include <mymath.h>
-#include "plugins/base/interface.h"
+#include <plugins/base/interface.h>
+#include <common.h>
+#include <string>
+#include <map>
 
-class cRSMModel;
+class cTexture;
+class cFile;
 
 
-class cRSMModelFrame
+class cRsmModelBase
 {
 public:
-	int time;
-	float quat[4];
-};
-
-class cBoundingbox
-{
-public:
-	float bbmin[3];
-	float bbmax[3];
-	float bbrange[3];
-	
-	cBoundingbox()
-	{
-		for(int i = 0; i < 3; i++)
-		{
-			bbmin[i] = 0;
-			bbmax[i] = 0;
-			bbrange[i] = 0;
-		}
-	}
-	cBoundingbox(cBoundingbox &other)
-	{
-		for(int i = 0; i < 3; i++)
-		{
-			bbmin[i] = other.bbmin[i];
-			bbmax[i] = other.bbmax[i];
-			bbrange[i] = other.bbrange[i];
-		}
-	}
-
-	//Draws the currect bounding box. By Henko
-	void Draw();
-};
-
-
-
-class cRSMModel : public cBrowInterface::cPluginRSMModel
-{
-public:
-	class cFace
-	{
-	public:
-		unsigned short v[3];
-		unsigned short t[3];
-		unsigned short texid;
-		unsigned short todo;
-		unsigned int todo2;
-		unsigned int nsurf;
-		cVector3	 normal;
-	};
 	class cMesh
 	{
 	public:
-		int nstep;
-		void load(cFile*, cRSMModel*, bool);
-		int todo;
-		float ftodo[10];
+		cMesh(cFile*, cRsmModelBase*, int ver1, int ver2);
+		void fetchChildren(std::map<std::string, cMesh*, std::less<std::string> >&);
+		void draw();
+		cMatrix4x4 getMatrix1();
+		cMatrix4x4 matrix1Cache;
+		bool		cache1;
+		cMatrix4x4 getMatrix2();
+		cMatrix4x4 matrix2Cache;
+		bool		cache2;
+		void setBoundingBox(cVector3&, cVector3&);
+		void setBoundingBox2(cMatrix4x4 &mat, cVector3 &bbmin, cVector3 &bbmax);
+		virtual bool collides(cMatrix4x4 &mat, cVector3 from, cVector3 to, cVector3* = NULL);
+
 		std::string name;
-		std::string parent;
-		std::vector<int> textures;
-		float trans[22];
+		std::string parentName;
+		int unknown1;
+		float unknown2;
+
+		cMatrix4x4	offset;
+		cVector3	pos_;
+		cVector3	pos;
+		float		rotangle;
+		cVector3	rotaxis;
+		cVector3	scale;
+
+		std::vector<cTexture*> textures;
+		int			nVertices;
+		cVector3*	vertices;
+		int			nTexVertices;
+		cVector2*	texVertices;
+		int			nFaces;
+		class cFace
+		{
+		public:
+			int			vertices[3];
+			int			texvertices[3];
+			cVector3	normal;
+			int			texIndex;
+			int			twoSide;
+			int			smoothGroup;
+		};
+		cFace*		faces;
+		int			nAnimationFrames;
+		long		lastTick;
+		class cFrame
+		{
+		public:
+			int			time;
+			cQuaternion	quat;
+		};
+		cFrame*		animationFrames;
 		
-		unsigned int nVertices;
-		std::vector<cVector3> vertices;
-		unsigned int nTexCoord;
-		std::vector<cVector3> texcoords;
-		unsigned int nFaces;
-		std::vector<cFace> faces;
-		unsigned int nFrameAnimations;
-		std::vector<cRSMModelFrame> frames;
-		cBoundingbox bb;
-		cBoundingbox realbb;
 		
-		void boundingbox(float* = NULL, bool = true);
-		
-		
-		void draw(cBoundingbox*, float*, bool, cRSMModel*, bool,bool,bool);
-		bool collides(cBoundingbox*, float*, bool, cRSMModel*, cVector3, cVector3);
-		cMesh();
-		
+		cRsmModelBase*		base;
+		cMesh* parent;
+		std::vector<cMesh*> children;
+		cVector3 bbmin;
+		cVector3 bbmax;
+		cVector3 bbrange;
 	};
 
-
-	~cRSMModel();
-	cRSMModel()
-	{
-		selected = false;
-#ifdef DISPLAYLIST
-		displaylisted = false;
-		displaylist = 0;
-#endif
-	}
-	std::string name;
 	std::string filename;
 	std::string rofilename;
-
-	void load(std::string filename);
-	std::vector<cMesh*>				meshes;
-	std::vector<int>				fathers;
-	std::vector<cTexture*>			textures;
-
-	bool recalcbb;
-	bool selected;
-	float lightopacity;
+	std::vector<cTexture*>	textures;
+	cVector3 realbbmin;
+	cVector3 realbbmax;
+	cVector3 realbbrange;
+	float		maxrange;
 	
-	bool animated;
-#ifdef DISPLAYLIST
-	bool displaylisted;
-	GLuint displaylist;
-#endif
-	cBoundingbox bb;
-	cBoundingbox bb2;
+	cVector3 bbmin;
+	cVector3 bbmax;
+	cVector3 bbrange;
+	cMesh* root;
 
-	//Real bounding box. by Henko
-	cBoundingbox realbb;
-	
-	float absolutebbv1_[3];
-	float absolutebbv2_[3];
-	float absolutebbv3_[3];
-	float absolutebbv4_[3];
-	float absolutebbv5_[3];
-	float absolutebbv6_[3];
-	float absolutebbv7_[3];
-	float absolutebbv8_[3];
-	
-	bool							collides(cVector3, cVector3);
-	bool							collides2(cBoundingbox*, int, float*, bool, cVector3, cVector3);
-	void							precollides();
-
-	void							draw(bool = true, bool = true,bool=false,bool=false);
-	void							draw2(cBoundingbox*, int, float*, bool,bool,bool,bool);
-
-	void							boundingbox();
+	enum eShadeType
+	{
+		SHADE_NO,
+		SHADE_FLAT,
+		SHADE_SMOOTH,
+		SHADE_BLACK,
+	} shadeType;
 
 
-
-
-
+	cRsmModelBase(std::string);
+	virtual ~cRsmModelBase();
+	void draw();
+	virtual bool collides(cMatrix4x4 &mat, cVector3 from, cVector3 to, cVector3* = NULL);
 };
+
+class cRsmModel : public cRsmModelBase, public cBrowInterface::cPluginRSMModel
+{
+public:
+	std::string name;
+	float lightopacity;
+	bool selected;
+
+	cRsmModel(std::string pFilename) : cRsmModelBase(pFilename)
+	{
+		filename = pFilename;
+		rofilename = filename.substr(filename.find("model\\") + 6);
+	}
+
+
+	void draw();
+	bool collides(cVector3 from, cVector3 to, cVector3* = NULL);
+	void setHeight();
+};
+
+
+
 
 #endif

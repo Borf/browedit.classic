@@ -3,6 +3,7 @@
 #include "graphics.h"
 #include "filesystem.h"
 #include "settings.h"
+#include <world.h>
 
 #define SPRITESIZE 128
 

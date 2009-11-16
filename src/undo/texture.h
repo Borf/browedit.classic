@@ -2,6 +2,7 @@
 #define __UNDO_TEXTURE_H__
 
 #include <undo.h>
+#include <world.h>
 
 class cUndoTexture : public cUndoItem
 {

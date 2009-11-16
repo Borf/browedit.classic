@@ -39,6 +39,8 @@ public:
 
 	char			get();
 	int				getword();
+	int				getInt();
+	float			getFloat();
 	int				read(char*, int);
 	int				readLine(char*, int);
 	std::string		readLine();

@@ -2,6 +2,7 @@
 #define __UNDO_WATERCHANGE_H__
 
 #include <undo.h>
+#include <world.h>
 
 class cUndoChangeWater : public cUndoItem
 {
