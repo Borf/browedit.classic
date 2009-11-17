@@ -1067,11 +1067,11 @@ MENUCOMMAND(gatcollision2)
 			cGraphics::worldContainer->camera.pointer.y = -5*(2*cGraphics::world->height-y) + 2.5;*/
 
 
-
+			unsigned int ii;
 			cVector3 colPos;
 			cVector3 worldpos = cVector3(5*x, -5000, 5*y);
 			cVector3 highup = worldpos + cVector3(0, 10000, 0);
-			for(unsigned int ii = 0; ii < cGraphics::world->models.size(); ii++)
+			for(ii = 0; ii < cGraphics::world->models.size(); ii++)
 			{
 				if(cGraphics::world->models[ii]->collides(worldpos, highup, &colPos))
 				{

@@ -1,4 +1,4 @@
-#include "rsmmodel.h"
+#include "RSMModel.h"
 #include <filesystem.h>
 #include <texture.h>
 #include <texturecache.h>
@@ -93,7 +93,8 @@ cRsmModelBase::cRsmModelBase( std::string pFilename)
 	
 	realbbmax = cVector3(-999999, -999999, -999999);
 	realbbmin = cVector3(999999, 999999, 999999);
-	root->setBoundingBox2(cMatrix4x4::makeScale(1,-1,1), realbbmin, realbbmax);
+	cMatrix4x4 mat = cMatrix4x4::makeScale(1,-1,1);
+	root->setBoundingBox2(mat, realbbmin, realbbmax);
 	realbbrange = (realbbmax + realbbmin) / 2.0f;
 	maxrange = max(max(realbbmax.x, -realbbmin.x), max(max(realbbmax.y, -realbbmin.y), max(realbbmax.z, -realbbmin.z)));
 
@@ -322,7 +323,8 @@ bool cRsmModelBase::cMesh::collides( cMatrix4x4 &mat, cVector3 from, cVector3 to
 	cMatrix4x4 mat2 = myMat * getMatrix2();
 	cVector3 triangle[4];
 	float bla;
-	for(int i = 0; i < nFaces; i++)
+	int i;
+	for(i = 0; i < nFaces; i++)
 	{
 		for(int ii = 0; ii < 3; ii++)
 		{
@@ -467,6 +469,7 @@ void cRsmModelBase::cMesh::draw()
 void cRsmModelBase::cMesh::setBoundingBox(cVector3 &_bbmin, cVector3 &_bbmax)
 {
 	int c;
+	int i;
 	bbmin = cVector3(9999999, 9999999, 9999999);
 	bbmax = cVector3(-9999999, -9999999, -9999999);
 
@@ -474,7 +477,7 @@ void cRsmModelBase::cMesh::setBoundingBox(cVector3 &_bbmin, cVector3 &_bbmax)
 		bbmin = bbmax = cVector3(0,0,0);
 
 	cMatrix4x4 myMat = offset;
-	for(int i = 0; i < nFaces; i++)
+	for(i = 0; i < nFaces; i++)
 	{
 		for(int ii = 0; ii < 3; ii++)
 		{
@@ -506,7 +509,8 @@ void cRsmModelBase::cMesh::setBoundingBox2(cMatrix4x4 &mat, cVector3 &bbmin_, cV
 {
 	cMatrix4x4 myMat = mat * getMatrix1();
 	cMatrix4x4 mat2 = myMat * getMatrix2();
-	for(int i = 0; i < nFaces; i++)
+	int i;
+	for(i = 0; i < nFaces; i++)
 	{
 		for(int ii = 0; ii < 3; ii++)
 		{

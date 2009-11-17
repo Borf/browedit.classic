@@ -8,7 +8,7 @@
 #else
 #include <gd.h>
 #endif
-#include <gl/gl.h>
+#include <GL/gl.h>
 #include <list>
 #include <vector>
 
