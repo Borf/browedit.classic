@@ -19,7 +19,7 @@ public:
 		cMesh(cFile*, cRsmModelBase*, int ver1, int ver2);
 		void fetchChildren(std::map<std::string, cMesh*, std::less<std::string> >&);
 		void draw();
-		cMatrix4x4 getMatrix1();
+		cMatrix4x4 getMatrix1(bool animate = true);
 		cMatrix4x4 matrix1Cache;
 		bool		cache1;
 		cMatrix4x4 getMatrix2();

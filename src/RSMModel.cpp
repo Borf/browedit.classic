@@ -319,7 +319,7 @@ void cRsmModel::setHeight()
 }
 bool cRsmModelBase::cMesh::collides( cMatrix4x4 &mat, cVector3 from, cVector3 to, cVector3* colPos )
 {
-	cMatrix4x4 myMat = mat * getMatrix1();
+	cMatrix4x4 myMat = mat * getMatrix1(false);
 	cMatrix4x4 mat2 = myMat * getMatrix2();
 	cVector3 triangle[4];
 	float bla;
@@ -529,7 +529,7 @@ void cRsmModelBase::cMesh::setBoundingBox2(cMatrix4x4 &mat, cVector3 &bbmin_, cV
 		children[i]->setBoundingBox2(myMat, bbmin_, bbmax_);	
 }
 
-cMatrix4x4 cRsmModelBase::cMesh::getMatrix1()
+cMatrix4x4 cRsmModelBase::cMesh::getMatrix1(bool animate)
 {
 	if(cache1)
 		return matrix1Cache;
@@ -550,39 +550,48 @@ cMatrix4x4 cRsmModelBase::cMesh::getMatrix1()
 		matrix1Cache *= cMatrix4x4::makeRotation(rotangle*180.0/3.14159, rotaxis.x, rotaxis.y, rotaxis.z);
 	else
 	{
-		int current = 0;
-		for(int i = 0; i < nAnimationFrames; i++)
+		if(animate)
 		{
-			if(animationFrames[i].time > lastTick)
+			int current = 0;
+			for(int i = 0; i < nAnimationFrames; i++)
 			{
-				current = i-1;
-				break;
+				if(animationFrames[i].time > lastTick)
+				{
+					current = i-1;
+					break;
+				}
 			}
-		}
-		if(current < 0)
-			current = 0;
-		
-		int next = current+1;
-		if(next >= nAnimationFrames)
-			next = 0;
+			if(current < 0)
+				current = 0;
+			
+			int next = current+1;
+			if(next >= nAnimationFrames)
+				next = 0;
 
-		float interval = ((float) (lastTick-animationFrames[current].time)) / ((float) (animationFrames[next].time-animationFrames[current].time));
-#if 0
-		cQuaternion quat(animationFrames[current].quat, animationFrames[next].quat, interval);
+			float interval = ((float) (lastTick-animationFrames[current].time)) / ((float) (animationFrames[next].time-animationFrames[current].time));
+#if 1
+			cQuaternion quat(animationFrames[current].quat, animationFrames[next].quat, interval);
 #else
-		cQuaternion quat(
-			(1-interval)*animationFrames[current].quat.x + interval*animationFrames[next].quat.x,
-			(1-interval)*animationFrames[current].quat.y + interval*animationFrames[next].quat.y,
-			(1-interval)*animationFrames[current].quat.z + interval*animationFrames[next].quat.z,
-			(1-interval)*animationFrames[current].quat.w + interval*animationFrames[next].quat.w);
+			cQuaternion quat(
+				(1-interval)*animationFrames[current].quat.x + interval*animationFrames[next].quat.x,
+				(1-interval)*animationFrames[current].quat.y + interval*animationFrames[next].quat.y,
+				(1-interval)*animationFrames[current].quat.z + interval*animationFrames[next].quat.z,
+				(1-interval)*animationFrames[current].quat.w + interval*animationFrames[next].quat.w);
 #endif
-		quat = quat.normalize();
+			quat = quat.normalize();
 
-		matrix1Cache *= quat.getRotationMatrix();
+			matrix1Cache *= quat.getRotationMatrix();
 
-		lastTick += cGraphicsBase::getFrameTicks();
-		while(lastTick > animationFrames[nAnimationFrames-1].time)
-			lastTick -= animationFrames[nAnimationFrames-1].time;
+			lastTick += cGraphicsBase::getFrameTicks();
+			while(lastTick > animationFrames[nAnimationFrames-1].time)
+				lastTick -= animationFrames[nAnimationFrames-1].time;
+		}
+		else
+		{
+			
+			matrix1Cache *= animationFrames[0].quat.normalize().getRotationMatrix();
+
+		}
 	}
 	
 	matrix1Cache *= cMatrix4x4::makeScale(scale.x, scale.y, scale.z);
