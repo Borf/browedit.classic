@@ -192,7 +192,7 @@ cRsmModel::cMesh::cMesh(cFile* pFile, cRsmModelBase* model, int ver1, int ver2)
 		animationFrames[i].time = pFile->getInt();
 		animationFrames[i].quat.values[0] = pFile->getFloat();
 		animationFrames[i].quat.values[1] = pFile->getFloat();
-		animationFrames[i].quat.values[2] = -pFile->getFloat();
+		animationFrames[i].quat.values[2] = pFile->getFloat();
 		animationFrames[i].quat.values[3] = pFile->getFloat();
 	}
 }
