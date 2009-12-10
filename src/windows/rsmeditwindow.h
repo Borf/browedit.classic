@@ -8,6 +8,7 @@
 #include <wm/windowrgbpicker.h>
 #include <wm/windowpicturebox.h>
 #include <wm/windowscrollpanel.h>
+#include <wm/windowtree.h>
 
 
 class cRsmModel;
@@ -38,6 +39,15 @@ class cRSMEditWindow : public cWindow
 		cWindowConvertButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
 		void onClick();
 	};
+
+	class cWindowMeshTree : public cWindowTree
+	{
+	public:
+		cWindowMeshTree(cWindow* parent, std::vector<cTreeNode*> n, TiXmlDocument* skin = &cWM::skin);
+		void onDoubleClick();
+
+	};
+
 
 	class cWindowModel : public cWindowObject
 	{

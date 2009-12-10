@@ -102,6 +102,7 @@ cRsmModelBase::cRsmModelBase( std::string pFilename)
 
 cRsmModel::cMesh::cMesh(cFile* pFile, cRsmModelBase* model, int ver1, int ver2)
 {
+	selected = false;
 	cache1 = false;
 	cache2 = false;
 	base = model;
@@ -293,6 +294,21 @@ bool cRsmModelBase::collides( cMatrix4x4 &mat, cVector3 from, cVector3 to, cVect
 	return intersects;
 }
 
+void cRsmModelBase::setTexture( cTexture* oldTexture, cTexture* newTexture )
+{
+	root->setTexture(oldTexture, newTexture);
+	for(unsigned int i = 0; i < textures.size(); i++)
+	{
+		if(textures[i] == oldTexture)
+			textures[i] = newTexture;
+	}
+}
+
+void cRsmModelBase::setSelection( cMesh* mesh )
+{
+	root->setSelection(mesh);
+}
+
 void cRsmModel::setHeight()
 {
 	cMatrix4x4 mat;
@@ -368,9 +384,9 @@ void cRsmModel::draw()
 	if(cGraphics::view.showBoundingBoxes)
 	{
 		float oldLineWidth;
-		glGetFloatv(GL_LINE_WIDTH, &oldLineWidth);
 		GLfloat colors[4];
 		glGetFloatv(GL_CURRENT_COLOR, colors);
+		glGetFloatv(GL_LINE_WIDTH, &oldLineWidth);
 
 
 		glDisable(GL_TEXTURE_2D);
@@ -443,7 +459,15 @@ void cRsmModelBase::cMesh::draw()
 	glMultMatrixf(getMatrix1().values);
 	glPushMatrix();
 	glMultMatrixf(getMatrix2().values);
+
 	
+	GLfloat colors[4];
+	if(selected)
+	{
+		glGetFloatv(GL_CURRENT_COLOR, colors);
+		glColor4f(1,0,0,1);
+	}
+
 	int i;
 	for(i = 0; i < nFaces; i++)
 	{
@@ -457,6 +481,8 @@ void cRsmModelBase::cMesh::draw()
 		}
 		glEnd();
 	}
+	if(selected)
+		glColor4fv(colors);
 	glPopMatrix();
 	for(i = 0; i < (int)children.size(); i++)
 	{
@@ -616,5 +642,25 @@ cMatrix4x4 cRsmModelBase::cMesh::getMatrix2()
 	
 	matrix2Cache *= offset;
 	cache2 = true;
+	
 	return matrix2Cache;
+}
+
+void cRsmModelBase::cMesh::setTexture( cTexture* oldTexture, cTexture* newTexture )
+{
+	unsigned int i;
+	for(i = 0; i < textures.size(); i++)
+	{
+		if(textures[i] == oldTexture)
+			textures[i] = newTexture;
+	}
+	for(i = 0; i < children.size(); i++)
+		children[i]->setTexture(oldTexture, newTexture);
+}
+
+void cRsmModelBase::cMesh::setSelection( cMesh* mesh )
+{
+	selected = this == mesh;
+	for(unsigned int i = 0; i < children.size(); i++)
+		children[i]->setSelection(mesh);
 }

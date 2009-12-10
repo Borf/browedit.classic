@@ -13,6 +13,7 @@
 #include <settings.h>
 #include <filesystem.h>
 #include <RSMModel.h>
+#include <windows/rsmmeshprops.h>
 
 cRSMEditWindow::cWindowOpenButton::cWindowOpenButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent,skin)
 {
@@ -236,63 +237,9 @@ cRSMEditWindow::cWindowModel::cWindowModel( cWindow* parent ) : cWindowObject(pa
 
 void cRSMEditWindow::cWindowModel::draw( int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom )
 {
-	unsigned int i;
 	if(cutoffbottom < 0)
 		cutoffbottom = 0;
 	glEnable(GL_DEPTH_TEST);
-	if(data != "" && model == NULL)
-	{
-		glPushMatrix();
-		glLoadIdentity();
-		model = new cRsmModel(data);
-		model->pos = cVector3(0,0.7f*w,1000);
-		
-		float sc = 0;
-		sc = max(sc, model->bbmax[0] - model->bbmin[0]);
-		sc = max(sc, model->bbmax[1] - model->bbmin[1]);
-		sc = max(sc, model->bbmax[2] - model->bbmin[2]);
-		sc = 1.5f*min(h,w) / sc;
-		
-		model->scale = cVector3(sc,sc,sc);
-		
-		model->rot = cVector3(0,0,0);
-//TODO		model->bb2.bbrange[0] = 0;
-		//model->bb2.bbmin[1] = 0;
-//TODO		model->bb2.bbrange[2] = 0;
-		glPopMatrix();
-		
-		
-		cWindowScrollPanel* scroll = (cWindowScrollPanel*)parent->objects["scroll"];
-		
-		for(i = 0; i < model->textures.size(); i++)
-		{
-			cWindowObject* o = new cWindowModelTexture(parent,i);
-			o->setText(0, model->textures[i]->getfilename());
-			o->moveTo(0, 130*i);
-			scroll->objects.push_back(o);
-			scroll->innerheight = 130*i+130;
-
-			o = new cWindowLabel(parent);
-			o->setText(0, "#000000" + model->textures[i]->getfilename().substr(cSettings::roDir.length() + 13));
-			o->moveTo(5,130*i+111);
-			o->alignment = ALIGN_TOPLEFT;
-			scroll->objects.push_back(o);
-
-			o = new cWindowLabel(parent);
-			o->setText(0, "#FF0000" + model->textures[i]->getfilename().substr(cSettings::roDir.length() + 13));
-			o->moveTo(4,130*i+110);
-			o->alignment = ALIGN_TOPLEFT;
-			scroll->objects.push_back(o);
-		
-		}
-		scroll->scrollposy = 0;
-		scroll->scrollposx = 0;
-		scroll->innerwidth = 128;
-		
-		
-		
-	}
-	
 	
 	GLint viewport[4];
 	glGetIntegerv(GL_VIEWPORT, viewport);			// (X, Y, Width, Height)
@@ -446,7 +393,7 @@ void cRSMEditWindow::cRGBPicker::onClick()
 
 cRSMEditWindow::cRSMEditWindow( ) : cWindow()
 {
-	strcpy(filename, std::string(cSettings::roDir + "data\\model\\프론테라\\분수대.rsm").c_str());
+	strcpy(filename, std::string(cSettings::roDir + "data\\model\\라헬\\분수.rsm").c_str());
 	windowType = WT_RSMEDIT;
 	resizable = true;
 	visible = true;
@@ -472,6 +419,14 @@ cRSMEditWindow::cRSMEditWindow( ) : cWindow()
 	((cWindowScrollPanel*)o)->innerwidth = 128;
 	
 	objects["scroll"] = o;
+
+
+	std::vector<cWindowTree::cTreeNode*> nodes;
+	o = new cWindowMeshTree(this, nodes);
+	o->moveTo(0,20);
+	o->resizeTo(200, innerHeight()-20);
+	objects["tree"] = o;
+
 	
 	objects["rgbpicker"] = new cRGBPicker(this);
 	
@@ -482,10 +437,31 @@ cRSMEditWindow::cRSMEditWindow( ) : cWindow()
 void cRSMEditWindow::resizeTo( int ww, int hh )
 {
 	cWindow::resizeTo(ww,hh);
-	objects["model"]->resizeTo(innerWidth()-140, innerHeight()-20);
+	if(objects.find("model") != objects.end())
+		objects["model"]->resizeTo(innerWidth()-140-200, innerHeight()-20);
 	objects["scroll"]->moveTo(innerWidth()-140, 20);
 	objects["scroll"]->resizeTo(140, innerHeight()-20);
+	objects["tree"]->resizeTo(200, innerHeight()-20);
 	objects["rgbpicker"]->resizeTo(innerWidth()-150,20);
+}
+
+
+class cObjectTreeNode : public cWindowTree::cTreeNode
+{
+public:
+	cRsmModelBase::cMesh* mesh;
+};
+
+cWindowTree::cTreeNode* buildObjectTree(cRsmModelBase::cMesh* mesh)
+{
+	cObjectTreeNode* bla = new cObjectTreeNode();
+	bla->text = mesh->name;
+	bla->mesh = mesh;
+	bla->open = true;
+
+	for(unsigned int i = 0; i < mesh->children.size(); i++)
+		bla->children.push_back(buildObjectTree(mesh->children[i]));
+	return bla;
 }
 
 void cRSMEditWindow::open()
@@ -498,17 +474,66 @@ void cRSMEditWindow::open()
 	
 	cWindowModel* o = new cWindowModel(this);
 	o->setText(1, filename);
-	o->moveTo(0,20);
-	o->resizeTo(innerWidth()-140, innerHeight()-20);
+	o->moveTo(200,20);
+	o->resizeTo(innerWidth()-140-200, innerHeight()-20);
 	o->alignment = ALIGN_TOPLEFT;
+
+	o->model = new cRsmModel(filename);
+	o->model->pos = cVector3(0,0.7f*o->getWidth(),1000);
+	
+	float sc = 0;
+	sc = max(sc, o->model->bbmax[0] - o->model->bbmin[0]);
+	sc = max(sc, o->model->bbmax[1] - o->model->bbmin[1]);
+	sc = max(sc, o->model->bbmax[2] - o->model->bbmin[2]);
+	sc = 1.5f*min(o->getHeight(),o->getWidth()) / sc;
+	
+	o->model->scale = cVector3(sc,sc,sc);
+	
+	o->model->rot = cVector3(0,0,0);
+	o->roty = -15;
 	
 	objects["model"] = o;
 	
 	cWindowScrollPanel* scroll = (cWindowScrollPanel*)objects["scroll"];
-	
 	for(unsigned int i = 0; i < scroll->objects.size(); i++)
 		delete scroll->objects[i];
 	scroll->objects.clear();
+
+	for(i = 0; i < o->model->textures.size(); i++)
+	{
+		cWindowObject* oo = new cWindowModelTexture(this,i);
+		oo->setText(0, o->model->textures[i]->getfilename());
+		oo->moveTo(0, 130*i);
+		scroll->objects.push_back(oo);
+		scroll->innerheight = 130*i+130;
+		
+		oo = new cWindowLabel(this);
+		oo->setText(0, "#000000" + o->model->textures[i]->getfilename().substr(cSettings::roDir.length() + 13));
+		oo->moveTo(5,130*i+111);
+		oo->alignment = ALIGN_TOPLEFT;
+		scroll->objects.push_back(oo);
+		
+		oo = new cWindowLabel(this);
+		oo->setText(0, "#FF0000" + o->model->textures[i]->getfilename().substr(cSettings::roDir.length() + 13));
+		oo->moveTo(4,130*i+110);
+		oo->alignment = ALIGN_TOPLEFT;
+		scroll->objects.push_back(oo);
+		
+	}
+	scroll->scrollposy = 0;
+	scroll->scrollposx = 0;
+	scroll->innerwidth = 128;	
+
+
+
+	cWindowTree* tree = (cWindowTree*)objects["tree"];
+	if(tree->nodes.size() > 0)
+		delete tree->nodes[0];
+	else
+		tree->nodes.push_back(NULL);
+	tree->nodes[0] = buildObjectTree(o->model->root);
+
+
 }
 
 void cRSMEditWindow::onStopDrag()
@@ -521,8 +546,10 @@ void cRSMEditWindow::changetexture( std::string newtexture )
 	cWindowModel* model = ((cWindowModel*)objects["model"]);
 	
 	Log(3,0,"Old tid: %i", model->model->textures[selected]->texId());
-	cTextureCache::unload(model->model->textures[selected]);
-	model->model->textures[selected] = cTextureCache::load(cSettings::roDir + newtexture);
+	cTexture* oldTexture = model->model->textures[selected];
+
+	model->model->setTexture(oldTexture, cTextureCache::load(cSettings::roDir + newtexture));
+	cTextureCache::unload(oldTexture);
 	Log(3,0,"new vtid: %i", model->model->textures[selected]->texId());
 	
 	cWindowScrollPanel* scroll = (cWindowScrollPanel*)objects["scroll"];
@@ -531,4 +558,26 @@ void cRSMEditWindow::changetexture( std::string newtexture )
 	o->setText(0, cSettings::roDir + newtexture);
 	o->moveTo(0, 130*selected);
 	scroll->objects[selected] = o;
+}
+
+cRSMEditWindow::cWindowMeshTree::cWindowMeshTree( cWindow* parent, std::vector<cTreeNode*> n, TiXmlDocument* skin) : cWindowTree(parent, n, skin)
+{
+	
+}
+
+void cRSMEditWindow::cWindowMeshTree::onDoubleClick()
+{
+	int a = selected;
+	cWindowTree::cTreeNode* node = NULL;
+	for(unsigned int i = 0; i < nodes.size(); i++)
+	{
+		node = nodes[i]->getnode(a);
+		if(node != NULL)
+			break;
+	}
+	
+	cObjectTreeNode* n = (cObjectTreeNode*)node;
+
+
+	cWM::addWindow(new cRsmMeshPropsWindow(n->mesh));
 }

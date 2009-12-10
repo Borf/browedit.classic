@@ -13,7 +13,7 @@ cWindowOkButton::cWindowOkButton( cWindow* parent, TiXmlDocument* skin ) : cWind
 
 void cWindowOkButton::onClick()
 {
-	if (parent->getWindowType() == WT_OBJECT || parent->getWindowType() == WT_LIGHT || parent->getWindowType() == WT_SOUND)
+	if (parent->getWindowType() == WT_OBJECT || parent->getWindowType() == WT_LIGHT || parent->getWindowType() == WT_SOUND || parent->getWindowType() == WT_RSMMESHPROPS)
 	{
 		parent->userfunc((void*)1);
 	}
@@ -40,7 +40,7 @@ cWindowCancelButton::~cWindowCancelButton()
 
 void cWindowCancelButton::onClick()
 {
-	if (parent->getWindowType() == WT_OBJECT || parent->getWindowType() == WT_EFFECT || parent->getWindowType() == WT_LIGHT)
+	if (parent->getWindowType() == WT_OBJECT || parent->getWindowType() == WT_EFFECT || parent->getWindowType() == WT_LIGHT || parent->getWindowType() == WT_SOUND || parent->getWindowType() == WT_RSMMESHPROPS)
 	{
 		parent->userfunc((void*)0);
 	}

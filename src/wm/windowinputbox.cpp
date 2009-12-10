@@ -319,7 +319,7 @@ void cWindowFloatInputBox::setInt( int id, int val )
 bool cWindowFloatInputBox::onKeyDown( int keyid, bool shift )
 {
 	bool ret = cWindowInputBox::onKeyDown(keyid, shift);
-	if (keyid == SDLK_RETURN)
+	if (keyid == SDLK_RETURN && floatje != NULL)
 	{
 		*floatje = (float)atof(text.c_str());
 		ret = true;
@@ -358,7 +358,7 @@ void cWindowStringInputBox::draw( int cutoffleft, int cutoffright, int cutofftop
 bool cWindowStringInputBox::onKeyDown( int keyid, bool shift )
 {
 	bool ret = cWindowInputBox::onKeyDown(keyid, shift);
-	if (keyid == SDLK_RETURN)
+	if (keyid == SDLK_RETURN && stringetje != NULL)
 	{
 		*stringetje = text;
 		ret = true;

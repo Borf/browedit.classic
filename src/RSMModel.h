@@ -28,6 +28,8 @@ public:
 		void setBoundingBox(cVector3&, cVector3&);
 		void setBoundingBox2(cMatrix4x4 &mat, cVector3 &bbmin, cVector3 &bbmax);
 		virtual bool collides(cMatrix4x4 &mat, cVector3 from, cVector3 to, cVector3* = NULL);
+		void setTexture(cTexture* oldTexture, cTexture* newTexture);
+		void setSelection(cMesh* mesh);
 
 		std::string name;
 		std::string parentName;
@@ -69,6 +71,7 @@ public:
 		cFrame*		animationFrames;
 		
 		
+		bool selected;
 		cRsmModelBase*		base;
 		cMesh* parent;
 		std::vector<cMesh*> children;
@@ -103,6 +106,8 @@ public:
 	virtual ~cRsmModelBase();
 	void draw();
 	virtual bool collides(cMatrix4x4 &mat, cVector3 from, cVector3 to, cVector3* = NULL);
+	void setTexture(cTexture* oldTexture, cTexture* newTexture);
+	void setSelection(cMesh* mesh);
 };
 
 class cRsmModel : public cRsmModelBase, public cBrowInterface::cPluginRSMModel

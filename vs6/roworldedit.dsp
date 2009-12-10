@@ -594,6 +594,10 @@ SOURCE=..\src\windows\rsmeditwindow.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\windows\rsmmeshprops.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\windows\soundoverviewwindow.h
 # End Source File
 # Begin Source File
@@ -708,6 +712,10 @@ SOURCE=..\src\windows\progresswindow.cpp
 # Begin Source File
 
 SOURCE=..\src\windows\rsmeditwindow.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\windows\rsmmeshprops.cpp
 # End Source File
 # Begin Source File
 

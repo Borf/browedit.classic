@@ -180,7 +180,30 @@ cWM::~cWM()
 
 void cWM::click(bool b)
 {
-	for(int i = 0; i < (int)windows.size(); i++)
+	unsigned int i;
+	for(i = 0; i < (int)windows.size(); i++)
+	{
+		if (windows[i]->isEnabled() && windows[i]->inWindow() && windows[i]->isAlwaysOnTop())
+		{
+			//move windows[i] to windows[0].
+			cWindow* w = windows[i];
+			if (i != 0)
+			{
+				for(int ii = i-1; ii >= 0; ii--)
+				{
+					windows[ii]->istopwindow(false);
+					windows[ii+1] = windows[ii];
+				}
+				windows[0] = w;
+				w->istopwindow(true);
+			}
+			if (b)
+				w->onClick();
+			return;
+		}
+	}
+	
+	for(i = 0; i < windows.size(); i++)
 	{
 		if (windows[i]->isEnabled() && windows[i]->inWindow() && (!windows[0]->modality() || i == 0))
 		{
