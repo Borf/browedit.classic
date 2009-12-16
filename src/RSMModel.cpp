@@ -494,7 +494,7 @@ void cRsmModelBase::cMesh::draw()
 
 void cRsmModelBase::cMesh::setBoundingBox(cVector3 &_bbmin, cVector3 &_bbmax)
 {
-	int c;
+	int i;
 	bbmin = cVector3(9999999, 9999999, 9999999);
 	bbmax = cVector3(-9999999, -9999999, -9999999);
 
@@ -509,7 +509,7 @@ void cRsmModelBase::cMesh::setBoundingBox(cVector3 &_bbmin, cVector3 &_bbmax)
 			cVector3 v = myMat * vertices[faces[i].vertices[ii]];
 			if(parent != NULL || children.size() != 0)
 				v += pos + pos_;
-			for(c = 0; c < 3; c++)
+			for(int c = 0; c < 3; c++)
 			{
 				bbmin[c] = min(bbmin[c], v[c]);
 				bbmax[c] = max(bbmax[c], v[c]);
