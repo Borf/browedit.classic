@@ -466,6 +466,7 @@ cWindowTree::cTreeNode* buildObjectTree(cRsmModelBase::cMesh* mesh)
 
 void cRSMEditWindow::open()
 {
+	unsigned int i;
 	if (objects.find("model") != objects.end())
 	{
 		delete objects["model"];
@@ -495,7 +496,7 @@ void cRSMEditWindow::open()
 	objects["model"] = o;
 	
 	cWindowScrollPanel* scroll = (cWindowScrollPanel*)objects["scroll"];
-	for(unsigned int i = 0; i < scroll->objects.size(); i++)
+	for(i = 0; i < scroll->objects.size(); i++)
 		delete scroll->objects[i];
 	scroll->objects.clear();
 
