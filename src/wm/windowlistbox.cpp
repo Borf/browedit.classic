@@ -1,3 +1,5 @@
+#include <bengine/forwards.h>
+#include <bengine/math/math.h>
 #include "windowlistbox.h"
 #include "window.h"
 #include <graphics.h>
@@ -9,7 +11,8 @@
 #include <font.h>
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
-#include <texture.h>
+#include <bengine/texture.h>
+#include <bengine/util.h>
 
 void cWindowListBox::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {
@@ -30,7 +33,7 @@ void cWindowListBox::draw(int cutoffleft, int cutoffright, int cutofftop, int cu
 		i++;
 		yy-=12;
 	}
-	int barheight = max((int)(((float)(h - (skinButtonDownHeight+skinButtonUpHeight)) * (float)((float)i / (float)values.size()))+0.5f), skinTopHeight+skinBottomHeight);
+	int barheight = bEngine::math::max((int)(((float)(h - (skinButtonDownHeight+skinButtonUpHeight)) * (float)((float)i / (float)values.size()))+0.5f), skinTopHeight+skinBottomHeight);
 
 	yy = realY();
 
@@ -232,7 +235,7 @@ void cWindowListBox::setInt(int index, int value)
 		if(selected < liststart)
 			liststart = selected;
 		if( selected > (liststart + ((h - 5 - 12 - 10)/12)))
-			liststart = max(0, selected - ((h - 5 - 12 - 10)/12)-1);
+			liststart = bEngine::math::max(0, selected - ((h - 5 - 12 - 10)/12)-1);
 		if(selected != oldselected)
 			onChange(oldselected);
 	}
@@ -302,7 +305,7 @@ void cWindowListBox::onClick()
 				yyy-=12;
 			}
 
-			int barheight = max((int)((float)(h - (skinButtonDownHeight+skinButtonUpHeight)) * (float)((float)i / (float)values.size())), skinTopHeight+skinBottomHeight);
+			int barheight = bEngine::math::max((int)((float)(h - (skinButtonDownHeight+skinButtonUpHeight)) * (float)((float)i / (float)values.size())), skinTopHeight+skinBottomHeight);
 			yyy = realY();
 			int barpos = (values.size() - i);
 			if (barpos != 0)
@@ -310,11 +313,11 @@ void cWindowListBox::onClick()
 
 			if (h-yy-skinButtonUpHeight < barpos)
 			{ // pgup
-				liststart = max(0, liststart-i);
+				liststart = bEngine::math::max(0, liststart-i);
 			}
 			else if (h-yy-skinButtonDownHeight > barpos+barheight)
 			{//pgdown
-				liststart = min((int)values.size()-i , liststart+i);
+				liststart = bEngine::math::min((int)values.size()-i , liststart+i);
 			}
 		}	
 	}
@@ -355,7 +358,7 @@ void cWindowListBox::drag()
 		sprintf(buf, "%i - %i", barpos, (int)(((float)barpos / (float)(h-(skinButtonDownHeight+skinButtonUpHeight))) * (float)values.size()));
 
 		int oldliststart = liststart;
-		liststart = max(min((int)((((float)barpos / (float)(h-(skinButtonDownHeight+skinButtonUpHeight))) * (float)values.size())+0.5f), (int)values.size()-i), 0);
+		liststart = bEngine::math::max(bEngine::math::min((int)((((float)barpos / (float)(h-(skinButtonDownHeight+skinButtonUpHeight))) * (float)values.size())+0.5f), (int)values.size()-i), 0);
 		if (oldliststart != liststart)
 			cGraphics::dragoffsety = yy;
 	}
@@ -419,14 +422,14 @@ cWindowListBox::cWindowListBox( cWindow* parent, TiXmlDocument *skin ) : cWindow
 	TiXmlElement* bSkin = skin->FirstChildElement("skin")->FirstChildElement("list")->FirstChildElement("scroll");
 	
 	std::string scolor = skin->FirstChildElement("skin")->FirstChildElement("list")->FirstChildElement("selectcolor")->FirstChild()->Value();
-	selectColor[0] = hex2dec(scolor.substr(0,2)) / 256.0f;
-	selectColor[1] = hex2dec(scolor.substr(2,2)) / 256.0f;
-	selectColor[2] = hex2dec(scolor.substr(4,2)) / 256.0f;
+	selectColor[0] = bEngine::util::hex2dec(scolor.substr(0,2)) / 256.0f;
+	selectColor[1] = bEngine::util::hex2dec(scolor.substr(2,2)) / 256.0f;
+	selectColor[2] = bEngine::util::hex2dec(scolor.substr(4,2)) / 256.0f;
 	
 	scolor = skin->FirstChildElement("skin")->FirstChildElement("list")->FirstChildElement("selectfontcolor")->FirstChild()->Value();
-	selectFontColor[0] = hex2dec(scolor.substr(0,2)) / 256.0f;
-	selectFontColor[1] = hex2dec(scolor.substr(2,2)) / 256.0f;
-	selectFontColor[2] = hex2dec(scolor.substr(4,2)) / 256.0f;
+	selectFontColor[0] = bEngine::util::hex2dec(scolor.substr(0,2)) / 256.0f;
+	selectFontColor[1] = bEngine::util::hex2dec(scolor.substr(2,2)) / 256.0f;
+	selectFontColor[2] = bEngine::util::hex2dec(scolor.substr(4,2)) / 256.0f;
 	
 	
 	skinBarWidth =			atoi(bSkin->FirstChildElement("width")->FirstChild()->Value());

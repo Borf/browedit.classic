@@ -1,3 +1,4 @@
+#include <common.h>
 #include "windowinputbox.h"
 #include "window.h"
 
@@ -420,4 +421,54 @@ void cWindowLongInputBox::setInt( int id, int val )
 		Log(3,0,"Use of depricated method, do not use!");
 		longje = (long*)val;
 	}
+}
+//////////////////////////////////////////////////int
+cWindowIntInputBox::cWindowIntInputBox( cWindow* parent, TiXmlDocument* skin ) : cWindowInputBox(parent, skin)
+{
+	type = OBJECT_FLOATINPUTBOX;
+	alignment = ALIGN_TOPLEFT;
+	resizeTo(70,20);
+	firstTime = true;
+	intje = NULL;
+}
+
+void cWindowIntInputBox::draw( int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom )
+{
+	if(intje == NULL)
+		return;
+	
+	if(*intje != lastvalue || firstTime)
+	{
+		firstTime = false;
+		char buf[100];
+		sprintf(buf, "%f", *intje);
+		while(buf[strlen(buf)-1] == '0')
+			buf[strlen(buf)-1] = '\0';
+		if(buf[strlen(buf)-1] == '.')
+			buf[strlen(buf)-1] = '\0';
+		text = buf;
+		lastvalue = *intje;
+	}
+	cWindowInputBox::draw(cutoffleft, cutoffright, cutofftop, cutoffbottom);
+}
+
+void cWindowIntInputBox::setInt( int id, int val )
+{
+	cWindowInputBox::setInt(id,val);
+	if (id == 3)
+	{
+		Log(3,0,"Use of depricated method, do not use!");
+		intje = (int*)val;
+	}
+}
+
+bool cWindowIntInputBox::onKeyDown( int keyid, bool shift )
+{
+	bool ret = cWindowInputBox::onKeyDown(keyid, shift);
+	if (keyid == SDLK_RETURN && intje != NULL)
+	{
+		*intje = (int)atoi(text.c_str());
+		ret = true;
+	}
+	return ret;
 }

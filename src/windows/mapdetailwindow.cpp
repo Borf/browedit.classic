@@ -9,11 +9,12 @@
 #include <wm/windowframe.h>
 #include <wm/windowscrollpanel.h>
 #include <wm/windowpicturebox.h>
+#include <bengine/util.h>
 
 extern void	mainloop();
 
-#include <bthread.h>
-extern cBMutex* renderMutex;
+//#include <bthread.h>
+//extern cBMutex* renderMutex;
 
 cMapDetailWindow::cMapDetailWindow() : cWindow()
 {
@@ -29,7 +30,7 @@ cMapDetailWindow::cMapDetailWindow() : cWindow()
 	objects["rollup"] = new cWindowRollupButton(this);
 	objects["close"] = new cWindowCloseButton(this);
 
-	class cMapInfoFinished : public cDownloadThread::cDownloadThreadFinisher
+/*	class cMapInfoFinished : public cDownloadThread::cDownloadThreadFinisher
 	{
 		cMapDetailWindow* wnd;
 	public:
@@ -44,7 +45,7 @@ cMapDetailWindow::cMapDetailWindow() : cWindow()
 		}
 	};
 
-	new cDownloadThread("http://browedit.excalibur-nw.com/mapdb/mapinfo.php?id=" + inttostring(1), new cMapInfoFinished(this));
+	new cDownloadThread("http://browedit.excalibur-nw.com/mapdb/mapinfo.php?id=" + bEngine::util::intToString(1), new cMapInfoFinished(this));*/
 }
 
 

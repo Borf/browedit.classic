@@ -2,9 +2,9 @@
 #define __SPRITE_H__
 
 #include <vector>
-#include <mymath.h>
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
+#include <bengine/math/vector3.h>
 
 
 class cSprite
@@ -74,7 +74,7 @@ public:
 	cSprite();
 	~cSprite();
 
-	cVector3				pos;
+	bEngine::math::cVector3				pos;
 	cActSpr*				body;
 	cActSpr*				head;
 	float					scale;

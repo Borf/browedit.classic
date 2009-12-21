@@ -1,13 +1,20 @@
 #include <common.h>
+
+#include <bengine/forwards.h>
+#include <bengine/texturecache.h>
+#include <bengine/texture.h>
+
 #include "clipboard.h"
 #include <graphics.h>
-#include <texturecache.h>
 #include <undo/texture.h>
 #include <undo/heightedit.h>
 #include <undo/gatheightedit.h>
 #include <undo/gattileedit.h>
 #include <undo/objectnew.h>
 #include "settings.h"
+#include <math.h>
+
+
 cClipBoardContents* cClipBoard::currentClipBoard = NULL;
 bool				cClipBoard::pasting = false;
 
@@ -81,7 +88,7 @@ void cClipboardTexture::apply()
 							cTextureContainer* t = new cTextureContainer();
 							t->RoFilename = texture->RoFilename;
 							t->RoFilename2 = texture->RoFilename2;
-							t->texture = cTextureCache::load(cSettings::roDir + "data\\texture\\" + texture->RoFilename);
+							t->texture = bEngine::cTextureCache::load(cSettings::roDir + "data\\texture\\" + texture->RoFilename);
 							found = cGraphics::world->textures.size();
 							cGraphics::world->textures.push_back(t);
 
@@ -263,7 +270,7 @@ void cClipboardObject::apply()
 		if(usePos)
 			model->pos = pos+pos2;
 		else
-			model->pos = cVector3(cGraphics::cMouse::x3d/5.0f, -cGraphics::cMouse::y3d, cGraphics::cMouse::z3d/5.0f);
+			model->pos = bEngine::math::cVector3(cGraphics::cMouse::x3d/5.0f, -cGraphics::cMouse::y3d, cGraphics::cMouse::z3d/5.0f);
 		if (SDL_GetModState() & KMOD_ALT)
 			model->pos.y = clipboardY;
 
@@ -317,7 +324,7 @@ void cClipboardObject::render()
 	if(!rsmmodel)
 	{
 		rsmmodel = new cRsmModel(clipboardFile);
-		rsmmodel->pos = cVector3(cGraphics::cMouse::x3d/5.0f, -cGraphics::cMouse::y3d, cGraphics::cMouse::z3d/5.0f);
+		rsmmodel->pos = bEngine::math::cVector3(cGraphics::cMouse::x3d/5.0f, -cGraphics::cMouse::y3d, cGraphics::cMouse::z3d/5.0f);
 		if (SDL_GetModState() & KMOD_CTRL)
 			rsmmodel->pos.y = clipboardY;
 		rsmmodel->scale = clipboardScale;
@@ -329,7 +336,7 @@ void cClipboardObject::render()
 		rsmmodel->pos = pos+pos2;
 	else
 	{
-		rsmmodel->pos = cVector3(cGraphics::cMouse::x3d/5.0f, -cGraphics::cMouse::y3d, cGraphics::cMouse::z3d/5.0f);
+		rsmmodel->pos = bEngine::math::cVector3(cGraphics::cMouse::x3d/5.0f, -cGraphics::cMouse::y3d, cGraphics::cMouse::z3d/5.0f);
 		if(SDL_GetModState() & KMOD_SHIFT)
 		{
 			rsmmodel->pos.x = round(rsmmodel->pos.x);
@@ -403,7 +410,7 @@ cClipBoardArea::cClipBoardArea(bool pTextures, bool pHeight, bool pObjects, bool
 					clipboard->clipboardName = cGraphics::world->models[i]->name;
 					clipboard->clipboardFloat = cGraphics::world->models[i]->lightopacity;
 					clipboard->usePos = true;
-					clipboard->pos = cGraphics::world->models[i]->pos - cVector3(2*minx,0,2*miny);
+					clipboard->pos = cGraphics::world->models[i]->pos - bEngine::math::cVector3(2*minx,0,2*miny);
 					objects.push_back(clipboard);
 				}
 			}
@@ -420,7 +427,7 @@ cClipBoardArea::cClipBoardArea(bool pTextures, bool pHeight, bool pObjects, bool
 				if(cGraphics::world->cubes[y][x].selected)
 				{
 					lights.push_back(cGraphics::world->lights[i]);
-					lights[lights.size()-1].pos -= cVector3(2*minx,0,2*miny);
+					lights[lights.size()-1].pos -= bEngine::math::cVector3(2*minx,0,2*miny);
 				}
 			}
 		}
@@ -436,7 +443,7 @@ cClipBoardArea::cClipBoardArea(bool pTextures, bool pHeight, bool pObjects, bool
 				if(cGraphics::world->cubes[y][x].selected)
 				{
 					effects.push_back(cGraphics::world->effects[i]);
-					effects[effects.size()-1].pos -= cVector3(2*minx,0,2*miny);
+					effects[effects.size()-1].pos -= bEngine::math::cVector3(2*minx,0,2*miny);
 				}
 			}
 		}
@@ -452,7 +459,7 @@ cClipBoardArea::cClipBoardArea(bool pTextures, bool pHeight, bool pObjects, bool
 				if(cGraphics::world->cubes[y][x].selected)
 				{
 					sounds.push_back(cGraphics::world->sounds[i]);
-					sounds[sounds.size()-1].pos -= cVector3(2*minx,0,2*miny);
+					sounds[sounds.size()-1].pos -= bEngine::math::cVector3(2*minx,0,2*miny);
 				}
 			}
 		}
@@ -504,7 +511,7 @@ void cClipBoardArea::apply()
 					cTextureContainer* container = new cTextureContainer();
 					container->RoFilename = texture->RoFilename;
 					container->RoFilename2 = texture->RoFilename2;
-					container->texture = cTextureCache::load(cSettings::roDir + "data\\texture\\" + texture->RoFilename);
+					container->texture = bEngine::cTextureCache::load(cSettings::roDir + "data\\texture\\" + texture->RoFilename);
 					found = cGraphics::world->textures.size();				
 					cGraphics::world->textures.push_back(container);
 				}
@@ -535,7 +542,7 @@ void cClipBoardArea::apply()
 					cTextureContainer* container = new cTextureContainer();
 					container->RoFilename = texture->RoFilename;
 					container->RoFilename2 = texture->RoFilename2;
-					container->texture = cTextureCache::load(cSettings::roDir + "data\\texture\\" + texture->RoFilename);
+					container->texture = bEngine::cTextureCache::load(cSettings::roDir + "data\\texture\\" + texture->RoFilename);
 					found = cGraphics::world->textures.size();				
 					cGraphics::world->textures.push_back(container);
 				}
@@ -563,7 +570,7 @@ void cClipBoardArea::apply()
 					cTextureContainer* container = new cTextureContainer();
 					container->RoFilename = texture->RoFilename;
 					container->RoFilename2 = texture->RoFilename2;
-					container->texture = cTextureCache::load(cSettings::roDir + "data\\texture\\" + texture->RoFilename);
+					container->texture = bEngine::cTextureCache::load(cSettings::roDir + "data\\texture\\" + texture->RoFilename);
 					found = cGraphics::world->textures.size();				
 					cGraphics::world->textures.push_back(container);
 				}
@@ -589,7 +596,7 @@ void cClipBoardArea::apply()
 		for(i = 0; i < lights.size(); i++)
 		{
 			cGraphics::world->lights.push_back(lights[i]);
-			cGraphics::world->lights[cGraphics::world->lights.size()-1].pos += cVector3(2*offX, 0, 2*offZ);
+			cGraphics::world->lights[cGraphics::world->lights.size()-1].pos += bEngine::math::cVector3(2*offX, 0, 2*offZ);
 		}
 	}
 	if(doEffects)
@@ -597,7 +604,7 @@ void cClipBoardArea::apply()
 		for(i = 0; i < effects.size(); i++)
 		{
 			cGraphics::world->effects.push_back(effects[i]);
-			cGraphics::world->effects[cGraphics::world->effects.size()-1].pos += cVector3(2*offX, 0, 2*offZ);
+			cGraphics::world->effects[cGraphics::world->effects.size()-1].pos += bEngine::math::cVector3(2*offX, 0, 2*offZ);
 		}
 	}
 	if(doSounds)
@@ -605,7 +612,7 @@ void cClipBoardArea::apply()
 		for(i = 0; i < sounds.size(); i++)
 		{
 			cGraphics::world->sounds.push_back(sounds[i]);
-			cGraphics::world->sounds[cGraphics::world->sounds.size()-1].pos += cVector3(2*offX, 0, 2*offZ);
+			cGraphics::world->sounds[cGraphics::world->sounds.size()-1].pos += bEngine::math::cVector3(2*offX, 0, 2*offZ);
 		}
 	}
 
@@ -654,7 +661,7 @@ void cClipBoardArea::render()
 		glScalef(1,1,-1);
 		for(i = 0; i < objects.size(); i++)
 		{
-			objects[i]->pos2 = cVector3(2*offX, 0.1f, 2*offZ);
+			objects[i]->pos2 = bEngine::math::cVector3(2*offX, 0.1f, 2*offZ);
 			objects[i]->render();
 		}
 		glPopMatrix();

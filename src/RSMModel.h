@@ -5,8 +5,9 @@
 #include <common.h>
 #include <string>
 #include <map>
+#include <bengine/math/matrix4x4.h>
+#include <bengine/math/quaternion.h>
 
-class cTexture;
 class cFile;
 
 
@@ -17,18 +18,19 @@ public:
 	{
 	public:
 		cMesh(cFile*, cRsmModelBase*, int ver1, int ver2);
+		void save();
 		void fetchChildren(std::map<std::string, cMesh*, std::less<std::string> >&);
 		void draw();
-		cMatrix4x4 getMatrix1(bool animate = true);
-		cMatrix4x4 matrix1Cache;
+		bEngine::math::cMatrix4x4 getMatrix1(bool animate = true);
+		bEngine::math::cMatrix4x4 matrix1Cache;
 		bool		cache1;
-		cMatrix4x4 getMatrix2();
-		cMatrix4x4 matrix2Cache;
+		bEngine::math::cMatrix4x4 getMatrix2();
+		bEngine::math::cMatrix4x4 matrix2Cache;
 		bool		cache2;
-		void setBoundingBox(cVector3&, cVector3&);
-		void setBoundingBox2(cMatrix4x4 &mat, cVector3 &bbmin, cVector3 &bbmax);
-		virtual bool collides(cMatrix4x4 &mat, cVector3 from, cVector3 to, cVector3* = NULL);
-		void setTexture(cTexture* oldTexture, cTexture* newTexture);
+		void setBoundingBox(bEngine::math::cVector3&, bEngine::math::cVector3&);
+		void setBoundingBox2(bEngine::math::cMatrix4x4 &mat, bEngine::math::cVector3 &bbmin, bEngine::math::cVector3 &bbmax);
+		virtual bool collides(bEngine::math::cMatrix4x4 &mat, bEngine::math::cVector3 from, bEngine::math::cVector3 to, bEngine::math::cVector3* = NULL);
+		void setTexture(bEngine::cTexture* oldTexture, bEngine::cTexture* newTexture);
 		void setSelection(cMesh* mesh);
 
 		std::string name;
@@ -36,25 +38,25 @@ public:
 		int unknown1;
 		float unknown2;
 
-		cMatrix4x4	offset;
-		cVector3	pos_;
-		cVector3	pos;
+		bEngine::math::cMatrix4x4	offset;
+		bEngine::math::cVector3	pos_;
+		bEngine::math::cVector3	pos;
 		float		rotangle;
-		cVector3	rotaxis;
-		cVector3	scale;
+		bEngine::math::cVector3	rotaxis;
+		bEngine::math::cVector3	scale;
 
-		std::vector<cTexture*> textures;
+		std::vector<bEngine::cTexture*> textures;
 		int			nVertices;
-		cVector3*	vertices;
+		bEngine::math::cVector3*	vertices;
 		int			nTexVertices;
-		cVector2*	texVertices;
+		bEngine::math::cVector2*	texVertices;
 		int			nFaces;
 		class cFace
 		{
 		public:
 			int			vertices[3];
 			int			texvertices[3];
-			cVector3	normal;
+			bEngine::math::cVector3	normal;
 			int			texIndex;
 			int			twoSide;
 			int			smoothGroup;
@@ -65,8 +67,9 @@ public:
 		class cFrame
 		{
 		public:
+			cFrame();
 			int			time;
-			cQuaternion	quat;
+			bEngine::math::cQuaternion	quat;
 		};
 		cFrame*		animationFrames;
 		
@@ -75,22 +78,22 @@ public:
 		cRsmModelBase*		base;
 		cMesh* parent;
 		std::vector<cMesh*> children;
-		cVector3 bbmin;
-		cVector3 bbmax;
-		cVector3 bbrange;
+		bEngine::math::cVector3 bbmin;
+		bEngine::math::cVector3 bbmax;
+		bEngine::math::cVector3 bbrange;
 	};
 
 	std::string filename;
 	std::string rofilename;
-	std::vector<cTexture*>	textures;
-	cVector3 realbbmin;
-	cVector3 realbbmax;
-	cVector3 realbbrange;
+	std::vector<bEngine::cTexture*>	textures;
+	bEngine::math::cVector3 realbbmin;
+	bEngine::math::cVector3 realbbmax;
+	bEngine::math::cVector3 realbbrange;
 	float		maxrange;
 	
-	cVector3 bbmin;
-	cVector3 bbmax;
-	cVector3 bbrange;
+	bEngine::math::cVector3 bbmin;
+	bEngine::math::cVector3 bbmax;
+	bEngine::math::cVector3 bbrange;
 	cMesh* root;
 
 	enum eShadeType
@@ -100,13 +103,16 @@ public:
 		SHADE_SMOOTH,
 		SHADE_BLACK,
 	} shadeType;
+	char unknown[16];
+	int alpha;
 
 
 	cRsmModelBase(std::string);
+	void save(std::string);
 	virtual ~cRsmModelBase();
 	void draw();
-	virtual bool collides(cMatrix4x4 &mat, cVector3 from, cVector3 to, cVector3* = NULL);
-	void setTexture(cTexture* oldTexture, cTexture* newTexture);
+	virtual bool collides(bEngine::math::cMatrix4x4 &mat, bEngine::math::cVector3 from, bEngine::math::cVector3 to, bEngine::math::cVector3* = NULL);
+	void setTexture(bEngine::cTexture* oldTexture, bEngine::cTexture* newTexture);
 	void setSelection(cMesh* mesh);
 };
 
@@ -125,7 +131,7 @@ public:
 
 
 	void draw();
-	bool collides(cVector3 from, cVector3 to, cVector3* = NULL);
+	bool collides(bEngine::math::cVector3 from, bEngine::math::cVector3 to, bEngine::math::cVector3* = NULL);
 	void setHeight();
 };
 

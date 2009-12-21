@@ -2,6 +2,7 @@
 #include "graphics.h"
 #include "undo/heightedit.h"
 #include <clipboard.h>
+#include <math.h>
 
 extern long tilex,tiley;
 extern long lasttimer;

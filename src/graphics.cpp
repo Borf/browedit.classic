@@ -1,10 +1,17 @@
 #define __GRAPHICS_CPP__
+#include <bengine/forwards.h>
+#include <bengine/util.h>
+#include <bengine/math/vector3.h>
+#include <bengine/texturecache.h>
+#include <bengine/texture.h>
+#include <bengine/math/math.h>
+
 #include "graphics.h"
+
 
 #include "common.h"
 #include "world.h"
 #include "font.h"
-#include "texture.h"
 #include "frustum.h"
 #include "wm/wm.h"
 
@@ -18,6 +25,7 @@
 #include <undo.h>
 #include "settings.h"
 #include "menu.h"
+
 
 extern void												ChangeGrid();
 extern cMenu*											currentobject;
@@ -82,7 +90,7 @@ int cGraphics::draw(bool drawwm)
 
 			glEnable(GL_TEXTURE_2D);
 			glColor4f(1,1,1,previewColor > 10 ? 1 : previewColor / 20.0f);
-			previewModel->pos = cVector3(40,-100,0);
+			previewModel->pos = bEngine::math::cVector3(40,-100,0);
 			previewModel->draw();//false, do not check frustum
 			if (previewColor > -1)
 				previewColor--;
@@ -112,7 +120,7 @@ int cGraphics::draw(bool drawwm)
 		glEnable(GL_TEXTURE_2D);
 		glColor4f(1,1,1,1);
 		
-		font->print(1,1,1,width-font->textLen("nModels: " + inttostring(cGraphics::nModelsDrawn)), 0, "nModels: %i", cGraphics::nModelsDrawn);
+		font->print(1,1,1,width-font->textLen("nModels: " + bEngine::util::intToString(cGraphics::nModelsDrawn)), 0, "nModels: %i", cGraphics::nModelsDrawn);
 
 		for(i = 0; 288*i+256 < height; i++)
 		{
@@ -252,8 +260,8 @@ int cGraphics::draw(bool drawwm)
 		glBegin(GL_QUADS);
 			glTexCoord2f(0,1);		glVertex2f( 0, height-20);
 			glTexCoord2f(0,0);		glVertex2f( 0, 0);
-			glTexCoord2f(1,0);		glVertex2f( min(height, width-256), 0);
-			glTexCoord2f(1,1);		glVertex2f( min(height, width-256), height-20);
+			glTexCoord2f(1,0);		glVertex2f( bEngine::math::min(height, width-256), 0);
+			glTexCoord2f(1,1);		glVertex2f( bEngine::math::min(height, width-256), height-20);
 		glEnd();
 	}
 	glEnable(GL_BLEND);
@@ -428,7 +436,7 @@ int cGraphics::init(int pWidth, int pHeight, int pBpp, bool pFullscreen)
 	glDisable(GL_LIGHTING);
 	font = new cFont();
 	font->load("data/fonts/"+cSettings::fontName+".tga");
-	splash = cTextureCache::load(cSettings::config.FirstChildElement("config")->FirstChildElement("splash")->FirstChild()->Value());
+	splash = bEngine::cTextureCache::load(cSettings::config.FirstChildElement("config")->FirstChildElement("splash")->FirstChild()->Value());
 	Log(3,0,GetMsg("graphics/INITIALIZINGWM"));
 	cWM::init(cSettings::skinFile);
 
@@ -437,9 +445,9 @@ int cGraphics::init(int pWidth, int pHeight, int pBpp, bool pFullscreen)
 	{
 		char buf[64];
 		sprintf(buf, "data/gat%i.tga", gatTiles[i]);
-		gatTextures.push_back(cTextureCache::load(buf));
+		gatTextures.push_back(bEngine::cTextureCache::load(buf));
 	}
-	gatBorder = cTextureCache::load("data/gatBorder.tga");
+	gatBorder = bEngine::cTextureCache::load("data/gatBorder.tga");
 
 	
 	waterDirectory =		cSettings::config.FirstChildElement("config")->FirstChildElement("water")->FirstChildElement("directory")->FirstChild()->Value();
@@ -453,13 +461,13 @@ int cGraphics::init(int pWidth, int pHeight, int pBpp, bool pFullscreen)
 		{
 			char buf[100];
 			sprintf(buf, "%s%swater%i%02i%s", cSettings::roDir.c_str(), waterDirectory.c_str(), i, ii, waterExtension.c_str());
-			waterTextures[i].push_back(cTextureCache::load(buf, TEX_NOCLAMP));
+			waterTextures[i].push_back(bEngine::cTextureCache::load(buf));
 		}
 	}
 	if(waterCount == 0)
 	{
 		waterTextures.resize(1);
-		waterTextures[i].push_back(cTextureCache::load(cSettings::roDir + waterDirectory + "water" + waterExtension));
+		waterTextures[i].push_back(bEngine::cTextureCache::load(cSettings::roDir + waterDirectory + "water" + waterExtension));
 	}
 
 	previewModel = NULL;
@@ -549,12 +557,12 @@ void cGraphics::closeAndCleanup()
 {
 	cGraphicsBase::killGLWindow();
 	
-	cTextureCache::unload(splash);
-	cTextureCache::unload(gatBorder);
+	bEngine::cTextureCache::unload(splash);
+	bEngine::cTextureCache::unload(gatBorder);
 
 	unsigned int i;
 	for(i = 0; i < gatTextures.size(); i++)
-		cTextureCache::unload(gatTextures[i]);
+		bEngine::cTextureCache::unload(gatTextures[i]);
 	
 	if(font)
 		delete font;
@@ -564,7 +572,7 @@ void cGraphics::closeAndCleanup()
 	{
 		for(unsigned int ii = 0; ii < waterTextures[i].size(); ii++)
 		{
-			cTextureCache::unload(waterTextures[i][ii]);
+			bEngine::cTextureCache::unload(waterTextures[i][ii]);
 		}
 	}
 	cWM::unLoad();
@@ -622,12 +630,12 @@ bool cGraphics::objectStartDrag = false;
 bool cGraphics::slope = false;
 int cGraphics::quadtreeView = -1;
 int cGraphics::gatType = 0;
-cTexture* cGraphics::texturePreview = NULL;
+bEngine::cTexture* cGraphics::texturePreview = NULL;
 bool cGraphics::groupeditmode = false;
 
-cVector3 cGraphics::selectionCenter = cVector3(-1,-1,-1);
-cVector3 cGraphics::backgroundColor = cVector3(0,0,0);
-cVector3 cGraphics::noTileColor = cVector3(1,1,1);
+bEngine::math::cVector3 cGraphics::selectionCenter = bEngine::math::cVector3(-1,-1,-1);
+bEngine::math::cVector3 cGraphics::backgroundColor = bEngine::math::cVector3(0,0,0);
+bEngine::math::cVector3 cGraphics::noTileColor = bEngine::math::cVector3(1,1,1);
 bool cGraphics::clearLightmaps = false;
 float cGraphics::gatTransparency = 0.3f;
 eTool cGraphics::textureTool = TOOL_BRUSH;
@@ -637,7 +645,7 @@ cBrowGraphics::textureBrush[0][1] = true;
 cBrowGraphics::textureBrush[0][2] = true;
 cBrowGraphics::textureBrush[0][3] = true;
 cBrowGraphics::textureBrush[1][0] = true;*/
-cVector2 cGraphics::textureBrushOffset = cVector2(0,0);
+bEngine::math::cVector2 cGraphics::textureBrushOffset = bEngine::math::cVector2(0,0);
 float cGraphics::textureGridSizeX = 4;
 float cGraphics::textureGridSizeY = 4;
 int cGraphics::textureBrushSize = 1;
@@ -646,14 +654,14 @@ std::vector<int> cGraphics::gatTiles;
 int cGraphics::nModelsDrawn = 0;
 cRsmModel* cGraphics::previewModel;
 unsigned int cGraphics::waterCount;
-cTexture* cGraphics::splash = NULL;
-std::vector<std::vector<cTexture*> > cGraphics::waterTextures;
-std::vector<cTexture*> cGraphics::gatTextures;
+bEngine::cTexture* cGraphics::splash = NULL;
+std::vector<std::vector<bEngine::cTexture*> > cGraphics::waterTextures;
+std::vector<bEngine::cTexture*> cGraphics::gatTextures;
 int cGraphics::previewColor;
 cFont* cGraphics::font;
 std::string cGraphics::waterExtension;
 std::string cGraphics::waterDirectory;
-cTexture* cGraphics::gatBorder;
+bEngine::cTexture* cGraphics::gatBorder;
 
 
 
@@ -763,7 +771,7 @@ cWorldContainer::cCamera::cCamera()
 	angle = 0;
 	height = 123;
 	rot = 0.0f;
-	pointer = cVector2(-774,-963.5);
+	pointer = bEngine::math::cVector2(-774,-963.5);
 }
 
 cWorldContainer::cWorldContainer( cWorld* w )
@@ -813,8 +821,8 @@ cWorldContainer::cSettings::cSettings()
 	textureRot			= 0;
 	fliph				= false;
 	flipv				= false;
-	selectionstart		= cVector2(0,0);
-	selectionend		= cVector2(0,0);
-	wallHeightMin		= cVector2(-1,-1);
-	wallHeightMax		= cVector2(-1,-1);
+	selectionstart		= bEngine::math::cVector2(0,0);
+	selectionend		= bEngine::math::cVector2(0,0);
+	wallHeightMin		= bEngine::math::cVector2(-1,-1);
+	wallHeightMax		= bEngine::math::cVector2(-1,-1);
 }

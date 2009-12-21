@@ -9,7 +9,8 @@
 #include <map>
 #include <string>
 
-class cTexture;
+#include <bengine/forwards.h>
+
 class cFont;
 class cWindowObject;
 
@@ -123,7 +124,7 @@ public:
 			bool			saveWindow;
 			std::string		defaultObject;
 
-							cWindow(cTexture* t = NULL, cFont* f = NULL, TiXmlDocument* skin = NULL);
+							cWindow(bEngine::cTexture* t = NULL, cFont* f = NULL, TiXmlDocument* skin = NULL);
 			virtual			~cWindow();
 			int				getX()						{ return x; }
 			int				getY()						{ return rolledUp ? y+h-16 : y; }
@@ -137,7 +138,7 @@ public:
 			void			istopwindow(bool b)		{ topWindow = b; }
 			bool			istopwindow()				{ return topWindow; }
 
-			void			init(cTexture* t, cFont* f)	{ texture = t; font = f; }
+			void			init(bEngine::cTexture* t, cFont* f)	{ texture = t; font = f; }
 				
 			WINDOW_TYPE		getWindowType()				{ return windowType; }
 			bool 			isVisible()					{ return visible || currentColor[3] != 0; }
@@ -197,7 +198,7 @@ public:
 
 	virtual void*			userfunc(void*) { return NULL; };
 
-	cTexture*				texture;
+	bEngine::cTexture*				texture;
 	cFont*					font;
 	objectlist				objects;
 	cWindowObject*			selectedObject;

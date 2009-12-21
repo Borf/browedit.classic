@@ -9,6 +9,7 @@
 #include "windows/lightoverviewwindow.h"
 #include <wm/windowcheckbox.h>
 #include <wm/windowinputbox.h>
+#include <math.h>
 
 extern bool	doneAction;
 
@@ -117,16 +118,16 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 				float mindist = 999999;
 				for(unsigned int i = 0; i < cGraphics::world->lights.size(); i++)
 				{
-					cVector3 d = cGraphics::world->lights[i].pos;
+					bEngine::math::cVector3 d = cGraphics::world->lights[i].pos;
 					d.x = d.x;
 					
 					d.x -= cGraphics::cMouse::x3d/5;
 					d.z -= cGraphics::cMouse::z3d/5;
 					d.y = 0;
 
-					if(mindist > d.magnitude())
+					if(mindist > d.length())
 					{
-						mindist = d.magnitude();
+						mindist = d.length();
 						minobj = i;
 					}
 				}
@@ -147,7 +148,7 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 					l.color.x = 0;
 					l.color.y = 0;
 					l.color.z = 0;
-					l.pos = cVector3(cGraphics::cMouse::x3d/5, cGraphics::cMouse::y3d+10, cGraphics::cMouse::z3d/5);
+					l.pos = bEngine::math::cVector3(cGraphics::cMouse::x3d/5, cGraphics::cMouse::y3d+10, cGraphics::cMouse::z3d/5);
 					l.todo = std::string(buf, 40);
 					l.todo2 = 192;
 					l.maxLightIncrement = 256;
@@ -166,16 +167,16 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 					float mindist = 999999;
 					for(unsigned int i = 0; i < cGraphics::world->lights.size(); i++)
 					{
-						cVector3 d = cGraphics::world->lights[i].pos;
+						bEngine::math::cVector3 d = cGraphics::world->lights[i].pos;
 						d.x = d.x;
 						
 						d.x -= cGraphics::cMouse::x3d/5;
 						d.z -= cGraphics::cMouse::z3d/5;
 						d.y = 0;
 
-						if(mindist > d.magnitude())
+						if(mindist > d.length())
 						{
-							mindist = d.magnitude();
+							mindist = d.length();
 							minobj = i;
 						}
 					}

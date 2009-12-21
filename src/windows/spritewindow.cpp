@@ -5,7 +5,8 @@
 #include <graphics.h>
 #include <settings.h>
 #include <world.h>
-
+#include <bengine/math/math.h>
+#include <math.h>
 TiXmlDocument sprites;
 
 
@@ -38,7 +39,7 @@ void cSpriteWindow::cWindowSprite::draw( int,int,int,int )
 	
 	cWindowObject::draw(0,0,0,0);
 	
-	sprite->pos = cVector3(xx/5 + w/2/5,yy+h/4,0);
+	sprite->pos = bEngine::math::cVector3(xx/5 + w/2/5,yy+h/4,0);
 	sprite->scale = 1;
 	sprite->draw();
 }
@@ -288,7 +289,7 @@ cSpriteWindow::cDirectionButton::cDirectionButton( cWindow* p, int dir, TiXmlDoc
 	text = directions[dir];
 	resizeTo(50,20);
 	alignment = ALIGN_TOPLEFT;
-	moveTo(35+(int)(35*sin(dir/8.0f*2*PI)), 300+     (dir<5 ? (-20*dir) : -20*(8-dir))     );
+	moveTo(35+(int)(35*sin(dir/8.0f*2*bEngine::math::PI)), 300+     (dir<5 ? (-20*dir) : -20*(8-dir))     );
 }
 
 void cSpriteWindow::cDirectionButton::onClick()

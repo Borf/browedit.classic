@@ -4,16 +4,17 @@
 #include <undo.h>
 #include <RSMModel.h>
 #include <world.h>
+#include <bengine/math/vector3.h>
 
 class cUndoChangeObject : public cUndoItem
 {
-	cVector3 pos;
-	cVector3 rot;
-	cVector3 scale;
+	bEngine::math::cVector3 pos;
+	bEngine::math::cVector3 rot;
+	bEngine::math::cVector3 scale;
 	int objectid;
 public:
 	
-	cUndoChangeObject(int id, cVector3 oldpos, cVector3 oldrot, cVector3 oldscale)
+	cUndoChangeObject(int id, bEngine::math::cVector3 oldpos, bEngine::math::cVector3 oldrot, bEngine::math::cVector3 oldscale)
 	{
 		type = UNDO_OTHER;
 		pos = oldpos;

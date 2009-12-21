@@ -9,7 +9,8 @@
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
 #include <graphics.h>
-#include <texture.h>
+#include <bengine/texture.h>
+#include <bengine/util.h>
 
 void cWindowObject::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {
@@ -152,9 +153,9 @@ cWindowObject::cWindowObject( cWindow* p, TiXmlElement* skin)
 		std::string color = "FFFFFF";
 		if(skin->FirstChildElement("fontcolor"))
 			color = skin->FirstChildElement("fontcolor")->FirstChild()->Value();
-		fontcolor[0] = hex2dec(color.substr(0,2)) / 256.0f;
-		fontcolor[1] = hex2dec(color.substr(2,2)) / 256.0f;
-		fontcolor[2] = hex2dec(color.substr(4,2)) / 256.0f;
+		fontcolor[0] = bEngine::util::hex2dec(color.substr(0,2)) / 256.0f;
+		fontcolor[1] = bEngine::util::hex2dec(color.substr(2,2)) / 256.0f;
+		fontcolor[2] = bEngine::util::hex2dec(color.substr(4,2)) / 256.0f;
 		
 		skinTopHeight = atoi(skin->FirstChildElement("top")->Attribute("height"));
 		skinTop =		512 - atoi(skin->FirstChildElement("top")->FirstChild()->Value());

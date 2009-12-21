@@ -1,3 +1,4 @@
+#include <bengine/forwards.h>
 #include "windowmainbutton.h"
 #include "window.h"
 #include <math.h>
@@ -6,7 +7,7 @@
 #include <windows.h>
 #endif
 
-#include <texture.h>
+#include <bengine/texture.h>
 #include <font.h>
 
 #include <GL/gl.h>												// Header File For The OpenGL32 Library

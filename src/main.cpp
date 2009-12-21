@@ -1,5 +1,4 @@
-#include <common.h>
-
+#include <bengine/forwards.h>
 #include <SDL/SDL_mixer.h>
 #include <fstream>
 #include <list>
@@ -27,10 +26,17 @@
 #include "windows/minimapwindow.h"
 #include "plugins/base/base.h"
 #include "interfaceimplementation.h"
-#include "bmutex.h"
 #include "settings.h"
-#include "texturecache.h"
 #include "clipboard.h"
+
+#include <bengine/util.h>
+#include <bengine/math/math.h>
+#include <bengine/math/vector3.h>
+#include <bengine/util/filesystem.h>
+#include <bengine/texturecache.h>
+#include <bengine/util/mutex.h>
+
+#include <grffilesystem.h>
 
 
 #ifdef _MEMORYMAGAGEMENT
@@ -47,7 +53,7 @@ MyStackWalker* stackWalker = NULL;
 #include <GL/glext.h>											// We use a define from this file: GL_BGRA_EXT
 #endif
 
-cBMutex* renderMutex;
+bEngine::util::cMutex* renderMutex;
 
 void MakeUndo();
 void Undo();
@@ -125,8 +131,8 @@ void mainloop()
 							if(x >= 0 && y >= 0 && x < cGraphics::world->width && y < cGraphics::world->height)
 							{
 								cCube* c = &cGraphics::world->cubes[y][x];
-								mmin = min(min(min(min(mmin, c->cell1),c->cell2),c->cell3),c->cell4);
-								mmax = max(max(max(max(mmax, c->cell1),c->cell2),c->cell3),c->cell4);
+								mmin = bEngine::math::min(bEngine::math::min(bEngine::math::min(bEngine::math::min(mmin, c->cell1),c->cell2),c->cell3),c->cell4);
+								mmax = bEngine::math::max(bEngine::math::max(bEngine::math::max(bEngine::math::max(mmax, c->cell1),c->cell2),c->cell3),c->cell4);
 							}
 						}
 					}
@@ -151,10 +157,10 @@ void mainloop()
 									c->cell4-=1;
 								if(ctrl)
 								{
-									c->cell1 = max(mmin,c->cell1);
-									c->cell2 = max(mmin,c->cell2);
-									c->cell3 = max(mmin,c->cell3);
-									c->cell4 = max(mmin,c->cell4);
+									c->cell1 = bEngine::math::max(mmin,c->cell1);
+									c->cell2 = bEngine::math::max(mmin,c->cell2);
+									c->cell3 = bEngine::math::max(mmin,c->cell3);
+									c->cell4 = bEngine::math::max(mmin,c->cell4);
 								}
 							}
 							if(cGraphics::cMouse::lbuttondown && cGraphics::cMouse::rbuttondown)
@@ -169,10 +175,10 @@ void mainloop()
 									c->cell4+=1;
 								if(ctrl)
 								{
-									c->cell1 = min(mmax,c->cell1);
-									c->cell2 = min(mmax,c->cell2);
-									c->cell3 = min(mmax,c->cell3);
-									c->cell4 = min(mmax,c->cell4);
+									c->cell1 = bEngine::math::min(mmax,c->cell1);
+									c->cell2 = bEngine::math::min(mmax,c->cell2);
+									c->cell3 = bEngine::math::min(mmax,c->cell3);
+									c->cell4 = bEngine::math::min(mmax,c->cell4);
 								}
 							}
 						}
@@ -186,9 +192,9 @@ void mainloop()
 
 	if(cGraphics::cMouse::rbuttondown && (keys[SDLK_w] || keys[SDLK_s] || keys[SDLK_a] || keys[SDLK_d]))
 	{
-		cVector2 v = cVector2((keys[SDLK_a] ? 1 : 0) - (keys[SDLK_d] ? 1 : 0), (keys[SDLK_w] ? 1 : 0) - (keys[SDLK_s] ? 1 : 0));
+		bEngine::math::cVector2 v = bEngine::math::cVector2((keys[SDLK_a] ? 1 : 0) - (keys[SDLK_d] ? 1 : 0), (keys[SDLK_w] ? 1 : 0) - (keys[SDLK_s] ? 1 : 0));
 		v = v * (cGraphics::getFrameTicks()/5.0f);
-		v.rotate(-cGraphics::worldContainer->camera.rot / PI * 180.0f);
+		v = v.getRotated(-cGraphics::worldContainer->camera.rot / bEngine::math::PI * 180.0f);
 		cGraphics::worldContainer->camera.pointer = cGraphics::worldContainer->camera.pointer + v;
 	}
 	
@@ -280,7 +286,7 @@ void mainloop()
 	if (!cGraphics::draw())
 		cSettings::running = false;
 	SDL_GL_SwapBuffers();
-	renderMutex->unlock();
+	renderMutex->unLock();
 	Sleep(1);
 }
 
@@ -467,6 +473,7 @@ int main(int argc, char *argv[])
 			TiXmlElement* el2 = el->FirstChildElement("grf");
 			while(el2 != NULL)
 			{
+				bEngine::util::cFileSystem::addFileLoader(new cGrfFileSystem::cGrfFileLoader(el2->FirstChild()->Value()));
 				cFileSystem::loadPackedFile(el2->FirstChild()->Value());
 				el2 = el2->NextSiblingElement("grf");
 			}
@@ -490,9 +497,9 @@ int main(int argc, char *argv[])
 				else if(strcmp(el2->Value(),					"skin") == 0)
 					cSettings::skinFile = el2->FirstChild()->Value();
 				else if(strcmp(el2->Value(),					"bgcolor") == 0)
-					cGraphics::backgroundColor = hex2floats(el2->FirstChild()->Value());
+					cGraphics::backgroundColor = bEngine::util::hex2floats(el2->FirstChild()->Value());
 				else if(strcmp(el2->Value(),					"notilecolor") == 0)
-					cGraphics::noTileColor = hex2floats(el2->FirstChild()->Value());
+					cGraphics::noTileColor = bEngine::util::hex2floats(el2->FirstChild()->Value());
 				else if(strcmp(el2->Value(),					"gattransparency") == 0)
 					cGraphics::gatTransparency = atof(el2->FirstChild()->Value());
 				else if(strcmp(el2->Value(),					"camerasmoothing") == 0)
@@ -917,7 +924,7 @@ int main(int argc, char *argv[])
 		
 	
 	lasttimer = SDL_GetTicks();
-	renderMutex = new cBMutex();
+	renderMutex = new bEngine::util::cMutex();
 	while( cSettings::running )
 		mainloop();
 
@@ -937,8 +944,8 @@ int main(int argc, char *argv[])
 		delete cClipBoard::currentClipBoard;
 
 
-	cTextureCache::status();
-	cTextureCache::unloadall();
+	bEngine::cTextureCache::status();
+	bEngine::cTextureCache::unloadall();
 	cFileSystem::unload();
 	delete cGraphics::menu;
 	if(cGraphics::popupMenu)
@@ -1113,19 +1120,19 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					if (SDL_GetModState() & KMOD_CTRL)
 					{
 						cGraphics::worldContainer->camera.angle += (cGraphics::cMouse::yOld - cGraphics::cMouse::y) / 10.0f;
-						cGraphics::worldContainer->camera.angle = max(min(cGraphics::worldContainer->camera.angle, (float)20), (float)-10);
+						cGraphics::worldContainer->camera.angle = bEngine::math::max(bEngine::math::min(cGraphics::worldContainer->camera.angle, (float)20), (float)-10);
 						cGraphics::worldContainer->camera.rot += (cGraphics::cMouse::xOld - cGraphics::cMouse::x) / 100.0f;
 						while(cGraphics::worldContainer->camera.rot < 0)
-							cGraphics::worldContainer->camera.rot+=2*(float)PI;
-						while(cGraphics::worldContainer->camera.rot > 2*PI)
-							cGraphics::worldContainer->camera.rot-=2*(float)PI;
+							cGraphics::worldContainer->camera.rot+=2*(float)bEngine::math::PI;
+						while(cGraphics::worldContainer->camera.rot > 2*bEngine::math::PI)
+							cGraphics::worldContainer->camera.rot-=2*(float)bEngine::math::PI;
 					}
 					else
 					{
 						if(cGraphics::worldContainer->view.topCamera)
 						{
 							cGraphics::worldContainer->camera.height += (cGraphics::cMouse::yOld - cGraphics::cMouse::y) / 2.0f;
-							cGraphics::worldContainer->camera.height = max(min(cGraphics::worldContainer->camera.height, (float)15000), (float)-5);
+							cGraphics::worldContainer->camera.height = bEngine::math::max(bEngine::math::min(cGraphics::worldContainer->camera.height, (float)15000), (float)-5);
 							if(cGraphics::worldContainer->camera.height != -5 && cGraphics::worldContainer->camera.height != 15000)
 							{
 								cGraphics::worldContainer->camera.pointer.x -= (cGraphics::cMouse::yOld - cGraphics::cMouse::y) / 4.0f;
@@ -1141,15 +1148,15 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						cGraphics::worldContainer->camera.rot += (cGraphics::cMouse::xOld - cGraphics::cMouse::x) / 100.0f;
 						if(cGraphics::worldContainer->view.sideCamera)
 						{
-							if(cGraphics::worldContainer->camera.rot <  (float)(1.6*PI))
-								cGraphics::worldContainer->camera.rot = (float)(1.6*PI);
-							if(cGraphics::worldContainer->camera.rot >= (float)(1.8*PI))
-								cGraphics::worldContainer->camera.rot = (float)(1.8*PI);
+							if(cGraphics::worldContainer->camera.rot <  (float)(1.6*bEngine::math::PI))
+								cGraphics::worldContainer->camera.rot = (float)(1.6*bEngine::math::PI);
+							if(cGraphics::worldContainer->camera.rot >= (float)(1.8*bEngine::math::PI))
+								cGraphics::worldContainer->camera.rot = (float)(1.8*bEngine::math::PI);
 						}						
 						while(cGraphics::worldContainer->camera.rot < 0)
-							cGraphics::worldContainer->camera.rot+=2*(float)PI;
-						while(cGraphics::worldContainer->camera.rot > 2*PI)
-							cGraphics::worldContainer->camera.rot-=2*(float)PI;
+							cGraphics::worldContainer->camera.rot+=2*(float)bEngine::math::PI;
+						while(cGraphics::worldContainer->camera.rot > 2*bEngine::math::PI)
+							cGraphics::worldContainer->camera.rot-=2*(float)bEngine::math::PI;
 					}
 				}
 			/*	else if (SDL_GetModState() & KMOD_CTRL)
@@ -1162,8 +1169,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				{
 					if(!cGraphics::worldContainer->view.topCamera)
 					{
-						cVector2 v = cVector2((cGraphics::cMouse::xOld - cGraphics::cMouse::x),  (cGraphics::cMouse::yOld - cGraphics::cMouse::y));
-						v.rotate(-cGraphics::worldContainer->camera.rot / PI * 180.0f);
+						bEngine::math::cVector2 v = bEngine::math::cVector2((cGraphics::cMouse::xOld - cGraphics::cMouse::x),  (cGraphics::cMouse::yOld - cGraphics::cMouse::y));
+						v = v.getRotated(-cGraphics::worldContainer->camera.rot / bEngine::math::PI * 180.0f);
 						cGraphics::worldContainer->camera.pointer = cGraphics::worldContainer->camera.pointer - v;
 					}
 					else
@@ -1230,7 +1237,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						float diff = cGraphics::worldContainer->camera.height;
 						cGraphics::worldContainer->camera.height*=1.1f;
 						diff -= cGraphics::worldContainer->camera.height;
-						cGraphics::worldContainer->camera.height = max(min(cGraphics::worldContainer->camera.height, (float)15000), (float)-5);
+						cGraphics::worldContainer->camera.height = bEngine::math::max(bEngine::math::min(cGraphics::worldContainer->camera.height, (float)15000), (float)-5);
 						if(cGraphics::worldContainer->camera.height != -5 && cGraphics::worldContainer->camera.height != 15000)
 						{
 							cGraphics::worldContainer->camera.pointer.x += diff/2.0f;
@@ -1240,7 +1247,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					else
 					{
 						cGraphics::worldContainer->camera.height*=1.1f;
-						cGraphics::worldContainer->camera.height = max(min(cGraphics::worldContainer->camera.height, (float)15000), (float)-5);
+						cGraphics::worldContainer->camera.height = bEngine::math::max(bEngine::math::min(cGraphics::worldContainer->camera.height, (float)15000), (float)-5);
 					}
 				}
 				return 1;
@@ -1258,7 +1265,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						float diff = cGraphics::worldContainer->camera.height;
 						cGraphics::worldContainer->camera.height/=1.1f;
 						diff -= cGraphics::worldContainer->camera.height;
-						cGraphics::worldContainer->camera.height = max(min(cGraphics::worldContainer->camera.height, (float)15000), (float)-5);
+						cGraphics::worldContainer->camera.height = bEngine::math::max(bEngine::math::min(cGraphics::worldContainer->camera.height, (float)15000), (float)-5);
 						if(cGraphics::worldContainer->camera.height != -5 && cGraphics::worldContainer->camera.height != 15000)
 						{
 							cGraphics::worldContainer->camera.pointer.x += diff/2.0f;
@@ -1268,7 +1275,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 					else
 					{
 						cGraphics::worldContainer->camera.height/=1.1f;
-						cGraphics::worldContainer->camera.height = max(min(cGraphics::worldContainer->camera.height, (float)15000), (float)-5);
+						cGraphics::worldContainer->camera.height = bEngine::math::max(bEngine::math::min(cGraphics::worldContainer->camera.height, (float)15000), (float)-5);
 					}
 				}
 				return 1;
@@ -1688,7 +1695,7 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 						ev.key.keysym.mod = (SDLMod)(KMOD_SHIFT | KMOD_CTRL);
 						SDL_PushEvent(&ev);
 						process_events();
-						cGraphics::worldContainer->camera.rot += 10.0f*((float)PI/180.0f);
+						cGraphics::worldContainer->camera.rot += 10.0f*((float)bEngine::math::PI/180.0f);
 					}
 					return true;
 				}

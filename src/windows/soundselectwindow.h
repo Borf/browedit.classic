@@ -6,6 +6,7 @@
 #include <wm/windowtree.h>
 #include <wm/windowlistbox.h>
 #include <wm/windowbutton.h>
+#include <bengine/math/vector3.h>
 
 
 class cSound;
@@ -46,10 +47,10 @@ class cSoundSelectWindow : public cWindow
 public:
 
 	std::map<cWindowTree::cTreeNode*, std::vector<std::pair<std::string, std::string> >, std::less<cWindowTree::cTreeNode*> > items;
-	cVector3 newPos;
+	bEngine::math::cVector3 newPos;
 	cSound* selectedSound;
 
-	cSoundSelectWindow(cVector3 pNewPos);	
+	cSoundSelectWindow(bEngine::math::cVector3 pNewPos);	
 	void resizeTo(int ww, int hh);
 	void* userfunc(void* param);
 

@@ -27,6 +27,14 @@
 #include <RSMModel.h>
 #include <sprite.h>
 
+#include <bengine/forwards.h>
+#include <bengine/util.h>
+#include <bengine/math/math.h>
+#include <bengine/math/vector3.h>
+#include <bengine/texture.h>
+#include <bengine/texturecache.h>
+#include <math.h>
+
 int process_events( );
 extern cMenu* mode;
 extern cMenu* editdetail;
@@ -36,8 +44,8 @@ extern cMenu* currentobject;
 extern TiXmlDocument sprites;
 
 void mainloop();
-#include <bthread.h>
-extern cBMutex* renderMutex;
+#include <bengine/util/thread.h>
+extern bEngine::util::cMutex* renderMutex;
 
 #include <curl/curl.h>
 
@@ -77,7 +85,7 @@ MENUCOMMAND(open)
 	std::string fileName;
 
 	if(cGraphics::world)
-		strcpy(cGraphics::world->fileName, replace(cGraphics::world->fileName, "/", "\\").c_str());
+		strcpy(cGraphics::world->fileName, bEngine::util::replace(cGraphics::world->fileName, "/", "\\").c_str());
 
 	if(cGraphics::world)
 		fileName = cGraphics::world->fileName;
@@ -166,7 +174,7 @@ MENUCOMMAND(save)
 		ZeroMemory(&ofn, sizeof(ofn));
 		ofn.lStructSize = sizeof(ofn);
 		ofn.hwndOwner = hWnd;
-		strcpy(cGraphics::world->fileName, replace(cGraphics::world->fileName, "/", "\\").c_str());
+		strcpy(cGraphics::world->fileName, bEngine::util::replace(cGraphics::world->fileName, "/", "\\").c_str());
 		ofn.lpstrFile = cGraphics::world->fileName;
 		ofn.nMaxFile = 256;
 		ofn.lpstrFilter = "All\0*.*\0RO maps\0*.rsw\0";
@@ -212,7 +220,7 @@ MENUCOMMAND(quicksave)
 		ZeroMemory(&ofn, sizeof(ofn));
 		ofn.lStructSize = sizeof(ofn);
 		ofn.hwndOwner = hWnd;
-		strcpy(cGraphics::world->fileName, replace(cGraphics::world->fileName, "/", "\\").c_str());
+		strcpy(cGraphics::world->fileName, bEngine::util::replace(cGraphics::world->fileName, "/", "\\").c_str());
 		ofn.lpstrFile = cGraphics::world->fileName;
 		ofn.nMaxFile = 256;
 		ofn.lpstrFilter = "All\0*.*\0RO maps\0*.rsw\0";
@@ -256,7 +264,7 @@ MENUCOMMAND(saveAs)
 	ZeroMemory(&ofn, sizeof(ofn));
 	ofn.lStructSize = sizeof(ofn);
 	ofn.hwndOwner = hWnd;
-	strcpy(cGraphics::world->fileName, replace(cGraphics::world->fileName, "/", "\\").c_str());
+	strcpy(cGraphics::world->fileName, bEngine::util::replace(cGraphics::world->fileName, "/", "\\").c_str());
 	ofn.lpstrFile = cGraphics::world->fileName;
 	ofn.nMaxFile = 256;
 	ofn.lpstrFilter = "All\0*.*\0RO maps\0*.rsw\0";
@@ -314,13 +322,13 @@ MENUCOMMAND(undo)
 }
 
 
-int ClassifyPoint(cVector3 point, cVector3 pO, cVector3 pN)
+int ClassifyPoint(bEngine::math::cVector3 point, bEngine::math::cVector3 pO, bEngine::math::cVector3 pN)
 {
-	cVector3 TempVect;
+	bEngine::math::cVector3 TempVect;
 	TempVect.x = pO.x - point.x;
 	TempVect.y = pO.y - point.y;
 	TempVect.z = pO.z - point.z;
-	cVector3 dir = TempVect;
+	bEngine::math::cVector3 dir = TempVect;
 	GLfloat d = dir.dot(pN);;
 	
 	if (d < -0.00001f)
@@ -528,8 +536,8 @@ MENUCOMMAND(random2)
 				}
 			}
 
-			x+=cos(a* (PI/180.0f));
-			y+=sin(a* (PI/180.0f));
+			x+=cos(a* (bEngine::math::PI/180.0f));
+			y+=sin(a* (bEngine::math::PI/180.0f));
 
 
 			if(y < 5)
@@ -599,7 +607,7 @@ MENUCOMMAND(random2)
 		bool ok = false;
 		while(!ok || cGraphics::world->cubes[(int)(model->pos.z/2)][(int)(model->pos.x/2)].cell1 != 0)
 		{
-			model->pos = cVector3(rand()%(cGraphics::world->width*2), 0, rand()%(cGraphics::world->height*2));
+			model->pos = bEngine::math::cVector3(rand()%(cGraphics::world->width*2), 0, rand()%(cGraphics::world->height*2));
 			ok = true;
 			for(int x = -4; x < 4; x++)
 			{
@@ -617,8 +625,8 @@ MENUCOMMAND(random2)
 
 
 		model->pos.y = cGraphics::world->cubes[(int)(model->pos.z/2)][(int)(model->pos.x/2)].cell1;
-		model->scale = cVector3(1,1,1);
-		model->rot = cVector3(0,rand()%360,0);
+		model->scale = bEngine::math::cVector3(1,1,1);
+		model->rot = bEngine::math::cVector3(0,rand()%360,0);
 		cGraphics::world->models.push_back(model);
 	}
 
@@ -857,15 +865,15 @@ MENUCOMMAND(random4)
 		for(i = 0; i < 1000; i++)
 		{
 			cRsmModel* model = new cRsmModel(cSettings::roDir +  randommodels[rand() % randommodels.size()]);
-			model->pos = cVector3(rand()%(cGraphics::world->width*2), 0, rand()%(cGraphics::world->height*2));
+			model->pos = bEngine::math::cVector3(rand()%(cGraphics::world->width*2), 0, rand()%(cGraphics::world->height*2));
 
 			while(cGraphics::world->cubes[(int)(model->pos.z/2)][(int)(model->pos.x/2)].tileUp > 32)
-				model->pos = cVector3(rand()%(cGraphics::world->width*2), 0, rand()%(cGraphics::world->height*2));
+				model->pos = bEngine::math::cVector3(rand()%(cGraphics::world->width*2), 0, rand()%(cGraphics::world->height*2));
 
 
 			model->pos.y = cGraphics::world->cubes[(int)(model->pos.z/2)][(int)(model->pos.x/2)].cell1;
-			model->scale = cVector3(1,1,1);
-			model->rot = cVector3(0,0,0);
+			model->scale = bEngine::math::cVector3(1,1,1);
+			model->rot = bEngine::math::cVector3(0,0,0);
 			cGraphics::world->models.push_back(model);
 		}
 	}
@@ -977,10 +985,10 @@ MENUCOMMAND(model)
 		return false;
 	delete cGraphics::previewModel;
 	cGraphics::previewModel = new cRsmModel(cSettings::roDir + src->data);
-	cGraphics::previewModel->rot = cVector3(0,0,0);
-	cGraphics::previewModel->scale = cVector3(4,4,4);
+	cGraphics::previewModel->rot = bEngine::math::cVector3(0,0,0);
+	cGraphics::previewModel->scale = bEngine::math::cVector3(4,4,4);
 
-	cGraphics::previewModel->pos = cVector3(40,-40,-40);
+	cGraphics::previewModel->pos = bEngine::math::cVector3(40,-40,-40);
 
 	if (cSettings::editMode != MODE_OBJECTS)
 		cGraphics::previewColor = 200;
@@ -1068,9 +1076,9 @@ MENUCOMMAND(gatcollision2)
 
 
 			unsigned int ii;
-			cVector3 colPos;
-			cVector3 worldpos = cVector3(5*x, -5000, 5*y);
-			cVector3 highup = worldpos + cVector3(0, 10000, 0);
+			bEngine::math::cVector3 colPos;
+			bEngine::math::cVector3 worldpos = bEngine::math::cVector3(5*x, -5000, 5*y);
+			bEngine::math::cVector3 highup = worldpos + bEngine::math::cVector3(0, 10000, 0);
 			for(ii = 0; ii < cGraphics::world->models.size(); ii++)
 			{
 				if(cGraphics::world->models[ii]->collides(worldpos, highup, &colPos))
@@ -1081,8 +1089,8 @@ MENUCOMMAND(gatcollision2)
 				}
 			}
 
-			worldpos = cVector3(5*x+5, -5000, 5*y);
-			highup = worldpos + cVector3(0, 10000, 0);
+			worldpos = bEngine::math::cVector3(5*x+5, -5000, 5*y);
+			highup = worldpos + bEngine::math::cVector3(0, 10000, 0);
 			for(ii = 0; ii < cGraphics::world->models.size(); ii++)
 			{
 				if(cGraphics::world->models[ii]->collides(worldpos, highup, &colPos))
@@ -1092,8 +1100,8 @@ MENUCOMMAND(gatcollision2)
 					break;
 				}
 			}
-			worldpos = cVector3(5*x, -5000, 5*y+5);
-			highup = worldpos + cVector3(0, 10000, 0);
+			worldpos = bEngine::math::cVector3(5*x, -5000, 5*y+5);
+			highup = worldpos + bEngine::math::cVector3(0, 10000, 0);
 			for(ii = 0; ii < cGraphics::world->models.size(); ii++)
 			{
 				if(cGraphics::world->models[ii]->collides(worldpos, highup, &colPos))
@@ -1103,8 +1111,8 @@ MENUCOMMAND(gatcollision2)
 					break;
 				}
 			}
-			worldpos = cVector3(5*x+5, -5000, 5*y+5);
-			highup = worldpos + cVector3(0, 10000, 0);
+			worldpos = bEngine::math::cVector3(5*x+5, -5000, 5*y+5);
+			highup = worldpos + bEngine::math::cVector3(0, 10000, 0);
 			for(ii = 0; ii < cGraphics::world->models.size(); ii++)
 			{
 				if(cGraphics::world->models[ii]->collides(worldpos, highup, &colPos))
@@ -1176,12 +1184,12 @@ public:
 	}
 };
 
-inline void setLightIntensity(BYTE* buf, int yy, int xx, cVector3 worldpos, std::vector<std::vector<int> >* = NULL );
+inline void setLightIntensity(BYTE* buf, int yy, int xx, bEngine::math::cVector3 worldpos, std::vector<std::vector<int> >* = NULL );
 
 
 
 
-
+/*
 class cLightmapWorker : public cBThread
 {
 	cBThread* parent;
@@ -1227,7 +1235,7 @@ public:
 					{
 						float fx = (xx-1)/6.0f;
 						float fy = (yy-1)/6.0f;
-						cVector3 worldpos = cVector3(	10*x+(10/6.0)*(xx-1), 
+						bEngine::math::cVector3 worldpos = bEngine::math::cVector3(	10*x+(10/6.0)*(xx-1), 
 							-((c->cell1*(1-fx)+c->cell2*(fx)) + (c->cell1*(fy)+c->cell3*(1-fy))-c->cell1),
 							10*y+(10/6.0)*(yy-1));
 						setLightIntensity(buf, yy, xx, worldpos, &cGraphics::world->tiles[c->tileUp].lightsWithShadow);
@@ -1250,7 +1258,7 @@ public:
 						
 						cCube* c2 = &cGraphics::world->cubes[y+1][x];
 						
-						cVector3 worldpos = cVector3(	10*x+(10/6.0)*(xx-1), 
+						bEngine::math::cVector3 worldpos = bEngine::math::cVector3(	10*x+(10/6.0)*(xx-1), 
 							-((1-fy)*c->cell3 + (fy)*c2->cell1),
 							10*y+10);
 						
@@ -1276,7 +1284,7 @@ public:
 						
 						cCube* c2 = &cGraphics::world->cubes[y][x+1];
 						
-						cVector3 worldpos = cVector3(	10*x+10, 
+						bEngine::math::cVector3 worldpos = bEngine::math::cVector3(	10*x+10, 
 							-((1-fy)*c->cell4 + (fy)*c2->cell3),
 							10*y+(10/6.0)*(7-xx));
 						setLightIntensity(buf, yy, xx, worldpos, &cGraphics::world->tiles[c->tileOtherSide].lightsWithShadow);
@@ -1327,7 +1335,7 @@ public:
 	}
 };
 
-
+*/
 
 
 
@@ -1384,7 +1392,7 @@ MENUCOMMAND(dolightmaps2)
 					{
 						float fx = (xx-1)/6.0f;
 						float fy = (yy-1)/6.0f;
-						cVector3 worldpos = cVector3(	10*x+(10/6.0)*(xx-1), 
+						bEngine::math::cVector3 worldpos = bEngine::math::cVector3(	10*x+(10/6.0)*(xx-1), 
 														-((c->cell1*(1-fx)+c->cell2*(fx)) + (c->cell1*(fy)+c->cell3*(1-fy))-c->cell1),
 														10*y+(10/6.0)*(yy-1));
 						setLightIntensity(buf, yy, xx, worldpos);
@@ -1406,7 +1414,7 @@ MENUCOMMAND(dolightmaps2)
 						
 						cCube* c2 = &cGraphics::world->cubes[y+1][x];
 						
-						cVector3 worldpos = cVector3(	10*x+(10/6.0)*(xx-1), 
+						bEngine::math::cVector3 worldpos = bEngine::math::cVector3(	10*x+(10/6.0)*(xx-1), 
 							-((1-fy)*c->cell3 + (fy)*c2->cell1),
 							10*y+10);
 						
@@ -1431,7 +1439,7 @@ MENUCOMMAND(dolightmaps2)
 
 						cCube* c2 = &cGraphics::world->cubes[y][x+1];
 
-						cVector3 worldpos = cVector3(	10*x+10, 
+						bEngine::math::cVector3 worldpos = bEngine::math::cVector3(	10*x+10, 
 														-((1-fy)*c->cell4 + (fy)*c2->cell3),
 														10*y+(10/6.0)*(7-xx));
 						setLightIntensity(buf, yy, xx, worldpos);
@@ -1650,7 +1658,7 @@ MENUCOMMAND(smoothlightmaps)
 					}
 				}
 			}
-			buf[x+cGraphics::world->width*6*y] = min(max(total / count,0),255);
+			buf[x+cGraphics::world->width*6*y] = bEngine::math::min(bEngine::math::max<int>(total / count,0),255);
 		}
 	}
 
@@ -1888,14 +1896,14 @@ MENUCOMMAND(tempfunc)
 
 bool mouseovertexture(cMenu* src)
 {
-	if (cGraphics::texturePreview == NULL || cGraphics::texturePreview->getfilename() != cSettings::roDir + "data\\texture\\" + ((cMenuItem*)src)->data)
+	if (cGraphics::texturePreview == NULL || cGraphics::texturePreview->getFilename() != cSettings::roDir + "data\\texture\\" + ((cMenuItem*)src)->data)
 	{
-		cGraphics::texturePreview = cTextureCache::load(cSettings::roDir + "data\\texture\\" + ((cMenuItem*)src)->data);
+		cGraphics::texturePreview = bEngine::cTextureCache::load(cSettings::roDir + "data\\texture\\" + ((cMenuItem*)src)->data);
 		return false;
 	}
 	else
 	{
-		cTextureCache::unload(cGraphics::texturePreview);
+		bEngine::cTextureCache::unload(cGraphics::texturePreview);
 		cGraphics::texturePreview = NULL;
 		return true;
 	}
@@ -1904,7 +1912,7 @@ bool mouseouttexture(cMenu* src)
 {
 	if (cGraphics::texturePreview != NULL)
 	{
-		cTextureCache::unload(cGraphics::texturePreview);
+		bEngine::cTextureCache::unload(cGraphics::texturePreview);
 		cGraphics::texturePreview = NULL;
 	}
 	return true;
@@ -1981,7 +1989,7 @@ MENUCOMMAND(cleantextures)
 				if(cGraphics::world->tiles[i].texture > i)
 					cGraphics::world->tiles[i].texture--;
 			}
-			cTextureCache::unload(cGraphics::world->textures[i]->texture);
+			bEngine::cTextureCache::unload(cGraphics::world->textures[i]->texture);
 			delete cGraphics::world->textures[i];
 			cGraphics::world->textures.erase(cGraphics::world->textures.begin() + i);
 		}
@@ -2221,7 +2229,7 @@ MENUCOMMAND(exportmapfiles)
 
 		for(unsigned int ii = 0; ii < cGraphics::world->models[i]->textures.size(); ii++)
 		{
-			std::string file = cGraphics::world->models[i]->textures[ii]->getfilename();
+			std::string file = cGraphics::world->models[i]->textures[ii]->getFilename();
 			cFile* pF = cFileSystem::open(file);
 			if(pF->location != -1)
 			{
@@ -2592,10 +2600,10 @@ void readscript(std::string filename)
 	while(!pFile->eof())
 	{
 		std::string line = pFile->readLine();
-		if(ltrim(rtrim(line)).substr(0,4) == "npc:")
-			readscript(ltrim(ltrim(rtrim(line)).substr(4)));
-		else if(ltrim(rtrim(line)).substr(0,7) == "import:")
-			readscript(ltrim(ltrim(rtrim(line)).substr(7)));
+		if(bEngine::util::trim(line).substr(0,4) == "npc:")
+			readscript(bEngine::util::trim(bEngine::util::trim(line)).substr(4));
+		else if(bEngine::util::trim(line).substr(0,7) == "import:")
+			readscript(bEngine::util::trim(bEngine::util::trim(line).substr(7)));
 		else if(line.find("\tscript\t") != std::string::npos || line.find("\tduplicate") != std::string::npos)
 		{
 			char mapname[256];
@@ -2718,7 +2726,7 @@ void checknpcs()
 		{
 			cGraphics::draw(false);
 			SDL_GL_SwapBuffers();
-			cGraphics::worldContainer->camera.rot += 22.5f*((float)PI/180.0f);
+			cGraphics::worldContainer->camera.rot += 22.5f*((float)bEngine::math::PI/180.0f);
 			while(cGraphics::worldContainer->camera.rot > 360)
 				cGraphics::worldContainer->camera.rot-=360;
 
@@ -2862,7 +2870,7 @@ MENUCOMMAND(addfavorite)
 	l.color.x = atof(n->FirstChildElement("color")->Attribute("r"));
 	l.color.y = atof(n->FirstChildElement("color")->Attribute("g"));
 	l.color.z = atof(n->FirstChildElement("color")->Attribute("b"));
-	l.pos = cVector3(cGraphics::cMouse::click3dx/5, cGraphics::cMouse::click3dy+atoi(n->FirstChildElement("height")->FirstChild()->Value()), cGraphics::cMouse::click3dz/5);
+	l.pos = bEngine::math::cVector3(cGraphics::cMouse::click3dx/5, cGraphics::cMouse::click3dy+atoi(n->FirstChildElement("height")->FirstChild()->Value()), cGraphics::cMouse::click3dz/5);
 	l.todo = std::string(buf, 40);
 	l.todo2 = atoi(n->FirstChildElement("brightness")->FirstChild()->Value());
 	l.maxLightIncrement = atoi(n->FirstChildElement("maxlight")->FirstChild()->Value());
@@ -3187,7 +3195,7 @@ MENUCOMMAND(rebuildtexturefile)
 			if(ext == ".jpg" || ext == ".bmp" || ext == ".tga")
 			{
 				std::string filename = it->first.substr(cSettings::roDir.length()+13);
-				filename = "RO/" + replace(filename, "\\", "/").substr(0, filename.length()-4) + "|" + filename + "\r\n";
+				filename = "RO/" + bEngine::util::replace(filename, "\\", "/").substr(0, filename.length()-4) + "|" + filename + "\r\n";
 				pFile.write(filename.c_str(), filename.length());
 			}
 		}
@@ -3215,7 +3223,7 @@ MENUCOMMAND(rebuildmodelfile)
 			{
 				std::string filename = it->first.substr(cSettings::roDir.length());
 				std::string shortname = filename.substr(11);
-				filename = "RO/" + replace(shortname, "\\", "/").substr(0, shortname.length()-4) + "|" + filename + "\r\n";
+				filename = "RO/" + bEngine::util::replace(shortname, "\\", "/").substr(0, shortname.length()-4) + "|" + filename + "\r\n";
 				pFile.write(filename.c_str(), filename.length());
 			}
 		}
@@ -3242,7 +3250,7 @@ MENUCOMMAND(rebuildsoundsfile)
 			{
 				std::string filename = it->first.substr(cSettings::roDir.length());
 				std::string shortname = filename.substr(9);
-				filename = "RO/" + replace(shortname, "\\", "/").substr(0, shortname.length()-4) + "|" + filename.substr(9) + "\r\n";
+				filename = "RO/" + bEngine::util::replace(shortname, "\\", "/").substr(0, shortname.length()-4) + "|" + filename.substr(9) + "\r\n";
 				pFile.write(filename.c_str(), filename.length());
 			}
 		}
@@ -3286,7 +3294,7 @@ MENUCOMMAND(saveOnline)
 		models[cGraphics::world->models[i]->rofilename] = true;
 		for(unsigned int ii = 0; ii < cGraphics::world->models[i]->textures.size(); ii++)
 		{
-			std::string filename = cGraphics::world->models[i]->textures[ii]->getfilename();
+			std::string filename = cGraphics::world->models[i]->textures[ii]->getFilename();
 			filename = filename.substr(cSettings::roDir.length() + 13);
 			textures[filename] = true;
 		}
@@ -3295,7 +3303,7 @@ MENUCOMMAND(saveOnline)
 	std::string resources;
 
 	resources = "mapname=" + mapname;
-	resources+= "&uid=" + inttostring(1);//TODO
+	resources+= "&uid=" + bEngine::util::intToString(1);//TODO
 	resources+= "&pass=" + password;
 
 
@@ -3309,7 +3317,7 @@ MENUCOMMAND(saveOnline)
 		resources += "&models[]=" + it->first;
 	}
 
-	class cPostFinished : public cDownloadThread::cDownloadThreadFinisher
+/*	class cPostFinished : public cDownloadThread::cDownloadThreadFinisher
 	{
 		std::string mapname;
 		std::string password;
@@ -3430,7 +3438,7 @@ MENUCOMMAND(saveOnline)
 
 	thread->wait();
 	Log(3,0,"Let's go");
-
+*/
 
 	cGraphics::world->save();			
 
@@ -3471,7 +3479,7 @@ MENUCOMMAND(saveOnline)
 		CURLFORM_END);
 	curl_formadd(&post, &last,
 		CURLFORM_COPYNAME, "uid",
-		CURLFORM_COPYCONTENTS, inttostring(1).c_str(), 
+		CURLFORM_COPYCONTENTS, bEngine::util::intToString(1).c_str(), 
 		CURLFORM_END);
 	curl_formadd(&post, &last,
 		CURLFORM_COPYNAME, "pass",
@@ -3487,7 +3495,7 @@ MENUCOMMAND(saveOnline)
 	return true;
 }
 
-inline void setLightIntensity( BYTE* buf, int yy, int xx, cVector3 worldpos, std::vector<std::vector<int> >* lights )
+inline void setLightIntensity( BYTE* buf, int yy, int xx, bEngine::math::cVector3 worldpos, std::vector<std::vector<int> >* lights )
 {
 	int from = 0;
 	unsigned int to = cGraphics::world->lights.size();
@@ -3502,13 +3510,13 @@ inline void setLightIntensity( BYTE* buf, int yy, int xx, cVector3 worldpos, std
 			break;
 		
 		cLight* l = &cGraphics::world->lights[i];
-		cVector3 lightpos = cVector3(l->pos.x*5, l->pos.y, l->pos.z*5);
-		cVector3 diff = worldpos - lightpos;
+		bEngine::math::cVector3 lightpos = bEngine::math::cVector3(l->pos.x*5, l->pos.y, l->pos.z*5);
+		bEngine::math::cVector3 diff = worldpos - lightpos;
 		
 		if(diff.y > 0)
 			continue;
 		
-		float length = diff.magnitude();
+		float length = diff.length();
 		if(length > l->range)
 			continue;
 		
@@ -3536,14 +3544,14 @@ inline void setLightIntensity( BYTE* buf, int yy, int xx, cVector3 worldpos, std
 		
 		if(obstructed != 0)
 		{
-			float intensity = (int)min((int)(l->maxLightIncrement), (int)(pow(1-(length / l->range), l->lightFalloff) * l->todo2));
+			float intensity = (int)bEngine::math::min((int)(l->maxLightIncrement), (int)(pow(1-(length / l->range), l->lightFalloff) * l->todo2));
 			intensity *= obstructed;
 			
-			buf[yy*8 + xx] = min(255, buf[yy*8 + xx] + max(0, (int)(intensity)));
+			buf[yy*8 + xx] = bEngine::math::min(255, buf[yy*8 + xx] + bEngine::math::max(0, (int)(intensity)));
 			
-			buf[64 + 3*(yy*8 + xx)+0] = min(255, buf[64 + 3*(yy*8 + xx)+0] + max(0, (int)(intensity*l->color.x)));
-			buf[64 + 3*(yy*8 + xx)+1] = min(255, buf[64 + 3*(yy*8 + xx)+1] + max(0, (int)(intensity*l->color.y)));
-			buf[64 + 3*(yy*8 + xx)+2] = min(255, buf[64 + 3*(yy*8 + xx)+2] + max(0, (int)(intensity*l->color.z)));
+			buf[64 + 3*(yy*8 + xx)+0] = bEngine::math::min(255, buf[64 + 3*(yy*8 + xx)+0] + bEngine::math::max(0, (int)(intensity*l->color.x)));
+			buf[64 + 3*(yy*8 + xx)+1] = bEngine::math::min(255, buf[64 + 3*(yy*8 + xx)+1] + bEngine::math::max(0, (int)(intensity*l->color.y)));
+			buf[64 + 3*(yy*8 + xx)+2] = bEngine::math::min(255, buf[64 + 3*(yy*8 + xx)+2] + bEngine::math::max(0, (int)(intensity*l->color.z)));
 		}
 	}
 }
@@ -3596,14 +3604,14 @@ MENUCOMMAND(makeMinimaps)
 #endif
 
 		cGraphics::worldContainer->view.topCamera = true;
-		cGraphics::worldContainer->camera.pointer = cVector2(-cGraphics::world->height*10,0);
+		cGraphics::worldContainer->camera.pointer = bEngine::math::cVector2(-cGraphics::world->height*10,0);
 		cGraphics::view.showDot = false;
 		cGraphics::view.showGrid = false;
 		cGraphics::view.showLightmaps = false;
 		cGraphics::view.showGlobalLighting = false;
 		cGraphics::view.showObjects = false;
 		cGraphics::view.showNoTiles = true;
-		cGraphics::noTileColor = cVector3(0,0,0);
+		cGraphics::noTileColor = bEngine::math::cVector3(0,0,0);
 
 		unsigned char *pixels = NULL;
 
@@ -3619,7 +3627,7 @@ MENUCOMMAND(makeMinimaps)
 		int mindist = 0;
 		float minheight = 0;
 
-		cGraphics::worldContainer->camera.height = max(cGraphics::world->height, cGraphics::world->width)*15;
+		cGraphics::worldContainer->camera.height = bEngine::math::max(cGraphics::world->height, cGraphics::world->width)*15;
 		for(int iii = 0; iii < 20; iii++)
 		{
 			if (!cGraphics::draw(false))
@@ -3639,9 +3647,9 @@ MENUCOMMAND(makeMinimaps)
 			int ii;
 			for(ii = 22; ii < screenStats[3]; ii++)
 			{
-				if(	pixels[3*(10+(cGraphics::h()-ii)*screenStats[2])+0] == round(cGraphics::backgroundColor[2]*255) &&
-					pixels[3*(10+(cGraphics::h()-ii)*screenStats[2])+1] == round(cGraphics::backgroundColor[1]*255) &&
-					pixels[3*(10+(cGraphics::h()-ii)*screenStats[2])+2] == round(cGraphics::backgroundColor[0]*255))
+				if(	pixels[3*(10+(cGraphics::h()-ii)*screenStats[2])+0] == round(cGraphics::backgroundColor.v[2]*255) &&
+					pixels[3*(10+(cGraphics::h()-ii)*screenStats[2])+1] == round(cGraphics::backgroundColor.v[1]*255) &&
+					pixels[3*(10+(cGraphics::h()-ii)*screenStats[2])+2] == round(cGraphics::backgroundColor.v[0]*255))
 					yto = cGraphics::h()-ii;
 				else
 					break;
@@ -3682,9 +3690,9 @@ MENUCOMMAND(makeMinimaps)
 
 		for(int ii = cGraphics::w()-257; ii > 0; ii--)
 		{
-			if(	pixels[3*(ii+5*screenStats[2])+0] == round(cGraphics::backgroundColor[2]*255) &&
-				pixels[3*(ii+5*screenStats[2])+1] == round(cGraphics::backgroundColor[1]*255) &&
-				pixels[3*(ii+5*screenStats[2])+2] == round(cGraphics::backgroundColor[0]*255))
+			if(	pixels[3*(ii+5*screenStats[2])+0] == round(cGraphics::backgroundColor.v[2]*255) &&
+				pixels[3*(ii+5*screenStats[2])+1] == round(cGraphics::backgroundColor.v[1]*255) &&
+				pixels[3*(ii+5*screenStats[2])+2] == round(cGraphics::backgroundColor.v[0]*255))
 				xto = ii;
 			else
 				break;

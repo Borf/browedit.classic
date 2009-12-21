@@ -1,3 +1,6 @@
+#include <bengine/forwards.h>
+#include <bengine/texture.h>
+#include <bengine/math/math.h>
 #include "windowtabpanel.h"
 
 #ifdef WIN32
@@ -10,7 +13,6 @@
 #include <font.h>
 #include "window.h"
 #include <graphics.h>
-#include <texture.h>
 
 void cWindowTabPanel::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {
@@ -28,7 +30,7 @@ void cWindowTabPanel::draw(int cutoffleft, int cutoffright, int cutofftop, int c
 	glTranslatef((float)xx, (float)yy, 0);
 	glBindTexture(GL_TEXTURE_2D, parent->texture->texId());
 
-	int hh = h - max(skinTabHeight[0], skinTabHeight[1]);
+	int hh = h - bEngine::math::max(skinTabHeight[0], skinTabHeight[1]);
 
 	glBegin(GL_QUADS);
 		glTexCoord2f(skinLeft/512.0f,					(skinTop-skinTopHeight)/512.0f);		glVertex2d(0,				hh-skinTopHeight);
@@ -79,8 +81,8 @@ void cWindowTabPanel::draw(int cutoffleft, int cutoffright, int cutofftop, int c
 	
 	
 	
-	int maxOverlapLeft = max(skinTabOverlapLeft[0], skinTabOverlapLeft[1]);
-	int maxOverlapRight = max(skinTabOverlapRight[0], skinTabOverlapRight[1]);
+	int maxOverlapLeft = bEngine::math::max(skinTabOverlapLeft[0], skinTabOverlapLeft[1]);
+	int maxOverlapRight = bEngine::math::max(skinTabOverlapRight[0], skinTabOverlapRight[1]);
 
 	for(i = tabs.size()-1; i >= 0 ; i--)
 	{

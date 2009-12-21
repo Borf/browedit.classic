@@ -5,6 +5,7 @@
 #include "windows/spritewindow.h"
 #include "settings.h"
 #include <world.h>
+#include <math.h>
 
 extern bool doneAction;
 
@@ -61,16 +62,16 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 				float mindist = 999999;
 				for(unsigned int i = 0; i < cGraphics::world->sprites.size(); i++)
 				{
-					cVector3 d = cGraphics::world->sprites[i]->pos;
+					bEngine::math::cVector3 d = cGraphics::world->sprites[i]->pos;
 					d.x = d.x;
 					
 					d.x -= cGraphics::cMouse::x3d/5;
 					d.z -= cGraphics::cMouse::z3d/5;
 					d.y = 0;
 
-					if(mindist > d.magnitude())
+					if(mindist > d.length())
 					{
-						mindist = d.magnitude();
+						mindist = d.length();
 						minobj = i;
 					}
 				}
@@ -98,7 +99,7 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 					sprintf(buf, "%i", headid);
 					sprite->loadHead(cSettings::roDir + "data\\sprite\\인간족\\머리통\\" + sexes[sex] + "\\" + buf + "_" + sexes[sex]);
 					
-					sprite->pos = cVector3(cGraphics::cMouse::x3d/5, cGraphics::cMouse::y3d, cGraphics::cMouse::z3d/5);
+					sprite->pos = bEngine::math::cVector3(cGraphics::cMouse::x3d/5, cGraphics::cMouse::y3d, cGraphics::cMouse::z3d/5);
 					cGraphics::world->sprites.push_back(sprite);
 
 					Log(3,0,"Sprite click");
@@ -112,16 +113,16 @@ int cProcessManagement::spriteedit_process_events(SDL_Event &event)
 					float mindist = 999999;
 					for(unsigned int i = 0; i < cGraphics::world->sprites.size(); i++)
 					{
-						cVector3 d = cGraphics::world->sprites[i]->pos;
+						bEngine::math::cVector3 d = cGraphics::world->sprites[i]->pos;
 						d.x = d.x;
 						
 						d.x -= cGraphics::cMouse::x3d/5;
 						d.z -= cGraphics::cMouse::z3d/5;
 						d.y = 0;
 
-						if(mindist > d.magnitude())
+						if(mindist > d.length())
 						{
-							mindist = d.magnitude();
+							mindist = d.length();
 							minobj = i;
 						}
 					}

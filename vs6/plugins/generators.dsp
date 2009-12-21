@@ -70,7 +70,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "PLUGIN_generators_EXPORTS" /Yu"stdafx.h" /FD /GZ /c
-# ADD CPP /nologo /MDd /W3 /Gm /Gi /GR /GX /ZI /Od /I "..\..\libs\include\stlport" /I "..\..\src" /I "..\..\libs\include" /D "WIN32_LEAN_AND_MEAN" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "PLUGIN_EXPORTS" /FD /GZ /c
+# ADD CPP /nologo /MDd /W3 /Gm /Gi /GR /GX /ZI /Od /I "..\..\src" /I "..\..\libs\include" /I "../../libs/bengine" /D "WIN32_LEAN_AND_MEAN" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "PLUGIN_EXPORTS" /FD /GZ /c
 # SUBTRACT CPP /WX /YX /Yc /Yu
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
@@ -81,7 +81,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 opengl32.lib plugin_baseD.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /out:"..\..\plugins\generators.dll" /pdbtype:sept /libpath:"..\..\libs\lib"
+# ADD LINK32 bengineD.lib opengl32.lib plugin_baseD.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /out:"..\..\plugins\generators.dll" /pdbtype:sept /libpath:"..\..\libs\lib" /libpath:"..\..\libs\bengine"
 
 !ENDIF 
 
@@ -99,10 +99,6 @@ SOURCE=..\..\src\plugins\generators\culvertgenerator.cpp
 # Begin Source File
 
 SOURCE=..\..\src\plugins\generators\mazegenerator.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\mymath.cpp
 # End Source File
 # Begin Source File
 

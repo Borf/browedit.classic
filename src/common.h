@@ -112,11 +112,11 @@ typedef int32_t intptr_t;
 #endif
 
 
+#include <bengine/forwards.h>
 
 
 #include <string>
 #include <vector>
-#include "mymath.h"
 
 #define SNAPPINGDIST 10
 #define DRAGBORDER   6
@@ -146,15 +146,15 @@ void log_open(const char*, const char*, int);
 void log_close();
 
 std::vector<std::string> split(std::string, std::string);
-std::string lcase(std::string s);
-std::string ucase(std::string s);
-std::string replace(std::string s, std::string a, std::string b);
-std::string ltrim(std::string s);
-std::string rtrim(std::string s);
-std::string inttostring(int);
-int hex2dec(std::string,int = 0);
-cVector3 hex2floats(std::string);
-void hex2floats(std::string, float*, int=4);
+//std::string lcase(std::string s);
+//std::string ucase(std::string s);
+//std::string replace(std::string s, std::string a, std::string b);
+//std::string ltrim(std::string s);
+//std::string rtrim(std::string s);
+//std::string inttostring(int);
+//int hex2dec(std::string,int = 0);
+//cVector3 hex2floats(std::string);
+//void hex2floats(std::string, float*, int=4);
 
 template <class T> inline bool inbetween(T val, T start, T end)
 {
@@ -256,7 +256,7 @@ template <class T> int linsearch(T needle, std::vector<T> &haystack)
 }
 
 
-bool LineIntersectPolygon( cVector3 *,int,cVector3 &,cVector3 &, float &);
+bool LineIntersectPolygon( bEngine::math::cVector3 *,int,bEngine::math::cVector3 &,bEngine::math::cVector3 &, float &);
 
 /*#ifdef WIN32
 #ifndef _CONSOLE

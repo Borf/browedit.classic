@@ -3,6 +3,7 @@
 #include "texturebrushwindow.h"
 
 #include <graphics.h>
+#include <math.h>
 
 cTextureToolsWindow::cWindowToolbarButton::cWindowToolbarButton( cWindow* parent, std::string image, eTool t, TiXmlDocument* totalskin ) : cWindowPictureBox(parent)
 {

@@ -45,6 +45,20 @@ public:
 	bool onKeyDown(int keyid, bool shift);
 };
 
+
+class cWindowIntInputBox : public cWindowInputBox
+{
+	int lastvalue;
+	bool firstTime;
+public:
+	int* intje;
+	cWindowIntInputBox(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+	void draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom);
+	void setInt(int id, int val);
+	bool onKeyDown(int keyid, bool shift);
+};
+
+
 class cWindowStringInputBox : public cWindowInputBox
 {
 	std::string lastvalue;

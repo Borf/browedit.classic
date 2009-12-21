@@ -1,7 +1,6 @@
 #ifndef __RSMEDITWINDOW_H__
 #define __RSMEDITWINDOW_H__
 
-#include <mymath.h>
 #include <wm/window.h>
 
 #include <wm/windowbutton.h>
@@ -9,6 +8,8 @@
 #include <wm/windowpicturebox.h>
 #include <wm/windowscrollpanel.h>
 #include <wm/windowtree.h>
+
+#include <bengine/math/vector3.h>
 
 
 class cRsmModel;
@@ -59,7 +60,7 @@ class cRSMEditWindow : public cWindow
 		float oldy;
 		long rotate;
 
-		cVector3 backgroundcolor;
+		bEngine::math::cVector3 backgroundcolor;
 
 		cWindowModel(cWindow* parent);
 		void draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom);

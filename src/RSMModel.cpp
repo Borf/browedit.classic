@@ -1,14 +1,18 @@
+#include <bengine/forwards.h>
+#include <bengine/util.h>
+#include <bengine/math/math.h>
+#include <bengine/texture.h>
+#include <bengine/texturecache.h>
+
+#include <common.h>
 #include "RSMModel.h"
 #include <filesystem.h>
-#include <texture.h>
-#include <texturecache.h>
 #include <settings.h>
 #include <graphics.h>
 #include <world.h>
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
 #include <map>
-
 
 cRsmModelBase::cRsmModelBase( std::string pFilename)
 {
@@ -42,7 +46,9 @@ cRsmModelBase::cRsmModelBase( std::string pFilename)
 	animLen = pFile->getInt();
 	shadeType = (eShadeType)pFile->getInt();
 	if(ver1 >= 1 && ver2 >= 4)
-		int alpha = pFile->get();
+		alpha = pFile->get();
+	else
+		alpha = 0;
 
 	char unknown[16];
 	pFile->read(unknown, 16);
@@ -52,7 +58,7 @@ cRsmModelBase::cRsmModelBase( std::string pFilename)
 	{
 		char textureName[40];
 		pFile->read(textureName, 40);
-		textures.push_back(cTextureCache::load(cSettings::roDir + "data\\texture\\" + textureName, (eTextureOptions)(TEX_NEARESTFILTER | TEX_NOCLAMP)));
+		textures.push_back(bEngine::cTextureCache::load(cSettings::roDir + "data\\texture\\" + textureName, (bEngine::eTextureOptions)(bEngine::TEX_NEARESTFILTER)));
 	}
 	
 	char buf[40];
@@ -85,18 +91,18 @@ cRsmModelBase::cRsmModelBase( std::string pFilename)
 
 
 
-	bbmin = cVector3(999999, 999999, 999999);
-	bbmax = cVector3(-999999, -999999, -9999999);
+	bbmin = bEngine::math::cVector3(999999, 999999, 999999);
+	bbmax = bEngine::math::cVector3(-999999, -999999, -9999999);
 	root->setBoundingBox(bbmin, bbmax);
 	bbrange = (bbmin + bbmax) / 2.0f;
 
 	
-	realbbmax = cVector3(-999999, -999999, -999999);
-	realbbmin = cVector3(999999, 999999, 999999);
-	cMatrix4x4 mat = cMatrix4x4::makeScale(1,-1,1);
+	realbbmax = bEngine::math::cVector3(-999999, -999999, -999999);
+	realbbmin = bEngine::math::cVector3(999999, 999999, 999999);
+	bEngine::math::cMatrix4x4 mat = bEngine::math::cMatrix4x4::makeScale(1,-1,1);
 	root->setBoundingBox2(mat, realbbmin, realbbmax);
 	realbbrange = (realbbmax + realbbmin) / 2.0f;
-	maxrange = max(max(realbbmax.x, -realbbmin.x), max(max(realbbmax.y, -realbbmin.y), max(realbbmax.z, -realbbmin.z)));
+	maxrange = bEngine::math::max(bEngine::math::max(realbbmax.x, -realbbmin.x), bEngine::math::max(bEngine::math::max(realbbmax.y, -realbbmin.y), bEngine::math::max(realbbmax.z, -realbbmin.z)));
 
 }
 
@@ -150,7 +156,7 @@ cRsmModel::cMesh::cMesh(cFile* pFile, cRsmModelBase* model, int ver1, int ver2)
 
 
 	nVertices = pFile->getInt();
-	vertices = new cVector3[nVertices];
+	vertices = new bEngine::math::cVector3[nVertices];
 	for(i = 0; i < nVertices; i++)
 	{
 		vertices[i].x = pFile->getFloat();
@@ -159,7 +165,7 @@ cRsmModel::cMesh::cMesh(cFile* pFile, cRsmModelBase* model, int ver1, int ver2)
 	}
 
 	nTexVertices = pFile->getInt();
-	texVertices = new cVector2[nTexVertices];
+	texVertices = new bEngine::math::cVector2[nTexVertices];
 	for(i = 0; i < nTexVertices; i++)
 	{
 		if(ver1 >= 1 && ver2 >= 2)
@@ -175,7 +181,7 @@ cRsmModel::cMesh::cMesh(cFile* pFile, cRsmModelBase* model, int ver1, int ver2)
 		faces[i].vertices[1] = pFile->getword();
 		faces[i].vertices[2] = pFile->getword();
 
-		faces[i].normal = (vertices[faces[i].vertices[1]] - vertices[faces[i].vertices[0]]).cross(vertices[faces[i].vertices[2]] - vertices[faces[i].vertices[0]]).getnormalized();
+		faces[i].normal = (vertices[faces[i].vertices[1]] - vertices[faces[i].vertices[0]]).cross(vertices[faces[i].vertices[2]] - vertices[faces[i].vertices[0]]).getNormalized();
 
 		faces[i].texvertices[0] = pFile->getword();
 		faces[i].texvertices[1] = pFile->getword();
@@ -211,73 +217,73 @@ void cRsmModelBase::draw()
 cRsmModelBase::~cRsmModelBase()
 {
 	for(unsigned int i = 0; i < textures.size(); i++)
-		cTextureCache::unload(textures[i]);
+		bEngine::cTextureCache::unload(textures[i]);
 	textures.clear();
 }
 
-bool cRsmModelBase::collides( cMatrix4x4 &mat, cVector3 from, cVector3 to, cVector3* colPos )
+bool cRsmModelBase::collides( bEngine::math::cMatrix4x4 &mat, bEngine::math::cVector3 from, bEngine::math::cVector3 to, bEngine::math::cVector3* colPos )
 {
-	cVector3 triangle[4];
+	bEngine::math::cVector3 triangle[4];
 	float bla;
 	
 	bool intersects = false;
 
 	while(true)
 	{
-		triangle[0] = mat * cVector3(realbbmin.x, -realbbmin.y, realbbmin.z);
-		triangle[1] = mat * cVector3(realbbmax.x, -realbbmin.y, realbbmin.z);
-		triangle[2] = mat * cVector3(realbbmax.x, -realbbmin.y, realbbmax.z);
-		triangle[3] = mat * cVector3(realbbmin.x, -realbbmin.y, realbbmax.z);
+		triangle[0] = mat * bEngine::math::cVector3(realbbmin.x, -realbbmin.y, realbbmin.z);
+		triangle[1] = mat * bEngine::math::cVector3(realbbmax.x, -realbbmin.y, realbbmin.z);
+		triangle[2] = mat * bEngine::math::cVector3(realbbmax.x, -realbbmin.y, realbbmax.z);
+		triangle[3] = mat * bEngine::math::cVector3(realbbmin.x, -realbbmin.y, realbbmax.z);
 		if(LineIntersectPolygon(triangle, 4, from, to, bla))
 		{
 			intersects = true;
 			break;
 		}
 
-		triangle[0] = mat * cVector3(realbbmin.x, -realbbmax.y, realbbmin.z);
-		triangle[1] = mat * cVector3(realbbmax.x, -realbbmax.y, realbbmin.z);
-		triangle[2] = mat * cVector3(realbbmax.x, -realbbmax.y, realbbmax.z);
-		triangle[3] = mat * cVector3(realbbmin.x, -realbbmax.y, realbbmax.z);
+		triangle[0] = mat * bEngine::math::cVector3(realbbmin.x, -realbbmax.y, realbbmin.z);
+		triangle[1] = mat * bEngine::math::cVector3(realbbmax.x, -realbbmax.y, realbbmin.z);
+		triangle[2] = mat * bEngine::math::cVector3(realbbmax.x, -realbbmax.y, realbbmax.z);
+		triangle[3] = mat * bEngine::math::cVector3(realbbmin.x, -realbbmax.y, realbbmax.z);
 		if(LineIntersectPolygon(triangle, 4, from, to, bla))
 		{
 			intersects = true;
 			break;
 		}
 
-		triangle[0] = mat * cVector3(realbbmin.x, -realbbmax.y, realbbmin.z);
-		triangle[1] = mat * cVector3(realbbmin.x, -realbbmin.y, realbbmin.z);
-		triangle[2] = mat * cVector3(realbbmin.x, -realbbmin.y, realbbmax.z);
-		triangle[3] = mat * cVector3(realbbmin.x, -realbbmax.y, realbbmax.z);
+		triangle[0] = mat * bEngine::math::cVector3(realbbmin.x, -realbbmax.y, realbbmin.z);
+		triangle[1] = mat * bEngine::math::cVector3(realbbmin.x, -realbbmin.y, realbbmin.z);
+		triangle[2] = mat * bEngine::math::cVector3(realbbmin.x, -realbbmin.y, realbbmax.z);
+		triangle[3] = mat * bEngine::math::cVector3(realbbmin.x, -realbbmax.y, realbbmax.z);
 		if(LineIntersectPolygon(triangle, 4, from, to, bla))
 		{
 			intersects = true;
 			break;
 		}
 		
-		triangle[0] = mat * cVector3(realbbmax.x, -realbbmax.y, realbbmin.z);
-		triangle[1] = mat * cVector3(realbbmax.x, -realbbmin.y, realbbmin.z);
-		triangle[2] = mat * cVector3(realbbmax.x, -realbbmin.y, realbbmax.z);
-		triangle[3] = mat * cVector3(realbbmax.x, -realbbmax.y, realbbmax.z);
+		triangle[0] = mat * bEngine::math::cVector3(realbbmax.x, -realbbmax.y, realbbmin.z);
+		triangle[1] = mat * bEngine::math::cVector3(realbbmax.x, -realbbmin.y, realbbmin.z);
+		triangle[2] = mat * bEngine::math::cVector3(realbbmax.x, -realbbmin.y, realbbmax.z);
+		triangle[3] = mat * bEngine::math::cVector3(realbbmax.x, -realbbmax.y, realbbmax.z);
 		if(LineIntersectPolygon(triangle, 4, from, to, bla))
 		{
 			intersects = true;
 			break;
 		}
 		
-		triangle[0] = mat * cVector3(realbbmin.x, -realbbmax.y, realbbmin.z);
-		triangle[1] = mat * cVector3(realbbmin.x, -realbbmin.y, realbbmin.z);
-		triangle[2] = mat * cVector3(realbbmax.x, -realbbmin.y, realbbmin.z);
-		triangle[3] = mat * cVector3(realbbmax.x, -realbbmax.y, realbbmin.z);
+		triangle[0] = mat * bEngine::math::cVector3(realbbmin.x, -realbbmax.y, realbbmin.z);
+		triangle[1] = mat * bEngine::math::cVector3(realbbmin.x, -realbbmin.y, realbbmin.z);
+		triangle[2] = mat * bEngine::math::cVector3(realbbmax.x, -realbbmin.y, realbbmin.z);
+		triangle[3] = mat * bEngine::math::cVector3(realbbmax.x, -realbbmax.y, realbbmin.z);
 		if(LineIntersectPolygon(triangle, 4, from, to, bla))
 		{
 			intersects = true;
 			break;
 		}
 		
-		triangle[0] = mat * cVector3(realbbmin.x, -realbbmax.y, realbbmax.z);
-		triangle[1] = mat * cVector3(realbbmin.x, -realbbmin.y, realbbmax.z);
-		triangle[2] = mat * cVector3(realbbmax.x, -realbbmin.y, realbbmax.z);
-		triangle[3] = mat * cVector3(realbbmax.x, -realbbmax.y, realbbmax.z);
+		triangle[0] = mat * bEngine::math::cVector3(realbbmin.x, -realbbmax.y, realbbmax.z);
+		triangle[1] = mat * bEngine::math::cVector3(realbbmin.x, -realbbmin.y, realbbmax.z);
+		triangle[2] = mat * bEngine::math::cVector3(realbbmax.x, -realbbmin.y, realbbmax.z);
+		triangle[3] = mat * bEngine::math::cVector3(realbbmax.x, -realbbmax.y, realbbmax.z);
 		if(LineIntersectPolygon(triangle, 4, from, to, bla))
 		{
 			intersects = true;
@@ -294,7 +300,7 @@ bool cRsmModelBase::collides( cMatrix4x4 &mat, cVector3 from, cVector3 to, cVect
 	return intersects;
 }
 
-void cRsmModelBase::setTexture( cTexture* oldTexture, cTexture* newTexture )
+void cRsmModelBase::setTexture( bEngine::cTexture* oldTexture, bEngine::cTexture* newTexture )
 {
 	root->setTexture(oldTexture, newTexture);
 	for(unsigned int i = 0; i < textures.size(); i++)
@@ -311,33 +317,33 @@ void cRsmModelBase::setSelection( cMesh* mesh )
 
 void cRsmModel::setHeight()
 {
-	cMatrix4x4 mat;
-	mat *= cMatrix4x4::makeTranslation(5*pos.x, -pos.y, 5*pos.z);
-	mat *= cMatrix4x4::makeRotation(-rot.z, 0.0, 0.0, 1.0);
-	mat *= cMatrix4x4::makeRotation(-rot.x, 1.0, 0.0, 0.0);	
-	mat *= cMatrix4x4::makeRotation(rot.y, 0.0, 1.0, 0.0);
-	mat *= cMatrix4x4::makeScale(scale.x, -scale.y, scale.z);
-	mat *= cMatrix4x4::makeTranslation(-realbbrange.x, realbbmin.y, -realbbrange.z);
+	bEngine::math::cMatrix4x4 mat;
+	mat *= bEngine::math::cMatrix4x4::makeTranslation(5*pos.x, -pos.y, 5*pos.z);
+	mat *= bEngine::math::cMatrix4x4::makeRotation(-rot.z, 0.0, 0.0, 1.0);
+	mat *= bEngine::math::cMatrix4x4::makeRotation(-rot.x, 1.0, 0.0, 0.0);	
+	mat *= bEngine::math::cMatrix4x4::makeRotation(rot.y, 0.0, 1.0, 0.0);
+	mat *= bEngine::math::cMatrix4x4::makeScale(scale.x, -scale.y, scale.z);
+	mat *= bEngine::math::cMatrix4x4::makeTranslation(-realbbrange.x, realbbmin.y, -realbbrange.z);
 
-	cVector3 bboxmin = mat * realbbmin;
-	cVector3 bboxmax = mat * realbbmax;
+	bEngine::math::cVector3 bboxmin = mat * realbbmin;
+	bEngine::math::cVector3 bboxmax = mat * realbbmax;
 
-	for(int x = min(bboxmin.x, bboxmax.x); x < max(bboxmin.x, bboxmax.x); x++)
+	for(int x = bEngine::math::min(bboxmin.x, bboxmax.x); x < bEngine::math::max(bboxmin.x, bboxmax.x); x++)
 	{
-		for(int y = min(bboxmin.z, bboxmax.z); y < max(bboxmin.z, bboxmax.z); y++)
+		for(int y = bEngine::math::min(bboxmin.z, bboxmax.z); y < bEngine::math::max(bboxmin.z, bboxmax.z); y++)
 		{
-			cGraphics::world->cubes[y/10][x/10].minHeight = min(cGraphics::world->cubes[y/10][x/10].minHeight, min(bboxmin.y, bboxmax.y));
-			cGraphics::world->cubes[y/10][x/10].maxHeight = max(cGraphics::world->cubes[y/10][x/10].maxHeight, max(bboxmin.y, bboxmax.y));
+			cGraphics::world->cubes[y/10][x/10].minHeight = bEngine::math::min(cGraphics::world->cubes[y/10][x/10].minHeight, bEngine::math::min(bboxmin.y, bboxmax.y));
+			cGraphics::world->cubes[y/10][x/10].maxHeight =bEngine::math:: max(cGraphics::world->cubes[y/10][x/10].maxHeight, bEngine::math::max(bboxmin.y, bboxmax.y));
 		}
 	}
 
 
 }
-bool cRsmModelBase::cMesh::collides( cMatrix4x4 &mat, cVector3 from, cVector3 to, cVector3* colPos )
+bool cRsmModelBase::cMesh::collides( bEngine::math::cMatrix4x4 &mat, bEngine::math::cVector3 from, bEngine::math::cVector3 to, bEngine::math::cVector3* colPos )
 {
-	cMatrix4x4 myMat = mat * getMatrix1(false);
-	cMatrix4x4 mat2 = myMat * getMatrix2();
-	cVector3 triangle[4];
+	bEngine::math::cMatrix4x4 myMat = mat * getMatrix1(false);
+	bEngine::math::cMatrix4x4 mat2 = myMat * getMatrix2();
+	bEngine::math::cVector3 triangle[4];
 	float bla;
 	int i;
 	for(i = 0; i < nFaces; i++)
@@ -424,15 +430,15 @@ void cRsmModel::draw()
 	glPopMatrix();
 }
 
-bool cRsmModel::collides( cVector3 from, cVector3 to, cVector3* colPos )
+bool cRsmModel::collides( bEngine::math::cVector3 from, bEngine::math::cVector3 to, bEngine::math::cVector3* colPos )
 {
-	cMatrix4x4 mat;
-	mat *= cMatrix4x4::makeTranslation(5*pos.x, -pos.y, 5*pos.z);
-	mat *= cMatrix4x4::makeRotation(-rot.z, 0.0, 0.0, 1.0);
-	mat *= cMatrix4x4::makeRotation(-rot.x, 1.0, 0.0, 0.0);	
-	mat *= cMatrix4x4::makeRotation(rot.y, 0.0, 1.0, 0.0);
-	mat *= cMatrix4x4::makeScale(scale.x, -scale.y, scale.z);
-	mat *= cMatrix4x4::makeTranslation(-realbbrange.x, realbbmin.y, -realbbrange.z);
+	bEngine::math::cMatrix4x4 mat;
+	mat *= bEngine::math::cMatrix4x4::makeTranslation(5*pos.x, -pos.y, 5*pos.z);
+	mat *= bEngine::math::cMatrix4x4::makeRotation(-rot.z, 0.0, 0.0, 1.0);
+	mat *= bEngine::math::cMatrix4x4::makeRotation(-rot.x, 1.0, 0.0, 0.0);	
+	mat *= bEngine::math::cMatrix4x4::makeRotation(rot.y, 0.0, 1.0, 0.0);
+	mat *= bEngine::math::cMatrix4x4::makeScale(scale.x, -scale.y, scale.z);
+	mat *= bEngine::math::cMatrix4x4::makeTranslation(-realbbrange.x, realbbmin.y, -realbbrange.z);
 
 	return cRsmModelBase::collides(mat, from, to, colPos);
 }
@@ -475,9 +481,9 @@ void cRsmModelBase::cMesh::draw()
 		glBegin(GL_TRIANGLES);
 		for(int ii = 0; ii < 3; ii++)
 		{
-			glNormal3fv(faces[i].normal.data);
+			glNormal3fv(faces[i].normal.v);
 			glTexCoord2f(texVertices[faces[i].texvertices[ii]].x, texVertices[faces[i].texvertices[ii]].y);
-			glVertex3fv(vertices[faces[i].vertices[ii]].data);
+			glVertex3fv(vertices[faces[i].vertices[ii]].v);
 		}
 		glEnd();
 	}
@@ -492,36 +498,39 @@ void cRsmModelBase::cMesh::draw()
 	}
 }
 
-void cRsmModelBase::cMesh::setBoundingBox(cVector3 &_bbmin, cVector3 &_bbmax)
+void cRsmModelBase::cMesh::setBoundingBox(bEngine::math::cVector3 &_bbmin, bEngine::math::cVector3 &_bbmax)
 {
+	int c;
 	int i;
-	bbmin = cVector3(9999999, 9999999, 9999999);
-	bbmax = cVector3(-9999999, -9999999, -9999999);
+	bbmin = bEngine::math::cVector3(9999999, 9999999, 9999999);
+	bbmax = bEngine::math::cVector3(-9999999, -9999999, -9999999);
 
 	if(parent != NULL)
-		bbmin = bbmax = cVector3(0,0,0);
+		bbmin = bbmax = bEngine::math::cVector3(0,0,0);
 
-	cMatrix4x4 myMat = offset;
+	bEngine::math::cMatrix4x4 myMat = offset;
 	for(i = 0; i < nFaces; i++)
 	{
 		for(int ii = 0; ii < 3; ii++)
 		{
-			cVector3 v = myMat * vertices[faces[i].vertices[ii]];
+			bEngine::math::cVector3 v = myMat * vertices[faces[i].vertices[ii]];
 			if(parent != NULL || children.size() != 0)
 				v += pos + pos_;
-			for(int c = 0; c < 3; c++)
+			for(c = 0; c < 3; c++)
+
 			{
-				bbmin[c] = min(bbmin[c], v[c]);
-				bbmax[c] = max(bbmax[c], v[c]);
+				bbmin.v[c] = bEngine::math::min(bbmin.v[c], v.v[c]);
+				bbmax.v[c] = bEngine::math::max(bbmax.v[c], v.v[c]);
 			}
 		}
 	}
 	bbrange = (bbmin + bbmax) / 2.0f;
 
+	for(c = 0; c < 3; c++)
 	for(i = 0; i < 3; i++)
 	{
-		_bbmax[i] = max(_bbmax[i], bbmax[i]);
-		_bbmin[i] = min(_bbmin[i], bbmin[i]);
+		_bbmax.v[c] = bEngine::math::max(_bbmax.v[c], bbmax.v[c]);
+		_bbmin.v[c] = bEngine::math::min(_bbmin.v[c], bbmin.v[c]);
 	}
 
 	for(i = 0; i < (int)children.size(); i++)
@@ -530,23 +539,23 @@ void cRsmModelBase::cMesh::setBoundingBox(cVector3 &_bbmin, cVector3 &_bbmax)
 }
 
 
-void cRsmModelBase::cMesh::setBoundingBox2(cMatrix4x4 &mat, cVector3 &bbmin_, cVector3 &bbmax_)
+void cRsmModelBase::cMesh::setBoundingBox2(bEngine::math::cMatrix4x4 &mat, bEngine::math::cVector3 &bbmin_, bEngine::math::cVector3 &bbmax_)
 {
-	cMatrix4x4 myMat = mat * getMatrix1();
-	cMatrix4x4 mat2 = myMat * getMatrix2();
+	bEngine::math::cMatrix4x4 myMat = mat * getMatrix1();
+	bEngine::math::cMatrix4x4 mat2 = myMat * getMatrix2();
 	int i;
 	for(i = 0; i < nFaces; i++)
 	{
 		for(int ii = 0; ii < 3; ii++)
 		{
-			cVector3 v = mat2 * vertices[faces[i].vertices[ii]];
-			bbmin_.x = min(bbmin_.x, v.x);
-			bbmin_.y = min(bbmin_.y, v.y);
-			bbmin_.z = min(bbmin_.z, v.z);
+			bEngine::math::cVector3 v = mat2 * vertices[faces[i].vertices[ii]];
+			bbmin_.x = bEngine::math::min(bbmin_.x, v.x);
+			bbmin_.y = bEngine::math::min(bbmin_.y, v.y);
+			bbmin_.z = bEngine::math::min(bbmin_.z, v.z);
 			
-			bbmax_.x = max(bbmax_.x, v.x);
-			bbmax_.y = max(bbmax_.y, v.y);
-			bbmax_.z = max(bbmax_.z, v.z);
+			bbmax_.x = bEngine::math::max(bbmax_.x, v.x);
+			bbmax_.y = bEngine::math::max(bbmax_.y, v.y);
+			bbmax_.z = bEngine::math::max(bbmax_.z, v.z);
 		}
 	}
 	
@@ -554,7 +563,7 @@ void cRsmModelBase::cMesh::setBoundingBox2(cMatrix4x4 &mat, cVector3 &bbmin_, cV
 		children[i]->setBoundingBox2(myMat, bbmin_, bbmax_);	
 }
 
-cMatrix4x4 cRsmModelBase::cMesh::getMatrix1(bool animate)
+bEngine::math::cMatrix4x4 cRsmModelBase::cMesh::getMatrix1(bool animate)
 {
 	if(cache1)
 		return matrix1Cache;
@@ -563,16 +572,16 @@ cMatrix4x4 cRsmModelBase::cMesh::getMatrix1(bool animate)
 	if(parent == NULL)
 	{
 		if(children.size() > 0)
-			matrix1Cache *= cMatrix4x4::makeTranslation(-base->bbrange.x, -base->bbmax.y, -base->bbrange.z);
+			matrix1Cache *= bEngine::math::cMatrix4x4::makeTranslation(-base->bbrange.x, -base->bbmax.y, -base->bbrange.z);
 		else
-			matrix1Cache *= cMatrix4x4::makeTranslation(0, -base->bbmax.y+base->bbrange.y, 0);
+			matrix1Cache *= bEngine::math::cMatrix4x4::makeTranslation(0, -base->bbmax.y+base->bbrange.y, 0);
 	}
 
 	if(parent != NULL)
-		matrix1Cache *= cMatrix4x4::makeTranslation(pos.x, pos.y, pos.z);
+		matrix1Cache *= bEngine::math::cMatrix4x4::makeTranslation(pos.x, pos.y, pos.z);
 	
 	if(nAnimationFrames == 0)
-		matrix1Cache *= cMatrix4x4::makeRotation(rotangle*180.0/3.14159, rotaxis.x, rotaxis.y, rotaxis.z);
+		matrix1Cache *= bEngine::math::cMatrix4x4::makeRotation(rotangle*180.0/3.14159, rotaxis.x, rotaxis.y, rotaxis.z);
 	else
 	{
 		if(animate)
@@ -595,15 +604,15 @@ cMatrix4x4 cRsmModelBase::cMesh::getMatrix1(bool animate)
 
 			float interval = ((float) (lastTick-animationFrames[current].time)) / ((float) (animationFrames[next].time-animationFrames[current].time));
 #if 1
-			cQuaternion quat(animationFrames[current].quat, animationFrames[next].quat, interval);
+			bEngine::math::cQuaternion quat(animationFrames[current].quat, animationFrames[next].quat, interval);
 #else
-			cQuaternion quat(
+			bEngine::math::cQuaternion quat(
 				(1-interval)*animationFrames[current].quat.x + interval*animationFrames[next].quat.x,
 				(1-interval)*animationFrames[current].quat.y + interval*animationFrames[next].quat.y,
 				(1-interval)*animationFrames[current].quat.z + interval*animationFrames[next].quat.z,
 				(1-interval)*animationFrames[current].quat.w + interval*animationFrames[next].quat.w);
 #endif
-			quat = quat.normalize();
+			quat = quat.getNormalized();
 
 			matrix1Cache *= quat.getRotationMatrix();
 
@@ -614,19 +623,19 @@ cMatrix4x4 cRsmModelBase::cMesh::getMatrix1(bool animate)
 		else
 		{
 			
-			matrix1Cache *= animationFrames[0].quat.normalize().getRotationMatrix();
+			matrix1Cache *= animationFrames[0].quat.getNormalized().getRotationMatrix();
 
 		}
 	}
 	
-	matrix1Cache *= cMatrix4x4::makeScale(scale.x, scale.y, scale.z);
+	matrix1Cache *= bEngine::math::cMatrix4x4::makeScale(scale.x, scale.y, scale.z);
 	
 	if(nAnimationFrames == 0)
 		cache1 = true;
 	return matrix1Cache;
 }
 
-cMatrix4x4 cRsmModelBase::cMesh::getMatrix2()
+bEngine::math::cMatrix4x4 cRsmModelBase::cMesh::getMatrix2()
 {
 	if(cache2)
 		return matrix2Cache;
@@ -634,10 +643,10 @@ cMatrix4x4 cRsmModelBase::cMesh::getMatrix2()
 	matrix2Cache.setIdentity();
 
 	if(parent == NULL && children.size() == 0)
-		matrix2Cache *= cMatrix4x4::makeTranslation(-base->bbrange.x, -base->bbrange.y, -base->bbrange.z);
+		matrix2Cache *= bEngine::math::cMatrix4x4::makeTranslation(-base->bbrange.x, -base->bbrange.y, -base->bbrange.z);
 	
 	if(parent != NULL || children.size() != 0)
-		matrix2Cache *= cMatrix4x4::makeTranslation(pos_.x, pos_.y, pos_.z);
+		matrix2Cache *= bEngine::math::cMatrix4x4::makeTranslation(pos_.x, pos_.y, pos_.z);
 	
 	matrix2Cache *= offset;
 	cache2 = true;
@@ -645,7 +654,7 @@ cMatrix4x4 cRsmModelBase::cMesh::getMatrix2()
 	return matrix2Cache;
 }
 
-void cRsmModelBase::cMesh::setTexture( cTexture* oldTexture, cTexture* newTexture )
+void cRsmModelBase::cMesh::setTexture( bEngine::cTexture* oldTexture, bEngine::cTexture* newTexture )
 {
 	unsigned int i;
 	for(i = 0; i < textures.size(); i++)
@@ -662,4 +671,64 @@ void cRsmModelBase::cMesh::setSelection( cMesh* mesh )
 	selected = this == mesh;
 	for(unsigned int i = 0; i < children.size(); i++)
 		children[i]->setSelection(mesh);
+}
+
+
+
+
+void cRsmModelBase::save(std::string pFilename)
+{
+	char header[4] = { 'G','R','S','M' };
+	int ver1 = 0;
+	int ver2 = 0;
+	int animLen = 0;
+	int nTextures = 0;
+	std::string mainNodeName = "";
+	int numMeshes = 0;
+	
+	int i;
+	root = NULL;
+	
+	std::ofstream pFile(pFilename.c_str(), std::ios_base::out | std::ios_base::binary);
+	if (pFile.bad() || !pFile.good())
+	{
+		Log(2,0,"cRsmModel: Could not open '%s'", pFilename.c_str());
+		return;
+	}
+	
+	pFile.write(header, 4);//header
+	pFile.put(1); // version1
+	pFile.put(5); // version2
+
+	i = 0;
+	pFile.write((char*)&i, 4);			//animlen
+	pFile.write((char*)&shadeType,4);
+	pFile.put(alpha);
+	pFile.write(unknown, 16);
+	pFile.write((char*)&nTextures,4);
+	
+	for(i = 0; i < nTextures; i++)
+	{
+		char textureName[40];
+		strcpy(textureName, bEngine::util::replace(textures[i]->getFilename(), cSettings::roDir + "data\\texture\\", "").c_str());
+		pFile.write(textureName, 40);
+	}
+	
+/*	char buf[40];
+	pFile->read(buf, 40);
+	mainNodeName = buf;
+	numMeshes = pFile->getInt();
+	if(numMeshes != 1)
+		Sleep(0);
+	std::map<std::string, cMesh*, std::less<std::string> > meshes;
+	for(i = 0; i < numMeshes; i++)
+	{
+		cMesh* mesh = new cMesh(pFile, this, ver1, ver2);
+		meshes[mesh->name] = mesh;
+	}*/
+}
+
+cRsmModelBase::cMesh::cFrame::cFrame() : quat(0,0,0,0)
+{
+	
 }

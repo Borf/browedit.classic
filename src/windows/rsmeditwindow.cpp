@@ -15,6 +15,11 @@
 #include <RSMModel.h>
 #include <windows/rsmmeshprops.h>
 
+#include <bengine/util.h>
+#include <bengine/math/math.h>
+#include <bengine/texture.h>
+#include <bengine/texturecache.h>
+
 cRSMEditWindow::cWindowOpenButton::cWindowOpenButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent,skin)
 {
 	alignment = ALIGN_TOPLEFT;
@@ -37,7 +42,7 @@ void cRSMEditWindow::cWindowOpenButton::onClick()
 	ofn.lStructSize = sizeof(ofn);
 	ofn.hwndOwner = hWnd;
 	
-	strcpy(((cRSMEditWindow*)parent)->filename, replace(((cRSMEditWindow*)parent)->filename, "/", "\\").c_str());
+	strcpy(((cRSMEditWindow*)parent)->filename, bEngine::util::replace(((cRSMEditWindow*)parent)->filename, "/", "\\").c_str());
 	ofn.lpstrFile = ((cRSMEditWindow*)parent)->filename;
 	ofn.nMaxFile = 256;
 	ofn.lpstrFilter = "All\0*.*\0RO Models\0*.rsm\0";
@@ -71,8 +76,10 @@ void cRSMEditWindow::cWindowSaveButton::onClick()
 {
 	if(!cWM::confirmWindow("Are you sure you want to overwrite this file?"))
 		return;
-	int i;
-	unsigned int ii;
+
+
+	((cWindowModel*)parent->objects["model"])->model->save(((cRSMEditWindow*)parent)->filename);
+/*
 	cFile* pFile = cFileSystem::open(((cRSMEditWindow*)parent)->filename);
 	
 	char buffer[100];
@@ -119,7 +126,7 @@ void cRSMEditWindow::cWindowSaveButton::onClick()
 	
 	pFile2.write(rest.c_str(), rest.length()-1);
 	
-	pFile2.close();
+	pFile2.close();*/
 }
 
 cRSMEditWindow::cWindowSaveAsButton::cWindowSaveAsButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent,skin)
@@ -133,95 +140,41 @@ cRSMEditWindow::cWindowSaveAsButton::cWindowSaveAsButton( cWindow* parent, TiXml
 void cRSMEditWindow::cWindowSaveAsButton::onClick()
 {
 	std::string oldfilename = ((cRSMEditWindow*)parent)->filename;
-	unsigned int i;
-	cFile* pFile = cFileSystem::open(((cRSMEditWindow*)parent)->filename);
-	
-	char buffer[100];
-	char header[100];
-	pFile->read(header, 6); // header
-	if (header[5] == 4)
-		pFile->read(header+6, 25); // unknown
-	else
-		pFile->read(header+6, 24); // unknown
-	
-	pFile->read(buffer, 4); // ntextures;
-	long nTextures;
-	memcpy((char*)&nTextures, buffer, 4);
-	
-	for(i = 0; (int)i < nTextures; i++)
-		pFile->read(buffer, 40);
-	
-	std::string rest = "";
-	while(!pFile->eof())
-	{
-		char buf[1024];
-		int read = pFile->read(buf, 1024);
-		rest += std::string(buf, read);
-	}
-	
-	pFile->close();
-	
 #ifdef WIN32
-				char curdir[255];
-				getcwd(curdir, 255);
-				SDL_SysWMinfo wmInfo;
-				SDL_VERSION(&wmInfo.version);
-				SDL_GetWMInfo(&wmInfo);
-				HWND hWnd = wmInfo.window;
-				OPENFILENAME ofn;
-				ZeroMemory(&ofn, sizeof(ofn));
-				ofn.lStructSize = sizeof(ofn);
-				ofn.hwndOwner = hWnd;
-				strcpy(((cRSMEditWindow*)parent)->filename, replace(((cRSMEditWindow*)parent)->filename, "/", "\\").c_str());
-				ofn.lpstrFile = ((cRSMEditWindow*)parent)->filename;
-				ofn.nMaxFile = 256;
-				ofn.lpstrFilter = "All\0*.*\0RO models\0*.rsm\0";
-				ofn.nFilterIndex = 2;
-				ofn.lpstrFileTitle = NULL;
-				ofn.nMaxFileTitle = 0;
-				ofn.lpstrInitialDir = NULL;
-				ofn.Flags = OFN_PATHMUSTEXIST | OFN_ENABLESIZING | OFN_OVERWRITEPROMPT;
-				if (!GetSaveFileName(&ofn))
-				{
-					strcpy(((cRSMEditWindow*)parent)->filename, oldfilename.c_str());
-					chdir(curdir);
-				}
-				else
-				{
-					if (strcmp(((cRSMEditWindow*)parent)->filename+strlen(((cRSMEditWindow*)parent)->filename)-4, ".rsm") != 0)
-					{ 
-						strcpy(((cRSMEditWindow*)parent)->filename, (std::string(((cRSMEditWindow*)parent)->filename) + ".rsm").c_str());
-					}
-					chdir(curdir);
-					
-					
-					std::ofstream pFile2;
-					pFile2.open(((cRSMEditWindow*)parent)->filename, std::ios_base::out | std::ios_base::binary);
-					pFile2.write(header, header[5] == 4 ? 31 : 30);
-					
-					
-					cWindowModel* model = ((cWindowModel*)parent->objects["model"]);
-					long nTextures = model->model->textures.size();
-					pFile2.write((char*)&nTextures, 4);
-					for(i = 0; i < model->model->textures.size(); i++)
-					{
-						char bufje[40];
-						ZeroMemory(bufje, 40);
-						std::string t = model->model->textures[i]->getfilename();
-						t = t.substr(cSettings::roDir.length()+13);
-						strcpy(bufje, t.c_str());
-						pFile2.write(bufje, 40);
-					}
-					
-					pFile2.write(rest.c_str(), rest.length()-1);
-					
-					pFile2.close();
-					
-					
-					
-					
-					
-				}
+	char curdir[255];
+	getcwd(curdir, 255);
+	SDL_SysWMinfo wmInfo;
+	SDL_VERSION(&wmInfo.version);
+	SDL_GetWMInfo(&wmInfo);
+	HWND hWnd = wmInfo.window;
+	OPENFILENAME ofn;
+	ZeroMemory(&ofn, sizeof(ofn));
+	ofn.lStructSize = sizeof(ofn);
+	ofn.hwndOwner = hWnd;
+	strcpy(((cRSMEditWindow*)parent)->filename, bEngine::util::replace(((cRSMEditWindow*)parent)->filename, "/", "\\").c_str());
+	ofn.lpstrFile = ((cRSMEditWindow*)parent)->filename;
+	ofn.nMaxFile = 256;
+	ofn.lpstrFilter = "All\0*.*\0RO models\0*.rsm\0";
+	ofn.nFilterIndex = 2;
+	ofn.lpstrFileTitle = NULL;
+	ofn.nMaxFileTitle = 0;
+	ofn.lpstrInitialDir = NULL;
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_ENABLESIZING | OFN_OVERWRITEPROMPT;
+	if (!GetSaveFileName(&ofn))
+	{
+		strcpy(((cRSMEditWindow*)parent)->filename, oldfilename.c_str());
+		chdir(curdir);
+	}
+	else
+	{
+		if (strcmp(((cRSMEditWindow*)parent)->filename+strlen(((cRSMEditWindow*)parent)->filename)-4, ".rsm") != 0)
+		{ 
+			strcpy(((cRSMEditWindow*)parent)->filename, (std::string(((cRSMEditWindow*)parent)->filename) + ".rsm").c_str());
+		}
+		chdir(curdir);
+		((cWindowModel*)parent->objects["model"])->model->save(((cRSMEditWindow*)parent)->filename);
+	}
+				
 #endif
 }
 
@@ -231,7 +184,7 @@ cRSMEditWindow::cWindowModel::cWindowModel( cWindow* parent ) : cWindowObject(pa
 	model = NULL;
 	roty=0;
 	oldy = -1;
-	backgroundcolor = cVector3(1,1,1);
+	backgroundcolor = bEngine::math::cVector3(1,1,1);
 	rotate = 0;
 }
 
@@ -450,12 +403,15 @@ class cObjectTreeNode : public cWindowTree::cTreeNode
 {
 public:
 	cRsmModelBase::cMesh* mesh;
+	std::string getText()
+	{
+		return mesh->name;
+	}
 };
 
 cWindowTree::cTreeNode* buildObjectTree(cRsmModelBase::cMesh* mesh)
 {
 	cObjectTreeNode* bla = new cObjectTreeNode();
-	bla->text = mesh->name;
 	bla->mesh = mesh;
 	bla->open = true;
 
@@ -480,17 +436,17 @@ void cRSMEditWindow::open()
 	o->alignment = ALIGN_TOPLEFT;
 
 	o->model = new cRsmModel(filename);
-	o->model->pos = cVector3(0,0.7f*o->getWidth(),1000);
+	o->model->pos = bEngine::math::cVector3(0,0.7f*o->getWidth(),1000);
 	
 	float sc = 0;
-	sc = max(sc, o->model->bbmax[0] - o->model->bbmin[0]);
-	sc = max(sc, o->model->bbmax[1] - o->model->bbmin[1]);
-	sc = max(sc, o->model->bbmax[2] - o->model->bbmin[2]);
-	sc = 1.5f*min(o->getHeight(),o->getWidth()) / sc;
+	sc = bEngine::math::max(sc, o->model->bbmax.v[0] - o->model->bbmin.v[0]);
+	sc = bEngine::math::max(sc, o->model->bbmax.v[1] - o->model->bbmin.v[1]);
+	sc = bEngine::math::max(sc, o->model->bbmax.v[2] - o->model->bbmin.v[2]);
+	sc = 1.5f*bEngine::math::min(o->getHeight(),o->getWidth()) / sc;
 	
-	o->model->scale = cVector3(sc,sc,sc);
+	o->model->scale = bEngine::math::cVector3(sc,sc,sc);
 	
-	o->model->rot = cVector3(0,0,0);
+	o->model->rot = bEngine::math::cVector3(0,0,0);
 	o->roty = -15;
 	
 	objects["model"] = o;
@@ -503,19 +459,19 @@ void cRSMEditWindow::open()
 	for(i = 0; i < o->model->textures.size(); i++)
 	{
 		cWindowObject* oo = new cWindowModelTexture(this,i);
-		oo->setText(0, o->model->textures[i]->getfilename());
+		oo->setText(0, o->model->textures[i]->getFilename());
 		oo->moveTo(0, 130*i);
 		scroll->objects.push_back(oo);
 		scroll->innerheight = 130*i+130;
 		
 		oo = new cWindowLabel(this);
-		oo->setText(0, "#000000" + o->model->textures[i]->getfilename().substr(cSettings::roDir.length() + 13));
+		oo->setText(0, "#000000" + o->model->textures[i]->getFilename().substr(cSettings::roDir.length() + 13));
 		oo->moveTo(5,130*i+111);
 		oo->alignment = ALIGN_TOPLEFT;
 		scroll->objects.push_back(oo);
 		
 		oo = new cWindowLabel(this);
-		oo->setText(0, "#FF0000" + o->model->textures[i]->getfilename().substr(cSettings::roDir.length() + 13));
+		oo->setText(0, "#FF0000" + o->model->textures[i]->getFilename().substr(cSettings::roDir.length() + 13));
 		oo->moveTo(4,130*i+110);
 		oo->alignment = ALIGN_TOPLEFT;
 		scroll->objects.push_back(oo);
@@ -547,10 +503,10 @@ void cRSMEditWindow::changetexture( std::string newtexture )
 	cWindowModel* model = ((cWindowModel*)objects["model"]);
 	
 	Log(3,0,"Old tid: %i", model->model->textures[selected]->texId());
-	cTexture* oldTexture = model->model->textures[selected];
+	bEngine::cTexture* oldTexture = model->model->textures[selected];
 
-	model->model->setTexture(oldTexture, cTextureCache::load(cSettings::roDir + newtexture));
-	cTextureCache::unload(oldTexture);
+	model->model->setTexture(oldTexture, bEngine::cTextureCache::load(cSettings::roDir + newtexture));
+	bEngine::cTextureCache::unload(oldTexture);
 	Log(3,0,"new vtid: %i", model->model->textures[selected]->texId());
 	
 	cWindowScrollPanel* scroll = (cWindowScrollPanel*)objects["scroll"];

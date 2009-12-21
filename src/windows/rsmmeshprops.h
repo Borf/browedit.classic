@@ -4,6 +4,7 @@
 #include <wm/window.h>
 #include <wm/windowbutton.h>
 #include <wm/windowinputbox.h>
+#include <wm/windowlistbox.h>
 #include <RSMModel.h>
 
 
@@ -19,6 +20,28 @@ public:
 		}
 		bool onKeyDown(int keyid, bool shift);
 	};
+
+	class cAnimationFrameList : public cWindowListBox
+	{
+	public:
+		cAnimationFrameList(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		void onChange(int oldValue);
+	};
+
+	class cButtonAddFrame : public cWindowButton
+	{
+	public:
+		cButtonAddFrame(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		void onClick();
+	};
+
+	class cButtonRemoveFrame : public cWindowButton
+	{
+	public:
+		cButtonRemoveFrame(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		void onClick();
+	};
+	
 
 
 	cRsmModelBase::cMesh* mesh;

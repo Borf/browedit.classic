@@ -12,41 +12,44 @@
 #include <direct.h>
 #endif
 #include <memory.h>
-#include "mymath.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include "tinyxml/tinyxml.h"
 #include <settings.h>
 const float EPSILON = 0.001f;
 
+#include <math.h>
 #include <SDL/SDL_syswm.h>
 #include <direct.h>
 #include <commdlg.h>
+#include <bengine/util.h>
+#include <bengine/math/vector2.h>
+#include <bengine/math/vector3.h>
 
 
-float DistLineToPoint(cVector2 LineStart, cVector2 LineEnd, cVector2 point)
+float DistLineToPoint(bEngine::math::cVector2 LineStart, bEngine::math::cVector2 LineEnd, bEngine::math::cVector2 point)
 {
     float LineMag;
     float U;
-    cVector2 Intersection;
+    bEngine::math::cVector2 Intersection;
  
-	cVector2 diff = (LineEnd-LineStart);
+	bEngine::math::cVector2 diff = (LineEnd-LineStart);
 
-    LineMag = diff.Magnitude();
+    LineMag = diff.length();
  
     U = ( ( ( point.x - LineStart.x ) * ( LineEnd.x - LineStart.x ) ) +
         ( ( point.y - LineStart.y ) * ( LineEnd.y - LineStart.y ) ) ) /
         ( LineMag * LineMag );
  
     if( U < 0.0f)
-        return (point-LineStart).Magnitude();
+        return (point-LineStart).length();
 	if (U > 1.0f )
-        return (point-LineEnd).Magnitude();
+        return (point-LineEnd).length();
  
     Intersection.x = LineStart.x + U * diff.x;
     Intersection.y = LineStart.y + U * diff.y;
  
-    return (point-Intersection).Magnitude();
+    return (point-Intersection).length();
 }
 
 
@@ -369,16 +372,16 @@ float min(float x, float y)
 
 struct tPlane
 {
-	cVector3 Normal;
+	bEngine::math::cVector3 Normal;
 	float D;
 };
 
 bool LinePlaneIntersection(tPlane &Plane, 
-			   cVector3 &StartLine,
-			   cVector3 &EndLine,
+			   bEngine::math::cVector3 &StartLine,
+			   bEngine::math::cVector3 &EndLine,
 			   float &t)
 {
-	cVector3 LineDir = EndLine - StartLine;			
+	bEngine::math::cVector3 LineDir = EndLine - StartLine;			
 	float Denominator = LineDir.dot(Plane.Normal);
 	if (fabs(Denominator) <= EPSILON) // Parallel to the plane
 	{		
@@ -393,9 +396,9 @@ bool LinePlaneIntersection(tPlane &Plane,
 	return true;
 }
 
-cVector3 Normal(cVector3* vertices)
+bEngine::math::cVector3 Normal(bEngine::math::cVector3* vertices)
 {
-	cVector3 b1, b2, normal;
+	bEngine::math::cVector3 b1, b2, normal;
 	b1 = vertices[0] - vertices[1];
 	b2 = vertices[2] - vertices[1];
 
@@ -403,16 +406,16 @@ cVector3 Normal(cVector3* vertices)
 	normal.y = b1.z * b2.x - b1.x * b2.z;
 	normal.z = b1.x * b2.y - b1.y * b2.x;
 
-	normal.normalize();
+	normal = normal.getNormalized();
 	return normal;
 	
 }
 
 
-bool LineIntersectPolygon( cVector3 *Vertices, 
+bool LineIntersectPolygon( bEngine::math::cVector3 *Vertices, 
 			   int NumVertices,
-			   cVector3 &StartLine,
-			   cVector3 &EndLine,
+			   bEngine::math::cVector3 &StartLine,
+			   bEngine::math::cVector3 &EndLine,
 			  float &t)
 {
 	tPlane Plane;
@@ -423,7 +426,7 @@ bool LineIntersectPolygon( cVector3 *Vertices,
 	if (!LinePlaneIntersection(Plane, StartLine, EndLine, tt))
 		return false;	
 	
-	cVector3 Intersection = StartLine + (EndLine - StartLine) * tt;			
+	bEngine::math::cVector3 Intersection = StartLine + (EndLine - StartLine) * tt;			
 	
 /*	if (Intersection == EndLine)
 		return false;*/
@@ -432,9 +435,9 @@ bool LineIntersectPolygon( cVector3 *Vertices,
 	{
 		tPlane EdgePlane;		
 		int NextVertex = (Vertex + 1) % NumVertices;
-		cVector3 EdgeVector = Vertices[NextVertex] - Vertices[Vertex];			
+		bEngine::math::cVector3 EdgeVector = Vertices[NextVertex] - Vertices[Vertex];			
 		EdgePlane.Normal = EdgeVector.cross(Plane.Normal);
-		EdgePlane.Normal.normalize();
+		EdgePlane.Normal = EdgePlane.Normal.getNormalized();
 		EdgePlane.D = - EdgePlane.Normal.dot(Vertices[Vertex]);
 											
 		if (EdgePlane.Normal.dot(Intersection) + EdgePlane.D < 0.0f)
@@ -499,25 +502,16 @@ const char* GetMsg(std::string s)
 }
 
 
-int hex2dec(std::string s, int mult)
-{
-	static std::string lookup = "0123456789ABCDEF";
-	int val = lookup.find(s[s.length()-1]);
-	if(s.length() == 1)
-		return pow(16.0,mult) * val;
-	else
-		return pow(16.0,mult) * val  + hex2dec(s.substr(0,s.length()-1), mult+1);
-}
 
-cVector3 hex2floats(std::string c)
+bEngine::math::cVector3 hex2floats(std::string c)
 {
-	return cVector3(hex2dec(c.substr(0,2))/256.0f, hex2dec(c.substr(2,2))/256.0f, hex2dec(c.substr(4,2))/256.0f);
+	return bEngine::math::cVector3(bEngine::util::hex2dec(c.substr(0,2))/256.0f, bEngine::util::hex2dec(c.substr(2,2))/256.0f, bEngine::util::hex2dec(c.substr(4,2))/256.0f);
 }
 
 void hex2floats( std::string c, float* floats, int count)
 {
 	for(int i = 0; i < count; i++)
-		floats[i] = hex2dec(c.substr(2*i, 2)) / 255.0f;
+		floats[i] = bEngine::util::hex2dec(c.substr(2*i, 2)) / 255.0f;
 }
 
 

@@ -6,10 +6,10 @@
 class cUndoObjectDelete : public cUndoItem
 {
 	std::string filename;
-	cVector3 pos;
+	bEngine::math::cVector3 pos;
 	int id;
-	cVector3 scale;
-	cVector3 rot;
+	bEngine::math::cVector3 scale;
+	bEngine::math::cVector3 rot;
 public:
 	cUndoObjectDelete(int i)
 	{

@@ -39,7 +39,7 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 
 					if (!ctrl && !alt)
 					{
-						cVector3 diff = cGraphics::world->models[i]->pos - cGraphics::selectionCenter;
+						bEngine::math::cVector3 diff = cGraphics::world->models[i]->pos - cGraphics::selectionCenter;
 
 						if(shift)
 						{
@@ -54,15 +54,15 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 					}
 					if(ctrl && !alt)
 					{
-						cVector2 diff = cVector2(cGraphics::world->models[i]->pos.x - cGraphics::selectionCenter.x, cGraphics::world->models[i]->pos.z - cGraphics::selectionCenter.z);
+						bEngine::math::cVector2 diff = bEngine::math::cVector2(cGraphics::world->models[i]->pos.x - cGraphics::selectionCenter.x, cGraphics::world->models[i]->pos.z - cGraphics::selectionCenter.z);
 						if(!shift)
 						{
 							cGraphics::world->models[i]->rot.y -= (cGraphics::cMouse::x - cGraphics::cMouse::xOld)/10.0f;
-							diff.rotate((cGraphics::cMouse::x-cGraphics::cMouse::xOld)/10.0f);
+							diff = diff.getRotated((cGraphics::cMouse::x-cGraphics::cMouse::xOld)/10.0f);
 						}
 						else
 						{
-							diff.rotate((cGraphics::cMouse::x-cGraphics::cMouse::xOld)*9);
+							diff = diff.getRotated((cGraphics::cMouse::x-cGraphics::cMouse::xOld)*9);
 							cGraphics::world->models[i]->rot.y -= (cGraphics::cMouse::x - cGraphics::cMouse::xOld)*9;
 						}
 
@@ -72,7 +72,7 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 					}
 					if(alt && !ctrl)
 					{
-						cVector2 diff = cVector2(cGraphics::world->models[i]->pos.x - cGraphics::selectionCenter.x, cGraphics::world->models[i]->pos.z - cGraphics::selectionCenter.z);
+						bEngine::math::cVector2 diff = bEngine::math::cVector2(cGraphics::world->models[i]->pos.x - cGraphics::selectionCenter.x, cGraphics::world->models[i]->pos.z - cGraphics::selectionCenter.z);
 						diff = diff * (1 + ((cGraphics::cMouse::x - cGraphics::cMouse::xOld) / 10.0f));
 						cGraphics::world->models[i]->pos.x = cGraphics::selectionCenter.x + diff.x;
 						cGraphics::world->models[i]->pos.z = cGraphics::selectionCenter.z + diff.y;
@@ -83,7 +83,7 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 				if(!ctrl && !alt)
 				{
 					int count = 0;
-					cGraphics::selectionCenter = cVector3(0,0,0);
+					cGraphics::selectionCenter = bEngine::math::cVector3(0,0,0);
 					for(unsigned int i = 0; i < cGraphics::world->models.size(); i++)
 					{
 						if (cGraphics::world->models[i]->selected)
@@ -125,7 +125,7 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 
 				for(i = 0; i < cGraphics::world->models.size(); i++)
 				{
-					cVector3* pos = &cGraphics::world->models[i]->pos;
+					bEngine::math::cVector3* pos = &cGraphics::world->models[i]->pos;
 					if (pos->x*5 > cGraphics::cMouse::x3dStart && pos->x*5 < cGraphics::cMouse::x3d && pos->z*5 > cGraphics::cMouse::z3dStart && pos->z*5 < cGraphics::cMouse::z3d)
 					{
 						cGraphics::world->models[i]->selected = !alt;
@@ -146,7 +146,7 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 				{
 					cGraphics::groupeditmode = !cGraphics::groupeditmode;
 					int count = 0;
-					cGraphics::selectionCenter = cVector3(0,0,0);
+					cGraphics::selectionCenter = bEngine::math::cVector3(0,0,0);
 					for(unsigned int i = 0; i < cGraphics::world->models.size(); i++)
 					{
 						if (cGraphics::world->models[i]->selected)
@@ -162,7 +162,7 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 				{
 					cGraphics::groupeditmode = !cGraphics::groupeditmode;
 					int count = 0;
-					cGraphics::selectionCenter = cVector3(0,0,0);
+					cGraphics::selectionCenter = bEngine::math::cVector3(0,0,0);
 					for(unsigned int i = 0; i < cGraphics::world->models.size(); i++)
 					{
 						if (cGraphics::world->models[i]->selected)
@@ -185,7 +185,7 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 						{
 							cGraphics::world->models[i]->selected = false;
 							cRsmModel* model = new cRsmModel(cGraphics::world->models[i]->filename);
-							model->pos = cGraphics::world->models[i]->pos + cVector3(4,0,4);
+							model->pos = cGraphics::world->models[i]->pos + bEngine::math::cVector3(4,0,4);
 							model->scale = cGraphics::world->models[i]->scale;
 							model->rot = cGraphics::world->models[i]->rot;
 							model->selected = true;

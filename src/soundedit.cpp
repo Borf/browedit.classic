@@ -11,6 +11,7 @@
 #include <windows/objectwindow.h>
 #include <wm/windowinputbox.h>
 #include <filesystem.h>
+#include <math.h>
 
 extern bool doneAction;
 extern void mainloop();
@@ -66,16 +67,16 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 				float mindist = 999999;
 				for(unsigned int i = 0; i < cGraphics::world->sounds.size(); i++)
 				{
-					cVector3 d = cGraphics::world->sounds[i].pos;
+					bEngine::math::cVector3 d = cGraphics::world->sounds[i].pos;
 					d.x = d.x;
 					
 					d.x -= cGraphics::cMouse::x3d/5;
 					d.z -= cGraphics::cMouse::z3d/5;
 					d.y = 0;
 
-					if(mindist > d.magnitude())
+					if(mindist > d.length())
 					{
-						mindist = d.magnitude();
+						mindist = d.length();
 						minobj = i;
 					}
 				}
@@ -91,11 +92,11 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 					if(w)
 					{
 						w->show();
-						((cSoundSelectWindow*)w)->newPos = cVector3(cGraphics::cMouse::x3d, cGraphics::cMouse::y3d, cGraphics::cMouse::z3d);
+						((cSoundSelectWindow*)w)->newPos = bEngine::math::cVector3(cGraphics::cMouse::x3d, cGraphics::cMouse::y3d, cGraphics::cMouse::z3d);
 						((cSoundSelectWindow*)w)->selectedSound = NULL;
 					}
 					else
-						cWM::addWindow(new cSoundSelectWindow(cVector3(cGraphics::cMouse::x3d, cGraphics::cMouse::y3d, cGraphics::cMouse::z3d)));
+						cWM::addWindow(new cSoundSelectWindow(bEngine::math::cVector3(cGraphics::cMouse::x3d, cGraphics::cMouse::y3d, cGraphics::cMouse::z3d)));
 					
 
 				}
@@ -107,16 +108,16 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 					float mindist = 999999;
 					for(unsigned int i = 0; i < cGraphics::world->sounds.size(); i++)
 					{
-						cVector3 d = cGraphics::world->sounds[i].pos;
+						bEngine::math::cVector3 d = cGraphics::world->sounds[i].pos;
 						d.x = d.x;
 						
 						d.x -= cGraphics::cMouse::x3d/5;
 						d.z -= cGraphics::cMouse::z3d/5;
 						d.y = 0;
 
-						if(mindist > d.magnitude())
+						if(mindist > d.length())
 						{
-							mindist = d.magnitude();
+							mindist = d.length();
 							minobj = i;
 						}
 					}

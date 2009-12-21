@@ -15,6 +15,8 @@
 #include <tinyxml/tinyxml.h>
 #include "plugins/base/interface.h"
 
+#include <bengine/forwards.h>
+
 class cTexture;
 class cTextureModel;
 class cSprite;
@@ -86,18 +88,18 @@ public:
 	float maxHeight;
 	float minHeight;
 	void calcNormal();
-	cVector3 normal;
-	cVector3 vNormal1;
-	cVector3 vNormal2;
-	cVector3 vNormal3;
-	cVector3 vNormal4;
+	bEngine::math::cVector3 normal;
+	bEngine::math::cVector3 vNormal1;
+	bEngine::math::cVector3 vNormal2;
+	bEngine::math::cVector3 vNormal3;
+	bEngine::math::cVector3 vNormal4;
 
 };
 
 class cTextureContainer : public cBrowInterface::cPluginTexture
 {
 public:
-	cTexture* texture;
+	bEngine::cTexture* texture;
 	std::string RoFilename;
 	std::string RoFilename2;
 	GLuint texId();
@@ -133,18 +135,18 @@ public:
 class cQuadTreeNode
 {
 public:
-	int load(std::vector<cVector3>&, int index, int level);
-	void save(std::vector<cVector3>&);
+	int load(std::vector<bEngine::math::cVector3>&, int index, int level);
+	void save(std::vector<bEngine::math::cVector3>&);
 	void generate(float w, float h, float, float,int);
 	void draw(int level);
 
 	void recalculate();
-	cVector3 box1;
-	cVector3 box2;
+	bEngine::math::cVector3 box1;
+	bEngine::math::cVector3 box2;
 
 
-	cVector3 range1;
-	cVector3 range2;
+	bEngine::math::cVector3 range1;
+	bEngine::math::cVector3 range2;
 
 	cQuadTreeNode* child1;
 	cQuadTreeNode* child2;
@@ -179,8 +181,8 @@ public:
 	//Correct light information. by Henko
 	int lightLongitude;
 	int lightLatitude;
-	cVector3	diffuse;
-	cVector3	ambient;
+	bEngine::math::cVector3	diffuse;
+	bEngine::math::cVector3	ambient;
 	float ambintensity;
 };
 
@@ -223,7 +225,7 @@ public:
 	cTextureModel*						sound;
 	cTextureModel*						effect;
 	
-	std::vector<cVector3>				quadTreeFloats;
+	std::vector<bEngine::math::cVector3>				quadTreeFloats;
 	void								setHeight();
 	cQuadTreeNode* root;
 	

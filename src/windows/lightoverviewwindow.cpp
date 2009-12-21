@@ -1,4 +1,5 @@
 #include "lightoverviewwindow.h"
+#include <bengine/math/math.h>
 
 #include <menu.h>
 #include <menucommands.h>
@@ -36,7 +37,7 @@ cLightOverViewWindow::cLightOverViewTreeNode* cLightOverViewWindow::cLightOverVi
 		
 		for(unsigned int i = 0; i < children.size(); i++)
 		{
-			if(children[i]->text == firstpart)
+			if(children[i]->getText() == firstpart)
 			{
 				return ((cLightOverViewTreeNode*)children[i])->addNodeTree(secondpart);
 			}
@@ -147,7 +148,7 @@ void cLightOverViewWindow::cLightOverViewTree::getObject( cLight m )
 			
 			selected = nn->getselectionnr();
 			if(selected < liststart || selected > liststart+(int)i)
-				liststart = min((int)values.size()-i+1 , selected-(i/2));
+				liststart = bEngine::math::min((int)values.size()-i+1 , selected-(i/2));
 			if(liststart < 0)
 				liststart = 0;
 			break;

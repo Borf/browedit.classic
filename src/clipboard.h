@@ -67,10 +67,10 @@ public:
 class cClipboardObject : public cClipBoardContents
 {
 public:
-	cVector3 clipboardRot;
-	cVector3 clipboardScale;
-	cVector3 pos;
-	cVector3 pos2;
+	bEngine::math::cVector3 clipboardRot;
+	bEngine::math::cVector3 clipboardScale;
+	bEngine::math::cVector3 pos;
+	bEngine::math::cVector3 pos2;
 	std::string clipboardFile;
 	std::string clipboardName;
 	float clipboardY;

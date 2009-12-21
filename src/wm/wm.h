@@ -1,13 +1,14 @@
 #ifndef __WM_H__
 #define __WM_H__
 
-class cFont;
-class cTexture;
 
 #include <vector>
 #include <string>
 #include "window.h"
 
+#include <bengine/forwards.h>
+
+class cFont;
 class TiXmlDocument;
 class cInputWindowCaller;
 class cConfirmWindowCaller;
@@ -52,7 +53,7 @@ public:
 
 	//properties
 	static std::vector<cWindow*>	windows; //vector of windows, 0 = topwindow
-	static cTexture*				texture;
+	static bEngine::cTexture*		texture;
 	static cFont*					font;
 	static TiXmlDocument			skin;
 	static float					color[4];

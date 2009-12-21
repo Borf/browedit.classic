@@ -8,6 +8,8 @@
 #include "windows/objectwindow.h"
 #include "windows/modeloverviewwindow.h"
 #include <clipboard.h>
+#include <bengine/util.h>
+#include <math.h>
 
 #define MENUCOMMAND(x) bool MenuCommand_ ## x (cMenuItem* src)
 MENUCOMMAND(model);
@@ -71,16 +73,16 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 				float mindist = 999999;
 				for(unsigned int i = 0; i < cGraphics::world->models.size(); i++)
 				{
-					cVector3 d = cGraphics::world->models[i]->pos;
+					bEngine::math::cVector3 d = cGraphics::world->models[i]->pos;
 					d.x = d.x;
 					
 					d.x -= cGraphics::cMouse::x3d/5;
 					d.z -= cGraphics::cMouse::z3d/5;
 					d.y = 0;
 
-					if(mindist > d.magnitude())
+					if(mindist > d.length())
 					{
-						mindist = d.magnitude();
+						mindist = d.length();
 						minobj = i;
 					}
 				}
@@ -101,10 +103,10 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 					if (SDL_GetModState() & KMOD_CTRL && cGraphics::previewModel != NULL)
 					{
 						cRsmModel* model = new cRsmModel(cGraphics::previewModel->filename);
-						model->pos = cVector3(cGraphics::cMouse::x3d/5, -cGraphics::cMouse::y3d, cGraphics::cMouse::z3d/5);
-						model->scale = cVector3(1,1,1);
-						model->rot = cVector3(0,0,0);
-						model->name = "Object" + inttostring(rand()%1000);
+						model->pos = bEngine::math::cVector3(cGraphics::cMouse::x3d/5, -cGraphics::cMouse::y3d, cGraphics::cMouse::z3d/5);
+						model->scale = bEngine::math::cVector3(1,1,1);
+						model->rot = bEngine::math::cVector3(0,0,0);
+						model->name = "Object" + bEngine::util::intToString(rand()%1000);
 						model->lightopacity = 1;
 						char buf[100];
 						sprintf(buf, "%s-%i", cGraphics::previewModel->rofilename.c_str(), rand()%100);
@@ -118,16 +120,16 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 						float mindist = 999999;
 						for(unsigned int i = 0; i < cGraphics::world->models.size(); i++)
 						{
-							cVector3 d = cGraphics::world->models[i]->pos;
+							bEngine::math::cVector3 d = cGraphics::world->models[i]->pos;
 							d.x = d.x;
 							
 							d.x -= cGraphics::cMouse::x3d/5;
 							d.z -= cGraphics::cMouse::z3d/5;
 							d.y = 0;
 
-							if(mindist > d.magnitude())
+							if(mindist > d.length())
 							{
-								mindist = d.magnitude();
+								mindist = d.length();
 								minobj = i;
 							}
 						}
@@ -365,7 +367,7 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 				if (cGraphics::worldContainer->settings.selectedObject != -1)
 				{
 					cGraphics::worldContainer->undoStack->push(new cUndoChangeObject(cGraphics::worldContainer->settings.selectedObject));
-					cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->rot = cVector3(0,0,0);
+					cGraphics::world->models[cGraphics::worldContainer->settings.selectedObject]->rot = bEngine::math::cVector3(0,0,0);
 				}
 				break;
 			case SDLK_SPACE:

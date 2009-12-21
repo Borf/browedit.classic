@@ -1,16 +1,16 @@
 #ifndef __TEXTUREMODEL_H__
 #define __TEXTUREMODEL_H__
 
-class cTexture;
-#include <mymath.h>
+#include <bengine/forwards.h>
+#include <bengine/math/vector3.h>
 
 class cTextureModel
 {
 private:
-	cTexture* tex;
+	bEngine::cTexture* tex;
 public:
-	cVector3 boundingbox1;
-	cVector3 boundingbox2;
+	bEngine::math::cVector3 boundingbox1;
+	bEngine::math::cVector3 boundingbox2;
 
 	cTextureModel();
 	virtual ~cTextureModel();

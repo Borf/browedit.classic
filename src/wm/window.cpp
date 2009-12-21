@@ -1,5 +1,5 @@
 #include <common.h>
-#include <texture.h>
+#include <bengine/texture.h>
 #include <font.h>
 #include "windowobject.h"
 #include "window.h"
@@ -17,9 +17,10 @@
 #ifndef __NOXML__
 #include <settings.h>
 #endif
+#include <bengine/util.h>
 
 
-cWindow::cWindow(cTexture* t, cFont* f, TiXmlDocument* skin)
+cWindow::cWindow(bEngine::cTexture* t, cFont* f, TiXmlDocument* skin)
 {
 	if(!t)
 		t = cWM::texture;
@@ -50,14 +51,14 @@ cWindow::cWindow(cTexture* t, cFont* f, TiXmlDocument* skin)
 	saveProperties = "";
 
 	std::string color = skin->FirstChildElement("skin")->FirstChildElement("window")->FirstChildElement("fontcolor")->FirstChild()->Value();
-	fontColor[0] = hex2dec(color.substr(0,2)) / 256.0f;
-	fontColor[1] = hex2dec(color.substr(2,2)) / 256.0f;
-	fontColor[2] = hex2dec(color.substr(4,2)) / 256.0f;
+	fontColor[0] = bEngine::util::hex2dec(color.substr(0,2)) / 256.0f;
+	fontColor[1] = bEngine::util::hex2dec(color.substr(2,2)) / 256.0f;
+	fontColor[2] = bEngine::util::hex2dec(color.substr(4,2)) / 256.0f;
 
 	color = skin->FirstChildElement("skin")->FirstChildElement("window")->FirstChildElement("title")->FirstChildElement("fontcolor")->FirstChild()->Value();
-	titleColor[0] = hex2dec(color.substr(0,2)) / 256.0f;
-	titleColor[1] = hex2dec(color.substr(2,2)) / 256.0f;
-	titleColor[2] = hex2dec(color.substr(4,2)) / 256.0f;
+	titleColor[0] = bEngine::util::hex2dec(color.substr(0,2)) / 256.0f;
+	titleColor[1] = bEngine::util::hex2dec(color.substr(2,2)) / 256.0f;
+	titleColor[2] = bEngine::util::hex2dec(color.substr(4,2)) / 256.0f;
 
 	titleOffX = atoi(skin->FirstChildElement("skin")->FirstChildElement("window")->FirstChildElement("title")->FirstChildElement("xoff")->FirstChild()->Value());
 	titleOffY = atoi(skin->FirstChildElement("skin")->FirstChildElement("window")->FirstChildElement("title")->FirstChildElement("yoff")->FirstChild()->Value());

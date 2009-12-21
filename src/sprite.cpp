@@ -4,6 +4,7 @@
 #include "filesystem.h"
 #include "settings.h"
 #include <world.h>
+#include <bengine/math/math.h>
 
 #define SPRITESIZE 128
 
@@ -327,7 +328,7 @@ void cSprite::draw()
 		cGraphics::worldContainer->camera.rot+=360;
 
 	if(scale != 1)
-		id = (8*action+((int)(8+direction-((cGraphics::worldContainer->camera.rot/(PI/180.0f)-22.5)/45))%8)) % body->actions.size();
+		id = (8*action+((int)(8+direction-((cGraphics::worldContainer->camera.rot/(bEngine::math::PI/180.0f)-22.5)/45))%8)) % body->actions.size();
 
 	if(body->actions[id]->frameCount <= 0)
 	{

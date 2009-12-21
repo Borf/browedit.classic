@@ -1,8 +1,8 @@
 #ifndef __INTERFACE_H__
 #define __INTERFACE_H__
 
-#include <mymath.h>
 #include <string>//TODO: remove this :P
+#include <bengine/math/vector3.h>
 
 class cWindow;
 class cPluginBase;
@@ -57,9 +57,9 @@ public:
 	class cPluginObject
 	{
 	public:
-		cVector3 pos;
-		cVector3 scale;
-		cVector3 rot;
+		bEngine::math::cVector3 pos;
+		bEngine::math::cVector3 scale;
+		bEngine::math::cVector3 rot;
 	};
 
 	class cPluginRSMModel : public cPluginObject
@@ -71,7 +71,7 @@ public:
 	public:
 		std::string		name;
 		std::string		todo;
-		cVector3	color;
+		bEngine::math::cVector3	color;
 		float		todo2;
 		// custom properties
 		

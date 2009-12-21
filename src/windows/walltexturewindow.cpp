@@ -3,7 +3,7 @@
 #include <graphics.h>
 #include <undo/wallchange.h>
 #include <wm/windowinputbox.h>
-#include <texture.h>
+#include <bengine/texture.h>
 
 cWallTextureWindow::cWallTextureWindow(int tileX, int tileY, bool horizontal ) : cWindow()
 {
@@ -134,22 +134,22 @@ void cWallTextureWindow::cWindowWallTextureBox::draw( int a,int b,int c,int d)
 
 void cWallTextureWindow::cWindowWallTextureBox::drag()
 {
-	if((cVector2(cGraphics::cMouse::xOld-parent->getX(), cGraphics::h()-cGraphics::cMouse::yOld-parent->getY()) - cVector2(realX() + 50+300*tile.u1,	realY() + 350-300*tile.v1)).Magnitude() < 20)
+	if((bEngine::math::cVector2(cGraphics::cMouse::xOld-parent->getX(), cGraphics::h()-cGraphics::cMouse::yOld-parent->getY()) - bEngine::math::cVector2(realX() + 50+300*tile.u1,	realY() + 350-300*tile.v1)).length() < 20)
 	{
 		tile.u1 += (cGraphics::cMouse::x - cGraphics::cMouse::xOld)/300.0f;
 		tile.v1 += (cGraphics::cMouse::y - cGraphics::cMouse::yOld)/300.0f;
 	}
-	else if((cVector2(cGraphics::cMouse::xOld-parent->getX(), cGraphics::h()-cGraphics::cMouse::yOld-parent->getY()) - cVector2(realX() + 50+300*tile.u2,	realY() + 350-300*tile.v2)).Magnitude() < 20)
+	else if((bEngine::math::cVector2(cGraphics::cMouse::xOld-parent->getX(), cGraphics::h()-cGraphics::cMouse::yOld-parent->getY()) - bEngine::math::cVector2(realX() + 50+300*tile.u2,	realY() + 350-300*tile.v2)).length() < 20)
 	{
 		tile.u2 += (cGraphics::cMouse::x - cGraphics::cMouse::xOld)/300.0f;
 		tile.v2 += (cGraphics::cMouse::y - cGraphics::cMouse::yOld)/300.0f;
 	}
-	else if((cVector2(cGraphics::cMouse::xOld-parent->getX(), cGraphics::h()-cGraphics::cMouse::yOld-parent->getY()) - cVector2(realX() + 50+300*tile.u3,	realY() + 350-300*tile.v3)).Magnitude() < 20)
+	else if((bEngine::math::cVector2(cGraphics::cMouse::xOld-parent->getX(), cGraphics::h()-cGraphics::cMouse::yOld-parent->getY()) - bEngine::math::cVector2(realX() + 50+300*tile.u3,	realY() + 350-300*tile.v3)).length() < 20)
 	{
 		tile.u3 += (cGraphics::cMouse::x - cGraphics::cMouse::xOld)/300.0f;
 		tile.v3 += (cGraphics::cMouse::y - cGraphics::cMouse::yOld)/300.0f;
 	}
-	else if((cVector2(cGraphics::cMouse::xOld-parent->getX(), cGraphics::h()-cGraphics::cMouse::yOld-parent->getY()) - cVector2(realX() + 50+300*tile.u4,	realY() + 350-300*tile.v4)).Magnitude() < 20)
+	else if((bEngine::math::cVector2(cGraphics::cMouse::xOld-parent->getX(), cGraphics::h()-cGraphics::cMouse::yOld-parent->getY()) - bEngine::math::cVector2(realX() + 50+300*tile.u4,	realY() + 350-300*tile.v4)).length() < 20)
 	{
 		tile.u4 += (cGraphics::cMouse::x - cGraphics::cMouse::xOld)/300.0f;
 		tile.v4 += (cGraphics::cMouse::y - cGraphics::cMouse::yOld)/300.0f;
@@ -159,51 +159,51 @@ void cWallTextureWindow::cWindowWallTextureBox::drag()
 
 	else if(SDL_GetModState() & KMOD_ALT)
 	{
-		cVector2 center = (cVector2(tile.u1, tile.v1) + cVector2(tile.u2, tile.v2) + cVector2(tile.u3, tile.v3) + cVector2(tile.u4, tile.v4)) / 4.0f;
+		bEngine::math::cVector2 center = (bEngine::math::cVector2(tile.u1, tile.v1) + bEngine::math::cVector2(tile.u2, tile.v2) + bEngine::math::cVector2(tile.u3, tile.v3) + bEngine::math::cVector2(tile.u4, tile.v4)) / 4.0f;
 		
-		cVector2 v;
-		v = cVector2(tile.u1, tile.v1) - center;;
+		bEngine::math::cVector2 v;
+		v = bEngine::math::cVector2(tile.u1, tile.v1) - center;;
 		v = v * (1 + ((cGraphics::cMouse::x - cGraphics::cMouse::xOld)/50.0f));
 		v = v + center;
 		tile.u1 = v.x;		tile.v1 = v.y;
 		
-		v = cVector2(tile.u2, tile.v2) - center;
+		v = bEngine::math::cVector2(tile.u2, tile.v2) - center;
 		v = v * (1 + ((cGraphics::cMouse::x - cGraphics::cMouse::xOld)/50.0f));
 		v = v + center;
 		tile.u2 = v.x;		tile.v2 = v.y;
 		
-		v = cVector2(tile.u3, tile.v3) - center;
+		v = bEngine::math::cVector2(tile.u3, tile.v3) - center;
 		v = v * (1 + ((cGraphics::cMouse::x - cGraphics::cMouse::xOld)/50.0f));
 		v = v + center;
 		tile.u3 = v.x;		tile.v3 = v.y;
 		
-		v = cVector2(tile.u4, tile.v4) - center;
+		v = bEngine::math::cVector2(tile.u4, tile.v4) - center;
 		v = v * (1+((cGraphics::cMouse::x - cGraphics::cMouse::xOld)/50.0f));
 		v = v + center;
 		tile.u4 = v.x;		tile.v4 = v.y;
 	}
  	else if(SDL_GetModState() & KMOD_CTRL)
 	{
-		cVector2 center = (cVector2(tile.u1, tile.v1) + cVector2(tile.u2, tile.v2) + cVector2(tile.u3, tile.v3) + cVector2(tile.u4, tile.v4)) / 4.0f;
+		bEngine::math::cVector2 center = (bEngine::math::cVector2(tile.u1, tile.v1) + bEngine::math::cVector2(tile.u2, tile.v2) + bEngine::math::cVector2(tile.u3, tile.v3) + bEngine::math::cVector2(tile.u4, tile.v4)) / 4.0f;
 
-		cVector2 v;
-		v = cVector2(tile.u1, tile.v1) - center;;
-		v.rotate((cGraphics::cMouse::x - cGraphics::cMouse::xOld)*1.0f);
+		bEngine::math::cVector2 v;
+		v = bEngine::math::cVector2(tile.u1, tile.v1) - center;;
+		v = v.getRotated((cGraphics::cMouse::x - cGraphics::cMouse::xOld)*1.0f);
 		v = v + center;
 		tile.u1 = v.x;		tile.v1 = v.y;
 	
-		v = cVector2(tile.u2, tile.v2) - center;
-		v.rotate((cGraphics::cMouse::x - cGraphics::cMouse::xOld)*1.0f);
+		v = bEngine::math::cVector2(tile.u2, tile.v2) - center;
+		v = v.getRotated((cGraphics::cMouse::x - cGraphics::cMouse::xOld)*1.0f);
 		v = v + center;
 		tile.u2 = v.x;		tile.v2 = v.y;
 		
-		v = cVector2(tile.u3, tile.v3) - center;
-		v.rotate((cGraphics::cMouse::x - cGraphics::cMouse::xOld)*1.0f);
+		v = bEngine::math::cVector2(tile.u3, tile.v3) - center;
+		v = v.getRotated((cGraphics::cMouse::x - cGraphics::cMouse::xOld)*1.0f);
 		v = v + center;
 		tile.u3 = v.x;		tile.v3 = v.y;
 		
-		v = cVector2(tile.u4, tile.v4) - center;
-		v.rotate((cGraphics::cMouse::x - cGraphics::cMouse::xOld)*1.0f);
+		v = bEngine::math::cVector2(tile.u4, tile.v4) - center;
+		v = v.getRotated((cGraphics::cMouse::x - cGraphics::cMouse::xOld)*1.0f);
 		v = v + center;
 		tile.u4 = v.x;		tile.v4 = v.y;
 	}

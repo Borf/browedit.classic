@@ -12,6 +12,8 @@ class cWindowTree : public cWindowObject
 public:
 	class cTreeNode
 	{
+	protected:
+		std::string text;
 	public:
 		cTreeNode();
 		cTreeNode(std::string t);
@@ -19,8 +21,10 @@ public:
 
 		bool open;
 		cTreeNode* parent;
-		std::string text;
 		std::vector<cTreeNode*> children;
+		
+		virtual std::string getText();
+		virtual void setText(std::string t);
 		
 		void getdata(std::vector<std::string>&, int = 0);
 		bool haschild(std::string);

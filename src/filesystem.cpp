@@ -6,7 +6,7 @@
 #include <fstream>
 #include <zlib.h>
 #include "settings.h"
-
+#include <bengine/util.h>
 
 
 
@@ -29,7 +29,7 @@ int cFileSystem::loadPackedFile(std::string grffilename)
 	
 	for(unsigned int i =0 ; i < grffile->grf->nfiles; i++)
 	{
-		std::string filename = replace(lcase(cSettings::roDir + grffile->grf->files[i].name),"/","\\");
+		std::string filename = bEngine::util::replace(bEngine::util::lcase(cSettings::roDir + grffile->grf->files[i].name),"/","\\");
 		grffile->files[filename] = new cFile();
 		grffile->files[filename]->fileName = grffile->grf->files[i].name;
 		grffile->files[filename]->location = thislocation;
@@ -65,13 +65,13 @@ cFile* cFileSystem::open(std::string filename)
 		return fil;
 	}
 
-	filename = replace(filename,"/","\\");
+	filename = bEngine::util::replace(filename,"/","\\");
 	for(unsigned int i = 0; i < locations.size(); i++)
 	{
-		if(locations[i]->files.find(lcase(filename)) != locations[i]->files.end())
+		if(locations[i]->files.find(bEngine::util::lcase(filename)) != locations[i]->files.end())
 		{
-			locations[i]->files[lcase(filename)]->open();
-			return locations[i]->files[lcase(filename)];
+			locations[i]->files[bEngine::util::lcase(filename)]->open();
+			return locations[i]->files[bEngine::util::lcase(filename)];
 		}
 	}
 	return NULL;
@@ -295,9 +295,9 @@ bool cFileSystem::isFile(std::string filename)
 		return true;
 	}
 
-	filename = replace(filename,"/","\\");
+	filename = bEngine::util::replace(filename,"/","\\");
 	for(unsigned int i = 0; i < locations.size(); i++)
-		if(locations[i]->files.find(lcase(filename)) != locations[i]->files.end())
+		if(locations[i]->files.find(bEngine::util::lcase(filename)) != locations[i]->files.end())
 			return true;
 	return false;
 }

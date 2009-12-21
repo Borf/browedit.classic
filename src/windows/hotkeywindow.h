@@ -1,11 +1,13 @@
 #ifndef __HOTKEYWINDOW_H__
 #define __HOTKEYWINDOW_H__
 
-#include <mymath.h>
 #include <wm/window.h>
 #include <wm/windowpicturebox.h>
 class cWorldContainer;
 
+#include <windows.h>
+#include <GL/gl.h>
+#include <bengine/math/vector2.h>
 
 class cHotkeyWindow : public cWindow
 {
@@ -16,7 +18,7 @@ public:
 		GLuint tid;
 		char* im;
 			
-		cVector2 camerapointer;
+		bEngine::math::cVector2 camerapointer;
 		float camerarot;
 		float cameraheight;
 		float cameraangle;

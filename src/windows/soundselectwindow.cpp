@@ -5,6 +5,7 @@
 #include <filesystem.h>
 #include <undo/soundnew.h>
 #include <settings.h>
+#include <bengine/util.h>
 
 extern std::vector<std::pair<std::string, std::string> > translations;
 extern void mainloop();
@@ -122,13 +123,13 @@ void cSoundSelectWindow::cWindowOkButton::onClick()
 	}
 	else
 	{
-		cVector3 newPos = ((cSoundSelectWindow*)parent)->newPos;
+		bEngine::math::cVector3 newPos = ((cSoundSelectWindow*)parent)->newPos;
 		cSound s;
 		s.fileName = filename;
 		s.name = ((cWindowDataListBox<std::string>*)parent->objects["sounds"])->values[selected];
-		s.pos = cVector3(newPos.x/5, newPos.y-17, newPos.z/5);
-		s.rot = cVector3(0,-45,0);
-		s.scale = cVector3(0.94f,0.94f,0.94f);
+		s.pos = bEngine::math::cVector3(newPos.x/5, newPos.y-17, newPos.z/5);
+		s.rot = bEngine::math::cVector3(0,-45,0);
+		s.scale = bEngine::math::cVector3(0.94f,0.94f,0.94f);
 		s.unknown6[0] = (BYTE)0xc7;
 		s.unknown6[1] = (BYTE)0xc1;
 		s.unknown6[2] = (BYTE)0xb7;
@@ -145,7 +146,7 @@ void cSoundSelectWindow::cWindowOkButton::onClick()
 				0x04, 0x00, 0x00, 0x00, 0xC0, 0xCC, 0xC6, 0xE5, 
 		};
 		s.todo1 = std::string((char*)rawData,40);
-		s.name = "sound" + inttostring(rand() % 99999);
+		s.name = "sound" + bEngine::util::intToString(rand() % 99999);
 		s.repeatDelay = 0.5f;
 		s.unknown2 = 70.0f;
 		s.unknown3 = 1;
@@ -177,7 +178,7 @@ void cSoundSelectWindow::cWindowCancelButton::onClick()
 	parent->close();
 }
 
-cSoundSelectWindow::cSoundSelectWindow(cVector3 pNewPos ) : cWindow()
+cSoundSelectWindow::cSoundSelectWindow(bEngine::math::cVector3 pNewPos ) : cWindow()
 {
 	selectedSound = NULL;
 	newPos = pNewPos; 
@@ -223,7 +224,7 @@ cSoundSelectWindow::cSoundSelectWindow(cVector3 pNewPos ) : cWindow()
 			{
 				std::string origcat = cat;
 				for(unsigned int ii = 0; ii < translations.size(); ii++)
-					cat = replace(cat, translations[ii].first, translations[ii].second);
+					cat = bEngine::util::replace(cat, translations[ii].first, translations[ii].second);
 				translationcache[origcat] = cat;
 			}
 			

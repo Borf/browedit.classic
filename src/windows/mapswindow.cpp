@@ -11,11 +11,14 @@
 #include <wm/windowpicturebox.h>
 #include "mapdetailwindow.h"
 
+#include <bengine/util.h>
+#include <bengine/texture.h>
+#include <bengine/util/thread.h>
+
 extern void	mainloop();
-extern cBMutex* renderMutex;
+extern bEngine::util::cMutex* renderMutex;
 
 
-#include <bthread.h>
 
 cMapsWindow::cMapsWindow() : cWindow()
 {
@@ -54,7 +57,7 @@ cMapsWindow::cMapsWindow() : cWindow()
 	objects["results"] = o;
 
 
-	class cIndexFinished : public cDownloadThread::cDownloadThreadFinisher
+/*	class cIndexFinished : public cDownloadThread::cDownloadThreadFinisher
 	{
 		cMapsWindow* wnd;
 
@@ -83,7 +86,7 @@ cMapsWindow::cMapsWindow() : cWindow()
 				o->alignment = ALIGN_TOPLEFT;
 				o->moveTo(px+10,py+30);
 				o->resizeTo(180,140);
-				o->tex = new cTextureFromMemory(".gif", data, length);
+//TODO				o->tex = new cTextureFromMemory(".gif", data, length);
 				panel->objects.push_back(o);		
 				renderMutex->unlock();
 			}
@@ -154,13 +157,13 @@ cMapsWindow::cMapsWindow() : cWindow()
 
 			for(i = 0; i < screenshots.size(); i++)
 			{
-				wnd->threads.push_back(new cDownloadThread("http://browedit.excalibur-nw.com/images/maps/" + inttostring(screenshots[i]) + "_screenshot.gif", new cImageFinished(wnd,i)));
+				wnd->threads.push_back(new cDownloadThread("http://browedit.excalibur-nw.com/images/maps/" + bEngine::util::intToString(screenshots[i]) + "_screenshot.gif", new cImageFinished(wnd,i)));
 			}
 
 		}
 	};
 
-	new cDownloadThread("http://browedit.excalibur-nw.com/mapdb/list.php", new cIndexFinished(this));
+	new cDownloadThread("http://browedit.excalibur-nw.com/mapdb/list.php", new cIndexFinished(this));*/
 }
 
 
@@ -219,13 +222,13 @@ void cMapsWindow::cWindowTextureBox::draw(int cutoffleft, int cutoffright, int c
 
 cMapsWindow::~cMapsWindow()
 {
-	for(unsigned int i = 0; i < threads.size(); i++)
+/*	for(unsigned int i = 0; i < threads.size(); i++)
 		if(threads[i] != NULL)
 		{
 			threads[i]->stop();
 			delete threads[i];
 			threads[i] = NULL;
-		}
+		}*/
 }
 
 void cMapsWindow::cClickableFrame::onClick()

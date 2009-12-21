@@ -11,6 +11,8 @@
 #include <graphics.h>
 #include <settings.h>
 #include <world.h>
+#include <bengine/util.h>
+#include <bengine/texturecache.h>
 
 cTextureWindow::cWindowTexture::cWindowTexture( cWindow* parent ) : cWindowPictureBox(parent)
 {
@@ -30,7 +32,7 @@ void cTextureWindow::cWindowTexture::onClick()
 		if(SDL_GetModState() & KMOD_SHIFT)
 		{
 			int id = cGraphics::worldContainer->settings.texturestart + (int)(cGraphics::worldContainer->settings.selectionstart.y - 32) / 288;
-			cTextureCache::unload(cGraphics::world->textures[id]->texture);
+			bEngine::cTextureCache::unload(cGraphics::world->textures[id]->texture);
 			delete cGraphics::world->textures[id];
 			
 			cTextureContainer* t = new cTextureContainer();
@@ -39,7 +41,7 @@ void cTextureWindow::cWindowTexture::onClick()
 			ZeroMemory(buf, 40);
 			sprintf(buf, "%i%i", rand(), rand());
 			t->RoFilename2 = std::string(buf,40);
-			t->texture = cTextureCache::load(cSettings::roDir + "data\\texture\\" + data, TEX_NEARESTFILTER);
+			t->texture = bEngine::cTextureCache::load(cSettings::roDir + "data\\texture\\" + data);
 			cGraphics::world->textures[id] = t;
 			
 		}
@@ -51,7 +53,7 @@ void cTextureWindow::cWindowTexture::onClick()
 			ZeroMemory(buf, 40);
 			sprintf(buf, "%i%i", rand(), rand());
 			t->RoFilename2 = std::string(buf,40);
-			t->texture = cTextureCache::load(cSettings::roDir + "data\\texture\\" + data, TEX_NEARESTFILTER);
+			t->texture = bEngine::cTextureCache::load(cSettings::roDir + "data\\texture\\" + data);
 			cGraphics::world->textures.push_back(t);
 			cGraphics::worldContainer->settings.texturestart = max((int)cGraphics::world->textures.size() - 2,0);
 		}
@@ -173,7 +175,7 @@ cTextureWindow::cTextureWindow( ) : cWindow()
 			{
 				std::string origcat = cat;
 				for(unsigned int ii = 0; ii < cSettings::translations.size(); ii++)
-					cat = replace(cat, cSettings::translations[ii].first, cSettings::translations[ii].second);
+					cat = bEngine::util::replace(cat, cSettings::translations[ii].first, cSettings::translations[ii].second);
 				translationcache[origcat] = cat;
 			}
 			

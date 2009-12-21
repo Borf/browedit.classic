@@ -4,6 +4,7 @@
 #include "undo/effectdelete.h"
 #include "menu.h"
 #include "windows/effectwindow.h"
+#include <math.h>
 
 extern cMenuItem* selectedeffect;
 
@@ -53,16 +54,16 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 				float mindist = 999999;
 				for(unsigned int i = 0; i < cGraphics::world->effects.size(); i++)
 				{
-					cVector3 d = cGraphics::world->effects[i].pos;
+					bEngine::math::cVector3 d = cGraphics::world->effects[i].pos;
 					d.x = d.x;
 					
 					d.x -= cGraphics::cMouse::x3d/5;
 					d.z -= cGraphics::cMouse::z3d/5;
 					d.y = 0;
 
-					if(mindist > d.magnitude())
+					if(mindist > d.length())
 					{
-						mindist = d.magnitude();
+						mindist = d.length();
 						minobj = i;
 					}
 				}
@@ -81,15 +82,15 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 					sprintf(buf, "obj%i", rand());
 					e.category = "\0\0\0\0";
 					e.loop = 40;
-					e.pos = cVector3(cGraphics::cMouse::x3d/5, -cGraphics::cMouse::y3d-10, cGraphics::cMouse::z3d/5);
+					e.pos = bEngine::math::cVector3(cGraphics::cMouse::x3d/5, -cGraphics::cMouse::y3d-10, cGraphics::cMouse::z3d/5);
 					e.name = buf;
 					e.readablename = selectedeffect->title;
 					e.type = atoi(selectedeffect->data.c_str());
 					e.todo1 = 1;
 					e.todo2 = 1;
 					e.todo3 = 1;
-					e.rot = cVector3(0,0,0);
-					e.scale = cVector3(1,1,1);
+					e.rot = bEngine::math::cVector3(0,0,0);
+					e.scale = bEngine::math::cVector3(1,1,1);
 					e.todo10 = 1; // seems to be linked to 11
 					e.todo11 = 1; // seems to be linked to 10
 					e.todo12 = 0; // seems to be always 0
@@ -105,16 +106,16 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 					float mindist = 999999;
 					for(unsigned int i = 0; i < cGraphics::world->effects.size(); i++)
 					{
-						cVector3 d = cGraphics::world->effects[i].pos;
+						bEngine::math::cVector3 d = cGraphics::world->effects[i].pos;
 						d.x = d.x;
 						
 						d.x -= cGraphics::cMouse::x3d/5.0f;
 						d.z -= cGraphics::cMouse::z3d/5.0f;
 						d.y = 0;
 
-						if(mindist > d.magnitude())
+						if(mindist > d.length())
 						{
-							mindist = d.magnitude();
+							mindist = d.length();
 							minobj = i;
 						}
 					}

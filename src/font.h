@@ -15,7 +15,7 @@ class cFont
 public:
 	int	width[256];
 
-	cTexture* texture;
+	bEngine::cTexture* texture;
 
 	GLuint	list_base;
 

@@ -1,3 +1,7 @@
+#include <bengine/forwards.h>
+#include <bengine/texture.h>
+#include <bengine/math/math.h>
+
 #include "windowtree.h"
 #include "window.h"
 #include <graphics.h>
@@ -10,7 +14,7 @@
 #include <GL/glu.h>												// Header File For The GLu32 Library
 #include <algorithm>
 #include <font.h>
-#include <texture.h>
+#include <bengine/util.h>
 
 void cWindowTree::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {
@@ -42,7 +46,7 @@ void cWindowTree::draw(int cutoffleft, int cutoffright, int cutofftop, int cutof
 		i++;
 		yy-=12;
 	}
-	int barheight = max((int)(((float)(h - (skinButtonDownHeight+skinButtonUpHeight)) * (float)((float)i / (float)values.size()))+0.5f), skinTopHeight+skinBottomHeight);
+	int barheight = bEngine::math::max((int)(((float)(h - (skinButtonDownHeight+skinButtonUpHeight)) * (float)((float)i / (float)values.size()))+0.5f), skinTopHeight+skinBottomHeight);
 
 	yy = realY();
 
@@ -305,7 +309,7 @@ void cWindowTree::onClick()
 			{
 				validCache = false;
 				node->open = !node->open;
-				Log(3,0,"Selected Node %s", node->text.c_str());
+				Log(3,0,"Selected Node %s", node->getText().c_str());
 			}
 			else
 				Log(3,0,"Wrong node selected O_o;");
@@ -331,7 +335,7 @@ void cWindowTree::onClick()
 				yyy-=12;
 			}
 
-			int barheight = max((int)((float)(h - (skinButtonDownHeight+skinButtonUpHeight)) * (float)((float)i / (float)values.size())), skinTopHeight+skinBottomHeight);
+			int barheight = bEngine::math::max((int)((float)(h - (skinButtonDownHeight+skinButtonUpHeight)) * (float)((float)i / (float)values.size())), skinTopHeight+skinBottomHeight);
 			yyy = realY();
 			int barpos = (values.size() - i);
 			if (barpos != 0)
@@ -339,11 +343,11 @@ void cWindowTree::onClick()
 
 			if (h-yy-8 < barpos)
 			{ // pgup
-				liststart = max(0, liststart-i);
+				liststart = bEngine::math::max(0, liststart-i);
 			}
 			else if (h-yy-8 > barpos+barheight)
 			{//pgdown
-				liststart = min((int)values.size()-i , liststart+i);
+				liststart = bEngine::math::min((int)values.size()-i , liststart+i);
 			}
 		}	
 	}
@@ -391,7 +395,7 @@ void cWindowTree::drag()
 		sprintf(buf, "%i - %i", barpos, (int)(((float)barpos / (float)(h-(skinButtonDownHeight+skinButtonUpHeight))) * (float)values.size()));
 
 		int oldliststart = liststart;
-		liststart = max(min((int)((((float)barpos / (float)(h-(skinButtonDownHeight+skinButtonUpHeight))) * (float)values.size())+0.5f), (int)(values.size()-i)), 0);
+		liststart = bEngine::math::max(bEngine::math::min((int)((((float)barpos / (float)(h-(skinButtonDownHeight+skinButtonUpHeight))) * (float)values.size())+0.5f), (int)(values.size()-i)), 0);
 		if (oldliststart != liststart)
 			cGraphics::dragoffsety = yy;
 	}
@@ -420,7 +424,7 @@ void cWindowTree::cTreeNode::getdata(std::vector<std::string> &data, int level)
 	else
 		d += "\32  ";
 
-	d += text;
+	d += getText();
 	data.push_back(d);
 	if (open)
 	{
@@ -461,7 +465,7 @@ cWindowTree::cTreeNode* cWindowTree::cTreeNode::getnode(int &nr)
 bool cWindowTree::cTreeNode::haschild(std::string tofind)
 {
 	for(unsigned int i = 0; i < children.size(); i++)
-		if (children[i]->text == tofind)
+		if (children[i]->getText() == tofind)
 			return true;
 
 	return false;
@@ -527,14 +531,14 @@ cWindowTree::cWindowTree( cWindow* parent, std::vector<cTreeNode*> n, TiXmlDocum
 	TiXmlElement* bSkin = skin->FirstChildElement("skin")->FirstChildElement("list")->FirstChildElement("scroll");
 	
 	std::string scolor = skin->FirstChildElement("skin")->FirstChildElement("list")->FirstChildElement("selectcolor")->FirstChild()->Value();
-	selectColor[0] = hex2dec(scolor.substr(0,2)) / 256.0f;
-	selectColor[1] = hex2dec(scolor.substr(2,2)) / 256.0f;
-	selectColor[2] = hex2dec(scolor.substr(4,2)) / 256.0f;
+	selectColor[0] = bEngine::util::hex2dec(scolor.substr(0,2)) / 256.0f;
+	selectColor[1] = bEngine::util::hex2dec(scolor.substr(2,2)) / 256.0f;
+	selectColor[2] = bEngine::util::hex2dec(scolor.substr(4,2)) / 256.0f;
 	
 	scolor = skin->FirstChildElement("skin")->FirstChildElement("list")->FirstChildElement("selectfontcolor")->FirstChild()->Value();
-	selectFontColor[0] = hex2dec(scolor.substr(0,2)) / 256.0f;
-	selectFontColor[1] = hex2dec(scolor.substr(2,2)) / 256.0f;
-	selectFontColor[2] = hex2dec(scolor.substr(4,2)) / 256.0f;
+	selectFontColor[0] = bEngine::util::hex2dec(scolor.substr(0,2)) / 256.0f;
+	selectFontColor[1] = bEngine::util::hex2dec(scolor.substr(2,2)) / 256.0f;
+	selectFontColor[2] = bEngine::util::hex2dec(scolor.substr(4,2)) / 256.0f;
 	
 	skinBarWidth =			atoi(bSkin->FirstChildElement("width")->FirstChild()->Value());
 	skinBarLeft =			atoi(bSkin->FirstChildElement("left")->FirstChild()->Value());
@@ -563,7 +567,7 @@ cWindowTree::cWindowTree( cWindow* parent, std::vector<cTreeNode*> n, TiXmlDocum
 
 cWindowTree::cTreeNode* cWindowTree::cTreeNode::getnode(std::string s)
 {
-	if(text == s)
+	if(getText() == s)
 		return this;
 	for(unsigned int i = 0; i < children.size(); i++)
 	{
@@ -577,7 +581,7 @@ cWindowTree::cTreeNode* cWindowTree::cTreeNode::getnode(std::string s)
 
 bool treeComp(cWindowTree::cTreeNode* a, cWindowTree::cTreeNode* b)
 {
-	return a->text > b->text;
+	return a->getText() > b->getText();
 }
 
 void cWindowTree::cTreeNode::sort()
@@ -643,4 +647,14 @@ cWindowTree::cTreeNode::cTreeNode( std::string t )
 cWindowTree::cTreeNode::cTreeNode()
 {
 	parent = NULL; open = false;
+}
+
+std::string cWindowTree::cTreeNode::getText()
+{
+	return text;
+}
+
+void cWindowTree::cTreeNode::setText( std::string t )
+{
+	text = t;
 }

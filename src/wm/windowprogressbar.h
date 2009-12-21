@@ -5,7 +5,7 @@
 #include "windowobject.h"
 #include <string>
 #include <vector>
-#include <texture.h>
+#include <bengine/texture.h>
 //using namespace std;
 
 class cWindowProgressBar: public cWindowObject

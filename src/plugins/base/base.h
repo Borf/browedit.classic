@@ -1,6 +1,8 @@
 #ifndef __PLUGIN_BASE_H__
 #define __PLUGIN_BASE_H__
 
+#pragma warning( disable : 4786 )
+
 #include <string>
 class TiXmlDocument;
 class cWindow;

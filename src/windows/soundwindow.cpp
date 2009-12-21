@@ -31,7 +31,7 @@ void cSoundWindow::cWindowSelectFileButton::onClick()
 	}
 	else
 	{
-		cSoundSelectWindow* w = new cSoundSelectWindow(cVector3());
+		cSoundSelectWindow* w = new cSoundSelectWindow(bEngine::math::cVector3());
 		w->selectedSound = selectedSound;
 		cWM::addWindow(w);
 	}

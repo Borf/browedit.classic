@@ -35,7 +35,7 @@ cSoundOverViewWindow::cSoundOverViewTreeNode* cSoundOverViewWindow::cSoundOverVi
 		
 		for(unsigned int i = 0; i < children.size(); i++)
 		{
-			if(children[i]->text == firstpart)
+			if(children[i]->getText() == firstpart)
 			{
 				return ((cSoundOverViewTreeNode*)children[i])->addNodeTree(secondpart);
 			}

@@ -9,7 +9,8 @@
 #include <wm/windowlabel.h>
 #include <fstream>
 #include <settings.h>
-
+#include <bengine/util.h>
+#include <bengine/math/math.h>
 
 cModelsWindow::cWindowModel::cWindowModel(cWindow* parent) : cWindowObject(parent)
 {
@@ -30,17 +31,17 @@ void cModelsWindow::cWindowModel::draw(int cutoffleft, int cutoffright, int cuto
 		glPushMatrix();
 		glLoadIdentity();
 		model = new cRsmModel(cSettings::roDir + data);
-		model->pos = cVector3(0,0.3*w,1000);
+		model->pos = bEngine::math::cVector3(0,0.3*w,1000);
 		
 		float sc = 0;
-		sc = max(sc, model->bbmax[0] - model->bbmin[0]);
-		sc = max(sc, model->bbmax[1] - model->bbmin[1]);
-		sc = max(sc, model->bbmax[2] - model->bbmin[2]);
-		sc = 1.4f*min(h,w) / sc;
+		sc = bEngine::math::max(sc, model->bbmax.v[0] - model->bbmin.v[0]);
+		sc = bEngine::math::max(sc, model->bbmax.v[1] - model->bbmin.v[1]);
+		sc = bEngine::math::max(sc, model->bbmax.v[2] - model->bbmin.v[2]);
+		sc = 1.4f*bEngine::math::min(h,w) / sc;
 
-		model->scale = cVector3(sc,sc,sc);
+		model->scale = bEngine::math::cVector3(sc,sc,sc);
 
-		model->rot = cVector3(0,0,0);
+		model->rot = bEngine::math::cVector3(0,0,0);
 //TODO		model->bb2.bbrange[0] = 0;
 		//model->bb2.bbmin[1] = 0;
 //TODO		model->bb2.bbrange[2] = 0;
@@ -110,9 +111,9 @@ void cModelsWindow::cWindowModel::onClick()
 		delete cGraphics::previewModel;
 	}
 	cGraphics::previewModel = new cRsmModel(cSettings::roDir + data);
-	cGraphics::previewModel->rot = cVector3(0,0,0);
-	cGraphics::previewModel->scale = cVector3(4,4,4);
-	cGraphics::previewModel->pos = cVector3(40,-40,-40);
+	cGraphics::previewModel->rot = bEngine::math::cVector3(0,0,0);
+	cGraphics::previewModel->scale = bEngine::math::cVector3(4,4,4);
+	cGraphics::previewModel->pos = bEngine::math::cVector3(40,-40,-40);
 	cGraphics::previewColor = 200;
 
 }
@@ -181,7 +182,7 @@ class cConfirmDeleteModel : public cConfirmWindowCaller
 			cWindowTree::cTreeNode* n = node;
 			while(n != NULL)
 			{
-				orig = "/" + n->text + orig;
+				orig = "/" + n->getText() + orig;
 				n = n->parent;
 			}
 			orig = orig.substr(1);
@@ -306,7 +307,7 @@ void cModelsWindow::cWindowModelCatSelect::onRightClick()
 		n = node;
 		while(n != NULL)
 		{
-			cat = n->text + "/" + cat;
+			cat = n->getText() + "/" + cat;
 			n = n->parent;
 		}
 
@@ -378,7 +379,7 @@ bool cModelsWindow::cWindowModelCatSelect::onKeyDown(int key, bool shift)
 			cTreeNode* n = node;
 			while(n != NULL)
 			{
-				cat = n->text + "/" + cat;
+				cat = n->getText() + "/" + cat;
 				n = n->parent;
 			}
 
@@ -481,14 +482,14 @@ void cModelsWindow::cWindowModelCatSelect::onDragOver()
 		cTreeNode* n = node;
 		while(n != NULL)
 		{
-			dest = "/" + n->text + dest;
+			dest = "/" + n->getText() + dest;
 			n = n->parent;
 		}
 		dest = dest.substr(1);
 		n = nodeorig;
 		while(n != NULL)
 		{
-			orig = "/" + n->text + orig;
+			orig = "/" + n->getText() + orig;
 			n = n->parent;
 		}
 		orig = orig.substr(1);
@@ -678,8 +679,8 @@ cModelsWindow::cModelsWindow() : cWindow()
 
 			for(unsigned int ii = 0; ii < cSettings::translations.size(); ii++)
 			{
-				name = replace(name, cSettings::translations[ii].first, cSettings::translations[ii].second);
-				cat = replace(cat, cSettings::translations[ii].first, cSettings::translations[ii].second);
+				name = bEngine::util::replace(name, cSettings::translations[ii].first, cSettings::translations[ii].second);
+				cat = bEngine::util::replace(cat, cSettings::translations[ii].first, cSettings::translations[ii].second);
 			}
 
 			if(lookup.find(cat) == lookup.end())

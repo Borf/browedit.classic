@@ -4,16 +4,14 @@
 #include "windowobject.h"
 #include <string>
 #include <vector>
-#include <texture.h>
-#include <texturecache.h>
-//using namespace std;
+#include <bengine/forwards.h>
 
 class cWindowPictureBox : public cWindowObject
 {
 protected:
 	int highlightmode;
 public:
-	cTexture* tex;
+	bEngine::cTexture* tex;
 	cWindowPictureBox(cWindow* parent);
 	~cWindowPictureBox();
 	virtual void draw(int,int,int,int);

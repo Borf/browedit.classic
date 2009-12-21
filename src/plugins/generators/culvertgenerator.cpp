@@ -227,8 +227,8 @@ bool cCulvertGenerator::action()
 			model->pos.x = (xx+x) + ((xx == x) ? 1 : 0);
 			model->pos.z = (yy+y) + ((yy == y) ? 1 : 0);
 			model->pos.y = 10;
-			model->scale = cVector3((xx == x) ? 0.95f : 1,1,(yy == y) ? 0.95f : 1);
-			model->rot = cVector3(0,xx==x ? 0 : 90,0);
+			model->scale = bEngine::math::cVector3((xx == x) ? 0.95f : 1,1,(yy == y) ? 0.95f : 1);
+			model->rot = bEngine::math::cVector3(0,xx==x ? 0 : 90,0);
 			browInterface->addModel(model);
 
 		}

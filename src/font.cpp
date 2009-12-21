@@ -1,11 +1,14 @@
 #define __FONT_CPP__
 
+#include <bengine/forwards.h>
+#include <bengine/texture.h>
+#include <bengine/texturecache.h>
+#include <bengine/util.h>
+
 
 #include "font.h"
 
-#include "texture.h"
 #include <vector>
-#include <texturecache.h>
 
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
@@ -21,6 +24,7 @@
 #include <unistd.h>
 #endif
 //using namespace std;
+
 
 
 
@@ -94,7 +98,7 @@ int cFont::print(float r, float g, float b, float x, float y, const char *fmt, .
 
 		glCallLists(before.length(),GL_UNSIGNED_BYTE, before.c_str());
 		if(color != "")
-			glColor4ub(hex2dec(color.substr(0,2)),hex2dec(color.substr(2,2)),hex2dec(color.substr(4,2)), tempColors[3]*255);
+			glColor4ub(bEngine::util::hex2dec(color.substr(0,2)),bEngine::util::hex2dec(color.substr(2,2)),bEngine::util::hex2dec(color.substr(4,2)), tempColors[3]*255);
 	}
 	glCallLists(txt.length(),GL_UNSIGNED_BYTE, txt.c_str());
 
@@ -180,7 +184,7 @@ int cFont::print3d(float r, float g, float b, float a, float x, float y, float z
 
 		glCallLists(before.length(),GL_UNSIGNED_BYTE, before.c_str());
 		if(color != "")
-			glColor3ub(hex2dec(color.substr(0,2)),hex2dec(color.substr(2,2)),hex2dec(color.substr(4,2)));
+			glColor3ub(bEngine::util::hex2dec(color.substr(0,2)),bEngine::util::hex2dec(color.substr(2,2)),bEngine::util::hex2dec(color.substr(4,2)));
 	}
 	glCallLists(txt.length(),GL_UNSIGNED_BYTE, txt.c_str());
 
@@ -219,7 +223,7 @@ int	cFont::textLen(std::string s)
 
 int cFont::load(std::string filename)
 {
-	texture = cTextureLoaders::load(filename,TEX_NOFREEDATA);
+	texture = bEngine::cTextureCache::load(filename,bEngine::TEX_NOFREEDATA);
 	Log(5,0,"Loading font %s", filename.c_str());
 	float cx, cy;
 	list_base=glGenLists(256);

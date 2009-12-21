@@ -1,3 +1,4 @@
+#include <common.h>
 #include "windowcheckbox.h"
 #include "window.h"
 
@@ -8,7 +9,7 @@
 #include <wm/wm.h>
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
-#include <texture.h>
+#include <bengine/texture.h>
 
 void cWindowCheckBox::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {

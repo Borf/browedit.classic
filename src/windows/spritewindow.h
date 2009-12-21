@@ -1,6 +1,7 @@
 #ifndef __SPRITEWINDOW_H__
 #define __SPRITEWINDOW_H__
 
+#include <common.h>
 #include <tinyxml/tinyxml.h>
 #include <filesystem.h>
 

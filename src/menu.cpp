@@ -5,6 +5,7 @@
 #include "font.h"
 #include <algorithm>
 #include <world.h>
+#include <bengine/util.h>
 
 extern cMenu*			lastmenu;
 
@@ -25,13 +26,13 @@ void cMenu::initSkin(TiXmlDocument &skin)
 	if(!skin.FirstChildElement("skin"))
 		return;
 	TiXmlElement* s = skin.FirstChildElement("skin")->FirstChildElement("menubar");
-	hex2floats(s->FirstChildElement("color")->FirstChild()->Value(),		barColor,			4);
-	hex2floats(s->FirstChildElement("fontcolor")->FirstChild()->Value(),	barFontColor,		4);
-	hex2floats(s->FirstChildElement("highlight")->FirstChild()->Value(),	barHighlightColor,	4);
+	bEngine::util::hex2floats(s->FirstChildElement("color")->FirstChild()->Value(),		barColor,			4);
+	bEngine::util::hex2floats(s->FirstChildElement("fontcolor")->FirstChild()->Value(),	barFontColor,		4);
+	bEngine::util::hex2floats(s->FirstChildElement("highlight")->FirstChild()->Value(),	barHighlightColor,	4);
 
-	hex2floats(s->FirstChildElement("menu")->FirstChildElement("color")->FirstChild()->Value(),			menuColor,			3);
-	hex2floats(s->FirstChildElement("menu")->FirstChildElement("fontcolor")->FirstChild()->Value(),		menuFontColor,		3);
-	hex2floats(s->FirstChildElement("menu")->FirstChildElement("highlight")->FirstChild()->Value(),		menuHighlightColor,	3);
+	bEngine::util::hex2floats(s->FirstChildElement("menu")->FirstChildElement("color")->FirstChild()->Value(),			menuColor,			3);
+	bEngine::util::hex2floats(s->FirstChildElement("menu")->FirstChildElement("fontcolor")->FirstChild()->Value(),		menuFontColor,		3);
+	bEngine::util::hex2floats(s->FirstChildElement("menu")->FirstChildElement("highlight")->FirstChild()->Value(),		menuHighlightColor,	3);
 	
 	opacityStart = atof(s->FirstChildElement("menu")->FirstChildElement("startopacity")->FirstChild()->Value());
 	opacityEnd = atof(s->FirstChildElement("menu")->FirstChildElement("targetopacity")->FirstChild()->Value());

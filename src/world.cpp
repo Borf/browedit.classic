@@ -1,9 +1,7 @@
 #include <common.h>
 #include "world.h"
 #include "graphics.h"
-#include "filesystem.h"
 #include "RSMModel.h"
-#include "texturecache.h"
 #include "menu.h"
 #include <frustum.h>
 #include "font.h"
@@ -11,10 +9,15 @@
 #include "settings.h"
 #include "texturemodel.h"
 #include "sprite.h"
-#include "texture.h"
-#include "texturecache.h"
 #include <windows/confirmwindow.h>
 #include "windows/hotkeywindow.h"
+#include <filesystem.h>
+
+#include <bengine/util.h>
+#include <bengine/math/math.h>
+#include <bengine/math/vector3.h>
+#include <bengine/util/filesystem.h>
+#include <bengine/texturecache.h>
 
 #include <math.h>
 #include <list>
@@ -66,7 +69,7 @@ void cWorld::load()
 	}
 
 	for(i = 0; i < textures.size(); i++)
-		cTextureCache::unload(textures[i]->texture);
+		bEngine::cTextureCache::unload(textures[i]->texture);
 	textures.clear();
 
 	for(y = 0; y < realLightmaps.size(); y+=21)
@@ -114,7 +117,7 @@ void cWorld::load()
 	int version;
 
 	Log(3,0,GetMsg("world/LOAD"), (std::string(fileName) + ".gnd").c_str());
-	cFile* pFile = cFileSystem::open(std::string(fileName) + ".gnd");
+	bEngine::util::cFileSystem::cReadFile* pFile = bEngine::util::cFileSystem::open(std::string(fileName) + ".gnd");
 	if(pFile == NULL)
 	{
 		Log(1,0,GetMsg("world/LOADFAIL"), (std::string(fileName) + ".gnd").c_str());
@@ -146,7 +149,7 @@ void cWorld::load()
 		height = *((int*)(buf+8));
 	}
 
-	cGraphics::worldContainer->camera.pointer = cVector2(-width*5,-height*5);
+	cGraphics::worldContainer->camera.pointer = bEngine::math::cVector2(-width*5,-height*5);
 
 
 	textures.resize(nTextures);
@@ -157,7 +160,7 @@ void cWorld::load()
 		cTextureContainer* t = new cTextureContainer();
 		t->RoFilename = s;
 		t->RoFilename2 = std::string(buf+40);
-		t->texture = cTextureCache::load(cSettings::roDir + "data\\texture\\" + s, TEX_NEARESTFILTER);
+		t->texture = bEngine::cTextureCache::load(cSettings::roDir + "data\\texture\\" + s);
 		textures[i] = t;
 	}
 
@@ -371,14 +374,14 @@ void cWorld::load()
 	}
 
 
-	pFile->close();
+	delete pFile;
 	loaded = true;
 	//clean();
 
 	Log(3,0,GetMsg("world/LOADDONE"), "gnd");
 
 	Log(3,0,GetMsg("world/LOAD"), (fileName + std::string(".rsw")).c_str());
-	pFile = cFileSystem::open(std::string(fileName) + ".rsw");
+	pFile = bEngine::util::cFileSystem::open(std::string(fileName) + ".rsw");
 
 
 	pFile->read(buf, 6);
@@ -439,8 +442,8 @@ void cWorld::load()
 		ambientLight.lightLongitude = 45;
 		ambientLight.lightLatitude = 45;
 
-		ambientLight.diffuse = cVector3(1,1,1);
-		ambientLight.ambient = cVector3(0.3f,0.3f,0.3f);
+		ambientLight.diffuse = bEngine::math::cVector3(1,1,1);
+		ambientLight.ambient = bEngine::math::cVector3(0.3f,0.3f,0.3f);
 	}
 
 	if(version >= 0x107)
@@ -612,20 +615,20 @@ void cWorld::load()
 			break;
 		default:
 			Log(2,0,GetMsg("world/UNKNOWNOBJECT"), type);
-			pFile->close();
+			delete pFile;
 			return;
 		};
 	}
 	quadTreeFloats.clear();
 	while(!pFile->eof())
 	{
-		cVector3 f;
+		bEngine::math::cVector3 f;
 		pFile->read((char*)&f.x, 4);
 		pFile->read((char*)&f.y, 4);
 		pFile->read((char*)&f.z, 4);
 		quadTreeFloats.push_back(f);
 	}
-	pFile->close(); 
+	delete pFile; 
 	Log(3,0,GetMsg("world/LOADDONE"), (std::string(fileName) + ".rsw").c_str());
 	
 	if(quadTreeFloats.size() > 0)
@@ -636,7 +639,7 @@ void cWorld::load()
 	}
 
 	Log(3,0,GetMsg("world/LOAD"), (std::string(fileName) + ".gat").c_str());
-	pFile = cFileSystem::open(std::string(fileName) + ".gat");
+	pFile = bEngine::util::cFileSystem::open(std::string(fileName) + ".gat");
 	pFile->read(buf, 14);
 	
 	gattiles.resize(height*2);
@@ -655,13 +658,13 @@ void cWorld::load()
 			pFile->get();pFile->get();pFile->get();
 		}
 	}
-	pFile->close();
+	delete pFile;
 	Log(3,0,GetMsg("world/LOADDONE"), (std::string(fileName) + ".gat").c_str());
 
 
 	cHotkeyWindow* wnd = new cHotkeyWindow(cGraphics::worldContainer);
 	cWM::addWindow(wnd);
-	pFile = cFileSystem::open(std::string(fileName) + ".locations");
+	pFile = bEngine::util::cFileSystem::open(std::string(fileName) + ".locations");
 	if(pFile != NULL)
 	{
 		while(!pFile->eof())
@@ -685,7 +688,7 @@ void cWorld::load()
 			o->userfunc(NULL);
 			o->loaded = true;
 		}
-		pFile->close();
+		delete pFile;
 	}
 
 	for(i = 0; i < sprites.size(); i++)
@@ -693,7 +696,7 @@ void cWorld::load()
 
 	sprites.clear();
 
-	if(cFileSystem::isFile(std::string(fileName) + ".sprites"))
+	if(bEngine::util::cFileSystem::isFile(std::string(fileName) + ".sprites"))
 	{
 		TiXmlDocument sprdoc = cFileSystem::getXml(std::string(fileName) + ".sprites");;
 		TiXmlElement* sprite = sprdoc.FirstChildElement("sprites")->FirstChildElement("sprite");
@@ -723,7 +726,7 @@ void cWorld::load()
 		}
 	}
 
-	if(cFileSystem::isFile(std::string(fileName) + ".extra"))
+	if(bEngine::util::cFileSystem::isFile(std::string(fileName) + ".extra"))
 	{
 		TiXmlDocument extradoc = cFileSystem::getXml(std::string(fileName) + ".extra");
 		TiXmlElement* light = extradoc.FirstChildElement("lights")->FirstChildElement("light");
@@ -758,7 +761,7 @@ void cWorld::load()
 }
 
 
-int cQuadTreeNode::load(std::vector<cVector3>& data, int index, int level)
+int cQuadTreeNode::load(std::vector<bEngine::math::cVector3>& data, int index, int level)
 {
 	child1 = NULL;
 	child2 = NULL;
@@ -790,8 +793,8 @@ void cQuadTreeNode::draw(int level)
 {
 	if (level == 0)
 	{
-		cVector3 v = box1;
-		cVector3 v2 = box2;
+		bEngine::math::cVector3 v = box1;
+		bEngine::math::cVector3 v2 = box2;
 
 		v.x += cGraphics::world->width*5;
 		v.y = -v.y;
@@ -873,7 +876,7 @@ void cWorld::save()
 		return;
 	TiXmlDocument extraproperties;
 
-	strcpy(fileName, replace(fileName, "\\","/").c_str());
+	strcpy(fileName, bEngine::util::replace(fileName, "\\","/").c_str());
 
 	{
 		if(!quickSave)
@@ -1463,7 +1466,7 @@ void cWorld::draw()
 	}
 
 	
-	static cVector3 lastLookAt, lastEye;
+	static bEngine::math::cVector3 lastLookAt, lastEye;
 
 
 	glMatrixMode(GL_MODELVIEW);							// Select The Modelview Matrix
@@ -1480,10 +1483,10 @@ void cWorld::draw()
 					0,1,0);
 	else
 	{
-		cVector3 eye = cVector3(-cGraphics::worldContainer->camera.pointer.x + cGraphics::worldContainer->camera.height*sin(cGraphics::worldContainer->camera.rot),
+		bEngine::math::cVector3 eye = bEngine::math::cVector3(-cGraphics::worldContainer->camera.pointer.x + cGraphics::worldContainer->camera.height*sin(cGraphics::worldContainer->camera.rot),
 								camrad+cGraphics::worldContainer->camera.height+camheight,
 								-cGraphics::worldContainer->camera.pointer.y + cGraphics::worldContainer->camera.height*cos(cGraphics::worldContainer->camera.rot));
-		cVector3 lookAt = cVector3(	-cGraphics::worldContainer->camera.pointer.x,camrad + 
+		bEngine::math::cVector3 lookAt = bEngine::math::cVector3(	-cGraphics::worldContainer->camera.pointer.x,camrad + 
 									cGraphics::worldContainer->camera.height * (cGraphics::worldContainer->camera.angle/10.0f)+camheight,
 									-cGraphics::worldContainer->camera.pointer.y);
 
@@ -1561,9 +1564,9 @@ void cWorld::draw()
 		cGraphics::worldContainer->settings.lightDiffuse[2] = ambientLight.diffuse.z;
 		cGraphics::worldContainer->settings.lightDiffuse[3] = 1.0f;
 
-		float xdir = cos((ambientLight.lightLongitude + 90)*PI/180.0)*sin((90-ambientLight.lightLatitude)*PI/180.0);
-		float zdir = sin((ambientLight.lightLongitude + 90)*PI/180.0)*sin((90-ambientLight.lightLatitude)*PI/180.0);
-		float ydir = cos((90-ambientLight.lightLatitude)*PI/180.0);
+		float xdir = cos((ambientLight.lightLongitude + 90)*bEngine::math::PI/180.0)*sin((90-ambientLight.lightLatitude)*bEngine::math::PI/180.0);
+		float zdir = sin((ambientLight.lightLongitude + 90)*bEngine::math::PI/180.0)*sin((90-ambientLight.lightLatitude)*bEngine::math::PI/180.0);
+		float ydir = cos((90-ambientLight.lightLatitude)*bEngine::math::PI/180.0);
 
 		cGraphics::worldContainer->settings.lightPosition[0] = xdir;
 		cGraphics::worldContainer->settings.lightPosition[1] = ydir;
@@ -1917,7 +1920,7 @@ void cWorld::draw()
 		glBindTexture(GL_TEXTURE_2D, cGraphics::waterTextures[water.type][(int)ceil(waterindex)]->texId());
 
 		if(cGraphics::view.showWaterAnimation)
-			waterindex+=max((float)0,(cGraphicsBase::getFrameTicks()) / 50.0f);
+			waterindex+=bEngine::math::max((float)0,(cGraphicsBase::getFrameTicks()) / 50.0f);
 		if (waterindex > cGraphics::waterTextures[water.type].size()-1)
 			waterindex = 0;
 		glBegin(GL_QUADS);
@@ -2280,7 +2283,7 @@ void cWorld::draw()
 				glVertex3f(x*10,-c->cell3+0.2,(height-y)*10-10);
 			glEnd();
 		}
-		if (!(cGraphics::worldContainer->settings.wallHeightMax == cVector2(-1,-1)))
+		if (!(cGraphics::worldContainer->settings.wallHeightMax == bEngine::math::cVector2(-1,-1)))
 		{
 			cCube* c = &cubes[(int)cGraphics::worldContainer->settings.wallHeightMax.y][(int)cGraphics::worldContainer->settings.wallHeightMax.x];
 			glColor4f(1,0,0,0.5);
@@ -2291,7 +2294,7 @@ void cWorld::draw()
 				glVertex3f(cGraphics::worldContainer->settings.wallHeightMax.x*10,-c->cell3+0.2,(height-cGraphics::worldContainer->settings.wallHeightMax.y)*10-10);
 			glEnd();
 		}
-		if (!(cGraphics::worldContainer->settings.wallHeightMin == cVector2(-1,-1)))
+		if (!(cGraphics::worldContainer->settings.wallHeightMin == bEngine::math::cVector2(-1,-1)))
 		{
 			cCube* c = &cubes[(int)cGraphics::worldContainer->settings.wallHeightMin.y][(int)cGraphics::worldContainer->settings.wallHeightMin.x];
 			glColor4f(0,1,0,0.5);
@@ -2362,7 +2365,7 @@ void cWorld::draw()
 			glBegin(GL_QUADS);
 			for(i = 0; i < models.size(); i++)
 			{
-				cVector3 pos = models[i]->pos;
+				bEngine::math::cVector3 pos = models[i]->pos;
 
 				if(cGraphics::worldContainer->settings.selectedObject == (int)i)
 					glColor4f(1,1,0,0.5);
@@ -2462,7 +2465,7 @@ void cWorld::draw()
 		glBegin(GL_QUADS);
 		for(i = 0; i < models.size(); i++)
 		{
-			cVector3 pos = models[i]->pos;
+			bEngine::math::cVector3 pos = models[i]->pos;
 
 			if(models[i]->selected)
 				glColor4f(1,1,0,0.5);
@@ -2525,7 +2528,7 @@ void cWorld::draw()
 			else
 				glColor4f(1,1,1,1);
 
-			cVector3 p = effects[i].pos;
+			bEngine::math::cVector3 p = effects[i].pos;
 			glTranslatef(5*effects[i].pos.x,-effects[i].pos.y, 5*(2*height-effects[i].pos.z));
 			effect->draw();
 			cGraphics::font->print3d(0,0,1,1,0,0,0,0.4f,"%s", effects[i].readablename.c_str());
@@ -2553,7 +2556,7 @@ void cWorld::draw()
 			else
 				glColor4f(1,1,1,1);
 
-			cVector3 p = sounds[i].pos;
+			bEngine::math::cVector3 p = sounds[i].pos;
 			glTranslatef(5*sounds[i].pos.x,-sounds[i].pos.y, 5*(2*height-sounds[i].pos.z));
 			sound->draw();
 			cGraphics::font->print3d(0,0,1,1,0,0,0,0.4f,"%s", sounds[i].fileName.c_str());
@@ -2567,7 +2570,7 @@ void cWorld::draw()
 		glEnable(GL_BLEND);
 		for(i = 0; i < lights.size(); i++)
 		{
-			cVector3 p = lights[i].pos;
+			bEngine::math::cVector3 p = lights[i].pos;
 			glTranslatef(5*lights[i].pos.x,lights[i].pos.y+5, 5*(2*height-lights[i].pos.z));
 			glColor3f(1,1,1);
 			light2->draw();
@@ -2764,35 +2767,35 @@ void cWorld::draw()
 								cCube* c = &cubes[y-yy][x+xx];
 								glNormal3f(c->normal.x, c->normal.y, c->normal.z);
 
-								cVector2 v1(0,0),v2(0,0),v3(0,0),v4(0,0);
+								bEngine::math::cVector2 v1(0,0),v2(0,0),v3(0,0),v4(0,0);
 
 								if(cGraphics::worldContainer->settings.textureRot == 0)
 								{
-									v1 = cVector2((xxx+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX,		1-(yyy+1+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY);
-									v2 = cVector2((xxx+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX,		1-(yyy+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY);
-									v3 = cVector2((xxx+1+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX,		1-(yyy+1+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY);
-									v4 = cVector2((xxx+1+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX,		1-(yyy+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY);
+									v1 = bEngine::math::cVector2((xxx+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX,		1-(yyy+1+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY);
+									v2 = bEngine::math::cVector2((xxx+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX,		1-(yyy+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY);
+									v3 = bEngine::math::cVector2((xxx+1+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX,		1-(yyy+1+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY);
+									v4 = bEngine::math::cVector2((xxx+1+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX,		1-(yyy+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY);
 								}
 								else if (cGraphics::worldContainer->settings.textureRot == 1)
 								{
-									v1 = cVector2((xxx+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX,		1-(yyy+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY);
-									v2 = cVector2((xxx+1+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX,		1-(yyy+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY);
-									v3 = cVector2((xxx+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX,		1-(yyy+1+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY);
-									v4 = cVector2((xxx+1+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX,		1-(yyy+1+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY);
+									v1 = bEngine::math::cVector2((xxx+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX,		1-(yyy+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY);
+									v2 = bEngine::math::cVector2((xxx+1+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX,		1-(yyy+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY);
+									v3 = bEngine::math::cVector2((xxx+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX,		1-(yyy+1+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY);
+									v4 = bEngine::math::cVector2((xxx+1+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX,		1-(yyy+1+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY);
 								}
 								else if (cGraphics::worldContainer->settings.textureRot == 2)
 								{
-									v1 = cVector2((xxx+1+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX,		1-(yyy+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY);
-									v2 = cVector2((xxx+1+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX,		1-(yyy+1+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY);
-									v3 = cVector2((xxx+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX,		1-(yyy+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY);
-									v4 = cVector2((xxx+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX,		1-(yyy+1+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY);
+									v1 = bEngine::math::cVector2((xxx+1+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX,		1-(yyy+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY);
+									v2 = bEngine::math::cVector2((xxx+1+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX,		1-(yyy+1+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY);
+									v3 = bEngine::math::cVector2((xxx+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX,		1-(yyy+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY);
+									v4 = bEngine::math::cVector2((xxx+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX,		1-(yyy+1+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY);
 								}
 								else if (cGraphics::worldContainer->settings.textureRot == 3)
 								{
-									v1 = cVector2((xxx+1+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX,		1-(yyy+1+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY);
-									v2 = cVector2((xxx+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX,		1-(yyy+1+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY);
-									v3 = cVector2((xxx+1+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX,		1-(yyy+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY);
-									v4 = cVector2((xxx+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX,		1-(yyy+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY);
+									v1 = bEngine::math::cVector2((xxx+1+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX,		1-(yyy+1+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY);
+									v2 = bEngine::math::cVector2((xxx+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX,		1-(yyy+1+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY);
+									v3 = bEngine::math::cVector2((xxx+1+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX,		1-(yyy+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY);
+									v4 = bEngine::math::cVector2((xxx+cGraphics::textureBrushOffset.x) * 1/ cGraphics::textureGridSizeX,		1-(yyy+cGraphics::textureBrushOffset.y) / cGraphics::textureGridSizeY);
 								}
 								v1.x = v1.x / (float)cGraphics::textureBrushSize;
 								v2.x = v2.x / (float)cGraphics::textureBrushSize;
@@ -2876,7 +2879,7 @@ void cWorld::draw()
 		glBindTexture(GL_TEXTURE_2D, cGraphics::waterTextures[water.type][(int)ceil(waterindex)]->texId());
 
 		if(cGraphics::view.showWaterAnimation)
-			waterindex+=max((float)0,(cGraphicsBase::getFrameTicks()) / 50.0f);
+			waterindex+=bEngine::math::max((float)0,(cGraphicsBase::getFrameTicks()) / 50.0f);
 		if (waterindex > cGraphics::waterTextures[water.type].size()-1)
 			waterindex = 0;
 		glBegin(GL_QUADS);
@@ -2895,7 +2898,7 @@ void cWorld::draw()
 		glColor4f(1,1,0,1);
 		glDisable(GL_TEXTURE_2D);
 		glBegin(GL_POLYGON);
-			for(double ii = 0; ii < 2*PI; ii+= 2*PI/20.0)
+			for(double ii = 0; ii < 2*bEngine::math::PI; ii+= 2*bEngine::math::PI/20.0)
 				if(cGraphics::worldContainer->view.topCamera)
 					glVertex3f(-cGraphics::worldContainer->camera.pointer.y+cos(ii)*2 + cGraphics::worldContainer->camera.height/2.0f + 15 ,camheight+0.1,-cGraphics::worldContainer->camera.pointer.x-cGraphics::worldContainer->camera.height/2.0f+sin(ii)*2-15);
 				else
@@ -3123,7 +3126,7 @@ void cWorld::unload()
 	unsigned int x,y,i;
 	for(i = 0; i < textures.size(); i++)
 	{
-		cTextureCache::unload(textures[i]->texture);
+		bEngine::cTextureCache::unload(textures[i]->texture);
 		delete textures[i];
 	}
 	textures.clear();
@@ -3197,14 +3200,14 @@ void cQuadTreeNode::recalculate()
 	if(child1 != NULL)
 	{
 		box1.y = child1->box1.y;
-		box1.y = max(box1.y, child2->box1.y);
-		box1.y = max(box1.y, child3->box1.y);
-		box1.y = max(box1.y, child4->box1.y);
+		box1.y = bEngine::math::max(box1.y, child2->box1.y);
+		box1.y = bEngine::math::max(box1.y, child3->box1.y);
+		box1.y = bEngine::math::max(box1.y, child4->box1.y);
 
 		box2.y = child1->box2.y;
-		box2.y = min(box2.y, child2->box2.y);
-		box2.y = min(box2.y, child3->box2.y);
-		box2.y = min(box2.y, child4->box2.y);
+		box2.y = bEngine::math::min(box2.y, child2->box2.y);
+		box2.y = bEngine::math::min(box2.y, child3->box2.y);
+		box2.y = bEngine::math::min(box2.y, child4->box2.y);
 	}
 	else
 	{
@@ -3223,21 +3226,21 @@ void cQuadTreeNode::recalculate()
 				if(tiley > -1 && tiley < cGraphics::world->height && tilex > -1 && tilex < cGraphics::world->width)
 				{
 					cCube* c = &cGraphics::world->cubes[cGraphics::world->height - tiley-1][tilex];
-					box1.y = max(box1.y, c->cell1);
-					box2.y = min(box2.y, c->cell1);
+					box1.y = bEngine::math::max(box1.y, c->cell1);
+					box2.y = bEngine::math::min(box2.y, c->cell1);
 
-					box1.y = max(box1.y, c->cell2);
-					box2.y = min(box2.y, c->cell2);
+					box1.y = bEngine::math::max(box1.y, c->cell2);
+					box2.y = bEngine::math::min(box2.y, c->cell2);
 
-					box1.y = max(box1.y, c->cell3);
-					box2.y = min(box2.y, c->cell3);
+					box1.y = bEngine::math::max(box1.y, c->cell3);
+					box2.y = bEngine::math::min(box2.y, c->cell3);
 
-					box1.y = max(box1.y, c->cell4);
-					box2.y = min(box2.y, c->cell4);
+					box1.y = bEngine::math::max(box1.y, c->cell4);
+					box2.y = bEngine::math::min(box2.y, c->cell4);
 
 					
-					box1.y = max(box1.y, c->maxHeight);
-					box2.y = min(box2.y, c->minHeight);
+					box1.y = bEngine::math::max(box1.y, c->maxHeight);
+					box2.y = bEngine::math::min(box2.y, c->minHeight);
 
 				}
 				else
@@ -3263,7 +3266,7 @@ void cQuadTreeNode::recalculate()
 
 }
 
-void cQuadTreeNode::save(std::vector<cVector3>& v)
+void cQuadTreeNode::save(std::vector<bEngine::math::cVector3>& v)
 {
 	v.push_back(box1);
 	v.push_back(box2);
@@ -3463,9 +3466,9 @@ int cRealLightMap::texId()
 	int xx, yy;
 
 	char* buf = new char[128*128*3];
-	for(xx = 0; xx < min(21, cGraphics::world->width-x); xx++)
+	for(xx = 0; xx < bEngine::math::min(21, cGraphics::world->width-x); xx++)
 	{
-		for(yy = 0; yy < min(21, cGraphics::world->height-y); yy++)
+		for(yy = 0; yy < bEngine::math::min(21, cGraphics::world->height-y); yy++)
 		{
 			if(cGraphics::world->cubes[y+yy][x+xx].tileUp == -1)
 				continue;
@@ -3485,7 +3488,7 @@ int cRealLightMap::texId()
 	}
 
 
-	for(xx = 0; xx < min(21, cGraphics::world->width-x); xx++)
+	for(xx = 0; xx < bEngine::math::min(21, cGraphics::world->width-x); xx++)
 	{
 		for(int xxx = 0; xxx < 6; xxx++)
 		{
@@ -3497,7 +3500,7 @@ int cRealLightMap::texId()
 		}
 	}
 
-	for(yy = 0; yy < min(21, cGraphics::world->height-y); yy++)
+	for(yy = 0; yy < bEngine::math::min(21, cGraphics::world->height-y); yy++)
 	{
 		for(int yyy = 0; yyy < 6; yyy++)
 		{
@@ -3539,9 +3542,9 @@ int cRealLightMap::texId2()
 
 	char* buf = new char[128*128];
 	ZeroMemory(buf, 128*128);
-	for(xx = 0; xx < min(21, cGraphics::world->width-x); xx++)
+	for(xx = 0; xx < bEngine::math::min(21, cGraphics::world->width-x); xx++)
 	{
-		for(yy = 0; yy < min(21, cGraphics::world->height-y); yy++)
+		for(yy = 0; yy < bEngine::math::min(21, cGraphics::world->height-y); yy++)
 		{
 			if(cGraphics::world->cubes[y+yy][x+xx].tileUp == -1)
 				continue;
@@ -3556,7 +3559,7 @@ int cRealLightMap::texId2()
 		}
 	}
 
-	for(xx = 0; xx < min(21, cGraphics::world->width-x); xx++)
+	for(xx = 0; xx < bEngine::math::min(21, cGraphics::world->width-x); xx++)
 	{
 		for(int xxx = 0; xxx < 6; xxx++)
 		{
@@ -3565,7 +3568,7 @@ int cRealLightMap::texId2()
 		}
 	}
 
-	for(yy = 0; yy < min(21, cGraphics::world->height-y); yy++)
+	for(yy = 0; yy < bEngine::math::min(21, cGraphics::world->height-y); yy++)
 	{
 		for(int yyy = 0; yyy < 6; yyy++)
 		{
@@ -4055,10 +4058,10 @@ void cWorld::calcVertexNormals(int xfrom, int yfrom, int xto, int yto)
 				cubes[y][x].vNormal3 += cubes[y][x+1].normal;
 				cubes[y][x].vNormal4 += cubes[y][x+1].normal;
 			}
-			cubes[y][x].vNormal1.normalize();
-			cubes[y][x].vNormal2.normalize();
-			cubes[y][x].vNormal3.normalize();
-			cubes[y][x].vNormal4.normalize();
+			cubes[y][x].vNormal1 = cubes[y][x].vNormal1.getNormalized();
+			cubes[y][x].vNormal2 = cubes[y][x].vNormal2.getNormalized();
+			cubes[y][x].vNormal3 = cubes[y][x].vNormal3.getNormalized();
+			cubes[y][x].vNormal4 = cubes[y][x].vNormal4.getNormalized();
 		}
 	}
 }
@@ -4090,7 +4093,7 @@ void cWorld::newEmpty(int newWidth,int newHeight)
 	}
 	
 	for(i = 0; i < textures.size(); i++)
-		cTextureCache::unload(textures[i]->texture);
+		bEngine::cTextureCache::unload(textures[i]->texture);
 	textures.clear();
 	
 	for(y = 0; y < realLightmaps.size(); y+=21)
@@ -4200,8 +4203,8 @@ void cWorld::newEmpty(int newWidth,int newHeight)
 	ambientLight.lightLongitude = 45;
 	ambientLight.lightLatitude = 45;
 	
-	ambientLight.diffuse = cVector3(1,1,1);
-	ambientLight.ambient = cVector3(0.3f,0.3f,0.3f);
+	ambientLight.diffuse = bEngine::math::cVector3(1,1,1);
+	ambientLight.ambient = bEngine::math::cVector3(0.3f,0.3f,0.3f);
 	ambientLight.ambintensity = 0.5f;
 
 	unknown1 = -500;
@@ -4244,7 +4247,7 @@ void cWorld::newEmpty(int newWidth,int newHeight)
 
 	lightmaps.push_back(l);
 	
-	cGraphics::worldContainer->camera.pointer = cVector2(-width*5,-height*5);
+	cGraphics::worldContainer->camera.pointer = bEngine::math::cVector2(-width*5,-height*5);
 	
 	loaded = true;
 	cGraphics::worldContainer->settings.texturestart = 0;
@@ -4334,10 +4337,10 @@ void cWorld::setHeight()
 
 void cCube::calcNormal()
 {
-	cVector3 b1, b2;
-	b1 = cVector3(10,-cell1,-10) - cVector3(0,-cell4,0);
-	b2 = cVector3(0,-cell3,-10) - cVector3(0,-cell4,0);
-	normal = b1.cross(b2).getnormalized();//cVector3(b1.y * b2.z - b1.z * b2.y, b1.z * b2.x - b1.x * b2.z, b1.x * b2.y - b1.y * b2.x);
+	bEngine::math::cVector3 b1, b2;
+	b1 = bEngine::math::cVector3(10,-cell1,-10) - bEngine::math::cVector3(0,-cell4,0);
+	b2 = bEngine::math::cVector3(0,-cell3,-10) - bEngine::math::cVector3(0,-cell4,0);
+	normal = b1.cross(b2).getNormalized();//cVector3(b1.y * b2.z - b1.z * b2.y, b1.z * b2.x - b1.x * b2.z, b1.x * b2.y - b1.y * b2.x);
 }
 
 cTile::cTile( cBrowInterface::cPluginTile t )

@@ -1,18 +1,19 @@
-#include <common.h>
-#include "texture.h"
+#include <bengine/forwards.h>
+#include <bengine/texture.h>
+#include <bengine/texturecache.h>
+
 #include "texturemodel.h"
-#include "texturecache.h"
 #include "graphics.h"
 
 int cTextureModel::open(std::string filename)
 {
-	tex = cTextureCache::load(filename);
+	tex = bEngine::cTextureCache::load(filename);
 	return 0;
 }
 
 int cTextureModel::close()
 {
-	cTextureCache::unload(tex);
+	bEngine::cTextureCache::unload(tex);
 	return 0;
 }
 
@@ -59,8 +60,8 @@ int cTextureModel::setstate(int state)
 
 cTextureModel::cTextureModel()
 {
-	boundingbox1 = cVector3(-5,-5,-5);
-	boundingbox2 = cVector3(5,5,5);
+	boundingbox1 = bEngine::math::cVector3(-5,-5,-5);
+	boundingbox2 = bEngine::math::cVector3(5,5,5);
 }
 
 cTextureModel::~cTextureModel()

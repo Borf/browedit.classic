@@ -8,12 +8,15 @@
 #include <GL/gl.h>
 #include <map>
 
+#include <bengine/forwards.h>
+#include <bengine/math/vector2.h>
+#include <bengine/math/vector3.h>
+
 class cWorld;
 class cUndoStack;
 class cFont;
 class cMenu;
 class cRsmModel;
-class cTexture;
 
 enum eTool
 {
@@ -80,7 +83,7 @@ public:
 		float				height;
 		float				angle;
 		float				rot;
-		cVector2			pointer;
+		bEngine::math::cVector2			pointer;
 	};
 	class cView
 	{
@@ -114,11 +117,11 @@ public:
 		float						gridoffsetx;
 		float						gridoffsety;
 		
-		cVector2					selectedTile;
-		cVector2					selectionstart;
-		cVector2					selectionend;
-		cVector3					selectionstart3d;
-		cVector3					selectionend3d;
+		bEngine::math::cVector2					selectedTile;
+		bEngine::math::cVector2					selectionstart;
+		bEngine::math::cVector2					selectionend;
+		bEngine::math::cVector3					selectionstart3d;
+		bEngine::math::cVector3					selectionend3d;
 		std::vector<int>			selectedobjects;
 		int							selectedObject;
 		
@@ -133,8 +136,8 @@ public:
 		GLfloat						lightDiffuse[4];
 		GLfloat						lightPosition[4];
 
-		cVector2					wallHeightMin;
-		cVector2					wallHeightMax;
+		bEngine::math::cVector2					wallHeightMin;
+		bEngine::math::cVector2					wallHeightMax;
 
 	};
 
@@ -195,26 +198,26 @@ public:
 
 	static eTool									textureTool;
 	static std::vector<std::vector<bool> >			textureBrush;
-	static cVector2									textureBrushOffset;
+	static bEngine::math::cVector2					textureBrushOffset;
 	static float									textureGridSizeX;
 	static float									textureGridSizeY;
 	static int										textureBrushSize;
 
 
-	static cVector3									selectionCenter;
+	static bEngine::math::cVector3					selectionCenter;
 
-	static std::vector<cTexture*>	gatTextures;
-	static cTexture*				gatBorder;
-	static cTexture*				splash;
-	static std::vector<std::vector<cTexture*> >		waterTextures;
+	static std::vector<bEngine::cTexture*>			gatTextures;
+	static bEngine::cTexture*						gatBorder;
+	static bEngine::cTexture*						splash;
+	static std::vector<std::vector<bEngine::cTexture*> >		waterTextures;
 	static std::string								waterDirectory;
 	static std::string								waterExtension;
 	static unsigned int								waterCount;
 
-	static cTexture*								texturePreview;
+	static bEngine::cTexture*						texturePreview;
 
-	static cVector3									backgroundColor;
-	static cVector3									noTileColor;
+	static bEngine::math::cVector3					backgroundColor;
+	static bEngine::math::cVector3					noTileColor;
 
 	static std::vector<int>							gatTiles;
 };

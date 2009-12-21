@@ -9,9 +9,9 @@ public:
 	class cObject
 	{public:
 	std::string filename;
-	cVector3 pos;
-	cVector3 rot;
-	cVector3 scale;
+	bEngine::math::cVector3 pos;
+	bEngine::math::cVector3 rot;
+	bEngine::math::cVector3 scale;
 	int id;
 	};
 	std::vector<cObject> objects;

@@ -1,3 +1,4 @@
+#include <bengine/forwards.h>
 #include "windowlabel.h"
 #include "window.h"
 
@@ -24,67 +25,6 @@ void cWindowLabel::draw(int cutoffleft, int cutoffright, int cutofftop, int cuto
 
 	if (lines.size() == 0)
 	{
-/*		string t = text;
-		string t1;
-		string next;
-		string space = "";
-		while(t.length() > 0)
-		{
-			next = t;
-			if (t.find(" ") != string::npos)
-			{
-				if (t.find("\n") != string::npos)
-				{
-					if (t.find(" ") > t.find((char)10))
-					{
-						next = t.substr(0, t.find((char)10));
-						t = t.substr(t.find((char)10)+1);
-						space = "\n";
-					}
-					else
-					{
-						next = t.substr(0, t.find(" "));
-						t = t.substr(t.find(" ")+1);
-					}
-				}
-				else
-				{
-					next = t.substr(0, t.find(" "));
-					t = t.substr(t.find(" ")+1);
-				}
-			}
-			else
-			{	// geen spatie
-				if (t.find("\n") != string::npos)
-				{
-					next = t.substr(0, t.find((char)10));
-					t = t.substr(t.find((char)10)+1);
-					space = "\n";
-				}
-				else
-				{
-					next = t;
-					t = "";
-				}
-			}
-
-			if (parent->font->textLen(removecolors(t1 + " " + next)) > w || space == "\n")
-			{
-				lines.push_back(t1);
-				t1 = next;
-			}
-			else
-				t1 = t1 + space + next;
-			if (space != "\n")
-				space = " ";
-			else
-				space = "";
-			}
-
-		}
-		lines.push_back(t1);
-*/
-
 			std::string textleft = text;
 			std::string curline = "";
 			std::string word = "";

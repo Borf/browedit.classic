@@ -2,6 +2,8 @@
 #include "graphics.h"
 #include "undo/texture.h"
 #include "clipboard.h"
+#include <math.h>
+#include <math.h>
 
 
 int cProcessManagement::textureedit_process_events(SDL_Event &event)

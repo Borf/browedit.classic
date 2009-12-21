@@ -8,11 +8,12 @@
 class cUndoChangeObjects : public cUndoItem
 {
 	class cObject
-	{public:
-	cVector3 pos;
-	cVector3 rot;
-	cVector3 scale;
-	int objectid;
+	{
+	public:
+		bEngine::math::cVector3 pos;
+		bEngine::math::cVector3 rot;
+		bEngine::math::cVector3 scale;
+		int objectid;
 	};
 	std::vector<cObject>	objects;
 	public:
@@ -40,7 +41,7 @@ class cUndoChangeObjects : public cUndoItem
 				cGraphics::world->models[objects[i].objectid]->scale = objects[i].scale;
 			}
 			int count = 0;
-			cGraphics::selectionCenter = cVector3(0,0,0);
+			cGraphics::selectionCenter = bEngine::math::cVector3(0,0,0);
 			for(i = 0; i < cGraphics::world->models.size(); i++)
 			{
 				if (cGraphics::world->models[i]->selected)

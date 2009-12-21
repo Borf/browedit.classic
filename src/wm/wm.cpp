@@ -1,9 +1,13 @@
+#include <bengine/forwards.h>
+#include <bengine/util.h>
+#include <bengine/texturecache.h>
+
 #include "wm.h"
 #include "window.h"
 
 #include <common.h>
 #include <font.h>
-#include <texture.h>
+#include <bengine/texture.h>
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
 #include <graphics.h>
@@ -12,14 +16,11 @@
 #include <windows/inputwindow.h>
 #include <windows/xmlwindow.h>
 #include <filesystem.h>
-#include <texturecache.h>
 extern void mainloop();
 
 
-
-
 std::vector<cWindow*>	cWM::windows; //vector of windows, 0 = topwindow
-cTexture*				cWM::texture;
+bEngine::cTexture*		cWM::texture;
 cFont*					cWM::font;
 TiXmlDocument			cWM::skin;
 float					cWM::color[4];
@@ -120,21 +121,21 @@ int cWM::draw()
 int cWM::init(std::string sSkin)
 {
 	skin = cFileSystem::getXml(sSkin);
-	texture = cTextureCache::load(skin.FirstChildElement("skin")->FirstChildElement("texture")->FirstChild()->Value());
+	texture = bEngine::cTextureCache::load(skin.FirstChildElement("skin")->FirstChildElement("texture")->FirstChild()->Value());
 	font = new cFont();
 	font->load(skin.FirstChildElement("skin")->FirstChildElement("font")->FirstChild()->Value());
 
 	std::string c = skin.FirstChildElement("skin")->FirstChildElement("color")->FirstChild()->Value();
-	color[0] = hex2dec(c.substr(0,2))/255.0f;
-	color[1] = hex2dec(c.substr(2,2))/255.0f;
-	color[2] = hex2dec(c.substr(4,2))/255.0f;
-	color[3] = hex2dec(c.substr(6,2))/255.0f;
+	color[0] = bEngine::util::hex2dec(c.substr(0,2))/255.0f;
+	color[1] = bEngine::util::hex2dec(c.substr(2,2))/255.0f;
+	color[2] = bEngine::util::hex2dec(c.substr(4,2))/255.0f;
+	color[3] = bEngine::util::hex2dec(c.substr(6,2))/255.0f;
 
 	c = skin.FirstChildElement("skin")->FirstChildElement("colorblurred")->FirstChild()->Value();
-	colorBlur[0] = hex2dec(c.substr(0,2))/255.0f;
-	colorBlur[1] = hex2dec(c.substr(2,2))/255.0f;
-	colorBlur[2] = hex2dec(c.substr(4,2))/255.0f;
-	colorBlur[3] = hex2dec(c.substr(6,2))/255.0f;
+	colorBlur[0] = bEngine::util::hex2dec(c.substr(0,2))/255.0f;
+	colorBlur[1] = bEngine::util::hex2dec(c.substr(2,2))/255.0f;
+	colorBlur[2] = bEngine::util::hex2dec(c.substr(4,2))/255.0f;
+	colorBlur[3] = bEngine::util::hex2dec(c.substr(6,2))/255.0f;
 
 	focus = 0;
 	Log(3,0,"Window Manager initialized");
@@ -163,7 +164,7 @@ void cWM::unLoad()
 	windows.clear();
 	if(texture)	
 	{
-		cTextureCache::unload(texture);
+		bEngine::cTextureCache::unload(texture);
 		texture = NULL;
 	}
 	if(font)

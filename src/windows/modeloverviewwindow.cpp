@@ -1,4 +1,5 @@
 #include "modeloverviewwindow.h"
+#include <bengine/math/math.h>
 
 
 #include <menu.h>
@@ -41,7 +42,7 @@ cModelOverViewWindow::cModelOverViewTreeNode* cModelOverViewWindow::cModelOverVi
 		
 		for(unsigned int i = 0; i < children.size(); i++)
 		{
-			if(children[i]->text == firstpart)
+			if(children[i]->getText() == firstpart)
 			{
 				return ((cModelOverViewTreeNode*)children[i])->addNodeTree(secondpart);
 			}
@@ -151,7 +152,7 @@ void cModelOverViewWindow::cModelOverViewTree::getObject( cRsmModel* m )
 			
 			selected = nn->getselectionnr();
 			if(selected < liststart || selected > liststart+(int)i)
-				liststart = min((int)values.size()-i+1 , selected-(i/2));
+				liststart = bEngine::math::min((int)values.size()-i+1 , selected-(i/2));
 			if(liststart < 0)
 				liststart = 0;
 			break;

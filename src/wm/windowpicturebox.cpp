@@ -1,6 +1,10 @@
+#include <bengine/forwards.h>
+#include <bengine/texture.h>
+#include <bengine/texturecache.h>
+
 #include "windowpicturebox.h"
 #include "window.h"
-#include <texturecache.h>
+
 
 #ifdef WIN32
 #include <windows.h>
@@ -71,7 +75,7 @@ void cWindowPictureBox::setText(int i, std::string fil)
 	if(i == 0)
 	{
 		loaded = true;
-		tex = cTextureCache::load(fil);
+		tex = bEngine::cTextureCache::load(fil);
 	}
 }
 
@@ -101,5 +105,5 @@ cWindowPictureBox::cWindowPictureBox( cWindow* parent ) : cWindowObject(parent)
 cWindowPictureBox::~cWindowPictureBox()
 {
 	if (tex != NULL || loaded)
-		cTextureCache::unload(tex);
+		bEngine::cTextureCache::unload(tex);
 }

@@ -8,8 +8,11 @@
 #include <filesystem.h>
 #include <RSMModel.h>
 #include <sprite.h>
-#include <texturecache.h>
 #include <world.h>
+#include <math.h>
+
+#include <bengine/util.h>
+#include <bengine/texturecache.h>
 
 extern std::vector<cPluginBase*> plugins;
 
@@ -150,7 +153,7 @@ void cBrowInterfaceImplementation::removeEffect(int i)
 }
 void cBrowInterfaceImplementation::removeTexture(int i)
 {
-	cTextureCache::unload(cGraphics::world->textures[i]->texture);
+	bEngine::cTextureCache::unload(cGraphics::world->textures[i]->texture);
 	cGraphics::world->textures.erase(cGraphics::world->textures.begin() + i);
 }
 void cBrowInterfaceImplementation::removeSound(int i)
@@ -248,7 +251,7 @@ cPluginBase* cBrowInterfaceImplementation::getPlugin(const char* name)
 	unsigned int i = 0;
 	for(i = 0; i < plugins.size(); i++)
 	{
-		if(lcase(plugins[i]->name) == lcase(name))
+		if(bEngine::util::lcase(std::string(plugins[i]->name)) == bEngine::util::lcase(std::string(name)))
 			return plugins[i];
 	}
 	return NULL;
@@ -442,7 +445,7 @@ void cBrowInterfaceImplementation::clearSounds()
 void cBrowInterfaceImplementation::clearTextures()
 {
 	for(unsigned int i = 0; i < cGraphics::world->textures.size(); i++)
-		cTextureCache::unload(cGraphics::world->textures[i]->texture);
+		bEngine::cTextureCache::unload(cGraphics::world->textures[i]->texture);
 	cGraphics::world->textures.clear();
 }
 
