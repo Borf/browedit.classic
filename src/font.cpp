@@ -36,8 +36,10 @@ cFont::cFont()
 cFont::~cFont()
 {
   glDeleteLists(list_base,256);                       // Delete All 256 Display Lists
-  texture->unLoad();
-  delete texture;
+  if(texture)
+  {
+	  bEngine::cTextureCache::unload(texture);
+  }
   texture = NULL;
 }
 

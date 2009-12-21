@@ -1,6 +1,5 @@
 <config>
     <ro directory="c:\program files\gravity\ro\">
-        <grf>c:\program files\gravity\ro\edata.grf</grf>
         <grf>c:\program files\gravity\ro\sdata.grf</grf>
     </ro>
     <files>
