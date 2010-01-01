@@ -10,7 +10,7 @@
 #include <windows/soundselectwindow.h>
 #include <windows/objectwindow.h>
 #include <wm/windowinputbox.h>
-#include <filesystem.h>
+#include <bengine/util/filesystem.h>
 #include <math.h>
 
 extern bool doneAction;
@@ -189,8 +189,8 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 
 						cSound* o = &cGraphics::world->sounds[cGraphics::worldContainer->settings.selectedObject];
 						Mix_Chunk *sample;
-						cFile* pFile = cFileSystem::open(cSettings::roDir+"data/wav/" + o->fileName);
-						sample=Mix_QuickLoad_WAV((BYTE*)pFile->data);
+						bEngine::util::cInStream* pFile = bEngine::util::cFileSystem::open(cSettings::roDir+"data/wav/" + o->fileName);
+						sample;//TODObengine=Mix_QuickLoad_WAV((BYTE*)pFile->data);
 						Mix_Volume(-1,MIX_MAX_VOLUME);
 						Mix_PlayChannel(0, sample, 0);
 						while(Mix_Playing(-1) > 0 && playing)
@@ -200,7 +200,7 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 						if(!playing)
 							Mix_HaltChannel(-1);
 						Mix_FreeChunk(sample);
-						pFile->close();
+						delete pFile;
 					}
 					playing = false;
 

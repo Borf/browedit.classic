@@ -10,7 +10,6 @@
 #include "undo/heightedit.h"
 #include "undo/gatheightedit.h"
 #include "undo/lightnew.h"
-#include "filesystem.h"
 #include "windows/waterwindow.h"
 #include "windows/ambientlightwindow.h"
 #include "windows/keybindwindow.h"
@@ -33,6 +32,7 @@
 #include <bengine/math/vector3.h>
 #include <bengine/texture.h>
 #include <bengine/texturecache.h>
+#include <bengine/util/filesystem.h>
 #include <math.h>
 
 int process_events( );
@@ -580,10 +580,10 @@ MENUCOMMAND(random2)
 	std::vector<std::string>	randommodels;
 	for(i = 0; i < cSettings::objectFiles.size(); i++)
 	{
-		cFile* pFile = cFileSystem::open(cSettings::objectFiles[i]);
+		bEngine::util::cInStream* pFile = bEngine::util::cFileSystem::open(cSettings::objectFiles[i]);
 		while(!pFile->eof())
 		{
-			std::string line = pFile->readLine();
+			std::string line = pFile->readline();
 			if (line == "")
 				continue;
 			std::string pre = line.substr(0, line.find("|"));
@@ -841,10 +841,10 @@ MENUCOMMAND(random4)
 	std::vector<std::string>	randommodels;
 	for(i = 0; i < cSettings::objectFiles.size(); i++)
 	{
-		cFile* pFile = cFileSystem::open(cSettings::objectFiles[i]);
+		bEngine::util::cInStream* pFile = bEngine::util::cFileSystem::open(cSettings::objectFiles[i]);
 		while(!pFile->eof())
 		{
-			std::string line = pFile->readLine();
+			std::string line = pFile->readline();
 			if (line == "")
 				continue;
 			std::string pre = line.substr(0, line.find("|"));
@@ -2181,14 +2181,15 @@ MENUCOMMAND(exportmapfiles)
 	if(!cGraphics::world)
 		return false;
 #ifdef WIN32
-	CreateDirectory(cGraphics::world->fileName, NULL);
+//TODObengine
+/*	CreateDirectory(cGraphics::world->fileName, NULL);
 	CreateDirectory((cGraphics::world->fileName + std::string("\\texture\\")).c_str(), NULL);
 
 	unsigned int i;
 	std::ofstream pFile((std::string(cGraphics::world->fileName) + ".txt").c_str());
 	for(i = 0; i < cGraphics::world->textures.size(); i++)
 	{
-		cFile* pF = cFileSystem::open(cSettings::roDir + "data\\texture\\" + cGraphics::world->textures[i]->RoFilename);
+		bEngine::util::cInStream* pF = bEngine::util::cFileSystem::open(cSettings::roDir + "data\\texture\\" + cGraphics::world->textures[i]->RoFilename);
 		if(pF->location != -1)
 		{
 			pF->close();
@@ -2248,7 +2249,7 @@ MENUCOMMAND(exportmapfiles)
 
 
 	pFile.close();
-	ShellExecute(NULL,"open",(std::string(cGraphics::world->fileName) + ".txt").c_str(),NULL,"c:\\",SW_SHOW);
+	ShellExecute(NULL,"open",(std::string(cGraphics::world->fileName) + ".txt").c_str(),NULL,"c:\\",SW_SHOW);*/
 #endif
 	return true;
 }
@@ -2593,13 +2594,13 @@ char dirmap[] = { 4,3,2,1,0,7,6,5 };
 void readscript(std::string filename)
 {
 	Log(3,0,"Reading %s", filename.c_str());
-	cFile* pFile = cFileSystem::open("C:\\Documents and Settings\\Borf\\Desktop\\eathena\\" + filename);
+	bEngine::util::cInStream* pFile = bEngine::util::cFileSystem::open("C:\\Documents and Settings\\Borf\\Desktop\\eathena\\" + filename);
 	if(pFile == NULL)
 		return;
 
 	while(!pFile->eof())
 	{
-		std::string line = pFile->readLine();
+		std::string line = pFile->readline();
 		if(bEngine::util::trim(line).substr(0,4) == "npc:")
 			readscript(bEngine::util::trim(bEngine::util::trim(line)).substr(4));
 		else if(bEngine::util::trim(line).substr(0,7) == "import:")
@@ -2660,7 +2661,7 @@ void readscript(std::string filename)
 	}
 
 
-	pFile->close();
+	delete pFile;
 }
 
 
@@ -2675,7 +2676,7 @@ MENUCOMMAND(eascript)
 	scriptmap = cGraphics::world->fileName;
 	scriptmap = scriptmap.substr(scriptmap.rfind("\\")+1);
 	if(!sprites.FirstChild())
-		sprites = cFileSystem::getXml("sprites.xml");
+		sprites;//TODObengine = cFileSystem::getXml("sprites.xml");
 
 
 	readscript("npc\\scripts_main.conf");
@@ -2796,7 +2797,7 @@ MENUCOMMAND(npcscreenies)
 				strcpy(cGraphics::world->fileName, (cSettings::roDir + "data\\" + filename.substr(0, filename.rfind("."))).c_str());
 				cGraphics::world->load();
 				if(!sprites.FirstChild())
-					sprites = cFileSystem::getXml("sprites.xml");
+					sprites;//TODObengine = cFileSystem::getXml("sprites.xml");
 
 
 				readscript("npc\\scripts_main.conf");
@@ -3180,14 +3181,15 @@ MENUCOMMAND(addfavlightcat)
 
 MENUCOMMAND(rebuildtexturefile)
 {
+//TODObengine
 	std::string file = cWM::inputWindow("File to output:", "data/rotextures.txt");
-	if(file == "")
+/*	if(file == "")
 		return false;
 	std::ofstream pFile(file.c_str(), std::ios_base::binary | std::ios_base::out);
 	unsigned int i;
 	for(i = 0; i < cFileSystem::locations.size(); i++)
 	{
-		for(std::map<std::string, cFile*, std::less<std::string> >::iterator it = cFileSystem::locations[i]->files.begin(); it != cFileSystem::locations[i]->files.end(); it++)
+		for(std::map<std::string, bEngine::util::cInStream*, std::less<std::string> >::iterator it = cFileSystem::locations[i]->files.begin(); it != cFileSystem::locations[i]->files.end(); it++)
 		{
 			if(it->first.substr(cSettings::roDir.length(),13) != "data\\texture\\")
 				continue;
@@ -3200,21 +3202,22 @@ MENUCOMMAND(rebuildtexturefile)
 			}
 		}
 	}
-	pFile.close();
+	pFile.close();*/
 	return true;
 }
 
 
 MENUCOMMAND(rebuildmodelfile)
 {
-	std::string file = cWM::inputWindow("File to output:", "data/romodels.txt");
+//TODObengine
+/*	std::string file = cWM::inputWindow("File to output:", "data/romodels.txt");
 	if(file == "")
 		return false;
 	std::ofstream pFile(file.c_str(), std::ios_base::binary | std::ios_base::out);
 	unsigned int i;
 	for(i = 0; i < cFileSystem::locations.size(); i++)
 	{
-		for(std::map<std::string, cFile*, std::less<std::string> >::iterator it = cFileSystem::locations[i]->files.begin(); it != cFileSystem::locations[i]->files.end(); it++)
+		for(std::map<std::string, bEngine::util::cInStream*, std::less<std::string> >::iterator it = cFileSystem::locations[i]->files.begin(); it != cFileSystem::locations[i]->files.end(); it++)
 		{
 			if(it->first.substr(cSettings::roDir.length(),11) != "data\\model\\")
 				continue;
@@ -3228,20 +3231,21 @@ MENUCOMMAND(rebuildmodelfile)
 			}
 		}
 	}
-	pFile.close();
+	pFile.close();*/
 	return true;
 }
 
 MENUCOMMAND(rebuildsoundsfile)
 {
-	std::string file = cWM::inputWindow("File to output:", "data/rosounds.txt");
+//TODObengine
+/*	std::string file = cWM::inputWindow("File to output:", "data/rosounds.txt");
 	if(file == "")
 		return false;
 	std::ofstream pFile(file.c_str(), std::ios_base::binary | std::ios_base::out);
 	unsigned int i;
 	for(i = 0; i < cFileSystem::locations.size(); i++)
 	{
-		for(std::map<std::string, cFile*, std::less<std::string> >::iterator it = cFileSystem::locations[i]->files.begin(); it != cFileSystem::locations[i]->files.end(); it++)
+		for(std::map<std::string, bEngine::util::cInStream*, std::less<std::string> >::iterator it = cFileSystem::locations[i]->files.begin(); it != cFileSystem::locations[i]->files.end(); it++)
 		{
 			if(it->first.substr(cSettings::roDir.length(),9) != "data\\wav\\")
 				continue;
@@ -3255,7 +3259,7 @@ MENUCOMMAND(rebuildsoundsfile)
 			}
 		}
 	}
-	pFile.close();
+	pFile.close();*/
 	return true;
 }
 
@@ -3444,10 +3448,10 @@ MENUCOMMAND(saveOnline)
 
 	cWM::showMessage("Please move your viewpoint to show the map on the thumbnail");
 
-
-	cFile* rsw = cFileSystem::open(std::string(cGraphics::world->fileName) + ".rsw");
-	cFile* gat = cFileSystem::open(std::string(cGraphics::world->fileName) + ".gat");
-	cFile* gnd = cFileSystem::open(std::string(cGraphics::world->fileName) + ".gnd");
+/*TODObengine
+	bEngine::util::cInStream* rsw = bEngine::util::cFileSystem::open(std::string(cGraphics::world->fileName) + ".rsw");
+	bEngine::util::cInStream* gat = bEngine::util::cFileSystem::open(std::string(cGraphics::world->fileName) + ".gat");
+	bEngine::util::cInStream* gnd = bEngine::util::cFileSystem::open(std::string(cGraphics::world->fileName) + ".gnd");
 
 	CURL *curl_handle;
 	curl_global_init(CURL_GLOBAL_ALL);
@@ -3491,7 +3495,7 @@ MENUCOMMAND(saveOnline)
 	curl_easy_perform(curl_handle);
 	curl_easy_cleanup(curl_handle);
 	Log(3,0,"Done sending :D");
-
+*/
 	return true;
 }
 
@@ -3566,9 +3570,10 @@ MENUCOMMAND(makeMinimaps)
 	std::vector<std::string> mapnames;
 	mapnames.clear();
 	unsigned int i;
-	for(i = 0; i < cFileSystem::locations.size(); i++)
+//TODObengine
+/*	for(i = 0; i < cFileSystem::locations.size(); i++)
 	{
-		for(std::map<std::string, cFile*, std::less<std::string> >::iterator it = cFileSystem::locations[i]->files.begin(); it != cFileSystem::locations[i]->files.end(); it++)
+		for(std::map<std::string, bEngine::util::cInStream*, std::less<std::string> >::iterator it = cFileSystem::locations[i]->files.begin(); it != cFileSystem::locations[i]->files.end(); it++)
 		{
 			if(it->first.find(".rsw") != std::string::npos)
 			{
@@ -3584,7 +3589,7 @@ MENUCOMMAND(makeMinimaps)
 
 		}
 	}
-
+*/
 	int mapcount = 0;
 	for(i = 0; i < mapnames.size(); i++)
 	{

@@ -1,7 +1,7 @@
 #include "windowbutton.h"
 #include "window.h"
 
-#include <font.h>
+#include <font_.h>
 #include <common.h>
 #ifdef WIN32
 #include <windows.h>

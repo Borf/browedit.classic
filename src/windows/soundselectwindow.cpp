@@ -2,10 +2,10 @@
 
 #include <SDL/SDL_mixer.h>
 #include "rsmeditwindow.h"
-#include <filesystem.h>
 #include <undo/soundnew.h>
 #include <settings.h>
 #include <bengine/util.h>
+#include <bengine/util/filesystem.h>
 
 extern std::vector<std::pair<std::string, std::string> > translations;
 extern void mainloop();
@@ -80,8 +80,8 @@ void cSoundSelectWindow::cWindowPlayButton::onClick()
 		
 		Mix_Chunk *sample;
 		
-		cFile* pFile = cFileSystem::open(cSettings::roDir+"data/wav/" + filename);
-		sample=Mix_QuickLoad_WAV((BYTE*)pFile->data);
+		bEngine::util::cInStream* pFile = bEngine::util::cFileSystem::open(cSettings::roDir+"data/wav/" + filename);
+		sample;//TODObengine=Mix_QuickLoad_WAV((BYTE*)pFile->data);
 		Mix_Volume(-1,MIX_MAX_VOLUME);
 		Mix_PlayChannel(0, sample, 0);
 		while(Mix_Playing(-1) > 0 && text == "Stop")
@@ -91,7 +91,7 @@ void cSoundSelectWindow::cWindowPlayButton::onClick()
 		if(text == "Play")
 			Mix_HaltChannel(-1);
 		Mix_FreeChunk(sample);
-		pFile->close();
+		delete pFile;
 		text = "Play";
 	}
 	else
@@ -204,12 +204,12 @@ cSoundSelectWindow::cSoundSelectWindow(bEngine::math::cVector3 pNewPos ) : cWind
 	
 	for(unsigned int i = 0; i < cSettings::soundFiles.size(); i++)
 	{
-		cFile* pFile = cFileSystem::open(cSettings::soundFiles[i]);
+		bEngine::util::cInStream* pFile = bEngine::util::cFileSystem::open(cSettings::soundFiles[i]);
 		if(pFile == NULL)
 			continue;
 		while(!pFile->eof())
 		{
-			line = pFile->readLine();
+			line = pFile->readline();
 			if (line == "")
 				continue;
 			pre = line.substr(0, line.find("|"));

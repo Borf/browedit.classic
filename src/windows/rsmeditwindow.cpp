@@ -11,7 +11,6 @@
 #include <SDL/SDL_syswm.h>
 #include <common.h>
 #include <settings.h>
-#include <filesystem.h>
 #include <RSMModel.h>
 #include <windows/rsmmeshprops.h>
 

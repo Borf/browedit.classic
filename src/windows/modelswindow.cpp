@@ -1,7 +1,7 @@
 #include <common.h>
 #include "modelswindow.h"
 
-#include <filesystem.h>
+#include <bengine/util/filesystem.h>
 #include "../graphics.h"
 #include "../menu.h"
 #include "../menucommands.h"
@@ -190,11 +190,11 @@ class cConfirmDeleteModel : public cConfirmWindowCaller
 
 			for(i = 0; i < cSettings::objectFiles.size(); i++)
 			{
-				cFile* pFile = cFileSystem::open(cSettings::objectFiles[i]);
+				bEngine::util::cInStream* pFile = bEngine::util::cFileSystem::open(cSettings::objectFiles[i]);
 				std::ofstream pFile2((cSettings::objectFiles[i] + ".tmp").c_str());
 				while(!pFile->eof())
 				{
-					std::string line = pFile->readLine();
+					std::string line = pFile->readline();
 					std::string pre = line.substr(0, line.find("|"));
 					std::string filename = line.substr(line.find("|")+1);
 					std::string directory = pre.substr(0, pre.rfind("/"));
@@ -208,7 +208,7 @@ class cConfirmDeleteModel : public cConfirmWindowCaller
 						pFile2.write(line.c_str(), line.length());
 					}
 				}
-				pFile->close();
+				delete pFile;
 				pFile2.close();
 #ifdef WIN32
 				DeleteFile((cSettings::objectFiles[i]+".bak").c_str());
@@ -385,18 +385,18 @@ bool cModelsWindow::cWindowModelCatSelect::onKeyDown(int key, bool shift)
 
 			for(i = 0; i < cSettings::objectFiles.size(); i++)
 			{
-				cFile* pFile = cFileSystem::open(cSettings::objectFiles[i]);
+				bEngine::util::cInStream* pFile = bEngine::util::cFileSystem::open(cSettings::objectFiles[i]);
 				std::ofstream pFile2((cSettings::objectFiles[i] + ".tmp").c_str());
 				while(!pFile->eof())
 				{
-					std::string line = pFile->readLine();
+					std::string line = pFile->readline();
 					if(line.substr(0, cat.length()) != cat)
 					{
 						line += "\n";
 						pFile2.write(line.c_str(), line.length());
 					}
 				}
-				pFile->close();
+				delete pFile;
 				pFile2.close();
 #ifdef WIN32
 				DeleteFile((cSettings::objectFiles[i]+".bak").c_str());
@@ -496,11 +496,11 @@ void cModelsWindow::cWindowModelCatSelect::onDragOver()
 
 		for(i = 0; i < cSettings::objectFiles.size(); i++)
 		{
-			cFile* pFile = cFileSystem::open(cSettings::objectFiles[i]);
+			bEngine::util::cInStream* pFile = bEngine::util::cFileSystem::open(cSettings::objectFiles[i]);
 			std::ofstream pFile2((cSettings::objectFiles[i] + ".tmp").c_str());
 			while(!pFile->eof())
 			{
-				std::string line = pFile->readLine();
+				std::string line = pFile->readline();
 				std::string pre = line.substr(0, line.find("|"));
 				std::string filename = line.substr(line.find("|")+1);
 				std::string directory = pre.substr(0, pre.rfind("/"));
@@ -521,7 +521,7 @@ void cModelsWindow::cWindowModelCatSelect::onDragOver()
 					pFile2.write(line.c_str(), line.length());
 				}
 			}
-			pFile->close();
+			delete pFile;
 			pFile2.close();
 #ifdef WIN32
 			DeleteFile((cSettings::objectFiles[i]+".bak").c_str());
@@ -665,10 +665,10 @@ cModelsWindow::cModelsWindow() : cWindow()
 
 	for(unsigned int i = 0; i < cSettings::objectFiles.size(); i++)
 	{
-		cFile* pFile = cFileSystem::open(cSettings::objectFiles[i]);
+		bEngine::util::cInStream* pFile = bEngine::util::cFileSystem::open(cSettings::objectFiles[i]);
 		while(!pFile->eof())
 		{
-			std::string line = pFile->readLine();
+			std::string line = pFile->readline();
 			if (line == "")
 				continue;
 			std::string pre = line.substr(0, line.find("|"));
@@ -696,6 +696,7 @@ cModelsWindow::cModelsWindow() : cWindow()
 				items[lookup[cat]].push_back(std::pair<std::string,std::string>(name,filename));
 			}
 		}
+		delete pFile;
 	}
 
 	o = new cWindowModelCatSelect(this, nodes);

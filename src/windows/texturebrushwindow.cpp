@@ -3,7 +3,7 @@
 #include <wm/windowscrollpanel.h>
 
 #include <graphics.h>
-#include <filesystem.h>
+#include <bengine/util/filesystem.h>
 
 
 
@@ -272,7 +272,7 @@ void cTextureBrushWindow::cWindowBrushSaveButton::onClick()
 	if(name == "")
 		return;
 
-	TiXmlDocument brushes = cFileSystem::getXml("data/brushes.xml");
+	TiXmlDocument brushes;//TODObengine = cFileSystem::getXml("data/brushes.xml");
 
 	TiXmlElement newBrush("brush");
 	newBrush.SetAttribute("name", name.c_str());
@@ -380,7 +380,7 @@ cTextureBrushWindow::cTextureBrushWindow() : cWindow()
 	objects["presets"] = scroll;
 		
 
-	TiXmlDocument brushes = cFileSystem::getXml("data/brushes.xml");
+	TiXmlDocument brushes;//TODObengine = cFileSystem::getXml("data/brushes.xml");
 	TiXmlElement* brushEl = brushes.FirstChildElement("brushes")->FirstChildElement("brush");
 	while(brushEl != NULL)
 	{

@@ -1,6 +1,6 @@
 #include "filewindow.h"
 #include <graphics.h>
-#include <filesystem.h>
+#include <bengine/util/filesystem.h>
 #include <wm/windowlistbox.h>
 #include "settings.h"
 #include <algorithm>
@@ -72,7 +72,8 @@ cFileWindow::cFileWindow(void (*pCallback)(std::string)) : cWindow()
 	
 	mapNames.clear();
 	unsigned int i;
-	for(i = 0; i < cFileSystem::locations.size(); i++)
+//TODObengine
+/*	for(i = 0; i < cFileSystem::locations.size(); i++)
 	{
 		for(std::map<std::string, cFile*, std::less<std::string> >::iterator it = cFileSystem::locations[i]->files.begin(); it != cFileSystem::locations[i]->files.end(); it++)
 		{
@@ -80,7 +81,7 @@ cFileWindow::cFileWindow(void (*pCallback)(std::string)) : cWindow()
 				mapNames.push_back(it->first.substr(cSettings::roDir.length()));
 			
 		}
-	}
+	}*/
 	
 	std::sort(mapNames.begin(), mapNames.end());
 	

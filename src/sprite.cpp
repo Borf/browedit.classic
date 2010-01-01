@@ -1,9 +1,9 @@
 #include <common.h>
 #include "sprite.h"
 #include "graphics.h"
-#include "filesystem.h"
 #include "settings.h"
 #include <world.h>
+#include <bengine/util/filesystem.h>
 #include <bengine/math/math.h>
 
 #define SPRITESIZE 128
@@ -108,7 +108,7 @@ void cSprite::cActSpr::load(std::string fname)
 	unsigned long ticks = tickcount();
 	fileName = fname;
 	int i,ii,x,y;
-	cFile* pFile = cFileSystem::open(fileName + ".spr");
+	bEngine::util::cFileSystem::cReadFile* pFile = bEngine::util::cFileSystem::open(fileName + ".spr");
 	if(pFile == NULL)
 	{
 		Log(2,0,"Error opening %s.spr", fileName.c_str());
@@ -124,11 +124,11 @@ void cSprite::cActSpr::load(std::string fname)
 
 	for(i = 0; i < frameCount; i++)
 	{
-		int width = pFile->getword();
-		int height = pFile->getword();
+		int width = pFile->readShort();
+		int height = pFile->readShort();
 		int framelen = width*height;
 		if(version1 != 0)
-			framelen = pFile->getword();
+			framelen = pFile->readShort();
 		
 		BYTE* data = new BYTE[width*height];
 		int iii = 0;
@@ -164,6 +164,7 @@ void cSprite::cActSpr::load(std::string fname)
 		}
 
 	
+//TODO: get pallette
 		char* image = new char[SPRITESIZE*SPRITESIZE*4];
 
 		for(y = 0; y < SPRITESIZE; y++)
@@ -174,10 +175,12 @@ void cSprite::cActSpr::load(std::string fname)
 				int yy = (int)(y * (height / (float)SPRITESIZE));
 
 				BYTE index = data[xx+width*yy];
-				
-				image[4*(x+SPRITESIZE*y)] = pFile->data[pFile->size-1024 + index*4];
-				image[4*(x+SPRITESIZE*y)+1] = pFile->data[pFile->size-1024 + index*4+1];
-				image[4*(x+SPRITESIZE*y)+2] = pFile->data[pFile->size-1024 + index*4+2];
+
+				pFile->seek(pFile->size()-1024+index*4, bEngine::util::cFileSystem::cReadFile::BEGIN);
+
+				image[4*(x+SPRITESIZE*y)] = pFile->get();
+				image[4*(x+SPRITESIZE*y)+1] = pFile->get();
+				image[4*(x+SPRITESIZE*y)+2] = pFile->get();
 				image[4*(x+SPRITESIZE*y)+3] = index==0 ? 0 : 255;
 			}
 		}
@@ -204,9 +207,9 @@ void cSprite::cActSpr::load(std::string fname)
 	Log(3,0,"%ims for spr", tickcount()-ticks);
 	ticks = tickcount();
 
-	pFile->close();
+	delete pFile;
 // done reading sprite
-	pFile = cFileSystem::open(fileName + ".act");
+	pFile = bEngine::util::cFileSystem::open(fileName + ".act");
 	if(pFile == NULL)
 	{
 		Log(1,0,"Error opening %s.act", fileName.c_str());
@@ -216,7 +219,7 @@ void cSprite::cActSpr::load(std::string fname)
 
 	version1 = pFile->get();
 	pFile->get();
-	int actioncount = pFile->getword();
+	int actioncount = pFile->readShort();
 	char buf[100];
 	pFile->read(buf, 10);
 
@@ -285,7 +288,7 @@ void cSprite::cActSpr::load(std::string fname)
 
 
 
-	pFile->close();
+	delete pFile;
 
 	Log(3,0,"Done loading sprite %s", fileName.c_str());
 	loaded = true;

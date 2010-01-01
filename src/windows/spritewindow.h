@@ -3,7 +3,6 @@
 
 #include <common.h>
 #include <tinyxml/tinyxml.h>
-#include <filesystem.h>
 
 #include <wm/window.h>
 #include <wm/windowtree.h>

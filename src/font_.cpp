@@ -1,4 +1,4 @@
-#define __FONT_CPP__
+#define __FONT__CPP__
 
 #include <bengine/forwards.h>
 #include <bengine/texture.h>
@@ -6,7 +6,7 @@
 #include <bengine/util.h>
 
 
-#include "font.h"
+#include "font_.h"
 
 #include <vector>
 

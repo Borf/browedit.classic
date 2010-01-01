@@ -12,6 +12,7 @@
 
 cRsmMeshPropsWindow::cRsmMeshPropsWindow(cRsmModelBase::cMesh* m ) : cWindow()
 {
+	int i;
 	mesh = m;
 	cWindowObject* o;
 	windowType = WT_RSMMESHPROPS;
@@ -49,7 +50,7 @@ cRsmMeshPropsWindow::cRsmMeshPropsWindow(cRsmModelBase::cMesh* m ) : cWindow()
 
 	addLabel("lblMesh", 100, 20, "Vertices: " + bEngine::util::intToString(m->nVertices) + ", Faces: " + bEngine::util::intToString(m->nFaces));
 
-	for(int i = 0; i < 16; i++)
+	for(i = 0; i < 16; i++)
 	{
 		o = new cRsmFloatInputBox(this);
 		o->moveTo(100 + 70 * (i/4),40 + 20*(i % 4));

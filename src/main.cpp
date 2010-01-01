@@ -11,8 +11,7 @@
 #include "StackWalker.h"
 #endif
 
-#include "font.h"
-#include "filesystem.h"
+#include "font_.h"
 #include "menu.h"
 #include "undo.h"
 #include "menucommands.h"
@@ -147,13 +146,13 @@ void mainloop()
 							cCube* c = &cGraphics::world->cubes[y][x];
 							if(cGraphics::cMouse::lbuttondown && !cGraphics::cMouse::rbuttondown)
 							{
-								if (!cGraphics::slope || (x > posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)) && y > posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f))
+								if (!cGraphics::slope || ((x > posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)) && y > posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)))
 									c->cell1-=1;
-								if (!cGraphics::slope || (x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1) && y > posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f))
+								if (!cGraphics::slope || ((x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1) && y > posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)))
 									c->cell2-=1;
-								if (!cGraphics::slope || (x > posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)) && y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1)
+								if (!cGraphics::slope || ((x > posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)) && y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1))
 									c->cell3-=1;
-								if (!cGraphics::slope || (x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1) && y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1)
+								if (!cGraphics::slope || ((x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1) && y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1))
 									c->cell4-=1;
 								if(ctrl)
 								{
@@ -165,13 +164,13 @@ void mainloop()
 							}
 							if(cGraphics::cMouse::lbuttondown && cGraphics::cMouse::rbuttondown)
 							{
-								if (!cGraphics::slope || (x > posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)) && y > posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f))
+								if (!cGraphics::slope || ((x > posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)) && y > posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)))
 									c->cell1+=1;
-								if (!cGraphics::slope || (x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1) && y > posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f))
+								if (!cGraphics::slope || ((x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1) && y > posy-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)))
 									c->cell2+=1;
-								if (!cGraphics::slope || (x > posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)) && y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1)
+								if (!cGraphics::slope || ((x > posx-(int)floor(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)) && y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1))
 									c->cell3+=1;
-								if (!cGraphics::slope || (x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1) && y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1)
+								if (!cGraphics::slope || ((x < posx+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1) && y < posy+(int)ceil(cGraphics::worldContainer->settings.brushSizeDetailHeight/2.0f)-1))
 									c->cell4+=1;
 								if(ctrl)
 								{
@@ -411,12 +410,12 @@ int main(int argc, char *argv[])
 #endif
 	int i;
 	log_open("log_worldeditor.txt","worldedit",2);
-	cFile* pFile = cFileSystem::open("config.txt");
+	bEngine::util::cFileSystem::cReadFile* pFile = bEngine::util::cFileSystem::open("config.txt");
 	if (pFile == NULL)
 	{
 		Log(2,0,"Error opening configfile, trying one directory up");
 		chdir("..");
-		pFile = cFileSystem::open("config.txt");
+		pFile = bEngine::util::cFileSystem::open("config.txt");
 		if(pFile == NULL)
 		{
 			Log(1,0,"Could not find configfile one directory up, stopping");
@@ -425,10 +424,11 @@ int main(int argc, char *argv[])
 		log_close();
 		log_open("log_worldeditor.txt","worldedit",2);
 	}
-	cSettings::configFileName = pFile->readLine();
-	pFile->close();
+	cSettings::configFileName = pFile->readline();
+	delete pFile;
+	pFile = NULL;
 
-	cSettings::config = cFileSystem::getXml(cSettings::configFileName);
+	cSettings::config;//TODObengine = cFileSystem::getXml(cSettings::configFileName);
 	if(cSettings::config.Error())
 	{
 		Log(1,0,"Could not load config xml: %s at %i:%i", cSettings::config.ErrorDesc(), cSettings::config.ErrorCol(), cSettings::config.ErrorRow());
@@ -437,7 +437,7 @@ int main(int argc, char *argv[])
 	}
 	std::string language = cSettings::config.FirstChildElement("config")->FirstChildElement("language")->FirstChild()->Value();
 	language = language.substr(language.find("=")+1);
-	cSettings::msgTable = cFileSystem::getXml("data/" + language + ".txt");
+	cSettings::msgTable;//TODObengine = cFileSystem::getXml("data/" + language + ".txt");
 
 	cMenu* mm;
 
@@ -474,7 +474,6 @@ int main(int argc, char *argv[])
 			while(el2 != NULL)
 			{
 				bEngine::util::cFileSystem::addFileLoader(new cGrfFileSystem::cGrfFileLoader(el2->FirstChild()->Value()));
-				cFileSystem::loadPackedFile(el2->FirstChild()->Value());
 				el2 = el2->NextSiblingElement("grf");
 			}
 
@@ -560,20 +559,21 @@ int main(int argc, char *argv[])
 	}			
 
 
-	pFile = cFileSystem::open("data/korean2english.txt");
+	pFile = bEngine::util::cFileSystem::open("data/korean2english.txt");
 	while(!pFile->eof())
 	{
-		std::string a = pFile->readLine();
-		std::string b = pFile->readLine();
+		std::string a = pFile->readline();
+		std::string b = pFile->readline();
 		translations.push_back(std::pair<std::string, std::string>(a,b));
 	}
 //	mergesort<std::pair<std::string, std::string> >(translations, translationcomp);
 	std::sort(translations.begin(), translations.end(), translationcomp);
-	pFile->close();
+	delete pFile;
+	pFile = NULL;
 
 	//models->sort();
 	
-	favoritelights = cFileSystem::getXml("data/lights.txt");
+	favoritelights;//TODObengine = cFileSystem::getXml("data/lights.txt");
 
 	if (!cGraphics::init(windowWidth, windowHeight, windowBpp, windowFullscreen))
 		return 1;
@@ -818,7 +818,7 @@ int main(int argc, char *argv[])
 	cGraphics::cMouse::lastrclick = 0;
 
 	Log(3,0,GetMsg("file/LOADING"), "data/keymap.txt");
-	pFile = cFileSystem::open("data/keymap.txt");
+	pFile = bEngine::util::cFileSystem::open("data/keymap.txt");
 	if(pFile == NULL)
 	{
 		Log(3,0,"Keymap file not found, writing default");
@@ -831,7 +831,7 @@ int main(int argc, char *argv[])
 			
 		}
 		pFile2.close();
-		pFile = cFileSystem::open("data/keymap.txt");
+		pFile = bEngine::util::cFileSystem::open("data/keymap.txt");
 
 	}
 	for(i = 0; i < SDLK_LAST-SDLK_FIRST; i++)
@@ -841,10 +841,11 @@ int main(int argc, char *argv[])
 			cSettings::keyMap[i] = i;
 		}
 		else
-			cSettings::keyMap[i] = atoi(pFile->readLine().c_str());
+			cSettings::keyMap[i] = atoi(pFile->readline().c_str());
 	}
 
-	pFile->close();
+	delete pFile;
+	pFile = NULL;
 	Log(3,0,GetMsg("file/DONELOADING"), "data/keymap.txt");
 
 
@@ -852,11 +853,11 @@ int main(int argc, char *argv[])
 	Log(3,0,GetMsg("file/LOADING"), "data/effects.txt");
 	std::vector<cMenu*> effectssubmenu;
 
-	pFile = cFileSystem::open("data/effects.txt");
+	pFile = bEngine::util::cFileSystem::open("data/effects.txt");
 	i = 0;
 	while(pFile && !pFile->eof())
 	{
-		std::string line = pFile->readLine();
+		std::string line = pFile->readline();
 		if(line.find("|") != std::string::npos)
 		{
 			if (effectssubmenu.size() <= floor(i/effectCount))
@@ -880,7 +881,8 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	pFile->close();
+	delete pFile;
+	pFile = NULL;
 	Log(3,0,GetMsg("file/DONELOADING"), "data/effects.txt");
 
 
@@ -946,7 +948,6 @@ int main(int argc, char *argv[])
 
 	bEngine::cTextureCache::status();
 	bEngine::cTextureCache::unloadall();
-	cFileSystem::unload();
 	delete cGraphics::menu;
 	if(cGraphics::popupMenu)
 		delete cGraphics::popupMenu;
@@ -1521,8 +1522,8 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 				cGraphics::view.showGrid = !cGraphics::view.showGrid;
 				break;
 			case SDLK_l:
-				if (!cGraphics::view.showLightmaps && !cGraphics::view.showGlobalLighting || 
-					 cGraphics::view.showLightmaps &&  cGraphics::view.showGlobalLighting)
+				if ((!cGraphics::view.showLightmaps && !cGraphics::view.showGlobalLighting) || 
+					 (cGraphics::view.showLightmaps &&  cGraphics::view.showGlobalLighting))
 					MenuCommand_toggle((cMenuItem*)cGraphics::menu->find(GetMsg("menu/view/GLOBALLIGHTING")));
 				MenuCommand_toggle((cMenuItem*)cGraphics::menu->find(GetMsg("menu/view/LIGHTMAPS")));
 				break;

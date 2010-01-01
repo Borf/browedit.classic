@@ -1,13 +1,12 @@
 #include <common.h>
 #include <bengine/texture.h>
-#include <font.h>
+#include <font_.h>
 #include "windowobject.h"
 #include "window.h"
 
 
 #include <graphics.h>
 
-#include <font.h>
 #include "windowinputbox.h"
 #include "windowlabel.h"
 #include "windowcheckbox.h"

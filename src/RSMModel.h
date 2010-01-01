@@ -5,11 +5,9 @@
 #include <common.h>
 #include <string>
 #include <map>
+#include <bengine/util/filesystem.h>
 #include <bengine/math/matrix4x4.h>
 #include <bengine/math/quaternion.h>
-
-class cFile;
-
 
 class cRsmModelBase
 {
@@ -17,7 +15,7 @@ public:
 	class cMesh
 	{
 	public:
-		cMesh(cFile*, cRsmModelBase*, int ver1, int ver2);
+		cMesh(bEngine::util::cInStream*, cRsmModelBase*, int ver1, int ver2);
 		void save();
 		void fetchChildren(std::map<std::string, cMesh*, std::less<std::string> >&);
 		void draw();

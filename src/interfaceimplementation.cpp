@@ -5,7 +5,6 @@
 #include <SDL/SDL.h>
 #include <settings.h>
 #include <plugins/base/base.h>
-#include <filesystem.h>
 #include <RSMModel.h>
 #include <sprite.h>
 #include <world.h>
@@ -13,6 +12,7 @@
 
 #include <bengine/util.h>
 #include <bengine/texturecache.h>
+#include <bengine/util/filesystem.h>
 
 extern std::vector<cPluginBase*> plugins;
 
@@ -23,7 +23,7 @@ void cBrowInterfaceImplementation::fixNormals()
 
 cWindow* cBrowInterfaceImplementation::addXmlWindow(const char* fileName)
 {
-	TiXmlDocument windowLayout = cFileSystem::getXml(fileName);
+	TiXmlDocument windowLayout;//TODObengine = cFileSystem::getXml(fileName);
 	if(windowLayout.Error() || !windowLayout.FirstChild())
 		return NULL;
 

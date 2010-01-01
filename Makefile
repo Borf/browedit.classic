@@ -1,12 +1,12 @@
 #!make
 LIBS = -lGL -lSDL -lgd -lGLU -lSDL_mixer -lcurl -lplugin_base
-INCLUDES = -Isrc -DGRF_STATIC -D__NOXML__
+INCLUDES = -Isrc -DGRF_STATIC -D__NOXML__ -Ilibs/bengine -DGLEW_STATIC
 CXX = g++
 CC = gcc
 DEFINES = 
 CFLAGS = -Wall -pipe
 # where are source files located?
-SOURCE_DIRS= src src/wm src/tinyxml src/grflib src/textureloaders src/windows src/undo
+SOURCE_DIRS= src src/wm src/tinyxml src/grflib src/windows src/undo libs/bengine/lib/src libs/bengine/bengine libs/bengine/lib/src/lib_json libs/bengine/bengine/layers libs/bengine/bengine/math libs/bengine/bengine/util libs/bengine/bengine/libjpeg libs/bengine/bengine/objects libs/bengine/bengine/sg libs/bengine/bengine/libpng libs/bengine/bengine/textureloaders libs/bengine/bengine/zlib libs/bengine/bengine/libjpeg
 # Host platform
 UNAME=$(shell uname -s | sed -e 's/_.*$$//')
 
@@ -82,8 +82,8 @@ endif
 endif
 WINDRES=mingw32-windres
 BINARY_EXT=.exe
-INCLUDES += -Ilibs/include
-LIBS = -L. -Llibs/lib -lzlib1 -lSDL -lbgd -lopengl32 -lglu32 -lws2_32 -lcomdlg32 -lcurl -lSDL_mixer -lplugin_base
+INCLUDES += -Ilibs/include -Ilibs/bengine -Ilibs/bengine/lib/include -DGLEW_STATIC
+LIBS = -L. -Llibs/lib -lzlib1 -lSDL -lbgd -lopengl32 -lglu32 -lws2_32 -lcomdlg32 -lcurl -lSDL_mixer -lplugin_base -lwinmm -lgdi32
 # ws2_32.lib sdl.lib sdlmain.lib zlib.lib bgd.lib opengl32.lib glu32.lib 
 endif
 

@@ -7,11 +7,11 @@
 #include <wm/windowlabel.h>
 #include "rsmeditwindow.h"
 
-#include <filesystem.h>
 #include <graphics.h>
 #include <settings.h>
 #include <world.h>
 #include <bengine/util.h>
+#include <bengine/util/filesystem.h>
 #include <bengine/texturecache.h>
 
 cTextureWindow::cWindowTexture::cWindowTexture( cWindow* parent ) : cWindowPictureBox(parent)
@@ -155,12 +155,12 @@ cTextureWindow::cTextureWindow( ) : cWindow()
 	
 	for(unsigned int i = 0; i < cSettings::textureFiles.size(); i++)
 	{
-		cFile* pFile = cFileSystem::open(cSettings::textureFiles[i]);
+		bEngine::util::cInStream* pFile = bEngine::util::cFileSystem::open(cSettings::textureFiles[i]);
 		if(pFile == NULL)
 			continue;
 		while(!pFile->eof())
 		{
-			line = pFile->readLine();
+			line = pFile->readline();
 			if (line == "")
 				continue;
 			pre = line.substr(0, line.find("|"));
@@ -212,6 +212,7 @@ cTextureWindow::cTextureWindow( ) : cWindow()
 				items[lookup[cat]].push_back(std::pair<std::string,std::string>(name,filename));
 			}
 		}
+		delete pFile;
 	}
 	
 	o = new cWindowTextureCatSelect(this, nodes);

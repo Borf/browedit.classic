@@ -6,7 +6,7 @@
 #include "window.h"
 
 #include <common.h>
-#include <font.h>
+#include <font_.h>
 #include <bengine/texture.h>
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
@@ -15,7 +15,7 @@
 #include <windows/confirmwindow.h>
 #include <windows/inputwindow.h>
 #include <windows/xmlwindow.h>
-#include <filesystem.h>
+#include <bengine/util/filesystem.h>
 extern void mainloop();
 
 
@@ -120,7 +120,7 @@ int cWM::draw()
 
 int cWM::init(std::string sSkin)
 {
-	skin = cFileSystem::getXml(sSkin);
+	skin;//TODObengine = cFileSystem::getXml(sSkin);
 	texture = bEngine::cTextureCache::load(skin.FirstChildElement("skin")->FirstChildElement("texture")->FirstChild()->Value());
 	font = new cFont();
 	font->load(skin.FirstChildElement("skin")->FirstChildElement("font")->FirstChild()->Value());
@@ -181,7 +181,7 @@ cWM::~cWM()
 
 void cWM::click(bool b)
 {
-	unsigned int i;
+	int i;
 	for(i = 0; i < (int)windows.size(); i++)
 	{
 		if (windows[i]->isEnabled() && windows[i]->inWindow() && windows[i]->isAlwaysOnTop())
@@ -204,7 +204,7 @@ void cWM::click(bool b)
 		}
 	}
 	
-	for(i = 0; i < windows.size(); i++)
+	for(i = 0; i < (int)windows.size(); i++)
 	{
 		if (windows[i]->isEnabled() && windows[i]->inWindow() && (!windows[0]->modality() || i == 0))
 		{
@@ -593,7 +593,7 @@ cWindow* cWM::inputWindow(std::string title, cInputWindowCaller* caller)
 
 cWindow* cWM::xmlWindow(std::string src)
 {
-	TiXmlDocument layout = cFileSystem::getXml(src);
+	TiXmlDocument layout;//TODObengine = cFileSystem::getXml(src);
 	cWindow* w = new cXmlWindow(layout);
 	addWindow(w);
 	return w;

@@ -6,6 +6,7 @@
 #include <settings.h>
 #include <world.h>
 #include <bengine/math/math.h>
+#include <bengine/util/filesystem.h>
 #include <math.h>
 TiXmlDocument sprites;
 
@@ -397,7 +398,7 @@ cSpriteWindow::cSpriteWindow() : cWindow()
 	}
 	
 	if(!sprites.FirstChild())
-		sprites = cFileSystem::getXml("data/sprites.xml");
+		sprites;//TODObengine = cFileSystem::getXml("data/sprites.xml");
 	
 	((cTabPanel*)objects["tabpanel"])->tabchange(-1);
 }

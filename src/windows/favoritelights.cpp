@@ -1,6 +1,6 @@
 #include "favoritelights.h"
 #include <graphics.h>
-#include <filesystem.h>
+#include <bengine/util/filesystem.h>
 
 cFavoriteLightsWindow::cFavoriteTreeNode::cFavoriteTreeNode( std::string t, std::vector<cWindowTree::cTreeNode*> items ) : cWindowTree::cTreeNode(t, items)
 {
@@ -303,7 +303,7 @@ cFavoriteLightsWindow::cWindowCancelButton::cWindowCancelButton( cWindow* parent
 
 void cFavoriteLightsWindow::cWindowCancelButton::onClick()
 {
-	favoritelights = cFileSystem::getXml("data/lights.txt");
+	favoritelights;//TODObengine = cFileSystem::getXml("data/lights.txt");
 	parent->close();
 }
 

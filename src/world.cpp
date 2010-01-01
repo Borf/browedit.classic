@@ -4,14 +4,13 @@
 #include "RSMModel.h"
 #include "menu.h"
 #include <frustum.h>
-#include "font.h"
+#include "font_.h"
 #include <clipboard.h>
 #include "settings.h"
 #include "texturemodel.h"
 #include "sprite.h"
 #include <windows/confirmwindow.h>
 #include "windows/hotkeywindow.h"
-#include <filesystem.h>
 
 #include <bengine/util.h>
 #include <bengine/math/math.h>
@@ -698,7 +697,7 @@ void cWorld::load()
 
 	if(bEngine::util::cFileSystem::isFile(std::string(fileName) + ".sprites"))
 	{
-		TiXmlDocument sprdoc = cFileSystem::getXml(std::string(fileName) + ".sprites");;
+		TiXmlDocument sprdoc;//TODObengine = cFileSystem::getXml(std::string(fileName) + ".sprites");;
 		TiXmlElement* sprite = sprdoc.FirstChildElement("sprites")->FirstChildElement("sprite");
 		while(sprite != NULL)
 		{
@@ -728,7 +727,7 @@ void cWorld::load()
 
 	if(bEngine::util::cFileSystem::isFile(std::string(fileName) + ".extra"))
 	{
-		TiXmlDocument extradoc = cFileSystem::getXml(std::string(fileName) + ".extra");
+		TiXmlDocument extradoc;//TODObengine = cFileSystem::getXml(std::string(fileName) + ".extra");
 		TiXmlElement* light = extradoc.FirstChildElement("lights")->FirstChildElement("light");
 		while(light != NULL)
 		{

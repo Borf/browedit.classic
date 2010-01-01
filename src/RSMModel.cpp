@@ -6,7 +6,6 @@
 
 #include <common.h>
 #include "RSMModel.h"
-#include <filesystem.h>
 #include <settings.h>
 #include <graphics.h>
 #include <world.h>
@@ -27,7 +26,7 @@ cRsmModelBase::cRsmModelBase( std::string pFilename)
 	int i;
 	root = NULL;
 
-	cFile* pFile = cFileSystem::open(pFilename);
+	bEngine::util::cInStream* pFile = bEngine::util::cFileSystem::open(pFilename);
 	if (pFile == NULL)
 	{
 		Log(2,0,"cRsmModel: Could not open '%s'", pFilename.c_str());
@@ -38,13 +37,13 @@ cRsmModelBase::cRsmModelBase( std::string pFilename)
 	if(memcmp(header, "GRSM", 4) != 0)
 	{
 		Log(2,0,"cRsmModel: %s is not a model, invalid header", pFilename.c_str());
-		pFile->close();
+		delete pFile;
 		return;
 	}
 	ver1 = pFile->get();
 	ver2 = pFile->get();
-	animLen = pFile->getInt();
-	shadeType = (eShadeType)pFile->getInt();
+	animLen = pFile->readInt();
+	shadeType = (eShadeType)pFile->readInt();
 	if(ver1 >= 1 && ver2 >= 4)
 		alpha = pFile->get();
 	else
@@ -52,7 +51,7 @@ cRsmModelBase::cRsmModelBase( std::string pFilename)
 
 	char unknown[16];
 	pFile->read(unknown, 16);
-	nTextures = pFile->getInt();
+	nTextures = pFile->readInt();
 
 	for(i = 0; i < nTextures; i++)
 	{
@@ -64,7 +63,7 @@ cRsmModelBase::cRsmModelBase( std::string pFilename)
 	char buf[40];
 	pFile->read(buf, 40);
 	mainNodeName = buf;
-	numMeshes = pFile->getInt();
+	numMeshes = pFile->readInt();
 	if(numMeshes != 1)
 		Sleep(0);
 	std::map<std::string, cMesh*, std::less<std::string> > meshes;
@@ -72,12 +71,6 @@ cRsmModelBase::cRsmModelBase( std::string pFilename)
 	{
 		cMesh* mesh = new cMesh(pFile, this, ver1, ver2);
 		meshes[mesh->name] = mesh;
-	}
-
-	if(pFile->index > pFile->size)
-	{
-		Log(2,0,"Error: read too much data!");
-		return;
 	}
 
 	if(meshes.find(mainNodeName) == meshes.end())
@@ -106,7 +99,7 @@ cRsmModelBase::cRsmModelBase( std::string pFilename)
 
 }
 
-cRsmModel::cMesh::cMesh(cFile* pFile, cRsmModelBase* model, int ver1, int ver2)
+cRsmModel::cMesh::cMesh(bEngine::util::cInStream* pFile, cRsmModelBase* model, int ver1, int ver2)
 {
 	selected = false;
 	cache1 = false;
@@ -121,86 +114,86 @@ cRsmModel::cMesh::cMesh(cFile* pFile, cRsmModelBase* model, int ver1, int ver2)
 	pFile->read(buf, 40);
 	parentName = buf;
 	
-	int nTextures = pFile->getInt();
+	int nTextures = pFile->readInt();
 	for(i = 0; i < nTextures; i++)
-		textures.push_back(model->textures[pFile->getInt()]);
+		textures.push_back(model->textures[pFile->readInt()]);
 
-	offset.values[0] = pFile->getFloat();	//rotation
-	offset.values[1] = pFile->getFloat();
-	offset.values[2] = pFile->getFloat();
+	offset.values[0] = pFile->readFloat();	//rotation
+	offset.values[1] = pFile->readFloat();
+	offset.values[2] = pFile->readFloat();
 
-	offset.values[4] = pFile->getFloat();
-	offset.values[5] = pFile->getFloat();
-	offset.values[6] = pFile->getFloat();
+	offset.values[4] = pFile->readFloat();
+	offset.values[5] = pFile->readFloat();
+	offset.values[6] = pFile->readFloat();
 	
-	offset.values[8] = pFile->getFloat();
-	offset.values[9] = pFile->getFloat();
-	offset.values[10] = pFile->getFloat();
+	offset.values[8] = pFile->readFloat();
+	offset.values[9] = pFile->readFloat();
+	offset.values[10] = pFile->readFloat();
 
-	pos_.x = pFile->getFloat();
-	pos_.y = pFile->getFloat();
-	pos_.z = pFile->getFloat();
+	pos_.x = pFile->readFloat();
+	pos_.y = pFile->readFloat();
+	pos_.z = pFile->readFloat();
 
-	pos.x = pFile->getFloat();
-	pos.y = pFile->getFloat();
-	pos.z = pFile->getFloat();
+	pos.x = pFile->readFloat();
+	pos.y = pFile->readFloat();
+	pos.z = pFile->readFloat();
 
-	rotangle = pFile->getFloat();
-	rotaxis.x = pFile->getFloat();
-	rotaxis.y = pFile->getFloat();
-	rotaxis.z = pFile->getFloat();
+	rotangle = pFile->readFloat();
+	rotaxis.x = pFile->readFloat();
+	rotaxis.y = pFile->readFloat();
+	rotaxis.z = pFile->readFloat();
 
-	scale.x = pFile->getFloat();
-	scale.y = pFile->getFloat();
-	scale.z = pFile->getFloat();
+	scale.x = pFile->readFloat();
+	scale.y = pFile->readFloat();
+	scale.z = pFile->readFloat();
 
 
-	nVertices = pFile->getInt();
+	nVertices = pFile->readInt();
 	vertices = new bEngine::math::cVector3[nVertices];
 	for(i = 0; i < nVertices; i++)
 	{
-		vertices[i].x = pFile->getFloat();
-		vertices[i].y = pFile->getFloat();
-		vertices[i].z = pFile->getFloat();
+		vertices[i].x = pFile->readFloat();
+		vertices[i].y = pFile->readFloat();
+		vertices[i].z = pFile->readFloat();
 	}
 
-	nTexVertices = pFile->getInt();
+	nTexVertices = pFile->readInt();
 	texVertices = new bEngine::math::cVector2[nTexVertices];
 	for(i = 0; i < nTexVertices; i++)
 	{
 		if(ver1 >= 1 && ver2 >= 2)
-			pFile->getFloat();
-		texVertices[i].x = pFile->getFloat();
-		texVertices[i].y = 1-pFile->getFloat();
+			pFile->readFloat();
+		texVertices[i].x = pFile->readFloat();
+		texVertices[i].y = 1-pFile->readFloat();
 	}
-	nFaces = pFile->getInt();
+	nFaces = pFile->readInt();
 	faces = new cFace[nFaces];
 	for(i = 0; i < nFaces; i++)
 	{
-		faces[i].vertices[0] = pFile->getword();
-		faces[i].vertices[1] = pFile->getword();
-		faces[i].vertices[2] = pFile->getword();
+		faces[i].vertices[0] = pFile->readShort();
+		faces[i].vertices[1] = pFile->readShort();
+		faces[i].vertices[2] = pFile->readShort();
 
 		faces[i].normal = (vertices[faces[i].vertices[1]] - vertices[faces[i].vertices[0]]).cross(vertices[faces[i].vertices[2]] - vertices[faces[i].vertices[0]]).getNormalized();
 
-		faces[i].texvertices[0] = pFile->getword();
-		faces[i].texvertices[1] = pFile->getword();
-		faces[i].texvertices[2] = pFile->getword();
+		faces[i].texvertices[0] = pFile->readShort();
+		faces[i].texvertices[1] = pFile->readShort();
+		faces[i].texvertices[2] = pFile->readShort();
 
-		faces[i].texIndex = pFile->getword();
-		pFile->getword();
-		faces[i].twoSide = pFile->getInt();
-		faces[i].smoothGroup = pFile->getInt();
+		faces[i].texIndex = pFile->readShort();
+		pFile->readShort();
+		faces[i].twoSide = pFile->readInt();
+		faces[i].smoothGroup = pFile->readInt();
 	}
-	nAnimationFrames = pFile->getInt();
+	nAnimationFrames = pFile->readInt();
 	animationFrames = new cFrame[nAnimationFrames];
 	for(i = 0; i < nAnimationFrames; i++)
 	{
-		animationFrames[i].time = pFile->getInt();
-		animationFrames[i].quat.values[0] = pFile->getFloat();
-		animationFrames[i].quat.values[1] = pFile->getFloat();
-		animationFrames[i].quat.values[2] = pFile->getFloat();
-		animationFrames[i].quat.values[3] = pFile->getFloat();
+		animationFrames[i].time = pFile->readInt();
+		animationFrames[i].quat.values[0] = pFile->readFloat();
+		animationFrames[i].quat.values[1] = pFile->readFloat();
+		animationFrames[i].quat.values[2] = pFile->readFloat();
+		animationFrames[i].quat.values[3] = pFile->readFloat();
 	}
 }
 
@@ -717,7 +710,7 @@ void cRsmModelBase::save(std::string pFilename)
 /*	char buf[40];
 	pFile->read(buf, 40);
 	mainNodeName = buf;
-	numMeshes = pFile->getInt();
+	numMeshes = pFile->readInt();
 	if(numMeshes != 1)
 		Sleep(0);
 	std::map<std::string, cMesh*, std::less<std::string> > meshes;

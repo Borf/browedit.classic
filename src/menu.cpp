@@ -2,7 +2,7 @@
 #include <GL/gl.h>
 
 #include "graphics.h"
-#include "font.h"
+#include "font_.h"
 #include <algorithm>
 #include <world.h>
 #include <bengine/util.h>

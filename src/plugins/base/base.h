@@ -1,7 +1,9 @@
 #ifndef __PLUGIN_BASE_H__
 #define __PLUGIN_BASE_H__
 
+#ifndef __MINGW32__
 #pragma warning( disable : 4786 )
+#endif
 
 #include <string>
 class TiXmlDocument;
