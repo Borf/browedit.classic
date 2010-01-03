@@ -2,7 +2,7 @@
 #include "progresswindow.h"
 #include <wm/windowprogressbar.h>
 
-cProgressWindow::cCancelButton::cCancelButton( cWindow* parent, bool* pCancel, TiXmlDocument* skin ) : cWindowButton(parent,skin)
+cProgressWindow::cCancelButton::cCancelButton( cWindow* parent, bool* pCancel, Json::Value &skin ) : cWindowButton(parent,skin)
 {
 	cancel = pCancel;
 	text = "Cancel";

@@ -72,7 +72,7 @@ public:
 	float selectFontColor[3];
 
 	
-	cWindowTree(cWindow* parent, std::vector<cTreeNode*> n, TiXmlDocument* skin = &cWM::skin);
+	cWindowTree(cWindow* parent, std::vector<cTreeNode*> n, Json::Value &skin = cWM::skin);
 	virtual ~cWindowTree() {}
 	virtual void draw(int,int,int,int);
 	virtual void onClick();

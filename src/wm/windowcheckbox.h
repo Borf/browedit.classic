@@ -18,7 +18,7 @@ protected:
 
 
 public:
-	cWindowCheckBox(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+	cWindowCheckBox(cWindow* parent, Json::Value &skin = cWM::skin);
 	virtual void draw(int,int,int,int);
 	virtual void onClick();
 	bool onChar(char, bool);
@@ -34,7 +34,7 @@ class cWindowBoolCheckBox : public cWindowCheckBox
 	bool firstTime;
 public:
 	bool* boolvalue;
-	cWindowBoolCheckBox(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+	cWindowBoolCheckBox(cWindow* parent, Json::Value &skin = cWM::skin);
 	void draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom);
 	void setInt(int id, int val);
 };

@@ -135,7 +135,7 @@ cWindowObject::cWindowObject()
 	enabled = true;
 }
 
-cWindowObject::cWindowObject( cWindow* p, TiXmlElement* skin)
+cWindowObject::cWindowObject( cWindow* p, Json::Value &skin)
 {
 	parent = p;
 	x = 10;
@@ -151,20 +151,20 @@ cWindowObject::cWindowObject( cWindow* p, TiXmlElement* skin)
 	if(skin != NULL)
 	{
 		std::string color = "FFFFFF";
-		if(skin->FirstChildElement("fontcolor"))
-			color = skin->FirstChildElement("fontcolor")->FirstChild()->Value();
+		if(skin.isMember("fontcolor"))
+			color = skin["fontcolor"].asString();
 		fontcolor[0] = bEngine::util::hex2dec(color.substr(0,2)) / 256.0f;
 		fontcolor[1] = bEngine::util::hex2dec(color.substr(2,2)) / 256.0f;
 		fontcolor[2] = bEngine::util::hex2dec(color.substr(4,2)) / 256.0f;
 		
-		skinTopHeight = atoi(skin->FirstChildElement("top")->Attribute("height"));
-		skinTop =		512 - atoi(skin->FirstChildElement("top")->FirstChild()->Value());
-		skinBottomHeight = atoi(skin->FirstChildElement("bottom")->Attribute("height"));
-		skinBottom =		512 - atoi(skin->FirstChildElement("bottom")->FirstChild()->Value());
+		skinTopHeight = skin["top"]["height"].asInt();
+		skinTop =		512 - skin["top"]["pos"].asInt();
+		skinBottomHeight = skin["bottom"]["height"].asInt();
+		skinBottom =		512 - skin["bottom"]["pos"].asInt();
 		
-		skinLeftWidth = atoi(skin->FirstChildElement("left")->Attribute("width"));
-		skinLeft =		atoi(skin->FirstChildElement("left")->FirstChild()->Value());
-		skinRightWidth = atoi(skin->FirstChildElement("right")->Attribute("width"));
-		skinRight =		atoi(skin->FirstChildElement("right")->FirstChild()->Value());
+		skinLeftWidth = skin["left"]["width"].asInt();
+		skinLeft =		skin["left"]["pos"].asInt();
+		skinRightWidth = skin["right"]["width"].asInt();
+		skinRight =		skin["right"]["pos"].asInt();
 	}
 }

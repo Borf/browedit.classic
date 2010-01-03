@@ -50,7 +50,7 @@ class cWallTextureWindow : public cWindow
 	public:
 		cTile	tile;
 
-		cWindowWallTextureBox(int,int,bool,cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		cWindowWallTextureBox(int,int,bool,cWindow* parent, Json::Value &skin = cWM::skin);
 		void draw(int,int,int,int);
 		void drag();
 	};

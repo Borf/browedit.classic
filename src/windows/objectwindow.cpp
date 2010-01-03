@@ -3,7 +3,7 @@
 #include <undo.h>
 
 
-cWindowOkButton::cWindowOkButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent, skin)
+cWindowOkButton::cWindowOkButton( cWindow* parent, Json::Value &skin ) : cWindowButton(parent, skin)
 {
 	alignment = ALIGN_BOTTOM;
 	moveTo(100, 0);
@@ -25,7 +25,7 @@ cWindowOkButton::~cWindowOkButton()
 	
 }
 
-cWindowCancelButton::cWindowCancelButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent, skin)
+cWindowCancelButton::cWindowCancelButton( cWindow* parent, Json::Value &skin ) : cWindowButton(parent, skin)
 {
 	alignment = ALIGN_BOTTOM;
 	moveTo(-100, 0);

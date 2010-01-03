@@ -12,7 +12,7 @@ class cProgressWindow : public cWindow
 	private:
 		bool* cancel;
 	public:
-		cCancelButton(cWindow* parent, bool* pCancel, TiXmlDocument* skin = &cWM::skin);
+		cCancelButton(cWindow* parent, bool* pCancel, Json::Value &skin = cWM::skin);
 		void onClick();
 	};
 public:

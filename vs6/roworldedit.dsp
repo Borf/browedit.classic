@@ -192,11 +192,7 @@ SOURCE=..\src\common.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\filesystem.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\font.cpp
+SOURCE=..\src\font_.cpp
 # End Source File
 # Begin Source File
 
@@ -280,7 +276,7 @@ SOURCE=..\src\filesystem.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\font.h
+SOURCE=..\src\font_.h
 # End Source File
 # Begin Source File
 

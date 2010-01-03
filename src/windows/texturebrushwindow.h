@@ -11,7 +11,7 @@ class cTextureBrushWindow : public cWindow
 	{
 		std::vector<std::vector<bool> > brush;
 	public:
-		cWindowBrushButton(cWindow* parent,int,int,std::string, TiXmlDocument* skin = &cWM::skin);
+		cWindowBrushButton(cWindow* parent,int,int,std::string, Json::Value &skin = cWM::skin);
 		void draw(int,int,int,int);
 		void onClick();
 	};
@@ -20,7 +20,7 @@ class cTextureBrushWindow : public cWindow
 	{
 	public:
 		bool	on;
-		cWindowBrushTile(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		cWindowBrushTile(cWindow* parent, Json::Value &skin = cWM::skin);
 		void draw(int,int,int,int);
 		void onClick();
 	};
@@ -28,28 +28,28 @@ class cTextureBrushWindow : public cWindow
 	class cWindowBrushChangeButton : public cWindowButton
 	{
 	public:
-		cWindowBrushChangeButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		cWindowBrushChangeButton(cWindow* parent, Json::Value &skin = cWM::skin);
 		void onClick();
 	};
 
 	class cWindowBrushOkButton : public cWindowButton
 	{
 	public:
-		cWindowBrushOkButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		cWindowBrushOkButton(cWindow* parent, Json::Value &skin = cWM::skin);
 		void onClick();
 	};
 
 	class cWindowBrushSaveButton : public cWindowButton
 	{
 	public:
-		cWindowBrushSaveButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		cWindowBrushSaveButton(cWindow* parent, Json::Value &skin = cWM::skin);
 		void onClick();
 	};
 
 	class cWindowBrushRotateButton : public cWindowButton
 	{
 	public:
-		cWindowBrushRotateButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		cWindowBrushRotateButton(cWindow* parent, Json::Value &skin = cWM::skin);
 		void onClick();
 	};
 

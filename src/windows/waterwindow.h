@@ -8,7 +8,7 @@
 class cWaterWindowOkButton : public cWindowButton
 {
 public:
-	cWaterWindowOkButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+	cWaterWindowOkButton(cWindow* parent, Json::Value &skin = cWM::skin);
 	virtual ~cWaterWindowOkButton();
 	void onClick();
 };

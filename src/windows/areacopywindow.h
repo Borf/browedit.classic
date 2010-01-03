@@ -19,7 +19,7 @@ private:
 	{
 
 	public:
-		cWindowOkButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin) : cWindowButton(parent,skin)
+		cWindowOkButton(cWindow* parent, Json::Value &skin = cWM::skin) : cWindowButton(parent,skin)
 		{
 			alignment = ALIGN_BOTTOM;
 			moveTo(0, 10);

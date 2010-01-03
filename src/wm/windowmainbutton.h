@@ -10,7 +10,7 @@ class cWindowMainButton : public cWindowButton
 protected:
 	std::string text;
 public:
-	cWindowMainButton(cWindow* parent, TiXmlDocument* skin);
+	cWindowMainButton(cWindow* parent, Json::Value &skin);
 	void draw(int,int,int,int);
 	void onClick();
 	void setText(int, std::string);

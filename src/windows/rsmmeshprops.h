@@ -14,7 +14,7 @@ public:
 	class cRsmFloatInputBox : public cWindowFloatInputBox
 	{
 	public:
-		cRsmFloatInputBox(cWindow* parent, TiXmlDocument* skin = &cWM::skin) : cWindowFloatInputBox(parent, skin)
+		cRsmFloatInputBox(cWindow* parent, Json::Value &skin = cWM::skin) : cWindowFloatInputBox(parent, skin)
 		{
 			alignment = ALIGN_TOPLEFT;
 		}
@@ -24,21 +24,21 @@ public:
 	class cAnimationFrameList : public cWindowListBox
 	{
 	public:
-		cAnimationFrameList(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		cAnimationFrameList(cWindow* parent, Json::Value &skin = cWM::skin);
 		void onChange(int oldValue);
 	};
 
 	class cButtonAddFrame : public cWindowButton
 	{
 	public:
-		cButtonAddFrame(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		cButtonAddFrame(cWindow* parent, Json::Value &skin = cWM::skin);
 		void onClick();
 	};
 
 	class cButtonRemoveFrame : public cWindowButton
 	{
 	public:
-		cButtonRemoveFrame(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		cButtonRemoveFrame(cWindow* parent, Json::Value &skin = cWM::skin);
 		void onClick();
 	};
 	

@@ -13,7 +13,7 @@ public:
 	{
 	public:
 		cSound*	selectedSound;
-		cWindowSelectFileButton(cWindow* parent, TiXmlDocument* = NULL);
+		cWindowSelectFileButton(cWindow* parent, Json::Value &skin = cWM::skin);
 		void onClick();
 	};
 	cUndoItem* undo;

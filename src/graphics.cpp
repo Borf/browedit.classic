@@ -436,7 +436,7 @@ int cGraphics::init(int pWidth, int pHeight, int pBpp, bool pFullscreen)
 	glDisable(GL_LIGHTING);
 	font = new cFont();
 	font->load("data/fonts/"+cSettings::fontName+".tga");
-	splash = bEngine::cTextureCache::load(cSettings::config.FirstChildElement("config")->FirstChildElement("splash")->FirstChild()->Value());
+	splash = bEngine::cTextureCache::load(cSettings::config["graphics"]["splash"].asString());
 	Log(3,0,GetMsg("graphics/INITIALIZINGWM"));
 	cWM::init(cSettings::skinFile);
 
@@ -450,9 +450,9 @@ int cGraphics::init(int pWidth, int pHeight, int pBpp, bool pFullscreen)
 	gatBorder = bEngine::cTextureCache::load("data/gatBorder.tga");
 
 	
-	waterDirectory =		cSettings::config.FirstChildElement("config")->FirstChildElement("water")->FirstChildElement("directory")->FirstChild()->Value();
-	waterExtension =		cSettings::config.FirstChildElement("config")->FirstChildElement("water")->FirstChildElement("extension")->FirstChild()->Value();
-	waterCount=atoi(cSettings::config.FirstChildElement("config")->FirstChildElement("water")->FirstChildElement("count")->FirstChild()->Value());
+	waterDirectory =		cSettings::config["files"]["water"]["directory"].asString();
+	waterExtension =		cSettings::config["files"]["water"]["extension"].asString();
+	waterCount=				cSettings::config["files"]["water"]["count"].asInt();
 
 	waterTextures.resize(waterCount);
 	for(i = 0; i < waterCount; i++)

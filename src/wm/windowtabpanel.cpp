@@ -158,10 +158,10 @@ void cWindowTabPanel::onClick()
 	}
 }
 
-cWindowTabPanel::cWindowTabPanel( cWindow* parent, TiXmlDocument* skin ) : cWindowObject(parent, skin->FirstChildElement("skin")->FirstChildElement("tabstrip"))
+cWindowTabPanel::cWindowTabPanel( cWindow* parent, Json::Value &skin ) : cWindowObject(parent, skin["tabstrip"])
 {
 	if(!skin)
-		skin = &cWM::skin;
+		skin = cWM::skin;
 	w = 100;
 	h = 25;
 	x = 10;
@@ -178,28 +178,28 @@ cWindowTabPanel::cWindowTabPanel( cWindow* parent, TiXmlDocument* skin ) : cWind
 	tabs.push_back("tab5");
 	
 	
-	skinTabFontOffX = atoi(skin->FirstChildElement("skin")->FirstChildElement("tabstrip")->FirstChildElement("fontoffx")->FirstChild()->Value());
-	skinTabFontOffY = atoi(skin->FirstChildElement("skin")->FirstChildElement("tabstrip")->FirstChildElement("fontoffy")->FirstChild()->Value());
+	skinTabFontOffX = skin["tabstrip"]["fontoffx"].asInt();
+	skinTabFontOffY = skin["tabstrip"]["fontoffy"].asInt();
 	
-	TiXmlElement* el = skin->FirstChildElement("skin")->FirstChildElement("tabstrip")->FirstChildElement("tabselected");
-	skinTabTop[0] =		512-atoi(el->FirstChildElement("top")->FirstChild()->Value());
-	skinTabHeight[0] =		atoi(el->FirstChildElement("height")->FirstChild()->Value());
-	skinTabLeft[0] =		atoi(el->FirstChildElement("left")->FirstChild()->Value());
-	skinTabLeftWidth[0] =	atoi(el->FirstChildElement("left")->Attribute("width"));
-	skinTabRight[0] =		atoi(el->FirstChildElement("right")->FirstChild()->Value());
-	skinTabRightWidth[0] =	atoi(el->FirstChildElement("right")->Attribute("width"));
-	skinTabOverlapLeft[0] =	atoi(el->FirstChildElement("overlapleft")->FirstChild()->Value());
-	skinTabOverlapRight[0] =atoi(el->FirstChildElement("overlapright")->FirstChild()->Value());
+	Json::Value el = skin["tabstrip"]["tabselected"];
+	skinTabTop[0] =		512-el["top"]["pos"].asInt();
+	skinTabHeight[0] =		el["height"].asInt();
+	skinTabLeft[0] =		el["left"]["pos"].asInt();
+	skinTabLeftWidth[0] =	el["left"]["width"].asInt();
+	skinTabRight[0] =		el["right"]["pos"].asInt();
+	skinTabRightWidth[0] =	el["right"]["width"].asInt();
+	skinTabOverlapLeft[0] =	el["overlapleft"].asInt();
+	skinTabOverlapRight[0] =el["overlapright"].asInt();
 	
-	el = skin->FirstChildElement("skin")->FirstChildElement("tabstrip")->FirstChildElement("tabunselected");
-	skinTabTop[1] =		512-atoi(el->FirstChildElement("top")->FirstChild()->Value());
-	skinTabHeight[1] =		atoi(el->FirstChildElement("height")->FirstChild()->Value());
-	skinTabLeft[1] =		atoi(el->FirstChildElement("left")->FirstChild()->Value());
-	skinTabLeftWidth[1] =	atoi(el->FirstChildElement("left")->Attribute("width"));
-	skinTabRight[1] =		atoi(el->FirstChildElement("right")->FirstChild()->Value());
-	skinTabRightWidth[1] =	atoi(el->FirstChildElement("right")->Attribute("width"));
-	skinTabOverlapLeft[1] =	atoi(el->FirstChildElement("overlapleft")->FirstChild()->Value());
-	skinTabOverlapRight[1] =atoi(el->FirstChildElement("overlapright")->FirstChild()->Value());
+	el = skin["tabstrip"]["tabunselected"];
+	skinTabTop[1] =		512-el["top"]["pos"].asInt();
+	skinTabHeight[1] =		el["height"].asInt();
+	skinTabLeft[1] =		el["left"]["pos"].asInt();
+	skinTabLeftWidth[1] =	el["left"]["width"].asInt();
+	skinTabRight[1] =		el["right"]["pos"].asInt();
+	skinTabRightWidth[1] =	el["right"]["width"].asInt();
+	skinTabOverlapLeft[1] =	el["overlapleft"].asInt();
+	skinTabOverlapRight[1] =el["overlapright"].asInt();
 }
 
 int cWindowTabPanel::getInt( int id )

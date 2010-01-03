@@ -1,0 +1,49 @@
+{
+	"files"
+	{
+		"rodir" : "c:\program files\gravity\ro\",
+		"grf" :
+		[
+			"c:\program files\gravity\ro\data.grf"
+			"c:\program files\gravity\ro\sdata.grf"
+		],
+		"models" :
+		[
+			"data/romodels.txt",
+			"data/alphamodels.txt",
+			"data/randommodels.txt"
+		],
+		"textures" :
+		[
+			"data/rotextures.txt",
+			"data/texturescustom.txt"
+		],
+		"sounds" :
+		[
+			"data/rosounds.txt"
+		],
+		"water" :
+		{
+			"directory" : "data\texture\ฟ๖ลอ\",
+			"extension" : ".jpg",
+			"count" : 8
+		},
+		"gattiles" : [ 0, 1, 2, 3, 4, 5, 6 ]	
+	}
+	"graphics" :
+	{
+		"resolution" :	[800, 600],
+		"fullscreen" :	false,
+		"bpp" :		32,
+		"font" :	"tahoma",
+		"skin" :	"data/skins/ro.json",
+		"notilecolor" :	"FFFF40",
+		"bgcolor" :	"8000FF"
+	}
+	"camerasmoothing" : 0.6,
+	"undosize" : 50,
+	"language" : "english",
+//	"firstmap" : "prontera",
+	"splash" : "data/hamtaro.tga",
+	"wm" : {}
+}

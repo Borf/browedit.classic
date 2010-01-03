@@ -13,13 +13,13 @@ public:
 	class cXmlButton : public cWindowButton
 	{
 	public:
-		cXmlButton(cWindow*, TiXmlDocument* = NULL);
+		cXmlButton(cWindow*, Json::Value &skin = cWM::skin);
 		void onClick();
 	};
 	class cXmlCheckBox : public cWindowCheckBox
 	{
 	public:
-		cXmlCheckBox(cWindow*, TiXmlDocument* = NULL);
+		cXmlCheckBox(cWindow*, Json::Value &skin = cWM::skin);
 		void onClick();
 	};
 

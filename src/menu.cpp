@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <world.h>
 #include <bengine/util.h>
+#include <json/json.h>
 
 extern cMenu*			lastmenu;
 
@@ -21,21 +22,19 @@ float		cMenu::opacityStart = 0;
 float		cMenu::opacityEnd = 0.75f;
 
 
-void cMenu::initSkin(TiXmlDocument &skin)
+void cMenu::initSkin(Json::Value &skin)
 {
-	if(!skin.FirstChildElement("skin"))
-		return;
-	TiXmlElement* s = skin.FirstChildElement("skin")->FirstChildElement("menubar");
-	bEngine::util::hex2floats(s->FirstChildElement("color")->FirstChild()->Value(),		barColor,			4);
-	bEngine::util::hex2floats(s->FirstChildElement("fontcolor")->FirstChild()->Value(),	barFontColor,		4);
-	bEngine::util::hex2floats(s->FirstChildElement("highlight")->FirstChild()->Value(),	barHighlightColor,	4);
+	Json::Value s = skin["menubar"];
+	bEngine::util::hex2floats(s["color"].asString(),		barColor,			4);
+	bEngine::util::hex2floats(s["fontcolor"].asString(),	barFontColor,		4);
+	bEngine::util::hex2floats(s["highlight"].asString(),	barHighlightColor,	4);
 
-	bEngine::util::hex2floats(s->FirstChildElement("menu")->FirstChildElement("color")->FirstChild()->Value(),			menuColor,			3);
-	bEngine::util::hex2floats(s->FirstChildElement("menu")->FirstChildElement("fontcolor")->FirstChild()->Value(),		menuFontColor,		3);
-	bEngine::util::hex2floats(s->FirstChildElement("menu")->FirstChildElement("highlight")->FirstChild()->Value(),		menuHighlightColor,	3);
+	bEngine::util::hex2floats(s["menu"]["color"].asString(),			menuColor,			3);
+	bEngine::util::hex2floats(s["menu"]["fontcolor"].asString(),		menuFontColor,		3);
+	bEngine::util::hex2floats(s["menu"]["highlight"].asString(),		menuHighlightColor,	3);
 	
-	opacityStart = atof(s->FirstChildElement("menu")->FirstChildElement("startopacity")->FirstChild()->Value());
-	opacityEnd = atof(s->FirstChildElement("menu")->FirstChildElement("targetopacity")->FirstChild()->Value());
+	opacityStart = s["menu"]["startopacity"].asDouble();
+	opacityEnd = s["menu"]["targetopacity"].asDouble();
 }
 
 cMenu::cMenu()

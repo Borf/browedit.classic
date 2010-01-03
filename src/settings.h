@@ -4,7 +4,7 @@
 #include <common.h>
 #include <string>
 #include <vector>
-#include <tinyxml/tinyxml.h>
+#include <json/json.h>
 
 enum eMode
 {
@@ -28,14 +28,14 @@ class cSettings
 {
 public:
 	static std::string		configFileName;
-	static TiXmlDocument	config;
+	static Json::Value		config;
 	static std::string		fontName;
 	static float			paintSpeed;
 	static std::string		roDir;
 	static std::string		skinFile;
 	static bool				running;
 	static eMode			editMode;
-	static TiXmlDocument	msgTable;
+	static Json::Value		msgTable;
 	static int				keyMap[SDLK_LAST-SDLK_FIRST];
 	static unsigned int		undoSize;
 	static float			cameraSmoothing;

@@ -27,14 +27,14 @@ public:
 	{
 	public:
 		cSprite* sprite;
-		cWindowSprite(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		cWindowSprite(cWindow* parent, Json::Value &skin = cWM::skin);
 		void draw(int,int,int,int);
 	};
 
 	class cTabPanel : public cWindowTabPanel
 	{
 	public:
-		cTabPanel(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		cTabPanel(cWindow* parent, Json::Value &skin = cWM::skin);
 		void tabchange(int oldtab);
 		void addxml(cWindowTree* tree, TiXmlNode* n, cWindowTree::cTreeNode* treenode, std::string dir = "");
 	};
@@ -43,7 +43,7 @@ public:
 	class cTree : public cWindowTree
 	{
 	public:
-		cTree(cWindow* parent, std::vector<cTreeNode*> n, TiXmlDocument* skin = &cWM::skin);
+		cTree(cWindow* parent, std::vector<cTreeNode*> n, Json::Value &skin = cWM::skin);
 		void onChange();
 	};
 
@@ -51,7 +51,7 @@ public:
 	class cActionChangeButton : public cWindowButton
 	{
 	public:
-		cActionChangeButton(cWindow* p, TiXmlDocument* skin = &cWM::skin);
+		cActionChangeButton(cWindow* p, Json::Value &skin = cWM::skin);
 		void onClick();
 	};
 
@@ -59,20 +59,20 @@ public:
 	{
 		int direction;
 	public:
-		cDirectionButton(cWindow* p, int dir, TiXmlDocument* skin = &cWM::skin);
+		cDirectionButton(cWindow* p, int dir, Json::Value &skin = cWM::skin);
 		void onClick();
 	};
 
 	class cOkButton : public cWindowButton
 	{
 	public:
-		cOkButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		cOkButton(cWindow* parent, Json::Value &skin = cWM::skin);
 		void onClick();
 	};
 	class cCancelButton : public cWindowButton
 	{
 	public:
-		cCancelButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		cCancelButton(cWindow* parent, Json::Value &skin = cWM::skin);
 		void onClick();
 	};
 

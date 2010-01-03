@@ -39,7 +39,7 @@ public:
 
 
 	int skinBarLeft;
-	cWindowScrollPanel(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+	cWindowScrollPanel(cWindow* parent, Json::Value &skin = cWM::skin);
 	~cWindowScrollPanel();
 	void draw(int,int,int,int);
 	void drag();

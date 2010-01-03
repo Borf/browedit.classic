@@ -1,7 +1,7 @@
 #include "messagewindow.h"
 
 
-cMessageWindow::cWindowOkButton::cWindowOkButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent,skin)
+cMessageWindow::cWindowOkButton::cWindowOkButton( cWindow* parent, Json::Value &skin) : cWindowButton(parent,skin)
 {
 	alignment = ALIGN_BOTTOM;
 	moveTo(0, 20);

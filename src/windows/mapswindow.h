@@ -11,7 +11,7 @@ class cMapsWindow : public cWindow
 	class cSearchButton : public cWindowButton
 	{
 	public:
-		cSearchButton(cWindow*, TiXmlDocument* = NULL);
+		cSearchButton(cWindow*, Json::Value &skin = cWM::skin);
 		void onClick();
 	};
 
@@ -31,7 +31,7 @@ public:
 	class cClickableFrame : public cWindowFrame
 	{
 	public:
-		cClickableFrame(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		cClickableFrame(cWindow* parent, Json::Value &skin = cWM::skin);
 		void onClick();
 	};
 	

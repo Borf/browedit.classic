@@ -1,6 +1,6 @@
 #include "inputwindow.h"
 
-cInputWindow::cWindowOkButton::cWindowOkButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent, skin)
+cInputWindow::cWindowOkButton::cWindowOkButton( cWindow* parent, Json::Value &skin ) : cWindowButton(parent, skin)
 {
 	alignment = ALIGN_BOTTOMLEFT;
 	moveTo(20, 20);
@@ -13,7 +13,7 @@ void cInputWindow::cWindowOkButton::onClick()
 	parent->userfunc((void*)1);
 }
 
-cInputWindow::cWindowCancelButton::cWindowCancelButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent, skin)
+cInputWindow::cWindowCancelButton::cWindowCancelButton( cWindow* parent, Json::Value &skin ) : cWindowButton(parent, skin)
 {
 	alignment = ALIGN_BOTTOMRIGHT;
 	moveTo(20, 20);

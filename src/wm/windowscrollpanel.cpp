@@ -468,7 +468,7 @@ void cWindowScrollPanel::onScrollDown()
 	scrollposy = (int)max(min(scrollposy, innerheight-h), 0);
 }
 
-cWindowScrollPanel::cWindowScrollPanel( cWindow* parent, TiXmlDocument* skin ) : cWindowObject(parent, skin->FirstChildElement("skin")->FirstChildElement("list"))
+cWindowScrollPanel::cWindowScrollPanel( cWindow* parent, Json::Value &skin ) : cWindowObject(parent, skin["list"])
 {
 	w = 100;
 	h = 25;
@@ -485,24 +485,24 @@ cWindowScrollPanel::cWindowScrollPanel( cWindow* parent, TiXmlDocument* skin ) :
 	scrollposy = 0;
 	draggingObject = NULL;
 	
-	TiXmlElement* bSkin = skin->FirstChildElement("skin")->FirstChildElement("list")->FirstChildElement("scroll");
+	Json::Value bSkin = skin["list"]["scroll"];
 	
-	skinBarWidth =			atoi(bSkin->FirstChildElement("width")->FirstChild()->Value());
-	skinBarLeft =			atoi(bSkin->FirstChildElement("left")->FirstChild()->Value());
-	skinButtonUpLeft =		atoi(bSkin->FirstChildElement("buttonup")->FirstChildElement("left")->FirstChild()->Value());
-	skinButtonUpTop =		512-atoi(bSkin->FirstChildElement("buttonup")->FirstChildElement("top")->FirstChild()->Value());
-	skinButtonUpHeight =	atoi(bSkin->FirstChildElement("buttonup")->FirstChildElement("height")->FirstChild()->Value());
-	skinButtonDownLeft =	atoi(bSkin->FirstChildElement("buttondown")->FirstChildElement("left")->FirstChild()->Value());
-	skinButtonDownTop =		512-atoi(bSkin->FirstChildElement("buttondown")->FirstChildElement("top")->FirstChild()->Value());
-	skinButtonDownHeight =	atoi(bSkin->FirstChildElement("buttondown")->FirstChildElement("height")->FirstChild()->Value());
+	skinBarWidth =				bSkin["width"].asInt();
+	skinBarLeft =				bSkin["left"].asInt();
+	skinButtonUpLeft =			bSkin["buttonup"]["left"].asInt();
+	skinButtonUpTop =		512-bSkin["buttonup"]["top"].asInt();
+	skinButtonUpHeight =		bSkin["buttonup"]["height"].asInt();
+	skinButtonDownLeft =		bSkin["buttondown"]["left"].asInt();
+	skinButtonDownTop =		512-bSkin["buttondown"]["top"].asInt();
+	skinButtonDownHeight =		bSkin["buttondown"]["height"].asInt();
 	
-	skinBarTopHeight = atoi(bSkin->FirstChildElement("top")->Attribute("height"));
-	skinBarTop =		512 - atoi(bSkin->FirstChildElement("top")->FirstChild()->Value());
-	skinBarBottomHeight = atoi(bSkin->FirstChildElement("bottom")->Attribute("height"));
-	skinBarBottom =		512 - atoi(bSkin->FirstChildElement("bottom")->FirstChild()->Value());
+	skinBarTopHeight =			bSkin["top"]["height"].asInt();
+	skinBarTop =			512-bSkin["top"]["pos"].asInt();
+	skinBarBottomHeight =		bSkin["bottom"]["height"].asInt();
+	skinBarBottom =			512-bSkin["bottom"]["pos"].asInt();
 	
-	skinBarBackTop=		512-atoi(bSkin->FirstChildElement("background")->FirstChildElement("top")->FirstChild()->Value());
-	skinBarBackHeight =	atoi(bSkin->FirstChildElement("background")->FirstChildElement("height")->FirstChild()->Value());
-	skinBarBackLeft =	atoi(bSkin->FirstChildElement("background")->FirstChildElement("left")->FirstChild()->Value());
-	skinBarCenterHeight = atoi(bSkin->FirstChildElement("centerheight")->FirstChild()->Value());
+	skinBarBackTop=			512-bSkin["background"]["top"].asInt();
+	skinBarBackHeight =			bSkin["background"]["height"].asInt();
+	skinBarBackLeft =			bSkin["background"]["left"].asInt();
+	skinBarCenterHeight =		bSkin["centerheight"].asInt();
 }

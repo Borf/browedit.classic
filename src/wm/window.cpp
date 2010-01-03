@@ -19,14 +19,14 @@
 #include <bengine/util.h>
 
 
-cWindow::cWindow(bEngine::cTexture* t, cFont* f, TiXmlDocument* skin)
+cWindow::cWindow(bEngine::cTexture* t, cFont* f, Json::Value &skin)
 {
 	if(!t)
 		t = cWM::texture;
 	if(!f)
 		f = cWM::font;
 	if(!skin)
-		skin = &cWM::skin;
+		skin = cWM::skin;
 
 	noTransparency = false;
 	visible = false;
@@ -49,44 +49,41 @@ cWindow::cWindow(bEngine::cTexture* t, cFont* f, TiXmlDocument* skin)
 	font = f;
 	saveProperties = "";
 
-	std::string color = skin->FirstChildElement("skin")->FirstChildElement("window")->FirstChildElement("fontcolor")->FirstChild()->Value();
+	std::string color = skin["window"]["fontcolor"].asString();
 	fontColor[0] = bEngine::util::hex2dec(color.substr(0,2)) / 256.0f;
 	fontColor[1] = bEngine::util::hex2dec(color.substr(2,2)) / 256.0f;
 	fontColor[2] = bEngine::util::hex2dec(color.substr(4,2)) / 256.0f;
 
-	color = skin->FirstChildElement("skin")->FirstChildElement("window")->FirstChildElement("title")->FirstChildElement("fontcolor")->FirstChild()->Value();
+	color = skin["window"]["title"]["fontcolor"].asString();
 	titleColor[0] = bEngine::util::hex2dec(color.substr(0,2)) / 256.0f;
 	titleColor[1] = bEngine::util::hex2dec(color.substr(2,2)) / 256.0f;
 	titleColor[2] = bEngine::util::hex2dec(color.substr(4,2)) / 256.0f;
 
-	titleOffX = atoi(skin->FirstChildElement("skin")->FirstChildElement("window")->FirstChildElement("title")->FirstChildElement("xoff")->FirstChild()->Value());
-	titleOffY = atoi(skin->FirstChildElement("skin")->FirstChildElement("window")->FirstChildElement("title")->FirstChildElement("yoff")->FirstChild()->Value());
+	titleOffX = skin["window"]["title"]["xoff"].asInt();
+	titleOffY = skin["window"]["title"]["yoff"].asInt();
 
+	Json::Value wSkin = skin["window"];
 
-	TiXmlElement* wSkin = skin->FirstChildElement("skin")->FirstChildElement("window");
-
-	skinTopHeight = atoi(wSkin->FirstChildElement("top")->Attribute("height"));
-	skinTop =		512 - atoi(wSkin->FirstChildElement("top")->FirstChild()->Value());
-	skinBottomHeight = atoi(wSkin->FirstChildElement("bottom")->Attribute("height"));
-	skinBottom =		512 - atoi(wSkin->FirstChildElement("bottom")->FirstChild()->Value());
+	skinTopHeight =		wSkin["top"]["height"].asInt();
+	skinTop =		512-wSkin["top"]["pos"].asInt();
+	skinBottomHeight =	wSkin["bottom"]["height"].asInt();
+	skinBottom =	512-wSkin["bottom"]["pos"].asInt();
 	
-	skinLeftWidth = atoi(wSkin->FirstChildElement("left")->Attribute("width"));
-	skinLeft =		atoi(wSkin->FirstChildElement("left")->FirstChild()->Value());
-	skinRightWidth = atoi(wSkin->FirstChildElement("right")->Attribute("width"));
-	skinRight =		atoi(wSkin->FirstChildElement("right")->FirstChild()->Value());
+	skinLeftWidth =		wSkin["left"]["width"].asInt();
+	skinLeft =			wSkin["left"]["pos"].asInt();
+	skinRightWidth =	wSkin["right"]["width"].asInt();
+	skinRight =			wSkin["right"]["pos"].asInt();
 
-	wSkin = wSkin->FirstChildElement("offsets");
-	skinOffLeft =	atoi(wSkin->FirstChildElement("left")->FirstChild()->Value());
-	skinOffRight =	atoi(wSkin->FirstChildElement("right")->FirstChild()->Value());
-	skinOffTop =	atoi(wSkin->FirstChildElement("top")->FirstChild()->Value());
-	skinOffBottom = atoi(wSkin->FirstChildElement("bottom")->FirstChild()->Value());
-
+	wSkin = wSkin["offsets"];
+	skinOffLeft =	wSkin["left"].asInt();
+	skinOffRight =	wSkin["right"].asInt();
+	skinOffTop =	wSkin["top"].asInt();
+	skinOffBottom = wSkin["bottom"].asInt();
 
 	currentColor[0] = cWM::color[0];
 	currentColor[1] = cWM::color[1];
 	currentColor[2] = cWM::color[2];
 	currentColor[3] = 0;
-
 }
 
 
@@ -549,10 +546,10 @@ cWindowObject* cWindow::addLabel(std::string name, int x, int y, std::string tex
 }
 
 
-cWindowObject* cWindow::addInputBox(std::string name, int x, int y, int w, std::string text, TiXmlDocument* skin)
+cWindowObject* cWindow::addInputBox(std::string name, int x, int y, int w, std::string text, Json::Value &skin)
 {
 	if(!skin)
-		skin = &cWM::skin;
+		skin = cWM::skin;
 	cWindowObject* o = new cWindowInputBox(this,skin);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(x,y);
@@ -562,10 +559,10 @@ cWindowObject* cWindow::addInputBox(std::string name, int x, int y, int w, std::
 	return o;
 }
 
-cWindowObject* cWindow::addCheckBox(std::string name, int x, int y, bool checked, TiXmlDocument* skin)
+cWindowObject* cWindow::addCheckBox(std::string name, int x, int y, bool checked, Json::Value &skin)
 {
 	if(!skin)
-		skin = &cWM::skin;
+		skin = cWM::skin;
 	cWindowObject* o = new cWindowCheckBox(this,skin);
 	o->alignment = ALIGN_TOPLEFT;
 	o->moveTo(x,y);
@@ -631,38 +628,24 @@ void cWindow::save()
 			std::pair<char*,bool*>("w", &resizable),
 			std::pair<char*,bool*>("h", &resizable) };
 
-		if(cSettings::config.FirstChildElement("config")->FirstChildElement("wm") == NULL)
-			cSettings::config.FirstChildElement("config")->InsertEndChild(TiXmlElement("wm"));
-		if(cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveProperties.c_str()) == NULL)
-			cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->InsertEndChild(TiXmlElement(saveProperties.c_str()));
+		if(!cSettings::config.isMember("wm"))
+			cSettings::config["wm"] = Json::Value();
+		if(!cSettings::config["wm"].isMember(saveProperties))
+			cSettings::config["wm"][saveProperties] = Json::Value();
 
-		for(int i = 0; i < 4; i++)
-		{
-			if(*elements[i].second && cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveProperties.c_str())->FirstChildElement(elements[i].first) == NULL)
-			{
-				cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveProperties.c_str())->InsertEndChild(TiXmlElement(elements[i].first));
-				cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveProperties.c_str())->FirstChildElement(elements[i].first)->InsertEndChild(TiXmlText(""));
-			}
-		}
 
-		char buf[10];
 		if(movable)
 		{
-			sprintf(buf, "%i", x);
-			cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveProperties.c_str())->FirstChildElement("x")->FirstChild()->SetValue(buf);
-
-			sprintf(buf, "%i", y);
-			cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveProperties.c_str())->FirstChildElement("y")->FirstChild()->SetValue(buf);
+			cSettings::config["wm"][saveProperties]["x"] = x;
+			cSettings::config["wm"][saveProperties]["y"] = y;
 		}
 		if(resizable)
 		{
-			sprintf(buf, "%i", h);
-			cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveProperties.c_str())->FirstChildElement("h")->FirstChild()->SetValue(buf);
-
-			sprintf(buf, "%i", w);
-			cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(saveProperties.c_str())->FirstChildElement("w")->FirstChild()->SetValue(buf);
+			cSettings::config["wm"][saveProperties]["w"] = w;
+			cSettings::config["wm"][saveProperties]["h"] = h;
 		}
-		cSettings::config.SaveFile(cSettings::configFileName.c_str());
+		Json::StyledStreamWriter writer;
+		writer.write(std::ofstream(cSettings::configFileName.c_str()), cSettings::config);
 
 	}
 #endif
@@ -672,26 +655,22 @@ void cWindow::initProps(std::string s)
 {
 #ifndef __NOXML__
 	saveProperties = s;
-	if(!cSettings::config.FirstChildElement("config"))
-		return;
-	if(!cSettings::config.FirstChildElement("config")->FirstChildElement("wm"))
-		return;
 
-	if(cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str()))
+	if(cSettings::config["wm"].isMember(s))
 	{
 		if(movable)
 		{
-			if(cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str())->FirstChildElement("x"))
-				x = atoi(cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str())->FirstChildElement("x")->FirstChild()->Value());
-			if(cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str())->FirstChildElement("y"))
-				y = atoi(cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str())->FirstChildElement("y")->FirstChild()->Value());
+			if(cSettings::config["wm"][s].isMember("x"))
+				x = cSettings::config["wm"][s]["x"].asInt();
+			if(cSettings::config["wm"][s].isMember("y"))
+				y = cSettings::config["wm"][s]["y"].asInt();
 		}
 		if(resizable)
 		{
-			if(cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str())->FirstChildElement("h"))
-				h = atoi(cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str())->FirstChildElement("h")->FirstChild()->Value());
-			if(cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str())->FirstChildElement("w"))
-				w = atoi(cSettings::config.FirstChildElement("config")->FirstChildElement("wm")->FirstChildElement(s.c_str())->FirstChildElement("w")->FirstChild()->Value());
+			if(cSettings::config["wm"][s].isMember("w"))
+				w = cSettings::config["wm"][s]["w"].asInt();
+			if(cSettings::config["wm"][s].isMember("h"))
+				h = cSettings::config["wm"][s]["h"].asInt();
 		}
 
 	}

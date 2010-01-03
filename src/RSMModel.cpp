@@ -170,18 +170,18 @@ cRsmModel::cMesh::cMesh(bEngine::util::cInStream* pFile, cRsmModelBase* model, i
 	faces = new cFace[nFaces];
 	for(i = 0; i < nFaces; i++)
 	{
-		faces[i].vertices[0] = pFile->readShort();
-		faces[i].vertices[1] = pFile->readShort();
-		faces[i].vertices[2] = pFile->readShort();
+		faces[i].vertices[0] = pFile->readWord();
+		faces[i].vertices[1] = pFile->readWord();
+		faces[i].vertices[2] = pFile->readWord();
 
 		faces[i].normal = (vertices[faces[i].vertices[1]] - vertices[faces[i].vertices[0]]).cross(vertices[faces[i].vertices[2]] - vertices[faces[i].vertices[0]]).getNormalized();
 
-		faces[i].texvertices[0] = pFile->readShort();
-		faces[i].texvertices[1] = pFile->readShort();
-		faces[i].texvertices[2] = pFile->readShort();
+		faces[i].texvertices[0] = pFile->readWord();
+		faces[i].texvertices[1] = pFile->readWord();
+		faces[i].texvertices[2] = pFile->readWord();
 
-		faces[i].texIndex = pFile->readShort();
-		pFile->readShort();
+		faces[i].texIndex = pFile->readWord();
+		pFile->readWord();
 		faces[i].twoSide = pFile->readInt();
 		faces[i].smoothGroup = pFile->readInt();
 	}

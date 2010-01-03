@@ -1171,7 +1171,7 @@ MENUCOMMAND(dolightmapsnoshadow)
 class cWindowPreviewButton : public cWindowButton
 {
 public:
-	cWindowPreviewButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin) : cWindowButton(parent, skin)
+	cWindowPreviewButton(cWindow* parent, Json::Value &skin = cWM::skin) : cWindowButton(parent, skin)
 	{
 		alignment = ALIGN_TOPLEFT;
 		moveTo(0,20);

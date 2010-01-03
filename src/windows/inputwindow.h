@@ -24,7 +24,7 @@ class cInputWindow : public cWindow
 	class cWindowOkButton : public cWindowButton
 	{
 	public:
-		cWindowOkButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		cWindowOkButton(cWindow* parent, Json::Value &skin = cWM::skin);
 		virtual ~cWindowOkButton() {}
 		void onClick();
 	};
@@ -32,7 +32,7 @@ class cInputWindow : public cWindow
 	class cWindowCancelButton : public cWindowButton
 	{
 	public:
-		cWindowCancelButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		cWindowCancelButton(cWindow* parent, Json::Value &skin = cWM::skin);
 		virtual ~cWindowCancelButton() {}
 		void onClick();
 	};

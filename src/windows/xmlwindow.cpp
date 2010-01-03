@@ -70,7 +70,7 @@ void cXmlWindow::event(cWindowObject* o, std::string type)
 	}
 }
 
-cXmlWindow::cXmlButton::cXmlButton(cWindow* p, TiXmlDocument* skin) : cWindowButton(p, skin)
+cXmlWindow::cXmlButton::cXmlButton(cWindow* p, Json::Value &skin) : cWindowButton(p, skin)
 {
 	
 }
@@ -80,7 +80,7 @@ void cXmlWindow::cXmlButton::onClick()
 	((cXmlWindow*)parent)->event(this, "click");
 }
 
-cXmlWindow::cXmlCheckBox::cXmlCheckBox( cWindow* p, TiXmlDocument* skin) : cWindowCheckBox(p,skin)
+cXmlWindow::cXmlCheckBox::cXmlCheckBox( cWindow* p, Json::Value &skin) : cWindowCheckBox(p,skin)
 {
 	
 }

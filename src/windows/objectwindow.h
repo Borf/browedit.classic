@@ -8,7 +8,7 @@ class cUndoItem;
 class cWindowOkButton : public cWindowButton
 {
 public:
-	cWindowOkButton(cWindow* parent, TiXmlDocument* = NULL);
+	cWindowOkButton(cWindow* parent, Json::Value &skin = cWM::skin);
 	virtual ~cWindowOkButton();
 	void onClick();
 };
@@ -17,7 +17,7 @@ public:
 class cWindowCancelButton : public cWindowButton
 {
 public:
-	cWindowCancelButton(cWindow* parent, TiXmlDocument* = NULL);
+	cWindowCancelButton(cWindow* parent, Json::Value &skin = cWM::skin);
 	virtual ~cWindowCancelButton();
 	void onClick();
 };

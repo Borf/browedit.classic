@@ -25,7 +25,7 @@ public:
 	int selectedtab;
 
 
-	cWindowTabPanel(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+	cWindowTabPanel(cWindow* parent, Json::Value &skin = cWM::skin);
 	void draw(int,int,int,int);
 	void onClick();
 

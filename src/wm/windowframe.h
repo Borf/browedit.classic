@@ -10,7 +10,7 @@ class cWindowFrame : public cWindowObject
 {
 	bool drawinner;
 public:
-	cWindowFrame(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+	cWindowFrame(cWindow* parent, Json::Value &skin = cWM::skin);
 	virtual void draw(int,int,int,int);
 	void setInt(int,int);
 };

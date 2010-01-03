@@ -16,31 +16,31 @@ class cSoundSelectWindow : public cWindow
 	class cWindowSoundCatSelect : public cWindowTree
 	{
 	public:
-		cWindowSoundCatSelect(cWindow* parent, std::vector<cWindowTree::cTreeNode*> n, TiXmlDocument* skin = &cWM::skin);
+		cWindowSoundCatSelect(cWindow* parent, std::vector<cWindowTree::cTreeNode*> n, Json::Value &skin = cWM::skin);
 		void onClick();
 	};
 	class cSoundList : public cWindowDataListBox<std::string>
 	{
 	public:
-		cSoundList(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		cSoundList(cWindow* parent, Json::Value &skin = cWM::skin);
 		void onDoubleClick();
 	};
 	class cWindowPlayButton : public cWindowButton
 	{
 	public:
-		cWindowPlayButton(cWindow* w, TiXmlDocument* skin = &cWM::skin);
+		cWindowPlayButton(cWindow* w, Json::Value &skin = cWM::skin);
 		void onClick();
 	};
 	class cWindowOkButton : public cWindowButton
 	{
 	public:
-		cWindowOkButton(cWindow* w, TiXmlDocument* skin = &cWM::skin);
+		cWindowOkButton(cWindow* w, Json::Value &skin = cWM::skin);
 		void onClick();
 	};
 	class cWindowCancelButton : public cWindowButton
 	{
 	public:
-		cWindowCancelButton(cWindow* w, TiXmlDocument* skin = &cWM::skin);
+		cWindowCancelButton(cWindow* w, Json::Value &skin = cWM::skin);
 		void onClick();
 	};
 

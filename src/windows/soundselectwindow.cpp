@@ -10,7 +10,7 @@
 extern std::vector<std::pair<std::string, std::string> > translations;
 extern void mainloop();
 
-cSoundSelectWindow::cWindowSoundCatSelect::cWindowSoundCatSelect( cWindow* parent, std::vector<cWindowTree::cTreeNode*> n, TiXmlDocument* skin ) : cWindowTree(parent, n,skin)
+cSoundSelectWindow::cWindowSoundCatSelect::cWindowSoundCatSelect( cWindow* parent, std::vector<cWindowTree::cTreeNode*> n, Json::Value &skin) : cWindowTree(parent, n,skin)
 {
 	
 }
@@ -48,7 +48,7 @@ void cSoundSelectWindow::cWindowSoundCatSelect::onClick()
 	cWM::draggingObject = NULL;
 }
 
-cSoundSelectWindow::cSoundList::cSoundList( cWindow* parent, TiXmlDocument* skin ) : cWindowDataListBox<std::string>(parent,skin)
+cSoundSelectWindow::cSoundList::cSoundList( cWindow* parent, Json::Value &skin) : cWindowDataListBox<std::string>(parent,skin)
 {
 	
 }
@@ -58,7 +58,7 @@ void cSoundSelectWindow::cSoundList::onDoubleClick()
 	parent->objects["play"]->onClick();
 }
 
-cSoundSelectWindow::cWindowPlayButton::cWindowPlayButton( cWindow* w, TiXmlDocument* skin ) : cWindowButton(w,skin)
+cSoundSelectWindow::cWindowPlayButton::cWindowPlayButton( cWindow* w, Json::Value &skin) : cWindowButton(w,skin)
 {
 	alignment = ALIGN_BOTTOMRIGHT;
 	moveTo(0,0);
@@ -100,7 +100,7 @@ void cSoundSelectWindow::cWindowPlayButton::onClick()
 	}
 }
 
-cSoundSelectWindow::cWindowOkButton::cWindowOkButton( cWindow* w, TiXmlDocument* skin ) : cWindowButton(w,skin)
+cSoundSelectWindow::cWindowOkButton::cWindowOkButton( cWindow* w, Json::Value &skin) : cWindowButton(w,skin)
 {
 	alignment = ALIGN_BOTTOMRIGHT;
 	moveTo(100,0);
@@ -165,7 +165,7 @@ void cSoundSelectWindow::cWindowOkButton::onClick()
 		w->userfunc(NULL);
 }
 
-cSoundSelectWindow::cWindowCancelButton::cWindowCancelButton( cWindow* w, TiXmlDocument* skin ) : cWindowButton(w,skin)
+cSoundSelectWindow::cWindowCancelButton::cWindowCancelButton( cWindow* w, Json::Value &skin) : cWindowButton(w,skin)
 {
 	alignment = ALIGN_BOTTOMRIGHT;
 	moveTo(200,0);

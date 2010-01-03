@@ -405,10 +405,10 @@ void cWindowListBox::onScrollDown()
 
 }
 
-cWindowListBox::cWindowListBox( cWindow* parent, TiXmlDocument *skin ) : cWindowObject(parent,skin->FirstChildElement("skin")->FirstChildElement("list"))
+cWindowListBox::cWindowListBox( cWindow* parent, Json::Value &skin ) : cWindowObject(parent,skin["list"])
 {
 	if(!skin)
-		skin = &cWM::skin;
+		skin = cWM::skin;
 	w = 280;
 	h = 100;
 	x = 5;
@@ -419,35 +419,34 @@ cWindowListBox::cWindowListBox( cWindow* parent, TiXmlDocument *skin ) : cWindow
 	showselection = true;
 	showscroll = true;
 	type = OBJECT_LISTBOX;
-	TiXmlElement* bSkin = skin->FirstChildElement("skin")->FirstChildElement("list")->FirstChildElement("scroll");
+	Json::Value bSkin = skin["list"]["scroll"];
 	
-	std::string scolor = skin->FirstChildElement("skin")->FirstChildElement("list")->FirstChildElement("selectcolor")->FirstChild()->Value();
+	std::string scolor = skin["list"]["selectcolor"].asString();
 	selectColor[0] = bEngine::util::hex2dec(scolor.substr(0,2)) / 256.0f;
 	selectColor[1] = bEngine::util::hex2dec(scolor.substr(2,2)) / 256.0f;
 	selectColor[2] = bEngine::util::hex2dec(scolor.substr(4,2)) / 256.0f;
 	
-	scolor = skin->FirstChildElement("skin")->FirstChildElement("list")->FirstChildElement("selectfontcolor")->FirstChild()->Value();
+	scolor = skin["list"]["selectfontcolor"].asString();
 	selectFontColor[0] = bEngine::util::hex2dec(scolor.substr(0,2)) / 256.0f;
 	selectFontColor[1] = bEngine::util::hex2dec(scolor.substr(2,2)) / 256.0f;
 	selectFontColor[2] = bEngine::util::hex2dec(scolor.substr(4,2)) / 256.0f;
 	
+	skinBarWidth =			bSkin["width"].asInt();
+	skinBarLeft =			bSkin["left"].asInt();
+	skinButtonUpLeft =		bSkin["buttonup"]["left"].asInt();
+	skinButtonUpTop =		512-bSkin["buttonup"]["top"].asInt();
+	skinButtonUpHeight =	bSkin["buttonup"]["height"].asInt();
+	skinButtonDownLeft =	bSkin["buttondown"]["left"].asInt();
+	skinButtonDownTop =		512-bSkin["buttondown"]["top"].asInt();
+	skinButtonDownHeight =	bSkin["buttondown"]["height"].asInt();
 	
-	skinBarWidth =			atoi(bSkin->FirstChildElement("width")->FirstChild()->Value());
-	skinBarLeft =			atoi(bSkin->FirstChildElement("left")->FirstChild()->Value());
-	skinButtonUpLeft =		atoi(bSkin->FirstChildElement("buttonup")->FirstChildElement("left")->FirstChild()->Value());
-	skinButtonUpTop =		512-atoi(bSkin->FirstChildElement("buttonup")->FirstChildElement("top")->FirstChild()->Value());
-	skinButtonUpHeight =	atoi(bSkin->FirstChildElement("buttonup")->FirstChildElement("height")->FirstChild()->Value());
-	skinButtonDownLeft =	atoi(bSkin->FirstChildElement("buttondown")->FirstChildElement("left")->FirstChild()->Value());
-	skinButtonDownTop =		512-atoi(bSkin->FirstChildElement("buttondown")->FirstChildElement("top")->FirstChild()->Value());
-	skinButtonDownHeight =	atoi(bSkin->FirstChildElement("buttondown")->FirstChildElement("height")->FirstChild()->Value());
+	skinBarTopHeight =	bSkin["top"]["height"].asInt();
+	skinBarTop =		512 - bSkin["top"]["pos"].asInt();
+	skinBarBottomHeight = bSkin["bottom"]["height"].asInt();
+	skinBarBottom =		512 - bSkin["bottom"]["pos"].asInt();
 	
-	skinBarTopHeight = atoi(bSkin->FirstChildElement("top")->Attribute("height"));
-	skinBarTop =		512 - atoi(bSkin->FirstChildElement("top")->FirstChild()->Value());
-	skinBarBottomHeight = atoi(bSkin->FirstChildElement("bottom")->Attribute("height"));
-	skinBarBottom =		512 - atoi(bSkin->FirstChildElement("bottom")->FirstChild()->Value());
-	
-	skinBarBackTop=		512-atoi(bSkin->FirstChildElement("background")->FirstChildElement("top")->FirstChild()->Value());
-	skinBarBackHeight =	atoi(bSkin->FirstChildElement("background")->FirstChildElement("height")->FirstChild()->Value());
-	skinBarBackLeft =	atoi(bSkin->FirstChildElement("background")->FirstChildElement("left")->FirstChild()->Value());
-	skinBarCenterHeight = atoi(bSkin->FirstChildElement("centerheight")->FirstChild()->Value());
+	skinBarBackTop=		512-bSkin["background"]["top"].asInt();
+	skinBarBackHeight =	bSkin["background"]["height"].asInt();
+	skinBarBackLeft =	bSkin["background"]["left"].asInt();
+	skinBarCenterHeight = bSkin["centerheight"].asInt();
 }

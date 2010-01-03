@@ -70,7 +70,7 @@ cModelOverViewWindow::cModelOverViewTreeNode* cModelOverViewWindow::cModelOverVi
 	return NULL;
 }
 
-cModelOverViewWindow::cModelOverViewTree::cModelOverViewTree( cWindow* parent, std::vector<cWindowTree::cTreeNode*> nodes, TiXmlDocument* skin ) : cWindowTree(parent, nodes, skin)
+cModelOverViewWindow::cModelOverViewTree::cModelOverViewTree( cWindow* parent, std::vector<cWindowTree::cTreeNode*> nodes, Json::Value &skin ) : cWindowTree(parent, nodes, skin)
 {
 	moveTo(0,0);
 	resizeTo(parent->innerWidth(), parent->innerHeight());

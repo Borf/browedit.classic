@@ -5,7 +5,7 @@
 #include "settings.h"
 #include <algorithm>
 
-cFileWindow::cOkButton::cOkButton( cWindow* parent, void (*pCallback)(std::string), TiXmlDocument* skin ) : cWindowButton(parent,skin)
+cFileWindow::cOkButton::cOkButton( cWindow* parent, void (*pCallback)(std::string), Json::Value &skin ) : cWindowButton(parent,skin)
 {
 	callback = pCallback;
 	alignment = ALIGN_BOTTOMRIGHT;
@@ -24,7 +24,7 @@ void cFileWindow::cOkButton::onClick()
 	callback(cSettings::roDir + filename);
 }
 
-cFileWindow::cWindowFilterBox::cWindowFilterBox( cWindow* parent, TiXmlDocument* skin ) : cWindowInputBox(parent,skin)
+cFileWindow::cWindowFilterBox::cWindowFilterBox( cWindow* parent, Json::Value &skin ) : cWindowInputBox(parent,skin)
 {
 	alignment = ALIGN_BOTTOMLEFT;
 	moveTo(0,0);

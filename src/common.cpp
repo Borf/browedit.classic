@@ -466,39 +466,35 @@ HWND GetConsoleHwnd()
 
 
 
-const char* GetMsg(std::string s)
+char* GetMsg(std::string s)
 {
 	std::string olds = s;
-	TiXmlNode* n = cSettings::msgTable.FirstChildElement("language");
+	Json::Value n = cSettings::msgTable;
 
 	//Fixed crash when no translation is found. by Henko
 	//TODO: get the translation string from s. s.c_str() does not work.
-	const char* notfound = "[NO MSG]";
+	static char* notfound = "[NO MSG]";
 
 	while(s.find("/") != std::string::npos)
 	{
 		std::string a = s.substr(0, s.find("/"));
-		n = n->FirstChildElement(a.c_str());
-		if(n == NULL)
+		if (!n.isMember(a))
 		{
 			Log(1,0,"Could not find translation for %s", olds.c_str());
 			return notfound;
 		}
+		n = n[a];
 		s = s.substr(s.find("/")+1);
 	}
-	if(n == NULL)
+
+	if(n.isMember(s))
 	{
-		Log(1,0,"Could not find translation for %s", olds.c_str());
-		return notfound;
-	}
-	n = n->FirstChildElement(s.c_str());
-	if(n == NULL)
-	{
-		Log(1,0,"Could not find translation for %s", olds.c_str());
-		return notfound;
+		static char bla[1024];
+		strcpy(bla, n[s].asCString());
+		return bla;
 	}
 
-	return (char*)n->FirstChild()->Value();
+	return notfound;
 }
 
 

@@ -24,7 +24,7 @@ public:
 	class cSoundOverViewTree : public cWindowTree
 	{
 	public:
-		cSoundOverViewTree(cWindow* parent, std::vector<cWindowTree::cTreeNode*> nodes, TiXmlDocument* skin = &cWM::skin);
+		cSoundOverViewTree(cWindow* parent, std::vector<cWindowTree::cTreeNode*> nodes, Json::Value &skin = cWM::skin);
 		void onChange();
 		void getObject(cSound m);
 	};

@@ -196,7 +196,7 @@ bool cRsmMeshPropsWindow::cRsmFloatInputBox::onKeyDown( int keyid, bool shift )
 	return b;
 }
 
-cRsmMeshPropsWindow::cAnimationFrameList::cAnimationFrameList( cWindow* parent, TiXmlDocument* skin) : cWindowListBox(parent, skin)
+cRsmMeshPropsWindow::cAnimationFrameList::cAnimationFrameList( cWindow* parent, Json::Value &skin) : cWindowListBox(parent, skin)
 {
 	moveTo(100, 190);
 	alignment = ALIGN_TOPLEFT;
@@ -214,7 +214,7 @@ void cRsmMeshPropsWindow::cAnimationFrameList::onChange( int oldValue )
 
 
 
-cRsmMeshPropsWindow::cButtonAddFrame::cButtonAddFrame( cWindow* parent, TiXmlDocument* skin) : cWindowButton(parent, skin)
+cRsmMeshPropsWindow::cButtonAddFrame::cButtonAddFrame( cWindow* parent, Json::Value &skin) : cWindowButton(parent, skin)
 {
 	alignment = ALIGN_TOPLEFT;
 	moveTo(170, 162);
@@ -244,7 +244,7 @@ void cRsmMeshPropsWindow::cButtonAddFrame::onClick()
 	((cWindowListBox*)parent->objects["lstFrames"])->onChange(0);
 }
 
-cRsmMeshPropsWindow::cButtonRemoveFrame::cButtonRemoveFrame( cWindow* parent, TiXmlDocument* skin) : cWindowButton(parent, skin)
+cRsmMeshPropsWindow::cButtonRemoveFrame::cButtonRemoveFrame( cWindow* parent, Json::Value &skin) : cWindowButton(parent, skin)
 {
 	alignment = ALIGN_TOPLEFT;
 	moveTo(280, 162);

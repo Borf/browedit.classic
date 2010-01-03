@@ -37,13 +37,13 @@ protected:
 		int right;
 		int condition;
 
-		cProgressSkin(TiXmlElement* el);
+		cProgressSkin(Json::Value &val);
 	};
 	
 	std::vector<cProgressSkin> skins;
 
 public:
-	cWindowProgressBar(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+	cWindowProgressBar(cWindow* parent, Json::Value &skin = cWM::skin);
 
 	void drawprogress(int,int);
 	virtual ~cWindowProgressBar() {}

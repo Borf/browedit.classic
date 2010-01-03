@@ -5,24 +5,24 @@
 #include <graphics.h>
 #include <math.h>
 
-cTextureToolsWindow::cWindowToolbarButton::cWindowToolbarButton( cWindow* parent, std::string image, eTool t, TiXmlDocument* totalskin ) : cWindowPictureBox(parent)
+cTextureToolsWindow::cWindowToolbarButton::cWindowToolbarButton( cWindow* parent, std::string image, eTool t, Json::Value &totalskin ) : cWindowPictureBox(parent)
 {
 	tool = t;
 	activated = t == cGraphics::textureTool;
 	if(!totalskin)
-		totalskin = &cWM::skin;
-	TiXmlElement* skin = totalskin->FirstChildElement("skin")->FirstChildElement("button");
+		totalskin = cWM::skin;
+	Json::Value &skin = totalskin["button"];
 	if(skin != NULL)
 	{
-		skinTopHeight = atoi(skin->FirstChildElement("top")->Attribute("height"));
-		skinTop =		512 - atoi(skin->FirstChildElement("top")->FirstChild()->Value());
-		skinBottomHeight = atoi(skin->FirstChildElement("bottom")->Attribute("height"));
-		skinBottom =		512 - atoi(skin->FirstChildElement("bottom")->FirstChild()->Value());
+		skinTopHeight = skin["top"]["height"].asInt();
+		skinTop =		512 - skin["top"]["pos"].asInt();
+		skinBottomHeight = skin["bottom"]["height"].asInt();
+		skinBottom =		512 - skin["bottom"]["pos"].asInt();
 		
-		skinLeftWidth = atoi(skin->FirstChildElement("left")->Attribute("width"));
-		skinLeft =		atoi(skin->FirstChildElement("left")->FirstChild()->Value());
-		skinRightWidth = atoi(skin->FirstChildElement("right")->Attribute("width"));
-		skinRight =		atoi(skin->FirstChildElement("right")->FirstChild()->Value());
+		skinLeftWidth = skin["left"]["width"].asInt();
+		skinLeft =		skin["left"]["pos"].asInt();
+		skinRightWidth = skin["right"]["width"].asInt();
+		skinRight =		skin["right"]["pos"].asInt();
 	}
 	
 	setText(0, image);
@@ -82,7 +82,7 @@ void cTextureToolsWindow::cWindowToolbarButton::onClick()
 	cGraphics::textureTool = tool;
 }
 
-cTextureToolsWindow::cWindowBrushShape::cWindowBrushShape( cWindow* parent, TiXmlDocument* totalskin ) : cWindowButton(parent, totalskin)
+cTextureToolsWindow::cWindowBrushShape::cWindowBrushShape( cWindow* parent, Json::Value &totalskin ) : cWindowButton(parent, totalskin)
 {
 	resizeTo(20,20);
 	alignment = ALIGN_TOPLEFT;
@@ -133,22 +133,22 @@ void cTextureToolsWindow::cWindowBrushShape::onClick()
 	cWM::addWindow(new cTextureBrushWindow());
 }
 
-cTextureToolsWindow::cWindowSelectArea::cWindowSelectArea( cWindow* parent, TiXmlDocument* totalskin ) : cWindowToolbarButton(parent, "data/buttons/selectarea.tga",TOOL_SELECTAREA, totalskin)
+cTextureToolsWindow::cWindowSelectArea::cWindowSelectArea( cWindow* parent, Json::Value &totalskin ) : cWindowToolbarButton(parent, "data/buttons/selectarea.tga",TOOL_SELECTAREA, totalskin)
 {
 	
 }
 
-cTextureToolsWindow::cWindowSelectBrush::cWindowSelectBrush( cWindow* parent, TiXmlDocument* totalskin ) : cWindowToolbarButton(parent, "data/buttons/selectbrush.tga",TOOL_SELECTBRUSH, totalskin)
+cTextureToolsWindow::cWindowSelectBrush::cWindowSelectBrush( cWindow* parent, Json::Value &totalskin ) : cWindowToolbarButton(parent, "data/buttons/selectbrush.tga",TOOL_SELECTBRUSH, totalskin)
 {
 	
 }
 
-cTextureToolsWindow::cWindowSelectWand::cWindowSelectWand( cWindow* parent, TiXmlDocument* totalskin ) : cWindowToolbarButton(parent, "data/buttons/selectwand.tga",TOOL_SELECTWAND, totalskin)
+cTextureToolsWindow::cWindowSelectWand::cWindowSelectWand( cWindow* parent, Json::Value &totalskin ) : cWindowToolbarButton(parent, "data/buttons/selectwand.tga",TOOL_SELECTWAND, totalskin)
 {
 	
 }
 
-cTextureToolsWindow::cWindowBrush::cWindowBrush( cWindow* parent, TiXmlDocument* totalskin ) : cWindowToolbarButton(parent, "data/buttons/brush.tga",TOOL_BRUSH, totalskin)
+cTextureToolsWindow::cWindowBrush::cWindowBrush( cWindow* parent, Json::Value &totalskin ) : cWindowToolbarButton(parent, "data/buttons/brush.tga",TOOL_BRUSH, totalskin)
 {
 	
 }
@@ -170,23 +170,23 @@ cTextureToolsWindow::cTextureToolsWindow( ) : cWindow()
 	title = "";
 	initProps("texturetools");
 	
-	TiXmlElement* wSkin = cWM::skin.FirstChildElement("skin")->FirstChildElement("miniwindow");
+	Json::Value wSkin = cWM::skin["miniwindow"];
 	
-	skinTopHeight = atoi(wSkin->FirstChildElement("top")->Attribute("height"));
-	skinTop =		512 - atoi(wSkin->FirstChildElement("top")->FirstChild()->Value());
-	skinBottomHeight = atoi(wSkin->FirstChildElement("bottom")->Attribute("height"));
-	skinBottom =		512 - atoi(wSkin->FirstChildElement("bottom")->FirstChild()->Value());
+	skinTopHeight = wSkin["top"]["height"].asInt();
+	skinTop =		512 - wSkin["top"]["pos"].asInt();
+	skinBottomHeight = wSkin["bottom"]["height"].asInt();
+	skinBottom =		512 - wSkin["bottom"]["pos"].asInt();
 	
-	skinLeftWidth = atoi(wSkin->FirstChildElement("left")->Attribute("width"));
-	skinLeft =		atoi(wSkin->FirstChildElement("left")->FirstChild()->Value());
-	skinRightWidth = atoi(wSkin->FirstChildElement("right")->Attribute("width"));
-	skinRight =		atoi(wSkin->FirstChildElement("right")->FirstChild()->Value());
+	skinLeftWidth = wSkin["left"]["width"].asInt();
+	skinLeft =		wSkin["left"]["pos"].asInt();
+	skinRightWidth = wSkin["right"]["width"].asInt();
+	skinRight =		wSkin["right"]["pos"].asInt();
 	
-	wSkin = wSkin->FirstChildElement("offsets");
-	skinOffLeft =	atoi(wSkin->FirstChildElement("left")->FirstChild()->Value());
-	skinOffRight =	atoi(wSkin->FirstChildElement("right")->FirstChild()->Value());
-	skinOffTop =	atoi(wSkin->FirstChildElement("top")->FirstChild()->Value());
-	skinOffBottom = atoi(wSkin->FirstChildElement("bottom")->FirstChild()->Value());
+	wSkin = wSkin["offsets"];
+	skinOffLeft =	wSkin["left"].asInt();
+	skinOffRight =	wSkin["right"].asInt();
+	skinOffTop =	wSkin["top"].asInt();
+	skinOffBottom = wSkin["bottom"].asInt();
 	
 	objects["selectarea"] = new cWindowSelectArea(this);
 	objects["selectbrush"] = new cWindowSelectBrush(this);

@@ -26,14 +26,14 @@ class cTextureWindow : public cWindow
 	class cWindowTextureCatSelect : public cWindowTree
 	{
 	public:
-		cWindowTextureCatSelect(cWindow* parent, std::vector<cWindowTree::cTreeNode*> n, TiXmlDocument* skin = &cWM::skin);
+		cWindowTextureCatSelect(cWindow* parent, std::vector<cWindowTree::cTreeNode*> n, Json::Value &skin = cWM::skin);
 		void onClick();
 	};
 
 	class cWindowFilterBox : public cWindowInputBox
 	{
 	public:
-		cWindowFilterBox(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		cWindowFilterBox(cWindow* parent, Json::Value &skin = cWM::skin);
 		bool onKeyDown(int, bool);
 	};
 

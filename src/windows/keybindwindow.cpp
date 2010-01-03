@@ -269,7 +269,7 @@ std::string keytostring(SDLKey key)
 }
 
 
-cKeyBindWindow::cWindowOkButton::cWindowOkButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent)
+cKeyBindWindow::cWindowOkButton::cWindowOkButton( cWindow* parent, Json::Value &skin ) : cWindowButton(parent)
 {
 	text = "Ok";
 	alignment = ALIGN_BOTTOMRIGHT;
@@ -349,7 +349,7 @@ void cKeyBindWindow::cWindowOkButton::onClick()
 	parent->close();
 }
 
-cKeyBindWindow::cCancelButton::cCancelButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent)
+cKeyBindWindow::cCancelButton::cCancelButton( cWindow* parent, Json::Value &skin ) : cWindowButton(parent)
 {
 	alignment = ALIGN_BOTTOMRIGHT;
 	moveTo(110,0);
@@ -362,7 +362,7 @@ void cKeyBindWindow::cCancelButton::onClick()
 	parent->close();
 }
 
-cKeyBindWindow::cKeyBindBox::cKeyBindBox( cWindow* parent, TiXmlDocument* skin ) : cWindowInputBox(parent)
+cKeyBindWindow::cKeyBindBox::cKeyBindBox( cWindow* parent, Json::Value &skin ) : cWindowInputBox(parent)
 {
 	key = SDLK_UNKNOWN;
 }
@@ -399,7 +399,7 @@ int cKeyBindWindow::cKeyBindBox::getInt( int id )
 	return key;
 }
 
-cKeyBindWindow::cClearButton::cClearButton( cWindow* parent, cKeyBindBox* box, TiXmlDocument* skin ) : cWindowButton(parent)
+cKeyBindWindow::cClearButton::cClearButton( cWindow* parent, cKeyBindBox* box, Json::Value &skin ) : cWindowButton(parent)
 {
 	text = "Clear";
 	resizeTo(50,20);
@@ -412,7 +412,7 @@ void cKeyBindWindow::cClearButton::onClick()
 	clearbox->setInt(0,0);
 }
 
-void cKeyBindWindow::addclearbutton( cKeyBindBox* box, TiXmlDocument* skin )
+void cKeyBindWindow::addclearbutton( cKeyBindBox* box, Json::Value &skin )
 {
 	cWindowObject* o = new cClearButton(this, box, skin);
 	if(box->alignment == ALIGN_TOPLEFT)
@@ -425,7 +425,7 @@ void cKeyBindWindow::addclearbutton( cKeyBindBox* box, TiXmlDocument* skin )
 	objects[buf] = o;
 }
 
-cKeyBindWindow::cKeyBindBox* cKeyBindWindow::addbox( std::string name, int x, int y, int defval, TiXmlDocument* skin )
+cKeyBindWindow::cKeyBindBox* cKeyBindWindow::addbox( std::string name, int x, int y, int defval, Json::Value &skin )
 {
 	cKeyBindBox* o = new cKeyBindBox(this);
 	o->moveTo(x,y);

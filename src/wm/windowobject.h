@@ -1,8 +1,9 @@
 #ifndef __WINDOWOBJECT_H__
 #define __WINDOWOBJECT_H__
 
+#include <bengine/forwards.h>
 #include <string>
-#include <tinyxml/tinyxml.h>
+#include <wm/wm.h>
 //using namespace std;
 
 
@@ -78,7 +79,7 @@ protected:
 
 public:
 	cWindowObject();	
-	cWindowObject(cWindow* p, TiXmlElement* skin = NULL);
+	cWindowObject(cWindow* p, Json::Value &skin = cWM::skin);
 
 	virtual ~cWindowObject() {}
 	OBJECT_BASE type;

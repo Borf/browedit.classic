@@ -96,10 +96,10 @@ std::string cWindowProgressBar::getPopup()
 	return buf;
 }
 
-cWindowProgressBar::cWindowProgressBar( cWindow* parent, TiXmlDocument* skin) : cWindowObject(parent)
+cWindowProgressBar::cWindowProgressBar( cWindow* parent, Json::Value &skin) : cWindowObject(parent)
 {
 	if(!skin)
-		skin = &cWM::skin;
+		skin = cWM::skin;
 	w = 100;
 	h = 10;
 	x = 5;
@@ -111,29 +111,26 @@ cWindowProgressBar::cWindowProgressBar( cWindow* parent, TiXmlDocument* skin) : 
 	value = 33;
 	
 	
-	TiXmlElement* p = skin->FirstChildElement("skin")->FirstChildElement("progress");
-	skinType = (strcmp(p->Attribute("type"), "normal") == 0 ? NORMAL : (strcmp(p->Attribute("type"), "conditional") == 0 ? CONDITIONAL : NORMAL));
+	Json::Value p = skin["progress"];
+	skinType = CONDITIONAL; //TODObengine(strcmp(p->Attribute("type"), "normal") == 0 ? NORMAL : (strcmp(p->Attribute("type"), "conditional") == 0 ? CONDITIONAL : NORMAL));
 	
 	
-	skins.push_back(cProgressSkin(p->FirstChildElement("back")));
-	TiXmlElement* el = p->FirstChildElement("bar");
-	while(el != NULL)
-	{
-		skins.push_back(cProgressSkin(el));
-		el = el->NextSiblingElement("bar");
-	}
+	skins.push_back(cProgressSkin(p["back"]));
+	
+	for(int i = 0; i < p["bars"].size(); i++)
+		skins.push_back(cProgressSkin(p["bars"][i]));
 }
-cWindowProgressBar::cProgressSkin::cProgressSkin( TiXmlElement* el )
+cWindowProgressBar::cProgressSkin::cProgressSkin( Json::Value &val)
 {
-	height = atoi(el->FirstChildElement("height")->FirstChild()->Value());
-	top = 512-atoi(el->FirstChildElement("top")->FirstChild()->Value());
-	leftWidth = atoi(el->FirstChildElement("left")->Attribute("width"));
-	left = atoi(el->FirstChildElement("left")->FirstChild()->Value());
-	rightWidth = atoi(el->FirstChildElement("right")->Attribute("width"));
-	right = atoi(el->FirstChildElement("right")->FirstChild()->Value());
+	height = val["top"]["height"].asInt();
+	top = 512-val["top"]["pos"].asInt();
+	leftWidth = val["left"]["width"].asInt();
+	left = val["left"]["pos"].asInt();
+	rightWidth = val["right"]["width"].asInt();
+	right = val["right"]["pos"].asInt();
 	
-	if(el->Attribute("cond"))
-		condition = atoi(el->Attribute("cond"));
+	if(val.isMember("cond"))
+		condition = val["cond"].asInt();
 	else
 		condition = 0;
 }

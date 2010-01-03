@@ -73,7 +73,7 @@ std::string cWindowCheckBox::getText(int id)
 	return value ? "1" : "0";
 }
 
-cWindowCheckBox::cWindowCheckBox( cWindow* parent, TiXmlDocument* skin ) : cWindowObject(parent)
+cWindowCheckBox::cWindowCheckBox( cWindow* parent, Json::Value &skin ) : cWindowObject(parent)
 {
 	x = 40;
 	y = 40;
@@ -82,19 +82,19 @@ cWindowCheckBox::cWindowCheckBox( cWindow* parent, TiXmlDocument* skin ) : cWind
 	type = OBJECT_CHECKBOX;
 	
 	if(!skin)
-		skin = &cWM::skin;
-	TiXmlElement* bSkin = skin->FirstChildElement("skin")->FirstChildElement("checkbox");
+		skin = cWM::skin;
+	Json::Value bSkin = skin["checkbox"];
 	
-	w = atoi(bSkin->FirstChildElement("width")->FirstChild()->Value());
-	h = atoi(bSkin->FirstChildElement("height")->FirstChild()->Value());
+	w = bSkin["width"].asInt();
+	h = bSkin["height"].asInt();
 	
-	skinCheckedLeft = atoi(bSkin->FirstChildElement("checked")->FirstChildElement("left")->FirstChild()->Value());
-	skinCheckedTop = 512-atoi(bSkin->FirstChildElement("checked")->FirstChildElement("top")->FirstChild()->Value());
-	skinUncheckedLeft = atoi(bSkin->FirstChildElement("unchecked")->FirstChildElement("left")->FirstChild()->Value());
-	skinUncheckedTop = 512-atoi(bSkin->FirstChildElement("unchecked")->FirstChildElement("top")->FirstChild()->Value());
+	skinCheckedLeft = bSkin["checked"]["left"]["pos"].asInt();
+	skinCheckedTop = 512-bSkin["checked"]["top"].asInt();
+	skinUncheckedLeft = bSkin["unchecked"]["left"].asInt();
+	skinUncheckedTop = 512-bSkin["unchecked"]["top"].asInt();
 }
 
-cWindowBoolCheckBox::cWindowBoolCheckBox( cWindow* parent, TiXmlDocument* skin ) : cWindowCheckBox(parent,skin)
+cWindowBoolCheckBox::cWindowBoolCheckBox( cWindow* parent, Json::Value &skin ) : cWindowCheckBox(parent,skin)
 {
 	alignment = ALIGN_TOPLEFT;
 	boolvalue = NULL;

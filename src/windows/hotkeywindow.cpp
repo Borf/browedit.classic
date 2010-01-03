@@ -177,7 +177,9 @@ cHotkeyWindow::cHotkeyWindow(cWorldContainer* container) : cWindow()
 	
 	cWindowObject* o;
 	
-	TiXmlElement* wSkin = cWM::skin.FirstChildElement("skin")->FirstChildElement("miniwindow");
+	Json::Value wSkin = cWM::skin["miniwindow"];
+
+	/*TODObengine
 	
 	skinTopHeight = atoi(wSkin->FirstChildElement("top")->Attribute("height"));
 	skinTop =		512 - atoi(wSkin->FirstChildElement("top")->FirstChild()->Value());
@@ -188,7 +190,7 @@ cHotkeyWindow::cHotkeyWindow(cWorldContainer* container) : cWindow()
 	skinLeft =		atoi(wSkin->FirstChildElement("left")->FirstChild()->Value());
 	skinRightWidth = atoi(wSkin->FirstChildElement("right")->Attribute("width"));
 	skinRight =		atoi(wSkin->FirstChildElement("right")->FirstChild()->Value());		
-	
+	*/
 	for(int i = 0; i < 8; i++)
 	{
 		char buf[10];

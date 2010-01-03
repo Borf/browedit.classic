@@ -22,7 +22,7 @@ public:
 	static float		menuHighlightColor[3];
 	static float		opacityStart;
 	static float		opacityEnd;
-	static void			initSkin(TiXmlDocument &);
+	static void			initSkin(Json::Value &);
 
 
 

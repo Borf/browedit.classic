@@ -22,7 +22,7 @@ cSpriteWindow::cSpriteInfo::cSpriteInfo( std::string f )
 	fileName = f;
 }
 
-cSpriteWindow::cWindowSprite::cWindowSprite( cWindow* parent, TiXmlDocument* skin ) : cWindowObject(parent, skin->FirstChildElement("skin")->FirstChildElement("frame"))
+cSpriteWindow::cWindowSprite::cWindowSprite( cWindow* parent, Json::Value &skin) : cWindowObject(parent, skin["frame"])
 {
 	alignment = ALIGN_TOPLEFT;
 	moveTo(0,0);
@@ -45,7 +45,7 @@ void cSpriteWindow::cWindowSprite::draw( int,int,int,int )
 	sprite->draw();
 }
 
-cSpriteWindow::cTabPanel::cTabPanel( cWindow* parent, TiXmlDocument* skin ) : cWindowTabPanel(parent, skin)
+cSpriteWindow::cTabPanel::cTabPanel( cWindow* parent, Json::Value &skin) : cWindowTabPanel(parent, skin)
 {
 	alignment = ALIGN_TOPLEFT;
 	tabs.clear();
@@ -209,7 +209,7 @@ void cSpriteWindow::cTabPanel::tabchange( int oldtab )
 }
 
 
-cSpriteWindow::cTree::cTree( cWindow* parent, std::vector<cTreeNode*> n, TiXmlDocument* skin ) : cWindowTree(parent, n,skin)
+cSpriteWindow::cTree::cTree( cWindow* parent, std::vector<cTreeNode*> n, Json::Value &skin) : cWindowTree(parent, n,skin)
 {
 	
 }
@@ -266,7 +266,7 @@ void cSpriteWindow::cTree::onChange()
 
 
 
-cSpriteWindow::cActionChangeButton::cActionChangeButton( cWindow* p, TiXmlDocument* skin ) : cWindowButton(p,skin)
+cSpriteWindow::cActionChangeButton::cActionChangeButton( cWindow* p, Json::Value &skin) : cWindowButton(p,skin)
 {
 	alignment = ALIGN_TOPLEFT;
 	moveTo(0, 200);
@@ -283,7 +283,7 @@ void cSpriteWindow::cActionChangeButton::onClick()
 }
 
 
-cSpriteWindow::cDirectionButton::cDirectionButton( cWindow* p, int dir, TiXmlDocument* skin ) : cWindowButton(p,skin)
+cSpriteWindow::cDirectionButton::cDirectionButton( cWindow* p, int dir, Json::Value &skin) : cWindowButton(p,skin)
 {
 	direction = dir;
 	const char* directions[] = { "S", "SE","E","NE","N","NW","W","SW" };
@@ -298,7 +298,7 @@ void cSpriteWindow::cDirectionButton::onClick()
 	((cSpriteWindow::cWindowSprite*)parent->objects["spritewindow"])->sprite->direction = direction;
 }
 
-cSpriteWindow::cOkButton::cOkButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent,skin)
+cSpriteWindow::cOkButton::cOkButton( cWindow* parent, Json::Value &skin) : cWindowButton(parent,skin)
 {
 	alignment = ALIGN_TOPLEFT;
 	moveTo(0, parent->innerHeight()-20);
@@ -343,7 +343,7 @@ void cSpriteWindow::cOkButton::onClick()
 	parent->close();
 }
 
-cSpriteWindow::cCancelButton::cCancelButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent, skin)
+cSpriteWindow::cCancelButton::cCancelButton( cWindow* parent, Json::Value &skin) : cWindowButton(parent, skin)
 {
 	alignment = ALIGN_TOPLEFT;
 	moveTo(0, parent->innerHeight()-40);

@@ -10,11 +10,10 @@
 #include <string>
 
 #include <bengine/forwards.h>
+#include <wm/wm.h>
 
 class cFont;
 class cWindowObject;
-
-#include <tinyxml/tinyxml.h>
 
 typedef std::map<std::string, cWindowObject*, std::less<std::string> > objectlist;
 
@@ -124,7 +123,7 @@ public:
 			bool			saveWindow;
 			std::string		defaultObject;
 
-							cWindow(bEngine::cTexture* t = NULL, cFont* f = NULL, TiXmlDocument* skin = NULL);
+							cWindow(bEngine::cTexture* t = NULL, cFont* f = NULL, Json::Value &skin = cWM::skin);
 			virtual			~cWindow();
 			int				getX()						{ return x; }
 			int				getY()						{ return rolledUp ? y+h-16 : y; }
@@ -191,8 +190,8 @@ public:
 	virtual bool 			onChar(char,bool);
 
 			cWindowObject*	addLabel(std::string, int,int,std::string);
-			cWindowObject*	addInputBox(std::string, int,int,int,std::string, TiXmlDocument* = NULL);
-			cWindowObject*	addCheckBox(std::string, int,int,bool, TiXmlDocument* = NULL);
+			cWindowObject*	addInputBox(std::string, int,int,int,std::string, Json::Value &skin = cWM::skin);
+			cWindowObject*	addCheckBox(std::string, int,int,bool, Json::Value &skin = cWM::skin);
 
 			void			center();
 

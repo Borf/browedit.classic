@@ -22,7 +22,7 @@ extern void mainloop();
 std::vector<cWindow*>	cWM::windows; //vector of windows, 0 = topwindow
 bEngine::cTexture*		cWM::texture;
 cFont*					cWM::font;
-TiXmlDocument			cWM::skin;
+Json::Value				cWM::skin;
 float					cWM::color[4];
 float					cWM::colorBlur[4];
 int						cWM::focus;
@@ -120,18 +120,18 @@ int cWM::draw()
 
 int cWM::init(std::string sSkin)
 {
-	skin;//TODObengine = cFileSystem::getXml(sSkin);
-	texture = bEngine::cTextureCache::load(skin.FirstChildElement("skin")->FirstChildElement("texture")->FirstChild()->Value());
+	skin = bEngine::util::cFileSystem::openJson(sSkin);
+	texture = bEngine::cTextureCache::load(skin["texture"].asString());
 	font = new cFont();
-	font->load(skin.FirstChildElement("skin")->FirstChildElement("font")->FirstChild()->Value());
+	font->load(skin["font"].asString());
 
-	std::string c = skin.FirstChildElement("skin")->FirstChildElement("color")->FirstChild()->Value();
+	std::string c = skin["color"].asString();
 	color[0] = bEngine::util::hex2dec(c.substr(0,2))/255.0f;
 	color[1] = bEngine::util::hex2dec(c.substr(2,2))/255.0f;
 	color[2] = bEngine::util::hex2dec(c.substr(4,2))/255.0f;
 	color[3] = bEngine::util::hex2dec(c.substr(6,2))/255.0f;
 
-	c = skin.FirstChildElement("skin")->FirstChildElement("colorblurred")->FirstChild()->Value();
+	c = skin["colorblurred"].asString();
 	colorBlur[0] = bEngine::util::hex2dec(c.substr(0,2))/255.0f;
 	colorBlur[1] = bEngine::util::hex2dec(c.substr(2,2))/255.0f;
 	colorBlur[2] = bEngine::util::hex2dec(c.substr(4,2))/255.0f;

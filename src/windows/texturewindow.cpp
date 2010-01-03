@@ -69,7 +69,7 @@ void cTextureWindow::cWindowTexture::setText( int i, std::string s )
 	}
 }
 
-cTextureWindow::cWindowTextureCatSelect::cWindowTextureCatSelect( cWindow* parent, std::vector<cWindowTree::cTreeNode*> n, TiXmlDocument* skin ) : cWindowTree(parent, n,skin)
+cTextureWindow::cWindowTextureCatSelect::cWindowTextureCatSelect( cWindow* parent, std::vector<cWindowTree::cTreeNode*> n, Json::Value &skin ) : cWindowTree(parent, n,skin)
 {
 	
 }
@@ -301,7 +301,7 @@ bool cTextureWindow::onKeyDown( int keyid, bool shift )
 		return cWindow::onKeyDown(keyid, shift);
 }
 
-cTextureWindow::cWindowFilterBox::cWindowFilterBox(cWindow* parent, TiXmlDocument* skin) : cWindowInputBox(parent,skin)
+cTextureWindow::cWindowFilterBox::cWindowFilterBox(cWindow* parent, Json::Value &skin) : cWindowInputBox(parent,skin)
 {
 	alignment = ALIGN_BOTTOMRIGHT;
 	text = "";

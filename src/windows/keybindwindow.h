@@ -16,14 +16,14 @@ public:
 	class cWindowOkButton : public cWindowButton
 	{
 	public:
-		cWindowOkButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		cWindowOkButton(cWindow* parent, Json::Value &skin = cWM::skin);
 		void onClick();
 	};
 
 	class cCancelButton : public cWindowButton
 	{
 	public:
-		cCancelButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		cCancelButton(cWindow* parent, Json::Value &skin = cWM::skin);
 		void onClick();
 	};
 
@@ -32,7 +32,7 @@ public:
 	{
 		SDLKey key;
 	public:
-		cKeyBindBox(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		cKeyBindBox(cWindow* parent, Json::Value &skin = cWM::skin);
 		bool onKeyDown(int keyid,bool);
 		bool onKeyUp(int keyid, bool);
 		bool onChar(char ch, bool);
@@ -46,12 +46,12 @@ public:
 	{
 		cKeyBindBox* clearbox;
 	public:
-		cClearButton(cWindow* parent, cKeyBindBox* box, TiXmlDocument* skin = &cWM::skin);
+		cClearButton(cWindow* parent, cKeyBindBox* box, Json::Value &skin = cWM::skin);
 		void onClick();
 	};
 
-	void addclearbutton(cKeyBindBox* box, TiXmlDocument* skin);
-	cKeyBindBox* addbox(std::string name, int x, int y, int defval, TiXmlDocument* skin = &cWM::skin);
+	void addclearbutton(cKeyBindBox* box, Json::Value &skin = cWM::skin);
+	cKeyBindBox* addbox(std::string name, int x, int y, int defval, Json::Value &skin = cWM::skin);
 	cKeyBindWindow();
 
 };

@@ -418,7 +418,7 @@ bool cModelsWindow::cWindowModelCatSelect::onKeyDown(int key, bool shift)
 	return false;
 }
 
-cModelsWindow::cWindowModelCatSelect::cWindowModelCatSelect(cWindow* parent, std::vector<cWindowTree::cTreeNode*> n, TiXmlDocument* skin) : cWindowTree(parent, n,skin)
+cModelsWindow::cWindowModelCatSelect::cWindowModelCatSelect(cWindow* parent, std::vector<cWindowTree::cTreeNode*> n, Json::Value &skin) : cWindowTree(parent, n,skin)
 {
 	originalselection = -1;
 }

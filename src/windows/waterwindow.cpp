@@ -4,7 +4,7 @@
 #include <graphics.h>
 #include <world.h>
 
-cWaterWindowOkButton::cWaterWindowOkButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent,skin)
+cWaterWindowOkButton::cWaterWindowOkButton( cWindow* parent, Json::Value &skin ) : cWindowButton(parent,skin)
 {
 	alignment = ALIGN_BOTTOM;
 	moveTo(0, 0);

@@ -17,7 +17,7 @@ class cTextureToolsWindow : public cWindow
 		bool activated;
 		eTool tool;
 
-		cWindowToolbarButton(cWindow* parent, std::string image, eTool t, TiXmlDocument* totalskin = &cWM::skin);
+		cWindowToolbarButton(cWindow* parent, std::string image, eTool t, Json::Value &skin = cWM::skin);
 		virtual void draw(int a,int b,int c,int d);
 		virtual void onClick();
 	};
@@ -25,7 +25,7 @@ class cTextureToolsWindow : public cWindow
 	class cWindowBrushShape : public cWindowButton
 	{
 	public:
-		cWindowBrushShape(cWindow* parent, TiXmlDocument* totalskin = &cWM::skin);
+		cWindowBrushShape(cWindow* parent, Json::Value &skin = cWM::skin);
 		void draw(int a,int b,int c,int d);
 		void onClick();
 	};
@@ -33,7 +33,7 @@ class cTextureToolsWindow : public cWindow
 	class cWindowLimitedFloatInputBox : public cWindowFloatInputBox
 	{
 	public:
-		cWindowLimitedFloatInputBox(cWindow* parent, TiXmlDocument* skin = &cWM::skin) : cWindowFloatInputBox(parent,skin) {}
+		cWindowLimitedFloatInputBox(cWindow* parent, Json::Value &skin = cWM::skin) : cWindowFloatInputBox(parent,skin) {}
 		bool onChar(char,bool);
 	};
 
@@ -41,22 +41,22 @@ class cTextureToolsWindow : public cWindow
 	class cWindowSelectArea : public cWindowToolbarButton
 	{
 	public:
-		cWindowSelectArea(cWindow* parent, TiXmlDocument* totalskin = &cWM::skin);
+		cWindowSelectArea(cWindow* parent, Json::Value &skin = cWM::skin);
 	};
 	class cWindowSelectBrush : public cWindowToolbarButton
 	{
 	public:
-		cWindowSelectBrush(cWindow* parent, TiXmlDocument* totalskin = &cWM::skin);
+		cWindowSelectBrush(cWindow* parent, Json::Value &skin = cWM::skin);
 	};
 	class cWindowSelectWand : public cWindowToolbarButton
 	{
 	public:
-		cWindowSelectWand(cWindow* parent, TiXmlDocument* totalskin = &cWM::skin);
+		cWindowSelectWand(cWindow* parent, Json::Value &skin = cWM::skin);
 	};
 	class cWindowBrush : public cWindowToolbarButton
 	{
 	public:
-		cWindowBrush(cWindow* parent, TiXmlDocument* totalskin = &cWM::skin);
+		cWindowBrush(cWindow* parent, Json::Value &skin = cWM::skin);
 	};
 
 public:

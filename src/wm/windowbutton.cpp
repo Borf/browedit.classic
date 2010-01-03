@@ -47,7 +47,7 @@ bool cWindowButton::onKeyDown(int c, bool shift)
 	return false;
 }
 
-cWindowButton::cWindowButton( cWindow* parent, TiXmlDocument* skin) : cWindowObject(parent, skin ? skin->FirstChildElement("skin")->FirstChildElement("button") : cWM::skin.FirstChildElement("skin")->FirstChildElement("button"))
+cWindowButton::cWindowButton( cWindow* parent, Json::Value &skin) : cWindowObject(parent, skin["button"])
 {
 	w = 100;
 	h = 25;
@@ -66,12 +66,12 @@ void cWindowButton::setText( int id, std::string txt )
 	text = txt;
 }
 
-cWindowCloseButton::cWindowCloseButton( cWindow* parent, TiXmlDocument* skin ) : cWindowObject(parent, skin ? skin->FirstChildElement("skin")->FirstChildElement("closebutton") : cWM::skin.FirstChildElement("skin")->FirstChildElement("closebutton"))
+cWindowCloseButton::cWindowCloseButton( cWindow* parent, Json::Value &skin ) : cWindowObject(parent, skin["closebutton"])
 {
 	if(!skin)
-		skin = &cWM::skin;
-	resizeTo(atoi(skin->FirstChildElement("skin")->FirstChildElement("closebutton")->FirstChildElement("width")->FirstChild()->Value()), atoi(skin->FirstChildElement("skin")->FirstChildElement("closebutton")->FirstChildElement("height")->FirstChild()->Value()));
-	moveTo(atoi(skin->FirstChildElement("skin")->FirstChildElement("closebutton")->FirstChildElement("offsetx")->FirstChild()->Value()), atoi(skin->FirstChildElement("skin")->FirstChildElement("closebutton")->FirstChildElement("offsety")->FirstChild()->Value()));
+		skin = cWM::skin;
+	resizeTo(skin["closebutton"]["width"].asInt(), skin["closebutton"]["height"].asInt());
+	moveTo(skin["closebutton"]["offsetx"].asInt(), skin["closebutton"]["offsety"].asInt());
 	alignment = ALIGN_TOPRIGHT;
 }
 
@@ -80,12 +80,12 @@ void cWindowCloseButton::onClick()
 	parent->close();
 }
 
-cWindowRollupButton::cWindowRollupButton( cWindow* parent, TiXmlDocument* skin ) : cWindowObject(parent, skin ? skin->FirstChildElement("skin")->FirstChildElement("collapsebutton") : cWM::skin.FirstChildElement("skin")->FirstChildElement("collapsebutton"))
+cWindowRollupButton::cWindowRollupButton( cWindow* parent, Json::Value &skin ) : cWindowObject(parent, skin["collapsebutton"])
 {
 	if(!skin)
-		skin = &cWM::skin;
-	resizeTo(atoi(skin->FirstChildElement("skin")->FirstChildElement("collapsebutton")->FirstChildElement("width")->FirstChild()->Value()), atoi(skin->FirstChildElement("skin")->FirstChildElement("collapsebutton")->FirstChildElement("height")->FirstChild()->Value()));
-	moveTo(atoi(skin->FirstChildElement("skin")->FirstChildElement("collapsebutton")->FirstChildElement("offsetx")->FirstChild()->Value()), atoi(skin->FirstChildElement("skin")->FirstChildElement("collapsebutton")->FirstChildElement("offsety")->FirstChild()->Value()));
+		skin = cWM::skin;
+	resizeTo(skin["collapsebutton"]["width"].asInt(), skin["collapsebutton"]["height"].asInt());
+	moveTo(skin["collapsebutton"]["offsetx"].asInt(), skin["collapsebutton"]["offsety"].asInt());
 	alignment = ALIGN_TOPRIGHT;
 }
 

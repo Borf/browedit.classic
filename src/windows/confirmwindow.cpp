@@ -1,6 +1,6 @@
 #include "confirmwindow.h"
 
-cConfirmWindow::cWindowOkButton::cWindowOkButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent, skin)
+cConfirmWindow::cWindowOkButton::cWindowOkButton( cWindow* parent, Json::Value &skin) : cWindowButton(parent, skin)
 {
 	alignment = ALIGN_BOTTOMLEFT;
 	moveTo(20, 20);
@@ -13,7 +13,7 @@ void cConfirmWindow::cWindowOkButton::onClick()
 	parent->userfunc((void*)1);
 }
 
-cConfirmWindow::cWindowCancelButton::cWindowCancelButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent, skin)
+cConfirmWindow::cWindowCancelButton::cWindowCancelButton( cWindow* parent, Json::Value &skin) : cWindowButton(parent, skin)
 {
 	alignment = ALIGN_BOTTOMRIGHT;
 	moveTo(20, 20);

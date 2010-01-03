@@ -168,7 +168,7 @@ cFavoriteLightsWindow::cFavoriteLightsWindow() : cWindow()
 	objects["CancelButton"] = new cWindowCancelButton(this);
 	objects["CancelButton"]->moveTo(0,0);
 }
-cFavoriteLightsWindow::cFavoritesTree::cFavoritesTree( cWindow* parent, std::vector<cWindowTree::cTreeNode*> nodes, TiXmlDocument* skin) : cWindowTree(parent, nodes,skin)
+cFavoriteLightsWindow::cFavoritesTree::cFavoritesTree( cWindow* parent, std::vector<cWindowTree::cTreeNode*> nodes, Json::Value &skin) : cWindowTree(parent, nodes,skin)
 {
 	moveTo(0,0);
 	resizeTo(200, parent->innerHeight());
@@ -278,7 +278,7 @@ void cFavoriteLightsWindow::cFavoritesTree::onChange()
 	parent->objects["height"]->setText(0, n->FirstChildElement("height")->FirstChild()->Value());
 }
 
-cFavoriteLightsWindow::cWindowOkButton::cWindowOkButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent,skin)
+cFavoriteLightsWindow::cWindowOkButton::cWindowOkButton( cWindow* parent, Json::Value &skin) : cWindowButton(parent,skin)
 {
 	alignment = ALIGN_BOTTOM;
 	moveTo(100, 0);
@@ -293,7 +293,7 @@ void cFavoriteLightsWindow::cWindowOkButton::onClick()
 	parent->close();
 }
 
-cFavoriteLightsWindow::cWindowCancelButton::cWindowCancelButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent,skin)
+cFavoriteLightsWindow::cWindowCancelButton::cWindowCancelButton( cWindow* parent, Json::Value &skin ) : cWindowButton(parent,skin)
 {
 	alignment = ALIGN_BOTTOM;
 	moveTo(-100, 0);

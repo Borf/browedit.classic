@@ -19,32 +19,32 @@ class cRSMEditWindow : public cWindow
 	class cWindowOpenButton : public cWindowButton
 	{
 	public:
-		cWindowOpenButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		cWindowOpenButton(cWindow* parent, Json::Value &skin = cWM::skin);
 		void onClick();
 	};
 	class cWindowSaveButton : public cWindowButton
 	{
 	public:
-		cWindowSaveButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		cWindowSaveButton(cWindow* parent, Json::Value &skin = cWM::skin);
 		void onClick();
 	};
 	class cWindowSaveAsButton : public cWindowButton
 	{
 	public:
-		cWindowSaveAsButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		cWindowSaveAsButton(cWindow* parent, Json::Value &skin = cWM::skin);
 		void onClick();
 	};
 	class cWindowConvertButton : public cWindowButton
 	{
 	public:
-		cWindowConvertButton(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+		cWindowConvertButton(cWindow* parent, Json::Value &skin = cWM::skin);
 		void onClick();
 	};
 
 	class cWindowMeshTree : public cWindowTree
 	{
 	public:
-		cWindowMeshTree(cWindow* parent, std::vector<cTreeNode*> n, TiXmlDocument* skin = &cWM::skin);
+		cWindowMeshTree(cWindow* parent, std::vector<cTreeNode*> n, Json::Value &skin = cWM::skin);
 		void onDoubleClick();
 
 	};

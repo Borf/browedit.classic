@@ -36,7 +36,7 @@ void cWindowFrame::setInt(int id, int val)
 	drawinner = val != 0;
 }
 
-cWindowFrame::cWindowFrame( cWindow* parent, TiXmlDocument* skin ) : cWindowObject(parent, skin->FirstChildElement("skin")->FirstChildElement("frame"))
+cWindowFrame::cWindowFrame( cWindow* parent, Json::Value &skin ) : cWindowObject(parent, skin["frame"])
 {
 	w = 100;
 	h = 25;

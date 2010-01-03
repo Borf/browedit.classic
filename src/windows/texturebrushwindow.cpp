@@ -7,7 +7,7 @@
 
 
 
-cTextureBrushWindow::cWindowBrushButton::cWindowBrushButton(cWindow* parent, int brushWidth, int brushHeight, std::string brushData, TiXmlDocument* skin) : cWindowObject(parent,skin->FirstChildElement("skin")->FirstChildElement("button"))
+cTextureBrushWindow::cWindowBrushButton::cWindowBrushButton(cWindow* parent, int brushWidth, int brushHeight, std::string brushData, Json::Value &skin) : cWindowObject(parent,skin["button"])
 {
 	alignment = ALIGN_TOPLEFT;
 	resizeTo(128,128);
@@ -103,7 +103,7 @@ void cTextureBrushWindow::cWindowBrushButton::onClick()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-cTextureBrushWindow::cWindowBrushTile::cWindowBrushTile( cWindow* parent, TiXmlDocument* skin ) : cWindowObject(parent,skin->FirstChildElement("skin")->FirstChildElement("button"))
+cTextureBrushWindow::cWindowBrushTile::cWindowBrushTile( cWindow* parent, Json::Value &skin) : cWindowObject(parent,skin["button"])
 {
 	alignment = ALIGN_TOPLEFT;
 	resizeTo(128,128);
@@ -142,7 +142,7 @@ void cTextureBrushWindow::cWindowBrushTile::onClick()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-cTextureBrushWindow::cWindowBrushChangeButton::cWindowBrushChangeButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent,skin)
+cTextureBrushWindow::cWindowBrushChangeButton::cWindowBrushChangeButton( cWindow* parent, Json::Value &skin) : cWindowButton(parent,skin)
 {
 	alignment = ALIGN_TOPLEFT;
 	text = "Change";
@@ -226,7 +226,7 @@ void cTextureBrushWindow::cWindowBrushChangeButton::onClick()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-cTextureBrushWindow::cWindowBrushOkButton::cWindowBrushOkButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent,skin)
+cTextureBrushWindow::cWindowBrushOkButton::cWindowBrushOkButton( cWindow* parent, Json::Value &skin) : cWindowButton(parent,skin)
 {
 	alignment = ALIGN_TOPLEFT;
 	text = "Ok";
@@ -259,7 +259,7 @@ void cTextureBrushWindow::cWindowBrushOkButton::onClick()
 
 
 
-cTextureBrushWindow::cWindowBrushSaveButton::cWindowBrushSaveButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent,skin)
+cTextureBrushWindow::cWindowBrushSaveButton::cWindowBrushSaveButton( cWindow* parent, Json::Value &skin) : cWindowButton(parent,skin)
 {
 	alignment = ALIGN_TOPLEFT;
 	resizeTo(140,h);
@@ -305,7 +305,7 @@ void cTextureBrushWindow::cWindowBrushSaveButton::onClick()
 
 
 
-cTextureBrushWindow::cWindowBrushRotateButton::cWindowBrushRotateButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent,skin)
+cTextureBrushWindow::cWindowBrushRotateButton::cWindowBrushRotateButton( cWindow* parent, Json::Value &skin) : cWindowButton(parent,skin)
 {
 	alignment = ALIGN_TOPLEFT;
 	text = "Rotate";

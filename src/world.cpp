@@ -725,7 +725,7 @@ void cWorld::load()
 		}
 	}
 
-	if(bEngine::util::cFileSystem::isFile(std::string(fileName) + ".extra"))
+/*	if(bEngine::util::cFileSystem::isFile(std::string(fileName) + ".extra"))
 	{
 		TiXmlDocument extradoc;//TODObengine = cFileSystem::getXml(std::string(fileName) + ".extra");
 		TiXmlElement* light = extradoc.FirstChildElement("lights")->FirstChildElement("light");
@@ -751,7 +751,7 @@ void cWorld::load()
 			}
 		}
 
-	}
+	}*/
 	
 	calcVertexNormals();
 	checkSanity();

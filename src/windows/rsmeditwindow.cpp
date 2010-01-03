@@ -19,7 +19,7 @@
 #include <bengine/texture.h>
 #include <bengine/texturecache.h>
 
-cRSMEditWindow::cWindowOpenButton::cWindowOpenButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent,skin)
+cRSMEditWindow::cWindowOpenButton::cWindowOpenButton( cWindow* parent, Json::Value &skin ) : cWindowButton(parent,skin)
 {
 	alignment = ALIGN_TOPLEFT;
 	moveTo(0, 0);
@@ -63,7 +63,7 @@ void cRSMEditWindow::cWindowOpenButton::onClick()
 #endif
 }
 
-cRSMEditWindow::cWindowSaveButton::cWindowSaveButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent,skin)
+cRSMEditWindow::cWindowSaveButton::cWindowSaveButton( cWindow* parent, Json::Value &skin) : cWindowButton(parent,skin)
 {
 	alignment = ALIGN_TOPLEFT;
 	moveTo(50, 0);
@@ -128,7 +128,7 @@ void cRSMEditWindow::cWindowSaveButton::onClick()
 	pFile2.close();*/
 }
 
-cRSMEditWindow::cWindowSaveAsButton::cWindowSaveAsButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent,skin)
+cRSMEditWindow::cWindowSaveAsButton::cWindowSaveAsButton( cWindow* parent, Json::Value &skin) : cWindowButton(parent,skin)
 {
 	alignment = ALIGN_TOPLEFT;
 	moveTo(100, 0);
@@ -516,7 +516,7 @@ void cRSMEditWindow::changetexture( std::string newtexture )
 	scroll->objects[selected] = o;
 }
 
-cRSMEditWindow::cWindowMeshTree::cWindowMeshTree( cWindow* parent, std::vector<cTreeNode*> n, TiXmlDocument* skin) : cWindowTree(parent, n, skin)
+cRSMEditWindow::cWindowMeshTree::cWindowMeshTree( cWindow* parent, std::vector<cTreeNode*> n, Json::Value &skin) : cWindowTree(parent, n, skin)
 {
 	
 }

@@ -18,7 +18,7 @@ public:
 	{
 	public:
 		int originalselection;
-		cWindowModelCatSelect(cWindow* parent, std::vector<cWindowTree::cTreeNode*> n, TiXmlDocument* skin = &cWM::skin);
+		cWindowModelCatSelect(cWindow* parent, std::vector<cWindowTree::cTreeNode*> n, Json::Value &skin = cWM::skin);
 		void onClick();
 		void onHoldDragOver();
 		void onDragOver();

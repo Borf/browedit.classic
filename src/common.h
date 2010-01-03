@@ -264,7 +264,7 @@ bool LineIntersectPolygon( bEngine::math::cVector3 *,int,bEngine::math::cVector3
 #endif*/
 
 
-const char* GetMsg(std::string s);
+char* GetMsg(std::string s);
 
 /**
  * Container for process handlers

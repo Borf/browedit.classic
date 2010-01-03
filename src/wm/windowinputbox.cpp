@@ -257,7 +257,7 @@ int cWindowInputBox::getInt(int id)
 	return cursor;
 }
 
-cWindowInputBox::cWindowInputBox( cWindow* parent, TiXmlDocument* skin ) : cWindowObject(parent, skin->FirstChildElement("skin")->FirstChildElement("input"))
+cWindowInputBox::cWindowInputBox( cWindow* parent, Json::Value &skin ) : cWindowObject(parent, skin["input"])
 {
 	w = 100;
 	h = 20;
@@ -272,13 +272,13 @@ cWindowInputBox::cWindowInputBox( cWindow* parent, TiXmlDocument* skin ) : cWind
 	selectable = true;
 	type = OBJECT_INPUTBOX;
 	
-	if(skin->FirstChildElement("skin")->FirstChildElement("input")->FirstChildElement("defaultheight"))
+	if(skin["input"].isMember("defaultheight"))
 	{
-		h = atoi(skin->FirstChildElement("skin")->FirstChildElement("input")->FirstChildElement("defaultheight")->FirstChild()->Value());
+		h = skin["input"]["defaultheight"].asInt();
 	}
 }
 
-cWindowFloatInputBox::cWindowFloatInputBox( cWindow* parent, TiXmlDocument* skin ) : cWindowInputBox(parent, skin)
+cWindowFloatInputBox::cWindowFloatInputBox( cWindow* parent, Json::Value &skin ) : cWindowInputBox(parent, skin)
 {
 	type = OBJECT_FLOATINPUTBOX;
 	alignment = ALIGN_TOPLEFT;
@@ -328,7 +328,7 @@ bool cWindowFloatInputBox::onKeyDown( int keyid, bool shift )
 	return ret;
 }
 
-cWindowStringInputBox::cWindowStringInputBox( cWindow* parent, TiXmlDocument* skin ) : cWindowInputBox(parent,skin)
+cWindowStringInputBox::cWindowStringInputBox( cWindow* parent, Json::Value &skin ) : cWindowInputBox(parent,skin)
 {
 	type = OBJECT_FLOATINPUTBOX;
 	alignment = ALIGN_TOPLEFT;
@@ -393,7 +393,7 @@ void cWindowLongInputBox::draw( int cutoffleft, int cutoffright, int cutofftop, 
 	cWindowInputBox::draw(cutoffleft, cutoffright, cutofftop, cutoffbottom);
 }
 
-cWindowLongInputBox::cWindowLongInputBox( cWindow* parent, TiXmlDocument* skin ) : cWindowInputBox(parent, skin)
+cWindowLongInputBox::cWindowLongInputBox( cWindow* parent, Json::Value &skin ) : cWindowInputBox(parent, skin)
 {
 	type = OBJECT_FLOATINPUTBOX;
 	alignment = ALIGN_TOPLEFT;
@@ -423,7 +423,7 @@ void cWindowLongInputBox::setInt( int id, int val )
 	}
 }
 //////////////////////////////////////////////////int
-cWindowIntInputBox::cWindowIntInputBox( cWindow* parent, TiXmlDocument* skin ) : cWindowInputBox(parent, skin)
+cWindowIntInputBox::cWindowIntInputBox( cWindow* parent, Json::Value &skin ) : cWindowInputBox(parent, skin)
 {
 	type = OBJECT_FLOATINPUTBOX;
 	alignment = ALIGN_TOPLEFT;

@@ -59,7 +59,7 @@ cWallTextureWindow::cWallTextureWindow(int tileX, int tileY, bool horizontal ) :
 
 }
 
-cWallTextureWindow::cWindowWallTextureBox::cWindowWallTextureBox( int tileX, int tileY, bool horizontal, cWindow* parent, TiXmlDocument* skin) : cWindowObject(parent, skin->FirstChildElement("skin")->FirstChildElement("frame"))
+cWallTextureWindow::cWindowWallTextureBox::cWindowWallTextureBox( int tileX, int tileY, bool horizontal, cWindow* parent, Json::Value &skin) : cWindowObject(parent, skin["frame"])
 {
 	alignment = ALIGN_TOPLEFT;
 	moveTo(0,0);

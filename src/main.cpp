@@ -428,16 +428,11 @@ int main(int argc, char *argv[])
 	delete pFile;
 	pFile = NULL;
 
-	cSettings::config;//TODObengine = cFileSystem::getXml(cSettings::configFileName);
-	if(cSettings::config.Error())
-	{
-		Log(1,0,"Could not load config xml: %s at %i:%i", cSettings::config.ErrorDesc(), cSettings::config.ErrorCol(), cSettings::config.ErrorRow());
-		Log(2,0,"Browedit will most likely crash");
+	cSettings::config = bEngine::util::cFileSystem::openJson(cSettings::configFileName);
 
-	}
-	std::string language = cSettings::config.FirstChildElement("config")->FirstChildElement("language")->FirstChild()->Value();
-	language = language.substr(language.find("=")+1);
-	cSettings::msgTable;//TODObengine = cFileSystem::getXml("data/" + language + ".txt");
+	
+	std::string language = cSettings::config["language"].asString();
+	cSettings::msgTable = bEngine::util::cFileSystem::openJson("data/" + language + ".json");
 
 	cMenu* mm;
 
@@ -457,106 +452,39 @@ int main(int argc, char *argv[])
 	levelm[models] = 0;*/
 	
 
-	TiXmlElement* el = cSettings::config.FirstChildElement("config")->FirstChildElement();
-
-
 	int windowWidth = 1024,windowHeight = 768, windowBpp = 32;
 	bool windowFullscreen = true;
 
-	while(el != NULL)
-	{
-		std::string option = el->Value();
+	cSettings::roDir = bEngine::util::replace(cSettings::config["files"]["rodir"].asString(), "/", "\\");
+	for(i = 0; i < cSettings::config["files"]["grf"].size(); i++)
+		bEngine::util::cFileSystem::addFileLoader(new cGrfFileSystem::cGrfFileLoader(cSettings::config["files"]["grf"][i].asString()));
+	for(i = 0; i < cSettings::config["files"]["gattiles"].size(); i++)
+		cGraphics::gatTiles.push_back(cSettings::config["files"]["gattiles"][i].asInt());
+	for(i = 0; i < cSettings::config["files"]["models"].size(); i++)
+		cSettings::objectFiles.push_back(cSettings::config["files"]["models"][i].asString());
+	for(i = 0; i < cSettings::config["files"]["textures"].size(); i++)
+		cSettings::textureFiles.push_back(cSettings::config["files"]["textures"][i].asString());
+	for(i = 0; i < cSettings::config["files"]["sounds"].size(); i++)
+		cSettings::soundFiles.push_back(cSettings::config["files"]["sounds"][i].asString());
+	
 
-		if(option == "ro")
-		{
-			cSettings::roDir = el->Attribute("directory");
-			TiXmlElement* el2 = el->FirstChildElement("grf");
-			while(el2 != NULL)
-			{
-				bEngine::util::cFileSystem::addFileLoader(new cGrfFileSystem::cGrfFileLoader(el2->FirstChild()->Value()));
-				el2 = el2->NextSiblingElement("grf");
-			}
 
-		}
-		if(option == "graphics")
-		{
-			TiXmlElement* el2 = el->FirstChildElement();
-			while(el2 != NULL)
-			{
-					 if(strcmp(el2->Value(),					"resx") == 0)
-					windowWidth = atoi(el2->FirstChild()->Value());
-				else if(strcmp(el2->Value(),					"resy") == 0)
-					windowHeight = atoi(el2->FirstChild()->Value());
-				else if(strcmp(el2->Value(),					"fullscreen") == 0)
-					windowFullscreen = strcmp(el2->FirstChild()->Value(),"true") == 0;
-				else if(strcmp(el2->Value(),					"bpp") == 0)
-					windowBpp = atoi(el2->FirstChild()->Value());
-				else if(strcmp(el2->Value(),					"font") == 0)
-					cSettings::fontName = el2->FirstChild()->Value();
-				else if(strcmp(el2->Value(),					"skin") == 0)
-					cSettings::skinFile = el2->FirstChild()->Value();
-				else if(strcmp(el2->Value(),					"bgcolor") == 0)
-					cGraphics::backgroundColor = bEngine::util::hex2floats(el2->FirstChild()->Value());
-				else if(strcmp(el2->Value(),					"notilecolor") == 0)
-					cGraphics::noTileColor = bEngine::util::hex2floats(el2->FirstChild()->Value());
-				else if(strcmp(el2->Value(),					"gattransparency") == 0)
-					cGraphics::gatTransparency = atof(el2->FirstChild()->Value());
-				else if(strcmp(el2->Value(),					"camerasmoothing") == 0)
-					cSettings::cameraSmoothing = atof(el2->FirstChild()->Value());
 
-				el2 = el2->NextSiblingElement();
+	windowWidth =					cSettings::config["graphics"]["resolution"][0u].asInt();
+	windowHeight =					cSettings::config["graphics"]["resolution"][1].asInt();
+	windowFullscreen =				cSettings::config["graphics"]["fullscreen"].asBool();
+	windowBpp =						cSettings::config["graphics"]["bpp"].asInt();
+	cSettings::fontName =			cSettings::config["graphics"]["font"].asString();
+	cSettings::skinFile =			cSettings::config["graphics"]["skin"].asString();
+	cGraphics::backgroundColor =	bEngine::util::hex2floats(cSettings::config["graphics"]["bgcolor"].asString());
+	cGraphics::noTileColor =		bEngine::util::hex2floats(cSettings::config["graphics"]["notilecolor"].asString());
+	cGraphics::gatTransparency =	cSettings::config["graphics"]["gattransparency"].asDouble();
 
-			}
-		}
-		if(option == "gattiles")
-		{
-			TiXmlElement* el2 = el->FirstChildElement("tile");
-			while(el2 != NULL)
-			{
-				cGraphics::gatTiles.push_back(atoi(el2->FirstChild()->Value()));
-				el2 = el2->NextSiblingElement("tile");
-			}
-		}
-		if(option == "files")
-		{
-			TiXmlElement* el2;
-			
-			el2 = el->FirstChildElement("models");
-			if(el2)
-			{
-				TiXmlElement* model = el2->FirstChildElement("model");
-				while(model != NULL)
-				{
-					std::string value = model->FirstChild()->Value();
-					cSettings::objectFiles.push_back(value);
-					model = model->NextSiblingElement("model");
-				}
-			}
-			el2 = el->FirstChildElement("textures");
-			if(el2)
-			{
-				TiXmlElement* texture = el2->FirstChildElement("texture");
-				while(texture != NULL)
-				{
-					cSettings::textureFiles.push_back(texture->FirstChild()->Value());
-					texture = texture->NextSiblingElement("texture");
-				}
-			}
-			el2 = el->FirstChildElement("sounds");
-			if(el2)
-			{
-				TiXmlElement* sound = el2->FirstChildElement("sound");
-				while(sound != NULL)
-				{
-					cSettings::soundFiles.push_back(sound->FirstChild()->Value());
-					sound = sound->NextSiblingElement("sound");
-				}
-			}
-		}
-		else if (option == "undo")
-			cSettings::undoSize = atoi(el->Attribute("size"));
-		el = el->NextSiblingElement();
-	}			
+	cSettings::undoSize =			cSettings::config["undosize"].asInt();
+	cSettings::cameraSmoothing =	cSettings::config["camerasmoothing"].asDouble();
+
+
+
 
 
 	pFile = bEngine::util::cFileSystem::open("data/korean2english.txt");
@@ -890,8 +818,8 @@ int main(int argc, char *argv[])
 	cGraphics::newWorld();
 	Log(3,0,GetMsg("DONEINIT"));
 	cGraphics::world->newWorld();
-	if(cSettings::config.FirstChildElement("config")->FirstChildElement("firstmap"))
-		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\" + cSettings::config.FirstChildElement("config")->FirstChildElement("firstmap")->FirstChild()->Value()).c_str());
+	if(cSettings::config.isMember("firstmap"))
+		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\" + cSettings::config["firstmap"].asString()).c_str());
 	else
 		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\lighttest").c_str());
 

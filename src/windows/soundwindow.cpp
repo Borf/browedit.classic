@@ -10,7 +10,7 @@
 #include <undo.h>
 
 
-cSoundWindow::cWindowSelectFileButton::cWindowSelectFileButton( cWindow* parent, TiXmlDocument* skin ) : cWindowButton(parent,skin)
+cSoundWindow::cWindowSelectFileButton::cWindowSelectFileButton( cWindow* parent, Json::Value &skin) : cWindowButton(parent,skin)
 {
 	selectedSound = NULL;
 	text = "Select";

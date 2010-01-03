@@ -1,0 +1,355 @@
+{
+	"net":
+	{
+		"HOSTNOTFOUND":"Could not	look up	host '%s', are you connected to	the internet?",
+		"NOSOCKET":"Cannot create	socket,	please reboot",
+		"VERSIONERROR":"You do not have the latest version of Browedit"
+	},
+	"file":
+	{
+		"LOADING":"Loading file %s",
+		"DONELOADING":"Done Loading file %s",
+		"COULDNOTOPEN":"Could not open %s"
+	},
+	"UNKNOWNCONFIG":"Unknown config option: %s = %s",
+	"DONEINIT":"Done Initializing",
+	"CALCMODEL":"Calculating model %i out of %i	(%.2%%)",
+	"PERCENTAGE":"%f %%",
+	"PLUGIN":
+	{
+		"LOAD":"Loading plugin: '%s'",
+		"INVALID":"%s is not a valid plugin",
+		"VERSIONERROR":"%s is a plugin compiled for a version %i of browedit. Please recompile the plugin	with the latest	plugin SDK",
+		"NOINSTANCE":"%s does not	contain	any commands"
+	},
+	"QUIT":"Are you sure you want to quit?",
+	"menu":
+	{
+		"file":
+		{
+			"TITLE":"File",
+			"NEW":"New",
+			"OPEN":"Open",
+			"OPENGRF":"Open	from GRF",
+			"CLOSE":"Close",
+			"SAVE":"Save",
+			"QUICKSAVE":"Quicksave",
+			"SAVEAS":"Save As",
+			"IMPORTARCTURUS":"Import Arcturus maps",
+			"EXPORTMAPFILES":"Export Map Files",
+			"REBUILDTEXTUREFILE":"Rebuild texture file",
+			"REBUILDMODELFILE":"Rebuild model file",
+			"REBUILDSOUNDSFILE":"Rebuild sounds file",
+			"MAPDATABASE":"Online Map Database",
+			"SAVEONLINE":"Save online",
+			"EXIT":"Exit"
+		},
+		"generate":{
+			"TITLE":"Generate",
+			"RANDOM1":"Hills",
+			"RANDOM2":"Cave	Dungeon",
+			"RANDOM4":"Mountains",
+			"RANDOM5":"Room	maze",
+			"MAZESTUFF":"Maze Stuff",
+			"QUADTREE":"Quadtree",
+			"CALCULATELIGHTMAPS":"Calculate	Lightmaps",
+			"CALCULATELIGHTMAPSLOCAL":"Calculate Selected lightmaps",
+			"CALCULATELIGHTMAPSLIGHT":"Calculate Lightmaps for selected lights",
+			"CALCULATELIGHTMAPSNOSHADOW":"Calculate	Lightmaps without shadows",
+			"CLEARMAP":"Clear Map",
+			"DUN99":"Generate 99 random dungeon floors"
+		},
+		"view":{
+			"TITLE":"View",
+			"GRID":"Grid",
+			"OBJECTS":"Objects",
+			"TRANSPARENTOBJECTS":"Transparent Objects",
+			"BOUNDINGBOXES":"Boundingboxes",
+			"LIGHTMAPS":"Lightmaps",
+			"GLOBALLIGHTING":"Global Lighting",
+			"TILECOLORS":"Tilecolors",
+			"SHOWWATER":"Water",
+			"TOPCAMERA":"Topcamera",
+			"SIDECAMERA":"Indoor Camera",
+			"INVISIBLETILES":"Invisible Tiles",
+			"SHOWGLOBALLIGHTING":"Global Lighting",
+			"WATERANIMATION":"Water	Animation",
+			"GATTILES":"Gat	Tiles",
+			"SHOWDOT":"Show	Dot",
+			"SHOWSPRITES":"Show Sprites"
+		},
+		"editmode":
+		{
+			"TITLE":"Edit Mode",
+			"TEXTUREEDIT":"Texture Edit",
+			"GLOBALHEIGHTEDIT":"Global Height Edit",
+			"DETAILTERRAINEDIT":"Detail Terrain Edit...",
+			"WALLEDIT":"Wall Edit",
+			"OBJECTEDIT":"Object Edit",
+			"GATEDIT":"GAT Edit",
+			"WATEREDIT":"Water Edit",
+			"EFFECTSEDIT":"Effects Edit",
+			"SOUNDSEDIT":"Sounds Edit",
+			"LIGHTSEDIT":"Lights Edit",
+			"OBJECTGROUPEDIT":"Object Group	Edit",
+			"SPRITEEDIT":"Sprite Edit",
+			"TEXTUREPAINTEDIT":"Texture Paint Edit"
+		},
+		"edit":
+		{
+			"TITLE":"Edit",
+			"SPEED":"Raise/Lowerspeed",
+			"SLOPING":"Sloping",
+			"SNAPOBJECTS":"Snap Objects to floor",
+			"FILLAREA":"Fill area with selected texture",
+			"GATHEIGHT":"Set GAT height",
+			"RESETCOLORS":"Reset colors",
+			"ADDWALLS":"Add	Walls",
+			"GATCOLLISION":"Set GAT	Collision",
+			"CLEANLIGHTMAPS":"Clean	Lightmaps",
+			"REMOVETEXTURES":"Remove unused	textures",
+			"CLEARLIGHTMAPSONEDIT":"Clear lightmaps	when you edit textures",
+			"SELECTALL":"Select All	Tiles"
+		},
+		"effects":
+		{
+			"TITLE":"Effects"
+		},
+		"windows":
+		{
+			"TITLE":"Windows",
+			"GLOBALLIGHTING":"Global Lighting",
+			"MODELWINDOW":"Models",
+			"TEXTURES":"Textures",
+			"PROPERTIES":"Properties",
+			"WATER":"Water",
+			"PREFERENCES":"Preferences",
+			"RSMEDITOR":"RSM Editor",
+			"FAVLIGHTS":"Favorite lights",
+			"OVERVIEW":"Map	Overview",
+			"MAPINFO":"Map Info"
+		},
+		"tools":
+		{
+			"TITLE":"Tools",
+			"CLEARMAP":"Clear Map",
+			"CONVERT":"Convert 3ds to RSM",
+			"generators":
+			{
+				"TITLE":"Generators",
+				"MAZEGENERATOR":"Maze",
+				"CULVERTGENERATOR":"Culvert"
+			},
+			"gat":
+			{
+				"TITLE":"GAT",
+				"GATHEIGHT":"Set height to geometry height"
+			},
+			"lightmap":
+			{
+				"TITLE":"Lightmap",
+				"IMPORT":"Import",
+				"EXPORT":"Export"
+			}
+		}
+	},
+	"fs":
+	{
+		"GRFOPENERROR":"FS: Error	opening	grf %s",
+		"GRFOPENDONE":"FS: Done reading grf	%s",
+		"FILEERROR":"FS: Could not open file %s"
+	},
+	"font":
+	{
+		"LOADING":"Font: Loading font %s",
+		"DONELOADING":"Font: Done	Loading	%s"
+	},
+	"graphics":
+	{
+		"INIT":"Initializing Graphics",
+		"INITFAIL":"Video Initialization failed: %s",
+		"QUERYFAIL":"Video Query Failed: %s",
+		"VIDEOMODEFAIL":"Video Mode Set Failed: %s",
+		"OPENGLFAIL":"OpenGL init failed",
+		"OPENINGTEXTURES":"Opening general textures",
+		"INITIALIZINGWM":"Initializing WM",
+		"TEXTUREFAIL":"Unable to load texture %s",
+		"texturecache":
+		{
+			"UNLOADFAIL":"Texturecache: Trying to unload texture %s, but this texture hasn't been loaded through the texturecache!",
+			"UNLOADALOT":"Texturecache: Texture %s is being	unloaded too often!",
+			"STILLLOADED":"Texturecache: Texture %s	is still %i times loaded"
+		}
+	},
+	"world":{
+		"LOAD":"World: Loading %s",
+		"LOADFAIL":"World: Could not open %s",
+		"LOADDONE":"World: Done loading %s",
+		"MODELFAIL":"World: Could	not open model %s",
+		"UNKNOWNOBJECT":"World: Unknown object type %i",
+		"QUADTREECALC":"Quadtree:	looking	at model %i out	of %i (%.2f%%)",
+		"TOOMANYLIGHTMAPS":"Too Many lightmaps!",
+		"MODELCOUNT":"World: %i models written",
+		"TILESUSED":"World: %i tiles are used",
+		"TILESLEFT":"World: %i tiles left",
+		"INVALIDLIGHTMAPFORMAT":"Invalid lightmap format: (%dx%d size %d)! Setting it to (%dx%d size %d)."},
+	"wm":
+	{
+		"OK":"Ok",
+		"CANCEL":"Cancel",
+		"globallighting":
+		{
+			"TITLE":"Global	Lighting",
+			"DIFFUSETITLE":"Diffuse	Light",
+			"DIFFUSECOLOR":"Color:",
+			"LONGITUDE":"Longitude angle:",
+			"LATITUDE":"Latitude angle:",
+			"AMBIENTTITLE":"Ambient	Light",
+			"AMBIENTCOLOR":"Color:",
+			"AMBINTENSITY":"Intensity:"
+		},
+		"confirm":
+		{
+			"TITLE":"Please	Confirm..."
+		},
+		"effect":
+		{
+			"TITLE":"Effect",
+			"POS":"Position:",
+			"SCALE":"Scale:",
+			"ROT":"Rotation:",
+			"LOOPTIME":"Loop Time:"
+		},
+		"input":
+		{
+			"TITLE":"Please	Input..."
+		},
+		"light":
+		{
+			"TITLE":"Light...",
+			"NAME":"Name:",
+			"POSITION":"Position:",
+			"COLOR":"Color:",
+			"INTENSITY":"Intensity:",
+			"RANGE":"Range:",
+			"MAXLIGHTINCREMENT":"Max. Light	Increment",
+			"LIGHTFALLOFF":"Light Falloff (0-1)",
+			"CASTSSHADOW":"Casts Shadows"
+		},
+		"favlight":
+		{
+			"TITLE":"Favorite Lights",
+			"NAME":"Name:",
+			"HEIGHT":"Height:",
+			"COLOR":"Color:",
+			"INTENSITY":"Intensity:",
+			"RANGE":"Range:",
+			"MAXLIGHTINCREMENT":"Max. Light	Increment",
+			"LIGHTFALLOFF":"Light Falloff (0-1)",
+			"CASTSSHADOW":"Casts Shadows"
+		},
+		"message":
+		{
+			"TITLE":"Message..."
+		},
+		"model":
+		{
+			"TITLE":"Model Select...",
+			"DELETECONFIRM":"Are you sure you want to remove this model from the list?",
+			"NODENAME":"Please enter the name of the new node"
+		},
+		"object":
+		{
+			"TITLE":"Object...",
+			"OBJECT":"Object:",
+			"POSITION":"Position:",
+			"SCALE":"Scale:",
+			"ROTATION":"Rotation:",
+			"LIGHTOPACITY":"Opacity	(0 - 1):"
+		},
+		"texture":
+		{
+			"TITLE":"Texture Select..."
+		},
+		"water":
+		{
+			"TITLE":"Water...",
+			"AMPLITUDE":"Amplitude:",
+			"HEIGHT":"Height:",
+			"PHASE":"Phase:",
+			"SURFACECYCLE":"SurfaceCycle:",
+			"TEXTURECYCLE":"TextureCycle:",
+			"TYPE":"Type:",
+			"ANIMSPEED":"Speed:"
+		},
+		"preferences":
+		{
+			"TITLE":"Preferences..."
+		},
+		"areacopy":
+		{
+			"TITLE":"Area Copy Preferences...",
+			"MODELS":"Models:",
+			"TEXTURES":"Textures:",
+			"HEIGHT":"Height:",
+			"GAT":"Gat:",
+			"WALLS":"Walls:",
+			"LIGHTS":"Lights:",
+			"EFFECTS":"Effects:",
+			"SOUNDS":"Sounds:"
+		},
+		"sprite":
+		{
+			"TITLE":"Sprite..."
+		},
+		"overview":
+		{
+			"TITLE":"Map Overview..."
+		},
+		"file":
+		{
+			"TITLE":"File...",
+			"SELECTMAP":"Select Map"
+		},
+		"progress":
+		{
+			"TITLE":"Progress:"
+		},
+		"sound":
+		{
+			"TITLE":"Sounds...",
+			"NAME":"Name:",
+			"FILE":"File:",
+			"POSITION":"Position:",
+			"SCALE":"Scale:",
+			"ROTATION":"Rotation:",
+			"REPEATDELAY":"Repeat delay:"
+		},
+		"soundselect":
+		{
+			"TITLE":"Sound Select..."
+		},
+		"maps":
+		{
+			"TITLE":"Online	Map Database..."
+		},
+		"mapdetail":
+		{
+			"TITLE":"Online	Map Database Detail..."
+		},
+		"clearmap":
+		{
+			"TITLE":"Clear Map",
+			"TEXTURES":"Textures",
+			"HEIGHT":"Height",
+			"WALLS":"Walls",
+			"GAT":"Gat",
+			"LIGHTMAPS":"Lightmaps",
+			"OBJECTS":"Objects",
+			"LIGHTS":"Lights",
+			"SOUNDS":"Sounds",
+			"EFFECTS":"Effects",
+			"SPRITES":"Sprites"
+		}
+	}
+}

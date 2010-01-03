@@ -170,7 +170,7 @@ cMapsWindow::cMapsWindow() : cWindow()
 
 
 
-cMapsWindow::cSearchButton::cSearchButton(cWindow* parent, TiXmlDocument* skin) : cWindowButton(parent, skin)
+cMapsWindow::cSearchButton::cSearchButton(cWindow* parent, Json::Value &skin) : cWindowButton(parent, skin)
 {
 	alignment = ALIGN_TOPRIGHT;
 	moveTo(10,10);
@@ -236,7 +236,7 @@ void cMapsWindow::cClickableFrame::onClick()
 	cWM::addWindow(new cMapDetailWindow());
 }
 
-cMapsWindow::cClickableFrame::cClickableFrame( cWindow* parent, TiXmlDocument* skin ) : cWindowFrame(parent, skin)
+cMapsWindow::cClickableFrame::cClickableFrame( cWindow* parent, Json::Value &skin ) : cWindowFrame(parent, skin)
 {
 	
 }

@@ -17,7 +17,7 @@ protected:
 	int selectionstart;
 	int defaultheight;
 public:
-	cWindowInputBox(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+	cWindowInputBox(cWindow* parent, Json::Value &skin = cWM::skin);
 	virtual ~cWindowInputBox() {}
 	virtual void draw(int,int,int,int);
 	virtual void onClick();
@@ -39,7 +39,7 @@ class cWindowFloatInputBox : public cWindowInputBox
 	bool firstTime;
 public:
 	float* floatje;
-	cWindowFloatInputBox(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+	cWindowFloatInputBox(cWindow* parent, Json::Value &skin = cWM::skin);
 	void draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom);
 	void setInt(int id, int val);
 	bool onKeyDown(int keyid, bool shift);
@@ -52,7 +52,7 @@ class cWindowIntInputBox : public cWindowInputBox
 	bool firstTime;
 public:
 	int* intje;
-	cWindowIntInputBox(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+	cWindowIntInputBox(cWindow* parent, Json::Value &skin = cWM::skin);
 	void draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom);
 	void setInt(int id, int val);
 	bool onKeyDown(int keyid, bool shift);
@@ -65,7 +65,7 @@ class cWindowStringInputBox : public cWindowInputBox
 	bool firstTime;
 public:
 	std::string* stringetje;
-	cWindowStringInputBox(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+	cWindowStringInputBox(cWindow* parent, Json::Value &skin = cWM::skin);
 	void draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom);
 	void setInt(int id, int val);
 	bool onKeyDown(int keyid, bool shift);
@@ -82,7 +82,7 @@ class cWindowLongInputBox : public cWindowInputBox
 	bool firstdraw;
 public:
 	long* longje;
-	cWindowLongInputBox(cWindow* parent, TiXmlDocument* skin = &cWM::skin);
+	cWindowLongInputBox(cWindow* parent, Json::Value &skin = cWM::skin);
 	void draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom);
 	void setInt(int id, int val);
 	bool onKeyDown(int keyid, bool shift);

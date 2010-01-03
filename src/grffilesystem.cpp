@@ -22,6 +22,7 @@ cGrfFileSystem::cGrfFileLoader::cGrfFileLoader( std::string grfFile )
 
 bool cGrfFileSystem::cGrfFileLoader::isFile(std::string fileName)
 {
+	fileName = bEngine::util::replace(fileName, "/", "\\");
 	fileName = bEngine::util::replace(fileName, cSettings::roDir, "");
 	for(unsigned int i = 0; i < grf->nfiles; i++)
 	{
@@ -33,6 +34,7 @@ bool cGrfFileSystem::cGrfFileLoader::isFile(std::string fileName)
 
 bEngine::util::cFileSystem::cReadFile* cGrfFileSystem::cGrfFileLoader::open(std::string fileName)
 {
+	fileName = bEngine::util::replace(fileName, "/", "\\");
 	fileName = bEngine::util::replace(fileName, cSettings::roDir, "");
 	for(unsigned int i = 0; i < grf->nfiles; i++)
 	{

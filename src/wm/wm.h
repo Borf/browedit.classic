@@ -4,15 +4,17 @@
 
 #include <vector>
 #include <string>
-#include "window.h"
+//#include "window.h"
 
 #include <bengine/forwards.h>
+#include <json/json.h>
 
 class cFont;
-class TiXmlDocument;
 class cInputWindowCaller;
 class cConfirmWindowCaller;
 class cWindowObject;
+class cWindow;
+enum WINDOW_TYPE;
 
 class cWM
 {
@@ -55,7 +57,7 @@ public:
 	static std::vector<cWindow*>	windows; //vector of windows, 0 = topwindow
 	static bEngine::cTexture*		texture;
 	static cFont*					font;
-	static TiXmlDocument			skin;
+	static Json::Value				skin;
 	static float					color[4];
 	static float					colorBlur[4];
 	static int						focus;

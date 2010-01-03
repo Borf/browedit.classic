@@ -24,7 +24,7 @@ public:
 	class cLightOverViewTree : public cWindowTree
 	{
 	public:
-		cLightOverViewTree(cWindow* parent, std::vector<cWindowTree::cTreeNode*> nodes, TiXmlDocument* skin = &cWM::skin);
+		cLightOverViewTree(cWindow* parent, std::vector<cWindowTree::cTreeNode*> nodes, Json::Value &skin = cWM::skin);
 		void onRightClick();
 		void onChange();
 		void getObject(cLight m);
