@@ -816,6 +816,10 @@ SOURCE=..\src\wm\window.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\wm\windows.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\wm\wm.cpp
 # End Source File
 # Begin Source File

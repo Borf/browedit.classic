@@ -4,7 +4,7 @@
 
 #include <vector>
 #include <string>
-//#include "window.h"
+#include <wm/windows.h>
 
 #include <bengine/forwards.h>
 #include <json/json.h>
@@ -14,7 +14,6 @@ class cInputWindowCaller;
 class cConfirmWindowCaller;
 class cWindowObject;
 class cWindow;
-enum WINDOW_TYPE;
 
 class cWM
 {
