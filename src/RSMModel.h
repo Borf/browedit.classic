@@ -8,14 +8,17 @@
 #include <bengine/util/filesystem.h>
 #include <bengine/math/matrix4x4.h>
 #include <bengine/math/quaternion.h>
+#include <bengine/util/serializabledata.h>
 
-class cRsmModelBase
+class cRsmModelBase : public bEngine::util::cSerializable
 {
 public:
-	class cMesh
+	class cMesh : public bEngine::util::cSerializable
 	{
 	public:
-		cMesh(bEngine::util::cInStream*, cRsmModelBase*, int ver1, int ver2);
+		cMesh(cRsmModelBase*, int ver1, int ver2);
+		bEngine::util::cInStream& readData(bEngine::util::cInStream &instream);
+		bEngine::util::cOutStream& writeData(bEngine::util::cOutStream &outstream);
 		void save();
 		void fetchChildren(std::map<std::string, cMesh*, std::less<std::string> >&);
 		void draw();
@@ -31,45 +34,52 @@ public:
 		void setTexture(bEngine::cTexture* oldTexture, bEngine::cTexture* newTexture);
 		void setSelection(cMesh* mesh);
 
-		std::string name;
-		std::string parentName;
-		int unknown1;
-		float unknown2;
+		cRsmModelBase* model;
 
-		bEngine::math::cMatrix4x4	offset;
-		bEngine::math::cVector3	pos_;
-		bEngine::math::cVector3	pos;
-		float		rotangle;
-		bEngine::math::cVector3	rotaxis;
-		bEngine::math::cVector3	scale;
+		std::string						name;
+		std::string						parentName;
+		int								unknown1;
+		float							unknown2;
+
+		bEngine::math::cMatrix4x4		offset;
+		bEngine::math::cVector3			pos_;
+		bEngine::math::cVector3			pos;
+		float							rotangle;
+		bEngine::math::cVector3			rotaxis;
+		bEngine::math::cVector3			scale;
 
 		std::vector<bEngine::cTexture*> textures;
-		int			nVertices;
-		bEngine::math::cVector3*	vertices;
-		int			nTexVertices;
-		bEngine::math::cVector2*	texVertices;
-		int			nFaces;
-		class cFace
+		int								nVertices;
+		bEngine::math::cVector3*		vertices;
+		int								nTexVertices;
+		bEngine::math::cVector2*		texVertices;
+		int								nFaces;
+
+		class cFace : public bEngine::util::cSerializable
 		{
 		public:
-			int			vertices[3];
-			int			texvertices[3];
-			bEngine::math::cVector3	normal;
-			int			texIndex;
-			int			twoSide;
-			int			smoothGroup;
+			bEngine::util::cInStream& readData(bEngine::util::cInStream &instream);
+			bEngine::util::cOutStream& writeData(bEngine::util::cOutStream &outstream);
+			int							vertices[3];
+			int							texvertices[3];
+			bEngine::math::cVector3		normal;
+			int							texIndex;
+			int							twoSide;
+			int							smoothGroup;
 		};
-		cFace*		faces;
-		int			nAnimationFrames;
-		long		lastTick;
-		class cFrame
+		cFace*							faces;
+		int								nAnimationFrames;
+		long							lastTick;
+		class cFrame : public bEngine::util::cSerializable
 		{
 		public:
+			bEngine::util::cInStream& readData(bEngine::util::cInStream &instream);
+			bEngine::util::cOutStream& writeData(bEngine::util::cOutStream &outstream);
 			cFrame();
-			int			time;
+			int							time;
 			bEngine::math::cQuaternion	quat;
 		};
-		cFrame*		animationFrames;
+		cFrame*							animationFrames;
 		
 		
 		bool selected;
@@ -100,9 +110,12 @@ public:
 		SHADE_FLAT,
 		SHADE_SMOOTH,
 		SHADE_BLACK,
-	} shadeType;
-	char unknown[16];
-	int alpha;
+	}								shadeType;
+
+	char							unknown[16];
+	char							alpha;
+	char							ver1;
+	char							ver2;
 
 
 	cRsmModelBase(std::string);
@@ -112,6 +125,9 @@ public:
 	virtual bool collides(bEngine::math::cMatrix4x4 &mat, bEngine::math::cVector3 from, bEngine::math::cVector3 to, bEngine::math::cVector3* = NULL);
 	void setTexture(bEngine::cTexture* oldTexture, bEngine::cTexture* newTexture);
 	void setSelection(cMesh* mesh);
+
+	bEngine::util::cInStream& readData(bEngine::util::cInStream &instream);
+	bEngine::util::cOutStream& writeData(bEngine::util::cOutStream &outstream);
 };
 
 class cRsmModel : public cRsmModelBase, public cBrowInterface::cPluginRSMModel

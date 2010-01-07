@@ -15,64 +15,71 @@
 
 cRsmModelBase::cRsmModelBase( std::string pFilename)
 {
+	root = NULL;
+
+	
+	bEngine::util::cInStream* pFile = bEngine::util::cFileSystem::open(pFilename);
+	*pFile>>this;
+	delete pFile;
+}
+
+
+bEngine::util::cOutStream &cRsmModelBase::writeData(bEngine::util::cOutStream &outstream)
+{
+	return outstream;
+}
+
+bEngine::util::cInStream &cRsmModelBase::readData(bEngine::util::cInStream &instream)
+{
 	char header[4];
-	int ver1 = 0;
-	int ver2 = 0;
 	int animLen = 0;
 	int nTextures = 0;
 	std::string mainNodeName = "";
 	int numMeshes = 0;
+	char buf[40];
+	std::map<std::string, cMesh*, std::less<std::string> > meshes;
 
 	int i;
-	root = NULL;
-
-	bEngine::util::cInStream* pFile = bEngine::util::cFileSystem::open(pFilename);
-	if (pFile == NULL)
-	{
-		Log(2,0,"cRsmModel: Could not open '%s'", pFilename.c_str());
-		return;
-	}
 	
-	pFile->read(header, 4);
+	instream.read(header, 4);
 	if(memcmp(header, "GRSM", 4) != 0)
 	{
-		Log(2,0,"cRsmModel: %s is not a model, invalid header", pFilename.c_str());
-		delete pFile;
-		return;
+		Log(2,0,"cRsmModel: not a model, invalid header");
+		return instream;
 	}
-	ver1 = pFile->get();
-	ver2 = pFile->get();
-	animLen = pFile->readInt();
-	shadeType = (eShadeType)pFile->readInt();
+	instream>>ver1;
+	instream>>ver2;
+	instream>>animLen;
+	shadeType = (eShadeType)instream.readInt();
+
 	if(ver1 >= 1 && ver2 >= 4)
-		alpha = pFile->get();
+		instream>>alpha;
 	else
 		alpha = 0;
 
 	char unknown[16];
-	pFile->read(unknown, 16);
-	nTextures = pFile->readInt();
+	instream.read(unknown, 16);
+	instream>>nTextures;
 
 	for(i = 0; i < nTextures; i++)
 	{
 		char textureName[40];
-		pFile->read(textureName, 40);
+		instream.read(textureName, 40);
 		textures.push_back(bEngine::cTextureCache::load(cSettings::roDir + "data\\texture\\" + textureName, (bEngine::eTextureOptions)(bEngine::TEX_NEARESTFILTER)));
 	}
 	
-	char buf[40];
-	pFile->read(buf, 40);
+	instream.read(buf, 40);
 	mainNodeName = buf;
-	numMeshes = pFile->readInt();
-	if(numMeshes != 1)
-		Sleep(0);
-	std::map<std::string, cMesh*, std::less<std::string> > meshes;
+	instream>>numMeshes;
+
 	for(i = 0; i < numMeshes; i++)
 	{
-		cMesh* mesh = new cMesh(pFile, this, ver1, ver2);
+		cMesh* mesh = new cMesh(this, ver1, ver2);
+		instream>>mesh;
 		meshes[mesh->name] = mesh;
 	}
-
+	//done reading, calculate boundingboxes
+	
 	if(meshes.find(mainNodeName) == meshes.end())
 	{
 		Log(2,0,"cRsmModel: Could not locate root mesh");
@@ -97,9 +104,10 @@ cRsmModelBase::cRsmModelBase( std::string pFilename)
 	realbbrange = (realbbmax + realbbmin) / 2.0f;
 	maxrange = bEngine::math::max(bEngine::math::max(realbbmax.x, -realbbmin.x), bEngine::math::max(bEngine::math::max(realbbmax.y, -realbbmin.y), bEngine::math::max(realbbmax.z, -realbbmin.z)));
 
+	return instream;
 }
 
-cRsmModel::cMesh::cMesh(bEngine::util::cInStream* pFile, cRsmModelBase* model, int ver1, int ver2)
+cRsmModel::cMesh::cMesh(cRsmModelBase* model, int ver1, int ver2)
 {
 	selected = false;
 	cache1 = false;
@@ -107,98 +115,179 @@ cRsmModel::cMesh::cMesh(bEngine::util::cInStream* pFile, cRsmModelBase* model, i
 	base = model;
 	lastTick = 0;
 	parent = NULL;
+	this->model = model;
+}
+
+bEngine::util::cInStream &cRsmModel::cMesh::readData(bEngine::util::cInStream &instream)
+{
 	char buf[40];
 	int i;
-	pFile->read(buf, 40);
+	int nTextures;
+
+	instream.read(buf, 40);
 	name = buf;
-	pFile->read(buf, 40);
+	instream.read(buf, 40);
 	parentName = buf;
 	
-	int nTextures = pFile->readInt();
+	instream>>nTextures;
 	for(i = 0; i < nTextures; i++)
-		textures.push_back(model->textures[pFile->readInt()]);
+		textures.push_back(model->textures[instream.readInt()]);
 
-	offset.values[0] = pFile->readFloat();	//rotation
-	offset.values[1] = pFile->readFloat();
-	offset.values[2] = pFile->readFloat();
+	instream>>offset.values[0];//rotation
+	instream>>offset.values[1];
+	instream>>offset.values[2];
 
-	offset.values[4] = pFile->readFloat();
-	offset.values[5] = pFile->readFloat();
-	offset.values[6] = pFile->readFloat();
+	instream>>offset.values[4];
+	instream>>offset.values[5];
+	instream>>offset.values[6];
 	
-	offset.values[8] = pFile->readFloat();
-	offset.values[9] = pFile->readFloat();
-	offset.values[10] = pFile->readFloat();
+	instream>>offset.values[8];
+	instream>>offset.values[9];
+	instream>>offset.values[10];
 
-	pos_.x = pFile->readFloat();
-	pos_.y = pFile->readFloat();
-	pos_.z = pFile->readFloat();
+	instream>>pos_;
+	instream>>pos;
+	instream>>rotangle;
+	instream>>rotaxis;
+	instream>>scale;
 
-	pos.x = pFile->readFloat();
-	pos.y = pFile->readFloat();
-	pos.z = pFile->readFloat();
-
-	rotangle = pFile->readFloat();
-	rotaxis.x = pFile->readFloat();
-	rotaxis.y = pFile->readFloat();
-	rotaxis.z = pFile->readFloat();
-
-	scale.x = pFile->readFloat();
-	scale.y = pFile->readFloat();
-	scale.z = pFile->readFloat();
-
-
-	nVertices = pFile->readInt();
+	instream>>nVertices;
 	vertices = new bEngine::math::cVector3[nVertices];
 	for(i = 0; i < nVertices; i++)
-	{
-		vertices[i].x = pFile->readFloat();
-		vertices[i].y = pFile->readFloat();
-		vertices[i].z = pFile->readFloat();
-	}
+		instream>>vertices[i];
 
-	nTexVertices = pFile->readInt();
+	instream>>nTexVertices;
 	texVertices = new bEngine::math::cVector2[nTexVertices];
 	for(i = 0; i < nTexVertices; i++)
 	{
-		if(ver1 >= 1 && ver2 >= 2)
-			pFile->readFloat();
-		texVertices[i].x = pFile->readFloat();
-		texVertices[i].y = 1-pFile->readFloat();
+		if(model->ver1 >= 1 && model->ver2 >= 2)
+			instream.readFloat();
+		instream>>texVertices[i];
+		texVertices[i].y = 1-texVertices[i].y;
 	}
-	nFaces = pFile->readInt();
+	instream>>nFaces;
 	faces = new cFace[nFaces];
 	for(i = 0; i < nFaces; i++)
 	{
-		faces[i].vertices[0] = pFile->readWord();
-		faces[i].vertices[1] = pFile->readWord();
-		faces[i].vertices[2] = pFile->readWord();
-
+		instream>>faces[i];
 		faces[i].normal = (vertices[faces[i].vertices[1]] - vertices[faces[i].vertices[0]]).cross(vertices[faces[i].vertices[2]] - vertices[faces[i].vertices[0]]).getNormalized();
-
-		faces[i].texvertices[0] = pFile->readWord();
-		faces[i].texvertices[1] = pFile->readWord();
-		faces[i].texvertices[2] = pFile->readWord();
-
-		faces[i].texIndex = pFile->readWord();
-		pFile->readWord();
-		faces[i].twoSide = pFile->readInt();
-		faces[i].smoothGroup = pFile->readInt();
 	}
-	nAnimationFrames = pFile->readInt();
+	
+	instream>>nAnimationFrames;
 	animationFrames = new cFrame[nAnimationFrames];
 	for(i = 0; i < nAnimationFrames; i++)
+		instream>>animationFrames[i];
+
+	return instream;
+}
+
+bEngine::util::cOutStream &cRsmModel::cMesh::writeData(bEngine::util::cOutStream &outstream)
+{
+	char buf[40];
+	int i;
+	
+	ZeroMemory(buf, 40);
+	strcpy(buf, name.c_str());
+	outstream.write(buf, 40);
+
+	ZeroMemory(buf, 40);
+	strcpy(buf, parentName.c_str());
+	outstream.write(buf, 40);
+
+	outstream<<(int)textures.size();
+	for(i = 0; i < textures.size(); i++)
+		outstream<<0;//TODOtextures.push_back(model->textures[instream.readInt()]);
+	
+	outstream<<offset.values[0];//rotation
+	outstream<<offset.values[1];
+	outstream<<offset.values[2];
+	
+	outstream<<offset.values[4];
+	outstream<<offset.values[5];
+	outstream<<offset.values[6];
+	
+	outstream<<offset.values[8];
+	outstream<<offset.values[9];
+	outstream<<offset.values[10];
+	
+	outstream<<pos_;
+	outstream<<pos;
+	outstream<<rotangle;
+	outstream<<rotaxis;
+	outstream<<scale;
+	
+	outstream<<nVertices;
+	for(i = 0; i < nVertices; i++)
+		outstream<<vertices[i];
+	
+	outstream<<nTexVertices;
+	for(i = 0; i < nTexVertices; i++)
 	{
-		animationFrames[i].time = pFile->readInt();
-		animationFrames[i].quat.values[0] = pFile->readFloat();
-		animationFrames[i].quat.values[1] = pFile->readFloat();
-		animationFrames[i].quat.values[2] = pFile->readFloat();
-		animationFrames[i].quat.values[3] = pFile->readFloat();
+		outstream<<0.0f;
+		texVertices[i].y = 1-texVertices[i].y;
+		outstream<<texVertices[i];
+		texVertices[i].y = 1-texVertices[i].y;
 	}
+	outstream<<nFaces;
+	faces = new cFace[nFaces];
+	for(i = 0; i < nFaces; i++)
+		outstream<<faces[i];
+	
+	outstream<<nAnimationFrames;
+	for(i = 0; i < nAnimationFrames; i++)
+		outstream<<animationFrames[i];
+	
+	return outstream;
 }
 
 
 
+bEngine::util::cInStream &cRsmModelBase::cMesh::cFace::readData(bEngine::util::cInStream &instream)
+{
+	vertices[0] = instream.readWord();
+	vertices[1] = instream.readWord();
+	vertices[2] = instream.readWord();
+	
+
+	texvertices[0] = instream.readWord();
+	texvertices[1] = instream.readWord();
+	texvertices[2] = instream.readWord();
+	
+	texIndex = instream.readWord();
+	instream.readWord();
+	twoSide = instream.readInt();
+	smoothGroup = instream.readInt();
+	return instream;
+}
+
+
+bEngine::util::cOutStream &cRsmModelBase::cMesh::cFace::writeData(bEngine::util::cOutStream &outstream)
+{
+	outstream.writeWord(vertices[0]);
+	outstream.writeWord(vertices[1]);
+	outstream.writeWord(vertices[2]);
+	
+	outstream.writeWord(texvertices[0]);
+	outstream.writeWord(texvertices[1]);
+	outstream.writeWord(texvertices[2]);
+	
+	outstream.writeWord(texIndex);
+	outstream.writeWord(0); //TODO
+	outstream.writeInt(twoSide);
+	outstream.writeInt(smoothGroup);
+	return outstream;
+}
+
+
+bEngine::util::cInStream &cRsmModelBase::cMesh::cFrame::readData(bEngine::util::cInStream &instream)
+{
+	return instream>>time>>quat;
+}
+
+bEngine::util::cOutStream &cRsmModelBase::cMesh::cFrame::writeData(bEngine::util::cOutStream &outstream)
+{
+	return outstream<<time<<quat;
+}
 
 
 void cRsmModelBase::draw()
@@ -682,30 +771,28 @@ void cRsmModelBase::save(std::string pFilename)
 	int i;
 	root = NULL;
 	
-	std::ofstream pFile(pFilename.c_str(), std::ios_base::out | std::ios_base::binary);
-	if (pFile.bad() || !pFile.good())
-	{
-		Log(2,0,"cRsmModel: Could not open '%s'", pFilename.c_str());
-		return;
-	}
+	bEngine::util::cFileSystem::cWriteFilePhysical* pFile = new bEngine::util::cFileSystem::cWriteFilePhysical(pFilename);
 	
-	pFile.write(header, 4);//header
-	pFile.put(1); // version1
-	pFile.put(5); // version2
+	pFile->write(header, 4);//header
+	pFile->put(1); // version1
+	pFile->put(5); // version2
 
 	i = 0;
-	pFile.write((char*)&i, 4);			//animlen
-	pFile.write((char*)&shadeType,4);
-	pFile.put(alpha);
-	pFile.write(unknown, 16);
-	pFile.write((char*)&nTextures,4);
+	pFile->write((char*)&i, 4);			//animlen
+	pFile->write((char*)&shadeType,4);
+	pFile->put(alpha);
+	pFile->write(unknown, 16);
+	pFile->write((char*)&nTextures,4);
 	
 	for(i = 0; i < nTextures; i++)
 	{
 		char textureName[40];
 		strcpy(textureName, bEngine::util::replace(textures[i]->getFilename(), cSettings::roDir + "data\\texture\\", "").c_str());
-		pFile.write(textureName, 40);
+		pFile->write(textureName, 40);
 	}
+
+
+	delete pFile;
 	
 /*	char buf[40];
 	pFile->read(buf, 40);
