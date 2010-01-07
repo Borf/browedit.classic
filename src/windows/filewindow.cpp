@@ -72,16 +72,14 @@ cFileWindow::cFileWindow(void (*pCallback)(std::string)) : cWindow()
 	
 	mapNames.clear();
 	unsigned int i;
-//TODObengine
-/*	for(i = 0; i < cFileSystem::locations.size(); i++)
+
+	std::vector<std::string> files = bEngine::util::cFileSystem::getFileList("data");
+	for(i = 0; i < files.size(); i++)
 	{
-		for(std::map<std::string, cFile*, std::less<std::string> >::iterator it = cFileSystem::locations[i]->files.begin(); it != cFileSystem::locations[i]->files.end(); it++)
-		{
-			if(it->first.find(".rsw") != std::string::npos)
-				mapNames.push_back(it->first.substr(cSettings::roDir.length()));
-			
-		}
-	}*/
+
+		if(files[i].substr(files[i].size()-4, 4) == ".rsw")
+			mapNames.push_back(files[i].substr(cSettings::roDir.length()));
+	}
 	
 	std::sort(mapNames.begin(), mapNames.end());
 	

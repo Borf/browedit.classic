@@ -19,6 +19,8 @@ public:
 		cGrfFileLoader(std::string grfFile);
 		virtual bool										isFile(std::string fileName);
 		virtual bEngine::util::cFileSystem::cReadFile*		open(std::string fileName);
+		virtual void										getFileList(std::vector<std::string> &files, std::string directory);
+
 	};
 
 

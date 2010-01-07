@@ -46,6 +46,20 @@ bEngine::util::cFileSystem::cReadFile* cGrfFileSystem::cGrfFileLoader::open(std:
 	return NULL;
 }
 
+void cGrfFileSystem::cGrfFileLoader::getFileList( std::vector<std::string> &files, std::string directory )
+{
+	directory = bEngine::util::replace(directory, "/", "\\");
+	directory = bEngine::util::lcase(bEngine::util::replace(directory, cSettings::roDir, ""));
+	for(unsigned int i = 0; i < grf->nfiles; i++)
+	{
+		if(bEngine::util::lcase(grf->files[i].name).substr(0, directory.length()) == directory)
+		{
+			files.push_back(cSettings::roDir + grf->files[i].name);
+		}
+	}
+	
+}
+
 
 cGrfFileSystem::cGrfFile::cGrfFile( std::string fileName, Grf* grf ) : bEngine::util::cFileSystem::cReadFileMemory()
 {
