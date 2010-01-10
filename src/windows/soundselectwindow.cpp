@@ -79,9 +79,8 @@ void cSoundSelectWindow::cWindowPlayButton::onClick()
 		text = "Stop";
 		
 		Mix_Chunk *sample;
-		
-		bEngine::util::cInStream* pFile = bEngine::util::cFileSystem::open(cSettings::roDir+"data/wav/" + filename);
-		sample;//TODObengine=Mix_QuickLoad_WAV((BYTE*)pFile->data);
+		std::string data = bEngine::util::cFileSystem::openData(cSettings::roDir+"data/wav/" + filename);
+		sample = Mix_QuickLoad_WAV((BYTE*)data.c_str());
 		Mix_Volume(-1,MIX_MAX_VOLUME);
 		Mix_PlayChannel(0, sample, 0);
 		while(Mix_Playing(-1) > 0 && text == "Stop")
@@ -91,7 +90,6 @@ void cSoundSelectWindow::cWindowPlayButton::onClick()
 		if(text == "Play")
 			Mix_HaltChannel(-1);
 		Mix_FreeChunk(sample);
-		delete pFile;
 		text = "Play";
 	}
 	else

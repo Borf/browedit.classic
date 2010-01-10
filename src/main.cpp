@@ -821,7 +821,7 @@ int main(int argc, char *argv[])
 	if(cSettings::config.isMember("firstmap"))
 		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\" + cSettings::config["firstmap"].asString()).c_str());
 	else
-		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\lighttest").c_str());
+		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\prontera").c_str());
 
 	if(argc > 1)
 	{

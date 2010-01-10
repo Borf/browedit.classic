@@ -179,7 +179,7 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 			case SDLK_SPACE:
 				if (cGraphics::worldContainer->settings.selectedObject != -1)
 				{
-					if((int)cGraphics::world->sounds.size() >= cGraphics::worldContainer->settings.selectedObject)
+					if((int)cGraphics::world->sounds.size() <= cGraphics::worldContainer->settings.selectedObject)
 						break;
 					static bool playing = false;
 
@@ -189,8 +189,8 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 
 						cSound* o = &cGraphics::world->sounds[cGraphics::worldContainer->settings.selectedObject];
 						Mix_Chunk *sample;
-						bEngine::util::cInStream* pFile = bEngine::util::cFileSystem::open(cSettings::roDir+"data/wav/" + o->fileName);
-						sample;//TODObengine=Mix_QuickLoad_WAV((BYTE*)pFile->data);
+						std::string data = bEngine::util::cFileSystem::openData(cSettings::roDir+"data/wav/" + o->fileName);
+						sample = Mix_QuickLoad_WAV((BYTE*)data.c_str());
 						Mix_Volume(-1,MIX_MAX_VOLUME);
 						Mix_PlayChannel(0, sample, 0);
 						while(Mix_Playing(-1) > 0 && playing)
@@ -200,7 +200,6 @@ int cProcessManagement::soundedit_process_events(SDL_Event &event)
 						if(!playing)
 							Mix_HaltChannel(-1);
 						Mix_FreeChunk(sample);
-						delete pFile;
 					}
 					playing = false;
 
