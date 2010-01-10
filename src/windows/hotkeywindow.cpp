@@ -178,19 +178,24 @@ cHotkeyWindow::cHotkeyWindow(cWorldContainer* container) : cWindow()
 	cWindowObject* o;
 	
 	Json::Value wSkin = cWM::skin["miniwindow"];
+	
+	skinTopHeight =		wSkin["top"]["height"].asInt();
+	skinTop =		512-wSkin["top"]["pos"].asInt();
+	skinBottomHeight =	wSkin["bottom"]["height"].asInt();
+	skinBottom =	512-wSkin["bottom"]["pos"].asInt();
+	
+	skinLeftWidth =		wSkin["left"]["width"].asInt();
+	skinLeft =			wSkin["left"]["pos"].asInt();
+	skinRightWidth =	wSkin["right"]["width"].asInt();
+	skinRight =			wSkin["right"]["pos"].asInt();
+	
+	wSkin = wSkin["offsets"];
+	skinOffLeft =	wSkin["left"].asInt();
+	skinOffRight =	wSkin["right"].asInt();
+	skinOffTop =	wSkin["top"].asInt();
+	skinOffBottom = wSkin["bottom"].asInt();
 
-	/*TODObengine
 	
-	skinTopHeight = atoi(wSkin->FirstChildElement("top")->Attribute("height"));
-	skinTop =		512 - atoi(wSkin->FirstChildElement("top")->FirstChild()->Value());
-	skinBottomHeight = atoi(wSkin->FirstChildElement("bottom")->Attribute("height"));
-	skinBottom =		512 - atoi(wSkin->FirstChildElement("bottom")->FirstChild()->Value());
-	
-	skinLeftWidth = atoi(wSkin->FirstChildElement("left")->Attribute("width"));
-	skinLeft =		atoi(wSkin->FirstChildElement("left")->FirstChild()->Value());
-	skinRightWidth = atoi(wSkin->FirstChildElement("right")->Attribute("width"));
-	skinRight =		atoi(wSkin->FirstChildElement("right")->FirstChild()->Value());		
-	*/
 	for(int i = 0; i < 8; i++)
 	{
 		char buf[10];

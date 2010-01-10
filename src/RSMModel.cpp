@@ -559,7 +559,8 @@ void cRsmModelBase::cMesh::draw()
 	int i;
 	for(i = 0; i < nFaces; i++)
 	{
-		glBindTexture(GL_TEXTURE_2D, textures[faces[i].texIndex]->texId());
+		if(textures[faces[i].texIndex])
+			glBindTexture(GL_TEXTURE_2D, textures[faces[i].texIndex]->texId());
 		glBegin(GL_TRIANGLES);
 		for(int ii = 0; ii < 3; ii++)
 		{

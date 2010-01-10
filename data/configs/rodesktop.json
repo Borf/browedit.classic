@@ -24,7 +24,7 @@
 		"fullscreen" : false,
 		"gattransparency" : null,
 		"notilecolor" : "FFFF40",
-		"resolution" : [ 800, 600 ],
+		"resolution" : [ 1024, 768 ],
 		"skin" : "data/skins/ro.json",
 		"splash" : "data/hamtaro.tga"
 	},
@@ -37,6 +37,25 @@
 		{
 			"x" : 520,
 			"y" : 0
+		},
+		"minimap" : 
+		{
+			"x" : 864,
+			"y" : 13
+		},
+		"textures" : 
+		{
+			"h" : 550,
+			"w" : 750,
+			"x" : 25,
+			"y" : 25
+		},
+		"texturetools" : 
+		{
+			"h" : 112,
+			"w" : 50,
+			"x" : 0,
+			"y" : 668
 		}
 	}
 }

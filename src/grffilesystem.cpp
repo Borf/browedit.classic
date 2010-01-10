@@ -17,6 +17,9 @@ cGrfFileSystem::cGrfFileLoader::cGrfFileLoader( std::string grfFile )
 		bEngine::cLog::add(GetMsg("fs/GRFOPENERROR"), grfFile.c_str());
 		throw "Argh";
 	}
+	for(unsigned int i = 0; i < grf->nfiles; i++)
+		strcpy(grf->files[i].name, bEngine::util::lcase(grf->files[i].name).c_str());
+
 
 }
 
@@ -24,6 +27,7 @@ bool cGrfFileSystem::cGrfFileLoader::isFile(std::string fileName)
 {
 	fileName = bEngine::util::replace(fileName, "/", "\\");
 	fileName = bEngine::util::replace(fileName, cSettings::roDir, "");
+	fileName = bEngine::util::lcase(fileName);
 	for(unsigned int i = 0; i < grf->nfiles; i++)
 	{
 		if(grf->files[i].name == fileName)
@@ -36,6 +40,7 @@ bEngine::util::cFileSystem::cReadFile* cGrfFileSystem::cGrfFileLoader::open(std:
 {
 	fileName = bEngine::util::replace(fileName, "/", "\\");
 	fileName = bEngine::util::replace(fileName, cSettings::roDir, "");
+	fileName = bEngine::util::lcase(fileName);
 	for(unsigned int i = 0; i < grf->nfiles; i++)
 	{
 		if(grf->files[i].name == fileName)

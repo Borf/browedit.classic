@@ -75,7 +75,7 @@
 		"bottom" :
 		{
 			"height" : 9,
-			"bottom" : 71
+			"pos" : 71
 		}
 	},
 	"miniwindow" : 
@@ -140,7 +140,7 @@
 		"top" :
 		{
 			"height" : 2,
-			"top" : 90
+			"pos" : 90
 		},
 		"left" :
 		{
@@ -155,7 +155,7 @@
 		"bottom" :
 		{
 			"height" : 2,
-			"bottom" : 93
+			"pos" : 93
 		},
 		"selectcolor" : "6666FF",
 		"selectfontcolor" : "FFFFFF",
@@ -190,7 +190,7 @@
 			"bottom" :
 			{
 				"height" : 4,
-				"bottom" : 35
+				"pos" : 35
 			}
 		}
 	},
