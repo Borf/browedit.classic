@@ -2,7 +2,6 @@
 #define __SPRITEWINDOW_H__
 
 #include <common.h>
-#include <tinyxml/tinyxml.h>
 
 #include <wm/window.h>
 #include <wm/windowtree.h>
@@ -36,7 +35,7 @@ public:
 	public:
 		cTabPanel(cWindow* parent, Json::Value &skin = cWM::skin);
 		void tabchange(int oldtab);
-		void addxml(cWindowTree* tree, TiXmlNode* n, cWindowTree::cTreeNode* treenode, std::string dir = "");
+//		void addxml(cWindowTree* tree, TiXmlNode* n, cWindowTree::cTreeNode* treenode, std::string dir = "");
 	};
 
 

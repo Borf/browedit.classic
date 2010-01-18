@@ -88,7 +88,7 @@ cWindowCheckBox::cWindowCheckBox( cWindow* parent, Json::Value &skin ) : cWindow
 	w = bSkin["width"].asInt();
 	h = bSkin["height"].asInt();
 	
-	skinCheckedLeft = bSkin["checked"]["left"]["pos"].asInt();
+	skinCheckedLeft = bSkin["checked"]["left"].asInt();
 	skinCheckedTop = 512-bSkin["checked"]["top"].asInt();
 	skinUncheckedLeft = bSkin["unchecked"]["left"].asInt();
 	skinUncheckedTop = 512-bSkin["unchecked"]["top"].asInt();

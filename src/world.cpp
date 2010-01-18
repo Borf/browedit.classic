@@ -382,9 +382,12 @@ void cWorld::load()
 		case 1:
 			{
 				cRsmModel* m = new cRsmModel(*pFile);
-				m->pos.x = (m->pos.x / 5) + width;
-				m->pos.z = (m->pos.z / 5) + height;
-				models.push_back(m);
+				if(m->root != NULL)
+				{
+					m->pos.x = (m->pos.x / 5) + width;
+					m->pos.z = (m->pos.z / 5) + height;
+					models.push_back(m);
+				}
 			}
 			break;
 		case 2:
@@ -497,7 +500,7 @@ void cWorld::load()
 
 	if(bEngine::util::cFileSystem::isFile(std::string(fileName) + ".sprites"))
 	{
-		TiXmlDocument sprdoc;//TODObengine = cFileSystem::getXml(std::string(fileName) + ".sprites");;
+/*		TiXmlDocument sprdoc;//TODObengine = cFileSystem::getXml(std::string(fileName) + ".sprites");;
 		TiXmlElement* sprite = sprdoc.FirstChildElement("sprites")->FirstChildElement("sprite");
 		while(sprite != NULL)
 		{
@@ -522,7 +525,7 @@ void cWorld::load()
 			}
 			sprites.push_back(s);
 			sprite = sprite->NextSiblingElement();
-		}
+		}*/
 	}
 
 /*	if(bEngine::util::cFileSystem::isFile(std::string(fileName) + ".extra"))
@@ -673,7 +676,7 @@ void cWorld::save()
 	srand(tickcount());
 	if (!loaded)
 		return;
-	TiXmlDocument extraproperties;
+//	TiXmlDocument extraproperties;
 
 	strcpy(fileName, bEngine::util::replace(fileName, "\\","/").c_str());
 
@@ -881,7 +884,7 @@ void cWorld::save()
 		if (models.size() != 0)
 			rnd = rand() % models.size();
 
-		TiXmlElement xmlmodels("models");
+//		TiXmlElement xmlmodels("models");
 
 		for(i = 0; i < models.size(); i++)
 		{
@@ -930,15 +933,15 @@ void cWorld::save()
 			pFile.write((char*)&m->scale.y, 4);
 			pFile.write((char*)&m->scale.z, 4);
 
-			TiXmlElement model("model");
-			model.SetAttribute("id", i);
-			model.SetAttribute("lightopacity", models[i]->lightopacity);
-			xmlmodels.InsertEndChild(model);
+//			TiXmlElement model("model");
+//			model.SetAttribute("id", i);
+//			model.SetAttribute("lightopacity", models[i]->lightopacity);
+//			xmlmodels.InsertEndChild(model);
 
 		}
-		extraproperties.InsertEndChild(xmlmodels);
+//		extraproperties.InsertEndChild(xmlmodels);
 		Log(3,0,GetMsg("world/MODELCOUNT"), models.size());
-		TiXmlElement xmllights("lights");
+//		TiXmlElement xmllights("lights");
 
 		for(i = 0; i < lights.size(); i++)
 		{
@@ -963,7 +966,7 @@ void cWorld::save()
 			pFile.write((char*)&lights[i].color.z,4);
 			pFile.write((char*)&lights[i].todo2,4);
 
-			TiXmlElement light("light");
+/*			TiXmlElement light("light");
 			light.SetAttribute("id", i);
 			if(lights[i].givesShadow)
 				light.SetAttribute("givesshadow", "true");
@@ -988,10 +991,10 @@ void cWorld::save()
 			light.InsertEndChild(lightfalloff);
 
 
-			xmllights.InsertEndChild(light);
+			xmllights.InsertEndChild(light);*/
 		}
 
-		extraproperties.InsertEndChild(xmllights);
+		//extraproperties.InsertEndChild(xmllights);
 
 
 		for(i = 0; i < sounds.size(); i++)
@@ -1147,7 +1150,7 @@ void cWorld::save()
 	}
 	if(sprites.size() > 0)
 	{
-		TiXmlDocument doc;
+/*		TiXmlDocument doc;
 		TiXmlElement headNode("sprites");
 		for(unsigned int i = 0; i < sprites.size(); i++)
 		{
@@ -1189,7 +1192,7 @@ void cWorld::save()
 		}
 
 		doc.InsertEndChild(headNode);
-		doc.SaveFile((std::string(fileName) + ".sprites").c_str());
+		doc.SaveFile((std::string(fileName) + ".sprites").c_str());*/
 	}
 	else
 	{
@@ -1200,7 +1203,7 @@ void cWorld::save()
 #endif
 	}
 
-	extraproperties.SaveFile((std::string(fileName) + ".extra").c_str());
+//	extraproperties.SaveFile((std::string(fileName) + ".extra").c_str());
 }
 
 

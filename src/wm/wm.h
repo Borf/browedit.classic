@@ -47,7 +47,7 @@ public:
 	static bool						confirmWindow(std::string);
 	static cWindow*					inputWindow(std::string, cInputWindowCaller* caller);
 	static std::string				inputWindow(std::string, std::string = "");
-	static cWindow*					xmlWindow(std::string);
+	static cWindow*					JsonWindow(std::string);
 
 	static void						printDebug();
 	static void						defocus();

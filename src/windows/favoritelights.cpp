@@ -17,7 +17,7 @@ cFavoriteLightsWindow::cFavoriteTreeNode::cFavoriteTreeNode() : cWindowTree::cTr
 	
 }
 
-void cFavoriteLightsWindow::addlights( cFavoriteTreeNode* parent, TiXmlNode* n )
+/*void cFavoriteLightsWindow::addlights( cFavoriteTreeNode* parent, TiXmlNode* n )
 {
 	while(n != NULL)
 	{
@@ -61,7 +61,7 @@ void cFavoriteLightsWindow::addlights( cFavoriteTreeNode* parent, TiXmlNode* n )
 		
 		n = n->NextSiblingElement();
 	}
-}
+}*/
 
 cFavoriteLightsWindow::cFavoriteLightsWindow() : cWindow()
 {
@@ -83,13 +83,13 @@ cFavoriteLightsWindow::cFavoriteLightsWindow() : cWindow()
 	
 	std::vector<cWindowTree::cTreeNode*> nodes;
 	cFavoriteTreeNode* windownode = new cFavoriteTreeNode("root");
-	TiXmlNode* n = favoritelights.FirstChildElement();
+/*	TiXmlNode* n = favoritelights.FirstChildElement();
 	addlights(windownode, n);
 	cWindowTree::cTreeNode* root = windownode->children[0];
 	windownode->children.clear(); // to prevend the children from being deleted;
 	delete windownode;
 	root->parent = NULL;
-	nodes.push_back(root);
+	nodes.push_back(root);*/
 	
 	objects["list"] = new cFavoritesTree(this, nodes);
 	
@@ -211,7 +211,7 @@ void cFavoriteLightsWindow::cFavoritesTree::onChange()
 	if(((cFavoriteLightsWindow*)parent)->currentkey.size() > 0)
 	{
 		std::vector<int> key = ((cFavoriteLightsWindow*)parent)->currentkey;
-		TiXmlNode* n = favoritelights.FirstChild();
+/*		TiXmlNode* n = favoritelights.FirstChild();
 		for(i = 0; i < key[key.size()-1]; i++)
 			n = n->NextSibling();
 		
@@ -234,7 +234,7 @@ void cFavoriteLightsWindow::cFavoritesTree::onChange()
 			n->FirstChildElement("lightfalloff")->FirstChild()->SetValue(parent->objects["lightfalloff"]->getText(0).c_str());
 			n->FirstChildElement("givesshadow")->FirstChild()->SetValue(parent->objects["castshadow"]->getText(0).c_str());
 			n->FirstChildElement("height")->FirstChild()->SetValue(parent->objects["height"]->getText(0).c_str());
-		}
+		}*/
 	}
 	
 	if(node->children.size() != 0 || ((cFavoriteTreeNode*)node)->isCat)
@@ -255,7 +255,7 @@ void cFavoriteLightsWindow::cFavoritesTree::onChange()
 	std::vector<int> keys = ((cFavoriteTreeNode*)node)->keys;
 	((cFavoriteLightsWindow*)parent)->currentkey = keys;
 	
-	TiXmlNode* n = favoritelights.FirstChild();
+/*	TiXmlNode* n = favoritelights.FirstChild();
 	for(i = 0; i < keys[keys.size()-1]; i++)
 		n = n->NextSibling();
 	
@@ -275,7 +275,7 @@ void cFavoriteLightsWindow::cFavoritesTree::onChange()
 	parent->objects["maxlightincrement"]->setText(0, n->FirstChildElement("maxlight")->FirstChild()->Value());
 	parent->objects["lightfalloff"]->setText(0, n->FirstChildElement("lightfalloff")->FirstChild()->Value());
 	parent->objects["castshadow"]->setInt(0, atoi(n->FirstChildElement("givesshadow")->FirstChild()->Value()));
-	parent->objects["height"]->setText(0, n->FirstChildElement("height")->FirstChild()->Value());
+	parent->objects["height"]->setText(0, n->FirstChildElement("height")->FirstChild()->Value());*/
 }
 
 cFavoriteLightsWindow::cWindowOkButton::cWindowOkButton( cWindow* parent, Json::Value &skin) : cWindowButton(parent,skin)
@@ -289,7 +289,7 @@ cFavoriteLightsWindow::cWindowOkButton::cWindowOkButton( cWindow* parent, Json::
 void cFavoriteLightsWindow::cWindowOkButton::onClick()
 {
 	((cWindowTree*)parent->objects["list"])->onChange();
-	favoritelights.SaveFile("data/lights.txt");
+//	favoritelights.SaveFile("data/lights.txt");
 	parent->close();
 }
 
@@ -303,7 +303,7 @@ cFavoriteLightsWindow::cWindowCancelButton::cWindowCancelButton( cWindow* parent
 
 void cFavoriteLightsWindow::cWindowCancelButton::onClick()
 {
-	favoritelights;//TODObengine = cFileSystem::getXml("data/lights.txt");
+//	favoritelights;//TODObengine = cFileSystem::getXml("data/lights.txt");
 	parent->close();
 }
 

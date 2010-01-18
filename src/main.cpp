@@ -6,7 +6,6 @@
 #include <utility>
 #include <math.h>
 #include <time.h>
-#include <tinyxml/tinyxml.h>
 #ifdef _MEMORYMAGAGEMENT
 #include "StackWalker.h"
 #endif
@@ -65,7 +64,7 @@ int process_events();
 long tilex,tiley;
 long lastmotion;
 bool	doneAction = true;
-TiXmlDocument favoritelights;
+//TiXmlDocument favoritelights; TODObengine
 
 
 unsigned long keys[SDLK_LAST-SDLK_FIRST];
@@ -392,9 +391,9 @@ int WinMain(HINSTANCE hInst,HINSTANCE hPrev, LPSTR Cmd,int nShow)
 }
 #endif
 
-cWindow* XmlWindow(std::string s)
+cWindow* JsonWindow(std::string s)
 {
-	return cWM::xmlWindow(s);
+	return cWM::JsonWindow(s);
 }
 
 
@@ -501,7 +500,7 @@ int main(int argc, char *argv[])
 
 	//models->sort();
 	
-	favoritelights;//TODObengine = cFileSystem::getXml("data/lights.txt");
+//	favoritelights;//TODObengine = cFileSystem::getXml("data/lights.txt");
 
 	if (!cGraphics::init(windowWidth, windowHeight, windowBpp, windowFullscreen))
 		return 1;
@@ -821,7 +820,7 @@ int main(int argc, char *argv[])
 	if(cSettings::config.isMember("firstmap"))
 		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\" + cSettings::config["firstmap"].asString()).c_str());
 	else
-		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\prontera").c_str());
+		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\lighttest").c_str());
 
 	if(argc > 1)
 	{

@@ -349,7 +349,8 @@
 			"LIGHTS":"Lights",
 			"SOUNDS":"Sounds",
 			"EFFECTS":"Effects",
-			"SPRITES":"Sprites"
+			"SPRITES":"Sprites",
+			"OK": "Ok"
 		}
 	}
 }

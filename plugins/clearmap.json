@@ -1,0 +1,259 @@
+{
+	"translation" : "clearmap",
+	"width" : 300,
+	"height" : 250,
+	"closebutton" : true,
+	"components" :
+	{
+		"chkTextures" :
+		{
+			"type" : "checkbox",
+			"value" : true,
+			"x" : 20,
+			"y" : 4
+		},
+		"btnTextures" :
+		{
+			"type" : "button",
+			"value" : "",
+			"align" : "topleft",
+			"x" : 40,
+			"y" : 4,
+			"width" : 15,
+			"height" : 15
+		},
+		"lblTextures" :
+		{
+			"type" : "label",
+			"value" : "TEXTURES",
+			"x" : 100,
+			"y" : 0
+		},
+		"chkHeight" :
+		{
+			"type" : "checkbox",
+			"value" : true,
+			"x" : 20,
+			"y" : 24
+		},
+		"btnHeight" :
+		{
+			"type" : "button",
+			"align" : "topleft",
+			"x" : 40,
+			"y" : 24,
+			"width" : 15,
+			"height" : 15
+		},
+		"lblHeight" :
+		{
+			"type" : "button",
+			"value" : "HEIGHT",
+			"x" : 100,
+			"y" : 20
+		},
+		"chkWalls" :
+		{
+			"type" : "checkbox",
+			"value" : true,
+			"x" : 20,
+			"y" : 44
+		},
+		"btnWalls" :
+		{
+			"type" : "button",
+			"align" : "topleft",
+			"x" : 40,
+			"y" : 44,
+			"width" : 15,
+			"height" : 15
+		},
+		"lblWalls" :
+		{
+			"type" : "label",
+			"value" : "WALLS",
+			"x" : 100,
+			"y" : 40
+		},
+		"chkGat" :
+		{
+			"type" : "checkbox",
+			"value" : true,
+			"align" : "topleft",
+			"x" : 20,
+			"y" : 64
+		},
+		"btnGat" :
+		{
+			"type" : "button",
+			"align" : "topleft",
+			"x" : 40,
+			"y" : 64,
+			"width" : 15,
+			"height" : 15
+		},
+		"lblGat" :
+		{
+			"type" : "label",
+			"value" : "GAT",
+			"x" : 100,
+			"y" : 60
+		},
+		"chkLightmaps" :
+		{
+			"type" : "checkbox",
+			"value" : true,
+			"align" : "topleft",
+			"x" : 20,
+			"y" : 84
+		},
+		"btnLightmaps" :
+		{
+			"type" : "button",
+			"align" : "topleft",
+			"x" : 40,
+			"y" : 84,
+			"width" : 15,
+			"height" : 15
+		},
+		"lblLightmaps" :
+		{
+			"type" : "label",
+			"value" : "LIGHTMAPS",
+			"x" : 100,
+			"y" : 80
+		},
+		"chkObjects" :
+		{
+			"type" : "checkbox",
+			"value" : true,
+			"align" : "topleft",
+			"x" : 20,
+			"y" : 104
+		},
+		"btnObjects" :
+		{
+			"type" : "button",
+			"align" : "topleft",
+			"x" : 40,
+			"y" : 104,
+			"width" : 15,
+			"height" : 15
+
+		},
+		"lblObjects" :
+		{
+			"type" : "label",
+			"value" : "OBJECTS",
+			"x" : 100,
+			"y" : 100
+		},
+		"chkLights" :
+		{
+			"type" : "checkbox",
+			"value" : true,
+			"align" : "topleft",
+			"x" : 20,
+			"y" : 124
+		},
+		"btnLights" :
+		{
+			"type" : "button",
+			"align" : "topleft",
+			"x" : 40,
+			"y" : 124,
+			"width" : 15,
+			"height" : 15
+
+		},
+		"lblLights" :
+		{
+			"type" : "label",
+			"value" : "LIGHTS",
+			"x" : 100,
+			"y" : 120
+		},
+		"chkSounds" :
+		{
+			"type" : "checkbox",
+			"value" : true,
+			"align" : "topleft",
+			"x" : 20,
+			"y" : 144
+		},
+		"btnSounds" :
+		{
+			"type" : "button",
+			"align" : "topleft",
+			"x" : 40,
+			"y" : 144,
+			"width" : 15,
+			"height" : 15
+
+		},
+		"lblSounds" :
+		{
+			"type" : "label",
+			"value" : "SOUNDS",
+			"x" : 100,
+			"y" : 140
+		},
+		"chkEffects" :
+		{
+			"type" : "checkbox",
+			"value" : true,
+			"align" : "topleft",
+			"x" : 20,
+			"y" : 164
+		},
+		"btnEffects" :
+		{
+			"type" : "button",
+			"align" : "topleft",
+			"x" : 40,
+			"y" : 164,
+			"width" : 15,
+			"height" : 15
+
+		},
+		"lblEffects" :
+		{
+			"type" : "label",
+			"value" : "EFFECTS",
+			"x" : 100,
+			"y" : 160
+		},
+		"chkSprites" :
+		{
+			"type" : "checkbox",
+			"value" : true,
+			"align" : "topleft",
+			"x" : 20,
+			"y" : 184
+		},
+		"btnSprites" :
+		{
+			"type" : "button",
+			"align" : "topleft",
+			"x" : 40,
+			"y" : 184,
+			"width" : 15,
+			"height" : 15
+
+		},
+		"lblSprites" :
+		{
+			"type" : "label",
+			"value" : "SPRITES",
+			"x" : 100,
+			"y" : 180
+		},
+		"btnOk" :
+		{
+			"type" : "button",
+			"value" : "OK",
+			"x" : 100,
+			"y" : 200
+		}
+	}
+}

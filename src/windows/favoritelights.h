@@ -12,7 +12,7 @@
 #include <wm/windowinputbox.h>
 #include "objectwindow.h"
 #include <wm/windowcheckbox.h>
-extern TiXmlDocument favoritelights;
+//extern TiXmlDocument favoritelights; TODObengine
 #include <menucommands.h>
 
 
@@ -33,7 +33,7 @@ public:
 	};
 
 	
-	static void addlights(cFavoriteTreeNode* parent, TiXmlNode* n);
+//	static void addlights(cFavoriteTreeNode* parent, TiXmlNode* n);
 
 
 	class cFavoritesTree : public cWindowTree

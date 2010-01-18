@@ -2626,7 +2626,7 @@ void readscript(std::string filename)
 			{
 				// we got an NPC :D
 				Log(3,0,"We got NPC %s at %s (%i,%i)", npcname, mapname, x,y);
-				TiXmlElement* el = sprites.FirstChildElement("sprites")->FirstChildElement("body")->FirstChildElement("npc")->FirstChildElement("sprite");
+/*				TiXmlElement* el = sprites.FirstChildElement("sprites")->FirstChildElement("body")->FirstChildElement("npc")->FirstChildElement("sprite");
 				while(el != NULL)
 				{
 					if(atoi(el->Attribute("id")) == spriteid)
@@ -2654,7 +2654,7 @@ void readscript(std::string filename)
 						break;
 					}
 					el = el->NextSiblingElement("sprite");
-				}
+				}*/
 			}
 		}
 
@@ -2675,8 +2675,8 @@ MENUCOMMAND(eascript)
 	cGraphics::world->sprites.clear();
 	scriptmap = cGraphics::world->fileName;
 	scriptmap = scriptmap.substr(scriptmap.rfind("\\")+1);
-	if(!sprites.FirstChild())
-		sprites;//TODObengine = cFileSystem::getXml("sprites.xml");
+//	if(!sprites.FirstChild())
+//		sprites;//TODObengine = cFileSystem::getXml("sprites.xml");
 
 
 	readscript("npc\\scripts_main.conf");
@@ -2796,8 +2796,8 @@ MENUCOMMAND(npcscreenies)
 			{
 				strcpy(cGraphics::world->fileName, (cSettings::roDir + "data\\" + filename.substr(0, filename.rfind("."))).c_str());
 				cGraphics::world->load();
-				if(!sprites.FirstChild())
-					sprites;//TODObengine = cFileSystem::getXml("sprites.xml");
+//				if(!sprites.FirstChild())
+//					sprites;//TODObengine = cFileSystem::getXml("sprites.xml");
 
 
 				readscript("npc\\scripts_main.conf");
@@ -2851,7 +2851,7 @@ MENUCOMMAND(addfavorite)
 	}
 
 
-	TiXmlNode* n = favoritelights.FirstChild();
+/*	TiXmlNode* n = favoritelights.FirstChild();
 	for(i = 0; i < keys[keys.size()-1]; i++)
 		n = n->NextSibling();
 
@@ -2890,7 +2890,7 @@ MENUCOMMAND(addfavorite)
 		cLightOverViewWindow::cLightOverViewTree* tree = (cLightOverViewWindow::cLightOverViewTree*)w->objects["list"];
 		Log(3,0,"Calling getobject for %i", tree);
 		tree->getObject(cGraphics::world->lights[cGraphics::worldContainer->settings.selectedObject]);
-	}
+	}*/
 
 	return true;
 }
@@ -2988,7 +2988,7 @@ MENUCOMMAND(removefavlight)
 		std::vector<int> keys = ((cFavoriteLightsWindow::cFavoriteTreeNode*)node)->keys;
 		delete node;
 
-		TiXmlNode* n = favoritelights.FirstChild();
+/*		TiXmlNode* n = favoritelights.FirstChild();
 		for(i = 0; i < keys[keys.size()-1]; i++)
 			n = n->NextSibling();
 
@@ -3016,7 +3016,7 @@ MENUCOMMAND(removefavlight)
 		delete windownode;
 		root->parent = NULL;
 		tree->nodes.push_back(root);
-	
+	*/
 	}
 	return true;
 }
@@ -3050,7 +3050,7 @@ MENUCOMMAND(addfavlight)
 
 		std::vector<int> keys = ((cFavoriteLightsWindow::cFavoriteTreeNode*)node)->keys;
 
-		TiXmlNode* n = favoritelights.FirstChild();
+/*		TiXmlNode* n = favoritelights.FirstChild();
 		for(i = 0; i < keys[keys.size()-1]; i++)
 			n = n->NextSibling();
 
@@ -3098,7 +3098,7 @@ MENUCOMMAND(addfavlight)
 		tree->nodes.clear();
 		tree->nodes.push_back(root);
 
-
+*/
 		return true;
 	}
 	else
@@ -3135,7 +3135,7 @@ MENUCOMMAND(addfavlightcat)
 
 		std::vector<int> keys = ((cFavoriteLightsWindow::cFavoriteTreeNode*)node)->keys;
 
-		TiXmlNode* n = favoritelights.FirstChild();
+/*		TiXmlNode* n = favoritelights.FirstChild();
 		for(i = 0; i < keys[keys.size()-1]; i++)
 			n = n->NextSibling();
 
@@ -3170,7 +3170,7 @@ MENUCOMMAND(addfavlightcat)
 			delete tree->nodes[i];
 		tree->nodes.clear();
 		tree->nodes.push_back(root);
-
+*/
 
 		return true;
 	}

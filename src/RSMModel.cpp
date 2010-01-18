@@ -255,8 +255,11 @@ bEngine::util::cInStream& cRsmModel::readData( bEngine::util::cInStream &instrea
 	filename.readData(instream);
 
 	bEngine::util::cInStream* pFile = bEngine::util::cFileSystem::open(cSettings::roDir + "data\\model\\" + filename);
-	cRsmModelBase::readData(*pFile);
-	delete pFile;
+	if(pFile)
+	{
+		cRsmModelBase::readData(*pFile);
+		delete pFile;
+	}
 	
 	CHAR buf[80];
 	instream.read(buf, 80);			//nodeName

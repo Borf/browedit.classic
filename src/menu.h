@@ -4,7 +4,6 @@
 
 #include "common.h"
 #include <string>
-#include <tinyxml/tinyxml.h>
 
 class cMenuItem;
 class cMenu;

@@ -14,7 +14,6 @@
 #include <memory.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "tinyxml/tinyxml.h"
 #include <settings.h>
 const float EPSILON = 0.001f;
 

@@ -12,7 +12,6 @@
 #include <list>
 #include <vector>
 
-#include <tinyxml/tinyxml.h>
 #include "plugins/base/interface.h"
 
 #include <bengine/forwards.h>

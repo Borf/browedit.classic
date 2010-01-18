@@ -1,7 +1,7 @@
 #include <common.h>
 #include "interfaceimplementation.h"
 #include <graphics.h>
-#include <windows/xmlwindow.h>
+#include <windows/jsonwindow.h>
 #include <SDL/SDL.h>
 #include <settings.h>
 #include <plugins/base/base.h>
@@ -21,13 +21,13 @@ void cBrowInterfaceImplementation::fixNormals()
 	cGraphics::world->calcVertexNormals();
 }
 
-cWindow* cBrowInterfaceImplementation::addXmlWindow(const char* fileName)
+cWindow* cBrowInterfaceImplementation::addJsonWindow(const char* fileName)
 {
-	TiXmlDocument windowLayout;//TODObengine = cFileSystem::getXml(fileName);
-	if(windowLayout.Error() || !windowLayout.FirstChild())
-		return NULL;
+	Json::Value windowLayout = bEngine::util::cFileSystem::openJson(fileName);
+//	if(windowLayout.Error() || !windowLayout.FirstChild())
+//		return NULL;
 
-	cXmlWindow* w = new cXmlWindow(windowLayout);
+	cJsonWindow* w = new cJsonWindow(windowLayout);
 	cWM::addWindow(w);
 	return w;
 }

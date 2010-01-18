@@ -13,12 +13,12 @@
 
 extern bool	doneAction;
 
-extern TiXmlDocument favoritelights;
+//extern TiXmlDocument favoritelights;
 
 //double mouseclickx, mouseclicky, mouseclickz;
 
 
-void addmenustuff(cMenu* m, TiXmlElement* el)
+/*void addmenustuff(cMenu* m, TiXmlElement* el)
 {
 	while(el != NULL)
 	{
@@ -62,7 +62,7 @@ void addmenustuff(cMenu* m, TiXmlElement* el)
 		el = el->NextSiblingElement();
 	}
 
-}
+}*/
 
 
 int cProcessManagement::lightedit_process_events(SDL_Event &event)
@@ -223,7 +223,7 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 					//ADDMENUITEM(mm,cGraphics::popupMenu,"Set as sunlight",		&MenuCommand_new);
 
 
-					addmenustuff(favs, favoritelights.FirstChildElement("lights")->FirstChildElement());
+					//addmenustuff(favs, favoritelights.FirstChildElement("lights")->FirstChildElement());//TODO bengine
 
 				}
 			}

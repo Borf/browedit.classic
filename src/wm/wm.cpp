@@ -14,8 +14,8 @@
 #include <windows/messagewindow.h>
 #include <windows/confirmwindow.h>
 #include <windows/inputwindow.h>
-#include <windows/xmlwindow.h>
 #include <bengine/util/filesystem.h>
+#include <windows/jsonwindow.h>
 extern void mainloop();
 
 
@@ -591,10 +591,10 @@ cWindow* cWM::inputWindow(std::string title, cInputWindowCaller* caller)
 	return w;
 }
 
-cWindow* cWM::xmlWindow(std::string src)
+cWindow* cWM::JsonWindow(std::string src)
 {
-	TiXmlDocument layout;//TODObengine = cFileSystem::getXml(src);
-	cWindow* w = new cXmlWindow(layout);
+	Json::Value layout = bEngine::util::cFileSystem::openJson(src);
+	cWindow* w = new cJsonWindow(layout);
 	addWindow(w);
 	return w;
 }

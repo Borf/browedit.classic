@@ -2,6 +2,7 @@
 #define __CLEARMAP_H__
 
 #include "../base/base.h"
+#include <windows/jsonwindow.h>
 
 class cClearMapPlugin : public cPluginBase
 {

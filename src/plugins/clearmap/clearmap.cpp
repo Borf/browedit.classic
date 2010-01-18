@@ -1,7 +1,7 @@
 #include <windows.h>
 #include "clearmap.h"
 #include "../base/interface.h"
-#include <windows/xmlwindow.h>
+#include <windows/jsonwindow.h>
 
 
 cClearMapPlugin::cClearMapPlugin() : cPluginBase("Clear Map", "tools/CLEARMAP")
@@ -14,9 +14,10 @@ cClearMapPlugin* plugin;
 
 
 
-void cClearMapPlugin::clickOk(cWindow* w)
+void cClearMapPlugin::clickOk(cWindow* ww)
 {
-	if(w->objects["chkTextures"]->getInt(0) != 0)
+	cJsonWindow* w = (cJsonWindow*)ww;
+	if(w->getObject("chkTextures")->getInt(0) != 0)
 	{
 		int x,y,i;
 		std::map<int, bool, std::less<int> > used;
@@ -44,7 +45,7 @@ void cClearMapPlugin::clickOk(cWindow* w)
 	}
 
 
-	if(w->objects["chkHeight"]->getInt(0) != 0)
+	if(w->getObject("chkHeight")->getInt(0) != 0)
 	{
 		for(int y = 0; y < browInterface->getWorldHeight(); y++)
 		{
@@ -62,7 +63,7 @@ void cClearMapPlugin::clickOk(cWindow* w)
 		browInterface->fixNormals();
 	}
 
-	if(w->objects["chkWalls"]->getInt(0) != 0)
+	if(w->getObject("chkWalls")->getInt(0) != 0)
 	{
 		for(int y = 0; y < browInterface->getWorldHeight(); y++)
 		{
@@ -74,7 +75,7 @@ void cClearMapPlugin::clickOk(cWindow* w)
 			}
 		}
 	}
-	if(w->objects["chkGat"]->getInt(0) != 0)
+	if(w->getObject("chkGat")->getInt(0) != 0)
 	{
 		for(int y = 0; y < browInterface->getWorldHeight(); y++)
 		{
@@ -116,7 +117,7 @@ void cClearMapPlugin::clickOk(cWindow* w)
 
 		}
 	}
-	if(w->objects["chkLightmaps"]->getInt(0) != 0)
+	if(w->getObject("chkLightmaps")->getInt(0) != 0)
 	{
 		int i;
 		browInterface->clearLightmaps();
@@ -130,15 +131,15 @@ void cClearMapPlugin::clickOk(cWindow* w)
 
 		browInterface->resetLightmaps();
 	}
-	if(w->objects["chkObjects"]->getInt(0) != 0)
+	if(w->getObject("chkObjects")->getInt(0) != 0)
 		browInterface->clearModels();
-	if(w->objects["chkSprites"]->getInt(0) != 0)
+	if(w->getObject("chkSprites")->getInt(0) != 0)
 		browInterface->clearSprites();
-	if(w->objects["chkLights"]->getInt(0) != 0)
+	if(w->getObject("chkLights")->getInt(0) != 0)
 		browInterface->clearLights();
-	if(w->objects["chkSounds"]->getInt(0) != 0)
+	if(w->getObject("chkSounds")->getInt(0) != 0)
 		browInterface->clearSounds();
-	if(w->objects["chkEffects"]->getInt(0) != 0)
+	if(w->getObject("chkEffects")->getInt(0) != 0)
 		browInterface->clearEffects();
 
 	w->close();
@@ -170,9 +171,9 @@ void handleevent(cWindow* w, std::string name, std::string event)
 bool cClearMapPlugin::action()
 {
 	plugin = this;
-	cXmlWindow* w = (cXmlWindow*)browInterface->addXmlWindow("plugins/clearmap.xml");
+	cJsonWindow* w = (cJsonWindow*)browInterface->addJsonWindow("plugins/clearmap.json");
 	if(!w)
-		browInterface->messageWindow("Error: could not open plugins/clearmap.xml");
+		browInterface->messageWindow("Error: could not open plugins/clearmap.json");
 	else
 		w->eventhandler = handleevent;
 	return true;

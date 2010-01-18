@@ -272,7 +272,7 @@ void cTextureBrushWindow::cWindowBrushSaveButton::onClick()
 	if(name == "")
 		return;
 
-	TiXmlDocument brushes;//TODObengine = cFileSystem::getXml("data/brushes.xml");
+/*	TiXmlDocument brushes;//TODObengine = cFileSystem::getXml("data/brushes.xml");
 
 	TiXmlElement newBrush("brush");
 	newBrush.SetAttribute("name", name.c_str());
@@ -297,7 +297,7 @@ void cTextureBrushWindow::cWindowBrushSaveButton::onClick()
 	cWindowObject* o = new cWindowBrushButton(parent,((cTextureBrushWindow*)parent)->brushWidth, ((cTextureBrushWindow*)parent)->brushHeight, data);
 	o->setPopup(name);
 	panel->objects.push_back(o);
-	panel->resizeTo(panel->getWidth(), panel->getHeight());
+	panel->resizeTo(panel->getWidth(), panel->getHeight());*/
 }
 
 
@@ -380,7 +380,7 @@ cTextureBrushWindow::cTextureBrushWindow() : cWindow()
 	objects["presets"] = scroll;
 		
 
-	TiXmlDocument brushes;//TODObengine = cFileSystem::getXml("data/brushes.xml");
+/*	TiXmlDocument brushes;//TODObengine = cFileSystem::getXml("data/brushes.xml");
 	TiXmlElement* brushEl = brushes.FirstChildElement("brushes")->FirstChildElement("brush");
 	while(brushEl != NULL)
 	{
@@ -410,8 +410,8 @@ cTextureBrushWindow::cTextureBrushWindow() : cWindow()
 		}
 	}
 
+	*/
 	char buf[10];
-
 	addLabel("lblWidth", 0,0,"Width");
 	sprintf(buf, "%i", brushWidth);
 	addInputBox("inpWidth", 140,140,140,buf);

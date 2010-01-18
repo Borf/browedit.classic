@@ -323,7 +323,7 @@ void cClipboardObject::render()
 {
 	if(!rsmmodel)
 	{
-		rsmmodel = new cRsmModel(clipboardFile);
+		rsmmodel = new cRsmModel(cSettings::roDir + "data\\model\\" + clipboardFile);
 		rsmmodel->pos = bEngine::math::cVector3(cGraphics::cMouse::x3d/5.0f, -cGraphics::cMouse::y3d, cGraphics::cMouse::z3d/5.0f);
 		if (SDL_GetModState() & KMOD_CTRL)
 			rsmmodel->pos.y = clipboardY;

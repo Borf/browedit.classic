@@ -75,7 +75,7 @@ public:
 	void					checkModelsOnCubes();
 	void					resetLightmaps();
 	
-	cWindow*				addXmlWindow(const char*);
+	cWindow*				addJsonWindow(const char*);
 	const char*				inputWindow(const char*, const char*);
 	void					messageWindow(const char*);
 	bool					confirmWindow(const char*);

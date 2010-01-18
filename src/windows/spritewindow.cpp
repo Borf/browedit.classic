@@ -8,7 +8,7 @@
 #include <bengine/math/math.h>
 #include <bengine/util/filesystem.h>
 #include <math.h>
-TiXmlDocument sprites;
+//TiXmlDocument sprites;
 
 
 
@@ -58,7 +58,7 @@ cSpriteWindow::cTabPanel::cTabPanel( cWindow* parent, Json::Value &skin) : cWind
 	resizeTo(parent->innerWidth() - 120,parent->innerHeight());
 }
 
-void cSpriteWindow::cTabPanel::addxml( cWindowTree* tree, TiXmlNode* n, cWindowTree::cTreeNode* treenode, std::string dir /*= ""*/ )
+/*void cSpriteWindow::cTabPanel::addxml( cWindowTree* tree, TiXmlNode* n, cWindowTree::cTreeNode* treenode, std::string dir )
 {
 	while(n != NULL)
 	{
@@ -85,14 +85,14 @@ void cSpriteWindow::cTabPanel::addxml( cWindowTree* tree, TiXmlNode* n, cWindowT
 		}
 		n = n->NextSiblingElement();
 	}
-}
+}*/
 void cSpriteWindow::cTabPanel::tabchange( int oldtab )
 {
 	cWindowTree* tree = (cWindowTree*)parent->objects["tree"];
 	tree->nodes.clear();
 	tree->liststart = 0;
 	
-	TiXmlNode* n = sprites.FirstChildElement("sprites");
+/*	TiXmlNode* n = sprites.FirstChildElement("sprites");
 	if(selectedtab == 0)
 		n = n->FirstChildElement("body");
 	else if(selectedtab == 1)
@@ -102,7 +102,7 @@ void cSpriteWindow::cTabPanel::tabchange( int oldtab )
 	((cSpriteWindow*)parent)->lookupMap.clear();
 	if(selectedtab != 0)
 		tree->nodes.push_back(new cWindowTree::cTreeNode("Nothing"));
-	addxml(tree, n->FirstChildElement(), NULL, n->ToElement()->Attribute("directory") != NULL ? n->ToElement()->Attribute("directory") : "");
+	addxml(tree, n->FirstChildElement(), NULL, n->ToElement()->Attribute("directory") != NULL ? n->ToElement()->Attribute("directory") : "");*/
 	
 	tree->selected = 0;
 	
@@ -397,8 +397,8 @@ cSpriteWindow::cSpriteWindow() : cWindow()
 		objects[buf] = new cDirectionButton(this, i);
 	}
 	
-	if(!sprites.FirstChild())
-		sprites;//TODObengine = cFileSystem::getXml("data/sprites.xml");
+//	if(!sprites.FirstChild())
+//		sprites;//TODObengine = cFileSystem::getXml("data/sprites.xml");
 	
 	((cTabPanel*)objects["tabpanel"])->tabchange(-1);
 }

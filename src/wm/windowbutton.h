@@ -3,7 +3,6 @@
 
 #include "windowobject.h"
 #include <string>
-#include <tinyxml/tinyxml.h>
 #include <wm/wm.h>
 //using namespace std;
 

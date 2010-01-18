@@ -272,10 +272,6 @@ SOURCE=..\src\common.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\filesystem.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\font_.h
 # End Source File
 # Begin Source File
@@ -395,34 +391,6 @@ SOURCE=..\src\grflib\rgz.c
 SOURCE=..\src\grflib\rgz.h
 # End Source File
 # End Group
-# Begin Group "tinyxml"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\src\tinyxml\tinystr.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\tinyxml\tinystr.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\tinyxml\tinyxml.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\tinyxml\tinyxml.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\tinyxml\tinyxmlerror.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\tinyxml\tinyxmlparser.cpp
-# End Source File
-# End Group
 # Begin Group "wm"
 
 # PROP Default_Filter ""
@@ -463,6 +431,10 @@ SOURCE=..\src\windows\hotkeywindow.h
 # Begin Source File
 
 SOURCE=..\src\windows\inputwindow.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\windows\jsonwindow.h
 # End Source File
 # Begin Source File
 
@@ -552,10 +524,6 @@ SOURCE=..\src\windows\walltexturewindow.h
 
 SOURCE=..\src\windows\waterwindow.h
 # End Source File
-# Begin Source File
-
-SOURCE=..\src\windows\xmlwindow.h
-# End Source File
 # End Group
 # Begin Source File
 
@@ -584,6 +552,10 @@ SOURCE=..\src\windows\hotkeywindow.cpp
 # Begin Source File
 
 SOURCE=..\src\windows\inputwindow.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\windows\jsonwindow.cpp
 # End Source File
 # Begin Source File
 
@@ -672,10 +644,6 @@ SOURCE=..\src\windows\walltexturewindow.cpp
 # Begin Source File
 
 SOURCE=..\src\windows\waterwindow.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\windows\xmlwindow.cpp
 # End Source File
 # End Group
 # Begin Group "components"
