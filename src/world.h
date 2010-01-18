@@ -16,6 +16,7 @@
 #include "plugins/base/interface.h"
 
 #include <bengine/forwards.h>
+#include <bengine/util/serializabledata.h>
 
 class cTexture;
 class cTextureModel;
@@ -23,7 +24,7 @@ class cSprite;
 class cRsmModel;
 
 
-class cLightmap : public cBrowInterface::cPluginLightmap
+class cLightmap : public cBrowInterface::cPluginLightmap, public bEngine::util::cSerializable
 {
 public:
 	cLightmap()
@@ -54,12 +55,15 @@ public:
 	bool generated2;
 	GLuint tid;
 	GLuint tid2;
+
+	bEngine::util::cInStream &readData(bEngine::util::cInStream &instream);
+	bEngine::util::cOutStream &writeData(bEngine::util::cOutStream &outstream);
 };
 
 class cRealLightMap
 {
 public:
-	cRealLightMap();
+	cRealLightMap(int px, int py);
 	int texId();
 	int texId2();
 
@@ -73,62 +77,84 @@ public:
 	void reset();
 };
 
-class cTile : public cBrowInterface::cPluginTile
+class cTile : public cBrowInterface::cPluginTile, public bEngine::util::cSerializable
 {
 public:
 	std::vector<std::vector<int> > lightsWithShadow;
 	cTile() {};
 	cTile(cBrowInterface::cPluginTile t);
+
+	bEngine::util::cInStream &readData(bEngine::util::cInStream &instream);
+	bEngine::util::cOutStream &writeData(bEngine::util::cOutStream &outstream);
+
 };
 
 
-class cCube : public cBrowInterface::cPluginCube
+class cCube : public cBrowInterface::cPluginCube, public bEngine::util::cSerializable
 {
 public:
 	float maxHeight;
 	float minHeight;
-	void calcNormal();
 	bEngine::math::cVector3 normal;
 	bEngine::math::cVector3 vNormal1;
 	bEngine::math::cVector3 vNormal2;
 	bEngine::math::cVector3 vNormal3;
 	bEngine::math::cVector3 vNormal4;
 
+	cCube();
+	cCube(const cCube &other);
+	void calcNormal();
+	bEngine::util::cInStream &readData(bEngine::util::cInStream &instream);
+	bEngine::util::cOutStream &writeData(bEngine::util::cOutStream &outstream);
 };
 
-class cTextureContainer : public cBrowInterface::cPluginTexture
+class cTextureContainer : public cBrowInterface::cPluginTexture, public bEngine::util::cSerializable
 {
 public:
+	cTextureContainer() {}
+	cTextureContainer(const cBrowInterface::cPluginTexture& pTexture);
+
+
 	bEngine::cTexture* texture;
-	std::string RoFilename;
-	std::string RoFilename2;
+	cBrowInterface::cRoString<40> RoFilename;
+	cBrowInterface::cRoString<40> RoFilename2;
 	GLuint texId();
 
+
+	void generateTexture();
+	bEngine::util::cInStream &readData(bEngine::util::cInStream &instream);
+	bEngine::util::cOutStream &writeData(bEngine::util::cOutStream &outstream);
 };
 
-class cLight : public cBrowInterface::cPluginLight
+class cLight : public cBrowInterface::cPluginLight,  public bEngine::util::cSerializable
 {
 public:
 	cLight() {};
 	cLight(cBrowInterface::cPluginLight other);
 	bool operator == (cLight other);
+
+	bEngine::util::cInStream &readData(bEngine::util::cInStream &instream);
+	bEngine::util::cOutStream &writeData(bEngine::util::cOutStream &outstream);
 };
 
 
-class cSound : public cBrowInterface::cPluginSound
+class cSound : public cBrowInterface::cPluginSound,  public bEngine::util::cSerializable
 {
 public:
 	cSound(){};
 	cSound(cBrowInterface::cPluginSound);
 	bool operator == (cSound other);
-
+	bEngine::util::cInStream &readData(bEngine::util::cInStream &instream);
+	bEngine::util::cOutStream &writeData(bEngine::util::cOutStream &outstream);
 };
 
-class cEffect : public cBrowInterface::cPluginEffect
+class cEffect : public cBrowInterface::cPluginEffect, public bEngine::util::cSerializable
 {
 public:
 	cEffect() {};
 	cEffect(cBrowInterface::cPluginEffect e);
+	bEngine::util::cInStream &readData(bEngine::util::cInStream &instream);
+	bEngine::util::cOutStream &writeData(bEngine::util::cOutStream &outstream);
 };
 
 
@@ -157,14 +183,16 @@ public:
 };
 
 
-class cGatTile : public cBrowInterface::cPluginGatCube
+class cGatTile : public cBrowInterface::cPluginGatCube, public bEngine::util::cSerializable
 {
 public:
 	cGatTile();
 	cGatTile(const cGatTile&);
+	bEngine::util::cInStream &readData(bEngine::util::cInStream &instream);
+	bEngine::util::cOutStream &writeData(bEngine::util::cOutStream &outstream);
 };
 
-class cWater
+class cWater : public bEngine::util::cSerializable
 {
 public:
 	float	height;
@@ -173,9 +201,12 @@ public:
 	float	phase;
 	float	surfaceCurve;
 	int		animSpeed;
+
+	bEngine::util::cInStream &readData(bEngine::util::cInStream &instream);
+	bEngine::util::cOutStream &writeData(bEngine::util::cOutStream &outstream);
 };
 
-class cAmbientLight
+class cAmbientLight : public bEngine::util::cSerializable
 {
 public:
 	//Correct light information. by Henko
@@ -184,9 +215,12 @@ public:
 	bEngine::math::cVector3	diffuse;
 	bEngine::math::cVector3	ambient;
 	float ambintensity;
+
+	bEngine::util::cInStream &readData(bEngine::util::cInStream &instream);
+	bEngine::util::cOutStream &writeData(bEngine::util::cOutStream &outstream);
 };
 
-class cWorld
+class cWorld : public bEngine::util::cSerializable
 {
 
 public:
@@ -199,7 +233,7 @@ public:
 	int									width;
 	int									texSize;
 	bool								quickSave;
-	std::vector<cTextureContainer*>		textures;
+	std::vector<cTextureContainer>		textures;
 	std::vector<cLightmap*>				lightmaps;
 	std::vector<cTile>					tiles;
 	std::vector<std::vector<cCube> >	cubes;
@@ -248,11 +282,13 @@ public:
 	void								calcVertexNormals(int = 0, int = 0, int = -1, int=-1);
 	std::vector<cCube*>					getWall(int,int,bool,bool);
 
+	bEngine::util::cInStream &readData(bEngine::util::cInStream &instream);
+	bEngine::util::cOutStream &writeData(bEngine::util::cOutStream &outstream);
 	
 
-	char								iniFile[40];
-	char								gndFile[40];
-	char								gatFile[40];
+	cBrowInterface::cRoString<40>		iniFile;
+	cBrowInterface::cRoString<40>		gndFile;
+	cBrowInterface::cRoString<40>		gatFile;
 
 
 	int									unknown1;

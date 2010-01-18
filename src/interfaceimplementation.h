@@ -19,7 +19,7 @@ public:
 	cPluginTexture*			getTexture(int);
 	int						textureCount();
 	void					removeTexture(int);
-	void					addTexture(cPluginTexture*);
+	void					addTexture(cPluginTexture);
 	void					clearTextures();
 	
 	cPluginLightmap*		newLightmap();

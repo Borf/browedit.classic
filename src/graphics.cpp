@@ -144,7 +144,7 @@ int cGraphics::draw(bool drawwm)
 			{
 				if (i+worldContainer->settings.texturestart >= (int)world->textures.size())
 					continue;
-				glBindTexture(GL_TEXTURE_2D, world->textures[i+worldContainer->settings.texturestart]->texId());
+				glBindTexture(GL_TEXTURE_2D, world->textures[i+worldContainer->settings.texturestart].texId());
 			}
 			glBegin(GL_QUADS);
 				glTexCoord2f(1,1);		glVertex2f( width, height-(32+288*i));
@@ -311,6 +311,7 @@ int cGraphics::draw(bool drawwm)
 										cSettings::editMode == MODE_SPRITE ?			GetMsg("menu/editmode/SPRITEEDIT") : 
 										cSettings::editMode == MODE_TEXTUREPAINT ?		GetMsg("menu/editmode/TEXTUREPAINTEDIT") : 
 	"");
+	glDisable(GL_ALPHA_TEST);
 	float l = font->textLen(buf);
 	font->print(0,0,0,width-l,height-14,buf);
 

@@ -32,28 +32,27 @@ void cTextureWindow::cWindowTexture::onClick()
 		if(SDL_GetModState() & KMOD_SHIFT)
 		{
 			int id = cGraphics::worldContainer->settings.texturestart + (int)(cGraphics::worldContainer->settings.selectionstart.y - 32) / 288;
-			bEngine::cTextureCache::unload(cGraphics::world->textures[id]->texture);
-			delete cGraphics::world->textures[id];
+			bEngine::cTextureCache::unload(cGraphics::world->textures[id].texture);
 			
-			cTextureContainer* t = new cTextureContainer();
-			t->RoFilename = data;
+			cTextureContainer t;
+			t.RoFilename = data;
 			char buf[40];
 			ZeroMemory(buf, 40);
 			sprintf(buf, "%i%i", rand(), rand());
-			t->RoFilename2 = std::string(buf,40);
-			t->texture = bEngine::cTextureCache::load(cSettings::roDir + "data\\texture\\" + data);
+			t.RoFilename2 = std::string(buf,40);
+			t.texture = bEngine::cTextureCache::load(cSettings::roDir + "data\\texture\\" + data);
 			cGraphics::world->textures[id] = t;
 			
 		}
 		else
 		{
-			cTextureContainer* t = new cTextureContainer();
-			t->RoFilename = data;
+			cTextureContainer t;
+			t.RoFilename = data;
 			char buf[40];
 			ZeroMemory(buf, 40);
 			sprintf(buf, "%i%i", rand(), rand());
-			t->RoFilename2 = std::string(buf,40);
-			t->texture = bEngine::cTextureCache::load(cSettings::roDir + "data\\texture\\" + data);
+			t.RoFilename2 = std::string(buf,40);
+			t.texture = bEngine::cTextureCache::load(cSettings::roDir + "data\\texture\\" + data);
 			cGraphics::world->textures.push_back(t);
 			cGraphics::worldContainer->settings.texturestart = max((int)cGraphics::world->textures.size() - 2,0);
 		}

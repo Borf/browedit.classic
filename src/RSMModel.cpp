@@ -13,11 +13,11 @@
 #include <GL/glu.h>												// Header File For The GLu32 Library
 #include <map>
 
+extern int tmpVersion;
+
 cRsmModelBase::cRsmModelBase( std::string pFilename)
 {
-	root = NULL;
-
-	
+	root = NULL;	
 	bEngine::util::cInStream* pFile = bEngine::util::cFileSystem::open(pFilename);
 	*pFile>>this;
 	delete pFile;
@@ -65,7 +65,7 @@ bEngine::util::cInStream &cRsmModelBase::readData(bEngine::util::cInStream &inst
 	{
 		char textureName[40];
 		instream.read(textureName, 40);
-		textures.push_back(bEngine::cTextureCache::load(cSettings::roDir + "data\\texture\\" + textureName, (bEngine::eTextureOptions)(bEngine::TEX_NEARESTFILTER)));
+		textures.push_back(bEngine::cTextureCache::load(cSettings::roDir + "data\\texture\\" + textureName));//, (bEngine::eTextureOptions)(bEngine::TEX_NEARESTFILTER)));
 	}
 	
 	instream.read(buf, 40);
@@ -237,6 +237,38 @@ bEngine::util::cOutStream &cRsmModel::cMesh::writeData(bEngine::util::cOutStream
 	for(i = 0; i < nAnimationFrames; i++)
 		outstream<<animationFrames[i];
 	
+	return outstream;
+}
+
+
+
+bEngine::util::cInStream& cRsmModel::readData( bEngine::util::cInStream &instream )
+{
+	if(tmpVersion >= 0x103)
+	{
+		name.readData(instream);
+		int animType = instream.readInt();
+		float animSpeed = instream.readFloat();
+		int blockType = instream.readInt();
+	}
+
+	filename.readData(instream);
+
+	bEngine::util::cInStream* pFile = bEngine::util::cFileSystem::open(cSettings::roDir + "data\\model\\" + filename);
+	cRsmModelBase::readData(*pFile);
+	delete pFile;
+	
+	CHAR buf[80];
+	instream.read(buf, 80);			//nodeName
+	instream>>pos;
+	instream>>rot;
+	instream>>scale;
+
+	return instream;
+}
+
+bEngine::util::cOutStream& cRsmModel::writeData( bEngine::util::cOutStream &outstream )
+{
 	return outstream;
 }
 
@@ -524,6 +556,13 @@ bool cRsmModel::collides( bEngine::math::cVector3 from, bEngine::math::cVector3 
 
 	return cRsmModelBase::collides(mat, from, to, colPos);
 }
+
+cRsmModel::cRsmModel( bEngine::util::cInStream &instream )
+{
+	lightopacity = 1;
+	readData(instream);
+}
+
 
 
 

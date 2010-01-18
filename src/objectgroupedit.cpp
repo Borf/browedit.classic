@@ -211,7 +211,7 @@ int cProcessManagement::objectgroupedit_process_events(SDL_Event &event)
 						{
 							char buf[100];
 							sprintf(buf, "%s\\%i", cat.c_str(), ii);
-							cGraphics::world->models[i]->name = buf;
+							cGraphics::world->models[i]->name = std::string(buf);
 							ii++;
 						}
 					}

@@ -3,6 +3,13 @@
 
 #include <string>//TODO: remove this :P
 #include <bengine/math/vector3.h>
+#include <bengine/forwards.h>
+#include <bengine/util/serializabledata.h>
+#include <bengine/util/stream.h>
+
+#ifdef WIN32
+#include <windows.h>
+#endif
 
 class cWindow;
 class cPluginBase;
@@ -11,6 +18,33 @@ class cPluginBase;
 class cBrowInterface
 {
 public:
+	template <int T>
+	class cRoString : public std::string, public bEngine::util::cSerializable
+	{
+	public:
+		bEngine::util::cInStream &readData(bEngine::util::cInStream &instream)
+		{
+			char buf[T];
+			instream.read(buf, T);
+			this->assign(buf);
+			return instream;
+		}
+		bEngine::util::cOutStream &writeData(bEngine::util::cOutStream &outstream)
+		{
+			char buf[T];
+			ZeroMemory(buf, T);
+			strcpy(buf, c_str());
+			outstream.write(buf, T);
+			return outstream;
+		}
+		
+		cRoString() {}
+		cRoString(const std::string &other)
+		{
+			assign(other);
+		}
+	};
+
 	class cPluginCube
 	{
 	public:
@@ -37,8 +71,8 @@ public:
 				v2,
 				v3,
 				v4;
-		int texture;
-		int lightmap;
+		WORD texture;
+		WORD lightmap;
 		char color[4];
 		bool used;
 	};
@@ -69,8 +103,8 @@ public:
 	class cPluginLight : public cPluginObject
 	{
 	public:
-		std::string		name;
-		std::string		todo;
+		cRoString<40>	name;
+		cRoString<40>	todo;
 		bEngine::math::cVector3	color;
 		float		todo2;
 		// custom properties
@@ -80,31 +114,34 @@ public:
 		bool		givesShadow;
 		float		lightFalloff;
 	};
-	class cPluginEffect : public cPluginObject
+	class cPluginEffect
 	{
 	public:
+		bEngine::math::cVector3 pos;
 		std::string readablename;
-		std::string name;
-		float todo1;
-		float todo2;
-		float todo3;
-		std::string category;
+		cRoString<80> name;
 		int	type;
 		float loop;
-		float todo10;
-		float todo11;
-		int todo12;
-		int todo13;
+		float param1;
+		float param2;
+		float param3;
+		float param4;
 	};
 	class cPluginSound : public cPluginObject
 	{
 	public:
-		std::string name;
-		std::string todo1;
-		std::string fileName;
+		cRoString<80> name;
+		cRoString<80> fileName;
 		
 		float repeatDelay;
-		float unknown2;
+		float vol;
+		long	width;
+		long	height;
+		float	range;
+		float	cycle;
+
+		float	unknown1;
+		float	unknown2;
 		long	unknown3;
 		long	unknown4;
 		float	unknown5;
@@ -138,7 +175,7 @@ public:
 	virtual cPluginTexture*			getTexture(int) = 0;
 	virtual int						textureCount() = 0;
 	virtual void					removeTexture(int) = 0;
-	virtual void					addTexture(cPluginTexture*) = 0;
+	virtual void					addTexture(cPluginTexture) = 0;
 	virtual void					clearTextures() = 0;
 
 	virtual cPluginLightmap*		newLightmap() = 0;

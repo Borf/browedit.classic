@@ -27,7 +27,7 @@ void cMiniMapWindow::cMiniMap::draw( int cutoffleft, int cutoffright, int cutoff
 				continue;
 			
 			cTile* t = &cGraphics::world->tiles[cGraphics::world->cubes[y][x].tileUp];
-			glBindTexture(GL_TEXTURE_2D, cGraphics::world->textures[t->texture]->texId());
+			glBindTexture(GL_TEXTURE_2D, cGraphics::world->textures[t->texture].texId());
 			glBegin(GL_TRIANGLE_STRIP);
 			glTexCoord2f(t->u1, 1-t->v1);				glVertex2f(xx+x,yy+y);
 			glTexCoord2f(t->u3, 1-t->v3);				glVertex2f(xx+x,yy+y+1);

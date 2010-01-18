@@ -92,7 +92,7 @@ cBrowInterface::cPluginCube* cBrowInterfaceImplementation::getCube(int x, int y)
 
 cBrowInterface::cPluginTexture* cBrowInterfaceImplementation::getTexture(int i)
 {
-	return cGraphics::world->textures[i];
+	return &cGraphics::world->textures[i];
 }
 
 cBrowInterface::cPluginTile* cBrowInterfaceImplementation::getTile(int i)
@@ -130,9 +130,9 @@ void cBrowInterfaceImplementation::addEffect(cBrowInterface::cPluginEffect effec
 {
 	cGraphics::world->effects.push_back(effect);
 }
-void cBrowInterfaceImplementation::addTexture(cBrowInterface::cPluginTexture* pTexture)
+void cBrowInterfaceImplementation::addTexture(cBrowInterface::cPluginTexture pTexture)
 {
-	cGraphics::world->textures.push_back((cTextureContainer*)pTexture);
+	cGraphics::world->textures.push_back(pTexture);
 }
 void cBrowInterfaceImplementation::addSound(cBrowInterface::cPluginSound sound)
 {
@@ -153,7 +153,7 @@ void cBrowInterfaceImplementation::removeEffect(int i)
 }
 void cBrowInterfaceImplementation::removeTexture(int i)
 {
-	bEngine::cTextureCache::unload(cGraphics::world->textures[i]->texture);
+	bEngine::cTextureCache::unload(cGraphics::world->textures[i].texture);
 	cGraphics::world->textures.erase(cGraphics::world->textures.begin() + i);
 }
 void cBrowInterfaceImplementation::removeSound(int i)
@@ -445,7 +445,7 @@ void cBrowInterfaceImplementation::clearSounds()
 void cBrowInterfaceImplementation::clearTextures()
 {
 	for(unsigned int i = 0; i < cGraphics::world->textures.size(); i++)
-		bEngine::cTextureCache::unload(cGraphics::world->textures[i]->texture);
+		bEngine::cTextureCache::unload(cGraphics::world->textures[i].texture);
 	cGraphics::world->textures.clear();
 }
 
@@ -467,3 +467,4 @@ void cBrowInterfaceImplementation::resetLightmaps()
 			cGraphics::world->realLightmaps[y][x]->reset();
 	}
 }
+

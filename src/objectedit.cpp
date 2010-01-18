@@ -108,8 +108,6 @@ int cProcessManagement::objectedit_process_events(SDL_Event &event)
 						model->rot = bEngine::math::cVector3(0,0,0);
 						model->name = "Object" + bEngine::util::intToString(rand()%1000);
 						model->lightopacity = 1;
-						char buf[100];
-						sprintf(buf, "%s-%i", cGraphics::previewModel->rofilename.c_str(), rand()%100);
 						cGraphics::world->models.push_back(model);
 						cGraphics::worldContainer->settings.selectedObject = cGraphics::world->models.size()-1;
 						cGraphics::worldContainer->undoStack->push(new cUndoNewObject());

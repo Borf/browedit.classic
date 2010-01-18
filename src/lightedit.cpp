@@ -144,12 +144,12 @@ int cProcessManagement::lightedit_process_events(SDL_Event &event)
 					cLight l;
 					char buf[100];
 					sprintf(buf, "Light%i", rand());
-					l.name = buf;
+					l.name = std::string(buf);
 					l.color.x = 0;
 					l.color.y = 0;
 					l.color.z = 0;
 					l.pos = bEngine::math::cVector3(cGraphics::cMouse::x3d/5, cGraphics::cMouse::y3d+10, cGraphics::cMouse::z3d/5);
-					l.todo = std::string(buf, 40);
+					l.todo = cBrowInterface::cRoString<40>(std::string(buf, 40));
 					l.todo2 = 192;
 					l.maxLightIncrement = 256;
 					l.range = 200;

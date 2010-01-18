@@ -80,21 +80,16 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 					cEffect e;
 					char buf[100];
 					sprintf(buf, "obj%i", rand());
-					e.category = "\0\0\0\0";
 					e.loop = 40;
 					e.pos = bEngine::math::cVector3(cGraphics::cMouse::x3d/5, -cGraphics::cMouse::y3d-10, cGraphics::cMouse::z3d/5);
-					e.name = buf;
+					e.name = std::string(buf);
 					e.readablename = selectedeffect->title;
 					e.type = atoi(selectedeffect->data.c_str());
-					e.todo1 = 1;
-					e.todo2 = 1;
-					e.todo3 = 1;
-					e.rot = bEngine::math::cVector3(0,0,0);
-					e.scale = bEngine::math::cVector3(1,1,1);
-					e.todo10 = 1; // seems to be linked to 11
-					e.todo11 = 1; // seems to be linked to 10
-					e.todo12 = 0; // seems to be always 0
-					e.todo13 = 0; // seems to be always 0
+					e.param1 = 0;
+					e.param2 = 0;
+					e.param3 = 0;
+					e.param4 = 0;
+
 
 					cGraphics::world->effects.push_back(e);
 				}
@@ -160,12 +155,6 @@ int cProcessManagement::effectedit_process_events(SDL_Event &event)
 					((cWindowFloatInputBox*)w->objects["posx"])->floatje = &o->pos.x;
 					((cWindowFloatInputBox*)w->objects["posy"])->floatje = &o->pos.y;
 					((cWindowFloatInputBox*)w->objects["posz"])->floatje = &o->pos.z;
-					((cWindowFloatInputBox*)w->objects["rotx"])->floatje = &o->rot.x;
-					((cWindowFloatInputBox*)w->objects["roty"])->floatje = &o->rot.y;
-					((cWindowFloatInputBox*)w->objects["rotz"])->floatje = &o->rot.z;
-					((cWindowFloatInputBox*)w->objects["scalex"])->floatje = &o->scale.x;
-					((cWindowFloatInputBox*)w->objects["scaley"])->floatje = &o->scale.y;
-					((cWindowFloatInputBox*)w->objects["scalez"])->floatje = &o->scale.z;
 					((cWindowFloatInputBox*)w->objects["looptime"])->floatje = &o->loop;
 
 					w->objects["objectname"]->setText(0, o->readablename);

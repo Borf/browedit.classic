@@ -91,8 +91,7 @@ public:
 		bEngine::math::cVector3 bbrange;
 	};
 
-	std::string filename;
-	std::string rofilename;
+	cBrowInterface::cRoString<80> filename;
 	std::vector<bEngine::cTexture*>	textures;
 	bEngine::math::cVector3 realbbmin;
 	bEngine::math::cVector3 realbbmax;
@@ -119,6 +118,7 @@ public:
 
 
 	cRsmModelBase(std::string);
+	cRsmModelBase() { root = NULL; }
 	void save(std::string);
 	virtual ~cRsmModelBase();
 	void draw();
@@ -126,23 +126,26 @@ public:
 	void setTexture(bEngine::cTexture* oldTexture, bEngine::cTexture* newTexture);
 	void setSelection(cMesh* mesh);
 
-	bEngine::util::cInStream& readData(bEngine::util::cInStream &instream);
-	bEngine::util::cOutStream& writeData(bEngine::util::cOutStream &outstream);
+	virtual bEngine::util::cInStream& readData(bEngine::util::cInStream &instream);
+	virtual bEngine::util::cOutStream& writeData(bEngine::util::cOutStream &outstream);
 };
 
 class cRsmModel : public cRsmModelBase, public cBrowInterface::cPluginRSMModel
 {
 public:
-	std::string name;
+	cBrowInterface::cRoString<40> name;
 	float lightopacity;
 	bool selected;
 
 	cRsmModel(std::string pFilename) : cRsmModelBase(pFilename)
 	{
 		filename = pFilename;
-		rofilename = filename.substr(filename.find("model\\") + 6);
 	}
+	cRsmModel(bEngine::util::cInStream &instream);
 
+
+	bEngine::util::cInStream& readData(bEngine::util::cInStream &instream);
+	bEngine::util::cOutStream& writeData(bEngine::util::cOutStream &outstream);
 
 	void draw();
 	bool collides(bEngine::math::cVector3 from, bEngine::math::cVector3 to, bEngine::math::cVector3* = NULL);

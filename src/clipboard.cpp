@@ -76,19 +76,19 @@ void cClipboardTexture::apply()
 					if(worldContainer != cGraphics::worldContainer)
 					{
 						cTile* tile = &data[xx][yy].second;
-						cTextureContainer* texture = worldContainer->world->textures[tile->texture];
+						cTextureContainer* texture = &worldContainer->world->textures[tile->texture];
 						int found = -1;
 						for(unsigned int i = 0; i < cGraphics::world->textures.size() && found == -1; i++)
 						{
-							if(cGraphics::world->textures[i]->RoFilename == texture->RoFilename)
+							if(cGraphics::world->textures[i].RoFilename == texture->RoFilename)
 								found = i;
 						}
 						if(found == -1)
 						{
-							cTextureContainer* t = new cTextureContainer();
-							t->RoFilename = texture->RoFilename;
-							t->RoFilename2 = texture->RoFilename2;
-							t->texture = bEngine::cTextureCache::load(cSettings::roDir + "data\\texture\\" + texture->RoFilename);
+							cTextureContainer t;
+							t.RoFilename = texture->RoFilename;
+							t.RoFilename2 = texture->RoFilename2;
+							t.texture = bEngine::cTextureCache::load(cSettings::roDir + "data\\texture\\" + texture->RoFilename);
 							found = cGraphics::world->textures.size();
 							cGraphics::world->textures.push_back(t);
 
@@ -117,7 +117,7 @@ void cClipboardTexture::render()
 			if(data[x][y].first != 1)
 				continue;
 			cTile t = data[x][y].second;
-			glBindTexture(GL_TEXTURE_2D, worldContainer->world->textures[t.texture]->texId());
+			glBindTexture(GL_TEXTURE_2D, worldContainer->world->textures[t.texture].texId());
 			cCube* c = &cGraphics::world->cubes[y][x];
 			glColor4f(1,1,1,0.8f);
 			glBegin(GL_QUADS);
@@ -184,7 +184,7 @@ void cClipboardHeight::render()
 			
 			cTile* t = &cGraphics::world->tiles[c->tileUp];
 			
-			glBindTexture(GL_TEXTURE_2D, cGraphics::world->textures[t->texture]->texId());
+			glBindTexture(GL_TEXTURE_2D, cGraphics::world->textures[t->texture].texId());
 			glBegin(GL_TRIANGLE_STRIP);
 			glTexCoord2f(t->u1, 1-t->v1);				glVertex3f((posx-x)*10,		-data[data.size()-1-y][data[y].size()-1-x][0],(cGraphics::world->height-(posy-y))*10);
 			glTexCoord2f(t->u3, 1-t->v3);				glVertex3f((posx-x)*10,		-data[data.size()-1-y][data[y].size()-1-x][2],(cGraphics::world->height-(posy-y))*10-10);
@@ -309,7 +309,7 @@ void cClipboardObject::apply()
 						found = true;
 				}
 			}
-			model->name = buf;
+			model->name = std::string(buf);
 		}
 		
 		cGraphics::world->models.push_back(model);
@@ -330,7 +330,7 @@ void cClipboardObject::render()
 		rsmmodel->scale = clipboardScale;
 		rsmmodel->rot = clipboardRot;
 		rsmmodel->lightopacity = clipboardFloat;
-		rsmmodel->name = "clipboard";
+		rsmmodel->name = std::string("clipboard");
 	}
 	if(usePos)
 		rsmmodel->pos = pos+pos2;
@@ -499,19 +499,19 @@ void cClipBoardArea::apply()
 				cGraphics::world->cubes[tiles[i].y+offZ][tiles[i].x+offX].tileUp = cGraphics::world->tiles.size();
 				cGraphics::world->tiles.push_back(worldContainer->world->tiles[tiles[i].cube.tileUp]);
 				
-				cTextureContainer* texture = worldContainer->world->textures[worldContainer->world->tiles[tiles[i].cube.tileUp].texture];
+				cTextureContainer* texture = &worldContainer->world->textures[worldContainer->world->tiles[tiles[i].cube.tileUp].texture];
 				int found = -1;
 				for(unsigned int ii = 0; ii < cGraphics::world->textures.size() && found == -1; ii++)
 				{
-					if(cGraphics::world->textures[ii]->RoFilename == texture->RoFilename)
+					if(cGraphics::world->textures[ii].RoFilename == texture->RoFilename)
 						found = ii;
 				}
 				if(found == -1)
 				{
-					cTextureContainer* container = new cTextureContainer();
-					container->RoFilename = texture->RoFilename;
-					container->RoFilename2 = texture->RoFilename2;
-					container->texture = bEngine::cTextureCache::load(cSettings::roDir + "data\\texture\\" + texture->RoFilename);
+					cTextureContainer container;
+					container.RoFilename = texture->RoFilename;
+					container.RoFilename2 = texture->RoFilename2;
+					container.texture = bEngine::cTextureCache::load(cSettings::roDir + "data\\texture\\" + texture->RoFilename);
 					found = cGraphics::world->textures.size();				
 					cGraphics::world->textures.push_back(container);
 				}
@@ -530,19 +530,19 @@ void cClipBoardArea::apply()
 				cGraphics::world->cubes[tiles[i].y+offZ][tiles[i].x+offX].tileSide = cGraphics::world->tiles.size();
 				cGraphics::world->tiles.push_back(worldContainer->world->tiles[tiles[i].cube.tileSide]);
 				
-				cTextureContainer* texture = worldContainer->world->textures[worldContainer->world->tiles[tiles[i].cube.tileSide].texture];
+				cTextureContainer* texture = &worldContainer->world->textures[worldContainer->world->tiles[tiles[i].cube.tileSide].texture];
 				int found = -1;
 				for(unsigned int ii = 0; ii < cGraphics::world->textures.size() && found == -1; ii++)
 				{
-					if(cGraphics::world->textures[ii]->RoFilename == texture->RoFilename)
+					if(cGraphics::world->textures[ii].RoFilename == texture->RoFilename)
 						found = ii;
 				}
 				if(found == -1)
 				{
-					cTextureContainer* container = new cTextureContainer();
-					container->RoFilename = texture->RoFilename;
-					container->RoFilename2 = texture->RoFilename2;
-					container->texture = bEngine::cTextureCache::load(cSettings::roDir + "data\\texture\\" + texture->RoFilename);
+					cTextureContainer container;
+					container.RoFilename = texture->RoFilename;
+					container.RoFilename2 = texture->RoFilename2;
+					container.texture = bEngine::cTextureCache::load(cSettings::roDir + "data\\texture\\" + texture->RoFilename);
 					found = cGraphics::world->textures.size();				
 					cGraphics::world->textures.push_back(container);
 				}
@@ -558,19 +558,19 @@ void cClipBoardArea::apply()
 				cGraphics::world->cubes[tiles[i].y+offZ][tiles[i].x+offX].tileOtherSide = cGraphics::world->tiles.size();
 				cGraphics::world->tiles.push_back(worldContainer->world->tiles[tiles[i].cube.tileOtherSide]);
 				
-				cTextureContainer* texture = worldContainer->world->textures[worldContainer->world->tiles[tiles[i].cube.tileOtherSide].texture];
+				cTextureContainer* texture = &worldContainer->world->textures[worldContainer->world->tiles[tiles[i].cube.tileOtherSide].texture];
 				int found = -1;
 				for(unsigned int ii = 0; ii < cGraphics::world->textures.size() && found == -1; ii++)
 				{
-					if(cGraphics::world->textures[ii]->RoFilename == texture->RoFilename)
+					if(cGraphics::world->textures[ii].RoFilename == texture->RoFilename)
 						found = ii;
 				}
 				if(found == -1)
 				{
-					cTextureContainer* container = new cTextureContainer();
-					container->RoFilename = texture->RoFilename;
-					container->RoFilename2 = texture->RoFilename2;
-					container->texture = bEngine::cTextureCache::load(cSettings::roDir + "data\\texture\\" + texture->RoFilename);
+					cTextureContainer container;
+					container.RoFilename = texture->RoFilename;
+					container.RoFilename2 = texture->RoFilename2;
+					container.texture = bEngine::cTextureCache::load(cSettings::roDir + "data\\texture\\" + texture->RoFilename);
 					found = cGraphics::world->textures.size();				
 					cGraphics::world->textures.push_back(container);
 				}
@@ -643,7 +643,7 @@ void cClipBoardArea::render()
 			t = &cGraphics::world->tiles[cGraphics::world->cubes[tiles[i].y+offZ][tiles[i].x+offX].tileUp];
 		}
 
-		glBindTexture(GL_TEXTURE_2D, worldContainer->world->textures[t->texture]->texId());
+		glBindTexture(GL_TEXTURE_2D, worldContainer->world->textures[t->texture].texId());
 		glBegin(GL_TRIANGLE_STRIP);
 			glTexCoord2f(t->u1, 1-t->v1);	glVertex3f((offX+tiles[i].x)*10,	-c->cell1+0.1f,(cGraphics::world->height-(offZ+tiles[i].y))*10);
 			glTexCoord2f(t->u3, 1-t->v3);	glVertex3f((offX+tiles[i].x)*10,	-c->cell3+0.1f,(cGraphics::world->height-(offZ+tiles[i].y))*10-10);

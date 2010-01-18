@@ -17,6 +17,7 @@
 #include <bengine/math/vector3.h>
 #include <bengine/util/filesystem.h>
 #include <bengine/texturecache.h>
+#include <bengine/log.h>
 
 #include <math.h>
 #include <list>
@@ -34,6 +35,8 @@ extern cMenu* effectsmenu;
 
 extern void mainloop();
 
+
+int tmpVersion = 0;
 
 void cWorld::load()
 {
@@ -68,7 +71,7 @@ void cWorld::load()
 	}
 
 	for(i = 0; i < textures.size(); i++)
-		bEngine::cTextureCache::unload(textures[i]->texture);
+		bEngine::cTextureCache::unload(textures[i].texture);
 	textures.clear();
 
 	for(y = 0; y < realLightmaps.size(); y+=21)
@@ -113,7 +116,8 @@ void cWorld::load()
 
 	water.height = 1;
 
-	int version;
+	short version;
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	Log(3,0,GetMsg("world/LOAD"), (std::string(fileName) + ".gnd").c_str());
 	bEngine::util::cFileSystem::cReadFile* pFile = bEngine::util::cFileSystem::open(std::string(fileName) + ".gnd");
@@ -123,13 +127,16 @@ void cWorld::load()
 		return;
 	}
 	char buf[512];
-	pFile->read(buf, 6);
+	pFile->read(buf, 4);
 
 	
 	if(buf[0] == 'G' && buf[1] == 'R' && buf[2] == 'G' && buf[3] == 'N')
-		version = ((BYTE)buf[4])<<8 | ((BYTE)buf[5]);
+		*pFile>>version;
 	else
 		version = 0;
+
+	tmpVersion = version;
+
 
 	unsigned int nTextures = 0;
 	if(version > 0)
@@ -154,21 +161,17 @@ void cWorld::load()
 	textures.resize(nTextures);
 	for(i = 0; i < nTextures; i++)
 	{
-		pFile->read(buf, 80);
-		std::string s = std::string(buf);
-		cTextureContainer* t = new cTextureContainer();
-		t->RoFilename = s;
-		t->RoFilename2 = std::string(buf+40);
-		t->texture = bEngine::cTextureCache::load(cSettings::roDir + "data\\texture\\" + s);
-		textures[i] = t;
+		*pFile>>&textures[i];
+		textures[i].generateTexture();
 	}
 
 	if(version > 0)
 	{
-		pFile->read(buf, 16);
-		lightmapWidth = *((int*)(buf+4));
-		lightmapHeight = *((int*)(buf+8));
-		gridSizeCell = *((int*)(buf+12));
+		int nLightmaps;
+		*pFile>>nLightmaps;
+		*pFile>>lightmapWidth;
+		*pFile>>lightmapHeight;
+		*pFile>>gridSizeCell;
 
 		//Fix lightmap format if it was invalid. by Henko
 		if (lightmapWidth != 8 || lightmapHeight != 8 || gridSizeCell != 1)
@@ -179,7 +182,6 @@ void cWorld::load()
 			gridSizeCell = 1;
 		}
 
-		unsigned int nLightmaps = *((int*)buf);
 		lightmaps.resize(nLightmaps);
 		for(i = 0; i < nLightmaps; i++)
 		{
@@ -187,32 +189,12 @@ void cWorld::load()
 			pFile->read(l->buf, 256);
 			lightmaps[i] = l;
 		}
-		unsigned int nTiles;
-		pFile->read((char*)&nTiles, 4);
+		
+		int nTiles;
+		*pFile>>nTiles;
 		tiles.resize(nTiles);
 		for(i = 0; i < nTiles; i++)
-		{
-			pFile->read(buf, 40);
-			cTile t;
-			memcpy((char*)&t.u1, buf, 4);
-			memcpy((char*)&t.u2, buf+4, 4);
-			memcpy((char*)&t.u3, buf+8, 4);
-			memcpy((char*)&t.u4, buf+12, 4);
-			memcpy((char*)&t.v1, buf+16, 4);
-			memcpy((char*)&t.v2, buf+20, 4);
-			memcpy((char*)&t.v3, buf+24, 4);
-			memcpy((char*)&t.v4, buf+28, 4);
-
-			t.texture = ((BYTE)buf[32]) | (((BYTE)buf[33])<<8);
-			t.lightmap = ((BYTE)buf[34]) | (((BYTE)buf[35])<<8);
-
-			if(t.lightmap < 0 || t.lightmap > (int)lightmaps.size())
-				t.lightmap = 0;
-			if(t.texture < 0 || t.texture > (int)textures.size())
-				t.texture = 0;
-			memcpy(t.color, buf+36, 4);
-			tiles[i] = t;
-		}
+			*pFile>>&tiles[i];
 	
 		cubes.resize(height);
 		for(y = 0; y < (unsigned int)height; y++)
@@ -220,32 +202,7 @@ void cWorld::load()
 			cubes[y].resize(width);
 			for(x = 0; x < (unsigned int)width; x++)
 			{
-				cCube* c = &cubes[y][x];
-				c->maxHeight = -99999;
-				c->minHeight = 99999;
-				c->selected = false;
-				if(version >= 0x0106)
-				{
-					pFile->read(buf, 28);
-					memcpy((char*)&c->cell1, buf, 4);
-					memcpy((char*)&c->cell2, buf+4, 4);
-					memcpy((char*)&c->cell3, buf+8, 4);
-					memcpy((char*)&c->cell4, buf+12, 4);
-					c->tileUp = *((int*)(buf+16));
-					c->tileSide = *((int*)(buf+20));
-					c->tileOtherSide = *((int*)(buf+24));
-				}
-				else
-				{
-					pFile->read(buf, 24);
-					memcpy((char*)&c->cell1, buf, 4);
-					memcpy((char*)&c->cell2, buf+4, 4);
-					memcpy((char*)&c->cell3, buf+8, 4);
-					memcpy((char*)&c->cell4, buf+12, 4);
-					c->tileUp = *((short*)(buf+16));
-					c->tileSide = *((short*)(buf+18));
-					c->tileOtherSide = *((short*)(buf+20));
-				}
+				*pFile>>cubes[y][x];
 			}
 		}
 	}
@@ -353,12 +310,11 @@ void cWorld::load()
 	{
 		for(x = 0; x < (unsigned int)width+21; x+=21)
 		{
-			cRealLightMap* l = new cRealLightMap();
-			l->x = x;
-			l->y = y;
-			realLightmaps[y][x] = l;
+			realLightmaps[y][x] = new cRealLightMap(x, y);
 		}
 	}
+
+
 	for(y = 0; y < (unsigned int)height; y++)
 	{
 		for(x = 0; x < (unsigned int)width; x++)
@@ -372,7 +328,6 @@ void cWorld::load()
 		}
 	}
 
-
 	delete pFile;
 	loaded = true;
 	//clean();
@@ -383,82 +338,32 @@ void cWorld::load()
 	pFile = bEngine::util::cFileSystem::open(std::string(fileName) + ".rsw");
 
 
-	pFile->read(buf, 6);
-	version = ((BYTE)buf[4])<<8 | ((BYTE)buf[5]);
+	pFile->read(buf, 4);
+	*pFile>>version;
+	tmpVersion = version;
 
 	//pFile->read(buf, 236);
-	pFile->read(iniFile, 40);
-	pFile->read(gndFile, 40);
+	iniFile.readData(*pFile);
+	gndFile.readData(*pFile);
 	if(version >= 0x104)
-		pFile->read(gatFile,40);
+		gatFile.readData(*pFile);
 	else
 	{
-		strcpy(gatFile, gndFile);
+		gatFile.assign(gndFile);
 		//todo: gnd -> gat
 	}
-	pFile->read(iniFile, 40);
+	iniFile.readData(*pFile);	//TODO: ehh...ini file read twice?
 
-	if(version >= 0x103)
-		pFile->read((char*)&water.height,4);
-	else
-		water.height = 0;
-
-	if(version >= 0x108)
-	{
-		pFile->read((char*)&water.type,4);
-		pFile->read((char*)&water.amplitude,4);
-		pFile->read((char*)&water.phase,4);
-		pFile->read((char*)&water.surfaceCurve,4);
-	}
-	else
-	{
-		water.type = 0;
-		water.amplitude = 1;
-		water.phase = 2;
-		water.surfaceCurve = 0.5f;
-	}
-
-	if(version >= 0x109)
-		pFile->read((char*)&water.animSpeed,4);
-	else
-		water.animSpeed = 3;
-	
-	if(version >= 0x105)
-	{
-		pFile->read((char*)&ambientLight.lightLongitude,4);
-		pFile->read((char*)&ambientLight.lightLatitude,4);
-
-		pFile->read((char*)&ambientLight.diffuse.x,4);
-		pFile->read((char*)&ambientLight.diffuse.y,4);
-		pFile->read((char*)&ambientLight.diffuse.z,4);
-
-		pFile->read((char*)&ambientLight.ambient.x,4);
-		pFile->read((char*)&ambientLight.ambient.y,4);
-		pFile->read((char*)&ambientLight.ambient.z,4);
-	}
-	else
-	{
-		ambientLight.lightLongitude = 45;
-		ambientLight.lightLatitude = 45;
-
-		ambientLight.diffuse = bEngine::math::cVector3(1,1,1);
-		ambientLight.ambient = bEngine::math::cVector3(0.3f,0.3f,0.3f);
-	}
-
-	if(version >= 0x107)
-		pFile->read((char*)&ambientLight.ambintensity,4);
-	else
-		ambientLight.ambintensity = 0.5f;
+	*pFile>>water;
+	*pFile>>ambientLight;
 
 	if(version >= 0x106)
 	{
-		pFile->read((char*)&unknown1,4);
-		pFile->read((char*)&unknown2,4);
-		pFile->read((char*)&unknown3,4);
-		pFile->read((char*)&unknown4,4);
+		*pFile>>unknown1>>unknown2>>unknown3>>unknown4;
 	}
 	else
 	{
+		bEngine::cLog::add("Error: 4 Unknown floats not defined...filling in some random values");
 		unknown1 = -500;
 		unknown2 = 500;
 		unknown3 = -500;
@@ -470,146 +375,43 @@ void cWorld::load()
 
 	for(i = 0; i < nObjects; i++)
 	{
-		pFile->read(buf, 4);
-		long type = *((long*)buf);
+		int type;
+		*pFile>>type;
 		switch(type)
 		{
 		case 1:
 			{
-			
-			ZeroMemory(buf, 248);
-			if(version >= 0x103)
-				pFile->read(buf,		248);
-			else
-				pFile->read(buf+40+12,	196);
-
-
-			std::string filename = buf+52;
-			cRsmModel* m = new cRsmModel(cSettings::roDir+ "data\\model\\" + filename);
-			if(!m)
-			{
-				Log(2,0,"ehh..unknown error while loading model");
-				break;
-			}
-			m->lightopacity = 1;
-
-/*			if (m->meshes.size() == 0)
-			{
-				Log(2,0,GetMsg("world/MODELFAIL"), filename.c_str());
-				continue;
-			}*/
-
-			m->name = std::string(buf);
-
-			m->pos.x = *((float*)(buf+212));
-			m->pos.y = *((float*)(buf+216));
-			m->pos.z = *((float*)(buf+220));
-
-
-			m->pos.x = (m->pos.x / 5) + width;
-			m->pos.z = (m->pos.z / 5) + height;
-
-			m->rot.x = *((float*)(buf+224));
-			m->rot.y = *((float*)(buf+228));
-			m->rot.z = *((float*)(buf+232));
-
-			m->scale.x = *((float*)(buf+236));
-			m->scale.y = *((float*)(buf+240));
-			m->scale.z = *((float*)(buf+244));
-			models.push_back(m);
+				cRsmModel* m = new cRsmModel(*pFile);
+				m->pos.x = (m->pos.x / 5) + width;
+				m->pos.z = (m->pos.z / 5) + height;
+				models.push_back(m);
 			}
 			break;
 		case 2:
 			{
-			pFile->read(buf, 108);
-			cLight l;
-			l.name = std::string(buf);
-			l.pos.x = *((float*)(buf+40));
-			l.pos.y = *((float*)(buf+44));
-			l.pos.z = *((float*)(buf+48));
-
-			l.pos.x = (l.pos.x / 5) + width;
-			l.pos.z = (l.pos.z / 5) + height;
-
-			l.todo = std::string(buf+52, 40);
-			l.color.x = *((float*)(buf+92));
-			l.color.y = *((float*)(buf+96));
-			l.color.z = *((float*)(buf+100));
-			l.todo2 = *((float*)(buf+104));
-			lights.push_back(l);
+				lights.resize(lights.size()+1);
+				cLight* light = &lights[lights.size()-1];
+				*pFile>>*light;
+				light->pos.x = (light->pos.x / 5) + width;
+				light->pos.z = (light->pos.z / 5) + height;
 			}
 			break;
 		case 3:
 			{
-			pFile->read(buf, 192);
-			cSound s;			
-			s.name = std::string(buf);
-			s.todo1 = std::string(buf+40, 40);
-			s.fileName = std::string(buf+80);
-
-			s.unknown8 = *((float*)(buf+120));	//0
-			s.unknown7 = *((float*)(buf+124));	//-435.095
-			s.rot.x = *((float*)(buf+128));
-			s.rot.y = *((float*)(buf+132));
-			s.rot.z = *((float*)(buf+136));
-			
-			s.scale.x = *((float*)(buf+140));
-			s.scale.y = *((float*)(buf+144));
-			s.scale.z = *((float*)(buf+148));
-
-			memcpy(s.unknown6, buf+152, 8);		//	152-159 -> 8 bytes of unknown
-
-			s.pos.x = *((float*)(buf+160));
-			s.pos.y = *((float*)(buf+164));
-			s.pos.z = *((float*)(buf+168));
-
-			s.unknown5 = *((float*)(buf+172));	//1
-			s.unknown4 = *((long*)(buf+176));	//50
-			s.unknown3 = *((long*)(buf+180));	//45
-			s.unknown2 = *((float*)(buf+184));	//70
-			s.repeatDelay = *((float*)(buf+188));	//4
-
-
-			s.pos.x = (s.pos.x / 5) + width;
-			s.pos.z = (s.pos.z / 5) + height;
-			sounds.push_back(s);
+				sounds.resize(sounds.size()+1);
+				cSound* sound = &sounds[sounds.size()-1];
+				*pFile>>*sound;
+				sound->pos.x = (sound->pos.x / 5) + width;
+				sound->pos.z = (sound->pos.z / 5) + height;
 			}
 			break;
 		case 4:
 			{
-			pFile->read(buf, 116);
-			cEffect e;
-			e.name = std::string(buf);
-			e.todo1 = *((float*)(buf+40));
-			e.todo2 = *((float*)(buf+44));
-			e.todo3 = *((float*)(buf+48));
-			e.rot.x = *((float*)(buf+52));
-			e.rot.y = *((float*)(buf+56));
-			e.rot.z = *((float*)(buf+60));
-			e.scale.x = *((float*)(buf+64));
-			e.scale.y = *((float*)(buf+68));
-			e.scale.z = *((float*)(buf+72));
-			e.category = std::string(buf+76, 4);
-			e.pos.x = *((float*)(buf+80));
-			e.pos.y = *((float*)(buf+84));
-			e.pos.z = *((float*)(buf+88));
-			e.type = *((int*)(buf+92));
-			e.loop = *((float*)(buf+96));
-			e.todo10 = *((float*)(buf+100));
-			e.todo11 = *((float*)(buf+104));
-			e.todo12 = *((int*)(buf+108));
-			e.todo13 = *((int*)(buf+112));
-			e.pos.x = (e.pos.x / 5) + width;
-			e.pos.z = (e.pos.z / 5) + height;
-
-			char buf[100];
-			sprintf(buf, "%i", e.type);
-			cMenu* m = effectsmenu->findData(buf);
-			if (m != NULL)
-				e.readablename = m->title;
-			else
-				e.readablename = "?";
-			effects.push_back(e);
+				effects.resize(effects.size()+1);
+				cEffect* effect = &effects[effects.size()-1];
+				*pFile>>*effect;
+				effect->pos.x = (effect->pos.x / 5) + width;
+				effect->pos.z = (effect->pos.z / 5) + height;
 			}
 			break;
 		default:
@@ -622,9 +424,7 @@ void cWorld::load()
 	while(!pFile->eof())
 	{
 		bEngine::math::cVector3 f;
-		pFile->read((char*)&f.x, 4);
-		pFile->read((char*)&f.y, 4);
-		pFile->read((char*)&f.z, 4);
+		*pFile>>f;
 		quadTreeFloats.push_back(f);
 	}
 	delete pFile; 
@@ -934,11 +734,11 @@ void cWorld::save()
 		unsigned int ii;
 		for(i = 0; i < textures.size(); i++)
 		{
-			pFile.write(textures[i]->RoFilename.c_str(), textures[i]->RoFilename.length());
-			for(ii = 0; ii < 40-textures[i]->RoFilename.length(); ii++)
+			pFile.write(textures[i].RoFilename.c_str(), textures[i].RoFilename.length());
+			for(ii = 0; ii < 40-textures[i].RoFilename.length(); ii++)
 				pFile.put('\0');
-			pFile.write(textures[i]->RoFilename2.c_str(), textures[i]->RoFilename2.length());
-			for(ii = 0; ii < 40-textures[i]->RoFilename2.length(); ii++)
+			pFile.write(textures[i].RoFilename2.c_str(), textures[i].RoFilename2.length());
+			for(ii = 0; ii < 40-textures[i].RoFilename2.length(); ii++)
 				pFile.put('\0');
 
 		}
@@ -1103,12 +903,10 @@ void cWorld::save()
 			f = 0;
 			pFile.write((char*)&f, 4); // unknown >_<
 
-			pFile.write(m->rofilename.c_str(), m->rofilename.length());
-			for(unsigned int ii = 0; ii < 40-m->rofilename.length(); ii++)
+			pFile.write(m->filename.c_str(), m->filename.length());
+			for(unsigned int ii = 0; ii < 80-m->filename.length(); ii++)
 				pFile.put('\0');	 // filename
 			
-			pFile.write(buf, 40); // reserved
-
 			ZeroMemory(buf, 100);
 			sprintf(buf, "%s", "Object01");
 			pFile.write(buf, 20); // type
@@ -1200,18 +998,14 @@ void cWorld::save()
 		{
 			long l = 3;
 			pFile.write((char*)&l, 4);
-			char buf[41];
-			ZeroMemory(buf,41);
+			char buf[81];
+			ZeroMemory(buf,81);
 			strcpy(buf, sounds[i].name.c_str());
-			pFile.write(buf, 40);
+			pFile.write(buf, 80);
 
-			ZeroMemory(buf,41);
-			memcpy(buf, sounds[i].todo1.c_str(), sounds[i].todo1.size());
-			pFile.write(buf, 40);
-
-			ZeroMemory(buf,41);
+			ZeroMemory(buf,81);
 			strcpy(buf, sounds[i].fileName.c_str());
-			pFile.write(buf, 40);
+			pFile.write(buf, 80);
 
 			pFile.write((char*)&sounds[i].unknown8, 4);		//120
 			pFile.write((char*)&sounds[i].unknown7, 4);		//124
@@ -1249,37 +1043,17 @@ void cWorld::save()
 		{
 			long l = 4;
 			pFile.write((char*)&l, 4);
-			char buf[41];
-			ZeroMemory(buf,41);
+			char buf[81];
+			ZeroMemory(buf,81);
 			strcpy(buf, effects[i].name.c_str());
-			pFile.write(buf, 40);
-			pFile.write((char*)&effects[i].todo1,4);
-			pFile.write((char*)&effects[i].todo2,4);
-			pFile.write((char*)&effects[i].todo3,4);
-
-			pFile.write((char*)&effects[i].rot.x,4);
-			pFile.write((char*)&effects[i].rot.y,4);
-			pFile.write((char*)&effects[i].rot.z,4);
-
-			pFile.write((char*)&effects[i].scale.x,4);
-			pFile.write((char*)&effects[i].scale.y,4);
-			pFile.write((char*)&effects[i].scale.z,4);
-			ZeroMemory(buf,41);
-			strcpy(buf, effects[i].category.c_str());
-			pFile.write(buf, 4);
-
-			float f = (effects[i].pos.x - width) * 5.0;
-			pFile.write((char*)&f, 4);
-			pFile.write((char*)&effects[i].pos.y, 4);
-			f = (effects[i].pos.z - height) * 5.0;
-			pFile.write((char*)&f, 4);
+			pFile.write(buf, 80);
 			
 			pFile.write((char*)&effects[i].type,4);
 			pFile.write((char*)&effects[i].loop,4);
-			pFile.write((char*)&effects[i].todo10,4);
-			pFile.write((char*)&effects[i].todo11,4);
-			pFile.write((char*)&effects[i].todo12,4);
-			pFile.write((char*)&effects[i].todo13,4);
+			pFile.write((char*)&effects[i].param1,4);
+			pFile.write((char*)&effects[i].param2,4);
+			pFile.write((char*)&effects[i].param3,4);
+			pFile.write((char*)&effects[i].param4,4);
 		}
 
 		for(i = 0; i < quadTreeFloats.size(); i++)
@@ -1439,6 +1213,11 @@ void cWorld::draw()
 {
 	if(!loaded)
 		return;
+
+
+	glAlphaFunc(GL_GEQUAL, 0.9f);
+	glEnable(GL_ALPHA_TEST);
+
 	int x,y;
 	unsigned int i;
 	
@@ -1637,7 +1416,7 @@ void cWorld::draw()
 				if(t->texture < 0)
 					t->texture = 0;
 
-				int texture = textures[t->texture]->texId();
+				int texture = textures[t->texture].texId();
 
 				glBindTexture(GL_TEXTURE_2D, texture);
 				if (	(cSettings::editMode == MODE_WALLS && cGraphics::view.showGrid && (c->tileOtherSide != -1 || c->tileSide != -1) || c->minHeight != 99999))
@@ -1724,7 +1503,7 @@ void cWorld::draw()
 				cTile* t = &tiles[c->tileOtherSide];
 				if(t->texture >= (int)textures.size())
 					break;
-				int texture = textures[t->texture]->texId();
+				int texture = textures[t->texture].texId();
 				glBindTexture(GL_TEXTURE_2D, texture);
 //				if(cGraphics::view.showAmbientLighting)
 //					glColor4f(ambientLight.diffuse.x,ambientLight.diffuse.y,ambientLight.diffuse.z,1);
@@ -1743,7 +1522,7 @@ void cWorld::draw()
 				cTile* t = &tiles[c->tileSide];
 				if(t->texture >= (int)textures.size())
 					break;
- 				int texture = textures[t->texture]->texId();
+ 				int texture = textures[t->texture].texId();
 				glBindTexture(GL_TEXTURE_2D, texture);
 //				if(cGraphics::view.showAmbientLighting)
 //					glColor4f(ambientLight.diffuse.x,ambientLight.diffuse.y,ambientLight.diffuse.z,1);
@@ -2149,7 +1928,7 @@ void cWorld::draw()
 							t.v4 = ((selendy+selstarty)/8.0)-t.v4;
 						}
 
-						glBindTexture(GL_TEXTURE_2D, textures[t.texture]->texId());
+						glBindTexture(GL_TEXTURE_2D, textures[t.texture].texId());
 						cCube* c = &cubes[y][x];
 						glBegin(GL_QUADS);
 							glTexCoord2f(t.u1, 1-t.v1); glVertex3f(x*10,-c->cell1+0.1,(height-y)*10);
@@ -2436,6 +2215,7 @@ void cWorld::draw()
 		}
 		glTranslatef(-s*cGraphics::worldContainer->settings.gridoffsetx,0,-s*cGraphics::worldContainer->settings.gridoffsety);
 	}
+	glDisable(GL_ALPHA_TEST);
 
 	if(cSettings::editMode == MODE_OBJECTGROUP)
 	{
@@ -2446,6 +2226,7 @@ void cWorld::draw()
 		glEnable(GL_BLEND);
 		glTranslatef(0,0,height*10);
 		glScalef(1,1,-1);
+		glEnable(GL_ALPHA_TEST);
 		for(i = 0; i < models.size(); i++)
 		{
 			if(models[i]->selected)
@@ -2454,6 +2235,7 @@ void cWorld::draw()
 				glColor4f(1,1,1, cGraphics::view.showObjectsAsTransparent ? 0.2f : 1);
 			models[i]->draw();
 		}
+		glDisable(GL_ALPHA_TEST);
 		glScalef(1,1,-1);
 		glTranslatef(0,0,-height*10);
 		glDisable(GL_LIGHTING);
@@ -2707,7 +2489,7 @@ void cWorld::draw()
 		{
 			if(inverseSelection && cGraphics::cMouse::lbuttondown)
 			{
-				int texture = textures[cGraphics::worldContainer->settings.texturestart + ((int)cGraphics::worldContainer->settings.selectionstart.y - 32) / 288]->texId();
+				int texture = textures[cGraphics::worldContainer->settings.texturestart + ((int)cGraphics::worldContainer->settings.selectionstart.y - 32) / 288].texId();
 				glEnable(GL_BLEND);
 				glColor4f(1,1,1,0.8f);
 		
@@ -2737,7 +2519,7 @@ void cWorld::draw()
 			}
 			else if(!inverseSelection)
 			{
-				int texture = textures[cGraphics::worldContainer->settings.texturestart]->texId();
+				int texture = textures[cGraphics::worldContainer->settings.texturestart].texId();
 				glEnable(GL_BLEND);
 				glEnable(GL_TEXTURE_2D);
 				glColor4f(1,1,1,0.8f);
@@ -2977,6 +2759,7 @@ void cWorld::draw()
 //			z = tileScale*cGraphics::worldContainer->camera.pointer.y;
 
 
+
 }
 
 
@@ -3125,8 +2908,7 @@ void cWorld::unload()
 	unsigned int x,y,i;
 	for(i = 0; i < textures.size(); i++)
 	{
-		bEngine::cTextureCache::unload(textures[i]->texture);
-		delete textures[i];
+		bEngine::cTextureCache::unload(textures[i].texture);
 	}
 	textures.clear();
 
@@ -3612,10 +3394,14 @@ void cRealLightMap::reset()
 	}
 }
 
-cRealLightMap::cRealLightMap()
+cRealLightMap::cRealLightMap( int px, int py )
 {
+	x = px;
+	y = py;
+
 	generated = false;
 	generated2 = false;
+
 }
 
 
@@ -4092,7 +3878,7 @@ void cWorld::newEmpty(int newWidth,int newHeight)
 	}
 	
 	for(i = 0; i < textures.size(); i++)
-		bEngine::cTextureCache::unload(textures[i]->texture);
+		bEngine::cTextureCache::unload(textures[i].texture);
 	textures.clear();
 	
 	for(y = 0; y < realLightmaps.size(); y+=21)
@@ -4218,10 +4004,7 @@ void cWorld::newEmpty(int newWidth,int newHeight)
 	{
 		for(x = 0; x < (unsigned int)width+21; x+=21)
 		{
-			cRealLightMap* l = new cRealLightMap();
-			l->x = x;
-			l->y = y;
-			realLightmaps[y][x] = l;
+			realLightmaps[y][x] = new cRealLightMap(x,y);
 		}
 	}
 
@@ -4362,16 +4145,12 @@ cEffect::cEffect( cBrowInterface::cPluginEffect e )
 {
 	readablename = e.readablename;
 	name = e.name;
-	todo1 = e.todo1;
-	todo2 = e.todo2;
-	todo3 = e.todo3;
-	category = e.category;
 	type = e.type;
 	loop = e.loop;
-	todo10 = e.todo10;
-	todo11 = e.todo11;
-	todo12 = e.todo12;
-	todo13 = e.todo13;
+	param1 = e.param1;
+	param2 = e.param2;
+	param3 = e.param3;
+	param4 = e.param4;
 }
 
 cLight::cLight( cBrowInterface::cPluginLight other )
@@ -4403,7 +4182,6 @@ bool cLight::operator==( cLight other )
 cSound::cSound( cBrowInterface::cPluginSound other )
 {
 	name = other.name;
-	todo1 = other.todo1;
 	fileName = other.fileName;
 	pos = other.pos;
 	rot = other.rot;
@@ -4421,7 +4199,6 @@ cSound::cSound( cBrowInterface::cPluginSound other )
 bool cSound::operator==( cSound other )
 {
 	return	name == other.name &&
-		todo1 == other.todo1 &&
 		fileName == other.fileName &&
 		pos == other.pos &&
 		rot == other.rot &&
@@ -4458,3 +4235,265 @@ GLuint cTextureContainer::texId()
 {
 	return texture->texId();
 }
+
+cTextureContainer::cTextureContainer( const cBrowInterface::cPluginTexture& pTexture )
+{
+	
+}
+
+void cTextureContainer::generateTexture()
+{
+	texture = bEngine::cTextureCache::load(cSettings::roDir + "data\\texture\\" + RoFilename);
+}
+
+
+cCube::cCube()
+{
+	maxHeight = -99999;
+	minHeight = 99999;
+	selected = false;
+}
+
+cCube::cCube( const cCube &other ) : cBrowInterface::cPluginCube(other)
+{
+	maxHeight = other.maxHeight;
+	minHeight = other.minHeight;
+	normal = other.normal;
+	vNormal1 = other.vNormal1;
+	vNormal2 = other.vNormal2;
+	vNormal3 = other.vNormal3;
+	vNormal4 = other.vNormal4;
+
+//todo: move to constructor of pluginbase
+	cell1 = other.cell1;
+	cell2 = other.cell2;
+	cell3 = other.cell3;
+	cell4 = other.cell4;
+	tileUp = other.tileUp;
+	tileSide = other.tileSide;
+	tileOtherSide = other.tileOtherSide;
+	selected = other.selected;
+	
+	hasModelOnTop = other.hasModelOnTop;
+}
+
+
+
+
+bEngine::util::cInStream & cLightmap::readData( bEngine::util::cInStream &instream )
+{
+	return instream;
+}
+
+bEngine::util::cOutStream & cLightmap::writeData( bEngine::util::cOutStream &outstream )
+{
+	return outstream;
+}
+
+bEngine::util::cInStream & cTile::readData( bEngine::util::cInStream &instream )
+{
+	instream>>u1>>u2>>u3>>u4;	//0-16
+	instream>>v1>>v2>>v3>>v4;	//16-32
+	instream>>texture;			//32-34
+	instream>>lightmap;			//34-36
+	instream>>color[0]>>color[1]>>color[3]>>color[4];			//36-40
+	return instream;
+}
+
+bEngine::util::cOutStream & cTile::writeData( bEngine::util::cOutStream &outstream )
+{
+	outstream<<u1<<u2<<u3<<u4;	//0-16
+	outstream<<v1<<v2<<v3<<v4;	//16-32
+	outstream<<texture;			//32-34
+	outstream<<lightmap;			//34-36
+	outstream<<color[0]<<color[1]<<color[3]<<color[4];			//36-40
+	return outstream;
+}
+
+bEngine::util::cInStream & cCube::readData( bEngine::util::cInStream &instream )
+{
+	instream>>cell1>>cell2>>cell3>>cell4;
+	if(tmpVersion >= 0x0106)
+	{
+		instream>>tileUp>>tileSide>>tileOtherSide;
+	}
+	else
+	{
+		tileUp = instream.readShort();
+		tileSide = instream.readShort();
+		tileOtherSide = instream.readShort();
+	}
+	return instream;
+}
+
+bEngine::util::cOutStream & cCube::writeData( bEngine::util::cOutStream &outstream )
+{
+	outstream<<cell1<<cell2<<cell3<<cell4;
+	outstream<<tileUp<<tileSide<<tileOtherSide;
+	return outstream;
+}
+
+
+bEngine::util::cInStream & cTextureContainer::readData( bEngine::util::cInStream &instream )
+{
+	RoFilename.readData(instream);
+	RoFilename2.readData(instream);
+	return instream;
+}
+
+bEngine::util::cOutStream & cTextureContainer::writeData( bEngine::util::cOutStream &outstream )
+{
+	RoFilename.writeData(outstream);
+	RoFilename2.writeData(outstream);
+	return outstream;
+}
+
+bEngine::util::cInStream & cLight::readData( bEngine::util::cInStream &instream )
+{
+	name.readData(instream);
+	instream>>pos;
+	todo.readData(instream);
+	instream>>color;
+	instream>>todo2;
+	return instream;
+}
+
+bEngine::util::cOutStream & cLight::writeData( bEngine::util::cOutStream &outstream )
+{
+	return outstream;
+}
+
+bEngine::util::cInStream & cSound::readData( bEngine::util::cInStream &instream )
+{
+	name.readData(instream);
+	fileName.readData(instream);
+	instream>>pos;
+	instream>>vol;
+	instream>>width;
+	instream>>height;
+	instream>>range;
+	if(tmpVersion >= 0x0200)
+		instream>>cycle;
+	return instream;
+}
+
+bEngine::util::cOutStream & cSound::writeData( bEngine::util::cOutStream &outstream )
+{
+	return outstream;
+}
+
+bEngine::util::cInStream & cEffect::readData( bEngine::util::cInStream &instream )
+{
+	name.readData(instream);
+	instream>>pos;
+	instream>>type;
+	instream>>loop;
+	instream>>param1>>param2>>param3>>param4;
+
+	
+	char buf[100];
+	sprintf(buf, "%i", type);
+	cMenu* m = effectsmenu->findData(buf);
+	if (m != NULL)
+		readablename = m->title;
+	else
+		readablename = "?";
+	
+	return instream;
+}
+
+bEngine::util::cOutStream & cEffect::writeData( bEngine::util::cOutStream &outstream )
+{
+	return outstream;
+}
+
+bEngine::util::cInStream & cGatTile::readData( bEngine::util::cInStream &instream )
+{
+	return instream;
+}
+
+bEngine::util::cOutStream & cGatTile::writeData( bEngine::util::cOutStream &outstream )
+{
+	return outstream;
+}
+
+bEngine::util::cInStream & cWater::readData( bEngine::util::cInStream &instream )
+{
+	height = 0;
+	type = 0;
+	amplitude = 1;
+	phase = 2;
+	surfaceCurve = 0.5f;
+	animSpeed = 3;
+
+	if(tmpVersion >= 0x103)
+		instream>>height;
+	
+	if(tmpVersion >= 0x108)
+	{
+		instream>>type;
+		instream>>amplitude;
+		instream>>phase;
+		instream>>surfaceCurve;
+	}
+	if(tmpVersion >= 0x109)
+		instream>>animSpeed;
+
+	return instream;
+}
+
+bEngine::util::cOutStream & cWater::writeData( bEngine::util::cOutStream &outstream )
+{
+	outstream<<height;
+	outstream<<type;
+	outstream<<amplitude;
+	outstream<<phase;
+	outstream<<surfaceCurve;
+	outstream<<animSpeed;
+	return outstream;
+}
+
+bEngine::util::cInStream & cAmbientLight::readData( bEngine::util::cInStream &instream )
+{
+	lightLongitude = 45;
+	lightLatitude = 45;
+	
+	diffuse = bEngine::math::cVector3(1,1,1);
+	ambient = bEngine::math::cVector3(0.3f,0.3f,0.3f);
+
+	ambintensity = 0.5f;
+
+	if(tmpVersion >= 0x105)
+	{
+		instream>>lightLongitude;
+		instream>>lightLatitude;
+		instream>>diffuse;
+		instream>>ambient;
+	}
+	if(tmpVersion >= 0x107)
+		instream>>ambintensity;
+
+	return instream;
+}
+
+bEngine::util::cOutStream & cAmbientLight::writeData( bEngine::util::cOutStream &outstream )
+{
+	outstream<<lightLongitude;
+	outstream<<lightLatitude;
+	outstream<<diffuse;
+	outstream<<ambient;
+	outstream<<ambintensity;
+	return outstream;
+}
+
+bEngine::util::cInStream & cWorld::readData( bEngine::util::cInStream &instream )
+{
+	return instream;
+}
+
+bEngine::util::cOutStream & cWorld::writeData( bEngine::util::cOutStream &outstream )
+{
+	return outstream;
+}
+
+

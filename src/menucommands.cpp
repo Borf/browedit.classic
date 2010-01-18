@@ -1989,8 +1989,8 @@ MENUCOMMAND(cleantextures)
 				if(cGraphics::world->tiles[i].texture > i)
 					cGraphics::world->tiles[i].texture--;
 			}
-			bEngine::cTextureCache::unload(cGraphics::world->textures[i]->texture);
-			delete cGraphics::world->textures[i];
+			bEngine::cTextureCache::unload(cGraphics::world->textures[i].texture);
+
 			cGraphics::world->textures.erase(cGraphics::world->textures.begin() + i);
 		}
 	}
@@ -2867,7 +2867,7 @@ MENUCOMMAND(addfavorite)
 	cLight l;
 	char buf[100];
 	sprintf(buf, "Light%i", rand());
-	l.name = buf;
+	l.name = std::string(buf);
 	l.color.x = atof(n->FirstChildElement("color")->Attribute("r"));
 	l.color.y = atof(n->FirstChildElement("color")->Attribute("g"));
 	l.color.z = atof(n->FirstChildElement("color")->Attribute("b"));
@@ -3292,10 +3292,10 @@ MENUCOMMAND(saveOnline)
 	std::map<std::string, bool, std::less<std::string> > models;
 	unsigned int i;
 	for(i = 0; i < cGraphics::world->textures.size(); i++)
-		textures[cGraphics::world->textures[i]->RoFilename] = true;
+		textures[cGraphics::world->textures[i].RoFilename] = true;
 	for(i = 0; i < cGraphics::world->models.size(); i++)
 	{
-		models[cGraphics::world->models[i]->rofilename] = true;
+		models[cGraphics::world->models[i]->filename] = true;
 		for(unsigned int ii = 0; ii < cGraphics::world->models[i]->textures.size(); ii++)
 		{
 			std::string filename = cGraphics::world->models[i]->textures[ii]->getFilename();
