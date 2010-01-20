@@ -1,0 +1,62 @@
+﻿[
+	{
+		"name" : "square",
+		"width" : 1,
+		"height" : 1,
+		"data" : "@"
+	},
+	{
+		"name" : "brick 1x2",
+		"height" : 1,
+		"width" : 2,
+		"data" : "@@"
+	},
+	{
+		"name" : "brick 1x3",
+		"height" : 1,
+		"width" : 3,
+		"data" : "@@@"
+	},
+	{
+		"name" : "brick 1x4",
+		"height" : 1,
+		"width" : 4,
+		"data" : "@@@@"
+	},
+	{
+		"name" : "brick 2x1",
+		"height" : 2,
+		"width" : 1,
+		"data" : "@@"
+	},
+	{
+		"name" : "brick 3x1",
+		"height" : 3,
+		"width" : 1,
+		"data" : "@@@"
+	},
+	{
+		"name" : "brick 4x1",
+		"height" : 4,
+		"width" : 1,
+		"data" : "@@@@"
+	},
+	{
+		"name" : "cross",
+		"height" : 3,
+		"width" : 3,
+		"data" : ".@.@@@.@."
+	},
+	{
+		"name" : "L",
+		"height" : 4,
+		"width" : 2,
+		"data" : "@@@@@..."
+	},
+	{
+		"name" : "Square",
+		"height" : 4,
+		"width" : 4,
+		"data" : "@@@@@@@@@@@@@@@@"
+	}
+]

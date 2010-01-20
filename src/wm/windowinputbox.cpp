@@ -441,7 +441,7 @@ void cWindowIntInputBox::draw( int cutoffleft, int cutoffright, int cutofftop, i
 	{
 		firstTime = false;
 		char buf[100];
-		sprintf(buf, "%f", *intje);
+		sprintf(buf, "%i", *intje);
 		while(buf[strlen(buf)-1] == '0')
 			buf[strlen(buf)-1] = '\0';
 		if(buf[strlen(buf)-1] == '.')

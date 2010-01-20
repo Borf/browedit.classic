@@ -4,6 +4,7 @@
 
 #include "wm.h"
 #include "window.h"
+#include <stdlib.h>
 
 #include <common.h>
 #include <font_.h>
