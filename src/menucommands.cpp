@@ -41,7 +41,6 @@ extern cMenu* editdetail;
 extern cMenu* speed;
 extern cMenu* models;
 extern cMenu* currentobject;
-extern TiXmlDocument sprites;
 
 void mainloop();
 #include <bengine/util/thread.h>

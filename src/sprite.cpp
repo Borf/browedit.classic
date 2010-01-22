@@ -124,11 +124,11 @@ void cSprite::cActSpr::load(std::string fname)
 
 	for(i = 0; i < frameCount; i++)
 	{
-		int width = pFile->readShort();
-		int height = pFile->readShort();
+		int width = pFile->readWord();
+		int height = pFile->readWord();
 		int framelen = width*height;
 		if(version1 != 0)
-			framelen = pFile->readShort();
+			framelen = pFile->readWord();
 		
 		BYTE* data = new BYTE[width*height];
 		int iii = 0;
@@ -137,15 +137,17 @@ void cSprite::cActSpr::load(std::string fname)
 			Log(2,0,"Invalid sprite height: %i x %i", width, height);
 			return;
 		}
-		for(ii = 0; ii < framelen && iii < width*height; ii++)
+		for(ii = 0; ii < framelen && iii < width*height;)
 		{
 			BYTE c = pFile->get();
+			ii++;
 			data[iii] = c;			iii++;
 			if(iii >= width*height)
 				break;
 			if(c == 0 && version1 != 0)
 			{
 				BYTE d = pFile->get();
+				ii++;
 				if(d == 0)
 				{
 					data[iii] = d; iii++;
@@ -162,6 +164,8 @@ void cSprite::cActSpr::load(std::string fname)
 				}
 			}
 		}
+
+		int oldIndex = pFile->tell();
 
 	
 //TODO: get pallette
@@ -185,6 +189,7 @@ void cSprite::cActSpr::load(std::string fname)
 			}
 		}
 		delete[] data;
+		pFile->seek(oldIndex, bEngine::util::cFileSystem::cReadFile::BEGIN);
 
 		cFrame* f = new cFrame();
 		f->tex = -1;
@@ -219,7 +224,7 @@ void cSprite::cActSpr::load(std::string fname)
 
 	version1 = pFile->get();
 	pFile->get();
-	int actioncount = pFile->readShort();
+	int actioncount = pFile->readWord();
 	char buf[100];
 	pFile->read(buf, 10);
 

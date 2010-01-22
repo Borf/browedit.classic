@@ -8,7 +8,9 @@
 #include <bengine/math/math.h>
 #include <bengine/util/filesystem.h>
 #include <math.h>
-//TiXmlDocument sprites;
+#include <json/value.h>
+
+extern Json::Value sprites;
 
 
 
@@ -396,9 +398,6 @@ cSpriteWindow::cSpriteWindow() : cWindow()
 		sprintf(buf, "dir%i", i);
 		objects[buf] = new cDirectionButton(this, i);
 	}
-	
-//	if(!sprites.FirstChild())
-//		sprites;//TODObengine = cFileSystem::getXml("data/sprites.xml");
 	
 	((cTabPanel*)objects["tabpanel"])->tabchange(-1);
 }

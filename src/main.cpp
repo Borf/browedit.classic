@@ -65,6 +65,7 @@ long tilex,tiley;
 long lastmotion;
 bool	doneAction = true;
 //TiXmlDocument favoritelights; TODObengine
+Json::Value sprites;
 
 
 unsigned long keys[SDLK_LAST-SDLK_FIRST];
@@ -484,6 +485,7 @@ int main(int argc, char *argv[])
 
 
 
+	sprites = bEngine::util::cFileSystem::openJson("data/sprites.json");
 
 
 	pFile = bEngine::util::cFileSystem::open("data/korean2english.txt");
