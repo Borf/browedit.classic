@@ -1,0 +1,15 @@
+#include <windows.h>
+#include "#CLASSFILE#.h"
+#include "../base/interface.h"
+
+
+c#CLASS#Plugin::c#CLASS#Plugin() : cPluginBase("TODO", "tools/TODO")
+{
+	
+}
+
+bool c#CLASS#Plugin::action()
+{
+//TODO
+	return true;
+}

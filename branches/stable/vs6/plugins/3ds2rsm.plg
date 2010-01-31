@@ -1,0 +1,26 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: plugin_3ds2rsm - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\Borf\LOCALS~1\Temp\RSP41F3.tmp" with contents
+[
+opengl32.lib plugin_baseD.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /incremental:yes /pdb:"../../obj/vs6/Debug/plugins/3ds2rsm/3ds2rsm.pdb" /debug /machine:I386 /out:"..\..\plugins\3ds2rsm.dll" /implib:"../../obj/vs6/Debug/plugins/3ds2rsm/3ds2rsm.lib" /pdbtype:sept /libpath:"..\..\libs\lib" 
+"\work\C++\roworldedit\obj\vs6\Debug\plugins\3ds2rsm\plugin.obj"
+"\work\C++\roworldedit\obj\vs6\Debug\plugins\3ds2rsm\3ds2rsmplugin.obj"
+]
+Creating command line "link.exe @C:\DOCUME~1\Borf\LOCALS~1\Temp\RSP41F3.tmp"
+<h3>Output Window</h3>
+Linking...
+   Creating library ../../obj/vs6/Debug/plugins/3ds2rsm/3ds2rsm.lib and object ../../obj/vs6/Debug/plugins/3ds2rsm/3ds2rsm.exp
+
+
+
+<h3>Results</h3>
+3ds2rsm.dll - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>

@@ -1,0 +1,125 @@
+Microsoft Developer Studio Workspace File, Format Version 6.00
+# WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
+
+###############################################################################
+
+Project: "plugin_3ds2rsm"=".\plugins\3ds2rsm.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "plugin_base"=".\plugins\base.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "plugin_clearmap"=".\plugins\clearmap.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name plugin_base
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "plugin_gat"=".\plugins\gat.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "plugin_generators"=".\plugins\generators.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "plugin_lightmap"=".\plugins\lightmap.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "roworldedit"=".\roworldedit.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name plugin_clearmap
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name generators
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name plugin_base
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name plugin_generators
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name plugin_gat
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name plugin_lightmap
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name plugin_3ds2rsm
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Global:
+
+Package=<5>
+{{{
+}}}
+
+Package=<3>
+{{{
+}}}
+
+###############################################################################
+

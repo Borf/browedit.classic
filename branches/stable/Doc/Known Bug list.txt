@@ -1,0 +1,62 @@
+This Txt is for all known bugs from Revision R230 and up. 
+For sanity sake please leave the revision number next to the bug its in and write fixed if its fixed.
+Leave your Name if you like. 
+
+Example: 
+
+	-Random1 Generation 
+		Null imput error 			
+								[R230] -Fixed Borf
+
+==============================================================================================
+-===  Known Errors  ===-
+==============================================================================================
+-exporting and importing lightmaps makes the shadows expand....   
+	lights on the shadows casted from a model has a faint lighted outline...
+ 	if you export import several times it begins to grow.	
+								[R231] [Broken]
+
+fix paste crash if accidental  
+	paste in texture mode? or just in texture window?	
+								[R231] [Broken]
+
+-Fix the grid in the second lightmap import
+	Grids appear?						
+								[R231] [Broken]
+
+
+-Find a way to get the Abmient lighting to cover the whole maps objects
+								[R231] [Broken]
+
+-lights that are placed at 0 height where your lights are, like some kind of dupe bug or something
+<YukiTsuki> I edited my merchant map and when I loaded it today it had lights under my other lights at the 0 height level but they only show in texture edit
+								[R231] [Broken]
+
+-Fix the holes and other bugs in the lighting
+								[R231] [Broken]
+
+----------------------------------------------------------------------------------------------
+
+-textures window ... 
+	texture closes to a minimize but if clicked twice becomes unretrievable.... 
+								[R235] [Fixed/Unused]
+
+-Models window
+	minimize for models icon is gone? 			
+								[R235] [Fixed/Unused]
+	When closed by icon window becomes unretrievable	
+								[R235] [Fixed/Unused]
+
+-remove the models tab in the menu...
+	the generating windows list is to large for the window.	
+								[R241] [Fixed]
+
+-Rename the randoms later ... 
+	random 1 top  rolling hills?
+	random 1 2nd  valleys?
+	random 1 3rd  culverts?
+	random 1 4th  Mountains?
+								[R233] [Fixed]
+
+
+-
