@@ -326,6 +326,8 @@ void cRsmModel::setHeight()
 	{
 		for(int y = min(bboxmin.z, bboxmax.z); y < max(bboxmin.z, bboxmax.z); y++)
 		{
+			if(x < 0 || y < 0 || x/10 > cGraphics::world->width || y/10 > cGraphics::world->height)
+				continue;
 			cGraphics::world->cubes[y/10][x/10].minHeight = min(cGraphics::world->cubes[y/10][x/10].minHeight, min(bboxmin.y, bboxmax.y));
 			cGraphics::world->cubes[y/10][x/10].maxHeight = max(cGraphics::world->cubes[y/10][x/10].maxHeight, max(bboxmin.y, bboxmax.y));
 		}
