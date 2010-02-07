@@ -457,7 +457,16 @@ int main(int argc, char *argv[])
 
 	cSettings::roDir = bEngine::util::replace(cSettings::config["files"]["rodir"].asString(), "/", "\\");
 	for(i = 0; i < cSettings::config["files"]["grf"].size(); i++)
-		bEngine::util::cFileSystem::addFileLoader(new cGrfFileSystem::cGrfFileLoader(cSettings::config["files"]["grf"][i].asString()));
+	{
+		try
+		{
+			bEngine::util::cFileSystem::addFileLoader(new cGrfFileSystem::cGrfFileLoader(cSettings::config["files"]["grf"][i].asString()));
+		}
+		catch (char* bla)
+		{
+			
+		}
+	}
 	for(i = 0; i < cSettings::config["files"]["gattiles"].size(); i++)
 		cGraphics::gatTiles.push_back(cSettings::config["files"]["gattiles"][i].asInt());
 	for(i = 0; i < cSettings::config["files"]["models"].size(); i++)
@@ -822,7 +831,7 @@ int main(int argc, char *argv[])
 	if(cSettings::config.isMember("firstmap"))
 		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\" + cSettings::config["firstmap"].asString()).c_str());
 	else
-		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\lighttest").c_str());
+		strcpy(cGraphics::world->fileName, std::string(cSettings::roDir + "data\\prontera").c_str());
 
 	if(argc > 1)
 	{

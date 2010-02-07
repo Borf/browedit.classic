@@ -449,8 +449,24 @@ void cRsmModel::setHeight()
 	{
 		for(int y = bEngine::math::min(bboxmin.z, bboxmax.z); y < bEngine::math::max(bboxmin.z, bboxmax.z); y++)
 		{
-			cGraphics::world->cubes[y/10][x/10].minHeight = bEngine::math::min(cGraphics::world->cubes[y/10][x/10].minHeight, bEngine::math::min(bboxmin.y, bboxmax.y));
-			cGraphics::world->cubes[y/10][x/10].maxHeight =bEngine::math:: max(cGraphics::world->cubes[y/10][x/10].maxHeight, bEngine::math::max(bboxmin.y, bboxmax.y));
+			if(y < 0 || x < 0 || y/10 >= cGraphics::world->height || x/10 >= cGraphics::world->width)
+				continue;
+			
+//			for(float xx = 0; xx <= 1; xx += 0.5)
+//			{
+//				for(float yy = 0; yy <= 1; yy += 0.5)
+//				{
+					bEngine::math::cVector3 from = bEngine::math::cVector3(x+0.5f, -1000, y+0.5f);
+					bEngine::math::cVector3 to = bEngine::math::cVector3(x+0.5f, 1000, y+0.5f);
+					bEngine::math::cVector3 colPos;
+					if(collides(from, to, &colPos))
+					{
+						cGraphics::world->cubes[y/10][x/10].minHeight = bEngine::math::min(cGraphics::world->cubes[y/10][x/10].minHeight, -colPos.y);
+						cGraphics::world->cubes[y/10][x/10].maxHeight =bEngine::math:: max(cGraphics::world->cubes[y/10][x/10].maxHeight, -colPos.y);
+					}
+//				}
+//			}
+
 		}
 	}
 
