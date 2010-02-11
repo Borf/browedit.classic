@@ -3,6 +3,7 @@
 #endif
 
 #include <windows.h>
+#include <cstdlib>
 #include "mazegenerator.h"
 #include "../base/interface.h"
 #include "types.h"

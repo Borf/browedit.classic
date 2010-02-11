@@ -1,15 +1,8 @@
-#ifdef PLUGIN_EXPORTS
-#define PLUGIN_API __declspec(dllexport)
-#else
-#define PLUGIN_API __declspec(dllimport)
-#pragma warning "Uhoh"
-#endif
-
 #include "../base/base.h"
 
 extern "C"
 {
-	PLUGIN_API cPluginBase** _cdecl	getInstances();
+	PLUGIN_API cPluginBase** getInstances();
 	extern PLUGIN_API int getInstanceCount;
 }
 

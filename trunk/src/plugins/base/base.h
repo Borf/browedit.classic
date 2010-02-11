@@ -5,6 +5,12 @@
 #pragma warning( disable : 4786 )
 #endif
 
+#ifdef PLUGIN_EXPORTS
+#define PLUGIN_API __declspec(dllexport) _cdecl
+#else
+#define PLUGIN_API
+#endif
+
 #include <string>
 class TiXmlDocument;
 class cWindow;
@@ -23,6 +29,5 @@ public:
 	virtual bool		action() = 0;
 	cBrowInterface*		browInterface;
 };
-
 
 #endif

@@ -1,12 +1,27 @@
 #!make
+
+export
+
+# Target folders
+TOPDIR := $(shell echo `pwd`)
+PLUGIN_BIN := $(TOPDIR)/plugins
+
+# Compiler flags
 LIBS = -lGL -lSDL -lgd -lGLU -lSDL_mixer -lcurl -lplugin_base
-INCLUDES = -Isrc -DGRF_STATIC -D__NOXML__ -Ilibs/bengine -DGLEW_STATIC
+INCLUDES = -Isrc -DGRF_STATIC -D__NOXML__ -DGLEW_STATIC \
+	-I$(TOPDIR)/libs/include \
+	-I$(TOPDIR)/libs/bengine \
+	-I$(TOPDIR)/libs/bengine/lib/include \
+	-I$(TOPDIR)/src/wm \
+	-I$(TOPDIR)/src
+	
 CXX = g++
 CC = gcc
 DEFINES = 
-CFLAGS = -Wall -pipe
+CFLAGS = -Wall -Wno-unknown-pragmas -pipe
 # where are source files located?
-SOURCE_DIRS= src src/wm src/tinyxml src/grflib src/windows src/undo libs/bengine/lib/src libs/bengine/bengine libs/bengine/lib/src/lib_json libs/bengine/bengine/layers libs/bengine/bengine/math libs/bengine/bengine/util libs/bengine/bengine/libjpeg libs/bengine/bengine/objects libs/bengine/bengine/sg libs/bengine/bengine/libpng libs/bengine/bengine/textureloaders libs/bengine/bengine/zlib libs/bengine/bengine/libjpeg
+SOURCE_DIRS= src src/wm src/tinyxml src/grflib src/windows src/undo
+
 # Host platform
 UNAME=$(shell uname -s | sed -e 's/_.*$$//')
 
@@ -48,6 +63,8 @@ CFLAGS += -m32
 CC=gcc
 CXX=g++
 BINARY_EXT=
+LIBRARY_EXT=.so
+LIBRARY_PREFIX=lib
 endif
 
 # Linux 64bit
@@ -56,6 +73,8 @@ CFLAGS += -m64
 CC=gcc
 CXX=g++
 BINARY_EXT=
+LIBRARY_EXT=.so
+LIBRARY_PREFIX=lib
 endif
 
 # Windows 32bit
@@ -66,7 +85,7 @@ ifeq ($(UNAME),CYGWIN)
 # On cygwin, use provided gcc, but tell to not use cygwin's dlls
 CC=gcc
 CXX=g++
-CFLAGS += -mno-cygwin
+CFLAGS += -mno-cygwin -DNEEDS_DLLMAIN
 else
 DEBIAN=$(shell which i586-mingw32msvc-g++)
 ifeq ($(DEBIAN),/usr/bin/i586-mingw32msvc-g++)
@@ -82,7 +101,8 @@ endif
 endif
 WINDRES=mingw32-windres
 BINARY_EXT=.exe
-INCLUDES += -Ilibs/include -Ilibs/bengine -Ilibs/bengine/lib/include -DGLEW_STATIC
+LIBRARY_EXT=.dll
+LIBRARY_PREFIX=
 LIBS = -L. -Llibs/lib -lzlib1 -lSDL -lbgd -lopengl32 -lglu32 -lws2_32 -lcomdlg32 -lcurl -lSDL_mixer -lplugin_base -lwinmm -lgdi32
 # ws2_32.lib sdl.lib sdlmain.lib zlib.lib bgd.lib opengl32.lib glu32.lib 
 endif
@@ -122,26 +142,12 @@ ifeq ($(PLATFORM),win32)
 OBJECTS_SRC += obj/src_Script1_rc_$(PLATFORM).o
 endif
 
-plugins: objdirectories plugin_base plugin_clearmap plugin_generators plugin_gat plugin_lightmap plugin_3ds2rsm #NEWDEPENDENCY#
-all: plugins $(TARGET)
-clean:
-	$(RM) obj/*.o obj/*.dep obj/*.mak $(TARGET)
+all: plugins_all $(TARGET)
+
+plugins_all :
+	make -C src/plugins
 
 # Depencies
-
-objdirectories:
-	@echo $(A)
-	@mkdir -p obj/plugins
-	@rm -r obj/plugins
-	@mkdir -p obj/plugins/base
-	@mkdir -p obj/plugins/clearmap
-	@mkdir -p obj/plugins/generators
-	@mkdir -p obj/plugins/gat
-	@mkdir -p obj/plugins/lightmap
-	@mkdir -p obj/plugins/3ds2rsm
-#NEWMKDIR#
-
-.PHONY: dep
 
 dep: obj/depencies_$(PLATFORM).mak
 
@@ -152,7 +158,7 @@ obj/depencies_$(PLATFORM).mak: $(DEP_ALL)
 # build depencies for depencies
 	@cat $^ | sed -r -e 's#^([a-zA-Z0-9]+)\.o#obj/\1_$(PLATFORM).dep#' >>$@
 
--include obj/depencies_$(PLATFORM).mak
+#-include obj/depencies_$(PLATFORM).mak
 
 # type-specific targets (compile, target = %.o)
 
@@ -173,10 +179,6 @@ obj/%_rc_$(PLATFORM).o: %.rc
 obj/%_$(PLATFORM).o: %.cpp
 	@echo -e "    \033[1mCC\033[1m\t\033[22;34m$<\033[39m"
 	@$(CXX) $(CFLAGS) $(INCLUDES) -c -o $@ $<
-
-
-
-
 
 # depencies
 
@@ -220,3 +222,10 @@ plugin_3ds2rsm: obj/plugins/3ds2rsm/3ds2rsmplugin_win32.o obj/plugins/3ds2rsm/3d
 	@$(CXX) $(CFLAGS) $(LDFLAGS) -Llibs/lib -W1 --out-implib -shared -o plugins/3ds2rsm.dll $^ -lopengl32 -lglu32 -lplugin_base
 
 #NEWTARGET#
+
+depends :
+	make -C libs/bengine depends
+	make -C src/plugins depends
+
+clean :
+	make -C src/plugins clean

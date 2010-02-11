@@ -29,7 +29,7 @@ public:
 
 	void (*eventhandler)(cWindow*, std::string, std::string);
 
-	virtual cWindowObject* getObject(char*);
+	virtual cWindowObject* getObject(const char*);
 
 };
 

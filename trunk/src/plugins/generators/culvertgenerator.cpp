@@ -1,7 +1,10 @@
 #include <windows.h>
+#include <cstdlib>
+#include <vector>
 #include "culvertgenerator.h"
 #include "../base/interface.h"
-#include "types.h"
+
+using namespace std;
 
 #ifndef __MINGW32__
 #pragma warning( disable : 4244 )

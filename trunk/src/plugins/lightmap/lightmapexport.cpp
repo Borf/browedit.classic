@@ -37,7 +37,7 @@ bool cLightMapExportPlugin::action()
 						{
 							for(int yy = 0; yy < 6; yy++)
 							{
-								int intensity = (BYTE)lightMap->buf[1+xx+8*yy+8];
+								int intensity = (unsigned char)lightMap->buf[1+xx+8*yy+8];
 								gdImageSetPixel(img, (exportWalls?12:6)*x+xx, (exportWalls?12:6)*y+yy, gdImageColorAllocate(img, intensity, intensity, intensity));
 							}
 						}
@@ -54,7 +54,7 @@ bool cLightMapExportPlugin::action()
 						{
 							for(int yy = 0; yy < 6; yy++)
 							{
-								int intensity = (BYTE)lightMap->buf[1+xx+8*yy+8];
+								int intensity = (unsigned char)lightMap->buf[1+xx+8*yy+8];
 								gdImageSetPixel(img, 12*x+xx+6, 12*y+yy, gdImageColorAllocate(img, intensity, intensity, intensity));
 							}
 						}
@@ -71,7 +71,7 @@ bool cLightMapExportPlugin::action()
 						{
 							for(int yy = 0; yy < 6; yy++)
 							{
-								int intensity = (BYTE)lightMap->buf[1+xx+8*yy+8];
+								int intensity = (unsigned char)lightMap->buf[1+xx+8*yy+8];
 								gdImageSetPixel(img, 12*x+xx, 12*y+yy+6, gdImageColorAllocate(img, intensity, intensity, intensity));
 							}
 						}
@@ -114,9 +114,9 @@ bool cLightMapExportPlugin::action()
 						{
 							for(int yy = 0; yy < 6; yy++)
 							{
-								int r = (BYTE)lightMap->buf[64+(1+xx+8*yy+8)*3];
-								int g = (BYTE)lightMap->buf[64+(1+xx+8*yy+8)*3+1];
-								int b = (BYTE)lightMap->buf[64+(1+xx+8*yy+8)*3+2];
+								int r = (unsigned char)lightMap->buf[64+(1+xx+8*yy+8)*3];
+								int g = (unsigned char)lightMap->buf[64+(1+xx+8*yy+8)*3+1];
+								int b = (unsigned char)lightMap->buf[64+(1+xx+8*yy+8)*3+2];
 								gdImageSetPixel(img, (exportWalls?12:6)*x+xx, (exportWalls?12:6)*y+yy, gdImageColorAllocate(img, r,g,b));
 							}
 						}
@@ -133,9 +133,9 @@ bool cLightMapExportPlugin::action()
 						{
 							for(int yy = 0; yy < 6; yy++)
 							{
-								int r = (BYTE)lightMap->buf[64+(1+xx+8*yy+8)*3];
-								int g = (BYTE)lightMap->buf[64+(1+xx+8*yy+8)*3+1];
-								int b = (BYTE)lightMap->buf[64+(1+xx+8*yy+8)*3+2];
+								int r = (unsigned char)lightMap->buf[64+(1+xx+8*yy+8)*3];
+								int g = (unsigned char)lightMap->buf[64+(1+xx+8*yy+8)*3+1];
+								int b = (unsigned char)lightMap->buf[64+(1+xx+8*yy+8)*3+2];
 								gdImageSetPixel(img, 12*x+xx+6, 12*y+yy, gdImageColorAllocate(img, r,g,b));
 							}
 						}
@@ -152,9 +152,9 @@ bool cLightMapExportPlugin::action()
 						{
 							for(int yy = 0; yy < 6; yy++)
 							{
-								int r = (BYTE)lightMap->buf[64+(1+xx+8*yy+8)*3];
-								int g = (BYTE)lightMap->buf[64+(1+xx+8*yy+8)*3+1];
-								int b = (BYTE)lightMap->buf[64+(1+xx+8*yy+8)*3+2];
+								int r = (unsigned char)lightMap->buf[64+(1+xx+8*yy+8)*3];
+								int g = (unsigned char)lightMap->buf[64+(1+xx+8*yy+8)*3+1];
+								int b = (unsigned char)lightMap->buf[64+(1+xx+8*yy+8)*3+2];
 								gdImageSetPixel(img, 12*x+xx, 12*y+yy+6, gdImageColorAllocate(img, r,g,b));
 							}
 						}

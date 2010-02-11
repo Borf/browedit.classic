@@ -1,5 +1,6 @@
 #include "base.h"
 #include "interface.h"
+#include <cstring>
 #include <wm/wm.h>
 #include <graphics.h>
 #include "../../version.h"

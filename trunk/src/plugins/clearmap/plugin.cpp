@@ -2,6 +2,7 @@
 #include "plugin.h"
 #include "clearmap.h"
 
+#ifdef WIN32
 BOOL APIENTRY DllMain( HANDLE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved )
 {
     switch (ul_reason_for_call)
@@ -14,14 +15,14 @@ BOOL APIENTRY DllMain( HANDLE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
     }
     return TRUE;
 }
+#endif
 
-PLUGIN_API int getInstanceCount=1;
+PLUGIN_API int getInstanceCount = 1;
 
-PLUGIN_API cPluginBase** _cdecl getInstances()
+PLUGIN_API cPluginBase** getInstances()
 {
 	cPluginBase** plugins = new cPluginBase*[getInstanceCount];
 	plugins[0] = new cClearMapPlugin();
 	return plugins;
 }
-
 
