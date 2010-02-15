@@ -50,7 +50,7 @@ int cProcessManagement::walledit_process_events(SDL_Event &event)
 					break;
 
 				//Henko: Additional check to avoid crash
-				if (x >= (int)cGraphics::world->cubes[y].size() || y >= (int)cGraphics::world->cubes.size())
+				if (y >= (int)cGraphics::world->cubes.size() || x >= (int)cGraphics::world->cubes[y].size())
 					break;
 				
 				float height = fabs(-cGraphics::cMouse::y3d - ((cGraphics::world->cubes[y][x].cell1 + cGraphics::world->cubes[y][x].cell2 + cGraphics::world->cubes[y][x].cell3 + cGraphics::world->cubes[y][x].cell4) / 4.0f));
