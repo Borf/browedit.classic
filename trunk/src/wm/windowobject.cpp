@@ -147,7 +147,13 @@ cWindowObject::cWindowObject( cWindow* p, Json::Value &skin)
 	selectable = true;
 	type = OBJECT_UNDEFINED;
 	enabled = true;
-	
+
+	setSkin(skin);
+}
+
+
+void cWindowObject::setSkin(Json::Value &skin)
+{
 	if(skin != NULL)
 	{
 		std::string color = "FFFFFF";

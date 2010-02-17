@@ -93,3 +93,40 @@ void cWindowRollupButton::onClick()
 {
 	parent->toggleroll();
 }
+
+
+
+
+
+cWindowToggleButton::cWindowToggleButton(cWindow* parent, Json::Value &skin) : cWindowButton(parent, skin)
+{
+	pushed = false;
+	text = "";
+	linkedValue = NULL;
+}
+
+cWindowToggleButton::cWindowToggleButton( cWindow* parent, bool* linked ) : cWindowButton(parent)
+{
+	linkedValue = linked;
+	text = "";
+}
+void cWindowToggleButton::onClick()
+{
+	pushed = !pushed;
+	if(linkedValue)
+		*linkedValue = !*linkedValue;
+}
+
+void cWindowToggleButton::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
+{
+	if(linkedValue)
+		pushed = *linkedValue;
+	GLfloat colors[4];
+	glGetFloatv(GL_CURRENT_COLOR, colors);
+
+	if(pushed)
+		glColor4f(0.75, 0.75, 0.75, 0.75);
+
+	cWindowButton::draw(cutoffleft, cutoffright, cutofftop, cutoffbottom);
+	glColor4fv(colors);
+}

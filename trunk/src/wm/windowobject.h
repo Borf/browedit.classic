@@ -75,7 +75,7 @@ protected:
 	int skinLeftWidth;
 	int skinRight;
 	int skinRightWidth;
-
+	void setSkin(Json::Value &skin);
 
 public:
 	cWindowObject();	

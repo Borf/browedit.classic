@@ -2839,7 +2839,7 @@ MENUCOMMAND(npcscreenies)
 
 MENUCOMMAND(addfavorite)
 {
-	int i;
+//	int i;
 	std::vector<int> keys;
 	std::string key = src->data;
 	while(key != "")

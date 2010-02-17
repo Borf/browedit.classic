@@ -62,7 +62,7 @@ void cJsonWindow::event(cWindowObject* o, std::string type)
 	}
 }
 
-cWindowObject* cJsonWindow::getObject( char* name)
+cWindowObject* cJsonWindow::getObject( const char* name)
 {
 	return objects[name];
 }

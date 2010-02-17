@@ -518,6 +518,10 @@ SOURCE=..\src\windows\texturewindow.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\windows\toolbar.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\windows\walltexturewindow.h
 # End Source File
 # Begin Source File
@@ -636,6 +640,10 @@ SOURCE=..\src\windows\texturetoolswindow.cpp
 # Begin Source File
 
 SOURCE=..\src\windows\texturewindow.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\windows\toolbar.cpp
 # End Source File
 # Begin Source File
 

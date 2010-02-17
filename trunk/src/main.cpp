@@ -22,6 +22,7 @@
 #include "windows/soundoverviewwindow.h"
 #include "windows/texturetoolswindow.h"
 #include "windows/minimapwindow.h"
+#include "windows/toolbar.h"
 #include "plugins/base/base.h"
 #include "interfaceimplementation.h"
 #include "settings.h"
@@ -464,7 +465,7 @@ int main(int argc, char *argv[])
 		}
 		catch (char* bla)
 		{
-			
+			Log(3,0,"Could not load %s, error %s", cSettings::config["files"]["grf"][i].asString().c_str(), bla);
 		}
 	}
 	for(i = 0; i < cSettings::config["files"]["gattiles"].size(); i++)
@@ -823,6 +824,7 @@ int main(int argc, char *argv[])
 	pFile = NULL;
 	Log(3,0,GetMsg("file/DONELOADING"), "data/effects.txt");
 
+	cWM::addWindow(new cToolBarWindow());
 
 
 	cGraphics::newWorld();

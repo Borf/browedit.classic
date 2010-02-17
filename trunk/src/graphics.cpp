@@ -271,11 +271,15 @@ int cGraphics::draw(bool drawwm)
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_BLEND);
 	glDisable(GL_LIGHTING);
+	if(drawwm)
+		cWM::draw();
+	glColor4f(1,1,1,1);
+
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_ALPHA_TEST);
 	menu->update();
 	menu->draw();
 
-	if(drawwm)
-		cWM::draw();
 
 
 	char buf[100];

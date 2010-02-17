@@ -46,6 +46,7 @@ int cWM::draw()
 	glEnable(GL_BLEND);
 	int size = windows.size()-1;
 	int topwindow = 0;
+	glPushMatrix();
 	for(i = 0; i < windows.size(); i++)
 	{
 		cWindow* w = windows[i];
@@ -115,6 +116,7 @@ int cWM::draw()
 	glEnable(GL_ALPHA_TEST);
 	glEnable(GL_DEPTH_TEST);
 	//glTranslatef(0,0,-9000);
+	glPopMatrix();
 	return 1;
 }
 

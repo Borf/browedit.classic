@@ -24,6 +24,19 @@ public:
 
 };
 
+
+class cWindowToggleButton : public cWindowButton
+{
+public:
+	bool pushed;
+	bool* linkedValue;
+
+	cWindowToggleButton(cWindow* parent, Json::Value &skin = cWM::skin);
+	cWindowToggleButton(cWindow* parent, bool* linked);
+	virtual void onClick();
+	virtual void draw(int,int,int,int);
+};
+
 class cWindowCloseButton : public cWindowObject
 {
 public:

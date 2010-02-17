@@ -6,7 +6,7 @@
 #endif
 
 #ifdef PLUGIN_EXPORTS
-#define PLUGIN_API __declspec(dllexport) _cdecl
+#define PLUGIN_API __declspec(dllexport)
 #else
 #define PLUGIN_API
 #endif

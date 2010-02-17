@@ -1227,7 +1227,7 @@ void cWorld::draw()
 	
 	int ww = cGraphics::w();
 	ww -= 256;
-	int hh = cGraphics::h()-20;
+	int hh = cGraphics::h()-(20 + 32);
 
 	glEnable(GL_DEPTH_TEST);
 	glViewport(0,0,ww,hh);						// Reset The Current Viewport
@@ -1430,11 +1430,11 @@ void cWorld::draw()
 //					glColor3f((BYTE)t->color[0] / 256.0f,(BYTE)t->color[1] / 256.0f,(BYTE)t->color[2] / 256.0f);
 				else if(((cSettings::editMode == MODE_TEXTUREPAINT && cGraphics::textureTool == TOOL_SELECTAREA) || cSettings::editMode == MODE_HEIGHTGLOBAL) && !cClipBoard::pasting)
 				{
-					if(cGraphics::cMouse::lbuttondown && cGraphics::cMouse::y < cGraphics::h() - 20 && inbetween<int>(x, round(cGraphics::cMouse::x3dStart/10), round(cGraphics::cMouse::x3d/10)) && inbetween<int>(y, round(cGraphics::cMouse::z3dStart/10), round(cGraphics::cMouse::z3d/10)) && alt)
+					if(cGraphics::cMouse::lbuttondown && cGraphics::cMouse::y < cGraphics::h() - (20 + 32) && inbetween<int>(x, round(cGraphics::cMouse::x3dStart/10), round(cGraphics::cMouse::x3d/10)) && inbetween<int>(y, round(cGraphics::cMouse::z3dStart/10), round(cGraphics::cMouse::z3d/10)) && alt)
 						glColor4f(0.3f, 0.3f, 0.3f, 1);
-					else if(cGraphics::cMouse::lbuttondown && cGraphics::cMouse::y < cGraphics::h() - 20 && inbetween<int>(x, round(cGraphics::cMouse::x3dStart/10), round(cGraphics::cMouse::x3d/10)) && inbetween<int>(y, round(cGraphics::cMouse::z3dStart/10), round(cGraphics::cMouse::z3d/10)))
+					else if(cGraphics::cMouse::lbuttondown && cGraphics::cMouse::y < cGraphics::h() - (20 + 32) && inbetween<int>(x, round(cGraphics::cMouse::x3dStart/10), round(cGraphics::cMouse::x3d/10)) && inbetween<int>(y, round(cGraphics::cMouse::z3dStart/10), round(cGraphics::cMouse::z3d/10)))
 						glColor4f(0.6f,0.6f,0.6f,1);
-					else if(cGraphics::cMouse::lbuttondown && cGraphics::cMouse::y < cGraphics::h() - 20 && (ctrl || alt) && c->selected)
+					else if(cGraphics::cMouse::lbuttondown && cGraphics::cMouse::y < cGraphics::h() - (20 + 32) && (ctrl || alt) && c->selected)
 						glColor4f(0.4f,0.4f,0.4f,1);
 					else if(inverseSelection && !c->selected)
 						glColor4f(0.2f, 0.2f, 0.2f, 1);
