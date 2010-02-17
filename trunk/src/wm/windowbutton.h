@@ -4,6 +4,7 @@
 #include "windowobject.h"
 #include <string>
 #include <wm/wm.h>
+class cWindowPictureBox;
 //using namespace std;
 
 class cWindowButton : public cWindowObject
@@ -13,6 +14,8 @@ protected:
 
 
 public:
+	cWindowPictureBox* icon;
+
 	cWindowButton(cWindow* parent, Json::Value &skin = cWM::skin);
 	virtual ~cWindowButton() {}
 	virtual void draw(int,int,int,int);
@@ -35,6 +38,8 @@ public:
 	cWindowToggleButton(cWindow* parent, bool* linked);
 	virtual void onClick();
 	virtual void draw(int,int,int,int);
+
+	void setIcon(std::string file);
 };
 
 class cWindowCloseButton : public cWindowObject

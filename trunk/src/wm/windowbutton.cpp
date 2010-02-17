@@ -10,6 +10,7 @@
 #include <GL/gl.h>												// Header File For The OpenGL32 Library
 #include <GL/glu.h>												// Header File For The GLu32 Library
 #include <wm/wm.h>
+#include <wm/windowpicturebox.h>
 
 void cWindowButton::draw(int cutoffleft, int cutoffright, int cutofftop, int cutoffbottom)
 {
@@ -59,6 +60,7 @@ cWindowButton::cWindowButton( cWindow* parent, Json::Value &skin) : cWindowObjec
 	selectable = true;
 	type = OBJECT_BUTTON;
 	enabled = true;
+	icon = NULL;
 }
 
 void cWindowButton::setText( int id, std::string txt )
@@ -103,12 +105,15 @@ cWindowToggleButton::cWindowToggleButton(cWindow* parent, Json::Value &skin) : c
 	pushed = false;
 	text = "";
 	linkedValue = NULL;
+	alignment = ALIGN_TOPLEFT;
 }
 
 cWindowToggleButton::cWindowToggleButton( cWindow* parent, bool* linked ) : cWindowButton(parent)
 {
 	linkedValue = linked;
 	text = "";
+	resizeTo(28,28);
+	alignment = ALIGN_TOPLEFT;
 }
 void cWindowToggleButton::onClick()
 {
@@ -128,5 +133,20 @@ void cWindowToggleButton::draw(int cutoffleft, int cutoffright, int cutofftop, i
 		glColor4f(0.75, 0.75, 0.75, 0.75);
 
 	cWindowButton::draw(cutoffleft, cutoffright, cutofftop, cutoffbottom);
+	if(icon != NULL)
+	{
+		icon->moveTo(getX() + (getWidth() - icon->getWidth())/2, getY() + (getHeight() - icon->getHeight())/2);
+		icon->draw(cutoffleft, cutoffright, cutofftop, cutoffbottom);
+	}
+
 	glColor4fv(colors);
+}
+
+void cWindowToggleButton::setIcon( std::string file )
+{
+	icon = new cWindowPictureBox(parent);
+	icon->setText(0, file);
+	icon->resizeTo(16,16);
+	icon->moveTo(6,6);
+	icon->alignment = ALIGN_TOPLEFT;
 }

@@ -47,8 +47,8 @@ cToolBarWindow::cToolBarWindow()
 
 
 	cWindowToggleButton* t = new cWindowToggleButton(this, &cGraphics::view.showGrid);
-	t->moveTo(350, 0);
-	t->resizeTo(28,28);
+	t->moveTo(320, 0);
+	t->setIcon("data/buttons/grid.tga");
 	objects["showgrid"] = t;
 	
 }
@@ -73,6 +73,25 @@ cToolBarWindow::cModeButton::cModeButton( cWindow* parent, int m ) : cWindowTogg
 	moveTo(28 * mode, 0);
 	resizeTo(28,28);
 	alignment = ALIGN_TOPLEFT;
+	icon = NULL;
+
+	switch(m)
+	{
+	case 0: setIcon("data/buttons/edit_texture.tga"); break;
+	case 1: setIcon("data/buttons/edit_heightdetail.tga"); break;
+	case 2: setIcon("data/buttons/edit_heightglobal.tga"); break;
+	case 3: setIcon("data/buttons/edit_walls.tga"); break;
+	case 4: setIcon("data/buttons/edit_objects.tga"); break;
+	case 5: setIcon("data/buttons/edit_gat.tga"); break;
+	case 6: setIcon("data/buttons/edit_water.tga"); break;
+	case 7: setIcon("data/buttons/edit_effects.tga"); break;
+	case 8: setIcon("data/buttons/edit_sounds.tga"); break;
+	case 9: setIcon("data/buttons/edit_lights.tga"); break;
+	case 10:setIcon("data/buttons/edit_objectgroup.tga"); break;
+	case 11:setIcon("data/buttons/edit_sprite.tga"); break;
+	case 12:setIcon("data/buttons/edit_texturepaint.tga"); break;
+	}
+
 }
 
 void cToolBarWindow::cModeButton::onClick()

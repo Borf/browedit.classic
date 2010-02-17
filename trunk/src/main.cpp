@@ -845,8 +845,8 @@ int main(int argc, char *argv[])
 #endif
 
 #ifdef _DEBUG
-	if(argc == 1)
-		cGraphics::world->load();
+//	if(argc == 1)
+//		cGraphics::world->load();
 //	cGraphics::world->importalpha();
 #endif
 
