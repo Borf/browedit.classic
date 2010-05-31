@@ -76,7 +76,8 @@ cFileWindow::cFileWindow(void (*pCallback)(std::string)) : cWindow()
 	std::vector<std::string> files = bEngine::util::cFileSystem::getFileList("data");
 	for(i = 0; i < files.size(); i++)
 	{
-
+		if(files[i].size() < 4)
+			continue;
 		if(files[i].substr(files[i].size()-4, 4) == ".rsw")
 			mapNames.push_back(files[i].substr(cSettings::roDir.length()));
 	}

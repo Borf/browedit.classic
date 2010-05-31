@@ -410,6 +410,7 @@ int main(int argc, char *argv[])
 	stackWalker = new MyStackWalker();
 #endif
 	int i;
+	bEngine::util::cFileSystem::addFileLoader(new bEngine::util::cFileSystem::cPhysicalFileLoader());
 	log_open("log_worldeditor.txt","worldedit",2);
 	bEngine::util::cFileSystem::cReadFile* pFile = bEngine::util::cFileSystem::open("config.txt");
 	if (pFile == NULL)
