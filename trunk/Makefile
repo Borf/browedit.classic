@@ -65,6 +65,7 @@ CXX=g++
 BINARY_EXT=
 LIBRARY_EXT=.so
 LIBRARY_PREFIX=lib
+LIBS = -lGL -lSDL -lgd -lGLU -lSDL_mixer -lcurl -lplugin_base -L. -Llibs/lib -lbengine -Llibs/bengine
 endif
 
 # Linux 64bit
@@ -142,7 +143,10 @@ ifeq ($(PLATFORM),win32)
 OBJECTS_SRC += obj/src_Script1_rc_$(PLATFORM).o
 endif
 
-all: plugins_all $(TARGET)
+all: plugins_all bengine $(TARGET)
+
+bengine:
+	make -C libs/bengine
 
 plugins_all :
 	make -C src/plugins
@@ -197,27 +201,28 @@ $(TARGET): $(OBJECTS_ALL)
 	@$(CXX) $(CFLAGS) $(LDFLAGS) -o $@ $^ $(LIBS)
 
 
-plugin_base: obj/plugins/base/base_win32.o
+plugin_base: obj/plugins/base/base_$(PLATFORM).o
 	@echo -e "    \033[1mLD\033[1m\t\033[22;35m$@\033[39m"
-	@$(AR) rcs libs/lib/libplugin_base.a obj/plugins/base/base_win32.o
+	@$(AR) rcs libs/lib/libplugin_base.a obj/plugins/base/base_$(PLATFORM).o
 
-plugin_clearmap: obj/plugins/clearmap/clearmap_win32.o obj/plugins/clearmap/plugin_win32.o
+
+plugin_clearmap: obj/plugins/clearmap/clearmap_$(PLATFORM).o obj/plugins/clearmap/plugin_$(PLATFORM).o
 	@echo -e "    \033[1mLD\033[1m\t\033[22;35m$@\033[39m"
 	@$(CXX) $(CFLAGS) $(LDFLAGS) -Llibs/lib -W1 --out-implib -shared -o plugins/clearmap.dll $^ -lopengl32 -lglu32 -lplugin_base
 
-plugin_generators: obj/plugins/generators/mazegenerator_win32.o obj/plugins/generators/culvertgenerator_win32.o obj/plugins/generators/plugin_win32.o obj/vector3_win32.o obj/vector2_win32.o obj/math_win32.o obj/stream_win32.o
+plugin_generators: obj/plugins/generators/mazegenerator_$(PLATFORM).o obj/plugins/generators/culvertgenerator_$(PLATFORM).o obj/plugins/generators/plugin_$(PLATFORM).o obj/vector3_$(PLATFORM).o obj/vector2_$(PLATFORM).o obj/math_$(PLATFORM).o obj/stream_$(PLATFORM).o
 	@echo -e "    \033[1mLD\033[1m\t\033[22;35m$@\033[39m"
 	@$(CXX) $(CFLAGS) $(LDFLAGS) -Llibs/lib -W1 --out-implib -shared -o plugins/generators.dll $^ -lopengl32 -lglu32 -lplugin_base
 
-plugin_gat: obj/plugins/gat/setgatheight_win32.o obj/plugins/gat/plugin_win32.o
+plugin_gat: obj/plugins/gat/setgatheight_$(PLATFORM).o obj/plugins/gat/plugin_$(PLATFORM).o
 	@echo -e "    \033[1mLD\033[1m\t\033[22;35m$@\033[39m"
 	@$(CXX) $(CFLAGS) $(LDFLAGS) -Llibs/lib -W1 --out-implib -shared -o plugins/gat.dll $^ -lopengl32 -lglu32 -lplugin_base
 
-plugin_lightmap: obj/plugins/lightmap/lightmapexport_win32.o obj/plugins/lightmap/lightmapimport_win32.o obj/plugins/lightmap/plugin_win32.o
+plugin_lightmap: obj/plugins/lightmap/lightmapexport_$(PLATFORM).o obj/plugins/lightmap/lightmapimport_$(PLATFORM).o obj/plugins/lightmap/plugin_$(PLATFORM).o
 	@echo -e "    \033[1mLD\033[1m\t\033[22;35m$@\033[39m"
 	@$(CXX) $(CFLAGS) $(LDFLAGS) -Llibs/lib -W1 --out-implib -shared -o plugins/lightmap.dll $^ -lopengl32 -lglu32 -lplugin_base -lbgd
 
-plugin_3ds2rsm: obj/plugins/3ds2rsm/3ds2rsmplugin_win32.o obj/plugins/3ds2rsm/3ds_win32.o obj/plugins/3ds2rsm/plugin_win32.o
+plugin_3ds2rsm: obj/plugins/3ds2rsm/3ds2rsmplugin_$(PLATFORM).o obj/plugins/3ds2rsm/3ds_$(PLATFORM).o obj/plugins/3ds2rsm/plugin_$(PLATFORM).o
 	@echo -e "    \033[1mLD\033[1m\t\033[22;35m$@\033[39m"
 	@$(CXX) $(CFLAGS) $(LDFLAGS) -Llibs/lib -W1 --out-implib -shared -o plugins/3ds2rsm.dll $^ -lopengl32 -lglu32 -lplugin_base
 

@@ -13,7 +13,8 @@
 #include <undo/objectnew.h>
 #include "settings.h"
 #include <math.h>
-
+#include <string.h>
+#include <stdlib.h>
 
 cClipBoardContents* cClipBoard::currentClipBoard = NULL;
 bool				cClipBoard::pasting = false;

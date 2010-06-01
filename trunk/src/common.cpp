@@ -10,6 +10,7 @@
 #include <windows.h>
 #include <time.h>
 #include <direct.h>
+#include <commdlg.h>
 #endif
 #include <memory.h>
 #include <stdio.h>
@@ -19,8 +20,6 @@ const float EPSILON = 0.001f;
 
 #include <math.h>
 #include <SDL/SDL_syswm.h>
-#include <direct.h>
-#include <commdlg.h>
 #include <bengine/util.h>
 #include <bengine/math/vector2.h>
 #include <bengine/math/vector3.h>

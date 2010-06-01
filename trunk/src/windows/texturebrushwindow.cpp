@@ -4,7 +4,7 @@
 
 #include <graphics.h>
 #include <bengine/util/filesystem.h>
-
+#include <stdlib.h>
 
 
 cTextureBrushWindow::cWindowBrushButton::cWindowBrushButton(cWindow* parent, int brushWidth, int brushHeight, std::string brushData, Json::Value &skin) : cWindowObject(parent,skin["button"])

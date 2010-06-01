@@ -5,6 +5,8 @@
 #include "grffilesystem.h"
 #include "settings.h"
 
+#include <string.h>
+
 cGrfFileSystem::cGrfFileLoader::cGrfFileLoader( std::string grfFile )
 {
 	this->grfFile = grfFile;

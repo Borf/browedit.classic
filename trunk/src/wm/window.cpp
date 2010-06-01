@@ -4,7 +4,6 @@
 #include "windowobject.h"
 #include "window.h"
 
-
 #include <graphics.h>
 
 #include "windowinputbox.h"
@@ -18,6 +17,7 @@
 #endif
 #include <bengine/util.h>
 
+#include <stdlib.h>
 
 cWindow::cWindow(bEngine::cTexture* t, cFont* f, Json::Value &skin)
 {

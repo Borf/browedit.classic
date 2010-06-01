@@ -10,6 +10,8 @@
 #include <world.h>
 #include <math.h>
 
+#include <stdarg.h>
+
 #include <bengine/util.h>
 #include <bengine/texturecache.h>
 #include <bengine/util/filesystem.h>

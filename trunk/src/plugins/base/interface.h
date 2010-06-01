@@ -11,6 +11,9 @@
 #include <windows.h>
 #endif
 
+#include <stdlib.h>
+#include <string.h>
+
 class cWindow;
 class cPluginBase;
 

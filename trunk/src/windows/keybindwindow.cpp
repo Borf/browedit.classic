@@ -2,7 +2,7 @@
 #include <fstream>
 
 #include <settings.h>
-
+#include <string.h>
 #include "keybindwindow.h"
 
 std::string keytostring(SDLKey key)

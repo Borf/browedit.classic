@@ -261,7 +261,7 @@ bEngine::util::cInStream& cRsmModel::readData( bEngine::util::cInStream &instrea
 		delete pFile;
 	}
 	
-	CHAR buf[80];
+	char buf[80];
 	instream.read(buf, 80);			//nodeName
 	instream>>pos;
 	instream>>rot;
