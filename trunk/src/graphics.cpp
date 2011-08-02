@@ -680,9 +680,8 @@ cWorldContainer::cView			cGraphics::view;
 
 
 
-cGraphics::cGraphics()
+cGraphics::cGraphics() : cGraphicsBase::cGraphicsBase()
 {
-	cGraphicsBase::cGraphicsBase();
 }
 
 

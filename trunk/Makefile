@@ -65,7 +65,7 @@ CXX=g++
 BINARY_EXT=
 LIBRARY_EXT=.so
 LIBRARY_PREFIX=lib
-LIBS = -lGL -lSDL -lgd -lGLU -lSDL_mixer -lcurl -lplugin_base -L. -Llibs/lib -lbengine -Llibs/bengine
+LIBS = -lGL -lSDL -lgd -lGLU -lSDL_mixer -lplugin_base -L. -Llibs/lib -lbengine -Llibs/bengine
 endif
 
 # Linux 64bit
@@ -147,9 +147,10 @@ all: plugins_all bengine $(TARGET)
 
 bengine:
 	make -C libs/bengine
+	@cp `find libs/bengine -name "*.a"` libs/bengine
+plugins_all : plugin_base
+#	make -C src/plugins
 
-plugins_all :
-	make -C src/plugins
 
 # Depencies
 
