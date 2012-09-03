@@ -96,7 +96,7 @@ void cWindowInputBox::onClick()
 	xx -= realX();
 	xx -= parent->getX();
 	int i = startindex;
-	while(xx > 0 && i <= (int)text.length())
+	while(xx > 0 && i < (int)text.length())
 	{
 		xx -= parent->font->width[(int)text[i]-32];
 		i++;

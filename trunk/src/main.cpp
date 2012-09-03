@@ -398,7 +398,6 @@ cWindow* JsonWindow(std::string s)
 	return cWM::JsonWindow(s);
 }
 
-
 int main(int argc, char *argv[])
 {
 #if 0

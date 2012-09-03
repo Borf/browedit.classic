@@ -16,7 +16,7 @@
 	#include <fstream>
 	#include <direct.h>
 
-	#define sleep(x) Sleep(1000*(x))
+	//#define sleep(x) Sleep(1000*(x))
 	#define DIR_SEPERATOR "\\"
 	#define newline "\r\n"
 	#define usleep(x) Sleep((x) / 1000);

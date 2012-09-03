@@ -7,6 +7,7 @@
 #include <world.h>
 #include <bengine/util.h>
 #include <json/json.h>
+#include <bengine/util/thread.h>
 
 extern cMenu*			lastmenu;
 
@@ -478,7 +479,7 @@ cMenu::~cMenu()
 void cMenuItemLinked::update()
 {
 	if(title == "Grid")
-		sleep(0);
+		bEngine::util::cThread::sleep(0);
 	if(pdata)
 		ticked = *((bool*)pdata);
 	cMenu::update();

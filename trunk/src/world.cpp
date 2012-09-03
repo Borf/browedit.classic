@@ -4246,7 +4246,7 @@ cTextureContainer::cTextureContainer( const cBrowInterface::cPluginTexture& pTex
 
 void cTextureContainer::generateTexture()
 {
-	texture = bEngine::cTextureCache::load(cSettings::roDir + "data\\texture\\" + RoFilename);
+	texture = bEngine::cTextureCache::load(cSettings::roDir + "data\\texture\\" + RoFilename, bEngine::TEX_CLAMP);
 }
 
 

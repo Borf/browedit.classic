@@ -622,11 +622,11 @@ void cWindow::save()
 #ifndef __NOXML__
 	if(saveProperties != "")
 	{
-		std::pair<char*,bool*> elements[] = {
-			std::pair<char*,bool*>("x", &movable),
-			std::pair<char*,bool*>("y", &movable),
-			std::pair<char*,bool*>("w", &resizable),
-			std::pair<char*,bool*>("h", &resizable) };
+		/*std::pair<std::string,bool*> elements[] = {
+			std::pair<std::string,bool*>("x", &movable),
+			std::pair<std::string,bool*>("y", &movable),
+			std::pair<std::string,bool*>("w", &resizable),
+			std::pair<std::string,bool*>("h", &resizable) };*/
 
 		if(!cSettings::config.isMember("wm"))
 			cSettings::config["wm"] = Json::Value();

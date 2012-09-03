@@ -4,9 +4,9 @@
 	"files" : 
 	{
 		"gattiles" : [ 0, 1, 2, 3, 4, 5, 6 ],
-		"grf" : [ "d:\\games\\new_exRO\\sdata.grf" ],
+		"grf" : [ "d:\\games\\ro\\data.grf", "d:\\games\\ro\\rdata.grf" ],
 		"models" : [ "data/romodels.txt", "data/alphamodels.txt", "data/randommodels.txt" ],
-		"rodir" : "d:\\games\\new_exRO\\",
+		"rodir" : "d:\\games\\ro\\",
 		"sounds" : [ "data/rosounds.txt" ],
 		"textures" : [ "data/rotextures.txt", "data/texturescustom.txt" ],
 		"water" : 
