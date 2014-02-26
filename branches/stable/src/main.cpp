@@ -1493,6 +1493,9 @@ int cProcessManagement::main_process_events(SDL_Event &event)
 
 			switch (event.key.keysym.sym)
 			{
+			case SDLK_s:
+				MenuCommand_save(NULL);
+				break;
 			case SDLK_r:
 				{
 					for(int y = 0; y < cGraphics::world->height; y++)
