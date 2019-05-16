@@ -1,0 +1,607 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\EventHandlers">
+      <UniqueIdentifier>{83fe84e1-3c29-4dbe-9f81-bcda39873034}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="wm">
+      <UniqueIdentifier>{858f2437-04b5-4f6b-8004-c170c1a78711}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="wm\windows">
+      <UniqueIdentifier>{1d08612c-f7af-442a-b756-accc6ac00017}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="wm\windows\headers">
+      <UniqueIdentifier>{3ab1a0c7-fd5b-476e-8219-f1b77c5a9885}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="wm\components">
+      <UniqueIdentifier>{700208e1-9a31-4e2a-9963-23571f3808f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="grflib">
+      <UniqueIdentifier>{403e91e0-3612-48cf-a0ab-2ae67713e6ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="tinyxml">
+      <UniqueIdentifier>{f1d03c1f-5710-4ede-9170-db8bedeb029c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="textureloaders">
+      <UniqueIdentifier>{44487f04-d3af-4944-bc61-cd070413f44d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\bmutex.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\bthread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\clipboard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\common.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\filesystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\font.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\frustum.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\gatedit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\graphics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\interfaceimplementation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\memorymanagement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\menu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\menucommands.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mymath.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\RSMModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\settings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\sprite.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\StackWalker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\svnver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\texturecache.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\texturemodel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\undo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\world.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\detailheightedit.cpp">
+      <Filter>Source Files\EventHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\effectedit.cpp">
+      <Filter>Source Files\EventHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\globalheightedit.cpp">
+      <Filter>Source Files\EventHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lightedit.cpp">
+      <Filter>Source Files\EventHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\objectedit.cpp">
+      <Filter>Source Files\EventHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\objectgroupedit.cpp">
+      <Filter>Source Files\EventHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\soundedit.cpp">
+      <Filter>Source Files\EventHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\spriteedit.cpp">
+      <Filter>Source Files\EventHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\textureedit.cpp">
+      <Filter>Source Files\EventHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\texturepaintedit.cpp">
+      <Filter>Source Files\EventHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\walledit.cpp">
+      <Filter>Source Files\EventHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\wateredit.cpp">
+      <Filter>Source Files\EventHandlers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\wm\window.cpp">
+      <Filter>wm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\wm\wm.cpp">
+      <Filter>wm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\windows\ambientlightwindow.cpp">
+      <Filter>wm\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\windows\confirmwindow.cpp">
+      <Filter>wm\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\windows\effectwindow.cpp">
+      <Filter>wm\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\windows\favoritelights.cpp">
+      <Filter>wm\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\windows\filewindow.cpp">
+      <Filter>wm\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\windows\hotkeywindow.cpp">
+      <Filter>wm\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\windows\inputwindow.cpp">
+      <Filter>wm\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\windows\keybindwindow.cpp">
+      <Filter>wm\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\windows\lightoverviewwindow.cpp">
+      <Filter>wm\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\windows\lightwindow.cpp">
+      <Filter>wm\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\windows\mapdetailwindow.cpp">
+      <Filter>wm\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\windows\mapswindow.cpp">
+      <Filter>wm\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\windows\messagewindow.cpp">
+      <Filter>wm\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\windows\minimapwindow.cpp">
+      <Filter>wm\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\windows\modeloverviewwindow.cpp">
+      <Filter>wm\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\windows\modelswindow.cpp">
+      <Filter>wm\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\windows\objectwindow.cpp">
+      <Filter>wm\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\windows\progresswindow.cpp">
+      <Filter>wm\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\windows\rsmeditwindow.cpp">
+      <Filter>wm\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\windows\soundoverviewwindow.cpp">
+      <Filter>wm\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\windows\soundselectwindow.cpp">
+      <Filter>wm\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\windows\soundwindow.cpp">
+      <Filter>wm\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\windows\spritewindow.cpp">
+      <Filter>wm\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\windows\texturebrushwindow.cpp">
+      <Filter>wm\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\windows\texturetoolswindow.cpp">
+      <Filter>wm\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\windows\texturewindow.cpp">
+      <Filter>wm\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\windows\walltexturewindow.cpp">
+      <Filter>wm\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\windows\waterwindow.cpp">
+      <Filter>wm\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\windows\xmlwindow.cpp">
+      <Filter>wm\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\wm\windowbutton.cpp">
+      <Filter>wm\components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\wm\windowcheckbox.cpp">
+      <Filter>wm\components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\wm\windowframe.cpp">
+      <Filter>wm\components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\wm\windowinputbox.cpp">
+      <Filter>wm\components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\wm\windowlabel.cpp">
+      <Filter>wm\components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\wm\windowlistbox.cpp">
+      <Filter>wm\components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\wm\windowmainbutton.cpp">
+      <Filter>wm\components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\wm\windowobject.cpp">
+      <Filter>wm\components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\wm\windowpicturebox.cpp">
+      <Filter>wm\components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\wm\windowprogressbar.cpp">
+      <Filter>wm\components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\wm\windowrgbpicker.cpp">
+      <Filter>wm\components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\wm\windowroundbutton.cpp">
+      <Filter>wm\components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\wm\windowscrollpanel.cpp">
+      <Filter>wm\components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\wm\windowtabpanel.cpp">
+      <Filter>wm\components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\wm\windowtree.cpp">
+      <Filter>wm\components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\grflib\grf.c">
+      <Filter>grflib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\grflib\grfcrypt.c">
+      <Filter>grflib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\grflib\grfsupport.c">
+      <Filter>grflib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\grflib\rgz.c">
+      <Filter>grflib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tinyxml\tinystr.cpp">
+      <Filter>tinyxml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tinyxml\tinyxml.cpp">
+      <Filter>tinyxml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tinyxml\tinyxmlerror.cpp">
+      <Filter>tinyxml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\tinyxml\tinyxmlparser.cpp">
+      <Filter>tinyxml</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\textureloaders\bitmaptextureloader.cpp">
+      <Filter>textureloaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\textureloaders\giftextureloader.cpp">
+      <Filter>textureloaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\textureloaders\jpegtextureloader.cpp">
+      <Filter>textureloaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\textureloaders\textureloader.cpp">
+      <Filter>textureloaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\textureloaders\tgatextureloader.cpp">
+      <Filter>textureloaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\windows\rsmmeshprops.cpp">
+      <Filter>wm\windows</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\bmutex.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\bthread.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\clipboard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\filesystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\font.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\frustum.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\graphics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\interfaceimplementation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\menu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\menucommands.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\mymath.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\RSMModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\settings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\sprite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\StackWalker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\svnver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\texturecache.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\texturemodel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\undo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\version.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\world.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\wm\window.h">
+      <Filter>wm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\wm\wm.h">
+      <Filter>wm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\windows\ambientlightwindow.h">
+      <Filter>wm\windows\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\windows\areacopywindow.h">
+      <Filter>wm\windows\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\windows\brushselectwindow.h">
+      <Filter>wm\windows\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\windows\confirmwindow.h">
+      <Filter>wm\windows\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\windows\effectwindow.h">
+      <Filter>wm\windows\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\windows\favoritelights.h">
+      <Filter>wm\windows\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\windows\filewindow.h">
+      <Filter>wm\windows\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\windows\hotkeywindow.h">
+      <Filter>wm\windows\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\windows\inputwindow.h">
+      <Filter>wm\windows\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\windows\keybindwindow.h">
+      <Filter>wm\windows\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\windows\lightoverviewwindow.h">
+      <Filter>wm\windows\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\windows\lightwindow.h">
+      <Filter>wm\windows\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\windows\mapdetailwindow.h">
+      <Filter>wm\windows\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\windows\mapswindow.h">
+      <Filter>wm\windows\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\windows\messagewindow.h">
+      <Filter>wm\windows\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\windows\minimapwindow.h">
+      <Filter>wm\windows\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\windows\modeloverviewwindow.h">
+      <Filter>wm\windows\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\windows\modelswindow.h">
+      <Filter>wm\windows\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\windows\objectwindow.h">
+      <Filter>wm\windows\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\windows\progresswindow.h">
+      <Filter>wm\windows\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\windows\rsmeditwindow.h">
+      <Filter>wm\windows\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\windows\soundoverviewwindow.h">
+      <Filter>wm\windows\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\windows\soundselectwindow.h">
+      <Filter>wm\windows\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\windows\soundwindow.h">
+      <Filter>wm\windows\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\windows\spritewindow.h">
+      <Filter>wm\windows\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\windows\texturebrushwindow.h">
+      <Filter>wm\windows\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\windows\texturetoolswindow.h">
+      <Filter>wm\windows\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\windows\texturewindow.h">
+      <Filter>wm\windows\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\windows\walltexturewindow.h">
+      <Filter>wm\windows\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\windows\waterwindow.h">
+      <Filter>wm\windows\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\windows\xmlwindow.h">
+      <Filter>wm\windows\headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\wm\windowbutton.h">
+      <Filter>wm\components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\wm\windowcheckbox.h">
+      <Filter>wm\components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\wm\windowframe.h">
+      <Filter>wm\components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\wm\windowinputbox.h">
+      <Filter>wm\components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\wm\windowlabel.h">
+      <Filter>wm\components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\wm\windowline.h">
+      <Filter>wm\components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\wm\windowlistbox.h">
+      <Filter>wm\components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\wm\windowmainbutton.h">
+      <Filter>wm\components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\wm\windowobject.h">
+      <Filter>wm\components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\wm\windowpicturebox.h">
+      <Filter>wm\components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\wm\windowprogressbar.h">
+      <Filter>wm\components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\wm\windowrgbpicker.h">
+      <Filter>wm\components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\wm\windowroundbutton.h">
+      <Filter>wm\components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\wm\windowscrollpanel.h">
+      <Filter>wm\components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\wm\windowtabpanel.h">
+      <Filter>wm\components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\wm\windowtree.h">
+      <Filter>wm\components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\grflib\grf.h">
+      <Filter>grflib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\grflib\grfcrypt.h">
+      <Filter>grflib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\grflib\grfsupport.h">
+      <Filter>grflib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\grflib\grftypes.h">
+      <Filter>grflib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\grflib\rgz.h">
+      <Filter>grflib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tinyxml\tinystr.h">
+      <Filter>tinyxml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\tinyxml\tinyxml.h">
+      <Filter>tinyxml</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\textureloaders\bitmaptextureloader.h">
+      <Filter>textureloaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\textureloaders\giftextureloader.h">
+      <Filter>textureloaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\textureloaders\jpegtextureloader.h">
+      <Filter>textureloaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\textureloaders\textureloader.h">
+      <Filter>textureloaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\textureloaders\tgatextureloader.h">
+      <Filter>textureloaders</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\windows\rsmmeshprops.h">
+      <Filter>wm\windows</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\src\Hamtaro.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\src\icon1.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\src\Script1.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

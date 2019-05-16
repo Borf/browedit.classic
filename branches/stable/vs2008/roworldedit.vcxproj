@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{42B28052-ACD9-46C3-B6C1-19B0C6F9C554}</ProjectGuid>
+    <RootNamespace>roworldedit</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>16.0.28803.298</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)../obj/vs9/$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)../obj/vs9/$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+    <TargetName>$(ProjectName)d</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)../obj/vs9/$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)../obj/vs9/$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\libs\SDL-1.2.15\include;..\src;..\libs/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;GRF_STATIC;_CRT_SECURE_NO_WARNINGS;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <DisableSpecificWarnings>4258;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>plugin_based.lib;libcurl.lib;sdl_mixer.lib;bgd.lib;sdl.lib;sdlmain.lib;zlib.lib;ws2_32.lib;opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(SolutionDir)../obj/vs9/$(Configuration)\roworldeditd.exe</OutputFile>
+      <AdditionalLibraryDirectories>..\libs\SDL-1.2.15\include\lib\x86;..\libs/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(SolutionDir)$/../$(ProjectName).pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <IgnoreSpecificDefaultLibraries>LIBCMT</IgnoreSpecificDefaultLibraries>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;GRF_STATIC;_CRT_SECURE_NO_WARNINGS;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>..\libs\SDL-1.2.15\include;..\src;..\libs/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+      <OutputFile>$(SolutionDir)../obj/vs9/$(Configuration)\roworldedit.exe</OutputFile>
+      <AdditionalLibraryDirectories>..\libs\SDL-1.2.15\include\lib\x86;..\libs/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>plugin_base.lib;libcurl.lib;sdl_mixer.lib;bgd.lib;sdl.lib;sdlmain.lib;zlib.lib;ws2_32.lib;opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\bmutex.cpp" />
+    <ClCompile Include="..\src\bthread.cpp" />
+    <ClCompile Include="..\src\clipboard.cpp" />
+    <ClCompile Include="..\src\common.cpp" />
+    <ClCompile Include="..\src\detailheightedit.cpp" />
+    <ClCompile Include="..\src\effectedit.cpp" />
+    <ClCompile Include="..\src\filesystem.cpp" />
+    <ClCompile Include="..\src\font.cpp" />
+    <ClCompile Include="..\src\frustum.cpp" />
+    <ClCompile Include="..\src\gatedit.cpp" />
+    <ClCompile Include="..\src\globalheightedit.cpp" />
+    <ClCompile Include="..\src\graphics.cpp" />
+    <ClCompile Include="..\src\grflib\grf.c" />
+    <ClCompile Include="..\src\grflib\grfcrypt.c" />
+    <ClCompile Include="..\src\grflib\grfsupport.c" />
+    <ClCompile Include="..\src\grflib\rgz.c" />
+    <ClCompile Include="..\src\interfaceimplementation.cpp" />
+    <ClCompile Include="..\src\lightedit.cpp" />
+    <ClCompile Include="..\src\main.cpp" />
+    <ClCompile Include="..\src\memorymanagement.cpp" />
+    <ClCompile Include="..\src\menu.cpp" />
+    <ClCompile Include="..\src\menucommands.cpp" />
+    <ClCompile Include="..\src\mymath.cpp" />
+    <ClCompile Include="..\src\objectedit.cpp" />
+    <ClCompile Include="..\src\objectgroupedit.cpp" />
+    <ClCompile Include="..\src\RSMModel.cpp" />
+    <ClCompile Include="..\src\settings.cpp" />
+    <ClCompile Include="..\src\soundedit.cpp" />
+    <ClCompile Include="..\src\sprite.cpp" />
+    <ClCompile Include="..\src\spriteedit.cpp" />
+    <ClCompile Include="..\src\StackWalker.cpp" />
+    <ClCompile Include="..\src\svnver.cpp" />
+    <ClCompile Include="..\src\texture.cpp" />
+    <ClCompile Include="..\src\texturecache.cpp" />
+    <ClCompile Include="..\src\textureedit.cpp" />
+    <ClCompile Include="..\src\textureloaders\bitmaptextureloader.cpp" />
+    <ClCompile Include="..\src\textureloaders\giftextureloader.cpp" />
+    <ClCompile Include="..\src\textureloaders\jpegtextureloader.cpp" />
+    <ClCompile Include="..\src\textureloaders\textureloader.cpp" />
+    <ClCompile Include="..\src\textureloaders\tgatextureloader.cpp" />
+    <ClCompile Include="..\src\texturemodel.cpp" />
+    <ClCompile Include="..\src\texturepaintedit.cpp" />
+    <ClCompile Include="..\src\tinyxml\tinystr.cpp" />
+    <ClCompile Include="..\src\tinyxml\tinyxml.cpp" />
+    <ClCompile Include="..\src\tinyxml\tinyxmlerror.cpp" />
+    <ClCompile Include="..\src\tinyxml\tinyxmlparser.cpp" />
+    <ClCompile Include="..\src\undo.cpp" />
+    <ClCompile Include="..\src\walledit.cpp" />
+    <ClCompile Include="..\src\wateredit.cpp" />
+    <ClCompile Include="..\src\windows\ambientlightwindow.cpp" />
+    <ClCompile Include="..\src\windows\confirmwindow.cpp" />
+    <ClCompile Include="..\src\windows\effectwindow.cpp" />
+    <ClCompile Include="..\src\windows\favoritelights.cpp" />
+    <ClCompile Include="..\src\windows\filewindow.cpp" />
+    <ClCompile Include="..\src\windows\hotkeywindow.cpp" />
+    <ClCompile Include="..\src\windows\inputwindow.cpp" />
+    <ClCompile Include="..\src\windows\keybindwindow.cpp" />
+    <ClCompile Include="..\src\windows\lightoverviewwindow.cpp" />
+    <ClCompile Include="..\src\windows\lightwindow.cpp" />
+    <ClCompile Include="..\src\windows\mapdetailwindow.cpp" />
+    <ClCompile Include="..\src\windows\mapswindow.cpp" />
+    <ClCompile Include="..\src\windows\messagewindow.cpp" />
+    <ClCompile Include="..\src\windows\minimapwindow.cpp" />
+    <ClCompile Include="..\src\windows\modeloverviewwindow.cpp" />
+    <ClCompile Include="..\src\windows\modelswindow.cpp" />
+    <ClCompile Include="..\src\windows\objectwindow.cpp" />
+    <ClCompile Include="..\src\windows\progresswindow.cpp" />
+    <ClCompile Include="..\src\windows\rsmeditwindow.cpp" />
+    <ClCompile Include="..\src\windows\rsmmeshprops.cpp" />
+    <ClCompile Include="..\src\windows\soundoverviewwindow.cpp" />
+    <ClCompile Include="..\src\windows\soundselectwindow.cpp" />
+    <ClCompile Include="..\src\windows\soundwindow.cpp" />
+    <ClCompile Include="..\src\windows\spritewindow.cpp" />
+    <ClCompile Include="..\src\windows\texturebrushwindow.cpp" />
+    <ClCompile Include="..\src\windows\texturetoolswindow.cpp" />
+    <ClCompile Include="..\src\windows\texturewindow.cpp" />
+    <ClCompile Include="..\src\windows\walltexturewindow.cpp" />
+    <ClCompile Include="..\src\windows\waterwindow.cpp" />
+    <ClCompile Include="..\src\windows\xmlwindow.cpp" />
+    <ClCompile Include="..\src\wm\window.cpp" />
+    <ClCompile Include="..\src\wm\windowbutton.cpp" />
+    <ClCompile Include="..\src\wm\windowcheckbox.cpp" />
+    <ClCompile Include="..\src\wm\windowframe.cpp" />
+    <ClCompile Include="..\src\wm\windowinputbox.cpp" />
+    <ClCompile Include="..\src\wm\windowlabel.cpp" />
+    <ClCompile Include="..\src\wm\windowlistbox.cpp" />
+    <ClCompile Include="..\src\wm\windowmainbutton.cpp" />
+    <ClCompile Include="..\src\wm\windowobject.cpp" />
+    <ClCompile Include="..\src\wm\windowpicturebox.cpp" />
+    <ClCompile Include="..\src\wm\windowprogressbar.cpp" />
+    <ClCompile Include="..\src\wm\windowrgbpicker.cpp" />
+    <ClCompile Include="..\src\wm\windowroundbutton.cpp" />
+    <ClCompile Include="..\src\wm\windowscrollpanel.cpp" />
+    <ClCompile Include="..\src\wm\windowtabpanel.cpp" />
+    <ClCompile Include="..\src\wm\windowtree.cpp" />
+    <ClCompile Include="..\src\wm\wm.cpp" />
+    <ClCompile Include="..\src\world.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\bmutex.h" />
+    <ClInclude Include="..\src\bthread.h" />
+    <ClInclude Include="..\src\clipboard.h" />
+    <ClInclude Include="..\src\common.h" />
+    <ClInclude Include="..\src\filesystem.h" />
+    <ClInclude Include="..\src\font.h" />
+    <ClInclude Include="..\src\frustum.h" />
+    <ClInclude Include="..\src\graphics.h" />
+    <ClInclude Include="..\src\grflib\grf.h" />
+    <ClInclude Include="..\src\grflib\grfcrypt.h" />
+    <ClInclude Include="..\src\grflib\grfsupport.h" />
+    <ClInclude Include="..\src\grflib\grftypes.h" />
+    <ClInclude Include="..\src\grflib\rgz.h" />
+    <ClInclude Include="..\src\interfaceimplementation.h" />
+    <ClInclude Include="..\src\menu.h" />
+    <ClInclude Include="..\src\menucommands.h" />
+    <ClInclude Include="..\src\mymath.h" />
+    <ClInclude Include="..\src\resource.h" />
+    <ClInclude Include="..\src\RSMModel.h" />
+    <ClInclude Include="..\src\settings.h" />
+    <ClInclude Include="..\src\sprite.h" />
+    <ClInclude Include="..\src\StackWalker.h" />
+    <ClInclude Include="..\src\svnver.h" />
+    <ClInclude Include="..\src\texture.h" />
+    <ClInclude Include="..\src\texturecache.h" />
+    <ClInclude Include="..\src\textureloaders\bitmaptextureloader.h" />
+    <ClInclude Include="..\src\textureloaders\giftextureloader.h" />
+    <ClInclude Include="..\src\textureloaders\jpegtextureloader.h" />
+    <ClInclude Include="..\src\textureloaders\textureloader.h" />
+    <ClInclude Include="..\src\textureloaders\tgatextureloader.h" />
+    <ClInclude Include="..\src\texturemodel.h" />
+    <ClInclude Include="..\src\tinyxml\tinystr.h" />
+    <ClInclude Include="..\src\tinyxml\tinyxml.h" />
+    <ClInclude Include="..\src\undo.h" />
+    <ClInclude Include="..\src\version.h" />
+    <ClInclude Include="..\src\windows\ambientlightwindow.h" />
+    <ClInclude Include="..\src\windows\areacopywindow.h" />
+    <ClInclude Include="..\src\windows\brushselectwindow.h" />
+    <ClInclude Include="..\src\windows\confirmwindow.h" />
+    <ClInclude Include="..\src\windows\effectwindow.h" />
+    <ClInclude Include="..\src\windows\favoritelights.h" />
+    <ClInclude Include="..\src\windows\filewindow.h" />
+    <ClInclude Include="..\src\windows\hotkeywindow.h" />
+    <ClInclude Include="..\src\windows\inputwindow.h" />
+    <ClInclude Include="..\src\windows\keybindwindow.h" />
+    <ClInclude Include="..\src\windows\lightoverviewwindow.h" />
+    <ClInclude Include="..\src\windows\lightwindow.h" />
+    <ClInclude Include="..\src\windows\mapdetailwindow.h" />
+    <ClInclude Include="..\src\windows\mapswindow.h" />
+    <ClInclude Include="..\src\windows\messagewindow.h" />
+    <ClInclude Include="..\src\windows\minimapwindow.h" />
+    <ClInclude Include="..\src\windows\modeloverviewwindow.h" />
+    <ClInclude Include="..\src\windows\modelswindow.h" />
+    <ClInclude Include="..\src\windows\objectwindow.h" />
+    <ClInclude Include="..\src\windows\progresswindow.h" />
+    <ClInclude Include="..\src\windows\rsmeditwindow.h" />
+    <ClInclude Include="..\src\windows\rsmmeshprops.h" />
+    <ClInclude Include="..\src\windows\soundoverviewwindow.h" />
+    <ClInclude Include="..\src\windows\soundselectwindow.h" />
+    <ClInclude Include="..\src\windows\soundwindow.h" />
+    <ClInclude Include="..\src\windows\spritewindow.h" />
+    <ClInclude Include="..\src\windows\texturebrushwindow.h" />
+    <ClInclude Include="..\src\windows\texturetoolswindow.h" />
+    <ClInclude Include="..\src\windows\texturewindow.h" />
+    <ClInclude Include="..\src\windows\walltexturewindow.h" />
+    <ClInclude Include="..\src\windows\waterwindow.h" />
+    <ClInclude Include="..\src\windows\xmlwindow.h" />
+    <ClInclude Include="..\src\wm\window.h" />
+    <ClInclude Include="..\src\wm\windowbutton.h" />
+    <ClInclude Include="..\src\wm\windowcheckbox.h" />
+    <ClInclude Include="..\src\wm\windowframe.h" />
+    <ClInclude Include="..\src\wm\windowinputbox.h" />
+    <ClInclude Include="..\src\wm\windowlabel.h" />
+    <ClInclude Include="..\src\wm\windowline.h" />
+    <ClInclude Include="..\src\wm\windowlistbox.h" />
+    <ClInclude Include="..\src\wm\windowmainbutton.h" />
+    <ClInclude Include="..\src\wm\windowobject.h" />
+    <ClInclude Include="..\src\wm\windowpicturebox.h" />
+    <ClInclude Include="..\src\wm\windowprogressbar.h" />
+    <ClInclude Include="..\src\wm\windowrgbpicker.h" />
+    <ClInclude Include="..\src\wm\windowroundbutton.h" />
+    <ClInclude Include="..\src\wm\windowscrollpanel.h" />
+    <ClInclude Include="..\src\wm\windowtabpanel.h" />
+    <ClInclude Include="..\src\wm\windowtree.h" />
+    <ClInclude Include="..\src\wm\wm.h" />
+    <ClInclude Include="..\src\world.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\src\Hamtaro.png" />
+    <Image Include="..\src\icon1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\src\Script1.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="plugins\clearmap.vcxproj">
+      <Project>{80bda90b-0a0f-45b2-aeac-e4998bbd74ab}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
